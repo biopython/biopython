@@ -38,14 +38,6 @@ def get_domain_details(domain):
 
     Arguments:
      - domain - domain id in EBI.
-
-    Example:
-
-    >>> dom_dict = ebisearch.get_domain_details(domain="allebi")
-    >>> print(str(dom_dict['domains'][0])[:150])
-    >>> {u'description': u'Results from all the EBI resources', u'subdomains':
-        [{u'description': u'', u'subdomains': [{u'fieldInfos': [{u'description'
-        : u'Luce
     """
     url = base_url + '/' + domain
     url = url.replace(" ", "%20")
@@ -110,8 +102,8 @@ def check_domain(domain):
      - domain - id of a domain to check.
     """
     if domain not in get_domains(verbose=False):
-        raise ValueError("""The domain does not correspond to the id of a known 
-                         domain in EBI. The list of EBI domains and their id 
+        raise ValueError("""The domain does not correspond to the id of a known
+                         domain in EBI. The list of EBI domains and their id
                          can be accessed with get_domains().""")
 
 
