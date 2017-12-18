@@ -351,7 +351,7 @@ class PlateRecord(object):
         return False
 
     def __len__(self):
-        """Returns the number of wells in this plate."""
+        """Return the number of wells in this plate."""
         return len(self._wells)
 
     def __eq__(self, other):
@@ -475,7 +475,7 @@ class PlateRecord(object):
         return newp
 
     def __repr__(self):
-        """Returns a (truncated) representation of the plate for debugging."""
+        """Return a (truncated) representation of the plate for debugging."""
         if len(self._wells) > 4:
             # Show the last well and the first three
             return "%s('%s, ..., %s')" % (self.__class__.__name__,
@@ -494,7 +494,7 @@ class PlateRecord(object):
                                ))
 
     def __str__(self):
-        """A human readable summary of the record (string).
+        """Return a human readable summary of the record (string).
 
         The python built in function str works by calling the object's ___str__
         method.  e.g.
@@ -646,7 +646,7 @@ class WellRecord(object):
         self._signals[time] = signal
 
     def __getitem__(self, time):
-        """Returns a subset of signals or a single signal."""
+        """Return a subset of signals or a single signal."""
         if isinstance(time, slice):
             # Fix the missing values in the slice
             if time.start is None:
@@ -727,11 +727,11 @@ class WellRecord(object):
         return neww
 
     def __len__(self):
-        """Returns the number of time points sampled."""
+        """Return the number of time points sampled."""
         return len(self._signals)
 
     def __repr__(self):
-        """Returns a (truncated) representation of the signals for debugging."""
+        """Return a (truncated) representation of the signals for debugging."""
         if len(self) > 7:
             # Shows the last time point and the first five
             return "%s('%s, ..., %s')" % (self.__class__.__name__,
@@ -743,7 +743,7 @@ class WellRecord(object):
                                ', '.join([str(x) for x in self.get_raw()]))
 
     def __str__(self):
-        """A human readable summary of the record (string).
+        """Return a human readable summary of the record (string).
 
         The python built-in function str works by calling the object's ___str__
         method.  e.g.
