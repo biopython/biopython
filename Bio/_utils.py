@@ -36,7 +36,7 @@ def iterlen(items):
 
 
 def read_forward(handle):
-    """Reads through whitespaces, returns the first non-whitespace line."""
+    """Read through whitespaces, returns the first non-whitespace line."""
     while True:
         line = handle.readline()
         # if line is empty or line has characters and stripping does not remove
@@ -46,7 +46,7 @@ def read_forward(handle):
 
 
 def trim_str(string, max_len, concat_char):
-    """Truncates the given string for display."""
+    """Truncate the given string for display."""
     if len(string) > max_len:
         return string[:max_len - len(concat_char)] + concat_char
     return string
@@ -65,7 +65,7 @@ def getattr_str(obj, attr, fmt=None, fallback='?'):
 
 
 def find_test_dir(start_dir=None):
-    """Finds the absolute path of Biopython's Tests directory.
+    """Find the absolute path of Biopython's Tests directory.
 
     Arguments:
     start_dir -- Initial directory to begin lookup (default to current dir)
@@ -98,7 +98,7 @@ def find_test_dir(start_dir=None):
 
 
 def run_doctest(target_dir=None, *args, **kwargs):
-    """Runs doctest for the importing module."""
+    """Run doctest for the importing module."""
     import doctest
 
     # default doctest options
