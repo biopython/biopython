@@ -77,7 +77,7 @@ class StandardData(object):
             coding_list = {'t': 'std', 'd': []}
 
     def __len__(self):
-        """Returns the length of the coding, use len(my_coding)."""
+        """Return the length of the coding, use len(my_coding)."""
         return len(self._data)
 
     def __getitem__(self, arg):
@@ -98,15 +98,15 @@ class StandardData(object):
 
     if sys.version_info[0] < 3:
         def next(self):
-            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
 
     def raw(self):
-        """Returns the full coding as a python list."""
+        """Return the full coding as a python list."""
         return self._data
 
     def __str__(self):
-        """Returns the full coding as a python string, use str(my_coding)."""
+        """Return the full coding as a python string, use str(my_coding)."""
         str_return = ''
         for coding in self._data:
             if coding['t'] == 'multi':

@@ -15,7 +15,7 @@ from Bio.Application import AbstractCommandline, _Argument
 
 
 def _gp_float(tok):
-    """Gets a float from a token, if it fails, returns the string (PRIVATE)."""
+    """Get a float from a token, if it fails, returns the string (PRIVATE)."""
     try:
         return float(tok)
     except ValueError:
@@ -23,7 +23,7 @@ def _gp_float(tok):
 
 
 def _gp_int(tok):
-    """Gets a int from a token, if it fails, returns the string (PRIVATE)."""
+    """Get a int from a token, if it fails, returns the string (PRIVATE)."""
     try:
         return int(tok)
     except ValueError:
@@ -133,7 +133,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
 
 
 class _FileIterator(object):
-    """Iterator which crawls over a stream of lines with a function (PRIVATE).
+    """Return an iterator which crawls over a stream of lines with a function (PRIVATE).
 
     The generator function is expected to yield a tuple, while
     consuming input
@@ -161,7 +161,7 @@ class _FileIterator(object):
 
     if sys.version_info[0] < 3:
         def next(self):
-            """Python 2 style alias for Python 3 style __next__ method."""
+            """Return next item, a Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
 
     def __del__(self):
@@ -174,7 +174,7 @@ class _FileIterator(object):
 
 
 class _GenePopCommandline(AbstractCommandline):
-    """Command Line Wrapper for GenePop (PRIVATE)."""
+    """Return a Command Line Wrapper for GenePop (PRIVATE)."""
 
     def __init__(self, genepop_dir=None, cmd='Genepop', **kwargs):
         self.parameters = [
@@ -194,7 +194,7 @@ class _GenePopCommandline(AbstractCommandline):
         self.set_parameter("mode", "Mode=Batch")
 
     def set_menu(self, option_list):
-        """Sets the menu option.
+        """Set the menu option.
 
         Example set_menu([6,1]) = get all F statistics (menu 6.1)
         """
@@ -202,13 +202,13 @@ class _GenePopCommandline(AbstractCommandline):
                            ".".join(str(x) for x in option_list))
 
     def set_input(self, fname):
-        """Sets the input file name."""
+        """Set the input file name."""
         self.set_parameter("input", "InputFile=" + fname)
 
 
 class GenePopController(object):
     def __init__(self, genepop_dir=None):
-        """Initializes the controller.
+        """Initialize the controller.
 
         genepop_dir is the directory where GenePop is.
 
@@ -249,7 +249,7 @@ class GenePopController(object):
     def _test_pop_hz_both(self, fname, type, ext, enum_test=True,
                           dememorization=10000, batches=20,
                           iterations=5000):
-        """Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Hardy-Weinberg test for heterozygote deficiency/excess.
 
         Returns a population iterator containing a dictionary where
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
@@ -268,7 +268,7 @@ class GenePopController(object):
     def _test_global_hz_both(self, fname, type, ext, enum_test=True,
                              dememorization=10000, batches=20,
                              iterations=5000):
-        """Global Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Global Hardy-Weinberg test for heterozygote deficiency/excess.
 
         Returns a triple with:
          - A list per population containing (pop_name, P-val, SE, switches).
@@ -312,7 +312,7 @@ class GenePopController(object):
     def test_pop_hz_deficiency(self, fname, enum_test=True,
                                dememorization=10000, batches=20,
                                iterations=5000):
-        """Hardy-Weinberg test for heterozygote deficiency.
+        """Use Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a population iterator containing a dictionary wehre
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
@@ -327,7 +327,7 @@ class GenePopController(object):
     def test_pop_hz_excess(self, fname, enum_test=True,
                            dememorization=10000, batches=20,
                            iterations=5000):
-        """Hardy-Weinberg test for heterozygote deficiency.
+        """Use Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a population iterator containing a dictionary where
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
@@ -342,7 +342,7 @@ class GenePopController(object):
     def test_pop_hz_prob(self, fname, ext, enum_test=False,
                          dememorization=10000, batches=20,
                          iterations=5000):
-        """Hardy-Weinberg test based on probability.
+        """Use Hardy-Weinberg test based on probability.
 
         Returns 2 iterators and a final tuple:
 
@@ -376,7 +376,7 @@ class GenePopController(object):
     def test_global_hz_deficiency(self, fname, enum_test=True,
                                   dememorization=10000, batches=20,
                                   iterations=5000):
-        """Global Hardy-Weinberg test for heterozygote deficiency.
+        """Use Global Hardy-Weinberg test for heterozygote deficiency.
 
         Returns a triple with:
          - An list per population containing (pop_name, P-val, SE, switches).
@@ -395,7 +395,7 @@ class GenePopController(object):
     def test_global_hz_excess(self, fname, enum_test=True,
                               dememorization=10000, batches=20,
                               iterations=5000):
-        """Global Hardy-Weinberg test for heterozygote excess.
+        """Use Global Hardy-Weinberg test for heterozygote excess.
 
         Returns a triple with:
          - A list per population containing (pop_name, P-val, SE, switches).
@@ -514,7 +514,7 @@ class GenePopController(object):
 
     # 5.1
     def calc_allele_genotype_freqs(self, fname):
-        """Calculates allele and genotype frequencies per locus and per sample.
+        """Calculate allele and genotype frequencies per locus and per sample.
 
         Parameters:
          - fname - file name
@@ -706,7 +706,7 @@ class GenePopController(object):
 
     # 6.1 Less genotype frequencies
     def calc_fst_all(self, fname):
-        """Executes GenePop and gets Fst/Fis/Fit (all populations).
+        """Execute GenePop and gets Fst/Fis/Fit (all populations).
 
         Parameters:
          - fname - file name
@@ -816,7 +816,7 @@ class GenePopController(object):
         raise NotImplementedError
 
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
-        """Calculates isolation by distance statistics."""
+        """Calculate isolation by distance statistics."""
         self._run_genepop([".GRA", ".MIG", ".ISO"], [6, sub],
                           fname, opts={
                               "MinimalDistance": min_dist,
@@ -849,7 +849,7 @@ class GenePopController(object):
 
     # 6.5
     def calc_ibd_diplo(self, fname, stat="a", scale="Log", min_dist=0.00001):
-        """Calculates isolation by distance statistics for diploid data.
+        """Calculate isolation by distance statistics for diploid data.
 
         See _calc_ibd for parameter details.
 
@@ -860,7 +860,7 @@ class GenePopController(object):
 
     # 6.6
     def calc_ibd_haplo(self, fname, stat="a", scale="Log", min_dist=0.00001):
-        """Calculates isolation by distance statistics for haploid data.
+        """Calculate isolation by distance statistics for haploid data.
 
         See _calc_ibd for parameter details.
 

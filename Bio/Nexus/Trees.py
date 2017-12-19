@@ -681,7 +681,7 @@ class Tree(Nodes.Chain):
     def root_with_outgroup(self, outgroup=None):
 
         def _connect_subtree(parent, child):
-            """Hook subtree starting with node child to parent."""
+            """Attach subtree starting with node child to parent."""
             for i, branch in enumerate(self.unrooted):
                 if parent in branch[:2] and child in branch[:2]:
                     branch = self.unrooted.pop(i)

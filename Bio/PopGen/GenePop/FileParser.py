@@ -24,7 +24,7 @@ from Bio.PopGen.GenePop import get_indiv
 
 
 def read(fname):
-    """Parses a file containing a GenePop file.
+    """Parse a file containing a GenePop file.
 
     fname is a file name that contains a GenePop record.
     """
@@ -33,7 +33,7 @@ def read(fname):
 
 
 class FileRecord(object):
-    """Holds information from a GenePop record.
+    """Hold information from a GenePop record.
 
     Attributes:
     - marker_len         The marker length (2 or 3 digit code per allele).
@@ -67,7 +67,7 @@ class FileRecord(object):
         self.start_read()
 
     def __str__(self):
-        """Returns (reconstructs) a GenePop textual representation.
+        """Return (reconstructs) a GenePop textual representation.
 
         This might take a lot of memory.
         Marker length will be 3.
@@ -105,7 +105,7 @@ class FileRecord(object):
         return "".join(rep)
 
     def start_read(self):
-        """Starts parsing a file containing a GenePop file."""
+        """Start parsing a file containing a GenePop file."""
         self._handle = open(self.fname)
         self.comment_line = self._handle.readline().rstrip()
         # We can now have one loci per line or all loci in a single line
@@ -126,7 +126,7 @@ class FileRecord(object):
         self.current_ind = 0
 
     def skip_header(self):
-        """Skips the Header. To be done after a re-open."""
+        """Skip the Header. To be done after a re-open."""
         self.current_pop = 0
         self.current_ind = 0
         for line in self._handle:
@@ -134,7 +134,7 @@ class FileRecord(object):
                 return
 
     def seek_position(self, pop, indiv):
-        """Seeks a certain position in the file.
+        """Seek a certain position in the file.
 
         Arguments:
          - pop - pop position (0 is first)
@@ -151,7 +151,7 @@ class FileRecord(object):
             indiv -= 1
 
     def skip_population(self):
-        """Skips the current population. Returns true if there is another pop."""
+        """Skip the current population. Returns true if there is another pop."""
         for line in self._handle:
             if line == "":
                 return False
@@ -162,7 +162,7 @@ class FileRecord(object):
                 return True
 
     def get_individual(self):
-        """Gets the next individual.
+        """Get the next individual.
 
         Returns individual information if there are more individuals
         in the current population.
@@ -184,7 +184,7 @@ class FileRecord(object):
         return False
 
     def remove_population(self, pos, fname):
-        """Removes a population (by position).
+        """Remove a population (by position).
 
         Arguments:
          - pos - position
@@ -227,7 +227,7 @@ class FileRecord(object):
                 l_parser = old_rec.get_individual()
 
     def remove_locus_by_position(self, pos, fname):
-        """Removes a locus by position.
+        """Remove a locus by position.
 
         Arguments:
          - pos - position
@@ -268,7 +268,7 @@ class FileRecord(object):
                 l_parser = old_rec.get_individual()
 
     def remove_loci_by_position(self, positions, fname):
-        """Removes a set of loci by position.
+        """Remove a set of loci by position.
 
         Arguments:
          - positions - positions
@@ -314,7 +314,7 @@ class FileRecord(object):
                 l_parser = old_rec.get_individual()
 
     def remove_locus_by_name(self, name, fname):
-        """Removes a locus by name.
+        """Remove a locus by name.
 
         Arguments:
          - name - name
@@ -329,7 +329,7 @@ class FileRecord(object):
         #   Although it should be Ok... Just a boolean return, maybe?
 
     def remove_loci_by_name(self, names, fname):
-        """Removes a loci list (by name).
+        """Remove a loci list (by name).
 
         Arguments:
          - names - names
