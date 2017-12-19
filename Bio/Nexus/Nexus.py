@@ -78,7 +78,7 @@ class CharBuffer(object):
             return None
 
     def __next__(self):
-        """Iterates over NEXUS characters in the file."""
+        """Iterate over NEXUS characters in the file."""
         if self.buffer:
             return self.buffer.pop(0)
         else:
@@ -86,11 +86,11 @@ class CharBuffer(object):
 
     if sys.version_info[0] < 3:
         def next(self):
-            """Deprecated Python 2 style alias for Python 3 style __next__ method."""
+            """Deprecate Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
 
     def next_nonwhitespace(self):
-        """Checks for next non whitespace character in NEXUS file."""
+        """Check for next non whitespace character in NEXUS file."""
         while True:
             p = next(self)
             if p is None:
@@ -100,12 +100,12 @@ class CharBuffer(object):
         return None
 
     def skip_whitespace(self):
-        """Skips whitespace characters in NEXUS file."""
+        """Skip whitespace characters in NEXUS file."""
         while self.buffer[0] in WHITESPACE:
             self.buffer = self.buffer[1:]
 
     def next_until(self, target):
-        """Keeps iterating the NEXUS file until it reaches a target character.
+        """Keep iterating the NEXUS file until it reaches a target character.
 
         Returns the word found in the NEXUS file.
         """
@@ -122,7 +122,7 @@ class CharBuffer(object):
             return None
 
     def peek_word(self, word):
-        """Returns a word stored in the buffer."""
+        """Return a word stored in the buffer."""
         return ''.join(self.buffer[:len(word)]) == word
 
     def next_word(self):
@@ -185,7 +185,7 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
-        """Swaps the value."""
+        """Swap the value."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
@@ -212,7 +212,7 @@ class StepMatrix(object):
         return self
 
     def smprint(self, name='your_name_here'):
-        """Prints a stepmatrix."""
+        """Print a stepmatrix."""
         matrix = 'usertype %s stepmatrix=%d\n' % (name, len(self.symbols))
         matrix += '        %s\n' % '        '.join(self.symbols)
         for x in self.symbols:
@@ -521,7 +521,7 @@ def _adjust_lines(lines):
 
 
 def _replace_parenthesized_ambigs(seq, rev_ambig_values):
-    """Replaces ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
+    """Replace ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
     opening = seq.find('(')
     while opening > -1:
         closing = seq.find(')')
@@ -679,7 +679,7 @@ class Nexus(object):
                 self._unknown_nexus_block(title, contents)
 
     def _get_nexus_block(self, file_contents):
-        """Generator for looping through Nexus blocks."""
+        """Return a generator for looping through Nexus blocks."""
         inblock = False
         blocklines = []
         while file_contents:
@@ -947,7 +947,7 @@ class Nexus(object):
         pass
 
     def _matrix(self, options):
-        """Creates a matrix for NEXUS object (PRIVATE)."""
+        """Create a matrix for NEXUS object (PRIVATE)."""
         if not self.ntax or not self.nchar:
             raise NexusError('Dimensions must be specified before matrix!')
         self.matrix = {}
@@ -1056,7 +1056,7 @@ class Nexus(object):
             "Please Report this as a bug, and send in data file."
 
     def _translate(self, options):
-        """Translates a Nexus file (PRIVATE)."""
+        """Translate a Nexus file (PRIVATE)."""
         self.translate = {}
         opts = CharBuffer(options)
         while True:
@@ -1077,7 +1077,7 @@ class Nexus(object):
                 raise NexusError('Format error in line %s.' % options)
 
     def _utree(self, options):
-        """Some software (clustalx) uses 'utree' to denote an unrooted tree."""
+        """Use 'utree' to denote an unrooted tree (ex: clustalx)."""
         self._tree(options)
 
     def _tree(self, options):
@@ -1119,7 +1119,7 @@ class Nexus(object):
         self.trees.append(tree)
 
     def _apply_block_structure(self, title, lines):
-        """Applies Block structure to the NEXUS file (PRIVATE)."""
+        """Apply Block structure to the NEXUS file (PRIVATE)."""
         block = Block('')
         block.title = title
         for line in lines:
@@ -1127,17 +1127,17 @@ class Nexus(object):
         self.structured.append(block)
 
     def _taxset(self, options):
-        """Creates unique taxset (PRIVATE)."""
+        """Create unique taxset (PRIVATE)."""
         name, taxa = self._get_indices(options, set_type=TAXSET)
         self.taxsets[name] = _make_unique(taxa)
 
     def _charset(self, options):
-        """Creates unique character set (PRIVATE)."""
+        """Create unique character set (PRIVATE)."""
         name, sites = self._get_indices(options, set_type=CHARSET)
         self.charsets[name] = _make_unique(sites)
 
     def _taxpartition(self, options):
-        """Collects taxpartition from a NEXUS file (PRIVATE)."""
+        """Collect taxpartition from a NEXUS file (PRIVATE)."""
         taxpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
@@ -1181,7 +1181,7 @@ class Nexus(object):
         pass
 
     def _charpartition(self, options):
-        """Collects character partition from NEXUS file (PRIVATE)."""
+        """Collect character partition from NEXUS file (PRIVATE)."""
         charpartition = {}
         quotelevel = False
         opts = CharBuffer(options)
@@ -1367,7 +1367,7 @@ class Nexus(object):
     def write_nexus_data_partitions(self, matrix=None, filename=None, blocksize=None,
                                     interleave=False, exclude=(), delete=(),
                                     charpartition=None, comment='', mrbayes=False):
-        """Writes a nexus file for each partition in charpartition.
+        """Write a nexus file for each partition in charpartition.
 
         Only non-excluded characters and non-deleted taxa are included,
         just the data block is written.
@@ -1406,7 +1406,7 @@ class Nexus(object):
                          blocksize=None, interleave=False, interleave_by_partition=False,
                          comment=None, omit_NEXUS=False, append_sets=True, mrbayes=False,
                          codons_block=True):
-        """Writes a nexus file with data and sets block to a file or handle.
+        """Write a nexus file with data and sets block to a file or handle.
 
         Character sets and partitions are appended by default, and are
         adjusted according to excluded characters (i.e. character sets
@@ -1529,7 +1529,7 @@ class Nexus(object):
         return filename
 
     def append_sets(self, exclude=(), delete=(), mrbayes=False, include_codons=True, codons_only=False):
-        """Returns a sets block."""
+        """Return a sets block."""
         if not self.charsets and not self.taxsets and not self.charpartitions:
             return ''
         if codons_only:
@@ -1601,7 +1601,7 @@ class Nexus(object):
             return ';\n'.join(setsb)
 
     def export_fasta(self, filename=None, width=70):
-        """Writes matrix into a fasta file."""
+        """Write matrix into a fasta file."""
         if not filename:
             if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup', 'nexus', 'nex', 'dat']:
                 filename = '.'.join(self.filename.split('.')[:-1]) + '.fas'
@@ -1615,7 +1615,7 @@ class Nexus(object):
         return filename
 
     def export_phylip(self, filename=None):
-        """Writes matrix into a PHYLIP file.
+        """Write matrix into a PHYLIP file.
 
         Note that this writes a relaxed PHYLIP format file, where the names
         are not truncated, nor checked for invalid characters.
@@ -1700,7 +1700,7 @@ class Nexus(object):
         return cstatus
 
     def weighted_stepmatrix(self, name='your_name_here', exclude=(), delete=()):
-        """Calculates a stepmatrix for weighted parsimony.
+        """Calculate a stepmatrix for weighted parsimony.
 
         See Wheeler (1990), Cladistics 6:269-275 and
         Felsenstein (1981), Biol. J. Linn. Soc. 16:183-196
@@ -1758,7 +1758,7 @@ class Nexus(object):
         return dict(zip(undelete, bootstrapseqs))
 
     def add_sequence(self, name, sequence):
-        """Adds a sequence (string) to the matrix."""
+        """Add a sequence (string) to the matrix."""
         if not name:
             raise NexusError('New sequence must have a name')
 
@@ -1860,7 +1860,7 @@ class Nexus(object):
         return newcharlabels
 
     def invert(self, charlist):
-        """Returns all character indices that are not in charlist."""
+        """Return all character indices that are not in charlist."""
         return [c for c in range(self.nchar) if c not in charlist]
 
     def gaponly(self, include_missing=False):
@@ -1872,7 +1872,7 @@ class Nexus(object):
         return [i for i, site in enumerate(sitesm) if set(site).issubset(gap)]
 
     def terminal_gap_to_missing(self, missing=None, skip_n=True):
-        """Replaces all terminal gaps with missing character.
+        """Replace all terminal gaps with missing character.
 
         Mixtures like ???------??------- are properly resolved.
         """

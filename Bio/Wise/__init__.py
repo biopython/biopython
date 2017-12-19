@@ -24,7 +24,7 @@ from Bio import SeqIO
 
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
-    """Helper function to build a command line string (PRIVATE).
+    """Build a command line string (PRIVATE).
 
     >>> os.environ["WISE_KBYTE"]="300000"
     >>> if os.isatty(sys.stderr.fileno()):

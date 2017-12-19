@@ -45,7 +45,7 @@ def get_indiv(line):
 
 
 def read(handle):
-    """Parses a handle containing a GenePop file.
+    """Parse a handle containing a GenePop file.
 
     handle is a file-like object that contains a GenePop record.
     """
@@ -89,7 +89,7 @@ def read(handle):
 
 
 class Record(object):
-    """Holds information from a GenePop record.
+    """Hold information from a GenePop record.
 
     Members:
 
@@ -132,7 +132,7 @@ class Record(object):
         self.populations = []
 
     def __str__(self):
-        """Returns (reconstructs) a GenePop textual representation."""
+        """Return (reconstructs) a GenePop textual representation."""
         rep = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         for pop in self.populations:
@@ -154,7 +154,7 @@ class Record(object):
         return "".join(rep)
 
     def split_in_pops(self, pop_names):
-        """Splits a GP record in a dictionary with 1 pop per entry.
+        """Split a GP record in a dictionary with 1 pop per entry.
 
         Given a record with n pops and m loci returns a dictionary
         of records (key pop_name) where each item is a record
@@ -175,7 +175,7 @@ class Record(object):
         return gp_pops
 
     def split_in_loci(self, gp):
-        """Splits a GP record in a dictionary with 1 locus per entry.
+        """Split a GP record in a dictionary with 1 locus per entry.
 
         Given a record with n pops and m loci returns a dictionary
         of records (key locus name) where each item is a record
@@ -197,11 +197,11 @@ class Record(object):
         return gp_loci
 
     def remove_population(self, pos):
-        """Removes a population (by position)."""
+        """Remove a population (by position)."""
         del self.populations[pos]
 
     def remove_locus_by_position(self, pos):
-        """Removes a locus by position."""
+        """Remove a locus by position."""
         del self.loci_list[pos]
         for pop in self.populations:
             for indiv in pop:
@@ -209,7 +209,7 @@ class Record(object):
                 del loci[pos]
 
     def remove_locus_by_name(self, name):
-        """Removes a locus by name."""
+        """Remove a locus by name."""
         for i in range(len(self.loci_list)):
             if self.loci_list[i] == name:
                 self.remove_locus_by_position(i)
