@@ -17,7 +17,7 @@ from Bio._py3k import _as_bytes
 
 
 def crc32(seq):
-    """Returns the crc32 checksum for a sequence (string or Seq object).
+    """Return the crc32 checksum for a sequence (string or Seq object).
 
     Note that the case is important:
 
@@ -60,7 +60,7 @@ _table_h = _init_table_h()
 
 
 def crc64(s):
-    """Returns the crc64 checksum for a sequence (string or Seq object).
+    """Return the crc64 checksum for a sequence (string or Seq object).
 
     Note that the case is important:
 
@@ -84,7 +84,7 @@ def crc64(s):
 
 
 def gcg(seq):
-    """Returns the GCG checksum (int) for a sequence (string or Seq object).
+    """Return the GCG checksum (int) for a sequence (string or Seq object).
 
     Given a nucleotide or amino-acid secuence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
@@ -117,7 +117,7 @@ def gcg(seq):
 
 
 def seguid(seq):
-    """Returns the SEGUID (string) for a sequence (string or Seq object).
+    """Return the SEGUID (string) for a sequence (string or Seq object).
 
     Given a nucleotide or amino-acid secuence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
@@ -132,7 +132,7 @@ def seguid(seq):
 
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
-    DOI: 10.1002/pmic.200600032
+    https://doi.org/10.1002/pmic.200600032
     """
     import hashlib
     import base64
@@ -146,7 +146,8 @@ def seguid(seq):
     m.update(_as_bytes(seq.upper()))
     try:
         # For Python 3+
-        return base64.encodebytes(m.digest()).decode().replace("\n", "").rstrip("=")
+        tmp = base64.encodebytes(m.digest())
+        return tmp.decode().replace("\n", "").rstrip("=")
     except AttributeError:
         pass
     # For all other Pythons

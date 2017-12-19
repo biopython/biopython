@@ -53,8 +53,9 @@ def trim_str(string, max_len, concat_char):
 
 
 def getattr_str(obj, attr, fmt=None, fallback='?'):
-    """Returns a string of the given object's attribute, defaulting to the
-    fallback value if attribute is not present.
+    """Return string of the given object's attribute.
+
+    Defaults to the given fallback value if attribute is not present.
     """
     if hasattr(obj, attr):
         if fmt is not None:

@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Index.py
+"""Index text files.
 
 This module provides a way to create indexes to text files.
 

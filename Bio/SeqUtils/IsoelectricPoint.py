@@ -5,32 +5,37 @@
 
 pK values and the methos are taken from::
 
-    * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,
-    J.-Ch., Frutiger, S. & Hochstrasser, D.F.
-    The focusing positions of polypeptides in immobilized pH gradients can be predicted
-    from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.
+    * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F.,
+    Sanchez, J.-Ch., Frutiger, S. & Hochstrasser, D.F.
+    The focusing positions of polypeptides in immobilized pH gradients can be
+    predicted from their amino acid sequences. Electrophoresis 1993, 14,
+    1023-1031.
 
     * Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.
     Reference points for comparisons of two-dimensional maps of proteins from
-    different human cell types defined in a pH scale where isoelectric points correlate
-    with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
+    different human cell types defined in a pH scale where isoelectric points
+    correlate with polypeptide compositions. Electrophoresis 1994, 15, 529-539.
 
 I designed the algorithm according to a note by David L. Tabb, available at:
 http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
-
 """
-
 
 positive_pKs = {'Nterm': 7.5, 'K': 10.0, 'R': 12.0, 'H': 5.98}
 negative_pKs = {'Cterm': 3.55, 'D': 4.05, 'E': 4.45, 'C': 9.0, 'Y': 10.0}
 pKcterminal = {'D': 4.55, 'E': 4.75}
-pKnterminal = {'A': 7.59, 'M': 7.0, 'S': 6.93, 'P': 8.36, 'T': 6.82, 'V': 7.44, 'E': 7.7}
+pKnterminal = {'A': 7.59, 'M': 7.0, 'S': 6.93, 'P': 8.36, 'T': 6.82, 'V': 7.44,
+               'E': 7.7}
 charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
 
 
-# access this module through ProtParam.ProteinAnalysis class.
-# first make a ProteinAnalysis object and then call its isoelectric_point method.
 class IsoelectricPoint(object):
+    """A class with one public method to calculate the pI of a protein.
+
+    Access this class through ProtParam.ProteinAnalysis class.
+    First make a ProteinAnalysis object and then call its isoelectric_point
+    method.
+    """
+
     def __init__(self, ProteinSequence, AminoAcidsContent):
         """Initialize the class."""
         self.sequence = ProteinSequence
@@ -62,8 +67,10 @@ class IsoelectricPoint(object):
 
         return PositiveCharge - NegativeCharge
 
-    # This is the action function, it tries different pH until the charge of the protein is 0 (or close).
+    # This is the action function, it tries different pH until the charge of
+    # the protein is 0 (or close).
     def pi(self):
+        """Calculate and return the isoelectric point as float."""
         pos_pKs = dict(positive_pKs)
         neg_pKs = dict(negative_pKs)
         nterm = self.sequence[0]

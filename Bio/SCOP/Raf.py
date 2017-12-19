@@ -310,8 +310,7 @@ class Res(object):
 
 
 def parse(handle):
-    """Iterates over a RAF file, returning a SeqMap object for each line
-    in the file.
+    """Iterate over RAF file, giving a SeqMap object for each line.
 
     Arguments:
      - handle -- file-like object.

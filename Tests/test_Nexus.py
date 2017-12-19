@@ -363,6 +363,46 @@ usertype matrix_test stepmatrix=5
 ;
 """)  # noqa : W291
 
+    def test_write_alignment(self):
+        # Default causes no interleave (columns <= 1000)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 90, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+
+        handle = StringIO()
+        NexusWriter(handle).write_alignment(a)
+        handle.seek(0)
+        data = handle.read()
+        self.assertIn("ATGCTGCTGA" * 90, data)
+
+        # Default causes interleave (columns > 1000)
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 110, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        handle = StringIO()
+        NexusWriter(handle).write_alignment(a)
+        handle.seek(0)
+        data = handle.read()
+        self.assertNotIn("ATGCTGCTGA" * 90, data)
+        self.assertIn("ATGCTGCTGA" * 7, data)
+
+        # Override interleave: True
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 9, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        handle = StringIO()
+        NexusWriter(handle).write_alignment(a, interleave=True)
+        handle.seek(0)
+        data = handle.read()
+        self.assertNotIn("ATGCTGCTGA" * 9, data)
+        self.assertIn("ATGCTGCTGA" * 7, data)
+
+        # Override interleave: False
+        records = [SeqRecord(Seq("ATGCTGCTGA" * 110, alphabet=ambiguous_dna), id=_id) for _id in ["foo", "bar", "baz"]]
+        a = MultipleSeqAlignment(records, alphabet=ambiguous_dna)
+        handle = StringIO()
+        NexusWriter(handle).write_alignment(a, interleave=False)
+        handle.seek(0)
+        data = handle.read()
+        self.assertIn("ATGCTGCTGA" * 110, data)
+
     def test_TreeTest1(self):
         """Test Tree module."""
         n = Nexus.Nexus(self.handle)

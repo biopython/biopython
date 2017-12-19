@@ -9,7 +9,7 @@ You are expected to use this module via the Bio.SeqIO functions.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
-(2011), http://dx.doi.org/10.1093/bib/bbr025
+(2011), https://doi.org/10.1093/bib/bbr025
 """
 
 from __future__ import print_function
@@ -198,7 +198,7 @@ class SeqXmlIterator(XMLRecordIterator):
             record.description = node.firstChild.data
 
     def _attr_DBRef(self, attr_dict, record):
-        """Parse a database cross reference"""
+        """Parse a database cross reference (PRIVATE)."""
         if "source" not in attr_dict or "id" not in attr_dict:
             raise ValueError("Invalid DB cross reference.")
 

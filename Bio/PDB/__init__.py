@@ -40,8 +40,8 @@ from . import Selection
 from .Superimposer import Superimposer
 
 # 3D vector class
-from .Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
-from .Vector import vector_to_axis, m2rotaxis, rotaxis2m
+from .vectors import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
+from .vectors import vector_to_axis, m2rotaxis, rotaxis2m
 
 # Alignment module
 from .StructureAlignment import StructureAlignment

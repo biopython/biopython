@@ -2140,14 +2140,16 @@ class MutableSeq(object):
                 return overlap_count
 
     def index(self, item):
-        """Return the position of a subsequence of the first occurrence of
-        a single letter.
+        """Return first occurrence position of a single entry (i.e. letter).
 
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq.index('A')
         0
         >>> my_seq.index('T')
         2
+
+        Note unlike a Biopython Seq object, or Python string, multi-letter
+        subsequences are not supported.
         """
         for i in range(len(self.data)):
             if self.data[i] == item:
