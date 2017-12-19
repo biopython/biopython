@@ -77,6 +77,7 @@ possible, especially the following contributors:
 - Nicolas Fontrodona (first contribution)
 - Peter Cock
 - rht (first contribution)
+- Rob Gilmore (first contribution)
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Shyam Saladi (first contribution)

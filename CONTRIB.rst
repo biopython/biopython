@@ -185,6 +185,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
+- Rob Gilmore <https://github.com/grabear>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>

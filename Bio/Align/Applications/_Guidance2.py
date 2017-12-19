@@ -11,7 +11,9 @@
 # package.
 
 """Command line wrapper for the multiple alignment program, GUIDANCE2.
-It weights, filters or masks unreliably aligned positions in multiple sequence alignments.
+
+It weights, filters or masks unreliably aligned positions in multiple
+sequence alignments.
 """
 
 from __future__ import print_function
@@ -36,7 +38,7 @@ class Guidance2Commandline(AbstractCommandline):
     GUIDANCE2: accurate detection of unreliable alignment regions
     accounting for the uncertainty of multiple parameters.
     Nucleic Acids Research, 2015 Jul 1; 43 (Web Server issue): W7-W14.;
-    doi: https://doi.org/10.1093/nar/gkq443
+    https://doi.org/10.1093/nar/gkq443
 
     Landan, G., and D. Graur. (2008).  Local reliability measures from
     sets of co-optimal multiple sequence alignments.  Pac Symp Biocomput
@@ -49,12 +51,10 @@ class Guidance2Commandline(AbstractCommandline):
     >>> seqFile = "ADGRB1.ffn"
     >>> msaProgram = "CLUSTALW"
     >>> seqType = "codon"
-    >>> outDir = Path(os.getcwd)
-    >>> Guidance2_cline = Guidance2Commandline(seqFile, msaProgram, seqType, str(outDir), bootstraps=20, seqCutoff=0.63,\
-                                    colCutoff=0.9, outOrder='as_input', dataset='ADGRB1')
-    >>>> print(Guidance2_cline)
-    perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data
-    --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset ADGRB1
+    >>> outDir = os.getcwd()
+    >>> Guidance2_cline = Guidance2Commandline(seqFile, msaProgram, seqType, str(outDir), bootstraps=20, seqCutoff=0.63, colCutoff=0.9, outOrder='as_input', dataset='ADGRB1')
+    >>> print(Guidance2_cline)
+    perl guidance.pl --seqFile HTR1A.ffn --msaProgram CLUSTALW --seqType codon --outDir ~/Guidance2/data --bootstraps 20 --seqCutoff 0.63 --colCutoff 0.9 --outOrder as_input --dataset ADGRB1
 
     You would typically run the command line with Guidance2_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
@@ -110,7 +110,8 @@ class Guidance2Commandline(AbstractCommandline):
                     _Option(['--outOrder', 'outOrder'],
                             "[aligned|as_input] default=aligned",
                             equate=False,
-                            checker_function=lambda x: x in ['aligned', 'as_input']),
+                            checker_function=lambda x: x in ['aligned',
+                                                             'as_input']),
                     _Option(['--msaFile', 'msaFile'],
                             "Input alignment file - not recommended",
                             filename=True, equate=False,
