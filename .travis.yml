@@ -72,6 +72,8 @@ addons:
     - probcons
     - samtools
     - wise
+    - prank
+    - ruby-full
 
 # We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
 #
@@ -104,6 +106,20 @@ before_install:
   - psql -c "create database biosql_test;" -U postgres
   - psql -c "create user biosql_user with encrypted password 'biosql_pass';" -U postgres
   - psql -c "grant all privileges on database biosql_test to biosql_user;" -U postgres
+  # Install BioPerl for Guidance2
+  - echo "Installing BioPerl"
+  - git clone https://github.com/bioperl/bioperl-live.git
+  - cd bioperl-live
+  - perl Build.PL
+  - ./Build test
+  - ./Build install
+  # Download, Decompress, and Make
+  - wget http://guidance.tau.ac.il/ver2/guidance.v2.02.tar.gz
+  - tar -xzvf guidance.v2.02.tar.gz
+  - guidance.v2.02/make
+  # Add guidance to the PATH temporarily
+  - export PATH=./guidance.v2.02/www/Guidance:$PATH
+
 
 
 # This is minimal and used under all stages
