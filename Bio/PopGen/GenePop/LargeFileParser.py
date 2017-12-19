@@ -36,7 +36,7 @@ def get_indiv(line):
 
 
 def read(handle):
-    """Parses a handle containing a GenePop file.
+    """Parse a handle containing a GenePop file.
 
     Arguments:
     - handle is a file-like object that contains a GenePop record.
@@ -65,7 +65,7 @@ def read(handle):
 
 
 class Record(object):
-    """Holds information from a GenePop record.
+    """Hold information from a GenePop record.
 
     Members:
     marker_len         The marker length (2 or 3 digit code per allele).
