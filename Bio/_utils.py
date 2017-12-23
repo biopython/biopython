@@ -36,7 +36,7 @@ def iterlen(items):
 
 
 def read_forward(handle):
-    """Read through whitespaces, returns the first non-whitespace line."""
+    """Read through whitespaces, return the first non-whitespace line."""
     while True:
         line = handle.readline()
         # if line is empty or line has characters and stripping does not remove
