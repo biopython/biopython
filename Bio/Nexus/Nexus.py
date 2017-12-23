@@ -86,7 +86,7 @@ class CharBuffer(object):
 
     if sys.version_info[0] < 3:
         def next(self):
-            """Deprecate Python 2 style alias for Python 3 style __next__ method."""
+            """Return next item, deprecated Python 2 style alias for Python 3 style __next__ method."""
             return self.__next__()
 
     def next_nonwhitespace(self):
@@ -105,10 +105,7 @@ class CharBuffer(object):
             self.buffer = self.buffer[1:]
 
     def next_until(self, target):
-        """Keep iterating the NEXUS file until it reaches a target character.
-
-        Returns the word found in the NEXUS file.
-        """
+        """Iterate over the NEXUS file until a target character is reached."""
         for t in target:
             try:
                 pos = self.buffer.index(t)
@@ -185,7 +182,6 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
-        """Swap the value."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
