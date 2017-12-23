@@ -132,7 +132,7 @@ class Record(object):
         self.populations = []
 
     def __str__(self):
-        """Return (reconstructs) a GenePop textual representation."""
+        """Return (reconstruct) a GenePop textual representation."""
         rep = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         for pop in self.populations:
