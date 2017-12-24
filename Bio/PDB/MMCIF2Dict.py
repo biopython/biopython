@@ -31,7 +31,7 @@ class MMCIF2Dict(dict):
             i = 0
             n = 0
             for token in tokens:
-                if token == "loop_":
+                if token.lower() == "loop_":
                     loop_flag = True
                     keys = []
                     i = 0

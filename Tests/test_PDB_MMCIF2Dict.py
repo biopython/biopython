@@ -107,6 +107,31 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertEqual(mmcif_dict["_test_key_value"], "foo")
         self.assertEqual(mmcif_dict["_test_loop"], list("abcdefg"))
 
+    def test_loop_keyword_case_insensitive(self):
+        """Comments may begin outside of column 1."""
+        test_data = u"""\
+            data_verbatim_test
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+
+        """
+        mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent(test_data)))
+
+        mmcif_dict2 = MMCIF2Dict(io.StringIO(textwrap.dedent(test_data.replace("loop_", "LOOP_"))))
+        self.assertDictEqual(mmcif_dict,
+                             mmcif_dict2)
+
+        mmcif_dict2 = MMCIF2Dict(io.StringIO(textwrap.dedent(test_data.replace("loop_", "looP_"))))
+        self.assertDictEqual(mmcif_dict,
+                             mmcif_dict2)
+
+        mmcif_dict2 = MMCIF2Dict(io.StringIO(textwrap.dedent(test_data.replace("_loop", "_LOOP"))))
+        self.assertNotEqual(mmcif_dict,
+                            mmcif_dict2)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
