@@ -18,7 +18,7 @@ import re
 
 
 def read(handle):
-    """Reads a COMPASS file containing one COMPASS record."""
+    """Read a COMPASS file containing one COMPASS record."""
     record = None
     try:
         line = next(handle)
@@ -52,7 +52,7 @@ def read(handle):
 
 
 def parse(handle):
-    """Iterates over records in a COMPASS file."""
+    """Iterate over records in a COMPASS file."""
     record = None
     try:
         line = next(handle)
@@ -128,14 +128,18 @@ class Record(object):
         s = self.hit_aln.replace("=", "")
         return len(s)
 
+
 # Everything below is private
 
-
 __regex = {"names": re.compile("Ali1:\s+(\S+)\s+Ali2:\s+(\S+)\s+"),
-           "threshold": re.compile("Threshold of effective gap content in columns: (\S+)"),
-           "lengths": re.compile("length1=(\S+)\s+filtered_length1=(\S+)\s+length2=(\S+)\s+filtered_length2=(\S+)"),
-           "profilewidth": re.compile("Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2=(\S+)\s+Neff2=(\S+)"),
-           "scores": re.compile("Smith-Waterman score = (\S+)\s+Evalue = (\S+)"),
+           "threshold": re.compile("Threshold of effective gap content in "
+                                   "columns: (\S+)"),
+           "lengths": re.compile("length1=(\S+)\s+filtered_length1=(\S+)"
+                                 "\s+length2=(\S+)\s+filtered_length2=(\S+)"),
+           "profilewidth": re.compile("Nseqs1=(\S+)\s+Neff1=(\S+)\s+Nseqs2="
+                                      "(\S+)\s+Neff2=(\S+)"),
+           "scores": re.compile("Smith-Waterman score = (\S+)\s+Evalue = "
+                                "(\S+)"),
            "start": re.compile("(\d+)"),
            "align": re.compile("^.{15}(\S+)"),
            "positive_alignment": re.compile("^.{15}(.+)"),
@@ -181,7 +185,8 @@ def __read_profilewidth(record, line):
 
 def __read_scores(record, line):
     if not line.startswith("Smith-Waterman"):
-        raise ValueError("Line does not start with 'Smith-Waterman':\n%s" % line)
+        raise ValueError("Line does not start with 'Smith-Waterman':\n%s"
+                         % line)
     m = __regex["scores"].search(line)
     if m:
         record.sw_score = int(m.group(1))
