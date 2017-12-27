@@ -446,7 +446,7 @@ class TreeMixin(object):
         return mrca
 
     def count_terminals(self):
-        """Counts the number of terminal (leaf) nodes within this tree."""
+        """Count the number of terminal (leaf) nodes within this tree."""
         return _utils.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):  # noqa: D402
@@ -542,7 +542,7 @@ class TreeMixin(object):
                 return False
 
     def is_parent_of(self, target=None, **kwargs):
-        """True if target is a descendent of this tree.
+        """Check if target is a descendent of this tree.
 
         Not required to be a direct descendent.
 
@@ -552,7 +552,7 @@ class TreeMixin(object):
         return self.get_path(target, **kwargs) is not None
 
     def is_preterminal(self):
-        """True if all direct descendents are terminal."""
+        """Check if all direct descendents are terminal."""
         if self.root.is_terminal():
             return False
         for clade in self.root.clades:
@@ -568,7 +568,7 @@ class TreeMixin(object):
     # Tree manipulation methods
 
     def collapse(self, target=None, **kwargs):
-        """Deletes target from the tree, relinking its children to its parent.
+        """Delete target from the tree, relinking its children to its parent.
 
         :returns: the parent clade.
 
@@ -787,7 +787,7 @@ class Tree(TreeElement, TreeMixin):
 
     @property
     def clade(self):
-        """The first clade in this tree (not itself)."""
+        """Return first clade in this tree (not itself)."""
         return self.root
 
     def as_phyloxml(self, **kwargs):
@@ -936,7 +936,7 @@ class Tree(TreeElement, TreeMixin):
     # Method assumed by TreeMixin
 
     def is_terminal(self):
-        """True if the root of this tree is terminal."""
+        """Check if the root of this tree is terminal."""
         return (not self.root.clades)
 
     # Convention from SeqRecord and Alignment classes
@@ -971,9 +971,9 @@ class Tree(TreeElement, TreeMixin):
     # Pretty-printer for the entire tree hierarchy
 
     def __str__(self):
-        """String representation of the entire tree.
+        """Return a string representation of the entire tree.
 
-        Serializes each sub-clade recursively using ``repr`` to create a summary
+        Serialize each sub-clade recursively using ``repr`` to create a summary
         of the object structure.
         """
         TAB = '    '
@@ -1039,7 +1039,7 @@ class Clade(TreeElement, TreeMixin):
         return self
 
     def is_terminal(self):
-        """True if this is a terminal (leaf) node."""
+        """Check if this is a terminal (leaf) node."""
         return (not self.clades)
 
     # Sequence-type behavior methods
@@ -1058,7 +1058,7 @@ class Clade(TreeElement, TreeMixin):
         return iter(self.clades)
 
     def __len__(self):
-        """Number of clades directy under the root."""
+        """Return the number of clades directy under the root."""
         return len(self.clades)
 
     # Python 3:

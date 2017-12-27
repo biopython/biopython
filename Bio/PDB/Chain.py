@@ -94,7 +94,7 @@ class Chain(Entity):
         return Entity.__getitem__(self, id)
 
     def __contains__(self, id):
-        """True if a residue with given id is present in this chain.
+        """Check if a residue with given id is present in this chain.
 
         Arguments:
 

@@ -451,7 +451,7 @@ class DataHandler(object):
                 self.lists.append(name)
 
     def elementDecl(self, name, model):
-        """Callback function is called for each element declaration in a DTD.
+        """Return element according to its declaration in a DTD.
 
         This is used for each element declaration in a DTD like::
 
