@@ -298,8 +298,13 @@ class FastaWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 
-class FastaNoWrapWriter(FastaWriter):
-    """Class to write Fasta format files without line wrapping."""
+class FastaTwoLineWriter(FastaWriter):
+    """Class to write 2-line per record Fasta format files.
+
+    This means we write the sequence information  without line
+    wrapping, and will always write a blank line for an empty
+    sequence.
+    """
 
     def __init__(self, handle, record2title=None):
         """Create a Fasta writer.
@@ -332,7 +337,8 @@ class FastaNoWrapWriter(FastaWriter):
             handle.close()
 
         """
-        super(FastaNoWrapWriter, self).__init__(handle, wrap=None, record2title=record2title)
+        super(FastaTwoLineWriter, self).__init__(handle, wrap=None,
+                                                 record2title=record2title)
 
 
 if __name__ == "__main__":
