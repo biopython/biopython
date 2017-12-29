@@ -34,7 +34,7 @@ except ImportError:
 
 
 def parse(file, format, **kwargs):
-    """Parse a file and return each of the trees it contains.
+    """Parse iteratively a file and return each of the trees it contains.
 
     If a file only contains one tree, this still returns an iterable object that
     contains one element.
