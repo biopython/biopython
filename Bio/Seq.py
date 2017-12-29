@@ -2385,6 +2385,29 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
                             IUPAC.ambiguous_rna.letters.upper())
     n = len(sequence)
+
+    # Check for tables with 'ambiguous' (dual-coding) stop codons:
+    for codon in stop_codons:
+            try:
+                forward_table[codon]
+                if to_stop:
+                    raise ValueError("This table contains at least one stop "
+                                     "codon ('{}') which codes for both "
+                                     "'STOP' and an amino acid ('{}'). You "
+                                     "can not use 'to_stop=True' with this "
+                                     "table."
+                                     .format(codon, forward_table[codon]))
+                else:
+                    warnings.warn("This table contains at least one stop "
+                                  "codon ('{}') which codes for both 'STOP' "
+                                  "and an amino acid ('{}'). Such codons will "
+                                  "be translated as amino acid."
+                                  .format(codon, forward_table[codon]),
+                                  BiopythonWarning)
+                break
+            except KeyError:
+                pass  # KeyError is the expected behaviour for most tables
+
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
             raise CodonTable.TranslationError(
@@ -2504,6 +2527,32 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     (e.g. "TA?" or "T-A") will throw a TranslationError.
 
     It will however translate either DNA or RNA.
+
+    NOTE - Since version 1.71 Biopython contains codon tables with 'ambiguous
+    stop codons'. These are stop codons with unambiguous sequence but which
+    have a context dependent coding as STOP or as amino acid. With these tables
+    'to_stop' must be False (otherwise a ValueError is raised). The dual
+    coding codons will always be translated as amino acid, except for
+    'cds=True', where the last codon will be translated as STOP.
+
+    >>> coding_dna3 = "ATGGCACGGAAGTGA"
+    >>> translate(coding_dna3)
+    'MARK*'
+
+    >>> translate(coding_dna3, table=27)  # Table 27: TGA -> STOP or W
+    'MARKW'
+
+    It will however raise a BiopythonWarning (not shown).
+
+    >>> translate(coding_dna3, table=27, cds=True)
+    'MARK'
+
+    >>> translate(coding_dna3, table=27, to_stop=True)
+    Traceback (most recent call last):
+       ...
+    ValueError: This table contains at least one stop codon ('TGA') which codes
+    for both 'STOP' and an amino acid ('W'). You can not use 'to_stop=True'
+    with this table.
     """
     if isinstance(sequence, Seq):
         return sequence.translate(table, stop_symbol, to_stop, cds)
