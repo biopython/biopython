@@ -1274,6 +1274,24 @@ class TestTranslating(unittest.TestCase):
         with self.assertRaises(TranslationError):
             Seq.translate(seq, table=2, cds=True)
 
+    def test_translation_using_tables_with_ambiguous_stop_codons(self):
+        """Check for error and warning messages.
+
+        Here, 'ambiguous stop codons' means codons of unambiguous sequence
+        but with a context sensitive encoding as STOP or an amino acid.
+        Thus, these codons appear within the codon table in the forward
+        table as well as in the list of stop codons.
+        """
+        seq = "ATGGGCTGA"
+        with self.assertRaises(ValueError):
+            Seq.translate(seq, table=28, to_stop=True)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            Seq.translate(seq, table=28)
+            message = str(w[-1].message)
+            self.assertTrue(message.startswith("This table contains at"))
+            self.assertTrue(message.endswith("be translated as amino acid."))
+
 
 class TestStopCodons(unittest.TestCase):
     def setUp(self):
