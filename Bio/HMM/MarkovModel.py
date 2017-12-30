@@ -357,7 +357,7 @@ class MarkovModelBuilder(object):
 
             # set the initial pseudocounts
             if pseudocount is None:
-                pseudcount = self.DEFAULT_PSEUDO
+                pseudocount = self.DEFAULT_PSEUDO
             self.transition_pseudo[(from_state, to_state)] = pseudocount
         else:
             raise KeyError("Transition from %s to %s is already allowed."
