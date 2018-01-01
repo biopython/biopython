@@ -260,6 +260,8 @@ class RestrictionType(type):
             cls.compsite = re.compile(cls.compsite)
         except AttributeError:
             # Can happen if initialised wrongly.
+            # (This was seen when Sphinx api-doc imports the classes, and
+            # tried to automatically general documentation for them)
             pass
         except Exception:
             raise ValueError("Problem with regular expression, re.compiled(%s)"
