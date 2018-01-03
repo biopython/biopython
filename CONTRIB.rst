@@ -181,6 +181,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
 - Peter Cock <https://github.com/peterjc>
 - Peter Slickers <piet at domain clondiag.com>
+- Philip Bergstrom <https://github.com/phber>
 - Phillip Garland <pgarland at gmail>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
