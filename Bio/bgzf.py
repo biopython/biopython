@@ -243,12 +243,12 @@ _bgzf_eof = b"\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00
 _bytes_BC = b"BC"
 
 
-def open(filename, mode="rb"):
+def open(filename, mode="rb", encoding='utf-8'):
     """Open a BGZF file for reading, writing or appending."""
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
-        return BgzfWriter(filename, mode)
+        return BgzfWriter(filename, mode, encoding=encoding)
     else:
         raise ValueError("Bad mode %r" % mode)
 
@@ -731,7 +731,7 @@ class BgzfReader(object):
 class BgzfWriter(object):
     """Define a BGZFWriter object."""
 
-    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
+    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6, encoding='utf-8'):
         """Initilize the class."""
         if fileobj:
             assert filename is None
@@ -745,6 +745,7 @@ class BgzfWriter(object):
                 handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
+        self.encoding = encoding
         self._buffer = b""
         self.compresslevel = compresslevel
 
@@ -786,8 +787,7 @@ class BgzfWriter(object):
 
     def write(self, data):
         """Write method for the class."""
-        # TODO - Check bytes vs unicode
-        data = _as_bytes(data)
+        data = data.encode(self.encoding)
         # block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
