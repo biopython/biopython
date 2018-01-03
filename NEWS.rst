@@ -85,6 +85,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Nicolas Fontrodona (first contribution)
 - Peter Cock
+- Philip Bergstrom (first contribution)
 - rht (first contribution)
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
