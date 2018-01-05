@@ -262,7 +262,10 @@ class EnzymeComparison(unittest.TestCase):
         self.assertTrue(EarI % EarI)
         self.assertIn(EcoRV, SmaI.compatible_end())
         self.assertIn(Acc65I, Asp718I.compatible_end())
-
+        
+    def test_bool_evaluation(self):
+        """Test boolean evaluation of EcoRI"""
+        self.assertTrue( bool(EcoRI) )
 
 class RestrictionBatchPrintTest(unittest.TestCase):
     """Tests Restriction.Analysis printing functionality."""
