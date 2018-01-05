@@ -475,9 +475,9 @@ class RestrictionType(type):
             return False
 
     def __bool__(cls):
-        """Boolean evaluation of an enzyme. Returns True.
-        """
+        """Boolean evaluation of an enzyme. Returns True."""
         return True
+
 
 class AbstractCut(RestrictionType):
     """Implement the methods that are common to all restriction enzymes.
