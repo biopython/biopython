@@ -168,7 +168,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def consensus(self):
-        """Returns the consensus sequence."""
+        """Return the consensus sequence."""
         sequence = ""
         for i in range(self.length):
             try:
@@ -325,7 +325,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
             self[letter] = tuple(self[letter])
 
     def log_odds(self, background=None):
-        """Returns the Position-Specific Scoring Matrix.
+        """Return the Position-Specific Scoring Matrix.
 
         The Position-Specific Scoring Matrix (PSSM) contains the log-odds
         scores computed from the probability matrix and the background
@@ -371,7 +371,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def calculate(self, sequence):
-        """Returns the PWM score for a given sequence for all positions.
+        """Return the PWM score for a given sequence for all positions.
 
         Notes:
          - the sequence can only be a DNA sequence
@@ -453,7 +453,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         raise Exception("Cannot compute the %GC composition of a PSSM")
 
     def mean(self, background=None):
-        """Expected value of the score of a motif."""
+        """Return expected value of the score of a motif."""
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:
@@ -475,7 +475,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return sx
 
     def std(self, background=None):
-        """Standard deviation of the score of a motif."""
+        """Return standard deviation of the score of a motif."""
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:

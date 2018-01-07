@@ -136,7 +136,7 @@ class Pathway(object):
         self._relations.remove(relation)
 
     def __str__(self):
-        """Returns a readable summary description string."""
+        """Return a readable summary description string."""
         outstr = ['Pathway: %s' % self.title,
                   'KEGG ID: %s' % self.name,
                   'Image file: %s' % self.image,
@@ -390,7 +390,7 @@ class Entry(object):
 
     @property
     def is_reactant(self):
-        """True if this Entry participate in any reaction in its parent pathway."""
+        """Return true if this Entry participate in any reaction in its parent pathway."""
         for rxn in self._pathway.reactions:
             if self._id in rxn.reactant_ids:
                 return True
@@ -762,7 +762,7 @@ class Relation(object):
         self._pathway = None
 
     def __str__(self):
-        """A useful human-readable string."""
+        """Return a useful human-readable string."""
         outstr = ['Relation (subtypes: %d):' % len(self.subtypes),
                   'Entry1:', str(self.entry1),
                   'Entry2:', str(self.entry2)]

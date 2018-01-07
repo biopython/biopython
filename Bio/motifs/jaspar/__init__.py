@@ -342,7 +342,7 @@ def calculate_pseudocounts(motif):
 
 
 def split_jaspar_id(id):
-    """Utility function to split a JASPAR matrix ID into its component.
+    """Split a JASPAR matrix ID into its component.
 
     Components are base ID and version number, e.g. 'MA0047.2' is returned as
     ('MA0047', 2).
