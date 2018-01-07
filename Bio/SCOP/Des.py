@@ -40,7 +40,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses DES records.
+        """Parse DES records.
 
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
@@ -77,7 +77,7 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DES file as a Des record for each line.
+    """Iterate over a DES file as a Des record for each line.
 
     Arguments:
      - handle - file-like object

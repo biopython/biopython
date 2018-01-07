@@ -75,7 +75,7 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a CLA file as Cla records for each line.
+    """Iterate over a CLA file as Cla records for each line.
 
     Arguments:
      - handle - file-like object.
