@@ -222,7 +222,7 @@ def _gpa11iterator(handle):
 
 
 def gpa_iterator(handle):
-    """Wrapper function: read GPA format files.
+    """Read GPA format files.
 
     This function should be called to read a
     gene_association.goa_uniprot file. Reads the first record and
@@ -320,7 +320,7 @@ def _gaf20byproteiniterator(handle):
 
 
 def gafbyproteiniterator(handle):
-    """Iterates over records in a gene association file.
+    """Iterate over records in a gene association file.
 
     Returns a list of all consecutive records with the same DB_Object_ID
     This function should be called to read a
@@ -428,7 +428,7 @@ def writebyproteinrec(outprotrec, handle, fields=GAF20FIELDS):
 
 
 def record_has(inrec, fieldvals):
-    """Accepts a record, and a dictionary of field values.
+    """Accept a record, and a dictionary of field values.
 
     The format is {'field_name': set([val1, val2])}.
     If any field in the record has  a matching value, the function returns
