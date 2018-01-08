@@ -39,7 +39,7 @@ class Record(object):
 
 
 def read(handle):
-    """Reads the next PHD record from the file, returning it as a Record object.
+    """Read the next PHD record from the file, return it as a Record object.
 
     This function reads PHD file data line by line from the handle,
     and returns a single Record object.
@@ -124,7 +124,7 @@ def read(handle):
 
 
 def parse(handle):
-    """Iterates over a file returning multiple PHD records.
+    """Iterate over a file yielding multiple PHD records.
 
     The data is read line by line from the handle. The handle can be a list
     of lines, an open file, or similar; the only requirement is that we can
