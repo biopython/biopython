@@ -390,7 +390,7 @@ class Entry(object):
 
     @property
     def is_reactant(self):
-        """Return true if this Entry participate in any reaction in its parent pathway."""
+        """Return true if this Entry participates in any reaction in its parent pathway."""
         for rxn in self._pathway.reactions:
             if self._id in rxn.reactant_ids:
                 return True
