@@ -545,7 +545,7 @@ class ACEFileRecord(object):
 
 
 def read(handle):
-    """Parses the full ACE file in list of contigs."""
+    """Parse a full ACE file into a list of contigs."""
     handle = iter(handle)
 
     record = ACEFileRecord()
