@@ -13,7 +13,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 
 def PdbSeqresIterator(handle):
-    """Returns SeqRecord objects for each chain in a PDB file.
+    """Return SeqRecord objects for each chain in a PDB file.
 
     The sequences are derived from the SEQRES lines in the
     PDB file header, not the atoms of the 3D structure.
@@ -119,7 +119,7 @@ def PdbSeqresIterator(handle):
 
 
 def PdbAtomIterator(handle):
-    """Returns SeqRecord objects for each chain in a PDB file.
+    """Return SeqRecord objects for each chain in a PDB file.
 
     The sequences are derived from the 3D structure (ATOM records), not the
     SEQRES lines in the PDB file header.

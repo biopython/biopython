@@ -360,7 +360,7 @@ def _sff_file_header(handle):
 
 
 def _sff_do_slow_index(handle):
-    """Generates an index by scanning though all the reads in an SFF file (PRIVATE).
+    """Generate an index by scanning though all the reads in an SFF file (PRIVATE).
 
     This is a slow but generic approach if we can't parse the provided index
     (if present).
@@ -503,7 +503,7 @@ def _sff_find_roche_index(handle):
 
 
 def ReadRocheXmlManifest(handle):
-    """Reads any Roche style XML manifest data in the SFF "index".
+    """Read any Roche style XML manifest data in the SFF "index".
 
     The SFF file format allows for multiple different index blocks, and Roche
     took advantage of this to define their own index block which also embeds
@@ -532,7 +532,7 @@ def ReadRocheXmlManifest(handle):
 
 # This is a generator function!
 def _sff_read_roche_index(handle):
-    """Reads any existing Roche style read index provided in the SFF file (PRIVATE).
+    """Read any existing Roche style read index provided in the SFF file (PRIVATE).
 
     Will use the handle seek/tell functions.
 

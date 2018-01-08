@@ -84,7 +84,7 @@ class SequenceWriter(object):
     """
 
     def __init__(self, handle):
-        """Creates the writer object.
+        """Create the writer object.
 
         Use the method write_file() to actually record your sequence records.
         """

@@ -152,7 +152,7 @@ _STATE_CONS_BLOCK = 3
 
 
 def _set_qresult_hits(qresult, hit_rows=()):
-    """Helper function for appending Hits without alignments into QueryResults."""
+    """Append Hits without alignments into QueryResults (PRIVATE)."""
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)
         # TODO: parse hit and hsp properties properly; by dealing with:
@@ -171,7 +171,7 @@ def _set_qresult_hits(qresult, hit_rows=()):
 
 
 def _set_hsp_seqs(hsp, parsed, program):
-    """Helper function for the main parsing code.
+    """Set HSPs sequences (PRIVATE).
 
     :param hsp: HSP whose properties will be set
     :type hsp: HSP
@@ -231,7 +231,7 @@ def _set_hsp_seqs(hsp, parsed, program):
 
 
 def _get_aln_slice_coords(parsed_hsp):
-    """Helper function for the main parsing code.
+    """Get HSPs sequences (PRIVATE).
 
     To get the actual pairwise alignment sequences, we must first
     translate the un-gapped sequence based coordinates into positions
@@ -277,7 +277,7 @@ class FastaM10Parser(object):
             yield qresult
 
     def _parse_preamble(self):
-        """Parses the Fasta preamble for Fasta flavor and version."""
+        """Parse the Fasta preamble for Fasta flavor and version."""
         preamble = {}
         while True:
             self.line = self.handle.readline()
@@ -296,7 +296,7 @@ class FastaM10Parser(object):
         return preamble
 
     def __parse_hit_table(self):
-        """Parses hit table rows."""
+        """Parse hit table rows."""
         # move to the first row
         self.line = self.handle.readline()
         # parse hit table until we see an empty line

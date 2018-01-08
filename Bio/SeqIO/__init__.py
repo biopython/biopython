@@ -519,7 +519,7 @@ def write(sequences, handle, format):
 
 
 def parse(handle, format, alphabet=None):
-    r"""Turns a sequence file into an iterator returning SeqRecords.
+    r"""Turn a sequence file into an iterator returning SeqRecords.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -634,7 +634,7 @@ def _force_alphabet(record_iterator, alphabet):
 
 
 def read(handle, format, alphabet=None):
-    """Turns a sequence file into a single SeqRecord.
+    """Turn a sequence file into a single SeqRecord.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -694,7 +694,7 @@ def read(handle, format, alphabet=None):
 
 
 def to_dict(sequences, key_function=None):
-    """Turns a sequence iterator or list into a dictionary.
+    """Turn a sequence iterator or list into a dictionary.
 
     Arguments:
      - sequences  - An iterator that returns SeqRecord objects,

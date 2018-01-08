@@ -240,7 +240,7 @@ class BlastTabParser(object):
         return fields
 
     def _parse_commented_qresult(self):
-        """Iterator returning `QueryResult` objects from a commented file (PRIVATE)."""
+        """Return `QueryResult` objects from a commented file (PRIVATE)."""
         while True:
             comments = self._parse_comments()
             if comments:
@@ -359,7 +359,7 @@ class BlastTabParser(object):
         return id_cache
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects (PRIVATE)."""
+        """Return QueryResult objects (PRIVATE)."""
         # state values, used to determine what to do with each line
         state_EOF = 0
         state_QRES_NEW = 1
