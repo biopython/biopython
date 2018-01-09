@@ -8,7 +8,8 @@
 import unittest
 from os import path
 from Bio import SeqIO
-from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition, CompoundLocation
+from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition, \
+    CompoundLocation, UnknownPosition
 
 
 class TestReference(unittest.TestCase):
@@ -83,6 +84,10 @@ class TestFeatureLocation(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, err):
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
+
+        # Features with UnknownPositions should pass test
+        FeatureLocation(42, UnknownPosition())
+        FeatureLocation(UnknownPosition(), 42)
 
 
 class TestCompoundLocation(unittest.TestCase):
