@@ -8,8 +8,8 @@
 import unittest
 from os import path
 from Bio import SeqIO
-from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition, \
-    CompoundLocation, UnknownPosition
+from Bio.SeqFeature import FeatureLocation, AfterPosition, BeforePosition
+from Bio.SeqFeature import CompoundLocation, UnknownPosition
 
 
 class TestReference(unittest.TestCase):
@@ -78,19 +78,29 @@ class TestFeatureLocation(unittest.TestCase):
         self.assertNotEqual(loc1, loc2)
 
     def test_start_before_end(self):
-        err = "must be greater than or equal to start location"
-        with self.assertRaisesRegex(ValueError, err):
+        expected = "must be greater than or equal to start location"
+        with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 23, 1)
+        assert expected in str(err.exception)
 
-        with self.assertRaisesRegex(ValueError, err):
+        with self.assertRaises(ValueError) as err:
             FeatureLocation(42, 0, 1)
+        assert expected in str(err.exception)
 
-        with self.assertRaisesRegex(ValueError, err):
+        with self.assertRaises(ValueError) as err:
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
+        assert expected in str(err.exception)
+
+        with self.assertRaises(ValueError) as err:
+            FeatureLocation(42, AfterPosition(0), 1)
+        assert expected in str(err.exception)
 
         # Features with UnknownPositions should pass check
         FeatureLocation(42, UnknownPosition())
         FeatureLocation(UnknownPosition(), 42)
+
+        # Same start and end should pass check
+        FeatureLocation(42, 42)
 
 
 class TestCompoundLocation(unittest.TestCase):
