@@ -83,9 +83,12 @@ class TestFeatureLocation(unittest.TestCase):
             FeatureLocation(42, 23, 1)
 
         with self.assertRaisesRegex(ValueError, err):
+            FeatureLocation(42, 0, 1)
+
+        with self.assertRaisesRegex(ValueError, err):
             FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
 
-        # Features with UnknownPositions should pass test
+        # Features with UnknownPositions should pass check
         FeatureLocation(42, UnknownPosition())
         FeatureLocation(UnknownPosition(), 42)
 
