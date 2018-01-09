@@ -109,6 +109,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <j.a.casbon at domain qmul.ac.uk>
+- James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
