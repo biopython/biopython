@@ -214,9 +214,9 @@ def make_dssp_dict(filename):
 
 
 def _make_dssp_dict(handle):
-    """Internal function used by mask_dssp_dict (PRIVATE).
+    """Return a DSSP dictionary, used by mask_dssp_dict (PRIVATE).
 
-    Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
+    DSSP dictionary maps (chainid, resid) to an amino acid,
     secondary structure symbol, solvent accessibility value, and hydrogen bond
     information (relative dssp indices and hydrogen bond energies) from an open
     DSSP file object.

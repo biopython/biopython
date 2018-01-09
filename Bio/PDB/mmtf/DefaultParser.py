@@ -137,7 +137,7 @@ class StructureDecoder(object):
 
     def set_header_info(self, r_free, r_work, resolution, title,
                         deposition_date, release_date, experimnetal_methods):
-        """Sets the header information.
+        """Set the header information.
 
         :param r_free: the measured R-Free for the structure
         :param r_work: the measure R-Work for the structure

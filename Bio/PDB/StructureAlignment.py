@@ -91,6 +91,6 @@ class StructureAlignment(object):
         return self.map12, self.map21
 
     def get_iterator(self):
-        """Iterator over all residue pairs."""
+        """Create an iterator over all residue pairs."""
         for i in range(0, len(self.duos)):
             yield self.duos[i]
