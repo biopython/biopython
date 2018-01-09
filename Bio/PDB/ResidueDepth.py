@@ -109,7 +109,7 @@ _atomic_radii = {
 
 
 def _get_atom_radius(atom, rtype='united'):
-    """Translates an atom object to an atomic radius defined in MSMS.
+    """Translate an atom object to an atomic radius defined in MSMS.
 
     Uses information from the parent residue and the atom object to define
     the atom type.

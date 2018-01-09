@@ -127,7 +127,7 @@ class Residue(Entity):
         return self.resname
 
     def get_unpacked_list(self):
-        """Returns the list of all atoms, unpack DisorderedAtoms."""
+        """Return the list of all atoms, unpack DisorderedAtoms."""
         atom_list = self.get_list()
         undisordered_atom_list = []
         for atom in atom_list:

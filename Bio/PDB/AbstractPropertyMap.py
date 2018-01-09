@@ -19,7 +19,7 @@ class AbstractPropertyMap(object):
         return entity_id
 
     def __contains__(self, id):
-        """True if the mapping has a property for this residue.
+        """Check if the mapping has a property for this residue.
 
         :param chain_id: chain id
         :type chain_id: char
@@ -61,7 +61,7 @@ class AbstractPropertyMap(object):
         return len(self.property_dict)
 
     def has_key(self, id):
-        """True if the mapping has a property for this residue.
+        """Check if the mapping has a property for this residue.
 
         :param chain_id: chain id
         :type chain_id: char

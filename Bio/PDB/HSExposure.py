@@ -104,7 +104,6 @@ class _AbstractHSExposure(AbstractPropertyMap):
         AbstractPropertyMap.__init__(self, hse_map, hse_keys, hse_list)
 
     def _get_cb(self, r1, r2, r3):
-        """Method is provided by the subclasses to calculate HSE (PRIVATE)."""
         return NotImplemented
 
     def _get_gly_cb_vector(self, residue):
@@ -249,7 +248,7 @@ class HSExposureCB(_AbstractHSExposure):
                 'EXP_HSE_B_U', 'EXP_HSE_B_D')
 
     def _get_cb(self, r1, r2, r3):
-        """Method to calculate CB-CA vector.
+        """Calculate CB-CA vector (PRIVATE).
 
         :param r1, r2, r3: three consecutive residues (only r2 is used)
         :type r1, r2, r3: L{Residue}
