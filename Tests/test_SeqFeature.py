@@ -76,6 +76,14 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = FeatureLocation(23, 42, 1, 'foo', 'baz')
         self.assertNotEqual(loc1, loc2)
 
+    def test_start_before_end(self):
+        err = "must be greater than or equal to start location"
+        with self.assertRaisesRegex(ValueError, err):
+            FeatureLocation(42, 23, 1)
+
+        with self.assertRaisesRegex(ValueError, err):
+            FeatureLocation(BeforePosition(42), AfterPosition(23), -1)
+
 
 class TestCompoundLocation(unittest.TestCase):
     """Tests for the SeqFeature.CompoundLocation class"""
