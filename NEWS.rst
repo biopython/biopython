@@ -73,6 +73,7 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
+- James Jeffryes (first contribution)
 - Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
 - João Rodrigues
