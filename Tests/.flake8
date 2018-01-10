@@ -6,7 +6,7 @@ ignore =
     # =======================
     # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-    E122,E123,E126,E127,E128,E241,E402,E501,E731,F401,F405,F821,F841,
+    E122,E123,E126,E127,E128,E241,E402,E501,E731,F401,F405,F821,F841,W503,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
@@ -41,7 +41,7 @@ ignore =
     # D400	First line should end with a period
     # D401	First line should be in imperative mood
     # D412	No blank lines allowed between a section header and its content
-    D400,D401
+    D400,D401,
     # We ignore D412 deliberately:
     D412,
     # =========================================
