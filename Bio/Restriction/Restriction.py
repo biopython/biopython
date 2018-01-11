@@ -346,9 +346,10 @@ class RestrictionType(type):
         try:
             return cls.size
         except AttributeError:
-            # Happens if the instance was not initialised as expected,
+            # Happens if the instance was not initialised as expected.
             # e.g. if instance created by a documentation framework
-            # like Sphinx trying to inspect the class automatically.
+            # like Sphinx trying to inspect the class automatically,
+            # Also seen within IPython.
             return 0
 
     def __hash__(cls):
