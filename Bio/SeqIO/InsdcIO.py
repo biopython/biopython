@@ -451,7 +451,7 @@ class GenBankWriter(_InsdcWriter):
 
     def _write_single_line(self, tag, text):
         """Write single line in each GenBank record (PRIVATE).
-        
+
         Used in the 'header' of each GenBank record.
         """
         assert len(tag) < self.HEADER_WIDTH
@@ -467,7 +467,7 @@ class GenBankWriter(_InsdcWriter):
 
     def _write_multi_line(self, tag, text):
         """Write multiple lines in each GenBank record (PRIVATE).
-        
+
         Used in the 'header' of each GenBank record.
         """
         # TODO - Do the line spliting while preserving white space?
