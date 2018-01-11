@@ -538,7 +538,7 @@ class DistanceTreeConstructor(TreeConstructor):
 
     """
 
-    methods = ['nj', 'upgma']
+    methods = ['nj', 'upgma', 'wpgma']
 
     def __init__(self, distance_calculator=None, method="nj"):
         if (distance_calculator is None or isinstance(distance_calculator, DistanceCalculator)):
@@ -557,6 +557,8 @@ class DistanceTreeConstructor(TreeConstructor):
             tree = None
             if self.method == 'upgma':
                 tree = self.upgma(dm)
+            elif self.method == 'wpgma':
+                tree = self.wpgma(dm)
             else:
                 tree = self.nj(dm)
             return tree
@@ -634,6 +636,73 @@ class DistanceTreeConstructor(TreeConstructor):
             dm_count.names[min_j] = "Inner" + str(inner_count)
 
             del dm_count[min_i]
+
+            dm.names[min_j] = "Inner" + str(inner_count)
+
+            del dm[min_i]
+        inner_clade.branch_length = 0
+        return BaseTree.Tree(inner_clade)
+
+    def wpgma(self, distance_matrix):
+        """Construct and return a WPGMA tree.
+
+        Constructs and returns a Weighted Pair Group Method
+        with Arithmetic mean (WPGMA) tree.
+
+        :Parameters:
+            distance_matrix : _DistanceMatrix
+                The distance matrix for tree construction.
+        """
+        if not isinstance(distance_matrix, _DistanceMatrix):
+            raise TypeError("Must provide a _DistanceMatrix object.")
+
+        # make a copy of the distance matrix to be used
+        dm = copy.deepcopy(distance_matrix)
+        # init terminal clades
+        clades = [BaseTree.Clade(None, name) for name in dm.names]
+        # init minimum index
+        min_i = 0
+        min_j = 0
+        inner_count = 0
+        while len(dm) > 1:
+            min_dist = dm[1, 0]
+            # find minimum index
+            for i in range(1, len(dm)):
+                for j in range(0, i):
+                    if min_dist >= dm[i, j]:
+                        min_dist = dm[i, j]
+                        min_i = i
+                        min_j = j
+
+            # create clade
+            clade1 = clades[min_i]
+            clade2 = clades[min_j]
+            inner_count += 1
+            inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
+            inner_clade.clades.append(clade1)
+            inner_clade.clades.append(clade2)
+            # assign branch length
+            if clade1.is_terminal():
+                clade1.branch_length = min_dist * 1.0 / 2
+            else:
+                clade1.branch_length = min_dist * \
+                    1.0 / 2 - self._height_of(clade1)
+
+            if clade2.is_terminal():
+                clade2.branch_length = min_dist * 1.0 / 2
+            else:
+                clade2.branch_length = min_dist * \
+                    1.0 / 2 - self._height_of(clade2)
+
+            # update node list
+            clades[min_j] = inner_clade
+            del clades[min_i]
+
+            # rebuild distance matrix,
+            # set the distances of new node at the index of min_j
+            for k in range(0, len(dm)):
+                if k != min_i and k != min_j:
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) * 1.0 / 2
 
             dm.names[min_j] = "Inner" + str(inner_count)
 
