@@ -258,6 +258,11 @@ class RestrictionType(type):
         # super(RestrictionType, cls).__init__(cls, name, bases, dct)
         try:
             cls.compsite = re.compile(cls.compsite)
+        except AttributeError:
+            # Can happen if initialised wrongly.
+            # (This was seen when Sphinx api-doc imports the classes, and
+            # tried to automatically general documentation for them)
+            pass
         except Exception:
             raise ValueError("Problem with regular expression, re.compiled(%s)"
                              % repr(cls.compsite))
@@ -338,7 +343,14 @@ class RestrictionType(type):
 
     def __len__(cls):
         """Return length of recognition site of enzyme as int."""
-        return cls.size
+        try:
+            return cls.size
+        except AttributeError:
+            # Happens if the instance was not initialised as expected.
+            # e.g. if instance created by a documentation framework
+            # like Sphinx trying to inspect the class automatically,
+            # Also seen within IPython.
+            return 0
 
     def __hash__(cls):
         # Python default is to use id(...)
