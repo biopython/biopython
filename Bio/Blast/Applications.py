@@ -99,7 +99,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def _validate_incompatibilities(self, incompatibles):
-        """Used by the BLAST+ _validate method (PRIVATE)."""
+        """Use _validate method by the BLAST+ (PRIVATE)."""
         for a in incompatibles:
             if self._get_parameter(a):
                 for b in incompatibles[a]:

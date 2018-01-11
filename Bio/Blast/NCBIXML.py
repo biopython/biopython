@@ -37,7 +37,7 @@ class _XMLparser(ContentHandler):
         self._debug_ignore_list = []
 
     def _secure_name(self, name):
-        """Removes 'dangerous' from tag names.
+        """Remove 'dangerous' from tag names.
 
         Arguments:
          - name -- name to be 'secured'
@@ -252,21 +252,21 @@ class BlastParser(_XMLparser):
                 self._header.date = parts[2]
 
     def _end_BlastOutput_reference(self):
-        """A reference to the article describing the algorithm (PRIVATE).
+        """Yield the article describing the algorithm (PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.reference = self._value
 
     def _end_BlastOutput_db(self):
-        """The database(s) searched (PRIVATE).
+        """Yield the database(s) searched (PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.database = self._value
 
     def _end_BlastOutput_query_ID(self):
-        """The identifier of the query (PRIVATE).
+        """Yield the identifier of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-ID> is enough
@@ -274,7 +274,7 @@ class BlastParser(_XMLparser):
         self._header.query_id = self._value
 
     def _end_BlastOutput_query_def(self):
-        """The definition line of the query (PRIVATE).
+        """Yield the definition line of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-def> is enough
@@ -282,7 +282,7 @@ class BlastParser(_XMLparser):
         self._header.query = self._value
 
     def _end_BlastOutput_query_len(self):
-        """The length of the query (PRIVATE).
+        """Yield the length of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-len> is enough
@@ -290,15 +290,15 @@ class BlastParser(_XMLparser):
         self._header.query_letters = int(self._value)
 
     def _end_Iteration_query_ID(self):
-        """The identifier of the query (PRIVATE)."""
+        """Yield the identifier of the query (PRIVATE)."""
         self._blast.query_id = self._value
 
     def _end_Iteration_query_def(self):
-        """The definition line of the query (PRIVATE)."""
+        """Yield the definition line of the query (PRIVATE)."""
         self._blast.query = self._value
 
     def _end_Iteration_query_len(self):
-        """The length of the query (PRIVATE)."""
+        """Yield the length of the query (PRIVATE)."""
         self._blast.query_letters = int(self._value)
 
     # def _end_BlastOutput_query_seq(self):
@@ -355,7 +355,7 @@ class BlastParser(_XMLparser):
                                          int(self._value))
 
     def _end_Parameters_filter(self):
-        """Filtering options (-F) (PRIVATE)."""
+        """Yield a filtering options (-F) (PRIVATE)."""
         self._parameters.filter = self._value
 
     # def _end_Parameters_pattern(self):
@@ -384,7 +384,7 @@ class BlastParser(_XMLparser):
         self._descr = None
 
     def _end_Hit_id(self):
-        """Identifier of the database sequence (PRIVATE)."""
+        """Yield the identifier of the database sequence (PRIVATE)."""
         self._hit.hit_id = self._value
         self._hit.title = self._value + ' '
 
@@ -395,7 +395,7 @@ class BlastParser(_XMLparser):
         self._descr.title = self._hit.title
 
     def _end_Hit_accession(self):
-        """Accession of the database sequence (PRIVATE)."""
+        """Yield the accession value of the database sequence (PRIVATE)."""
         self._hit.accession = self._value
         self._descr.accession = self._value
 
@@ -464,15 +464,15 @@ class BlastParser(_XMLparser):
         self._hsp.frame += (int(self._value),)
 
     def _end_Hsp_identity(self):
-        """Number of identities in the alignment (PRIVATE)."""
+        """Yield the number of identities in the alignment (PRIVATE)."""
         self._hsp.identities = int(self._value)
 
     def _end_Hsp_positive(self):
-        """Number of positive (conservative) substitutions in the alignment (PRIVATE)."""
+        """Yield the number of positive (conservative) substitutions in the alignment (PRIVATE)."""
         self._hsp.positives = int(self._value)
 
     def _end_Hsp_gaps(self):
-        """Number of gaps in the alignment (PRIVATE)."""
+        """Yield the number of gaps in the alignment (PRIVATE)."""
         self._hsp.gaps = int(self._value)
 
     def _end_Hsp_align_len(self):
@@ -492,26 +492,26 @@ class BlastParser(_XMLparser):
         self._hsp.sbjct = self._value
 
     def _end_Hsp_midline(self):
-        """Formatting middle line as normally seen in BLAST report (PRIVATE)."""
+        """Format middle line as normally seen in BLAST report (PRIVATE)."""
         self._hsp.match = self._value  # do NOT strip spaces!
         assert len(self._hsp.match) == len(self._hsp.query)
         assert len(self._hsp.match) == len(self._hsp.sbjct)
 
     # Statistics
     def _end_Statistics_db_num(self):
-        """Number of sequences in the database (PRIVATE)."""
+        """Yield the number of sequences in the database (PRIVATE)."""
         self._blast.num_sequences_in_database = int(self._value)
 
     def _end_Statistics_db_len(self):
-        """Number of letters in the database (PRIVATE)."""
+        """Yield the number of letters in the database (PRIVATE)."""
         self._blast.num_letters_in_database = int(self._value)
 
     def _end_Statistics_hsp_len(self):
-        """The effective HSP length (PRIVATE)."""
+        """Yield the effective HSP length (PRIVATE)."""
         self._blast.effective_hsp_length = int(self._value)
 
     def _end_Statistics_eff_space(self):
-        """The effective search space (PRIVATE)."""
+        """Yield the effective search space (PRIVATE)."""
         self._blast.effective_search_space = float(self._value)
 
     def _end_Statistics_kappa(self):
@@ -528,7 +528,7 @@ class BlastParser(_XMLparser):
 
 
 def read(handle, debug=0):
-    """Returns a single Blast record (assumes just one query).
+    """Return a single Blast record (assumes just one query).
 
     Uses the BlastParser internally.
 
@@ -555,7 +555,7 @@ def read(handle, debug=0):
 
 
 def parse(handle, debug=0):
-    """Returns an iterator a Blast record for each query.
+    """Return an iterator a Blast record for each query.
 
     Incremental parser, this is an iterator that returns
     Blast records.  It uses the BlastParser internally.
