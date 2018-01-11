@@ -384,7 +384,7 @@ class BlastXmlParser(object):
                 yield qresult
 
     def _parse_hit(self, root_hit_elem, query_id):
-        """Transform Iteration_hits XML elements into Hit objects (PRIVATE).
+        """Yield a generator object that transforms Iteration_hits XML elements into Hit objects (PRIVATE).
 
         :param root_hit_elem: root element of the Iteration_hits tag.
         :type root_hit_elem: XML element tag
@@ -445,7 +445,7 @@ class BlastXmlParser(object):
             yield hit
 
     def _parse_hsp(self, root_hsp_frag_elem, query_id, hit_id):
-        """Transform Hit_hsps XML elements into HSP objects (PRIVATE).
+        """Yield a generator object that transforms Hit_hsps XML elements into HSP objects (PRIVATE).
 
         :param root_hsp_frag_elem: the ``Hit_hsps`` tag
         :type root_hsp_frag_elem: XML element tag

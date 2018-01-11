@@ -200,7 +200,7 @@ _RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
 
 
 def _list_from_csv(csv_string, caster=None):
-    """Transform the given comma-separated string into a list.
+    """Transform the given comma-separated string into a list (PRIVATE).
 
     :param csv_string: comma-separated input string
     :type csv_string: string
@@ -448,7 +448,7 @@ class BlatPslParser(object):
             "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
 
     def _parse_qresult(self):
-        """Return QueryResult objects (PRIVATE)."""
+        """Yield QueryResult objects (PRIVATE)."""
         # state values, determines what to do for each line
         state_EOF = 0
         state_QRES_NEW = 1

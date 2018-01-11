@@ -450,7 +450,10 @@ class GenBankWriter(_InsdcWriter):
     SEQUENCE_INDENT = 9
 
     def _write_single_line(self, tag, text):
-        """Write single line in each GenBank record (PRIVATE)."""
+        """Write single line in each GenBank record (PRIVATE).
+        
+        Used in the 'header' of each GenBank record.
+        """
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
@@ -463,7 +466,10 @@ class GenBankWriter(_InsdcWriter):
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        """Write multiple lines in each GenBank record (PRIVATE)."""
+        """Write multiple lines in each GenBank record (PRIVATE).
+        
+        Used in the 'header' of each GenBank record.
+        """
         # TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
