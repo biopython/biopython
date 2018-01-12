@@ -259,7 +259,7 @@ class BlastParser(_XMLparser):
         self._header.reference = self._value
 
     def _end_BlastOutput_db(self):
-        """Yield the database(s) searched (PRIVATE).
+        """Record the database(s) searched (PRIVATE).
 
         Save this to put on each blast record object
         """
@@ -355,7 +355,7 @@ class BlastParser(_XMLparser):
                                          int(self._value))
 
     def _end_Parameters_filter(self):
-        """Record a filtering options (-F) (PRIVATE)."""
+        """Record filtering options (-F) (PRIVATE)."""
         self._parameters.filter = self._value
 
     # def _end_Parameters_pattern(self):
