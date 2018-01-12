@@ -548,7 +548,7 @@ _solexa_to_sanger_quality_str = dict(
 
 
 def _get_sanger_quality_str(record):
-    """Returns a Sanger FASTQ encoded quality string (PRIVATE).
+    """Return a Sanger FASTQ encoded quality string (PRIVATE).
 
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
@@ -668,7 +668,7 @@ _solexa_to_illumina_quality_str = dict(
 
 
 def _get_illumina_quality_str(record):
-    """Returns an Illumina 1.3 to 1.7 FASTQ encoded quality string (PRIVATE).
+    """Return an Illumina 1.3 to 1.7 FASTQ encoded quality string (PRIVATE).
 
     Notice that due to the limited range of printable ASCII characters, a
     PHRED quality of 62 is the maximum that can be held in an Illumina FASTQ
@@ -738,7 +738,7 @@ _phred_to_solexa_quality_str = dict(
 
 
 def _get_solexa_quality_str(record):
-    """Returns a Solexa FASTQ encoded quality string (PRIVATE).
+    """Return a Solexa FASTQ encoded quality string (PRIVATE).
 
     Notice that due to the limited range of printable ASCII characters, a
     Solexa quality of 62 is the maximum that can be held in a Solexa FASTQ
@@ -954,7 +954,7 @@ def FastqGeneralIterator(handle):
 
 
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
-    """Generator function to iterate over FASTQ records (as SeqRecord objects).
+    """Iterate over FASTQ records as SeqRecord objects.
 
     Arguments:
      - handle - input file
@@ -1049,7 +1049,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
 
 def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
-    r"""Parsing old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
+    r"""Parse old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
 

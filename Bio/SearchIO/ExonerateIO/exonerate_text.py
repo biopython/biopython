@@ -57,7 +57,7 @@ def _flip_codons(codon_seq, target_seq):
 
 
 def _get_block_coords(parsed_seq, row_dict, has_ner=False):
-    """Returns a list of start, end coordinates for each given block in the sequence."""
+    """Return a list of start, end coordinates for each given block in the sequence."""
     start = 0
     coords = []
     if not has_ner:
@@ -129,7 +129,7 @@ def _stitch_rows(raw_rows):
 
 
 def _get_row_dict(row_len, model):
-    """Returns a dictionary of row indices for parsing alignment blocks."""
+    """Return a dictionary of row indices for parsing alignment blocks."""
     idx = {}
     # 3 lines, usually in dna vs dna models
     if row_len == 3:
@@ -170,7 +170,7 @@ def _get_row_dict(row_len, model):
 
 
 def _get_blocks(rows, coords, idx):
-    """Returns a list of dictionaries of sequences split by the coordinates."""
+    """Return a list of dictionaries of sequences split by the coordinates."""
     for idx_name in ('query', 'hit', 'midline', 'qannot', 'hannot'):
         assert idx_name in idx
     blocks = []
@@ -190,7 +190,7 @@ def _get_blocks(rows, coords, idx):
 
 
 def _get_scodon_moves(tmp_seq_blocks):
-    """Dictionary of split codon locations relative to each fragment end (PRIVATE)."""
+    """Get a dictionary of split codon locations relative to each fragment end (PRIVATE)."""
     scodon_moves = {'query': [], 'hit': []}
     for seq_type in scodon_moves:
         scoords = []
@@ -214,7 +214,7 @@ def _get_scodon_moves(tmp_seq_blocks):
 
 
 def _clean_blocks(tmp_seq_blocks):
-    """Removes curly braces (split codon markers) from the given sequences."""
+    """Remove curly braces (split codon markers) from the given sequences."""
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
@@ -226,7 +226,7 @@ def _clean_blocks(tmp_seq_blocks):
 
 
 def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
-    """Returns the length of introns between fragments."""
+    """Return the length of introns between fragments."""
     # set opposite type, for setting introns
     opp_type = 'hit' if seq_type == 'query' else 'query'
     # list of flags to denote if an intron follows a block
@@ -431,7 +431,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def _read_alignment(self):
-        """Reads the raw alignment block strings, returns them in a list."""
+        """Read the raw alignment block strings, returns them in a list (PRIVATE)."""
         raw_aln_blocks = []
         # flag to check whether we're in an aligment row
         in_aln_row = False
@@ -482,7 +482,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
     _query_mark = b"C4 Alignment"
 
     def get_qresult_id(self, pos):
-        """Returns the query ID from the nearest "Query:" line."""
+        """Return the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
         sentinel = b"Query:"
@@ -498,7 +498,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
         return qid
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Return the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None

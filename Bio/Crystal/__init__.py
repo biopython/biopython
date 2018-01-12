@@ -60,7 +60,7 @@ class Hetero(object):
         return self.data == other.data
 
     def __ne__(self, other):
-        """Returns true iff self is not equal to other."""
+        """Return true iff self is not equal to other."""
         return not self.__eq__(other)
 
     def __repr__(self):
@@ -119,7 +119,7 @@ class Chain(object):
         return ok
 
     def __ne__(self, other):
-        """Returns true iff self is not equal to other."""
+        """Return true iff self is not equal to other."""
         return not self.__eq__(other)
 
     def __len__(self):

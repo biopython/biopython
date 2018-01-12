@@ -54,7 +54,7 @@ from Bio._py3k import basestring
 
 
 def GenBankIterator(handle):
-    """Breaks up a Genbank file into SeqRecord objects.
+    """Break up a Genbank file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -94,7 +94,7 @@ def GenBankIterator(handle):
 
 
 def EmblIterator(handle):
-    """Breaks up an EMBL file into SeqRecord objects.
+    """Break up an EMBL file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -140,7 +140,7 @@ def EmblIterator(handle):
 
 
 def ImgtIterator(handle):
-    """Breaks up an IMGT file into SeqRecord objects.
+    """Break up an IMGT file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -153,7 +153,7 @@ def ImgtIterator(handle):
 
 
 def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
-    """Breaks up a Genbank file into SeqRecord objects for each CDS feature.
+    """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
@@ -164,7 +164,7 @@ def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
 
 
 def EmblCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
-    """Breaks up a EMBL file into SeqRecord objects for each CDS feature.
+    """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
@@ -388,7 +388,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _split_multi_line(text, max_len):
-        """Returns a list of strings.
+        """Return a list of strings.
 
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
@@ -416,7 +416,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         return answer
 
     def _split_contig(self, record, max_len):
-        """Returns a list of strings, splits on commas."""
+        """Return a list of strings, splits on commas."""
         # TODO - Merge this with _write_multi_line method?
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
@@ -450,7 +450,10 @@ class GenBankWriter(_InsdcWriter):
     SEQUENCE_INDENT = 9
 
     def _write_single_line(self, tag, text):
-        """Used in the 'header' of each GenBank record."""
+        """Write single line in each GenBank record (PRIVATE).
+
+        Used in the 'header' of each GenBank record.
+        """
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
@@ -463,7 +466,10 @@ class GenBankWriter(_InsdcWriter):
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        """Used in the 'header' of each GenBank record."""
+        """Write multiple lines in each GenBank record (PRIVATE).
+
+        Used in the 'header' of each GenBank record.
+        """
         # TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)

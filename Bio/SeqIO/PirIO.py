@@ -108,7 +108,7 @@ _pir_alphabets = {"P1": generic_protein,
 
 
 def PirIterator(handle):
-    """Generator function to iterate over Fasta records (as SeqRecord objects).
+    """Iterate over Fasta records as SeqRecord objects.
 
     handle - input file
     alphabet - optional alphabet

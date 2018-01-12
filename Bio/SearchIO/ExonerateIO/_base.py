@@ -22,13 +22,13 @@ _RE_TRANS = re.compile(r'[53ISCF]')
 
 
 def _set_frame(frag):
-    """Sets the HSPFragment frames."""
+    """Set the HSPFragment frames."""
     frag.hit_frame = (frag.hit_start % 3 + 1) * frag.hit_strand
     frag.query_frame = (frag.query_start % 3 + 1) * frag.query_strand
 
 
 def _make_triplets(seq, phase=0):
-    """Selects a valid amino acid sequence given a 3-letter code input.
+    """Select a valid amino acid sequence given a 3-letter code input.
 
     This function takes a single three-letter amino acid sequence and the phase
     of the sequence to return the longest intact amino acid sequence possible.
@@ -57,7 +57,7 @@ def _make_triplets(seq, phase=0):
 
 
 def _get_fragments_coord(frags):
-    """Returns the letter coordinate of the given list of fragments.
+    """Return the letter coordinate of the given list of fragments.
 
     This function takes a list of three-letter amino acid sequences and
     returns a list of coordinates for each fragment had all the input
@@ -84,7 +84,7 @@ def _get_fragments_coord(frags):
 
 
 def _get_fragments_phase(frags):
-    """Returns the phases of the given list of 3-letter amino acid fragments.
+    """Return the phases of the given list of 3-letter amino acid fragments.
 
     This is an internal private function and is meant for parsing Exonerate's
     three-letter amino acid output.
@@ -172,7 +172,7 @@ def _adjust_aa_seq(fraglist):
 
 
 def _split_fragment(frag):
-    """Splits one HSPFragment containing frame-shifted alignment into two."""
+    """Split one HSPFragment containing frame-shifted alignment into two."""
     # given an HSPFragment object with frameshift(s), this method splits it
     # into fragments without frameshifts by sequentially chopping it off
     # starting from the beginning
@@ -236,7 +236,7 @@ def _split_fragment(frag):
 
 
 def _create_hsp(hid, qid, hspd):
-    """Returns a list of HSP objects from the given parsed HSP values."""
+    """Return a list of HSP objects from the given parsed HSP values."""
     frags = []
     # we are iterating over query_ranges, but hit_ranges works just as well
     for idx, qcoords in enumerate(hspd['query_ranges']):
@@ -334,7 +334,7 @@ class _BaseExonerateParser(object):
             yield qresult
 
     def read_until(self, bool_func):
-        """Reads the file handle until the given bool function returns True."""
+        """Read the file handle until the given bool function returns True."""
         while True:
             if not self.line or bool_func(self.line):
                 return
@@ -494,7 +494,7 @@ class _BaseExonerateIndexer(SearchIndexer):
         raise NotImplementedError("Should be defined by subclass")
 
     def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
+        """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         qresult_key = None
