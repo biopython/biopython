@@ -2550,9 +2550,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     >>> translate(coding_dna3, table=27, to_stop=True)
     Traceback (most recent call last):
        ...
-    ValueError: This table contains at least one stop codon ('TGA') which codes
-    for both 'STOP' and an amino acid ('W'). You can not use 'to_stop=True'
-    with this table.
+    ValueError: ... You can not use 'to_stop=True' with this table.
     """
     if isinstance(sequence, Seq):
         return sequence.translate(table, stop_symbol, to_stop, cds)
