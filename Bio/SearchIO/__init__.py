@@ -316,7 +316,7 @@ def parse(handle, format=None, **kwargs):
 
 
 def read(handle, format=None, **kwargs):
-    """Turns a search output file containing one query into a single QueryResult.
+    """Turn a search output file containing one query into a single QueryResult.
 
      - handle - Handle to the file, or the filename as a string.
      - format - Lower case string denoting one of the supported formats.
@@ -370,7 +370,7 @@ def read(handle, format=None, **kwargs):
 
 
 def to_dict(qresults, key_function=lambda rec: rec.id):
-    """Turns a QueryResult iterator or list into a dictionary.
+    """Turn a QueryResult iterator or list into a dictionary.
 
      - qresults     - Iterable returning QueryResult objects.
      - key_function - Optional callback function which when given a
@@ -572,7 +572,7 @@ def index_db(index_filename, filenames=None, format=None,
 
 
 def write(qresults, handle, format=None, **kwargs):
-    """Writes QueryResult objects to a file in the given format.
+    """Write QueryResult objects to a file in the given format.
 
      - qresults - An iterator returning QueryResult objects or a single
                   QueryResult object.

@@ -21,7 +21,7 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 
 def SimpleFastaParser(handle):
-    """Generator function to iterate over Fasta records (as string tuples).
+    """Iterate over Fasta records as string tuples.
 
     For each record a tuple of two strings is returned, the FASTA title
     line (without the leading '>' character), and the sequence (with any
@@ -74,9 +74,7 @@ def SimpleFastaParser(handle):
 
 
 def FastaTwoLineParser(handle):
-    """Generator function for two-line-per-record FASTA format.
-
-    Iterate over no-wrapping Fasta records as string tuples.
+    """Iterate over no-wrapping Fasta records as string tuples.
 
     Functionally the same as SimpleFastaParser but with a strict
     interpretation of the FASTA format as exactly two lines per
@@ -137,7 +135,7 @@ def FastaTwoLineParser(handle):
 
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
-    """Generator function to iterate over Fasta records (as SeqRecord objects).
+    """Iterate over Fasta records as SeqRecord objects.
 
     Arguments:
      - handle - input file

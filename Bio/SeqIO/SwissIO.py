@@ -65,7 +65,7 @@ def _make_seqfeature(name, from_res, to_res, description, ft_id):
 
 
 def SwissIterator(handle):
-    """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
+    """Break up a Swiss-Prot/UniProt file into SeqRecord objects.
 
     Every section from the ID line to the terminating // becomes
     a single SeqRecord with associated annotation and features.

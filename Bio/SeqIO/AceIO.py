@@ -20,7 +20,7 @@ from Bio.Sequencing import Ace
 
 
 def AceIterator(handle):
-    """Returns SeqRecord objects from an ACE file.
+    """Return SeqRecord objects from an ACE file.
 
     This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
     by iterating over the file in a single pass, we are forced to ignore any

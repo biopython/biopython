@@ -331,7 +331,7 @@ for tag in _INSTRUMENT_SPECIFIC_TAGS.values():
 
 
 def AbiIterator(handle, alphabet=None, trim=False):
-    """Iterator for the Abi file format."""
+    """Return an iterator for the Abi file format."""
     # raise exception is alphabet is not dna
     if alphabet is not None:
         if isinstance(Alphabet._get_base_alphabet(alphabet),
@@ -435,12 +435,12 @@ def AbiIterator(handle, alphabet=None, trim=False):
 
 
 def _AbiTrimIterator(handle):
-    """Iterator for the Abi file format that yields trimmed SeqRecord objects."""
+    """Return an iterator for the Abi file format that yields trimmed SeqRecord objects (PRIVATE)."""
     return AbiIterator(handle, trim=True)
 
 
 def _abi_parse_header(header, handle):
-    """Generator that returns directory contents."""
+    """Return directory contents (PRIVATE)."""
     # header structure (after ABIF marker):
     # file version, tag name, tag number,
     # element type code, element size, number of elements
@@ -529,7 +529,7 @@ def _abi_trim(seq_record):
 
 
 def _parse_tag_data(elem_code, elem_num, raw_data):
-    """Returns single data value.
+    """Return single data value.
 
     Arguments:
      - elem_code - What kind of data

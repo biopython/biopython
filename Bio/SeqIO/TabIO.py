@@ -40,7 +40,7 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
-    """Iterates over tab separated lines (as SeqRecord objects).
+    """Iterate over tab separated lines as SeqRecord objects.
 
     Each line of the file should contain one tab only, dividing the line
     into an identifier and the full sequence.

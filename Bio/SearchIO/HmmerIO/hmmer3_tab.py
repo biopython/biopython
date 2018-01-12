@@ -35,7 +35,7 @@ class Hmmer3TabParser(object):
                 yield qresult
 
     def _parse_row(self):
-        """Returns a dictionary of parsed row values."""
+        """Return a dictionary of parsed row values."""
         cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
@@ -78,7 +78,7 @@ class Hmmer3TabParser(object):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects."""
+        """Return QueryResult objects (PRIVATE)."""
         # state values, determines what to do for each line
         state_EOF = 0
         state_QRES_NEW = 1
@@ -154,7 +154,7 @@ class Hmmer3TabIndexer(SearchIndexer):
     _query_id_idx = 2
 
     def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
+        """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         query_id_idx = self._query_id_idx
@@ -196,7 +196,7 @@ class Hmmer3TabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw bytes string of a QueryResult object from the given offset."""
+        """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = self._query_id_idx
@@ -228,7 +228,7 @@ class Hmmer3TabWriter(object):
         self.handle = handle
 
     def write_file(self, qresults):
-        """Writes to the handle.
+        """Write to the handle.
 
         Returns a tuple of how many QueryResult, Hit, and HSP objects were written.
 
@@ -255,7 +255,7 @@ class Hmmer3TabWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self, first_qresult=None):
-        """Returns the header string of a HMMER table output."""
+        """Return the header string of a HMMER table output."""
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
@@ -288,7 +288,7 @@ class Hmmer3TabWriter(object):
         return header
 
     def _build_row(self, qresult):
-        """Returns a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object."""
         rows = ''
 
         # calculate whitespace required

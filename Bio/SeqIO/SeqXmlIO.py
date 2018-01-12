@@ -42,7 +42,7 @@ class XMLRecordIterator(object):
     """
 
     def __init__(self, handle, recordTag, namespace=None):
-        """Creating the object and initializing the XML parser."""
+        """Create the object and initializing the XML parser."""
         self._recordTag = recordTag
         self._namespace = namespace
         self._events = pulldom.parse(handle)
@@ -154,7 +154,7 @@ class SeqXmlIterator(XMLRecordIterator):
         record.annotations["ncbi_taxid"] = attr_dict["ncbiTaxID"]
 
     def _attr_entry(self, attr_dict, record):
-        """New entry set id and the optional entry source."""
+        """Set new entry with id and the optional entry source (PRIVATE)."""
         if "id" not in attr_dict:
             raise ValueError("Malformed entry! Identifier is missing.")
 

@@ -61,7 +61,7 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         self._parse = _parse
 
     def get(self, offset):
-        """Returns SeqRecord."""
+        """Return SeqRecord."""
         # Should be overridden for binary file formats etc:
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
@@ -187,7 +187,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         self._marker_re = re.compile(b"^" + marker)
 
     def __iter__(self):
-        """Returns (id, offset, length) tuples."""
+        """Return (id, offset, length) tuples."""
         marker_offset = len(self._marker)
         marker_re = self._marker_re
         handle = self._handle

@@ -200,7 +200,7 @@ _RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
 
 
 def _list_from_csv(csv_string, caster=None):
-    """Transforms the given comma-separated string into a list.
+    """Transform the given comma-separated string into a list (PRIVATE).
 
     :param csv_string: comma-separated input string
     :type csv_string: string
@@ -406,7 +406,7 @@ class BlatPslParser(object):
             yield qresult
 
     def _parse_row(self):
-        """Returns a dictionary of parsed column values."""
+        """Return a dictionary of parsed column values."""
         assert self.line
         cols = [x for x in self.line.strip().split('\t') if x]
         self._validate_cols(cols)
@@ -448,7 +448,7 @@ class BlatPslParser(object):
             "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects."""
+        """Yield QueryResult objects (PRIVATE)."""
         # state values, determines what to do for each line
         state_EOF = 0
         state_QRES_NEW = 1
@@ -527,7 +527,7 @@ class BlatPslIndexer(SearchIndexer):
         SearchIndexer.__init__(self, filename, pslx=pslx)
 
     def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
+        """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         # denotes column location for query identifier
@@ -568,7 +568,7 @@ class BlatPslIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns raw bytes string of a QueryResult object from the given offset."""
+        """Return raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = 9
@@ -634,7 +634,7 @@ class BlatPslWriter(object):
         return header
 
     def _build_row(self, qresult):
-        """Returns a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object."""
         # For now, our writer writes the row according to the order in
         # the QueryResult and Hit objects.
         # This is different from BLAT's native output, where the rows are

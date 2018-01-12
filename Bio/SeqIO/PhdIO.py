@@ -61,7 +61,7 @@ from Bio.SeqIO import QualityIO
 
 
 def PhdIterator(handle):
-    """Returns SeqRecord objects from a PHD file.
+    """Return SeqRecord objects from a PHD file.
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
     """

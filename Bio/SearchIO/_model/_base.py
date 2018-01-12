@@ -38,7 +38,7 @@ class _BaseHSP(_BaseSearchObject):
     """Abstract base class for HSP objects."""
 
     def _str_hsp_header(self):
-        """Prints the alignment header info."""
+        """Print the alignment header info."""
         lines = []
         # set query id line
         qid_line = trim_str('      Query: %s %s' %

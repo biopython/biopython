@@ -32,7 +32,7 @@ _RE_VCOMP = re.compile(r"""
 
 
 def parse_vulgar_comp(hsp, vulgar_comp):
-    """Parses the vulgar components present in the hsp dictionary."""
+    """Parse the vulgar components present in the hsp dictionary."""
     # containers for block coordinates
     qstarts, qends, hstarts, hends = \
             [hsp['query_start']], [], [hsp['hit_start']], []
@@ -167,7 +167,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
     _query_mark = _as_bytes('vulgar')
 
     def get_qresult_id(self, pos):
-        """Returns the query ID of the nearest vulgar line."""
+        """Return the query ID of the nearest vulgar line."""
         handle = self._handle
         handle.seek(pos)
         # get line, check if it's a vulgar line, and get query ID
@@ -177,7 +177,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         return id.group(1)
 
     def get_raw(self, offset):
-        """Returns the raw bytes string of a QueryResult object from the given offset."""
+        """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
