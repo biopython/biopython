@@ -57,7 +57,7 @@ class PatternIO(object):
             output_handle.write("%s\n" % string_pattern)
 
     def write_seq(self, seq_pattern_list, output_handle):
-        """Convenience function to write Seq objects to a file.
+        """Write Seq objects to a file.
 
         This can take Seqs and MutableSeqs, and write them to a file
         as strings.
