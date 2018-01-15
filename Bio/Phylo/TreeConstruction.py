@@ -604,7 +604,7 @@ class DistanceTreeConstructor(TreeConstructor):
             return tree
         else:
             raise TypeError("Must provide a DistanceCalculator object.")
-   
+
     def upgma(self, distance_matrix):
         """Construct and return a UPGMA tree.
 
@@ -682,7 +682,7 @@ class DistanceTreeConstructor(TreeConstructor):
             del dm[min_i]
         inner_clade.branch_length = 0
         return BaseTree.Tree(inner_clade)
-		
+
     def wpgma(self, distance_matrix):
         """Construct and return a WPGMA tree.
 
