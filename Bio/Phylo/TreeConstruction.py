@@ -619,6 +619,11 @@ class DistanceTreeConstructor(TreeConstructor):
 
         # make a copy of the distance matrix to be used
         dm = copy.deepcopy(distance_matrix)
+        # make a copy of the distance matrix to be used for counting
+        dm_count = copy.deepcopy(dm)
+        for i in range(1, len(dm_count)):
+            for j in range(0, i):
+                dm_count[i, j] = 1
         # init terminal clades
         clades = [BaseTree.Clade(None, name) for name in dm.names]
         # init minimum index
@@ -663,7 +668,13 @@ class DistanceTreeConstructor(TreeConstructor):
             # set the distances of new node at the index of min_j
             for k in range(0, len(dm)):
                 if k != min_i and k != min_j:
-                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k]) * 1.0 / 2
+                    dm[min_j, k] = ((dm[min_i, k] * dm_count[min_i, k]) + (dm[min_j, k] * dm_count[min_j, k])) * \
+                                   1.0 / (dm_count[min_i, k] + dm_count[min_j, k])
+
+                    dm_count[min_j, k] = dm_count[min_i, k] + dm_count[min_j, k]
+            dm_count.names[min_j] = "Inner" + str(inner_count)
+
+            del dm_count[min_i]
 
             dm.names[min_j] = "Inner" + str(inner_count)
 
@@ -758,7 +769,11 @@ class DistanceTreeConstructor(TreeConstructor):
         if clade.is_terminal():
             height = clade.branch_length
         else:
-            height = height + max([self._height_of(c) for c in clade.clades])
+            for terminal in clade.get_terminals():
+                path = clade.get_path(target=terminal)
+                height = 0
+                for value in path:
+                    height = height + value.branch_length
         return height
 
 # #################### Tree Scoring and Searching Classes #####################
