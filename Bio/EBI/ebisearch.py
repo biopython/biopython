@@ -19,7 +19,7 @@ The following code was developed by Berenice Batut (berenice.batut@gmail.com)
 References:
 Park Y.M., Squizzato S., Buso N., Gur T., Lopez R. (2017)
 The EBI search engine: EBI search as a service making biological data accessible
-for all.;Nucleic Acids Research, May 2, 2017; DOI: 10.1093/nar/gkx359
+for all.;Nucleic Acids Research, May 2, 2017; https://doi.org/10.1093/nar/gkx359
 
 """
 
