@@ -133,6 +133,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Katharine Lindner <katel at domain worldpath.net>
+- Katherine Richardson <https://github.com/stuckmke/>
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
 - Kian Ho <https://github.com/kianho>
