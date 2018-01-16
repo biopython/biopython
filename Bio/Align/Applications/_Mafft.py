@@ -6,8 +6,6 @@
 
 from __future__ import print_function
 
-
-import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 
