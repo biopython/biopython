@@ -842,7 +842,7 @@ class DistanceTreeConstructor(TreeConstructor):
                 path = clade.get_path(target=terminal)
                 height = 0
                 for value in path:
-                    height = height + value.branch_length
+                    height += value.branch_length
         return height
 
 # #################### Tree Scoring and Searching Classes #####################
