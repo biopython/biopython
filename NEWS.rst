@@ -36,6 +36,10 @@ compile time - only at run time (and only for those modules which use NumPy).
 Seq, UnknownSeq, MutableSeq and derived classes now support integer
 multiplication methods, matching native Python string methods.
 
+A translate method has been added to Bio.SeqFeature that will extract a
+feature and translate it using the codon_start and transl_table qualifiers
+of the feature if they are present.
+
 Bio.SearchIO is no longer considered experimental, and so it does not raise
 warnings anymore when imported.
 
@@ -49,6 +53,7 @@ possible, especially the following contributors:
 - Blaise Li
 - Chad Parmet
 - Chris Rands
+- Connor T. Skennerton
 - Francesco Gastaldello
 - Michiel de Hoon
 - Pamela Russell (first contribution)
@@ -135,6 +140,7 @@ possible, especially the following contributors:
 - Ariel Aptekmann
 - Chris Rands
 - Christian Brueffer
+- Connor T. Skennerton
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
