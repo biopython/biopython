@@ -337,6 +337,72 @@ class SeqFeature(object):
                              "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
 
+    def translate(self, parent_sequence, table="Standard", stop_symbol="*",
+            codon_start=1, to_stop=False, cds=False, gap=None):
+        """Get a translation of the feature's sequence.
+
+        This is a shortcut method that will both extract the feature and
+        translate it, taking into account the codon_start and transl_table
+        qualifiers, if they are present. If they are not present the
+        value of the arguments "table" and "codon_start" are used.
+
+        Arguments:
+         - parent_sequence - This method will translate DNA or RNA sequences,
+           and those with a nucleotide or generic alphabet. Trying to
+           translate a protein sequence raises an exception.
+         - table - Which codon table to use if there is no transl_table
+           qualifier for this feature. This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - codon_start - offset at which the first complete codon of a
+           coding feature can be found, relative to the first base of
+           that feature. Has a valid value of 1, 2 or 3. Will only be used
+           if the feature does not have a codon_start qualifier
+         - stop_symbol - Single character string, what to use for
+           terminators.  This defaults to the asterisk, "*".
+         - to_stop - Boolean, defaults to False meaning do a full
+           translation continuing on past any stop codons (translated as the
+           specified stop_symbol).  If True, translation is terminated at
+           the first in frame stop codon (and the stop_symbol is not
+           appended to the returned protein sequence).
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+           this checks the sequence starts with a valid alternative start
+           codon (which will be translated as methionine, M), that the
+           sequence length is a multiple of three, and that there is a
+           single in frame stop codon at the end (this will be excluded
+           from the protein sequence, regardless of the to_stop option).
+           If these tests fail, an exception is raised.
+         - gap - Single character string to denote symbol used for gaps.
+           It will try to guess the gap character from the alphabet.
+
+        e.g. Where a feature has transl_table and codon_start qualifiers:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
+        >>> f.qualifiers['transl_table'] = [11]
+        >>> f.translate(seq)
+        Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> f.qualifiers['codon_start'] = [2]
+        >>> f.translate(seq)
+        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        """
+        # see if this feature should be translated in a different
+        # frame using the "codon_start" qualifier
+        if codon_start not in [1, 2, 3]:
+            raise ValueError("The codon_start must be 1, 2, or 3. The supplied value"
+                    " is {}".format(codon_start))
+        codon_start = int(self.qualifiers.get("codon_start", [codon_start])[0]) - 1
+
+        feat_seq = self.extract(parent_sequence)[codon_start:]
+        codon_table = self.qualifiers.get("transl_table", [table])[0]
+
+        return feat_seq.translate(table=codon_table, stop_symbol=stop_symbol,
+                to_stop=to_stop, cds=cds, gap=gap)
+
     # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
