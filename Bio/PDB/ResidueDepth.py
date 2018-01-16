@@ -554,17 +554,3 @@ class ResidueDepth(AbstractPropertyMap):
             residue.xtra['EXP_RD'] = rd
             residue.xtra['EXP_RD_CA'] = ca_rd
         AbstractPropertyMap.__init__(self, depth_dict, depth_keys, depth_list)
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure("X", sys.argv[1])
-    model = s[0]
-
-    rd = ResidueDepth(model)
-
-    for item in rd:
-        print(item)
