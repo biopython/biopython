@@ -18,61 +18,42 @@ class ResidueDepthTests(unittest.TestCase):
 
     def test_ResidueDepth(self):
         """Test on module that calculate residue depth via MSMS on protein structures."""
-    prot_file = 'PDB/2XHE.pdb'
-    p = PDBParser()
-    s = p.get_structure("X", prot_file)
-    model = s[0]
-    rd = ResidueDepth(model, prot_file)
-    res_chain = ''
-    for item in rd.property_list[:100]:
-        res_chain = res_chain + item[0].get_resname()
-    self.assertEqual(res_chain, """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSE
-                                   RLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALV
-                                   ALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMET
-                                   SERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSE
-                                   RLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEI
-                                   LEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHE
-                                   ALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
-    prot_file = 'PDB/2BEG.pdb'
-    p = PDBParser()
-    s = p.get_structure("X", prot_file)
-    model = s[0]
-    rd = ResidueDepth(model, prot_file)
-    res_chain = ''
-    for item in rd.property_list[:100]:
-        res_chain = res_chain + item[0].get_resname()
-    self.assertEqual(res_chain, """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAIL
-                                   EILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEP
-                                   HEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEU
-                                   METVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUAS
-                                   PVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYG
-                                   LYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSER
-                                   ASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
-    prot_file = 'PDB/1LCD.pdb'
-    p = PDBParser()
-    s = p.get_structure("X", prot_file)
-    model = s[0]
-    rd = ResidueDepth(model, prot_file)
-    res_chain = ''
-    for item in rd.property_list[:100]:
-        res_chain = res_chain + item[0].get_resname()
-    self.assertEqual(res_chain, """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVA
-                                   LSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISV
-                                   ALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLU
-                                   LEUASNTYRILEPROASNARG""")
-    prot_file = 'PDB/1A8O.pdb'
-    p = PDBParser()
-    s = p.get_structure("X", prot_file)
-    model = s[0]
-    rd = ResidueDepth(model, prot_file)
-    res_chain = ''
-    for item in rd.property_list[:100]:
-        res_chain = res_chain + item[0].get_resname()
-    self.assertEqual(res_chain, """MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVA
-                                   LASPARGPHETYRLYSTHRLEUARGALAGLUGLNALASERGLNG
-                                   LUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALA
-                                   ASNPROASPCYSLYSTHRILELEULYSALALEUGLYPROGLYAL
-                                   ATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY""")
+        prot_file = 'PDB/2XHE.pdb'
+        p = PDBParser()
+        s = p.get_structure("X", prot_file)
+        model = s[0]
+        rd = ResidueDepth(model, prot_file)
+        res_chain = ''
+        for item in rd.property_list[:100]:
+            res_chain = res_chain + item[0].get_resname()
+        self.assertEqual(res_chain, """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
+        prot_file = 'PDB/2BEG.pdb'
+        p = PDBParser()
+        s = p.get_structure("X", prot_file)
+        model = s[0]
+        rd = ResidueDepth(model, prot_file)
+        res_chain = ''
+        for item in rd.property_list[:100]:
+            res_chain = res_chain + item[0].get_resname()
+        self.assertEqual(res_chain, """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
+        prot_file = 'PDB/1LCD.pdb'
+        p = PDBParser()
+        s = p.get_structure("X", prot_file)
+        model = s[0]
+        rd = ResidueDepth(model, prot_file)
+        res_chain = ''
+        for item in rd.property_list[:100]:
+            res_chain = res_chain + item[0].get_resname()
+        self.assertEqual(res_chain, """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROASNARG""")
+        prot_file = 'PDB/1A8O.pdb'
+        p = PDBParser()
+        s = p.get_structure("X", prot_file)
+        model = s[0]
+        rd = ResidueDepth(model, prot_file)
+        res_chain = ''
+        for item in rd.property_list[:100]:
+            res_chain = res_chain + item[0].get_resname()
+        self.assertEqual(res_chain, """MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUGLNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALAASNPROASPCYSLYSTHRILELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY""")
 
 
 if __name__ == '__main__':
