@@ -2387,26 +2387,19 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     n = len(sequence)
 
     # Check for tables with 'ambiguous' (dual-coding) stop codons:
-    for codon in stop_codons:
-            try:
-                forward_table[codon]
-                if to_stop:
-                    raise ValueError("This table contains at least one stop "
-                                     "codon ('{}') which codes for both "
-                                     "'STOP' and an amino acid ('{}'). You "
-                                     "can not use 'to_stop=True' with this "
-                                     "table."
-                                     .format(codon, forward_table[codon]))
-                else:
-                    warnings.warn("This table contains at least one stop "
-                                  "codon ('{}') which codes for both 'STOP' "
-                                  "and an amino acid ('{}'). Such codons will "
-                                  "be translated as amino acid."
-                                  .format(codon, forward_table[codon]),
-                                  BiopythonWarning)
-                break
-            except KeyError:
-                pass  # KeyError is the expected behaviour for most tables
+    for codon in (c for c in stop_codons if c in forward_table):
+        if to_stop:
+            raise ValueError("This table contains at least one stop codon "
+                             "('{}') which codes for both 'STOP' and an "
+                             "amino acid ('{}'). You can not use 'to_stop="
+                             "True' with this table."
+                             .format(codon, forward_table[codon]))
+        warnings.warn("This table contains at least one stop codon ('{}') "
+                      "which codes for both 'STOP' and an amino acid ('{}'). "
+                      "Such codons will be translated as amino acid."
+                      .format(codon, forward_table[codon]),
+                      BiopythonWarning)
+        break
 
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
