@@ -11,6 +11,7 @@
 
 import unittest
 from Bio.PDB import PDBParser, ResidueDepth
+from Bio import MissingExternalDependencyError
 
 
 msms_exe = None
