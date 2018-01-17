@@ -13,10 +13,24 @@ import unittest
 from Bio.PDB import PDBParser, ResidueDepth
 
 
+msms_exe = None
+from Bio._py3k import getoutput
+try:
+    output = getoutput("msms -h")
+    if output.startswith("Usage : msms parameters"):
+        msms_exe = "msms"
+except OSError:
+    pass
+
+if not msms_exe:
+    raise MissingExternalDependencyError(
+        "Install MSMS if you want to use it in Biopython.")
+
+
 class ResidueDepthTests(unittest.TestCase):
     """Test ResidueDepth module."""
 
-    def test_ResidueDepth(self):
+    def test_ResidueDepth_2XHE(self):
         """Test on module that calculate residue depth via MSMS on protein structures."""
         prot_file = 'PDB/2XHE.pdb'
         p = PDBParser()
@@ -27,6 +41,8 @@ class ResidueDepthTests(unittest.TestCase):
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
         self.assertEqual(res_chain, """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
+
+    def test_ResidueDepth_2BEG(self):
         prot_file = 'PDB/2BEG.pdb'
         p = PDBParser()
         s = p.get_structure("X", prot_file)
@@ -36,6 +52,8 @@ class ResidueDepthTests(unittest.TestCase):
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
         self.assertEqual(res_chain, """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
+
+    def test_ResidueDepth_1LCD(self):
         prot_file = 'PDB/1LCD.pdb'
         p = PDBParser()
         s = p.get_structure("X", prot_file)
@@ -45,6 +63,8 @@ class ResidueDepthTests(unittest.TestCase):
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
         self.assertEqual(res_chain, """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROASNARG""")
+
+    def test_ResidueDepth_1A8O(self):
         prot_file = 'PDB/1A8O.pdb'
         p = PDBParser()
         s = p.get_structure("X", prot_file)
