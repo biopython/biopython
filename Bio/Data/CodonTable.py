@@ -343,6 +343,14 @@ class AmbiguousForwardTable(object):
 
         self._cache = {}
 
+    def __contains__(self, codon):
+        """Check if codon works as key for ambiguous forward_table."""
+        try:
+            self.__getitem__(codon)
+            return True
+        except (KeyError, TranslationError):
+            return False
+
     def get(self, codon, failobj=None):
         try:
             return self.__getitem__(codon)
