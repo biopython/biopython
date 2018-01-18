@@ -10,9 +10,10 @@
 """Unit tests for the Bio.PDB.ResidueDepth module."""
 
 import unittest
+import warnings
 from Bio.PDB import PDBParser, ResidueDepth
-from Bio import MissingExternalDependencyError
-
+from Bio import MissingExternalDependencyError, BiopythonDeprecationWarning
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 msms_exe = None
 from Bio._py3k import getoutput
@@ -35,9 +36,13 @@ class ResidueDepthTests(unittest.TestCase):
         """Test on module that calculate residue depth via MSMS on protein structures."""
         prot_file = 'PDB/2XHE.pdb'
         p = PDBParser()
-        s = p.get_structure("X", prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s = p.get_structure("X", prot_file)
         model = s[0]
-        rd = ResidueDepth(model, prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            rd = ResidueDepth(model, prot_file)
         res_chain = ''
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
@@ -48,7 +53,9 @@ class ResidueDepthTests(unittest.TestCase):
         p = PDBParser()
         s = p.get_structure("X", prot_file)
         model = s[0]
-        rd = ResidueDepth(model, prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            rd = ResidueDepth(model, prot_file)
         res_chain = ''
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
@@ -57,9 +64,13 @@ class ResidueDepthTests(unittest.TestCase):
     def test_ResidueDepth_1LCD(self):
         prot_file = 'PDB/1LCD.pdb'
         p = PDBParser()
-        s = p.get_structure("X", prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s = p.get_structure("X", prot_file)
         model = s[0]
-        rd = ResidueDepth(model, prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            rd = ResidueDepth(model, prot_file)
         res_chain = ''
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
@@ -70,7 +81,9 @@ class ResidueDepthTests(unittest.TestCase):
         p = PDBParser()
         s = p.get_structure("X", prot_file)
         model = s[0]
-        rd = ResidueDepth(model, prot_file)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
+            rd = ResidueDepth(model, prot_file)
         res_chain = ''
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
