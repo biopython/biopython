@@ -48,7 +48,7 @@ class TestQblast(unittest.TestCase):
         # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
-                        "rat [ORGN]", {'megablast': 'FALSE'},
+                        None, {'megablast': 'FALSE', 'organism': 'rat (taxid:10114)'},
                         ['9506405', '13592137', '37589612', '149064087', '56912225'])
 
     def test_pcr_primers(self):
@@ -123,6 +123,17 @@ class TestQblast(unittest.TestCase):
                             'template_length': 18,
                             'megablast': 'on',
                         }, ['XM_635681.1', 'XM_008496783.1'])
+
+    def test_SRA_db(self):
+        # Try to blast agianst sra database with "organism" option.
+        self.run_qblast("blastn", "sra",
+                        """>some_seq_from_Ae.albopictus_C636
+                        AAATGCTGTGCAGTACGAGAGGAACCACAGCTTCGAACCAATGGCTCAAAACTAGTTCGA
+                        CCGGACTTTGGTATAACGCTACGTTCGTTGGATTATGCCTGAACGCCTCTAAGGTCGTAA
+                        C""",
+                        10, None, {"organism": "SRX2911477"},
+                        ["SRR5675886.6928865.1", "SRR5675886.6894837.1",
+                         "SRR5675886.6865755.1", "SRR5675886.6680098.1"])
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         try:
