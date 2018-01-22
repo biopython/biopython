@@ -22,6 +22,7 @@ from Bio.PDB.parse_pdb_header import parse_pdb_header, _parse_remark_465
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB file(s)."""
+
     def test_parse_pdb_with_remark_465(self):
         """Tests that parse_pdb_header now can identify some REMARK 465 entries."""
         header = parse_pdb_header("PDB/2XHE.pdb")
@@ -35,16 +36,17 @@ class ParseReal(unittest.TestCase):
 
     def test_parse_remark_465(self):
         """A UNIT-test for the private function _parse_remark_465."""
-        out_d = {"has_missing_residues": False, "missing_residues": []}
-        _parse_remark_465("", out_d)
-        self.assertFalse(out_d["has_missing_residues"])
-        _parse_remark_465("GLU B   276", out_d)
-        self.assertTrue(out_d["has_missing_residues"])
-        self.assertEqual(len(out_d["missing_residues"]), 1)
-        out_d = {"has_missing_residues": False, "missing_residues": []}
-        _parse_remark_465("SOME OTHER TEXT THAT CAN'T BE PARSED WITH NUMBERS 1234", out_d)
-        self.assertTrue(out_d["has_missing_residues"])
-        self.assertEqual(out_d["missing_residues"], [])
+        info = _parse_remark_465("GLU B   276")
+        self.assertEqual(info, {"model": None, "res_name": "GLU",
+                                "chain": "B", "ssseq": 276, "insertion": None})
+
+        info = _parse_remark_465("2 GLU B   276B")
+        self.assertEqual(info, {"model": 2, "res_name": "GLU",
+                                "chain": "B", "ssseq": 276, "insertion": "B"})
+
+        info = _parse_remark_465("A 2    11")
+        self.assertEqual(info, {"model": None, "res_name": "A",
+                                "chain": "2", "ssseq": 11, "insertion": None})
 
 
 if __name__ == '__main__':
