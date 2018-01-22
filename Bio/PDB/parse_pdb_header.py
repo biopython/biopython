@@ -166,7 +166,8 @@ def _parse_remark_465(line):
     if match is not None:
         residue = {}
         if " " in match.group(1):
-            residue["model"], residue["res_name"] = match.group(1).split(" ")
+            model, residue["res_name"] = match.group(1).split(" ")
+            residue["model"] = int(model)
         else:
             residue["model"] = None
             residue["res_name"] = match.group(1)
