@@ -42,7 +42,7 @@ print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 
 
 class TestQblast(unittest.TestCase):
-    
+
     import time
 
     def test_blastp_nr_actin(self):
