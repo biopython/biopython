@@ -12,7 +12,7 @@
 import unittest
 import warnings
 from Bio.PDB import PDBParser, ResidueDepth
-from Bio import MissingExternalDependencyError, BiopythonDeprecationWarning
+from Bio import MissingExternalDependencyError
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 msms_exe = None
@@ -32,66 +32,7 @@ if not msms_exe:
 class ResidueDepthTests(unittest.TestCase):
     """Test ResidueDepth module."""
 
-    def test_ResidueDepth_2XHE_old(self):
-        """Test on module that calculate residue depth via MSMS on protein structures."""
-        prot_file = 'PDB/2XHE.pdb'
-        p = PDBParser()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = p.get_structure("X", prot_file)
-        model = s[0]
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            rd = ResidueDepth(model, prot_file)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
-
-    def test_ResidueDepth_2BEG_old(self):
-        prot_file = 'PDB/2BEG.pdb'
-        p = PDBParser()
-        s = p.get_structure("X", prot_file)
-        model = s[0]
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            rd = ResidueDepth(model, prot_file)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
-
-    def test_ResidueDepth_1LCD_old(self):
-        prot_file = 'PDB/1LCD.pdb'
-        p = PDBParser()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = p.get_structure("X", prot_file)
-        model = s[0]
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            rd = ResidueDepth(model, prot_file)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROASNARG""")
-
-    def test_ResidueDepth_1A8O_old(self):
-        prot_file = 'PDB/1A8O.pdb'
-        p = PDBParser()
-        s = p.get_structure("X", prot_file)
-        model = s[0]
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonDeprecationWarning)
-            rd = ResidueDepth(model, prot_file)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUGLNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALAASNPROASPCYSLYSTHRILELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY""")
-
-    def test_ResidueDepth_2XHE_new(self):
-        """Test on module that calculate residue depth via MSMS on protein structures."""
-        prot_file = 'PDB/2XHE.pdb'
+    def check_msms(self, prot_file, first_100_residues):
         p = PDBParser()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
@@ -101,42 +42,19 @@ class ResidueDepthTests(unittest.TestCase):
         res_chain = ''
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
+        self.assertEqual(res_chain, first_100_residues)
 
-    def test_ResidueDepth_2BEG_new(self):
-        prot_file = 'PDB/2BEG.pdb'
-        p = PDBParser()
-        s = p.get_structure("X", prot_file)
-        model = s[0]
-        rd = ResidueDepth(model)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
+    def test_ResidueDepth_2XHE(self):
+        self.check_msms('PDB/2XHE.pdb', """HISMETSERLEULYSSERALAVALLYSTHRVALLEUTHRASNSERLEUARGSERVALALAASPGLYGLYASPTRPLYSVALLEUVALVALASPLYSPROALALEUARGMETILESERGLUCYSALAARGMETSERGLUILELEUASPLEUGLYVALTHRVALVALGLUASPVALSERLYSGLNARGLYSVALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPROTHRGLUGLUASNLEUASPTYRVALILEARGASPPHEALAASPARGTHRPROTHRTYRGLUALAALAHISLEU""")
 
-    def test_ResidueDepth_1LCD_new(self):
-        prot_file = 'PDB/1LCD.pdb'
-        p = PDBParser()
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", PDBConstructionWarning)
-            s = p.get_structure("X", prot_file)
-        model = s[0]
-        rd = ResidueDepth(model)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROASNARG""")
+    def test_ResidueDepth_2BEG(self):
+        self.check_msms('PDB/2BEG.pdb', """LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLYVALVALILEALALEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGLYALAILEILEGLYLEUMETVALGLYGLY""")
 
-    def test_ResidueDepth_1A8O_new(self):
-        prot_file = 'PDB/1A8O.pdb'
-        p = PDBParser()
-        s = p.get_structure("X", prot_file)
-        model = s[0]
-        rd = ResidueDepth(model)
-        res_chain = ''
-        for item in rd.property_list[:100]:
-            res_chain = res_chain + item[0].get_resname()
-        self.assertEqual(res_chain, """MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUGLNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALAASNPROASPCYSLYSTHRILELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY""")
+    def test_ResidueDepth_1LCD(self):
+        self.check_msms('PDB/1LCD.pdb', """METLYSPROVALTHRLEUTYRASPVALALAGLUTYRALAGLYVALSERTYRGLNTHRVALSERARGVALVALASNGLNALASERHISVALSERALALYSTHRARGGLULYSVALGLUALAALAMETALAGLULEUASNTYRILEPROASNARG""")
+
+    def test_ResidueDepth_1A8O(self):
+        self.check_msms('PDB/1A8O.pdb', """MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGASPTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUGLNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHRLEULEUVALGLNASNALAASNPROASPCYSLYSTHRILELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUMSEMSETHRALACYSGLNGLY""")
 
 
 if __name__ == '__main__':
