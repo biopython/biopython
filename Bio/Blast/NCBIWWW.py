@@ -82,8 +82,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     import time
 
     assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
-    if url_base == "https://blast.ncbi.nlm.nih.gov/Blast.cgi":
-        assert num_threads is None
+    if url_base == "https://blast.ncbi.nlm.nih.gov/Blast.cgi" and num_threads is not None:
+        raise ValueError('The "num_threads" option cannot be used on NCBI public servers.')
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
