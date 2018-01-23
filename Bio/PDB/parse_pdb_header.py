@@ -141,13 +141,8 @@ def _parse_remark_465(line):
     only gives templates, but does not say they have to be followed.
     So we assume that not all pdb-files with a REMARK 465 can be understood.
 
-    The dictionary entry "has_missing_residues" will be set to True, if
-    at least one REMARK 465 entry with non-empty text exists.
-
-    The dictionary entry 'missing_residues' will be filled with those
-    missing residues that can be parsed from the PDB header.
-    WARNING: The list out_dict['missing_residues'] will be
-    empty or incomplete, if the pdb-header is not successfully parsed.
+    Returns a dictionary with the following keys:
+    "model", "res_name", "chain", "ssseq", "insertion"
     """
     if line:
         # Note that line has been stripped.
