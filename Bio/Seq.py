@@ -2184,9 +2184,9 @@ class MutableSeq(object):
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        c = dict([(x.lower(), y.lower()) for x, y in d.items()])
-        d.update(c)
-        self.data = [d[c] for c in self.data]
+        mixed = d.copy()  # We're going to edit this to be mixed case!
+        mixed.update((x.lower(), y.lower()) for x, y in d.items())
+        self.data = [mixed[_] for _ in self.data]
         self.data = array.array(self.array_indicator, self.data)
 
     def reverse_complement(self):
