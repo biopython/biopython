@@ -7,9 +7,6 @@ ignore =
     # =======================
     # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-    #
-    # These are ignored by default:
-    E122,E123,E126,E241,W503,
     # =====================================
     # pydocstyle: D### - Missing Docstrings
     # =====================================
