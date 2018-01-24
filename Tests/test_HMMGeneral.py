@@ -3,6 +3,8 @@
 
 Also tests Training methods.
 """
+
+
 # standard modules
 from __future__ import print_function
 
@@ -39,6 +41,28 @@ def test_assertion(name, result, expected):
     """
     assert result == expected, "Expected %s, got %s for %s" \
            % (expected, result, name)
+
+
+class TrainingSequenceTest(unittest.TestCase):
+    def test_empty_state_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_valid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('12', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_invalid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('1', NumberAlphabet())
+        with self.assertRaises(ValueError):
+            Trainer.TrainingSequence(emission_seq, state_seq)
 
 
 class MarkovModelBuilderTest(unittest.TestCase):
