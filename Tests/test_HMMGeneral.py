@@ -3,8 +3,6 @@
 
 Also tests Training methods.
 """
-
-
 # standard modules
 from __future__ import print_function
 
@@ -401,8 +399,6 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         previous_vars = {('1', 0): .5,
                          ('2', 0): .7}
         s_value = self.dp._calculate_s_value(1, previous_vars)
-
-        # print(s_value)
 
 
 class AbstractTrainerTest(unittest.TestCase):
