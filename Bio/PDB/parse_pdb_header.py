@@ -103,8 +103,7 @@ def _nice_case(line):
         if c >= 'a' and c <= 'z' and nextCap:
             c = c.upper()
             nextCap = 0
-        elif c == ' ' or c == '.' or c == ',' or c == ';' or c == ':' or c == '\t' or\
-             c == '-' or c == '_':
+        elif c in ' .,;:\t-_':
             nextCap = 1
         s += c
         i += 1
