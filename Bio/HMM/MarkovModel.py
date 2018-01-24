@@ -477,14 +477,12 @@ class HiddenMarkovModel(object):
         # a dictionary of the possible transitions from each state
         # each key is a source state, mapped to a list of the destination states
         # that are reachable from the source state via a transition
-        self._transitions_from = \
-           _calculate_from_transitions(self.transition_prob)
+        self._transitions_from = _calculate_from_transitions(self.transition_prob)
 
         # a dictionary of the possible transitions to each state
         # each key is a destination state, mapped to a list of source states
         # from which the destination is reachable via a transition
-        self._transitions_to = \
-           _calculate_to_transitions(self.transition_prob)
+        self._transitions_to = _calculate_to_transitions(self.transition_prob)
 
     def get_blank_transitions(self):
         """Get the default transitions for the model.

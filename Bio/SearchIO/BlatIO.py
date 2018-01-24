@@ -283,8 +283,10 @@ def _calc_score(psl, is_protein):
     # calculates score
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     size_mul = 3 if is_protein else 1
-    return size_mul * (psl['matches'] + (psl['repmatches'] >> 1)) - \
-            size_mul * psl['mismatches'] - psl['qnuminsert'] - psl['tnuminsert']
+    return (size_mul * (psl['matches'] + (psl['repmatches'] >> 1))
+            - size_mul * psl['mismatches']
+            - psl['qnuminsert']
+            - psl['tnuminsert'])
 
 
 def _create_hsp(hid, qid, psl):

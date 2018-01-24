@@ -119,11 +119,9 @@ def _stitch_rows(raw_rows):
     # to flip them with their 'inner' pairs
     if len(cmbn_rows) == 5:
         # flip query sequence
-        cmbn_rows[0], cmbn_rows[1] = \
-                _flip_codons(cmbn_rows[0], cmbn_rows[1])
+        cmbn_rows[0], cmbn_rows[1] = _flip_codons(cmbn_rows[0], cmbn_rows[1])
         # flip hit sequence
-        cmbn_rows[4], cmbn_rows[3] = \
-                _flip_codons(cmbn_rows[4], cmbn_rows[3])
+        cmbn_rows[4], cmbn_rows[3] = _flip_codons(cmbn_rows[4], cmbn_rows[3])
 
     return cmbn_rows
 
@@ -275,8 +273,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
     # and start from the second block, after the first inter seq
     for idx, block in enumerate(hsp[seq_type][1:]):
         bstart = coords[-1][1] + inter_lens[idx] * seq_step
-        bend = bstart + seq_step * \
-                len(block.replace('-', ''))
+        bend = bstart + seq_step * len(block.replace('-', ''))
         coords.append((bstart, bend))
 
     # adjust the coords so the smallest is [0], if strand is -1
@@ -411,8 +408,7 @@ class ExonerateTextParser(_BaseExonerateParser):
             assert len(inter_lens) == len(hsp[opp_type]) - 1, \
                     "%r vs %r" % (len(inter_lens), len(hsp[opp_type]) - 1)
             # fill the hsp query and hit coordinates
-            hsp['%s_ranges' % opp_type] = \
-                    _comp_coords(hsp, opp_type, inter_lens)
+            hsp['%s_ranges' % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner
             # can't do this in the if-else clause above since we need to
             # compute the ranges first

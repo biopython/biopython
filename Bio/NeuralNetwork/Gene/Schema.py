@@ -242,10 +242,9 @@ class GeneticAlgorithmFinder(object):
            that we want to generate.
 
         """
-        start_population = \
-           Organism.function_population(self.motif_generator.random_motif,
-                                        self.initial_population,
-                                        fitness)
+        start_population = Organism.function_population(self.motif_generator.random_motif,
+                                                        self.initial_population,
+                                                        fitness)
         finisher = SimpleFinisher(num_schemas, self.min_generations)
 
         # set up the evolver and do the evolution
@@ -659,9 +658,9 @@ class SchemaFactory(object):
 
             num_tries += 1
 
-            new_schema, matching_motifs = \
-                        self._schema_from_motif(cur_motif, motif_list,
-                                                num_ambiguous)
+            new_schema, matching_motifs = self._schema_from_motif(cur_motif,
+                                                                  motif_list,
+                                                                  num_ambiguous)
 
             has_match = 0
             for old_schema in cur_schemas:

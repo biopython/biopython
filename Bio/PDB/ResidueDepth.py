@@ -526,10 +526,9 @@ class ResidueDepth(AbstractPropertyMap):
         """Initialize the class."""
         # Issue warning if pdb_file is given
         if pdb_file is not None:
-            warnings.warn(("ResidueDepth no longer requires a pdb file."
-                           " This argument will be removed in a future release"
-                           " of Biopython."),
-                           BiopythonDeprecationWarning)
+            warnings.warn("ResidueDepth no longer requires a pdb file. "
+                          "This argument will be removed in a future release "
+                          "of Biopython.", BiopythonDeprecationWarning)
 
         depth_dict = {}
         depth_list = []

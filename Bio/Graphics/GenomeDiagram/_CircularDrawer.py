@@ -102,8 +102,8 @@ class CircularDrawer(AbstractDrawer):
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
-                                  x, y, xl, xr, yt, yb, start, end,
-                                  tracklines, cross_track_links)
+                                x, y, xl, xr, yt, yb, start, end,
+                                tracklines, cross_track_links)
 
         # Useful measurements on the page
         self.track_size = track_size

@@ -128,10 +128,8 @@ class KGMLCanvas(object):
         # Instantiate canvas
         self.drawing = \
             canvas.Canvas(filename, bottomup=0,
-                          pagesize=(cwidth *
-                                        (1 + 2 * self.margins[0]),
-                                    cheight *
-                                        (1 + 2 * self.margins[1])))
+                          pagesize=(cwidth * (1 + 2 * self.margins[0]),
+                                    cheight * (1 + 2 * self.margins[1])))
         self.drawing.setFont(self.fontname, self.fontsize)
         # Transform the canvas to add the margins
         self.drawing.translate(self.margins[0] * self.pathway.bounds[1][0],

@@ -34,14 +34,19 @@ _RE_VCOMP = re.compile(r"""
 def parse_vulgar_comp(hsp, vulgar_comp):
     """Parse the vulgar components present in the hsp dictionary."""
     # containers for block coordinates
-    qstarts, qends, hstarts, hends = \
-            [hsp['query_start']], [], [hsp['hit_start']], []
+    qstarts = [hsp['query_start']]
+    qends = []
+    hstarts = [hsp['hit_start']]
+    hends = []
     # containers for split codons
-    hsp['query_split_codons'], hsp['hit_split_codons'] = [], []
+    hsp['query_split_codons'] = []
+    hsp['hit_split_codons'] = []
     # containers for ner blocks
-    hsp['query_ner_ranges'], hsp['hit_ner_ranges'] = [], []
+    hsp['query_ner_ranges'] = []
+    hsp['hit_ner_ranges'] = []
     # sentinels for tracking query and hit positions
-    qpos, hpos = hsp['query_start'], hsp['hit_start']
+    qpos = hsp['query_start']
+    hpos = hsp['hit_start']
     # multiplier for determining sentinel movement
     qmove = 1 if hsp['query_strand'] >= 0 else -1
     hmove = 1 if hsp['hit_strand'] >= 0 else -1

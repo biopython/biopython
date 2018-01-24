@@ -367,8 +367,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
         elif format in SeqIO._FormatToIterator:
             # Exploit the existing SeqIO parser to the dirty work!
             i = _SeqIO_to_alignment_iterator(fp, format,
-                                                alphabet=alphabet,
-                                                seq_count=seq_count)
+                                             alphabet=alphabet,
+                                             seq_count=seq_count)
         else:
             raise ValueError("Unknown format '%s'" % format)
 

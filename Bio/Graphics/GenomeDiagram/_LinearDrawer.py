@@ -119,8 +119,8 @@ class LinearDrawer(AbstractDrawer):
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
-                                  x, y, xl, xr, yt, yb, start, end,
-                                  tracklines, cross_track_links)
+                                x, y, xl, xr, yt, yb, start, end,
+                                tracklines, cross_track_links)
 
         # Useful measurements on the page
         self.fragments = fragments
@@ -995,27 +995,27 @@ class LinearDrawer(AbstractDrawer):
         pos, val = data[0]
         lastfrag, lastx = self.canvas_location(pos)
         lastx += self.x0        # Start xy co-ords
-        lasty = trackheight * (val - midval) / resolution + \
-                self.fragment_lines[lastfrag][0] + ctr
+        lasty = (trackheight * (val - midval) / resolution
+                 + self.fragment_lines[lastfrag][0] + ctr)
         lastval = val
         # Add a series of lines linking consecutive data points
         for pos, val in data:
             frag, x = self.canvas_location(pos)
             x += self.x0        # next xy co-ords
-            y = trackheight * (val - midval) / resolution + \
-                self.fragment_lines[frag][0] + ctr
+            y = (trackheight * (val - midval) / resolution
+                 + self.fragment_lines[frag][0] + ctr)
             if frag == lastfrag:    # Points on the same fragment: draw the line
                 line_elements.append(Line(lastx, lasty, x, y,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
             else:   # Points not on the same fragment, so interpolate
-                tempy = trackheight * (val - midval) / resolution + \
-                        self.fragment_lines[lastfrag][0] + ctr
+                tempy = (trackheight * (val - midval) / resolution
+                         + self.fragment_lines[lastfrag][0] + ctr)
                 line_elements.append(Line(lastx, lasty, self.xlim, tempy,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
-                tempy = trackheight * (val - midval) / resolution + \
-                        self.fragment_lines[frag][0] + ctr
+                tempy = (trackheight * (val - midval) / resolution
+                         + self.fragment_lines[frag][0] + ctr)
                 line_elements.append(Line(self.x0, tempy, x, y,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))

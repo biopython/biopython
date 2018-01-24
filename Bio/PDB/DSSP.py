@@ -485,10 +485,10 @@ class DSSP(AbstractResiduePropertyMap):
                 raise PDBException("Structure/DSSP mismatch at %s" % res)
 
             dssp_vals = (dssp_index, aa, ss, rel_acc, phi, psi,
-                            NH_O_1_relidx, NH_O_1_energy,
-                            O_NH_1_relidx, O_NH_1_energy,
-                            NH_O_2_relidx, NH_O_2_energy,
-                            O_NH_2_relidx, O_NH_2_energy)
+                         NH_O_1_relidx, NH_O_1_energy,
+                         O_NH_1_relidx, O_NH_1_energy,
+                         NH_O_2_relidx, NH_O_2_energy,
+                         O_NH_2_relidx, O_NH_2_energy)
 
             dssp_map[key] = dssp_vals
             dssp_list.append(dssp_vals)

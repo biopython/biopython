@@ -147,7 +147,7 @@ class ColorTranslator(object):
                     else:
                         comment = ""
                     self._colorscheme[label] = (self.int255_color((red, green, blue)),
-                                                 comment)
+                                                comment)
                 except ValueError:
                     raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 

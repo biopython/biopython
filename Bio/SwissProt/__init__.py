@@ -333,8 +333,7 @@ def _read_dt(record, line):
         for index in range(len(uprcols)):
             if 'REL.' in uprcols[index]:
                 rel_index = index
-        assert rel_index >= 0, \
-                "Could not find Rel. in DT line: %s" % line
+        assert rel_index >= 0, "Could not find Rel. in DT line: %s" % line
         version_index = rel_index + 1
         # get the version information
         str_version = cols[version_index].rstrip(",")

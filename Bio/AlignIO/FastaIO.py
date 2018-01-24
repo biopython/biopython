@@ -46,10 +46,8 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     align_stripped = alignment_seq_with_flanking.strip("-")
     display_start = int(annotation['al_display_start'])
     if int(annotation['al_start']) <= int(annotation['al_stop']):
-        start = int(annotation['al_start']) \
-              - display_start
-        end = int(annotation['al_stop']) \
-              - display_start + 1
+        start = int(annotation['al_start']) - display_start
+        end = int(annotation['al_stop']) - display_start + 1
     else:
         # FASTA has flipped this sequence...
         start = display_start \

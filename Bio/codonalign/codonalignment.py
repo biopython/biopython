@@ -86,17 +86,17 @@ class CodonAlignment(MultipleSeqAlignment):
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
             return "".join(str(rec[col_index]) for rec in
-                                                    self._records[row_index])
+                           self._records[row_index])
         else:
             if alphabet is None:
                 from Bio.Alphabet import generic_nucleotide
                 return MultipleSeqAlignment((rec[col_index] for rec in
-                                                    self._records[row_index]),
-                                             generic_nucleotide)
+                                             self._records[row_index]),
+                                            generic_nucleotide)
             else:
                 return MultipleSeqAlignment((rec[col_index] for rec in
-                                                    self._records[row_index]),
-                                             generic_nucleotide)
+                                             self._records[row_index]),
+                                            generic_nucleotide)
 
     def get_aln_length(self):
         return self.get_alignment_length() // 3
@@ -173,7 +173,7 @@ class CodonAlignment(MultipleSeqAlignment):
         needed by CodonAlignment is met.
         """
         rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id)
-                 for i in align._records]
+               for i in align._records]
         return cls(rec, alphabet=alphabet)
 
 
