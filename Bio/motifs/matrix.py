@@ -128,7 +128,7 @@ class GenericPositionMatrix(dict):
                     d = {}
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
-                        d[letter1] = [values[index2] for index2 in indices2]
+                        d[letter1] = [values[_] for _ in indices2]
                     if sorted(letters1) == self._letters:
                         return self.__class__(self.alphabet, d)
                     else:

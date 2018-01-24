@@ -1691,7 +1691,7 @@ class Nexus(object):
             else:
                 cstatus.extend(b for b in self.ambiguous_values[c] if b not in cstatus)
         if self.missing in cstatus and narrow and len(cstatus) > 1:
-            cstatus = [c for c in cstatus if c != self.missing]
+            cstatus = [_ for _ in cstatus if _ != self.missing]
         cstatus.sort()
         return cstatus
 

@@ -251,11 +251,10 @@ def _baum_welch(N, M, training_outputs,
     for i in range(MAX_ITERATIONS):
         llik = LOG0
         for outputs in training_outputs:
-            x = _baum_welch_one(
+            llik += _baum_welch_one(
                 N, M, outputs,
                 lp_initial, lp_transition, lp_emission,
                 lpseudo_initial, lpseudo_transition, lpseudo_emission,)
-            llik += x
         if update_fn is not None:
             update_fn(i, llik)
         if prev_llik is not None and numpy.fabs(prev_llik - llik) < 0.1:
@@ -266,7 +265,7 @@ def _baum_welch(N, M, training_outputs,
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
-    return [numpy.exp(x) for x in (lp_initial, lp_transition, lp_emission)]
+    return [numpy.exp(_) for _ in (lp_initial, lp_transition, lp_emission)]
 
 
 def _baum_welch_one(N, M, outputs,

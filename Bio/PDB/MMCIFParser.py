@@ -199,7 +199,7 @@ class MMCIFParser(object):
             if aniso_flag == 1:
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou = [float(x) for x in u]
+                mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
@@ -440,6 +440,6 @@ class FastMMCIFParser(object):
             if aniso_flag == 1:
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou = [float(x) for x in u]
+                mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
