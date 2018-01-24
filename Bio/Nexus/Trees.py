@@ -793,11 +793,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
     # countclades={}
     alltaxa = set(trees[0].get_taxa())
     # calculate calde frequencies
-    c = 0
     for t in trees:
-        c += 1
-        # if c%100==0:
-        #    print(c)
         if alltaxa != set(t.get_taxa()):
             raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)
