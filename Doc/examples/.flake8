@@ -10,15 +10,6 @@ ignore =
     #
     # These are ignored by default:
     E122,E123,E126,E241,W503,
-    # These are not ignored by default:
-    # E127	continuation line over-indented for visual indent
-    # E128	continuation line under-indented for visual indent
-    # E501	line too long (XX > 79 characters)
-    # E731	do not assign a lambda expression, use a def
-    # F401	module imported but unused
-    # F841	local variable name is assigned to but never used
-    # TODO: Fix some of these?
-    E127,E128,E501,E731,F401,F841,
     # =====================================
     # pydocstyle: D### - Missing Docstrings
     # =====================================
