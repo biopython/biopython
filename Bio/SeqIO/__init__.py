@@ -963,8 +963,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
-               % (index_filename, filenames, format, alphabet, key_function)
+    repr = ("SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)"
+            % (index_filename, filenames, format, alphabet, key_function))
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
