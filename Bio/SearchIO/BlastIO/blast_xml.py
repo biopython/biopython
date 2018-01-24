@@ -501,8 +501,7 @@ class BlastXmlParser(object):
                     setattr(frag, val_info[0], value)
 
             # set the similarity characters into aln_annotation dict
-            frag.aln_annotation['similarity'] = \
-                    hsp_frag_elem.findtext('Hsp_midline')
+            frag.aln_annotation['similarity'] = hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
             # since 'x-from' could be bigger than 'x-to', we need to figure

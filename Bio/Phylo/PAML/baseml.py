@@ -154,7 +154,7 @@ class Baseml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
-                parse=True):
+            parse=True):
         """Run baseml using the current configuration and then parse the results.
 
         Return a process signal so the user can determine if

@@ -161,8 +161,10 @@ class BarChartDistribution(object):
             self._draw_title(cur_drawing, self.chart_title,
                              start_x, start_y, end_x, end_y)
         # set the position of the bar chart
-        x_start, x_end, y_start, y_end = \
-           self._determine_position(start_x, start_y, end_x, end_y)
+        x_start, x_end, y_start, y_end = self._determine_position(start_x,
+                                                                  start_y,
+                                                                  end_x,
+                                                                  end_y)
 
         bar_chart.x = x_start
         bar_chart.y = y_start

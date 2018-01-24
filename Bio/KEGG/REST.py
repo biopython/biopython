@@ -144,8 +144,7 @@ def kegg_find(database, query, option=None):
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
-    if database in ["compound", "drug"] and \
-          option in ["formula", "exact_mass", "mol_weight"]:
+    if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
         resp = _q("find", database, query, option)
     elif option:
         raise Exception("Invalid option arg for kegg find request.")

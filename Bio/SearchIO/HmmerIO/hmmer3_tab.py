@@ -184,15 +184,15 @@ class Hmmer3TabIndexer(SearchIndexer):
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            adj_end - start_offset
+                    yield (_bytes_to_string(qresult_key), start_offset,
+                           adj_end - start_offset)
                     qresult_key = curr_key
                     start_offset = adj_end
 
             line = handle.readline()
             if not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield (_bytes_to_string(qresult_key), start_offset,
+                       end_offset - start_offset)
                 break
 
     def get_raw(self, offset):
@@ -267,23 +267,25 @@ class Hmmer3TabWriter(object):
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
-        header = "#%*s %22s %22s %33s\n" % \
-                (tnamew + qnamew + taccw + qaccw + 2, "",
-                "--- full sequence ----", "--- best 1 domain ----",
-                "--- domain number estimation ----")
-        header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew - 1, " target name",
-                        taccw, "accession", qnamew, "query name", qaccw,
-                        "accession", "  E-value", " score", " bias",
-                        "  E-value", " score", " bias", "exp",
-                        "reg", "clu", " ov", "env", "dom", "rep",
-                        "inc", "description of target")
-        header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew - 1, "-------------------",
-                taccw, "----------", qnamew, "--------------------", qaccw,
-                "----------", "---------", "------", "-----", "---------",
-                "------", "-----", "---", "---", "---", "---", "---", "---",
-                "---", "---", "---------------------")
+        header = ("#%*s %22s %22s %33s\n"
+                  % (tnamew + qnamew + taccw + qaccw + 2, "",
+                     "--- full sequence ----", "--- best 1 domain ----",
+                     "--- domain number estimation ----"))
+        header += ("#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s "
+                   "%3s %3s %3s %3s %3s %3s %s\n"
+                   % (tnamew - 1, " target name",
+                      taccw, "accession", qnamew, "query name", qaccw,
+                      "accession", "  E-value", " score", " bias",
+                      "  E-value", " score", " bias", "exp",
+                      "reg", "clu", " ov", "env", "dom", "rep",
+                      "inc", "description of target"))
+        header += ("#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s "
+                   "%3s %3s %3s %3s %3s %s\n"
+                   % (tnamew - 1, "-------------------",
+                      taccw, "----------", qnamew, "--------------------", qaccw,
+                      "----------", "---------", "------", "-----", "---------",
+                      "------", "-----", "---", "---", "---", "---", "---", "---",
+                      "---", "---", "---------------------"))
 
         return header
 

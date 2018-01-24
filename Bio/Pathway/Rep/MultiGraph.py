@@ -21,9 +21,9 @@ class MultiGraph(object):
 
     def __eq__(self, g):
         """Return true if g is equal to this graph."""
-        return isinstance(g, MultiGraph) and \
-               (self._adjacency_list == g._adjacency_list) and \
-               (self._label_map == g._label_map)
+        return (isinstance(g, MultiGraph)
+                and self._adjacency_list == g._adjacency_list
+                and self._label_map == g._label_map)
 
     def __ne__(self, g):
         """Return true if g is not equal to this graph."""

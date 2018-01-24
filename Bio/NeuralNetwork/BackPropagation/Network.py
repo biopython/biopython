@@ -86,8 +86,7 @@ class BasicNetwork(object):
                 for prediction_num in range(len(predictions)):
                     real_value = example.outputs[prediction_num]
                     predicted_value = predictions[prediction_num]
-                    validation_error += \
-                            0.5 * math.pow((real_value - predicted_value), 2)
+                    validation_error += 0.5 * math.pow((real_value - predicted_value), 2)
 
             # see if we have gone far enough to stop
             if stopping_criteria(num_iterations, training_error,

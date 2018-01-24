@@ -445,9 +445,9 @@ class SeqRecord(object):
 
             if biosql_available and isinstance(self, DBSeqRecord):
                 answer = SeqRecord(self.seq[index],
-                                        id=self.id,
-                                        name=self.name,
-                                        description=self.description)
+                                   id=self.id,
+                                   name=self.name,
+                                   description=self.description)
             else:
                 answer = self.__class__(self.seq[index],
                                         id=self.id,

@@ -72,10 +72,10 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:
-            frag['hit_end'], frag['query_end'] = \
-                    frag['query_end'], frag['hit_end']
-            frag['hit_start'], frag['query_start'] = \
-                    frag['query_start'], frag['hit_start']
+            frag['hit_end'], frag['query_end'] = (frag['query_end'],
+                                                  frag['hit_end'])
+            frag['hit_start'], frag['query_start'] = (frag['query_start'],
+                                                      frag['hit_start'])
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
@@ -258,25 +258,27 @@ class Hmmer3DomtabHmmhitWriter(object):
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
-        header = "#%*s %22s %40s %11s %11s %11s\n" % \
-                (tnamew + qnamew - 1 + 15 + taccw + qaccw, "", "--- full sequence ---",
-                "-------------- this domain -------------", "hmm coord",
-                "ali coord", "env coord")
-        header += "#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s " \
-                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew - 1,
-                " target name", taccw, "accession", "tlen", qnamew,
-                "query name", qaccw, "accession", "qlen", "E-value", "score",
-                "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias",
-                "from", "to", "from", "to", "from", "to", "acc",
-                "description of target")
-        header += "#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s " \
-                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew - 1,
-                "-------------------", taccw, "----------", "-----",
-                qnamew, "--------------------", qaccw, "----------",
-                "-----", "---------", "------", "-----", "---", "---",
-                "---------", "---------", "------", "-----", "-----", "-----",
-                "-----", "-----", "-----", "-----", "----",
-                "---------------------")
+        header = ("#%*s %22s %40s %11s %11s %11s\n"
+                  % (tnamew + qnamew - 1 + 15 + taccw + qaccw, "", "--- full sequence ---",
+                     "-------------- this domain -------------", "hmm coord",
+                     "ali coord", "env coord"))
+        header += ("#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s "
+                   "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n"
+                   % (tnamew - 1,
+                      " target name", taccw, "accession", "tlen", qnamew,
+                      "query name", qaccw, "accession", "qlen", "E-value", "score",
+                      "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias",
+                      "from", "to", "from", "to", "from", "to", "acc",
+                      "description of target"))
+        header += ("#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s "
+                   "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n"
+                   % (tnamew - 1,
+                      "-------------------", taccw, "----------", "-----",
+                      qnamew, "--------------------", qaccw, "----------",
+                      "-----", "---------", "------", "-----", "---", "---",
+                      "---------", "---------", "------", "-----", "-----", "-----",
+                      "-----", "-----", "-----", "-----", "----",
+                      "---------------------"))
 
         return header
 

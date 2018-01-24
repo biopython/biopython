@@ -94,7 +94,7 @@ class ColorSpiral(object):
             # For each value of n, t indicates the angle through which the
             # spiral has turned, to this point
             t = (1. / self._b) * (log(n + (k * offset)) -
-                                    log((1 + offset) * k * self._a))
+                                  log((1 + offset) * k * self._a))
             # Put 0 <= h <= 2*pi, where h is the angular part of the polar
             # co-ordinates for this point on the spiral
             h = t

@@ -384,10 +384,10 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
             raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
-                                 % self.alphabet)
+                             % self.alphabet)
         if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
-                                 % sequence.alphabet)
+                             % sequence.alphabet)
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower

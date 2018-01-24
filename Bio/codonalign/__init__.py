@@ -641,8 +641,9 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     start = rf_table[aa_num - 1] + 3
                     end = rf_table[aa_num]
                     ngap = 3 - (rf_table[aa_num] - rf_table[aa_num - 1] - 3)
-                    this_codon = nucl_seq._data[start:end] + '-' * ngap + \
-                            nucl_seq._data[rf_table[aa_num]:rf_table[aa_num] + 3]
+                    this_codon = (nucl_seq._data[start:end]
+                                  + '-' * ngap
+                                  + nucl_seq._data[rf_table[aa_num]:rf_table[aa_num] + 3])
                 else:
                     start = rf_table[aa_num]
                     end = start + 3
@@ -710,12 +711,12 @@ def _align_shift_recs(recs):
                     gap_num = 0
                 if gap_num != 0:
                     gaps = '-' * int(gap_num)
-                    seq = recs[j].seq._data[:int(k)] + gaps + \
-                            recs[j].seq._data[int(k):]
+                    seq = (recs[j].seq._data[:int(k)] + gaps
+                           + recs[j].seq._data[int(k):])
                     full_rf_table = full_rf_table_lst[j]
                     bp = full_rf_table.index(k)
-                    full_rf_table = full_rf_table[:bp] + \
-                            [v + int(gap_num) for v in full_rf_table[bp + 1:]]
+                    full_rf_table = (full_rf_table[:bp]
+                                     + [v + int(gap_num) for v in full_rf_table[bp + 1:]])
                     full_rf_table_lst[j] = full_rf_table
                     recs[j].seq = CodonSeq(seq,
                                            rf_table=recs[j].seq.rf_table,
@@ -726,15 +727,15 @@ def _align_shift_recs(recs):
         if len(add_lst) != rec_num:
             for j, k in add_lst:
                 gaps = "-" * int(gap_num)
-                seq = recs[j].seq._data[:int(k)] + gaps + \
-                        recs[j].seq._data[int(k):]
+                seq = (recs[j].seq._data[:int(k)] + gaps
+                       + recs[j].seq._data[int(k):])
                 full_rf_table = full_rf_table_lst[j]
                 bp = full_rf_table.index(k)
                 inter_rf = []
                 for t in filter(lambda x: x % 3 == 0, range(len(gaps))):
                     inter_rf.append(k + t + 3.0)
-                full_rf_table = full_rf_table[:bp] + inter_rf + \
-                        [v + int(gap_num) for v in full_rf_table[bp:]]
+                full_rf_table = (full_rf_table[:bp] + inter_rf
+                                 + [v + int(gap_num) for v in full_rf_table[bp:]])
                 full_rf_table_lst[j] = full_rf_table
                 recs[j].seq = CodonSeq(seq,
                                        rf_table=recs[j].seq.rf_table,

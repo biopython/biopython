@@ -76,23 +76,23 @@ class Record(object):
 
     def __str__(self):
         """Return a string representation of this Record."""
-        return self._entry() + \
-               self._name() + \
-               self._classname() + \
-               self._sysname() + \
-               self._reaction() + \
-               self._substrate() + \
-               self._product() + \
-               self._inhibitor() + \
-               self._cofactor() + \
-               self._effector() + \
-               self._comment() + \
-               self._pathway() + \
-               self._genes() + \
-               self._disease() + \
-               self._structures() + \
-               self._dblinks() + \
-               "///"
+        return (self._entry() +
+                self._name() +
+                self._classname() +
+                self._sysname() +
+                self._reaction() +
+                self._substrate() +
+                self._product() +
+                self._inhibitor() +
+                self._cofactor() +
+                self._effector() +
+                self._comment() +
+                self._pathway() +
+                self._genes() +
+                self._disease() +
+                self._structures() +
+                self._dblinks() +
+                "///")
 
     def _entry(self):
         return _write_kegg("ENTRY",
