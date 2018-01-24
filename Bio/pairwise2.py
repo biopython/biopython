@@ -468,7 +468,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # starting points.
     starts = _find_start(score_matrix, align_globally)
     # Find the highest score.
-    best_score = max([x[0] for x in starts])
+    best_score = max([_[0] for _ in starts])
 
     # If they only want the score, then return it.
     if score_only:
