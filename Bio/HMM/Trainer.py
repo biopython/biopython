@@ -38,9 +38,8 @@ class TrainingSequence(object):
            the sequence of states should be an empty string.
 
         """
-        if len(state_path) > 0:
-            assert len(emissions) == len(state_path), \
-                   "State path does not match associated emissions."
+        if len(state_path) > 0 and len(emissions) != len(state_path):
+            raise ValueError('State path does not match associated emissions.')
         self.emissions = emissions
         self.states = state_path
 
