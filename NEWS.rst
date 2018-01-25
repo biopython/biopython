@@ -90,6 +90,7 @@ possible, especially the following contributors:
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Shyam Saladi (first contribution)
+- Siong Kong
 - Spencer Bliven
 - Stefans Mezulis
 - Steve Bond
