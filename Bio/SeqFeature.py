@@ -337,7 +337,7 @@ class SeqFeature(object):
                              "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
 
-    def translate(self, parent_sequence, table="Standard", start_offset=0,
+    def translate(self, parent_sequence, table="Standard", start_offset=None,
                   stop_symbol="*", to_stop=False, cds=False, gap=None):
         """Get a translation of the feature's sequence.
 
@@ -364,8 +364,7 @@ class SeqFeature(object):
            that feature. Has a valid value of 0, 1 or 2. NOTE: this
            uses python's 0-based numbering whereas the codon_start
            qualifier in files from NCBI use 1-based numbering.
-           Will only be used if the feature does not have a
-           codon_start qualifier
+           Will override a codon_start qualifier
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
@@ -392,18 +391,17 @@ class SeqFeature(object):
         """
         # see if this feature should be translated in a different
         # frame using the "codon_start" qualifier
-        try:
-            start_offset = int(self.qualifiers["codon_start"][0]) - 1
-        except KeyError:
-            if start_offset not in [0, 1, 2]:
-                raise ValueError("The start_offset must be 0, 1, or 2. The supplied value"
-                                 " is {}".format(start_offset))
-        else:
-            # if we get codon_start from a qualifier, make sure that
-            # it also has a correct value
-            if start_offset not in [0, 1, 2]:
-                raise ValueError("The codon_start qualifier must be 1, 2, or 3 "
-                                 "The value supplied is {}".format(self.qualifiers["codon_start"][0]))
+        if start_offset is None:
+            try:
+                start_offset = int(self.qualifiers["codon_start"][0]) - 1
+            except KeyError:
+                start_offset = 0
+
+        if start_offset not in [0, 1, 2]:
+            raise ValueError("The start_offset must be 0, 1, or 2. "
+                             "The supplied value is {}. Check the value "
+                             "of either the codon_start qualifier or "
+                             "the start_offset argument".format(start_offset))
 
         feat_seq = self.extract(parent_sequence)[start_offset:]
         codon_table = self.qualifiers.get("transl_table", [table])[0]
