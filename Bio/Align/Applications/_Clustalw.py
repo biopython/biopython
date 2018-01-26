@@ -42,8 +42,7 @@ class ClustalwCommandline(AbstractCommandline):
     # TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
         """Initialize the class."""
-        self.parameters = \
-            [
+        self.parameters = [
             _Option(["-infile", "-INFILE", "INFILE", "infile"],
                     "Input sequences.",
                     filename=True),
