@@ -1289,7 +1289,7 @@ class TestTranslating(unittest.TestCase):
             warnings.simplefilter("always")
             Seq.translate(seq, table=28)
             message = str(w[-1].message)
-            self.assertTrue(message.startswith("This table contains at"))
+            self.assertTrue(message.startswith("This table contains"))
             self.assertTrue(message.endswith("be translated as amino acid."))
 
 

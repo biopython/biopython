@@ -2387,19 +2387,20 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     n = len(sequence)
 
     # Check for tables with 'ambiguous' (dual-coding) stop codons:
-    for codon in (c for c in stop_codons if c in forward_table):
+    dual_coding = [c for c in stop_codons if c in forward_table]
+    if dual_coding:
+        c = dual_coding[0]
         if to_stop:
-            raise ValueError("This table contains at least one stop codon "
-                             "('{}') which codes for both 'STOP' and an "
-                             "amino acid ('{}'). You can not use 'to_stop="
-                             "True' with this table."
-                             .format(codon, forward_table[codon]))
-        warnings.warn("This table contains at least one stop codon ('{}') "
-                      "which codes for both 'STOP' and an amino acid ('{}'). "
+            raise ValueError("You cannot use 'to_stop=True' with this table "
+                             "as it contains {} codon(s) which can be both "
+                             " STOP and an  amino acid (e.g. '{}' -> '{}' or "
+                             "STOP)."
+                             .format(len(dual_coding), c, forward_table[c]))
+        warnings.warn("This table contains {} codon(s) which code(s) for both "
+                      "STOP and an amino acid (e.g. '{}' -> '{}' or STOP). "
                       "Such codons will be translated as amino acid."
-                      .format(codon, forward_table[codon]),
+                      .format(len(dual_coding), c, forward_table[c]),
                       BiopythonWarning)
-        break
 
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
@@ -2543,7 +2544,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     >>> translate(coding_dna3, table=27, to_stop=True)
     Traceback (most recent call last):
        ...
-    ValueError: ... You can not use 'to_stop=True' with this table.
+    ValueError: You cannot use 'to_stop=True' with this table ...
     """
     if isinstance(sequence, Seq):
         return sequence.translate(table, stop_symbol, to_stop, cds)
