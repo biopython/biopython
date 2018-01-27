@@ -696,7 +696,7 @@ class SchemaFactory(object):
          - A list of all of the motifs in motif_list that match the schema.
 
         """
-        if not motif in motif_list:
+        if motif not in motif_list:
             raise ValueError(
                 'Starting motif expected to be present in all motifs.')
 

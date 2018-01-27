@@ -146,7 +146,6 @@ class SignatureCoder(object):
             raise ValueError('Inconsistent signature sizes: {sizes}'.format(
                 sizes=','.join((str(size) for size in sorted(sig_sizes)))))
 
-
     def representation(self, sequence):
         """Convert a sequence into a representation of its signatures.
 
