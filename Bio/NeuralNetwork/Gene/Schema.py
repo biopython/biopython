@@ -573,7 +573,7 @@ def matches_schema(pattern, schema, ambiguity_character='*'):
 class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures."""
 
-    def __init__(self, ambiguity_symbol='*'):
+    def __init__(self, ambiguity_symbol='*', maximum_tries=150):
         """Initialize the SchemaFactory.
 
         Arguments:
@@ -582,6 +582,7 @@ class SchemaFactory(object):
 
         """
         self._ambiguity_symbol = ambiguity_symbol
+        self._maximum_tries = maximum_tries
 
     def from_motifs(self, motif_repository, motif_percent, num_ambiguous):
         """Generate schema from a list of motifs.
@@ -606,7 +607,8 @@ class SchemaFactory(object):
         # of motifs
         total_count = self._get_num_motifs(motif_repository, all_motifs)
         matched_count = 0
-        assert total_count > 0, "Expected to have motifs to match"
+        if total_count == 0:
+            raise ValueError('Expected to have motifs to match')
         while (float(matched_count) / float(total_count)) < motif_percent:
             new_schema, matching_motifs = \
                         self._get_unique_schema(list(schema_info.keys()),
@@ -627,8 +629,6 @@ class SchemaFactory(object):
             schema_info[new_schema] = schema_counts
 
             matched_count += schema_counts
-
-            # print "percentage:", float(matched_count) / float(total_count)
 
         return PatternRepository(schema_info)
 
@@ -675,9 +675,10 @@ class SchemaFactory(object):
                 break
 
             # check for big loops in which we can't find a new schema
-            assert num_tries < 150, \
-                   "Could not generate schema in %s tries from %s with %s" \
-                   % (num_tries, motif_list, cur_schemas)
+            if num_tries >= self._maximum_tries:
+                raise RuntimeError(
+                    'Could not generate schema in %s tries from %s with %s' % (
+                        num_tries, motif_list, cur_schemas))
 
         return new_schema, matching_motifs
 
@@ -686,7 +687,7 @@ class SchemaFactory(object):
 
         Arguments:
          - motif - A motif with the pattern we will start from.
-         - motif_list - The total motifs we have.to match to.
+         - motif_list - The total motifs we have to match to.
          - num_ambiguous - The number of ambiguous characters that should
            be present in the schema.
 
@@ -695,8 +696,9 @@ class SchemaFactory(object):
          - A list of all of the motifs in motif_list that match the schema.
 
         """
-        assert motif in motif_list, \
-               "Expected starting motif present in remaining motifs."
+        if not motif in motif_list:
+            raise ValueError(
+                'Starting motif expected to be present in all motifs.')
 
         # convert random positions in the motif to ambiguous characters
         # convert the motif into a list of characters so we can manipulate it

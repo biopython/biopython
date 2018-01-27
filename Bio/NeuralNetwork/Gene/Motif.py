@@ -69,10 +69,9 @@ class MotifFinder(object):
         all_motifs = {}
         for seq_record in seq_records:
             # if we are working with alphabets, make sure we are consistent
-            if alphabet is not None:
-                assert seq_record.seq.alphabet == alphabet, \
-                       "Working with alphabet %s and got %s" % \
-                       (alphabet, seq_record.seq.alphabet)
+            if alphabet is not None and seq_record.seq.alphabet != alphabet:
+                raise ValueError('Working with alphabet %s and got %s' % (
+                    alphabet, seq_record.seq.alphabet))
 
             # now start finding motifs in the sequence
             for start in range(len(seq_record.seq) - (motif_size - 1)):
