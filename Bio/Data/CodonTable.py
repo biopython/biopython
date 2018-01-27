@@ -201,6 +201,7 @@ class AmbiguousCodonTable(CodonTable):
     # This lets us get the names, if the original table is an NCBI
     # table.
     def __getattr__(self, name):
+        """Forward attribute lookups to the original table."""
         return getattr(self._codon_table, name)
 
 
@@ -344,7 +345,10 @@ class AmbiguousForwardTable(object):
         self._cache = {}
 
     def __contains__(self, codon):
-        """Check if codon works as key for ambiguous forward_table."""
+        """Check if codon works as key for ambiguous forward_table.
+
+        Only returns 'True' if forward_table[codon] returns a value.
+        """
         try:
             self.__getitem__(codon)
             return True
@@ -352,12 +356,21 @@ class AmbiguousForwardTable(object):
             return False
 
     def get(self, codon, failobj=None):
+        """Implement get for dictionary-like behaviour."""
         try:
             return self.__getitem__(codon)
         except KeyError:
             return failobj
 
     def __getitem__(self, codon):
+        """Implement dictionary-like behaviour for AmbiguousForwardTable.
+
+        forward_table[codon] will either return an amino acid letter,
+        or throws a KeyError (if codon does not encode an amino acid)
+        or a TranslationError (if codon does encode for an amino acid,
+        but either is also a stop codon or does encode several amino acids,
+        for which no unique letter is available in the given alphabet.
+        """
         try:
             x = self._cache[codon]
         except KeyError:
