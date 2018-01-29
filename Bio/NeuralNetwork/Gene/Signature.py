@@ -11,6 +11,7 @@ regions that are not necessarily consecutive. This may be useful in
 the case of very diverged sequences, where signatures may pick out
 important conservation that can't be found by motifs (hopefully!).
 """
+from itertools import chain
 # biopython
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
@@ -140,22 +141,10 @@ class SignatureCoder(object):
         self._max_gap = max_gap
 
         # check to be sure the signatures are all the same size
-        # only do this if we actually have signatures
-        if len(self._signatures) > 0:
-            first_sig_size = len(self._signatures[0][0])
-            second_sig_size = len(self._signatures[0][1])
-
-            assert first_sig_size == second_sig_size, \
-                   "Ends of the signature do not match: %s" \
-                   % self._signatures[0]
-
-            for sig in self._signatures:
-                assert len(sig[0]) == first_sig_size, \
-                       "Got first part of signature %s, expected size %s" % \
-                       (sig[0], first_sig_size)
-                assert len(sig[1]) == second_sig_size, \
-                       "Got second part of signature %s, expected size %s" % \
-                       (sig[1], second_sig_size)
+        sig_sizes = set((len(sig) for sig in chain(*signatures)))
+        if len(sig_sizes) > 1:
+            raise ValueError('Inconsistent signature sizes: {sizes}'.format(
+                sizes=','.join((str(size) for size in sorted(sig_sizes)))))
 
     def representation(self, sequence):
         """Convert a sequence into a representation of its signatures.

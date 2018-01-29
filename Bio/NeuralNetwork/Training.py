@@ -55,8 +55,9 @@ class ExampleManager(object):
          - test_examples - Examples for training purposes.
 
         """
-        assert training_percent + validation_percent <= 1.0, \
-            "Training and validation percentages more than 100 percent"
+        if training_percent + validation_percent > 1.0:
+            raise ValueError(
+                'The sum of training and validation percentages > 100')
 
         self.train_examples = []
         self.validation_examples = []
