@@ -1,4 +1,9 @@
-#!/usr/bin/env python
+# Copyright 2001 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Test function to teach the neural network an XOR function.
 
 This is a very basic test of Neural Network functionality.
@@ -6,6 +11,7 @@ This is a very basic test of Neural Network functionality.
 from __future__ import print_function
 
 import warnings
+
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)

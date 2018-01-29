@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
@@ -15,7 +16,7 @@ as all falling under a schema like 'GAT*', where the star indicates a
 character can be anything. This helps us condense a whole ton of
 motifs or signatures.
 """
-# standard modules
+
 from __future__ import print_function
 
 import random

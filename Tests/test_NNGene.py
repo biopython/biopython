@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-
+# Copyright 2001 Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,19 +9,18 @@
 This exercises the Motif, Schema and Signature methods of representing
 genes, as well as generic Pattern methods.
 """
-# standard library
+
 from __future__ import print_function
 
 import os
 import unittest
+import warnings
 
-# Biopython
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.SeqRecord import SeqRecord
 
-import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)
