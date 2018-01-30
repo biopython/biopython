@@ -1690,7 +1690,7 @@ class UnknownSeq(Seq):
         explicit gap character declaration.
         """
         # Offload the alphabet stuff
-        s = Seq(self._character, self.alphabet).ungap()
+        s = Seq(self._character, self.alphabet).ungap(gap)
         if s:
             return UnknownSeq(self._length, s.alphabet, self._character)
         else:
