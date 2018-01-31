@@ -172,7 +172,7 @@ class DataHandler(object):
     from Bio import Entrez
 
     # Check if user has set a custom cache location
-    if Entrez.cache != None:
+    if Entrez.cache is not None:
         directory = Entrez.cache
     # If not, set a cache location based on the platform
     else:
