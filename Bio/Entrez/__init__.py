@@ -36,7 +36,7 @@ Variables:
 
     - email        Set the Entrez email parameter (default is not set).
     - tool         Set the Entrez tool parameter (default is ``biopython``).
-    - cache        Set the Entrez cache parameter (default is not set).
+    - cache        Set the directory to cache NCBI DTD files for the Entrez XML parser (if not set the default is under your home directory).
 
 Functions:
 
@@ -565,9 +565,6 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
-    # Tell Entrez if we want to set a custom cache location.
-    if "cache" not in params:
-        params["cache"] = cache
     return params
 
 
