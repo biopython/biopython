@@ -169,12 +169,19 @@ class ValidationError(ValueError):
 class DataHandler(object):
 
     import platform
-    if platform.system() == 'Windows':
-        directory = os.path.join(os.getenv("APPDATA"), "biopython")
-    else:  # Unix/Linux/Mac
-        home = os.path.expanduser('~')
-        directory = os.path.join(home, '.config', 'biopython')
-        del home
+    from Bio import Entrez
+
+    # Check if user has set a custom cache location
+    if Entrez.cache != None:
+        directory = Entrez.cache
+    # If not, set a cache location based on the platform
+    else:
+        if platform.system() == 'Windows':
+            directory = os.path.join(os.getenv("APPDATA"), "biopython")
+        else:  # Unix/Linux/Mac
+            home = os.path.expanduser('~')
+            directory = os.path.join(home, '.config', 'biopython')
+            del home
     local_dtd_dir = os.path.join(directory, 'Bio', 'Entrez', 'DTDs')
     local_xsd_dir = os.path.join(directory, 'Bio', 'Entrez', 'XSDs')
     del directory
@@ -193,7 +200,6 @@ class DataHandler(object):
         if not os.path.isdir(local_xsd_dir):
             raise exception
 
-    from Bio import Entrez
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
     global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
     del Entrez
