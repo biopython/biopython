@@ -669,6 +669,11 @@ class FeatureLocation(object):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
+        if isinstance(self.start.position, int) and \
+                isinstance(self.end.position, int) and self.start > self.end:
+            raise ValueError('End location ({}) must be greater than or equal '
+                             'to start location ({})'.format(self.end,
+                                                             self.start))
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db
