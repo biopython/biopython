@@ -11,6 +11,7 @@ import unittest
 import sys
 
 from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Alphabet import generic_protein, generic_nucleotide
 from Bio.Alphabet import generic_dna, generic_rna
 from Bio.Alphabet.IUPAC import protein, extended_protein
@@ -737,6 +738,18 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
 
     # TODO - Addition...
+
+
+class FileBasedTests(unittest.TestCase):
+    """Test Seq objects created from files by SeqIO."""
+
+    def test_unknown_seq_ungap(self):
+        """Test ungap() works properly on UnknownSeq instances."""
+        rec = SeqIO.read('GenBank/NT_019265.gb', 'genbank')
+        self.assertIsInstance(rec.seq, UnknownSeq)
+
+        ungapped_seq = rec.features[1].extract(rec.seq).ungap('-')
+        self.assertIsInstance(ungapped_seq, UnknownSeq)
 
 
 if __name__ == "__main__":
