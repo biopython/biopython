@@ -39,7 +39,7 @@ protein_letters_1to3 = {
 }
 protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
     'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
-    'U': 'Sel', 'O': 'Pyl',
+    'U': 'Sec', 'O': 'Pyl',
 }.items()))
 
 protein_letters_3to1 = dict((x[1], x[0]) for x in
