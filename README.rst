@@ -1,6 +1,9 @@
 .. image:: https://img.shields.io/pypi/v/biopython.svg
    :alt: Biopython on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/biopython
+.. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg
+   :alt: Biopython on the Conda package conda-forge channel
+   :target: https://anaconda.org/bioconda/biopython
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
