@@ -1,10 +1,8 @@
 """Test."""
+import re
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from xml.etree import cElementTree as ElementTree
-
-# Namespace
-NS = '{http://www.ebi.ac.uk/interpro/resources/schemas/interproscan5}'
 
 # element - hit attribute name mapping
 _ELEM_HIT = {
@@ -43,24 +41,26 @@ class InterproXmlParser(object):
         meta = dict()
         meta['program'] = 'InterProScan'
         meta['version'] = elem.attrib['interproscan-version']
+        # store the namespace value
+        self.NS = re.sub('protein-matches', '', elem.tag)
         return meta
 
     def _parse_qresult(self):
         """Parse query results."""
         for event, elem in self.xml_iter:
-            if event == 'end' and elem.tag == NS + 'protein':
+            if event == 'end' and elem.tag == self.NS + 'protein':
                 # store the query sequence
-                seq = elem.find(NS + 'sequence')
+                seq = elem.find(self.NS + 'sequence')
                 query_seq = seq.text
 
                 # store the query id and description
-                xref = elem.find(NS + 'xref')
+                xref = elem.find(self.NS + 'xref')
                 query_id = xref.attrib['id']
                 query_desc = xref.attrib['name']
 
                 # parse each hit
                 hit_list = [hit for hit in self._parse_hit(
-                    elem.find(NS + 'matches'), query_id, query_seq)]
+                    elem.find(self.NS + 'matches'), query_id, query_seq)]
 
                 # create qresult and assing attributes
                 qresult = QueryResult(hit_list, query_id)
@@ -77,16 +77,16 @@ class InterproXmlParser(object):
 
         for hit_elem in root_hit_elem:
             # store the hit id
-            signature = hit_elem.find(NS + 'signature')
+            signature = hit_elem.find(self.NS + 'signature')
             hit_id = signature.attrib['ac']
 
             # store alt_ids and alt_descs
             alt_ids, alt_descs = self._parse_alt_ids(
-                signature.find(NS + 'entry'))
+                signature.find(self.NS + 'entry'))
 
             # parse each hsp
             hsps = [hsp for hsp in self._parse_hsp(
-                hit_elem.find(NS + 'locations'), query_id, hit_id, query_seq)]
+                hit_elem.find(self.NS + 'locations'), query_id, hit_id, query_seq)]
 
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)
@@ -143,8 +143,10 @@ class InterproXmlParser(object):
         # store go-xrefs and pathway-refs id and description
         if root_entry_elem is not None:
             alt_elem = []
-            alt_elem = alt_elem + root_entry_elem.findall(NS + 'go-xref')
-            alt_elem = alt_elem + root_entry_elem.findall(NS + 'pathway-xref')
+            alt_elem = alt_elem + root_entry_elem.findall(
+                self.NS + 'go-xref')
+            alt_elem = alt_elem + root_entry_elem.findall(
+                self.NS + 'pathway-xref')
 
             for entry in alt_elem:
                 if entry.attrib['id'] is not None:
