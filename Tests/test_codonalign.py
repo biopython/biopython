@@ -231,12 +231,17 @@ class Test_dn_ds(unittest.TestCase):
             self.assertAlmostEqual(round(ds_cal, 4), round(ds_corr, 4), places=4)
 
 
-from run_tests import is_numpy
 try:
     from math import lgamma  # New in Python 2.7
 except ImportError:
     lgamma = None
-if is_numpy() and lgamma:
+
+try:
+    import numpy
+except ImportError:
+    numpy = None
+
+if numpy and lgamma:
     class Test_MK(unittest.TestCase):
         def test_mk(self):
             p = SeqIO.index(TEST_ALIGN_FILE7[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
