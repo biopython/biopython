@@ -39,6 +39,7 @@ class InterproXmlParser(object):
         """Parse the header for the InterProScan version."""
         event, elem = next(self.xml_iter)
         meta = dict()
+        meta['target'] = 'Interpro'
         meta['program'] = 'InterProScan'
         meta['version'] = elem.attrib['interproscan-version']
         # store the namespace value
@@ -95,6 +96,12 @@ class InterproXmlParser(object):
                 value = signature.attrib.get(key)
                 if value is not None:
                     setattr(hit, attr, caster(value))
+            signature_lib = signature.find(self.NS + 'signature-library-release')
+            for key, (attr, caster) in _ELEM_HIT.items():
+                value = signature_lib.attrib.get(key)
+                if value is not None:
+                    setattr(hit, attr, caster(value))
+
             yield hit
 
     def _parse_hsp(self, root_hsp_elem, query_id, hit_id, query_seq=None):
