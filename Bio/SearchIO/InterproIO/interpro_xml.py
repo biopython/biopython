@@ -63,7 +63,6 @@ class InterproXmlParser(object):
                     elem.find(NS + 'matches'), query_id, query_seq)]
 
                 # create qresult and assing attributes
-                # print(query_id, hit_list)
                 qresult = QueryResult(hit_list, query_id)
                 setattr(qresult, 'description', query_desc)
                 for key, value in self._meta.items():
@@ -94,7 +93,6 @@ class InterproXmlParser(object):
             # setattr(hit, '_id_alt', alt_ids)
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature.attrib.get(key)
-                # print(key, value)
                 if value is not None:
                     setattr(hit, attr, caster(value))
             yield hit
@@ -125,7 +123,7 @@ class InterproXmlParser(object):
             setattr(hsp, 'hit_id', hit_id)
             for key, (attr, caster) in _ELEM_HSP.items():
                 value = hsp_elem.attrib.get(key)
-                if value is not None and caster is not str:
+                if value is not None:
                     setattr(hsp, attr, caster(value))
             yield hsp
 
