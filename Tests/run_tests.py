@@ -48,6 +48,20 @@ except ImportError:
     from io import StringIO  # Python 3 (unicode strings)
 
 
+try:
+    import numpy
+    try:
+        # NumPy 1.14 changed repr output breaking our doctests,
+        # request the legacy 1.13 style
+        numpy.set_printoptions(legacy="1.13")
+    except TypeError:
+        # Old Numpy, output should be fine as it is :)
+        # TypeError: set_printoptions() got an unexpected keyword argument 'legacy'
+        pass
+except ImportError:
+    numpy = None
+
+
 def is_pypy():
     import platform
     try:
@@ -57,17 +71,6 @@ def is_pypy():
         # New in Python 2.6, not in Jython yet either
         pass
     return False
-
-
-def is_numpy():
-    if is_pypy():
-        return False
-    try:
-        import numpy
-        del numpy
-        return True
-    except ImportError:
-        return False
 
 
 # The default verbosity (not verbose)
@@ -149,7 +152,7 @@ DOCTEST_MODULES = [
     "Bio.Wise.psw",
 ]
 # Silently ignore any doctests for modules requiring numpy!
-if is_numpy():
+if numpy:
     DOCTEST_MODULES.extend([
         "Bio.Affy.CelFile",
         "Bio.MaxEntropy",
