@@ -35,6 +35,11 @@ class InterproXmlParser(object):
             handle, events=('start', 'end')))
         self._meta = self._parse_header()
 
+    def __iter__(self):
+        """Iterate qresults."""
+        for qresult in self._parse_qresult():
+            yield qresult
+
     def _parse_header(self):
         """Parse the header for the InterProScan version."""
         event, elem = next(self.xml_iter)
