@@ -124,6 +124,8 @@ class Hit(_BaseSearchObject):
         self._description = None
         self._description_alt = []
         self._query_description = None
+        self.target = '<unknown target>'
+        self.target_version = '<unknown target version>'
 
         # TODO - Move this into the for look below in case
         # hsps is a single use iterator?
@@ -182,6 +184,9 @@ class Hit(_BaseSearchObject):
             hid_line += trim_str('\n       %s' % self.description,
                     80, '...')
         lines.append(hid_line)
+
+        # set target line
+        lines.append(' Target: %s %s' % (self.target, self.target_version))
 
         # set hsp line and table
         if not self.hsps:
