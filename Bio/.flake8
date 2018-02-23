@@ -36,11 +36,6 @@ ignore =
     # D211	No blank lines allowed before class docstring
     # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ===========================================
-    # pydocstyle: D4## - Docstring Content Issues
-    # ===========================================
-    # D401	First line should be in imperative mood
-    D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
