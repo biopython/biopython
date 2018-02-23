@@ -10,7 +10,7 @@ NS = '{http://www.ebi.ac.uk/interpro/resources/schemas/interproscan5}'
 _ELEM_HIT = {
     'name': ('id', str),
     'ac': ('accession', str),
-    'description': ('desc', str),
+    'desc': ('description', str),
     'library': ('target', str),
     'version': ('target_version', str),
 }
@@ -94,7 +94,8 @@ class InterproXmlParser(object):
             # setattr(hit, '_id_alt', alt_ids)
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature.attrib.get(key)
-                if value is not None and caster is not str:
+                # print(key, value)
+                if value is not None:
                     setattr(hit, attr, caster(value))
             yield hit
 
@@ -112,7 +113,7 @@ class InterproXmlParser(object):
                 setattr(frag, 'query', query_seq)
             for key, (attr, caster) in _ELEM_FRAG.items():
                 value = hsp_elem.attrib.get(key)
-                if value is not None and caster is not str:
+                if value is not None:
                     # start should be 0-based
                     if attr.endswith('start'):
                         value = caster(value) - 1
