@@ -92,6 +92,14 @@
                     <mobidblite-location start="136" end="158"/>
                 </locations>
             </mobidblite-match>
+            <mobidblite-match>
+                <signature ac="mobidb-lite" desc="consensus disorder prediction" name="disorder_prediction">
+                    <signature-library-release library="MOBIDB_LITE" version="1.0"/>
+                </signature>
+                <locations>
+                    <mobidblite-location start="36" end="58"/>
+                </locations>
+            </mobidblite-match>
             <superfamilyhmmer3-match evalue="2.48E-35">
                 <signature ac="SSF47113" name="Histone-fold">
                     <entry ac="IPR009072" desc="Histone-fold" name="Histone-fold" type="HOMOLOGOUS_SUPERFAMILY">

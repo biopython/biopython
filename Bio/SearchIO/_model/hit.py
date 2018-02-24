@@ -124,8 +124,9 @@ class Hit(_BaseSearchObject):
         self._description = None
         self._description_alt = []
         self._query_description = None
-        self.target = '<unknown target>'
-        self.target_version = '<unknown target version>'
+        self.target = None
+        self.target_version = None
+        self.dbxrefs = []
 
         # TODO - Move this into the for look below in case
         # hsps is a single use iterator?
@@ -186,7 +187,13 @@ class Hit(_BaseSearchObject):
         lines.append(hid_line)
 
         # set target line
-        lines.append(' Target: %s %s' % (self.target, self.target_version))
+        if self.target is not None:
+            lines.append(' Target: %s %s' % (self.target, self.target_version))
+
+        # set dbxrefs line
+        if self.dbxrefs:
+            lines.append("Database cross-references: " +
+                         ", ".join(self.dbxrefs))
 
         # set hsp line and table
         if not self.hsps:
