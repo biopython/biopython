@@ -1,3 +1,8 @@
+# Copyright 2018 by Adhemar Zerlotini. All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Bio.SearchIO parser for InterProScan XML output formats."""
 # for more info: https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
 
