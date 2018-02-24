@@ -1,13 +1,27 @@
-"""Test."""
+"""Bio.SearchIO parser for InterProScan XML output formats."""
+# for more info: https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
+
+import sys
 import re
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from xml.etree import cElementTree as ElementTree
+
+# For speed try to use cElementTree rather than ElementTree
+try:
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
+        from xml.etree import ElementTree as ElementTree
+    else:
+        from xml.etree import cElementTree as ElementTree
+except ImportError:
+    from xml.etree import ElementTree as ElementTree
+
 
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    'name': ('id', str),
-    'ac': ('accession', str),
+    'name': ('accession', str),
+    'ac': ('id', str),
     'desc': ('description', str),
     'library': ('target', str),
     'version': ('target_version', str),
@@ -44,7 +58,7 @@ class InterproXmlParser(object):
         """Parse the header for the InterProScan version."""
         event, elem = next(self.xml_iter)
         meta = dict()
-        meta['target'] = 'Interpro'
+        meta['target'] = 'InterPro'
         meta['program'] = 'InterProScan'
         meta['version'] = elem.attrib['interproscan-version']
         # store the namespace value
@@ -65,8 +79,20 @@ class InterproXmlParser(object):
                 query_desc = xref.attrib['name']
 
                 # parse each hit
-                hit_list = [hit for hit in self._parse_hit(
-                    elem.find(self.NS + 'matches'), query_id, query_seq)]
+                hit_list = []
+                for hit_new in self._parse_hit(
+                        elem.find(self.NS + 'matches'), query_id, query_seq):
+                    # interproscan results contain duplicate hits rather than
+                    # a single hit with multiple hsps. In this case the hsps
+                    # of a duplicate hit will be appended to the already
+                    # existing hit
+                    for hit in hit_list:
+                        if hit.id == hit_new.id:
+                            for hsp in hit_new.hsps:
+                                hit.hsps.append(hsp)
+                            break
+                    else:
+                        hit_list.append(hit_new)
 
                 # create qresult and assing attributes
                 qresult = QueryResult(hit_list, query_id)
@@ -86,22 +112,24 @@ class InterproXmlParser(object):
             signature = hit_elem.find(self.NS + 'signature')
             hit_id = signature.attrib['ac']
 
-            # store alt_ids and alt_descs
-            alt_ids, alt_descs = self._parse_alt_ids(
+            # store xrefs and alt_descs
+            xrefs = self._parse_xrefs(
                 signature.find(self.NS + 'entry'))
 
             # parse each hsp
             hsps = [hsp for hsp in self._parse_hsp(
-                hit_elem.find(self.NS + 'locations'), query_id, hit_id, query_seq)]
+                hit_elem.find(self.NS + 'locations'),
+                query_id, hit_id, query_seq)]
 
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)
-            # setattr(hit, '_id_alt', alt_ids)
+            setattr(hit, 'dbxrefs', xrefs)
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature.attrib.get(key)
                 if value is not None:
                     setattr(hit, attr, caster(value))
-            signature_lib = signature.find(self.NS + 'signature-library-release')
+            signature_lib = signature.find(
+                    self.NS + 'signature-library-release')
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature_lib.attrib.get(key)
                 if value is not None:
@@ -127,7 +155,14 @@ class InterproXmlParser(object):
                     # start should be 0-based
                     if attr.endswith('start'):
                         value = caster(value) - 1
+                    # store query start and end to calculate aln_span
+                    if attr == 'query_start':
+                        start = int(value)
+                    if attr == 'query_end':
+                        end = int(value)
                     setattr(frag, attr, caster(value))
+            # calculate aln_span and store
+            setattr(frag, 'aln_span', end - start)
 
             # create hsp and assign attributes
             hsp = HSP([frag])
@@ -139,34 +174,30 @@ class InterproXmlParser(object):
                     setattr(hsp, attr, caster(value))
             yield hsp
 
-    def _parse_alt_ids(self, root_entry_elem):
+    def _parse_xrefs(self, root_entry_elem):
         """Parse xrefs."""
-        alt_ids, alt_descs = [], []
+        xrefs = []
         # store entry id and description
         if root_entry_elem is not None:
-            alt_ids.append(root_entry_elem.attrib['ac'])
-            if (root_entry_elem.attrib['name'] is not None or
-               root_entry_elem.attrib['desc'] is not None):
-                alt_descs.append('%s %s %s' % (
-                    root_entry_elem.attrib['ac'],
-                    root_entry_elem.attrib.get('name'),
-                    root_entry_elem.attrib.get('desc')))
+            xrefs.append('IPR:' + root_entry_elem.attrib['ac'])
 
         # store go-xrefs and pathway-refs id and description
         if root_entry_elem is not None:
-            alt_elem = []
-            alt_elem = alt_elem + root_entry_elem.findall(
+            xref_elems = []
+            xref_elems = xref_elems + root_entry_elem.findall(
                 self.NS + 'go-xref')
-            alt_elem = alt_elem + root_entry_elem.findall(
+            xref_elems = xref_elems + root_entry_elem.findall(
                 self.NS + 'pathway-xref')
 
-            for entry in alt_elem:
-                if entry.attrib['id'] is not None:
-                    alt_ids.append(entry.attrib['id'])
-                    if (entry.attrib['name'] is not None or
-                       entry.attrib['category'] is not None):
-                        alt_descs.append('%s %s [%s]' % (
-                            entry.attrib['id'],
-                            entry.attrib.get('name'),
-                            entry.attrib.get('db')))
-        return alt_ids, alt_descs
+            for entry in xref_elems:
+                xref = entry.attrib['id']
+                if ':' not in xref:
+                    xref = entry.attrib['db'] + ':' + xref
+                xrefs.append(xref)
+        return xrefs
+
+
+# if not used as a module, run the doctest
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest()
