@@ -45,7 +45,7 @@ _ELEM_FRAG = {
 }
 
 
-class InterproXmlParser(object):
+class InterproscanXmlParser(object):
     """Parser for the InterProScan XML format."""
 
     def __init__(self, handle):
@@ -113,6 +113,10 @@ class InterproXmlParser(object):
             root_hit_elem = []
 
         for hit_elem in root_hit_elem:
+            # store the match/location type
+            type = re.sub(r"%s(\w+)-match" % self.NS,
+                          r"\1",
+                          hit_elem.find('.').tag)
             # store the hit id
             signature = hit_elem.find(self.NS + 'signature')
             hit_id = signature.attrib['ac']
@@ -129,6 +133,7 @@ class InterproXmlParser(object):
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)
             setattr(hit, 'dbxrefs', xrefs)
+            setattr(hit, 'type', type)
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature.attrib.get(key)
                 if value is not None:

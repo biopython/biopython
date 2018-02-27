@@ -320,7 +320,7 @@ PACKAGES = [
     'Bio.SearchIO.BlastIO',
     'Bio.SearchIO.HmmerIO',
     'Bio.SearchIO.ExonerateIO',
-    'Bio.SearchIO.InterproIO',
+    'Bio.SearchIO.InterproscanIO',
     'Bio.SeqIO',
     'Bio.SeqUtils',
     'Bio.Sequencing',

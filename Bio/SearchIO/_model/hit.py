@@ -124,6 +124,7 @@ class Hit(_BaseSearchObject):
         self._description = None
         self._description_alt = []
         self._query_description = None
+        self.type = None
         self.target = None
         self.target_version = None
         self.dbxrefs = []
@@ -189,6 +190,10 @@ class Hit(_BaseSearchObject):
         # set target line
         if self.target is not None:
             lines.append(' Target: %s %s' % (self.target, self.target_version))
+
+        # set type line
+        if self.type is not None:
+            lines.append(' Type: %s' % (self.type))
 
         # set dbxrefs line
         if self.dbxrefs:
