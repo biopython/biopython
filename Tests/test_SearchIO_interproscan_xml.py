@@ -1,4 +1,4 @@
-"""Tests for SearchIO InterproIO parsers."""
+"""Tests for SearchIO InterproscanIO parsers."""
 
 import os
 import sys
@@ -15,7 +15,7 @@ with warnings.catch_warnings():
 
 # test case files are in the Blast directory
 TEST_DIR = 'InterProScan'
-FMT = 'interpro-xml'
+FMT = 'interproscan-xml'
 
 
 def get_file(filename):
@@ -23,7 +23,7 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class BlastnXmlCases(unittest.TestCase):
+class InterproscanXmlCases(unittest.TestCase):
 
     def test_xml_001(self):
         xml_file = get_file('test_001.xml')

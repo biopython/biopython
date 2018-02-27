@@ -232,7 +232,7 @@ _ITERATOR_MAP = {
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
-        'interpro-xml': ('InterproIO', 'InterproXmlParser'),
+        'interproscan-xml': ('InterproscanIO', 'InterproscanXmlParser'),
 }
 
 # dictionary of supported formats for index()
