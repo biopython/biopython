@@ -45,15 +45,14 @@ https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats
 |                +--------------------+--------------------------------------+
 |                | description        | signature.desc                       |
 |                +--------------------+--------------------------------------+
-|                | target             | signature-library-release.library    |
-|                +--------------------+--------------------------------------+
-|                | target_version     | signature-library-release.version    |
-|                +--------------------+--------------------------------------+
 |                | dbxrefs            | IPR:entry.ac                         |
 |                |                    | go-xref.id                           |
 |                |                    | pathway-xref.db:pathway-xref.id      |
 |                +--------------------+--------------------------------------+
-|                | type               | *-match / *-location                 |
+|                | format_attributes  |                                      |
+|                | ['Target']         | *-match / *-location                 |
+|                | ['Target version'] | signature-library-release.library    |
+|                | ['Hit type']       | signature-library-release.version    |
 +----------------+--------------------+--------------------------------------+
 | HSP            | bitscore           | *-location.score                     |
 |                +--------------------+--------------------------------------+
@@ -74,14 +73,15 @@ InterProScan XML files may contain a match with multiple locations or multiple
 matches to the same protein with a single location. In both cases, the match is
 uniquely stored as a HIT object and the locations as HSP objects.
 
-The types of matches or locations (eg. hmmer3-match, hmmer3-location,
-coils-match, panther-location) are stored in HIT.type. For instance, for
-every 'phobious-match', there will be a 'phobious-location'. Therefore,
-Hit.type will store the string excluding '-match' or '-location' ('phobious',
-in this example).
-
 HSP.*start == *start - 1 (Since every start position is 0-based in Biopython)
 HSP.aln_span ==  query-end - query-start
+
+The types of matches or locations (eg. hmmer3-match, hmmer3-location,
+coils-match, panther-location) are stored in hit.format_attributes['Hit type'].
+For instance, for every 'phobious-match', there will be a 'phobious-location'.
+Therefore, Hit.type will store the string excluding '-match' or '-location'
+('phobious', in this example).
+
 
 """
 
