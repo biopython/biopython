@@ -87,15 +87,19 @@ def as_handle(handleish, mode='r', **kwargs):
     if sys.version_info[:2] < (3, 6):
         from pathlib import Path
         handleish = str(handleish) if isinstance(handleish, Path) else handleish
+
     if sys.version_info[0] >= 3 and "U" in mode:
         mode = mode.replace("U", "")
-    if 'encoding' in kwargs:
-        with codecs.open(handleish, mode, **kwargs) as fp:
-            yield fp
+
+    if isinstance(handleish, basestring):
+        if 'encoding' in kwargs:
+            with codecs.open(handleish, mode, **kwargs) as fp:
+                yield fp
+        else:
+            with open(handleish, mode, **kwargs) as fp:
+                yield fp
     else:
-        with open(handleish, mode, **kwargs) as fp:
-            yield fp
-    yield handleish
+        yield handleish
 
 
 def _open_for_random_access(filename):
