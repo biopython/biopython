@@ -28,8 +28,6 @@ _ELEM_HIT = {
     'name': ('accession', str),
     'ac': ('id', str),
     'desc': ('description', str),
-    'library': ('target', str),
-    'version': ('target_version', str),
 }
 # element - hsp attribute name mapping
 _ELEM_HSP = {
@@ -114,9 +112,9 @@ class InterproscanXmlParser(object):
 
         for hit_elem in root_hit_elem:
             # store the match/location type
-            type = re.sub(r"%s(\w+)-match" % self.NS,
-                          r"\1",
-                          hit_elem.find('.').tag)
+            hit_type = re.sub(r"%s(\w+)-match" % self.NS,
+                              r"\1",
+                              hit_elem.find('.').tag)
             # store the hit id
             signature = hit_elem.find(self.NS + 'signature')
             hit_id = signature.attrib['ac']
@@ -133,17 +131,18 @@ class InterproscanXmlParser(object):
             # create hit and assign attributes
             hit = Hit(hsps, hit_id)
             setattr(hit, 'dbxrefs', xrefs)
-            setattr(hit, 'type', type)
             for key, (attr, caster) in _ELEM_HIT.items():
                 value = signature.attrib.get(key)
                 if value is not None:
                     setattr(hit, attr, caster(value))
+            # format specific attributes
+            hit.format_attributes['Hit type'] = str(hit_type)
             signature_lib = signature.find(
                     self.NS + 'signature-library-release')
-            for key, (attr, caster) in _ELEM_HIT.items():
-                value = signature_lib.attrib.get(key)
-                if value is not None:
-                    setattr(hit, attr, caster(value))
+            hit.format_attributes['Target'] = str(
+                signature_lib.attrib.get('library'))
+            hit.format_attributes['Target version'] = str(
+                signature_lib.attrib.get('version'))
 
             yield hit
 

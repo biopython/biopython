@@ -45,8 +45,9 @@ class InterproscanXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('PF00808', hit.id)
         self.assertEqual('Histone-like transcription factor (CBF/NF-Y) and archaeal histone', hit.description)
-        self.assertEqual('PFAM', hit.target)
-        self.assertEqual('31.0', hit.target_version)
+        self.assertEqual('PFAM', hit.format_attributes['Target'])
+        self.assertEqual('31.0', hit.format_attributes['Target version'])
+        self.assertEqual('hmmer3', hit.format_attributes['Hit type'])
         self.assertEqual(2, len(hit))
 
         hsp = hit.hsps[0]
