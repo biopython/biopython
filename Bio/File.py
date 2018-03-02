@@ -82,14 +82,15 @@ def as_handle(handleish, mode='r', **kwargs):
     been deprecated (this happens automatically in text mode).
 
     """
-    # Workaround for https://github.com/biopython/biopython/issues/1544.
-    # TODO: Remove when Python 3.5 dependency is dropped.
-    if sys.version_info[:2] < (3, 6):
-        from pathlib import Path
-        handleish = str(handleish) if isinstance(handleish, Path) else handleish
-
-    if sys.version_info[0] >= 3 and "U" in mode:
-        mode = mode.replace("U", "")
+    if sys.version_info.major >= 3:
+        # Workaround for https://github.com/biopython/biopython/issues/1544.
+        # TODO: Remove when Python 3.5 dependency is dropped.
+        if 4 <= sys.version_info.minor <= 5:
+            from pathlib import Path
+            if isinstance(handleish, Path):
+                handleish = str(handleish)
+        if "U" in mode:
+            mode = mode.replace("U", "")
 
     if isinstance(handleish, basestring):
         if 'encoding' in kwargs:
