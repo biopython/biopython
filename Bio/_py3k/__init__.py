@@ -104,7 +104,9 @@ if sys.version_info[0] >= 3:
             # the HTTP headers may tell us the encoding.
             encoding = handle.headers.get_content_charset()
         except AttributeError:
-            encoding = locale.getpreferredencoding(False)
+            encoding = None
+        if encoding is None:
+            encoding = 'latin-1'
         wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
         try:
             # If wrapping an online handle, this is nice to have:
