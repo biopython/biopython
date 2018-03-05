@@ -106,6 +106,13 @@ if sys.version_info[0] >= 3:
         except AttributeError:
             encoding = None
         if encoding is None:
+            # The W3C recommendation is:
+            # When no explicit charset parameter is provided by the sender,
+            # media subtypes of the "text" type are defined to have a default
+            # charset value of "ISO-8859-1" when received via HTTP.
+            # "ISO-8859-1" is also known as 'latin-1'
+            # See the following for more detail:
+            # https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7.1
             encoding = 'latin-1'
         wrapped = io.TextIOWrapper(io.BufferedReader(handle), encoding=encoding)
         try:
