@@ -18,9 +18,9 @@ Classes:
 
 Examples
 --------
->>> from Bio.ExPASy import Cellosaurus
+>>> from Bio.ExPASy import cellosaurus
 >>> handle = open("cellosaurus.txt")
->>> records = Cellosaurus.parse(handle)
+>>> records = cellosaurus.parse(handle)
 
 """
 
