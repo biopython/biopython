@@ -750,10 +750,10 @@ class SeqRecord(object):
     def __ge__(self, other):
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
-    # Note Python 3 does not use __cmp__ and there is no need to
-    # define __cmp__ on Python 2 as have all of  _lt__ etc defined.
+    # Make SeqRecord unhashable explicit, required for Python 2.
+    # See github issue 929 for related discussion.
+    __hash__ = None
 
-    # Python 3:
     def __bool__(self):
         """Boolean value of an instance of this class (True).
 
