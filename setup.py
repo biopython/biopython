@@ -365,6 +365,9 @@ else:
     Extension('Bio.Cluster._cluster',
               ['Bio/Cluster/cluster.c', 'Bio/Cluster/clustermodule.c'],
               ),
+    Extension('Bio.Align._aligners',
+              ['Bio/Align/_aligners.c'],
+              ).
     Extension('Bio.PDB.kdtrees',
               ["Bio/PDB/kdtrees.c"],
               ),
@@ -448,3 +451,4 @@ setup(name='biopython',
       },
       install_requires=REQUIRES,
       )
+
