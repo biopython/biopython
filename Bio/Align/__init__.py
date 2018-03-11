@@ -1256,10 +1256,17 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 """
 
     def align(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
         for path in paths:
             alignment = PairwiseAlignment(seqA, seqB, path, score)
             yield alignment
+
+    def score(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 
 if __name__ == "__main__":

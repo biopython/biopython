@@ -416,7 +416,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
             self->substitution_matrix[j][i] = self->mismatch;
         }
     }
-    i = 'N' - 'A';
+    i = 'X' - 'A';
     self->substitution_matrix[i][i] = 0.0;
     self->letters = NULL;
     self->algorithm = Unknown;
@@ -614,7 +614,7 @@ Aligner_set_match(Aligner* self, PyObject* value, void* closure)
     }
     self->match = match;
     for (i = 0; i < n; i++) self->substitution_matrix[i][i] = match;
-    i = 'N' - 'A';
+    i = 'X' - 'A';
     self->substitution_matrix[i][i] = 0.0;
     if (self->letters) {
         free(self->letters);
@@ -650,7 +650,7 @@ Aligner_set_mismatch(Aligner* self, PyObject* value, void* closure)
             self->substitution_matrix[j][i] = mismatch;
         }
     }
-    i = 'N' - 'A';
+    i = 'X' - 'A';
     for (j = 0; j < n; j++) {
         self->substitution_matrix[i][j] = 0;
         self->substitution_matrix[j][i] = 0;
@@ -988,7 +988,7 @@ Aligner_set_internal_open_gap_score(Aligner* self, PyObject* value, void* closur
         self->query_gap_function = NULL;
     }
     self->target_open_gap_score = score;
-    self->target_open_gap_score = score;
+    self->query_open_gap_score = score;
     self->algorithm = Unknown;
     return 0;
 }
@@ -1433,7 +1433,6 @@ Aligner_get_target_extend_gap_score(Aligner* self, void* closure)
         }
         return PyFloat_FromDouble(score);
     }
-    return PyFloat_FromDouble(self->target_extend_gap_score);
 }
 
 static int
@@ -1581,8 +1580,7 @@ Aligner_get_query_gap_score(Aligner* self, void* closure)
     }
     else {
         const double score = self->query_open_gap_score;
-        if (score != self->query_open_gap_score
-         || score != self->query_left_open_gap_score
+        if (score != self->query_left_open_gap_score
          || score != self->query_right_open_gap_score
          || score != self->query_extend_gap_score
          || score != self->query_left_extend_gap_score
@@ -1596,8 +1594,7 @@ Aligner_get_query_gap_score(Aligner* self, void* closure)
 
 static int
 Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
-{   self->algorithm = Unknown;
-    if (PyCallable_Check(value)) {
+{   if (PyCallable_Check(value)) {
         Py_XDECREF(self->query_gap_function);
         Py_INCREF(value);
         self->query_gap_function = value;
@@ -1620,6 +1617,7 @@ Aligner_set_query_gap_score(Aligner* self, PyObject* value, void* closure)
             self->query_gap_function = NULL;
         }
     }
+    self->algorithm = Unknown;
     return 0;
 }
 
@@ -1730,7 +1728,6 @@ static int
 Aligner_set_target_end_gap_score(Aligner* self, PyObject* value, void* closure) {
     const double score = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->algorithm = Unknown;
     self->target_left_open_gap_score = score;
     self->target_left_extend_gap_score = score;
     self->target_right_open_gap_score = score;
@@ -2127,8 +2124,8 @@ Aligner_get_query_internal_gap_score(Aligner* self, void* closure)
         return NULL;
     }
     else {
-        const double score = self->query_left_open_gap_score;
-        if (score != self->query_left_extend_gap_score) {
+        const double score = self->query_open_gap_score;
+        if (score != self->query_extend_gap_score) {
             PyErr_SetString(PyExc_ValueError, "gap scores are different");
             return NULL;
         }
