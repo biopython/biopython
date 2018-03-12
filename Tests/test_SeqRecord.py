@@ -387,7 +387,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
     def test_le_exception(self):
         def le():
             SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
-            self.assertRaises(NotImplementedError, le)
+        self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
