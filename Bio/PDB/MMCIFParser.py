@@ -54,7 +54,7 @@ class MMCIFParser(object):
 
         Arguments:
          - structure_id - string, the id that will be used for the structure
-         - filename - name of the mmCIF file OR an open filehandle
+         - filename - name of mmCIF file, OR an open text mode file handle
 
         """
         with warnings.catch_warnings():
