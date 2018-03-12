@@ -64,6 +64,10 @@ to the builtin ``open`` function. Specifically, this allows using
 ``pathlib.Path`` objects under Python 3.6 and newer, as per `PEP 519
 <https://www.python.org/dev/peps/pep-0519/>`_.
 
+Unweighted Pair Group Method with Arithmetic Mean (UPGMA) now calculates
+correctly in Phylo/TreeConstruction.py and the script now offers Weighted Pair
+Group Method with Arithmetic Mean (WPGMA) as a selectable method.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
@@ -85,6 +89,7 @@ possible, especially the following contributors:
 - Jeroen Van Goey
 - Jun Aruga (first contribution)
 - Kai Blin
+- Katherine Richardson (first contribution)
 - Kozo Nishida
 - Lewis A. Marshall (first contribution)
 - Markus Piotrowski
