@@ -425,7 +425,7 @@ Aligner_init(Aligner *self, PyObject *args, PyObject *kwds)
 
 static void
 Aligner_dealloc(Aligner* self)
-{   if (self->letters) free(self->letters);
+{   if (self->letters) PyMem_Free(self->letters);
     Py_XDECREF(self->target_gap_function);
     Py_XDECREF(self->query_gap_function);
     Py_TYPE(self)->tp_free((PyObject*)self);
@@ -617,7 +617,7 @@ Aligner_set_match(Aligner* self, PyObject* value, void* closure)
     i = 'X' - 'A';
     self->substitution_matrix[i][i] = 0.0;
     if (self->letters) {
-        free(self->letters);
+        PyMem_Free(self->letters);
         self->letters = NULL;
     }
     return 0;
@@ -656,7 +656,7 @@ Aligner_set_mismatch(Aligner* self, PyObject* value, void* closure)
         self->substitution_matrix[j][i] = 0;
     }
     if (self->letters) {
-        free(self->letters);
+        PyMem_Free(self->letters);
         self->letters = NULL;
     }
     return 0;
@@ -748,7 +748,7 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
         letters[i] = 1;
         letters[j] = 1;
     }
-    if (!self->letters) self->letters = malloc(n*sizeof(int));
+    if (!self->letters) self->letters = PyMem_Malloc(n*sizeof(int));
     if (!self->letters) {
         PyErr_SetString(PyExc_MemoryError, "Out of memory");
         return -1;
@@ -2855,19 +2855,19 @@ _deallocate_needlemanwunsch_smithwaterman_matrix(Py_ssize_t nA, Cell** M)
     if (!M) return;
     for (i = 0; i <= nA; i++) {
         if (!M[i]) break;
-        free(M[i]);
+        PyMem_Free(M[i]);
     }
-    free(M);
+    PyMem_Free(M);
 }
 
 static Cell**
 _allocate_needlemanwunsch_smithwaterman_matrix(Py_ssize_t nA, Py_ssize_t nB)
 {
     int i;
-    Cell** M = malloc((nA+1)*sizeof(Cell*));
+    Cell** M = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!M) return NULL;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(Cell));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
         if (!M[i]) goto exit;
     }
     return M;
@@ -2885,17 +2885,17 @@ _deallocate_gotoh_matrices(Py_ssize_t nA, Cell** M, Cell** Ix, Cell** Iy)
             if (Iy) {
                 for (i = 0; i <= nA; i++) {
                     if (!M[i]) break;
-                    free(M[i]);
+                    PyMem_Free(M[i]);
                     if (!Ix[i]) break;
-                    free(Ix[i]);
+                    PyMem_Free(Ix[i]);
                     if (!Iy[i]) break;
-                    free(Iy[i]);
+                    PyMem_Free(Iy[i]);
                 }
-                free(Iy);
+                PyMem_Free(Iy);
             }
-            free(Ix);
+            PyMem_Free(Ix);
         }
-        free(M);
+        PyMem_Free(M);
     }
 }
 
@@ -2907,18 +2907,18 @@ _allocate_gotoh_matrices(Py_ssize_t nA, Py_ssize_t nB,
     Cell** M = NULL;
     Cell** Ix = NULL;
     Cell** Iy = NULL;
-    M = malloc((nA+1)*sizeof(Cell*));
+    M = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(Cell*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(Cell*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(Cell));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(Cell));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(Cell));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
         if (!Iy[i]) goto exit;
     }
     *pM = M;
@@ -2942,29 +2942,29 @@ _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
             if (Iy) {
                 for (i = 0; i <= nA; i++) {
                     if (!M[i]) break;
-                    free(M[i]);
+                    PyMem_Free(M[i]);
                     if (Ix[i]) {
                         if (Iy[i]) {
                             for (j = 0; j <= nB; j++) {
                                 trace = Ix[i][j].traceM;
-                                if (trace) free(trace);
+                                if (trace) PyMem_Free(trace);
                                 trace = Ix[i][j].traceXY;
-                                if (trace) free(trace);
+                                if (trace) PyMem_Free(trace);
                                 trace = Iy[i][j].traceM;
-                                if (trace) free(trace);
+                                if (trace) PyMem_Free(trace);
                                 trace = Iy[i][j].traceXY;
-                                if (trace) free(trace);
+                                if (trace) PyMem_Free(trace);
                             }
-                            free(Iy[i]);
+                            PyMem_Free(Iy[i]);
                         } else break;
-                        free(Ix[i]);
+                        PyMem_Free(Ix[i]);
                     } else break;
                 }
-                free(Iy);
+                PyMem_Free(Iy);
             }
-            free(Ix);
+            PyMem_Free(Ix);
         }
-        free(M);
+        PyMem_Free(M);
     }
 }
 
@@ -2978,18 +2978,18 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
     CellM** M = NULL;
     CellXY** Ix = NULL;
     CellXY** Iy = NULL;
-    M = malloc((nA+1)*sizeof(CellM*));
+    M = PyMem_Malloc((nA+1)*sizeof(CellM*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(CellXY*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(CellXY*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(CellXY*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(CellXY*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(CellM));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(CellM));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(CellXY));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(CellXY));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(CellXY));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(CellXY));
         if (!Iy[i]) goto exit;
         for (j = 0; j <= nB; j++) {
             Ix[i][j].traceM = NULL;
@@ -3011,12 +3011,12 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 case Global:
                     M[i][0].score = -DBL_MAX;
                     Ix[i][0].score = 0;
-                    trace = malloc(2*sizeof(int));
+                    trace = PyMem_Malloc(2*sizeof(int));
                     if (!trace) goto exit;
                     Ix[i][0].traceM = trace;
                     trace[0] = 0;
                     trace[1] = -1;
-                    trace = malloc(sizeof(int));
+                    trace = PyMem_Malloc(sizeof(int));
                     if (!trace) goto exit;
                     Ix[i][0].traceXY = trace;
                     trace[0] = -1;
@@ -3039,12 +3039,12 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
             case Global:
                 M[0][i].score = -DBL_MAX;
                 Iy[0][i].score = 0;
-                trace = malloc(2*sizeof(int));
+                trace = PyMem_Malloc(2*sizeof(int));
                 if (!trace) goto exit;
                 Iy[0][i].traceM = trace;
                 trace[0] = 0;
                 trace[1] = -1;
-                trace = malloc(sizeof(int));
+                trace = PyMem_Malloc(sizeof(int));
                 if (!trace) goto exit;
                 Iy[0][i].traceXY = trace;
                 trace[0] = -1;
@@ -3091,10 +3091,10 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
     PyObject* result = NULL;
 
     /* Needleman-Wunsch algorithm */
-    F = malloc((nA+1)*sizeof(double*));
+    F = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!F) goto exit;
     for (i = 0; i <= nA; i++) {
-        F[i] = malloc((nB+1)*sizeof(double));
+        F[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!F[i]) goto exit;
     }
 
@@ -3139,9 +3139,9 @@ exit:
     if (F) {
         for (i = 0; i <= nA; i++) {
             if (!F[i]) break;
-            free(F[i]);
+            PyMem_Free(F[i]);
         }
-        free(F);
+        PyMem_Free(F);
     }
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
@@ -3165,10 +3165,10 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
     PyObject* result = NULL;
 
     /* Smith-Waterman algorithm */
-    F = malloc((nA+1)*sizeof(double*));
+    F = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!F) goto exit;
     for (i = 0; i <= nA; i++) {
-        F[i] = malloc((nB+1)*sizeof(double));
+        F[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!F[i]) goto exit;
     }
 
@@ -3208,9 +3208,9 @@ exit:
     if (F) {
         for (i = 0; i <= nA; i++) {
             if (!F[i]) break;
-            free(F[i]);
+            PyMem_Free(F[i]);
         }
-        free(F);
+        PyMem_Free(F);
     }
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
@@ -4399,18 +4399,18 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
-    M = malloc((nA+1)*sizeof(double*));
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(double*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(double*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(double));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(double));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(double));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -4505,17 +4505,17 @@ exit:
                 /* If Iy is NULL, then M[i], Ix[i], and Iy[i] are also NULL. */
                 for (i = 0; i <= nA; i++) {
                     if (!M[i]) break;
-                    free(M[i]);
+                    PyMem_Free(M[i]);
                     if (!Ix[i]) break;
-                    free(Ix[i]);
+                    PyMem_Free(Ix[i]);
                     if (!Iy[i]) break;
-                    free(Iy[i]);
+                    PyMem_Free(Iy[i]);
                 }
-                free(Iy);
+                PyMem_Free(Iy);
             }
-            free(Ix);
+            PyMem_Free(Ix);
         }
-        free(M);
+        PyMem_Free(M);
     }
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
@@ -4543,18 +4543,18 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
     PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
-    M = malloc((nA+1)*sizeof(double*));
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(double*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(double*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(double));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(double));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(double));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -4643,17 +4643,17 @@ exit:
                 /* If Iy is NULL, then M[i], Ix[i], and Iy[i] are also NULL. */
                 for (i = 0; i <= nA; i++) {
                     if (!M[i]) break;
-                    free(M[i]);
+                    PyMem_Free(M[i]);
                     if (!Ix[i]) break;
-                    free(Ix[i]);
+                    PyMem_Free(Ix[i]);
                     if (!Iy[i]) break;
-                    free(Iy[i]);
+                    PyMem_Free(Iy[i]);
                 }
-                free(Iy);
+                PyMem_Free(Iy);
             }
-            free(Ix);
+            PyMem_Free(Ix);
         }
-        free(M);
+        PyMem_Free(M);
     }
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
@@ -4996,18 +4996,18 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
     PyObject* result = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    M = malloc((nA+1)*sizeof(double*));
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(double*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(double*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(double));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(double));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(double));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -5065,17 +5065,17 @@ exit:
                 /* If Iy is NULL, then M[i], Ix[i], and Iy[i] are also NULL. */ 
                 for (i = 0; i <= nA; i++) {
                     if (!M[i]) break;
-                    free(M[i]); 
+                    PyMem_Free(M[i]); 
                     if (!Ix[i]) break;
-                    free(Ix[i]);
+                    PyMem_Free(Ix[i]);
                     if (!Iy[i]) break;
-                    free(Iy[i]);
+                    PyMem_Free(Iy[i]);
                 }
-                free(Iy);
+                PyMem_Free(Iy);
             }
-            free(Ix);
+            PyMem_Free(Ix);
         }
-        free(M);
+        PyMem_Free(M);
     }
     if (!ok) return NULL;
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
@@ -5131,10 +5131,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                                             Ix[i-1][j-1].score,
                                             Iy[i-1][j-1].score,
                                             self->substitution_matrix[kA][kB]);
-            traceM = malloc((i+1)*sizeof(int));
+            traceM = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
-            traceXY = malloc((i+1)*sizeof(int));
+            traceXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             nm = 0;
@@ -5147,19 +5147,19 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                                                       Iy[i-k][j].score,
                                                       i-k);
             }
-            traceM = realloc(traceM, (nm+1)*sizeof(int));
+            traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
             traceM[nm] = -1;
-            traceXY = realloc(traceXY, (ng+1)*sizeof(int));
+            traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             traceXY[ng] = -1;
             Ix[i][j].score = score;
-            traceM = malloc((j+1)*sizeof(int));
+            traceM = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceM) goto exit;
             Iy[i][j].traceM = traceM;
-            traceXY = malloc((j+1)*sizeof(int));
+            traceXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
             nm = 0;
@@ -5173,11 +5173,11 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                                                       j-k);
             }
             Iy[i][j].score = score;
-            traceM = realloc(traceM, (nm+1)*sizeof(int));
+            traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
             Iy[i][j].traceM = traceM;
             traceM[nm] = -1;
-            traceXY = realloc(traceXY, (ng+1)*sizeof(int));
+            traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
             traceXY[ng] = -1;
@@ -5232,18 +5232,18 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
     PyObject* result = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    M = malloc((nA+1)*sizeof(double*));
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = malloc((nA+1)*sizeof(double*));
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = malloc((nA+1)*sizeof(double*));
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = malloc((nB+1)*sizeof(double));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = malloc((nB+1)*sizeof(double));
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = malloc((nB+1)*sizeof(double));
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -5296,7 +5296,7 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
     result = PyFloat_FromDouble(maximum);
 exit:
     if (!result) {
-        /* otherwise the alignment generator will free the matrices */
+        /* otherwise the alignment generator will PyMem_Free the matrices */
         if (M) {
             /* If M is NULL, then Ix is also NULL. */
             if (Ix) {
@@ -5306,17 +5306,17 @@ exit:
                      * also NULL. */
                     for (i = 0; i <= nA; i++) {
                         if (!M[i]) break;
-                        free(M[i]);
+                        PyMem_Free(M[i]);
                         if (!Ix[i]) break;
-                        free(Ix[i]);
+                        PyMem_Free(Ix[i]);
                         if (!Iy[i]) break;
-                        free(Iy[i]);
+                        PyMem_Free(Iy[i]);
                     }
-                    free(Iy);
+                    PyMem_Free(Iy);
                 }
-                free(Ix);
+                PyMem_Free(Ix);
             }
-            free(M);
+            PyMem_Free(M);
         }
     }
     if (!ok) return NULL;
@@ -5368,10 +5368,10 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                                            Iy[i-1][j-1].score,
                                            self->substitution_matrix[kA][kB]);
             M[i][j].path.i = -1;
-            traceM = malloc((i+1)*sizeof(int));
+            traceM = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
-            traceXY = malloc((i+1)*sizeof(int));
+            traceXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             score = -DBL_MAX;
@@ -5392,18 +5392,18 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceXY[ng] = -1;
             Ix[i][j].score = score;
             Ix[i][j].path.i = -1;
-            traceM = realloc(traceM, (nm+1)*sizeof(int));
+            traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
             traceM[nm] = -1;
-            traceXY = realloc(traceXY, (ng+1)*sizeof(int));
+            traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             traceXY[ng] = -1;
-            traceM = malloc((j+1)*sizeof(int));
+            traceM = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceM) goto exit;
             Iy[i][j].traceM = traceM;
-            traceXY = malloc((j+1)*sizeof(int));
+            traceXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
             nm = 0;
@@ -5422,10 +5422,10 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                 ng = 0;
             }
             else if (score > maximum) maximum = score;
-            traceM = realloc(traceM, (nm+1)*sizeof(int));
+            traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
             Iy[i][j].traceM = traceM;
-            traceXY = realloc(traceXY, (ng+1)*sizeof(int));
+            traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
             traceM[nm] = -1;
