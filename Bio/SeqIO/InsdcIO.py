@@ -632,7 +632,7 @@ class GenBankWriter(_InsdcWriter):
                 warnings.warn("Molecule type %r too long" % mol_type,
                               BiopythonWarning)
                 mol_type = None
-        if mol_type == "protein":
+        if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
 
         if mol_type:
