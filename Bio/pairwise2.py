@@ -64,7 +64,7 @@ printout, use the ``format_alignment`` method of the module:
 All alignment functions have the following arguments:
 
 - Two sequences: strings, Biopython sequence objects or lists.
-  Lists are useful for suppling sequences which contain residues that are
+  Lists are useful for supplying sequences which contain residues that are
   encoded by more than one letter.
 
 - ``penalize_extend_when_opening``: boolean (default: False).
