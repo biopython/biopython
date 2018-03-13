@@ -366,6 +366,12 @@ GT--
   Score=1
 """)  # noqa: W291
 
+    def test_separate_penalize_end_gaps(self):
+        """Test alignment where end-gaps are differently penalized."""
+        align = pairwise2.align.globalms('AT', 'AGG', 1.0, -0.5, -1.75, -0.25,
+                                         penalize_end_gaps=(True, False))
+        self.assertEqual(align[0], ('A--T', 'AGG-', -1.0, 0, 4))
+
 
 class TestPairwiseSeparateGapPenalties(unittest.TestCase):
 
