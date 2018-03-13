@@ -387,7 +387,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
     def test_le_exception(self):
         def le():
             SeqRecord(Seq("A")) <= SeqRecord(Seq("A"))
-            self.assertRaises(NotImplementedError, le)
+        self.assertRaises(NotImplementedError, le)
 
     def test_eq_exception(self):
         def equality():
@@ -408,6 +408,15 @@ class SeqRecordMethodsMore(unittest.TestCase):
         def ge():
             SeqRecord(Seq("A")) >= SeqRecord(Seq("A"))
         self.assertRaises(NotImplementedError, ge)
+
+    def test_hash_exception(self):
+        def hash1():
+            hash(SeqRecord(Seq("A")))
+        self.assertRaises(TypeError, hash1)
+
+        def hash2():
+            SeqRecord(Seq("A")).__hash__()
+        self.assertRaises(TypeError, hash2)
 
 
 class TestTranslation(unittest.TestCase):

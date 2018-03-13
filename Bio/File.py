@@ -82,7 +82,16 @@ def as_handle(handleish, mode='r', **kwargs):
     been deprecated (this happens automatically in text mode).
 
     """
-    try:
+    # If we're running under a version of Python that supports PEP 519, try
+    # to convert `handleish` to a string with `os.fspath`.
+    if hasattr(os, 'fspath'):
+        try:
+            handleish = os.fspath(handleish)
+        except TypeError:
+            # handleish isn't path-like, and it remains unchanged -- we'll yield it below
+            pass
+
+    if isinstance(handleish, basestring):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")
         if 'encoding' in kwargs:
@@ -91,7 +100,7 @@ def as_handle(handleish, mode='r', **kwargs):
         else:
             with open(handleish, mode, **kwargs) as fp:
                 yield fp
-    except TypeError:
+    else:
         yield handleish
 
 

@@ -117,6 +117,27 @@ class AsHandleTestCase(unittest.TestCase):
             self.assertFalse(handle.closed)
         self.assertTrue(handle.closed)
 
+    @unittest.skipIf(
+        sys.version_info < (3, 6),
+        'Passing path-like objects to File.as_handle requires Python >= 3.6',
+    )
+    def test_custom_path_like_object(self):
+        "Test as_handle with a custom path-like object"
+        class CustomPathLike:
+            def __init__(self, path):
+                self.path = path
+
+            def __fspath__(self):
+                return self.path
+
+        p = CustomPathLike(self._path('test_file.fasta'))
+        mode = 'wb'
+        with File.as_handle(p, mode=mode) as handle:
+            self.assertEqual(p.path, handle.name)
+            self.assertEqual(mode, handle.mode)
+            self.assertFalse(handle.closed)
+        self.assertTrue(handle.closed)
+
     def test_stringio(self):
         s = StringIO()
         with File.as_handle(s) as handle:
