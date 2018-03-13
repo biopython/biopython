@@ -124,7 +124,7 @@ class Hit(_BaseSearchObject):
         self._description = None
         self._description_alt = []
         self._query_description = None
-        self.format_attributes = {}
+        self.attributes = {}
         self.dbxrefs = []
 
         # TODO - Move this into the for look below in case
@@ -185,8 +185,8 @@ class Hit(_BaseSearchObject):
                     80, '...')
         lines.append(hid_line)
 
-        # set format_attributes lines
-        for key, value in sorted(self.format_attributes.items()):
+        # set attributes lines
+        for key, value in sorted(self.attributes.items()):
             lines.append(' %s: %s' % (key, value))
 
         # set dbxrefs line
