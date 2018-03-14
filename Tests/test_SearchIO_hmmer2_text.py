@@ -217,8 +217,10 @@ class HmmpfamTests(unittest.TestCase):
 
         file (text_23_hmmpfam_004.out)
         """
-        results = list(parse(path.join("Hmmer", "text_23_hmmpfam_004.out"), self.fmt))
-        self.assertEqual(1, len(results))
+        results = parse(path.join("Hmmer", "text_23_hmmpfam_004.out"), self.fmt)
+        res = next(results)
+        self.assertEqual('PKSI-KS', res[0].id)
+        self.assertEqual('PKSI-FK', res[1].id)
 
     def test_hmmpfam_24(self):
         """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""
