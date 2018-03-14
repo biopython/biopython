@@ -35,7 +35,7 @@ class Residue(Entity):
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
-    
+
     # Residue-specific equality check as the Entity one does not work as expected
     def __hash__(self):
         return hash(self.id)
@@ -54,7 +54,7 @@ class Residue(Entity):
                 return self.parent == other.parent
         else:
             return NotImplemented
- 
+
     # Residue-specific sorting methods
     # Sort first by HETATM flag, then by resseq, finally by insertion code
     def __gt__(self, other):
