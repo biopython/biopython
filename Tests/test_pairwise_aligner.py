@@ -59,6 +59,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: global
 """)
 
     def test_aligner_property_gapscores(self):
@@ -97,6 +98,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -2.000000
   query right open gap score: -1.000000
   query right extend gap score: -2.000000
+  mode: global
 """)
         self.assertAlmostEqual(aligner.query_end_open_gap_score, open_score)
         self.assertAlmostEqual(aligner.query_end_extend_gap_score, extend_score)
@@ -148,6 +150,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -5.000000
   query right open gap score: -5.000000
   query right extend gap score: -5.000000
+  mode: global
 """)
         with self.assertRaises(ValueError):
             aligner.target_gap_score = 'wrong'
@@ -181,6 +184,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: global
 """)
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
         score = aligner.score(seq1, seq2)
@@ -227,6 +231,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -1.000000
   query right open gap score: -5.000000
   query right extend gap score: -1.000000
+  mode: global
 """)
         score = aligner.score("CC", "ACCT")
         self.assertAlmostEqual(score, -7.0)
@@ -254,6 +259,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.100000
   query right extend gap score: -0.100000
+  mode: local
 """)
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
@@ -297,6 +303,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.100000
   query right extend gap score: 0.000000
+  mode: local
 """)
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
@@ -344,6 +351,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.100000
   query right extend gap score: 0.000000
+  mode: global
 """)
         seq1 = "AA"
         seq2 = "A"
@@ -391,6 +399,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.100000
   query right extend gap score: 0.000000
+  mode: global
 """)
         seq1 = "GAA"
         seq2 = "GA"
@@ -436,6 +445,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.100000
   query right extend gap score: 0.000000
+  mode: global
 """)
         seq1 = "GAACT"
         seq2 = "GAT"
@@ -475,6 +485,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.100000
   query right extend gap score: 0.000000
+  mode: global
 """)
         seq1 = "GCT"
         seq2 = "GATA"
@@ -522,6 +533,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.500000
   query right open gap score: -0.200000
   query right extend gap score: -0.500000
+  mode: global
 """)
         seq1 = "GACT"
         seq2 = "GT"
@@ -560,6 +572,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -1.500000
   query right open gap score: -0.200000
   query right extend gap score: -1.500000
+  mode: global
 """)
         seq1 = "GACT"
         seq2 = "GT"
@@ -607,6 +620,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -1.500000
   query right open gap score: -1.700000
   query right extend gap score: -1.500000
+  mode: global
 """)
         seq1 = "GACT"
         seq2 = "GT"
@@ -649,6 +663,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: global
 """)
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         seq1 = "GACT"
@@ -716,6 +731,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.800000
   query right extend gap score: 0.000000
+  mode: local
 """)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.7)
@@ -761,6 +777,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.200000
   query right extend gap score: 0.000000
+  mode: local
 """)
         seq1 = "GAT"
         seq2 = "GTCT"
@@ -810,6 +827,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.100000
   query right extend gap score: -0.100000
+  mode: local
 """)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.9)
@@ -896,6 +914,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -0.500000
   query right extend gap score: 0.000000
+  mode: local
 """)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -938,6 +957,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -1.000000
   query right extend gap score: 0.000000
+  mode: local
 """)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -974,6 +994,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: -1.000000
   query right extend gap score: 0.000000
+  mode: local
 """)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -1012,6 +1033,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.300000
   query right extend gap score: -0.100000
+  mode: local
 """)
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 1)
@@ -1048,6 +1070,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.300000
   query right extend gap score: -0.100000
+  mode: local
 """)
         score = aligner.score("abcce", "c")
         self.assertAlmostEqual(score, 1)
@@ -1091,6 +1114,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.300000
   query right extend gap score: -0.100000
+  mode: global
 """)
         seq1 = "abcde"
         seq2 = "c"
@@ -1129,6 +1153,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: -0.100000
   query right open gap score: -0.300000
   query right extend gap score: -0.100000
+  mode: global
 """)
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 0.2)
@@ -1161,6 +1186,7 @@ Pairwise sequence aligner with parameters
   mismatch score: -1.000000
   target gap function: %s
   query gap function: %s
+  mode: global
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer global alignment algorithm")
@@ -1203,6 +1229,7 @@ Pairwise sequence aligner with parameters
   mismatch score: -1.000000
   target gap function: %s
   query gap function: %s
+  mode: global
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer global alignment algorithm")
@@ -1254,6 +1281,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: global
 """ % gap_score)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -1274,6 +1302,7 @@ Pairwise sequence aligner with parameters
   mismatch score: -10.000000
   target gap function: %s
   query gap function: %s
+  mode: global
 """ % (gap_score, gap_score))
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
@@ -1331,6 +1360,7 @@ Pairwise sequence aligner with parameters
   mismatch score: -1.000000
   target gap function: %s
   query gap function: %s
+  mode: local
 """ % (nogaps, specificgaps))
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
@@ -1377,6 +1407,7 @@ Pairwise sequence aligner with parameters
   mismatch score: -1.000000
   target gap function: %s
   query gap function: %s
+  mode: local
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer local alignment algorithm")
@@ -1428,6 +1459,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: local
 """ % gap_score)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
@@ -1460,6 +1492,7 @@ Pairwise sequence aligner with parameters
   query left extend gap score: 0.000000
   query right open gap score: 0.000000
   query right extend gap score: 0.000000
+  mode: local
 """ % gap_score)
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)

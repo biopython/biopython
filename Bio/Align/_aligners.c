@@ -533,6 +533,11 @@ Aligner_str(Aligner* self)
                        self->query_right_extend_gap_score);
         p += n;
     }
+    switch (self->mode) {
+        case Global: n = sprintf(p, "  mode: global\n"); break;
+        case Local: n = sprintf(p, "  mode: local\n"); break;
+    }
+    p += n;
 #if PY_MAJOR_VERSION >= 3
     if (self->target_gap_function || self->query_gap_function)
         return PyUnicode_FromFormat(text, self->target_gap_function, self->query_gap_function);
