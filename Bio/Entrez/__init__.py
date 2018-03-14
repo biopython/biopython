@@ -36,6 +36,9 @@ Variables:
 
     - email        Set the Entrez email parameter (default is not set).
     - tool         Set the Entrez tool parameter (default is ``biopython``).
+    - api_key      Personal API key from NCBI. If not set, only 3 queries per
+                   seconds are allowed. 10 queries per seconds otherwise with a
+                   valid API key.
 
 Functions:
 
@@ -502,19 +505,28 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     This function also enforces the "up to three queries per second rule"
     to avoid abusing the NCBI servers.
     """
-    # NCBI requirement: At most three queries per second.
+    # NCBI requirement: At most three queries per second if no API key is provided.
     # Equivalently, at least a third of second between queries
-    delay = 0.333333334
-    current = time.time()
-    wait = _open.previous + delay - current
-    if wait > 0:
-        time.sleep(wait)
-        _open.previous = current + wait
-    else:
-        _open.previous = current
-
     params = _construct_params(params)
     options = _encode_options(ecitmatch, params)
+    if params['api_key'] is None:
+        delay = 0.333333334
+        current = time.time()
+        wait = _open.previous + delay - current
+        if wait > 0:
+            time.sleep(wait)
+            _open.previous = current + wait
+        else:
+            _open.previous = current
+    else:
+        delay = 0.1
+        current = time.time()
+        wait = _open.previous + delay - current
+        if wait > 0:
+            time.sleep(wait)
+            _open.previous = current + wait
+        else:
+            _open.previous = current
 
     # By default, post is None. Set to a boolean to over-ride length choice:
     if post is None and len(options) > 1000:
