@@ -67,7 +67,7 @@ class Residue(Entity):
                 return resseq_s > resseq_o
             elif icode_s != icode_o:
                 return icode_s > icode_o
-            else
+            else:
                 return self.parent > other.parent
         else:
             return NotImplemented
@@ -82,7 +82,7 @@ class Residue(Entity):
                 return resseq_s >= resseq_o
             elif icode_s != icode_o:
                 return icode_s >= icode_o
-            else
+            else:
                 return self.parent >= other.parent
         else:
             return NotImplemented
@@ -97,7 +97,7 @@ class Residue(Entity):
                 return resseq_s < resseq_o
             elif icode_s != icode_o:
                 return icode_s < icode_o
-            else
+            else:
                 return self.parent < other.parent
         else:
             return NotImplemented
@@ -112,7 +112,7 @@ class Residue(Entity):
                 return resseq_s <= resseq_o
             elif icode_s != icode_o:
                 return icode_s <= icode_o
-            else
+            else:
                 return self.parent < other.parent
         else:
             return NotImplemented
