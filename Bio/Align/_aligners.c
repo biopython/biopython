@@ -2662,13 +2662,6 @@ static PyGetSetDef Aligner_getset[] = {
     if (score < 0) score = 0; \
     else if (score > maximum) maximum = score;
 
-#define SELECT_SCORE_LOCAL2(score1, score2) \
-    score = score1; \
-    temp = score2; \
-    if (temp > score) score = temp; \
-    if (score < 0) score = 0; \
-    else if (score > maximum) maximum = score;
-
 #define SELECT_SCORE_LOCAL1(score1) \
     score = score1; \
     if (score < 0) score = 0; \
@@ -3169,16 +3162,14 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
             F[i][j] = score;
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_SCORE_LOCAL2(F[i-1][nB-1] + self->substitution_matrix[kA][kB],
-                            F[i][nB-1] + gap_extend_A);
+        SELECT_SCORE_LOCAL1(F[i-1][nB-1] + self->substitution_matrix[kA][kB]);
         F[i][nB] = score;
     }
     kA = CHARINDEX(sA[nA-1]);
     F[nA][0] = 0;
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_SCORE_LOCAL2(F[nA-1][j-1] + self->substitution_matrix[kA][kB],
-                            F[nA-1][j] + gap_extend_B);
+        SELECT_SCORE_LOCAL1(F[nA-1][j-1] + self->substitution_matrix[kA][kB]);
         F[nA][j] = score;
     }
     kB = CHARINDEX(sB[nB-1]);
@@ -4576,10 +4567,7 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
         kB = CHARINDEX(sB[nB-1]);
 
         Ix[i][nB] = 0;
-        SELECT_SCORE_LOCAL3(M[i][nB-1] + gap_open_A,
-                            Iy[i][nB-1] + gap_extend_A,
-                            Ix[i][nB-1] + gap_open_A);
-        Iy[i][nB] = score;
+        Iy[i][nB] = 0;
         SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[i-1][nB-1],
                                        Ix[i-1][nB-1],
                                        Iy[i-1][nB-1],
@@ -4590,10 +4578,7 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_SCORE_LOCAL3(M[nA-1][j] + gap_open_B,
-                            Ix[nA-1][j] + gap_extend_B,
-                            Iy[nA-1][j] + gap_open_B);
-        Ix[nA][j] = score;
+        Ix[nA][j] = 0;
         Iy[nA][j] = 0;
         SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[nA-1][j-1],
                                        Ix[nA-1][j-1],
@@ -4858,10 +4843,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         kB = CHARINDEX(sB[nB-1]);
         Ix[i][nB].score = 0;
         Ix[i][nB].trace = 0;
-        SELECT_TRACE_GOTOH_LOCAL_GAP(Iy[i][nB],
-                                     M[i][nB-1].score + gap_open_A,
-                                     Ix[i][nB-1].score + gap_open_A,
-                                     Iy[i][nB-1].score + gap_extend_A);
+        Iy[i][nB].score = 0;
+        Iy[i][nB].trace = 0;
         SELECT_TRACE_GOTOH_LOCAL_ALIGN(M[i][nB],
                                        M[i-1][nB-1].score,
                                        Ix[i-1][nB-1].score,
@@ -4871,10 +4854,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_TRACE_GOTOH_LOCAL_GAP(Ix[nA][j],
-                                     M[nA-1][j].score + gap_open_B,
-                                     Ix[nA-1][j].score + gap_extend_B,
-                                     Iy[nA-1][j].score + gap_open_B);
+        Ix[nA][j].score = 0;
+        Ix[nA][j].trace = 0;
         Iy[nA][j].score = 0;
         Iy[nA][j].trace = 0;
         SELECT_TRACE_GOTOH_LOCAL_ALIGN(M[nA][j],
@@ -5251,6 +5232,11 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
                                            Iy[i-1][j-1],
                                            self->substitution_matrix[kA][kB]);
             M[i][j] = score;
+            if (i < nA || j < nB) {
+                Ix[i][j] = 0;
+                Iy[i][j] = 0;
+                continue;
+            }
             score = 0.0;
             for (k = 1; k <= i; k++) {
                 ok = _call_query_gap_function(self, j, k, &gapscore);
