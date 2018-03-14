@@ -64,6 +64,8 @@ to the builtin ``open`` function. Specifically, this allows using
 ``pathlib.Path`` objects under Python 3.6 and newer, as per `PEP 519
 <https://www.python.org/dev/peps/pep-0519/>`_.
 
+Bio.SearchIO can now parse InterProScan XML files.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
