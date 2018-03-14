@@ -2700,40 +2700,6 @@ static PyGetSetDef Aligner_getset[] = {
     cell.trace = trace; \
     if (score > maximum) maximum = score;
 
-#define SELECT_TRACE_SMITH_WATERMAN_HD(cell, score1, score2) \
-    score = score1; \
-    trace = HORIZONTAL; \
-    temp = score2; \
-    if (temp > score + epsilon) { \
-        score = temp; \
-        trace = DIAGONAL; \
-    } \
-    else if (temp > score - epsilon) trace |= DIAGONAL; \
-    if (score < epsilon) { \
-        score = 0; \
-        trace = 0; \
-    } \
-    cell.score = score; \
-    cell.trace = trace; \
-    if (score > maximum) maximum = score;
-
-#define SELECT_TRACE_SMITH_WATERMAN_VD(cell, score1, score2) \
-    score = score1; \
-    trace = VERTICAL; \
-    temp = score2; \
-    if (temp > score + epsilon) { \
-        score = temp; \
-        trace = DIAGONAL; \
-    } \
-    else if (temp > score - epsilon) trace |= DIAGONAL; \
-    if (score < epsilon) { \
-        score = 0; \
-        trace = 0; \
-    } \
-    cell.score = score; \
-    cell.trace = trace; \
-    if (score > maximum) maximum = score;
-
 #define SELECT_TRACE_SMITH_WATERMAN_D(cell, score1) \
     score = score1; \
     trace = DIAGONAL; \
@@ -4336,8 +4302,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
                 M[i-1][j-1].score + self->substitution_matrix[kA][kB]);
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_TRACE_SMITH_WATERMAN_HD(M[i][nB],
-            M[i][nB-1].score + gap_extend_A,
+        SELECT_TRACE_SMITH_WATERMAN_D(M[i][nB],
             M[i-1][nB-1].score + self->substitution_matrix[kA][kB]);
     }
     M[nA][0].score = 0;
@@ -4345,8 +4310,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_TRACE_SMITH_WATERMAN_VD(M[nA][j],
-            M[nA-1][j].score + gap_extend_B,
+        SELECT_TRACE_SMITH_WATERMAN_D(M[nA][j],
             M[nA-1][j-1].score + self->substitution_matrix[kA][kB]);
     }
     kB = CHARINDEX(sB[nB-1]);
