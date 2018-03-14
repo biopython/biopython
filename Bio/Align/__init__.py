@@ -1140,6 +1140,38 @@ class PairwiseAlignment(object):
         return line
 
 
+class Alignments(object):
+
+    def __init__(self, seqA, seqB, score, paths):
+        self.seqA = seqA
+        self.seqB = seqB
+        self.score = score
+        self.paths = paths
+        self.index = -1
+
+    def __getitem__(self, index):
+        if index == self.index:
+            return self.alignment
+        if index < self.index:
+            self.paths.reset()
+            self.index = -1
+        while self.index < index:
+            try:
+                alignment = self.next()
+            except StopIteration:
+                raise IndexError('index out of range')
+        return alignment
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        path = next(self.paths)
+        self.index += 1
+        alignment = PairwiseAlignment(self.seqA, self.seqB, path, self.score)
+        self.alignment = alignment
+        return alignment
+
 class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
 
@@ -1259,9 +1291,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         seqA = str(seqA)
         seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
-        for path in paths:
-            alignment = PairwiseAlignment(seqA, seqB, path, score)
-            yield alignment
+        alignments = Alignments(seqA, seqB, score, paths)
+        return alignments
 
     def score(self, seqA, seqB):
         seqA = str(seqA)

@@ -1807,13 +1807,11 @@ showing an alignment score of 72.0. To see the individual alignments, do
 
 As the total number of optimal alignments can be huge (more than 4e+37 for
 this example), especially for poorly aligning sequences, \verb+aligner.align+
-returns an iterator over all alignments instead of a list.
-Let's pull out the first alignment:
+returns an iterator over all alignments instead of a list. However, the
+iterator also supports indexing:
 %cont-doctest
 \begin{verbatim}
->>> for alignment in alignments:
-...     break
-...
+>>> alignment = alignments[0]
 \end{verbatim}
 
 The alignment object stores the alignment score, as well as the alignment

@@ -3235,7 +3235,7 @@ static PyObject* _next_needlemanwunsch(PathGenerator* self)
             if (!path) {
                 /* we reached the end of the alignment without finding
                  * an alternative path */
-                M[i][j].path = DONE;
+                M[0][0].path = DONE;
                 return NULL;
             }
         }
@@ -4118,10 +4118,52 @@ PathGenerator_dealloc(PathGenerator* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
+static const char PathGenerator_reset__doc__[] = "reset the iterator";
+
+static PyObject*
+PathGenerator_reset(PathGenerator* self)
+{
+    switch (self->mode) {
+        case Local:
+            if (self->threshold <= 0) /* no solutions were found */ break;
+            self->iA = 0;
+            self->iB = 0;
+        case Global:
+            switch (self->algorithm) {
+                case NeedlemanWunschSmithWaterman:
+                case Gotoh: {
+                    Cell** M = self->M.affine;
+                    M[0][0].path = 0;
+                    break;
+                }
+                case WatermanSmithBeyer: {
+                    CellM** M = self->M.general;
+                    M[0][0].path.i = -1;
+                    M[0][0].path.j = 0;
+                    break;
+                }
+                case Unknown:
+                default:
+                    break;
+        }
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyMethodDef PathGenerator_methods[] = {
+    {"reset",
+     (PyCFunction)PathGenerator_reset,
+     METH_NOARGS,
+     PathGenerator_reset__doc__
+    },
+    {NULL}  /* Sentinel */
+};
+
 PyTypeObject PathGenerator_Type = {
     PyVarObject_HEAD_INIT(&PyType_Type, 0)
-    "Alignment generator",          /* tp_name */
-    sizeof(PathGenerator),     /* tp_basicsize */
+    "Path generator",               /* tp_name */
+    sizeof(PathGenerator),          /* tp_basicsize */
     0,                              /* tp_itemsize */
     (destructor)PathGenerator_dealloc,  /* tp_dealloc */
     0,                              /* tp_print */
@@ -4146,6 +4188,7 @@ PyTypeObject PathGenerator_Type = {
     0,                              /* tp_weaklistoffset */
     PyObject_SelfIter,              /* tp_iter */
     (iternextfunc)PathGenerator_next,      /* tp_iternext */
+    PathGenerator_methods,          /* tp_methods */
 };
 
 static PathGenerator*
@@ -4327,8 +4370,8 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (paths) {
         PyObject* result;
         paths->M.affine = M;
+        paths->threshold = maximum - epsilon;
         if (maximum==0) M[0][0].path = DONE;
-        else paths->threshold = maximum - epsilon;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
         return result;
@@ -4882,8 +4925,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         paths->M.affine = M;
         paths->Ix.affine = Ix;
         paths->Iy.affine = Iy;
+        paths->threshold = maximum - epsilon;
         if (maximum==0) M[0][0].path = DONE;
-        else paths->threshold = maximum - epsilon;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
         return result;
@@ -5407,8 +5450,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
         paths->M.general = M;
         paths->Ix.general = Ix;
         paths->Iy.general = Iy;
+        paths->threshold = maximum - epsilon;
         if (maximum==0) M[0][0].path.j = -1; /* DONE */
-        else paths->threshold = maximum - epsilon;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
         return result;
