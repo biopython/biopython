@@ -1558,7 +1558,7 @@ pairwise alignment algorithms.
 GAACT
 ||  |
 GA--T
-
+<BLANKLINE>
 GAACT
 | | |
 G-A-T
@@ -1571,18 +1571,17 @@ to \verb+"local"+:
 %cont-doctest
 \begin{verbatim}
 >>> aligner.mode = 'local'
->>> alignments = aligner.align("LSPADKTNVKAA", "PEEKSAV")
->>> alignments = list(alignments)
->>> print(len(alignments))
-1
->>> alignment = alignments[0]
->>> print(alignment)
-LSPADKTNVKAA
-  |..|..|   
-  PEEKSAV   
->>> print(alignment.score)
-16.0
+>>> seq1 = "AGAACTC"
+>>> seq2 = "GAACT"
+>>> alignments = aligner.align(seq1, seq2)
+>>> for alignment in alignments:
+...     print(alignment)
+AGAACTC
+ ||||| 
+ GAACT 
 <BLANKLINE>
+>>> print(alignment.score)
+5.0
 \end{verbatim}
 
 \subsection{Match and mismatch scores}
@@ -1747,20 +1746,20 @@ For even more fine-grained control over the gap scores, you can specify a gap sc
 >>> aligner.query_gap_score = my_gap_score_function
 >>> alignments = aligner.align("AACTT", "AATT")
 >>> for alignment in alignments:
-...     print alignment
+...     print(alignment)
 ... 
 AACTT
  |.||
 -AATT
-
+<BLANKLINE>
 AACTT
 | .||
 A-ATT
-
+<BLANKLINE>
 AACTT
 ||. |
 AAT-T
-
+<BLANKLINE>
 AACTT
 ||.| 
 AATT-
@@ -1870,3 +1869,23 @@ MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKV...
 
 This alignment has the same score that we obtained earlier with EMBOSS needle
 using the same sequences and the same parameters.
+
+To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
+%cont-doctest
+\begin{verbatim}
+>>> aligner.mode = 'local'
+>>> aligner.open_gap_score = -10
+>>> aligner.extend_gap_score = -1
+>>> alignments = aligner.align("LSPADKTNVKAA", "PEEKSAV")
+>>> alignments = list(alignments)
+>>> print(len(alignments))
+1
+>>> alignment = alignments[0]
+>>> print(alignment)
+LSPADKTNVKAA
+  |..|..|   
+  PEEKSAV   
+<BLANKLINE>
+>>> print(alignment.score)
+16.0
+\end{verbatim}
