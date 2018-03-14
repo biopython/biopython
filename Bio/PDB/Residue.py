@@ -35,7 +35,26 @@ class Residue(Entity):
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
+    
+    # Residue-specific equality check as the Entity one does not work as expected
+    def __hash__(self):
+        return hash(self.id)
 
+    def __eq__(self, other):
+        if isinstance(other, Residue):
+            hetflag_s, resseq_s, icode_s = self.id
+            hetflag_o, resseq_o, icode_o = other.id
+            if resseq_o != resseq_s:
+                return False
+            elif hetflag_s != hetflag_o:
+                return False
+            elif icode_s != icode_s:
+                return False
+            else:
+                return self.parent == other.parent
+        else:
+            return NotImplemented
+ 
     # Residue-specific sorting methods
     # Sort first by HETATM flag, then by resseq, finally by insertion code
     def __gt__(self, other):
@@ -46,8 +65,10 @@ class Residue(Entity):
                 return hetflag_s > hetflag_o
             elif resseq_o != resseq_s:
                 return resseq_s > resseq_o
-            else:
+            elif icode_s != icode_o:
                 return icode_s > icode_o
+            else
+                return self.parent > other.parent
         else:
             return NotImplemented
 
@@ -59,8 +80,10 @@ class Residue(Entity):
                 return hetflag_s >= hetflag_o
             elif resseq_o != resseq_s:
                 return resseq_s >= resseq_o
-            else:
+            elif icode_s != icode_o:
                 return icode_s >= icode_o
+            else
+                return self.parent >= other.parent
         else:
             return NotImplemented
 
@@ -72,8 +95,10 @@ class Residue(Entity):
                 return hetflag_s < hetflag_o
             elif resseq_o != resseq_s:
                 return resseq_s < resseq_o
-            else:
+            elif icode_s != icode_o:
                 return icode_s < icode_o
+            else
+                return self.parent < other.parent
         else:
             return NotImplemented
 
@@ -82,11 +107,13 @@ class Residue(Entity):
             hetflag_s, resseq_s, icode_s = self.id
             hetflag_o, resseq_o, icode_o = other.id
             if hetflag_o != hetflag_s:
-                return hetflag_s < hetflag_o
+                return hetflag_s <= hetflag_o
             elif resseq_o != resseq_s:
-                return resseq_s < resseq_o
-            else:
-                return icode_s < icode_o
+                return resseq_s <= resseq_o
+            elif icode_s != icode_o:
+                return icode_s <= icode_o
+            else
+                return self.parent < other.parent
         else:
             return NotImplemented
 
