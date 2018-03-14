@@ -259,16 +259,12 @@ class Hmmer2TextParser(object):
                         break
 
                 # skip the *-> start marker if it exists
-                if self.line[19] == '*':
+                if self.line[19:22] == '*->':
                     seq = self.line[22:]
                     pad = 3
                 else:
                     seq = self.line[19:]
                     pad = 0
-
-                # get rid of the end marker
-                if seq.endswith('<-*'):
-                    seq = seq[:-3]
 
                 hmmseq += seq
                 line_len = len(seq)
@@ -282,9 +278,21 @@ class Hmmer2TextParser(object):
 
                 if not self.read_next():
                     break
-                otherseq += self.line[19:].split()[0].strip()
+
+                # if we have a line break in the end marker, we get a
+                # whitespace-only otherseq line, making split()[0] return
+                # the end coordinate. That'll be a -, which is a valid character
+                # in the sequence, meaning we can't just strip it.
+                parts = self.line[19:].split()
+                if len(parts) == 2:
+                    otherseq += self.line[19:].split()[0].strip()
 
             self.push_back(self.line)
+
+            # get rid of the end marker
+            if hmmseq.endswith('<-*'):
+                hmmseq = hmmseq[:-3]
+                consensus = consensus[:-3]
 
             # add similarity sequence to annotation
             frag.aln_annotation['similarity'] = consensus

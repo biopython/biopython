@@ -52,6 +52,7 @@ text_22_hmmpfam_001.out     single query, one match, bioperl's L77119.hmmer file
 text_23_hmmpfam_001.out     single query, multiple matches, bioperl's hmmpfam_cs.out file
 text_23_hmmpfam_002.out     single query, no match
 text_23_hmmpfam_003.out     single query, one match, missing some consensus content
+text_23_hmmpfam_004.out     single query, one match, line break in the end of sequence marker
 text_24_hmmpfam_001.out     multiple queries
 text_20_hmmsearch_001.out   single query, multiple matches, bioperl's hmmsearch.out file
 text_22_hmmsearch_001.out   single query, multiple matches, bioperl's cysprot1b.hmmsearch file
