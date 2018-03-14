@@ -801,28 +801,38 @@ Aligner_get_gap_score(Aligner* self, void* closure)
 
 static int
 Aligner_set_gap_score(Aligner* self, PyObject* value, void* closure)
-{   const double score = PyFloat_AsDouble(value);
-    if (PyErr_Occurred()) return -1;
-    if (self->target_gap_function) {
-        Py_DECREF(self->target_gap_function);
-        self->target_gap_function = NULL;
+{   if (PyCallable_Check(value)) {
+        Py_XDECREF(self->target_gap_function);
+        Py_XDECREF(self->query_gap_function);
+        Py_INCREF(value);
+        Py_INCREF(value);
+        self->target_gap_function = value;
+        self->query_gap_function = value;
     }
-    if (self->query_gap_function) {
-        Py_DECREF(self->query_gap_function);
-        self->query_gap_function = NULL;
+    else {
+        const double score = PyFloat_AsDouble(value);
+        if (PyErr_Occurred()) return -1;
+        if (self->target_gap_function) {
+            Py_DECREF(self->target_gap_function);
+            self->target_gap_function = NULL;
+        }
+        if (self->query_gap_function) {
+            Py_DECREF(self->query_gap_function);
+            self->query_gap_function = NULL;
+        }
+        self->target_open_gap_score = score;
+        self->target_extend_gap_score = score;
+        self->target_left_open_gap_score = score;
+        self->target_left_extend_gap_score = score;
+        self->target_right_open_gap_score = score;
+        self->target_right_extend_gap_score = score;
+        self->query_open_gap_score = score;
+        self->query_extend_gap_score = score;
+        self->query_left_open_gap_score = score;
+        self->query_left_extend_gap_score = score;
+        self->query_right_open_gap_score = score;
+        self->query_right_extend_gap_score = score;
     }
-    self->target_open_gap_score = score;
-    self->target_extend_gap_score = score;
-    self->target_left_open_gap_score = score;
-    self->target_left_extend_gap_score = score;
-    self->target_right_open_gap_score = score;
-    self->target_right_extend_gap_score = score;
-    self->query_open_gap_score = score;
-    self->query_extend_gap_score = score;
-    self->query_left_open_gap_score = score;
-    self->query_left_extend_gap_score = score;
-    self->query_right_open_gap_score = score;
-    self->query_right_extend_gap_score = score;
     self->algorithm = Unknown;
     return 0;
 }
