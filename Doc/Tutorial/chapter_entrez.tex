@@ -48,6 +48,15 @@ To paraphrase:
 \end{verbatim}
 The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
+\item After May 1, 2018, NCBI will limit access to the E-utilities unless one have an API key (more info at \url{https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/}).
+Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the right parameter is specified in any E-utility (include {\tt api_key="MyAPIkey"} in the argument list):
+%doctest
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
+                               retmode='xml', api_key="MyAPIkey")
+\end{verbatim}
 \end{itemize}
 
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
