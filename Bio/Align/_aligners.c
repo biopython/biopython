@@ -5275,7 +5275,7 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
                                            Iy[i-1][j-1],
                                            self->substitution_matrix[kA][kB]);
             M[i][j] = score;
-            if (i < nA || j < nB) {
+            if (i == nA || j == nB) {
                 Ix[i][j] = 0;
                 Iy[i][j] = 0;
                 continue;
@@ -5376,6 +5376,15 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                                            Iy[i-1][j-1].score,
                                            self->substitution_matrix[kA][kB]);
             M[i][j].path.i = -1;
+            if (i == nA || j == nB) {
+                Ix[i][j].score = score;
+                Ix[i][j].traceM = NULL;
+                Ix[i][j].traceXY = NULL;
+                Iy[i][j].score = score;
+                Iy[i][j].traceM = NULL;
+                Iy[i][j].traceXY = NULL;
+                continue;
+            }
             traceM = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
