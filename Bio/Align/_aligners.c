@@ -4165,7 +4165,7 @@ static PyMethodDef PathGenerator_methods[] = {
 };
 
 static Py_ssize_t
-_needlemanwunsch_length(PathGenerator* self)
+PathGenerator_needlemanwunsch_length(PathGenerator* self)
 {
     int i;
     int j;
@@ -4173,16 +4173,29 @@ _needlemanwunsch_length(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Cell** M = self->M.affine;
-    int count;
+    Py_ssize_t term;
+    Py_ssize_t count;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             if (i==0 && j==0) count = 1;
             else {
                 trace = M[i][j].trace;
                 count = 0;
-                if (trace & HORIZONTAL) count += M[i][j-1].count;
-                if (trace & VERTICAL) count += M[i-1][j].count;
-                if (trace & DIAGONAL) count += M[i-1][j-1].count;
+                if (trace & HORIZONTAL) {
+                    term = M[i][j-1].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
+                if (trace & VERTICAL) {
+                    term = M[i-1][j].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
+                if (trace & DIAGONAL) {
+                    term = M[i-1][j-1].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
             }
             M[i][j].count = count;
         }
@@ -4191,7 +4204,7 @@ _needlemanwunsch_length(PathGenerator* self)
 }
 
 static Py_ssize_t
-_smithwaterman_length(PathGenerator* self)
+PathGenerator_smithwaterman_length(PathGenerator* self)
 {
     int i;
     int j;
@@ -4200,17 +4213,31 @@ _smithwaterman_length(PathGenerator* self)
     const int nB = self->nB;
     Cell** M = self->M.affine;
     const double threshold = self->threshold;
-    int count;
-    int total = 0;
+    Py_ssize_t term;
+    Py_ssize_t count;
+    Py_ssize_t total = 0;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             trace = M[i][j].trace;
             count = 0;
-            if (trace & HORIZONTAL) count += M[i][j-1].count;
-            if (trace & VERTICAL) count += M[i-1][j].count;
-            if (trace & DIAGONAL) count += M[i-1][j-1].count;
+            if (trace & HORIZONTAL) {
+                term = M[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & VERTICAL) {
+                term = M[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & DIAGONAL) {
+                term = M[i-1][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             if (count==0) count = 1;
             M[i][j].count = count;
+            if (count > PY_SSIZE_T_MAX - total) return -1;
             if (M[i][j].score >= threshold) total += count;
         }
     }
@@ -4218,7 +4245,7 @@ _smithwaterman_length(PathGenerator* self)
 }
 
 static Py_ssize_t
-_gotoh_global_length(PathGenerator* self)
+PathGenerator_gotoh_global_length(PathGenerator* self)
 {
     int i;
     int j;
@@ -4229,41 +4256,90 @@ _gotoh_global_length(PathGenerator* self)
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
     const double threshold = self->threshold;
-    int count;
+    Py_ssize_t count;
+    Py_ssize_t term;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             if (i==0 && j==0) count = 1;
             else {
                 count = 0;
                 trace = M[i][j].trace;
-                if (trace & M_MATRIX) count += M[i-1][j-1].count;
-                if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
-                if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+                if (trace & M_MATRIX) {
+                    term = M[i-1][j-1].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
+                if (trace & Ix_MATRIX) {
+                    term = Ix[i-1][j-1].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
+                if (trace & Iy_MATRIX) {
+                    term = Iy[i-1][j-1].count;
+                    if (term > PY_SSIZE_T_MAX - count) return -1;
+                    count += term;
+                }
             }
             M[i][j].count = count;
             count = 0;
             trace = Ix[i][j].trace;
-            if (trace & M_MATRIX) count += M[i-1][j].count;
-            if (trace & Ix_MATRIX) count += Ix[i-1][j].count;
-            if (trace & Iy_MATRIX) count += Iy[i-1][j].count;
+            if (trace & M_MATRIX) {
+                term = M[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Ix_MATRIX) {
+                term = Ix[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Iy_MATRIX) {
+                term = Iy[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             Ix[i][j].count = count;
             count = 0;
             trace = Iy[i][j].trace;
-            if (trace & M_MATRIX) count += M[i][j-1].count;
-            if (trace & Ix_MATRIX) count += Ix[i][j-1].count;
-            if (trace & Iy_MATRIX) count += Iy[i][j-1].count;
+            if (trace & M_MATRIX) {
+                term = M[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Ix_MATRIX) {
+                term = Ix[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Iy_MATRIX) {
+                term = Iy[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             Iy[i][j].count = count;
         }
     }
     count = 0;
-    if (M[nA][nB].score >= threshold) count += M[nA][nB].count;
-    if (Ix[nA][nB].score >= threshold) count += Ix[nA][nB].count;
-    if (Iy[nA][nB].score >= threshold) count += Iy[nA][nB].count;
+    if (M[nA][nB].score >= threshold) {
+        term = M[nA][nB].count;
+        if (term > PY_SSIZE_T_MAX - count) return -1;
+        count += term;
+    }
+    if (Ix[nA][nB].score >= threshold) {
+        term = Ix[nA][nB].count;
+        if (term > PY_SSIZE_T_MAX - count) return -1;
+        count += term;
+    }
+    if (Iy[nA][nB].score >= threshold) {
+        term = Iy[nA][nB].count;
+        if (term > PY_SSIZE_T_MAX - count) return -1;
+        count += term;
+    }
     return count;
 }
 
 static Py_ssize_t
-_gotoh_local_length(PathGenerator* self)
+PathGenerator_gotoh_local_length(PathGenerator* self)
 {
     int i;
     int j;
@@ -4274,32 +4350,78 @@ _gotoh_local_length(PathGenerator* self)
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
     const double threshold = self->threshold;
-    int count;
-    int total = 0;
+    Py_ssize_t term;
+    Py_ssize_t count;
+    Py_ssize_t total = 0;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             count = 0;
             trace = M[i][j].trace;
-            if (trace & M_MATRIX) count += M[i-1][j-1].count;
-            if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
-            if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+            if (trace & M_MATRIX) {
+                term = M[i-1][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Ix_MATRIX) {
+                term = Ix[i-1][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Iy_MATRIX) {
+                term = Iy[i-1][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             if (count==0) count = 1;
             M[i][j].count = count;
-            if (M[i][j].score >= threshold) total += count;
+            if (M[i][j].score >= threshold) {
+                if (count > PY_SSIZE_T_MAX - total) return -1;
+                total += count;
+            }
             count = 0;
             trace = Ix[i][j].trace;
-            if (trace & M_MATRIX) count += M[i-1][j].count;
-            if (trace & Ix_MATRIX) count += Ix[i-1][j].count;
-            if (trace & Iy_MATRIX) count += Iy[i-1][j].count;
+            if (trace & M_MATRIX) {
+                term = M[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Ix_MATRIX) {
+                term = Ix[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Iy_MATRIX) {
+                term = Iy[i-1][j].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             Ix[i][j].count = count;
-            if (Ix[i][j].score >= threshold) total += count;
+            if (Ix[i][j].score >= threshold) {
+                if (count > PY_SSIZE_T_MAX - total) return -1;
+                total += count;
+            }
             count = 0;
             trace = Iy[i][j].trace;
-            if (trace & M_MATRIX) count += M[i][j-1].count;
-            if (trace & Ix_MATRIX) count += Ix[i][j-1].count;
-            if (trace & Iy_MATRIX) count += Iy[i][j-1].count;
+            if (trace & M_MATRIX) {
+                term = M[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Ix_MATRIX) {
+                term = Ix[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
+            if (trace & Iy_MATRIX) {
+                term = Iy[i][j-1].count;
+                if (term > PY_SSIZE_T_MAX - count) return -1;
+                count += term;
+            }
             Iy[i][j].count = count;
-            if (Iy[i][j].score >= threshold) total += count;
+            if (Iy[i][j].score >= threshold) {
+                if (count > PY_SSIZE_T_MAX - total) return -1;
+                total += count;
+            }
         }
     }
     return total;
@@ -4458,20 +4580,20 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
             case NeedlemanWunschSmithWaterman:
                 switch (self->mode) {
                     case Global:
-                        length = _needlemanwunsch_length(self);
+                        length = PathGenerator_needlemanwunsch_length(self);
                         break;
                     case Local:
-                        length = _smithwaterman_length(self);
+                        length = PathGenerator_smithwaterman_length(self);
                         break;
                 }
                 break;
             case Gotoh:
                 switch (self->mode) {
                     case Global:
-                        length = _gotoh_global_length(self);
+                        length = PathGenerator_gotoh_global_length(self);
                         break;
                     case Local:
-                        length = _gotoh_local_length(self);
+                        length = PathGenerator_gotoh_local_length(self);
                         break;
                 }
                 break;
