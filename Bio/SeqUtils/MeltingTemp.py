@@ -78,6 +78,13 @@ Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:
     >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.DNA_NN2))  # Sugimoto '96
     65.47
 
+Tables for RNA and RNA/DNA hybrids are included:
+
+    >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.RNA_NN1))  # Freier '86
+    73.35
+    >>> print('%0.2f' % mt.Tm_NN(myseq, nn_table=mt.R_DNA_NN1))  # Sugimoto '95
+    57.17
+
 Several types of salc correction (for Tm_NN and Tm_GC):
 
     >>> for i in range(1, 8):
