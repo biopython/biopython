@@ -110,6 +110,7 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 email = None
 tool = "biopython"
+api_key = None
 
 
 # XXX retmode?
@@ -509,24 +510,14 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     # Equivalently, at least a third of second between queries
     params = _construct_params(params)
     options = _encode_options(ecitmatch, params)
-    if params['api_key'] is None:
-        delay = 0.333333334
-        current = time.time()
-        wait = _open.previous + delay - current
-        if wait > 0:
-            time.sleep(wait)
-            _open.previous = current + wait
-        else:
-            _open.previous = current
+    delay = 0.1 if api_key else 0.333333334
+    current = time.time()
+    wait = _open.previous + delay - current
+    if wait > 0:
+        time.sleep(wait)
+        _open.previous = current + wait
     else:
-        delay = 0.1
-        current = time.time()
-        wait = _open.previous + delay - current
-        if wait > 0:
-            time.sleep(wait)
-            _open.previous = current + wait
-        else:
-            _open.previous = current
+        _open.previous = current
 
     # By default, post is None. Set to a boolean to over-ride length choice:
     if post is None and len(options) > 1000:
@@ -575,6 +566,8 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
+    if "api_key" not in params:
+        params["api_key"] = api_key
     return params
 
 

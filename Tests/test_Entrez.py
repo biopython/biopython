@@ -13,11 +13,12 @@ from Bio import Entrez
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython@biopython.org"
+Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython%40biopython.org"
-API_KEY = "5cfd4026f9df285d6cfc723c662d74bcbe09"
+URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 
 class TestURLConstruction(unittest.TestCase):
@@ -41,11 +42,10 @@ class TestURLConstruction(unittest.TestCase):
         post = False
 
         params = Entrez._construct_params(variables)
-        params['api_key'] = API_KEY
         options = Entrez._encode_options(ecitmatch=True, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertIn("retmode=xml", result_url)
-        self.assertIn(API_KEY, result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
@@ -86,7 +86,6 @@ class TestURLConstruction(unittest.TestCase):
         post = False
 
         params = Entrez._construct_params(variables)
-        params['api_key'] = API_KEY
         options = Entrez._encode_options(ecitmatch=False, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi?"),
@@ -94,7 +93,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
         self.assertIn("id=22347800%2C48526535", result_url)
-        self.assertIn(API_KEY, result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
@@ -104,7 +103,6 @@ class TestURLConstruction(unittest.TestCase):
         post = False
 
         params = Entrez._construct_params(variables)
-        params['api_key'] = API_KEY
         options = Entrez._encode_options(ecitmatch=False, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"),
@@ -113,7 +111,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
-        self.assertIn(API_KEY, result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_elink3(self):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
@@ -123,7 +121,6 @@ class TestURLConstruction(unittest.TestCase):
         post = False
 
         params = Entrez._construct_params(variables)
-        params['api_key'] = API_KEY
         options = Entrez._encode_options(ecitmatch=False, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "elink.fcgi"),
@@ -133,7 +130,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn("id=15718680", result_url)
         self.assertIn("id=157427902", result_url)
         self.assertIn("id=119703751", result_url)
-        self.assertIn(API_KEY, result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_efetch(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
@@ -142,7 +139,6 @@ class TestURLConstruction(unittest.TestCase):
         post = False
 
         params = Entrez._construct_params(variables)
-        params['api_key'] = API_KEY
         options = Entrez._encode_options(ecitmatch=False, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertTrue(result_url.startswith(URL_HEAD + "efetch.fcgi?"),
@@ -151,7 +147,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
-        self.assertIn(API_KEY, result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
 
 if __name__ == "__main__":
