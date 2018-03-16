@@ -1,5 +1,5 @@
 # Copyright 2004-2008 by Sebastian Bassi.
-# Copyright 2013 by Markus Piotrowski.
+# Copyright 2013-2018 by Markus Piotrowski.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -257,12 +257,12 @@ R_DNA_NN1 = {
     'init': (1.9, -3.9), 'init_A/T': (0, 0), 'init_G/C': (0, 0),
     'init_oneG/C': (0, 0), 'init_allA/T': (0, 0), 'init_5T/A': (0, 0),
     'sym': (0, 0),
-    'AA': (-11.5, -36.4), 'AC': (-7.8, -21.6), 'AG': (-7.0, -19.7),
-    'AT': (-8.3, -23.9), 'CA': (-10.4, -28.4), 'CC': (-12.8, -31.9),
-    'CG': (-16.3, -47.1), 'CT': (-9.1, -23.5), 'GA': (-8.6, -22.9),
-    'GC': (-8.0, -17.1), 'GG': (-9.3, -23.2), 'GT': (-5.9, -12.3),
-    'TA': (-7.8, -23.2), 'TC': (-5.5, -13.5), 'TG': (-9.0, -26.1),
-    'TT': (-7.8, -21.9)}
+    'AA/TT': (-11.5, -36.4), 'AC/TG': (-7.8, -21.6), 'AG/TC': (-7.0, -19.7),
+    'AT/TA': (-8.3, -23.9), 'CA/GT': (-10.4, -28.4), 'CC/GG': (-12.8, -31.9),
+    'CG/GC': (-16.3, -47.1), 'CT/GA': (-9.1, -23.5), 'GA/CT': (-8.6, -22.9),
+    'GC/CG': (-8.0, -17.1), 'GG/CC': (-9.3, -23.2), 'GT/CA': (-5.9, -12.3),
+    'TA/AT': (-7.8, -23.2), 'TC/AG': (-5.5, -13.5), 'TG/AC': (-9.0, -26.1),
+    'TT/AA': (-7.8, -21.9)}
 
 # Internal mismatch and inosine table (DNA)
 # Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
@@ -448,7 +448,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
     calculate corrected Tm values, different operations need to be applied:
 
      - methods 1-4: Tm(new) = Tm(old) + corr
-     - method 5: deltaH(new) = deltaH(old) + corr
+     - method 5: deltaS(new) = deltaS(old) + corr
      - methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)
 
     Parameters:
@@ -811,6 +811,7 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
        For RNA/DNA hybridizations:
 
         - R_DNA_NN1: values from Sugimoto et al. (1995)
+          Note that ``seq`` must be the RNA sequence.
 
        Use the module's maketable method to make a new table or to update one
        one of the implemented tables.
