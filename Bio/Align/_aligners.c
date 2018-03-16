@@ -32,12 +32,14 @@ typedef struct {
     double score;
     unsigned int trace : 3;
     unsigned int path : 4;
+    Py_ssize_t count;
 } Cell;
 
 typedef struct {
     double score;
     unsigned int trace : 3;
     struct {int i; int j;} path;
+    Py_ssize_t count;
 } CellM; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 typedef struct {
@@ -45,6 +47,7 @@ typedef struct {
     int* traceM;
     int* traceXY;
     struct {int i; int j;} path;
+    Py_ssize_t count;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 static int _convert_single_letter(PyObject* item)
@@ -354,6 +357,7 @@ typedef struct {
     Mode mode;
     Algorithm algorithm;
     double threshold;
+    Py_ssize_t length;
 } PathGenerator;
 
 typedef struct {
@@ -3049,8 +3053,8 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
                                              const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_extend_A = self->target_extend_gap_score;
@@ -3126,8 +3130,8 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
                                            const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_extend_A = self->target_extend_gap_score;
@@ -4160,6 +4164,353 @@ static PyMethodDef PathGenerator_methods[] = {
     {NULL}  /* Sentinel */
 };
 
+static Py_ssize_t
+_needlemanwunsch_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Cell** M = self->M.affine;
+    int count;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            if (i==0 && j==0) count = 1;
+            else {
+                trace = M[i][j].trace;
+                count = 0;
+                if (trace & HORIZONTAL) count += M[i][j-1].count;
+                if (trace & VERTICAL) count += M[i-1][j].count;
+                if (trace & DIAGONAL) count += M[i-1][j-1].count;
+            }
+            M[i][j].count = count;
+        }
+    }
+    return count;
+}
+
+static Py_ssize_t
+_smithwaterman_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Cell** M = self->M.affine;
+    const double threshold = self->threshold;
+    int count;
+    int total = 0;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            trace = M[i][j].trace;
+            count = 0;
+            if (trace & HORIZONTAL) count += M[i][j-1].count;
+            if (trace & VERTICAL) count += M[i-1][j].count;
+            if (trace & DIAGONAL) count += M[i-1][j-1].count;
+            if (count==0) count = 1;
+            M[i][j].count = count;
+            if (M[i][j].score >= threshold) total += count;
+        }
+    }
+    return total;
+}
+
+static Py_ssize_t
+_gotoh_global_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Cell** M = self->M.affine;
+    Cell** Ix = self->Ix.affine;
+    Cell** Iy = self->Iy.affine;
+    const double threshold = self->threshold;
+    int count;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            if (i==0 && j==0) count = 1;
+            else {
+                count = 0;
+                trace = M[i][j].trace;
+                if (trace & M_MATRIX) count += M[i-1][j-1].count;
+                if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
+                if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+            }
+            M[i][j].count = count;
+            count = 0;
+            trace = Ix[i][j].trace;
+            if (trace & M_MATRIX) count += M[i-1][j].count;
+            if (trace & Ix_MATRIX) count += Ix[i-1][j].count;
+            if (trace & Iy_MATRIX) count += Iy[i-1][j].count;
+            Ix[i][j].count = count;
+            count = 0;
+            trace = Iy[i][j].trace;
+            if (trace & M_MATRIX) count += M[i][j-1].count;
+            if (trace & Ix_MATRIX) count += Ix[i][j-1].count;
+            if (trace & Iy_MATRIX) count += Iy[i][j-1].count;
+            Iy[i][j].count = count;
+        }
+    }
+    count = 0;
+    if (M[nA][nB].score >= threshold) count += M[nA][nB].count;
+    if (Ix[nA][nB].score >= threshold) count += Ix[nA][nB].count;
+    if (Iy[nA][nB].score >= threshold) count += Iy[nA][nB].count;
+    return count;
+}
+
+static Py_ssize_t
+_gotoh_local_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Cell** M = self->M.affine;
+    Cell** Ix = self->Ix.affine;
+    Cell** Iy = self->Iy.affine;
+    const double threshold = self->threshold;
+    int count;
+    int total = 0;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            count = 0;
+            trace = M[i][j].trace;
+            if (trace & M_MATRIX) count += M[i-1][j-1].count;
+            if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
+            if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+            if (count==0) count = 1;
+            M[i][j].count = count;
+            if (M[i][j].score >= threshold) total += count;
+            count = 0;
+            trace = Ix[i][j].trace;
+            if (trace & M_MATRIX) count += M[i-1][j].count;
+            if (trace & Ix_MATRIX) count += Ix[i-1][j].count;
+            if (trace & Iy_MATRIX) count += Iy[i-1][j].count;
+            Ix[i][j].count = count;
+            if (Ix[i][j].score >= threshold) total += count;
+            count = 0;
+            trace = Iy[i][j].trace;
+            if (trace & M_MATRIX) count += M[i][j-1].count;
+            if (trace & Ix_MATRIX) count += Ix[i][j-1].count;
+            if (trace & Iy_MATRIX) count += Iy[i][j-1].count;
+            Iy[i][j].count = count;
+            if (Iy[i][j].score >= threshold) total += count;
+        }
+    }
+    return total;
+}
+
+static Py_ssize_t
+_waterman_smith_beyer_global_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int k;
+    int trace;
+    int* tracep;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    CellM** M = self->M.general;
+    CellXY** Ix = self->Ix.general;
+    CellXY** Iy = self->Iy.general;
+    const double threshold = self->threshold;
+    int count;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            count = 0;
+            trace = M[i][j].trace;
+            if (trace & M_MATRIX) count += M[i-1][j-1].count;
+            if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
+            if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+            if (count == 0) count = 1; /* happens at M[0][0] only */
+            M[i][j].count = count;
+            count = 0;
+            tracep = Ix[i][j].traceM;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += M[k][j].count;
+                    tracep++;
+                }
+            }
+            tracep = Ix[i][j].traceXY;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += Iy[k][j].count;
+                    tracep++;
+                }
+            }
+            Ix[i][j].count = count;
+            count = 0;
+            tracep = Iy[i][j].traceM;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += M[i][k].count;
+                    tracep++;
+                }
+            }
+            tracep = Iy[i][j].traceXY;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += Ix[i][k].count;
+                    tracep++;
+                }
+            }
+            Iy[i][j].count = count;
+        }
+    }
+    count = 0;
+    if (M[nA][nB].score > threshold) count += M[nA][nB].count;
+    if (Ix[nA][nB].score > threshold) count += Ix[nA][nB].count;
+    if (Iy[nA][nB].score > threshold) count += Iy[nA][nB].count;
+    return count;
+}
+
+static Py_ssize_t
+_waterman_smith_beyer_local_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int k;
+    int trace;
+    int* tracep;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    CellM** M = self->M.general;
+    CellXY** Ix = self->Ix.general;
+    CellXY** Iy = self->Iy.general;
+    const double threshold = self->threshold;
+    int count;
+    Py_ssize_t total = 0;
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            count = 0;
+            trace = M[i][j].trace;
+            if (trace & M_MATRIX) count += M[i-1][j-1].count;
+            if (trace & Ix_MATRIX) count += Ix[i-1][j-1].count;
+            if (trace & Iy_MATRIX) count += Iy[i-1][j-1].count;
+            if (count==0) count = 1;
+            M[i][j].count = count;
+            if (M[i][j].score >= threshold) total += count;
+            count = 0;
+            tracep = Ix[i][j].traceM;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += M[k][j].count;
+                    tracep++;
+                }
+            }
+            tracep = Ix[i][j].traceXY;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += Iy[k][j].count;
+                    tracep++;
+                }
+            }
+            if (count == 0) count = 1;
+            Ix[i][j].count = count;
+            count = 0;
+            tracep = Iy[i][j].traceM;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += M[i][k].count;
+                    tracep++;
+                }
+            }
+            tracep = Iy[i][j].traceXY;
+            if (tracep) {
+                while (1) {
+                    k = *tracep;
+                    if (k < 0) break;
+                    count += Ix[i][k].count;
+                    tracep++;
+                }
+            }
+            if (count == 0) count = 1;
+            Iy[i][j].count = count;
+        }
+    }
+    return total;
+}
+
+static Py_ssize_t PathGenerator_length(PathGenerator* self) {
+    Py_ssize_t length = self->length;
+    if (length == 0) {
+        switch (self->algorithm) {
+            case NeedlemanWunschSmithWaterman:
+                switch (self->mode) {
+                    case Global:
+                        length = _needlemanwunsch_length(self);
+                        break;
+                    case Local:
+                        length = _smithwaterman_length(self);
+                        break;
+                }
+                break;
+            case Gotoh:
+                switch (self->mode) {
+                    case Global:
+                        length = _gotoh_global_length(self);
+                        break;
+                    case Local:
+                        length = _gotoh_local_length(self);
+                        break;
+                }
+                break;
+            case WatermanSmithBeyer:
+                switch (self->mode) {
+                    case Global:
+                        length = _waterman_smith_beyer_global_length(self);
+                        break;
+                    case Local:
+                        length = _waterman_smith_beyer_local_length(self);
+                        break;
+                }
+                break;
+            case Unknown:
+            default:
+                PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
+                return -1;
+        }
+        self->length = length;
+    }
+    if (length == -1) {
+        PyErr_Format(PyExc_OverflowError,
+                     "number of optimal alignments is larger than %zd",
+                     PY_SSIZE_T_MAX);
+    }
+    return length;
+}
+
+static PySequenceMethods PathGenerator_as_sequence = {
+    (lenfunc)PathGenerator_length,  /* sq_length */
+    NULL,                           /* sq_concat */
+    NULL,                           /* sq_repeat */
+    NULL,                           /* sq_item */
+    NULL,                           /* sq_ass_item */
+    NULL,                           /* sq_contains */
+    NULL,                           /* sq_inplace_concat */
+    NULL,                           /* sq_inplace_repeat */
+};
+
 PyTypeObject PathGenerator_Type = {
     PyVarObject_HEAD_INIT(&PyType_Type, 0)
     "Path generator",               /* tp_name */
@@ -4172,7 +4523,7 @@ PyTypeObject PathGenerator_Type = {
     0,                              /* tp_reserved */
     0,                              /* tp_repr */
     0,                              /* tp_as_number */
-    0,                              /* tp_as_sequence */
+    &PathGenerator_as_sequence,     /* tp_as_sequence */
     0,                              /* tp_as_mapping */
     0,                              /* tp_hash */
     0,                              /* tp_call */
@@ -4224,6 +4575,7 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
     generator->algorithm = algorithm;
     generator->mode = aligner->mode;
     generator->threshold = 0;
+    generator->length = 0;
 
     return generator;
 }
@@ -4233,8 +4585,8 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                              const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_extend_A = self->target_extend_gap_score;
@@ -4315,8 +4667,8 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                            const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_extend_A = self->target_extend_gap_score;
@@ -4388,8 +4740,8 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
                                           const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_open_A = self->target_open_gap_score;
@@ -4539,8 +4891,8 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
                                          const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_open_A = self->target_open_gap_score;
@@ -4671,8 +5023,8 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                           const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_open_A = self->target_open_gap_score;
@@ -4821,8 +5173,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                          const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int kA;
     int kB;
     const double gap_open_A = self->target_open_gap_score;
@@ -4983,8 +5335,8 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
                                           const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int k;
     int kA;
     int kB;
@@ -5091,8 +5443,8 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                                           const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int k;
     int kA;
     int kB;
@@ -5218,8 +5570,8 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
                                          const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int k;
     int kA;
     int kB;
@@ -5338,8 +5690,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                                          const char* sB, Py_ssize_t nB)
 {
     char c;
-    long i;
-    long j;
+    int i;
+    int j;
     int k;
     int kA;
     int kB;

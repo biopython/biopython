@@ -190,21 +190,20 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(str(alignment), """\
 GAACT
-| | |
-G-A-T
+||  |
+GA--T
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(str(alignment), """\
 GAACT
-||  |
-GA--T
+| | |
+G-A-T
 """)
 
     def test_align_affine1_score(self):
@@ -264,7 +263,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AxBx", "zABz")
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -308,7 +306,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AxBx", "zABz")
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -358,7 +355,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -406,7 +402,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -452,7 +447,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.9)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.9)
@@ -492,7 +486,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -540,7 +533,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.3)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.3)
@@ -579,7 +571,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 0.6)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.6)
@@ -627,7 +618,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -1.2)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -1.2)
@@ -671,22 +661,20 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 3)
-        alignments.sort()
         alignment = alignments[0]
-        self.assertAlmostEqual(alignment.score, 1.0)
-        self.assertEqual(str(alignment), """\
-GACT
-|  |
-G--T
-""")
-        alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(str(alignment), """\
 GACT
   .|
 --GT
+""")
+        alignment = alignments[1]
+        self.assertAlmostEqual(alignment.score, 1.0)
+        self.assertEqual(str(alignment), """\
+GACT
+|  |
+G--T
 """)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.0)
@@ -736,7 +724,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.7)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.7)
@@ -784,7 +771,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.8)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.8)
@@ -832,7 +818,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -856,7 +841,6 @@ GAA-T
 GTCCT
 """)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 3)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
@@ -919,19 +903,18 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
 ATAT
-|| |
-AT-T
+||. 
+ATT 
 """)
         self.assertAlmostEqual(alignments[1].score, 3.0)
         self.assertEqual(str(alignments[1]), """\
 ATAT
-||. 
-ATT 
+|| |
+AT-T
 """)
 
     def test_match_dictionary2(self):
@@ -962,7 +945,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
@@ -999,7 +981,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
@@ -1038,7 +1019,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score("abcde", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcde", "c")
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
@@ -1075,7 +1055,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score("abcce", "c")
         self.assertAlmostEqual(score, 1)
         alignments = aligner.align("abcce", "c")
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1)
@@ -1121,7 +1100,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 0.2)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 0.2)
@@ -1193,7 +1171,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2)
@@ -1236,7 +1213,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -10)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -10)
@@ -1286,7 +1262,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -1304,10 +1279,9 @@ Pairwise sequence aligner with parameters
   query gap function: %s
   mode: global
 """ % (gap_score, gap_score))
-        alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, -8.0)
-        alignments = sorted(alignments)
+        alignments = aligner.align(seq1, seq2)
         self.assertEqual(len(alignments), 4)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, -8.0)
@@ -1319,23 +1293,23 @@ TTGG-AA
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
-TT-CC-AA
-||    ||
-TTG--GAA
-""")
-        alignment = alignments[2]
-        self.assertAlmostEqual(alignment.score, -8.0)
-        self.assertEqual(str(alignment), """\
 TTC--CAA
 ||    ||
 TT-GG-AA
 """)
-        alignment = alignments[3]
+        alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
 TTCC-AA
 || . ||
 TT-GGAA
+""")
+        alignment = alignments[3]
+        self.assertAlmostEqual(alignment.score, -8.0)
+        self.assertEqual(str(alignment), """\
+TT-CC-AA
+||    ||
+TTG--GAA
 """)
 
     def test_gap_here_only_local_1(self):
@@ -1365,7 +1339,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -1414,7 +1387,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 13)
         alignments = aligner.align(seq1, seq2)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 13)
@@ -1464,7 +1436,6 @@ Pairwise sequence aligner with parameters
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
         alignments = aligner.align(seq1, seq2)
-        alignments = list(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)
@@ -1497,7 +1468,6 @@ Pairwise sequence aligner with parameters
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
-        alignments = sorted(alignments)
         self.assertEqual(len(alignments), 2)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 2.0)

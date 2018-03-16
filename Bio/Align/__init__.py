@@ -1149,6 +1149,9 @@ class Alignments(object):
         self.paths = paths
         self.index = -1
 
+    def __len__(self):
+        return len(self.paths)
+
     def __getitem__(self, index):
         if index == self.index:
             return self.alignment
