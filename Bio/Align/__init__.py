@@ -1168,12 +1168,14 @@ class Alignments(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         path = next(self.paths)
         self.index += 1
         alignment = PairwiseAlignment(self.seqA, self.seqB, path, self.score)
         self.alignment = alignment
         return alignment
+
+    next = __next__ # Python 2
 
 class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
