@@ -963,7 +963,7 @@ class PairwiseAlignment(object):
         return self.path >= other.path
 
     def __format__(self, format_spec):
-        if format_spec=='psl':
+        if format_spec == 'psl':
             return self._format_psl()
         return str(self)
 
@@ -993,8 +993,8 @@ class PairwiseAlignment(object):
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
-            aligned_seq1 += " " * (end-end1) + seq1[:end1]
-            aligned_seq2 += " " * (end-end2) + seq2[:end2]
+            aligned_seq1 += " " * (end - end1) + seq1[:end1]
+            aligned_seq2 += " " * (end - end2) + seq2[:end2]
             pattern += ' ' * end
         start1 = end1
         start2 = end2
@@ -1079,41 +1079,41 @@ class PairwiseAlignment(object):
             count1 = end1 - start1
             count2 = end2 - start2
             if count1 == 0:
-                if start2==0:
+                if start2 == 0:
                     Qstart += count2
-                elif end2==n2:
+                elif end2 == n2:
                     Qend -= count2
                 else:
                     Qgapcount += 1
                     Qgapbases += count2
                 start2 = end2
             elif count2 == 0:
-                if start1==0:
+                if start1 == 0:
                     Tstart += count1
-                elif end1==n1:
+                elif end1 == n1:
                     Tend -= count1
                 else:
                     Tgapcount += 1
                     Tgapbases += count1
                 start1 = end1
             else:
-                assert count1==count2
+                assert count1 == count2
                 tStarts.append(start1)
                 qStarts.append(start2)
                 blockSizes.append(count1)
                 for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
-                    if c1=='N' or c2=='N':
+                    if c1 == 'N' or c2 == 'N':
                         Ns += 1
-                    elif c1==c2:
+                    elif c1 == c2:
                         match += 1
                     else:
                         mismatch += 1
                 start1 = end1
                 start2 = end2
         blockcount = len(blockSizes)
-        blockSizes = ",".join(map(str,blockSizes)) + ","
-        qStarts = ",".join(map(str,qStarts)) + ","
-        tStarts = ",".join(map(str,tStarts)) + ","
+        blockSizes = ",".join(map(str, blockSizes)) + ","
+        qStarts = ",".join(map(str, qStarts)) + ","
+        tStarts = ",".join(map(str, tStarts)) + ","
         words = [str(match),
                  str(mismatch),
                  str(repmatch),
@@ -1135,7 +1135,7 @@ class PairwiseAlignment(object):
                  blockSizes,
                  qStarts,
                  tStarts,
-                ]
+                 ]
         line = "\t".join(words) + "\n"
         return line
 
@@ -1177,7 +1177,7 @@ class Alignments(object):
         self.alignment = alignment
         return alignment
 
-    next = __next__ # Python 2
+    next = __next__  # Python 2
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):
