@@ -961,11 +961,10 @@ class PairwiseAlignment(object):
     def __ge__(self, other):
         return self.path >= other.path
 
-    def __format__(self, format_spec=None):
-        if format_spec is None:
-            return str(self)
-        elif format_spec=='psl':
+    def __format__(self, format_spec):
+        if format_spec=='psl':
             return self._format_psl()
+        return str(self)
 
     def __str__(self):
         query = self.query
@@ -1166,6 +1165,8 @@ class Alignments(object):
         return alignment
 
     def __iter__(self):
+        self.paths.reset()
+        self.index = -1
         return self
 
     def __next__(self):
