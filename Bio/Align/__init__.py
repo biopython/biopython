@@ -20,6 +20,7 @@ from Bio import Alphabet
 
 from Bio.Align import _aligners
 
+
 class MultipleSeqAlignment(object):
     """Represents a classical multiple sequence alignment (MSA).
 
@@ -1177,6 +1178,7 @@ class Alignments(object):
         return alignment
 
     next = __next__ # Python 2
+
 
 class PairwiseAligner(_aligners.PairwiseAligner):
     """Performs pairwise sequence alignment using dynamic programming.
