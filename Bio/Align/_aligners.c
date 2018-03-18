@@ -4524,7 +4524,7 @@ static PySequenceMethods PathGenerator_as_sequence = {
 };
 
 static PyTypeObject PathGenerator_Type = {
-    PyVarObject_HEAD_INIT(&PyType_Type, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "Path generator",               /* tp_name */
     sizeof(PathGenerator),          /* tp_basicsize */
     0,                              /* tp_itemsize */
