@@ -1200,7 +1200,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     Calling the "score" method on the aligner with two sequences as arguments
     will calculate the alignment score between the two sequences.
     Calling the "align" method on the aligner with two sequences as arguments
-    will return a generator yielding the alignments between the two sequences.
+    will return a generator yielding the alignments between the two
+    sequences.
 
     Some examples:
     >>> from Bio import Align
