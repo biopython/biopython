@@ -68,7 +68,7 @@ class Paml(object):
         return list(self._options.items())
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current working directory.
+        """Convert all file/directory locations to paths relative to the current working directory (PRIVATE).
 
         paml requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
