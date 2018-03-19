@@ -37,7 +37,7 @@ class PhyloXMLWarning(BiopythonWarning):
 
 
 def _check_str(text, testfunc):
-    """Check a string using testfunc, and warn if there's no match."""
+    """Check a string using testfunc, and warn if there's no match (PRIVATE)."""
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
                       PhyloXMLWarning, stacklevel=2)
@@ -249,7 +249,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     # Singular property for plural attribute
     def _get_confidence(self):
-        """Equivalent to self.confidences[0] if there is only 1 value.
+        """Equivalent to self.confidences[0] if there is only 1 value (PRIVATE).
 
         See Also: `Clade.confidence`, `Clade.taxonomy`
 
