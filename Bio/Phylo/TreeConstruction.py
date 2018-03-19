@@ -457,7 +457,7 @@ class DistanceCalculator(object):
                              ", ".join(self.models))
 
     def _pairwise(self, seq1, seq2):
-        """Calculate pairwise distance from two sequences.
+        """Calculate pairwise distance from two sequences (PRIVATE).
 
         Returns a value between 0 (identical sequences) and 1 (completely
         different, or seq1 is an empty string.)
@@ -753,7 +753,7 @@ class DistanceTreeConstructor(TreeConstructor):
         return BaseTree.Tree(root, rooted=False)
 
     def _height_of(self, clade):
-        """Calculate clade height -- the longest path to any terminal."""
+        """Calculate clade height -- the longest path to any terminal (PRIVATE)."""
         height = 0
         if clade.is_terminal():
             height = clade.branch_length
@@ -817,7 +817,7 @@ class NNITreeSearcher(TreeSearcher):
         return self._nni(starting_tree, alignment)
 
     def _nni(self, starting_tree, alignment):
-        """Search for the best parsimony tree using the NNI algorithm."""
+        """Search for the best parsimony tree using the NNI algorithm (PRIVATE)."""
         best_tree = starting_tree
         while True:
             best_score = self.scorer.get_score(best_tree, alignment)
@@ -833,7 +833,7 @@ class NNITreeSearcher(TreeSearcher):
         return best_tree
 
     def _get_neighbors(self, tree):
-        """Get all neighbor trees of the given tree.
+        """Get all neighbor trees of the given tree (PRIVATE).
 
         Currently only for binary rooted trees.
         """
