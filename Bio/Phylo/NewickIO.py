@@ -127,7 +127,7 @@ class Parser(object):
             yield self._parse_tree(buf)
 
     def _parse_tree(self, text):
-        """Parse the text representation into an Tree object."""
+        """Parse the text representation into an Tree object (PRIVATE)."""
         tokens = re.finditer(tokenizer, text.strip())
 
         new_clade = self.new_clade
