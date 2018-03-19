@@ -10,12 +10,12 @@ from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 
 def _is_int(x):
-    """Test whether the argument can be serialized as an integer."""
+    """Test whether the argument can be serialized as an integer (PRIVATE)."""
     return isinstance(x, int) or str(x).isdigit()
 
 
 def _is_numeric(x):
-    """Test whether the argument can be serialized as a number."""
+    """Test whether the argument can be serialized as a number (PRIVATE)."""
     try:
         float(str(x))
         return True
