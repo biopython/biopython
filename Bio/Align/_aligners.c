@@ -4873,6 +4873,30 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     SELECT_SCORE_GLOBAL(M[nA][nB], Ix[nA][nB], Iy[nA][nB]);
     result = PyFloat_FromDouble(score);
 
+for (i = 0; i <= nA; i++) {
+    for (j = 0; j <= nB; j++) {
+        score = M[i][j];
+        if (score==-DBL_MAX) printf("-inf\t");
+        else printf("%f\t", score);
+    }
+    printf("\n");
+}
+for (i = 0; i <= nA; i++) {
+    for (j = 0; j <= nB; j++) {
+        score = Ix[i][j];
+        if (score==-DBL_MAX) printf("-inf\t");
+        else printf("%f\t", score);
+    }
+    printf("\n");
+}
+for (i = 0; i <= nA; i++) {
+    for (j = 0; j <= nB; j++) {
+        score = Iy[i][j];
+        if (score==-DBL_MAX) printf("-inf\t");
+        else printf("%f\t", score);
+    }
+    printf("\n");
+}
 exit:
     if (M) {
         /* If M is NULL, then Ix is also NULL. */
