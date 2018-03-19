@@ -4794,6 +4794,7 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
      */
+    M[0][0] = 0;
     Ix[0][0] = -DBL_MAX;
     Iy[0][0] = -DBL_MAX;
     for (i = 1; i <= nA; i++) {
