@@ -22,7 +22,7 @@ def cdf_chi2(df, stat):
 
 
 def _ln_gamma_function(alpha):
-    """Compute the log of the gamma function for a given alpha.
+    """Compute the log of the gamma function for a given alpha (PRIVATE).
 
     Comments from Z. Yang:
     Returns ln(gamma(alpha)) for alpha>0, accurate to 10 decimal places.
@@ -49,7 +49,7 @@ def _ln_gamma_function(alpha):
 
 
 def _incomplete_gamma(x, alpha):
-    """Compute an incomplete gamma ratio.
+    """Compute an incomplete gamma ratio (PRIVATE).
 
     Comments from Z. Yang::
 
