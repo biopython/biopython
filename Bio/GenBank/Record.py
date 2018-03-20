@@ -18,7 +18,7 @@ import Bio.GenBank
 
 
 def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
-    """Write a line of GenBank info that can wrap over multiple lines.
+    """Write a line of GenBank info that can wrap over multiple lines (PRIVATE).
 
     This takes a line of information which can potentially wrap over
     multiple lines, and breaks it up with carriage returns and
@@ -78,7 +78,7 @@ def _wrapped_genbank(information, indent, wrap_space=1, split_char=" "):
 
 
 def _indent_genbank(information, indent):
-    """Write out information with the specified indent.
+    """Write out information with the specified indent (PRIVATE).
 
     Unlike _wrapped_genbank, this function makes no attempt to wrap
     lines -- it assumes that the information already has newlines in the
@@ -235,7 +235,7 @@ class Record(object):
         return output
 
     def _locus_line(self):
-        """Provide the output string for the LOCUS line."""
+        """Provide the output string for the LOCUS line (PRIVATE)."""
         output = "LOCUS"
         output += " " * 7  # 6-12 spaces
         output += "%-9s" % self.locus
@@ -267,13 +267,13 @@ class Record(object):
         return output
 
     def _definition_line(self):
-        """Provide output for the DEFINITION line."""
+        """Provide output for the DEFINITION line (PRIVATE)."""
         output = Record.BASE_FORMAT % "DEFINITION"
         output += _wrapped_genbank(self.definition + ".", Record.GB_BASE_INDENT)
         return output
 
     def _accession_line(self):
-        """Output for the ACCESSION line."""
+        """Output for the ACCESSION line (PRIVATE)."""
         if self.accession:
             output = Record.BASE_FORMAT % "ACCESSION"
 
@@ -289,7 +289,7 @@ class Record(object):
         return output
 
     def _version_line(self):
-        """Output for the VERSION line."""
+        """Output for the VERSION line (PRIVATE)."""
         if self.version:
             output = Record.BASE_FORMAT % "VERSION"
             output += self.version
@@ -315,7 +315,7 @@ class Record(object):
         return output
 
     def _nid_line(self):
-        """Output for the NID line. Use of NID is obsolete in GenBank files."""
+        """Output for the NID line. Use of NID is obsolete in GenBank files (PRIVATE)."""
         if self.nid:
             output = Record.BASE_FORMAT % "NID"
             output += "%s\n" % self.nid
@@ -324,7 +324,7 @@ class Record(object):
         return output
 
     def _pid_line(self):
-        """Output for PID line. Presumedly, PID usage is also obsolete."""
+        """Output for PID line. Presumedly, PID usage is also obsolete (PRIVATE)."""
         if self.pid:
             output = Record.BASE_FORMAT % "PID"
             output += "%s\n" % self.pid
@@ -333,7 +333,7 @@ class Record(object):
         return output
 
     def _keywords_line(self):
-        """Output for the KEYWORDS line."""
+        """Output for the KEYWORDS line (PRIVATE)."""
         output = ""
         if len(self.keywords) >= 0:
             output += Record.BASE_FORMAT % "KEYWORDS"
@@ -350,7 +350,7 @@ class Record(object):
         return output
 
     def _db_source_line(self):
-        """Output for DBSOURCE line."""
+        """Output for DBSOURCE line (PRIVATE)."""
         if self.db_source:
             output = Record.BASE_FORMAT % "DBSOURCE"
             output += "%s\n" % self.db_source
@@ -359,7 +359,7 @@ class Record(object):
         return output
 
     def _segment_line(self):
-        """Output for the SEGMENT line."""
+        """Output for the SEGMENT line (PRIVATE)."""
         output = ""
         if self.segment:
             output += Record.BASE_FORMAT % "SEGMENT"
@@ -367,13 +367,13 @@ class Record(object):
         return output
 
     def _source_line(self):
-        """Output for SOURCE line on where the sample came from."""
+        """Output for SOURCE line on where the sample came from (PRIVATE)."""
         output = Record.BASE_FORMAT % "SOURCE"
         output += _wrapped_genbank(self.source, Record.GB_BASE_INDENT)
         return output
 
     def _organism_line(self):
-        """Output for ORGANISM line with taxonomy info."""
+        """Output for ORGANISM line with taxonomy info (PRIVATE)."""
         output = Record.INTERNAL_FORMAT % "ORGANISM"
         # Now that species names can be too long, this line can wrap (Bug 2591)
         output += _wrapped_genbank(self.organism, Record.GB_BASE_INDENT)
@@ -389,7 +389,7 @@ class Record(object):
         return output
 
     def _comment_line(self):
-        """Output for the COMMENT lines."""
+        """Output for the COMMENT lines (PRIVATE)."""
         output = ""
         if self.comment:
             output += Record.BASE_FORMAT % "COMMENT"
@@ -398,7 +398,7 @@ class Record(object):
         return output
 
     def _features_line(self):
-        """Output for the FEATURES line."""
+        """Output for the FEATURES line (PRIVATE)."""
         output = ""
         if len(self.features) > 0:
             output += Record.BASE_FEATURE_FORMAT % "FEATURES"
@@ -406,7 +406,7 @@ class Record(object):
         return output
 
     def _base_count_line(self):
-        """Output for the BASE COUNT line with base information."""
+        """Output for the BASE COUNT line with base information (PRIVATE)."""
         output = ""
         if self.base_counts:
             output += Record.BASE_FORMAT % "BASE COUNT  "
@@ -431,7 +431,7 @@ class Record(object):
         return output
 
     def _origin_line(self):
-        """Output for the ORIGIN line."""
+        """Output for the ORIGIN line (PRIVATE)."""
         output = ""
         # only output the ORIGIN line if we have a sequence
         if self.sequence:
@@ -444,7 +444,7 @@ class Record(object):
         return output
 
     def _sequence_line(self):
-        """Output for all of the sequence."""
+        """Output for all of the sequence (PRIVATE)."""
         output = ""
         if self.sequence:
             cur_seq_pos = 0
@@ -480,7 +480,7 @@ class Record(object):
             return output
 
     def _contig_line(self):
-        """Output for CONTIG location information from RefSeq."""
+        """Output for CONTIG location information from RefSeq (PRIVATE)."""
         output = ""
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
@@ -531,7 +531,7 @@ class Reference(object):
         return output
 
     def _reference_line(self):
-        """Output for REFERENCE lines."""
+        """Output for REFERENCE lines (PRIVATE)."""
         output = Record.BASE_FORMAT % "REFERENCE"
         if self.number:
             if self.bases:
@@ -544,7 +544,7 @@ class Reference(object):
         return output
 
     def _authors_line(self):
-        """Output for AUTHORS information."""
+        """Output for AUTHORS information (PRIVATE)."""
         output = ""
         if self.authors:
             output += Record.INTERNAL_FORMAT % "AUTHORS"
@@ -552,7 +552,7 @@ class Reference(object):
         return output
 
     def _consrtm_line(self):
-        """Output for CONSRTM information."""
+        """Output for CONSRTM information (PRIVATE)."""
         output = ""
         if self.consrtm:
             output += Record.INTERNAL_FORMAT % "CONSRTM"
@@ -560,7 +560,7 @@ class Reference(object):
         return output
 
     def _title_line(self):
-        """Output for TITLE information."""
+        """Output for TITLE information (PRIVATE)."""
         output = ""
         if self.title:
             output += Record.INTERNAL_FORMAT % "TITLE"
@@ -568,7 +568,7 @@ class Reference(object):
         return output
 
     def _journal_line(self):
-        """Output for JOURNAL information."""
+        """Output for JOURNAL information (PRIVATE)."""
         output = ""
         if self.journal:
             output += Record.INTERNAL_FORMAT % "JOURNAL"
@@ -576,7 +576,7 @@ class Reference(object):
         return output
 
     def _medline_line(self):
-        """Output for MEDLINE information."""
+        """Output for MEDLINE information (PRIVATE)."""
         output = ""
         if self.medline_id:
             output += Record.INTERNAL_FORMAT % "MEDLINE"
@@ -584,7 +584,7 @@ class Reference(object):
         return output
 
     def _pubmed_line(self):
-        """Output for PUBMED information."""
+        """Output for PUBMED information (PRIVATE)."""
         output = ""
         if self.pubmed_id:
             output += Record.OTHER_INTERNAL_FORMAT % "PUBMED"
@@ -592,7 +592,7 @@ class Reference(object):
         return output
 
     def _remark_line(self):
-        """Output for REMARK information."""
+        """Output for REMARK information (PRIVATE)."""
         output = ""
         if self.remark:
             output += Record.INTERNAL_FORMAT % "REMARK"
