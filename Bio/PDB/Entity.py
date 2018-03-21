@@ -53,47 +53,52 @@ class Entity(object):
         for child in self.child_list:
             yield child
 
-    # Generic id-based comparison methods
+    # Generic id-based comparison methods considers all parents as well as children
     # Works for Structures and Models (id is numeric)
     def __eq__(self, other):
-        if isinstance(other, Entity):
-            return self.id == other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() == other.get_full_id()
         else:
             return NotImplemented
 
+    # test for inequality
     def __ne__(self, other):
-        if isinstance(other, Entity):
-            return self.id != other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() != other.get_full_id()
         else:
             return NotImplemented
 
+    # test greater than
     def __gt__(self, other):
-        if isinstance(other, Entity):
-            return self.id > other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() > other.get_full_id()
         else:
             return NotImplemented
 
+    # test greater or equal
     def __ge__(self, other):
-        if isinstance(other, Entity):
-            return self.id >= other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() >= other.get_full_id()
         else:
             return NotImplemented
 
+    # test less than
     def __lt__(self, other):
-        if isinstance(other, Entity):
-            return self.id < other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() < other.get_full_id()
         else:
             return NotImplemented
 
+    # test less or equal
     def __le__(self, other):
-        if isinstance(other, Entity):
-            return self.id <= other.id
+        if isinstance(other, type(self)):
+            return self.get_full_id() <= other.get_full_id()
         else:
             return NotImplemented
 
     # Hash method to allow uniqueness (set)
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.get_full_id())
 
     # Private methods
 
