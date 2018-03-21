@@ -277,7 +277,7 @@ class FastaM10Parser(object):
             yield qresult
 
     def _parse_preamble(self):
-        """Parse the Fasta preamble for Fasta flavor and version."""
+        """Parse the Fasta preamble for Fasta flavor and version (PRIVATE)."""
         preamble = {}
         while True:
             self.line = self.handle.readline()
