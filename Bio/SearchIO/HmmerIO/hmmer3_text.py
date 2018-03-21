@@ -48,7 +48,7 @@ class Hmmer3TextParser(object):
             yield qresult
 
     def _read_until(self, bool_func):
-        """Read the file handle until the given function returns True."""
+        """Read the file handle until the given function returns True (PRIVATE)."""
         while True:
             if not self.line or bool_func(self.line):
                 return
@@ -56,7 +56,7 @@ class Hmmer3TextParser(object):
                 self.line = read_forward(self.handle)
 
     def _parse_preamble(self):
-        """Parse HMMER preamble (lines beginning with '#')."""
+        """Parse HMMER preamble (lines beginning with '#') (PRIVATE)."""
         meta = {}
         # bool flag for storing state ~ whether we are parsing the option
         # lines or not
@@ -98,7 +98,7 @@ class Hmmer3TextParser(object):
         return meta
 
     def _parse_qresult(self):
-        """Parse a HMMER3 query block."""
+        """Parse a HMMER3 query block (PRIVATE)."""
         self._read_until(lambda line: line.startswith('Query:'))
 
         while self.line:
@@ -160,7 +160,7 @@ class Hmmer3TextParser(object):
                 break
 
     def _parse_hit(self, qid, qdesc):
-        """Parse a HMMER3 hit block, beginning with the hit table."""
+        """Parse a HMMER3 hit block, beginning with the hit table (PRIVATE)."""
         # get to the end of the hit table delimiter and read one more line
         self._read_until(lambda line:
                 line.startswith('    ------- ------ -----'))
@@ -219,7 +219,7 @@ class Hmmer3TextParser(object):
             self.line = read_forward(self.handle)
 
     def _create_hits(self, hit_attrs, qid, qdesc):
-        """Parse a HMMER3 hsp block, beginning with the hsp table."""
+        """Parse a HMMER3 hsp block, beginning with the hsp table (PRIVATE)."""
         # read through until the beginning of the hsp block
         self._read_until(lambda line: line.startswith('Internal pipeline') or
                          line.startswith('>>'))
@@ -326,7 +326,7 @@ class Hmmer3TextParser(object):
                 self._parse_aln_block(hid, hit.hsps)
 
     def _parse_aln_block(self, hid, hsp_list):
-        """Parse a HMMER3 HSP alignment block."""
+        """Parse a HMMER3 HSP alignment block (PRIVATE)."""
         self.line = read_forward(self.handle)
         dom_counter = 0
         while True:
