@@ -58,7 +58,7 @@ class InterproscanXmlParser(object):
             yield qresult
 
     def _parse_header(self):
-        """Parse the header for the InterProScan version."""
+        """Parse the header for the InterProScan version (PRIVATE)."""
         event, elem = next(self.xml_iter)
         meta = dict()
         meta['target'] = 'InterPro'
@@ -69,7 +69,7 @@ class InterproscanXmlParser(object):
         return meta
 
     def _parse_qresult(self):
-        """Parse query results."""
+        """Parse query results (PRIVATE)."""
         for event, elem in self.xml_iter:
             if event == 'end' and elem.tag == self.NS + 'protein':
                 # store the query sequence
@@ -105,7 +105,7 @@ class InterproscanXmlParser(object):
                 yield qresult
 
     def _parse_hit(self, root_hit_elem, query_id, query_seq=None):
-        """Parse hit."""
+        """Parse hit (PRIVATE)."""
         # feed the loop below an empty list so iteration still works
         if root_hit_elem is None:
             root_hit_elem = []
@@ -147,7 +147,7 @@ class InterproscanXmlParser(object):
             yield hit
 
     def _parse_hsp(self, root_hsp_elem, query_id, hit_id, query_seq=None):
-        """Parse hsp."""
+        """Parse hsp (PRIVATE)."""
         # feed the loop below an empty list so iteration still works
         if root_hsp_elem is None:
             root_hsp_elem = []
@@ -184,7 +184,7 @@ class InterproscanXmlParser(object):
             yield hsp
 
     def _parse_xrefs(self, root_entry_elem):
-        """Parse xrefs."""
+        """Parse xrefs (PRIVATE)."""
         xrefs = []
         # store entry id and description
         if root_entry_elem is not None:
