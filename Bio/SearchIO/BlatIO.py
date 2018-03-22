@@ -216,7 +216,7 @@ def _list_from_csv(csv_string, caster=None):
 
 
 def _reorient_starts(starts, blksizes, seqlen, strand):
-    """Reorients block starts into the opposite strand's coordinates.
+    """Reorients block starts into the opposite strand's coordinates (PRIVATE).
 
     :param starts: start coordinates
     :type starts: list [int]
@@ -408,7 +408,7 @@ class BlatPslParser(object):
             yield qresult
 
     def _parse_row(self):
-        """Return a dictionary of parsed column values."""
+        """Return a dictionary of parsed column values (PRIVATE)."""
         assert self.line
         cols = [x for x in self.line.strip().split('\t') if x]
         self._validate_cols(cols)
@@ -636,7 +636,7 @@ class BlatPslWriter(object):
         return header
 
     def _build_row(self, qresult):
-        """Return a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object (PRIVATE)."""
         # For now, our writer writes the row according to the order in
         # the QueryResult and Hit objects.
         # This is different from BLAT's native output, where the rows are
