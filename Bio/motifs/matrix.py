@@ -22,26 +22,35 @@ from Bio import Alphabet
 # Fall back to the slower Python implementation if Jython or IronPython.
 try:
     from . import _pwm
+    import numpy
+    # We could further generalize this code by using array objects from
+    # the Python standard library instead of numpy arrays; this would still
+    # allow us to use the C module.
 
-    def _calculate(score_dict, sequence, m, n):
+    def _calculate(score_dict, sequence, m):
         """Calculate scores using C code (PRIVATE)."""
-        logodds = [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)]
-        return _pwm.calculate(sequence, logodds)
+        n = len(sequence)
+        # Create the numpy arrays here; the C module then does not rely on numpy
+        # Use a float32 for the scores array to save space
+        scores = numpy.empty(n - m + 1, numpy.float32)
+        logodds = numpy.array([[score_dict[letter][i] for letter in "ACGT"]
+                               for i in range(m)], float)
+        _pwm.calculate(sequence, logodds, scores)
+        return scores
 
 except ImportError:
     if platform.python_implementation() == 'CPython':
         import warnings
         from Bio import BiopythonWarning
-        warnings.warn("Using pure-Python as missing Biopython's C code for PWM. "
-                      "This can happen if Biopython was installed without NumPy. "
-                      "Try re-installing NumPy and then Biopython.",
+        warnings.warn("Using pure-Python as missing Biopython's C code for PWM.",
                       BiopythonWarning)
 
-    def _calculate(score_dict, sequence, m, n):
+    def _calculate(score_dict, sequence, m):
         """Calculate scores using Python code (PRIVATE).
 
         The C code handles mixed case so Python version must too.
         """
+        n = len(sequence)
         sequence = sequence.upper()
         scores = []
         for i in range(n - m + 1):
@@ -394,9 +403,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
-        n = len(sequence)
-
-        scores = _calculate(self, sequence, m, n)
+        scores = _calculate(self, sequence, m)
 
         if len(scores) == 1:
             return scores[0]
