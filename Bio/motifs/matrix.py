@@ -32,7 +32,7 @@ try:
         n = len(sequence)
         # Create the numpy arrays here; the C module then does not rely on numpy
         # Use a float32 for the scores array to save space
-        scores = numpy.empty(n-m+1, numpy.float32)
+        scores = numpy.empty(n - m + 1, numpy.float32)
         logodds = numpy.array([[score_dict[letter][i] for letter in "ACGT"]
                                for i in range(m)], float)
         _pwm.calculate(sequence, logodds, scores)
