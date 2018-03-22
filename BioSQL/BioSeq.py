@@ -217,7 +217,7 @@ def _retrieve_seq(adaptor, primary_id):
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):
-    """Retrieve the database cross references for the sequence."""
+    """Retrieve the database cross references for the sequence (PRIVATE)."""
     _dbxrefs = []
     dbxrefs = adaptor.execute_and_fetchall(
         "SELECT dbname, accession, version"
