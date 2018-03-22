@@ -36,7 +36,7 @@ calculate(const char sequence[], int s, Py_ssize_t m, double* matrix,
                     score += matrix[j*4+2]; break;
                 case 'T':
                 case 't':
-		    score += matrix[j*4+3]; break;
+                    score += matrix[j*4+3]; break;
                 default:
                     ok = 0;
             }
