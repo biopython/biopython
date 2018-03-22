@@ -337,7 +337,7 @@ class _CursorWrapper(object):
         self.real_cursor.executemany(operation, params)
 
     def _convert_tuple(self, tuple_):
-        """Decode any bytestrings present in the row."""
+        """Decode any bytestrings present in the row (PRIVATE)."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
             if type(elem) is bytes:
