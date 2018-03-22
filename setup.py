@@ -373,6 +373,9 @@ elif is_pypy():
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
+    Extension('Bio.motifs._pwm',
+              ["Bio/motifs/_pwm.c"],
+              ),
     ]
 else:
     EXTENSIONS = [
@@ -386,6 +389,9 @@ else:
               ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
+              ),
+    Extension('Bio.motifs._pwm',
+              ["Bio/motifs/_pwm.c"],
               ),
     ]
 
@@ -403,11 +409,6 @@ if is_Numpy_installed():
         Extension('Bio.KDTree._CKDTree',
                   ["Bio/KDTree/KDTree.c",
                    "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.motifs._pwm',
-                  ["Bio/motifs/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
     EXTENSIONS.append(
