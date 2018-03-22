@@ -373,6 +373,9 @@ elif is_pypy():
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
+    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              ),
     ]
 else:
     EXTENSIONS = [
@@ -386,6 +389,9 @@ else:
               ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
+              ),
+    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
               ),
     ]
 
@@ -408,11 +414,6 @@ if is_Numpy_installed():
     EXTENSIONS.append(
         Extension('Bio.motifs._pwm',
                   ["Bio/motifs/_pwm.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 
