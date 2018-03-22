@@ -375,6 +375,7 @@ elif is_pypy():
               ),
     Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
               ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              ),
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
@@ -394,12 +395,13 @@ else:
               ),
     Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
               ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              ),
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
     ]
 
-# Add extensions that requires NumPy to build
+# Add extensions that require NumPy to build
 if is_Numpy_installed():
     import numpy
     numpy_include_dir = numpy.get_include()
