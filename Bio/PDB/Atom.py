@@ -76,21 +76,21 @@ class Atom(object):
     # Sorting Methods
     # standard across different objects and allows direct comparison
     def __eq__(self, other):
-        """Test equality"""
+        """Test equality."""
         if isinstance(other, Atom):
             return self.full_id == other.full_id
         else:
             return NotImplemented
 
     def __ne__(self, other):
-        """Test inequality"""
+        """Test inequality."""
         if isinstance(other, Atom):
             return  self.full_id != other.full_id
         else:
             return NotImplemented
 
     def __gt__(self, other):
-        """Test greater then"""
+        """Test greater then."""
         if isinstance(other, Atom):
             if self.parent != other.parent:
                 return self.parent > other.parent
@@ -106,7 +106,7 @@ class Atom(object):
             return NotImplemented
 
     def __ge__(self, other):
-        """Test greater or equal"""
+        """Test greater or equal."""
         if isinstance(other, Atom):
             if self.parent != other.parent:
                 return self.parent >= other.parent
@@ -122,7 +122,7 @@ class Atom(object):
             return NotImplemented
 
     def __lt__(self, other):
-        """Test less than"""
+        """Test less than."""
         if isinstance(other, Atom):
             if self.parent != other.parent:
                 return self.parent < other.parent
@@ -138,7 +138,7 @@ class Atom(object):
             return NotImplemented
 
     def __le__(self, other):
-        """Test less or equal"""
+        """Test less or equal."""
         if isinstance(other, Atom):
             if self.parent != other.parent:
                 return self.parent <= other.parent

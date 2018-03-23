@@ -56,7 +56,7 @@ class Entity(object):
     # Generic id-based comparison methods considers all parents as well as children
     # Works for all Entities - Atoms have comparable custom operators
     def __eq__(self, other):
-        """Test for equality. This compares full_id including the IDs of all parents"""
+        """Test for equality. This compares full_id including the IDs of all parents."""
         if isinstance(other, type(self)):
             return self.full_id == other.full_id
         else:
