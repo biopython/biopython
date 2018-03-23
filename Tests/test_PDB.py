@@ -554,7 +554,7 @@ class ParseTest(unittest.TestCase):
         # Chains (same code as models)
         model = struct[1]
         chains = [c.id for c in sorted(model)]
-        self.assertEqual(chains, ['A', 'B' ,'C' , ' '])
+        self.assertEqual(chains, ['A', 'B', 'C', ' '])
         # Residues
         residues = [r.id[1] for r in sorted(struct[1]['C'])]
         self.assertEqual(residues, [1, 2, 3, 4, 0])
@@ -576,7 +576,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(residues, [80, 81])
         # Insertion code + hetflag + chain
         residues = [r for r in struct[1]['B']] + [struct[1]['A'][44]]
-        self.assertEqual([("{}"*4).format(r.parent.id, *r.id) for r in sorted(residues)],
+        self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
                          ['A 44 ', 'B 44 ', 'B 46 ', 'B 47 ', 'B 48 ', 'B 49 ', 'B 50 ',
                           'B 51 ', 'B 51A', 'B 52 ', 'BH_SEP45 ', 'BW0 '])
         # DisorderedAtom
@@ -602,7 +602,6 @@ class ParseTest(unittest.TestCase):
         self.assertGreater(atom1, atom2)
         self.assertNotEqual(atom1, atom2)
         self.assertLess(atom2, atom1)
-
 
         # In Py2 this will be True/False, in Py3 it will raise a TypeError.
         try:
