@@ -54,51 +54,52 @@ class Entity(object):
             yield child
 
     # Generic id-based comparison methods considers all parents as well as children
-    # Works for Structures and Models (id is numeric)
+    # Works for all Entities - Atoms have comparable custom operators
     def __eq__(self, other):
+        """Test for equality. This compares full_id including the IDs of all parents"""
         if isinstance(other, type(self)):
-            return self.get_full_id() == other.get_full_id()
+            return self.full_id == other.full_id
         else:
             return NotImplemented
 
-    # test for inequality
     def __ne__(self, other):
+        """Test for inequality."""
         if isinstance(other, type(self)):
-            return self.get_full_id() != other.get_full_id()
+            return self.full_id != other.full_id
         else:
             return NotImplemented
 
-    # test greater than
     def __gt__(self, other):
+        """Test greater than."""
         if isinstance(other, type(self)):
-            return self.get_full_id() > other.get_full_id()
+            return self.full_id > other.full_id
         else:
             return NotImplemented
 
-    # test greater or equal
     def __ge__(self, other):
+        """Test greater or equal."""
         if isinstance(other, type(self)):
-            return self.get_full_id() >= other.get_full_id()
+            return self.full_id >= other.full_id
         else:
             return NotImplemented
 
-    # test less than
     def __lt__(self, other):
+        """Test less than."""
         if isinstance(other, type(self)):
-            return self.get_full_id() < other.get_full_id()
+            return self.full_id < other.full_id
         else:
             return NotImplemented
 
-    # test less or equal
     def __le__(self, other):
+        """Test less or equal."""
         if isinstance(other, type(self)):
-            return self.get_full_id() <= other.get_full_id()
+            return self.full_id <= other.full_id
         else:
             return NotImplemented
 
-    # Hash method to allow uniqueness (set)
     def __hash__(self):
-        return hash(self.get_full_id())
+        """Hash method to allow uniqueness (set)."""
+        return hash(self.full_id)
 
     # Private methods
 
@@ -158,6 +159,7 @@ class Entity(object):
     def set_parent(self, entity):
         """Set the parent Entity object."""
         self.parent = entity
+        self.full_id = self.get_full_id()
 
     def detach_parent(self):
         """Detach the parent."""
