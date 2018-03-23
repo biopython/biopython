@@ -816,7 +816,7 @@ class GenePopController(object):
         raise NotImplementedError
 
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
-        """Calculate isolation by distance statistics."""
+        """Calculate isolation by distance statistics (PRIVATE)."""
         self._run_genepop([".GRA", ".MIG", ".ISO"], [6, sub],
                           fname, opts={
                               "MinimalDistance": min_dist,
