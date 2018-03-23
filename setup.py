@@ -379,6 +379,10 @@ elif is_pypy():
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
+    Extension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.c",
+               "Bio/KDTree/KDTreemodule.c"],
+              ),
     ]
 else:
     EXTENSIONS = [
@@ -399,6 +403,10 @@ else:
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
+    Extension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.c",
+               "Bio/KDTree/KDTreemodule.c"],
+              ),
     ]
 
 # Add extensions that require NumPy to build
@@ -409,12 +417,6 @@ if is_Numpy_installed():
         Extension('Bio.Cluster.cluster',
                   ['Bio/Cluster/clustermodule.c',
                    'Bio/Cluster/cluster.c'],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.KDTree._CKDTree',
-                  ["Bio/KDTree/KDTree.c",
-                   "Bio/KDTree/KDTreemodule.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 

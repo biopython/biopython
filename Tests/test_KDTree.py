@@ -20,7 +20,7 @@ except ImportError:
     raise MissingExternalDependencyError(
             "C module in Bio.KDTree not compiled")
 
-from Bio.KDTree import KDTree, _CKDTree
+from Bio.KDTree.KDTree import KDTree
 from numpy import sum, sqrt, array
 from numpy import random
 
@@ -51,17 +51,17 @@ def neighbor_test(nr_points, dim, bucket_size, radius):
     Returns true if the test passes.
     """
     # KD tree search
-    kdt = _CKDTree.KDTree(dim, bucket_size)
+    kdt = KDTree(dim, bucket_size)
     coords = random.random((nr_points, dim))
-    kdt.set_data(coords)
-    neighbors = kdt.neighbor_search(radius)
+    kdt.kdt.set_data(coords)
+    neighbors = kdt.kdt.neighbor_search(radius)
     r = [neighbor.radius for neighbor in neighbors]
     if r is None:
         l1 = 0
     else:
         l1 = len(r)
     # now do a slow search to compare results
-    neighbors = kdt.neighbor_simple_search(radius)
+    neighbors = kdt.kdt.neighbor_simple_search(radius)
     r = [neighbor.radius for neighbor in neighbors]
     if r is None:
         l2 = 0
@@ -89,11 +89,11 @@ def test(nr_points, dim, bucket_size, radius):
     Returns true if the test passes.
     """
     # kd tree search
-    kdt = _CKDTree.KDTree(dim, bucket_size)
+    kdt = KDTree(dim, bucket_size)
     coords = random.random((nr_points, dim))
     center = coords[0]
-    kdt.set_data(coords)
-    kdt.search_center_radius(center, radius)
+    kdt.kdt.set_data(coords)
+    kdt.kdt.search_center_radius(center, radius)
     r = kdt.get_indices()
     if r is None:
         l1 = 0
