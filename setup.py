@@ -373,6 +373,9 @@ elif is_pypy():
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
+    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              ),
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
@@ -390,12 +393,15 @@ else:
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
+    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
+              ),
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
     ]
 
-# Add extensions that requires NumPy to build
+# Add extensions that require NumPy to build
 if is_Numpy_installed():
     import numpy
     numpy_include_dir = numpy.get_include()
@@ -411,12 +417,6 @@ if is_Numpy_installed():
                    "Bio/KDTree/KDTreemodule.c"],
                   include_dirs=[numpy_include_dir],
                   ))
-    EXTENSIONS.append(
-        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-
 
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
