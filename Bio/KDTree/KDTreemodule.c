@@ -290,7 +290,7 @@ PyTree_set_data(PyTree* self, PyObject* args)
         case 'L': COPY2DARRAY(unsigned long); break;
         default:
             PyErr_Format(PyExc_RuntimeError,
-                "array should contain numerical data (format character was %c.",
+                "array should contain numerical data (format character was %c).",
                 datatype);
             goto exit;
     }
