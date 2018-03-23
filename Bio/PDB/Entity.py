@@ -135,8 +135,10 @@ class Entity(object):
         self.full_id = self._generate_full_id()
 
     def _generate_full_id(self):
-        """Generate the full_id of the Entity based on its
-         Id and the IDs of the parents.
+        """Generate full_id.
+
+        Generate the full_id of the Entity based on its
+        Id and the IDs of the parents.
         """
         entity_id = self.get_id()
         parts = [entity_id]
