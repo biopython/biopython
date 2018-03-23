@@ -85,7 +85,7 @@ class Atom(object):
     def __ne__(self, other):
         """Test inequality."""
         if isinstance(other, Atom):
-            return  self.full_id != other.full_id
+            return self.full_id != other.full_id
         else:
             return NotImplemented
 
@@ -280,7 +280,6 @@ class Atom(object):
         """
         self.parent = parent
         self.full_id = self.get_full_id()
-
 
     def detach_parent(self):
         """Remove reference to parent."""
