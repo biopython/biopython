@@ -607,7 +607,7 @@ class ParseTest(unittest.TestCase):
         # residues with same ID string should not be equal if the parent is not equal
         res1, res2, res3 = residues[0], residues[-1], struct2[1]['A'][44]
         self.assertEqual(res1.id, res2.id)
-        self.assertEqual(res2, res3) # Equality of identical residues with different structure ID
+        self.assertEqual(res2, res3)  # Equality of identical residues with different structure ID
         self.assertFalse(res1 == res2)
         self.assertGreater(res1, res2)
         self.assertGreaterEqual(res1, res2)
