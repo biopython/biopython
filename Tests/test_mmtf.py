@@ -56,7 +56,7 @@ class ParseMMTF(unittest.TestCase):
             warnings.simplefilter('ignore', PDBConstructionWarning)
             mmtf_struct = MMTFParser.get_structure(mmtf_filename)
         mmcif_parser = MMCIFParser()
-        mmcif_struct = mmcif_parser.get_structure("example", cif_filename)
+        mmcif_struct = mmcif_parser.get_structure("4CUP", cif_filename)
         self.mmcif_atoms = [x for x in mmcif_struct.get_atoms()]
         self.mmtf_atoms = [x for x in mmtf_struct.get_atoms()]
         self.check_atoms()
