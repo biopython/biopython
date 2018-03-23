@@ -549,6 +549,8 @@ class ParseTest(unittest.TestCase):
         """Test comparing and sorting the several SMCRA objects"""
 
         struct = self.structure
+        # Test deepcopy of a structure with disordered atoms
+        struct2 = deepcopy(struct)
 
         # Sorting (<, >, <=, <=)
         # Chains (same code as models)
@@ -584,6 +586,18 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(atoms, ['A', 'B'])
 
         # Comparisons
+        # Structure
+        self.assertEqual(struct, struct2)
+        self.assertLessEqual(struct, struct2)
+        self.assertGreaterEqual(struct, struct2)
+        struct2.id = 'new_id'
+        self.assertNotEqual(struct, struct2)
+        self.assertLess(struct, struct2)
+        self.assertLessEqual(struct, struct2)
+        self.assertGreater(struct2, struct)
+        self.assertGreaterEqual(struct2, struct)
+
+        # Model
         self.assertTrue(model == model)  # __eq__ same type
         self.assertFalse(struct[0] == struct[1])
 
@@ -591,19 +605,32 @@ class ParseTest(unittest.TestCase):
         self.assertFalse(struct == model)
 
         # residues with same ID string should not be equal if the parent is not equal
-        res1, res2 = residues[0], residues[-1]
+        res1, res2, res3 = residues[0], residues[-1], struct2[1]['A'][44]
         self.assertEqual(res1.id, res2.id)
+        self.assertEqual(res2, res3) # Equality of identical residues with different structure ID
         self.assertFalse(res1 == res2)
         self.assertGreater(res1, res2)
+        self.assertGreaterEqual(res1, res2)
         self.assertLess(res2, res1)
+        self.assertLessEqual(res2, res1)
 
         # atom should not be equal if the parent is not equal
-        atom1, atom2 = residues[0]['CA'], residues[-1]['CA']
+        atom1, atom2, atom3 = res1['CA'], res2['CA'], res3['CA']
+        self.assertEqual(atom2, atom3)  # Equality of identical atoms with different structure ID
         self.assertGreater(atom1, atom2)
+        self.assertGreaterEqual(atom1, atom2)
+        self.assertGreaterEqual(atom2, atom3)
         self.assertNotEqual(atom1, atom2)
         self.assertLess(atom2, atom1)
+        self.assertLessEqual(atom2, atom1)
+        self.assertLessEqual(atom2, atom3)
 
         # In Py2 this will be True/False, in Py3 it will raise a TypeError.
+        try:
+            self.assertTrue(atom1 < res1)  # __gt__ diff. types
+        except TypeError:
+            pass
+
         try:
             self.assertTrue(struct > model)  # __gt__ diff. types
         except TypeError:
@@ -613,10 +640,6 @@ class ParseTest(unittest.TestCase):
             self.assertFalse(struct >= [])  # __le__ diff. types
         except TypeError:
             pass
-
-    def test_deepcopy_of_structure_with_disorder(self):
-        """Test deepcopy of a structure with disordered atoms"""
-        structure = deepcopy(self.structure)
 
 
 class ParseReal(unittest.TestCase):
