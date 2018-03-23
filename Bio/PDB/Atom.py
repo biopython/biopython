@@ -76,19 +76,24 @@ class Atom(object):
     # Sorting Methods
     # standard across different objects and allows direct comparison
     def __eq__(self, other):
+        """Test equality"""
         if isinstance(other, Atom):
-            return (self.id, self.altloc) == (other.id, other.altloc)
+            return self.full_id == other.full_id
         else:
             return NotImplemented
 
     def __ne__(self, other):
+        """Test inequality"""
         if isinstance(other, Atom):
-            return (self.id, self.altloc) != (other.id, other.altloc)
+            return  self.full_id != other.full_id
         else:
             return NotImplemented
 
     def __gt__(self, other):
+        """Test greater then"""
         if isinstance(other, Atom):
+            if self.parent != other.parent:
+                return self.parent > other.parent
             order_s = self._sorting_keys.get(self.name, 4)
             order_o = self._sorting_keys.get(other.name, 4)
             if order_s != order_o:
@@ -101,7 +106,10 @@ class Atom(object):
             return NotImplemented
 
     def __ge__(self, other):
+        """Test greater or equal"""
         if isinstance(other, Atom):
+            if self.parent != other.parent:
+                return self.parent >= other.parent
             order_s = self._sorting_keys.get(self.name, 4)
             order_o = self._sorting_keys.get(other.name, 4)
             if order_s != order_o:
@@ -114,7 +122,10 @@ class Atom(object):
             return NotImplemented
 
     def __lt__(self, other):
+        """Test less than"""
         if isinstance(other, Atom):
+            if self.parent != other.parent:
+                return self.parent < other.parent
             order_s = self._sorting_keys.get(self.name, 4)
             order_o = self._sorting_keys.get(other.name, 4)
             if order_s != order_o:
@@ -127,7 +138,10 @@ class Atom(object):
             return NotImplemented
 
     def __le__(self, other):
+        """Test less or equal"""
         if isinstance(other, Atom):
+            if self.parent != other.parent:
+                return self.parent <= other.parent
             order_s = self._sorting_keys.get(self.name, 4)
             order_o = self._sorting_keys.get(other.name, 4)
             if order_s != order_o:
@@ -265,6 +279,8 @@ class Atom(object):
 
         """
         self.parent = parent
+        self.full_id = self.get_full_id()
+
 
     def detach_parent(self):
         """Remove reference to parent."""
