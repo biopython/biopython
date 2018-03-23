@@ -105,7 +105,6 @@ class KDTree(object):
         self.kdt.get_radii(radii)
         return radii
 
-
     def get_indices(self):
         """Return the list of indices.
 
@@ -122,9 +121,6 @@ class KDTree(object):
         self.kdt.get_indices(indices)
         return indices
 
-
-    # Fixed radius search for all points
-
     def all_search(self, radius):
         """All fixed neighbor search.
 
@@ -134,6 +130,7 @@ class KDTree(object):
          - radius: float (>0)
 
         """
+        # Fixed radius search for all points
         if not self.built:
             raise Exception("No point set specified")
         self.neighbors = self.kdt.neighbor_search(radius)
