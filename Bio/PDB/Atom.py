@@ -78,14 +78,14 @@ class Atom(object):
     def __eq__(self, other):
         """Test equality."""
         if isinstance(other, Atom):
-            return self.full_id == other.full_id
+            return self.full_id[1:] == other.full_id[1:]
         else:
             return NotImplemented
 
     def __ne__(self, other):
         """Test inequality."""
         if isinstance(other, Atom):
-            return self.full_id != other.full_id
+            return self.full_id[1:] != other.full_id[1:]
         else:
             return NotImplemented
 
