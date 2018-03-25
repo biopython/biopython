@@ -1,36 +1,17 @@
 #include <Python.h>
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include "numpy/arrayobject.h"
 
 
-
-static PyObject*
-calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
+static void
+calculate(const char sequence[], int s, Py_ssize_t m, double* matrix,
+          Py_ssize_t n, float* scores)
 {
-    npy_intp n = s - m + 1;
-    npy_intp i, j;
+    Py_ssize_t i, j;
     char c;
     double score;
     int ok;
-    PyObject* result;
-    PyArrayObject* array;
-    float* p;
-    npy_intp shape = (npy_intp)n;
+    float* p = scores;
     float nan = 0.0;
     nan /= nan;
-    if ((int)shape!=n)
-    {
-        PyErr_SetString(PyExc_ValueError, "integer overflow");
-        return NULL;
-    }
-    result = PyArray_SimpleNew(1, &shape, NPY_FLOAT32);
-    if (!result)
-    {
-        PyErr_SetString(PyExc_MemoryError, "failed to create output data");
-        return NULL;
-    }
-    p = PyArray_DATA((PyArrayObject*)result);
-    array = (PyArrayObject*)matrix;
     for (i = 0; i < n; i++)
     {
         score = 0.0;
@@ -46,16 +27,16 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
                  plasmid). */
                 case 'A':
                 case 'a':
-                    score += *((double*)PyArray_GETPTR2(array, j, 0)); break;
+                    score += matrix[j*4+0]; break;
                 case 'C':
                 case 'c':
-                    score += *((double*)PyArray_GETPTR2(array, j, 1)); break;
+                    score += matrix[j*4+1]; break;
                 case 'G':
                 case 'g':
-                    score += *((double*)PyArray_GETPTR2(array, j, 2)); break;
+                    score += matrix[j*4+2]; break;
                 case 'T':
                 case 't':
-                    score += *((double*)PyArray_GETPTR2(array, j, 3)); break;
+                    score += matrix[j*4+3]; break;
                 default:
                     ok = 0;
             }
@@ -64,7 +45,79 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
         else *p = nan;
         p++;
     }
-    return result;
+}
+
+static int
+matrix_converter(PyObject* object, void* address)
+{
+    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
+    char datatype;
+    Py_buffer* view = address;
+    if (PyObject_GetBuffer(object, view, flags) == -1) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "position-weight matrix is not an array");
+        return 0;
+    }
+    datatype = view->format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view->format[1]; break;
+        default: break;
+    }
+    if (datatype != 'd') {
+        PyErr_Format(PyExc_RuntimeError,
+            "position-weight matrix data format incorrect ('%c', expected 'd')",
+            datatype);
+        return 0;
+    }
+    if (view->ndim != 2) {
+        PyErr_Format(PyExc_RuntimeError,
+            "position-weight matrix has incorrect rank (%d expected 2)",
+            view->ndim);
+        return 0;
+    }
+    if (view->shape[1] != 4) {
+        PyErr_Format(PyExc_RuntimeError,
+            "position-weight matrix should have four columns "
+            "(%zd columns found)", view->shape[1]);
+        return 0;
+    }
+    return 1;
+}
+
+static int
+scores_converter(PyObject* object, void* address)
+{
+    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
+    char datatype;
+    Py_buffer* view = address;
+    if (PyObject_GetBuffer(object, view, flags) == -1)
+        return 0;
+    datatype = view->format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view->format[1]; break;
+        default: break;
+    }
+    if (datatype != 'f') {
+        PyErr_Format(PyExc_RuntimeError,
+            "scores array has incorrect data format ('%c', expected 'f')",
+            datatype);
+        return 0;
+    }
+    if (view->ndim != 1) {
+        PyErr_Format(PyExc_ValueError,
+            "scores array has incorrect rank (%d expected 1)",
+            view->ndim);
+        return 0;
+    }
+    return 1;
 }
 
 static char calculate__doc__[] =
@@ -78,46 +131,35 @@ static PyObject*
 py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
 {
     const char* sequence;
-    PyObject* matrix = NULL;
-    static char* kwlist[] = {"sequence", "matrix", NULL};
-    npy_intp m;
+    static char* kwlist[] = {"sequence", "matrix", "scores", NULL};
+    Py_ssize_t m;
+    Py_ssize_t n;
     int s;
-    PyObject* result;
-    PyArrayObject* array;
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "s#O&", kwlist,
+    PyObject* result = NULL;
+    Py_buffer scores;
+    Py_buffer matrix;
+    matrix.obj = NULL;
+    scores.obj = NULL;
+    if(!PyArg_ParseTupleAndKeywords(args, keywords, "s#O&O&", kwlist,
                                     &sequence,
                                     &s,
-                                    PyArray_Converter,
-                                    &matrix)) return NULL;
-
-    array = (PyArrayObject*) matrix;
-    if (PyArray_TYPE(array) != NPY_DOUBLE)
-    {
-        PyErr_SetString(PyExc_ValueError,
-            "position-weight matrix should contain floating-point values");
-        result = NULL;
+                                    matrix_converter, &matrix,
+                                    scores_converter, &scores)) goto exit;
+    m = matrix.shape[0];
+    n = scores.shape[0];
+    if (n != s - m + 1) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "size of scores array is inconsistent");
+        goto exit;
     }
-    else if (PyArray_NDIM(array) != 2) /* Checking number of dimensions */
-    {
-        result = PyErr_Format(PyExc_ValueError,
-            "position-weight matrix has incorrect rank (%d expected 2)",
-            PyArray_NDIM(array));
-    }
-    else if(PyArray_DIM(array, 1) != 4)
-    {
-        result = PyErr_Format(PyExc_ValueError,
-            "position-weight matrix should have four columns (%" NPY_INTP_FMT
-            " columns found)", PyArray_DIM(array, 1));
-    }
-    else
-    {
-        m = PyArray_DIM(array, 0);
-        result = calculate(sequence, s, matrix, m);
-    }
-    Py_DECREF(matrix);
+    calculate(sequence, s, m, matrix.buf, n, scores.buf);
+    Py_INCREF(Py_None);
+    result = Py_None;
+exit:
+    if (matrix.obj) PyBuffer_Release(&matrix);
+    if (scores.obj) PyBuffer_Release(&scores);
     return result;
 }
-
 
 static struct PyMethodDef methods[] = {
    {"calculate", (PyCFunction)py_calculate, METH_VARARGS | METH_KEYWORDS, calculate__doc__},
@@ -148,9 +190,6 @@ void init_pwm(void)
 #endif
 {
   PyObject *m;
-
-  import_array();
-
 #if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&moduledef);
   if (m==NULL) return NULL;

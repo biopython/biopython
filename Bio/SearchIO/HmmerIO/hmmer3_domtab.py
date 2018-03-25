@@ -26,7 +26,7 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
     """Base hmmer3-domtab iterator."""
 
     def _parse_row(self):
-        """Return a dictionary of parsed row values."""
+        """Return a dictionary of parsed row values (PRIVATE)."""
         assert self.line
         cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 23, we have extra description columns
@@ -243,7 +243,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self, first_qresult=None):
-        """Return the header string of a domain HMMER table output."""
+        """Return the header string of a domain HMMER table output (PRIVATE)."""
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1157
         if first_qresult:
@@ -283,7 +283,7 @@ class Hmmer3DomtabHmmhitWriter(object):
         return header
 
     def _build_row(self, qresult):
-        """Return a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object (PRIVATE)."""
         rows = ''
 
         # calculate whitespace required

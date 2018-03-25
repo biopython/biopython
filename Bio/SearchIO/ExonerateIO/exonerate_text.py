@@ -42,7 +42,7 @@ _RE_SCODON_END = re.compile(r'^\{(\w{1,2})\}')
 
 
 def _flip_codons(codon_seq, target_seq):
-    """Flips the codon characters from one seq to another."""
+    """Flips the codon characters from one seq to another (PRIVATE)."""
     a, b = '', ''
     for char1, char2 in zip(codon_seq, target_seq):
         # no need to do anything if the codon seq line has nothing
@@ -57,7 +57,7 @@ def _flip_codons(codon_seq, target_seq):
 
 
 def _get_block_coords(parsed_seq, row_dict, has_ner=False):
-    """Return a list of start, end coordinates for each given block in the sequence."""
+    """Return a list of start, end coordinates for each given block in the sequence (PRIVATE)."""
     start = 0
     coords = []
     if not has_ner:
@@ -94,7 +94,7 @@ def _get_inter_coords(coords, strand=1):
 
 
 def _stitch_rows(raw_rows):
-    """Stitches together the parsed alignment rows and returns them in a list."""
+    """Stitches together the parsed alignment rows and returns them in a list (PRIVATE)."""
     # deal with possible codon surprise!
     # (i.e. alignments with codons using cdna2genome model)
     # by creating additional rows to contain the codons
@@ -127,7 +127,7 @@ def _stitch_rows(raw_rows):
 
 
 def _get_row_dict(row_len, model):
-    """Return a dictionary of row indices for parsing alignment blocks."""
+    """Return a dictionary of row indices for parsing alignment blocks (PRIVATE)."""
     idx = {}
     # 3 lines, usually in dna vs dna models
     if row_len == 3:
@@ -168,7 +168,7 @@ def _get_row_dict(row_len, model):
 
 
 def _get_blocks(rows, coords, idx):
-    """Return a list of dictionaries of sequences split by the coordinates."""
+    """Return a list of dictionaries of sequences split by the coordinates (PRIVATE)."""
     for idx_name in ('query', 'hit', 'midline', 'qannot', 'hannot'):
         assert idx_name in idx
     blocks = []
@@ -212,7 +212,7 @@ def _get_scodon_moves(tmp_seq_blocks):
 
 
 def _clean_blocks(tmp_seq_blocks):
-    """Remove curly braces (split codon markers) from the given sequences."""
+    """Remove curly braces (split codon markers) from the given sequences (PRIVATE)."""
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
@@ -224,7 +224,7 @@ def _clean_blocks(tmp_seq_blocks):
 
 
 def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
-    """Return the length of introns between fragments."""
+    """Return the length of introns between fragments (PRIVATE)."""
     # set opposite type, for setting introns
     opp_type = 'hit' if seq_type == 'query' else 'query'
     # list of flags to denote if an intron follows a block
@@ -260,7 +260,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
 
 
 def _comp_coords(hsp, seq_type, inter_lens):
-    """Fill the block coordinates of the given hsp dictionary."""
+    """Fill the block coordinates of the given hsp dictionary (PRIVATE)."""
     assert seq_type in ('hit', 'query')
     # manually fill the first coord
     seq_step = 1 if hsp['%s_strand' % seq_type] >= 0 else -1

@@ -231,6 +231,7 @@ _ITERATOR_MAP = {
         # as we need it distinguish hit / target coordinates
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        'interproscan-xml': ('InterproscanIO', 'InterproscanXmlParser'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
 }
 

@@ -35,7 +35,7 @@ class Hmmer3TabParser(object):
                 yield qresult
 
     def _parse_row(self):
-        """Return a dictionary of parsed row values."""
+        """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
@@ -255,7 +255,7 @@ class Hmmer3TabWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self, first_qresult=None):
-        """Return the header string of a HMMER table output."""
+        """Return the header string of a HMMER table output (PRIVATE)."""
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
@@ -290,7 +290,7 @@ class Hmmer3TabWriter(object):
         return header
 
     def _build_row(self, qresult):
-        """Return a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object (PRIVATE)."""
         rows = ''
 
         # calculate whitespace required

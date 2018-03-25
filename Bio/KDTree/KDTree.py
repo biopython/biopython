@@ -14,7 +14,7 @@ Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
 # from __future__ import print_function
-from numpy import array
+from numpy import array, empty
 from Bio.KDTree import _CKDTree
 
 
@@ -98,10 +98,12 @@ class KDTree(object):
         Return the list of distances from center after
         a neighbor search.
         """
-        a = self.kdt.get_radii()
-        if a is None:
+        n = self.kdt.get_count()
+        if n == 0:
             return []
-        return a
+        radii = empty(n, int)
+        self.kdt.get_radii(radii)
+        return radii
 
     def get_indices(self):
         """Return the list of indices.
@@ -112,12 +114,12 @@ class KDTree(object):
 
         For an index pair, the first index<second index.
         """
-        a = self.kdt.get_indices()
-        if a is None:
+        n = self.kdt.get_count()
+        if n == 0:
             return []
-        return a
-
-    # Fixed radius search for all points
+        indices = empty(n, int)
+        self.kdt.get_indices(indices)
+        return indices
 
     def all_search(self, radius):
         """All fixed neighbor search.
@@ -128,6 +130,7 @@ class KDTree(object):
          - radius: float (>0)
 
         """
+        # Fixed radius search for all points
         if not self.built:
             raise Exception("No point set specified")
         self.neighbors = self.kdt.neighbor_search(radius)

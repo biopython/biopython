@@ -1,19 +1,5 @@
 #include <Python.h>
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include <numpy/arrayobject.h>
 #include "KDTree.h"
-
-
-/* Must define Py_TYPE for Python 2.5 or older */
-#ifndef Py_TYPE
-#  define Py_TYPE(o) ((o)->ob_type)
-#endif
-
-/* Must define PyVarObject_HEAD_INIT for Python 2.5 or older */
-#ifndef PyVarObject_HEAD_INIT
-#define PyVarObject_HEAD_INIT(type, size)       \
-        PyObject_HEAD_INIT(type) size,
-#endif
 
 
 typedef struct {
@@ -113,10 +99,11 @@ PyNeighbor_getradius(PyNeighbor* self, void* closure)
 
 static int
 PyNeighbor_setradius(PyNeighbor* self, PyObject* value, void* closure)
-{ const double radius = PyFloat_AsDouble(value);
-  if (PyErr_Occurred()) return -1;
-  self->neighbor.radius = (float)radius;
-  return 0;
+{
+    const double radius = PyFloat_AsDouble(value);
+    if (PyErr_Occurred()) return -1;
+    self->neighbor.radius = (float)radius;
+    return 0;
 }
 
 static char PyNeighbor_radius__doc__[] =
@@ -192,17 +179,15 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
 
     if(!PyArg_ParseTuple(args, "ii:KDTree_init" ,&dim, &bucket_size)) return -1;
 
-    if (dim <= 0 || bucket_size <= 0)
-    {
+    if (dim <= 0 || bucket_size <= 0) {
         PyErr_SetString(PyExc_ValueError, "Both arguments should be positive");
         return -1;
     }
 
     tree = KDTree_init(dim, bucket_size);
-    if (tree==NULL)
-    {
+    if (tree==NULL) {
         PyErr_SetString(PyExc_MemoryError, "Insufficient memory for tree");
-	return -1;
+        return -1;
     }
 
     self->tree = tree;
@@ -221,8 +206,7 @@ PyTree_get_count(PyTree* self)
 #else
     result = PyInt_FromLong(count);
 #endif
-    if (!result)
-    {
+    if (!result) {
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for object.");
         return NULL;
     }
@@ -249,98 +233,101 @@ PyTree_neighbor_get_count(PyTree* self)
     return result;
 }
 
+#define COPY2DARRAY(ctype) \
+    for (i = 0; i < n; i++) { \
+        for (j = 0; j < m; j++) { \
+            coords[i*m+j] = *(ctype *) (p+i*rowstride+j*colstride); \
+        } \
+    }
+
 static PyObject*
 PyTree_set_data(PyTree* self, PyObject* args)
 {
     float* coords;
-    long int n, m, i;
+    Py_ssize_t n, m, i, j;
     PyObject *obj;
-    PyArrayObject *array;
     struct KDTree* tree = self->tree;
     int ok;
-    npy_intp rowstride, colstride;
+    Py_ssize_t rowstride, colstride;
     const char* p;
+    const int flags = PyBUF_FORMAT | PyBUF_STRIDES;
+    char datatype;
+    Py_buffer view;
 
     if(!PyArg_ParseTuple(args, "O:KDTree_set_data",&obj)) return NULL;
 
-    /* Check if it is an array */
-    if (!PyArray_Check(obj))
-    {
-        PyErr_SetString(PyExc_TypeError, "First argument must be an array.");
+    if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
+    if (view.ndim != 2) {
+        PyErr_SetString(PyExc_RuntimeError, "Array must be two-dimensional");
         return NULL;
     }
-    array=(PyArrayObject *) obj;
-    if(PyArray_NDIM(array)!=2)
-    {
-        PyErr_SetString(PyExc_ValueError, "Array must be two dimensional.");
-        return NULL;
-    }
-    if (PyArray_TYPE(array) == NPY_DOUBLE)
-    {
-        Py_INCREF(obj);
-    }
-    else
-    {
-        /* Cast to type double */
-        obj = PyArray_Cast(array, NPY_DOUBLE);
-        if (!obj)
-        {
-            PyErr_SetString(PyExc_ValueError,
-                            "coordinates cannot be cast to needed type.");
-            return NULL;
-        }
-        array = (PyArrayObject*) obj;
-    }
-
-    n = (long int) PyArray_DIM(array, 0);
-    m = (long int) PyArray_DIM(array, 1);
-
+    n = view.shape[0];
+    m = view.shape[1];
+    rowstride = view.strides[0];
+    colstride = view.strides[1];
     /* coord_data is deleted by the KDTree object */
-    coords= malloc(m*n*sizeof(float));
-    if (!coords)
-    {
-        Py_DECREF(obj);
-        PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for coordinates.");
-        return NULL;
+    coords = malloc(m*n*sizeof(float));
+    if (!coords) {
+        PyErr_SetString(PyExc_MemoryError, "Failed to allocate memory for coordinates.");
+        goto exit;
     }
-
-    rowstride =  PyArray_STRIDE(array, 0);
-    colstride =  PyArray_STRIDE(array, 1);
-    p = PyArray_BYTES(array);
-
-    for (i=0; i<n; i++)
-    {
-        int j;
-
-        for (j=0; j<m; j++)
-        {
-            coords[i*m+j]=*(double *) (p+i*rowstride+j*colstride);
-        }
+    p = view.buf;
+    datatype = view.format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view.format[1]; break;
+        default: break;
     }
-    Py_DECREF(obj);
-
+    switch (datatype) {
+        case 'd': COPY2DARRAY(double); break;
+        case 'f': COPY2DARRAY(float); break;
+        case 'i': COPY2DARRAY(int); break;
+        case 'I': COPY2DARRAY(unsigned int); break;
+        case 'l': COPY2DARRAY(long); break;
+        case 'L': COPY2DARRAY(unsigned long); break;
+        default:
+            PyErr_Format(PyExc_RuntimeError,
+                "array should contain numerical data (format character was %c).",
+                datatype);
+            goto exit;
+    }
     ok = KDTree_set_data(tree, coords, n);
     if (!ok)
     {
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for nodes.");
-        return NULL;
+        goto exit;
     }
-
+    PyBuffer_Release(&view);
     Py_INCREF(Py_None);
     return Py_None;
+
+exit:
+    PyBuffer_Release(&view);
+    if (coords) free(coords);
+    return NULL;
 }
+
+#define COPY1DARRAY(ctype) \
+    for (i = 0; i < n; i++) { \
+        coords[i] = *(ctype *) (p+i*stride); \
+    }
 
 static PyObject*
 PyTree_search_center_radius(PyTree* self, PyObject* args)
 {
     PyObject *obj;
     double radius;
-    PyArrayObject *array;
     long int n, i;
     float *coords;
     struct KDTree* tree = self->tree;
     int ok;
-    npy_intp stride;
+    const int flags = PyBUF_FORMAT | PyBUF_STRIDES;
+    Py_ssize_t stride;
+    Py_buffer view;
+    char datatype;
     const char* p;
 
     if(!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj ,&radius))
@@ -352,65 +339,55 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
         return NULL;
     }
 
-    /* Check if it is an array */
-    if (!PyArray_Check(obj))
-    {
-        PyErr_SetString(PyExc_TypeError, "First argument must be an array.");
+    if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
+    if (view.ndim != 1) {
+        PyErr_SetString(PyExc_RuntimeError, "Array must be one-dimensional");
         return NULL;
     }
-    array=(PyArrayObject *) obj;
-
-    if(PyArray_NDIM(array)!=1)
-    {
-        PyErr_SetString(PyExc_ValueError, "Array must be one dimensional.");
-        return NULL;
-    }
-    if (PyArray_TYPE(array) == NPY_DOUBLE)
-    {
-        Py_INCREF(obj);
-    }
-    else
-    {
-        /* Cast to type double */
-        obj = PyArray_Cast(array, NPY_DOUBLE);
-        if (!obj)
-        {
-            PyErr_SetString(PyExc_ValueError,
-                            "coordinates cannot be cast to needed type.");
-            return NULL;
-        }
-        array = (PyArrayObject*) obj;
-    }
-
-    n = (long int) PyArray_DIM(array, 0);
-
+    n = view.shape[0];
+    stride = view.strides[0];
     /* coord_data is deleted by the KDTree object */
-    coords= malloc(n*sizeof(float));
-    if (!coords)
-    {
-        Py_DECREF(obj);
-        PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for coordinates.");
-        return NULL;
+    coords = malloc(n*sizeof(float));
+    if (!coords) {
+        PyErr_NoMemory();
+        goto exit;
     }
-
-    stride =  PyArray_STRIDE(array, 0);
-    p = PyArray_BYTES(array);
-    for (i=0; i<n; i++)
-    {
-        coords[i]=*(double *) (p+i*stride);
+    p = view.buf;
+    datatype = view.format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view.format[1]; break;
+        default: break;
     }
-    Py_DECREF(obj);
-
+    switch (datatype) {
+        case 'd': COPY1DARRAY(double); break;
+        case 'f': COPY1DARRAY(float); break;
+        case 'i': COPY1DARRAY(int); break;
+        case 'I': COPY1DARRAY(unsigned int); break;
+        case 'l': COPY1DARRAY(long); break;
+        case 'L': COPY1DARRAY(unsigned long); break;
+        default:
+            PyErr_Format(PyExc_RuntimeError,
+                "array should contain numerical data (format character was %c.",
+                datatype);
+            goto exit;
+    }
     ok = KDTree_search_center_radius(tree, coords, radius);
-
-    if (!ok)
-    {
-        PyErr_SetString (PyExc_MemoryError, "Insufficient memory for calculation.");
-        return NULL;
+    if (!ok) {
+        PyErr_NoMemory();
+        goto exit;
     }
-
+    PyBuffer_Release(&view);
     Py_INCREF(Py_None);
     return Py_None;
+
+exit:
+    PyBuffer_Release(&view);
+    if (coords) free(coords);
+    return NULL;
 }
 
 static PyObject*
@@ -540,61 +517,87 @@ PyTree_neighbor_simple_search(PyTree* self, PyObject* args)
 static char PyTree_get_indices__doc__[] =
 "returns indices of coordinates within radius as a Numpy array\n";
 
-static PyObject *PyTree_get_indices(PyTree *self)
+static PyObject *PyTree_get_indices(PyTree *self, PyObject* args)
 {
-	npy_intp length;
-	PyArrayObject *array;
-	struct KDTree* tree = self->tree;
+    struct KDTree* tree = self->tree;
+    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
+    char datatype;
+    Py_buffer view;
+    PyObject* object;
 
-	length=KDTree_get_count(tree);
-
-	if (length==0)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, NPY_LONG);
-	if (!array)
-	{
-		PyErr_SetString(PyExc_MemoryError,
-				"Insufficient memory for array");
-		return NULL;
-	}
-
-	/* copy the data into the Numpy data pointer */
-	KDTree_copy_indices(tree, (long int *) PyArray_BYTES(array));
-	return PyArray_Return(array);
+    if (!PyArg_ParseTuple(args, "O:KDTree_get_indices", &object)) return NULL;
+    if (PyObject_GetBuffer(object, &view, flags) == -1)
+        return NULL;
+    datatype = view.format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view.format[1]; break;
+        default: break;
+    }
+    if (datatype != 'l') {
+        PyErr_Format(PyExc_RuntimeError,
+            "array has incorrect data format ('%c', expected 'l')", datatype);
+        PyBuffer_Release(&view);
+        return NULL;
+    }
+    else if (view.ndim != 1) {
+        PyErr_Format(PyExc_ValueError,
+            "array has incorrect rank (%d expected 1)", view.ndim);
+        PyBuffer_Release(&view);
+        return NULL;
+    }
+    /* copy the data into the Numpy data pointer */
+    KDTree_copy_indices(tree, (long int *) view.buf);
+    PyBuffer_Release(&view);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 static char PyTree_get_radii__doc__[] =
 "returns distances of coordinates within radius as a Numpy array.\n";
 
-static PyObject *PyTree_get_radii(PyTree *self)
+static PyObject *PyTree_get_radii(PyTree *self, PyObject* args)
 {
-	npy_intp length;
-	PyArrayObject *array;
-	struct KDTree* tree = self->tree;
+    PyObject* object;
+    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
+    char datatype;
+    Py_buffer view;
+    struct KDTree* tree = self->tree;
 
-	length=KDTree_get_count(tree);
+    if (!PyArg_ParseTuple(args, "O:KDTree_get_radii", &object)) return NULL;
+    if (PyObject_GetBuffer(object, &view, flags) == -1)
+        return NULL;
+    datatype = view.format[0];
+    switch (datatype) {
+        case '@':
+        case '=':
+        case '<':
+        case '>':
+        case '!': datatype = view.format[1]; break;
+        default: break;
+    }
+    if (datatype != 'l') {
+        PyErr_Format(PyExc_RuntimeError,
+            "array has incorrect data format ('%c', expected 'f')", datatype);
+        PyBuffer_Release(&view);
+        return NULL;
+    }
+    else if (view.ndim != 1) {
+        PyErr_Format(PyExc_ValueError,
+            "array has incorrect rank (%d expected 1)", view.ndim);
+        PyBuffer_Release(&view);
+        return NULL;
+    }
 
-	if (length==0)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
+    /* copy the data into the Numpy data pointer */
+    KDTree_copy_radii(tree, (float *) view.buf);
 
-	array=(PyArrayObject *) PyArray_SimpleNew(1, &length, NPY_FLOAT32);
-	if (!array)
-	{
-		PyErr_SetString(PyExc_MemoryError,
-				"Insufficient memory for array");
-		return NULL;
-	}
-
-	/* copy the data into the Numpy data pointer */
-	KDTree_copy_radii(tree, (float *) PyArray_BYTES(array));
-	return PyArray_Return(array);
+    PyBuffer_Release(&view);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 static PyMethodDef PyTree_methods[] = {
@@ -604,8 +607,8 @@ static PyMethodDef PyTree_methods[] = {
     {"neighbor_get_count", (PyCFunction)PyTree_neighbor_get_count, METH_NOARGS, NULL},
     {"neighbor_search", (PyCFunction)PyTree_neighbor_search, METH_VARARGS, NULL},
     {"neighbor_simple_search", (PyCFunction)PyTree_neighbor_simple_search, METH_VARARGS, NULL},
-    {"get_indices", (PyCFunction)PyTree_get_indices, METH_NOARGS, PyTree_get_indices__doc__},
-    {"get_radii", (PyCFunction)PyTree_get_radii, METH_NOARGS, PyTree_get_radii__doc__},
+    {"get_indices", (PyCFunction)PyTree_get_indices, METH_VARARGS, PyTree_get_indices__doc__},
+    {"get_radii", (PyCFunction)PyTree_get_radii, METH_VARARGS, PyTree_get_radii__doc__},
     {NULL}  /* Sentinel */
 };
 
@@ -633,12 +636,12 @@ static PyTypeObject PyTreeType = {
     0,                           /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT,          /*tp_flags*/
     PyTree_doc,                  /* tp_doc */
-    0,		                 /* tp_traverse */
-    0,		                 /* tp_clear */
-    0,		                 /* tp_richcompare */
-    0,		                 /* tp_weaklistoffset */
-    0,		                 /* tp_iter */
-    0,		                 /* tp_iternext */
+    0,                           /* tp_traverse */
+    0,                           /* tp_clear */
+    0,                           /* tp_richcompare */
+    0,                           /* tp_weaklistoffset */
+    0,                           /* tp_iter */
+    0,                           /* tp_iternext */
     PyTree_methods,              /* tp_methods */
     NULL,                        /* tp_members */
     0,                           /* tp_getset */
@@ -678,8 +681,6 @@ init_CKDTree(void)
 #endif
 {
   PyObject *module;
-
-  import_array();
 
   PyTreeType.tp_new = PyType_GenericNew;
   PyNeighborType.tp_new = PyType_GenericNew;
