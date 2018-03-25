@@ -122,6 +122,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
+- Joerg Schaarschmidt <https://github.com/schaarj>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
