@@ -860,10 +860,19 @@ if __name__ == "__main__":
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
+    # Ensure we have binary mode handles
+    # (leave stderr as default text mode)
+    if sys.version_info[0] >= 3:
+        stdin = sys.stdin.buffer
+        stdout = sys.stdout.buffer
+    else:
+        stdin = sys.stdin
+        stdout = sys.stdout
+
     sys.stderr.write("Producing BGZF output from stdin...\n")
-    w = BgzfWriter(fileobj=sys.stdout)
+    w = BgzfWriter(fileobj=stdout)
     while True:
-        data = sys.stdin.read(65536)
+        data = stdin.read(65536)
         w.write(data)
         if not data:
             break
