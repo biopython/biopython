@@ -144,7 +144,7 @@ class Atom(object):
         return hash(self.get_full_id())
 
     def _assign_element(self, element):
-        """Guess element from atom name if not recognised."""
+        """Guess element from atom name if not recognised (PRIVATE)."""
         if not element or element.capitalize() not in IUPACData.atom_weights:
             # Inorganic elements have their name shifted left by one position
             #  (is a convention in PDB, but not part of the standard).

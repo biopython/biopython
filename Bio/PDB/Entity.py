@@ -98,7 +98,7 @@ class Entity(object):
     # Private methods
 
     def _reset_full_id(self):
-        """Reset the full_id.
+        """Reset the full_id (PRIVATE).
 
         Sets the full_id of this entity and
         recursively of all its children to None.

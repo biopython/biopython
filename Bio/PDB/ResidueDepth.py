@@ -109,7 +109,7 @@ _atomic_radii = {
 
 
 def _get_atom_radius(atom, rtype='united'):
-    """Translate an atom object to an atomic radius defined in MSMS.
+    """Translate an atom object to an atomic radius defined in MSMS (PRIVATE).
 
     Uses information from the parent residue and the atom object to define
     the atom type.
@@ -433,7 +433,7 @@ def _get_atom_radius(atom, rtype='united'):
 
 
 def _read_vertex_array(filename):
-    """Read the vertex list into a Numeric array."""
+    """Read the vertex list into a Numeric array (PRIVATE)."""
     with open(filename, "r") as fp:
         vertex_list = []
         for l in fp:
