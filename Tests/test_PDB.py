@@ -79,7 +79,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 16, ' ') redefined at line 135.",
                     "Residue (' ', 80, ' ') redefined at line 633.",
                     "Residue (' ', 81, ' ') redefined at line 646.",
-                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 823.'
+                    'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902.'
                     ]):
                 self.assertIn(msg, str(wrn))
 
@@ -172,7 +172,7 @@ class ParseTest(unittest.TestCase):
         """Extract polypeptides using C-N."""
         ppbuild = PPBuilder()
         polypeptides = ppbuild.build_peptides(self.structure[1])
-        self.assertEqual(len(polypeptides), 1)
+        self.assertEqual(len(polypeptides), 2)
         pp = polypeptides[0]
         # Check the start and end positions
         self.assertEqual(pp[0].get_id()[1], 2)
@@ -189,7 +189,7 @@ class ParseTest(unittest.TestCase):
         """Extract polypeptides using CA-CA."""
         ppbuild = CaPPBuilder()
         polypeptides = ppbuild.build_peptides(self.structure[1])
-        self.assertEqual(len(polypeptides), 1)
+        self.assertEqual(len(polypeptides), 2)
         pp = polypeptides[0]
         # Check the start and end positions
         self.assertEqual(pp[0].get_id()[1], 2)
@@ -219,7 +219,7 @@ class ParseTest(unittest.TestCase):
         # --- Checking model 1 ---
         m1 = self.structure[1]
         # Model 1 contains 3 chains
-        self.assertEqual(len(m1), 3)
+        self.assertEqual(len(m1), 4)
         # Deconstruct this data structure to check each chain
         chain_data = [  # chain_id, chain_len, [(residue_id, residue_len), ...]
             ('A', 86, [((' ', 0, ' '), 1),
@@ -309,7 +309,19 @@ class ParseTest(unittest.TestCase):
                        ((' ', 85, ' '), 11),
                        ((' ', 86, ' '), 6),
                        ]),
-            ('B', 5, [(('W', 0, ' '), 1),
+            ('B', 11, [((' ', 44, ' '), 11),
+                       (('H_SEP', 45, ' '), 10),  # Phosphoserine
+                       ((' ', 46, ' '), 8),
+                       ((' ', 47, ' '), 10),
+                       ((' ', 48, ' '), 11),
+                       ((' ', 49, ' '), 6),
+                       ((' ', 50, ' '), 4),
+                       ((' ', 51, ' '), 5),
+                       ((' ', 51, 'A'), 5),
+                       ((' ', 52, ' '), 7),
+                       (('W', 0, ' '), 1),
+                       ]),
+            ('C', 5, [(('W', 0, ' '), 1),
                       (('H_NAG', 1, ' '), 14),
                       (('H_NAG', 2, ' '), 14),
                       (('H_NAG', 4, ' '), 14),
@@ -438,7 +450,7 @@ class ParseTest(unittest.TestCase):
         model = structure[1]
         self.assertEqual(model.id, 1)
         self.assertEqual(model.level, "M")
-        self.assertEqual(len(model), 3)
+        self.assertEqual(len(model), 4)
         chain = model["A"]
         self.assertEqual(chain.id, "A")
         self.assertEqual(chain.level, "C")
@@ -537,14 +549,16 @@ class ParseTest(unittest.TestCase):
         """Test comparing and sorting the several SMCRA objects"""
 
         struct = self.structure
+        # Test deepcopy of a structure with disordered atoms
+        struct2 = deepcopy(struct)
 
         # Sorting (<, >, <=, <=)
         # Chains (same code as models)
         model = struct[1]
         chains = [c.id for c in sorted(model)]
-        self.assertEqual(chains, ['A', 'B', ' '])
+        self.assertEqual(chains, ['A', 'B', 'C', ' '])
         # Residues
-        residues = [r.id[1] for r in sorted(struct[1]['B'])]
+        residues = [r.id[1] for r in sorted(struct[1]['C'])]
         self.assertEqual(residues, [1, 2, 3, 4, 0])
         # Atoms
         for residue in struct.get_residues():
@@ -562,18 +576,61 @@ class ParseTest(unittest.TestCase):
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]['A'])][79:81]
         self.assertEqual(residues, [80, 81])
+        # Insertion code + hetflag + chain
+        residues = [r for r in struct[1]['B']] + [struct[1]['A'][44]]
+        self.assertEqual([("{}" * 4).format(r.parent.id, *r.id) for r in sorted(residues)],
+                         ['A 44 ', 'B 44 ', 'B 46 ', 'B 47 ', 'B 48 ', 'B 49 ', 'B 50 ',
+                          'B 51 ', 'B 51A', 'B 52 ', 'BH_SEP45 ', 'BW0 '])
         # DisorderedAtom
         atoms = [a.altloc for a in sorted(struct[1]['A'][74]['OD1'])]
         self.assertEqual(atoms, ['A', 'B'])
 
         # Comparisons
+        # Structure
+        self.assertEqual(struct, struct2)
+        self.assertLessEqual(struct, struct2)
+        self.assertGreaterEqual(struct, struct2)
+        struct2.id = 'new_id'
+        self.assertNotEqual(struct, struct2)
+        self.assertLess(struct, struct2)
+        self.assertLessEqual(struct, struct2)
+        self.assertGreater(struct2, struct)
+        self.assertGreaterEqual(struct2, struct)
+
+        # Model
         self.assertTrue(model == model)  # __eq__ same type
         self.assertFalse(struct[0] == struct[1])
 
         self.assertFalse(struct[0] == [])  # __eq__ diff. types
         self.assertFalse(struct == model)
 
+        # residues with same ID string should not be equal if the parent is not equal
+        res1, res2, res3 = residues[0], residues[-1], struct2[1]['A'][44]
+        self.assertEqual(res1.id, res2.id)
+        self.assertEqual(res2, res3)  # Equality of identical residues with different structure ID
+        self.assertFalse(res1 == res2)
+        self.assertGreater(res1, res2)
+        self.assertGreaterEqual(res1, res2)
+        self.assertLess(res2, res1)
+        self.assertLessEqual(res2, res1)
+
+        # atom should not be equal if the parent is not equal
+        atom1, atom2, atom3 = res1['CA'], res2['CA'], res3['CA']
+        self.assertEqual(atom2, atom3)  # Equality of identical atoms with different structure ID
+        self.assertGreater(atom1, atom2)
+        self.assertGreaterEqual(atom1, atom2)
+        self.assertGreaterEqual(atom2, atom3)
+        self.assertNotEqual(atom1, atom2)
+        self.assertLess(atom2, atom1)
+        self.assertLessEqual(atom2, atom1)
+        self.assertLessEqual(atom2, atom3)
+
         # In Py2 this will be True/False, in Py3 it will raise a TypeError.
+        try:
+            self.assertTrue(atom1 < res1)  # __gt__ diff. types
+        except TypeError:
+            pass
+
         try:
             self.assertTrue(struct > model)  # __gt__ diff. types
         except TypeError:
@@ -583,10 +640,6 @@ class ParseTest(unittest.TestCase):
             self.assertFalse(struct >= [])  # __le__ diff. types
         except TypeError:
             pass
-
-    def test_deepcopy_of_structure_with_disorder(self):
-        """Test deepcopy of a structure with disordered atoms"""
-        structure = deepcopy(self.structure)
 
 
 class ParseReal(unittest.TestCase):
@@ -1022,6 +1075,7 @@ class Exposure(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        structure[1].detach_child('B')
         self.model = structure[1]
         # Look at first chain only
         a_residues = list(self.model["A"].child_list)
@@ -1162,17 +1216,17 @@ class IterationTests(unittest.TestCase):
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
-        self.assertEqual(chains, ['A', 'A', 'B', ' '])
+        self.assertEqual(chains, ['A', 'A', 'B', 'C', ' '])
 
     def test_get_residues(self):
         """Yields all residues from all models."""
         residues = [resi.id for resi in self.struc.get_residues()]
-        self.assertEqual(len(residues), 168)
+        self.assertEqual(len(residues), 179)
 
     def test_get_atoms(self):
         """Yields all atoms from the structure, excluding duplicates and ALTLOCs which are not parsed."""
         atoms = ["%12s" % str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
-        self.assertEqual(len(atoms), 757)
+        self.assertEqual(len(atoms), 835)
 
 
 class ChangingIdTests(unittest.TestCase):
