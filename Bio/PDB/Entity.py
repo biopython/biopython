@@ -53,64 +53,102 @@ class Entity(object):
         for child in self.child_list:
             yield child
 
-    # Generic id-based comparison methods
-    # Works for Structures and Models (id is numeric)
+    # Generic id-based comparison methods considers all parents as well as children
+    # Works for all Entities - Atoms have comparable custom operators
     def __eq__(self, other):
-        if isinstance(other, Entity):
-            return self.id == other.id
+        """Test for equality. This compares full_id including the IDs of all parents."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id == other.id
+            else:
+                return self.full_id[1:] == other.full_id[1:]
         else:
             return NotImplemented
 
     def __ne__(self, other):
-        if isinstance(other, Entity):
-            return self.id != other.id
+        """Test for inequality."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id != other.id
+            else:
+                return self.full_id[1:] != other.full_id[1:]
         else:
             return NotImplemented
 
     def __gt__(self, other):
-        if isinstance(other, Entity):
-            return self.id > other.id
+        """Test greater than."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id > other.id
+            else:
+                return self.full_id[1:] > other.full_id[1:]
         else:
             return NotImplemented
 
     def __ge__(self, other):
-        if isinstance(other, Entity):
-            return self.id >= other.id
+        """Test greater or equal."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id >= other.id
+            else:
+                return self.full_id[1:] >= other.full_id[1:]
         else:
             return NotImplemented
 
     def __lt__(self, other):
-        if isinstance(other, Entity):
-            return self.id < other.id
+        """Test less than."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id < other.id
+            else:
+                return self.full_id[1:] < other.full_id[1:]
         else:
             return NotImplemented
 
     def __le__(self, other):
-        if isinstance(other, Entity):
-            return self.id <= other.id
+        """Test less or equal."""
+        if isinstance(other, type(self)):
+            if self.parent is None:
+                return self.id <= other.id
+            else:
+                return self.full_id[1:] <= other.full_id[1:]
         else:
             return NotImplemented
 
-    # Hash method to allow uniqueness (set)
     def __hash__(self):
-        return hash(self.id)
+        """Hash method to allow uniqueness (set)."""
+        return hash(self.full_id)
 
     # Private methods
 
     def _reset_full_id(self):
         """Reset the full_id.
 
-        Sets the full_id of this entity and
-        recursively of all its children to None.
-        This means that it will be newly generated
-        at the next call to get_full_id.
+        Resets the full_id of this entity and
+        recursively of all its children based on their ID.
         """
         for child in self:
             try:
                 child._reset_full_id()
             except AttributeError:
                 pass  # Atoms do not cache their full ids.
-        self.full_id = None
+        self.full_id = self._generate_full_id()
+
+    def _generate_full_id(self):
+        """Generate full_id.
+
+        Generate the full_id of the Entity based on its
+        Id and the IDs of the parents.
+        """
+        entity_id = self.get_id()
+        parts = [entity_id]
+        parent = self.get_parent()
+        while parent is not None:
+            entity_id = parent.get_id()
+            parts.append(entity_id)
+            parent = parent.get_parent()
+        parts.reverse()
+        return tuple(parts)
 
     # Public methods
 
@@ -153,6 +191,7 @@ class Entity(object):
     def set_parent(self, entity):
         """Set the parent Entity object."""
         self.parent = entity
+        self._reset_full_id()
 
     def detach_parent(self):
         """Detach the parent."""
@@ -227,15 +266,7 @@ class Entity(object):
         identifier is 10 and its insertion code "A".
         """
         if self.full_id is None:
-            entity_id = self.get_id()
-            parts = [entity_id]
-            parent = self.get_parent()
-            while parent is not None:
-                entity_id = parent.get_id()
-                parts.append(entity_id)
-                parent = parent.get_parent()
-            parts.reverse()
-            self.full_id = tuple(parts)
+            self._reset_full_id()
         return self.full_id
 
     def transform(self, rot, tran):
