@@ -49,7 +49,7 @@ class QCPSuperimposer(object):
         self.init_rms = None
 
     def _rms(self, coords1, coords2):
-        """Return rms deviations between coords1 and coords2."""
+        """Return rms deviations between coords1 and coords2 (PRIVATE)."""
         diff = coords1 - coords2
         return sqrt(sum(dot(diff, diff)) / coords1.shape[0])
 
