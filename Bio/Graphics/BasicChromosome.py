@@ -161,7 +161,7 @@ class Organism(_ChromosomeComponent):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Write out the title of the organism figure."""
+        """Write out the title of the organism figure (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -170,7 +170,7 @@ class Organism(_ChromosomeComponent):
         cur_drawing.add(title_string)
 
     def _draw_legend(self, cur_drawing, start_y, width):
-        """Draw a legend for the figure.
+        """Draw a legend for the figure (PRIVATE).
 
         Subclasses should implement this (see also self._legend_height) to
         provide specialized legends.
@@ -281,7 +281,7 @@ class Chromosome(_ChromosomeComponent):
         self._draw_label(cur_drawing, self._name)
 
     def _draw_label(self, cur_drawing, label_name):
-        """Draw a label for the chromosome."""
+        """Draw a label for the chromosome (PRIVATE)."""
         x_position = 0.5 * (self.start_x_position + self.end_x_position)
         y_position = self.end_y_position
 
@@ -293,7 +293,7 @@ class Chromosome(_ChromosomeComponent):
         cur_drawing.add(label_string)
 
     def _draw_labels(self, cur_drawing, left_labels, right_labels):
-        """Layout and draw sub-feature labels for the chromosome.
+        """Layout and draw sub-feature labels for the chromosome (PRIVATE).
 
         Tries to place each label at the same vertical position as the
         feature it applies to, but will adjust the positions to avoid or
@@ -417,7 +417,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         self._draw_label(cur_drawing)
 
     def _draw_subcomponents(self, cur_drawing):
-        """Draw any subcomponents of the chromosome segment.
+        """Draw any subcomponents of the chromosome segment (PRIVATE).
 
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
@@ -425,7 +425,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         pass
 
     def _draw_segment(self, cur_drawing):
-        """Draw the current chromosome segment."""
+        """Draw the current chromosome segment (PRIVATE)."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         segment_y = self.end_y_position
@@ -454,7 +454,7 @@ class ChromosomeSegment(_ChromosomeComponent):
             cur_drawing.add(fill_rectangle)
 
     def _overdraw_subcomponents(self, cur_drawing):
-        """Draw any subcomponents of the chromosome segment over the main part.
+        """Draw any subcomponents of the chromosome segment over the main part (PRIVATE).
 
         This should be overridden in derived classes if there are
         subcomponents to be drawn.
@@ -462,7 +462,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         pass
 
     def _draw_label(self, cur_drawing):
-        """Add a label to the chromosome segment.
+        """Add a label to the chromosome segment (PRIVATE).
 
         The label will be applied to the right of the segment.
 
@@ -635,7 +635,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         self.label_sep_percent = self.chr_percent * 0.5
 
     def _overdraw_subcomponents(self, cur_drawing):
-        """Draw any annotated features on the chromosome segment.
+        """Draw any annotated features on the chromosome segment (PRIVATE).
 
         Assumes _draw_segment already called to fill out the basic shape,
         and assmes that uses the same boundaries.
@@ -737,7 +737,7 @@ class TelomereSegment(ChromosomeSegment):
         self._inverted = inverted
 
     def _draw_segment(self, cur_drawing):
-        """Draw a half circle representing the end of a linear chromosome."""
+        """Draw a half circle representing the end of a linear chromosome (PRIVATE)."""
         # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \
