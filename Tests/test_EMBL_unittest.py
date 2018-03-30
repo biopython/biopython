@@ -56,7 +56,7 @@ class EMBLTests(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             fasta_seq = SeqIO.read('EMBL/RepBase23.02.embl', 'embl')
-            self.assertEqual(len(w), 0)
+            self.assertTrue(w, "Malformed DR line in EMBL file.")
 
 
 if __name__ == "__main__":

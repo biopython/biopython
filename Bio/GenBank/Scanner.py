@@ -877,9 +877,9 @@ class EmblScanner(InsdcScanner):
                 # Turn it into "database_identifier:primary_identifier" to
                 # mimic the GenBank parser. e.g. "MGI:98599"
                 if len(parts) == 1:
-                    parts = ("Unknown database, file format invalid", "Primary identifier unknown, file format invalid")
-
-                consumer.dblink("%s:%s" % (parts[0].strip(),
+                    warnings.warn("Malformed DR line in EMBL file.", BiopythonParserWarning)
+                else:
+                    consumer.dblink("%s:%s" % (parts[0].strip(),
                                            parts[1].strip()))
             elif line_type == 'RA':
                 # Remove trailing ; at end of authors list
