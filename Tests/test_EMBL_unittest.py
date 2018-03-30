@@ -50,14 +50,13 @@ class EMBLTests(unittest.TestCase):
             self.assertEqual(len(rec), 154)
             self.assertEqual(rec.seq[:10], "MVLSEGEWQL")
             self.assertEqual(rec.seq[-10:], "AKYKELGYQG")
+
     def test_embl_wrong_dr_line(self):
         """Test files with wrong DR lines"""
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             fasta_seq = SeqIO.read('EMBL/RepBase23.02.embl', 'embl')
             self.assertEqual(len(w), 0)
-            
-            
 
 
 if __name__ == "__main__":
