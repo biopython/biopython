@@ -34,7 +34,7 @@ class StructureBuilder(object):
         self.header = {}
 
     def _is_completely_disordered(self, residue):
-        """Return 1 if all atoms in the residue have a non blank altloc."""
+        """Return 1 if all atoms in the residue have a non blank altloc (PRIVATE)."""
         atom_list = residue.get_unpacked_list()
         for atom in atom_list:
             altloc = atom.get_altloc()
