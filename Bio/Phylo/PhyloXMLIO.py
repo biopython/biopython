@@ -138,14 +138,14 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 # Functions I wish ElementTree had
 
 def _local(tag):
-    """Extract the local tag from a namespaced tag name."""
+    """Extract the local tag from a namespaced tag name (PRIVATE)."""
     if tag[0] == '{':
         return tag[tag.index('}') + 1:]
     return tag
 
 
 def _split_namespace(tag):
-    """Split a tag into namespace and local tag strings."""
+    """Split a tag into namespace and local tag strings (PRIVATE)."""
     try:
         return tag[1:].split('}', 1)
     except ValueError:
@@ -153,12 +153,12 @@ def _split_namespace(tag):
 
 
 def _ns(tag, namespace=NAMESPACES['phy']):
-    """Format an XML tag with the given namespace."""
+    """Format an XML tag with the given namespace (PRIVATE)."""
     return '{%s}%s' % (namespace, tag)
 
 
 def _get_child_as(parent, tag, construct):
-    """Find a child node by tag, and pass it through a constructor.
+    """Find a child node by tag, and pass it through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
     """
@@ -168,7 +168,7 @@ def _get_child_as(parent, tag, construct):
 
 
 def _get_child_text(parent, tag, construct=unicode):
-    """Find a child node by tag; pass its text through a constructor.
+    """Find a child node by tag; pass its text through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
     """
@@ -178,7 +178,7 @@ def _get_child_text(parent, tag, construct=unicode):
 
 
 def _get_children_as(parent, tag, construct):
-    """Find child nodes by tag; pass each through a constructor.
+    """Find child nodes by tag; pass each through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
     """
@@ -187,7 +187,7 @@ def _get_children_as(parent, tag, construct):
 
 
 def _get_children_text(parent, tag, construct=unicode):
-    """Find child nodes by tag; pass each node's text through a constructor.
+    """Find child nodes by tag; pass each node's text through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
     """
@@ -197,7 +197,7 @@ def _get_children_text(parent, tag, construct=unicode):
 
 
 def _indent(elem, level=0):
-    """Add line breaks and indentation to ElementTree in-place.
+    """Add line breaks and indentation to ElementTree in-place (PRIVATE).
 
     Sources:
      - http://effbot.org/zone/element-lib.htm#prettyprint
@@ -256,7 +256,7 @@ def _float(text):
 
 
 def _collapse_wspace(text):
-    """Replace all spans of whitespace with a single space character.
+    """Replace all spans of whitespace with a single space character (PRIVATE).
 
     Also remove leading and trailing whitespace. See "Collapse Whitespace
     Policy" in the phyloXML spec glossary:
@@ -268,7 +268,7 @@ def _collapse_wspace(text):
 
 # NB: Not currently used
 def _replace_wspace(text):
-    """Replace tab, LF and CR characters with spaces, but don't collapse.
+    """Replace tab, LF and CR characters with spaces, but don't collapse (PRIVATE).
 
     See "Replace Whitespace Policy" in the phyloXML spec glossary:
     http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
@@ -332,7 +332,7 @@ class Parser(object):
     # Special parsing cases -- incremental, using self.context
 
     def _parse_phylogeny(self, parent):
-        """Parse a single phylogeny within the phyloXML tree.
+        """Parse a single phylogeny within the phyloXML tree (PRIVATE).
 
         Recursively builds a phylogenetic tree with help from parse_clade, then
         clears the XML event history for the phylogeny element and returns
@@ -388,7 +388,7 @@ class Parser(object):
         ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
-        """Parse a Clade node and its children, recursively."""
+        """Parse a Clade node and its children, recursively (PRIVATE)."""
         clade = PX.Clade(**parent.attrib)
         if clade.branch_length is not None:
             clade.branch_length = float(clade.branch_length)
@@ -623,7 +623,7 @@ class Parser(object):
 # ---------------------------------------------------------
 
 def _serialize(value):
-    """Convert a Python primitive to a phyloXML-compatible Unicode string."""
+    """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
     if isinstance(value, float):
         return unicode(value).upper()
     elif isinstance(value, bool):
@@ -632,7 +632,7 @@ def _serialize(value):
 
 
 def _clean_attrib(obj, attrs):
-    """Create a dictionary from an object's specified, non-None attributes."""
+    """Create a dictionary from an object's specified, non-None attributes (PRIVATE)."""
     out = {}
     for key in attrs:
         val = getattr(obj, key)
