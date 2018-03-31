@@ -87,7 +87,7 @@ class RouletteWheelSelection(AbstractSelection):
         return new_population
 
     def _set_up_wheel(self, population):
-        """Set up the roulette wheel based on the fitnesses.
+        """Set up the roulette wheel based on the fitnesses (PRIVATE).
 
         This creates a fitness proportional 'wheel' that will be used for
         selecting based on random numbers.
