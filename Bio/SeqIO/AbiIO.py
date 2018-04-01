@@ -480,7 +480,7 @@ def _abi_parse_header(header, handle):
 
 
 def _abi_trim(seq_record):
-    """Trims the sequence using Richard Mott's modified trimming algorithm.
+    """Trims the sequence using Richard Mott's modified trimming algorithm (PRIVATE).
 
     Arguments:
         - seq_record - SeqRecord object to be trimmed.
@@ -529,7 +529,7 @@ def _abi_trim(seq_record):
 
 
 def _parse_tag_data(elem_code, elem_num, raw_data):
-    """Return single data value.
+    """Return single data value (PRIVATE).
 
     Arguments:
      - elem_code - What kind of data
