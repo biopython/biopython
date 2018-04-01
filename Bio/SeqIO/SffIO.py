@@ -254,7 +254,7 @@ _flag = b"\xff"
 
 
 def _check_mode(handle):
-    """Ensure handle not opened in text mode.
+    """Ensure handle not opened in text mode (PRIVATE).
 
     Ensures mode is not set for Universal new line
     and ensures mode is binary for Windows
@@ -706,7 +706,7 @@ _powers_of_36 = [36 ** i for i in range(6)]
 
 
 def _string_as_base_36(string):
-    """Interpret a string as a base-36 number as per 454 manual."""
+    """Interpret a string as a base-36 number as per 454 manual (PRIVATE)."""
     total = 0
     for c, power in zip(string[::-1], _powers_of_36):
         # For reference: ord('0') = 48, ord('9') = 57
@@ -726,7 +726,7 @@ def _string_as_base_36(string):
 
 
 def _get_read_xy(read_name):
-    """Extract coordinates from last 5 characters of read name."""
+    """Extract coordinates from last 5 characters of read name (PRIVATE)."""
     number = _string_as_base_36(read_name[9:])
     return divmod(number, 4096)
 
@@ -739,7 +739,7 @@ _time_denominators = [13 * 32 * 24 * 60 * 60,
 
 
 def _get_read_time(read_name):
-    """Extract time from first 6 characters of read name."""
+    """Extract time from first 6 characters of read name (PRIVATE)."""
     time_list = []
     remainder = _string_as_base_36(read_name[:6])
     for denominator in _time_denominators:
@@ -751,7 +751,7 @@ def _get_read_time(read_name):
 
 
 def _get_read_region(read_name):
-    """Extract region from read name."""
+    """Extract region from read name (PRIVATE)."""
     return int(read_name[8])
 
 
