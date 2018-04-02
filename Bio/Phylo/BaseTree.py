@@ -35,7 +35,7 @@ else:
 # General tree-traversal algorithms
 
 def _level_traverse(root, get_children):
-    """Traverse a tree in breadth-first (level) order."""
+    """Traverse a tree in breadth-first (level) order (PRIVATE)."""
     Q = collections.deque([root])
     while Q:
         v = Q.popleft()
@@ -44,7 +44,7 @@ def _level_traverse(root, get_children):
 
 
 def _preorder_traverse(root, get_children):
-    """Traverse a tree in depth-first pre-order (parent before children)."""
+    """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -55,7 +55,7 @@ def _preorder_traverse(root, get_children):
 
 
 def _postorder_traverse(root, get_children):
-    """Traverse a tree in depth-first post-order (children before parent)."""
+    """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
     def dfs(elem):
         for v in get_children(elem):
             for u in dfs(v):
@@ -66,7 +66,7 @@ def _postorder_traverse(root, get_children):
 
 
 def _sorted_attrs(elem):
-    """Get a flat list of elem's attributes, sorted for consistency."""
+    """Get a flat list of elem's attributes, sorted for consistency (PRIVATE)."""
     singles = []
     lists = []
     # Sort attributes for consistent results
@@ -85,14 +85,14 @@ def _sorted_attrs(elem):
 # Factory functions to generalize searching for clades/nodes
 
 def _identity_matcher(target):
-    """Match a node to the target object by identity."""
+    """Match a node to the target object by identity (PRIVATE)."""
     def match(node):
         return (node is target)
     return match
 
 
 def _class_matcher(target_cls):
-    """Match a node if it's an instance of the given class."""
+    """Match a node if it's an instance of the given class (PRIVATE)."""
     def match(node):
         return isinstance(node, target_cls)
     return match
@@ -108,7 +108,7 @@ def _string_matcher(target):
 
 
 def _attribute_matcher(kwargs):
-    """Match a node by specified attribute values.
+    """Match a node by specified attribute values (PRIVATE).
 
     ``terminal`` is a special case: True restricts the search to external (leaf)
     nodes, False restricts to internal nodes, and None allows all tree elements
@@ -151,7 +151,7 @@ def _attribute_matcher(kwargs):
 
 
 def _function_matcher(matcher_func):
-    """Safer attribute lookup -- returns False instead of raising an error."""
+    """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
     def match(node):
         try:
             return matcher_func(node)
@@ -161,7 +161,7 @@ def _function_matcher(matcher_func):
 
 
 def _object_matcher(obj):
-    """Retrieve a matcher function by passing an arbitrary object.
+    """Retrieve a matcher function by passing an arbitrary object (PRIVATE).
 
     i.e. passing a `TreeElement` such as a `Clade` or `Tree` instance returns an
     identity matcher, passing a type such as the `PhyloXML.Taxonomy` class
@@ -188,7 +188,7 @@ def _object_matcher(obj):
 
 
 def _combine_matchers(target, kwargs, require_spec):
-    """Merge target specifications with keyword arguments.
+    """Merge target specifications with keyword arguments (PRIVATE).
 
     Dispatch the components to the various matcher functions, then merge into a
     single boolean function.
@@ -208,7 +208,7 @@ def _combine_matchers(target, kwargs, require_spec):
 
 
 def _combine_args(first, *rest):
-    """Convert ``[targets]`` or ``*targets`` arguments to a single iterable.
+    """Convert ``[targets]`` or ``*targets`` arguments to a single iterable (PRIVATE).
 
     This helps other functions work like the built-in functions `max` and
     `min`.
@@ -267,7 +267,7 @@ class TreeMixin(object):
     # Traversal methods
 
     def _filter_search(self, filter_func, order, follow_attrs):
-        """Perform a BFS or DFS traversal through all elements in this tree.
+        """Perform a BFS or DFS traversal through all elements in this tree (PRIVATE).
 
         :returns: generator of all elements for which `filter_func` is True.
 

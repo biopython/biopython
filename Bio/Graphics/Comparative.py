@@ -84,7 +84,7 @@ class ComparativeScatterPlot(object):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Add a title to the page we are outputting."""
+        """Add a title to the page we are outputting (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -122,7 +122,7 @@ class ComparativeScatterPlot(object):
         cur_drawing.add(scatter_plot)
 
     def _set_colors_and_shapes(self, scatter_plot, display_info):
-        """Set the colors and shapes of the points displayed.
+        """Set the colors and shapes of the points displayed (PRIVATE).
 
         By default this just sets all of the points according to the order
         of colors and shapes defined in self.color_choices and
@@ -149,7 +149,7 @@ class ComparativeScatterPlot(object):
                     self.shape_choices[-1]
 
     def _find_min_max(self, info):
-        """Find min and max for x and y coordinates in the given data."""
+        """Find min and max for x and y coordinates in the given data (PRIVATE)."""
         x_min = info[0][0][0]
         x_max = info[0][0][0]
         y_min = info[0][0][1]

@@ -124,7 +124,7 @@ class DistributionPage(object):
                                       end_y_pos)
 
     def _draw_legend(self, cur_drawing, start_y, width):
-        """Add a legend to the figure.
+        """Add a legend to the figure (PRIVATE).
 
         Subclasses can implement to provide a specialized legend.
         """

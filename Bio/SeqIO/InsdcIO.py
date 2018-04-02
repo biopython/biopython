@@ -334,7 +334,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
     def _wrap_location(self, location):
-        """Split a feature location into lines (break at commas)."""
+        """Split a feature location into lines (break at commas) (PRIVATE)."""
         # TODO - Rewrite this not to recurse!
         length = self.MAX_WIDTH - self.QUALIFIER_INDENT
         if len(location) <= length:
@@ -350,7 +350,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             self._wrap_location(location[index + 1:])
 
     def _write_feature(self, feature, record_length):
-        """Write a single SeqFeature object to features table."""
+        """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
         f_type = feature.type.replace(" ", "_")
@@ -369,7 +369,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _get_annotation_str(record, key, default=".", just_first=False):
-        """Get an annotation dictionary entry (as a string).
+        """Get an annotation dictionary entry (as a string) (PRIVATE).
 
         Some entries are lists, in which case if just_first=True the first entry
         is returned.  If just_first=False (default) this verifies there is only
@@ -388,7 +388,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _split_multi_line(text, max_len):
-        """Return a list of strings.
+        """Return a list of strings (PRIVATE).
 
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
@@ -416,7 +416,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         return answer
 
     def _split_contig(self, record, max_len):
-        """Return a list of strings, splits on commas."""
+        """Return a list of strings, splits on commas (PRIVATE)."""
         # TODO - Merge this with _write_multi_line method?
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
@@ -585,7 +585,7 @@ class GenBankWriter(_InsdcWriter):
             return " " * max_topology_len
 
     def _write_the_first_line(self, record):
-        """Write the LOCUS line."""
+        """Write the LOCUS line (PRIVATE)."""
         locus = record.name
         if not locus or locus == "<unknown name>":
             locus = record.id
@@ -1021,7 +1021,7 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line(tag, line)
 
     def _write_the_first_lines(self, record):
-        """Write the ID and AC lines."""
+        """Write the ID and AC lines (PRIVATE)."""
         if "." in record.id and record.id.rsplit(".", 1)[1].isdigit():
             version = "SV " + record.id.rsplit(".", 1)[1]
             accession = self._get_annotation_str(record, "accession",

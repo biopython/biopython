@@ -91,7 +91,7 @@ class SequenceWriter(object):
         self.handle = handle
 
     def _get_seq_string(self, record):
-        """Use this to catch errors like the sequence being None."""
+        """Use this to catch errors like the sequence being None (PRIVATE)."""
         if not isinstance(record, SeqRecord):
             raise TypeError("Expected a SeqRecord object")
         if record.seq is None:
