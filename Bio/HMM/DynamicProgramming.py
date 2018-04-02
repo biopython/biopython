@@ -43,7 +43,7 @@ class AbstractDPAlgorithms(object):
         self._seq = sequence
 
     def _forward_recursion(self, cur_state, sequence_pos, forward_vars):
-        """Calculate the forward recursion value."""
+        """Calculate the forward recursion value (PRIVATE)."""
         raise NotImplementedError("Subclasses must implement")
 
     def forward_algorithm(self):
@@ -106,7 +106,7 @@ class AbstractDPAlgorithms(object):
         return forward_var, seq_prob
 
     def _backward_recursion(self, cur_state, sequence_pos, forward_vars):
-        """Calculate the backward recursion value."""
+        """Calculate the backward recursion value (PRIVATE)."""
         raise NotImplementedError("Subclasses must implement")
 
     def backward_algorithm(self):
@@ -186,7 +186,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         self._s_values = {}
 
     def _calculate_s_value(self, seq_pos, previous_vars):
-        """Calculate the next scaling variable for a sequence position.
+        """Calculate the next scaling variable for a sequence position (PRIVATE).
 
         This utilizes the approach of choosing s values such that the
         sum of all of the scaled f values is equal to 1.
@@ -226,7 +226,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         return s_value
 
     def _forward_recursion(self, cur_state, sequence_pos, forward_vars):
-        """Calculate the value of the forward recursion.
+        """Calculate the value of the forward recursion (PRIVATE).
 
         Arguments:
          - cur_state -- The letter of the state we are calculating the
@@ -271,7 +271,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
             return None
 
     def _backward_recursion(self, cur_state, sequence_pos, backward_vars):
-        """Calculate the value of the backward recursion.
+        """Calculate the value of the backward recursion (PRIVATE).
 
         Arguments:
          - cur_state -- The letter of the state we are calculating the
