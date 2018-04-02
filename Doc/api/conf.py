@@ -212,7 +212,7 @@ numpydoc_class_members_toctree = False
 
 def run_apidoc(_):
     """Call sphinx-apidoc on Bio and BioSQL modules."""
-    from sphinx.apidoc import main as apidoc_main
+    from sphinx.ext.apidoc import main as apidoc_main
     cur_dir = os.path.abspath(os.path.dirname(__file__))
     # Can't see a better way than running apidoc twice, for Bio & BioSQL
     # We don't care about the index.rst / conf.py (we have our own)
@@ -220,8 +220,8 @@ def run_apidoc(_):
     # $ sphinx-apidoc -e -F -o /tmp/api/BioSQL BioSQL
     # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
     tmp_path = tempfile.mkdtemp()
-    apidoc_main([None, '-e', '-F', '-o', tmp_path, '../../BioSQL'])
-    apidoc_main([None, '-e', '-F', '-o', tmp_path, '../../Bio'])
+    apidoc_main(['-e', '-F', '-o', tmp_path, '../../BioSQL'])
+    apidoc_main(['-e', '-F', '-o', tmp_path, '../../Bio'])
     os.remove(os.path.join(tmp_path, 'index.rst'))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):
