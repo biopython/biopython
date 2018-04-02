@@ -7,6 +7,6 @@ I have read the ``CONTRIBUTING.rst`` file and understand that AppVeyor and
 TravisCI will be used to confirm the Biopython unit tests and ``flake8`` style
 checks pass with these changes.
 
-I am happy be thanked by name in the ``NEWS.rst`` and ``CONTRIB.rst`` files,
-and have added myself to those files as part of this pull request. (*This
-acknowledgement is optional. Note we list the names sorted alphabetically.*)
+I have added my name to the alphabetical contributors listings in the files
+``NEWS.rst`` and ``CONTRIB.rst`` as part of this pull request, am listed
+already, or do not wish to be listed. (*This acknowledgement is optional.*)
