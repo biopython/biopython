@@ -8,8 +8,8 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released) Biopython 1.71
-==============================================
+3 April 2018: Biopython 1.71
+============================
 
 This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
 It has also been tested on PyPy2.7 v5.10.0 and PyPy3.5 v5.10.1.
