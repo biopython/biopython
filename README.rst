@@ -91,7 +91,7 @@ implementations:
   support for Python 2.7 no later than 2020, in line with the end-of-life or
   sunset date for Python 2.7 itself.
 
-- PyPy v5.7 and also PyPy3.5 v5.8 beta -- see http://www.pypy.org
+- PyPy2.7 v5.10.0, or PyPy3.5 v5.10.1 -- see http://www.pypy.org
 
   Aside from ``Bio.trie`` (which does not compile as ``marshal.h`` is
   currently missing under PyPy), everything should work. Older versions
