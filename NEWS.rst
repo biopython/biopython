@@ -102,7 +102,7 @@ to the builtin ``open`` function. Specifically, this allows using
 
 Bio.SearchIO can now parse InterProScan XML files.
 
-For Python 3 compatibility, comparision operators for the entities within a
+For Python 3 compatibility, comparison operators for the entities within a
 Bio.PDB Structure object were implemented. These allow the comparison of
 models, chains, residues, and atoms with the common operators  (==, !=, >, ...)
 Comparisons are based on IDs and take the parents of the entity up to the
