@@ -342,7 +342,11 @@ class DataHandler(object):
                 else:
                     self.parse_xsd(ET.fromstring(handle.read()))
                     handle.close()
-        self.content = ""
+
+        tags_to_be_ignored = ["i", "u", "b", "sup", "sub"]
+        if name not in tags_to_be_ignored:
+            self.content = ""
+
         if name in self.lists:
             object = ListElement()
         elif name in self.dictionaries:

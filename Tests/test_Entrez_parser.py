@@ -4128,6 +4128,14 @@ class EFetchTest(unittest.TestCase):
         records = Entrez.parse(handle)
         self.assertRaises(CorruptedXMLError, next, records)
 
+    def test_article_title_with_html_tags(self):
+        """Test if article titles with HTML tags are extracted correctly"""
+        from Bio.Entrez import Parser
+        with open('Entrez/title_with_html_tags.xml', "rb") as handle:
+            data = Entrez.read(handle, validate=False)
+            title = data['PubmedArticle'][0]['MedlineCitation']['Article']['ArticleTitle']
+            self.assertEqual(title, "Leucocyte telomere length, genetic variants at theTERTgene region and risk of pancreatic cancer.")
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
