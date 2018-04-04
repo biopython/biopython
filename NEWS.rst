@@ -8,6 +8,12 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
+(In progress, not yet released) Biopython 1.71
+==============================================
+
+Nothing note worthy as yet.
+
+
 3 April 2018: Biopython 1.71
 ============================
 
