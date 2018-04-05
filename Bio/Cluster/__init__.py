@@ -112,7 +112,6 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
      - nfound: the number of times this solution was found.
 """
 
-
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
@@ -321,8 +320,7 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
 
 def somcluster(data, mask=None, weight=None, transpose=False,
                nxgrid=2, nygrid=1, inittau=0.02, niter=1, dist='e'):
-    """Calculate a Self-Organizing Map, and return the cell to which each
-    item was assigned, as well as the centroid of each cell.
+    """Calculate a Self-Organizing Map.
 
     This function implements a Self-Organizing Map on a rectangular grid.
 
@@ -400,7 +398,7 @@ def somcluster(data, mask=None, weight=None, transpose=False,
 
 def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
                     method='a', dist='e', transpose=False):
-    """Calculate and return the distance between two clusters
+    """Calculate and return the distance between two clusters.
 
     Arguments:
      - data: nrows x ncolumns array containing the expression data
@@ -589,9 +587,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
 
 
 def pca(data):
-    """Perform principal component analysis, and return the mean of each
-    column, the coordinates of each row with respect to the principal
-    components, the principal components, and the eigenvalues.
+    """Perform principal component analysis.
 
     Arguments:
      - data: nrows x ncolumns array containing the expression data
@@ -900,7 +896,7 @@ class Record(object):
            rectangular SOM grid to which the gene or samples was assigned.
          - celldata:  an array with dimensions (nxgrid, nygrid, number of
            samples) if genes are being clustered, or (nxgrid, nygrid,
-           number of genes) if samples are being clustered. Each item 
+           number of genes) if samples are being clustered. Each item
            [ix, iy] of this array is a 1D vector containing the gene
            expression data for the centroid of the cluster in the SOM grid
            cell with coordinates [ix, iy].

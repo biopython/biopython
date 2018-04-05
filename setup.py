@@ -407,15 +407,11 @@ else:
               ["Bio/KDTree/KDTree.c",
                "Bio/KDTree/KDTreemodule.c"],
               ),
-    ]
-
-# Add extensions that require NumPy to build
-if is_Numpy_installed():
-    EXTENSIONS.append(
-        Extension('Bio.Cluster._cluster',
-                  ['Bio/Cluster/clustermodule.c',
-                   'Bio/Cluster/cluster.c'],
-                  ))
+    Extension('Bio.Cluster._cluster',
+              ['Bio/Cluster/clustermodule.c',
+               'Bio/Cluster/cluster.c'],
+              libraries=['m'],
+              )]
 
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
