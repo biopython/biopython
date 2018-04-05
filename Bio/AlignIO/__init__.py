@@ -235,9 +235,10 @@ def write(alignments, handle, format):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-    assert isinstance(count, int), "Internal error - the underlying %s " \
-           "writer should have returned the alignment count, not %s" \
-           % (format, repr(count))
+    if not isinstance(count, int):
+        raise RuntimeError("Internal error - the underlying %s "
+                           "writer should have returned the alignment count, not %s"
+                           % (format, repr(count)))
 
     return count
 
@@ -259,7 +260,9 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     combined into a single MultipleSeqAlignment.
     """
     from Bio import SeqIO
-    assert format in SeqIO._FormatToIterator
+
+    if format not in SeqIO._FormatToIterator:
+        raise ValueError("Unknown format '%s'" % format)
 
     if seq_count:
         # Use the count to split the records into batches.
@@ -440,7 +443,8 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first) == seq_count
+        if len(first) != seq_count:
+            raise RuntimeError("More sequences found in alignment than specified in seq_count: %s." % seq_count)
     return first
 
 
