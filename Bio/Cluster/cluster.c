@@ -1721,7 +1721,6 @@ static double(*setmetric(char dist))
     case 'k': return &kendall;
     default: return &euclid;
   }
-  return NULL; /* Never get here */
 }
 
 /* *********************************************************************  */
@@ -1926,7 +1925,6 @@ An integer drawn from a binomial distribution with parameters (p, n).
       }
     }
   }
-  /* Never get here */
   return -1;
 }
 
@@ -2022,17 +2020,17 @@ This array shows which data values are missing. If mask[i][j]==0, then
 data[i][j] is missing.
 
 clusterid  (output) int[nrows] if transpose==0
-                    int[ncolumns] if transpose==1
+                    int[ncolumns] otherwise
 The cluster number to which each element belongs. If transpose==0, then the
 dimension of clusterid is equal to nrows (the number of genes). Otherwise, it
 is equal to ncolumns (the number of microarrays).
 
 cdata      (output) double[nclusters][ncolumns] if transpose==0
-                    double[nrows][nclusters] if transpose==1
+                    double[nrows][nclusters] otherwise
 On exit of getclustermeans, this array contains the cluster centroids.
 
 cmask      (output) int[nclusters][ncolumns] if transpose==0
-                    int[nrows][nclusters] if transpose==1
+                    int[nrows][nclusters] otherwise
 This array shows which data values of are missing for each centroid. If
 cmask[i][j]==0, then cdata[i][j] is missing. A data value is missing for
 a centroid if all corresponding data values of the cluster members are missing.
@@ -2132,17 +2130,17 @@ This array shows which data values are missing. If mask[i][j]==0, then
 data[i][j] is missing.
 
 clusterid  (output) int[nrows] if transpose==0
-                    int[ncolumns] if transpose==1
+                    int[ncolumns] otherwise
 The cluster number to which each element belongs. If transpose==0, then the
 dimension of clusterid is equal to nrows (the number of genes). Otherwise, it
 is equal to ncolumns (the number of microarrays).
 
 cdata      (output) double[nclusters][ncolumns] if transpose==0
-                    double[nrows][nclusters] if transpose==1
+                    double[nrows][nclusters] otherwise
 On exit of getclustermedians, this array contains the cluster centroids.
 
 cmask      (output) int[nclusters][ncolumns] if transpose==0
-                    int[nrows][nclusters] if transpose==1
+                    int[nrows][nclusters] otherwise
 This array shows which data values of are missing for each centroid. If
 cmask[i][j]==0, then cdata[i][j] is missing. A data value is missing for
 a centroid if all corresponding data values of the cluster members are missing.
@@ -2152,7 +2150,7 @@ If transpose==0, clusters of rows (genes) are specified. Otherwise, clusters of
 columns (microarrays) are specified.
 
 cache      (input) double[nrows] if transpose==0
-                   double[ncolumns] if transpose==1
+                   double[ncolumns] otherwise
 This array should be allocated before calling getclustermedians; its contents
 on input is not relevant. This array is used as a temporary storage space when
 calculating the medians.
@@ -2240,17 +2238,17 @@ This array shows which data values are missing. If mask[i][j]==0, then
 data[i][j] is missing.
 
 clusterid  (output) int[nrows] if transpose==0
-                    int[ncolumns] if transpose==1
+                    int[ncolumns] otherwise
 The cluster number to which each element belongs. If transpose==0, then the
 dimension of clusterid is equal to nrows (the number of genes). Otherwise, it
 is equal to ncolumns (the number of microarrays).
 
 cdata      (output) double[nclusters][ncolumns] if transpose==0
-                    double[nrows][nclusters] if transpose==1
+                    double[nrows][nclusters] otherwise
 On exit of getclustercentroids, this array contains the cluster centroids.
 
 cmask      (output) int[nclusters][ncolumns] if transpose==0
-                    int[nrows][nclusters] if transpose==1
+                    int[nrows][nclusters] otherwise
 This array shows which data values of are missing for each centroid. If
 cmask[i][j]==0, then cdata[i][j] is missing. A data value is missing for
 a centroid if all corresponding data values of the cluster members are missing.
@@ -2626,7 +2624,7 @@ dist=='k': Kendall's tau
 For other values of dist, the default (Euclidean distance) is used.
 
 clusterid  (output; input) int[nrows] if transpose==0
-                           int[ncolumns] if transpose==1
+                           int[ncolumns] otherwise
 The cluster number to which a gene or microarray was assigned. If npass==0,
 then on input clusterid contains the initial clustering assignment from which
 the clustering algorithm starts. On output, it contains the clustering solution
@@ -2914,24 +2912,20 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
 
 /* ******************************************************************** */
 
-double** distancematrix (int nrows, int ncolumns, double** data,
-  int** mask, double weights[], char dist, int transpose)
+void distancematrix(int nrows, int ncolumns, double** data, int** mask,
+  double weights[], char dist, int transpose, double** matrix)
 /*
 Purpose
 =======
 
 The distancematrix routine calculates the distance matrix between genes or
 microarrays using their measured gene expression data. Several distance measures
-can be used. The routine returns a pointer to a ragged array containing the
-distances between the genes. As the distance matrix is symmetric, with zeros on
-the diagonal, only the lower triangular half of the distance matrix is saved.
-The distancematrix routine allocates space for the distance matrix. If the
-parameter transpose is set to a nonzero value, the distances between the columns
-(microarrays) are calculated, otherwise distances between the rows (genes) are
-calculated.
-If sufficient space in memory cannot be allocated to store the distance matrix,
-the routine returns a NULL pointer, and all memory allocated so far for the
-distance matrix is freed.
+can be used. As the distance matrix is symmetric, with zeros on the diagonal,
+only the lower triangular half of the distance matrix is stored.
+Space for the distance matrix should be allocated before calling this routine.
+If the parameter transpose is set to a nonzero value, the distances between
+columns of the data matrix are calculated, otherwise distances between the rows
+are calculated.
 
 
 Arguments
@@ -2975,42 +2969,28 @@ calculated. Otherwise, the distances between the columns is calculated.
 The former is needed when genes are being clustered; the latter is used
 when microarrays are being clustered.
 
+distmatrix (output) double**
+A ragged array, with the number of columns in each row is equal to the
+row index (so distmatrix[i] has i columns). Upon return, the values of
+the distance matrix are stored in this array.
+
+
 ========================================================================
 */
 { /* First determine the size of the distance matrix */
   const int n = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
   int i,j;
-  double** matrix;
 
   /* Set the metric function as indicated by dist */
   double (*metric)
     (int, double**, double**, int**, int**, const double[], int, int, int) =
        setmetric(dist);
 
-  if (n < 2) return NULL;
-
-  /* Set up the ragged array */
-  matrix = malloc(n*sizeof(double*));
-  if(matrix==NULL) return NULL; /* Not enough memory available */
-  matrix[0] = NULL;
-  /* The zeroth row has zero columns. We allocate it anyway for convenience.*/
-  for (i = 1; i < n; i++)
-  { matrix[i] = malloc(i*sizeof(double));
-    if (matrix[i]==NULL) break; /* Not enough memory available */
-  }
-  if (i < n) /* break condition encountered */
-  { j = i;
-    for (i = 1; i < j; i++) free(matrix[i]);
-    return NULL;
-  }
-
   /* Calculate the distances and save them in the ragged array */
   for (i = 1; i < n; i++)
     for (j = 0; j < i; j++)
       matrix[i][j]=metric(ndata,data,data,mask,mask,weights,i,j,transpose);
-
-  return matrix;
 }
 
 /* ******************************************************************** */
@@ -3047,7 +3027,7 @@ This array shows which data values are missing. If mask[i][j]==0, then
 data[i][j] is missing.
 
 weight     (input) int[ncolumns] if transpose==0,
-                   int[nrows]    if transpose==1
+                   int[nrows]    otherwise
 The weights that are used to calculate the distance. The length of this vector
 is ncolumns if gene weights are being clustered, and nrows if microarrays
 weights are being clustered.
@@ -3080,7 +3060,7 @@ Return value
 
 The function returns a pointer to a newly allocated array containing the
 calculated weights for the rows (if transpose==0) or columns (if
-transpose==1). If not enough memory could be allocated to store the
+transpose!=0). If not enough memory could be allocated to store the
 weights array, the function returns NULL.
 
 ========================================================================
@@ -3117,7 +3097,7 @@ weights array, the function returns NULL.
 
 /* ******************************************************************** */
 
-void cuttree (int nelements, Node* tree, int nclusters, int clusterid[])
+int cuttree (int nelements, const Node* tree, int nclusters, int clusterid[])
 
 /*
 Purpose
@@ -3146,8 +3126,13 @@ clusterid      (output) int[nelements]
 The number of the cluster to which each element was assigned. Clusters are
 numbered 0..nclusters-1 in the left-to-right order in which they appear in the
 hierarchical clustering tree. Space for the clusterid array should be allocated
-before calling the cuttree routine. If a memory error occured, all elements in
-clusterid are set to -1.
+before calling the cuttree routine.
+
+Return value
+============
+
+If no errors occur, cuttree returns 1.
+If a memory error occurs, cuttree returns 0.
 
 ========================================================================
 */
@@ -3159,13 +3144,10 @@ clusterid are set to -1.
   int* parents;
   if (nclusters==1) {
       for (i = 0; i < nelements; i++) clusterid[i] = 0;
-      return;
+      return 1;
   }
   parents = malloc((nelements-1)*sizeof(int));
-  if (!parents)
-  { for (i = 0; i < nelements; i++) clusterid[i] = -1;
-    return;
-  }
+  if (!parents) return 0;
   while (1) {
       if (i >= 0) {
           clusterid[i] = k;
@@ -3194,6 +3176,7 @@ clusterid are set to -1.
       }
   }
   free(parents);
+  return 1;
 }
 
 /* ******************************************************************** */
@@ -3229,7 +3212,7 @@ This array shows which data values are missing. If
 mask[i][j] == 0, then data[i][j] is missing.
 
 weight     (input) double[ncolumns] if transpose==0;
-                   double[nrows]    if transpose==1
+                   double[nrows]    otherwise
 The weights that are used to calculate the distance. The length of this vector
 is ncolumns if genes are being clustered, and nrows if microarrays are being
 clustered.
@@ -3821,10 +3804,21 @@ If a memory error occurs, treecluster returns NULL.
   if (nelements < 2) return NULL;
 
   /* Calculate the distance matrix if the user didn't give it */
-  if(ldistmatrix)
-  { distmatrix =
-      distancematrix(nrows, ncolumns, data, mask, weight, dist, transpose);
-    if (!distmatrix) return NULL; /* Insufficient memory */
+  if (ldistmatrix) {
+    /* Set up the ragged array */
+    int i;
+    distmatrix = malloc(nelements*sizeof(double*));
+    if(distmatrix==NULL) return NULL; /* Not enough memory available */
+    distmatrix[0] = NULL;
+    for (i = 1; i < nelements; i++)
+    { distmatrix[i] = malloc(i*sizeof(double));
+      if (distmatrix[i]==NULL) /* Not enough memory available */
+      { while (--i >= 0) free(distmatrix[i]);
+        return NULL;
+      }
+    }
+    distancematrix(nrows, ncolumns, data, mask, weight, dist, transpose,
+                   distmatrix);
   }
 
   switch(method)
@@ -4276,7 +4270,7 @@ This array shows which data values are missing. If
 mask[i][j] == 0, then data[i][j] is missing.
 
 weights    (input) double[ncolumns] if transpose==0;
-                   double[nrows]    if transpose==1
+                   double[nrows]    otherwise
 The weights that are used to calculate the distance. The length of this vector
 is ncolumns if genes are being clustered, or nrows if microarrays are being
 clustered.
@@ -4310,14 +4304,14 @@ dist=='k': Kendall's tau
 For other values of dist, the default (Euclidean distance) is used.
 
 celldata (output) double[nxgrid][nygrid][ncolumns] if transpose==0;
-                  double[nxgrid][nygrid][nrows]    if tranpose==1
+                  double[nxgrid][nygrid][nrows]    otherwise
 The gene expression data for each node (cell) in the 2D grid. This can be
 interpreted as the centroid for the cluster corresponding to that cell. If
 celldata is NULL, then the centroids are not returned. If celldata is not
 NULL, enough space should be allocated to store the centroid data before callingsomcluster.
 
 clusterid (output), int[nrows][2]    if transpose==0;
-                    int[ncolumns][2] if transpose==1
+                    int[ncolumns][2] otherwise
 For each item (gene or microarray) that is clustered, the coordinates of the
 cell in the 2D grid to which the item was assigned. If clusterid is NULL, the
 cluster assignments are not returned. If clusterid is not NULL, enough memory
@@ -4342,10 +4336,10 @@ somcluster.
     }
   }
 
-  somworker (nrows, ncolumns, data, mask, weight, transpose, nxgrid, nygrid,
+  somworker(nrows, ncolumns, data, mask, weight, transpose, nxgrid, nygrid,
     inittau, celldata, niter, dist);
   if (clusterid)
-    somassign (nrows, ncolumns, data, mask, weight, transpose,
+    somassign(nrows, ncolumns, data, mask, weight, transpose,
       nxgrid, nygrid, celldata, dist, clusterid);
   if(lcelldata==0)
   { for (i = 0; i < nxgrid; i++)
@@ -4396,7 +4390,7 @@ This array shows which data values are missing. If mask[i][j]==0, then
 data[i][j] is missing.
 
 weight     (input) double[ncolumns] if transpose==0;
-                   double[nrows]    if transpose==1
+                   double[nrows]    otherwise
 The weights that are used to calculate the distance.
 
 n1         (input) int

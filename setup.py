@@ -411,13 +411,10 @@ else:
 
 # Add extensions that require NumPy to build
 if is_Numpy_installed():
-    import numpy
-    numpy_include_dir = numpy.get_include()
     EXTENSIONS.append(
-        Extension('Bio.Cluster.cluster',
+        Extension('Bio.Cluster._cluster',
                   ['Bio/Cluster/clustermodule.c',
                    'Bio/Cluster/cluster.c'],
-                  include_dirs=[numpy_include_dir],
                   ))
 
 # We now define the Biopython version number in Bio/__init__.py

@@ -38,14 +38,14 @@
 #  include <windows.h>
 #endif
 
-#define CLUSTERVERSION "1.54"
+#define CLUSTERVERSION "1.55"
 
 /* Chapter 2 */
-double clusterdistance (int nrows, int ncolumns, double** data, int** mask,
+double clusterdistance(int nrows, int ncolumns, double** data, int** mask,
   double weight[], int n1, int n2, int index1[], int index2[], char dist,
   char method, int transpose);
-double** distancematrix (int ngenes, int ndata, double** data,
-  int** mask, double* weight, char dist, int transpose);
+void distancematrix(int ngenes, int ndata, double** data, int** mask,
+  double* weight, char dist, int transpose, double** distances);
 
 /* Chapter 3 */
 int getclustercentroids(int nclusters, int nrows, int ncolumns,
@@ -53,10 +53,10 @@ int getclustercentroids(int nclusters, int nrows, int ncolumns,
   int transpose, char method);
 void getclustermedoids(int nclusters, int nelements, double** distance,
   int clusterid[], int centroids[], double errors[]);
-void kcluster (int nclusters, int ngenes, int ndata, double** data,
+void kcluster(int nclusters, int ngenes, int ndata, double** data,
   int** mask, double weight[], int transpose, int npass, char method, char dist,
   int clusterid[], double* error, int* ifound);
-void kmedoids (int nclusters, int nelements, double** distance,
+void kmedoids(int nclusters, int nelements, double** distance,
   int npass, int clusterid[], double* error, int* ifound);
 
 /* Chapter 4 */
@@ -71,13 +71,13 @@ typedef struct {int left; int right; double distance;} Node;
  * between the two subnodes that were joined.
  */
 
-Node* treecluster (int nrows, int ncolumns, double** data, int** mask,
+Node* treecluster(int nrows, int ncolumns, double** data, int** mask,
   double weight[], int transpose, char dist, char method, double** distmatrix);
 int sorttree(const int nnodes, Node* tree, const double order[], int indices[]);
-void cuttree (int nelements, Node* tree, int nclusters, int clusterid[]);
+int cuttree(int nelements, const Node* tree, int nclusters, int clusterid[]);
 
 /* Chapter 5 */
-void somcluster (int nrows, int ncolumns, double** data, int** mask,
+void somcluster(int nrows, int ncolumns, double** data, int** mask,
   const double weight[], int transpose, int nxnodes, int nynodes,
   double inittau, int niter, char dist, double*** celldata,
   int clusterid[][2]);

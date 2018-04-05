@@ -1,23 +1,631 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-#
-"""Cluster Analysis.
+import numpy
+import numbers
 
-The Bio.Cluster provides commonly used clustering algorithms and was
-designed with the application to gene expression data in mind. However,
-this module can also be used for cluster analysis of other types of data.
+from . import _cluster
 
-Bio.Cluster and the underlying C Clustering Library is described in
-M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
+__all__ = ['Node',
+           'Tree',
+           'kcluster',
+           'kmedoids',
+           'treecluster',
+           'somcluster',
+           'clusterdistance',
+           'clustercentroids',
+           'distancematrix',
+           'pca',
+           'Record',
+           'read']
+
+
+class Node(_cluster.Node):
+    __doc__ = _cluster.Node.__doc__
+
+
+class Tree(_cluster.Tree):
+
+    def sort(self, order=None):
+        n = len(self) + 1
+        indices = numpy.ones(n, dtype='i')
+        if order is None:
+            order = numpy.ones(n, dtype='d')
+        elif isinstance(order, numpy.ndarray):
+            order = numpy.require(order, dtype='d', requirements='C')
+        else:
+            order = numpy.array(order, dtype='d')
+        _cluster.Tree.sort(self, indices, order)
+        return indices
+
+    def cut(self, nclusters=None):
+        n = len(self) + 1
+        indices = numpy.ones(n, dtype='i')
+        if nclusters is None:
+            nclusters = n
+        return _cluster.Tree.cut(self, indices, nclusters)
+    
+
+def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
+             npass=1, method='a', dist='e', initialid=None):
+    """\
+kcluster(data, nclusters=2, mask=None, weight=None,
+         transpose=0, npass=1, method='a', dist='e',
+         initialid=None) -> clusterid, error, nfound
+
+This function implements k-means clustering.
+
+Arguments
+ - data: nrows x ncolumns array containing the data values.
+ - nclusters: number of clusters (the 'k' in k-means).
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i][j]==0, then data[i][j] is missing.
+ - weight: the weights to be used when calculating distances
+ - transpose:
+
+   - if equal to 0, rows are clustered;
+   - if equal to 1, columns are clustered.
+
+ - npass: number of times the k-means clustering algorithm is
+   performed, each time with a different (random) initial
+   condition.
+ - method: specifies how the center of a cluster is found:
+   - method=='a': arithmetic mean;
+   - method=='m': median.
+
+ - dist: specifies the distance function to be used:
+
+   - dist == 'e': Euclidean distance;
+   - dist == 'b': City Block distance;
+   - dist == 'c': Pearson correlation;
+   - dist == 'a': absolute value of the correlation;
+   - dist == 'u': uncentered correlation;
+   - dist == 'x': absolute uncentered correlation;
+   - dist == 's': Spearman's rank correlation;
+   - dist == 'k': Kendall's tau.
+
+ - initialid: the initial clustering from which the algorithm should start.
+   If initialid is None, the routine carries out npass
+   repetitions of the EM algorithm, each time starting from a
+   different random initial clustering. If initialid is given,
+   the routine carries out the EM algorithm only once, starting
+   from the given initial clustering and without randomizing the
+   order in which items are assigned to clusters (i.e., using
+   the same order as in the data matrix). In that case, the
+   k-means algorithm is fully deterministic.
+
+Return values:
+ - clusterid: array containing the number of the cluster to which each
+   item was assigned in the best k-means clustering solution that was
+   found in the npass runs;
+ - error: the within-cluster sum of distances for the returned k-means
+   clustering solution;
+ - nfound: the number of times this solution was found.
 """
 
-import numpy
 
-from Bio.Cluster.cluster import version, kcluster, kmedoids, treecluster
-from Bio.Cluster.cluster import somcluster, clusterdistance
-from Bio.Cluster.cluster import clustercentroids, distancematrix, pca
-from Bio.Cluster.cluster import Node, Tree
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    elif isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    if weight is None:
+        n = data.shape[1] if transpose else data.shape[0]
+        weight = numpy.ones(n, dtype='d')
+    elif isinstance(weight, numpy.ndarray):
+        weight = numpy.require(weight, dtype='d', requirements='C')
+    else:
+        weight = numpy.array(weight, dtype='d')
+    if initialid is None:
+        if npass <= 0:
+            raise ValueError("npass should be a positive integer")
+        n = data.shape[1] if transpose else data.shape[0]
+        clusterid = numpy.empty(n, dtype='i')
+    else:
+        npass = 0
+        clusterid = numpy.array(initialid, dtype='i')
+    error, nfound = _cluster.kcluster(data, nclusters, mask, weight, transpose,
+                                      npass, method, dist, clusterid)
+    return clusterid, error, nfound
+
+
+def kmedoids(distance, nclusters=2, npass=1, initialid=None):
+    """\
+kmedoids(distance, nclusters=2, npass=1,
+         initialid=None) -> clusterid, error, nfound.
+
+This function implements k-medoids clustering.
+
+Arguments:
+ - distance: The distance matrix between the items. There are three
+   ways in which you can pass a distance matrix:
+
+   1. a 2D Numerical Python array (in which only the left-lower
+      part of the array will be accessed);
+   2. a 1D Numerical Python array containing the distances
+      consecutively;
+   3. a list of rows containing the lower-triangular part of
+      the distance matrix.
+
+   Examples are:
+
+       >>> # option 1.:
+       >>> distance = array([[0.0, 1.1, 2.3],
+       ...                   [1.1, 0.0, 4.5],
+       ...                   [2.3, 4.5, 0.0]])
+       ...
+       >>> # option 2.:
+       >>> distance = array([1.1, 2.3, 4.5])
+       >>> # option 3.:
+       >>> distance = [array([]),
+       ...             array([1.1]),
+       ...             array([2.3, 4.5])]
+       ...
+       >>>
+
+   These three correspond to the same distance matrix.
+ - nclusters: number of clusters (the 'k' in k-medoids)
+ - npass: the number of times the k-medoids clustering algorithm
+   is performed, each time with a different (random) initial
+   condition.
+ - initialid: the initial clustering from which the algorithm should start.
+   If initialid is not given, the routine carries out npass
+   repetitions of the EM algorithm, each time starting from a
+   different random initial clustering. If initialid is given,
+   the routine carries out the EM algorithm only once, starting
+   from the initial clustering specified by initialid and
+   without randomizing the order in which items are assigned to
+   clusters (i.e., using the same order as in the data matrix).
+   In that case, the k-medoids algorithm is fully deterministic.
+
+Return values:
+ - clusterid: array containing the number of the cluster to which each
+   item was assigned in the best k-means clustering solution that was
+   found in the npass runs;
+ - error: the within-cluster sum of distances for the returned k-means
+   clustering solution;
+ - nfound: the number of times this solution was found.
+"""
+    if initialid is None:
+        if npass <= 0:
+            raise ValueError("npass should be a positive integer")
+        n = len(distance)
+        clusterid = numpy.empty(n, dtype='i')
+    else:
+        npass = 0
+        clusterid = numpy.array(initialid, dtype='i')
+    distance = __check_distancematrix(distance)
+    error, nfound = _cluster.kmedoids(distance, nclusters, npass, clusterid)
+    return clusterid, error, nfound
+
+
+def treecluster(data, mask=None, weight=None, transpose=False, method='m',
+                dist='e', distancematrix=None):
+    """\
+treecluster(data=None, mask=None, weight=None, transpose=0, dist='e',
+            method='m', distancematrix=None) -> Tree object
+
+This function implements the pairwise single, complete, centroid, and
+average linkage hierarchical clustering methods.
+
+Arguments:
+ - data: nrows x ncolumns array containing the data values.
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i][j]==0, then data[i][j] is missing.
+ - weight: the weights to be used when calculating distances.
+ - transpose:
+
+   - if False, rows are clustered;
+   - if True, columns are clustered.
+
+ - dist: specifies the distance function to be used:
+
+   - dist == 'e': Euclidean distance
+   - dist == 'b': City Block distance
+   - dist == 'c': Pearson correlation
+   - dist == 'a': absolute value of the correlation
+   - dist == 'u': uncentered correlation
+   - dist == 'x': absolute uncentered correlation
+   - dist == 's': Spearman's rank correlation
+   - dist == 'k': Kendall's tau
+
+ - method: specifies which linkage method is used:
+
+   - method=='s': Single pairwise linkage
+   - method=='m': Complete (maximum) pairwise linkage (default)
+   - method=='c': Centroid linkage
+   - method=='a': Average pairwise linkage
+
+ - distancematrix:  The distance matrix between the itemss. There are
+   three ways in which you can pass a distance matrix:
+
+   1. a 2D Numerical Python array (in which only the left-lower
+      part of the array will be accessed);
+   2. a 1D Numerical Python array containing the distances
+      consecutively;
+   3. a list of rows containing the lower-triangular part of
+      the distance matrix.
+
+   Examples are:
+
+       >>> # option 1.:
+       >>> distance = array([[0.0, 1.1, 2.3],
+       ...                   [1.1, 0.0, 4.5],
+       ...                   [2.3, 4.5, 0.0]])
+       ...
+       >>> # option 2.:
+       >>> distance = array([1.1, 2.3, 4.5])
+       >>> # option 3.:
+       >>> distance = [array([]),
+       ...             array([1.1]),
+       ...             array([2.3, 4.5])]
+       ...
+       >>>
+
+   These three correspond to the same distance matrix.
+
+   PLEASE NOTE:
+   As the treecluster routine may shuffle the values in the
+   distance matrix as part of the clustering algorithm, be sure
+   to save this array in a different variable before calling
+   treecluster if you need it later.
+
+Either data or distancematrix should be None. If distancematrix is None,
+the hierarchical clustering solution is calculated from the values stored
+in the argument data. If data is None, the hierarchical clustering solution
+is instead calculated from the distance matrix. Pairwise centroid-linkage
+clustering can be performed only from the data values and not from the
+distance matrix. Pairwise single-, maximum-, and average-linkage clustering
+can be calculated from the data values or from the distance matrix.
+
+Return value:
+treecluster returns a Tree object describing the hierarchical clustering
+result. See the description of the Tree class for more information.
+"""
+    if data is None:
+        pass
+    elif isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    elif isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    if data is not None:
+        if weight is None:
+            n = data.shape[1] if transpose else data.shape[0]
+            weight = numpy.ones(n, dtype='d')
+        elif isinstance(weight, numpy.ndarray):
+            weight = numpy.require(weight, dtype='d', requirements='C')
+        else:
+            weight = numpy.array(weight, dtype='d')
+    distancematrix = __check_distancematrix(distancematrix)
+    tree = Tree()
+    _cluster.treecluster(tree, data, mask, weight, transpose, method, dist,
+                         distancematrix)
+    return tree
+
+
+def somcluster(data, mask=None, weight=None, transpose=False,
+               nxgrid=2, nygrid=1, inittau=0.02, niter=1, dist='e'):
+    """\
+somcluster(data, mask=None, weight=None, transpose=0,
+           nxgrid=2, nygrid=1, inittau=0.02, niter=1,
+           dist='e') -> clusterid, celldata
+
+This function implements a self-organizing map on a rectangular grid.
+
+Arguments:
+ - data: nrows x ncolumns array containing the data values;
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i][j]==0, then data[i][j] is missing.
+ - weight: the weights to be used when calculating distances
+ - transpose:
+
+   - if equal to 0, rows are clustered;
+   - if equal to 1, columns are clustered.
+
+ - nxgrid: the horizontal dimension of the rectangular SOM map
+ - nygrid: the vertical dimension of the rectangular SOM map
+ - inittau: the initial value of tau (the neighborbood function)
+ - niter: the number of iterations
+ - dist: specifies the distance function to be used:
+
+   - dist == 'e': Euclidean distance
+   - dist == 'b': City Block distance
+   - dist == 'c': Pearson correlation
+   - dist == 'a': absolute value of the correlation
+   - dist == 'u': uncentered correlation
+   - dist == 'x': absolute uncentered correlation
+   - dist == 's': Spearman's rank correlation
+   - dist == 'k': Kendall's tau
+
+Return values:
+
+ - clusterid: array with two columns, with the number of rows equal to
+   the items that are being clustered. Each row in the array contains
+   the x and y coordinates of the cell in the rectangular SOM grid to
+   which the item was assigned.
+
+ - celldata:  an array with dimensions [nxgrid, nygrid, number of columns]
+   if rows are being clustered, or [nxgrid, nygrid, number of rows) if
+   columns are being clustered.
+   Each element [ix, iy] of this array is a 1D vector containing the
+   data values for the centroid of the cluster in the SOM grid cell
+   with coordinates [ix, iy].
+"""
+    if transpose:
+        ndata = data.shape[0]
+        nitems = data.shape[1]
+    else:
+        ndata = data.shape[1]
+        nitems = data.shape[0]
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    elif mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    if weight is None:
+        weight = numpy.ones(n, dtype='d')
+    elif isinstance(weight, numpy.ndarray):
+        weight = numpy.require(weight, dtype='d', requirements='C')
+    else:
+        weight = numpy.array(weight, dtype='d')
+    if nxgrid < 1:
+        raise ValueError("nxgrid should be a positive integer (default is 2)")
+    if nygrid < 1:
+        raise ValueError("nygrid should be a positive integer (default is 1)")
+    clusterids = numpy.ones((nitems, 2), dtype='i')
+    celldata = numpy.empty((nxgrid, nygrid, ndata), dtype='d')
+    _cluster.somcluster(clusterids, celldata, data, mask, weight, transpose,
+                        inittau, niter, dist)
+    return clusterids, celldata
+
+
+def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
+                    method='a', dist='e', transpose=False):
+    """\
+clusterdistance(data, mask=None, weight=None, index1, index2, dist='e',
+                method='a', transpose=0) -> distance between two clusters
+
+Arguments:
+ - data: nrows x ncolumns array containing the expression data
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i][j]==0, then data[i][j] is missing.
+ - weight: the weights to be used when calculating distances
+ - index1: 1D array identifying which items belong to the
+   first cluster. If the cluster contains only one item, then
+   index1 can also be written as a single integer.
+ - index2: 1D array identifying which items belong to the
+   second cluster. If the cluster contains only one item, then
+   index2 can also be written as a single integer.
+ - dist: specifies the distance function to be used:
+
+   - dist == 'e': Euclidean distance
+   - dist == 'b': City Block distance
+   - dist == 'c': Pearson correlation
+   - dist == 'a': absolute value of the correlation
+   - dist == 'u': uncentered correlation
+   - dist == 'x': absolute uncentered correlation
+   - dist == 's': Spearman's rank correlation
+   - dist == 'k': Kendall's tau
+
+ - method: specifies how the distance between two clusters is defined:
+
+   - method=='a': the distance between the arithmetic means of the
+     two clusters
+   - method=='m': the distance between the medians of the two
+     clusters
+   - method=='s': the smallest pairwise distance between members
+     of the two clusters
+   - method=='x': the largest pairwise distance between members of
+     the two clusters
+   - method=='v': average of the pairwise distances between
+     members of the clusters
+
+ - transpose:
+
+   - if False: clusters of rows are considered;
+   - if True: clusters of columns are considered.
+
+"""
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    elif mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    if weight is None:
+        n = data.shape[1] if transpose else data.shape[0]
+        weight = numpy.ones(n, dtype='d')
+    elif isinstance(weight, numpy.ndarray):
+        weight = numpy.require(weight, dtype='d', requirements='C')
+    else:
+        weight = numpy.array(weight, dtype='d')
+    if index1 is None:
+        index1 = numpy.zeros(1, dtype='i')
+    elif isinstance(index1, numbers.Integral):
+        index1 = numpy.array([index1], dtype='i')
+    elif isinstance(index1, numpy.ndarray):
+        index1 = numpy.require(index1, dtype='i', requirements='C')
+    else:
+        index1 = numpy.array(index1, dtype='i')
+    if index2 is None:
+        index2 = numpy.zeros(1, dtype='i')
+    elif isinstance(index2, numbers.Integral):
+        index2 = numpy.array([index2], dtype='i')
+    elif isinstance(index2, numpy.ndarray):
+        index2 = numpy.require(index2, dtype='i', requirements='C')
+    else:
+        index2 = numpy.array(index2, dtype='i')
+    return _cluster.clusterdistance(data, mask, weight, index1, index2,
+                                    method, dist, transpose)
+
+
+def clustercentroids(data, mask=None, clusterid=None, method='a',
+                     transpose=False):
+    """\
+clustercentroids(data, mask=None, clusterid=None, method='a',
+                 transpose=0) -> cdata, cmask
+
+The clustercentroids routine calculates the cluster centroids, given to
+which cluster each item belongs. The centroid is defined as either
+the mean or the median over all items for each dimension.
+
+Arguments:
+ - data: nrows x ncolumns array containing the data values.
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i, j]==0, then data[i, j] is missing.
+ - clusterid: array containing the cluster number for each item.
+   The cluster number should be non-negative.
+ - method: specifies whether the centroid is calculated from the
+   arithmetic mean (method=='a', default) or the median (method=='m')
+   over each dimension.
+ - transpose: if False, each row contains the data for one item;
+              if True, each column contains the data for one item.
+
+Return values:
+ - cdata: 2D array containing the cluster centroids.
+   If transpose is False, then the dimensions of cdata are
+   nclusters x ncolumns.
+   If transpose is True, then the dimensions of cdata are
+   nrows x nclusters.
+ - cmask: 2D array of integers describing which items in cdata,
+   if any, are missing.
+"""
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    elif isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    if clusterid is None:
+        n = data.shape[1] if transpose else data.shape[0]
+        clusterid = numpy.zeros(n, dtype='i')
+    else:
+        clusterid = numpy.require(clusterid, dtype='i', requirements='C')
+    return _cluster.clustercentroids(data, mask, clusterid, method, transpose)
+
+
+def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
+    """\
+distancematrix(data, mask=None, weight=None, transpose=0,
+               dist='e') -> distance matrix as a list of arrays
+
+This function returns the distance matrix calculated from the data.
+
+Arguments:
+
+ - data: nrows x ncolumns array containing the expression data.
+
+ - mask: nrows x ncolumns array of integers, showing which data are
+   missing. If mask[i][j]==0, then data[i][j] is missing.
+
+ - weight: the weights to be used when calculating distances.
+
+ - transpose: if False: the distances between rows are calculated;
+              if True:  the distances beteeen columns are calculated.
+
+ - dist: specifies the distance function to be used:
+
+   - dist == 'e': Euclidean distance
+   - dist == 'b': City Block distance
+   - dist == 'c': Pearson correlation
+   - dist == 'a': absolute value of the correlation
+   - dist == 'u': uncentered correlation
+   - dist == 'x': absolute uncentered correlation
+   - dist == 's': Spearman's rank correlation
+   - dist == 'k': Kendall's tau
+
+Return value:
+The distance matrix is returned as a list of 1D arrays containing the
+distance matrix calculated from the data. The number of columns in eac
+row is equal to the row number. Hence, the first row has zero length.
+An example of the return value is:
+
+    matrix = [[],
+              array([1.]),
+              array([7., 3.]),
+              array([4., 2., 6.])]
+
+This corresponds to the distance matrix:
+
+    [0., 1., 7., 4.]
+    [1., 0., 3., 2.]
+    [7., 3., 0., 6.]
+    [4., 2., 6., 0.]
+"""
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    if isinstance(mask, numpy.ndarray):
+        mask = numpy.require(mask, dtype='i', requirements='C')
+    elif mask is None:
+        mask = numpy.ones(data.shape, dtype='i')
+    else:
+        mask = numpy.array(mask, dtype='i')
+    n = data.shape[1] if transpose else data.shape[0]
+    matrix = [numpy.empty(i, dtype='d') for i in range(n)]
+    _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
+    return matrix
+
+
+def pca(data):
+    """\
+pca(data) -> (columnmean, coordinates, pc, eigenvalues)
+
+This function returns the principal component decomposition calculated
+from the data values.
+
+Arguments:
+ - data: nrows x ncolumns array containing the expression data
+
+Return value:
+This function returns an array containing the mean of each column, the
+principal components as an nmin x ncolumns array, as well as the
+coordinates (an nrows x nmin array) of the data along the principal
+components, and the associated eigenvalues. The principal components, the
+coordinates, and the eigenvalues are sorted by the magnitude of the
+eigenvalue, with the largest eigenvalues appearing first. Here, nmin is
+the smaller of nrows and ncolumns.
+Adding the column means to the dot product of the coordinates and the
+principal components,
+
+    >>> columnmean + dot(coordinates, pc)
+
+recreates the data matrix.
+"""
+    if isinstance(data, numpy.ndarray):
+        data = numpy.require(data, dtype='d', requirements='C')
+    else:
+        data = numpy.array(data, dtype='d')
+    nrows, ncols = data.shape
+    nmin = min(nrows, ncols)
+    columnmean = numpy.empty(ncols, dtype='d')
+    pc = numpy.empty((nmin, ncols), dtype='d')
+    coordinates = numpy.empty((nrows, nmin), dtype='d')
+    eigenvalues = numpy.empty(nmin, dtype='d')
+    _cluster.pca(data, columnmean, coordinates, pc, eigenvalues)
+    return columnmean, coordinates, pc, eigenvalues
 
 
 def _savetree(jobname, tree, order, transpose):
@@ -67,7 +675,7 @@ class Record(object):
     Attributes:
      - data:     a matrix containing the gene expression data
      - mask:     a matrix containing only 1's and 0's, denoting which values
-       are present (1) or missing (0). If all elements of mask are
+       are present (1) or missing (0). If all items of mask are
        one (no missing data), then mask is set to None.
      - geneid:   a list containing a unique identifier for each gene
        (e.g., ORF name)
@@ -180,18 +788,18 @@ class Record(object):
         hierarchical clustering methods are available.
 
         Arguments:
-         - transpose: if equal to 0, genes (rows) are clustered;
-           if equal to 1, microarrays (columns) are clustered.
+         - transpose: if equal to 0, rows are clustered;
+           if equal to 1, columns are clustered.
          - dist     : specifies the distance function to be used:
 
-           - dist=='e': Euclidean distance
-           - dist=='b': City Block distance
-           - dist=='c': Pearson correlation
-           - dist=='a': absolute value of the correlation
-           - dist=='u': uncentered correlation
-           - dist=='x': absolute uncentered correlation
-           - dist=='s': Spearman's rank correlation
-           - dist=='k': Kendall's tau
+           - dist == 'e': Euclidean distance
+           - dist == 'b': City Block distance
+           - dist == 'c': Pearson correlation
+           - dist == 'a': absolute value of the correlation
+           - dist == 'u': uncentered correlation
+           - dist == 'x': absolute uncentered correlation
+           - dist == 's': Spearman's rank correlation
+           - dist == 'k': Kendall's tau
 
          - method   : specifies which linkage method is used:
 
@@ -218,8 +826,8 @@ class Record(object):
 
         Arguments:
          - nclusters: number of clusters (the 'k' in k-means)
-         - transpose: if equal to 0, genes (rows) are clustered;
-           if equal to 1, microarrays (columns) are clustered.
+         - transpose: if False, genes (rows) are clustered;
+                      if True, samples (columns) are clustered.
          - npass    : number of times the k-means clustering algorithm is
            performed, each time with a different (random) initial condition.
          - method   : specifies how the center of a cluster is found:
@@ -229,14 +837,14 @@ class Record(object):
 
          - dist     : specifies the distance function to be used:
 
-             - dist=='e': Euclidean distance
-             - dist=='b': City Block distance
-             - dist=='c': Pearson correlation
-             - dist=='a': absolute value of the correlation
-             - dist=='u': uncentered correlation
-             - dist=='x': absolute uncentered correlation
-             - dist=='s': Spearman's rank correlation
-             - dist=='k': Kendall's tau
+             - dist == 'e': Euclidean distance
+             - dist == 'b': City Block distance
+             - dist == 'c': Pearson correlation
+             - dist == 'a': absolute value of the correlation
+             - dist == 'u': uncentered correlation
+             - dist == 'x': absolute uncentered correlation
+             - dist == 's': Spearman's rank correlation
+             - dist == 'k': Kendall's tau
 
          - initialid: the initial clustering from which the algorithm should
            start. If initialid is None, the routine carries out npass
@@ -249,7 +857,7 @@ class Record(object):
 
         Return values:
          - clusterid: array containing the number of the cluster to which each
-           gene/microarray was assigned in the best k-means clustering
+           gene/sample was assigned in the best k-means clustering
            solution that was found in the npass runs;
          - error:     the within-cluster sum of distances for the returned
            k-means clustering solution;
@@ -270,35 +878,35 @@ class Record(object):
         The somcluster method returns a tuple (clusterid, celldata).
 
         Arguments:
-         - transpose: if equal to 0, genes (rows) are clustered;
-           if equal to 1, microarrays (columns) are clustered.
+         - transpose: if False, genes (rows) are clustered;
+                      if True,  samples (columns) are clustered.
          - nxgrid   : the horizontal dimension of the rectangular SOM map
          - nygrid   : the vertical dimension of the rectangular SOM map
          - inittau  : the initial value of tau (the neighborbood function)
          - niter    : the number of iterations
          - dist     : specifies the distance function to be used:
 
-           - dist=='e': Euclidean distance
-           - dist=='b': City Block distance
-           - dist=='c': Pearson correlation
-           - dist=='a': absolute value of the correlation
-           - dist=='u': uncentered correlation
-           - dist=='x': absolute uncentered correlation
-           - dist=='s': Spearman's rank correlation
-           - dist=='k': Kendall's tau
+           - dist == 'e': Euclidean distance
+           - dist == 'b': City Block distance
+           - dist == 'c': Pearson correlation
+           - dist == 'a': absolute value of the correlation
+           - dist == 'u': uncentered correlation
+           - dist == 'x': absolute uncentered correlation
+           - dist == 's': Spearman's rank correlation
+           - dist == 'k': Kendall's tau
 
         Return values:
          - clusterid: array with two columns, while the number of rows is equal
-           to the number of genes or the number of microarrays depending on
-           whether genes or microarrays are being clustered. Each row in
+           to the number of genes or the number of samples depending on
+           whether genes or samples are being clustered. Each row in
            the array contains the x and y coordinates of the cell in the
-           rectangular SOM grid to which the gene or microarray was assigned.
+           rectangular SOM grid to which the gene or samples was assigned.
          - celldata:  an array with dimensions (nxgrid, nygrid, number of
-           microarrays) if genes are being clustered, or (nxgrid, nygrid,
-           number of genes) if microarrays are being clustered. Each element
-           [ix][iy] of this array is a 1D vector containing the gene
+           samples) if genes are being clustered, or (nxgrid, nygrid,
+           number of genes) if samples are being clustered. Each item 
+           [ix, iy] of this array is a 1D vector containing the gene
            expression data for the centroid of the cluster in the SOM grid
-           cell with coordinates (ix, iy).
+           cell with coordinates [ix, iy].
 
         """
         if transpose == 0:
@@ -312,16 +920,16 @@ class Record(object):
         """Calculate the cluster centroids and return a tuple (cdata, cmask).
 
         The centroid is defined as either the mean or the median over all
-        elements for each dimension.
+        items for each dimension.
 
         Arguments:
          - data     : nrows x ncolumns array containing the expression data
          - mask     : nrows x ncolumns array of integers, showing which data
            are missing. If mask[i][j]==0, then data[i][j] is missing.
-         - transpose: if equal to 0, gene (row) clusters are considered;
-           if equal to 1, microarray (column) clusters are considered.
+         - transpose: if False, gene (row) clusters are considered;
+                      if True, sample (column) clusters are considered.
          - clusterid: array containing the cluster number for each gene or
-           microarray. The cluster number should be non-negative.
+           sample. The cluster number should be non-negative.
          - method   : specifies how the centroid is calculated:
 
            - method=='a': arithmetic mean over each dimension. (default)
@@ -331,7 +939,7 @@ class Record(object):
          - cdata    : 2D array containing the cluster centroids. If transpose==0,
            then the dimensions of cdata are nclusters x ncolumns. If
            transpose==1, then the dimensions of cdata are nrows x nclusters.
-         - cmask    : 2D array of integers describing which elements in cdata,
+         - cmask    : 2D array of integers describing which items in cdata,
            if any, are missing.
 
         """
@@ -343,24 +951,24 @@ class Record(object):
         """Calculate the distance between two clusters.
 
         Arguments:
-         - index1   : 1D array identifying which genes/microarrays belong to the
+         - index1   : 1D array identifying which genes/samples belong to the
            first cluster. If the cluster contains only one gene, then
            index1 can also be written as a single integer.
-         - index2   : 1D array identifying which genes/microarrays belong to the
+         - index2   : 1D array identifying which genes/samples belong to the
            second cluster. If the cluster contains only one gene, then
            index2 can also be written as a single integer.
-         - transpose: if equal to 0, genes (rows) are clustered;
-           if equal to 1, microarrays (columns) are clustered.
+         - transpose: if False, genes (rows) are clustered;
+                      if True, samples (columns) are clustered.
          - dist     : specifies the distance function to be used:
 
-           - dist=='e': Euclidean distance
-           - dist=='b': City Block distance
-           - dist=='c': Pearson correlation
-           - dist=='a': absolute value of the correlation
-           - dist=='u': uncentered correlation
-           - dist=='x': absolute uncentered correlation
-           - dist=='s': Spearman's rank correlation
-           - dist=='k': Kendall's tau
+           - dist == 'e': Euclidean distance
+           - dist == 'b': City Block distance
+           - dist == 'c': Pearson correlation
+           - dist == 'a': absolute value of the correlation
+           - dist == 'u': uncentered correlation
+           - dist == 'x': absolute uncentered correlation
+           - dist == 's': Spearman's rank correlation
+           - dist == 'k': Kendall's tau
 
          - method   : specifies how the distance between two clusters is defined:
 
@@ -374,8 +982,8 @@ class Record(object):
            - method=='v': average of the pairwise distances between members
              of the clusters
 
-         - transpose: if equal to 0: clusters of genes (rows) are considered;
-           if equal to 1: clusters of microarrays (columns) are considered.
+         - transpose: if False: clusters of genes (rows) are considered;
+                      if True: clusters of samples (columns) are considered.
 
         """
         if transpose == 0:
@@ -389,33 +997,33 @@ class Record(object):
         """Calculate the distance matrix and return it as a list of arrays.
 
         Arguments:
-         - transpose: if equal to 0: calculate the distances between genes
-           (rows); if equal to 1: calculate the distances beteeen microarrays
-           (columns).
+         - transpose:
+             if False: calculate the distances between genes (rows);
+             if True: calculate the distances beteeen samples (columns).
          - dist     : specifies the distance function to be used:
 
-           - dist=='e': Euclidean distance
-           - dist=='b': City Block distance
-           - dist=='c': Pearson correlation
-           - dist=='a': absolute value of the correlation
-           - dist=='u': uncentered correlation
-           - dist=='x': absolute uncentered correlation
-           - dist=='s': Spearman's rank correlation
-           - dist=='k': Kendall's tau
+           - dist == 'e': Euclidean distance
+           - dist == 'b': City Block distance
+           - dist == 'c': Pearson correlation
+           - dist == 'a': absolute value of the correlation
+           - dist == 'u': uncentered correlation
+           - dist == 'x': absolute uncentered correlation
+           - dist == 's': Spearman's rank correlation
+           - dist == 'k': Kendall's tau
 
         Return value:
 
         The distance matrix is returned as a list of 1D arrays containing the
         distance matrix between the gene expression data. The number of columns
         in each row is equal to the row number. Hence, the first row has zero
-        elements. An example of the return value is::
+        length. An example of the return value is:
 
             matrix = [[],
                       array([1.]),
                       array([7., 3.]),
                       array([4., 2., 6.])]
 
-        This corresponds to the distance matrix::
+        This corresponds to the distance matrix:
 
             [0., 1., 7., 4.]
             [1., 0., 3., 2.]
@@ -585,3 +1193,34 @@ def read(handle):
     Cluster/TreeView program.
     """
     return Record(handle)
+
+# Everything below is private
+# 
+
+def __check_distancematrix(distancematrix):
+    if distancematrix is None:
+        return distancematrix
+    elif isinstance(distancematrix, numpy.ndarray):
+        distancematrix = numpy.require(distancematrix, dtype='d', requirements='C')
+        return distancematrix
+    else:
+        try:
+            distancematrix = numpy.array(distancematrix, dtype='d')
+        except ValueError:
+            pass
+        else:
+            return distancematrix
+        n = len(distancematrix)
+        d = [None] * n
+        for i, row in enumerate(distancematrix):
+            if isinstance(row, numpy.ndarray):
+                row = numpy.require(row, dtype='d', requirements='C')
+            else:
+                row = numpy.array(row, dtype='d')
+            if row.ndim != 1:
+                raise ValueError("row %d is not one-dimensional" % i)
+            m = len(row)
+            if m != i:
+                raise ValueError("row %d has incorrect size (%d, expected %d)" % (m, i))
+            d[i] = row
+        return d
