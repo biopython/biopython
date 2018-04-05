@@ -621,7 +621,7 @@ class DataHandler(object):
         self.dtd_urls.pop()
         return 1
 
-    def _initialize_directory(self, type):
+    def _initialize_directory(self, directory_types):
         ''' Internal function to initialize the local DTD/XSD directories.
         Added to allow for custom directory (cache) locations,
         for example when code is deployed on AWS Lambda.'''
@@ -635,7 +635,7 @@ class DataHandler(object):
                 home = os.path.expanduser('~')
                 self.directory = os.path.join(home, '.config', 'biopython')
                 del home
-        if 'DTD' in type:
+        if 'DTD' in directory_types:
             local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
             try:
                 os.makedirs(local_dtd_dir)  # use exist_ok=True on Python >= 3.2
@@ -645,7 +645,7 @@ class DataHandler(object):
                 # a race condition.
                 if not os.path.isdir(local_dtd_dir):
                     raise exception
-        if 'XSD' in type:
+        if 'XSD' in directory_types:
             local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
             try:
                 os.makedirs(local_xsd_dir)  # use exist_ok=True on Python >= 3.2
