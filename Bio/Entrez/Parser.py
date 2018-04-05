@@ -189,7 +189,9 @@ class DataHandler(object):
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.is_schema = False
-        self.directory = None
+        self._directory = None
+        self.local_dtd_dir = ''
+        self.local_xsd_dir = ''
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
@@ -511,15 +513,15 @@ class DataHandler(object):
             self.structures.update({name: multiple})
 
     def open_dtd_file(self, filename):
-        self._initialize_directory(type = 'DTD') # Initialize local_dtd_dir
-        path = os.path.join(DataHandler.local_dtd_dir, filename)
+        self._initialize_directory(directory_type = 'DTD') # Initialize local_dtd_dir
+        path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
             pass
         else:
             return handle
-        path = os.path.join(DataHandler.global_dtd_dir, filename)
+        path = os.path.join(self.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
@@ -529,15 +531,15 @@ class DataHandler(object):
         return None
 
     def open_xsd_file(self, filename):
-        self._initialize_directory(type = 'XSD') # Initialize local_xsd_dir
-        path = os.path.join(DataHandler.local_xsd_dir, filename)
+        self._initialize_directory(directory_type = 'XSD') # Initialize local_xsd_dir
+        path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
             pass
         else:
             return handle
-        path = os.path.join(DataHandler.global_xsd_dir, filename)
+        path = os.path.join(self.global_xsd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
@@ -547,8 +549,8 @@ class DataHandler(object):
         return None
 
     def save_dtd_file(self, filename, text):
-        self._initialize_directory(type = 'DTD') # Initialize local_dtd_dir
-        path = os.path.join(DataHandler.local_dtd_dir, filename)
+        self._initialize_directory(directory_type = 'DTD') # Initialize local_dtd_dir
+        path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
         except IOError:
@@ -558,8 +560,8 @@ class DataHandler(object):
             handle.close()
 
     def save_xsd_file(self, filename, text):
-        self._initialize_directory(type = 'XSD') # Initialize local_xsd_dir
-        path = os.path.join(DataHandler.local_xsd_dir, filename)
+        self._initialize_directory(directory_type = 'XSD') # Initialize local_xsd_dir
+        path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
         except IOError:
@@ -621,7 +623,7 @@ class DataHandler(object):
         self.dtd_urls.pop()
         return 1
 
-    def _initialize_directory(self, directory_types):
+    def _initialize_directory(self, directory_type):
         ''' Internal function to initialize the local DTD/XSD directories.
         Added to allow for custom directory (cache) locations,
         for example when code is deployed on AWS Lambda.'''
@@ -635,7 +637,8 @@ class DataHandler(object):
                 home = os.path.expanduser('~')
                 self.directory = os.path.join(home, '.config', 'biopython')
                 del home
-        if 'DTD' in directory_types:
+            del platform
+        if 'DTD' in directory_type:
             local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
             try:
                 os.makedirs(local_dtd_dir)  # use exist_ok=True on Python >= 3.2
@@ -645,24 +648,23 @@ class DataHandler(object):
                 # a race condition.
                 if not os.path.isdir(local_dtd_dir):
                     raise exception
-        if 'XSD' in directory_types:
+        if 'XSD' in directory_type:
             local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
             try:
                 os.makedirs(local_xsd_dir)  # use exist_ok=True on Python >= 3.2
             except OSError as exception:
                 if not os.path.isdir(local_xsd_dir):
                     raise exception
-        del platform
         return
 
     @property
     def directory(self):
         ''' The property allowing user to set a custom home directory for DTD and XSD files.'''
-        return self.directory
+        return self._directory
 
     @directory.setter
     def directory(self, directory):
         ''' Whenever user sets a custom directory, trigger initialization.'''
-        self.directory = directory
-        self._initialize_directory(['DTD','XSD'])
+        self._directory = directory
+        self._initialize_directory(directory_type=['DTD','XSD'])
         return
