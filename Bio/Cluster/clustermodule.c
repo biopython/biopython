@@ -126,7 +126,6 @@ static int
 data_converter(PyObject* object, void* pointer)
 {
     Data* data = pointer;
-    char format;
     int nrows;
     int ncols;
     int i;
@@ -134,7 +133,7 @@ data_converter(PyObject* object, void* pointer)
     Py_buffer* view = &data->view;
     const char* p;
     Py_ssize_t stride;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_STRIDES;
+    const int flag = PyBUF_ND | PyBUF_STRIDES;
 
     /* data should be initialized to 0 before calling this function. */
 
@@ -150,16 +149,7 @@ data_converter(PyObject* object, void* pointer)
                      view->ndim);
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'd') {
+    if (view->itemsize != sizeof(double)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "data matrix has incorrect data type");
         return 0;
@@ -212,7 +202,6 @@ static int
 mask_converter(PyObject* object, void* pointer)
 {
     Mask* mask = pointer;
-    char format;
     int nrows;
     int ncols;
     int i;
@@ -220,7 +209,7 @@ mask_converter(PyObject* object, void* pointer)
     Py_buffer* view = &mask->view;
     const char* p;
     Py_ssize_t stride;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_STRIDES;
+    const int flag = PyBUF_ND | PyBUF_STRIDES;
 
     /* data should be initialized to 0 before calling this function. */
 
@@ -234,17 +223,7 @@ mask_converter(PyObject* object, void* pointer)
                      "mask has incorrect rank (%d expected 2)", view->ndim);
         return 0;
     }
-    printf("format = %s\n", view->format);
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'i') {
+    if (view->itemsize != sizeof(int)) {
         PyErr_SetString(PyExc_RuntimeError, "mask has incorrect data type");
         return 0;
     }
@@ -285,9 +264,8 @@ static int
 vector_converter(PyObject* object, void* pointer)
 {
     Py_buffer* view = pointer;
-    char format;
     int ndata;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
 
     if (PyObject_GetBuffer(object, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError, "unexpected format.");
@@ -298,16 +276,7 @@ vector_converter(PyObject* object, void* pointer)
                      view->ndim);
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'd') {
+    if (view->itemsize != sizeof(double)) {
         PyErr_SetString(PyExc_RuntimeError, "array has incorrect data type");
         return 0;
     }
@@ -368,11 +337,10 @@ typedef struct {
 static int
 _convert_list_to_distancematrix(PyObject* list, Distancematrix* distances) {
     int i;
-    char format;
     double** values;
     Py_buffer* view;
     Py_buffer* views;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     const int n = (int) PyList_GET_SIZE(list);   
     if (n != PyList_GET_SIZE(list)) {
         PyErr_SetString(PyExc_ValueError, "distance matrix is too large");
@@ -404,16 +372,7 @@ _convert_list_to_distancematrix(PyObject* list, Distancematrix* distances) {
                          i, view->ndim);
             break;
         }
-        format = view->format[0];
-        switch (format) {
-            case '@':
-            case '=':
-            case '<':
-            case '>':
-            case '!': format = view->format[1]; break;
-            default: break;
-        }
-        if (format != 'd') {
+        if (view->itemsize != sizeof(double)) {
             PyErr_Format(PyExc_RuntimeError,
                          "row %d has incorrect data type", i);
             break;
@@ -439,13 +398,12 @@ _convert_list_to_distancematrix(PyObject* list, Distancematrix* distances) {
 
 static int
 _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
-    char format;
     int i;
     int n;
     double** values;
     double* p;
     Py_buffer* view = &distances->view;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     if (PyObject_GetBuffer(array, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError,
                         "distance matrix has unexpected format.");
@@ -455,16 +413,7 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
         PyErr_SetString(PyExc_RuntimeError, "distance matrix is empty");
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'd') {
+    if (view->itemsize != sizeof(double)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "distance matrix has an incorrect data type");
         return 0;
@@ -563,10 +512,9 @@ celldata_converter(PyObject* argument, void* pointer)
     int nx;
     int ny;
     int nz;
-    char format;
     Celldata* celldata = pointer;
     Py_buffer* view = &celldata->view;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError,
                         "celldata array has unexpected format.");
@@ -580,16 +528,7 @@ celldata_converter(PyObject* argument, void* pointer)
         PyErr_SetString(PyExc_RuntimeError, "celldata array too large");
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'd') {
+    if (view->itemsize != sizeof(double)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "celldata array has incorrect data type");
         return 0;
@@ -629,9 +568,8 @@ static int
 index_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
-    char format;
     int n;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
 
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError, "unexpected format.");
@@ -642,16 +580,7 @@ index_converter(PyObject* argument, void* pointer)
                      view->ndim);
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'i') {
+    if (view->itemsize != sizeof(int)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "argument has incorrect data type");
         return 0;
@@ -671,9 +600,8 @@ static int
 index2d_converter(PyObject* argument, void* pointer)
 {
     Py_buffer* view = pointer;
-    char format;
     int n;
-    const int flag = PyBUF_ND | PyBUF_FORMAT | PyBUF_C_CONTIGUOUS;
+    const int flag = PyBUF_ND | PyBUF_C_CONTIGUOUS;
 
     if (PyObject_GetBuffer(argument, view, flag) == -1) {
         PyErr_SetString(PyExc_RuntimeError, "unexpected format.");
@@ -684,16 +612,7 @@ index2d_converter(PyObject* argument, void* pointer)
                      view->ndim);
         return 0;
     }
-    format = view->format[0];
-    switch (format) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': format = view->format[1]; break;
-        default: break;
-    }
-    if (format != 'i') {
+    if (view->itemsize != sizeof(int)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "argument has incorrect data type");
         PyBuffer_Release(view);
