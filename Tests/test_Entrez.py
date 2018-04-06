@@ -3,12 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Offline tests for the URL construction of NCBI's Entrez services."""
+"""Offline tests for
+(1) the URL construction of NCBI's Entrez services.
+(2) setting a custom directory for DTD and XSD downloads."""
 
 import unittest
 import warnings
 
 from Bio import Entrez
+from Bio.Entrez import Parser
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
@@ -141,6 +144,24 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
+
+class CustomDirectoryTest(unittest.TestCase):
+    def test_custom_directory(self):
+        import tempfile
+        import os
+        # create a temporary directory
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Set the custom directory to the temporary directory.
+            # This assignment statement will also initialize the local DTD and XSD directories.
+            Parser.DataHandler.directory = tmpdir
+
+            # Confirm that the two temp directories are named what we want.
+            self.assertTrue(Parser.DataHandler.local_dtd_dir, os.path.join(Parser.DataHandler.directory, 'Bio', 'Entrez', 'DTDs'))
+            self.assertTrue(Parser.DataHandler.local_xsd_dir, os.path.join(Parser.DataHandler.directory, 'Bio', 'Entrez', 'XSDs'))
+
+            # And that they were created.
+            self.assertTrue(os.path.isdir(Parser.DataHandler.local_dtd_dir))
+            self.assertTrue(os.path.isdir(Parser.DataHandler.local_xsd_dir))
 
 
 if __name__ == "__main__":
