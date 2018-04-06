@@ -5,7 +5,7 @@
 
 """Offline tests for
 (1) the URL construction of NCBI's Entrez services.
-(2) setting a custom directory for DTD and XSD downloads."""
+(2) setting a custom directory for DTD and XSD downloads. [added by cparmet 4-6-18]"""
 
 import unittest
 import warnings
@@ -146,6 +146,8 @@ class TestURLConstruction(unittest.TestCase):
                         result_url)
 
 class CustomDirectoryTest(unittest.TestCase):
+    """ Unit test for the feature to set a custom directory for Entrez, via Parser.DataHandler.directory.
+    cparmet 4-6-18 """
     def test_custom_directory(self):
         import tempfile
         import os
