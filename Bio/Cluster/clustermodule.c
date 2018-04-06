@@ -234,6 +234,7 @@ mask_converter(PyObject* object, void* pointer)
                      "mask has incorrect rank (%d expected 2)", view->ndim);
         return 0;
     }
+    printf("format = %s\n", view->format);
     format = view->format[0];
     switch (format) {
         case '@':
