@@ -113,7 +113,7 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
      - error: the within-cluster sum of distances for the returned k-means
        clustering solution;
      - nfound: the number of times this solution was found.
-"""
+    """
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
@@ -201,7 +201,7 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
      - error: the within-cluster sum of distances for the returned k-means
        clustering solution;
      - nfound: the number of times this solution was found.
-"""
+    """
     if initialid is None:
         if npass <= 0:
             raise ValueError("npass should be a positive integer")
@@ -295,7 +295,7 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     Return value:
     treecluster returns a Tree object describing the hierarchical clustering
     result. See the description of the Tree class for more information.
-"""
+    """
     if data is None:
         pass
     elif isinstance(data, numpy.ndarray):
@@ -330,44 +330,44 @@ def somcluster(data, mask=None, weight=None, transpose=False,
     This function implements a Self-Organizing Map on a rectangular grid.
 
     Arguments:
-    x- data: nrows x ncolumns array containing the data values;
-    x- mask: nrows x ncolumns array of integers, showing which data are
-    x  missing. If mask[i][j]==0, then data[i][j] is missing.
-    x- weight: the weights to be used when calculating distances
-    x- transpose:
+     - data: nrows x ncolumns array containing the data values;
+     - mask: nrows x ncolumns array of integers, showing which data are
+       missing. If mask[i][j]==0, then data[i][j] is missing.
+     - weight: the weights to be used when calculating distances
+     - transpose:
 
-    x  - if equal to 0, rows are clustered;
-    x  - if equal to 1, columns are clustered.
+       - if equal to 0, rows are clustered;
+       - if equal to 1, columns are clustered.
 
-    x- nxgrid: the horizontal dimension of the rectangular SOM map
-    x- nygrid: the vertical dimension of the rectangular SOM map
-    x- inittau: the initial value of tau (the neighborbood function)
-    x- niter: the number of iterations
-    x- dist: specifies the distance function to be used:
+     - nxgrid: the horizontal dimension of the rectangular SOM map
+     - nygrid: the vertical dimension of the rectangular SOM map
+     - inittau: the initial value of tau (the neighborbood function)
+     - niter: the number of iterations
+     - dist: specifies the distance function to be used:
 
-    x  - dist == 'e': Euclidean distance
-    x  - dist == 'b': City Block distance
-    x  - dist == 'c': Pearson correlation
-    x  - dist == 'a': absolute value of the correlation
-    x  - dist == 'u': uncentered correlation
-    x  - dist == 'x': absolute uncentered correlation
-    x  - dist == 's': Spearman's rank correlation
-    x  - dist == 'k': Kendall's tau
+       - dist == 'e': Euclidean distance
+       - dist == 'b': City Block distance
+       - dist == 'c': Pearson correlation
+       - dist == 'a': absolute value of the correlation
+       - dist == 'u': uncentered correlation
+       - dist == 'x': absolute uncentered correlation
+       - dist == 's': Spearman's rank correlation
+       - dist == 'k': Kendall's tau
 
     Return values:
 
-    x- clusterid: array with two columns, with the number of rows equal to
-    x  the items that are being clustered. Each row in the array contains
-    x  the x and y coordinates of the cell in the rectangular SOM grid to
-    x  which the item was assigned.
+     - clusterid: array with two columns, with the number of rows equal to
+       the items that are being clustered. Each row in the array contains
+       the x and y coordinates of the cell in the rectangular SOM grid to
+       which the item was assigned.
 
-    x- celldata:  an array with dimensions [nxgrid, nygrid, number of columns]
-    x  if rows are being clustered, or [nxgrid, nygrid, number of rows) if
-    x  columns are being clustered.
-    x  Each element [ix, iy] of this array is a 1D vector containing the
-    x  data values for the centroid of the cluster in the SOM grid cell
-    x  with coordinates [ix, iy].
-"""
+     - celldata:  an array with dimensions [nxgrid, nygrid, number of columns]
+       if rows are being clustered, or [nxgrid, nygrid, number of rows) if
+       columns are being clustered.
+       Each element [ix, iy] of this array is a 1D vector containing the
+       data values for the centroid of the cluster in the SOM grid cell
+       with coordinates [ix, iy].
+    """
     if transpose:
         ndata = data.shape[0]
         nitems = data.shape[1]
@@ -444,7 +444,7 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
 
        - if False: clusters of rows are considered;
        - if True: clusters of columns are considered.
-"""
+    """
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
@@ -510,7 +510,7 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
        nrows x nclusters.
      - cmask: 2D array of integers describing which items in cdata,
        if any, are missing.
-"""
+    """
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
@@ -574,7 +574,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
         [1., 0., 3., 2.]
         [7., 3., 0., 6.]
         [4., 2., 6., 0.]
-"""
+    """
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
@@ -611,7 +611,7 @@ def pca(data):
     >>> columnmean + dot(coordinates, pc)
 
     recreates the data matrix.
-"""
+    """
     if isinstance(data, numpy.ndarray):
         data = numpy.require(data, dtype='d', requirements='C')
     else:
