@@ -372,7 +372,7 @@ class KnownStateTrainer(AbstractTrainer):
         return self._markov_model
 
     def _count_emissions(self, training_seq, emission_counts):
-        """Add emissions from the training sequence to the current counts.
+        """Add emissions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
          - training_seq -- A TrainingSequence with states and emissions
@@ -392,7 +392,7 @@ class KnownStateTrainer(AbstractTrainer):
         return emission_counts
 
     def _count_transitions(self, state_seq, transition_counts):
-        """Add transitions from the training sequence to the current counts.
+        """Add transitions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
          - state_seq -- A Seq object with the states of the current training

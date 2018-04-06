@@ -27,7 +27,7 @@ def _gen_random_array(n):
 
 
 def _calculate_emissions(emission_probs):
-    """Calculate which symbols can be emitted in each state."""
+    """Calculate which symbols can be emitted in each state (PRIVATE)."""
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
     emissions = dict()
@@ -41,7 +41,7 @@ def _calculate_emissions(emission_probs):
 
 
 def _calculate_from_transitions(trans_probs):
-    """Calculate which 'from transitions' are allowed for each state.
+    """Calculate which 'from transitions' are allowed for each state (PRIVATE).
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -60,7 +60,7 @@ def _calculate_from_transitions(trans_probs):
 
 
 def _calculate_to_transitions(trans_probs):
-    """Calculate which 'to transitions' are allowed for each state.
+    """Calculate which 'to transitions' are allowed for each state (PRIVATE).
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -121,7 +121,7 @@ class MarkovModelBuilder(object):
                                                 emission_alphabet)
 
     def _all_blank(self, first_alphabet, second_alphabet):
-        """Return a dictionary with all counts set to zero.
+        """Return a dictionary with all counts set to zero (PRIVATE).
 
         This uses the letters in the first and second alphabet to create
         a dictionary with keys of two tuples organized as
@@ -136,7 +136,7 @@ class MarkovModelBuilder(object):
         return all_blank
 
     def _all_pseudo(self, first_alphabet, second_alphabet):
-        """Return a dictionary with all counts set to a default value.
+        """Return a dictionary with all counts set to a default value (PRIVATE).
 
         This takes the letters in first alphabet and second alphabet and
         creates a dictionary with keys of two tuples organized as:
@@ -636,7 +636,7 @@ class HiddenMarkovModel(object):
         return traceback_seq.toseq(), state_path_prob
 
     def _log_transform(self, probability):
-        """Return log transform of the given probability dictionary.
+        """Return log transform of the given probability dictionary (PRIVATE).
 
         When calculating the Viterbi equation, add logs of probabilities rather
         than multiplying probabilities, to avoid underflow errors. This method

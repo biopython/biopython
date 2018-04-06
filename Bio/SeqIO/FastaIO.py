@@ -1,4 +1,4 @@
-# Copyright 2006-2015 by Peter Cock.  All rights reserved.
+# Copyright 2006-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -18,6 +18,7 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
 def SimpleFastaParser(handle):
@@ -216,10 +217,14 @@ def FastaTwoLineIterator(handle, alphabet=single_letter_alphabet):
 
 
 class FastaWriter(SequentialSequenceWriter):
-    """Class to write Fasta format files."""
+    """Class to write Fasta format files (OBSOLETE).
+
+    Please use the ``as_fasta`` function instead, or the top level
+    ``Bio.SeqIO.write()`` function instead using ``format="fasta"``.
+    """
 
     def __init__(self, handle, wrap=60, record2title=None):
-        """Create a Fasta writer.
+        """Create a Fasta writer (OBSOLETE).
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
@@ -297,7 +302,7 @@ class FastaWriter(SequentialSequenceWriter):
 
 
 class FastaTwoLineWriter(FastaWriter):
-    """Class to write 2-line per record Fasta format files.
+    """Class to write 2-line per record Fasta format files (OBSOLETE).
 
     This means we write the sequence information  without line
     wrapping, and will always write a blank line for an empty
@@ -305,7 +310,7 @@ class FastaTwoLineWriter(FastaWriter):
     """
 
     def __init__(self, handle, record2title=None):
-        """Create a Fasta writer.
+        """Create a 2-line per record Fasta writer (OBSOLETE).
 
         Arguments:
          - handle - Handle to an output file, e.g. as returned
@@ -337,6 +342,59 @@ class FastaTwoLineWriter(FastaWriter):
         """
         super(FastaTwoLineWriter, self).__init__(handle, wrap=None,
                                                  record2title=record2title)
+
+
+def as_fasta(record):
+    """Turn a SeqRecord into a FASTA formated string.
+
+    This is used internally by the SeqRecord's .format("fasta")
+    method and by the SeqIO.write(..., ..., "fasta") function.
+    """
+    id = _clean(record.id)
+    description = _clean(record.description)
+    if description and description.split(None, 1)[0] == id:
+        # The description includes the id at the start
+        title = description
+    elif description:
+        title = "%s %s" % (id, description)
+    else:
+        title = id
+    assert "\n" not in title
+    assert "\r" not in title
+    lines = [">%s\n" % title]
+
+    data = _get_seq_string(record)  # Catches sequence being None
+    assert "\n" not in data
+    assert "\r" not in data
+    for i in range(0, len(data), 60):
+        lines.append(data[i:i + 60] + "\n")
+
+    return "".join(lines)
+
+
+def as_fasta_2line(record):
+    """Turn a SeqRecord into a two-line FASTA formated string.
+
+    This is used internally by the SeqRecord's .format("fasta-2line")
+    method and by the SeqIO.write(..., ..., "fasta-2line") function.
+    """
+    id = _clean(record.id)
+    description = _clean(record.description)
+    if description and description.split(None, 1)[0] == id:
+        # The description includes the id at the start
+        title = description
+    elif description:
+        title = "%s %s" % (id, description)
+    else:
+        title = id
+    assert "\n" not in title
+    assert "\r" not in title
+
+    data = _get_seq_string(record)  # Catches sequence being None
+    assert "\n" not in data
+    assert "\r" not in data
+
+    return ">%s\n%s\n" % (title, data)
 
 
 if __name__ == "__main__":

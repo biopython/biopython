@@ -11,9 +11,15 @@ The latest news is at the top of this file.
 (In progress, not yet released) Biopython 1.71
 ==============================================
 
+Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
+SeqIO.write (especially when used in a for loop).
+
+
+3 April 2018: Biopython 1.71
+============================
+
 This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
-It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
-(although support for Jython is deprecated).
+It has also been tested on PyPy2.7 v5.10.0 and PyPy3.5 v5.10.1.
 
 Python 3 is the primary development platform for Biopython. We will drop
 support for Python 2.7 no later than 2020, in line with the end-of-life or
@@ -116,7 +122,6 @@ possible, especially the following contributors:
 - Yasar L. Ahmed (first contribution)
 - Zachary Sailer (first contribution)
 - Zaid Ur-Rehman (first contribution)
-
 
 
 10 July 2017: Biopython 1.70

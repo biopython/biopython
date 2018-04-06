@@ -51,7 +51,7 @@ matrix:
       python: 3.6
       env: TOXENV=py36-cover
     - stage: test
-      python: pypy-5.7.1
+      python: pypy
       env: TOXENV=pypy-nocov
     - stage: test
       python: pypy3
@@ -99,6 +99,33 @@ before_install:
   - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
   # This will create ./bin/Genepop and a harmless ./info/ folder.
   - tar -jxvf genepop-4.5.1-0.tar.bz2
+  # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
+  # We therefore deactivate that, and download and unzip portable PyPy binaries.
+  - |
+    if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then
+        deactivate
+        wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.10.0-linux_x86_64-portable.tar.bz2
+        tar -jxvf pypy-5.10.0-linux_x86_64-portable.tar.bz2
+        echo 'Setting up aliases...'
+        cd pypy-5.10.0-linux_x86_64-portable/bin/
+        export PATH=$PWD:$PATH
+        ln -s pypy python
+        echo 'Setting up pip...'
+        ./pypy -m ensurepip
+    fi
+  - |
+    if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then
+        deactivate
+        wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy3.5-5.10.1-linux_x86_64-portable.tar.bz2
+        tar -jxvf pypy3.5-5.10.1-linux_x86_64-portable.tar.bz2
+        echo 'Setting up aliases...'
+        cd pypy3.5-5.10.1-linux_x86_64-portable/bin/
+        export PATH=$PWD:$PATH
+        ln -s pypy3 python
+        echo 'Setting up pip...'
+        ./pypy3 -m ensurepip
+        ln -s pip3 pip
+    fi
   - popd
   - cp Tests/biosql.ini.sample Tests/biosql.ini
   - psql -c "create database biosql_test;" -U postgres

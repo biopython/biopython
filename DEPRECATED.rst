@@ -60,7 +60,7 @@ within Biopython.
 
 Bio.DocSQL
 ==========
-This was deprecated in Biopython 1.69.
+This was deprecated in Biopython 1.69, and removed in Release 1.71.
 
 Bio.CodonAlign
 ==============

@@ -1,0 +1,43 @@
+ID   MuDR-N273_OS repbase;    DNA;    ORY; 799 BP.
+XX
+AC   .
+XX
+DT   26-OCT-2017 (Rel. 22.11, Created)
+DT   26-OCT-2017 (Rel. 22.11, Last updated, Version 1)
+XX
+DE   DNA transposon - consensus.
+XX
+KW   MuDR; DNA transposon; Transposable Element; Nonautonomous;
+KW   MuDR-N273_OS.
+XX
+OS   Oryza sativa
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; Liliopsida; Poales; Poaceae;
+OC   BOP clade; Oryzoideae; Oryzeae; Oryzinae; Oryza.
+XX
+RN   [1]
+RP   1-799
+RA   Bao W.;
+RT   "DNA transposons from the rice genome.";
+RL   Repbase Reports 17(11), 1316-1316 (2017).
+XX
+DR   [1] (Consensus)
+XX
+CC   ~91% identical to the consensus.
+XX
+SQ   Sequence 799 BP; 262 A; 122 C; 125 G; 289 T; 1 other;
+     ggggtttttt tttaactatt tgccactctt acggagtgsc actattgaga tgccactctt        60
+     ccaaattttt ttacacaaac accacatgag agagatattt ttcctaacta gagtgccatg       120
+     tcagcaagag agacttgaaa tgaccttttt acccctagtt tgagaaatat gagagattat       180
+     atacaaacat atataagaaa atattattta ttatatctta aaaagagtta tcacgggcaa       240
+     atatacgtcg aacaagttca ccataattta ataatagatt caacataggg tgaacttgtt       300
+     caacatatat ttatccgtga taactctttt tagatataat atagtacgta cttactatgt       360
+     tgaatctatt attaaattgt ggtgaacttg tccaacgtat actgctgtga taactctttt       420
+     ttagatacaa tatattgtgt tgaatctatt attaaattgt ggtgaacttg ttcaacgtat       480
+     attgcccgtg ataaattttt ttagatataa tatactatgc taaatctatt attaaattgt       540
+     ggtgaacttg ttcaacgtat atttgcccgt gataactctt ttttaagata taataaacaa       600
+     tattttctta tatatgtttg tatataatct ctcatatttc tcaaactagg ggtaaaaagg       660
+     tcatttcaag tcccccttgc tgacatggca ctctagttag gaaaaatatc tctctcatgt       720
+     ggtgtttgtg taaaaaaatt tggaagagtg gcatctcaat agtggcactc cgtaagagtg       780
+     gcaaatagtt aaaaacccc                                                    799
+//
