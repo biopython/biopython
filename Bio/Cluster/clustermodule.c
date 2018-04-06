@@ -28,7 +28,7 @@ extract_single_character(PyObject* object, const char variable[],
         if (n==1) {
             Py_UNICODE* u = PyUnicode_AS_UNICODE(object);
             Py_UNICODE ch = u[0];
-            if (ch < 128) c = ch;
+            if (ch < 128) c = (char) ch;
         }
     }
     else

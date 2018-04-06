@@ -39,7 +39,7 @@ class Tree(_cluster.Tree):
 
     def sort(self, order=None):
         n = len(self) + 1
-        indices = numpy.ones(n, dtype='i')
+        indices = numpy.ones(n, dtype='intc')
         if order is None:
             order = numpy.ones(n, dtype='d')
         elif isinstance(order, numpy.ndarray):
@@ -51,7 +51,7 @@ class Tree(_cluster.Tree):
 
     def cut(self, nclusters=None):
         n = len(self) + 1
-        indices = numpy.ones(n, dtype='i')
+        indices = numpy.ones(n, dtype='intc')
         if nclusters is None:
             nclusters = n
         return _cluster.Tree.cut(self, indices, nclusters)
@@ -117,11 +117,11 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
     else:
         data = numpy.array(data, dtype='d')
     if mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     if weight is None:
         n = data.shape[1] if transpose else data.shape[0]
         weight = numpy.ones(n, dtype='d')
@@ -133,10 +133,10 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
         if npass <= 0:
             raise ValueError("npass should be a positive integer")
         n = data.shape[1] if transpose else data.shape[0]
-        clusterid = numpy.empty(n, dtype='i')
+        clusterid = numpy.empty(n, dtype='intc')
     else:
         npass = 0
-        clusterid = numpy.array(initialid, dtype='i')
+        clusterid = numpy.array(initialid, dtype='intc')
     error, nfound = _cluster.kcluster(data, nclusters, mask, weight, transpose,
                                       npass, method, dist, clusterid)
     return clusterid, error, nfound
@@ -201,10 +201,10 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
         if npass <= 0:
             raise ValueError("npass should be a positive integer")
         n = len(distance)
-        clusterid = numpy.empty(n, dtype='i')
+        clusterid = numpy.empty(n, dtype='intc')
     else:
         npass = 0
-        clusterid = numpy.array(initialid, dtype='i')
+        clusterid = numpy.array(initialid, dtype='intc')
     distance = __check_distancematrix(distance)
     error, nfound = _cluster.kmedoids(distance, nclusters, npass, clusterid)
     return clusterid, error, nfound
@@ -298,11 +298,11 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     else:
         data = numpy.array(data, dtype='d')
     if mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     if data is not None:
         if weight is None:
             n = data.shape[1] if transpose else data.shape[0]
@@ -374,11 +374,11 @@ def somcluster(data, mask=None, weight=None, transpose=False,
     else:
         data = numpy.array(data, dtype='d')
     if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     elif mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     if weight is None:
         weight = numpy.ones(n, dtype='d')
     elif isinstance(weight, numpy.ndarray):
@@ -389,7 +389,7 @@ def somcluster(data, mask=None, weight=None, transpose=False,
         raise ValueError("nxgrid should be a positive integer (default is 2)")
     if nygrid < 1:
         raise ValueError("nygrid should be a positive integer (default is 1)")
-    clusterids = numpy.ones((nitems, 2), dtype='i')
+    clusterids = numpy.ones((nitems, 2), dtype='intc')
     celldata = numpy.empty((nxgrid, nygrid, ndata), dtype='d')
     _cluster.somcluster(clusterids, celldata, data, mask, weight, transpose,
                         inittau, niter, dist)
@@ -445,11 +445,11 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
     else:
         data = numpy.array(data, dtype='d')
     if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     elif mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     if weight is None:
         n = data.shape[1] if transpose else data.shape[0]
         weight = numpy.ones(n, dtype='d')
@@ -458,21 +458,21 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
     else:
         weight = numpy.array(weight, dtype='d')
     if index1 is None:
-        index1 = numpy.zeros(1, dtype='i')
+        index1 = numpy.zeros(1, dtype='intc')
     elif isinstance(index1, numbers.Integral):
-        index1 = numpy.array([index1], dtype='i')
+        index1 = numpy.array([index1], dtype='intc')
     elif isinstance(index1, numpy.ndarray):
-        index1 = numpy.require(index1, dtype='i', requirements='C')
+        index1 = numpy.require(index1, dtype='intc', requirements='C')
     else:
-        index1 = numpy.array(index1, dtype='i')
+        index1 = numpy.array(index1, dtype='intc')
     if index2 is None:
-        index2 = numpy.zeros(1, dtype='i')
+        index2 = numpy.zeros(1, dtype='intc')
     elif isinstance(index2, numbers.Integral):
-        index2 = numpy.array([index2], dtype='i')
+        index2 = numpy.array([index2], dtype='intc')
     elif isinstance(index2, numpy.ndarray):
-        index2 = numpy.require(index2, dtype='i', requirements='C')
+        index2 = numpy.require(index2, dtype='intc', requirements='C')
     else:
-        index2 = numpy.array(index2, dtype='i')
+        index2 = numpy.array(index2, dtype='intc')
     return _cluster.clusterdistance(data, mask, weight, index1, index2,
                                     method, dist, transpose)
 
@@ -511,16 +511,16 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
     else:
         data = numpy.array(data, dtype='d')
     if mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     if clusterid is None:
         n = data.shape[1] if transpose else data.shape[0]
-        clusterid = numpy.zeros(n, dtype='i')
+        clusterid = numpy.zeros(n, dtype='intc')
     else:
-        clusterid = numpy.require(clusterid, dtype='i', requirements='C')
+        clusterid = numpy.require(clusterid, dtype='intc', requirements='C')
     return _cluster.clustercentroids(data, mask, clusterid, method, transpose)
 
 
@@ -575,11 +575,11 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
     else:
         data = numpy.array(data, dtype='d')
     if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='i', requirements='C')
+        mask = numpy.require(mask, dtype='intc', requirements='C')
     elif mask is None:
-        mask = numpy.ones(data.shape, dtype='i')
+        mask = numpy.ones(data.shape, dtype='intc')
     else:
-        mask = numpy.array(mask, dtype='i')
+        mask = numpy.array(mask, dtype='intc')
     n = data.shape[1] if transpose else data.shape[0]
     matrix = [numpy.empty(i, dtype='d') for i in range(n)]
     _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
