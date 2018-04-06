@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <float.h>
-#include <math.h>
 #include "cluster.h"
 
 
@@ -471,7 +470,7 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
     }
     if (view->ndim == 1) {
         int m = view->shape[0];
-        n = (int) round((1+sqrt(1+8*m))/2);
+        n = (int)(1+sqrt(1+8*m)/2); /* rounds to (1+sqrt(1+8*m))/2 */
         if (n*n-n != 2 * m) {
             PyErr_SetString(PyExc_ValueError,
                             "distance matrix has unexpected size.");

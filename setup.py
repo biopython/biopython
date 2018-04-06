@@ -410,7 +410,6 @@ else:
     Extension('Bio.Cluster._cluster',
               ['Bio/Cluster/clustermodule.c',
                'Bio/Cluster/cluster.c'],
-              libraries=['m'],
               )]
 
 # We now define the Biopython version number in Bio/__init__.py
