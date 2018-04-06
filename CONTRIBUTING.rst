@@ -101,7 +101,7 @@ be run, and their results reported on the pull request.
 We use TravisCI to run most of the Biopython tests (although currently only
 under Linux, and not with all the optional dependencies included), plus also
 check Python coding style using the ``flake8`` tool with the ``pydocstyle``
-pluging (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
+plugin (``flake8-docstrings``), and reStructuredText using ``rst-lint``.
 https://travis-ci.org/biopython/biopython/branches
 
 We use AppVeyor to run most of the tests under Windows (although currently

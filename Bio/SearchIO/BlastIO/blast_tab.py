@@ -216,6 +216,10 @@ class BlastTabParser(object):
         elif self.has_comments:
             iterfunc = self._parse_commented_qresult
         else:
+            if self.line.startswith("#"):
+                raise ValueError("Encountered unexpected character '#' at the"
+                                 " beginning of a line. Set comments=True if"
+                                 " the file is a commented file.")
             iterfunc = self._parse_qresult
 
         for qresult in iterfunc():

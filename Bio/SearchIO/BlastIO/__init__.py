@@ -263,9 +263,9 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | gap_num           | gaps         |
 |             +-------------------+--------------+
-|             | ident_pct         | nident       |
+|             | ident_num         | nident       |
 |             +-------------------+--------------+
-|             | ident_num         | pident       |
+|             | ident_pct         | pident       |
 |             +-------------------+--------------+
 |             | mismatch_num      | mismatch     |
 |             +-------------------+--------------+

@@ -3,7 +3,7 @@
    :target: https://pypi.python.org/pypi/biopython
 .. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg
    :alt: Biopython on the Conda package conda-forge channel
-   :target: https://anaconda.org/bioconda/biopython
+   :target: https://anaconda.org/conda-forge/biopython
 .. image:: https://img.shields.io/travis/biopython/biopython/master.svg
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
@@ -168,12 +168,12 @@ deprecated).
   pacakge).
 
 - Appropriate C compiler for your version of Python, for example GCC on Linux,
-  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple’s
+  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple's
   command line tools, which can be installed with the terminal command::
 
       xcode-select --install
 
-  This will offer to install Apple’s XCode development suite - you can, but it
+  This will offer to install Apple's XCode development suite - you can, but it
   is not needed and takes a lot of disk space.
 
 - NumPy, see http://www.numpy.org - this package is used in ``Bio.Cluster``,
