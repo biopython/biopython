@@ -59,9 +59,12 @@ class Tree(_cluster.Tree):
 
 def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
              npass=1, method='a', dist='e', initialid=None):
-    """Perform k-means clustering, and return the cluster assignments,
-    the within-cluster sum of distances of the optimal k-means clustering
-    solution, and the number of times the optimal solution was found.
+    """Perform k-means clustering.
+
+    This function performs k-means clustering on the values in data, and
+    returns the cluster assignments, the within-cluster sum of distances
+    of the optimal k-means clustering solution, and the number of times
+    the optimal solution was found.
 
     Arguments
      - data: nrows x ncolumns array containing the data values.
@@ -143,9 +146,12 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
 
 
 def kmedoids(distance, nclusters=2, npass=1, initialid=None):
-    """Perform k-medoids clustering, and return the cluster assignments,
-    the within-cluster sum of distances of the optimal k-medoids clustering
-    solution, and the number of times the optimal solution was found.
+    """Perform k-medoids clustering.
+
+    This function performs k-medoids clustering, and returns the cluster
+    assignments, the within-cluster sum of distances of the optimal
+    k-medoids clustering solution, and the number of times the optimal
+    solution was found.
 
     Arguments:
      - distance: The distance matrix between the items. There are three
@@ -1188,7 +1194,8 @@ def read(handle):
     return Record(handle)
 
 # Everything below is private
-# 
+#
+
 
 def __check_distancematrix(distancematrix):
     if distancematrix is None:
