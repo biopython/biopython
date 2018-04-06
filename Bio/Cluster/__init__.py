@@ -74,15 +74,15 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
      - weight: the weights to be used when calculating distances
      - transpose:
 
-       - if equal to 0, rows are clustered;
-       - if equal to 1, columns are clustered.
+       - if False: rows are clustered;
+       - if True: columns are clustered.
 
      - npass: number of times the k-means clustering algorithm is
        performed, each time with a different (random) initial
        condition.
      - method: specifies how the center of a cluster is found:
-       - method=='a': arithmetic mean;
-       - method=='m': median.
+       - method == 'a': arithmetic mean;
+       - method == 'm': median.
 
      - dist: specifies the distance function to be used:
 
@@ -114,31 +114,12 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
        clustering solution;
      - nfound: the number of times this solution was found.
     """
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    else:
-        mask = numpy.array(mask, dtype='intc')
-    if weight is None:
-        n = data.shape[1] if transpose else data.shape[0]
-        weight = numpy.ones(n, dtype='d')
-    elif isinstance(weight, numpy.ndarray):
-        weight = numpy.require(weight, dtype='d', requirements='C')
-    else:
-        weight = numpy.array(weight, dtype='d')
-    if initialid is None:
-        if npass <= 0:
-            raise ValueError("npass should be a positive integer")
-        n = data.shape[1] if transpose else data.shape[0]
-        clusterid = numpy.empty(n, dtype='intc')
-    else:
-        npass = 0
-        clusterid = numpy.array(initialid, dtype='intc')
+    data = __check_data(data)
+    shape = data.shape
+    nitems = shape[1] if transpose else shape[0]
+    mask = __check_mask(mask, shape)
+    weight = __check_weight(weight, nitems)
+    clusterid, npass = __check_initialid(initialid, npass, nitems)
     error, nfound = _cluster.kcluster(data, nclusters, mask, weight, transpose,
                                       npass, method, dist, clusterid)
     return clusterid, error, nfound
@@ -202,15 +183,9 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
        clustering solution;
      - nfound: the number of times this solution was found.
     """
-    if initialid is None:
-        if npass <= 0:
-            raise ValueError("npass should be a positive integer")
-        n = len(distance)
-        clusterid = numpy.empty(n, dtype='intc')
-    else:
-        npass = 0
-        clusterid = numpy.array(initialid, dtype='intc')
     distance = __check_distancematrix(distance)
+    nitems = len(distance)
+    clusterid, npass = __check_initialid(initialid, npass, nitems)
     error, nfound = _cluster.kmedoids(distance, nclusters, npass, clusterid)
     return clusterid, error, nfound
 
@@ -245,10 +220,10 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
 
      - method: specifies which linkage method is used:
 
-       - method=='s': Single pairwise linkage
-       - method=='m': Complete (maximum) pairwise linkage (default)
-       - method=='c': Centroid linkage
-       - method=='a': Average pairwise linkage
+       - method == 's': Single pairwise linkage
+       - method == 'm': Complete (maximum) pairwise linkage (default)
+       - method == 'c': Centroid linkage
+       - method == 'a': Average pairwise linkage
 
      - distancematrix:  The distance matrix between the itemss. There are
        three ways in which you can pass a distance matrix:
@@ -296,26 +271,12 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     treecluster returns a Tree object describing the hierarchical clustering
     result. See the description of the Tree class for more information.
     """
-    if data is None:
-        pass
-    elif isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    else:
-        mask = numpy.array(mask, dtype='intc')
     if data is not None:
-        if weight is None:
-            n = data.shape[1] if transpose else data.shape[0]
-            weight = numpy.ones(n, dtype='d')
-        elif isinstance(weight, numpy.ndarray):
-            weight = numpy.require(weight, dtype='d', requirements='C')
-        else:
-            weight = numpy.array(weight, dtype='d')
+        data = __check_data(data)
+        shape = data.shape
+        nitems = shape[1] if transpose else shape[0]
+        mask = __check_mask(mask, shape)
+        weight = __check_weight(weight, nitems)
     distancematrix = __check_distancematrix(distancematrix)
     tree = Tree()
     _cluster.treecluster(tree, data, mask, weight, transpose, method, dist,
@@ -336,8 +297,8 @@ def somcluster(data, mask=None, weight=None, transpose=False,
      - weight: the weights to be used when calculating distances
      - transpose:
 
-       - if equal to 0, rows are clustered;
-       - if equal to 1, columns are clustered.
+       - if False: rows are clustered;
+       - if True: columns are clustered.
 
      - nxgrid: the horizontal dimension of the rectangular SOM map
      - nygrid: the vertical dimension of the rectangular SOM map
@@ -374,22 +335,11 @@ def somcluster(data, mask=None, weight=None, transpose=False,
     else:
         ndata = data.shape[1]
         nitems = data.shape[0]
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    elif mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    else:
-        mask = numpy.array(mask, dtype='intc')
-    if weight is None:
-        weight = numpy.ones(ndata, dtype='d')
-    elif isinstance(weight, numpy.ndarray):
-        weight = numpy.require(weight, dtype='d', requirements='C')
-    else:
-        weight = numpy.array(weight, dtype='d')
+    data = __check_data(data)
+    shape = data.shape
+    nitems = shape[1] if transpose else shape[0]
+    mask = __check_mask(mask, shape)
+    weight = __check_weight(weight, nitems)
     if nxgrid < 1:
         raise ValueError("nxgrid should be a positive integer (default is 2)")
     if nygrid < 1:
@@ -406,9 +356,9 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
     """Calculate and return the distance between two clusters.
 
     Arguments:
-     - data: nrows x ncolumns array containing the expression data
+     - data: nrows x ncolumns array containing the data values.
      - mask: nrows x ncolumns array of integers, showing which data are
-       missing. If mask[i][j]==0, then data[i][j] is missing.
+       missing. If mask[i, j]==0, then data[i, j] is missing.
      - weight: the weights to be used when calculating distances
      - index1: 1D array identifying which items belong to the
        first cluster. If the cluster contains only one item, then
@@ -429,55 +379,29 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
 
      - method: specifies how the distance between two clusters is defined:
 
-       - method=='a': the distance between the arithmetic means of the
-         two clusters
-       - method=='m': the distance between the medians of the two
-         clusters
-       - method=='s': the smallest pairwise distance between members
-         of the two clusters
-       - method=='x': the largest pairwise distance between members of
-         the two clusters
-       - method=='v': average of the pairwise distances between
-         members of the clusters
+       - method == 'a': the distance between the arithmetic means
+                        of the two clusters
+       - method == 'm': the distance between the medians of the two
+                        clusters
+       - method == 's': the smallest pairwise distance between members
+                        of the two clusters
+       - method == 'x': the largest pairwise distance between members of
+                        the two clusters
+       - method == 'v': average of the pairwise distances between
+                        members of the clusters
 
      - transpose:
 
        - if False: clusters of rows are considered;
        - if True: clusters of columns are considered.
     """
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    elif mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    else:
-        mask = numpy.array(mask, dtype='intc')
-    if weight is None:
-        n = data.shape[1] if transpose else data.shape[0]
-        weight = numpy.ones(n, dtype='d')
-    elif isinstance(weight, numpy.ndarray):
-        weight = numpy.require(weight, dtype='d', requirements='C')
-    else:
-        weight = numpy.array(weight, dtype='d')
-    if index1 is None:
-        index1 = numpy.zeros(1, dtype='intc')
-    elif isinstance(index1, numbers.Integral):
-        index1 = numpy.array([index1], dtype='intc')
-    elif isinstance(index1, numpy.ndarray):
-        index1 = numpy.require(index1, dtype='intc', requirements='C')
-    else:
-        index1 = numpy.array(index1, dtype='intc')
-    if index2 is None:
-        index2 = numpy.zeros(1, dtype='intc')
-    elif isinstance(index2, numbers.Integral):
-        index2 = numpy.array([index2], dtype='intc')
-    elif isinstance(index2, numpy.ndarray):
-        index2 = numpy.require(index2, dtype='intc', requirements='C')
-    else:
-        index2 = numpy.array(index2, dtype='intc')
+    data = __check_data(data)
+    shape = data.shape
+    nitems = shape[1] if transpose else shape[0]
+    mask = __check_mask(mask, shape)
+    weight = __check_weight(weight, nitems)
+    index1 = __check_index(index1)
+    index2 = __check_index(index2)
     return _cluster.clusterdistance(data, mask, weight, index1, index2,
                                     method, dist, transpose)
 
@@ -497,7 +421,7 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
      - clusterid: array containing the cluster number for each item.
        The cluster number should be non-negative.
      - method: specifies whether the centroid is calculated from the
-       arithmetic mean (method=='a', default) or the median (method=='m')
+       arithmetic mean (method == 'a', default) or the median (method == 'm')
        over each dimension.
      - transpose: if False, each row contains the data for one item;
                   if True, each column contains the data for one item.
@@ -511,16 +435,8 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
      - cmask: 2D array of integers describing which items in cdata,
        if any, are missing.
     """
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    elif isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    else:
-        mask = numpy.array(mask, dtype='intc')
+    data = __check_data(data)
+    mask = __check_mask(mask, data.shape)
     if clusterid is None:
         n = data.shape[1] if transpose else data.shape[0]
         clusterid = numpy.zeros(n, dtype='intc')
@@ -536,7 +452,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
 
     Arguments:
 
-     - data: nrows x ncolumns array containing the expression data.
+     - data: nrows x ncolumns array containing the data values.
 
      - mask: nrows x ncolumns array of integers, showing which data are
        missing. If mask[i][j]==0, then data[i][j] is missing.
@@ -575,16 +491,8 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
         [7., 3., 0., 6.]
         [4., 2., 6., 0.]
     """
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
-    if isinstance(mask, numpy.ndarray):
-        mask = numpy.require(mask, dtype='intc', requirements='C')
-    elif mask is None:
-        mask = numpy.ones(data.shape, dtype='intc')
-    else:
-        mask = numpy.array(mask, dtype='intc')
+    data = __check_data(data)
+    mask = __check_mask(mask, data.shape)
     n = data.shape[1] if transpose else data.shape[0]
     matrix = [numpy.empty(i, dtype='d') for i in range(n)]
     _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
@@ -595,7 +503,7 @@ def pca(data):
     """Perform principal component analysis.
 
     Arguments:
-     - data: nrows x ncolumns array containing the expression data
+     - data: nrows x ncolumns array containing the data values.
 
     Return value:
     This function returns an array containing the mean of each column, the
@@ -612,10 +520,7 @@ def pca(data):
 
     recreates the data matrix.
     """
-    if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
-    else:
-        data = numpy.array(data, dtype='d')
+    data = __check_data(data)
     nrows, ncols = data.shape
     nmin = min(nrows, ncols)
     columnmean = numpy.empty(ncols, dtype='d')
@@ -786,8 +691,8 @@ class Record(object):
         hierarchical clustering methods are available.
 
         Arguments:
-         - transpose: if equal to 0, rows are clustered;
-           if equal to 1, columns are clustered.
+         - transpose: if False: rows are clustered;
+                      if True: columns are clustered.
          - dist     : specifies the distance function to be used:
 
            - dist == 'e': Euclidean distance
@@ -799,12 +704,12 @@ class Record(object):
            - dist == 's': Spearman's rank correlation
            - dist == 'k': Kendall's tau
 
-         - method   : specifies which linkage method is used:
+         - method: specifies which linkage method is used:
 
-           - method=='s': Single pairwise linkage
-           - method=='m': Complete (maximum) pairwise linkage (default)
-           - method=='c': Centroid linkage
-           - method=='a': Average pairwise linkage
+           - method == 's': Single pairwise linkage
+           - method == 'm': Complete (maximum) pairwise linkage (default)
+           - method == 'c': Centroid linkage
+           - method == 'a': Average pairwise linkage
 
         See the description of the Tree class for more information about
         the Tree object returned by this method.
@@ -830,8 +735,8 @@ class Record(object):
            performed, each time with a different (random) initial condition.
          - method   : specifies how the center of a cluster is found:
 
-           - method=='a': arithmetic mean
-           - method=='m': median
+           - method == 'a': arithmetic mean
+           - method == 'm': median
 
          - dist     : specifies the distance function to be used:
 
@@ -930,8 +835,8 @@ class Record(object):
            sample. The cluster number should be non-negative.
          - method   : specifies how the centroid is calculated:
 
-           - method=='a': arithmetic mean over each dimension. (default)
-           - method=='m': median over each dimension.
+           - method == 'a': arithmetic mean over each dimension. (default)
+           - method == 'm': median over each dimension.
 
         Return values:
          - cdata    : 2D array containing the cluster centroids. If transpose==0,
@@ -968,20 +873,21 @@ class Record(object):
            - dist == 's': Spearman's rank correlation
            - dist == 'k': Kendall's tau
 
-         - method   : specifies how the distance between two clusters is defined:
+         - method: specifies how the distance between two clusters is defined:
 
-           - method=='a': the distance between the arithmetic means of the
-             two clusters
-           - method=='m': the distance between the medians of the two clusters
-           - method=='s': the smallest pairwise distance between members of
-             the two clusters
-           - method=='x': the largest pairwise distance between members of
-             the two clusters
-           - method=='v': average of the pairwise distances between members
-             of the clusters
+           - method == 'a': the distance between the arithmetic means
+                            of the two clusters
+           - method == 'm': the distance between the medians of the
+                            two clusters
+           - method == 's': the smallest pairwise distance between members
+                            of the two clusters
+           - method == 'x': the largest pairwise distance between members
+                            of the two clusters
+           - method == 'v': average of the pairwise distances between members
+                            of the clusters
 
-         - transpose: if False: clusters of genes (rows) are considered;
-                      if True: clusters of samples (columns) are considered.
+         - transpose: if False: clusters of rows are considered;
+                      if True: clusters of columns are considered.
 
         """
         if transpose == 0:
@@ -995,11 +901,12 @@ class Record(object):
         """Calculate the distance matrix and return it as a list of arrays.
 
         Arguments:
+
          - transpose:
              if False: calculate the distances between genes (rows);
              if True: calculate the distances beteeen samples (columns).
-         - dist     : specifies the distance function to be used:
 
+         - dist: specifies the distance function to be used:
            - dist == 'e': Euclidean distance
            - dist == 'b': City Block distance
            - dist == 'c': Pearson correlation
@@ -1194,6 +1101,53 @@ def read(handle):
 
 # Everything below is private
 #
+
+
+def __check_data(data):
+    if isinstance(data, numpy.ndarray):
+        return numpy.require(data, dtype='d', requirements='C')
+    else:
+        return numpy.array(data, dtype='d')
+
+
+def __check_mask(mask, shape):
+    if mask is None:
+        return numpy.ones(shape, dtype='intc')
+    elif isinstance(mask, numpy.ndarray):
+        return numpy.require(mask, dtype='intc', requirements='C')
+    else:
+        return numpy.array(mask, dtype='intc')
+
+
+def __check_weight(weight, nitems):
+    if weight is None:
+        return numpy.ones(nitems, dtype='d')
+    elif isinstance(weight, numpy.ndarray):
+        return numpy.require(weight, dtype='d', requirements='C')
+    else:
+        return numpy.array(weight, dtype='d')
+
+
+def __check_initialid(initialid, npass, nitems):
+    if initialid is None:
+        if npass <= 0:
+            raise ValueError("npass should be a positive integer")
+        clusterid = numpy.empty(nitems, dtype='intc')
+    else:
+        npass = 0
+        clusterid = numpy.array(initialid, dtype='intc')
+    return clusterid, npass
+
+
+def __check_index(index):
+    if index is None:
+        return numpy.zeros(1, dtype='intc')
+    elif isinstance(index, numbers.Integral):
+        return numpy.array([index], dtype='intc')
+    elif isinstance(index, numpy.ndarray):
+        return numpy.require(index, dtype='intc', requirements='C')
+    else:
+        return numpy.array(index, dtype='intc')
 
 
 def __check_distancematrix(distancematrix):
