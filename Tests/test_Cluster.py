@@ -54,7 +54,7 @@ class TestCluster(unittest.TestCase):
                              [12, 2, 0, 5, 0]], numpy.int32)
         try:
             treecluster(data1)
-        except Exception, e:
+        except Exception as e:
             self.fail(e)
             self.fail("treecluster failed to accept matrix data1")
 
@@ -183,7 +183,7 @@ class TestCluster(unittest.TestCase):
                              [12.7, 2.5, 0.4, 5.7, 0.2]], numpy.float)
         try:
             treecluster(data, mask1)
-        except Exception, e:
+        except Exception as e:
             self.fail(e)
             self.fail("treecluster failed to accept matrix mask1")
 
