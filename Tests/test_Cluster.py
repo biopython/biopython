@@ -30,57 +30,56 @@ class TestCluster(unittest.TestCase):
                              [5.1, 5.2]])
 
         # Another normal matrix, no errors; written as a list
-        data2 = [[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                 [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                 [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                 [12.1, 2.0, 0.0, 5.0, 0.0]]
+        data2 = [[1.1, 2.2, 3.3, 4.4, 5.5],
+                 [3.1, 3.2, 1.3, 2.4, 1.5],
+                 [4.1, 2.2, 0.3, 5.4, 0.5],
+                 [2.1, 2.0, 0.0, 5.0, 0.0]]
 
         # Rows are not contiguous
-        data3 = data1[::2,:]
+        data3 = data1[::2, :]
 
         # Columns are not contiguous
-        data4 = numpy.array(data2)[:,::2]
+        data4 = numpy.array(data2)[:, ::2]
 
         # Matrix using float32
-        data5 = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                              [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                              [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                              [12.1, 2.0, 0.0, 5.0, 0.0]], numpy.float32)
+        data5 = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                             [3.1, 3.2, 1.3, 2.4, 1.5],
+                             [4.1, 2.2, 0.3, 5.4, 0.5],
+                             [2.1, 2.0, 0.0, 5.0, 0.0]], numpy.float32)
 
         # Matrix using int
-        data6 = numpy.array([[ 1, 2, 3, 4, 5],
-                             [ 3, 3, 1, 2, 1],
-                             [ 4, 2, 0, 5, 0],
-                             [12, 2, 0, 5, 0]], numpy.int32)
+        data6 = numpy.array([[1, 2, 3, 4, 5],
+                             [3, 3, 1, 2, 1],
+                             [4, 2, 0, 5, 0],
+                             [2, 2, 0, 5, 0]], numpy.int32)
         try:
             treecluster(data1)
-        except Exception as e:
-            self.fail(e)
+        except Exception:
             self.fail("treecluster failed to accept matrix data1")
 
         try:
             treecluster(data2)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix data2")
 
         try:
             treecluster(data3)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix data3")
 
         try:
             treecluster(data4)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix data4")
 
         try:
             treecluster(data5)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix data5")
 
         try:
             treecluster(data6)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix data6")
 
         # Ragged matrix
@@ -106,9 +105,9 @@ class TestCluster(unittest.TestCase):
         data13 = [None]
 
         # Array of incorrect rank
-        data14 = numpy.array([[[1.1, 1.2],[2.3, 1.2],[3.4, 1.6]],
-                              [[1.4, 1.3],[3.2, 4.5],[9.8, 4.9]],
-                              [[1.1, 1.5],[1.1, 2.3],[6.5, 0.4]]])
+        data14 = numpy.array([[[1.1, 1.2], [2.3, 1.2], [3.4, 1.6]],
+                              [[1.4, 1.3], [3.2, 4.5], [9.8, 4.9]],
+                              [[1.1, 1.5], [1.1, 2.3], [6.5, 0.4]]])
 
         # Array with non-numerical values
         data15 = numpy.array([['a', 'b', 'c'],
@@ -135,10 +134,10 @@ class TestCluster(unittest.TestCase):
             from Pycluster import treecluster
 
         # data matrix
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                            [12.1, 2.0, 0.0, 5.0, 0.0]])
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
+                            [2.1, 2.0, 0.0, 5.0, 0.0]])
 
         # Normal mask, no errors
         mask1 = numpy.array([[1, 1, 0, 1, 0],
@@ -161,14 +160,14 @@ class TestCluster(unittest.TestCase):
                              [1, 1, 0, 1, 1],
                              [1, 1, 0, 1, 1],
                              [1, 0, 1, 1, 0]])
-        mask3 = mask3[::2,:]
+        mask3 = mask3[::2, :]
 
         # Columns are not contiguous
         mask4 = numpy.array([[1, 1, 0, 1, 0, 1, 0, 0, 1, 1],
                              [1, 1, 1, 0, 0, 1, 1, 0, 0, 1],
                              [1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
                              [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]])
-        mask4 = mask4[:,::2]
+        mask4 = mask4[:, ::2]
 
         # Matrix using int16
         mask5 = numpy.array([[1, 1, 0, 1, 0],
@@ -177,39 +176,38 @@ class TestCluster(unittest.TestCase):
                              [1, 1, 0, 1, 1]], numpy.int16)
 
         # Matrix using float
-        mask6 = numpy.array([[ 1.0, 2.2, 3.1, 4.8, 5.1],
-                             [ 3.3, 3.3, 1.4, 2.4, 1.2],
-                             [ 4.1, 2.2, 0.6, 5.5, 0.6],
-                             [12.7, 2.5, 0.4, 5.7, 0.2]], numpy.float)
+        mask6 = numpy.array([[1.0, 2.2, 3.1, 4.8, 5.1],
+                             [3.3, 3.3, 1.4, 2.4, 1.2],
+                             [4.1, 2.2, 0.6, 5.5, 0.6],
+                             [2.7, 2.5, 0.4, 5.7, 0.2]], numpy.float)
         try:
             treecluster(data, mask1)
-        except Exception as e:
-            self.fail(e)
+        except Exception:
             self.fail("treecluster failed to accept matrix mask1")
 
         try:
             treecluster(data, mask2)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix mask2")
 
         try:
             treecluster(data, mask3)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix mask3")
 
         try:
             treecluster(data, mask4)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix mask4")
 
         try:
             treecluster(data, mask5)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix mask5")
 
         try:
             treecluster(data, mask6)
-        except:
+        except Exception:
             self.fail("treecluster failed to accept matrix mask6")
 
         # Ragged mask
@@ -252,9 +250,9 @@ class TestCluster(unittest.TestCase):
         mask14 = []
 
         # Array of incorrect rank
-        mask15 = numpy.array([[[1, 1],[0, 1],[1, 1]],
-                              [[1, 1],[0, 1],[1, 1]],
-                              [[1, 1],[1, 1],[1, 0]]])
+        mask15 = numpy.array([[[1, 1], [0, 1], [1, 1]],
+                              [[1, 1], [0, 1], [1, 1]],
+                              [[1, 1], [1, 1], [1, 0]]])
 
         # References that cannot be converted to a matrix of int
         mask16 = "snoopy"
@@ -283,10 +281,10 @@ class TestCluster(unittest.TestCase):
         nclusters = 3
         # First data set
         weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                            [12.1, 2.0, 0.0, 5.0, 0.0]])
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
+                            [9.9, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
@@ -350,10 +348,10 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = numpy.array([1, 1, 1, 1, 1])
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                            [12.1, 2.0, 0.0, 5.0, 0.0]])
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
+                            [9.9, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
@@ -371,11 +369,11 @@ class TestCluster(unittest.TestCase):
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c3, dist='e',
                                    method='a', transpose=0)
-        self.assertAlmostEqual(distance, 32.508, places=3)
+        self.assertAlmostEqual(distance, 23.796, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c2, index2=c3, dist='e',
                                    method='a', transpose=0)
-        self.assertAlmostEqual(distance, 15.118, places=3)
+        self.assertAlmostEqual(distance, 8.606, places=3)
 
         # Second data set
         weight = numpy.array([1, 1])
@@ -432,10 +430,10 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight1 = [1, 1, 1, 1, 1]
-        data1 = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                             [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                             [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                             [12.1, 2.0, 0.0, 5.0, 0.0]])
+        data1 = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                             [3.1, 3.2, 1.3, 2.4, 1.5],
+                             [4.1, 2.2, 0.3, 5.4, 0.5],
+                             [9.7, 2.0, 0.0, 5.0, 0.0]])
         mask1 = numpy.array([[1, 1, 1, 1, 1],
                              [1, 1, 1, 1, 1],
                              [1, 1, 1, 1, 1],
@@ -454,14 +452,14 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(tree[1].distance, 7.300, places=3)
         self.assertEqual(tree[2].left, 3)
         self.assertEqual(tree[2].right, -2)
-        self.assertAlmostEqual(tree[2].distance, 21.348, places=3)
-        indices = tree.sort([0,1,2,3])
+        self.assertAlmostEqual(tree[2].distance, 13.540, places=3)
+        indices = tree.sort([0, 1, 2, 3])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 0)
         self.assertEqual(indices[1], 1)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 3)
-        indices = tree.sort([0,3,2,1])
+        indices = tree.sort([0, 3, 2, 1])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 3)
         self.assertEqual(indices[1], 0)
@@ -480,14 +478,14 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(tree[1].distance, 5.800, places=3)
         self.assertEqual(tree[2].left, -2)
         self.assertEqual(tree[2].right, 3)
-        self.assertAlmostEqual(tree[2].distance, 12.908, places=3)
-        indices = tree.sort([0,1,2,3])
+        self.assertAlmostEqual(tree[2].distance, 6.380, places=3)
+        indices = tree.sort([0, 1, 2, 3])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 0)
         self.assertEqual(indices[1], 1)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 3)
-        indices = tree.sort([0,3,2,1])
+        indices = tree.sort([0, 3, 2, 1])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 3)
         self.assertEqual(indices[1], 0)
@@ -506,14 +504,14 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(tree[1].distance, 6.650, places=3)
         self.assertEqual(tree[2].left, -2)
         self.assertEqual(tree[2].right, 3)
-        self.assertAlmostEqual(tree[2].distance, 19.437, places=3)
-        indices = tree.sort([0,1,2,3])
+        self.assertAlmostEqual(tree[2].distance, 11.629, places=3)
+        indices = tree.sort([0, 1, 2, 3])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 0)
         self.assertEqual(indices[1], 1)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 3)
-        indices = tree.sort([0,3,2,1])
+        indices = tree.sort([0, 3, 2, 1])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 3)
         self.assertEqual(indices[1], 0)
@@ -532,20 +530,19 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(tree[1].distance, 8.800, places=3)
         self.assertEqual(tree[2].left, 3)
         self.assertEqual(tree[2].right, -2)
-        self.assertAlmostEqual(tree[2].distance, 32.508, places=3)
-        indices = tree.sort([0,1,2,3])
+        self.assertAlmostEqual(tree[2].distance, 23.100, places=3)
+        indices = tree.sort([0, 1, 2, 3])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 0)
         self.assertEqual(indices[1], 1)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 3)
-        indices = tree.sort([0,3,2,1])
+        indices = tree.sort([0, 3, 2, 1])
         self.assertEqual(len(indices), len(data1))
         self.assertEqual(indices[0], 3)
         self.assertEqual(indices[1], 0)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 1)
-
 
         # Second data set
         weight2 = [1, 1]
@@ -809,10 +806,10 @@ class TestCluster(unittest.TestCase):
 
         # First data set
         weight = [1, 1, 1, 1, 1]
-        data = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                            [ 3.1, 3.2, 1.3, 2.4, 1.5],
-                            [ 4.1, 2.2, 0.3, 5.4, 0.5],
-                            [12.1, 2.0, 0.0, 5.0, 0.0]])
+        data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                            [3.1, 3.2, 1.3, 2.4, 1.5],
+                            [4.1, 2.2, 0.3, 5.4, 0.5],
+                            [9.9, 2.0, 0.0, 5.0, 0.0]])
         mask = numpy.array([[1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
