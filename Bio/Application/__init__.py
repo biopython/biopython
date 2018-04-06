@@ -320,7 +320,7 @@ class AbstractCommandline(object):
         return answer
 
     def _get_parameter(self, name):
-        """Get a commandline option value."""
+        """Get a commandline option value (PRIVATE)."""
         for parameter in self.parameters:
             if name in parameter.names:
                 if isinstance(parameter, _Switch):
@@ -330,7 +330,7 @@ class AbstractCommandline(object):
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name):
-        """Reset or clear a commandline option value."""
+        """Reset or clear a commandline option value (PRIVATE)."""
         cleared_option = False
         for parameter in self.parameters:
             if name in parameter.names:
@@ -370,7 +370,7 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
-        """Check whether the given value is valid.
+        """Check whether the given value is valid (PRIVATE).
 
         No return value - it either works or raises a ValueError.
 
@@ -751,7 +751,7 @@ def _escape_filename(filename):
 
 
 def _test():
-    """Run the Bio.Application module's doctests."""
+    """Run the Bio.Application module's doctests (PRIVATE)."""
     import doctest
     doctest.testmod(verbose=1)
 
