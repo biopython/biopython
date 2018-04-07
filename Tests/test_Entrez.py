@@ -3,9 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Offline tests for
+"""Offline tests for two Entrez features.
+
 (1) the URL construction of NCBI's Entrez services.
-(2) setting a custom directory for DTD and XSD downloads."""
+(2) setting a custom directory for DTD and XSD downloads.
+"""
 
 import unittest
 import warnings
@@ -145,9 +147,12 @@ class TestURLConstruction(unittest.TestCase):
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
 
+
 class CustomDirectoryTest(unittest.TestCase):
-    """ Unit test for the feature to set a custom directory for Entrez, via Parser.DataHandler.directory.
-    cparmet 4-6-18 """
+    """Offline unit test for custom directory feature.
+
+    Allow user to specify a custom directory for Entrez DTD/XSD files by setting Parser.DataHandler.directory.
+    """
     def test_custom_directory(self):
         import tempfile
         import os
@@ -155,20 +160,21 @@ class CustomDirectoryTest(unittest.TestCase):
 
         handler = Parser.DataHandler(validate=False)
 
-        # create a temporary directory
+        # Create a temporary directory
         tmpdir = tempfile.mkdtemp()
         # Set the custom directory to the temporary directory.
         # This assignment statement will also initialize the local DTD and XSD directories.
         handler.directory = tmpdir
 
         # Confirm that the two temp directories are named what we want.
-        self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'), msg = 'DTD: ' + handler.local_dtd_dir) # + '; directory = ' + handler.directory
+        self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'))
         self.assertEqual(handler.local_xsd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'XSDs'))
 
         # And that they were created.
         self.assertTrue(os.path.isdir(handler.local_dtd_dir))
         self.assertTrue(os.path.isdir(handler.local_xsd_dir))
         shutil.rmtree(tmpdir)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
