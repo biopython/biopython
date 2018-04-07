@@ -200,8 +200,8 @@ static double* getrank(int n, const double data[], const double weight[])
   double* rank;
   int* index;
   double total = 0.0;
-  double subtotal = 0.0;
-  double current = 0.f/0.f; /* NaN */
+  double subtotal;
+  double current;
   double value;
   rank = malloc(n*sizeof(double));
   if (!rank) return NULL;
@@ -214,7 +214,10 @@ static double* getrank(int n, const double data[], const double weight[])
   sort(n, data, index);
   /* Build a rank table */
   k = 0;
-  for (i = 0; i < n; i++) {
+  j = index[0];
+  current = data[j];
+  subtotal = weight[j];
+  for (i = 1; i < n; i++) {
       j = index[i];
       value = data[j];
       if (value != current) {
