@@ -1270,6 +1270,12 @@ py_kcluster(PyObject* self, PyObject* args, PyObject* keywords)
     ncols = data.ncols;
     ndata = transpose ? nrows : ncols;
     nitems = transpose ? ncols : nrows;
+    if (weight.shape[0] != ndata) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "weight has incorrect size %zd (expected %d)",
+                     weight.shape[0], ndata);
+        goto exit;
+    }
     if (nclusters < 1) {
         PyErr_SetString(PyExc_ValueError, "nclusters should be positive");
         goto exit;
@@ -1589,6 +1595,12 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
         }
         ndata = transpose ? nrows : ncols;
         nitems = transpose ? ncols : nrows;
+        if (weight.shape[0] != ndata) {
+            PyErr_Format(PyExc_RuntimeError,
+                         "weight has incorrect size %zd (expected %d)",
+                         weight.shape[0], ndata);
+            goto exit;
+        }
 
         nodes = treecluster(nrows,
                             ncols,
@@ -1745,6 +1757,12 @@ py_somcluster(PyObject* self, PyObject* args, PyObject* keywords)
     }
     nitems = transpose ? ncols : nrows;
     ndata = transpose ? nrows : ncols;
+    if (weight.shape[0] != ndata) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "weight has incorrect size %zd (expected %d)",
+                     weight.shape[0], ndata);
+        goto exit;
+    }
     if (celldata.nz != ndata) {
         PyErr_Format(PyExc_RuntimeError,
                     "the celldata array size is not consistent with the data "
@@ -1877,6 +1895,12 @@ py_clusterdistance(PyObject* self, PyObject* args, PyObject* keywords)
         PyErr_Format(PyExc_ValueError,
             "mask has incorrect dimensions (%zd x %zd, expected %d x %d)",
             mask.view.shape[0], mask.view.shape[1], data.nrows, data.ncols);
+        goto exit;
+    }
+    if (weight.shape[0] != ndata) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "weight has incorrect size %zd (expected %d)",
+                     weight.shape[0], ndata);
         goto exit;
     }
 
@@ -2114,6 +2138,12 @@ py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
     }
     ndata = (transpose==0) ? ncols : nrows;
     nelements = (transpose==0) ? nrows : ncols;
+    if (weight.shape[0] != ndata) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "weight has incorrect size %zd (expected %d)",
+                     weight.shape[0], ndata);
+        goto exit;
+    }
     if (_convert_list_to_distancematrix(list, &distances) == 0) goto exit;
 
     distancematrix(nrows,

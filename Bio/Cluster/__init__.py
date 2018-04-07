@@ -116,9 +116,12 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
     """
     data = __check_data(data)
     shape = data.shape
-    nitems = shape[1] if transpose else shape[0]
+    if transpose:
+        ndata, nitems = shape
+    else:
+        nitems, ndata = shape
     mask = __check_mask(mask, shape)
-    weight = __check_weight(weight, nitems)
+    weight = __check_weight(weight, ndata)
     clusterid, npass = __check_initialid(initialid, npass, nitems)
     error, nfound = _cluster.kcluster(data, nclusters, mask, weight, transpose,
                                       npass, method, dist, clusterid)
@@ -274,9 +277,9 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     if data is not None:
         data = __check_data(data)
         shape = data.shape
-        nitems = shape[1] if transpose else shape[0]
+        ndata = shape[0] if transpose else shape[1]
         mask = __check_mask(mask, shape)
-        weight = __check_weight(weight, nitems)
+        weight = __check_weight(weight, ndata)
     distancematrix = __check_distancematrix(distancematrix)
     tree = Tree()
     _cluster.treecluster(tree, data, mask, weight, transpose, method, dist,
@@ -330,16 +333,13 @@ def somcluster(data, mask=None, weight=None, transpose=False,
        with coordinates [ix, iy].
     """
     if transpose:
-        ndata = data.shape[0]
-        nitems = data.shape[1]
+        ndata, nitems = data.shape
     else:
-        ndata = data.shape[1]
-        nitems = data.shape[0]
+        nitems, ndata = data.shape
     data = __check_data(data)
     shape = data.shape
-    nitems = shape[1] if transpose else shape[0]
     mask = __check_mask(mask, shape)
-    weight = __check_weight(weight, nitems)
+    weight = __check_weight(weight, ndata)
     if nxgrid < 1:
         raise ValueError("nxgrid should be a positive integer (default is 2)")
     if nygrid < 1:
@@ -397,9 +397,9 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
     """
     data = __check_data(data)
     shape = data.shape
-    nitems = shape[1] if transpose else shape[0]
+    ndata = shape[0] if transpose else shape[1]
     mask = __check_mask(mask, shape)
-    weight = __check_weight(weight, nitems)
+    weight = __check_weight(weight, ndata)
     index1 = __check_index(index1)
     index2 = __check_index(index2)
     return _cluster.clusterdistance(data, mask, weight, index1, index2,
@@ -1105,9 +1105,12 @@ def read(handle):
 
 def __check_data(data):
     if isinstance(data, numpy.ndarray):
-        return numpy.require(data, dtype='d', requirements='C')
+        data = numpy.require(data, dtype='d', requirements='C')
     else:
-        return numpy.array(data, dtype='d')
+        data = numpy.array(data, dtype='d')
+    if data.ndim != 2:
+        raise ValueError("data should be 2-dimensional")
+    return data
 
 
 def __check_mask(mask, shape):
@@ -1119,9 +1122,9 @@ def __check_mask(mask, shape):
         return numpy.array(mask, dtype='intc')
 
 
-def __check_weight(weight, nitems):
+def __check_weight(weight, ndata):
     if weight is None:
-        return numpy.ones(nitems, dtype='d')
+        return numpy.ones(ndata, dtype='d')
     elif isinstance(weight, numpy.ndarray):
         return numpy.require(weight, dtype='d', requirements='C')
     else:
