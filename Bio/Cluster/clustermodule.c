@@ -425,7 +425,7 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
         return 0;
     }
     if (view->ndim == 1) {
-        int m = view->shape[0];
+        int m = (int) view->shape[0];
         if (m != view->shape[0]) {
             PyErr_Format(PyExc_ValueError,
                          "distance matrix is too large (size = %zd)",
@@ -448,7 +448,7 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
         for (p = view->buf, i = 0; i < n; p += i, i++) values[i] = p;
     }
     else if (view->ndim == 2) {
-        n = view->shape[0];
+        n = (int) view->shape[0];
         if (n != view->shape[0]) {
             PyErr_Format(PyExc_ValueError,
                          "distance matrix is too large (size = %zd)",
@@ -849,15 +849,15 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
         return -1;
     }
 
-    n = PyList_GET_SIZE(arg);
-    if (n < 1) {
-        PyErr_SetString(PyExc_ValueError, "List is empty");
-        return -1;
-    }
+    n = (int) PyList_GET_SIZE(arg);
     if (n != PyList_GET_SIZE(arg)) {
         PyErr_Format(PyExc_ValueError,
                      "List is too large (size = %zd)", PyList_GET_SIZE(arg));
         return 0;
+    }
+    if (n < 1) {
+        PyErr_SetString(PyExc_ValueError, "List is empty");
+        return -1;
     }
     nodes = malloc(n*sizeof(Node));
     for (i = 0; i < n; i++) {
