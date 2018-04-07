@@ -294,9 +294,15 @@ vector_converter(PyObject* object, void* pointer)
 static int check_clusterid(Py_buffer clusterid) {
     int i, j;
     int *p = clusterid.buf;
-    const int nitems = clusterid.shape[0];
     int nclusters = 0;
     int* number;
+    const int nitems = (int) clusterid.shape[0];
+    if (nitems != clusterid.shape[0]) {
+        PyErr_Format(PyExc_ValueError,
+                     "clusterid array is too large (size = %zd)",
+                     clusterid.shape[0]);
+        return 0;
+    }
     for (i = 0; i < nitems; i++) {
         j = p[i];
         if (j > nclusters) nclusters = j;
@@ -420,6 +426,12 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
     }
     if (view->ndim == 1) {
         int m = view->shape[0];
+        if (m != view->shape[0]) {
+            PyErr_Format(PyExc_ValueError,
+                         "distance matrix is too large (size = %zd)",
+                         view->shape[0]);
+            return 0;
+        }
         n = (int)(1+sqrt(1+8*m)/2); /* rounds to (1+sqrt(1+8*m))/2 */
         if (n*n-n != 2 * m) {
             PyErr_SetString(PyExc_ValueError,
@@ -437,6 +449,12 @@ _convert_array_to_distancematrix(PyObject* array, Distancematrix* distances) {
     }
     else if (view->ndim == 2) {
         n = view->shape[0];
+        if (n != view->shape[0]) {
+            PyErr_Format(PyExc_ValueError,
+                         "distance matrix is too large (size = %zd)",
+                         view->shape[0]);
+            return 0;
+        }
         distances->n = n;
         if (view->shape[1] != n) {
             PyErr_SetString(PyExc_ValueError,
@@ -835,6 +853,11 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
     if (n < 1) {
         PyErr_SetString(PyExc_ValueError, "List is empty");
         return -1;
+    }
+    if (n != PyList_GET_SIZE(arg)) {
+        PyErr_Format(PyExc_ValueError,
+                     "List is too large (size = %zd)", PyList_GET_SIZE(arg));
+        return 0;
     }
     nodes = malloc(n*sizeof(Node));
     for (i = 0; i < n; i++) {
@@ -1909,8 +1932,8 @@ py_clusterdistance(PyObject* self, PyObject* args, PyObject* keywords)
                                data.values,
                                mask.values,
                                weight.buf,
-                               index1.shape[0],
-                               index2.shape[0],
+                               (int) index1.shape[0],
+                               (int) index2.shape[0],
                                index1.buf,
                                index2.buf,
                                dist,
