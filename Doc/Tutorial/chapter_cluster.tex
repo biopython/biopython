@@ -22,7 +22,7 @@ The data to be clustered are represented by a $n \times m$ Numerical Python arra
 
 \subsection*{Missing values}
 
-Often in microarray experiments, some of the data values are missing, which is indicated by an additional $n \times m$ Numerical Python integer array \verb|mask|. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing and is ignored in the analysis.
+The $n \times m$ Numerical Python integer array \verb|mask| indicates if any of the values in \verb|data| are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing and is ignored in the analysis.
 
 \subsection*{Random number generator}
 
@@ -159,9 +159,6 @@ As Kendall's $\tau$ is always between -1 and 1, the corresponding distance will 
 \subsection*{Weighting}
 
 For most of the distance functions available in \verb|Bio.Cluster|, a weight vector can be applied. The weight vector contains weights for the items in the data vector. If the weight for item $i$ is $w_i$, then that item is treated as if it occurred $w_i$ times in the data. The weight do not have to be integers.
-For the Spearman rank correlation and Kendall's
-$\tau$,
-weights do not have a well-defined meaning and are therefore not implemented.
 
 \subsection*{Calculating the distance matrix}
 \label{subsec:distancematrix}
@@ -610,7 +607,7 @@ where
 $\left(N_x, N_y\right)$
 are the dimensions of the rectangle defining the topology.
 
-The function \verb|somcluster| implements the complete algorithm to calculate a Self-Organizing Map on a rectangular grid. First it initializes the random number generator. The node data are then initialized using the random number generator. The order in which genes or microarrays are used to modify the SOM is also randomized. The total number of iterations in the SOM algorithm is specified by the user.
+The function \verb|somcluster| implements the complete algorithm to calculate a Self-Organizing Map on a rectangular grid. First it initializes the random number generator. The node data are then initialized using the random number generator. The order in which genes or samples are used to modify the SOM is also randomized. The total number of iterations in the SOM algorithm is specified by the user.
 
 To run \verb|somcluster|, use
 \begin{verbatim}
@@ -753,7 +750,7 @@ A \verb|Record| object has the following attributes:
 
 \begin{itemize}
 \item \verb|data| \\
-The data array containing the gene expression data. Genes are stored row-wise, while microarrays are stored column-wise.
+The data array containing the gene expression data. Genes are stored row-wise, while samples are stored column-wise.
 
 \item \verb|mask| \\
 This array shows which elements in the \verb|data| array, if any, are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If no data were found to be missing, \verb|mask| is set to \verb|None|.
@@ -771,13 +768,13 @@ The weights that are to be used to calculate the distance in expression profile 
 The preferred order in which genes should be stored in an output file. If not present in the data file, \verb|gorder| is set to \verb|None|.
 
 \item \verb|expid| \\
-This is a list containing a description of each microarray, e.g. experimental condition.
+This is a list containing a description of each sample, e.g. experimental condition.
 
 \item \verb|eweight| \\
-The weights that are to be used to calculate the distance in expression profile between microarrays. If not present in the data file, \verb|eweight| is set to \verb|None|.
+The weights that are to be used to calculate the distance in expression profile between samples. If not present in the data file, \verb|eweight| is set to \verb|None|.
 
 \item \verb|eorder| \\
-The preferred order in which microarrays should be stored in an output file. If not present in the data file, \verb|eorder| is set to \verb|None|.
+The preferred order in which samples should be stored in an output file. If not present in the data file, \verb|eorder| is set to \verb|None|.
 
 \item \verb|uniqid| \\
 The string that was used instead of UNIQID in the data file.
@@ -866,7 +863,7 @@ defines the linkage method to be used:
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \item \verb|transpose| \\
-Determines if genes or microarrays are being clustered. If \verb|transpose==0|, genes (rows) are being clustered. If \verb|transpose==1|, microarrays (columns) are clustered.
+Determines if genes or samples are being clustered. If \verb|transpose==0|, genes (rows) are being clustered. If \verb|transpose==1|, samples (columns) are clustered.
 \end{itemize}
 
 This function returns a \verb|Tree| object. This object contains $\left(\textrm{number of items} - 1\right)$ nodes, where the number of items is the number of rows if rows were clustered, or the number of columns if columns were clustered. Each node describes a pairwise linking event, where the node attributes \verb|left| and \verb|right| each contain the number of one item or subnode, and \verb|distance| the distance between them. Items are numbered from 0 to $\left(\textrm{number of items} - 1\right)$, while clusters are numbered -1 to $-\left(\textrm{number of items}-1\right)$.

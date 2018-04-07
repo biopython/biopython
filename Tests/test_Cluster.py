@@ -1,7 +1,6 @@
 import unittest
 
 import numpy
-import sys
 
 
 class TestCluster(unittest.TestCase):
