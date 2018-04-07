@@ -513,7 +513,7 @@ class DataHandler(object):
             self.structures.update({name: multiple})
 
     def open_dtd_file(self, filename):
-        self._initialize_directory(directory_type = 'DTD') # Initialize local_dtd_dir
+        self._initialize_directory(directory_type='DTD')
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -531,7 +531,7 @@ class DataHandler(object):
         return None
 
     def open_xsd_file(self, filename):
-        self._initialize_directory(directory_type = 'XSD') # Initialize local_xsd_dir
+        self._initialize_directory(directory_type='XSD')
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -549,7 +549,7 @@ class DataHandler(object):
         return None
 
     def save_dtd_file(self, filename, text):
-        self._initialize_directory(directory_type = 'DTD') # Initialize local_dtd_dir
+        self._initialize_directory(directory_type='DTD')
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -560,7 +560,7 @@ class DataHandler(object):
             handle.close()
 
     def save_xsd_file(self, filename, text):
-        self._initialize_directory(directory_type = 'XSD') # Initialize local_xsd_dir
+        self._initialize_directory(directory_type='XSD')
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -624,10 +624,11 @@ class DataHandler(object):
         return 1
 
     def _initialize_directory(self, directory_type):
-        ''' Internal function to initialize the local DTD/XSD directories.
-        Added to allow for custom directory (cache) locations,
-        for example when code is deployed on AWS Lambda.'''
+        """Internal function to initialize the local DTD/XSD directories.
 
+        Added to allow for custom directory (cache) locations,
+        for example when code is deployed on AWS Lambda.
+        """
         # If user hasn't set a custom cache location, initialize it.
         if self.directory is None:
             import platform
@@ -659,12 +660,11 @@ class DataHandler(object):
 
     @property
     def directory(self):
-        ''' The property allowing user to set a custom home directory for DTD and XSD files.'''
         return self._directory
 
     @directory.setter
     def directory(self, directory):
-        ''' Whenever user sets a custom directory, trigger initialization.'''
+        """Allow user to set a custom directory, also triggering subdirectory initialization."""
         self._directory = directory
-        self._initialize_directory(directory_type=['DTD','XSD'])
+        self._initialize_directory(directory_type=['DTD', 'XSD'])
         return
