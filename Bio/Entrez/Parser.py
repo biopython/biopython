@@ -639,21 +639,21 @@ class DataHandler(object):
                 del home
             del platform
         if 'DTD' in directory_type:
-            local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
+            self.local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
             try:
-                os.makedirs(local_dtd_dir)  # use exist_ok=True on Python >= 3.2
+                os.makedirs(self.local_dtd_dir)  # use exist_ok=True on Python >= 3.2
             except OSError as exception:
                 # Check if local_dtd_dir already exists, and that it is a directory.
                 # Trying os.makedirs first and then checking for os.path.isdir avoids
                 # a race condition.
-                if not os.path.isdir(local_dtd_dir):
+                if not os.path.isdir(self.local_dtd_dir):
                     raise exception
         if 'XSD' in directory_type:
-            local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
+            self.local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
             try:
-                os.makedirs(local_xsd_dir)  # use exist_ok=True on Python >= 3.2
+                os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
             except OSError as exception:
-                if not os.path.isdir(local_xsd_dir):
+                if not os.path.isdir(self.local_xsd_dir):
                     raise exception
         return
 

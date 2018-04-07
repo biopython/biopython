@@ -5,7 +5,7 @@
 
 """Offline tests for
 (1) the URL construction of NCBI's Entrez services.
-(2) setting a custom directory for DTD and XSD downloads. [added by cparmet 4-6-18]"""
+(2) setting a custom directory for DTD and XSD downloads."""
 
 import unittest
 import warnings
@@ -151,19 +151,22 @@ class CustomDirectoryTest(unittest.TestCase):
     def test_custom_directory(self):
         import tempfile
         import os
+
+        handler = Parser.DataHandler(validate=False)
+
         # create a temporary directory
         with tempfile.TemporaryDirectory() as tmpdir:
             # Set the custom directory to the temporary directory.
             # This assignment statement will also initialize the local DTD and XSD directories.
-            Parser.DataHandler.directory = tmpdir
+            handler.directory = tmpdir
 
             # Confirm that the two temp directories are named what we want.
-            self.assertTrue(Parser.DataHandler.local_dtd_dir, os.path.join(Parser.DataHandler.directory, 'Bio', 'Entrez', 'DTDs'))
-            self.assertTrue(Parser.DataHandler.local_xsd_dir, os.path.join(Parser.DataHandler.directory, 'Bio', 'Entrez', 'XSDs'))
+            self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'), msg = 'DTD: ' + handler.local_dtd_dir) # + '; directory = ' + handler.directory
+            self.assertEqual(handler.local_xsd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'XSDs'))
 
             # And that they were created.
-            self.assertTrue(os.path.isdir(Parser.DataHandler.local_dtd_dir))
-            self.assertTrue(os.path.isdir(Parser.DataHandler.local_xsd_dir))
+            self.assertTrue(os.path.isdir(handler.local_dtd_dir))
+            self.assertTrue(os.path.isdir(handler.local_xsd_dir))
 
 
 if __name__ == "__main__":
