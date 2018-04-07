@@ -1678,10 +1678,10 @@ If transpose==0, the distance between two rows in the matrix is calculated.
 Otherwise, the distance between two columns in the matrix is calculated.
 ============================================================================
 */
-{ int con = 0;
-  int dis = 0;
-  int exx = 0;
-  int exy = 0;
+{ double con = 0;
+  double dis = 0;
+  double exx = 0;
+  double exy = 0;
   int flag = 0;
   /* flag will remain zero if no nonzero combinations of mask1 and mask2 are
    * found.
