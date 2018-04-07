@@ -151,23 +151,24 @@ class CustomDirectoryTest(unittest.TestCase):
     def test_custom_directory(self):
         import tempfile
         import os
+        import shutil
 
         handler = Parser.DataHandler(validate=False)
 
         # create a temporary directory
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # Set the custom directory to the temporary directory.
-            # This assignment statement will also initialize the local DTD and XSD directories.
-            handler.directory = tmpdir
+        tmpdir = tempfile.mkdtemp()
+        # Set the custom directory to the temporary directory.
+        # This assignment statement will also initialize the local DTD and XSD directories.
+        handler.directory = tmpdir
 
-            # Confirm that the two temp directories are named what we want.
-            self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'), msg = 'DTD: ' + handler.local_dtd_dir) # + '; directory = ' + handler.directory
-            self.assertEqual(handler.local_xsd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'XSDs'))
+        # Confirm that the two temp directories are named what we want.
+        self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'), msg = 'DTD: ' + handler.local_dtd_dir) # + '; directory = ' + handler.directory
+        self.assertEqual(handler.local_xsd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'XSDs'))
 
-            # And that they were created.
-            self.assertTrue(os.path.isdir(handler.local_dtd_dir))
-            self.assertTrue(os.path.isdir(handler.local_xsd_dir))
-
+        # And that they were created.
+        self.assertTrue(os.path.isdir(handler.local_dtd_dir))
+        self.assertTrue(os.path.isdir(handler.local_xsd_dir))
+        shutil.rmtree(tmpdir)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
