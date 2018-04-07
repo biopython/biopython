@@ -171,6 +171,9 @@ class DataHandler(object):
     from Bio import Entrez
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
     global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
+    local_dtd_dir = ''
+    local_xsd_dir = ''
+
     del Entrez
 
     def __init__(self, validate):
@@ -190,8 +193,6 @@ class DataHandler(object):
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.is_schema = False
         self._directory = None
-        self.local_dtd_dir = ''
-        self.local_xsd_dir = ''
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
