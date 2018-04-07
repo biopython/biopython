@@ -624,7 +624,7 @@ class DataHandler(object):
         return 1
 
     def _initialize_directory(self, directory_type):
-        """Internal function to initialize the local DTD/XSD directories.
+        """Initialize the local DTD/XSD directories.
 
         Added to allow for custom directory (cache) locations,
         for example when code is deployed on AWS Lambda.
