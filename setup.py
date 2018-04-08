@@ -154,19 +154,8 @@ def check_dependencies():
     # means overwrite previous installations.  If the user has
     # forced an installation, should we also ignore dependencies?
 
-    # We only check for NumPy, as this is a compile time dependency
-    if is_Numpy_installed():
-        return True
-    if is_jython():
-        return True  # NumPy is not available for Jython (for now)
-    if is_ironpython():
-        return True  # We're ignoring NumPy under IronPython (for now)
-
-    sys.exit("""Missing required dependency NumPy (Numerical Python).
-
-Unless running under Jython or IronPython, we require NumPy be installed
-when compiling Biopython. See http://www.numpy.org for details.
-""")
+    # Currently there are no compile time dependencies
+    return True
 
 
 class install_biopython(install):
@@ -192,9 +181,9 @@ class build_py_biopython(build_py):
             # from Bio/Restriction/Restriction_Dictionary.py
             self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
-        if is_Numpy_installed():
-            # Should be everything (i.e. C Python or PyPy)
-            # except Jython and IronPython
+        if is_jython() or is_ironpython():
+            pass
+        else:
             self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
@@ -245,10 +234,6 @@ def can_import(module_name):
         return __import__(module_name)
     except ImportError:
         return None
-
-
-def is_Numpy_installed():
-    return bool(can_import("numpy"))
 
 
 # Using requirements.txt is preferred for an application
