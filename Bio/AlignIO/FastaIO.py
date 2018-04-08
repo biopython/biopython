@@ -56,9 +56,9 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
         end = display_start \
               - int(annotation['al_stop']) + 1
     end += align_stripped.count("-")
-    assert 0 <= start and start < end and end <= len(align_stripped), \
-           "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-           % (alignment_seq_with_flanking, start, end, annotation)
+    if start < 0 or start >= end or end > len(align_stripped):
+        raise ValueError("Problem with sequence start/stop,\n%s[%i:%i]\n%s"
+                         % (alignment_seq_with_flanking, start, end, annotation))
     return align_stripped[start:end]
 
 
@@ -114,16 +114,18 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         q = "?"  # Just for printing len(q) in debug below
         m = "?"  # Just for printing len(m) in debug below
         tool = global_tags.get("tool", "").upper()
-        try:
-            q = _extract_alignment_region(query_seq, query_tags)
-            if tool in ["TFASTX"] and len(match_seq) == len(q):
-                m = match_seq
-                # Quick hack until I can work out how -, * and / characters
-                # and the apparent mix of aa and bp coordinates works.
-            else:
-                m = _extract_alignment_region(match_seq, match_tags)
-            assert len(q) == len(m)
-        except AssertionError as err:
+
+        q = _extract_alignment_region(query_seq, query_tags)
+        if tool in ["TFASTX"] and len(match_seq) == len(q):
+            m = match_seq
+            # Quick hack until I can work out how -, * and / characters
+            # and the apparent mix of aa and bp coordinates works.
+        else:
+            m = _extract_alignment_region(match_seq, match_tags)
+        if len(q) != len(m):
+            # refactor to add error information to exception message?
+            # otherwise wont this all print to stdout when it should be
+            # directed to stderr?
             print("Darn... amino acids vs nucleotide coordinates?")
             print(tool)
             print(query_seq)
@@ -133,7 +135,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             print(match_tags)
             print("%s %i" % (m, len(m)))
             print(handle.name)
-            raise err
+            raise ValueError("Darn... amino acids vs nucleotide coordinates?")
 
         assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
@@ -312,7 +314,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 # Can get > as the last line of a histogram
                 pass
             else:
-                assert False, "state %i got %r" % (state, line)
+                raise RuntimeError("state %i got %r" % (state, line))
         elif line.startswith("; al_cons"):
             assert state == state_ALIGN_MATCH, line
             state = state_ALIGN_CONS
@@ -338,7 +340,7 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
             elif state == state_ALIGN_MATCH:
                 match_tags[key] = value
             else:
-                assert False, "Unexpected state %r, %r" % (state, line)
+                raise RuntimeError("Unexpected state %r, %r" % (state, line))
         elif state == state_ALIGN_QUERY:
             query_seq += line.strip()
         elif state == state_ALIGN_MATCH:
