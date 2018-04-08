@@ -363,41 +363,11 @@ if is_jython():
 elif is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
-elif is_pypy():
-    # Two out of three ain't bad?
-    EXTENSIONS = [
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              ),
-    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-              ),
-    Extension('Bio.motifs._pwm',
-              ["Bio/motifs/_pwm.c"],
-              ),
-    Extension('Bio.Cluster._cluster',
-              ['Bio/Cluster/clustermodule.c',
-               'Bio/Cluster/cluster.c'],
-              ),
-    Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.c",
-               "Bio/KDTree/KDTreemodule.c"],
-              ),
-    ]
 else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c'],
               ),
-    Extension('Bio.trie',
-              ['Bio/triemodule.c',
-               'Bio/trie.c'],
-              include_dirs=["Bio"]
-              ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
@@ -407,14 +377,21 @@ else:
     Extension('Bio.motifs._pwm',
               ["Bio/motifs/_pwm.c"],
               ),
-    Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.c",
-               "Bio/KDTree/KDTreemodule.c"],
-              ),
     Extension('Bio.Cluster._cluster',
-              ['Bio/Cluster/clustermodule.c',
-               'Bio/Cluster/cluster.c'],
-              )]
+              ['Bio/Cluster/cluster.c', 'Bio/Cluster/clustermodule.c'],
+              ),
+    Extension('Bio.KDTree._CKDTree',
+              ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"],
+              ),
+    ]
+    if not is_pypy():
+        # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+        extension = Extension('Bio.trie',
+                              ['Bio/triemodule.c', 'Bio/trie.c'],
+                              include_dirs=["Bio"]
+                             )
+        EXTENSIONS.append(extension)
+
 
 # We now define the Biopython version number in Bio/__init__.py
 # Here we can't use "import Bio" then "Bio.__version__" as that would
