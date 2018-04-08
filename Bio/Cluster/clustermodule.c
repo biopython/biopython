@@ -1724,7 +1724,6 @@ py_somcluster(PyObject* self, PyObject* args, PyObject* keywords)
 {
     int nrows;
     int ncols;
-    int nitems;
     int ndata;
     Data data = {0};
     Mask mask = {0};
@@ -1778,7 +1777,6 @@ py_somcluster(PyObject* self, PyObject* args, PyObject* keywords)
             mask.view.shape[0], mask.view.shape[1], data.nrows, data.ncols);
         goto exit;
     }
-    nitems = transpose ? ncols : nrows;
     ndata = transpose ? nrows : ncols;
     if (weight.shape[0] != ndata) {
         PyErr_Format(PyExc_RuntimeError,
@@ -1992,7 +1990,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
 {
     int nrows;
     int ncols;
-    unsigned int nitems;
+    int nitems;
     int nclusters;
     Data data = {0};
     Mask mask = {0};
@@ -2125,7 +2123,7 @@ py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
     Py_buffer weight = {0};
     int transpose = 0;
     char dist = 'e';
-    int nrows, ncols, nelements, ndata;
+    int nrows, ncols, ndata;
     PyObject* result = NULL;
 
     /* -- Read the input variables --------------------------------------- */
@@ -2160,7 +2158,6 @@ py_distancematrix(PyObject* self, PyObject* args, PyObject* keywords)
         goto exit;
     }
     ndata = (transpose==0) ? ncols : nrows;
-    nelements = (transpose==0) ? nrows : ncols;
     if (weight.shape[0] != ndata) {
         PyErr_Format(PyExc_RuntimeError,
                      "weight has incorrect size %zd (expected %d)",
