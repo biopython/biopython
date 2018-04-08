@@ -9,7 +9,7 @@ designed with the application to gene expression data in mind. However,
 this module can also be used for cluster analysis of other types of data.
 
 Bio.Cluster and the underlying C Clustering Library is described in
-M. de Hoon et al. (2004) http://dx.doi.org/10.1093/bioinformatics/bth078
+M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
 """
 
 import numpy
