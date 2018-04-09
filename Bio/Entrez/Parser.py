@@ -514,7 +514,7 @@ class DataHandler(object):
             self.structures.update({name: multiple})
 
     def open_dtd_file(self, filename):
-        self._initialize_directory(directory_type='DTD')
+        self._initialize_directory()
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -532,7 +532,7 @@ class DataHandler(object):
         return None
 
     def open_xsd_file(self, filename):
-        self._initialize_directory(directory_type='XSD')
+        self._initialize_directory()
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "rb")
@@ -550,7 +550,7 @@ class DataHandler(object):
         return None
 
     def save_dtd_file(self, filename, text):
-        self._initialize_directory(directory_type='DTD')
+        self._initialize_directory()
         path = os.path.join(self.local_dtd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -561,7 +561,7 @@ class DataHandler(object):
             handle.close()
 
     def save_xsd_file(self, filename, text):
-        self._initialize_directory(directory_type='XSD')
+        self._initialize_directory()
         path = os.path.join(self.local_xsd_dir, filename)
         try:
             handle = open(path, "wb")
@@ -624,7 +624,7 @@ class DataHandler(object):
         self.dtd_urls.pop()
         return 1
 
-    def _initialize_directory(self, directory_type):
+    def _initialize_directory(self):
         """Initialize the local DTD/XSD directories.
 
         Added to allow for custom directory (cache) locations,
@@ -640,23 +640,23 @@ class DataHandler(object):
                 self.directory = os.path.join(home, '.config', 'biopython')
                 del home
             del platform
-        if 'DTD' in directory_type:
-            self.local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
-            try:
-                os.makedirs(self.local_dtd_dir)  # use exist_ok=True on Python >= 3.2
-            except OSError as exception:
-                # Check if local_dtd_dir already exists, and that it is a directory.
-                # Trying os.makedirs first and then checking for os.path.isdir avoids
-                # a race condition.
-                if not os.path.isdir(self.local_dtd_dir):
-                    raise exception
-        if 'XSD' in directory_type:
-            self.local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
-            try:
-                os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
-            except OSError as exception:
-                if not os.path.isdir(self.local_xsd_dir):
-                    raise exception
+        # Create DTD local directory
+        self.local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
+        try:
+            os.makedirs(self.local_dtd_dir)  # use exist_ok=True on Python >= 3.2
+        except OSError as exception:
+            # Check if local_dtd_dir already exists, and that it is a directory.
+            # Trying os.makedirs first and then checking for os.path.isdir avoids
+            # a race condition.
+            if not os.path.isdir(self.local_dtd_dir):
+                raise exception
+        # Create XSD local directory
+        self.local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
+        try:
+            os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
+        except OSError as exception:
+            if not os.path.isdir(self.local_xsd_dir):
+                raise exception
         return
 
     @property
@@ -667,5 +667,5 @@ class DataHandler(object):
     def directory(self, directory):
         """Allow user to set a custom directory, also triggering subdirectory initialization."""
         self._directory = directory
-        self._initialize_directory(directory_type=['DTD', 'XSD'])
+        self._initialize_directory()
         return
