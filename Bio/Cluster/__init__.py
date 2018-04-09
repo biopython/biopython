@@ -31,6 +31,9 @@ __all__ = ('Node',
            'read')
 
 
+__version__ = _cluster.version()
+
+
 class Node(_cluster.Node):
     __doc__ = _cluster.Node.__doc__
 
