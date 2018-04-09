@@ -271,8 +271,12 @@ class MafIndex(object):
             idx_version = int(self._con.execute(
                 "SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])
             if idx_version != MAFINDEX_VERSION:
-                raise ValueError("Index version (%s) incompatible with "
-                                 "this version of MafIndex" % idx_version)
+                msg = "\n".join([
+                    "Index version (%s) incompatible with this version "
+                    "of MafIndex" % idx_version,
+                    "You might erase the existing index %s "
+                    "for it to be rebuilt." % self._index_filename])
+                raise ValueError(msg)
 
             filename = self._con.execute(
                 "SELECT value FROM meta_data WHERE key = 'filename'").fetchone()[0]
