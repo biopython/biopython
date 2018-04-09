@@ -17,7 +17,7 @@ import numbers
 
 from . import _cluster
 
-__all__ = ['Node',
+__all__ = ('Node',
            'Tree',
            'kcluster',
            'kmedoids',
@@ -28,7 +28,7 @@ __all__ = ['Node',
            'distancematrix',
            'pca',
            'Record',
-           'read']
+           'read')
 
 
 class Node(_cluster.Node):

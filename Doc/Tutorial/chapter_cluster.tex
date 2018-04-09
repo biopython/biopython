@@ -946,7 +946,7 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%TODO, Windows: doctest ../Tests/Cluster lib:numpy
+%doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -962,7 +962,7 @@ This will create the files \verb|cyano_result.cdt|, \verb|cyano_result.gtr|, and
 
 Similarly, we can save a $k$-means clustering solution:
 
-%TODO, Windows: doctest ../Tests/Cluster lib:numpy
+%doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -975,20 +975,4 @@ Similarly, we can save a $k$-means clustering solution:
 
 This will create the files \verb|cyano_result_K_G2_A2.cdt|, \verb|cyano_result_K_G2.kgg|, and \verb|cyano_result_K_A2.kag|.
 
-\section{Auxiliary functions}
-
-\verb|median(data)|
-returns the median of the 1D array \verb|data|.
-
-\verb|mean(data)|
-returns the mean of the 1D array \verb|data|.
-
-\verb|version()|
-returns the version number of the underlying C Clustering Library as a string.
-
-%TODO, Windows: doctest . lib:numpy
-\begin{verbatim}
->>> from Bio import Cluster
->>> print(Cluster.version())
-1.50
 \end{verbatim}
