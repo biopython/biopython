@@ -3,7 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Unit tests for Bio.AlignIO.MafIO.MafIndex()"""
+"""Unit tests for Bio.AlignIO.MafIO.MafIndex()."""
 
 try:
     import sqlite3
@@ -25,7 +25,7 @@ from seq_tests_common import compare_record
 
 
 class StaticMethodTest(unittest.TestCase):
-    """Test static UCSC binning-related functions"""
+    """Test static UCSC binning-related functions."""
 
     def test_region2bin(self):
         data = [(25079603, 25079787, set([0, 1, 11, 96, 776])),
@@ -66,7 +66,7 @@ class StaticMethodTest(unittest.TestCase):
 
 if sqlite3:
     class PreBuiltIndexTest(unittest.TestCase):
-        """Test loading of prebuilt indices"""
+        """Test loading of prebuilt indices."""
 
         def test_old(self):
             idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
@@ -127,7 +127,7 @@ if sqlite3:
                               "mm9.chr10")
 
     class NewIndexTest(unittest.TestCase):
-        """Test creation of new indices"""
+        """Test creation of new indices."""
 
         def setUp(self):
             self.tmpdir = tempfile.mkdtemp()
@@ -160,7 +160,7 @@ if sqlite3:
                               "mm9.chr10")
 
     class TestGetRecord(unittest.TestCase):
-        """Make sure we can seek and fetch records properly"""
+        """Make sure we can seek and fetch records properly."""
 
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
@@ -262,7 +262,7 @@ if sqlite3:
                 self.assertTrue(compare_record(recs[i], fetched_recs[i]))
 
     class TestSearchGoodMAF(unittest.TestCase):
-        """Test index searching on a properly-formatted MAF"""
+        """Test index searching on a properly-formatted MAF."""
 
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex",
@@ -329,8 +329,10 @@ if sqlite3:
                     3021494, 16173516, 16393864, 15875298, 78072287, 14757144]))
 
         def test_correct_retrieval_3(self):
-            """References:
-            https://github.com/biopython/biopython/issues/1083"""
+            """Following issue 1083.
+
+            https://github.com/biopython/biopython/issues/1083
+            """
             search = self.idx.search((3012076, 3012076 + 300), (3012076 + 100, 3012076 + 400))
             results = [x for x in search]
 
@@ -348,47 +350,48 @@ if sqlite3:
                     3012441, 15860899, 16379447, 16160646, 180525]))
 
         def test_correct_block_boundary(self):
-            """References:
+            """Following issues 504 and 1086.
+
             https://github.com/biopython/biopython/pull/504
             https://github.com/biopython/biopython/pull/1086#issuecomment-285080702
 
             We test what happens at the boundary between these two MAF blocks:
 
-a score=19159.000000
-s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
-s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
-i hg18.chr6                        I 9085 C 0
-s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
-q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
-i panTro2.chr6                     I 9106 C 0
-s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
-i calJac1.Contig6394               N 0 C 0
-s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
-q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
-i loxAfr1.scaffold_75566           N 0 C 0
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=19159.000000
+            s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+            s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            i hg18.chr6                        I 9085 C 0
+            s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
+            i panTro2.chr6                     I 9106 C 0
+            s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+            i calJac1.Contig6394               N 0 C 0
+            s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+            q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
+            i loxAfr1.scaffold_75566           N 0 C 0
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
 
-a score=40840.000000
-s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
-s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-i hg18.chr6                        C 0 I 401
-s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
-i panTro2.chr6                     C 0 I 400
-s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
-i calJac1.Contig6394               C 0 I 2
-s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
-q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
-i otoGar1.scaffold_334.1-359464    I 2931 I 2
-s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
-q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
-i loxAfr1.scaffold_75566           C 0 I 2
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=40840.000000
+            s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+            s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            i hg18.chr6                        C 0 I 401
+            s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
+            i panTro2.chr6                     C 0 I 400
+            s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+            i calJac1.Contig6394               C 0 I 2
+            s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+            q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
+            i otoGar1.scaffold_334.1-359464    I 2931 I 2
+            s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+            q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
+            i loxAfr1.scaffold_75566           C 0 I 2
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             # Segments ending at the end of the first block
             search = self.idx.search([3014687], [3014689])
@@ -411,31 +414,32 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             self.assertEqual(len(list(search)), 2)
 
         def test_correct_block_length(self):
-            """References:
+            """Following issues 504 and 1086.
+
             https://github.com/biopython/biopython/pull/504
             https://github.com/biopython/biopython/pull/1086#issuecomment-285080702
 
             We get the alignement corresponding to the following whole MAF block
             and check that the lengths of its sequences are correct:
 
-a score=40840.000000
-s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
-s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-i hg18.chr6                        C 0 I 401
-s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
-i panTro2.chr6                     C 0 I 400
-s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
-i calJac1.Contig6394               C 0 I 2
-s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
-q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
-i otoGar1.scaffold_334.1-359464    I 2931 I 2
-s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
-q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
-i loxAfr1.scaffold_75566           C 0 I 2
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=40840.000000
+            s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+            s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            i hg18.chr6                        C 0 I 401
+            s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
+            i panTro2.chr6                     C 0 I 400
+            s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+            i calJac1.Contig6394               C 0 I 2
+            s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+            q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
+            i otoGar1.scaffold_334.1-359464    I 2931 I 2
+            s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+            q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
+            i loxAfr1.scaffold_75566           C 0 I 2
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
@@ -450,27 +454,29 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
                 self.assertEqual(len(seq_dict[seq_id].ungap('-')), length)
 
         def test_correct_spliced_sequences_1(self):
-            """We get the alignement corresponding to the following whole MAF block
+            """Checking that spliced sequences are correct.
+
+            We get the alignement corresponding to the following whole MAF block
             and check that the sequences are correct:
 
-a score=40840.000000
-s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
-s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-i hg18.chr6                        C 0 I 401
-s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
-i panTro2.chr6                     C 0 I 400
-s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
-i calJac1.Contig6394               C 0 I 2
-s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
-q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
-i otoGar1.scaffold_334.1-359464    I 2931 I 2
-s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
-q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
-i loxAfr1.scaffold_75566           C 0 I 2
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=40840.000000
+            s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+            s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            i hg18.chr6                        C 0 I 401
+            s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
+            i panTro2.chr6                     C 0 I 400
+            s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+            i calJac1.Contig6394               C 0 I 2
+            s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+            q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
+            i otoGar1.scaffold_334.1-359464    I 2931 I 2
+            s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+            q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
+            i loxAfr1.scaffold_75566           C 0 I 2
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
@@ -485,44 +491,46 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
                 self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
 
         def test_correct_spliced_sequences_2(self):
-            """We get spliced alignements from following MAF blocks
+            """Checking that spliced sequences are correct.
+
+            We get spliced alignements from following MAF blocks
             and check that the sequences are correct:
 
-a score=19159.000000
-s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
-s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
-i hg18.chr6                        I 9085 C 0
-s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
-q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
-i panTro2.chr6                     I 9106 C 0
-s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
-i calJac1.Contig6394               N 0 C 0
-s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
-q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
-i loxAfr1.scaffold_75566           N 0 C 0
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=19159.000000
+            s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+            s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            i hg18.chr6                        I 9085 C 0
+            s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
+            i panTro2.chr6                     I 9106 C 0
+            s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+            i calJac1.Contig6394               N 0 C 0
+            s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+            q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
+            i loxAfr1.scaffold_75566           N 0 C 0
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
 
-a score=40840.000000
-s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
-s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-i hg18.chr6                        C 0 I 401
-s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
-q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
-i panTro2.chr6                     C 0 I 400
-s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
-i calJac1.Contig6394               C 0 I 2
-s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
-q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
-i otoGar1.scaffold_334.1-359464    I 2931 I 2
-s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
-q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
-i loxAfr1.scaffold_75566           C 0 I 2
-e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
-e echTel1.scaffold_288249             87661 7564 +    100002 I
-e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            a score=40840.000000
+            s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+            s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            i hg18.chr6                        C 0 I 401
+            s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
+            i panTro2.chr6                     C 0 I 400
+            s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+            i calJac1.Contig6394               C 0 I 2
+            s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+            q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
+            i otoGar1.scaffold_334.1-359464    I 2931 I 2
+            s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+            q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
+            i loxAfr1.scaffold_75566           C 0 I 2
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014644, 3014689], [3014644 + 45, 3014689 + 53])
             seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
@@ -537,7 +545,7 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
                 self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
 
     class TestSearchBadMAF(unittest.TestCase):
-        """Test index searching on an incorrectly-formatted MAF"""
+        """Test index searching on an incorrectly-formatted MAF."""
 
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex",
@@ -549,7 +557,7 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             self.assertRaises(ValueError, next, search)
 
     class TestSpliceGoodMAF(unittest.TestCase):
-        """Test in silico splicing on a correctly-formatted MAF"""
+        """Test in silico splicing on a correctly-formatted MAF."""
 
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10_big.mafindex",
@@ -591,7 +599,7 @@ e ponAbe2.chr6                     16161448 8044 - 174210431 I
             self.assertEqual(mm9_seq, cnksr3)
 
     class TestSpliceBadMAF(unittest.TestCase):
-        """Test in silico splicing on an incorrectly-formatted MAF"""
+        """Test in silico splicing on an incorrectly-formatted MAF."""
 
         def setUp(self):
             self.idx = MafIndex("MAF/ucsc_mm9_chr10_bad.mafindex",
