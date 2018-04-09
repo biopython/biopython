@@ -740,6 +740,7 @@ class MafIndex(object):
         return MultipleSeqAlignment(result_multiseq)
 
     def __repr__(self):
+        """Return a string representation of the index."""
         return "MafIO.MafIndex(%r, target_seqname=%r)" % (self._maf_fp.name,
                                                           self._target_seqname)
 
