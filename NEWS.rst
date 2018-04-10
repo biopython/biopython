@@ -18,6 +18,10 @@ The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
 inclusive end co-ordindates to better handle searches at end points. This
 will require you to rebuild any existing MAF index files.
 
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
