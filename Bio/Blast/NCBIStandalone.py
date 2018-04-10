@@ -1821,7 +1821,7 @@ class BlastErrorParser(AbstractParser):
         return self._consumer.data
 
     def _diagnose_error(self, handle, data_record):
-        """Attempt to diagnose an error in the passed handle.
+        """Attempt to diagnose an error in the passed handle (PRIVATE).
 
         Arguments:
         - handle - The handle potentially containing the error
