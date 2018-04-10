@@ -14,6 +14,17 @@ The latest news is at the top of this file.
 Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
 SeqIO.write (especially when used in a for loop).
 
+The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
+inclusive end co-ordindates to better handle searches at end points. This
+will require you to rebuild any existing MAF index files.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Blaise Li
+- Peter Cock
+- Wibowo 'Bow' Arindrarto
+
 
 3 April 2018: Biopython 1.71
 ============================
