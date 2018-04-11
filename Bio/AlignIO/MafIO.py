@@ -3,9 +3,10 @@
 # Revisions Copyright 2014, 2015 by Adam Novak.  All rights reserved.
 # Revisions Copyright 2015, 2017 by Blaise Li.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.AlignIO support for the "maf" multiple alignment format.
 
 The Multiple Alignment Format, described by UCSC, stores a series of
