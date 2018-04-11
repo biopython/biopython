@@ -70,7 +70,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Claude Paroz <claude at two (as digit) xlibre dot net>
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
-- Cymon J Cox <cymon at domain duke.edu>
+- Cymon J Cox <https://github.com/cymon>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
