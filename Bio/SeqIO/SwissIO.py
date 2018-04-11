@@ -2,10 +2,10 @@
 # Revisions copyright 2008-2009 by Michiel de Hoon.
 # All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "swiss" (aka SwissProt/UniProt) file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
