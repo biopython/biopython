@@ -1,7 +1,11 @@
 # Copyright 2012 by Eric Talevich.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Bio.SeqIO parser for the PDB format, using Bio.PDB internally."""
+
 import collections
 import warnings
 
