@@ -37,7 +37,7 @@ The DSSP codes for secondary structure used here are:
 
 Usage
 -----
-The DSSP class can be used to run DSSP on a pdb file, and provides a
+The DSSP class can be used to run DSSP on a PDB or mmCIF file, and provides a
 handle to the DSSP secondary structure and accessibility.
 
 **Note** that DSSP can only handle one model, and will only run
@@ -99,6 +99,7 @@ from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.Polypeptide import three_to_one
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 # Match C in DSSP
 _dssp_cys = re.compile("[a-z]")
@@ -413,7 +414,7 @@ class DSSP(AbstractResiduePropertyMap):
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
-            File type switch, either PDB, MMCIF or DSSP. Inferred from file
+            File type switch: either PDB, MMCIF or DSSP. Inferred from file
             extension by default.
 
         """
@@ -423,6 +424,8 @@ class DSSP(AbstractResiduePropertyMap):
         if file_type == '':
             file_type = os.path.splitext(in_file)[1][1:]
         file_type = file_type.upper()
+        if file_type == 'CIF':
+            file_type = 'MMCIF'
         assert file_type in ['PDB', 'MMCIF', 'DSSP']
         # If the input file is a PDB or mmCIF file run DSSP and parse output:
         if file_type == 'PDB' or file_type == 'MMCIF':
@@ -450,11 +453,26 @@ class DSSP(AbstractResiduePropertyMap):
             """Serialize a residue's resseq and icode for easy comparison."""
             return "%s%s" % (res_id[1], res_id[2])
 
+        # DSSP outputs label_asym_id from the mmCIF file as the chain ID
+        # But MMCIFParser reads in the auth_asym_id
+        # Here we create a dictionary to map label_asym_id to auth_asym_id
+        # using the mmCIF file
+        if file_type == 'MMCIF':
+            mmcif_dict = MMCIF2Dict(in_file)
+            mmcif_chain_dict = {}
+            for i, c in enumerate(mmcif_dict['_atom_site.label_asym_id']):
+                if c not in mmcif_chain_dict:
+                    mmcif_chain_dict[c] = mmcif_dict['_atom_site.auth_asym_id'][i]
+            dssp_mapped_keys = []
+
         # Now create a dictionary that maps Residue objects to
         # secondary structure and accessibility, and a list of
         # (residue, (secondary structure, accessibility)) tuples
         for key in dssp_keys:
             chain_id, res_id = key
+            if file_type == 'MMCIF':
+                chain_id = mmcif_chain_dict[chain_id]
+                dssp_mapped_keys.append((chain_id, res_id))
             chain = model[chain_id]
             try:
                 res = chain[res_id]
@@ -592,7 +610,9 @@ class DSSP(AbstractResiduePropertyMap):
                 O_NH_2_energy,
             )
 
-            dssp_map[key] = dssp_vals
+            dssp_map[(chain_id, res_id)] = dssp_vals
             dssp_list.append(dssp_vals)
 
+        if file_type == 'MMCIF':
+            dssp_keys = dssp_mapped_keys
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys, dssp_list)
