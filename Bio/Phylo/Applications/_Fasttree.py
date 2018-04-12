@@ -1,7 +1,10 @@
-# Copyright 2013 by Nate Sutton.  Based on code in _Phyml.py by Eric Talevich.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its license.
-# Please see the LICENSE file that should have been included as part of this
-# package.
+# Copyright 2013 by Nate Sutton.
+# Based on code in _Phyml.py by Eric Talevich.
+# All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Command-line wrapper for tree inference program Fasttree."""
 from __future__ import print_function
 
