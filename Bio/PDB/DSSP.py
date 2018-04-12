@@ -90,6 +90,7 @@ The dssp data returned for a single residue is a tuple in the form:
 
 
 import re
+import os
 from io import StringIO
 import subprocess
 import warnings
@@ -370,7 +371,7 @@ def _make_dssp_dict(handle):
 class DSSP(AbstractResiduePropertyMap):
     """Run DSSP and parse secondary structure and accessibility.
 
-    Run DSSP on a pdb file, and provide a handle to the
+    Run DSSP on a PDB/mmCIF file, and provide a handle to the
     DSSP secondary structure and accessibility.
 
     **Note** that DSSP can only handle one model.
@@ -395,7 +396,7 @@ class DSSP(AbstractResiduePropertyMap):
     """
 
     def __init__(
-        self, model, in_file, dssp="dssp", acc_array="Sander", file_type="PDB"
+        self, model, in_file, dssp="dssp", acc_array="Sander", file_type=""
     ):
         """Create a DSSP object.
 
@@ -412,16 +413,19 @@ class DSSP(AbstractResiduePropertyMap):
             Sander & Rost (1994), or Wilke: Tien et al. 2013, as string
             Sander/Wilke/Miller. Defaults to Sander.
         file_type: string
-            File type switch, either PDB or DSSP with PDB as default.
+            File type switch, either PDB, MMCIF or DSSP. Inferred from file
+            extension by default.
 
         """
         self.residue_max_acc = residue_max_acc[acc_array]
 
         # create DSSP dictionary
+        if file_type == '':
+            file_type = os.path.splitext(in_file)[1][1:]
         file_type = file_type.upper()
-        assert file_type in ["PDB", "DSSP"]
-        # If the input file is a PDB file run DSSP and parse output:
-        if file_type == "PDB":
+        assert file_type in ['PDB', 'MMCIF', 'DSSP']
+        # If the input file is a PDB or mmCIF file run DSSP and parse output:
+        if file_type == 'PDB' or file_type == 'MMCIF':
             # Newer versions of DSSP program call the binary 'mkdssp', so
             # calling 'dssp' will not work in some operating systems
             # (Debian distribution of DSSP includes a symlink for 'dssp' argument)
