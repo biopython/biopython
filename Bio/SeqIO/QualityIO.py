@@ -1,11 +1,9 @@
 # Copyright 2009-2017 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# This module is for reading and writing FASTQ and QUAL format files as
-# SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the FASTQ and QUAL file formats.
 
 Note that you are expected to use this code via the Bio.SeqIO interface, as
