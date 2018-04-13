@@ -1,9 +1,10 @@
 # Copyright 2006-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2015 by Ben Woodcroft.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.AlignIO support for "stockholm" format (used in the PFAM database).
 
