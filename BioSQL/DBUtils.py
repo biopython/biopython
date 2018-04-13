@@ -2,9 +2,11 @@
 # Revisions 2007-2010 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Brad Chapman.  All rights reserved.
 # Revisions 2013 copyright by Tiago Antao.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
