@@ -4,9 +4,6 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-
-from .interproscan_xml import InterproscanXmlParser
-
 """Bio.SearchIO support for InterProScan output formats.
 
 This module adds support for parsing InterProScan XML output.
@@ -87,9 +84,9 @@ coils-match, panther-location) are stored in hit.attributes['Hit type'].
 For instance, for every 'phobious-match', there will be a 'phobious-location'.
 Therefore, Hit.type will store the string excluding '-match' or '-location'
 ('phobious', in this example).
-
-
 """
+
+from .interproscan_xml import InterproscanXmlParser
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
