@@ -1,4 +1,4 @@
-# Copyright 2000-2001 Jeff Chang.
+# Copyright 2000 Andrew Dalke.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
