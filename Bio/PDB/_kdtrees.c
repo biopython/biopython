@@ -1176,22 +1176,20 @@ static PyTypeObject PyNeighborType = {
 
 typedef struct {
     PyObject_HEAD
-    struct KDTree* tree;
+    struct KDTree tree;
 } PyTree;
 
 static void
 PyTree_dealloc(PyTree* self)
 {
-    struct KDTree* tree = self->tree;
-    /* clean up KD tree */
-    if (!tree) return;
+    struct KDTree* tree = &self->tree;
+    if (!tree->_root) return;
     Node_destroy(tree->_root);
     Region_destroy(tree->_query_region);
     if (tree->_center_coord) free(tree->_center_coord);
     if (tree->_coords) free(tree->_coords);
     if (tree->_data_point_list) free(tree->_data_point_list);
     if (tree->_neighbor_list) free(tree->_neighbor_list);
-    free(tree);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -1209,19 +1207,7 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
         return -1;
     }
 
-    tree = malloc(sizeof(struct KDTree));
-    if (tree == NULL) {
-        PyErr_SetString(PyExc_MemoryError, "Insufficient memory for tree");
-        return -1;
-    }
-
-    tree->_center_coord = malloc(dim*sizeof(float));
-    if (tree->_center_coord == NULL)
-    {
-        free(tree);
-        PyErr_SetString(PyExc_MemoryError, "Insufficient memory for tree");
-        return -1;
-    }
+    tree = &self->tree;
 
     tree->dim = dim;
     tree->_query_region = NULL;
@@ -1235,7 +1221,13 @@ PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
     tree->_data_point_list = NULL;
     tree->_data_point_list_size = 0;
 
-    self->tree = tree;
+    tree->_center_coord = malloc(dim*sizeof(float));
+    if (tree->_center_coord == NULL)
+    {
+        free(tree);
+        PyErr_SetString(PyExc_MemoryError, "Insufficient memory for tree");
+        return -1;
+    }
 
     Region_dim = tree->dim;
 
@@ -1246,9 +1238,8 @@ static PyObject*
 PyTree_get_count(PyTree* self)
 {
     long count;
-    struct KDTree* tree = self->tree;
     PyObject* result;
-    count = tree->_count;
+    count = self->tree._count;
 #if PY_MAJOR_VERSION >= 3
     result = PyLong_FromLong(count);
 #else
@@ -1265,8 +1256,7 @@ static PyObject*
 PyTree_neighbor_get_count(PyTree* self)
 {
     PyObject* result;
-    struct KDTree* tree = self->tree;
-    long count = tree->_neighbor_count;
+    long count = self->tree._neighbor_count;
 #if PY_MAJOR_VERSION >= 3
     result = PyLong_FromLong(count);
 #else
@@ -1287,7 +1277,7 @@ PyTree_set_data(PyTree* self, PyObject* args)
     float* coords;
     Py_ssize_t n, m, i, j;
     PyObject *obj;
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     int ok;
     Py_ssize_t rowstride, colstride;
     const char* p;
@@ -1390,7 +1380,7 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
     double radius;
     long int n, i;
     float *coords;
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     const int flags = PyBUF_FORMAT | PyBUF_STRIDES;
     Py_ssize_t stride;
     Py_buffer view;
@@ -1511,7 +1501,7 @@ PyTree_neighbor_search(PyTree* self, PyObject* args)
 {
     int ok;
     double radius;
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     struct Neighbor* neighbors;
     struct Neighbor* pp, *qq;
     PyObject* list;
@@ -1573,7 +1563,7 @@ PyTree_neighbor_simple_search(PyTree* self, PyObject* args)
 {
     int ok;
     double radius;
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     struct Neighbor* neighbors;
     struct Neighbor* pp, *qq;
     PyObject* list;
@@ -1635,7 +1625,7 @@ static char PyTree_get_indices__doc__[] =
 
 static PyObject *PyTree_get_indices(PyTree *self, PyObject* args)
 {
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
     char datatype;
     Py_buffer view;
@@ -1685,7 +1675,7 @@ static PyObject *PyTree_get_radii(PyTree *self, PyObject* args)
     const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
     char datatype;
     Py_buffer view;
-    struct KDTree* tree = self->tree;
+    struct KDTree* tree = &self->tree;
     float *radii;
     Py_ssize_t i;
 
