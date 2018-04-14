@@ -9,10 +9,11 @@
 # as part of this package.
 
 """Unit tests for those parts of the Bio.PDB module using Bio.KDTree."""
+
 import unittest
 
 try:
-    from numpy import array
+    from numpy import array, dot, sqrt
     from numpy.random import random
 except ImportError:
     from Bio import MissingExternalDependencyError
@@ -20,16 +21,17 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB.")
 
 try:
-    from Bio.KDTree import _CKDTree
+    from Bio.PDB import _kdtrees
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "C module in Bio.KDTree not compiled")
+        "C module Bio.PDB._kdtrees not compiled")
 
-from Bio.PDB.NeighborSearch import NeighborSearch
+from Bio.PDB.NeighborSearch import NeighborSearch, KDTree
 
 
 class NeighborTest(unittest.TestCase):
+
     def test_neighbor_search(self):
         """NeighborSearch: Find nearby randomly generated coordinates.
 
@@ -54,6 +56,155 @@ class NeighborTest(unittest.TestCase):
         self.assertEqual([], ns.search(x, 5.0, "C"))
         self.assertEqual([], ns.search(x, 5.0, "M"))
         self.assertEqual([], ns.search(x, 5.0, "S"))
+
+
+class KDTreeTest(unittest.TestCase):
+
+    nr_points = 5000     # number of points used in test
+    dim = 3              # dimension of coords
+    bucket_size = 5      # number of points per tree node
+    radius = 0.01        # radius of search (typically 0.05 or so)
+    query_radius = 10    # radius of search
+
+    def test_KDTree_exceptions(self):
+        dim = self.dim
+        bucket_size = self.bucket_size
+        nr_points = self.nr_points
+        radius = self.radius
+        kdt = KDTree(dim, bucket_size)
+        with self.assertRaises(Exception) as context:
+            kdt.set_coords(random((nr_points, dim)) * 100000000000000)
+        self.assertTrue("Points should lie between -1e6 and 1e6" in str(context.exception))
+        with self.assertRaises(Exception) as context:
+            kdt.set_coords(random((nr_points, dim - 2)))
+        self.assertTrue("Expected a Nx%i NumPy array" % dim in str(context.exception))
+        with self.assertRaises(Exception) as context:
+            kdt.search(array([0, 0, 0]), radius)
+        self.assertTrue("No point set specified" in str(context.exception))
+
+
+    def test_KDTree_neighbour(self):
+        """Test all fixed radius neighbor search.
+
+        Test all fixed radius neighbor search using the KD tree C
+        module, and compare the results to a manual search.
+        """
+        dim = self.dim
+        bucket_size = self.bucket_size
+        nr_points = self.nr_points
+        radius = self.radius
+        for i in range(0, 10):
+            # KD tree search
+            kdt = KDTree(dim, bucket_size)
+            coords = random((nr_points, dim))
+            kdt.set_data(coords)
+            neighbors = kdt.neighbor_search(radius)
+            r = [neighbor.radius for neighbor in neighbors]
+            if r is None:
+                l1 = 0
+            else:
+                l1 = len(r)
+            # manual search
+            neighbors = kdt.neighbor_simple_search(radius)
+            r = [neighbor.radius for neighbor in neighbors]
+            if r is None:
+                l2 = 0
+            else:
+                l2 = len(r)
+            # compare results
+            self.assertEqual(l1, l2)
+
+
+    def test_KDTree(self):
+        """Test neighbor search.
+
+        Test neighbor search using the KD tree C module,
+        and compare the results to a manual search.
+        """
+        dim = self.dim
+        bucket_size = self.bucket_size
+        nr_points = self.nr_points
+        radius = self.radius
+        for i in range(0, 10):
+            # kd tree search
+            kdt = KDTree(dim, bucket_size)
+            coords = random((nr_points, dim))
+            center = coords[0]
+            kdt.set_data(coords)
+            kdt.search_center_radius(center, radius)
+            r = kdt.get_indices()
+            if r is None:
+                l1 = 0
+            else:
+                l1 = len(r)
+            # manual search
+            l2 = 0
+            for i in range(0, nr_points):
+                p = coords[i]
+                v = p - center
+                if sqrt(dot(v, v)) <= radius:
+                    l2 += 1
+            # compare results
+            self.assertEqual(l1, l2)
+
+
+    def test_all_search(self):
+        """Test fixed neighbor search.
+
+        Using the KDTree C module, search point pairs that are
+        within a large radius, and verify that we found all radii.
+        """
+        dim = self.dim
+        bucket_size = self.bucket_size
+        nr_points = self.nr_points
+        query_radius = self.query_radius
+        for i in range(0, 5):
+            # KD tree search
+            kdt = KDTree(dim, bucket_size)
+            coords = random((nr_points // 10, dim))
+            kdt.set_coords(coords)
+            kdt.all_search(query_radius)
+            indices = kdt.all_get_indices()
+            if indices is None:
+                l1 = 0
+            else:
+                l1 = len(indices)
+            # find all points
+            radii = kdt.all_get_radii()
+            if radii is None:
+                l2 = 0
+            else:
+                l2 = len(radii)
+            # compare the results
+            self.assertEqual(l1, l2)
+
+
+    def test_search(self):
+        """Test search all points within radius of center.
+
+        Using the KDTree C module, search all point pairs that are
+        within radius, and compare the results to a manual search.
+        """
+        dim = self.dim
+        bucket_size = self.bucket_size
+        nr_points = self.nr_points
+        radius = self.radius
+        for i in range(0, 5):
+            # KD tree search
+            kdt = KDTree(dim, bucket_size)
+            coords = random((nr_points, dim))
+            kdt.set_coords(coords)
+            kdt.search(coords[0], radius * 100)
+            radii = kdt.get_radii()
+            # manual search
+            l1 = 0
+            for i in range(0, nr_points):
+                p = coords[i]
+                v = p - coords[0]
+                if sqrt(dot(v, v)) <= radius * 100:
+                    l1 += 1
+            # compare th results
+            self.assertEqual(l1, len(radii))
 
 
 if __name__ == '__main__':

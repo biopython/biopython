@@ -1,18 +1,157 @@
-# Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+# Copyright (C) 2002, 2004 Thomas Hamelryck (thamelry@binf.ku.dk)
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Fast atom neighbor lookup using a KD tree (implemented in C++)."""
+
+"""Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
 from __future__ import print_function
 
 import numpy
 
-from Bio.KDTree import KDTree
-
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
+
+from . import _kdtrees
+
+
+class KDTree(_kdtrees.KDTree):
+    """KD tree data structure for searching N-dimensional vectors.
+
+    The KD tree data structure can be used for all kinds of searches that
+    involve N-dimensional vectors. For example, neighbor searches (find all
+    points within a radius of a given point) or finding all point pairs in a
+    set that are within a certain radius of each other.
+
+    Reference:
+
+    Computational Geometry: Algorithms and Applications
+    Second Edition
+    Mark de Berg, Marc van Kreveld, Mark Overmars, Otfried Schwarzkopf
+    published by Springer-Verlag
+    2nd rev. ed. 2000.
+    ISBN: 3-540-65620-0
+
+    The KD tree data structure is described in chapter 5, pg. 99.
+
+    The following article made clear to me that the nodes should
+    contain more than one point (this leads to dramatic speed
+    improvements for the "all fixed radius neighbor search", see
+    below):
+
+    JL Bentley, "K-d trees for semidynamic point sets," in Sixth Annual ACM
+    Symposium on Computational Geometry, vol. 91. San Francisco, 1990
+
+    This KD implementation also performs a "all fixed radius neighbor search",
+    i.e. it can find all point pairs in a set that are within a certain radius
+    of each other. As far as I know the algorithm has not been published.
+    """
+
+    def __init__(self, dim, bucket_size=1):
+        """Initialize KDTree class."""
+        self.dim = dim
+        _kdtrees.KDTree.__init__(self, dim, bucket_size)
+        self.built = 0
+
+    # Set data
+
+    def set_coords(self, coords):
+        """Add the coordinates of the points.
+
+        Arguments:
+         - coords: two dimensional NumPy array. E.g. if the points
+           have dimensionality D and there are N points, the coords
+           array should be NxD dimensional.
+
+        """
+        if coords.min() <= -1e6 or coords.max() >= 1e6:
+            raise Exception("Points should lie between -1e6 and 1e6")
+        if len(coords.shape) != 2 or coords.shape[1] != self.dim:
+            raise Exception("Expected a Nx%i NumPy array" % self.dim)
+        self.set_data(coords)
+        self.built = 1
+
+    # Fixed radius search for a point
+
+    def search(self, center, radius):
+        """Search all points within radius of center.
+
+        Arguments:
+         - center: one dimensional NumPy array. E.g. if the points have
+           dimensionality D, the center array should be D dimensional.
+         - radius: float>0
+
+        """
+        if not self.built:
+            raise Exception("No point set specified")
+        if center.shape != (self.dim,):
+            raise Exception("Expected a %i-dimensional NumPy array"
+                            % self.dim)
+        self.search_center_radius(center, radius)
+
+    def get_radii(self):
+        """Return radii.
+
+        Return the list of distances from center after
+        a neighbor search.
+        """
+        n = self.get_count()
+        if n == 0:
+            return []
+        radii = numpy.empty(n, int)
+        _kdtrees.KDTree.get_radii(self, radii)
+        return radii
+
+    def get_indices(self):
+        """Return the list of indices.
+
+        Return the list of indices after a neighbor search.
+        The indices refer to the original coords NumPy array. The
+        coordinates with these indices were within radius of center.
+
+        For an index pair, the first index<second index.
+        """
+        n = self.get_count()
+        if n == 0:
+            return []
+        indices = numpy.empty(n, int)
+        _kdtrees.KDTree.get_indices(self, indices)
+        return indices
+
+    def all_search(self, radius):
+        """All fixed neighbor search.
+
+        Search all point pairs that are within radius.
+
+        Arguments:
+         - radius: float (>0)
+
+        """
+        # Fixed radius search for all points
+        if not self.built:
+            raise Exception("No point set specified")
+        self.neighbors = self.neighbor_search(radius)
+
+    def all_get_indices(self):
+        """Return All Fixed Neighbor Search results.
+
+        Return a Nx2 dim NumPy array containing
+        the indices of the point pairs, where N
+        is the number of neighbor pairs.
+        """
+        a = numpy.array([[neighbor.index1, neighbor.index2] for neighbor in self.neighbors])
+        return a
+
+    def all_get_radii(self):
+        """Return All Fixed Neighbor Search results.
+
+        Return an N-dim array containing the distances
+        of all the point pairs, where N is the number
+        of neighbor pairs..
+        """
+        return [neighbor.radius for neighbor in self.neighbors]
 
 
 class NeighborSearch(object):
