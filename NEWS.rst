@@ -127,6 +127,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Philip Bergstrom (first contribution)
 - rht (first contribution)
+- Rob Gilmore (first contribution)
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Shyam Saladi (first contribution)
