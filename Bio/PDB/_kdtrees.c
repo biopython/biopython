@@ -275,20 +275,14 @@ static float KDTree_dist(float *coord1, float *coord2, int dim)
 
 static int KDTree_report_point(struct KDTree* tree, long int index, float *coord)
 {
-    float r;
-
-    r=KDTree_dist(tree->_center_coord, coord, tree->dim);
-
+    const float r = KDTree_dist(tree->_center_coord, coord, tree->dim);
     if (r <= tree->_radius_sq)
     {
         int n = tree->_count;
         struct Radius* p;
 
         p = realloc(tree->_radius_list, (n+1)*sizeof(struct Radius));
-        if (p==NULL)
-        {
-            return 0;
-        }
+        if (p==NULL) return 0;
         /* note use of sqrt - only calculated if necessary */
         p[n].index = index;
         p[n].value = sqrt(r);
@@ -300,10 +294,7 @@ static int KDTree_report_point(struct KDTree* tree, long int index, float *coord
 
 static int KDTree_test_neighbors(struct KDTree* tree, struct DataPoint* p1, struct DataPoint* p2)
 {
-    float r;
-
-    r = KDTree_dist(p1->_coord, p2->_coord, tree->dim);
-
+    const float r = KDTree_dist(p1->_coord, p2->_coord, tree->dim);
     if(r <= tree->_neighbor_radius_sq)
     {
         /* we found a neighbor pair! */
@@ -354,14 +345,14 @@ static int KDTree_search_neighbors_between_buckets(struct KDTree* tree, struct N
     long int i;
     int ok;
 
-    for (i =node1->_start; i<node1->_end; i++)
+    for (i = node1->_start; i<node1->_end; i++)
     {
         struct DataPoint p1;
         long int j;
 
         p1 = tree->_data_point_list[i];
 
-        for (j=node2->_start; j<node2->_end; j++)
+        for (j = node2->_start; j<node2->_end; j++)
         {
             struct DataPoint p2;
 
