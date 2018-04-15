@@ -13,15 +13,15 @@ static int DataPoint_current_dim = 0;
 struct DataPoint
 {
     long int _index;
-    float _coord[DIM];
+    double _coord[DIM];
 };
 
 static int compare(const void* self, const void* other)
 {
     const struct DataPoint* p = self;
     const struct DataPoint* q = other;
-    const float a = p->_coord[DataPoint_current_dim];
-    const float b = q->_coord[DataPoint_current_dim];
+    const double a = p->_coord[DataPoint_current_dim];
+    const double b = q->_coord[DataPoint_current_dim];
     if (a < b) return -1;
     if (a > b) return +1;
     return 0;
@@ -40,7 +40,7 @@ typedef struct {
     PyObject_HEAD
     long int index1;
     long int index2;
-    float radius;
+    double radius;
 } Neighbor;
 
 static int
@@ -55,7 +55,7 @@ Neighbor_init(Neighbor *self, PyObject *args, PyObject *kwds)
         return -1;
     self->index1 = index1;
     self->index2 = index2;
-    self->radius = (float)radius;
+    self->radius = radius;
 
     return 0;
 }
@@ -129,8 +129,8 @@ static char Neighbor_radius__doc__[] = "the radius\n";
 static PyObject*
 Neighbor_getradius(Neighbor* self, void* closure)
 {
-    const float value = self->radius;
-    return PyFloat_FromDouble((double)value);
+    const double value = self->radius;
+    return PyFloat_FromDouble(value);
 }
 
 static int
@@ -138,7 +138,7 @@ Neighbor_setradius(Neighbor* self, PyObject* value, void* closure)
 {
     const double radius = PyFloat_AsDouble(value);
     if (PyErr_Occurred()) return -1;
-    self->radius = (float)radius;
+    self->radius = radius;
     return 0;
 }
 
@@ -197,13 +197,13 @@ struct Node
 {
     struct Node *_left;
     struct Node *_right;
-    float _cut_value;
+    double _cut_value;
     int _cut_dim;
     long int _start, _end;
 };
 
 static struct Node*
-Node_create(float cut_value, int cut_dim, long int start, long int end)
+Node_create(double cut_value, int cut_dim, long int start, long int end)
 {
     struct Node* node = malloc(sizeof(struct Node));
     if (node == NULL) return NULL;
@@ -235,11 +235,11 @@ static int Node_is_leaf(struct Node* node)
 
 struct Region
 {
-    float _left[DIM];
-    float _right[DIM];
+    double _left[DIM];
+    double _right[DIM];
 };
 
-static struct Region* Region_create(const float *left, const float *right)
+static struct Region* Region_create(const double *left, const double *right)
 {
     int i;
     struct Region* region = malloc(sizeof(struct Region));
@@ -268,7 +268,7 @@ static void Region_destroy(struct Region* region)
     if (region) free(region);
 }
 
-static int Region_encloses(struct Region* region, float *coord)
+static int Region_encloses(struct Region* region, double *coord)
 {
     int i;
     for (i = 0; i < DIM; i++)
@@ -282,37 +282,37 @@ static int Region_encloses(struct Region* region, float *coord)
 }
 
 static int
-Region_test_intersect_left(struct Region* region, float split_coord, int current_dim)
+Region_test_intersect_left(struct Region* region, double split_coord, int current_dim)
 {
-    const float r = region->_right[current_dim];
-    const float l = region->_left[current_dim];
+    const double r = region->_right[current_dim];
+    const double l = region->_left[current_dim];
     if (split_coord < l) return -1;
     else if (split_coord < r) return 0; /* split point in interval */
     else return +1;
 }
 
 static int
-Region_test_intersect_right(struct Region* region, float split_coord, int current_dim)
+Region_test_intersect_right(struct Region* region, double split_coord, int current_dim)
 {
-    const float r = region->_right[current_dim];
-    const float l = region->_left[current_dim];
+    const double r = region->_right[current_dim];
+    const double l = region->_left[current_dim];
     if (split_coord <= l) return -1;
     else if (split_coord <= r) return 0; /* split point in interval */
     else return +1;
 }
 
 static int
-Region_test_intersection(struct Region* this_region, struct Region *query_region, float radius)
+Region_test_intersection(struct Region* this_region, struct Region *query_region, double radius)
 {
     int status = 2;
 
     int i;
     for (i = 0; i < DIM; i++)
     {
-        float rs = this_region->_right[i];
-        float ls = this_region->_left[i];
-        float rq = query_region->_right[i];
-        float lq = query_region->_left[i];
+        double rs = this_region->_right[i];
+        double ls = this_region->_left[i];
+        double rq = query_region->_right[i];
+        double lq = query_region->_left[i];
 
         if (ls-rq > radius)
         {
@@ -339,10 +339,10 @@ Region_test_intersection(struct Region* this_region, struct Region *query_region
 }
 
 static struct Region*
-Region_create_intersect_left(struct Region* region, float split_coord, int current_dim)
+Region_create_intersect_left(struct Region* region, double split_coord, int current_dim)
 {
     struct Region* p;
-    const float value = region->_right[current_dim];
+    const double value = region->_right[current_dim];
     region->_right[current_dim] = split_coord;
     p = Region_create(region->_left, region->_right);
     region->_right[current_dim] = value;
@@ -350,10 +350,10 @@ Region_create_intersect_left(struct Region* region, float split_coord, int curre
 }
 
 static struct Region*
-Region_create_intersect_right(struct Region* region, float split_coord, int current_dim)
+Region_create_intersect_right(struct Region* region, double split_coord, int current_dim)
 {
     struct Region* p;
-    const float value = region->_left[current_dim];
+    const double value = region->_left[current_dim];
     region->_left[current_dim] = split_coord;
     p = Region_create(region->_left, region->_right);
     region->_left[current_dim] = value;
@@ -365,7 +365,7 @@ Region_create_intersect_right(struct Region* region, float split_coord, int curr
 struct Radius
 {
     long int index;
-    float value;
+    double value;
 };
 
 /* KDTree */
@@ -378,19 +378,19 @@ typedef struct {
     struct Node *_root;
     struct Region *_query_region;
     long int _count;
-    float _radius;
-    float _radius_sq;
-    float _neighbor_radius;
-    float _neighbor_radius_sq;
-    float _center_coord[DIM];
+    double _radius;
+    double _radius_sq;
+    double _neighbor_radius;
+    double _neighbor_radius_sq;
+    double _center_coord[DIM];
     int _bucket_size;
 } KDTree;
 
-static float KDTree_dist(float *coord1, float *coord2)
+static double KDTree_dist(double *coord1, double *coord2)
 {
     /* returns the SQUARE of the distance between two points */
     int i;
-    float sum = 0, dif = 0;
+    double sum = 0, dif = 0;
 
     for (i = 0; i < DIM; i++) {
         dif = coord1[i]-coord2[i];
@@ -399,9 +399,9 @@ static float KDTree_dist(float *coord1, float *coord2)
     return sum;
 }
 
-static int KDTree_report_point(KDTree* self, long int index, float *coord)
+static int KDTree_report_point(KDTree* self, long int index, double *coord)
 {
-    const float r = KDTree_dist(self->_center_coord, coord);
+    const double r = KDTree_dist(self->_center_coord, coord);
     if (r <= self->_radius_sq)
     {
         int n = self->_count;
@@ -422,7 +422,7 @@ static int
 KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct DataPoint* p2, PyObject* neighbors)
 {
     int ok;
-    const float r = KDTree_dist(p1->_coord, p2->_coord);
+    const double r = KDTree_dist(p1->_coord, p2->_coord);
     if (r <= self->_neighbor_radius_sq)
     {
         /* we found a neighbor pair! */
@@ -538,7 +538,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
         }
         else
         {
-            float cut_value;
+            double cut_value;
             int intersect;
 
             cut_value = down->_cut_value;
@@ -587,7 +587,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
         }
         else
         {
-            float cut_value;
+            double cut_value;
             int intersect;
 
             cut_value = up->_cut_value;
@@ -650,7 +650,7 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Regio
     struct Region *right_region = NULL;
     int localdim;
     int intersect;
-    float cut_value;
+    double cut_value;
     int ok = 1;
 
     localdim = depth % DIM;
@@ -777,7 +777,7 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
         long int left_offset_begin, left_offset_end;
         long int right_offset_begin, right_offset_end;
         long int d;
-        float cut_value;
+        double cut_value;
         struct DataPoint data_point;
         struct Node *left_node, *right_node, *new_node;
 
@@ -1103,8 +1103,8 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     double *coords;
     const int flags = PyBUF_ND | PyBUF_CONTIG_RO;
     Py_buffer view;
-    float left[DIM];
-    float right[DIM];
+    double left[DIM];
+    double right[DIM];
 
     if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj, &radius))
         return NULL;
@@ -1236,7 +1236,7 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
     DataPoint_sort(self->_data_point_list, self->_data_point_list_size, 0);
 
     for (i = 0; i < self->_data_point_list_size; i++) {
-        float x1;
+        double x1;
         long int j;
         struct DataPoint p1;
 
@@ -1245,7 +1245,7 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 
         for (j = i+1; j < self->_data_point_list_size; j++) {
             struct DataPoint p2 = self->_data_point_list[j];
-            float x2 = p2._coord[0];
+            double x2 = p2._coord[0];
             if (fabs(x2-x1) <= radius)
             {
                 ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
@@ -1314,7 +1314,7 @@ static PyObject *KDTree_get_radii(KDTree *self, PyObject* args)
     const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
     char datatype;
     Py_buffer view;
-    float *radii;
+    double *radii;
     Py_ssize_t i;
 
     if (!PyArg_ParseTuple(args, "O:KDTree_get_radii", &object)) return NULL;
