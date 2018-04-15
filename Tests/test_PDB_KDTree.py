@@ -61,23 +61,21 @@ class NeighborTest(unittest.TestCase):
 class KDTreeTest(unittest.TestCase):
 
     nr_points = 5000     # number of points used in test
-    dim = 3              # dimension of coords
     bucket_size = 5      # number of points per tree node
     radius = 0.01        # radius of search (typically 0.05 or so)
     query_radius = 10    # radius of search
 
     def test_KDTree_exceptions(self):
-        dim = self.dim
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
-        kdt = KDTree(dim, bucket_size)
+        kdt = KDTree(bucket_size)
         with self.assertRaises(Exception) as context:
-            kdt.set_coords(random((nr_points, dim)) * 100000000000000)
+            kdt.set_coords(random((nr_points, 3)) * 100000000000000)
         self.assertTrue("Points should lie between -1e6 and 1e6" in str(context.exception))
         with self.assertRaises(Exception) as context:
-            kdt.set_coords(random((nr_points, dim - 2)))
-        self.assertTrue("Expected a Nx%i NumPy array" % dim in str(context.exception))
+            kdt.set_coords(random((nr_points, 3 - 2)))
+        self.assertTrue("Expected a Nx3 NumPy array" in str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.search(array([0, 0, 0]), radius)
         self.assertTrue("No point set specified" in str(context.exception))
@@ -89,14 +87,13 @@ class KDTreeTest(unittest.TestCase):
         Test all fixed radius neighbor search using the KD tree C
         module, and compare the results to a manual search.
         """
-        dim = self.dim
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
         for i in range(0, 10):
             # KD tree search
-            kdt = KDTree(dim, bucket_size)
-            coords = random((nr_points, dim))
+            kdt = KDTree(bucket_size)
+            coords = random((nr_points, 3))
             kdt.set_data(coords)
             neighbors = kdt.neighbor_search(radius)
             r = [neighbor.radius for neighbor in neighbors]
@@ -121,14 +118,13 @@ class KDTreeTest(unittest.TestCase):
         Test neighbor search using the KD tree C module,
         and compare the results to a manual search.
         """
-        dim = self.dim
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
         for i in range(0, 10):
             # kd tree search
-            kdt = KDTree(dim, bucket_size)
-            coords = random((nr_points, dim))
+            kdt = KDTree(bucket_size)
+            coords = random((nr_points, 3))
             center = coords[0]
             kdt.set_data(coords)
             kdt.search_center_radius(center, radius)
@@ -154,14 +150,13 @@ class KDTreeTest(unittest.TestCase):
         Using the KDTree C module, search point pairs that are
         within a large radius, and verify that we found all radii.
         """
-        dim = self.dim
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         query_radius = self.query_radius
         for i in range(0, 5):
             # KD tree search
-            kdt = KDTree(dim, bucket_size)
-            coords = random((nr_points // 10, dim))
+            kdt = KDTree(bucket_size)
+            coords = random((nr_points // 10, 3))
             kdt.set_coords(coords)
             kdt.all_search(query_radius)
             indices = kdt.all_get_indices()
@@ -185,14 +180,13 @@ class KDTreeTest(unittest.TestCase):
         Using the KDTree C module, search all point pairs that are
         within radius, and compare the results to a manual search.
         """
-        dim = self.dim
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
         for i in range(0, 5):
             # KD tree search
-            kdt = KDTree(dim, bucket_size)
-            coords = random((nr_points, dim))
+            kdt = KDTree(bucket_size)
+            coords = random((nr_points, 3))
             kdt.set_coords(coords)
             kdt.search(coords[0], radius * 100)
             radii = kdt.get_radii()
