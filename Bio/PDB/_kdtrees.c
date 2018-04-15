@@ -401,7 +401,6 @@ typedef struct {
     float _neighbor_radius;
     float _neighbor_radius_sq;
     float *_center_coord;
-    float *_coords;
     int _bucket_size;
     int dim;
 } KDTree;
@@ -1016,7 +1015,6 @@ KDTree_dealloc(KDTree* self)
     Node_destroy(self->_root);
     Region_destroy(self->_query_region);
     if (self->_center_coord) free(self->_center_coord);
-    if (self->_coords) free(self->_coords);
     if (self->_data_point_list) free(self->_data_point_list);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -1038,7 +1036,6 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
     self->dim = dim;
     self->_query_region = NULL;
     self->_root = NULL;
-    self->_coords = NULL;
     self->_radius_list = NULL;
     self->_count = 0;
     self->_bucket_size = bucket_size;
@@ -1133,15 +1130,11 @@ KDTree_set_data(KDTree* self, PyObject* args)
 
     /* clean up stuff from previous use */
     Node_destroy(self->_root);
-    if (self->_coords) free(self->_coords);
     if (self->_radius_list) {
         free(self->_radius_list);
         self->_radius_list = NULL;
     }
     self->_count = 0;
-    /* keep pointer to coords to delete it */
-    self->_coords = coords;
-
     for (i = 0; i < n; i++)
     {
         ok = KDTree_add_point(self, i, coords+i*self->dim);
