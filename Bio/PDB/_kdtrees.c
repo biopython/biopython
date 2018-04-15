@@ -393,11 +393,9 @@ typedef struct {
     struct DataPoint* _data_point_list;
     int _data_point_list_size;
     struct Radius* _radius_list;
-    Neighbor** _neighbor_list;
     struct Node *_root;
     struct Region *_query_region;
     long int _count;
-    long int _neighbor_count;
     float _radius;
     float _radius_sq;
     float _neighbor_radius;
@@ -440,34 +438,32 @@ static int KDTree_report_point(KDTree* self, long int index, float *coord)
     return 1;
 }
 
-static int KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct DataPoint* p2)
+static int
+KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct DataPoint* p2, PyObject* neighbors)
 {
+    int ok;
     const float r = KDTree_dist(p1->_coord, p2->_coord, self->dim);
     if (r <= self->_neighbor_radius_sq)
     {
         /* we found a neighbor pair! */
-        Neighbor** p;
         Neighbor* neighbor;
-        int n = self->_neighbor_count;
-        p = realloc(self->_neighbor_list, (n+1)*sizeof(Neighbor*));
-        if (p == NULL) return 0;
         neighbor = (Neighbor*) NeighborType.tp_alloc(&NeighborType, 0);
-        if (!neighbor) {
-            free(p);
-            return 0;
-        }
+        if (!neighbor) return 0;
         neighbor->index1 = p1->_index;
         neighbor->index2 = p2->_index;
         neighbor->radius = sqrt(r); /* note sqrt */
-        p[n] = neighbor;
-        self->_neighbor_count = n + 1;
-        self->_neighbor_list = p;
+        ok = PyList_Append(neighbors, (PyObject*)neighbor);
+        Py_DECREF(neighbor);
+        if (ok == -1) {
+            Py_DECREF(neighbors);
+            return 0;
+        }
     }
 
     return 1;
 }
 
-static int KDTree_search_neighbors_in_bucket(KDTree* self, struct Node *node)
+static int KDTree_search_neighbors_in_bucket(KDTree* self, struct Node *node, PyObject* neighbors)
 {
     long int i;
     int ok;
@@ -481,14 +477,14 @@ static int KDTree_search_neighbors_in_bucket(KDTree* self, struct Node *node)
 
         for (j = i+1; j < node->_end; j++) {
             struct DataPoint p2 = self->_data_point_list[j];
-            ok = KDTree_test_neighbors(self, &p1, &p2);
+            ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
             if (!ok) return 0;
         }
     }
     return 1;
 }
 
-static int KDTree_search_neighbors_between_buckets(KDTree* self, struct Node *node1, struct Node *node2)
+static int KDTree_search_neighbors_between_buckets(KDTree* self, struct Node *node1, struct Node *node2, PyObject* neighbors)
 {
     long int i;
     int ok;
@@ -503,14 +499,14 @@ static int KDTree_search_neighbors_between_buckets(KDTree* self, struct Node *no
         for (j = node2->_start; j < node2->_end; j++)
         {
             struct DataPoint p2 = self->_data_point_list[j];
-            ok = KDTree_test_neighbors(self, &p1, &p2);
+            ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
             if (!ok) return 0;
         }
     }
     return 1;
 }
 
-static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct Region *down_region, struct Node *up, struct Region *up_region, int depth)
+static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct Region *down_region, struct Node *up, struct Region *up_region, int depth, PyObject* neighbors)
 {
     int down_is_leaf, up_is_leaf;
     int localdim;
@@ -539,7 +535,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
     if (up_is_leaf && down_is_leaf)
     {
         /* two leaf nodes */
-        ok = KDTree_search_neighbors_between_buckets(self, down, up);
+        ok = KDTree_search_neighbors_between_buckets(self, down, up, neighbors);
     }
     else
     {
@@ -651,13 +647,13 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
         }
 
         if (ok)
-            ok = KDTree_neighbor_search_pairs(self, up_left, up_left_region, down_left, down_left_region, depth+1);
+            ok = KDTree_neighbor_search_pairs(self, up_left, up_left_region, down_left, down_left_region, depth+1, neighbors);
         if (ok)
-            ok = KDTree_neighbor_search_pairs(self, up_left, up_left_region, down_right, down_right_region, depth+1);
+            ok = KDTree_neighbor_search_pairs(self, up_left, up_left_region, down_right, down_right_region, depth+1, neighbors);
         if (ok)
-            ok = KDTree_neighbor_search_pairs(self, up_right, up_right_region, down_left, down_left_region, depth+1);
+            ok = KDTree_neighbor_search_pairs(self, up_right, up_right_region, down_left, down_left_region, depth+1, neighbors);
         if (ok)
-            ok = KDTree_neighbor_search_pairs(self, up_right, up_right_region, down_right, down_right_region, depth+1);
+            ok = KDTree_neighbor_search_pairs(self, up_right, up_right_region, down_right, down_right_region, depth+1, neighbors);
 
         Region_destroy(down_left_region);
         Region_destroy(down_right_region);
@@ -667,7 +663,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
     return ok;
 }
 
-static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Region *region, int depth)
+static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Region *region, int depth, PyObject* neighbors)
 {
     struct Node *left, *right;
     struct Region *left_region = NULL;
@@ -720,11 +716,11 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Regio
         if (!Node_is_leaf(left))
         {
             /* search for pairs in this half plane */
-            ok = KDTree__neighbor_search(self, left, left_region, depth+1);
+            ok = KDTree__neighbor_search(self, left, left_region, depth+1, neighbors);
         }
         else
         {
-            ok = KDTree_search_neighbors_in_bucket(self, left);
+            ok = KDTree_search_neighbors_in_bucket(self, left, neighbors);
         }
     }
 
@@ -733,18 +729,18 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Regio
         if (!Node_is_leaf(right))
         {
             /* search for pairs in this half plane */
-            ok = KDTree__neighbor_search(self, right, right_region, depth+1);
+            ok = KDTree__neighbor_search(self, right, right_region, depth+1, neighbors);
         }
         else
         {
-            ok = KDTree_search_neighbors_in_bucket(self, right);
+            ok = KDTree_search_neighbors_in_bucket(self, right, neighbors);
         }
     }
 
     /* search for pairs between the half planes */
     if (ok)
     {
-        ok = KDTree_neighbor_search_pairs(self, left, left_region, right, right_region, depth+1);
+        ok = KDTree_neighbor_search_pairs(self, left, left_region, right, right_region, depth+1, neighbors);
     }
 
     /* cleanup */
@@ -1022,7 +1018,6 @@ KDTree_dealloc(KDTree* self)
     if (self->_center_coord) free(self->_center_coord);
     if (self->_coords) free(self->_coords);
     if (self->_data_point_list) free(self->_data_point_list);
-    if (self->_neighbor_list) free(self->_neighbor_list);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -1046,8 +1041,6 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
     self->_coords = NULL;
     self->_radius_list = NULL;
     self->_count = 0;
-    self->_neighbor_count = 0;
-    self->_neighbor_list = NULL;
     self->_bucket_size = bucket_size;
     self->_data_point_list = NULL;
     self->_data_point_list_size = 0;
@@ -1081,25 +1074,6 @@ KDTree_get_count(KDTree* self)
     }
     return result;
 }
-
-static PyObject*
-KDTree_neighbor_get_count(KDTree* self)
-{
-    PyObject* result;
-    long count = self->_neighbor_count;
-#if PY_MAJOR_VERSION >= 3
-    result = PyLong_FromLong(count);
-#else
-    result = PyInt_FromLong(count);
-#endif
-    if (!result)
-    {
-        PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for object.");
-        return NULL;
-    }
-    return result;
-}
-
 
 static PyObject*
 KDTree_set_data(KDTree* self, PyObject* args)
@@ -1328,8 +1302,7 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
     int ok = 0;
     double radius;
     Region_dim = self->dim;
-    PyObject* list;
-    Py_ssize_t i;
+    PyObject* neighbors;
 
     if (!PyArg_ParseTuple(args, "d:KDTree_neighbor_search", &radius))
         return NULL;
@@ -1339,11 +1312,8 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
         return NULL;
     }
 
-    if (self->_neighbor_list) {
-        free(self->_neighbor_list);
-        self->_neighbor_list = NULL;
-    }
-    self->_neighbor_count = 0;
+    neighbors = PyList_New(0);
+
     /* note the use of r^2 to avoid use of sqrt */
     self->_neighbor_radius = radius;
     self->_neighbor_radius_sq = radius*radius;
@@ -1351,26 +1321,19 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
     if (Node_is_leaf(self->_root)) {
         /* this is a boundary condition */
         /* bucket_size > nr of points */
-        ok = KDTree_search_neighbors_in_bucket(self, self->_root);
+        ok = KDTree_search_neighbors_in_bucket(self, self->_root, neighbors);
     }
     else {
         /* "normal" situation */
         /* start with [-INF, INF] */
         struct Region *region = Region_create(NULL, NULL);
         if (region) {
-            ok = KDTree__neighbor_search(self, self->_root, region, 0);
+            ok = KDTree__neighbor_search(self, self->_root, region, 0, neighbors);
             Region_destroy(region);
         }
     }
     if (!ok) return PyErr_NoMemory();
-
-    list = PyList_New(self->_neighbor_count);
-    if (list) {
-        for (i = 0; i < self->_neighbor_count; i++)
-            PyList_SET_ITEM(list, i, (PyObject*)(self->_neighbor_list[i]));
-    }
-
-    return list;
+    return neighbors;
 }
 
 static PyObject*
@@ -1378,7 +1341,7 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 {
     int ok;
     double radius;
-    PyObject* list;
+    PyObject* neighbors;
     Py_ssize_t i;
 
     if (!PyArg_ParseTuple(args, "d:KDTree_neighbor_simple_search", &radius))
@@ -1389,16 +1352,13 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
         return NULL;
     }
 
+    neighbors = PyList_New(0);
+    if (!neighbors) return NULL;
+
     Region_dim = self->dim;
 
     self->_neighbor_radius = radius;
     self->_neighbor_radius_sq = radius*radius;
-
-    self->_neighbor_count = 0;
-    if (self->_neighbor_list) {
-        free(self->_neighbor_list);
-        self->_neighbor_list = NULL;
-    }
 
     DataPoint_sort(self->_data_point_list, self->_data_point_list_size, 0);
 
@@ -1411,15 +1371,11 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
         x1 = p1._coord[0];
 
         for (j = i+1; j < self->_data_point_list_size; j++) {
-            struct DataPoint p2;
-            float x2;
-
-            p2 = self->_data_point_list[j];
-            x2=p2._coord[0];
-
+            struct DataPoint p2 = self->_data_point_list[j];
+            float x2 = p2._coord[0];
             if (fabs(x2-x1) <= radius)
             {
-                ok = KDTree_test_neighbors(self, &p1, &p2);
+                ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
                 if (!ok) return PyErr_NoMemory();
             }
             else
@@ -1428,14 +1384,7 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
             }
         }
     }
-
-    list = PyList_New(self->_neighbor_count);
-    if (list) {
-        for (i = 0; i < self->_neighbor_count; i++)
-            PyList_SET_ITEM(list, i, (PyObject*)(self->_neighbor_list[i]));
-    }
-
-    return list;
+    return neighbors;
 }
 
 static char KDTree_get_indices__doc__[] =
@@ -1533,7 +1482,6 @@ static PyMethodDef KDTree_methods[] = {
     {"get_count", (PyCFunction)KDTree_get_count, METH_NOARGS, NULL},
     {"set_data", (PyCFunction)KDTree_set_data, METH_VARARGS, NULL},
     {"search_center_radius", (PyCFunction)KDTree_search_center_radius, METH_VARARGS, NULL},
-    {"neighbor_get_count", (PyCFunction)KDTree_neighbor_get_count, METH_NOARGS, NULL},
     {"neighbor_search", (PyCFunction)KDTree_neighbor_search, METH_VARARGS, NULL},
     {"neighbor_simple_search", (PyCFunction)KDTree_neighbor_simple_search, METH_VARARGS, NULL},
     {"get_indices", (PyCFunction)KDTree_get_indices, METH_VARARGS, KDTree_get_indices__doc__},
