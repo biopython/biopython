@@ -40,7 +40,161 @@ struct Neighbor
     long int index1;
     long int index2;
     float radius;
-    struct Neighbor* next;
+};
+
+typedef struct {
+    PyObject_HEAD
+    struct Neighbor neighbor;
+} PyNeighbor;
+
+static int
+PyNeighbor_init(PyNeighbor *self, PyObject *args, PyObject *kwds)
+{
+    long int index1, index2;
+    float radius = 0.0;
+    static char *kwlist[] = {"index1", "index2", "radius", NULL};
+
+    if (! PyArg_ParseTupleAndKeywords(args, kwds, "ii|d", kwlist,
+                                      &index1, &index2, &radius))
+        return -1;
+    self->neighbor.index1 = index1;
+    self->neighbor.index2 = index2;
+    self->neighbor.radius = radius;
+
+    return 0;
+}
+
+static PyObject*
+PyNeighbor_repr(PyNeighbor* self)
+{
+    char string[64];
+    sprintf(string, "(%ld, %ld): %g",
+            self->neighbor.index1, self->neighbor.index2, self->neighbor.radius);
+#if PY_MAJOR_VERSION >= 3
+    return PyUnicode_FromFormat(string);
+#else
+    return PyString_FromString(string);
+#endif
+}
+
+static char PyNeighbor_index1__doc__[] =
+"index of the first neighbor";
+
+static PyObject*
+PyNeighbor_getindex1(PyNeighbor* self, void* closure)
+{
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong(self->neighbor.index1);
+#else
+    return PyInt_FromLong(self->neighbor.index1);
+#endif
+}
+
+static int
+PyNeighbor_setindex1(PyNeighbor* self, PyObject* value, void* closure)
+{
+#if PY_MAJOR_VERSION >= 3
+    long index1 = PyLong_AsLong(value);
+#else
+    long index1 = PyInt_AsLong(value);
+#endif
+    if (PyErr_Occurred()) return -1;
+    self->neighbor.index1 = index1;
+    return 0;
+}
+
+static char PyNeighbor_index2__doc__[] =
+"index of the second neighbor";
+
+static PyObject*
+PyNeighbor_getindex2(PyNeighbor* self, void* closure)
+{
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong(self->neighbor.index2);
+#else
+    return PyInt_FromLong(self->neighbor.index2);
+#endif
+}
+
+static int
+PyNeighbor_setindex2(PyNeighbor* self, PyObject* value, void* closure)
+{
+#if PY_MAJOR_VERSION >= 3
+    long index2 = PyLong_AsLong(value);
+#else
+    long index2 = PyInt_AsLong(value);
+#endif
+    if (PyErr_Occurred()) return -1;
+    self->neighbor.index2 = index2;
+    return 0;
+}
+
+static char PyNeighbor_radius__doc__[] =
+"the radius\n";
+
+static PyObject*
+PyNeighbor_getradius(PyNeighbor* self, void* closure)
+{
+    const float value = self->neighbor.radius;
+    return PyFloat_FromDouble((double)value);
+}
+
+static int
+PyNeighbor_setradius(PyNeighbor* self, PyObject* value, void* closure)
+{
+    const double radius = PyFloat_AsDouble(value);
+    if (PyErr_Occurred()) return -1;
+    self->neighbor.radius = (float)radius;
+    return 0;
+}
+
+static PyGetSetDef PyNeighbor_getset[] = {
+    {"index1", (getter)PyNeighbor_getindex1, (setter)PyNeighbor_setindex1, PyNeighbor_index1__doc__, NULL},
+    {"index2", (getter)PyNeighbor_getindex2, (setter)PyNeighbor_setindex2, PyNeighbor_index2__doc__, NULL},
+    {"radius", (getter)PyNeighbor_getradius, (setter)PyNeighbor_setradius, PyNeighbor_radius__doc__, NULL},
+    {NULL}  /* Sentinel */
+};
+
+static char PyNeighbor_doc[] =
+"A neighbor pair; members are index1, index2, and radius.\n";
+
+static PyTypeObject PyNeighborType = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "KDTree.Neighbor",         /* tp_name*/
+    sizeof(PyNeighbor),        /* tp_basicsize*/
+    0,                         /* tp_itemsize*/
+    0,                         /* tp_dealloc*/
+    0,                         /* tp_print*/
+    0,                         /* tp_getattr*/
+    0,                         /* tp_setattr*/
+    0,                         /* tp_compare*/
+    (reprfunc)PyNeighbor_repr, /* tp_repr*/
+    0,                         /* tp_as_number*/
+    0,                         /* tp_as_sequence*/
+    0,                         /* tp_as_mapping*/
+    0,                         /* tp_hash */
+    0,                         /* tp_call*/
+    0,                         /* tp_str*/
+    0,                         /* tp_getattro*/
+    0,                         /* tp_setattro*/
+    0,                         /* tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
+    PyNeighbor_doc,            /* tp_doc */
+    0,                         /* tp_traverse */
+    0,                         /* tp_clear */
+    0,                         /* tp_richcompare */
+    0,                         /* tp_weaklistoffset */
+    0,                         /* tp_iter */
+    0,                         /* tp_iternext */
+    0,                         /* tp_methods */
+    0,                         /* tp_members */
+    PyNeighbor_getset,         /* tp_getset */
+    0,                         /* tp_base */
+    0,                         /* tp_dict */
+    0,                         /* tp_descr_get */
+    0,                         /* tp_descr_set */
+    0,                         /* tp_dictoffset */
+    (initproc)PyNeighbor_init, /* tp_init */
 };
 
 /* Node */
@@ -245,7 +399,7 @@ typedef struct {
     struct DataPoint* _data_point_list;
     int _data_point_list_size;
     struct Radius* _radius_list;
-    struct Neighbor* _neighbor_list;
+    PyNeighbor** _neighbor_list;
     struct Node *_root;
     struct Region *_query_region;
     long int _count;
@@ -298,18 +452,22 @@ static int KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct Data
     if (r <= self->_neighbor_radius_sq)
     {
         /* we found a neighbor pair! */
-        struct Neighbor* p;
-        int n;
-        n = self->_neighbor_count;
-        p = realloc(self->_neighbor_list, (n+1)*sizeof(struct Neighbor));
+        PyNeighbor** p;
+        PyNeighbor* neighbor;
+        int n = self->_neighbor_count;
+        p = realloc(self->_neighbor_list, (n+1)*sizeof(PyNeighbor*));
         if (p==NULL) return 0;
-
-        p[n].index1 = p1->_index;
-        p[n].index2 = p2->_index;
-        /* note sqrt */
-        p[n].radius = sqrt(r);
+        neighbor = (PyNeighbor*) PyNeighborType.tp_alloc(&PyNeighborType, 0);
+        if (!neighbor) {
+            free(p);
+            return 0;
+        }
+        neighbor->neighbor.index1 = p1->_index;
+        neighbor->neighbor.index2 = p2->_index;
+        neighbor->neighbor.radius = sqrt(r); /* note sqrt */
+        p[n] = neighbor;
+        self->_neighbor_count = n + 1;
         self->_neighbor_list = p;
-        self->_neighbor_count++;
     }
 
     return 1;
@@ -869,162 +1027,6 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
 
 /* Python interface */
 
-typedef struct {
-    PyObject_HEAD
-    struct Neighbor neighbor;
-} PyNeighbor;
-
-static int
-PyNeighbor_init(PyNeighbor *self, PyObject *args, PyObject *kwds)
-{
-    long int index1, index2;
-    float radius = 0.0;
-    static char *kwlist[] = {"index1", "index2", "radius", NULL};
-
-    if (! PyArg_ParseTupleAndKeywords(args, kwds, "ii|d", kwlist,
-                                      &index1, &index2, &radius))
-        return -1;
-    self->neighbor.index1 = index1;
-    self->neighbor.index2 = index2;
-    self->neighbor.radius = radius;
-
-    return 0;
-}
-
-static PyObject*
-PyNeighbor_repr(PyNeighbor* self)
-{
-    char string[64];
-    sprintf(string, "(%ld, %ld): %g",
-            self->neighbor.index1, self->neighbor.index2, self->neighbor.radius);
-#if PY_MAJOR_VERSION >= 3
-    return PyUnicode_FromFormat(string);
-#else
-    return PyString_FromString(string);
-#endif
-
-}
-
-static char PyNeighbor_index1__doc__[] =
-"index of the first neighbor";
-
-static PyObject*
-PyNeighbor_getindex1(PyNeighbor* self, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    return PyLong_FromLong(self->neighbor.index1);
-#else
-    return PyInt_FromLong(self->neighbor.index1);
-#endif
-}
-
-static int
-PyNeighbor_setindex1(PyNeighbor* self, PyObject* value, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    long index1 = PyLong_AsLong(value);
-#else
-    long index1 = PyInt_AsLong(value);
-#endif
-    if (PyErr_Occurred()) return -1;
-    self->neighbor.index1 = index1;
-    return 0;
-}
-
-static char PyNeighbor_index2__doc__[] =
-"index of the second neighbor";
-
-static PyObject*
-PyNeighbor_getindex2(PyNeighbor* self, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    return PyLong_FromLong(self->neighbor.index2);
-#else
-    return PyInt_FromLong(self->neighbor.index2);
-#endif
-}
-
-static int
-PyNeighbor_setindex2(PyNeighbor* self, PyObject* value, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    long index2 = PyLong_AsLong(value);
-#else
-    long index2 = PyInt_AsLong(value);
-#endif
-    if (PyErr_Occurred()) return -1;
-    self->neighbor.index2 = index2;
-    return 0;
-}
-
-static PyObject*
-PyNeighbor_getradius(PyNeighbor* self, void* closure)
-{
-    const float value = self->neighbor.radius;
-    return PyFloat_FromDouble((double)value);
-}
-
-static int
-PyNeighbor_setradius(PyNeighbor* self, PyObject* value, void* closure)
-{
-    const double radius = PyFloat_AsDouble(value);
-    if (PyErr_Occurred()) return -1;
-    self->neighbor.radius = (float)radius;
-    return 0;
-}
-
-static char PyNeighbor_radius__doc__[] =
-"the radius\n";
-
-static PyGetSetDef PyNeighbor_getset[] = {
-    {"index1", (getter)PyNeighbor_getindex1, (setter)PyNeighbor_setindex1, PyNeighbor_index1__doc__, NULL},
-    {"index2", (getter)PyNeighbor_getindex2, (setter)PyNeighbor_setindex2, PyNeighbor_index2__doc__, NULL},
-    {"radius", (getter)PyNeighbor_getradius, (setter)PyNeighbor_setradius, PyNeighbor_radius__doc__, NULL},
-    {NULL}  /* Sentinel */
-};
-
-static char PyNeighbor_doc[] =
-"A neighbor pair; members are index1, index2, and radius.\n";
-
-static PyTypeObject PyNeighborType = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    "KDTree.Neighbor",         /* tp_name*/
-    sizeof(PyNeighbor),        /* tp_basicsize*/
-    0,                         /* tp_itemsize*/
-    0,                         /* tp_dealloc*/
-    0,                         /* tp_print*/
-    0,                         /* tp_getattr*/
-    0,                         /* tp_setattr*/
-    0,                         /* tp_compare*/
-    (reprfunc)PyNeighbor_repr, /* tp_repr*/
-    0,                         /* tp_as_number*/
-    0,                         /* tp_as_sequence*/
-    0,                         /* tp_as_mapping*/
-    0,                         /* tp_hash */
-    0,                         /* tp_call*/
-    0,                         /* tp_str*/
-    0,                         /* tp_getattro*/
-    0,                         /* tp_setattro*/
-    0,                         /* tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
-    PyNeighbor_doc,            /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    0,                         /* tp_methods */
-    0,                         /* tp_members */
-    PyNeighbor_getset,         /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)PyNeighbor_init, /* tp_init */
-};
-
 static void
 KDTree_dealloc(KDTree* self)
 {
@@ -1376,22 +1378,9 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
     if (!ok) return PyErr_NoMemory();
 
     list = PyList_New(self->_neighbor_count);
-    if (list)
-    {
-        PyNeighbor* p;
+    if (list) {
         for (i = 0; i < self->_neighbor_count; i++)
-        {
-            p = (PyNeighbor*) PyNeighborType.tp_alloc(&PyNeighborType, 0);
-            if (!p)
-            {
-                PyErr_SetString(PyExc_MemoryError,
-                    "could not create node for return value");
-                Py_DECREF(list);
-                return NULL;
-            }
-            p->neighbor = self->_neighbor_list[i];
-            PyList_SET_ITEM(list, i, (PyObject*)p);
-        }
+            PyList_SET_ITEM(list, i, (PyObject*)(self->_neighbor_list[i]));
     }
 
     return list;
@@ -1402,7 +1391,6 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 {
     int ok;
     double radius;
-    struct Neighbor* neighbors;
     PyObject* list;
     Py_ssize_t i;
 
@@ -1455,41 +1443,10 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
         }
     }
 
-    neighbors = NULL;
-
-    for (i = 0; i < self->_neighbor_count; i++) {
-        struct Neighbor* neighbor = malloc(sizeof(struct Neighbor));
-        if (!neighbor)
-        {
-            while(1)
-            {
-                neighbor = neighbors;
-                if (!neighbor) return 0;
-                neighbors = neighbor->next;
-                free(neighbor);
-            }
-        }
-        *neighbor = self->_neighbor_list[i];
-        neighbor->next = neighbors;
-        neighbors = neighbor;
-    }
-
     list = PyList_New(self->_neighbor_count);
-    if (list)
-    {
-        PyNeighbor* p;
-        for (i = 0; i < self->_neighbor_count; i++) {
-            p = (PyNeighbor*) PyNeighborType.tp_alloc(&PyNeighborType, 0);
-            if(!p)
-            {
-                PyErr_SetString(PyExc_MemoryError,
-                    "could not create node for return value");
-                Py_DECREF(list);
-                return NULL;
-            }
-            p->neighbor = self->_neighbor_list[i];
-            PyList_SET_ITEM(list, i, (PyObject*)p);
-        }
+    if (list) {
+        for (i = 0; i < self->_neighbor_count; i++)
+            PyList_SET_ITEM(list, i, (PyObject*)(self->_neighbor_list[i]));
     }
 
     return list;
