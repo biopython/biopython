@@ -18,10 +18,10 @@ from . import _kdtrees
 
 
 class KDTree(_kdtrees.KDTree):
-    """KD tree data structure for searching N-dimensional vectors.
+    """KD tree data structure for searching 3-dimensional vectors.
 
     The KD tree data structure can be used for all kinds of searches that
-    involve N-dimensional vectors. For example, neighbor searches (find all
+    involve 3-dimensional vectors. For example, neighbor searches (find all
     points within a radius of a given point) or finding all point pairs in a
     set that are within a certain radius of each other.
 
@@ -49,10 +49,9 @@ class KDTree(_kdtrees.KDTree):
     of each other. As far as I know the algorithm has not been published.
     """
 
-    def __init__(self, dim, bucket_size=1):
+    def __init__(self, bucket_size=1):
         """Initialize KDTree class."""
-        self.dim = dim
-        _kdtrees.KDTree.__init__(self, dim, bucket_size)
+        _kdtrees.KDTree.__init__(self, bucket_size)
         self.built = 0
 
     # Set data
@@ -61,15 +60,12 @@ class KDTree(_kdtrees.KDTree):
         """Add the coordinates of the points.
 
         Arguments:
-         - coords: two dimensional NumPy array. E.g. if the points
-           have dimensionality D and there are N points, the coords
-           array should be NxD dimensional.
-
+         - coords: Nx3 NumPy array, where N is the number of points.
         """
         if coords.min() <= -1e6 or coords.max() >= 1e6:
             raise Exception("Points should lie between -1e6 and 1e6")
-        if len(coords.shape) != 2 or coords.shape[1] != self.dim:
-            raise Exception("Expected a Nx%i NumPy array" % self.dim)
+        if len(coords.shape) != 2 or coords.shape[1] != 3:
+            raise Exception("Expected a Nx3 NumPy array")
         self.set_data(coords)
         self.built = 1
 
@@ -79,16 +75,15 @@ class KDTree(_kdtrees.KDTree):
         """Search all points within radius of center.
 
         Arguments:
-         - center: one dimensional NumPy array. E.g. if the points have
-           dimensionality D, the center array should be D dimensional.
+         - center: NumPy array of size 3.
          - radius: float>0
 
         """
         if not self.built:
             raise Exception("No point set specified")
-        if center.shape != (self.dim,):
-            raise Exception("Expected a %i-dimensional NumPy array"
-                            % self.dim)
+        center = numpy.require(center, dtype='d', requirements='C')
+        if center.shape != (3,):
+            raise Exception("Expected a 3-dimensional NumPy array")
         self.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -137,7 +132,7 @@ class KDTree(_kdtrees.KDTree):
     def all_get_indices(self):
         """Return All Fixed Neighbor Search results.
 
-        Return a Nx2 dim NumPy array containing
+        Return a Nx2 dimensional NumPy array containing
         the indices of the point pairs, where N
         is the number of neighbor pairs.
         """
@@ -149,7 +144,7 @@ class KDTree(_kdtrees.KDTree):
 
         Return an N-dim array containing the distances
         of all the point pairs, where N is the number
-        of neighbor pairs..
+        of neighbor pairs.
         """
         return [neighbor.radius for neighbor in self.neighbors]
 
@@ -181,10 +176,10 @@ class NeighborSearch(object):
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
         # to Nx3 array of type float
-        self.coords = numpy.array(coord_list, dtype="f")
+        self.coords = numpy.array(coord_list, dtype="d")
         assert bucket_size > 1
         assert self.coords.shape[1] == 3
-        self.kdt = KDTree(3, bucket_size)
+        self.kdt = KDTree(bucket_size)
         self.kdt.set_coords(self.coords)
 
     # Private
@@ -228,15 +223,11 @@ class NeighborSearch(object):
             raise PDBException("%s: Unknown level" % level)
         self.kdt.search(center, radius)
         indices = self.kdt.get_indices()
-        n_atom_list = []
-        atom_list = self.atom_list
-        for i in indices:
-            a = atom_list[i]
-            n_atom_list.append(a)
+        atom_list = [self.atom_list[index] for index in indices]
         if level == "A":
-            return n_atom_list
+            return atom_list
         else:
-            return unfold_entities(n_atom_list, level)
+            return unfold_entities(atom_list, level)
 
     def search_all(self, radius, level="A"):
         """All neighbor search.

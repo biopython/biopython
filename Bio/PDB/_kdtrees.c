@@ -4,6 +4,7 @@
 
 #define INF 1000000
 
+#define DIM 3 /* three spatial dimensions */
 
 /* DataPoint */
 
@@ -12,7 +13,7 @@ static int DataPoint_current_dim = 0;
 struct DataPoint
 {
     long int _index;
-    float *_coord;
+    float _coord[DIM];
 };
 
 static int compare(const void* self, const void* other)
@@ -123,8 +124,7 @@ Neighbor_setindex2(Neighbor* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Neighbor_radius__doc__[] =
-"the radius\n";
+static char Neighbor_radius__doc__[] = "the radius\n";
 
 static PyObject*
 Neighbor_getradius(Neighbor* self, void* closure)
@@ -233,44 +233,29 @@ static int Node_is_leaf(struct Node* node)
 
 /* Region */
 
-static int Region_dim = 3;
-
 struct Region
 {
-    float *_left;
-    float *_right;
+    float _left[DIM];
+    float _right[DIM];
 };
 
 static struct Region* Region_create(const float *left, const float *right)
 {
+    int i;
     struct Region* region = malloc(sizeof(struct Region));
     if (region == NULL) return NULL;
-
-    region->_left = malloc(Region_dim*sizeof(float));
-    region->_right = malloc(Region_dim*sizeof(float));
-    if (region->_left == NULL || region->_right == NULL)
-    {
-        if (region->_left) free(region->_left);
-        if (region->_right) free(region->_right);
-        free(region);
-        return NULL;
-    }
 
     if (left == NULL || right == NULL)
     {
         /* [-INF, INF] */
-        int i;
-        for (i = 0; i < Region_dim; i++)
-        {
+        for (i = 0; i < DIM; i++) {
             region->_left[i]=-INF;
             region->_right[i]=INF;
         }
     }
     else
     {
-        int i;
-        for (i = 0; i < Region_dim; i++)
-        {
+        for (i = 0; i < DIM; i++) {
             region->_left[i] = left[i];
             region->_right[i] = right[i];
         }
@@ -280,16 +265,13 @@ static struct Region* Region_create(const float *left, const float *right)
 
 static void Region_destroy(struct Region* region)
 {
-    if (region == NULL) return;
-    if (region->_left) free(region->_left);
-    if (region->_right) free(region->_right);
-    free(region);
+    if (region) free(region);
 }
 
 static int Region_encloses(struct Region* region, float *coord)
 {
     int i;
-    for (i = 0; i < Region_dim; i++)
+    for (i = 0; i < DIM; i++)
     {
         if (!(coord[i] >= region->_left[i] && coord[i] <= region->_right[i]))
         {
@@ -322,10 +304,10 @@ Region_test_intersect_right(struct Region* region, float split_coord, int curren
 static int
 Region_test_intersection(struct Region* this_region, struct Region *query_region, float radius)
 {
-    int status=2;
+    int status = 2;
 
     int i;
-    for (i = 0; i < Region_dim; i++)
+    for (i = 0; i < DIM; i++)
     {
         float rs = this_region->_right[i];
         float ls = this_region->_left[i];
@@ -350,7 +332,7 @@ Region_test_intersection(struct Region* this_region, struct Region *query_region
         else
         {
             /* overlap (at least in dim i) */
-            status=1;
+            status = 1;
         }
     }
     return status;
@@ -400,18 +382,17 @@ typedef struct {
     float _radius_sq;
     float _neighbor_radius;
     float _neighbor_radius_sq;
-    float *_center_coord;
+    float _center_coord[DIM];
     int _bucket_size;
-    int dim;
 } KDTree;
 
-static float KDTree_dist(float *coord1, float *coord2, int dim)
+static float KDTree_dist(float *coord1, float *coord2)
 {
     /* returns the SQUARE of the distance between two points */
     int i;
     float sum = 0, dif = 0;
 
-    for (i = 0; i < dim; i++) {
+    for (i = 0; i < DIM; i++) {
         dif = coord1[i]-coord2[i];
         sum += dif*dif;
     }
@@ -420,7 +401,7 @@ static float KDTree_dist(float *coord1, float *coord2, int dim)
 
 static int KDTree_report_point(KDTree* self, long int index, float *coord)
 {
-    const float r = KDTree_dist(self->_center_coord, coord, self->dim);
+    const float r = KDTree_dist(self->_center_coord, coord);
     if (r <= self->_radius_sq)
     {
         int n = self->_count;
@@ -441,7 +422,7 @@ static int
 KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct DataPoint* p2, PyObject* neighbors)
 {
     int ok;
-    const float r = KDTree_dist(p1->_coord, p2->_coord, self->dim);
+    const float r = KDTree_dist(p1->_coord, p2->_coord);
     if (r <= self->_neighbor_radius_sq)
     {
         /* we found a neighbor pair! */
@@ -525,7 +506,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
     }
 
     /* dim */
-    localdim = depth % self->dim;
+    localdim = depth % DIM;
 
     /* are they leaves? */
     up_is_leaf = Node_is_leaf(up);
@@ -672,7 +653,7 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Regio
     float cut_value;
     int ok = 1;
 
-    localdim = depth % self->dim;
+    localdim = depth % DIM;
 
     left = node->_left;
     right = node->_right;
@@ -749,8 +730,9 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Regio
     return ok;
 }
 
-static int KDTree_add_point(KDTree* self, long int index, float *coord)
+static int KDTree_add_point(KDTree* self, long int index, double *coord)
 {
+    int i;
     int n;
     struct DataPoint* p;
 
@@ -759,7 +741,7 @@ static int KDTree_add_point(KDTree* self, long int index, float *coord)
     if (p == NULL) return 0;
 
     p[n]._index = index;
-    p[n]._coord = coord;
+    for (i = 0; i < DIM; i++) p[n]._coord[i] = coord[i];
 
     self->_data_point_list_size = n+1;
     self->_data_point_list = p;
@@ -781,7 +763,7 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
     }
     else
     {
-        localdim = depth % self->dim;
+        localdim = depth % DIM;
     }
 
     if ((offset_end-offset_begin) <= self->_bucket_size)
@@ -834,13 +816,6 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
         return new_node;
     }
 }
-
-#define COPY2DARRAY(ctype) \
-    for (i = 0; i < n; i++) { \
-        for (j = 0; j < m; j++) { \
-            coords[i*m+j] = *(ctype *) (p+i*rowstride+j*colstride); \
-        } \
-    }
 
 static int KDTree_report_subtree(KDTree* self, struct Node *node)
 {
@@ -921,7 +896,7 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
         node = self->_root;
     }
 
-    current_dim = depth % self->dim;
+    current_dim = depth % DIM;
 
     if (Node_is_leaf(node))
     {
@@ -1014,7 +989,6 @@ KDTree_dealloc(KDTree* self)
     if (!self->_root) return;
     Node_destroy(self->_root);
     Region_destroy(self->_query_region);
-    if (self->_center_coord) free(self->_center_coord);
     if (self->_data_point_list) free(self->_data_point_list);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -1022,18 +996,16 @@ KDTree_dealloc(KDTree* self)
 static int
 KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
 {
-    int dim;
     int bucket_size;
 
-    if (!PyArg_ParseTuple(args, "ii:KDTree_init" ,&dim, &bucket_size))
+    if (!PyArg_ParseTuple(args, "i:KDTree_init" , &bucket_size))
         return -1;
 
-    if (dim <= 0 || bucket_size <= 0) {
-        PyErr_SetString(PyExc_ValueError, "Both arguments should be positive");
+    if (bucket_size <= 0) {
+        PyErr_SetString(PyExc_ValueError, "bucket size should be positive");
         return -1;
     }
 
-    self->dim = dim;
     self->_query_region = NULL;
     self->_root = NULL;
     self->_radius_list = NULL;
@@ -1041,16 +1013,6 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
     self->_bucket_size = bucket_size;
     self->_data_point_list = NULL;
     self->_data_point_list_size = 0;
-
-    self->_center_coord = malloc(dim*sizeof(float));
-    if (self->_center_coord == NULL)
-    {
-        PyErr_SetString(PyExc_MemoryError, "Insufficient memory for tree");
-        return -1;
-    }
-
-    Region_dim = self->dim;
-
     return 0;
 }
 
@@ -1075,14 +1037,11 @@ KDTree_get_count(KDTree* self)
 static PyObject*
 KDTree_set_data(KDTree* self, PyObject* args)
 {
-    float* coords;
-    Py_ssize_t n, m, i, j;
+    double* coords;
+    Py_ssize_t n, m, i;
     PyObject *obj;
     int ok;
-    Py_ssize_t rowstride, colstride;
-    const char* p;
-    const int flags = PyBUF_FORMAT | PyBUF_STRIDES;
-    char datatype;
+    const int flags = PyBUF_ND | PyBUF_CONTIG_RO;
     Py_buffer view;
 
     if (!PyArg_ParseTuple(args, "O:KDTree_set_data", &obj)) return NULL;
@@ -1090,43 +1049,16 @@ KDTree_set_data(KDTree* self, PyObject* args)
     if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
     if (view.ndim != 2) {
         PyErr_SetString(PyExc_RuntimeError, "Array must be two-dimensional");
-        return NULL;
+        goto exit;
     }
     n = view.shape[0];
     m = view.shape[1];
-    rowstride = view.strides[0];
-    colstride = view.strides[1];
-    /* coord_data is deleted by the KDTree object */
-    coords = malloc(m*n*sizeof(float));
-    if (!coords) {
-        PyErr_SetString(PyExc_MemoryError, "Failed to allocate memory for coordinates.");
-        goto exit;
+    if (view.itemsize != sizeof(double)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "coords array has incorrect data type");
+        return 0;
     }
-    p = view.buf;
-    datatype = view.format[0];
-    switch (datatype) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': datatype = view.format[1]; break;
-        default: break;
-    }
-    switch (datatype) {
-        case 'd': COPY2DARRAY(double); break;
-        case 'f': COPY2DARRAY(float); break;
-        case 'i': COPY2DARRAY(int); break;
-        case 'I': COPY2DARRAY(unsigned int); break;
-        case 'l': COPY2DARRAY(long); break;
-        case 'L': COPY2DARRAY(unsigned long); break;
-        default:
-            PyErr_Format(PyExc_RuntimeError,
-                "array should contain numerical data (format character was %c).",
-                datatype);
-            goto exit;
-    }
-
-    Region_dim = self->dim;
+    coords = view.buf;
 
     /* clean up stuff from previous use */
     Node_destroy(self->_root);
@@ -1137,7 +1069,7 @@ KDTree_set_data(KDTree* self, PyObject* args)
     self->_count = 0;
     for (i = 0; i < n; i++)
     {
-        ok = KDTree_add_point(self, i, coords+i*self->dim);
+        ok = KDTree_add_point(self, i, coords+i*DIM);
         if (!ok) 
         {
             free(self->_data_point_list);
@@ -1159,32 +1091,22 @@ KDTree_set_data(KDTree* self, PyObject* args)
 
 exit:
     PyBuffer_Release(&view);
-    if (coords) free(coords);
     return NULL;
 }
-
-#define COPY1DARRAY(ctype) \
-    for (i = 0; i < n; i++) { \
-        coords[i] = *(ctype *) (p+i*stride); \
-    }
 
 static PyObject*
 KDTree_search_center_radius(KDTree* self, PyObject* args)
 {
     PyObject *obj;
     double radius;
-    long int n, i;
-    float *coords;
-    const int flags = PyBUF_FORMAT | PyBUF_STRIDES;
-    Py_ssize_t stride;
+    long int i;
+    double *coords;
+    const int flags = PyBUF_ND | PyBUF_CONTIG_RO;
     Py_buffer view;
-    char datatype;
-    const char* p;
-    int dim = self->dim;
-    float* left;
-    float* right;
+    float left[DIM];
+    float right[DIM];
 
-    if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj ,&radius))
+    if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj, &radius))
         return NULL;
 
     if (radius <= 0)
@@ -1194,54 +1116,22 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     }
 
     if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
+    if (view.itemsize != sizeof(double)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "coords array has incorrect data type");
+        goto exit;
+    }
     if (view.ndim != 1) {
-        PyErr_SetString(PyExc_RuntimeError, "Array must be one-dimensional");
-        return NULL;
-    }
-    n = view.shape[0];
-    stride = view.strides[0];
-    /* coord_data is deleted by the KDTree object */
-    coords = malloc(n*sizeof(float));
-    if (!coords) {
-        PyErr_NoMemory();
+        PyErr_SetString(PyExc_RuntimeError,
+                        "coords array must be one-dimensional");
         goto exit;
     }
-    p = view.buf;
-    datatype = view.format[0];
-    switch (datatype) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': datatype = view.format[1]; break;
-        default: break;
-    }
-    switch (datatype) {
-        case 'd': COPY1DARRAY(double); break;
-        case 'f': COPY1DARRAY(float); break;
-        case 'i': COPY1DARRAY(int); break;
-        case 'I': COPY1DARRAY(unsigned int); break;
-        case 'l': COPY1DARRAY(long); break;
-        case 'L': COPY1DARRAY(unsigned long); break;
-        default:
-            PyErr_Format(PyExc_RuntimeError,
-                "array should contain numerical data (format character was %c.",
-                datatype);
-            goto exit;
-    }
-
-    left = malloc(dim*sizeof(float));
-    right = malloc(dim*sizeof(float));
-    if (left == NULL || right == NULL)
-    {
-        if (left) free(left);
-        if (right) free(right);
-        PyErr_NoMemory();
+    if (view.shape[0] != DIM) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "coords array dimension must be 3");
         goto exit;
     }
-
-    Region_dim = self->dim;
-
+    coords = view.buf;
     if (self->_radius_list) {
         free(self->_radius_list);
         self->_radius_list = NULL;
@@ -1252,22 +1142,16 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     /* use of r^2 to avoid sqrt use */
     self->_radius_sq = radius*radius;
 
-    for (i = 0; i < self->dim; i++)
+    for (i = 0; i < DIM; i++)
     {
-        left[i] = coords[i]-radius;
-        right[i] = coords[i]+radius;
+        left[i] = coords[i] - radius;
+        right[i] = coords[i] + radius;
         /* set center of query */
         self->_center_coord[i] = coords[i];
     }
 
-    /* clean up! */
-    if (coords) free(coords);
-
     Region_destroy(self->_query_region);
     self->_query_region = Region_create(left, right);
-
-    free(left);
-    free(right);
 
     if (!self->_query_region) {
         PyErr_NoMemory();
@@ -1285,7 +1169,6 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
 
 exit:
     PyBuffer_Release(&view);
-    if (coords) free(coords);
     return NULL;
 }
 
@@ -1294,7 +1177,6 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
 {
     int ok = 0;
     double radius;
-    Region_dim = self->dim;
     PyObject* neighbors;
 
     if (!PyArg_ParseTuple(args, "d:KDTree_neighbor_search", &radius))
@@ -1347,8 +1229,6 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 
     neighbors = PyList_New(0);
     if (!neighbors) return NULL;
-
-    Region_dim = self->dim;
 
     self->_neighbor_radius = radius;
     self->_neighbor_radius_sq = radius*radius;
