@@ -57,7 +57,8 @@ class Tree(_cluster.Tree):
         indices = numpy.ones(n, dtype='intc')
         if nclusters is None:
             nclusters = n
-        return _cluster.Tree.cut(self, indices, nclusters)
+        _cluster.Tree.cut(self, indices, nclusters)
+        return indices
 
 
 def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
