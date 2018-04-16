@@ -1,11 +1,13 @@
 # Copyright 2010 by Thomas Schmitt.
-# All rights reserved.
 #
-# This module is for reading and writing SeqXML format files as
-# SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "seqxml" file format, SeqXML.
 
-You are expected to use this module via the Bio.SeqIO functions.
+This module is for reading and writing SeqXML format files as
+SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
