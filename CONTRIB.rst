@@ -212,7 +212,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Thomas Hamelryck <thamelry at domain binf.ku.dk>
 - Thomas Holder <https://github.com/speleo3>
 - Thomas Rosleff Soerensen <rosleff at domain mpiz-koeln.mpg.de>
-- Thomas Schmitt <Thomas dot Schmitt at Swedish domain sbc.su>
+- Thomas Schmitt <https://github.com/wurstbonbon>
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
 - Tyghe Vallard <https://github.com/necrolyte2>
