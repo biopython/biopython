@@ -84,7 +84,7 @@ class MMCIF2Dict(dict):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
-            elif c == "#" and not quote_open_char:
+            elif not quote_open_char and c == "#" and ((i == 0) or (i > 0 and line[i - 1] in self.whitespace_chars)):
                 return
             elif not in_token:
                 in_token = True
