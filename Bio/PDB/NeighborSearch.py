@@ -49,22 +49,15 @@ class KDTree(_kdtrees.KDTree):
     of each other. As far as I know the algorithm has not been published.
     """
 
-    def __init__(self, bucket_size=1):
-        """Initialize KDTree class."""
-        _kdtrees.KDTree.__init__(self, bucket_size)
-        self.built = 0
-
-    # Set data
-
-    def set_coords(self, coords):
-        """Add the coordinates of the points.
+    def __init__(self, coords, bucket_size=1):
+        """Initialize KDTree class.
 
         Arguments:
          - coords: Nx3 NumPy array, where N is the number of points.
         """
+        _kdtrees.KDTree.__init__(self, bucket_size)
         coords = numpy.require(coords, dtype='d', requirements='C')
         self.set_data(coords)
-        self.built = 1
 
     # Fixed radius search for a point
 
@@ -76,8 +69,6 @@ class KDTree(_kdtrees.KDTree):
          - radius: float>0
 
         """
-        if not self.built:
-            raise Exception("No point set specified")
         center = numpy.require(center, dtype='d', requirements='C')
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
@@ -122,8 +113,6 @@ class KDTree(_kdtrees.KDTree):
 
         """
         # Fixed radius search for all points
-        if not self.built:
-            raise Exception("No point set specified")
         self.neighbors = self.neighbor_search(radius)
 
     def all_get_indices(self):
@@ -176,8 +165,7 @@ class NeighborSearch(object):
         self.coords = numpy.array(coord_list, dtype="d")
         assert bucket_size > 1
         assert self.coords.shape[1] == 3
-        self.kdt = KDTree(bucket_size)
-        self.kdt.set_coords(self.coords)
+        self.kdt = KDTree(self.coords, bucket_size)
 
     # Private
 
