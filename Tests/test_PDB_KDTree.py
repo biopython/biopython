@@ -69,16 +69,13 @@ class KDTreeTest(unittest.TestCase):
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
-        kdt = KDTree(bucket_size)
+        coords = random((nr_points, 3)) * 100000000000000
         with self.assertRaises(Exception) as context:
-            kdt.set_coords(random((nr_points, 3)) * 100000000000000)
+            kdt = KDTree(coords, bucket_size)
         self.assertTrue("coordinate values should lie between -1e6 and 1e6" in str(context.exception))
         with self.assertRaises(Exception) as context:
-            kdt.set_coords(random((nr_points, 3 - 2)))
+            kdt = KDTree(random((nr_points, 3 - 2)), bucket_size)
         self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
-        with self.assertRaises(Exception) as context:
-            kdt.search(array([0, 0, 0]), radius)
-        self.assertTrue("No point set specified" in str(context.exception))
 
 
     def test_KDTree_neighbour(self):
@@ -92,9 +89,8 @@ class KDTreeTest(unittest.TestCase):
         radius = self.radius
         for i in range(0, 10):
             # KD tree search
-            kdt = KDTree(bucket_size)
             coords = random((nr_points, 3))
-            kdt.set_coords(coords)
+            kdt = KDTree(coords, bucket_size)
             neighbors = kdt.neighbor_search(radius)
             r = [neighbor.radius for neighbor in neighbors]
             if r is None:
@@ -123,10 +119,9 @@ class KDTreeTest(unittest.TestCase):
         radius = self.radius
         for i in range(0, 10):
             # kd tree search
-            kdt = KDTree(bucket_size)
             coords = random((nr_points, 3))
             center = coords[0]
-            kdt.set_coords(coords)
+            kdt = KDTree(coords, bucket_size)
             kdt.search_center_radius(center, radius)
             r = kdt.get_indices()
             if r is None:
@@ -155,9 +150,8 @@ class KDTreeTest(unittest.TestCase):
         query_radius = self.query_radius
         for i in range(0, 5):
             # KD tree search
-            kdt = KDTree(bucket_size)
             coords = random((nr_points // 10, 3))
-            kdt.set_coords(coords)
+            kdt = KDTree(coords, bucket_size)
             kdt.all_search(query_radius)
             indices = kdt.all_get_indices()
             if indices is None:
@@ -185,9 +179,8 @@ class KDTreeTest(unittest.TestCase):
         radius = self.radius
         for i in range(0, 5):
             # KD tree search
-            kdt = KDTree(bucket_size)
             coords = random((nr_points, 3))
-            kdt.set_coords(coords)
+            kdt = KDTree(coords, bucket_size)
             kdt.search(coords[0], radius * 100)
             radii = kdt.get_radii()
             # manual search
