@@ -1041,7 +1041,8 @@ KDTree_set_data(KDTree* self, PyObject* args)
     Py_ssize_t n, m, i;
     PyObject *obj;
     int ok;
-    const int flags = PyBUF_ND | PyBUF_CONTIG_RO;
+    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
+
     Py_buffer view;
 
     if (!PyArg_ParseTuple(args, "O:KDTree_set_data", &obj)) return NULL;
@@ -1101,7 +1102,7 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     double radius;
     long int i;
     double *coords;
-    const int flags = PyBUF_ND | PyBUF_CONTIG_RO;
+    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     Py_buffer view;
     double left[DIM];
     double right[DIM];
@@ -1265,8 +1266,7 @@ static char KDTree_get_indices__doc__[] =
 
 static PyObject *KDTree_get_indices(KDTree *self, PyObject* args)
 {
-    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
-    char datatype;
+    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     Py_buffer view;
     PyObject* object;
     Py_ssize_t i;
@@ -1275,26 +1275,16 @@ static PyObject *KDTree_get_indices(KDTree *self, PyObject* args)
     if (!PyArg_ParseTuple(args, "O:KDTree_get_indices", &object)) return NULL;
     if (PyObject_GetBuffer(object, &view, flags) == -1)
         return NULL;
-    datatype = view.format[0];
-    switch (datatype) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': datatype = view.format[1]; break;
-        default: break;
-    }
-    if (datatype != 'l') {
-        PyErr_Format(PyExc_RuntimeError,
-            "array has incorrect data format ('%c', expected 'l')", datatype);
-        PyBuffer_Release(&view);
-        return NULL;
-    }
-    else if (view.ndim != 1) {
+    if (view.ndim != 1) {
         PyErr_Format(PyExc_ValueError,
             "array has incorrect rank (%d expected 1)", view.ndim);
         PyBuffer_Release(&view);
         return NULL;
+    }
+    if (view.itemsize != sizeof(Py_ssize_t)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "coords array has incorrect data type");
+        return 0;
     }
     /* copy the data into the Numpy data pointer */
     indices = view.buf;
@@ -1311,8 +1301,7 @@ static char KDTree_get_radii__doc__[] =
 static PyObject *KDTree_get_radii(KDTree *self, PyObject* args)
 {
     PyObject* object;
-    const int flags = PyBUF_C_CONTIGUOUS | PyBUF_FORMAT;
-    char datatype;
+    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
     Py_buffer view;
     double *radii;
     Py_ssize_t i;
@@ -1320,24 +1309,14 @@ static PyObject *KDTree_get_radii(KDTree *self, PyObject* args)
     if (!PyArg_ParseTuple(args, "O:KDTree_get_radii", &object)) return NULL;
     if (PyObject_GetBuffer(object, &view, flags) == -1)
         return NULL;
-    datatype = view.format[0];
-    switch (datatype) {
-        case '@':
-        case '=':
-        case '<':
-        case '>':
-        case '!': datatype = view.format[1]; break;
-        default: break;
+    if (view.itemsize != sizeof(double)) {
+        PyErr_SetString(PyExc_RuntimeError,
+                        "radii array has incorrect data type");
+        return 0;
     }
-    if (datatype != 'l') {
+    if (view.ndim != 1) {
         PyErr_Format(PyExc_RuntimeError,
-            "array has incorrect data format ('%c', expected 'f')", datatype);
-        PyBuffer_Release(&view);
-        return NULL;
-    }
-    else if (view.ndim != 1) {
-        PyErr_Format(PyExc_ValueError,
-            "array has incorrect rank (%d expected 1)", view.ndim);
+            "radii array has incorrect rank (%d expected 1)", view.ndim);
         PyBuffer_Release(&view);
         return NULL;
     }

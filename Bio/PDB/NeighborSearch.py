@@ -66,6 +66,7 @@ class KDTree(_kdtrees.KDTree):
             raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape) != 2 or coords.shape[1] != 3:
             raise Exception("Expected a Nx3 NumPy array")
+        coords = numpy.require(coords, dtype='d', requirements='C')
         self.set_data(coords)
         self.built = 1
 
