@@ -122,19 +122,17 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
         else:
             m = _extract_alignment_region(match_seq, match_tags)
         if len(q) != len(m):
-            # refactor to add error information to exception message?
-            # otherwise wont this all print to stdout when it should be
-            # directed to stderr?
-            print("Darn... amino acids vs nucleotide coordinates?")
-            print(tool)
-            print(query_seq)
-            print(query_tags)
-            print("%s %i" % (q, len(q)))
-            print(match_seq)
-            print(match_tags)
-            print("%s %i" % (m, len(m)))
-            print(handle.name)
-            raise ValueError("Darn... amino acids vs nucleotide coordinates?")
+            message = """Darn... amino acids vs nucleotide coordinates?
+            tool: {0}
+            query_seq: {1}
+            query_tags: {2}
+            {3} length: {4}
+            match_seq: {5}
+            match_tags: {6}
+            {7} length: {8}
+            handle.name: {9}
+            """.format(tool, query_seq, query_tags, q, len(q), match_seq, match_tags, m, len(m), handle.name)
+            raise ValueError(message)
 
         assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
