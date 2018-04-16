@@ -1038,7 +1038,7 @@ static PyObject*
 KDTree_set_data(KDTree* self, PyObject* args)
 {
     double* coords;
-    Py_ssize_t n, m, i;
+    Py_ssize_t n, i;
     PyObject *obj;
     int ok;
     const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
@@ -1048,18 +1048,25 @@ KDTree_set_data(KDTree* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "O:KDTree_set_data", &obj)) return NULL;
 
     if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
-    if (view.ndim != 2) {
-        PyErr_SetString(PyExc_RuntimeError, "Array must be two-dimensional");
-        goto exit;
-    }
-    n = view.shape[0];
-    m = view.shape[1];
     if (view.itemsize != sizeof(double)) {
         PyErr_SetString(PyExc_RuntimeError,
                         "coords array has incorrect data type");
         return 0;
     }
+    if (view.ndim != 2 || view.shape[1] != 3) {
+        PyErr_SetString(PyExc_ValueError, "expected a Nx3 numpy array");
+        goto exit;
+    }
+    n = view.shape[0];
     coords = view.buf;
+    for (i = 0; i < 3*n; i++) {
+        const double value = coords[i];
+        if (value <= -1e6 || value >= 1e6) {
+            PyErr_SetString(PyExc_ValueError,
+                "coordinate values should lie between -1e6 and 1e6");
+            goto exit;
+        }
+    }
 
     /* clean up stuff from previous use */
     Node_destroy(self->_root);
