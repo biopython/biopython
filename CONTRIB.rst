@@ -117,6 +117,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
+- Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
