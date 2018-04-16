@@ -72,10 +72,10 @@ class KDTreeTest(unittest.TestCase):
         kdt = KDTree(bucket_size)
         with self.assertRaises(Exception) as context:
             kdt.set_coords(random((nr_points, 3)) * 100000000000000)
-        self.assertTrue("Points should lie between -1e6 and 1e6" in str(context.exception))
+        self.assertTrue("coordinate values should lie between -1e6 and 1e6" in str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.set_coords(random((nr_points, 3 - 2)))
-        self.assertTrue("Expected a Nx3 NumPy array" in str(context.exception))
+        self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
         with self.assertRaises(Exception) as context:
             kdt.search(array([0, 0, 0]), radius)
         self.assertTrue("No point set specified" in str(context.exception))
@@ -94,7 +94,7 @@ class KDTreeTest(unittest.TestCase):
             # KD tree search
             kdt = KDTree(bucket_size)
             coords = random((nr_points, 3))
-            kdt.set_data(coords)
+            kdt.set_coords(coords)
             neighbors = kdt.neighbor_search(radius)
             r = [neighbor.radius for neighbor in neighbors]
             if r is None:
@@ -126,7 +126,7 @@ class KDTreeTest(unittest.TestCase):
             kdt = KDTree(bucket_size)
             coords = random((nr_points, 3))
             center = coords[0]
-            kdt.set_data(coords)
+            kdt.set_coords(coords)
             kdt.search_center_radius(center, radius)
             r = kdt.get_indices()
             if r is None:
