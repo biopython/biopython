@@ -55,9 +55,8 @@ class KDTree(_kdtrees.KDTree):
         Arguments:
          - coords: Nx3 NumPy array, where N is the number of points.
         """
-        _kdtrees.KDTree.__init__(self, bucket_size)
         coords = numpy.require(coords, dtype='d', requirements='C')
-        self.set_data(coords)
+        _kdtrees.KDTree.__init__(self, coords, bucket_size)
 
     # Fixed radius search for a point
 
