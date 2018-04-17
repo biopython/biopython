@@ -1,10 +1,13 @@
+# Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
-# Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2015 by Peter Cock.
+# Copyright 2004-2005, 2010 by M de Hoon.
+# Copyright 2007-2018 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Provide objects to represent biological sequences with alphabets.
 
 See also the Seq_ wiki and the chapter in our tutorial:
