@@ -992,8 +992,8 @@ KDTree_dealloc(KDTree* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-static int
-KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
+static PyObject*
+KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 {
     int bucket_size = 1;
     double* coords;
@@ -1003,34 +1003,27 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
     const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
 
     Py_buffer view;
+    KDTree* self;
 
-    self->_query_region = NULL;
-    self->_root = NULL;
-    self->_radius_list = NULL;
-    self->_count = 0;
-    self->_data_point_list = NULL;
-    self->_data_point_list_size = 0;
-
-    if (!PyArg_ParseTuple(args, "Oi:KDTree_init" , &obj, &bucket_size))
-        return -1;
+    if (!PyArg_ParseTuple(args, "O|i:KDTree_new" , &obj, &bucket_size))
+        return NULL;
 
     if (bucket_size <= 0) {
         PyErr_SetString(PyExc_ValueError, "bucket size should be positive");
-        return -1;
+        return NULL;
     }
-    self->_bucket_size = bucket_size;
 
-    if (PyObject_GetBuffer(obj, &view, flags) == -1) return -1;
+    if (PyObject_GetBuffer(obj, &view, flags) == -1) return NULL;
     if (view.itemsize != sizeof(double)) {
         PyBuffer_Release(&view);
         PyErr_SetString(PyExc_RuntimeError,
                         "coords array has incorrect data type");
-        return -1;
+        return NULL;
     }
     if (view.ndim != 2 || view.shape[1] != 3) {
         PyBuffer_Release(&view);
         PyErr_SetString(PyExc_ValueError, "expected a Nx3 numpy array");
-        return -1;
+        return NULL;
     }
     n = view.shape[0];
     coords = view.buf;
@@ -1040,16 +1033,27 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
             PyBuffer_Release(&view);
             PyErr_SetString(PyExc_ValueError,
                 "coordinate values should lie between -1e6 and 1e6");
-            return -1;
+            return NULL;
         }
     }
+
+    self = (KDTree*)type->tp_alloc(type, 0);
+    if (!self) return NULL;
+    self->_bucket_size = bucket_size;
+    self->_query_region = NULL;
+    self->_root = NULL;
+    self->_radius_list = NULL;
+    self->_count = 0;
+    self->_data_point_list = NULL;
+    self->_data_point_list_size = 0;
 
     for (i = 0; i < n; i++) {
         ok = KDTree_add_point(self, i, coords+i*DIM);
         if (!ok) {
             /* KDTree_dealloc will deallocate data already stored in KDTree */
             PyBuffer_Release(&view);
-            return -1;
+            Py_DECREF(self);
+            return PyErr_NoMemory();
         }
     }
     PyBuffer_Release(&view);
@@ -1057,10 +1061,10 @@ KDTree_init(KDTree* self, PyObject* args, PyObject* kwds)
     /* build KD tree */
     self->_root = KDTree_build_tree(self, 0, 0, 0);
     if (!self->_root) {
-        PyErr_NoMemory();
-        return -1;
+        Py_DECREF(self);
+        return PyErr_NoMemory();
     }
-    return 0;
+    return (PyObject*)self;
 }
 
 static PyObject*
@@ -1364,7 +1368,9 @@ static PyTypeObject KDTreeType = {
     0,                           /* tp_descr_get */
     0,                           /* tp_descr_set */
     0,                           /* tp_dictoffset */
-    (initproc)KDTree_init,       /* tp_init */
+    0,                           /* tp_init */
+    0,                           /* tp_alloc */
+    (newfunc)KDTree_new,         /* tp_new */
 };
 
 /* ========================================================================== */
@@ -1396,7 +1402,6 @@ init_kdtrees(void)
 {
   PyObject *module;
 
-  KDTreeType.tp_new = PyType_GenericNew;
   NeighborType.tp_new = PyType_GenericNew;
   if (PyType_Ready(&KDTreeType) < 0)
 #if PY_MAJOR_VERSION >= 3
