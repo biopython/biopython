@@ -1,7 +1,9 @@
-# Copyright 2010-2013 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2010-2018 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Python 3 compatibility tools (PRIVATE).
 
 We used to have lines like this under Python 2 in order to use
