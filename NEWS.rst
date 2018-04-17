@@ -8,7 +8,7 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released) Biopython 1.71
+(In progress, not yet released) Biopython 1.72
 ==============================================
 
 Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
