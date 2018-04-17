@@ -2199,9 +2199,6 @@ class MutableSeq(object):
         self.complement()
         self.data.reverse()
 
-    # Sorting a sequence makes no sense.
-    # def sort(self, *args): self.data.sort(*args)
-
     def extend(self, other):
         """Add a sequence to the original mutable sequence object.
 
