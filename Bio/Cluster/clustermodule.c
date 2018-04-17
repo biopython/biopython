@@ -826,86 +826,104 @@ PyTree_dealloc(PyTree* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-static int
-PyTree_init(PyTree* self, PyObject* args, PyObject* kwds)
+static PyObject*
+PyTree_new(PyTypeObject *type, PyObject* args, PyObject* kwds)
 {
-    int i;
+    int i, j;
     int n;
     Node* nodes;
     PyObject* arg = NULL;
     int* flag;
+    PyTree* self;
 
-    if (!PyArg_ParseTuple(args, "|O", &arg)) return -1;
+    self = (PyTree *)type->tp_alloc(type, 0);
+    if (!self) return NULL;
+
+    if (!PyArg_ParseTuple(args, "|O", &arg)) {
+        Py_DECREF(self);
+        return NULL;
+    }
 
     if (arg == NULL) {
         self->n = 0;
         self->nodes = NULL;
-        return 0;
+        return (PyObject*)self;
     }
 
     if (!PyList_Check(arg)) {
+        Py_DECREF(self);
         PyErr_SetString(PyExc_TypeError,
                         "Argument should be a list of Node objects");
-        return -1;
+        return NULL;
     }
 
     n = (int) PyList_GET_SIZE(arg);
     if (n != PyList_GET_SIZE(arg)) {
+        Py_DECREF(self);
         PyErr_Format(PyExc_ValueError,
                      "List is too large (size = %zd)", PyList_GET_SIZE(arg));
-        return 0;
+        return NULL;
     }
     if (n < 1) {
+        Py_DECREF(self);
         PyErr_SetString(PyExc_ValueError, "List is empty");
-        return -1;
+        return NULL;
     }
     nodes = malloc(n*sizeof(Node));
+    if (!nodes) {
+        Py_DECREF(self);
+        return PyErr_NoMemory();
+    }
     for (i = 0; i < n; i++) {
         PyNode* p;
         PyObject* row = PyList_GET_ITEM(arg, i);
-        if (row->ob_type != &PyNodeType) {
+        if (!PyType_IsSubtype(Py_TYPE(row), &PyNodeType)) {
             free(nodes);
+            Py_DECREF(self);
             PyErr_Format(PyExc_TypeError,
                          "Row %d in list is not a Node object", i);
-            return -1;
+            return NULL;
         }
         p = (PyNode*)row;
         nodes[i] = p->node;
     }
     /* --- Check if this is a bona fide tree ------------------------------- */
     flag = malloc((2*n+1)*sizeof(int));
-    if (flag) {/* Otherwise, we're in enough trouble already */
-        int j;
-        for (i = 0; i < 2*n+1; i++) flag[i] = 0;
-        for (i = 0; i < n; i++) {
-            j = nodes[i].left;
-            if (j < 0) {
-                j = -j-1;
-                if (j>=i) break;
-            }
-            else j+=n;
-            if (flag[j]) break;
-            flag[j] = 1;
-            j = nodes[i].right;
-            if (j < 0) {
-              j = -j-1;
-              if (j>=i) break;
-            }
-            else j+=n;
-            if (flag[j]) break;
-            flag[j] = 1;
-        }
-        free(flag);
+    if (!flag) {
+        free(nodes);
+        Py_DECREF(self);
+        return PyErr_NoMemory();
     }
-    if (!flag || i < n) {
+    for (i = 0; i < 2*n+1; i++) flag[i] = 0;
+    for (i = 0; i < n; i++) {
+        j = nodes[i].left;
+        if (j < 0) {
+            j = -j-1;
+            if (j>=i) break;
+        }
+        else j+=n;
+        if (flag[j]) break;
+        flag[j] = 1;
+        j = nodes[i].right;
+        if (j < 0) {
+          j = -j-1;
+          if (j>=i) break;
+        }
+        else j+=n;
+        if (flag[j]) break;
+        flag[j] = 1;
+    }
+    free(flag);
+    if (i < n) {
         /* break encountered */
         free(nodes);
+        Py_DECREF(self);
         PyErr_SetString(PyExc_ValueError, "Inconsistent tree");
-        return -1;
+        return NULL;
     }
     self->n = n;
     self->nodes = nodes;
-    return 0;
+    return (PyObject*)self;
 }
 
 static PyObject*
@@ -1163,7 +1181,9 @@ static PyTypeObject PyTreeType = {
     0,                           /* tp_descr_get */
     0,                           /* tp_descr_set */
     0,                           /* tp_dictoffset */
-    (initproc)PyTree_init,       /* tp_init */
+    0,                           /* tp_init */
+    0,                           /* tp_alloc */
+    (newfunc)PyTree_new,         /* tp_new */
 };
 
 /* ========================================================================== */
@@ -2356,7 +2376,6 @@ init_cluster(void)
     PyObject *module;
 
     PyNodeType.tp_new = PyType_GenericNew;
-    PyTreeType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&PyNodeType) < 0)
 #if PY_MAJOR_VERSION >= 3
         return NULL;
