@@ -333,7 +333,7 @@ making up each alignment as SeqRecords.
 
 from __future__ import print_function
 
-from collections import OrderedDict
+import sys
 
 from Bio._py3k import basestring
 
@@ -399,6 +399,11 @@ from . import TabIO
 from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 
+if sys.version_info < (3, 6):
+    from collections import OrderedDict as _dict
+else:
+    # Default dict is sorted in Python 3.6 onwards
+    _dict = dict
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -779,11 +784,16 @@ def to_dict(sequences, key_function=None):
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
+
+    Since Python 3.6, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. As of
+    Biopython 1.72, on older versions of Python we explicitly use an
+    OrderedDict so that you can always assume the record order is preserved.
     """
     if key_function is None:
         key_function = lambda rec: rec.id
 
-    d = OrderedDict()
+    d = _dict()
     for record in sequences:
         key = key_function(record)
         if key in d:
