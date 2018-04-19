@@ -28,6 +28,7 @@ possible, especially the following contributors:
 - Blaise Li
 - Chris Rands
 - Peter Cock
+- Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
 
