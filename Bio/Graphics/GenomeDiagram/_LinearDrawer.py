@@ -315,8 +315,7 @@ class LinearDrawer(AbstractDrawer):
                "Tick at %i, but showing %r to %r for track" \
                % (tickpos, track.start, track.end)
         fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
-        assert fragment >= 0, \
-               "Fragment %i, tickpos %i" % (fragment, tickpos)
+        assert fragment >= 0, "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
         tickx += self.x0                # Tick X co-ord
         ticktop = tctr + ticklen        # Y co-ord of tick top
@@ -332,9 +331,9 @@ class LinearDrawer(AbstractDrawer):
             else:
                 tickstring = str(tickpos)
             label = String(0, 0, tickstring,  # Make label string
-                   fontName=track.scale_font,
-                   fontSize=track.scale_fontsize,
-                   fillColor=track.scale_color)
+                           fontName=track.scale_font,
+                           fontSize=track.scale_fontsize,
+                           fillColor=track.scale_color)
             labelgroup = Group(label)
             rotation = angle2trig(track.scale_fontangle)
             labelgroup.transform = (rotation[0], rotation[1], rotation[2],
@@ -384,7 +383,7 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x_right = self.xlim - self.x0
             scale_elements.append(Line(self.x0 + x_left, tctr, self.x0 + x_right, tctr,
-                                   strokeColor=track.scale_color))
+                                       strokeColor=track.scale_color))
             # Y-axis start marker
             scale_elements.append(Line(self.x0 + x_left, tbtm, self.x0 + x_left, ttop,
                                        strokeColor=track.scale_color))
@@ -645,11 +644,9 @@ class LinearDrawer(AbstractDrawer):
         endA = cross_link.endA
         endB = cross_link.endB
 
-        if not self.is_in_bounds(startA) \
-        and not self.is_in_bounds(endA):
+        if not self.is_in_bounds(startA) and not self.is_in_bounds(endA):
             return None
-        if not self.is_in_bounds(startB) \
-        and not self.is_in_bounds(endB):
+        if not self.is_in_bounds(startB) and not self.is_in_bounds(endB):
             return None
 
         if startA < self.start:
@@ -782,11 +779,11 @@ class LinearDrawer(AbstractDrawer):
                         extra = [self.x0, 0.3 * yA + 0.7 * yB,
                                  self.x0, 0.7 * yA + 0.3 * yB]
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA] + extra),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif fragment < start_fragmentA or end_fragmentA < fragment:
                 if cross_link.flip:
                     # Just draw B as a triangle to left
@@ -802,47 +799,47 @@ class LinearDrawer(AbstractDrawer):
                         extra = [self.x0, 0.7 * yA + 0.3 * yB,
                                  self.x0, 0.3 * yA + 0.7 * yB]
                 answer.append(Polygon(deduplicate([xBs, yB, xBe, yB] + extra),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip and ((crop_leftA and not crop_rightA) or
-                                    (crop_leftB and not crop_rightB)):
+                                      (crop_leftB and not crop_rightB)):
                 # On left end of fragment... force "crossing" to margin
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
-                                       self.x0, 0.5 * (yA + yB),
-                                       xBe, yB, xBs, yB]),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                                   self.x0, 0.5 * (yA + yB),
+                                                   xBe, yB, xBs, yB]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip and ((crop_rightA and not crop_leftA) or
                                       (crop_rightB and not crop_leftB)):
                 # On right end... force "crossing" to margin
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
-                                       xBe, yB, xBs, yB,
-                                       self.x0 + self.pagewidth, 0.5 * (yA + yB)]),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                                   xBe, yB, xBs, yB,
+                                                   self.x0 + self.pagewidth, 0.5 * (yA + yB)]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip:
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBs, yB, xBe, yB]),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             else:
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBe, yB, xBs, yB]),
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
         return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):

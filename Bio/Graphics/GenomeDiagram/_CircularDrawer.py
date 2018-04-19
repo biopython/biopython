@@ -381,11 +381,9 @@ class CircularDrawer(AbstractDrawer):
         endA = cross_link.endA
         endB = cross_link.endB
 
-        if not self.is_in_bounds(startA) \
-        and not self.is_in_bounds(endA):
+        if not self.is_in_bounds(startA) and not self.is_in_bounds(endA):
             return None
-        if not self.is_in_bounds(startB) \
-        and not self.is_in_bounds(endB):
+        if not self.is_in_bounds(startB) and not self.is_in_bounds(endB):
             return None
 
         if startA < self.start:
@@ -440,14 +438,16 @@ class CircularDrawer(AbstractDrawer):
 
         if ctrA < ctrB:
             return [self._draw_arc_poly(topA, btmB,
-                           startangleA, endangleA,
-                           startangleB, endangleB,
-                           cross_link.color, cross_link.border, cross_link.flip)]
+                                        startangleA, endangleA,
+                                        startangleB, endangleB,
+                                        cross_link.color, cross_link.border,
+                                        cross_link.flip)]
         else:
             return [self._draw_arc_poly(btmA, topB,
-                           startangleA, endangleA,
-                           startangleB, endangleB,
-                           cross_link.color, cross_link.border, cross_link.flip)]
+                                        startangleA, endangleA,
+                                        startangleB, endangleB,
+                                        cross_link.color, cross_link.border,
+                                        cross_link.flip)]
 
     def draw_graph_set(self, set):
         """Return list of graph elements and list of their labels.
@@ -581,7 +581,7 @@ class CircularDrawer(AbstractDrawer):
 
             # Draw bar
             bar_elements.append(self._draw_arc(ctr, ctr + barval, pos0angle,
-                                              pos1angle, barcolor))
+                                               pos1angle, barcolor))
         return bar_elements
 
     def draw_heat_graph(self, graph):
@@ -865,26 +865,26 @@ class CircularDrawer(AbstractDrawer):
             # Draw an arc, leaving out the wedge
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
             greytrack_bgs.append(self._draw_arc(btm, top, startangle, endangle,
-                                 colors.Color(0.96, 0.96, 0.96)))
+                                                colors.Color(0.96, 0.96, 0.96)))
         elif self.sweep < 1:
             # Make a partial circle, a large arc box
             # This method assumes the correct center for us.
             greytrack_bgs.append(self._draw_arc(btm, top, 0, 2 * pi * self.sweep,
-                                 colors.Color(0.96, 0.96, 0.96)))
+                                                colors.Color(0.96, 0.96, 0.96)))
         else:
             # Make a full circle (using a VERY thick linewidth)
             greytrack_bgs.append(Circle(self.xcenter, self.ycenter, ctr,
-                                 strokeColor=colors.Color(0.96, 0.96, 0.96),
-                                 fillColor=None, strokeWidth=top - btm))
+                                        strokeColor=colors.Color(0.96, 0.96, 0.96),
+                                        fillColor=None, strokeWidth=top - btm))
 
         if track.greytrack_labels:
             # Labels are required for this track
             labelstep = self.length // track.greytrack_labels  # label interval
             for pos in range(self.start, self.end, labelstep):
                 label = String(0, 0, track.name,            # Add a new label at
-                           fontName=track.greytrack_font,   # each interval
-                           fontSize=track.greytrack_fontsize,
-                           fillColor=track.greytrack_fontcolor)
+                               fontName=track.greytrack_font,   # each interval
+                               fontSize=track.greytrack_fontsize,
+                               fillColor=track.greytrack_fontcolor)
                 theta, costheta, sintheta = self.canvas_angle(pos)
                 if theta < startangle or endangle < theta:
                     continue
@@ -923,7 +923,7 @@ class CircularDrawer(AbstractDrawer):
         return self._draw_arc(inner_radius, outer_radius, startangle, endangle, **kwargs)
 
     def _draw_arc(self, inner_radius, outer_radius, startangle, endangle,
-                 color, border=None, colour=None, **kwargs):
+                  color, border=None, colour=None, **kwargs):
         """Return closed path describing an arc box.
 
         Arguments:
@@ -1062,9 +1062,9 @@ class CircularDrawer(AbstractDrawer):
                                 )
 
     def _draw_sigil_cut_corner_box(self, bottom, center, top,
-                          startangle, endangle, strand,
-                          color, border=None, corner=0.5,
-                          **kwargs):
+                                   startangle, endangle, strand,
+                                   color, border=None, corner=0.5,
+                                   **kwargs):
         """Draw OCTO sigil, box with corners cut off."""
         if strand == 1:
             inner_radius = center
@@ -1152,9 +1152,9 @@ class CircularDrawer(AbstractDrawer):
                                     orientation=orientation, **kwargs)
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
-                  color, border=None,
-                  shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
-                  colour=None, **kwargs):
+                        color, border=None,
+                        shaft_height_ratio=0.4, head_length_ratio=0.5,
+                        orientation='right', colour=None, **kwargs):
         """Draw an arrow along an arc."""
         # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
