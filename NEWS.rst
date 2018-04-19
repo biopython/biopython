@@ -36,6 +36,7 @@ possible, especially the following contributors:
 - Chad Parmet
 - Chris Rands
 - Peter Cock
+- Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
 
