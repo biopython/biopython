@@ -26,6 +26,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Blaise Li
+- Chris Rands
 - Peter Cock
 - Wibowo 'Bow' Arindrarto
 
