@@ -196,7 +196,7 @@ possible, especially the following contributors:
 - Ariel Aptekmann (first contribution)
 - Ben Fulton
 - Bertrand Caron (first contribution)
-- Chris Rands
+- Chris Rands (first contribution)
 - Connor T. Skennerton
 - Eric Rasche
 - Eric Talevich
