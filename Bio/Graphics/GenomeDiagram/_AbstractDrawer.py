@@ -1,12 +1,14 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
 # Revisions copyright 2008-2017 by Peter Cock.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# Contact:       Leighton Pritchard, Scottish Crop Research Institute,
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
+# Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
-#                L.Pritchard@scri.ac.uk
+#                Leighton.Pritchard@hutton.ac.uk
 ################################################################################
 
 """AbstractDrawer module (considered to be a private module, the API may change!).
