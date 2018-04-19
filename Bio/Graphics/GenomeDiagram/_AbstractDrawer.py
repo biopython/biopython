@@ -271,7 +271,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
 
 
 def deduplicate(points):
-    """Remove adjacent duplicate points
+    """Remove adjacent duplicate points.
 
     This is important for use with the Polygon class since reportlab has a
     bug with duplicate points.
