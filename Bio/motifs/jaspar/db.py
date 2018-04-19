@@ -293,7 +293,7 @@ class JASPAR5(object):
         return record
 
     def _fetch_latest_version(self, base_id):
-        """Get the latest version number for the given base_id."""
+        """Get the latest version number for the given base_id (PRIVATE)."""
         cur = self.dbh.cursor()
         cur.execute("""select VERSION from MATRIX where BASE_id = %s
                        order by VERSION desc limit 1""", (base_id,))
@@ -312,7 +312,7 @@ class JASPAR5(object):
         return latest
 
     def _fetch_internal_id(self, base_id, version):
-        """Fetch the internal id for a base id + version.
+        """Fetch the internal id for a base id + version (PRIVATE).
 
         Also checks if this combo exists or not.
         """
@@ -422,7 +422,7 @@ class JASPAR5(object):
         return motif
 
     def _fetch_counts_matrix(self, int_id):
-        """Fetch the counts matrix from the JASPAR DB by the internal ID.
+        """Fetch the counts matrix from the JASPAR DB by the internal ID (PRIVATE).
 
         Returns a Bio.motifs.matrix.GenericPositionMatrix
         """
@@ -735,7 +735,7 @@ class JASPAR5(object):
         return int_ids
 
     def _is_latest_version(self, int_id):
-        """Check if the internal ID represents the latest JASPAR matrix.
+        """Check if the internal ID represents the latest JASPAR matrix (PRIVATE).
 
         Does this internal ID represent the latest version of the JASPAR
         matrix (collapse on base ids)
