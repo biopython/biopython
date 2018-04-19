@@ -63,6 +63,9 @@ extended_dna_letters = "GATCBDSW"
 # are there extended forms?
 # extended_rna_letters = "GAUCBDSW"
 
+# "X" is included in the following _values and _complement dictionaries,
+# for historical reasons although it is not an IUPAC nucleotide,
+# and so is not in the corresponding _letters strings above
 ambiguous_dna_values = {
     "A": "A",
     "C": "C",
