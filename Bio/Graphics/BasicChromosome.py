@@ -1,8 +1,10 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2001, 2003 by Brad Chapman.  All rights reserved.
+# Revisions copyright 2011 by Peter Cock.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Draw representations of organism chromosomes with added information.
 
 These classes are meant to model the drawing of pictures of chromosomes.
