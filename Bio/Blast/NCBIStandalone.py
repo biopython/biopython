@@ -985,7 +985,8 @@ class _AlignmentConsumer(object):
     def length(self, line):
         # e.g. "Length = 81" or more recently, "Length=428"
         parts = line.replace(" ", "").split("=")
-        assert len(parts) == 2, "Unrecognised format length line"
+        if len(parts) != 2:
+            raise ValueError("Unrecognised format length line")
         self._alignment.length = parts[1]
         self._alignment.length = _safe_int(self._alignment.length)
 

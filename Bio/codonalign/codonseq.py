@@ -77,7 +77,8 @@ class CodonSeq(Seq):
         # check the length of the alignment to be a triple
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
-            assert len(self) % 3 == 0, "Sequence length is not a triple number"
+            if len(self) % 3 != 0:
+                raise ValueError("Sequence length is not a triple number")
             self.rf_table = list(filter(lambda x: x % 3 == 0,
                                         range(len(seq_ungapped))))
             # check alphabet
@@ -91,11 +92,12 @@ class CodonSeq(Seq):
             # if gap_char in self._data:
             #    assert  len(self) % 3 == 0, \
             #            "Gapped sequence length is not a triple number"
-            assert isinstance(rf_table, (tuple, list)), \
-                "rf_table should be a tuple or list object"
-            assert all(isinstance(i, int) for i in rf_table), \
-                "elements in rf_table should be int that specify " + \
-                "the codon positions of the sequence"
+            if not isinstance(rf_table, (tuple, list)):
+                raise TypeError("rf_table should be a tuple or list object")
+            if not all(isinstance(i, int) for i in rf_table):
+                raise TypeError("Elements in rf_table should be int "
+                                "that specify the codon positions of "
+                                "the sequence")
             seq_ungapped = self._data.replace(gap_char, "")
             for i in rf_table:
                 if seq_ungapped[i:i + 3] not in alphabet.letters:

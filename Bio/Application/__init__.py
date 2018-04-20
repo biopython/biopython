@@ -212,7 +212,8 @@ class AbstractCommandline(object):
         aliases = set()
         for p in parameters:
             if not p.names:
-                assert isinstance(p, _StaticArgument), p
+                if not isinstance(p, _StaticArgument):
+                    raise TypeError("Expected %s to be of type _StaticArgument" % repr(p))
                 continue
             for name in p.names:
                 if name in aliases:
@@ -383,7 +384,8 @@ class AbstractCommandline(object):
         """
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
-            assert is_good in [0, 1, True, False]
+            if is_good not in [0, 1, True, False]:
+                raise ValueError("Result of check_function: %s is of an unexpected value" % is_good)
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
                                  % (value, name))
@@ -576,8 +578,8 @@ class _Option(_AbstractParameter):
     def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("%r for %s" % (description, names[-1]))
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -665,8 +667,8 @@ class _Argument(_AbstractParameter):
         #    raise ValueError("The names argument to _Argument should be a "
         #                     "single entry list with a PEP8 property name.")
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("%r for %s" % (description, names[-1]))
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -689,9 +691,10 @@ class _ArgumentList(_Argument):
     # TODO - Option to require at least one value? e.g. min/max count?
 
     def __str__(self):
-        assert isinstance(self.value, list), \
-                "Arguments should be a list"
-        assert self.value, "Requires at least one filename"
+        if not isinstance(self.value, list):
+            raise TypeError("Arguments should be a list")
+        if not self.value:
+            raise ValueError("Requires at least one filename")
         # A trailing space is required so that parameters following the last filename
         # do not appear merged.
         # e.g.:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
