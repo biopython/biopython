@@ -60,6 +60,7 @@ test_records = [
      [(["stockholm"], ValueError, "Duplicate record identifier: Beta"),
       (["maf"], ValueError, "Identifiers in each MultipleSeqAlignment must be unique"),
       (["phylip", "phylip-relaxed", "phylip-sequential"], ValueError, "Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
+    ([SeqRecord(Seq("TCGAGAGATCTC", Alphabet.generic_dna), id="X", description="  ")], "Whitespace-only description", []),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"

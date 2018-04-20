@@ -454,7 +454,16 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GS ':
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
-                    seq_id, feature, text = line[5:].strip().split(None, 2)
+                    parts = line[5:].strip().split(None, 2)
+                    if len(parts) not in (2, 3):
+                        raise ValueError(
+                            "Could not split line in seqname, "
+                            "feature, and text:\n" + line)
+                    seq_id, feature = parts[:2]
+                    if len(parts) == 3:
+                        text = parts[2]
+                    else:
+                        text = ""
                     # if seq_id not in ids:
                     #    ids.append(seq_id)
                     if seq_id not in gs:
