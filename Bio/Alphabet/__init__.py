@@ -263,7 +263,8 @@ def _get_base_alphabet(alphabet):
     a = alphabet
     while isinstance(a, AlphabetEncoder):
         a = a.alphabet
-    assert isinstance(a, Alphabet), "Invalid alphabet found, %s" % repr(a)
+    if not isinstance(a, Alphabet):
+        raise TypeError("Invalid alphabet found, %s." % repr(a))
     return a
 
 

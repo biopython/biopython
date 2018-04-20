@@ -33,6 +33,7 @@ Improved support for parsing NCBI Entrez XML files that use XSD schemas.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Benjamin Vaisvil (first contribution)
 - Blaise Li
 - Chad Parmet
 - Chris Rands

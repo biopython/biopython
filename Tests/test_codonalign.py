@@ -45,7 +45,7 @@ class TestCodonSeq(unittest.TestCase):
         self.assertEqual(str(codonseq1.get_codon(slice(None, None, -1))), 'CCCGGATTT---TTTAAA')
 
         self.assertRaises(ValueError, codonalign.CodonSeq, 'AAA-TT')
-        self.assertRaises(AssertionError, codonalign.CodonSeq, 'AAA-T')
+        self.assertRaises(ValueError, codonalign.CodonSeq, 'AAA-T')
         self.assertRaises(ValueError, codonalign.CodonSeq, 'YVVRRDQQQ')
         self.assertTrue(isinstance(codonseq1.toSeq(), Seq))
 

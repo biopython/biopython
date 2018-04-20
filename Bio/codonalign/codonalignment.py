@@ -45,8 +45,8 @@ class CodonAlignment(MultipleSeqAlignment):
                 raise TypeError("CodonSeq objects are expected in each "
                                 "SeqRecord in CodonAlignment")
 
-        assert self.get_alignment_length() % 3 == 0, \
-            "Alignment length is not a triple number"
+        if self.get_alignment_length() % 3 != 0:
+            raise ValueError("Alignment length is not a triple number")
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
