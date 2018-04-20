@@ -78,7 +78,7 @@ class SequenceIterator(object):
 
 # Function variant of the SequenceWriter method.
 def _get_seq_string(record):
-    """Use this to catch errors like the sequence being None."""
+    """Use this to catch errors like the sequence being None (PRIVATE)."""
     if not isinstance(record, SeqRecord):
         raise TypeError("Expected a SeqRecord object")
     if record.seq is None:
@@ -92,7 +92,7 @@ def _get_seq_string(record):
 
 # Function variant of the SequenceWriter method.
 def _clean(text):
-    """Use this to avoid getting newlines in the output."""
+    """Use this to avoid getting newlines in the output (PRIVATE)."""
     return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
 
 
