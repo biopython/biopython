@@ -59,7 +59,7 @@ class SignatureFinder(object):
         return PatternRepository(sig_info)
 
     def _get_signature_dict(self, seq_records, sig_size, max_gap):
-        """Return a dictionary with all signatures and their counts.
+        """Return a dictionary with all signatures and their counts (PRIVATE).
 
         This internal function does all of the hard work for the
         find_signatures function.
@@ -106,7 +106,7 @@ class SignatureFinder(object):
         return all_sigs
 
     def _add_sig(self, sig_dict, sig_to_add):
-        """Add a signature to the given dictionary."""
+        """Add a signature to the given dictionary (PRIVATE)."""
         # incrememt the count of the signature if it is already present
         if sig_to_add in sig_dict:
             sig_dict[sig_to_add] += 1
