@@ -234,7 +234,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         self.handle.write("//\n")
 
     def _write_record(self, record):
-        """Write a single SeqRecord to the file."""
+        """Write a single SeqRecord to the file (PRIVATE)."""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 
@@ -538,7 +538,7 @@ class StockholmIterator(AlignmentIterator):
             raise StopIteration
 
     def _identifier_split(self, identifier):
-        """Return (name, start, end) string tuple from an identier."""
+        """Return (name, start, end) string tuple from an identier (PRIVATE)."""
         if '/' in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
@@ -551,7 +551,7 @@ class StockholmIterator(AlignmentIterator):
         return identifier, None, None
 
     def _get_meta_data(self, identifier, meta_dict):
-        """Take an itentifier and returns dict of all meta-data matching it.
+        """Take an itentifier and returns dict of all meta-data matching it (PRIVATE).
 
         For example, given "Q9PN73_CAMJE/149-220" will return all matches to
         this or "Q9PN73_CAMJE" which the identifier without its /start-end
@@ -585,7 +585,7 @@ class StockholmIterator(AlignmentIterator):
         return answer
 
     def _populate_meta_data(self, identifier, record):
-        """Add meta-date to a SecRecord's annotations dictionary.
+        """Add meta-date to a SecRecord's annotations dictionary (PRIVATE).
 
         This function applies the PFAM conventions.
         """
