@@ -40,7 +40,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parse DES records.
+        """Parse DES records (PRIVATE).
 
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.

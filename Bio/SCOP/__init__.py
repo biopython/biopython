@@ -875,7 +875,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
 
 
 def _open(cgi, params=None, get=1):
-    """Open a handle to SCOP, returns an UndoHandle.
+    """Open a handle to SCOP, returns an UndoHandle (PRIVATE).
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean
