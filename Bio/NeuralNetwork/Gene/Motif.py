@@ -54,7 +54,7 @@ class MotifFinder(object):
         return PatternRepository(motif_info)
 
     def _get_motif_dict(self, seq_records, motif_size):
-        """Return a dictionary with information on motifs.
+        """Return a dictionary with information on motifs (PRIVATE).
 
         This internal function essentially does all of the hard work for
         finding motifs, and returns a dictionary containing the found motifs
@@ -138,7 +138,7 @@ class MotifFinder(object):
         return PatternRepository(motif_diffs)
 
     def _add_motif(self, motif_dict, motif_to_add):
-        """Add a motif to the given dictionary."""
+        """Add a motif to the given dictionary (PRIVATE)."""
         # incrememt the count of the motif if it is already present
         if motif_to_add in motif_dict:
             motif_dict[motif_to_add] += 1

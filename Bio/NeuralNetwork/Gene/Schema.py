@@ -633,7 +633,7 @@ class SchemaFactory(object):
         return PatternRepository(schema_info)
 
     def _get_num_motifs(self, repository, motif_list):
-        """Return the number of motif counts for the list of motifs."""
+        """Return the number of motif counts for the list of motifs (PRIVATE)."""
         motif_count = 0
         for motif in motif_list:
             motif_count += repository.count(motif)
@@ -641,7 +641,7 @@ class SchemaFactory(object):
         return motif_count
 
     def _get_unique_schema(self, cur_schemas, motif_list, num_ambiguous):
-        """Retrieve a unique schema from a motif.
+        """Retrieve a unique schema from a motif (PRIVATE).
 
         We don't want to end up with schema that match the same thing,
         since this could lead to ambiguous results, and be messy. This
@@ -683,7 +683,7 @@ class SchemaFactory(object):
         return new_schema, matching_motifs
 
     def _schema_from_motif(self, motif, motif_list, num_ambiguous):
-        """Create a schema from a given starting motif.
+        """Create a schema from a given starting motif (PRIVATE).
 
         Arguments:
          - motif - A motif with the pattern we will start from.
