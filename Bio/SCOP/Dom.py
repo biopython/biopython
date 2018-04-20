@@ -37,7 +37,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parse DOM records.
+        """Parse DOM records (PRIVATE).
 
         Records consist of 4 tab deliminated fields;
         sid, pdbid, residues, hierarchy
