@@ -78,7 +78,8 @@ class CodonSeq(Seq):
         if rf_table is None:
             seq_ungapped = self._data.replace(gap_char, "")
             if len(self) % 3 != 0:
-                raise ValueError("Sequence length is not a triple number")
+                raise ValueError("Sequence length is not a multiple of "
+                                 "three (i.e. a whole number of codons)")
             self.rf_table = list(filter(lambda x: x % 3 == 0,
                                         range(len(seq_ungapped))))
             # check alphabet

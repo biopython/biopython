@@ -46,7 +46,8 @@ class CodonAlignment(MultipleSeqAlignment):
                                 "SeqRecord in CodonAlignment")
 
         if self.get_alignment_length() % 3 != 0:
-            raise ValueError("Alignment length is not a triple number")
+            raise ValueError("Alignment length is not a multiple of "
+                             "three (i.e. a whole number of codons)")
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
@@ -88,8 +89,8 @@ class CodonAlignment(MultipleSeqAlignment):
             return "".join(str(rec[col_index]) for rec in
                            self._records[row_index])
         else:
+            from Bio.Alphabet import generic_nucleotide
             if alphabet is None:
-                from Bio.Alphabet import generic_nucleotide
                 return MultipleSeqAlignment((rec[col_index] for rec in
                                              self._records[row_index]),
                                             generic_nucleotide)

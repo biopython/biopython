@@ -77,7 +77,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
     if program not in programs:
-        raise ValueError("Program specified is %s. Expected one of %s" % (program, ", ".join(programs)))
+        raise ValueError("Program specified is %s. Expected one of %s"
+                         % (program, ", ".join(programs)))
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
