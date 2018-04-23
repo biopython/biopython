@@ -418,7 +418,7 @@ def make_table(oldtable=None, values=None):
 
 
 def _check(seq, method):
-    """Return a sequence which fullfils the requirements of the given method.
+    """Return a sequence which fullfils the requirements of the given method (PRIVATE).
 
     All Tm methods in this package require the sequence in uppercase format.
     Most methods make use of the length of the sequence (directly or
@@ -767,7 +767,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
 
 
 def _key_error(neighbors, strict):
-    """Throw an error or a warning if there is no data for the neighbors."""
+    """Throw an error or a warning if there is no data for the neighbors (PRIVATE)."""
     # We haven't found the key in the tables
     if strict:
         raise ValueError('no thermodynamic data for neighbors \'' + neighbors +
