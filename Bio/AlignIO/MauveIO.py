@@ -136,7 +136,7 @@ class MauveWriter(SequentialAlignmentWriter):
         self.handle.write('=\n')
 
     def _write_record(self, record, record_idx=0):
-        """Write a single SeqRecord to the file."""
+        """Write a single SeqRecord to the file (PRIVATE)."""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 

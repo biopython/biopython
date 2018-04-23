@@ -135,7 +135,7 @@ class Entity(object):
         self.full_id = self._generate_full_id()
 
     def _generate_full_id(self):
-        """Generate full_id.
+        """Generate full_id (PRIVATE).
 
         Generate the full_id of the Entity based on its
         Id and the IDs of the parents.
