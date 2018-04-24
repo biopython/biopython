@@ -22,6 +22,7 @@ import os
 import sys
 import contextlib
 import itertools
+import platform
 
 from Bio._py3k import basestring
 
@@ -30,12 +31,16 @@ try:
 except ImportError:
     from UserDict import DictMixin as _dict_base
 
-if sys.version_info < (3, 6):
-    from collections import OrderedDict as _dict
-else:
-    # Default dict is sorted in Python 3.6 onwards
+# Ordered dict is a language feature from Python 3.7 onwards.
+# CPython 3.6 also already has ordered dicts.
+# PyPy has always had ordered dicts.
+if (sys.version_info >= (3, 7)
+        or platform.python_implementation() == "PyPy"
+        or (sys.version_info == (3, 6)
+            and platform.python_implementation() == "CPython")):
     _dict = dict
-
+else:
+    from collections import OrderedDict as _dict
 
 try:
     from sqlite3 import dbapi2 as _sqlite
