@@ -213,8 +213,7 @@ class AbstractCommandline(object):
         for p in parameters:
             if not p.names:
                 if not isinstance(p, _StaticArgument):
-                    raise TypeError("Expected %s to be of type _StaticArgument"
-                                    % repr(p))
+                    raise TypeError("Expected %r to be of type _StaticArgument" % p)
                 continue
             for name in p.names:
                 if name in aliases:
@@ -223,18 +222,18 @@ class AbstractCommandline(object):
                 aliases.add(name)
             name = p.names[-1]
             if _re_prop_name.match(name) is None:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name in python"
-                                 % repr(name))
+                                 % name)
             if name in _reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name because it is "
-                                 "a reserved word in python" % repr(name))
+                                 "a reserved word in python" % name)
             if name in _local_reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name due to the "
                                  "way the AbstractCommandline class works"
-                                 % repr(name))
+                                 % name)
 
             # Beware of binding-versus-assignment confusion issues
             def getter(name):
@@ -312,14 +311,14 @@ class AbstractCommandline(object):
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
-        answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
+        answer = "%s(cmd=%r" % (self.__class__.__name__, self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
                 else:
-                    answer += ", %s=%s" \
-                              % (parameter.names[-1], repr(parameter.value))
+                    answer += ", %s=%r" \
+                              % (parameter.names[-1], parameter.value)
         answer += ")"
         return answer
 
@@ -386,7 +385,7 @@ class AbstractCommandline(object):
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
             if is_good not in [0, 1, True, False]:
-                raise ValueError("Result of check_function: %s is of an unexpected value"
+                raise ValueError("Result of check_function: %r is of an unexpected value"
                                  % is_good)
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
