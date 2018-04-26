@@ -94,28 +94,12 @@ class KDTree(_kdtrees.KDTree):
         Arguments:
          - radius: float (>0)
 
+        Returns a list of neighbors; each neighbor has attributes index1,
+        index2 corresponding to the indices of the point pair, and an
+        attribute radius with the radius between them.
         """
         # Fixed radius search for all points
-        self.neighbors = self.neighbor_search(radius)
-
-    def all_get_indices(self):
-        """Return All Fixed Neighbor Search results.
-
-        Return a Nx2 dimensional NumPy array containing
-        the indices of the point pairs, where N
-        is the number of neighbor pairs.
-        """
-        a = numpy.array([[neighbor.index1, neighbor.index2] for neighbor in self.neighbors])
-        return a
-
-    def all_get_radii(self):
-        """Return All Fixed Neighbor Search results.
-
-        Return an N-dim array containing the distances
-        of all the point pairs, where N is the number
-        of neighbor pairs.
-        """
-        return [neighbor.radius for neighbor in self.neighbors]
+        return self.neighbor_search(radius)
 
 
 class NeighborSearch(object):
@@ -209,11 +193,12 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        self.kdt.all_search(radius)
-        indices = self.kdt.all_get_indices()
+        neighbors = self.kdt.all_search(radius)
         atom_list = self.atom_list
         atom_pair_list = []
-        for i1, i2 in indices:
+        for neighbor in neighbors:
+            i1 = neighbor.index1
+            i2 = neighbor.index2
             a1 = atom_list[i1]
             a2 = atom_list[i2]
             atom_pair_list.append((a1, a2))
