@@ -67,40 +67,24 @@ class KDTree(_kdtrees.KDTree):
          - center: NumPy array of size 3.
          - radius: float>0
 
+        Returns (indices, radii),
+
+        where indices is a NumPy array of indices of coordinates
+        that were were within radius of center, and distances is a
+        NumPy array with the corresponding distances from center.
+
+        For an index pair, the first index < second index.
         """
         center = numpy.require(center, dtype='d', requirements='C')
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
-        self.search_center_radius(center, radius)
-
-    def get_radii(self):
-        """Return radii.
-
-        Return the list of distances from center after
-        a neighbor search.
-        """
-        n = self.get_count()
-        if n == 0:
-            return []
-        radii = numpy.empty(n, int)
-        _kdtrees.KDTree.get_radii(self, radii)
-        return radii
-
-    def get_indices(self):
-        """Return the list of indices.
-
-        Return the list of indices after a neighbor search.
-        The indices refer to the original coords NumPy array. The
-        coordinates with these indices were within radius of center.
-
-        For an index pair, the first index<second index.
-        """
-        n = self.get_count()
-        if n == 0:
-            return []
+        n = self.search_center_radius(center, radius)
         indices = numpy.empty(n, int)
-        _kdtrees.KDTree.get_indices(self, indices)
-        return indices
+        radii = numpy.empty(n, int)
+        if n > 0:
+            _kdtrees.KDTree.get_indices(self, indices)
+            _kdtrees.KDTree.get_radii(self, radii)
+        return indices, radii
 
     def all_search(self, radius):
         """All fixed neighbor search.
@@ -205,8 +189,7 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        self.kdt.search(center, radius)
-        indices = self.kdt.get_indices()
+        indices, radii = self.kdt.search(center, radius)
         atom_list = [self.atom_list[index] for index in indices]
         if level == "A":
             return atom_list
