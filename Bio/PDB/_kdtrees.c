@@ -10,16 +10,16 @@
 
 static int DataPoint_current_dim = 0;
 
-struct DataPoint
+typedef struct
 {
     long int _index;
     double _coord[DIM];
-};
+} DataPoint;
 
 static int compare(const void* self, const void* other)
 {
-    const struct DataPoint* p = self;
-    const struct DataPoint* q = other;
+    const DataPoint* p = self;
+    const DataPoint* q = other;
     const double a = p->_coord[DataPoint_current_dim];
     const double b = q->_coord[DataPoint_current_dim];
     if (a < b) return -1;
@@ -27,11 +27,11 @@ static int compare(const void* self, const void* other)
     return 0;
 }
 
-static void DataPoint_sort(struct DataPoint* list, int n, int i)
+static void DataPoint_sort(DataPoint* list, int n, int i)
 {
     /* set sort dimension */
     DataPoint_current_dim = i;
-    qsort(list, n, sizeof(struct DataPoint), compare);
+    qsort(list, n, sizeof(DataPoint), compare);
 }
 
 /* Neighbor */
@@ -372,7 +372,7 @@ struct Radius
 
 typedef struct {
     PyObject_HEAD
-    struct DataPoint* _data_point_list;
+    DataPoint* _data_point_list;
     int _data_point_list_size;
     struct Radius* _radius_list;
     struct Node *_root;
@@ -418,7 +418,7 @@ static int KDTree_report_point(KDTree* self, long int index, double *coord)
 }
 
 static int
-KDTree_test_neighbors(KDTree* self, struct DataPoint* p1, struct DataPoint* p2, PyObject* neighbors)
+KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neighbors)
 {
     int ok;
     const double r = KDTree_dist(p1->_coord, p2->_coord);
@@ -449,13 +449,13 @@ static int KDTree_search_neighbors_in_bucket(KDTree* self, struct Node *node, Py
 
     for (i = node->_start; i < node->_end; i++)
     {
-        struct DataPoint p1;
+        DataPoint p1;
         long int j;
 
         p1 = self->_data_point_list[i];
 
         for (j = i+1; j < node->_end; j++) {
-            struct DataPoint p2 = self->_data_point_list[j];
+            DataPoint p2 = self->_data_point_list[j];
             ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
             if (!ok) return 0;
         }
@@ -470,14 +470,14 @@ static int KDTree_search_neighbors_between_buckets(KDTree* self, struct Node *no
 
     for (i = node1->_start; i < node1->_end; i++)
     {
-        struct DataPoint p1;
+        DataPoint p1;
         long int j;
 
         p1 = self->_data_point_list[i];
 
         for (j = node2->_start; j < node2->_end; j++)
         {
-            struct DataPoint p2 = self->_data_point_list[j];
+            DataPoint p2 = self->_data_point_list[j];
             ok = KDTree_test_neighbors(self, &p1, &p2, neighbors);
             if (!ok) return 0;
         }
@@ -729,25 +729,6 @@ static int KDTree__neighbor_search(KDTree* self, struct Node *node, Region *regi
     return ok;
 }
 
-static int KDTree_add_point(KDTree* self, long int index, double *coord)
-{
-    int i;
-    int n;
-    struct DataPoint* p;
-
-    n = self->_data_point_list_size;
-    p = realloc(self->_data_point_list, (n+1)*sizeof(struct DataPoint));
-    if (p == NULL) return 0;
-
-    p[n]._index = index;
-    for (i = 0; i < DIM; i++) p[n]._coord[i] = coord[i];
-
-    self->_data_point_list_size = n+1;
-    self->_data_point_list = p;
-
-    return 1;
-}
-
 static struct Node *
 KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int depth)
 {
@@ -777,7 +758,7 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
         long int right_offset_begin, right_offset_end;
         long int d;
         double cut_value;
-        struct DataPoint data_point;
+        DataPoint data_point;
         struct Node *left_node, *right_node, *new_node;
 
         DataPoint_sort(self->_data_point_list+offset_begin, offset_end-offset_begin, localdim);
@@ -826,7 +807,7 @@ static int KDTree_report_subtree(KDTree* self, struct Node *node)
 
         for (i = node->_start; i < node->_end; i++)
         {
-            struct DataPoint data_point;
+            DataPoint data_point;
             data_point = self->_data_point_list[i];
             ok = KDTree_report_point(self, data_point._index, data_point._coord);
             if (!ok) return 0;
@@ -903,7 +884,7 @@ static int KDTree_search(KDTree* self, Region *region, struct Node *node, int de
 
         for (i = node->_start; i < node->_end; i++)
         {
-            struct DataPoint data_point;
+            DataPoint data_point;
 
             data_point = self->_data_point_list[i];
 
@@ -995,13 +976,14 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
 {
     int bucket_size = 1;
     double* coords;
-    Py_ssize_t n, i;
+    Py_ssize_t n, i, j;
     PyObject *obj;
-    int ok;
     const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
 
     Py_buffer view;
     KDTree* self;
+    DataPoint* data_point_list;
+    double value;
 
     if (!PyArg_ParseTuple(args, "O|i:KDTree_new" , &obj, &bucket_size))
         return NULL;
@@ -1024,38 +1006,43 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
         return NULL;
     }
     n = view.shape[0];
-    coords = view.buf;
-    for (i = 0; i < 3*n; i++) {
-        const double value = coords[i];
-        if (value <= -1e6 || value >= 1e6) {
-            PyBuffer_Release(&view);
-            PyErr_SetString(PyExc_ValueError,
-                "coordinate values should lie between -1e6 and 1e6");
-            return NULL;
-        }
+
+    data_point_list = malloc(n*sizeof(DataPoint));
+    if (data_point_list == NULL) {
+        /* KDTree_dealloc will deallocate data already stored in KDTree */
+        PyBuffer_Release(&view);
+        return PyErr_NoMemory();
     }
 
-    self = (KDTree*)type->tp_alloc(type, 0);
-    if (!self) return NULL;
-    self->_bucket_size = bucket_size;
-    self->_root = NULL;
-    self->_radius_list = NULL;
-    self->_count = 0;
-    self->_data_point_list = NULL;
-    self->_data_point_list_size = 0;
-
+    coords = view.buf;
     for (i = 0; i < n; i++) {
-        ok = KDTree_add_point(self, i, coords+i*DIM);
-        if (!ok) {
-            /* KDTree_dealloc will deallocate data already stored in KDTree */
-            PyBuffer_Release(&view);
-            Py_DECREF(self);
-            return PyErr_NoMemory();
+        data_point_list[i]._index = i;
+        for (j = 0; j < DIM; j++, coords++) {
+            value = *coords;
+            if (value <= -1e6 || value >= 1e6) {
+                free(data_point_list);
+                PyBuffer_Release(&view);
+                PyErr_SetString(PyExc_ValueError,
+                    "coordinate values should lie between -1e6 and 1e6");
+                return NULL;
+            }
+            data_point_list[i]._coord[j] = value;
         }
     }
     PyBuffer_Release(&view);
 
     /* build KD tree */
+    self = (KDTree*)type->tp_alloc(type, 0);
+    if (!self) {
+        free(data_point_list);
+        return NULL;
+    }
+    self->_bucket_size = bucket_size;
+    self->_radius_list = NULL;
+    self->_count = 0;
+    self->_data_point_list = data_point_list;
+    self->_data_point_list_size = n;
+
     self->_root = KDTree_build_tree(self, 0, 0, 0);
     if (!self->_root) {
         Py_DECREF(self);
@@ -1227,13 +1214,13 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
     for (i = 0; i < self->_data_point_list_size; i++) {
         double x1;
         long int j;
-        struct DataPoint p1;
+        DataPoint p1;
 
         p1 = self->_data_point_list[i];
         x1 = p1._coord[0];
 
         for (j = i+1; j < self->_data_point_list_size; j++) {
-            struct DataPoint p2 = self->_data_point_list[j];
+            DataPoint p2 = self->_data_point_list[j];
             double x2 = p2._coord[0];
             if (fabs(x2-x1) <= radius)
             {
