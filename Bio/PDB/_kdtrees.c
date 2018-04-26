@@ -233,16 +233,16 @@ static int Node_is_leaf(struct Node* node)
 
 /* Region */
 
-struct Region
+typedef struct
 {
     double _left[DIM];
     double _right[DIM];
-};
+} Region;
 
-static struct Region* Region_create(const double *left, const double *right)
+static Region* Region_create(const double *left, const double *right)
 {
     int i;
-    struct Region* region = malloc(sizeof(struct Region));
+    Region* region = malloc(sizeof(Region));
     if (region == NULL) return NULL;
 
     if (left == NULL || right == NULL)
@@ -263,12 +263,12 @@ static struct Region* Region_create(const double *left, const double *right)
     return region;
 }
 
-static void Region_destroy(struct Region* region)
+static void Region_destroy(Region* region)
 {
     if (region) free(region);
 }
 
-static int Region_encloses(struct Region* region, double *coord)
+static int Region_encloses(Region* region, double *coord)
 {
     int i;
     for (i = 0; i < DIM; i++)
@@ -282,7 +282,7 @@ static int Region_encloses(struct Region* region, double *coord)
 }
 
 static int
-Region_test_intersect_left(struct Region* region, double split_coord, int current_dim)
+Region_test_intersect_left(Region* region, double split_coord, int current_dim)
 {
     const double r = region->_right[current_dim];
     const double l = region->_left[current_dim];
@@ -292,7 +292,7 @@ Region_test_intersect_left(struct Region* region, double split_coord, int curren
 }
 
 static int
-Region_test_intersect_right(struct Region* region, double split_coord, int current_dim)
+Region_test_intersect_right(Region* region, double split_coord, int current_dim)
 {
     const double r = region->_right[current_dim];
     const double l = region->_left[current_dim];
@@ -302,7 +302,7 @@ Region_test_intersect_right(struct Region* region, double split_coord, int curre
 }
 
 static int
-Region_test_intersection(struct Region* this_region, struct Region *query_region, double radius)
+Region_test_intersection(Region* this_region, Region *query_region, double radius)
 {
     int status = 2;
 
@@ -338,10 +338,10 @@ Region_test_intersection(struct Region* this_region, struct Region *query_region
     return status;
 }
 
-static struct Region*
-Region_create_intersect_left(struct Region* region, double split_coord, int current_dim)
+static Region*
+Region_create_intersect_left(Region* region, double split_coord, int current_dim)
 {
-    struct Region* p;
+    Region* p;
     const double value = region->_right[current_dim];
     region->_right[current_dim] = split_coord;
     p = Region_create(region->_left, region->_right);
@@ -349,10 +349,10 @@ Region_create_intersect_left(struct Region* region, double split_coord, int curr
     return p;
 }
 
-static struct Region*
-Region_create_intersect_right(struct Region* region, double split_coord, int current_dim)
+static Region*
+Region_create_intersect_right(Region* region, double split_coord, int current_dim)
 {
-    struct Region* p;
+    Region* p;
     const double value = region->_left[current_dim];
     region->_left[current_dim] = split_coord;
     p = Region_create(region->_left, region->_right);
@@ -376,7 +376,6 @@ typedef struct {
     int _data_point_list_size;
     struct Radius* _radius_list;
     struct Node *_root;
-    struct Region *_query_region;
     long int _count;
     double _radius;
     double _radius_sq;
@@ -486,7 +485,7 @@ static int KDTree_search_neighbors_between_buckets(KDTree* self, struct Node *no
     return 1;
 }
 
-static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct Region *down_region, struct Node *up, struct Region *up_region, int depth, PyObject* neighbors)
+static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, Region *down_region, struct Node *up, Region *up_region, int depth, PyObject* neighbors)
 {
     int down_is_leaf, up_is_leaf;
     int localdim;
@@ -522,10 +521,10 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
         /* one or no leaf nodes */
 
         struct Node *up_right, *up_left, *down_left, *down_right;
-        struct Region *up_left_region = NULL;
-        struct Region *up_right_region = NULL;
-        struct Region *down_left_region = NULL;
-        struct Region *down_right_region = NULL;
+        Region *up_left_region = NULL;
+        Region *up_right_region = NULL;
+        Region *down_left_region = NULL;
+        Region *down_right_region = NULL;
 
         if (down_is_leaf)
         {
@@ -643,11 +642,11 @@ static int KDTree_neighbor_search_pairs(KDTree* self, struct Node *down, struct 
     return ok;
 }
 
-static int KDTree__neighbor_search(KDTree* self, struct Node *node, struct Region *region, int depth, PyObject* neighbors)
+static int KDTree__neighbor_search(KDTree* self, struct Node *node, Region *region, int depth, PyObject* neighbors)
 {
     struct Node *left, *right;
-    struct Region *left_region = NULL;
-    struct Region *right_region = NULL;
+    Region *left_region = NULL;
+    Region *right_region = NULL;
     int localdim;
     int intersect;
     double cut_value;
@@ -844,16 +843,16 @@ static int KDTree_report_subtree(KDTree* self, struct Node *node)
     return 1;
 }
 
-static int KDTree_search(KDTree* self, struct Region *region, struct Node *node, int depth);
+static int KDTree_search(KDTree* self, Region *region, struct Node *node, int depth, Region* query_region);
 
-static int KDTree_test_region(KDTree* self, struct Node *node, struct Region *region, int depth)
+static int KDTree_test_region(KDTree* self, struct Node *node, Region *region, int depth, Region* query_region)
 {
     int ok;
     int intersect_flag;
 
     /* is node region inside, outside or overlapping
      * with query region? */
-    intersect_flag = Region_test_intersection(region, self->_query_region, 0);
+    intersect_flag = Region_test_intersection(region, query_region, 0);
 
     if (intersect_flag==2)
     {
@@ -866,7 +865,7 @@ static int KDTree_test_region(KDTree* self, struct Node *node, struct Region *re
     else if (intersect_flag==1)
     {
         /* overlap - recursion */
-        ok = KDTree_search(self, region, node, depth+1);
+        ok = KDTree_search(self, region, node, depth+1, query_region);
         /* search does cleanup of region */
         if (!ok) return 0;
     }
@@ -880,7 +879,7 @@ static int KDTree_test_region(KDTree* self, struct Node *node, struct Region *re
     return 1;
 }
 
-static int KDTree_search(KDTree* self, struct Region *region, struct Node *node, int depth)
+static int KDTree_search(KDTree* self, Region *region, struct Node *node, int depth, Region* query_region)
 {
     int current_dim;
     int ok = 1;
@@ -908,7 +907,7 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
 
             data_point = self->_data_point_list[i];
 
-            if (Region_encloses(self->_query_region, data_point._coord))
+            if (Region_encloses(query_region, data_point._coord))
             {
                 /* point is enclosed in query region - report & stop */
                 ok = KDTree_report_point(self, data_point._index, data_point._coord);
@@ -918,7 +917,7 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
     else
     {
         struct Node *left_node, *right_node;
-        struct Region *left_region, *right_region;
+        Region *left_region, *right_region;
         int intersect_left, intersect_right;
 
         left_node = node->_left;
@@ -932,14 +931,14 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
             case 1:
                 left_region = Region_create(region->_left, region->_right);
                 if (left_region)
-                    ok = KDTree_test_region(self, left_node, left_region, depth);
+                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region);
                 else
                     ok = 0;
                 break;
             case 0:
                 left_region = Region_create_intersect_left(region, node->_cut_value, current_dim);
                 if (left_region)
-                    ok = KDTree_test_region(self, left_node, left_region, depth);
+                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region);
                 else
                     ok = 0;
                 break;
@@ -959,7 +958,7 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
                 right_region = Region_create(region->_left, region->_right);
                 /* test for overlap/inside/outside & do recursion/report/stop */
                 if (right_region)
-                    ok = KDTree_test_region(self, right_node, right_region, depth);
+                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region);
                 else
                     ok = 0;
                 break;
@@ -967,7 +966,7 @@ static int KDTree_search(KDTree* self, struct Region *region, struct Node *node,
                 right_region = Region_create_intersect_right(region, node->_cut_value, current_dim);
                 /* test for overlap/inside/outside & do recursion/report/stop */
                 if (right_region)
-                    ok = KDTree_test_region(self, right_node, right_region, depth);
+                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region);
                 else
                     ok = 0;
                 break;
@@ -987,7 +986,6 @@ static void
 KDTree_dealloc(KDTree* self)
 {
     Node_destroy(self->_root);
-    Region_destroy(self->_query_region);
     if (self->_data_point_list) free(self->_data_point_list);
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -1040,7 +1038,6 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     self = (KDTree*)type->tp_alloc(type, 0);
     if (!self) return NULL;
     self->_bucket_size = bucket_size;
-    self->_query_region = NULL;
     self->_root = NULL;
     self->_radius_list = NULL;
     self->_count = 0;
@@ -1096,6 +1093,8 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     Py_buffer view;
     double left[DIM];
     double right[DIM];
+    Region* query_region = NULL;
+    PyObject* result = NULL;
 
     if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj, &radius))
         return NULL;
@@ -1141,26 +1140,25 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
         self->_center_coord[i] = coords[i];
     }
 
-    Region_destroy(self->_query_region);
-    self->_query_region = Region_create(left, right);
+    query_region = Region_create(left, right);
 
-    if (!self->_query_region) {
+    if (!query_region) {
         PyErr_NoMemory();
         goto exit;
     }
 
-    if (!KDTree_search(self, NULL, NULL, 0)) {
+    if (!KDTree_search(self, NULL, NULL, 0, query_region)) {
         PyErr_NoMemory();
         goto exit;
     }
 
-    PyBuffer_Release(&view);
     Py_INCREF(Py_None);
-    return Py_None;
+    result = Py_None;
 
 exit:
+    if (query_region) Region_destroy(query_region);
     PyBuffer_Release(&view);
-    return NULL;
+    return result;
 }
 
 static PyObject*
@@ -1192,7 +1190,7 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
     else {
         /* "normal" situation */
         /* start with [-INF, INF] */
-        struct Region *region = Region_create(NULL, NULL);
+        Region *region = Region_create(NULL, NULL);
         if (region) {
             ok = KDTree__neighbor_search(self, self->_root, region, 0, neighbors);
             Region_destroy(region);
