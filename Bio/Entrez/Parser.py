@@ -657,7 +657,6 @@ class DataHandler(object):
         except OSError as exception:
             if not os.path.isdir(self.local_xsd_dir):
                 raise exception
-        return
 
     @property
     def directory(self):
@@ -668,4 +667,3 @@ class DataHandler(object):
         """Allow user to set a custom directory, also triggering subdirectory initialization."""
         self._directory = directory
         self._initialize_directory()
-        return
