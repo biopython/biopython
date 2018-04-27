@@ -122,8 +122,8 @@ class KDTreeTest(unittest.TestCase):
             coords = random((nr_points, 3))
             center = coords[0]
             kdt = KDTree(coords, bucket_size)
-            indices, radii = kdt.search(center, radius)
-            l1 = len(indices)
+            points = kdt.search(center, radius)
+            l1 = len(points)
             # manual search
             l2 = 0
             for i in range(0, nr_points):
@@ -167,7 +167,7 @@ class KDTreeTest(unittest.TestCase):
             # KD tree search
             coords = random((nr_points, 3))
             kdt = KDTree(coords, bucket_size)
-            indices, radii = kdt.search(coords[0], radius * 100)
+            points = kdt.search(coords[0], radius * 100)
             # manual search
             l1 = 0
             for i in range(0, nr_points):
@@ -176,7 +176,7 @@ class KDTreeTest(unittest.TestCase):
                 if sqrt(dot(v, v)) <= radius * 100:
                     l1 += 1
             # compare th results
-            self.assertEqual(l1, len(radii))
+            self.assertEqual(l1, len(points))
 
 
 if __name__ == '__main__':

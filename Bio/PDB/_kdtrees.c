@@ -34,6 +34,112 @@ static void DataPoint_sort(DataPoint* list, int n, int i)
     qsort(list, n, sizeof(DataPoint), compare);
 }
 
+/* Point */
+
+typedef struct {
+    PyObject_HEAD
+    long int index;
+    double radius;
+} Point;
+
+static int
+Point_init(Point *self, PyObject *args, PyObject *kwds)
+{
+    int index;
+    double radius = 0.0;
+    static char *kwlist[] = {"index", "radius", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "i|d", kwlist,
+                                     &index, &radius))
+        return -1;
+
+    self->index = index;
+    self->radius = radius;
+    return 0;
+}
+
+static PyObject*
+Point_repr(Point* self)
+{
+    char string[64];
+    sprintf(string, "%ld: %g", self->index, self->radius);
+#if PY_MAJOR_VERSION >= 3
+    return PyUnicode_FromFormat(string);
+#else
+    return PyString_FromString(string);
+#endif
+}
+
+static char Point_index__doc__[] =
+"index";
+
+static PyObject*
+Point_getindex(Point* self, void* closure)
+{
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong(self->index);
+#else
+    return PyInt_FromLong(self->index);
+#endif
+}
+
+static char Point_radius__doc__[] = "the radius";
+
+static PyObject*
+Point_getradius(Point* self, void* closure)
+{
+    const double value = self->radius;
+    return PyFloat_FromDouble(value);
+}
+
+static PyGetSetDef Point_getset[] = {
+    {"index", (getter)Point_getindex, NULL, Point_index__doc__, NULL},
+    {"radius", (getter)Point_getradius, NULL, Point_radius__doc__, NULL},
+    {NULL}  /* Sentinel */
+};
+
+static char Point_doc[] =
+"A single point; attributes are index and radius.\n";
+
+static PyTypeObject PointType = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "Point",                   /* tp_name*/
+    sizeof(Point),             /* tp_basicsize*/
+    0,                         /* tp_itemsize*/
+    0,                         /* tp_dealloc*/
+    0,                         /* tp_print*/
+    0,                         /* tp_getattr*/
+    0,                         /* tp_setattr*/
+    0,                         /* tp_compare*/
+    (reprfunc)Point_repr,      /* tp_repr*/
+    0,                         /* tp_as_number*/
+    0,                         /* tp_as_sequence*/
+    0,                         /* tp_as_mapping*/
+    0,                         /* tp_hash */
+    0,                         /* tp_call*/
+    0,                         /* tp_str*/
+    0,                         /* tp_getattro*/
+    0,                         /* tp_setattro*/
+    0,                         /* tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
+    Point_doc,                 /* tp_doc */
+    0,                         /* tp_traverse */
+    0,                         /* tp_clear */
+    0,                         /* tp_richcompare */
+    0,                         /* tp_weaklistoffset */
+    0,                         /* tp_iter */
+    0,                         /* tp_iternext */
+    0,                         /* tp_methods */
+    0,                         /* tp_members */
+    Point_getset,              /* tp_getset */
+    0,                         /* tp_base */
+    0,                         /* tp_dict */
+    0,                         /* tp_descr_get */
+    0,                         /* tp_descr_set */
+    0,                         /* tp_dictoffset */
+    (initproc)Point_init,      /* tp_init */
+};
+
 /* Neighbor */
 
 typedef struct {
@@ -85,19 +191,6 @@ Neighbor_getindex1(Neighbor* self, void* closure)
 #endif
 }
 
-static int
-Neighbor_setindex1(Neighbor* self, PyObject* value, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    long index1 = PyLong_AsLong(value);
-#else
-    long index1 = PyInt_AsLong(value);
-#endif
-    if (PyErr_Occurred()) return -1;
-    self->index1 = index1;
-    return 0;
-}
-
 static char Neighbor_index2__doc__[] =
 "index of the second neighbor";
 
@@ -111,20 +204,7 @@ Neighbor_getindex2(Neighbor* self, void* closure)
 #endif
 }
 
-static int
-Neighbor_setindex2(Neighbor* self, PyObject* value, void* closure)
-{
-#if PY_MAJOR_VERSION >= 3
-    long index2 = PyLong_AsLong(value);
-#else
-    long index2 = PyInt_AsLong(value);
-#endif
-    if (PyErr_Occurred()) return -1;
-    self->index2 = index2;
-    return 0;
-}
-
-static char Neighbor_radius__doc__[] = "the radius\n";
+static char Neighbor_radius__doc__[] = "the radius";
 
 static PyObject*
 Neighbor_getradius(Neighbor* self, void* closure)
@@ -133,24 +213,15 @@ Neighbor_getradius(Neighbor* self, void* closure)
     return PyFloat_FromDouble(value);
 }
 
-static int
-Neighbor_setradius(Neighbor* self, PyObject* value, void* closure)
-{
-    const double radius = PyFloat_AsDouble(value);
-    if (PyErr_Occurred()) return -1;
-    self->radius = radius;
-    return 0;
-}
-
 static PyGetSetDef Neighbor_getset[] = {
-    {"index1", (getter)Neighbor_getindex1, (setter)Neighbor_setindex1, Neighbor_index1__doc__, NULL},
-    {"index2", (getter)Neighbor_getindex2, (setter)Neighbor_setindex2, Neighbor_index2__doc__, NULL},
-    {"radius", (getter)Neighbor_getradius, (setter)Neighbor_setradius, Neighbor_radius__doc__, NULL},
+    {"index1", (getter)Neighbor_getindex1, NULL, Neighbor_index1__doc__, NULL},
+    {"index2", (getter)Neighbor_getindex2, NULL, Neighbor_index2__doc__, NULL},
+    {"radius", (getter)Neighbor_getradius, NULL, Neighbor_radius__doc__, NULL},
     {NULL}  /* Sentinel */
 };
 
 static char Neighbor_doc[] =
-"A neighbor pair; members are index1, index2, and radius.\n";
+"A neighbor pair; attributes are index1, index2, and radius.\n";
 
 static PyTypeObject NeighborType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -162,7 +233,7 @@ static PyTypeObject NeighborType = {
     0,                         /* tp_getattr*/
     0,                         /* tp_setattr*/
     0,                         /* tp_compare*/
-    (reprfunc)Neighbor_repr, /* tp_repr*/
+    (reprfunc)Neighbor_repr,   /* tp_repr*/
     0,                         /* tp_as_number*/
     0,                         /* tp_as_sequence*/
     0,                         /* tp_as_mapping*/
@@ -374,9 +445,7 @@ typedef struct {
     PyObject_HEAD
     DataPoint* _data_point_list;
     int _data_point_list_size;
-    Radius* _radius_list;
     Node *_root;
-    long int _count;
     double _radius;
     double _radius_sq;
     double _neighbor_radius;
@@ -398,23 +467,23 @@ static double KDTree_dist(double *coord1, double *coord2)
     return sum;
 }
 
-static int KDTree_report_point(KDTree* self, DataPoint* data_point)
+static int
+KDTree_report_point(KDTree* self, DataPoint* data_point, PyObject* points)
 {
+    int ok;
     long int index = data_point->_index;
     double *coord = data_point->_coord;
     const double r = KDTree_dist(self->_center_coord, coord);
     if (r <= self->_radius_sq)
     {
-        int n = self->_count;
-        Radius* p;
-
-        p = realloc(self->_radius_list, (n+1)*sizeof(Radius));
-        if (p == NULL) return 0;
-        /* note use of sqrt - only calculated if necessary */
-        p[n].index = index;
-        p[n].value = sqrt(r);
-        self->_radius_list = p;
-        self->_count++;
+        Point* point;
+        point = (Point*) PointType.tp_alloc(&PointType, 0);
+        if (!point) return 0;
+        point->index = index;
+        point->radius = sqrt(r); /* note sqrt */
+        ok = PyList_Append(points, (PyObject*)point);
+        Py_DECREF(point);
+        if (ok == -1) return 0;
     }
     return 1;
 }
@@ -435,10 +504,7 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
         neighbor->radius = sqrt(r); /* note sqrt */
         ok = PyList_Append(neighbors, (PyObject*)neighbor);
         Py_DECREF(neighbor);
-        if (ok == -1) {
-            Py_DECREF(neighbors);
-            return 0;
-        }
+        if (ok == -1) return 0;
     }
 
     return 1;
@@ -800,30 +866,31 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
     }
 }
 
-static int KDTree_report_subtree(KDTree* self, Node *node)
+static int KDTree_report_subtree(KDTree* self, Node *node, PyObject* points)
 {
     int ok;
     if (Node_is_leaf(node)) {
         /* report point(s) */
         long int i;
         for (i = node->_start; i < node->_end; i++) {
-            ok = KDTree_report_point(self, &self->_data_point_list[i]);
+            ok = KDTree_report_point(self, &self->_data_point_list[i], points);
             if (!ok) return 0;
         }
     }
     else {
         /* find points in subtrees via recursion */
-        ok = KDTree_report_subtree(self, node->_left);
+        ok = KDTree_report_subtree(self, node->_left, points);
         if (!ok) return 0;
-        ok = KDTree_report_subtree(self, node->_right);
+        ok = KDTree_report_subtree(self, node->_right, points);
         if (!ok) return 0;
     }
     return 1;
 }
 
-static int KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query_region);
+static int
+KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query_region, PyObject* points);
 
-static int KDTree_test_region(KDTree* self, Node *node, Region *region, int depth, Region* query_region)
+static int KDTree_test_region(KDTree* self, Node *node, Region *region, int depth, Region* query_region, PyObject* points)
 {
     int ok;
     int intersect_flag;
@@ -835,13 +902,13 @@ static int KDTree_test_region(KDTree* self, Node *node, Region *region, int dept
     switch (intersect_flag) {
         case 2:
             /* inside - extract points */
-            ok = KDTree_report_subtree(self, node);
+            ok = KDTree_report_subtree(self, node, points);
             /* end of recursion -- get rid of region */
             Region_destroy(region);
             break;
         case 1:
             /* overlap - recursion */
-            ok = KDTree_search(self, region, node, depth+1, query_region);
+            ok = KDTree_search(self, region, node, depth+1, query_region, points);
             /* search does cleanup of region */
             break;
         default:
@@ -855,7 +922,7 @@ static int KDTree_test_region(KDTree* self, Node *node, Region *region, int dept
 }
 
 static int
-KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query_region)
+KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query_region, PyObject* points)
 {
     int current_dim;
     int ok = 1;
@@ -880,7 +947,7 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
             data_point = &self->_data_point_list[i];
             if (Region_encloses(query_region, data_point->_coord)) {
                 /* point is enclosed in query region - report & stop */
-                ok = KDTree_report_point(self, data_point);
+                ok = KDTree_report_point(self, data_point, points);
             }
         }
     }
@@ -900,14 +967,14 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
             case 1:
                 left_region = Region_create(region->_left, region->_right);
                 if (left_region)
-                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region);
+                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region, points);
                 else
                     ok = 0;
                 break;
             case 0:
                 left_region = Region_create_intersect_left(region, node->_cut_value, current_dim);
                 if (left_region)
-                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region);
+                    ok = KDTree_test_region(self, left_node, left_region, depth, query_region, points);
                 else
                     ok = 0;
                 break;
@@ -927,7 +994,7 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
                 right_region = Region_create(region->_left, region->_right);
                 /* test for overlap/inside/outside & do recursion/report/stop */
                 if (right_region)
-                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region);
+                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region, points);
                 else
                     ok = 0;
                 break;
@@ -935,7 +1002,7 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
                 right_region = Region_create_intersect_right(region, node->_cut_value, current_dim);
                 /* test for overlap/inside/outside & do recursion/report/stop */
                 if (right_region)
-                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region);
+                    ok = KDTree_test_region(self, right_node, right_region, depth, query_region, points);
                 else
                     ok = 0;
                 break;
@@ -1026,8 +1093,6 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
         return NULL;
     }
     self->_bucket_size = bucket_size;
-    self->_radius_list = NULL;
-    self->_count = 0;
     self->_data_point_list = data_point_list;
     self->_data_point_list_size = n;
 
@@ -1051,7 +1116,7 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     double left[DIM];
     double right[DIM];
     Region* query_region = NULL;
-    PyObject* result = NULL;
+    PyObject* points = NULL;
 
     if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj, &radius))
         return NULL;
@@ -1079,11 +1144,6 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
         goto exit;
     }
     coords = view.buf;
-    if (self->_radius_list) {
-        free(self->_radius_list);
-        self->_radius_list = NULL;
-    }
-    self->_count = 0;
 
     self->_radius = radius;
     /* use of r^2 to avoid sqrt use */
@@ -1104,21 +1164,20 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
         goto exit;
     }
 
-    if (!KDTree_search(self, NULL, NULL, 0, query_region)) {
+    points = PyList_New(0);
+    if (!points) goto exit;
+
+    if (!KDTree_search(self, NULL, NULL, 0, query_region, points)) {
         PyErr_NoMemory();
+        Py_DECREF(points);
+        points = NULL;
         goto exit;
     }
-
-#if PY_MAJOR_VERSION >= 3
-    result = PyLong_FromLong(self->_count);
-#else
-    result = PyInt_FromLong(self->_count);
-#endif
 
 exit:
     if (query_region) Region_destroy(query_region);
     PyBuffer_Release(&view);
-    return result;
+    return points;
 }
 
 static PyObject*
@@ -1156,7 +1215,10 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
             Region_destroy(region);
         }
     }
-    if (!ok) return PyErr_NoMemory();
+    if (!ok) {
+        Py_DECREF(neighbors);
+        return PyErr_NoMemory();
+    }
     return neighbors;
 }
 
@@ -1209,85 +1271,14 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
     return neighbors;
 }
 
-static char KDTree_get_indices__doc__[] =
-"returns indices of coordinates within radius as a Numpy array\n";
-
-static PyObject *KDTree_get_indices(KDTree *self, PyObject* args)
-{
-    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
-    Py_buffer view;
-    PyObject* object;
-    Py_ssize_t i;
-    Py_ssize_t* indices;
-
-    if (!PyArg_ParseTuple(args, "O:KDTree_get_indices", &object)) return NULL;
-    if (PyObject_GetBuffer(object, &view, flags) == -1)
-        return NULL;
-    if (view.ndim != 1) {
-        PyErr_Format(PyExc_ValueError,
-            "array has incorrect rank (%d expected 1)", view.ndim);
-        PyBuffer_Release(&view);
-        return NULL;
-    }
-    if (view.itemsize != sizeof(Py_ssize_t)) {
-        PyErr_SetString(PyExc_RuntimeError,
-                        "coords array has incorrect data type");
-        return 0;
-    }
-    /* copy the data into the Numpy data pointer */
-    indices = view.buf;
-    for (i = 0; i < self->_count; i++) indices[i] = self->_radius_list[i].index;
-
-    PyBuffer_Release(&view);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-
-static char KDTree_get_radii__doc__[] =
-"returns distances of coordinates within radius as a Numpy array.\n";
-
-static PyObject *KDTree_get_radii(KDTree *self, PyObject* args)
-{
-    PyObject* object;
-    const int flags = PyBUF_ND | PyBUF_C_CONTIGUOUS;
-    Py_buffer view;
-    double *radii;
-    Py_ssize_t i;
-
-    if (!PyArg_ParseTuple(args, "O:KDTree_get_radii", &object)) return NULL;
-    if (PyObject_GetBuffer(object, &view, flags) == -1)
-        return NULL;
-    if (view.itemsize != sizeof(double)) {
-        PyErr_SetString(PyExc_RuntimeError,
-                        "radii array has incorrect data type");
-        return 0;
-    }
-    if (view.ndim != 1) {
-        PyErr_Format(PyExc_RuntimeError,
-            "radii array has incorrect rank (%d expected 1)", view.ndim);
-        PyBuffer_Release(&view);
-        return NULL;
-    }
-
-    /* copy the data into the Numpy data pointer */
-    radii = view.buf;
-    for (i = 0; i < self->_count; i++) radii[i] = self->_radius_list[i].value;
-
-    PyBuffer_Release(&view);
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-
 static PyMethodDef KDTree_methods[] = {
     {"search_center_radius", (PyCFunction)KDTree_search_center_radius, METH_VARARGS, NULL},
     {"neighbor_search", (PyCFunction)KDTree_neighbor_search, METH_VARARGS, NULL},
     {"neighbor_simple_search", (PyCFunction)KDTree_neighbor_simple_search, METH_VARARGS, NULL},
-    {"get_indices", (PyCFunction)KDTree_get_indices, METH_VARARGS, KDTree_get_indices__doc__},
-    {"get_radii", (PyCFunction)KDTree_get_radii, METH_VARARGS, KDTree_get_radii__doc__},
     {NULL}  /* Sentinel */
 };
 
-static char KDTree_doc[] = "C KDTree.\n";
+static char KDTree_doc[] = "KDTree implemented in C.\n";
 
 static PyTypeObject KDTreeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -1359,8 +1350,15 @@ init_kdtrees(void)
 {
   PyObject *module;
 
+  PointType.tp_new = PyType_GenericNew;
   NeighborType.tp_new = PyType_GenericNew;
   if (PyType_Ready(&KDTreeType) < 0)
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
+  if (PyType_Ready(&PointType) < 0)
 #if PY_MAJOR_VERSION >= 3
       return NULL;
 #else
@@ -1382,8 +1380,10 @@ init_kdtrees(void)
 #endif
 
   Py_INCREF(&KDTreeType);
+  Py_INCREF(&PointType);
   Py_INCREF(&NeighborType);
   PyModule_AddObject(module, "KDTree", (PyObject*) &KDTreeType);
+  PyModule_AddObject(module, "Point", (PyObject*) &PointType);
   PyModule_AddObject(module, "Neighbor", (PyObject*) &NeighborType);
 
   if (PyErr_Occurred()) Py_FatalError("can't initialize module _kdtrees");

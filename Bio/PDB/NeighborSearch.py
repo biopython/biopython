@@ -67,39 +67,30 @@ class KDTree(_kdtrees.KDTree):
          - center: NumPy array of size 3.
          - radius: float>0
 
-        Returns (indices, radii),
-
-        where indices is a NumPy array of indices of coordinates
-        that were were within radius of center, and distances is a
-        NumPy array with the corresponding distances from center.
-
-        For an index pair, the first index < second index.
+        Returns a list of Point objects; each neighbor has an attribute
+        index corresponding to the index of the point, and an attribute
+        radius with the radius between them.
         """
         center = numpy.require(center, dtype='d', requirements='C')
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
-        n = self.search_center_radius(center, radius)
-        indices = numpy.empty(n, int)
-        radii = numpy.empty(n, int)
-        if n > 0:
-            _kdtrees.KDTree.get_indices(self, indices)
-            _kdtrees.KDTree.get_radii(self, radii)
-        return indices, radii
+        points = self.search_center_radius(center, radius)
+        return points
 
     def all_search(self, radius):
         """All fixed neighbor search.
 
-        Search all point pairs that are within radius.
+        Find all point pairs that are within radius of each other.
 
         Arguments:
          - radius: float (>0)
 
-        Returns a list of neighbors; each neighbor has attributes index1,
-        index2 corresponding to the indices of the point pair, and an
-        attribute radius with the radius between them.
+        Returns a list of Neighbor objects; each neighbor has attributes
+        index1, index2 corresponding to the indices of the point pair,
+        and an attribute radius with the radius between them.
         """
-        # Fixed radius search for all points
-        return self.neighbor_search(radius)
+        neighbors = self.neighbor_search(radius)
+        return neighbors
 
 
 class NeighborSearch(object):
@@ -173,8 +164,8 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        indices, radii = self.kdt.search(center, radius)
-        atom_list = [self.atom_list[index] for index in indices]
+        points = self.kdt.search(center, radius)
+        atom_list = [self.atom_list[point.index] for point in points]
         if level == "A":
             return atom_list
         else:
