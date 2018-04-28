@@ -384,14 +384,14 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
        - dist == 'k': Kendall's tau
      - method: specifies how the distance between two clusters is defined:
        - method == 'a': the distance between the arithmetic means
-         of the two clusters
+       of the two clusters
        - method == 'm': the distance between the medians of the two clusters
        - method == 's': the smallest pairwise distance between members
-         of the two clusters
+       of the two clusters
        - method == 'x': the largest pairwise distance between members
-         of the two clusters
+       of the two clusters
        - method == 'v': average of the pairwise distances between members
-         of the two clusters
+       of the two clusters
      - transpose:
        - if False: clusters of rows are considered;
        - if True: clusters of columns are considered.
@@ -819,15 +819,15 @@ class Record(object):
            - dist == 'k': Kendall's tau
          - method: specifies how the distance between two clusters is defined:
            - method == 'a': the distance between the arithmetic means
-             of the two clusters
+           of the two clusters
            - method == 'm': the distance between the medians of the
-             two clusters
+           two clusters
            - method == 's': the smallest pairwise distance between members
-             of the two clusters
+           of the two clusters
            - method == 'x': the largest pairwise distance between members
-             of the two clusters
+           of the two clusters
            - method == 'v': average of the pairwise distances between members
-             of the two clusters
+           of the two clusters
          - transpose: if False: clusters of rows are considered;
                       if True: clusters of columns are considered.
         """
