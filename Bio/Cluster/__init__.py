@@ -159,11 +159,12 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
      - distance: The distance matrix between the items. There are three
        ways in which you can pass a distance matrix:
        1. a 2D Numerical Python array (in which only the left-lower
-          part of the array will be accessed);
+       part of the array will be accessed);
        2. a 1D Numerical Python array containing the distances
-          consecutively;
+       consecutively;
        3. a list of rows containing the lower-triangular part of
-          the distance matrix.
+       the distance matrix.
+
        Examples are:
 
            >>> # option 1.:
@@ -239,14 +240,14 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
        - method == 'm': Complete (maximum) pairwise linkage (default)
        - method == 'c': Centroid linkage
        - method == 'a': Average pairwise linkage
-     - distancematrix:  The distance matrix between the itemss. There are
+     - distancematrix:  The distance matrix between the items. There are
        three ways in which you can pass a distance matrix:
        1. a 2D Numerical Python array (in which only the left-lower
-          part of the array will be accessed);
+       part of the array will be accessed);
        2. a 1D Numerical Python array containing the distances
-          consecutively;
+       consecutively;
        3. a list of rows containing the lower-triangular part of
-          the distance matrix.
+       the distance matrix.
 
        Examples are:
 
@@ -553,6 +554,7 @@ class Record(object):
        samples in the output file
      - uniqid: the string that was used instead of UNIQID in the input file.
     """
+
     def __init__(self, handle=None):
         """Read gene expression data from the file handle and return a Record.
 
@@ -666,10 +668,10 @@ class Record(object):
         See the description of the Tree class for more information about
         the Tree object returned by this method.
         """
-        if transpose == False:
-            weight = self.eweight
-        elif transpose == True:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return treecluster(self.data, self.mask, weight, transpose, method,
                            dist)
 
@@ -714,10 +716,10 @@ class Record(object):
            k-means clustering solution;
          - nfound: the number of times this solution was found.
         """
-        if transpose == False:
-            weight = self.eweight
-        elif transpose == True:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return kcluster(self.data, nclusters, self.mask, weight, transpose,
                         npass, method, dist, initialid)
 
@@ -757,10 +759,10 @@ class Record(object):
            expression data for the centroid of the cluster in the SOM grid
            cell with coordinates [ix, iy].
         """
-        if transpose == False:
-            weight = self.eweight
-        elif transpose == True:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return somcluster(self.data, self.mask, weight, transpose,
                           nxgrid, nygrid, inittau, niter, dist)
 
