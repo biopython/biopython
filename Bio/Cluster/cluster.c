@@ -3858,7 +3858,7 @@ If a memory error occurs, treecluster returns NULL.
     for (i = 1; i < nelements; i++)
     { distmatrix[i] = malloc(i*sizeof(double));
       if (distmatrix[i]==NULL) /* Not enough memory available */
-      { while (--i >= 0) free(distmatrix[i]);
+      { while (--i > 0) free(distmatrix[i]);
         return NULL;
       }
     }
