@@ -980,51 +980,61 @@ PyTree_length(PyTree *self)
 }
 
 static PyObject*
-PyTree_item(PyTree* self, int i)
+PyTree_subscript(PyTree* self, PyObject* item)
 {
-    PyNode* result;
-    if (i < 0 || i >= self->n) {
-        PyErr_SetString(PyExc_IndexError, "tree index out of range");
+    if (PyIndex_Check(item)) {
+        PyNode* result;
+        Py_ssize_t i;
+        i = PyNumber_AsSsize_t(item, PyExc_IndexError);
+        if (i == -1 && PyErr_Occurred())
+            return NULL;
+        if (i < 0)
+            i += self->n;
+        if (i < 0 || i >= self->n) {
+            PyErr_SetString(PyExc_IndexError, "tree index out of range");
+            return NULL;
+        }
+        result = (PyNode*) PyNodeType.tp_alloc(&PyNodeType, 0);
+        if (!result) return PyErr_NoMemory();
+        result->node = self->nodes[i];
+        return (PyObject*) result;
+    }
+    else if (PySlice_Check(item)) {
+        Py_ssize_t i, j;
+        Py_ssize_t start, stop, step, slicelength;
+#if PY_MAJOR_VERSION < 3
+        if (PySlice_GetIndicesEx((PySliceObject*)item, self->n, &start, &stop, &step, &slicelength) == -1) return NULL;
+#else
+        if (PySlice_GetIndicesEx(item, self->n, &start, &stop, &step, &slicelength) == -1) return NULL;
+#endif
+        if (slicelength == 0) return PyList_New(0);
+        else {
+            PyNode* node;
+            PyObject* result = PyList_New(slicelength);
+            if (!result) return PyErr_NoMemory();
+            for (i = 0, j = start; i < slicelength; i++, j += step) {
+                node = (PyNode*) PyNodeType.tp_alloc(&PyNodeType, 0);
+                if (!node) {
+                    Py_DECREF(result);
+                    return PyErr_NoMemory();
+                }
+                node->node = self->nodes[j];
+                PyList_SET_ITEM(result, i, (PyObject*)node);
+            }
+            return result;
+        }
+    }
+    else {
+        PyErr_Format(PyExc_TypeError,
+                     "tree indices must be integers, not %.200s",
+                     item->ob_type->tp_name);
         return NULL;
     }
-    result = (PyNode*) PyNodeType.tp_alloc(&PyNodeType, 0);
-    if(!result) return PyErr_NoMemory();
-    result->node = self->nodes[i];
-    return (PyObject*) result;
 }
 
-static PyObject*
-PyTree_slice(PyTree* self, int i, int j)
-{
-    int row;
-    const int n = self->n;
-    PyObject* item;
-    PyObject* result;
-    if (i < 0) i = 0;
-    if (j < 0 || j > n) j = n;
-    if (j < i) j = i;
-    result = PyList_New(j-i);
-    if(!result) return PyErr_NoMemory();
-    for (row = 0; i < j; i++, row++) {
-        item = PyTree_item(self, i);
-        if(!item) {
-            Py_DECREF(result);
-            return PyErr_NoMemory();
-        }
-        PyList_SET_ITEM(result, row, item);
-    }
-    return result;
-}
-
-static PySequenceMethods PyTree_sequence = {
-    (lenfunc)PyTree_length,           /* sq_length */
-    NULL,                             /* sq_concat */
-    NULL,                             /* sq_repeat */
-    (ssizeargfunc)PyTree_item,        /* sq_item */
-    (ssizessizeargfunc)PyTree_slice,  /* sq_slice */
-    NULL,                             /* sq_ass_item */
-    NULL,                             /* sq_ass_slice */
-    NULL                              /* sq_contains */
+static PyMappingMethods PyTree_mapping = {
+    (lenfunc)PyTree_length,           /* mp_length */
+    (binaryfunc)PyTree_subscript,     /* mp_subscript */
 };
 
 static char PyTree_scale__doc__[] =
@@ -1147,24 +1157,24 @@ static char PyTree_doc[] =
 
 static PyTypeObject PyTreeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "_cluster.Tree",             /*tp_name*/
-    sizeof(PyTree),              /*tp_basicsize*/
-    0,                           /*tp_itemsize*/
-    (destructor)PyTree_dealloc,  /*tp_dealloc*/
-    0,                           /*tp_print*/
-    0,                           /*tp_getattr*/
-    0,                           /*tp_setattr*/
-    0,                           /*tp_compare*/
-    0,                           /*tp_repr*/
-    0,                           /*tp_as_number*/
-    &PyTree_sequence,            /*tp_as_sequence*/
-    0,                           /*tp_as_mapping*/
-    0,                           /*tp_hash */
-    0,                           /*tp_call*/
-    (reprfunc)PyTree_str,        /*tp_str*/
-    0,                           /*tp_getattro*/
-    0,                           /*tp_setattro*/
-    0,                           /*tp_as_buffer*/
+    "_cluster.Tree",             /* tp_name */
+    sizeof(PyTree),              /* tp_basicsize */
+    0,                           /* tp_itemsize */
+    (destructor)PyTree_dealloc,  /* tp_dealloc */
+    0,                           /* tp_print */
+    0,                           /* tp_getattr */
+    0,                           /* tp_setattr */
+    0,                           /* tp_compare */
+    0,                           /* tp_repr */
+    0,                           /* tp_as_number */
+    0,                           /* tp_as_sequence */
+    &PyTree_mapping,             /* tp_as_mapping */
+    0,                           /* tp_hash */
+    0,                           /* tp_call */
+    (reprfunc)PyTree_str,        /* tp_str */
+    0,                           /* tp_getattro */
+    0,                           /* tp_setattro */
+    0,                           /* tp_as_buffer */
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,          /*tp_flags*/
     PyTree_doc,                  /* tp_doc */
     0,                           /* tp_traverse */

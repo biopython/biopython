@@ -962,7 +962,7 @@ class Record(object):
         nnodes = len(tree)
         with open(jobname + extension, "w") as outputfile:
             nodeID = [''] * nnodes
-            nodedist = numpy.array([node.distance for node in tree])
+            nodedist = numpy.array([node.distance for node in tree[:]])
             for nodeindex in range(nnodes):
                 min1 = tree[nodeindex].left
                 min2 = tree[nodeindex].right
