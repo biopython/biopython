@@ -73,7 +73,6 @@ class Tree(_cluster.Tree):
         Keyword arguments:
          - nclusters: The desired number of clusters.
         """
-
         n = len(self) + 1
         indices = numpy.ones(n, dtype='intc')
         if nclusters is None:
@@ -830,10 +829,10 @@ class Record(object):
          - transpose: if False: clusters of rows are considered;
                       if True: clusters of columns are considered.
         """
-        if transpose == False:
-            weight = self.eweight
-        elif transpose == True:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return clusterdistance(self.data, self.mask, weight,
                                index1, index2, method, dist, transpose)
 
@@ -874,10 +873,10 @@ class Record(object):
             [4., 2., 6., 0.]
 
         """
-        if transpose == False:
-            weight = self.eweight
-        elif transpose == True:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return distancematrix(self.data, self.mask, weight, transpose, dist)
 
     def save(self, jobname, geneclusters=None, expclusters=None):
@@ -950,13 +949,13 @@ class Record(object):
         self._savedata(filename, gid, aid, geneindex, expindex)
 
     def _savetree(self, jobname, tree, order, transpose):
-        """Save the hierarchical clustering solution (PRIVATE)"""
-        if transpose == False:
-            extension = ".gtr"
-            keyword = "GENE"
-        elif transpose == True:
+        """Save the hierarchical clustering solution (PRIVATE)."""
+        if transpose:
             extension = ".atr"
             keyword = "ARRY"
+        else:
+            extension = ".gtr"
+            keyword = "GENE"
         index = tree.sort(order)
         nnodes = len(tree)
         with open(jobname + extension, "w") as outputfile:
@@ -985,13 +984,13 @@ class Record(object):
         return index
 
     def _savekmeans(self, filename, clusterids, order, transpose):
-        """Save the k-means clustering solution (PRIVATE)"""
-        if transpose == False:
-            label = self.uniqid
-            names = self.geneid
-        elif transpose == True:
+        """Save the k-means clustering solution (PRIVATE)."""
+        if transpose:
             label = "ARRAY"
             names = self.expid
+        else:
+            label = self.uniqid
+            names = self.geneid
         with open(filename, "w") as outputfile:
             outputfile.write(label + "\tGROUP\n")
             index = numpy.argsort(order)
@@ -1009,7 +1008,7 @@ class Record(object):
         return sortedindex
 
     def _savedata(self, jobname, gid, aid, geneindex, expindex):
-        """Save the clustered data (PRIVATE)"""
+        """Save the clustered data (PRIVATE)."""
         if self.genename is None:
             genename = self.geneid
         else:
