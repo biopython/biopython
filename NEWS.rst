@@ -103,6 +103,7 @@ possible, especially the following contributors:
 - Pamela Russell (first contribution)
 - Peter Cock
 - Spencer Bliven
+- Stefans Mezulis
 - Wibowo 'Bow' Arindrarto
 
 
