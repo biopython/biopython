@@ -579,7 +579,7 @@ static PyObject *PyTree_get_radii(PyTree *self, PyObject* args)
         case '!': datatype = view.format[1]; break;
         default: break;
     }
-    if (datatype != 'l') {
+    if (datatype != 'f') {
         PyErr_Format(PyExc_RuntimeError,
             "array has incorrect data format ('%c', expected 'f')", datatype);
         PyBuffer_Release(&view);

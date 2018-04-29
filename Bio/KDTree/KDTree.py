@@ -101,7 +101,7 @@ class KDTree(object):
         n = self.kdt.get_count()
         if n == 0:
             return []
-        radii = empty(n, int)
+        radii = empty(n, 'f')
         self.kdt.get_radii(radii)
         return radii
 
