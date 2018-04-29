@@ -41,6 +41,17 @@ class Node(_cluster.Node):
 class Tree(_cluster.Tree):
 
     def sort(self, order=None):
+        """Sort the hierarchical clustering tree.
+
+        Sort the hierarchical clustering tree by switching the left and
+        right subnode of nodes such that the elements in the left-to-right
+        order of the tree tend to have increasing order values.
+
+        Return the indices of the elements in the left-to-right order in
+        the hierarchical clustering tree, such that the element with index
+        indices[i] occurs at position i in the dendrogram.
+
+        """
         n = len(self) + 1
         indices = numpy.ones(n, dtype='intc')
         if order is None:
@@ -53,6 +64,15 @@ class Tree(_cluster.Tree):
         return indices
 
     def cut(self, nclusters=None):
+        """Create clusters by cutting the hierarchical clustering tree.
+
+        Divide the elements in a hierarchical clustering result mytree
+        into clusters, and return an array with the number of the cluster
+        to which each element was assigned.
+
+        Keyword arguments:
+         - nclusters: The desired number of clusters.
+        """
         n = len(self) + 1
         indices = numpy.ones(n, dtype='intc')
         if nclusters is None:
@@ -70,26 +90,22 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
     of the optimal k-means clustering solution, and the number of times
     the optimal solution was found.
 
-    Arguments
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
      - nclusters: number of clusters (the 'k' in k-means).
      - mask: nrows x ncolumns array of integers, showing which data
        are missing. If mask[i,j]==0, then data[i,j] is missing.
      - weight: the weights to be used when calculating distances
      - transpose:
-
        - if False: rows are clustered;
        - if True: columns are clustered.
-
      - npass: number of times the k-means clustering algorithm is
        performed, each time with a different (random) initial
        condition.
      - method: specifies how the center of a cluster is found:
        - method == 'a': arithmetic mean;
        - method == 'm': median.
-
      - dist: specifies the distance function to be used:
-
        - dist == 'e': Euclidean distance;
        - dist == 'b': City Block distance;
        - dist == 'c': Pearson correlation;
@@ -98,7 +114,6 @@ def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
        - dist == 'x': absolute uncentered correlation;
        - dist == 's': Spearman's rank correlation;
        - dist == 'k': Kendall's tau.
-
      - initialid: the initial clustering from which the algorithm
        should start.
        If initialid is None, the routine carries out npass
@@ -140,16 +155,15 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
     k-medoids clustering solution, and the number of times the optimal
     solution was found.
 
-    Arguments:
+    Keyword arguments:
      - distance: The distance matrix between the items. There are three
        ways in which you can pass a distance matrix:
-
        1. a 2D Numerical Python array (in which only the left-lower
-          part of the array will be accessed);
+       part of the array will be accessed);
        2. a 1D Numerical Python array containing the distances
-          consecutively;
+       consecutively;
        3. a list of rows containing the lower-triangular part of
-          the distance matrix.
+       the distance matrix.
 
        Examples are:
 
@@ -204,18 +218,15 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     This function implements the pairwise single, complete, centroid, and
     average linkage hierarchical clustering methods.
 
-    Arguments:
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
      - mask: nrows x ncolumns array of integers, showing which data are
        missing. If mask[i][j]==0, then data[i][j] is missing.
      - weight: the weights to be used when calculating distances.
      - transpose:
-
        - if False, rows are clustered;
        - if True, columns are clustered.
-
      - dist: specifies the distance function to be used:
-
        - dist == 'e': Euclidean distance
        - dist == 'b': City Block distance
        - dist == 'c': Pearson correlation
@@ -224,23 +235,19 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
        - dist == 'x': absolute uncentered correlation
        - dist == 's': Spearman's rank correlation
        - dist == 'k': Kendall's tau
-
      - method: specifies which linkage method is used:
-
        - method == 's': Single pairwise linkage
        - method == 'm': Complete (maximum) pairwise linkage (default)
        - method == 'c': Centroid linkage
        - method == 'a': Average pairwise linkage
-
-     - distancematrix:  The distance matrix between the itemss. There are
+     - distancematrix:  The distance matrix between the items. There are
        three ways in which you can pass a distance matrix:
-
        1. a 2D Numerical Python array (in which only the left-lower
-          part of the array will be accessed);
+       part of the array will be accessed);
        2. a 1D Numerical Python array containing the distances
-          consecutively;
+       consecutively;
        3. a list of rows containing the lower-triangular part of
-          the distance matrix.
+       the distance matrix.
 
        Examples are:
 
@@ -297,22 +304,19 @@ def somcluster(data, mask=None, weight=None, transpose=False,
 
     This function implements a Self-Organizing Map on a rectangular grid.
 
-    Arguments:
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values;
      - mask: nrows x ncolumns array of integers, showing which data are
        missing. If mask[i][j]==0, then data[i][j] is missing.
      - weight: the weights to be used when calculating distances
      - transpose:
-
        - if False: rows are clustered;
        - if True: columns are clustered.
-
      - nxgrid: the horizontal dimension of the rectangular SOM map
      - nygrid: the vertical dimension of the rectangular SOM map
      - inittau: the initial value of tau (the neighborbood function)
      - niter: the number of iterations
      - dist: specifies the distance function to be used:
-
        - dist == 'e': Euclidean distance
        - dist == 'b': City Block distance
        - dist == 'c': Pearson correlation
@@ -328,7 +332,6 @@ def somcluster(data, mask=None, weight=None, transpose=False,
        the items that are being clustered. Each row in the array contains
        the x and y coordinates of the cell in the rectangular SOM grid to
        which the item was assigned.
-
      - celldata:  an array with dimensions [nxgrid, nygrid, number of columns]
        if rows are being clustered, or [nxgrid, nygrid, number of rows) if
        columns are being clustered.
@@ -359,7 +362,7 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
                     method='a', dist='e', transpose=False):
     """Calculate and return the distance between two clusters.
 
-    Arguments:
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
      - mask: nrows x ncolumns array of integers, showing which data are
        missing. If mask[i, j]==0, then data[i, j] is missing.
@@ -371,7 +374,6 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
        second cluster. If the cluster contains only one item, then
        index2 can also be written as a single integer.
      - dist: specifies the distance function to be used:
-
        - dist == 'e': Euclidean distance
        - dist == 'b': City Block distance
        - dist == 'c': Pearson correlation
@@ -380,22 +382,17 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
        - dist == 'x': absolute uncentered correlation
        - dist == 's': Spearman's rank correlation
        - dist == 'k': Kendall's tau
-
      - method: specifies how the distance between two clusters is defined:
-
        - method == 'a': the distance between the arithmetic means
-                        of the two clusters
-       - method == 'm': the distance between the medians of the two
-                        clusters
+       of the two clusters
+       - method == 'm': the distance between the medians of the two clusters
        - method == 's': the smallest pairwise distance between members
-                        of the two clusters
-       - method == 'x': the largest pairwise distance between members of
-                        the two clusters
-       - method == 'v': average of the pairwise distances between
-                        members of the clusters
-
+       of the two clusters
+       - method == 'x': the largest pairwise distance between members
+       of the two clusters
+       - method == 'v': average of the pairwise distances between members
+       of the two clusters
      - transpose:
-
        - if False: clusters of rows are considered;
        - if True: clusters of columns are considered.
     """
@@ -418,7 +415,7 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
     which cluster each item belongs. The centroid is defined as either
     the mean or the median over all items for each dimension.
 
-    Arguments:
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
      - mask: nrows x ncolumns array of integers, showing which data are
        missing. If mask[i, j]==0, then data[i, j] is missing.
@@ -454,20 +451,14 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
 
     This function returns the distance matrix calculated from the data.
 
-    Arguments:
-
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
-
      - mask: nrows x ncolumns array of integers, showing which data are
-       missing. If mask[i][j]==0, then data[i][j] is missing.
-
+       missing. If mask[i, j]==0, then data[i, j] is missing.
      - weight: the weights to be used when calculating distances.
-
      - transpose: if False: the distances between rows are calculated;
-                  if True:  the distances beteeen columns are calculated.
-
+                  if True:  the distances between columns are calculated.
      - dist: specifies the distance function to be used:
-
        - dist == 'e': Euclidean distance
        - dist == 'b': City Block distance
        - dist == 'c': Pearson correlation
@@ -506,7 +497,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
 def pca(data):
     """Perform principal component analysis.
 
-    Arguments:
+    Keyword arguments:
      - data: nrows x ncolumns array containing the data values.
 
     Return value:
@@ -535,43 +526,6 @@ def pca(data):
     return columnmean, coordinates, pc, eigenvalues
 
 
-def _savetree(jobname, tree, order, transpose):
-    # Save the hierarchical clustering solution given by the tree, following
-    # the specified order, in a file whose name is based on jobname.
-    if transpose == 0:
-        extension = ".gtr"
-        keyword = "GENE"
-    else:
-        extension = ".atr"
-        keyword = "ARRY"
-    index = tree.sort(order)
-    nnodes = len(tree)
-    with open(jobname + extension, "w") as outputfile:
-        nodeID = [''] * nnodes
-        nodedist = numpy.array([node.distance for node in tree])
-        for nodeindex in range(nnodes):
-            min1 = tree[nodeindex].left
-            min2 = tree[nodeindex].right
-            nodeID[nodeindex] = "NODE%dX" % (nodeindex + 1)
-            outputfile.write(nodeID[nodeindex])
-            outputfile.write("\t")
-            if min1 < 0:
-                index1 = -min1 - 1
-                outputfile.write(nodeID[index1] + "\t")
-                nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
-            else:
-                outputfile.write("%s%dX\t" % (keyword, min1))
-            if min2 < 0:
-                index2 = -min2 - 1
-                outputfile.write(nodeID[index2] + "\t")
-                nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
-            else:
-                outputfile.write("%s%dX\t" % (keyword, min2))
-            outputfile.write(str(1.0 - nodedist[nodeindex]))
-            outputfile.write("\n")
-    return index
-
-
 class Record(object):
     """Store gene expression data.
 
@@ -580,25 +534,24 @@ class Record(object):
     Cluster/TreeView program.
 
     Attributes:
-     - data:     a matrix containing the gene expression data
-     - mask:     a matrix containing only 1's and 0's, denoting which values
+     - data: a matrix containing the gene expression data
+     - mask: a matrix containing only 1's and 0's, denoting which values
        are present (1) or missing (0). If all items of mask are
        one (no missing data), then mask is set to None.
-     - geneid:   a list containing a unique identifier for each gene
+     - geneid: a list containing a unique identifier for each gene
        (e.g., ORF name)
      - genename: a list containing an additional description for each gene
        (e.g., gene name)
-     - gweight:  the weight to be used for each gene when calculating the
+     - gweight: the weight to be used for each gene when calculating the
        distance
-     - gorder:   an array of real numbers indicating the preferred order of the
+     - gorder: an array of real numbers indicating the preferred order of the
        genes in the output file
-     - expid:    a list containing a unique identifier for each experimental
-       condition
-     - eweight:  the weight to be used for each experimental condition when
-       calculating the distance
-     - eorder:   an array of real numbers indication the preferred order in the
-       output file of the experimental conditions
-     - uniqid:   the string that was used instead of UNIQID in the input file.
+     - expid: a list containing a unique identifier for each sample.
+     - eweight: the weight to be used for each sample when calculating the
+       distance
+     - eorder: an array of real numbers indication the preferred order of the
+       samples in the output file
+     - uniqid: the string that was used instead of UNIQID in the input file.
 
     """
 
@@ -688,17 +641,16 @@ class Record(object):
         if self.gorder:
             self.gorder = numpy.array(self.gorder)
 
-    def treecluster(self, transpose=0, method='m', dist='e'):
+    def treecluster(self, transpose=False, method='m', dist='e'):
         """Apply hierarchical clustering and return a Tree object.
 
         The pairwise single, complete, centroid, and average linkage
         hierarchical clustering methods are available.
 
-        Arguments:
+        Keyword arguments:
          - transpose: if False: rows are clustered;
                       if True: columns are clustered.
-         - dist     : specifies the distance function to be used:
-
+         - dist: specifies the distance function to be used:
            - dist == 'e': Euclidean distance
            - dist == 'b': City Block distance
            - dist == 'c': Pearson correlation
@@ -707,9 +659,7 @@ class Record(object):
            - dist == 'x': absolute uncentered correlation
            - dist == 's': Spearman's rank correlation
            - dist == 'k': Kendall's tau
-
          - method: specifies which linkage method is used:
-
            - method == 's': Single pairwise linkage
            - method == 'm': Complete (maximum) pairwise linkage (default)
            - method == 'c': Centroid linkage
@@ -718,41 +668,37 @@ class Record(object):
         See the description of the Tree class for more information about
         the Tree object returned by this method.
         """
-        if transpose == 0:
-            weight = self.eweight
-        else:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return treecluster(self.data, self.mask, weight, transpose, method,
                            dist)
 
-    def kcluster(self, nclusters=2, transpose=0, npass=1, method='a', dist='e',
-                 initialid=None):
+    def kcluster(self, nclusters=2, transpose=False, npass=1,
+                 method='a', dist='e', initialid=None):
         """Apply k-means or k-median clustering.
 
         This method returns a tuple (clusterid, error, nfound).
 
-        Arguments:
+        Keyword arguments:
          - nclusters: number of clusters (the 'k' in k-means)
          - transpose: if False, genes (rows) are clustered;
                       if True, samples (columns) are clustered.
-         - npass    : number of times the k-means clustering algorithm is
+         - npass: number of times the k-means clustering algorithm is
            performed, each time with a different (random) initial condition.
-         - method   : specifies how the center of a cluster is found:
-
+         - method: specifies how the center of a cluster is found:
            - method == 'a': arithmetic mean
            - method == 'm': median
-
-         - dist     : specifies the distance function to be used:
-
-             - dist == 'e': Euclidean distance
-             - dist == 'b': City Block distance
-             - dist == 'c': Pearson correlation
-             - dist == 'a': absolute value of the correlation
-             - dist == 'u': uncentered correlation
-             - dist == 'x': absolute uncentered correlation
-             - dist == 's': Spearman's rank correlation
-             - dist == 'k': Kendall's tau
-
+         - dist: specifies the distance function to be used:
+           - dist == 'e': Euclidean distance
+           - dist == 'b': City Block distance
+           - dist == 'c': Pearson correlation
+           - dist == 'a': absolute value of the correlation
+           - dist == 'u': uncentered correlation
+           - dist == 'x': absolute uncentered correlation
+           - dist == 's': Spearman's rank correlation
+           - dist == 'k': Kendall's tau
          - initialid: the initial clustering from which the algorithm should
            start. If initialid is None, the routine carries out npass
            repetitions of the EM algorithm, each time starting from a different
@@ -766,33 +712,31 @@ class Record(object):
          - clusterid: array containing the number of the cluster to which each
            gene/sample was assigned in the best k-means clustering
            solution that was found in the npass runs;
-         - error:     the within-cluster sum of distances for the returned
+         - error: the within-cluster sum of distances for the returned
            k-means clustering solution;
-         - nfound:    the number of times this solution was found.
-
+         - nfound: the number of times this solution was found.
         """
-        if transpose == 0:
-            weight = self.eweight
-        else:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return kcluster(self.data, nclusters, self.mask, weight, transpose,
                         npass, method, dist, initialid)
 
-    def somcluster(self, transpose=0, nxgrid=2, nygrid=1, inittau=0.02,
+    def somcluster(self, transpose=False, nxgrid=2, nygrid=1, inittau=0.02,
                    niter=1, dist='e'):
         """Calculate a self-organizing map on a rectangular grid.
 
         The somcluster method returns a tuple (clusterid, celldata).
 
-        Arguments:
+        Keyword arguments:
          - transpose: if False, genes (rows) are clustered;
                       if True,  samples (columns) are clustered.
-         - nxgrid   : the horizontal dimension of the rectangular SOM map
-         - nygrid   : the vertical dimension of the rectangular SOM map
-         - inittau  : the initial value of tau (the neighborbood function)
-         - niter    : the number of iterations
-         - dist     : specifies the distance function to be used:
-
+         - nxgrid: the horizontal dimension of the rectangular SOM map
+         - nygrid: the vertical dimension of the rectangular SOM map
+         - inittau: the initial value of tau (the neighborbood function)
+         - niter: the number of iterations
+         - dist: specifies the distance function to be used:
            - dist == 'e': Euclidean distance
            - dist == 'b': City Block distance
            - dist == 'c': Pearson correlation
@@ -808,66 +752,63 @@ class Record(object):
            whether genes or samples are being clustered. Each row in
            the array contains the x and y coordinates of the cell in the
            rectangular SOM grid to which the gene or samples was assigned.
-         - celldata:  an array with dimensions (nxgrid, nygrid, number of
+         - celldata: an array with dimensions (nxgrid, nygrid, number of
            samples) if genes are being clustered, or (nxgrid, nygrid,
            number of genes) if samples are being clustered. Each item
            [ix, iy] of this array is a 1D vector containing the gene
            expression data for the centroid of the cluster in the SOM grid
            cell with coordinates [ix, iy].
-
         """
-        if transpose == 0:
-            weight = self.eweight
-        else:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return somcluster(self.data, self.mask, weight, transpose,
                           nxgrid, nygrid, inittau, niter, dist)
 
-    def clustercentroids(self, clusterid=None, method='a', transpose=0):
+    def clustercentroids(self, clusterid=None, method='a', transpose=False):
         """Calculate the cluster centroids and return a tuple (cdata, cmask).
 
         The centroid is defined as either the mean or the median over all
         items for each dimension.
 
-        Arguments:
-         - data     : nrows x ncolumns array containing the expression data
-         - mask     : nrows x ncolumns array of integers, showing which data
-           are missing. If mask[i][j]==0, then data[i][j] is missing.
+        Keyword arguments:
+         - data: nrows x ncolumns array containing the expression data
+         - mask: nrows x ncolumns array of integers, showing which data
+           are missing. If mask[i, j]==0, then data[i, j] is missing.
          - transpose: if False, gene (row) clusters are considered;
                       if True, sample (column) clusters are considered.
          - clusterid: array containing the cluster number for each gene or
            sample. The cluster number should be non-negative.
-         - method   : specifies how the centroid is calculated:
-
+         - method: specifies how the centroid is calculated:
            - method == 'a': arithmetic mean over each dimension. (default)
            - method == 'm': median over each dimension.
 
         Return values:
-         - cdata    : 2D array containing the cluster centroids. If transpose==0,
-           then the dimensions of cdata are nclusters x ncolumns. If
-           transpose==1, then the dimensions of cdata are nrows x nclusters.
-         - cmask    : 2D array of integers describing which items in cdata,
+         - cdata: 2D array containing the cluster centroids. If transpose
+           is False, then the dimensions of cdata are nclusters x ncolumns.
+           If transpose is True, then the dimensions of cdata are nrows x
+           nclusters.
+         - cmask: 2D array of integers describing which items in cdata,
            if any, are missing.
-
         """
         return clustercentroids(self.data, self.mask, clusterid, method,
                                 transpose)
 
     def clusterdistance(self, index1=0, index2=0, method='a', dist='e',
-                        transpose=0):
+                        transpose=False):
         """Calculate the distance between two clusters.
 
-        Arguments:
-         - index1   : 1D array identifying which genes/samples belong to the
+        Keyword arguments:
+         - index1: 1D array identifying which genes/samples belong to the
            first cluster. If the cluster contains only one gene, then
            index1 can also be written as a single integer.
-         - index2   : 1D array identifying which genes/samples belong to the
+         - index2: 1D array identifying which genes/samples belong to the
            second cluster. If the cluster contains only one gene, then
            index2 can also be written as a single integer.
          - transpose: if False, genes (rows) are clustered;
                       if True, samples (columns) are clustered.
-         - dist     : specifies the distance function to be used:
-
+         - dist: specifies the distance function to be used:
            - dist == 'e': Euclidean distance
            - dist == 'b': City Block distance
            - dist == 'c': Pearson correlation
@@ -876,40 +817,34 @@ class Record(object):
            - dist == 'x': absolute uncentered correlation
            - dist == 's': Spearman's rank correlation
            - dist == 'k': Kendall's tau
-
          - method: specifies how the distance between two clusters is defined:
-
            - method == 'a': the distance between the arithmetic means
-                            of the two clusters
+           of the two clusters
            - method == 'm': the distance between the medians of the
-                            two clusters
+           two clusters
            - method == 's': the smallest pairwise distance between members
-                            of the two clusters
+           of the two clusters
            - method == 'x': the largest pairwise distance between members
-                            of the two clusters
+           of the two clusters
            - method == 'v': average of the pairwise distances between members
-                            of the clusters
-
+           of the two clusters
          - transpose: if False: clusters of rows are considered;
                       if True: clusters of columns are considered.
-
         """
-        if transpose == 0:
-            weight = self.eweight
-        else:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return clusterdistance(self.data, self.mask, weight,
                                index1, index2, method, dist, transpose)
 
-    def distancematrix(self, transpose=0, dist='e'):
+    def distancematrix(self, transpose=False, dist='e'):
         """Calculate the distance matrix and return it as a list of arrays.
 
-        Arguments:
-
+        Keyword arguments:
          - transpose:
              if False: calculate the distances between genes (rows);
-             if True: calculate the distances beteeen samples (columns).
-
+             if True: calculate the distances between samples (columns).
          - dist: specifies the distance function to be used:
            - dist == 'e': Euclidean distance
            - dist == 'b': City Block distance
@@ -940,10 +875,10 @@ class Record(object):
             [4., 2., 6., 0.]
 
         """
-        if transpose == 0:
-            weight = self.eweight
-        else:
+        if transpose:
             weight = self.gweight
+        else:
+            weight = self.eweight
         return distancematrix(self.data, self.mask, weight, transpose, dist)
 
     def save(self, jobname, geneclusters=None, expclusters=None):
@@ -952,22 +887,21 @@ class Record(object):
         The saved files follow the convention for the Java TreeView program,
         which can therefore be used to view the clustering result.
 
-        Arguments:
-         - jobname:   The base name of the files to be saved. The filenames
+        Keyword arguments:
+         - jobname: The base name of the files to be saved. The filenames
            are jobname.cdt, jobname.gtr, and jobname.atr for hierarchical
            clustering, and jobname-K*.cdt, jobname-K*.kgg, jobname-K*.kag
            for k-means clustering results.
-         - geneclusters=None:  For hierarchical clustering results,
-           geneclusters is a Tree object as returned by the treecluster
-           method. For k-means clustering results, geneclusters is a vector
-           containing ngenes integers, describing to which cluster a given
-           gene belongs. This vector can be calculated by kcluster.
-         - expclusters=None:  For hierarchical clustering results, expclusters
+         - geneclusters: For hierarchical clustering results, geneclusters
+           is a Tree object as returned by the treecluster method. For k-means
+           clustering results, geneclusters is a vector containing ngenes
+           integers, describing to which cluster a given gene belongs. This
+           vector can be calculated by kcluster.
+         - expclusters: For hierarchical clustering results, expclusters
            is a Tree object as returned by the treecluster method. For k-means
            clustering results, expclusters is a vector containing nexps
-           integers, describing to which cluster a given experimental
-           condition belongs. This vector can be calculated by kcluster.
-
+           integers, describing to which cluster a given sample belongs. This
+           vector can be calculated by kcluster.
         """
         (ngenes, nexps) = numpy.shape(self.data)
         if self.gorder is None:
@@ -989,41 +923,76 @@ class Record(object):
         postfix = ""
         if isinstance(geneclusters, Tree):
             # This is a hierarchical clustering result.
-            geneindex = _savetree(jobname, geneclusters, gorder, 0)
+            geneindex = self._savetree(jobname, geneclusters, gorder, False)
             gid = 1
         elif geneclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
             k = max(geneclusters) + 1
             kggfilename = "%s_K_G%d.kgg" % (jobname, k)
-            geneindex = self._savekmeans(kggfilename, geneclusters, gorder, 0)
+            geneindex = self._savekmeans(kggfilename, geneclusters, gorder, False)
             postfix = "_G%d" % k
         else:
             geneindex = numpy.argsort(gorder)
         if isinstance(expclusters, Tree):
             # This is a hierarchical clustering result.
-            expindex = _savetree(jobname, expclusters, eorder, 1)
+            expindex = self._savetree(jobname, expclusters, eorder, True)
             aid = 1
         elif expclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
             k = max(expclusters) + 1
             kagfilename = "%s_K_A%d.kag" % (jobname, k)
-            expindex = self._savekmeans(kagfilename, expclusters, eorder, 1)
+            expindex = self._savekmeans(kagfilename, expclusters, eorder, True)
             postfix += "_A%d" % k
         else:
             expindex = numpy.argsort(eorder)
         filename = filename + postfix
         self._savedata(filename, gid, aid, geneindex, expindex)
 
-    def _savekmeans(self, filename, clusterids, order, transpose):
-        # Save a k-means clustering solution
-        if transpose == 0:
-            label = self.uniqid
-            names = self.geneid
+    def _savetree(self, jobname, tree, order, transpose):
+        """Save the hierarchical clustering solution (PRIVATE)."""
+        if transpose:
+            extension = ".atr"
+            keyword = "ARRY"
         else:
+            extension = ".gtr"
+            keyword = "GENE"
+        index = tree.sort(order)
+        nnodes = len(tree)
+        with open(jobname + extension, "w") as outputfile:
+            nodeID = [''] * nnodes
+            nodedist = numpy.array([node.distance for node in tree[:]])
+            for nodeindex in range(nnodes):
+                min1 = tree[nodeindex].left
+                min2 = tree[nodeindex].right
+                nodeID[nodeindex] = "NODE%dX" % (nodeindex + 1)
+                outputfile.write(nodeID[nodeindex])
+                outputfile.write("\t")
+                if min1 < 0:
+                    index1 = -min1 - 1
+                    outputfile.write(nodeID[index1] + "\t")
+                    nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
+                else:
+                    outputfile.write("%s%dX\t" % (keyword, min1))
+                if min2 < 0:
+                    index2 = -min2 - 1
+                    outputfile.write(nodeID[index2] + "\t")
+                    nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
+                else:
+                    outputfile.write("%s%dX\t" % (keyword, min2))
+                outputfile.write(str(1.0 - nodedist[nodeindex]))
+                outputfile.write("\n")
+        return index
+
+    def _savekmeans(self, filename, clusterids, order, transpose):
+        """Save the k-means clustering solution (PRIVATE)."""
+        if transpose:
             label = "ARRAY"
             names = self.expid
+        else:
+            label = self.uniqid
+            names = self.geneid
         with open(filename, "w") as outputfile:
             outputfile.write(label + "\tGROUP\n")
             index = numpy.argsort(order)
@@ -1041,7 +1010,7 @@ class Record(object):
         return sortedindex
 
     def _savedata(self, jobname, gid, aid, geneindex, expindex):
-        # Save the clustered data.
+        """Save the clustered data (PRIVATE)."""
         if self.genename is None:
             genename = self.geneid
         else:
@@ -1103,9 +1072,9 @@ def read(handle):
     """
     return Record(handle)
 
+
 # Everything below is private
 #
-
 
 def __check_data(data):
     if isinstance(data, numpy.ndarray):

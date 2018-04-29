@@ -244,17 +244,17 @@ makedatamask(int nrows, int ncols, double*** pdata, int*** pmask)
   double** data;
   int** mask;
   data = malloc(nrows*sizeof(double*));
-  if(!data) return 0;
+  if (!data) return 0;
   mask = malloc(nrows*sizeof(int*));
-  if(!mask)
+  if (!mask)
   { free(data);
     return 0;
   }
   for (i = 0; i < nrows; i++)
   { data[i] = malloc(ncols*sizeof(double));
-    if(!data[i]) break;
+    if (!data[i]) break;
     mask[i] = malloc(ncols*sizeof(int));
-    if(!mask[i])
+    if (!mask[i])
     { free(data[i]);
       break;
     }
@@ -508,7 +508,7 @@ static int svd(int m, int n, double** u, double w[], double** vt)
     for (k = n-1; k >= 0; k--)
     { k1 = k-1;
       its = 0;
-      while(1)
+      while (1)
       /* test for splitting */
       { for (l = k; l >= 0; l--)
         { l1 = l-1;
@@ -709,7 +709,7 @@ static int svd(int m, int n, double** u, double w[], double** vt)
     for (k = m-1; k >= 0; k--)
     { k1 = k-1;
       its = 0;
-      while(1)
+      while (1)
       /* test for splitting */
       { for (l = k; l >= 0; l--)
         { l1 = l-1;
@@ -1559,9 +1559,9 @@ Otherwise, the distance between two columns in the matrix is calculated.
   double* tdata1;
   double* tdata2;
   tdata1 = malloc(n*sizeof(double));
-  if(!tdata1) return 0.0; /* Memory allocation error */
+  if (!tdata1) return 0.0; /* Memory allocation error */
   tdata2 = malloc(n*sizeof(double));
-  if(!tdata2) /* Memory allocation error */
+  if (!tdata2) /* Memory allocation error */
   { free(tdata1);
     return 0.0;
   }
@@ -1590,13 +1590,13 @@ Otherwise, the distance between two columns in the matrix is calculated.
   }
   rank1 = getrank(m, tdata1, weight);
   free(tdata1);
-  if(!rank1)
+  if (!rank1)
   { free(tdata2);
     return 0.0; /* Memory allocation error */
   }
   rank2 = getrank(m, tdata2, weight);
   free(tdata2);
-  if(!rank2) /* Memory allocation error */
+  if (!rank2) /* Memory allocation error */
   { free(rank1);
     return 0.0;
   }
@@ -1815,9 +1815,9 @@ A double-precison number between 0.0 and 1.0.
     if (s1 < 0) s1+=m1;
     k = s2/52774;
     s2 = 40692*(s2-k*52774)-k*3791;
-    if(s2 < 0) s2+=m2;
+    if (s2 < 0) s2+=m2;
     z = s1-s2;
-    if(z < 1) z+=(m1-1);
+    if (z < 1) z+=(m1-1);
   } while (z==m1); /* To avoid returning 1.0 */
 
   return z*scale;
@@ -1864,7 +1864,7 @@ An integer drawn from a binomial distribution with parameters (p, n).
     double r = exp(n*log(q)); /* pow() causes a crash on AIX */
     int x = 0;
     double u = uniform();
-    while(1)
+    while (1)
     { if (u < r) return x;
       u-=r;
       x++;
@@ -2418,7 +2418,7 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
     for (i = 0; i < nelements; i++) counts[tclusterid[i]]++;
 
     /* Start the loop */
-    while(1)
+    while (1)
     { double previous = total;
       total = 0.0;
 
@@ -2523,7 +2523,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
     for (i = 0; i < nelements; i++) counts[tclusterid[i]]++;
 
     /* Start the loop */
-    while(1)
+    while (1)
     { double previous = total;
       total = 0.0;
 
@@ -2705,7 +2705,7 @@ number of clusters is larger than the number of elements being clustered,
   /* This will contain the number of elements in each cluster, which is
    * needed to check for empty clusters. */
   counts = malloc(nclusters*sizeof(int));
-  if(!counts) return;
+  if (!counts) return;
 
   /* Find out if the user specified an initial clustering */
   if (npass<=1) tclusterid = clusterid;
@@ -2727,9 +2727,9 @@ number of clusters is larger than the number of elements being clustered,
   /* Allocate space to store the centroid data */
   if (transpose==0) ok = makedatamask(nclusters, ndata, &cdata, &cmask);
   else ok = makedatamask(ndata, nclusters, &cdata, &cmask);
-  if(!ok)
+  if (!ok)
   { free(counts);
-    if(npass>1)
+    if (npass>1)
     { free(tclusterid);
       free(mapping);
       return;
@@ -2738,7 +2738,7 @@ number of clusters is larger than the number of elements being clustered,
 
   if (method=='m')
   { double* cache = malloc(nelements*sizeof(double));
-    if(cache)
+    if (cache)
     { *ifound = kmedians(nclusters, nrows, ncolumns, data, mask, weight,
                          transpose, npass, dist, cdata, cmask, clusterid, error,
                          tclusterid, counts, mapping, cache);
@@ -2840,13 +2840,13 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
   if (saved==NULL) return;
 
   centroids = malloc(nclusters*sizeof(int));
-  if(!centroids)
+  if (!centroids)
   { free(saved);
     return;
   }
 
   errors = malloc(nclusters*sizeof(double));
-  if(!errors)
+  if (!errors)
   { free(saved);
     free(centroids);
     return;
@@ -2856,7 +2856,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
   if (npass<=1) tclusterid = clusterid;
   else
   { tclusterid = malloc(nelements*sizeof(int));
-    if(!tclusterid)
+    if (!tclusterid)
     { free(saved);
       free(centroids);
       free(errors);
@@ -2872,7 +2872,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
     int period = 10;
 
     if (npass!=0) randomassign(nclusters, nelements, tclusterid);
-    while(1)
+    while (1)
     { double previous = total;
       total = 0.0;
 
@@ -3305,13 +3305,13 @@ If a memory error occurs, pclcluster returns NULL.
   double** newdata;
   int** newmask;
   int* distid = malloc(nelements*sizeof(int));
-  if(!distid) return NULL;
+  if (!distid) return NULL;
   result = malloc(nnodes*sizeof(Node));
-  if(!result)
+  if (!result)
   { free(distid);
     return NULL;
   }
-  if(!makedatamask(nelements, ndata, &newdata, &newmask))
+  if (!makedatamask(nelements, ndata, &newdata, &newmask))
   { free(result);
     free(distid);
     return NULL;
@@ -3491,20 +3491,20 @@ If a memory error occurs, pslcluster returns NULL.
   int* index;
   Node* result;
   temp = malloc(nnodes*sizeof(double));
-  if(!temp) return NULL;
+  if (!temp) return NULL;
   index = malloc(nelements*sizeof(int));
-  if(!index)
+  if (!index)
   { free(temp);
     return NULL;
   }
   vector = malloc(nnodes*sizeof(int));
-  if(!vector)
+  if (!vector)
   { free(index);
     free(temp);
     return NULL;
   }
   result = malloc(nelements*sizeof(Node));
-  if(!result)
+  if (!result)
   { free(vector);
     free(index);
     free(temp);
@@ -3513,7 +3513,7 @@ If a memory error occurs, pslcluster returns NULL.
 
   for (i = 0; i < nnodes; i++) vector[i] = i;
 
-  if(distmatrix)
+  if (distmatrix)
   { for (i = 0; i < nrows; i++)
     { result[i].distance = DBL_MAX;
       for (j = 0; j < i; j++) temp[j] = distmatrix[i][j];
@@ -3615,7 +3615,7 @@ If a memory error occurs, pmlcluster returns NULL.
   Node* result;
 
   clusterid = malloc(nelements*sizeof(int));
-  if(!clusterid) return NULL;
+  if (!clusterid) return NULL;
   result = malloc((nelements-1)*sizeof(Node));
   if (!result)
   { free(clusterid);
@@ -3691,9 +3691,9 @@ If a memory error occurs, palcluster returns NULL.
   Node* result;
 
   clusterid = malloc(nelements*sizeof(int));
-  if(!clusterid) return NULL;
+  if (!clusterid) return NULL;
   number = malloc(nelements*sizeof(int));
-  if(!number)
+  if (!number)
   { free(clusterid);
     return NULL;
   }
@@ -3853,12 +3853,12 @@ If a memory error occurs, treecluster returns NULL.
     /* Set up the ragged array */
     int i;
     distmatrix = malloc(nelements*sizeof(double*));
-    if(distmatrix==NULL) return NULL; /* Not enough memory available */
+    if (distmatrix==NULL) return NULL; /* Not enough memory available */
     distmatrix[0] = NULL;
     for (i = 1; i < nelements; i++)
     { distmatrix[i] = malloc(i*sizeof(double));
       if (distmatrix[i]==NULL) /* Not enough memory available */
-      { while (--i >= 0) free(distmatrix[i]);
+      { while (--i > 0) free(distmatrix[i]);
         return NULL;
       }
     }
@@ -3884,7 +3884,7 @@ If a memory error occurs, treecluster returns NULL.
   }
 
   /* Deallocate space for distance matrix, if it was allocated by treecluster */
-  if(ldistmatrix)
+  if (ldistmatrix)
   { int i;
     for (i = 1; i < nelements; i++) free(distmatrix[i]);
     free(distmatrix);
@@ -4010,13 +4010,13 @@ void somworker(int nrows, int ncolumns, double** data, int** mask,
 { const int nelements = (transpose==0) ? nrows : ncolumns;
   const int ndata = (transpose==0) ? ncolumns : nrows;
   int i, j;
-  double* stddata = calloc(nelements,sizeof(double));
   int** dummymask;
   int ix, iy;
   int* index;
   int iter;
   /* Maximum radius in which nodes are adjusted */
   double maxradius = sqrt(nxgrid*nxgrid+nygrid*nygrid);
+  double* stddata = calloc(nelements,sizeof(double));
 
   /* Set the metric function as indicated by dist */
   double (*metric)
@@ -4261,7 +4261,7 @@ void somassign(int nrows, int ncolumns, double** data, int** mask,
       for (ix = 0; ix < nxgrid; ix++)
       { for (iy = 0; iy < nygrid; iy++)
         { double distance;
-          for(j = 0; j < ndata; j++)
+          for (j = 0; j < ndata; j++)
             celldatavector[j] = &(celldata[ix][iy][j]);
           distance = metric(ndata,data,celldatavector,
             mask,dummymask,weights,i,0,transpose);
@@ -4384,7 +4384,7 @@ somcluster.
   if (clusterid)
     somassign(nrows, ncolumns, data, mask, weight, transpose,
       nxgrid, nygrid, celldata, dist, clusterid);
-  if(lcelldata==0)
+  if (lcelldata==0)
   { for (i = 0; i < nxgrid; i++)
       for (j = 0; j < nygrid; j++)
         free(celldata[i][j]);
