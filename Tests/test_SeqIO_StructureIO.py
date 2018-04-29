@@ -23,8 +23,19 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 def SeqresTestGenerator(extension, parser):
-    """Parameterised superclass for tests reading sequences from the sequence
-    records of structure files."""
+    """
+    Test factory for tests reading SEQRES (or similar) records.
+
+    This is a factory returning a parameterised superclass for tests reading
+    sequences from the sequence records of structure files.
+
+    Arguments:
+        extension:
+            The extension of the files to read from the ``PDB`` directory (e.g.
+            ``pdb`` or ``cif``).
+        parser:
+            The name of the SeqIO parser to use (e.g. ``pdb-atom``).
+    """
 
     class SeqresTests(unittest.TestCase):
         """Use "parser" to parse sequence records from a structure file.
@@ -67,17 +78,22 @@ def SeqresTestGenerator(extension, parser):
             self.assertEqual(len(chains), 0)
     return SeqresTests
 
+
 class TestPdbSeqres(SeqresTestGenerator("pdb", "pdb-seqres")):
     """Test pdb-seqres SeqIO driver."""
     pass
+
 
 class TestCifSeqres(SeqresTestGenerator("cif", "cif-seqres")):
     """Test cif-seqres SeqIO driver."""
     pass
 
+
 def AtomTestGenerator(extension, parser):
-    """Parameterised superclass for tests that read sequences from atoms in
-    structure files.
+    """
+    Test factory for tests reading ATOM (or similar) records.
+
+    See SeqresTestGenerator for more information.
     """
 
     class AtomTests(unittest.TestCase):
@@ -147,11 +163,12 @@ class TestPdbAtom(AtomTestGenerator('pdb', 'pdb-atom')):
         self.assertEqual(chain.annotations['chain'], 'A')
         self.assertEqual(str(chain.seq), 'E')
 
+
 class TestCifAtom(AtomTestGenerator('cif', 'cif-atom')):
     """Test cif-atom SeqIO driver."""
 
     def test_atom_read_noheader(self):
-        """ Read a single-chain CIF without a header by ATOM entries."""
+        """Read a single-chain CIF without a header by ATOM entries."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             warnings.simplefilter("ignore", BiopythonWarning)
@@ -161,7 +178,7 @@ class TestCifAtom(AtomTestGenerator('cif', 'cif-atom')):
         self.assertEqual(str(chain.seq),
                          'MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTIL'
                          'KALGPGATLEEMMTACQG')
-    pass
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
