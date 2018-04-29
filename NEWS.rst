@@ -22,10 +22,15 @@ In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
+The Entrez module now allows users to set a custom directory location for DTD
+and XSD files. This change allows Entrez to be used in code deployments
+such as AWS Lambda, which restricts write access to specific directories.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Blaise Li
+- Chad Parmet
 - Chris Rands
 - Peter Cock
 - Wibowo 'Bow' Arindrarto
