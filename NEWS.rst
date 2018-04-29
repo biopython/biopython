@@ -41,6 +41,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Spencer Bliven
+- Stefans Mezulis
 - Wibowo 'Bow' Arindrarto
 
 
