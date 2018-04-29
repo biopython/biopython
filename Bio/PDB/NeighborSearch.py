@@ -71,9 +71,6 @@ class KDTree(_kdtrees.KDTree):
         index corresponding to the index of the point, and an attribute
         radius with the radius between them.
         """
-        center = numpy.require(center, dtype='d', requirements='C')
-        if center.shape != (3,):
-            raise Exception("Expected a 3-dimensional NumPy array")
         points = self.search_center_radius(center, radius)
         return points
 
@@ -103,7 +100,7 @@ class NeighborSearch(object):
      2. To find all atoms/residues/chains/models/structures that are within
         a fixed radius of each other.
 
-    NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
+    NeighborSearch makes use of the KDTree class implemented in C, so it's fast.
     """
 
     def __init__(self, atom_list, bucket_size=10):
@@ -164,6 +161,9 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
+        center = numpy.require(center, dtype='d', requirements='C')
+        if center.shape != (3,):
+            raise Exception("Expected a 3-dimensional NumPy array")
         points = self.kdt.search(center, radius)
         atom_list = [self.atom_list[point.index] for point in points]
         if level == "A":
