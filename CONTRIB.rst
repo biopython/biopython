@@ -58,6 +58,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
 - Cecilia Alsmark <Cecilia.Alsmark at domain ebc.uu.se>
+- Chad Parmet <https://github.com/cparmet>
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
