@@ -152,8 +152,6 @@ class KDTreeTest(unittest.TestCase):
                 coords = random((nr_points, 3))
                 kdt = kdtrees.KDTree(coords, bucket_size)
                 neighbors1 = kdt.neighbor_search(radius)
-                key = lambda neighbor: (neighbor.index1, neighbor.index2)
-                neighbors1.sort(key=key)
                 # manual search
                 neighbors2 = []
                 indices = argsort(coords[:,0])
@@ -175,6 +173,8 @@ class KDTreeTest(unittest.TestCase):
                             neighbor = kdtrees.Neighbor(i1, i2, r)
                             neighbors2.append(neighbor)
                 self.assertEqual(len(neighbors1), len(neighbors2))
+                key = lambda neighbor: (neighbor.index1, neighbor.index2)
+                neighbors1.sort(key=key)
                 neighbors2.sort(key=key)
                 for neighbor1, neighbor2 in zip(neighbors1, neighbors2):
                     self.assertEqual(neighbor1.index1, neighbor2.index1)

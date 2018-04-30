@@ -497,10 +497,19 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
     {
         /* we found a neighbor pair! */
         Neighbor* neighbor;
+        long int index1, index2;
         neighbor = (Neighbor*) NeighborType.tp_alloc(&NeighborType, 0);
         if (!neighbor) return 0;
-        neighbor->index1 = p1->_index;
-        neighbor->index2 = p2->_index;
+        index1 = p1->_index;
+        index2 = p2->_index;
+        if (index1 < index2) {
+            neighbor->index1 = index1;
+            neighbor->index2 = index2;
+        }
+        else {
+            neighbor->index1 = index2;
+            neighbor->index2 = index1;
+        }
         neighbor->radius = sqrt(r); /* note sqrt */
         ok = PyList_Append(neighbors, (PyObject*)neighbor);
         Py_DECREF(neighbor);
