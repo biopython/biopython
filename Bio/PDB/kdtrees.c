@@ -446,12 +446,13 @@ typedef struct {
     DataPoint* _data_point_list;
     int _data_point_list_size;
     Node *_root;
+    int _bucket_size;
+    /* The following are temporary variables used during a search only. */
     double _radius;
     double _radius_sq;
     double _neighbor_radius;
     double _neighbor_radius_sq;
     double _center_coord[DIM];
-    int _bucket_size;
 } KDTree;
 
 static double KDTree_dist(double *coord1, double *coord2)
