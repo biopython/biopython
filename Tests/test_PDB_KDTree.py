@@ -77,7 +77,6 @@ class KDTreeTest(unittest.TestCase):
             kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)
         self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
 
-
     def test_KDTree_point_search(self):
         """Test searching all points within a certain radius of center.
 
@@ -86,7 +85,7 @@ class KDTreeTest(unittest.TestCase):
         """
         bucket_size = self.bucket_size
         nr_points = self.nr_points
-        for radius in (self.radius, 100*self.radius):
+        for radius in (self.radius, 100 * self.radius):
             for i in range(0, 10):
                 # kd tree search
                 coords = random((nr_points, 3))
@@ -108,7 +107,6 @@ class KDTreeTest(unittest.TestCase):
                 for point1, point2 in zip(points1, points2):
                     self.assertEqual(point1.index, point2.index)
                     self.assertAlmostEqual(point1.radius, point2.radius)
-
 
     def test_KDTree_neighbor_search_simple(self):
         """Test all fixed radius neighbor search.
@@ -137,7 +135,6 @@ class KDTreeTest(unittest.TestCase):
                 self.assertEqual(neighbor1.index2, neighbor2.index2)
                 self.assertAlmostEqual(neighbor1.radius, neighbor2.radius)
 
-
     def test_KDTree_neighbor_search_manual(self):
         """Test all fixed radius neighbor search.
 
@@ -145,8 +142,8 @@ class KDTreeTest(unittest.TestCase):
         module, and compare the results to those of a manual search.
         """
         bucket_size = self.bucket_size
-        nr_points = self.nr_points // 10 # use fewer points to speed up the test
-        for radius in (self.radius, 3*self.radius):
+        nr_points = self.nr_points // 10  # fewer points to speed up the test
+        for radius in (self.radius, 3 * self.radius):
             for i in range(0, 5):
                 # KD tree search
                 coords = random((nr_points, 3))
@@ -154,11 +151,11 @@ class KDTreeTest(unittest.TestCase):
                 neighbors1 = kdt.neighbor_search(radius)
                 # manual search
                 neighbors2 = []
-                indices = argsort(coords[:,0])
+                indices = argsort(coords[:, 0])
                 for j1 in range(nr_points):
                     index1 = indices[j1]
                     p1 = coords[index1]
-                    for j2 in range(j1+1, nr_points):
+                    for j2 in range(j1 + 1, nr_points):
                         index2 = indices[j2]
                         p2 = coords[index2]
                         if p2[0] - p1[0] > radius:
