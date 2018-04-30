@@ -11,6 +11,7 @@
 """Unit tests for those parts of the Bio.PDB module using Bio.KDTree."""
 
 import unittest
+from collections import namedtuple
 
 try:
     from numpy import array, dot, sqrt
@@ -114,25 +115,31 @@ class KDTreeTest(unittest.TestCase):
         Test neighbor search using the KD tree C module,
         and compare the results to a manual search.
         """
+        Point = namedtuple("Point", ['index', 'radius'])
         bucket_size = self.bucket_size
         nr_points = self.nr_points
         radius = self.radius
         for i in range(0, 10):
             # kd tree search
             coords = random((nr_points, 3))
-            center = coords[0]
+            center = random(3)
             kdt = kdtrees.KDTree(coords, bucket_size)
-            points = kdt.search(center, radius)
-            l1 = len(points)
+            points1 = kdt.search(center, radius)
+            points1.sort(key=lambda point: point.index)
             # manual search
-            l2 = 0
+            points2 = []
             for i in range(0, nr_points):
                 p = coords[i]
                 v = p - center
-                if sqrt(dot(v, v)) <= radius:
-                    l2 += 1
+                r = sqrt(dot(v, v))
+                if r <= radius:
+                    point2 = Point(i, r)
+                    points2.append(point2)
             # compare results
-            self.assertEqual(l1, l2)
+            self.assertEqual(len(points1), len(points2))
+            for point1, point2 in zip(points1, points2):
+                self.assertEqual(point1.index, point2.index)
+                self.assertAlmostEqual(point1.radius, point2.radius)
 
 
     def test_all_search(self):
