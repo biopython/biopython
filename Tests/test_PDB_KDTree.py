@@ -21,13 +21,13 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB.")
 
 try:
-    from Bio.PDB import _kdtrees
+    from Bio.PDB import kdtrees
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
-        "C module Bio.PDB._kdtrees not compiled")
+        "C module Bio.PDB.kdtrees not compiled")
 
-from Bio.PDB.NeighborSearch import NeighborSearch, KDTree
+from Bio.PDB.NeighborSearch import NeighborSearch
 
 
 class NeighborTest(unittest.TestCase):
@@ -71,10 +71,10 @@ class KDTreeTest(unittest.TestCase):
         radius = self.radius
         coords = random((nr_points, 3)) * 100000000000000
         with self.assertRaises(Exception) as context:
-            kdt = KDTree(coords, bucket_size)
+            kdt = kdtrees.KDTree(coords, bucket_size)
         self.assertTrue("coordinate values should lie between -1e6 and 1e6" in str(context.exception))
         with self.assertRaises(Exception) as context:
-            kdt = KDTree(random((nr_points, 3 - 2)), bucket_size)
+            kdt = kdtrees.KDTree(random((nr_points, 3 - 2)), bucket_size)
         self.assertTrue("expected a Nx3 numpy array" in str(context.exception))
 
 
@@ -90,7 +90,7 @@ class KDTreeTest(unittest.TestCase):
         for i in range(0, 10):
             # KD tree search
             coords = random((nr_points, 3))
-            kdt = KDTree(coords, bucket_size)
+            kdt = kdtrees.KDTree(coords, bucket_size)
             neighbors = kdt.neighbor_search(radius)
             r = [neighbor.radius for neighbor in neighbors]
             if r is None:
@@ -121,7 +121,7 @@ class KDTreeTest(unittest.TestCase):
             # kd tree search
             coords = random((nr_points, 3))
             center = coords[0]
-            kdt = KDTree(coords, bucket_size)
+            kdt = kdtrees.KDTree(coords, bucket_size)
             points = kdt.search(center, radius)
             l1 = len(points)
             # manual search
@@ -147,7 +147,7 @@ class KDTreeTest(unittest.TestCase):
         for i in range(0, 5):
             # KD tree search
             coords = random((nr_points // 10, 3))
-            kdt = KDTree(coords, bucket_size)
+            kdt = kdtrees.KDTree(coords, bucket_size)
             neighbors = kdt.neighbor_search(query_radius)
             l1 = len(neighbors)
             # find all points
@@ -166,7 +166,7 @@ class KDTreeTest(unittest.TestCase):
         for i in range(0, 5):
             # KD tree search
             coords = random((nr_points, 3))
-            kdt = KDTree(coords, bucket_size)
+            kdt = kdtrees.KDTree(coords, bucket_size)
             points = kdt.search(coords[0], radius * 100)
             # manual search
             l1 = 0
