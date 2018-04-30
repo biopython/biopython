@@ -711,7 +711,7 @@ static int KDTree_neighbor_search_pairs(KDTree* self, Node *down, Region *down_r
     return ok;
 }
 
-static int KDTree__neighbor_search(KDTree* self, Node *node, Region *region, int depth, PyObject* neighbors)
+static int KDTree_neighbor_search(KDTree* self, Node *node, Region *region, int depth, PyObject* neighbors)
 {
     Node *left, *right;
     Region *left_region = NULL;
@@ -764,7 +764,7 @@ static int KDTree__neighbor_search(KDTree* self, Node *node, Region *region, int
         if (!Node_is_leaf(left))
         {
             /* search for pairs in this half plane */
-            ok = KDTree__neighbor_search(self, left, left_region, depth+1, neighbors);
+            ok = KDTree_neighbor_search(self, left, left_region, depth+1, neighbors);
         }
         else
         {
@@ -777,7 +777,7 @@ static int KDTree__neighbor_search(KDTree* self, Node *node, Region *region, int
         if (!Node_is_leaf(right))
         {
             /* search for pairs in this half plane */
-            ok = KDTree__neighbor_search(self, right, right_region, depth+1, neighbors);
+            ok = KDTree_neighbor_search(self, right, right_region, depth+1, neighbors);
         }
         else
         {
@@ -1104,8 +1104,20 @@ KDTree_new(PyTypeObject* type, PyObject* args, PyObject* kwds)
     return (PyObject*)self;
 }
 
+PyDoc_STRVAR(PyKDTree_search__doc__,
+"Search all points within the given radius of center.\n\
+\n\
+Arguments:\n\
+ - center: NumPy array of size 3.\n\
+ - radius: float>0\n\
+\n\
+Returns a list of Point objects; each neighbor has an attribute\n\
+index corresponding to the index of the point, and an attribute\n\
+radius with the radius between them.");
+
+
 static PyObject*
-KDTree_search_center_radius(KDTree* self, PyObject* args)
+PyKDTree_search(KDTree* self, PyObject* args)
 {
     PyObject *obj;
     double radius;
@@ -1118,7 +1130,7 @@ KDTree_search_center_radius(KDTree* self, PyObject* args)
     Region* query_region = NULL;
     PyObject* points = NULL;
 
-    if (!PyArg_ParseTuple(args, "Od:KDTree_search_center_radius", &obj, &radius))
+    if (!PyArg_ParseTuple(args, "Od:search", &obj, &radius))
         return NULL;
 
     if (radius <= 0)
@@ -1180,14 +1192,27 @@ exit:
     return points;
 }
 
+PyDoc_STRVAR(PyKDTree_neighbor_search__doc__,
+"All fixed neighbor search.\n\
+\n\
+Find all point pairs that are within radius of each other.\n\
+\n\
+Arguments:\n\
+ - radius: float (>0)\n\
+\n\
+Returns a list of Neighbor objects; each neighbor has attributes\n\
+index1, index2 corresponding to the indices of the point pair,\n\
+and an attribute radius with the radius between them.");
+
+
 static PyObject*
-KDTree_neighbor_search(KDTree* self, PyObject* args)
+PyKDTree_neighbor_search(KDTree* self, PyObject* args)
 {
     int ok = 0;
     double radius;
     PyObject* neighbors;
 
-    if (!PyArg_ParseTuple(args, "d:KDTree_neighbor_search", &radius))
+    if (!PyArg_ParseTuple(args, "d:neighbor_search", &radius))
         return NULL;
 
     if (radius <= 0) {
@@ -1211,7 +1236,7 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
         /* start with [-INF, INF] */
         Region *region = Region_create(NULL, NULL);
         if (region) {
-            ok = KDTree__neighbor_search(self, self->_root, region, 0, neighbors);
+            ok = KDTree_neighbor_search(self, self->_root, region, 0, neighbors);
             Region_destroy(region);
         }
     }
@@ -1222,15 +1247,29 @@ KDTree_neighbor_search(KDTree* self, PyObject* args)
     return neighbors;
 }
 
+PyDoc_STRVAR(PyKDTree_neighbor_simple_search__doc__,
+"All fixed neighbor search (for testing purposes only).\n\
+\n\
+Find all point pairs that are within radius of each other, using a simple\n\
+but slow algorithm. This function is provided to be able to verify the\n\
+correctness of fast algorithm using the KD Tree for testing purposes.\n\
+\n\
+Arguments:\n\
+ - radius: float (>0)\n\
+\n\
+Returns a list of Neighbor objects; each neighbor has attributes\n\
+index1, index2 corresponding to the indices of the point pair,\n\
+and an attribute radius with the radius between them.");
+
 static PyObject*
-KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
+PyKDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 {
     int ok;
     double radius;
     PyObject* neighbors;
     Py_ssize_t i;
 
-    if (!PyArg_ParseTuple(args, "d:KDTree_neighbor_simple_search", &radius))
+    if (!PyArg_ParseTuple(args, "d:neighbor_simple_search", &radius))
         return NULL;
 
     if (radius <= 0) {
@@ -1272,13 +1311,54 @@ KDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 }
 
 static PyMethodDef KDTree_methods[] = {
-    {"search_center_radius", (PyCFunction)KDTree_search_center_radius, METH_VARARGS, NULL},
-    {"neighbor_search", (PyCFunction)KDTree_neighbor_search, METH_VARARGS, NULL},
-    {"neighbor_simple_search", (PyCFunction)KDTree_neighbor_simple_search, METH_VARARGS, NULL},
+    {"search",
+     (PyCFunction)PyKDTree_search,
+      METH_VARARGS,
+      PyKDTree_search__doc__},
+    {"neighbor_search",
+     (PyCFunction)PyKDTree_neighbor_search,
+      METH_VARARGS,
+      PyKDTree_neighbor_search__doc__},
+    {"neighbor_simple_search",
+     (PyCFunction)PyKDTree_neighbor_simple_search,
+      METH_VARARGS,
+      PyKDTree_neighbor_simple_search__doc__},
     {NULL}  /* Sentinel */
 };
 
-static char KDTree_doc[] = "KDTree implemented in C.\n";
+PyDoc_STRVAR(KDTree_doc,
+"KDTree(coordinates, bucket_size=1) -> new KDTree\n\
+\n\
+Create a new KDTree object for the given coordinates and bucket size,\n\
+where coordinates is an Nx3 NumPy array (N being the number of points).\n\
+\n\
+The KDTree data structure can be used for neighbor searches (find all\n\
+points within a radius of a given point) and for finding all point pairs\n\
+within a certain radius of each other.\n\
+\n\
+Reference:\n\
+\n\
+Computational Geometry: Algorithms and Applications\n\
+Second Edition\n\
+Mark de Berg, Marc van Kreveld, Mark Overmars, Otfried Schwarzkopf\n\
+published by Springer-Verlag\n\
+2nd rev. ed. 2000.\n\
+ISBN: 3-540-65620-0\n\
+\n\
+The KD tree data structure is described in chapter 5, pg. 99.\n\
+\n\
+The following article made clear to me that the nodes should\n\
+contain more than one point (this leads to dramatic speed\n\
+improvements for the \"all fixed radius neighbor search\", see\n\
+below):\n\
+\n\
+JL Bentley, \"K-d trees for semidynamic point sets,\" in Sixth Annual\n\
+ACM Symposium on Computational Geometry, vol. 91. San Francisco, 1990\n\
+\n\
+This KD implementation also performs an \"all fixed radius neighbor search\",\n\
+i.e. it can find all point pairs in a set that are within a certain radius\n\
+of each other. As far as I know the algorithm has not been published.");
+
 
 static PyTypeObject KDTreeType = {
     PyVarObject_HEAD_INIT(NULL, 0)

@@ -18,77 +18,8 @@ from . import _kdtrees
 
 
 class KDTree(_kdtrees.KDTree):
-    """KD tree data structure for searching 3-dimensional vectors.
 
-    The KD tree data structure can be used for all kinds of searches that
-    involve 3-dimensional vectors. For example, neighbor searches (find all
-    points within a radius of a given point) or finding all point pairs in a
-    set that are within a certain radius of each other.
-
-    Reference:
-
-    Computational Geometry: Algorithms and Applications
-    Second Edition
-    Mark de Berg, Marc van Kreveld, Mark Overmars, Otfried Schwarzkopf
-    published by Springer-Verlag
-    2nd rev. ed. 2000.
-    ISBN: 3-540-65620-0
-
-    The KD tree data structure is described in chapter 5, pg. 99.
-
-    The following article made clear to me that the nodes should
-    contain more than one point (this leads to dramatic speed
-    improvements for the "all fixed radius neighbor search", see
-    below):
-
-    JL Bentley, "K-d trees for semidynamic point sets," in Sixth Annual ACM
-    Symposium on Computational Geometry, vol. 91. San Francisco, 1990
-
-    This KD implementation also performs a "all fixed radius neighbor search",
-    i.e. it can find all point pairs in a set that are within a certain radius
-    of each other. As far as I know the algorithm has not been published.
-    """
-
-    def __init__(self, coords, bucket_size=1):
-        """Initialize KDTree class.
-
-        Arguments:
-         - coords: Nx3 NumPy array, where N is the number of points.
-        """
-        coords = numpy.require(coords, dtype='d', requirements='C')
-        _kdtrees.KDTree.__init__(self, coords, bucket_size)
-
-    # Fixed radius search for a point
-
-    def search(self, center, radius):
-        """Search all points within radius of center.
-
-        Arguments:
-         - center: NumPy array of size 3.
-         - radius: float>0
-
-        Returns a list of Point objects; each neighbor has an attribute
-        index corresponding to the index of the point, and an attribute
-        radius with the radius between them.
-        """
-        points = self.search_center_radius(center, radius)
-        return points
-
-    def all_search(self, radius):
-        """All fixed neighbor search.
-
-        Find all point pairs that are within radius of each other.
-
-        Arguments:
-         - radius: float (>0)
-
-        Returns a list of Neighbor objects; each neighbor has attributes
-        index1, index2 corresponding to the indices of the point pair,
-        and an attribute radius with the radius between them.
-        """
-        neighbors = self.neighbor_search(radius)
-        return neighbors
-
+    pass
 
 class NeighborSearch(object):
     """Class for neighbor searching.
@@ -184,7 +115,7 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        neighbors = self.kdt.all_search(radius)
+        neighbors = self.kdt.neighbor_search(radius)
         atom_list = self.atom_list
         atom_pair_list = []
         for neighbor in neighbors:

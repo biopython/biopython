@@ -148,7 +148,7 @@ class KDTreeTest(unittest.TestCase):
             # KD tree search
             coords = random((nr_points // 10, 3))
             kdt = KDTree(coords, bucket_size)
-            neighbors = kdt.all_search(query_radius)
+            neighbors = kdt.neighbor_search(query_radius)
             l1 = len(neighbors)
             # find all points
             # self.assertEqual(l1, l2)
