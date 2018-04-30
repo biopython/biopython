@@ -14,12 +14,6 @@ import numpy
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
-from . import _kdtrees
-
-
-class KDTree(_kdtrees.KDTree):
-
-    pass
 
 class NeighborSearch(object):
     """Class for neighbor searching.
@@ -31,7 +25,7 @@ class NeighborSearch(object):
      2. To find all atoms/residues/chains/models/structures that are within
         a fixed radius of each other.
 
-    NeighborSearch makes use of the KDTree class implemented in C, so it's fast.
+    NeighborSearch makes use of the KDTree class implemented in C for speed.
     """
 
     def __init__(self, atom_list, bucket_size=10):
@@ -44,6 +38,7 @@ class NeighborSearch(object):
            with this to optimize speed if you feel like it.
 
         """
+        from Bio.PDB.kdtrees import KDTree
         self.atom_list = atom_list
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]

@@ -1409,7 +1409,7 @@ static PyTypeObject KDTreeType = {
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "_kdtrees",
+        "kdtrees",
         NULL,
         -1,
         NULL,
@@ -1420,12 +1420,12 @@ static struct PyModuleDef moduledef = {
 };
 
 PyObject *
-PyInit__kdtrees(void)
+PyInit_kdtrees(void)
 
 #else
 
 void
-init_kdtrees(void)
+initkdtrees(void)
 #endif
 {
   PyObject *module;
@@ -1455,7 +1455,7 @@ init_kdtrees(void)
   module = PyModule_Create(&moduledef);
   if (module == NULL) return NULL;
 #else
-  module = Py_InitModule("_kdtrees", NULL);
+  module = Py_InitModule("kdtrees", NULL);
   if (module == NULL) return;
 #endif
 
@@ -1466,7 +1466,7 @@ init_kdtrees(void)
   PyModule_AddObject(module, "Point", (PyObject*) &PointType);
   PyModule_AddObject(module, "Neighbor", (PyObject*) &NeighborType);
 
-  if (PyErr_Occurred()) Py_FatalError("can't initialize module _kdtrees");
+  if (PyErr_Occurred()) Py_FatalError("can't initialize module kdtrees");
 #if PY_MAJOR_VERSION >= 3
   return module;
 #endif
