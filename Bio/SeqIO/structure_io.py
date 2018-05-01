@@ -1,5 +1,4 @@
-"""
-Base function for sequence parsers that read structures Bio.PDB parsers.
+"""Base function for sequence parsers that read structures Bio.PDB parsers.
 
 Once a parser from Bio.PDB has been used to load a structure into a
 Bio.PDB.Structure.Structure object, there is no difference in how the sequence

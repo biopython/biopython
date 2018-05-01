@@ -23,8 +23,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 def SeqresTestGenerator(extension, parser):
-    """
-    Test factory for tests reading SEQRES (or similar) records.
+    """Test factory for tests reading SEQRES (or similar) records.
 
     This is a factory returning a parameterised superclass for tests reading
     sequences from the sequence records of structure files.
@@ -90,8 +89,7 @@ class TestCifSeqres(SeqresTestGenerator("cif", "cif-seqres")):
 
 
 def AtomTestGenerator(extension, parser):
-    """
-    Test factory for tests reading ATOM (or similar) records.
+    """Test factory for tests reading ATOM (or similar) records.
 
     See SeqresTestGenerator for more information.
     """
