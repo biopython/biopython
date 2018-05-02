@@ -736,3 +736,9 @@ Release 1.63. The Martel specific ``EventGenerator`` was removed in Release 1.67
 
 ``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.
+
+Bio.KDTree
+==========
+This module was declared obsolete in Release 1.72. As of Release 1.72, KDTree
+data structures and the functionality previously available in Bio.KDTree are
+provided in a new module ``Bio.PDB.kdtrees``.
