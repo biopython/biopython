@@ -321,7 +321,8 @@ class DataHandler(object):
                 else:
                     self.parse_xsd(ET.fromstring(handle.read()))
                     handle.close()
-        self.content = ""
+        if name not in ["i", "u", "b", "sup", "sub"]:
+            self.content = ""
         if name in self.lists:
             object = ListElement()
         elif name in self.dictionaries:
