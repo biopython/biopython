@@ -189,6 +189,26 @@ class ErrorConsumer(Consumer):
             raise RuntimeError(value)
 
 
+class StringConsumer(Consumer):
+
+    def __init__(self, attrs):
+        self.attributes = attrs
+        self.data = []
+
+    def consume(self, content):
+        self.data.append(content)
+
+    def finalize(self):
+        value = "".join(self.data)
+        # Convert Unicode strings to plain strings if possible
+        try:
+            value = StringElement(value)
+        except UnicodeEncodeError:
+            value = UnicodeElement(value)
+        value.attributes = dict(self.attributes)
+        return value
+
+
 class DataHandler(object):
 
     from Bio import Entrez
@@ -202,7 +222,6 @@ class DataHandler(object):
     def __init__(self, validate):
         """Initialize the class."""
         self.stack = []
-        self.strings = []
         self.lists = []
         self.dictionaries = []
         self.structures = {}
@@ -375,9 +394,6 @@ class DataHandler(object):
                 object = StringElement()
             object.itemname = name
             object.itemtype = itemtype
-        elif name in self.strings:
-            self.attributes = attrs
-            return
         else:
             # Element not found in DTD
             if self.validating:
@@ -404,36 +420,28 @@ class DataHandler(object):
             value = consumer.finalize()
             if value is None:
                 return
-        value = self.content
-        if name in self.strings:
-            # Convert Unicode strings to plain strings if possible
-            try:
-                value = StringElement(value)
-            except UnicodeEncodeError:
-                value = UnicodeElement(value)
-        elif name in self.items:
-            self.object = self.stack.pop()
-            if self.object.itemtype in ("List", "Structure"):
-                return
-            elif self.object.itemtype == "Integer" and value:
-                value = IntegerElement(value)
-            else:
-                # Convert Unicode strings to plain strings if possible
-                try:
-                    value = StringElement(value)
-                except UnicodeEncodeError:
-                    value = UnicodeElement(value)
-            name = self.object.itemname
         else:
-            self.object = self.stack.pop()
-            value = re.sub(r"[\s]+", "", value)
-            if self.is_schema and value:
-                self.object.update({'data': value})
-            return
+            value = self.content
+            if name in self.items:
+                self.object = self.stack.pop()
+                if self.object.itemtype in ("List", "Structure"):
+                    return
+                elif self.object.itemtype == "Integer" and value:
+                    value = IntegerElement(value)
+                else:
+                    # Convert Unicode strings to plain strings if possible
+                    try:
+                        value = StringElement(value)
+                    except UnicodeEncodeError:
+                        value = UnicodeElement(value)
+                name = self.object.itemname
+            else:
+                self.object = self.stack.pop()
+                value = re.sub(r"[\s]+", "", value)
+                if self.is_schema and value:
+                    self.object.update({'data': value})
+                return
         value.tag = name
-        if self.attributes:
-            value.attributes = dict(self.attributes)
-            del self.attributes
         current = self.stack[-1]
         if current != "":
             try:
@@ -501,7 +509,7 @@ class DataHandler(object):
         # PCDATA declarations correspond to strings
         if model[0] in (expat.model.XML_CTYPE_MIXED,
                         expat.model.XML_CTYPE_EMPTY):
-            self.strings.append(name)
+            self.classes[name] = StringConsumer
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
