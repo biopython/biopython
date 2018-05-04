@@ -168,20 +168,29 @@ class ValidationError(ValueError):
 
 class Consumer(object):
 
-    def __init__(self, attrs):
-        pass
+    def __init__(self, name, attrs):
+        return
 
+    def consume(self, content):
+        return
+
+    def store(self, key, value):
+        return
+
+    @property
+    def value(self):
+        return
 
 class ErrorConsumer(Consumer):
 
-    def __init__(self, attrs):
-        self.attributes = attrs
+    def __init__(self, name, attrs):
         self.data = []
 
     def consume(self, content):
         self.data.append(content)
 
-    def finalize(self):
+    @property
+    def value(self):
         value = "".join(self.data)
         if value == "":
             return None
@@ -191,22 +200,121 @@ class ErrorConsumer(Consumer):
 
 class StringConsumer(Consumer):
 
-    def __init__(self, attrs):
-        self.attributes = attrs
+    def __init__(self, name, attrs):
+        self.tag = name
+        self.attributes = dict(attrs)
         self.data = []
 
     def consume(self, content):
         self.data.append(content)
 
-    def finalize(self):
+    @property
+    def value(self):
         value = "".join(self.data)
         # Convert Unicode strings to plain strings if possible
         try:
             value = StringElement(value)
         except UnicodeEncodeError:
             value = UnicodeElement(value)
-        value.attributes = dict(self.attributes)
+        value.tag = self.tag
+        value.attributes = self.attributes
         return value
+
+
+class IntegerConsumer(Consumer):
+
+    def __init__(self, name, attrs):
+        self.tag = name
+        self.attributes = dict(attrs)
+        self.data = []
+
+    def consume(self, content):
+        self.data.append(content)
+
+    @property
+    def value(self):
+        value = int("".join(self.data))
+        value = IntegerElement(value)
+        value.tag = self.tag
+        value.attributes = self.attributes
+        return value
+
+
+class ListConsumer(Consumer):
+
+    def __init__(self, name, attrs):
+        data = ListElement()
+        data.tag = name
+        data.attributes = dict(attrs)
+        self.data = data
+
+    def store(self, key, value):
+        self.data.append(value)
+
+    @property
+    def value(self):
+        return self.data
+
+
+class DictionaryConsumer(Consumer):
+
+    def __init__(self, name, attrs):
+        data = DictionaryElement()
+        data.tag = name
+        data.attributes = dict(attrs)
+        self.data = data
+
+    def store(self, key, value):
+        self.data[key] = value
+
+    @property
+    def value(self):
+        return self.data
+
+
+class StructureConsumer(Consumer): #FIXME merge with DictionaryConsumer
+
+    def __init__(self, name, attrs):
+        data = DictionaryElement()
+        data.tag = name
+        data.attributes = dict(attrs)
+        for key in self.listkeys:
+            data[key] = []
+        self.data = data
+
+    def store(self, key, value):
+        if key in self.listkeys: 
+            self.data[key].append(value)
+        else:
+            self.data[key] = value
+
+    @property
+    def value(self):
+        return self.data
+
+
+def select_item_consumer(name, attrs):
+    assert name == 'Item'
+    name = str(attrs["Name"])  # convert from Unicode
+    del attrs["Name"]
+    itemtype = str(attrs["Type"])  # convert from Unicode
+    del attrs["Type"]
+    if itemtype == "Structure":
+        consumer = DictionaryConsumer(name, attrs)
+    elif name in ("ArticleIds", "History"):
+        cls = type(name,
+                   (StructureConsumer,),
+                   {"listkeys": ["pubmed", "medline"]})
+        consumer = cls(name, attrs)
+    elif itemtype == "List":
+        consumer = ListConsumer(name, attrs)
+    elif itemtype == "Integer":
+        consumer = IntegerConsumer(name, attrs)
+    elif itemtype in ("String", "Date", "Unknown"):
+        consumer = StringConsumer(name, attrs)
+    else:
+        raise ValueError("Unknown item type %s" % name)
+    return consumer
 
 
 class DataHandler(object):
@@ -221,11 +329,6 @@ class DataHandler(object):
 
     def __init__(self, validate):
         """Initialize the class."""
-        self.stack = []
-        self.lists = []
-        self.dictionaries = []
-        self.structures = {}
-        self.items = []
         self.dtd_urls = []
         self.classes = {}
         self.consumer = None
@@ -287,7 +390,7 @@ class DataHandler(object):
             text = handle.read(BLOCK)
             if not text:
                 # We have reached the end of the XML file
-                if self.stack:
+                if self.consumer:
                     # No more XML data, but there is still some unfinished
                     # business
                     raise CorruptedXMLError("Premature end of XML stream")
@@ -321,11 +424,11 @@ class DataHandler(object):
                     # probably the input data is not in XML format.
                     raise NotXMLError(e)
 
-            if not self.stack:
+            if not self.consumer:
                 # Haven't read enough from the XML file yet
                 continue
 
-            records = self.stack[0]
+            records = self.consumer
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
             while len(records) > 1:  # Then the top record is finished
@@ -365,96 +468,29 @@ class DataHandler(object):
                     handle.close()
         cls = self.classes.get(name)
         if cls is None:
-            consumer = Consumer(attrs)
-        else:
-            consumer = cls(attrs)
-        consumer.parent = self.consumer
-        self.consumer = consumer
-        if cls is not None:
-            return
-        self.content = ""
-        if name in self.lists:
-            object = ListElement()
-        elif name in self.dictionaries:
-            object = DictionaryElement()
-        elif name in self.structures:
-            object = StructureElement(self.structures[name])
-        elif name in self.items:  # Only appears in ESummary
-            name = str(attrs["Name"])  # convert from Unicode
-            del attrs["Name"]
-            itemtype = str(attrs["Type"])  # convert from Unicode
-            del attrs["Type"]
-            if itemtype == "Structure":
-                object = DictionaryElement()
-            elif name in ("ArticleIds", "History"):
-                object = StructureElement(["pubmed", "medline"])
-            elif itemtype == "List":
-                object = ListElement()
-            else:
-                object = StringElement()
-            object.itemname = name
-            object.itemtype = itemtype
-        else:
             # Element not found in DTD
             if self.validating:
                 raise ValidationError(name)
             else:
                 # this will not be stored in the record
-                object = ""
-        if object != "":
-            object.tag = name
-            if attrs:
-                object.attributes = dict(attrs)
-            if len(self.stack) != 0:
-                current = self.stack[-1]
-                try:
-                    current.append(object)
-                except AttributeError:
-                    current[name] = object
-        self.stack.append(object)
+                consumer = Consumer(name, attrs)
+        else:
+            consumer = cls(name, attrs)
+        consumer.parent = self.consumer
+        self.consumer = consumer
 
     def endElementHandler(self, name):
         consumer = self.consumer
         self.consumer = consumer.parent
-        if type(consumer) != Consumer:
-            value = consumer.finalize()
-            if value is None:
-                return
-        else:
-            value = self.content
-            if name in self.items:
-                self.object = self.stack.pop()
-                if self.object.itemtype in ("List", "Structure"):
-                    return
-                elif self.object.itemtype == "Integer" and value:
-                    value = IntegerElement(value)
-                else:
-                    # Convert Unicode strings to plain strings if possible
-                    try:
-                        value = StringElement(value)
-                    except UnicodeEncodeError:
-                        value = UnicodeElement(value)
-                name = self.object.itemname
-            else:
-                self.object = self.stack.pop()
-                value = re.sub(r"[\s]+", "", value)
-                if self.is_schema and value:
-                    self.object.update({'data': value})
-                return
-        value.tag = name
-        current = self.stack[-1]
-        if current != "":
-            try:
-                current.append(value)
-            except AttributeError:
-                current[name] = value
+        value = consumer.value
+        if self.consumer is None:
+            self.object = value
+        elif value is not None:
+            name = value.tag
+            self.consumer.store(name, value)
 
     def characterDataHandler(self, content):
-        self.content += content
-        try:
-            self.consumer.consume(content)
-        except AttributeError:
-            pass
+        self.consumer.consume(content)
 
     def parse_xsd(self, root):
         is_dictionary = False
@@ -470,7 +506,7 @@ class DataHandler(object):
                 self.dictionaries.append(name)
                 is_dictionary = False
             else:
-                self.lists.append(name)
+                self.classes[name] = ListConsumer
 
     def elementDecl(self, name, model):
         """Call a call-back function for each element declaration in a DTD.
@@ -497,7 +533,7 @@ class DataHandler(object):
                                         ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
-            self.items.append(name)
+            self.classes[name] = select_item_consumer
             return
         # First, remove ignorable parentheses around declarations
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
@@ -516,7 +552,7 @@ class DataHandler(object):
                          expat.model.XML_CTYPE_SEQ) and
             model[1] in (expat.model.XML_CQUANT_PLUS,
                          expat.model.XML_CQUANT_REP)):
-            self.lists.append(name)
+            self.classes[name] = ListConsumer
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -550,11 +586,13 @@ class DataHandler(object):
                     multiple.append(name)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            self.lists.append(name)
+            self.classes[name] = ListConsumer
         elif len(multiple) == 0:
-            self.dictionaries.append(name)
+            self.classes[name] = DictionaryConsumer
         else:
-            self.structures.update({name: multiple})
+            self.classes[name] = type(str(name),
+                                      (StructureConsumer,),
+                                      {"listkeys": multiple})
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
