@@ -180,13 +180,13 @@ class DataHandler(object):
         """Initialize the class."""
         self.stack = []
         self.errors = []
-        self.integers = []
         self.strings = []
         self.lists = []
         self.dictionaries = []
         self.structures = {}
         self.items = []
         self.dtd_urls = []
+        self.classes = {}
         self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
@@ -343,7 +343,7 @@ class DataHandler(object):
                 object = StringElement()
             object.itemname = name
             object.itemtype = itemtype
-        elif name in self.strings + self.errors + self.integers:
+        elif name in self.strings + self.errors:
             self.attributes = attrs
             return
         else:
@@ -372,8 +372,6 @@ class DataHandler(object):
                 return
             else:
                 raise RuntimeError(value)
-        elif name in self.integers:
-            value = IntegerElement(value)
         elif name in self.strings:
             # Convert Unicode strings to plain strings if possible
             try:
