@@ -166,6 +166,29 @@ class ValidationError(ValueError):
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
+class Consumer(object):
+
+    def __init__(self, attrs):
+        pass
+
+
+class ErrorConsumer(Consumer):
+
+    def __init__(self, attrs):
+        self.attributes = attrs
+        self.data = []
+
+    def consume(self, content):
+        self.data.append(content)
+
+    def finalize(self):
+        value = "".join(self.data)
+        if value == "":
+            return None
+        else:
+            raise RuntimeError(value)
+
+
 class DataHandler(object):
 
     from Bio import Entrez
@@ -179,7 +202,6 @@ class DataHandler(object):
     def __init__(self, validate):
         """Initialize the class."""
         self.stack = []
-        self.errors = []
         self.strings = []
         self.lists = []
         self.dictionaries = []
@@ -187,6 +209,7 @@ class DataHandler(object):
         self.items = []
         self.dtd_urls = []
         self.classes = {}
+        self.consumer = None
         self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
@@ -321,6 +344,15 @@ class DataHandler(object):
                 else:
                     self.parse_xsd(ET.fromstring(handle.read()))
                     handle.close()
+        cls = self.classes.get(name)
+        if cls is None:
+            consumer = Consumer(attrs)
+        else:
+            consumer = cls(attrs)
+        consumer.parent = self.consumer
+        self.consumer = consumer
+        if cls is not None:
+            return
         self.content = ""
         if name in self.lists:
             object = ListElement()
@@ -343,7 +375,7 @@ class DataHandler(object):
                 object = StringElement()
             object.itemname = name
             object.itemtype = itemtype
-        elif name in self.strings + self.errors:
+        elif name in self.strings:
             self.attributes = attrs
             return
         else:
@@ -366,13 +398,14 @@ class DataHandler(object):
         self.stack.append(object)
 
     def endElementHandler(self, name):
-        value = self.content
-        if name in self.errors:
-            if value == "":
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if type(consumer) != Consumer:
+            value = consumer.finalize()
+            if value is None:
                 return
-            else:
-                raise RuntimeError(value)
-        elif name in self.strings:
+        value = self.content
+        if name in self.strings:
             # Convert Unicode strings to plain strings if possible
             try:
                 value = StringElement(value)
@@ -410,6 +443,10 @@ class DataHandler(object):
 
     def characterDataHandler(self, content):
         self.content += content
+        try:
+            self.consumer.consume(content)
+        except AttributeError:
+            pass
 
     def parse_xsd(self, root):
         is_dictionary = False
@@ -439,7 +476,7 @@ class DataHandler(object):
         or error.
         """
         if name.upper() == "ERROR":
-            self.errors.append(name)
+            self.classes[name] = ErrorConsumer
             return
         if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
