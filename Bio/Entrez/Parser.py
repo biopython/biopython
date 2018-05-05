@@ -338,7 +338,6 @@ class DataHandler(object):
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.is_schema = False
         self._directory = None
-        # self.record = None
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
@@ -389,29 +388,6 @@ class DataHandler(object):
         while True:
             # Read in another block of the file...
             text = handle.read(BLOCK)
-            if not text:
-                # We have reached the end of the XML file
-                if self.consumer:
-                    # No more XML data, but there is still some unfinished
-                    # business
-                    raise CorruptedXMLError("Premature end of XML stream")
-                try:
-                    for record in self.record:
-                        yield record
-                except AttributeError:
-                    if self.parser.StartElementHandler:
-                        # We saw the initial <!xml declaration, and expat
-                        # didn't notice any errors, so self.record should be
-                        # defined. If not, this is a bug.
-                        raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
-                    else:
-                        # We did not see the initial <!xml declaration, so
-                        # probably the input data is not in XML format.
-                        raise NotXMLError("XML declaration not found")
-                self.parser.Parse("", True)
-                self.parser = None
-                return
-
             try:
                 self.parser.Parse(text, False)
             except expat.ExpatError as e:
@@ -424,17 +400,33 @@ class DataHandler(object):
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
                     raise NotXMLError(e)
+            try:
+                records = self.record
+            except AttributeError:
+                if self.parser.StartElementHandler:
+                    # We saw the initial <!xml declaration, and expat
+                    # didn't notice any errors, so self.record should be
+                    # defined. If not, this is a bug.
+                    raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+                else:
+                    # We did not see the initial <!xml declaration, so
+                    # probably the input data is not in XML format.
+                    raise NotXMLError("XML declaration not found")
 
-            if self.consumer is not None:
-                # Haven't read enough from the XML file yet
-                continue
-
-            records = self.record
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
+
             while len(records) > 1:  # Then the top record is finished
                 record = records.pop(0)
                 yield record
+
+            if not text:
+                self.parser = None
+                if self.consumer:
+                    # We have reached the end of the XML file
+                    # No more XML data, but there is still some unfinished
+                    # business
+                    raise CorruptedXMLError("Premature end of XML stream")
 
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
@@ -486,7 +478,7 @@ class DataHandler(object):
             # The record attribute will be set again at the last end tag;
             # However, it doesn't hurt to set it twice.
             value = consumer.value
-            if value:
+            if value is not None:
                 self.record = value
         self.consumer = consumer
 
