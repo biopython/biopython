@@ -338,6 +338,7 @@ class DataHandler(object):
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.is_schema = False
         self._directory = None
+        # self.record = None
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
@@ -371,11 +372,11 @@ class DataHandler(object):
                 # the input data is not in XML format.
                 raise NotXMLError(e)
         try:
-            return self.object
+            return self.record
         except AttributeError:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, and expat didn't notice
-                # any errors, so self.object should be defined. If not, this is
+                # any errors, so self.record should be defined. If not, this is
                 # a bug.
                 raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
             else:
@@ -395,12 +396,12 @@ class DataHandler(object):
                     # business
                     raise CorruptedXMLError("Premature end of XML stream")
                 try:
-                    for record in self.object:
+                    for record in self.record:
                         yield record
                 except AttributeError:
                     if self.parser.StartElementHandler:
                         # We saw the initial <!xml declaration, and expat
-                        # didn't notice any errors, so self.object should be
+                        # didn't notice any errors, so self.record should be
                         # defined. If not, this is a bug.
                         raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
                     else:
@@ -424,11 +425,11 @@ class DataHandler(object):
                     # probably the input data is not in XML format.
                     raise NotXMLError(e)
 
-            if not self.consumer:
+            if self.consumer is not None:
                 # Haven't read enough from the XML file yet
                 continue
 
-            records = self.consumer
+            records = self.record
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
             while len(records) > 1:  # Then the top record is finished
@@ -477,6 +478,16 @@ class DataHandler(object):
         else:
             consumer = cls(name, attrs)
         consumer.parent = self.consumer
+        if self.consumer is None:
+            # This is relevant only for Entrez.parse, not for Entrez.read.
+            # If self.consumer is None, then this is the first start tag we
+            # encounter, and it should refer to a list. Store this list in
+            # the record attribute, so that Entrez.parse can iterate over it.
+            # The record attribute will be set again at the last end tag;
+            # However, it doesn't hurt to set it twice.
+            value = consumer.value
+            if value:
+                self.record = value
         self.consumer = consumer
 
     def endElementHandler(self, name):
@@ -484,7 +495,7 @@ class DataHandler(object):
         self.consumer = consumer.parent
         value = consumer.value
         if self.consumer is None:
-            self.object = value
+            self.record = value
         elif value is not None:
             name = value.tag
             self.consumer.store(name, value)
