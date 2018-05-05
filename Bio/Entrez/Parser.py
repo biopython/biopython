@@ -242,6 +242,8 @@ class IntegerConsumer(Consumer):
 
 class ListConsumer(Consumer):
 
+    keys = None
+
     def __init__(self, name, attrs):
         data = ListElement()
         data.tag = name
@@ -249,6 +251,8 @@ class ListConsumer(Consumer):
         self.data = data
 
     def store(self, key, value):
+        if self.keys is not None and key not in self.keys:
+            raise ValueError("Unexpected item '%s' in list" % key)
         self.data.append(value)
 
     @property
@@ -307,6 +311,7 @@ def select_item_consumer(name, attrs):
                    {"listkeys": ["pubmed", "medline"]})
         consumer = cls(name, attrs)
     elif itemtype == "List":
+        # Keys are unknown in this case
         consumer = ListConsumer(name, attrs)
     elif itemtype == "Integer":
         consumer = IntegerConsumer(name, attrs)
@@ -555,7 +560,12 @@ class DataHandler(object):
                          expat.model.XML_CTYPE_SEQ) and
             model[1] in (expat.model.XML_CQUANT_PLUS,
                          expat.model.XML_CQUANT_REP)):
-            self.classes[name] = ListConsumer
+            children = model[3]
+            if model[0] == expat.model.XML_CTYPE_SEQ:
+                assert len(children) == 1
+            keys = set([child[2] for child in children])
+            bases = (ListConsumer,)
+            self.classes[name] = type(str(name), bases, {'keys': keys})
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
