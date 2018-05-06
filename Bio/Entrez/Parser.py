@@ -144,6 +144,7 @@ class ValidationError(ValueError):
 class Consumer(object):
 
     def __init__(self, name, attrs):
+        """Create a do-nothing Consumer object."""
         return
 
     def startElementHandler(self, name, attrs):
@@ -162,9 +163,11 @@ class Consumer(object):
     def value(self):
         return
 
+
 class ErrorConsumer(Consumer):
 
     def __init__(self, name, attrs):
+        """Create a Consumer for ERROR messages in the XML data"""
         self.data = []
 
     def consume(self, content):
@@ -184,6 +187,7 @@ class StringConsumer(Consumer):
     consumable = set()
 
     def __init__(self, name, attrs):
+        """Create a Consumer for plain text elements in the XML data"""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
@@ -222,6 +226,7 @@ class StringConsumer(Consumer):
 class IntegerConsumer(Consumer):
 
     def __init__(self, name, attrs):
+        """Create a Consumer for integer elements in the XML data"""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
@@ -243,6 +248,7 @@ class ListConsumer(Consumer):
     keys = None
 
     def __init__(self, name, attrs):
+        """Create a Consumer for list elements in the XML data"""
         data = ListElement()
         data.tag = name
         if attrs:
@@ -264,6 +270,7 @@ class DictionaryConsumer(Consumer):
     multiple = None
 
     def __init__(self, name, attrs):
+        """Create a Consumer for dictionary elements in the XML data"""
         data = DictionaryElement()
         data.tag = name
         data.attributes = dict(attrs)
@@ -321,7 +328,7 @@ class DataHandler(object):
     del Entrez
 
     def __init__(self, validate):
-        """Initialize the class."""
+        """Create a DataHandler object."""
         self.dtd_urls = []
         self.classes = {}
         self.consumer = None
@@ -511,7 +518,7 @@ class DataHandler(object):
                 if "attribute" in element.tag:
                     is_dictionary = True
             if is_dictionary:
-                self.dictionaries.append(name)
+                self.classes[name] = DictionaryConsumer
                 is_dictionary = False
             else:
                 self.classes[name] = ListConsumer
