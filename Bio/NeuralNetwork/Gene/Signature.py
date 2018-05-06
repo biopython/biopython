@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Find and deal with signatures in biological sequence data.
 
@@ -11,6 +12,7 @@ regions that are not necessarily consecutive. This may be useful in
 the case of very diverged sequences, where signatures may pick out
 important conservation that can't be found by motifs (hopefully!).
 """
+from itertools import chain
 # biopython
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
@@ -57,7 +59,7 @@ class SignatureFinder(object):
         return PatternRepository(sig_info)
 
     def _get_signature_dict(self, seq_records, sig_size, max_gap):
-        """Return a dictionary with all signatures and their counts.
+        """Return a dictionary with all signatures and their counts (PRIVATE).
 
         This internal function does all of the hard work for the
         find_signatures function.
@@ -104,7 +106,7 @@ class SignatureFinder(object):
         return all_sigs
 
     def _add_sig(self, sig_dict, sig_to_add):
-        """Add a signature to the given dictionary."""
+        """Add a signature to the given dictionary (PRIVATE)."""
         # incrememt the count of the signature if it is already present
         if sig_to_add in sig_dict:
             sig_dict[sig_to_add] += 1
@@ -140,22 +142,10 @@ class SignatureCoder(object):
         self._max_gap = max_gap
 
         # check to be sure the signatures are all the same size
-        # only do this if we actually have signatures
-        if len(self._signatures) > 0:
-            first_sig_size = len(self._signatures[0][0])
-            second_sig_size = len(self._signatures[0][1])
-
-            assert first_sig_size == second_sig_size, \
-                   "Ends of the signature do not match: %s" \
-                   % self._signatures[0]
-
-            for sig in self._signatures:
-                assert len(sig[0]) == first_sig_size, \
-                       "Got first part of signature %s, expected size %s" % \
-                       (sig[0], first_sig_size)
-                assert len(sig[1]) == second_sig_size, \
-                       "Got second part of signature %s, expected size %s" % \
-                       (sig[1], second_sig_size)
+        sig_sizes = set((len(sig) for sig in chain(*signatures)))
+        if len(sig_sizes) > 1:
+            raise ValueError('Inconsistent signature sizes: {sizes}'.format(
+                sizes=','.join((str(size) for size in sorted(sig_sizes)))))
 
     def representation(self, sequence):
         """Convert a sequence into a representation of its signatures.

@@ -36,60 +36,6 @@ class Residue(Entity):
         full_id = (resname, hetflag, resseq, icode)
         return "<Residue %s het=%s resseq=%s icode=%s>" % full_id
 
-    # Residue-specific sorting methods
-    # Sort first by HETATM flag, then by resseq, finally by insertion code
-    def __gt__(self, other):
-        if isinstance(other, Residue):
-            hetflag_s, resseq_s, icode_s = self.id
-            hetflag_o, resseq_o, icode_o = other.id
-            if hetflag_o != hetflag_s:
-                return hetflag_s > hetflag_o
-            elif resseq_o != resseq_s:
-                return resseq_s > resseq_o
-            else:
-                return icode_s > icode_o
-        else:
-            return NotImplemented
-
-    def __ge__(self, other):
-        if isinstance(other, Residue):
-            hetflag_s, resseq_s, icode_s = self.id
-            hetflag_o, resseq_o, icode_o = other.id
-            if hetflag_o != hetflag_s:
-                return hetflag_s >= hetflag_o
-            elif resseq_o != resseq_s:
-                return resseq_s >= resseq_o
-            else:
-                return icode_s >= icode_o
-        else:
-            return NotImplemented
-
-    def __lt__(self, other):
-        if isinstance(other, Residue):
-            hetflag_s, resseq_s, icode_s = self.id
-            hetflag_o, resseq_o, icode_o = other.id
-            if hetflag_o != hetflag_s:
-                return hetflag_s < hetflag_o
-            elif resseq_o != resseq_s:
-                return resseq_s < resseq_o
-            else:
-                return icode_s < icode_o
-        else:
-            return NotImplemented
-
-    def __le__(self, other):
-        if isinstance(other, Residue):
-            hetflag_s, resseq_s, icode_s = self.id
-            hetflag_o, resseq_o, icode_o = other.id
-            if hetflag_o != hetflag_s:
-                return hetflag_s < hetflag_o
-            elif resseq_o != resseq_s:
-                return resseq_s < resseq_o
-            else:
-                return icode_s < icode_o
-        else:
-            return NotImplemented
-
     def add(self, atom):
         """Add an Atom object.
 
@@ -127,7 +73,7 @@ class Residue(Entity):
         return self.resname
 
     def get_unpacked_list(self):
-        """Returns the list of all atoms, unpack DisorderedAtoms."""
+        """Return the list of all atoms, unpack DisorderedAtoms."""
         atom_list = self.get_list()
         undisordered_atom_list = []
         for atom in atom_list:

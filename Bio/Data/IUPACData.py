@@ -1,7 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2000 Andrew Dalke.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Information about the IUPAC alphabets."""
 
 
@@ -39,7 +41,7 @@ protein_letters_1to3 = {
 }
 protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
     'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
-    'U': 'Sel', 'O': 'Pyl',
+    'U': 'Sec', 'O': 'Pyl',
 }.items()))
 
 protein_letters_3to1 = dict((x[1], x[0]) for x in
@@ -61,6 +63,9 @@ extended_dna_letters = "GATCBDSW"
 # are there extended forms?
 # extended_rna_letters = "GAUCBDSW"
 
+# "X" is included in the following _values and _complement dictionaries,
+# for historical reasons although it is not an IUPAC nucleotide,
+# and so is not in the corresponding _letters strings above
 ambiguous_dna_values = {
     "A": "A",
     "C": "C",

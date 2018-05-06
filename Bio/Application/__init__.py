@@ -1,9 +1,11 @@
 # Copyright 2001-2004 Brad Chapman.
 # Revisions copyright 2009-2013 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """General mechanisms to access applications in Biopython.
 
 This module is not intended for direct use. It provides the basic objects which
@@ -320,7 +322,7 @@ class AbstractCommandline(object):
         return answer
 
     def _get_parameter(self, name):
-        """Get a commandline option value."""
+        """Get a commandline option value (PRIVATE)."""
         for parameter in self.parameters:
             if name in parameter.names:
                 if isinstance(parameter, _Switch):
@@ -330,7 +332,7 @@ class AbstractCommandline(object):
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name):
-        """Reset or clear a commandline option value."""
+        """Reset or clear a commandline option value (PRIVATE)."""
         cleared_option = False
         for parameter in self.parameters:
             if name in parameter.names:
@@ -370,7 +372,7 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
-        """Check whether the given value is valid.
+        """Check whether the given value is valid (PRIVATE).
 
         No return value - it either works or raises a ValueError.
 
@@ -751,7 +753,7 @@ def _escape_filename(filename):
 
 
 def _test():
-    """Run the Bio.Application module's doctests."""
+    """Run the Bio.Application module's doctests (PRIVATE)."""
     import doctest
     doctest.testmod(verbose=1)
 

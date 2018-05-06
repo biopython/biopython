@@ -1,9 +1,10 @@
 # Copyright 2010 by Eric Talevich. All rights reserved.
 # Copyright 2012 by Wibowo Arindrarto. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Common utility functions for various Bio submodules."""
 
 from __future__ import print_function
@@ -36,7 +37,7 @@ def iterlen(items):
 
 
 def read_forward(handle):
-    """Reads through whitespaces, returns the first non-whitespace line."""
+    """Read through whitespaces, return the first non-whitespace line."""
     while True:
         line = handle.readline()
         # if line is empty or line has characters and stripping does not remove
@@ -46,7 +47,7 @@ def read_forward(handle):
 
 
 def trim_str(string, max_len, concat_char):
-    """Truncates the given string for display."""
+    """Truncate the given string for display."""
     if len(string) > max_len:
         return string[:max_len - len(concat_char)] + concat_char
     return string
@@ -65,7 +66,7 @@ def getattr_str(obj, attr, fmt=None, fallback='?'):
 
 
 def find_test_dir(start_dir=None):
-    """Finds the absolute path of Biopython's Tests directory.
+    """Find the absolute path of Biopython's Tests directory.
 
     Arguments:
     start_dir -- Initial directory to begin lookup (default to current dir)
@@ -98,7 +99,7 @@ def find_test_dir(start_dir=None):
 
 
 def run_doctest(target_dir=None, *args, **kwargs):
-    """Runs doctest for the importing module."""
+    """Run doctest for the importing module."""
     import doctest
 
     # default doctest options

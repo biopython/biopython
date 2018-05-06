@@ -39,7 +39,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses HIE records.
+        """Parse HIE records (PRIVATE).
 
         Records consist of 3 tab deliminated fields; node's sunid,
         parent's sunid, and a list of children's sunids.
@@ -93,7 +93,7 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a HIE file as Hie records for each line.
+    """Iterate over a HIE file as Hie records for each line.
 
     Arguments:
      - handle - file-like object.

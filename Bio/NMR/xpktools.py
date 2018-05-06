@@ -194,7 +194,7 @@ class Peaklist(object):
 
 
 def replace_entry(line, fieldn, newentry):
-    """Helper function replace an entry in a string by the field number.
+    """Replace an entry in a string by the field number.
 
     No padding is implemented currently.  Spacing will change if
     the original field entry and the new field entry are of

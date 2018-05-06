@@ -5,6 +5,7 @@ build
 dist
  
 #Ignore backup files from some Unix editors,
+\#*.py\#
 *~
 *.swp
 *.bak
@@ -94,3 +95,6 @@ Doc/*/*/hevea.sty
 #Ignore IntelliJ IDEA directory and project files
 .idea
 *.iml
+
+#Ignore unittest cache dirctory
+.cache/

@@ -1,8 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2001 by Brad Chapman.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Display information distributed across a Chromosome-like object.
 
 These classes are meant to show the distribution of some kind of information
@@ -124,7 +125,7 @@ class DistributionPage(object):
                                       end_y_pos)
 
     def _draw_legend(self, cur_drawing, start_y, width):
-        """Add a legend to the figure.
+        """Add a legend to the figure (PRIVATE).
 
         Subclasses can implement to provide a specialized legend.
         """
@@ -161,8 +162,10 @@ class BarChartDistribution(object):
             self._draw_title(cur_drawing, self.chart_title,
                              start_x, start_y, end_x, end_y)
         # set the position of the bar chart
-        x_start, x_end, y_start, y_end = \
-           self._determine_position(start_x, start_y, end_x, end_y)
+        x_start, x_end, y_start, y_end = self._determine_position(start_x,
+                                                                  start_y,
+                                                                  end_x,
+                                                                  end_y)
 
         bar_chart.x = x_start
         bar_chart.y = y_start

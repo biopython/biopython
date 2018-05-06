@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Deal with Motifs or Signatures allowing ambiguity in the sequences.
 
@@ -15,7 +16,7 @@ as all falling under a schema like 'GAT*', where the star indicates a
 character can be anything. This helps us condense a whole ton of
 motifs or signatures.
 """
-# standard modules
+
 from __future__ import print_function
 
 import random
@@ -242,10 +243,9 @@ class GeneticAlgorithmFinder(object):
            that we want to generate.
 
         """
-        start_population = \
-           Organism.function_population(self.motif_generator.random_motif,
-                                        self.initial_population,
-                                        fitness)
+        start_population = Organism.function_population(self.motif_generator.random_motif,
+                                                        self.initial_population,
+                                                        fitness)
         finisher = SimpleFinisher(num_schemas, self.min_generations)
 
         # set up the evolver and do the evolution
@@ -573,7 +573,7 @@ def matches_schema(pattern, schema, ambiguity_character='*'):
 class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures."""
 
-    def __init__(self, ambiguity_symbol='*'):
+    def __init__(self, ambiguity_symbol='*', maximum_tries=150):
         """Initialize the SchemaFactory.
 
         Arguments:
@@ -582,6 +582,7 @@ class SchemaFactory(object):
 
         """
         self._ambiguity_symbol = ambiguity_symbol
+        self._maximum_tries = maximum_tries
 
     def from_motifs(self, motif_repository, motif_percent, num_ambiguous):
         """Generate schema from a list of motifs.
@@ -606,7 +607,8 @@ class SchemaFactory(object):
         # of motifs
         total_count = self._get_num_motifs(motif_repository, all_motifs)
         matched_count = 0
-        assert total_count > 0, "Expected to have motifs to match"
+        if total_count == 0:
+            raise ValueError('Expected to have motifs to match')
         while (float(matched_count) / float(total_count)) < motif_percent:
             new_schema, matching_motifs = \
                         self._get_unique_schema(list(schema_info.keys()),
@@ -628,12 +630,10 @@ class SchemaFactory(object):
 
             matched_count += schema_counts
 
-            # print "percentage:", float(matched_count) / float(total_count)
-
         return PatternRepository(schema_info)
 
     def _get_num_motifs(self, repository, motif_list):
-        """Return the number of motif counts for the list of motifs."""
+        """Return the number of motif counts for the list of motifs (PRIVATE)."""
         motif_count = 0
         for motif in motif_list:
             motif_count += repository.count(motif)
@@ -641,7 +641,7 @@ class SchemaFactory(object):
         return motif_count
 
     def _get_unique_schema(self, cur_schemas, motif_list, num_ambiguous):
-        """Retrieve a unique schema from a motif.
+        """Retrieve a unique schema from a motif (PRIVATE).
 
         We don't want to end up with schema that match the same thing,
         since this could lead to ambiguous results, and be messy. This
@@ -659,9 +659,9 @@ class SchemaFactory(object):
 
             num_tries += 1
 
-            new_schema, matching_motifs = \
-                        self._schema_from_motif(cur_motif, motif_list,
-                                                num_ambiguous)
+            new_schema, matching_motifs = self._schema_from_motif(cur_motif,
+                                                                  motif_list,
+                                                                  num_ambiguous)
 
             has_match = 0
             for old_schema in cur_schemas:
@@ -675,18 +675,19 @@ class SchemaFactory(object):
                 break
 
             # check for big loops in which we can't find a new schema
-            assert num_tries < 150, \
-                   "Could not generate schema in %s tries from %s with %s" \
-                   % (num_tries, motif_list, cur_schemas)
+            if num_tries >= self._maximum_tries:
+                raise RuntimeError(
+                    'Could not generate schema in %s tries from %s with %s' % (
+                        num_tries, motif_list, cur_schemas))
 
         return new_schema, matching_motifs
 
     def _schema_from_motif(self, motif, motif_list, num_ambiguous):
-        """Create a schema from a given starting motif.
+        """Create a schema from a given starting motif (PRIVATE).
 
         Arguments:
          - motif - A motif with the pattern we will start from.
-         - motif_list - The total motifs we have.to match to.
+         - motif_list - The total motifs we have to match to.
          - num_ambiguous - The number of ambiguous characters that should
            be present in the schema.
 
@@ -695,8 +696,9 @@ class SchemaFactory(object):
          - A list of all of the motifs in motif_list that match the schema.
 
         """
-        assert motif in motif_list, \
-               "Expected starting motif present in remaining motifs."
+        if motif not in motif_list:
+            raise ValueError(
+                'Starting motif expected to be present in all motifs.')
 
         # convert random positions in the motif to ambiguous characters
         # convert the motif into a list of characters so we can manipulate it

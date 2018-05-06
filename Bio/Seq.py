@@ -1,10 +1,13 @@
+# Copyright 2000 Andrew Dalke.
 # Copyright 2000-2002 Brad Chapman.
-# Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2015 by Peter Cock.
+# Copyright 2004-2005, 2010 by M de Hoon.
+# Copyright 2007-2018 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Provide objects to represent biological sequences with alphabets.
 
 See also the Seq_ wiki and the chapter in our tutorial:
@@ -1690,7 +1693,7 @@ class UnknownSeq(Seq):
         explicit gap character declaration.
         """
         # Offload the alphabet stuff
-        s = Seq(self._character, self.alphabet).ungap()
+        s = Seq(self._character, self.alphabet).ungap(gap)
         if s:
             return UnknownSeq(self._length, s.alphabet, self._character)
         else:
@@ -2184,9 +2187,9 @@ class MutableSeq(object):
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        c = dict([(x.lower(), y.lower()) for x, y in d.items()])
-        d.update(c)
-        self.data = [d[c] for c in self.data]
+        mixed = d.copy()  # We're going to edit this to be mixed case!
+        mixed.update((x.lower(), y.lower()) for x, y in d.items())
+        self.data = [mixed[_] for _ in self.data]
         self.data = array.array(self.array_indicator, self.data)
 
     def reverse_complement(self):
@@ -2198,9 +2201,6 @@ class MutableSeq(object):
         """
         self.complement()
         self.data.reverse()
-
-    # Sorting a sequence makes no sense.
-    # def sort(self, *args): self.data.sort(*args)
 
     def extend(self, other):
         """Add a sequence to the original mutable sequence object.
@@ -2385,6 +2385,23 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
                             IUPAC.ambiguous_rna.letters.upper())
     n = len(sequence)
+
+    # Check for tables with 'ambiguous' (dual-coding) stop codons:
+    dual_coding = [c for c in stop_codons if c in forward_table]
+    if dual_coding:
+        c = dual_coding[0]
+        if to_stop:
+            raise ValueError("You cannot use 'to_stop=True' with this table "
+                             "as it contains {} codon(s) which can be both "
+                             " STOP and an  amino acid (e.g. '{}' -> '{}' or "
+                             "STOP)."
+                             .format(len(dual_coding), c, forward_table[c]))
+        warnings.warn("This table contains {} codon(s) which code(s) for both "
+                      "STOP and an amino acid (e.g. '{}' -> '{}' or STOP). "
+                      "Such codons will be translated as amino acid."
+                      .format(len(dual_coding), c, forward_table[c]),
+                      BiopythonWarning)
+
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
             raise CodonTable.TranslationError(
@@ -2504,6 +2521,30 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     (e.g. "TA?" or "T-A") will throw a TranslationError.
 
     It will however translate either DNA or RNA.
+
+    NOTE - Since version 1.71 Biopython contains codon tables with 'ambiguous
+    stop codons'. These are stop codons with unambiguous sequence but which
+    have a context dependent coding as STOP or as amino acid. With these tables
+    'to_stop' must be False (otherwise a ValueError is raised). The dual
+    coding codons will always be translated as amino acid, except for
+    'cds=True', where the last codon will be translated as STOP.
+
+    >>> coding_dna3 = "ATGGCACGGAAGTGA"
+    >>> translate(coding_dna3)
+    'MARK*'
+
+    >>> translate(coding_dna3, table=27)  # Table 27: TGA -> STOP or W
+    'MARKW'
+
+    It will however raise a BiopythonWarning (not shown).
+
+    >>> translate(coding_dna3, table=27, cds=True)
+    'MARK'
+
+    >>> translate(coding_dna3, table=27, to_stop=True)
+    Traceback (most recent call last):
+       ...
+    ValueError: You cannot use 'to_stop=True' with this table ...
     """
     if isinstance(sequence, Seq):
         return sequence.translate(table, stop_symbol, to_stop, cds)

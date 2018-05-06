@@ -276,6 +276,8 @@ names are also used in Bio.AlignIO and include the following:
     - fasta   - The generic sequence file format where each record starts with
       an identifer line starting with a ">" character, followed by
       lines of sequence.
+    - fasta-2line - Stricter interpretation of the FASTA format using exactly
+      two lines per record (no line wrapping).
     - fastq   - A "FASTA like" format used by Sanger which also stores PHRED
       sequence quality values (with an ASCII offset of 33).
     - fastq-sanger - An alias for "fastq" for consistency with BioPerl and EMBOSS
@@ -399,6 +401,7 @@ from . import UniprotIO
 # Most alignment file formats will be handled via Bio.AlignIO
 
 _FormatToIterator = {"fasta": FastaIO.FastaIterator,
+                     "fasta-2line": FastaIO.FastaTwoLineIterator,
                      "gb": InsdcIO.GenBankIterator,
                      "genbank": InsdcIO.GenBankIterator,
                      "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
@@ -427,7 +430,21 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
+_FormatToString = {
+    "fasta": FastaIO.as_fasta,
+    "fasta-2line": FastaIO.as_fasta_2line,
+    "tab": TabIO.as_tab,
+    "fastq": QualityIO.as_fastq,
+    "fastq-sanger": QualityIO.as_fastq,
+    "fastq-solexa": QualityIO.as_fastq_solexa,
+    "fastq-illumina": QualityIO.as_fastq_illumina,
+    "qual": QualityIO.as_qual,
+}
+
+# This could exclude file formats covered by _FormatToString?
+# Right now used in the unit tests as proxy for all supported outputs...
 _FormatToWriter = {"fasta": FastaIO.FastaWriter,
+                   "fasta-2line": FastaIO.FastaTwoLineWriter,
                    "gb": InsdcIO.GenBankWriter,
                    "genbank": InsdcIO.GenBankWriter,
                    "embl": InsdcIO.EmblWriter,
@@ -487,8 +504,14 @@ def write(sequences, handle, format):
         mode = 'w'
 
     with as_handle(handle, mode) as fp:
-        # Map the file format to a writer class
-        if format in _FormatToWriter:
+        # Map the file format to a writer function/class
+        if format in _FormatToString:
+            format_function = _FormatToString[format]
+            count = 0
+            for record in sequences:
+                fp.write(format_function(record))
+                count += 1
+        elif format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
@@ -515,7 +538,7 @@ def write(sequences, handle, format):
 
 
 def parse(handle, format, alphabet=None):
-    r"""Turns a sequence file into an iterator returning SeqRecords.
+    r"""Turn a sequence file into an iterator returning SeqRecords.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -630,7 +653,7 @@ def _force_alphabet(record_iterator, alphabet):
 
 
 def read(handle, format, alphabet=None):
-    """Turns a sequence file into a single SeqRecord.
+    """Turn a sequence file into a single SeqRecord.
 
     Arguments:
      - handle   - handle to the file, or the filename as a string
@@ -690,7 +713,7 @@ def read(handle, format, alphabet=None):
 
 
 def to_dict(sequences, key_function=None):
-    """Turns a sequence iterator or list into a dictionary.
+    """Turn a sequence iterator or list into a dictionary.
 
     Arguments:
      - sequences  - An iterator that returns SeqRecord objects,
@@ -959,8 +982,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
-               % (index_filename, filenames, format, alphabet, key_function)
+    repr = ("SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)"
+            % (index_filename, filenames, format, alphabet, key_function))
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""

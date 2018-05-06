@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Find and deal with motifs in biological sequence data.
 
@@ -53,7 +54,7 @@ class MotifFinder(object):
         return PatternRepository(motif_info)
 
     def _get_motif_dict(self, seq_records, motif_size):
-        """Return a dictionary with information on motifs.
+        """Return a dictionary with information on motifs (PRIVATE).
 
         This internal function essentially does all of the hard work for
         finding motifs, and returns a dictionary containing the found motifs
@@ -69,10 +70,9 @@ class MotifFinder(object):
         all_motifs = {}
         for seq_record in seq_records:
             # if we are working with alphabets, make sure we are consistent
-            if alphabet is not None:
-                assert seq_record.seq.alphabet == alphabet, \
-                       "Working with alphabet %s and got %s" % \
-                       (alphabet, seq_record.seq.alphabet)
+            if alphabet is not None and seq_record.seq.alphabet != alphabet:
+                raise ValueError('Working with alphabet %s and got %s' % (
+                    alphabet, seq_record.seq.alphabet))
 
             # now start finding motifs in the sequence
             for start in range(len(seq_record.seq) - (motif_size - 1)):
@@ -138,7 +138,7 @@ class MotifFinder(object):
         return PatternRepository(motif_diffs)
 
     def _add_motif(self, motif_dict, motif_to_add):
-        """Add a motif to the given dictionary."""
+        """Add a motif to the given dictionary (PRIVATE)."""
         # incrememt the count of the motif if it is already present
         if motif_to_add in motif_dict:
             motif_dict[motif_to_add] += 1

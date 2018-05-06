@@ -167,7 +167,7 @@ class Fragment(object):
         return sup.get_rms()
 
     def __repr__(self):
-        """String representing the fragment object.
+        """Represent the fragment object as a string.
 
         Returns <Fragment length=L id=ID> where L=length of fragment
         and ID the identifier (rank in the library).
@@ -176,7 +176,7 @@ class Fragment(object):
 
 
 def _make_fragment_list(pp, length):
-    """Dice up a peptide in fragments of length "length".
+    """Dice up a peptide in fragments of length "length" (PRIVATE).
 
     :param pp: a list of residues (part of one peptide)
     :type pp: [L{Residue}, L{Residue}, ...]
@@ -306,7 +306,7 @@ class FragmentMapper(object):
         return res in self
 
     def __contains__(self, res):
-        """True if the given residue is in any of the mapped fragments.
+        """Check if the given residue is in any of the mapped fragments.
 
         :type res: L{Residue}
         """

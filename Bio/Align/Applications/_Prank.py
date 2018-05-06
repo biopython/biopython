@@ -1,7 +1,9 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Command line wrapper for the multiple alignment program PRANK."""
 
 from __future__ import print_function
@@ -162,14 +164,14 @@ class PrankCommandline(AbstractCommandline):
             # Doesn't specify type but Float and Int work
             _Option(["-matresize", "matresize"],
                     "Matrix resizing multiplier",
-                    checker_function=lambda x: isinstance(x, float) or
-                                               isinstance(x, int)),
+                    checker_function=lambda x: (isinstance(x, float) or
+                                                isinstance(x, int))),
             # -matinitsize=# [matrix initial size multiplier]
             # Doesn't specify type but Float and Int work
             _Option(["-matinitsize", "matinitsize"],
                     "Matrix initial size multiplier",
-                    checker_function=lambda x: isinstance(x, float) or
-                                               isinstance(x, int)),
+                    checker_function=lambda x: (isinstance(x, float) or
+                                                isinstance(x, int))),
             _Switch(["-longseq", "longseq"],
                     "Save space in pairwise alignments"),
             _Switch(["-pwgenomic", "pwgenomic"],

@@ -1,3 +1,11 @@
+# Copyright 2016 Anthony Bradley.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Code handle loading mmtf-python into Biopython's structures."""
+
 from Bio.PDB.StructureBuilder import StructureBuilder
 import numpy
 
@@ -137,7 +145,7 @@ class StructureDecoder(object):
 
     def set_header_info(self, r_free, r_work, resolution, title,
                         deposition_date, release_date, experimnetal_methods):
-        """Sets the header information.
+        """Set the header information.
 
         :param r_free: the measured R-Free for the structure
         :param r_work: the measure R-Work for the structure

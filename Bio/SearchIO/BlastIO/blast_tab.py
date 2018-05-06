@@ -1,7 +1,9 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SearchIO parser for BLAST+ tab output format, with or without comments."""
 
@@ -216,6 +218,10 @@ class BlastTabParser(object):
         elif self.has_comments:
             iterfunc = self._parse_commented_qresult
         else:
+            if self.line.startswith("#"):
+                raise ValueError("Encountered unexpected character '#' at the"
+                                 " beginning of a line. Set comments=True if"
+                                 " the file is a commented file.")
             iterfunc = self._parse_qresult
 
         for qresult in iterfunc():
@@ -240,7 +246,7 @@ class BlastTabParser(object):
         return fields
 
     def _parse_commented_qresult(self):
-        """Iterator returning `QueryResult` objects from a commented file (PRIVATE)."""
+        """Yield `QueryResult` objects from a commented file (PRIVATE)."""
         while True:
             comments = self._parse_comments()
             if comments:
@@ -359,7 +365,7 @@ class BlastTabParser(object):
         return id_cache
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects (PRIVATE)."""
+        """Yield QueryResult objects (PRIVATE)."""
         # state values, used to determine what to do with each line
         state_EOF = 0
         state_QRES_NEW = 1

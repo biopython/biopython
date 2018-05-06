@@ -1,10 +1,11 @@
 # Copyright 2000-2002 by Andrew Dalke.
 # Revisions copyright 2007-2010 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Alphabets used in Seq objects etc to declare sequence type and letters.
 
 This is used by sequences which contain a finite number of similar words.
@@ -35,7 +36,7 @@ class Alphabet(object):
         return self.__class__.__name__ + "()"
 
     def contains(self, other):
-        """Does this alphabet 'contain' the other (OBSOLETE?).
+        """Test if the other alphabet is contained in this one (OBSOLETE?).
 
         Returns a boolean.  This relies on the Alphabet subclassing
         hierarchy only, and does not check the letters property.
@@ -157,10 +158,12 @@ class ThreeLetterProtein(Alphabet):
         ]
 
     def _upper(self):
-        raise NotImplementedError("We don't have an uppercase three letter protein alphabet.")
+        raise NotImplementedError("We don't have an uppercase three letter "
+                                  "protein alphabet.")
 
     def _lower(self):
-        raise NotImplementedError("We don't have a lowercase three letter protein alphabet.")
+        raise NotImplementedError("We don't have a lowercase three letter "
+                                  "protein alphabet.")
 
 # ##### Non per-sequence modifications
 
@@ -187,7 +190,7 @@ class AlphabetEncoder(object):
                                self.new_letters)
 
     def contains(self, other):
-        """Does this alphabet 'contain' the other (OBSOLETE?).
+        """Test if the other alphabet is contained in this one (OBSOLETE?).
 
         This is isn't implemented for the base AlphabetEncoder,
         which will always return 0 (False).
@@ -196,11 +199,13 @@ class AlphabetEncoder(object):
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
-        return AlphabetEncoder(self.alphabet._upper(), self.new_letters.upper())
+        return AlphabetEncoder(self.alphabet._upper(),
+                               self.new_letters.upper())
 
     def _lower(self):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
-        return AlphabetEncoder(self.alphabet._lower(), self.new_letters.lower())
+        return AlphabetEncoder(self.alphabet._lower(),
+                               self.new_letters.lower())
 
 
 class Gapped(AlphabetEncoder):
@@ -210,14 +215,14 @@ class Gapped(AlphabetEncoder):
         self.gap_char = gap_char
 
     def contains(self, other):
-        """Does this alphabet 'contain' the other (OBSOLETE?).
+        """Test if the other alphabet is contained in this one (OBSOLETE?).
 
         Returns a boolean.  This relies on the Alphabet subclassing
         hierarchy, and attempts to check the gap character.  This fails
         if the other alphabet does not have a gap character!
         """
-        return other.gap_char == self.gap_char and \
-               self.alphabet.contains(other.alphabet)
+        return (other.gap_char == self.gap_char and
+                self.alphabet.contains(other.alphabet))
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
@@ -235,14 +240,14 @@ class HasStopCodon(AlphabetEncoder):
         self.stop_symbol = stop_symbol
 
     def contains(self, other):
-        """Does this alphabet 'contain' the other (OBSOLETE?).
+        """Test if the other alphabet is contained in this one (OBSOLETE?).
 
         Returns a boolean.  This relies on the Alphabet subclassing
         hierarchy, and attempts to check the stop symbol.  This fails
         if the other alphabet does not have a stop symbol!
         """
-        return other.stop_symbol == self.stop_symbol and \
-               self.alphabet.contains(other.alphabet)
+        return (other.stop_symbol == self.stop_symbol and
+                self.alphabet.contains(other.alphabet))
 
     def _upper(self):
         """Return an upper case variant of the current alphabet (PRIVATE)."""
@@ -254,32 +259,33 @@ class HasStopCodon(AlphabetEncoder):
 
 
 def _get_base_alphabet(alphabet):
-    """Returns the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
+    """Return the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
     a = alphabet
     while isinstance(a, AlphabetEncoder):
         a = a.alphabet
-    assert isinstance(a, Alphabet), \
-           "Invalid alphabet found, %s" % repr(a)
+    assert isinstance(a, Alphabet), "Invalid alphabet found, %s" % repr(a)
     return a
 
 
 def _ungap(alphabet):
-    """Returns the alphabet without any gap encoder (PRIVATE)."""
+    """Return the alphabet without any gap encoder (PRIVATE)."""
     # TODO - Handle via method of the objects?
     if not hasattr(alphabet, "gap_char"):
         return alphabet
     elif isinstance(alphabet, Gapped):
         return alphabet.alphabet
     elif isinstance(alphabet, HasStopCodon):
-        return HasStopCodon(_ungap(alphabet.alphabet), stop_symbol=alphabet.stop_symbol)
+        return HasStopCodon(_ungap(alphabet.alphabet),
+                            stop_symbol=alphabet.stop_symbol)
     elif isinstance(alphabet, AlphabetEncoder):
-        return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
+        return AlphabetEncoder(_ungap(alphabet.alphabet),
+                               letters=alphabet.letters)
     else:
         raise NotImplementedError
 
 
 def _consensus_base_alphabet(alphabets):
-    """Returns a common but often generic base alphabet object (PRIVATE).
+    """Return a common but often generic base alphabet object (PRIVATE).
 
     This throws away any AlphabetEncoder information, e.g. Gapped alphabets.
 
@@ -297,12 +303,12 @@ def _consensus_base_alphabet(alphabets):
             pass
         elif isinstance(common, a.__class__):
             common = a
-        elif isinstance(a, NucleotideAlphabet) \
-        and isinstance(common, NucleotideAlphabet):
+        elif (isinstance(a, NucleotideAlphabet) and
+              isinstance(common, NucleotideAlphabet)):
             # e.g. Give a mix of RNA and DNA alphabets
             common = generic_nucleotide
-        elif isinstance(a, SingleLetterAlphabet) \
-        and isinstance(common, SingleLetterAlphabet):
+        elif (isinstance(a, SingleLetterAlphabet) and
+              isinstance(common, SingleLetterAlphabet)):
             # This is a pretty big mis-match!
             common = single_letter_alphabet
         else:
@@ -315,41 +321,44 @@ def _consensus_base_alphabet(alphabets):
 
 
 def _consensus_alphabet(alphabets):
-    """Returns a common but often generic alphabet object (PRIVATE).
+    """Return a common but often generic alphabet object (PRIVATE).
 
-    >>> from Bio.Alphabet import IUPAC
-    >>> _consensus_alphabet([IUPAC.extended_protein, IUPAC.protein])
-    ExtendedIUPACProtein()
-    >>> _consensus_alphabet([generic_protein, IUPAC.protein])
-    ProteinAlphabet()
+        >>> from Bio.Alphabet import IUPAC
+        >>> _consensus_alphabet([IUPAC.extended_protein, IUPAC.protein])
+        ExtendedIUPACProtein()
+        >>> _consensus_alphabet([generic_protein, IUPAC.protein])
+        ProteinAlphabet()
 
     Note that DNA+RNA -> Nucleotide, and Nucleotide+Protein-> generic single
     letter.  These DO NOT raise an exception!
 
-    >>> _consensus_alphabet([generic_dna, generic_nucleotide])
-    NucleotideAlphabet()
-    >>> _consensus_alphabet([generic_dna, generic_rna])
-    NucleotideAlphabet()
-    >>> _consensus_alphabet([generic_dna, generic_protein])
-    SingleLetterAlphabet()
-    >>> _consensus_alphabet([single_letter_alphabet, generic_protein])
-    SingleLetterAlphabet()
+        >>> _consensus_alphabet([generic_dna, generic_nucleotide])
+        NucleotideAlphabet()
+        >>> _consensus_alphabet([generic_dna, generic_rna])
+        NucleotideAlphabet()
+        >>> _consensus_alphabet([generic_dna, generic_protein])
+        SingleLetterAlphabet()
+        >>> _consensus_alphabet([single_letter_alphabet, generic_protein])
+        SingleLetterAlphabet()
 
     This is aware of Gapped and HasStopCodon and new letters added by
     other AlphabetEncoders.  This WILL raise an exception if more than
     one gap character or stop symbol is present.
 
-    >>> from Bio.Alphabet import IUPAC
-    >>> _consensus_alphabet([Gapped(IUPAC.extended_protein), HasStopCodon(IUPAC.protein)])
-    HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
-    >>> _consensus_alphabet([Gapped(IUPAC.protein, "-"), Gapped(IUPAC.protein, "=")])
-    Traceback (most recent call last):
-        ...
-    ValueError: More than one gap character present
-    >>> _consensus_alphabet([HasStopCodon(IUPAC.protein, "*"), HasStopCodon(IUPAC.protein, "+")])
-    Traceback (most recent call last):
-        ...
-    ValueError: More than one stop symbol present
+        >>> from Bio.Alphabet import IUPAC
+        >>> _consensus_alphabet([Gapped(IUPAC.extended_protein),
+        ...                     HasStopCodon(IUPAC.protein)])
+        HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+        >>> _consensus_alphabet([Gapped(IUPAC.protein, "-"),
+        ...                     Gapped(IUPAC.protein, "=")])
+        Traceback (most recent call last):
+            ...
+        ValueError: More than one gap character present
+        >>> _consensus_alphabet([HasStopCodon(IUPAC.protein, "*"),
+        ...                     HasStopCodon(IUPAC.protein, "+")])
+        Traceback (most recent call last):
+            ...
+        ValueError: More than one stop symbol present
     """
     base = _consensus_base_alphabet(alphabets)
     gap = None
@@ -377,8 +386,8 @@ def _consensus_alphabet(alphabets):
         # New letters...
         if hasattr(alpha, "new_letters"):
             for letter in alpha.new_letters:
-                if letter not in new_letters \
-                and letter != gap and letter != stop:
+                if letter not in new_letters and letter != gap \
+                   and letter != stop:
                     new_letters += letter
 
     alpha = base
@@ -392,16 +401,16 @@ def _consensus_alphabet(alphabets):
 
 
 def _check_type_compatible(alphabets):
-    """Returns True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
+    """Return True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
 
-    >>> _check_type_compatible([generic_dna, generic_nucleotide])
-    True
-    >>> _check_type_compatible([generic_dna, generic_rna])
-    False
-    >>> _check_type_compatible([generic_dna, generic_protein])
-    False
-    >>> _check_type_compatible([single_letter_alphabet, generic_protein])
-    True
+        >>> _check_type_compatible([generic_dna, generic_nucleotide])
+        True
+        >>> _check_type_compatible([generic_dna, generic_rna])
+        False
+        >>> _check_type_compatible([generic_dna, generic_protein])
+        False
+        >>> _check_type_compatible([single_letter_alphabet, generic_protein])
+        True
 
     This relies on the Alphabet subclassing hierarchy.  It does not
     check things like gap characters or stop symbols.
@@ -433,20 +442,20 @@ def _check_type_compatible(alphabets):
 def _verify_alphabet(sequence):
     """Check all letters in sequence are in the alphabet (PRIVATE).
 
-    >>> from Bio.Seq import Seq
-    >>> from Bio.Alphabet import IUPAC
-    >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-    ...              IUPAC.protein)
-    >>> _verify_alphabet(my_seq)
-    True
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        ...              IUPAC.protein)
+        >>> _verify_alphabet(my_seq)
+        True
 
-    This example has an X, which is not in the IUPAC protein alphabet
-    (you should be using the IUPAC extended protein alphabet):
+        This example has an X, which is not in the IUPAC protein alphabet
+        (you should be using the IUPAC extended protein alphabet):
 
-    >>> bad_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVFX",
-    ...                IUPAC.protein)
-    >>> _verify_alphabet(bad_seq)
-    False
+        >>> bad_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVFX",
+        ...                IUPAC.protein)
+        >>> _verify_alphabet(bad_seq)
+        False
 
     This replaces Bio.utils.verify_alphabet() since we are deprecating
     that. Potentially this could be added to the Alphabet object, and

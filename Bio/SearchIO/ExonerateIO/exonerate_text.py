@@ -42,7 +42,7 @@ _RE_SCODON_END = re.compile(r'^\{(\w{1,2})\}')
 
 
 def _flip_codons(codon_seq, target_seq):
-    """Flips the codon characters from one seq to another."""
+    """Flips the codon characters from one seq to another (PRIVATE)."""
     a, b = '', ''
     for char1, char2 in zip(codon_seq, target_seq):
         # no need to do anything if the codon seq line has nothing
@@ -57,7 +57,7 @@ def _flip_codons(codon_seq, target_seq):
 
 
 def _get_block_coords(parsed_seq, row_dict, has_ner=False):
-    """Returns a list of start, end coordinates for each given block in the sequence."""
+    """Return a list of start, end coordinates for each given block in the sequence (PRIVATE)."""
     start = 0
     coords = []
     if not has_ner:
@@ -94,7 +94,7 @@ def _get_inter_coords(coords, strand=1):
 
 
 def _stitch_rows(raw_rows):
-    """Stitches together the parsed alignment rows and returns them in a list."""
+    """Stitches together the parsed alignment rows and returns them in a list (PRIVATE)."""
     # deal with possible codon surprise!
     # (i.e. alignments with codons using cdna2genome model)
     # by creating additional rows to contain the codons
@@ -119,17 +119,15 @@ def _stitch_rows(raw_rows):
     # to flip them with their 'inner' pairs
     if len(cmbn_rows) == 5:
         # flip query sequence
-        cmbn_rows[0], cmbn_rows[1] = \
-                _flip_codons(cmbn_rows[0], cmbn_rows[1])
+        cmbn_rows[0], cmbn_rows[1] = _flip_codons(cmbn_rows[0], cmbn_rows[1])
         # flip hit sequence
-        cmbn_rows[4], cmbn_rows[3] = \
-                _flip_codons(cmbn_rows[4], cmbn_rows[3])
+        cmbn_rows[4], cmbn_rows[3] = _flip_codons(cmbn_rows[4], cmbn_rows[3])
 
     return cmbn_rows
 
 
 def _get_row_dict(row_len, model):
-    """Returns a dictionary of row indices for parsing alignment blocks."""
+    """Return a dictionary of row indices for parsing alignment blocks (PRIVATE)."""
     idx = {}
     # 3 lines, usually in dna vs dna models
     if row_len == 3:
@@ -170,7 +168,7 @@ def _get_row_dict(row_len, model):
 
 
 def _get_blocks(rows, coords, idx):
-    """Returns a list of dictionaries of sequences split by the coordinates."""
+    """Return a list of dictionaries of sequences split by the coordinates (PRIVATE)."""
     for idx_name in ('query', 'hit', 'midline', 'qannot', 'hannot'):
         assert idx_name in idx
     blocks = []
@@ -190,7 +188,7 @@ def _get_blocks(rows, coords, idx):
 
 
 def _get_scodon_moves(tmp_seq_blocks):
-    """Dictionary of split codon locations relative to each fragment end (PRIVATE)."""
+    """Get a dictionary of split codon locations relative to each fragment end (PRIVATE)."""
     scodon_moves = {'query': [], 'hit': []}
     for seq_type in scodon_moves:
         scoords = []
@@ -214,7 +212,7 @@ def _get_scodon_moves(tmp_seq_blocks):
 
 
 def _clean_blocks(tmp_seq_blocks):
-    """Removes curly braces (split codon markers) from the given sequences."""
+    """Remove curly braces (split codon markers) from the given sequences (PRIVATE)."""
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
@@ -226,7 +224,7 @@ def _clean_blocks(tmp_seq_blocks):
 
 
 def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
-    """Returns the length of introns between fragments."""
+    """Return the length of introns between fragments (PRIVATE)."""
     # set opposite type, for setting introns
     opp_type = 'hit' if seq_type == 'query' else 'query'
     # list of flags to denote if an intron follows a block
@@ -262,7 +260,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
 
 
 def _comp_coords(hsp, seq_type, inter_lens):
-    """Fill the block coordinates of the given hsp dictionary."""
+    """Fill the block coordinates of the given hsp dictionary (PRIVATE)."""
     assert seq_type in ('hit', 'query')
     # manually fill the first coord
     seq_step = 1 if hsp['%s_strand' % seq_type] >= 0 else -1
@@ -275,8 +273,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
     # and start from the second block, after the first inter seq
     for idx, block in enumerate(hsp[seq_type][1:]):
         bstart = coords[-1][1] + inter_lens[idx] * seq_step
-        bend = bstart + seq_step * \
-                len(block.replace('-', ''))
+        bend = bstart + seq_step * len(block.replace('-', ''))
         coords.append((bstart, bend))
 
     # adjust the coords so the smallest is [0], if strand is -1
@@ -411,8 +408,7 @@ class ExonerateTextParser(_BaseExonerateParser):
             assert len(inter_lens) == len(hsp[opp_type]) - 1, \
                     "%r vs %r" % (len(inter_lens), len(hsp[opp_type]) - 1)
             # fill the hsp query and hit coordinates
-            hsp['%s_ranges' % opp_type] = \
-                    _comp_coords(hsp, opp_type, inter_lens)
+            hsp['%s_ranges' % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner
             # can't do this in the if-else clause above since we need to
             # compute the ranges first
@@ -431,7 +427,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def _read_alignment(self):
-        """Reads the raw alignment block strings, returns them in a list."""
+        """Read the raw alignment block strings, returns them in a list (PRIVATE)."""
         raw_aln_blocks = []
         # flag to check whether we're in an aligment row
         in_aln_row = False
@@ -482,7 +478,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
     _query_mark = b"C4 Alignment"
 
     def get_qresult_id(self, pos):
-        """Returns the query ID from the nearest "Query:" line."""
+        """Return the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
         sentinel = b"Query:"
@@ -498,7 +494,7 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
         return qid
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Return the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None

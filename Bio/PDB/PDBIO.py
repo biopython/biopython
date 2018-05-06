@@ -22,6 +22,7 @@ class Select(object):
     """
 
     def __repr__(self):
+        """Represent the output as a string for debugging."""
         return "<Select all>"
 
     def accept_model(self, model):
@@ -66,7 +67,7 @@ class PDBIO(object):
 
     def _get_atom_line(self, atom, hetfield, segid, atom_number, resname,
                        resseq, icode, chain_id, charge="  "):
-        """Returns an ATOM PDB string (PRIVATE)."""
+        """Return an ATOM PDB string (PRIVATE)."""
         if hetfield != " ":
             record_type = "HETATM"
         else:
@@ -113,7 +114,7 @@ class PDBIO(object):
     # Public methods
 
     def set_structure(self, pdb_object):
-        # Check what the user is providing and build a structure appropriately
+        """Check what the user is providing and build a structure."""
         if pdb_object.level == "S":
             structure = pdb_object
         else:
@@ -232,27 +233,3 @@ class PDBIO(object):
             fp.write('END\n')
         if close_file:
             fp.close()
-
-
-if __name__ == "__main__":
-
-    from Bio.PDB.PDBParser import PDBParser
-
-    import sys
-
-    p = PDBParser(PERMISSIVE=True)
-
-    s = p.get_structure("test", sys.argv[1])
-
-    io = PDBIO()
-    io.set_structure(s)
-    io.save("out1.pdb")
-
-    with open("out2.pdb", "w") as fp:
-        s1 = p.get_structure("test1", sys.argv[1])
-        s2 = p.get_structure("test2", sys.argv[2])
-        io = PDBIO(1)
-        io.set_structure(s1)
-        io.save(fp)
-        io.set_structure(s2)
-        io.save(fp, write_end=1)

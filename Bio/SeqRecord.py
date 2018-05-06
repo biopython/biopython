@@ -321,7 +321,7 @@ class SeqRecord(object):
                    doc="The sequence itself, as a Seq or MutableSeq object.")
 
     def __getitem__(self, index):
-        """Returns a sub-sequence or an individual letter.
+        """Return a sub-sequence or an individual letter.
 
         Slicing, e.g. my_record[5:10], returns a new SeqRecord for
         that sub-sequence with appropriate annotation preserved.  The
@@ -445,9 +445,9 @@ class SeqRecord(object):
 
             if biosql_available and isinstance(self, DBSeqRecord):
                 answer = SeqRecord(self.seq[index],
-                                        id=self.id,
-                                        name=self.name,
-                                        description=self.description)
+                                   id=self.id,
+                                   name=self.name,
+                                   description=self.description)
             else:
                 answer = self.__class__(self.seq[index],
                                         id=self.id,
@@ -543,7 +543,7 @@ class SeqRecord(object):
         return iter(self.seq)
 
     def __contains__(self, char):
-        """Implements the 'in' keyword, searches the sequence.
+        """Implement the 'in' keyword, searches the sequence.
 
         e.g.
 
@@ -575,7 +575,7 @@ class SeqRecord(object):
         return char in self.seq
 
     def __str__(self):
-        """A human readable summary of the record and its annotation (string).
+        """Return a human readable summary of the record and its annotation (string).
 
         The python built in function str works by calling the object's ___str__
         method.  e.g.
@@ -626,7 +626,7 @@ class SeqRecord(object):
         return "\n".join(lines)
 
     def __repr__(self):
-        """A concise summary of the record for debugging (string).
+        """Return a concise summary of the record for debugging (string).
 
         The python built in function repr works by calling the object's ___repr__
         method.  e.g.
@@ -660,7 +660,7 @@ class SeqRecord(object):
                self.description, self.dbxrefs)
 
     def format(self, format):
-        r"""Returns the record as a string in the specified file format.
+        r"""Return the record as a string in the specified file format.
 
         The format should be a lower case string supported as an output
         format by Bio.SeqIO, which is used to turn the SeqRecord into a
@@ -694,7 +694,7 @@ class SeqRecord(object):
         return self.__format__(format)
 
     def __format__(self, format_spec):
-        """Returns the record as a string in the specified file format.
+        """Return the record as a string in the specified file format.
 
         This method supports the python format() function added in
         Python 2.6/3.0.  The format_spec should be a lower case string
@@ -708,6 +708,12 @@ class SeqRecord(object):
             # Follow python convention and default to using __str__
             return str(self)
         from Bio import SeqIO
+
+        # Easy case, can call string-building function directly
+        if format_spec in SeqIO._FormatToString:
+            return SeqIO._FormatToString[format_spec](self)
+
+        # Harder case, make a temp handle instead
         if format_spec in SeqIO._BinaryFormats:
             # Return bytes on Python 3
             from io import BytesIO
@@ -719,7 +725,7 @@ class SeqRecord(object):
         return handle.getvalue()
 
     def __len__(self):
-        """Returns the length of the sequence.
+        """Return the length of the sequence.
 
         For example, using Bio.SeqIO to read in a FASTA nucleotide file:
 
@@ -749,6 +755,10 @@ class SeqRecord(object):
 
     def __ge__(self, other):
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    # Make SeqRecord unhashable explicit, required for Python 2.
+    # See github issue 929 for related discussion.
+    __hash__ = None
 
     # Note Python 3 does not use __cmp__ and there is no need to
     # define __cmp__ on Python 2 as have all of  _lt__ etc defined.
@@ -913,7 +923,7 @@ class SeqRecord(object):
                          dbxrefs=self.dbxrefs[:])
 
     def upper(self):
-        """Returns a copy of the record with an upper case sequence.
+        """Return a copy of the record with an upper case sequence.
 
         All the annotation is preserved unchanged. e.g.
 
@@ -948,7 +958,7 @@ class SeqRecord(object):
                          letter_annotations=self.letter_annotations.copy())
 
     def lower(self):
-        """Returns a copy of the record with a lower case sequence.
+        """Return a copy of the record with a lower case sequence.
 
         All the annotation is preserved unchanged. e.g.
 
@@ -990,7 +1000,7 @@ class SeqRecord(object):
     def reverse_complement(self, id=False, name=False, description=False,
                            features=True, annotations=False,
                            letter_annotations=True, dbxrefs=False):
-        """Returns new SeqRecord with reverse complement sequence.
+        """Return new SeqRecord with reverse complement sequence.
 
         By default the new record does NOT preserve the sequence identifier,
         name, description, general annotation or database cross-references -
@@ -1172,7 +1182,7 @@ class SeqRecord(object):
                   id=False, name=False, description=False,
                   features=False, annotations=False,
                   letter_annotations=False, dbxrefs=False):
-        """Returns new SeqRecord with translated sequence.
+        """Return new SeqRecord with translated sequence.
 
         This calls the record's .seq.translate() method (which describes
         the translation related arguments, like table for the genetic code),

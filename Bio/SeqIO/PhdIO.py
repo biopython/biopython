@@ -1,10 +1,10 @@
 # Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "phd" file format.
 
 PHD files are output by PHRED and used by PHRAP and CONSED.
@@ -61,7 +61,7 @@ from Bio.SeqIO import QualityIO
 
 
 def PhdIterator(handle):
-    """Returns SeqRecord objects from a PHD file.
+    """Return SeqRecord objects from a PHD file.
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
     """

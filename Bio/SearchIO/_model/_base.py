@@ -15,7 +15,7 @@ class _BaseSearchObject(object):
     _NON_STICKY_ATTRS = ()
 
     def _transfer_attrs(self, obj):
-        """Transfer instance attributes to the given object.
+        """Transfer instance attributes to the given object (PRIVATE).
 
         This method is used to transfer attributes set externally (for example
         using `setattr`) to a new object created from this one (for example
@@ -38,7 +38,7 @@ class _BaseHSP(_BaseSearchObject):
     """Abstract base class for HSP objects."""
 
     def _str_hsp_header(self):
-        """Prints the alignment header info."""
+        """Print the alignment header info (PRIVATE)."""
         lines = []
         # set query id line
         qid_line = trim_str('      Query: %s %s' %

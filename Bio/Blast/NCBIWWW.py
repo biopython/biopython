@@ -70,7 +70,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+    https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
     import time

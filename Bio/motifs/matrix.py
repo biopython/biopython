@@ -22,26 +22,35 @@ from Bio import Alphabet
 # Fall back to the slower Python implementation if Jython or IronPython.
 try:
     from . import _pwm
+    import numpy
+    # We could further generalize this code by using array objects from
+    # the Python standard library instead of numpy arrays; this would still
+    # allow us to use the C module.
 
-    def _calculate(score_dict, sequence, m, n):
+    def _calculate(score_dict, sequence, m):
         """Calculate scores using C code (PRIVATE)."""
-        logodds = [[score_dict[letter][i] for letter in "ACGT"] for i in range(m)]
-        return _pwm.calculate(sequence, logodds)
+        n = len(sequence)
+        # Create the numpy arrays here; the C module then does not rely on numpy
+        # Use a float32 for the scores array to save space
+        scores = numpy.empty(n - m + 1, numpy.float32)
+        logodds = numpy.array([[score_dict[letter][i] for letter in "ACGT"]
+                               for i in range(m)], float)
+        _pwm.calculate(sequence, logodds, scores)
+        return scores
 
 except ImportError:
     if platform.python_implementation() == 'CPython':
         import warnings
         from Bio import BiopythonWarning
-        warnings.warn("Using pure-Python as missing Biopython's C code for PWM. "
-                      "This can happen if Biopython was installed without NumPy. "
-                      "Try re-installing NumPy and then Biopython.",
+        warnings.warn("Using pure-Python as missing Biopython's C code for PWM.",
                       BiopythonWarning)
 
-    def _calculate(score_dict, sequence, m, n):
+    def _calculate(score_dict, sequence, m):
         """Calculate scores using Python code (PRIVATE).
 
         The C code handles mixed case so Python version must too.
         """
+        n = len(sequence)
         sequence = sequence.upper()
         scores = []
         for i in range(n - m + 1):
@@ -128,7 +137,7 @@ class GenericPositionMatrix(dict):
                     d = {}
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
-                        d[letter1] = [values[index2] for index2 in indices2]
+                        d[letter1] = [values[_] for _ in indices2]
                     if sorted(letters1) == self._letters:
                         return self.__class__(self.alphabet, d)
                     else:
@@ -168,7 +177,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def consensus(self):
-        """Returns the consensus sequence."""
+        """Return the consensus sequence."""
         sequence = ""
         for i in range(self.length):
             try:
@@ -325,7 +334,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
             self[letter] = tuple(self[letter])
 
     def log_odds(self, background=None):
-        """Returns the Position-Specific Scoring Matrix.
+        """Return the Position-Specific Scoring Matrix.
 
         The Position-Specific Scoring Matrix (PSSM) contains the log-odds
         scores computed from the probability matrix and the background
@@ -371,7 +380,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def calculate(self, sequence):
-        """Returns the PWM score for a given sequence for all positions.
+        """Return the PWM score for a given sequence for all positions.
 
         Notes:
          - the sequence can only be a DNA sequence
@@ -384,19 +393,17 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
             raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
-                                 % self.alphabet)
+                             % self.alphabet)
         if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
             raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
-                                 % sequence.alphabet)
+                             % sequence.alphabet)
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
         # case would impose an overhead to allocate the extra memory.
         sequence = str(sequence)
         m = self.length
-        n = len(sequence)
-
-        scores = _calculate(self, sequence, m, n)
+        scores = _calculate(self, sequence, m)
 
         if len(scores) == 1:
             return scores[0]
@@ -453,7 +460,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         raise Exception("Cannot compute the %GC composition of a PSSM")
 
     def mean(self, background=None):
-        """Expected value of the score of a motif."""
+        """Return expected value of the score of a motif."""
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:
@@ -475,7 +482,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return sx
 
     def std(self, background=None):
-        """Standard deviation of the score of a motif."""
+        """Return standard deviation of the score of a motif."""
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:

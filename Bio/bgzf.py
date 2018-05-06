@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-# Copyright 2010-2015 by Peter Cock.
+# Copyright 2010-2018 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""Read and write BGZF compressed files (the GZIP variant used in BAM).
 
 The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
@@ -860,10 +862,19 @@ if __name__ == "__main__":
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
+    # Ensure we have binary mode handles
+    # (leave stderr as default text mode)
+    if sys.version_info[0] >= 3:
+        stdin = sys.stdin.buffer
+        stdout = sys.stdout.buffer
+    else:
+        stdin = sys.stdin
+        stdout = sys.stdout
+
     sys.stderr.write("Producing BGZF output from stdin...\n")
-    w = BgzfWriter(fileobj=sys.stdout)
+    w = BgzfWriter(fileobj=stdout)
     while True:
-        data = sys.stdin.read(65536)
+        data = stdin.read(65536)
         w.write(data)
         if not data:
             break

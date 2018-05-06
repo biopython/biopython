@@ -1,9 +1,9 @@
 # Copyright 2007-2016 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package..
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "genbank" and "embl" file formats.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -54,7 +54,7 @@ from Bio._py3k import basestring
 
 
 def GenBankIterator(handle):
-    """Breaks up a Genbank file into SeqRecord objects.
+    """Break up a Genbank file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -94,7 +94,7 @@ def GenBankIterator(handle):
 
 
 def EmblIterator(handle):
-    """Breaks up an EMBL file into SeqRecord objects.
+    """Break up an EMBL file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -140,7 +140,7 @@ def EmblIterator(handle):
 
 
 def ImgtIterator(handle):
-    """Breaks up an IMGT file into SeqRecord objects.
+    """Break up an IMGT file into SeqRecord objects.
 
     Every section from the LOCUS line to the terminating // becomes
     a single SeqRecord with associated annotation and features.
@@ -153,7 +153,7 @@ def ImgtIterator(handle):
 
 
 def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
-    """Breaks up a Genbank file into SeqRecord objects for each CDS feature.
+    """Break up a Genbank file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
@@ -164,7 +164,7 @@ def GenBankCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
 
 
 def EmblCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein):
-    """Breaks up a EMBL file into SeqRecord objects for each CDS feature.
+    """Break up a EMBL file into SeqRecord objects for each CDS feature.
 
     Every section from the LOCUS line to the terminating // can contain
     many CDS features.  These are returned as with the stated amino acid
@@ -271,8 +271,8 @@ def _insdc_location_string(location, rec_length):
         if location.strand == -1:
             # Special case, put complement outside the join/order/... and reverse order
             return "complement(%s(%s))" % (location.operator,
-                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length)
-                            for p in parts[::-1]))
+                                           ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length)
+                                                    for p in parts[::-1]))
         else:
             return "%s(%s)" % (location.operator,
                                ",".join(_insdc_location_string(p, rec_length) for p in parts))
@@ -334,7 +334,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
     def _wrap_location(self, location):
-        """Split a feature location into lines (break at commas)."""
+        """Split a feature location into lines (break at commas) (PRIVATE)."""
         # TODO - Rewrite this not to recurse!
         length = self.MAX_WIDTH - self.QUALIFIER_INDENT
         if len(location) <= length:
@@ -350,7 +350,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             self._wrap_location(location[index + 1:])
 
     def _write_feature(self, feature, record_length):
-        """Write a single SeqFeature object to features table."""
+        """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
         f_type = feature.type.replace(" ", "_")
@@ -369,7 +369,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _get_annotation_str(record, key, default=".", just_first=False):
-        """Get an annotation dictionary entry (as a string).
+        """Get an annotation dictionary entry (as a string) (PRIVATE).
 
         Some entries are lists, in which case if just_first=True the first entry
         is returned.  If just_first=False (default) this verifies there is only
@@ -388,7 +388,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _split_multi_line(text, max_len):
-        """Returns a list of strings.
+        """Return a list of strings (PRIVATE).
 
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
@@ -416,7 +416,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         return answer
 
     def _split_contig(self, record, max_len):
-        """Returns a list of strings, splits on commas."""
+        """Return a list of strings, splits on commas (PRIVATE)."""
         # TODO - Merge this with _write_multi_line method?
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
@@ -450,7 +450,10 @@ class GenBankWriter(_InsdcWriter):
     SEQUENCE_INDENT = 9
 
     def _write_single_line(self, tag, text):
-        """Used in the 'header' of each GenBank record."""
+        """Write single line in each GenBank record (PRIVATE).
+
+        Used in the 'header' of each GenBank record.
+        """
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             if tag:
@@ -463,7 +466,10 @@ class GenBankWriter(_InsdcWriter):
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        """Used in the 'header' of each GenBank record."""
+        """Write multiple lines in each GenBank record (PRIVATE).
+
+        Used in the 'header' of each GenBank record.
+        """
         # TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
@@ -579,7 +585,7 @@ class GenBankWriter(_InsdcWriter):
             return " " * max_topology_len
 
     def _write_the_first_line(self, record):
-        """Write the LOCUS line."""
+        """Write the LOCUS line (PRIVATE)."""
         locus = record.name
         if not locus or locus == "<unknown name>":
             locus = record.id
@@ -626,7 +632,7 @@ class GenBankWriter(_InsdcWriter):
                 warnings.warn("Molecule type %r too long" % mol_type,
                               BiopythonWarning)
                 mol_type = None
-        if mol_type == "protein":
+        if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
 
         if mol_type:
@@ -1015,7 +1021,7 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line(tag, line)
 
     def _write_the_first_lines(self, record):
-        """Write the ID and AC lines."""
+        """Write the ID and AC lines (PRIVATE)."""
         if "." in record.id and record.id.rsplit(".", 1)[1].isdigit():
             version = "SV " + record.id.rsplit(".", 1)[1]
             accession = self._get_annotation_str(record, "accession",

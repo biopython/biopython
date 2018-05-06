@@ -1,7 +1,9 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SearchIO parser for BLAST+ XML output formats."""
 # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
@@ -235,7 +237,7 @@ class BlastXmlParser(object):
             yield qresult
 
     def _parse_preamble(self):
-        """Parses all tag data prior to the first query result."""
+        """Parse all tag data prior to the first query result (PRIVATE)."""
         # dictionary for containing all information prior to the first query
         meta = {}
         # dictionary for fallback information
@@ -280,7 +282,7 @@ class BlastXmlParser(object):
         return meta, fallback
 
     def _parse_qresult(self):
-        """Parses query results."""
+        """Parse query results (PRIVATE)."""
         # parse the queries
         for event, qresult_elem in self.xml_iter:
             # </Iteration> marks the end of a single query
@@ -384,7 +386,7 @@ class BlastXmlParser(object):
                 yield qresult
 
     def _parse_hit(self, root_hit_elem, query_id):
-        """Generator that transforms Iteration_hits XML elements into Hit objects.
+        """Yield a generator object that transforms Iteration_hits XML elements into Hit objects (PRIVATE).
 
         :param root_hit_elem: root element of the Iteration_hits tag.
         :type root_hit_elem: XML element tag
@@ -445,7 +447,7 @@ class BlastXmlParser(object):
             yield hit
 
     def _parse_hsp(self, root_hsp_frag_elem, query_id, hit_id):
-        """Iterator that transforms Hit_hsps XML elements into HSP objects.
+        """Yield a generator object that transforms Hit_hsps XML elements into HSP objects (PRIVATE).
 
         :param root_hsp_frag_elem: the ``Hit_hsps`` tag
         :type root_hsp_frag_elem: XML element tag
@@ -501,8 +503,7 @@ class BlastXmlParser(object):
                     setattr(frag, val_info[0], value)
 
             # set the similarity characters into aln_annotation dict
-            frag.aln_annotation['similarity'] = \
-                    hsp_frag_elem.findtext('Hsp_midline')
+            frag.aln_annotation['similarity'] = hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
             # since 'x-from' could be bigger than 'x-to', we need to figure
@@ -656,13 +657,13 @@ class _BlastXmlGenerator(XMLGenerator):
             self.write = self._out.write
 
     def startDocument(self):
-        """Starts the XML document."""
+        """Start the XML document."""
         self.write(u'<?xml version="1.0"?>\n'
                 '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
                 '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
 
     def startElement(self, name, attrs=None, children=False):
-        """Starts an XML element.
+        """Start an XML element.
 
         :param name: element name
         :type name: string
@@ -678,12 +679,12 @@ class _BlastXmlGenerator(XMLGenerator):
         XMLGenerator.startElement(self, name, attrs)
 
     def endElement(self, name):
-        """Ends and XML element of the given name."""
+        """End and XML element of the given name."""
         XMLGenerator.endElement(self, name)
         self.write(u'\n')
 
     def startParent(self, name, attrs=None):
-        """Starts an XML element which has children.
+        """Start an XML element which has children.
 
         :param name: element name
         :type name: string
@@ -700,7 +701,7 @@ class _BlastXmlGenerator(XMLGenerator):
         self._parent_stack.append(name)
 
     def endParent(self):
-        """Ends an XML element with children."""
+        """End an XML element with children."""
         # the element to end is the one on top of the stack
         name = self._parent_stack.pop()
         self._level -= self._increment
@@ -708,17 +709,17 @@ class _BlastXmlGenerator(XMLGenerator):
         self.endElement(name)
 
     def startParents(self, *names):
-        """Starts XML elements without children."""
+        """Start XML elements without children."""
         for name in names:
             self.startParent(name)
 
     def endParents(self, num):
-        """Ends XML elements, according to the given number."""
+        """End XML elements, according to the given number."""
         for i in range(num):
             self.endParent()
 
     def simpleElement(self, name, content=None):
-        """Creates an XML element without children with the given content."""
+        """Create an XML element without children with the given content."""
         self.startElement(name, attrs={})
         if content:
             self.characters(content)
@@ -741,7 +742,7 @@ class BlastXmlWriter(object):
         self._use_raw_hit_ids = use_raw_hit_ids
 
     def write_file(self, qresults):
-        """Writes the XML contents to the output handle."""
+        """Write the XML contents to the output handle."""
         xml = self.xml
         self.qresult_counter, self.hit_counter, self.hsp_counter, \
             self.frag_counter = 0, 0, 0, 0
@@ -762,7 +763,7 @@ class BlastXmlWriter(object):
             self.frag_counter
 
     def _write_elem_block(self, block_name, map_name, obj, opt_dict=None):
-        """Writes sibling XML elements.
+        """Write sibling XML elements (PRIVATE).
 
         :param block_name: common element name prefix
         :type block_name: string
@@ -791,7 +792,7 @@ class BlastXmlWriter(object):
                 self.xml.simpleElement(elem, content)
 
     def _write_preamble(self, qresult):
-        """Writes the XML file preamble."""
+        """Write the XML file preamble (PRIVATE)."""
         xml = self.xml
 
         for elem, attr in _WRITE_MAPS['preamble']:
@@ -819,14 +820,14 @@ class BlastXmlWriter(object):
                 xml.simpleElement(elem, content)
 
     def _write_param(self, qresult):
-        """Writes the parameter block of the preamble."""
+        """Write the parameter block of the preamble (PRIVATE)."""
         xml = self.xml
         xml.startParent('Parameters')
         self._write_elem_block('Parameters_', 'param', qresult)
         xml.endParent()
 
     def _write_qresults(self, qresults):
-        """Writes QueryResult objects into iteration elements."""
+        """Write QueryResult objects into iteration elements (PRIVATE)."""
         xml = self.xml
 
         for num, qresult in enumerate(qresults):
@@ -864,7 +865,7 @@ class BlastXmlWriter(object):
             xml.endParent()
 
     def _write_hits(self, hits):
-        """Writes Hit objects."""
+        """Write Hit objects (PRIVATE)."""
         xml = self.xml
 
         for num, hit in enumerate(hits):
@@ -896,7 +897,7 @@ class BlastXmlWriter(object):
             xml.endParents(2)
 
     def _write_hsps(self, hsps):
-        """Writes HSP objects."""
+        """Write HSP objects (PRIVATE)."""
         xml = self.xml
         for num, hsp in enumerate(hsps):
             xml.startParent('Hsp')
@@ -917,7 +918,7 @@ class BlastXmlWriter(object):
             xml.endParent()
 
     def _adjust_output(self, hsp, elem, attr):
-        """Adjusts output to mimic native BLAST+ XML as much as possible."""
+        """Adjust output to mimic native BLAST+ XML as much as possible (PRIVATE)."""
         # adjust coordinates
         if attr in ('query_start', 'query_end', 'hit_start', 'hit_end',
                 'pattern_start', 'pattern_end'):

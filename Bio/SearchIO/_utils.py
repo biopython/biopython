@@ -8,7 +8,7 @@ from Bio._py3k import basestring
 
 
 def get_processor(format, mapping):
-    """Returns the object to process the given format according to the mapping.
+    """Return the object to process the given format according to the mapping.
 
     :param format: format name
     :type format: string, lower case
@@ -68,7 +68,7 @@ def allitems(attr=None, doc=''):
 
 
 def fullcascade(attr, doc=''):
-    """Returns a getter property with a cascading setter.
+    """Return a getter property with a cascading setter.
 
     This is similar to ``optionalcascade``, but for SearchIO containers that have
     at least one item (HSP). The getter always retrieves the attribute
@@ -88,7 +88,7 @@ def fullcascade(attr, doc=''):
 
 
 def optionalcascade(cont_attr, item_attr, doc=''):
-    """Returns a getter property with a cascading setter.
+    """Return a getter property with a cascading setter.
 
     This is used for the ``id`` and ``description`` properties of the container
     objects with zero or more items. These items have their own private
@@ -117,7 +117,7 @@ def optionalcascade(cont_attr, item_attr, doc=''):
 
 
 def fragcascade(attr, seq_type, doc=''):
-    """Returns a getter property with cascading setter, for HSPFragment objects.
+    """Return a getter property with cascading setter, for HSPFragment objects.
 
     Similar to ``partialcascade``, but for HSPFragment objects and acts on ``query``
     or ``hit`` properties of the object if they are not None.

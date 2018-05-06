@@ -56,15 +56,15 @@ class Record(object):
 
     def __str__(self):
         """Return a string representation of this Record."""
-        return self._entry() + \
-               self._name() + \
-               self._formula() + \
-               self._mass() + \
-               self._pathway() + \
-               self._enzyme() + \
-               self._structures() + \
-               self._dblinks() + \
-               "///"
+        return (self._entry() +
+                self._name() +
+                self._formula() +
+                self._mass() +
+                self._pathway() +
+                self._enzyme() +
+                self._structures() +
+                self._dblinks() +
+                "///")
 
     def _entry(self):
         return _write_kegg("ENTRY",

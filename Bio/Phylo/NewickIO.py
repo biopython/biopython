@@ -127,7 +127,7 @@ class Parser(object):
             yield self._parse_tree(buf)
 
     def _parse_tree(self, text):
-        """Parses the text representation into an Tree object."""
+        """Parse the text representation into an Tree object (PRIVATE)."""
         tokens = re.finditer(tokenizer, text.strip())
 
         new_clade = self.new_clade
@@ -219,7 +219,7 @@ class Parser(object):
         return clade
 
     def process_clade(self, clade):
-        """Final processing of parsed clade. Remove node's parent and return it."""
+        """Remove node's parent and return it. Final processing of parsed clade."""
         if ((clade.name) and not
                 (self.values_are_confidence or self.comments_are_confidence) and
                 (clade.confidence is None) and
@@ -331,7 +331,7 @@ class Writer(object):
                     return (':' + format_branch_length
                             ) % (clade.branch_length or 0.0) + _get_comment(clade)
                 else:
-                    return (':' + format_confidence + ':' + format_branch_length
+                    return (format_confidence + ':' + format_branch_length
                             ) % (clade.confidence, clade.branch_length or 0.0) + _get_comment(clade)
 
         return make_info_string

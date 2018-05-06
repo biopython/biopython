@@ -37,7 +37,7 @@ class PhyloXMLWarning(BiopythonWarning):
 
 
 def _check_str(text, testfunc):
-    """Check a string using testfunc, and warn if there's no match."""
+    """Check a string using testfunc, and warn if there's no match (PRIVATE)."""
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
                       PhyloXMLWarning, stacklevel=2)
@@ -95,7 +95,7 @@ class Phyloxml(PhyloElement):
         return iter(self.phylogenies)
 
     def __len__(self):
-        """Number of phylogenetic trees in this object."""
+        """Return the number of phylogenetic trees in this object."""
         return len(self.phylogenies)
 
     def __str__(self):
@@ -249,7 +249,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     # Singular property for plural attribute
     def _get_confidence(self):
-        """Equivalent to self.confidences[0] if there is only 1 value.
+        """Equivalent to self.confidences[0] if there is only 1 value (PRIVATE).
 
         See Also: `Clade.confidence`, `Clade.taxonomy`
 
@@ -593,13 +593,13 @@ class Confidence(PhyloElement):
         return id(self)
 
     def __eq__(self, other):
-        """Checks for equality between Confidence objects."""
+        """Check for equality between Confidence objects."""
         if isinstance(other, Confidence):
             return self.value == other.value
         return self.value == other
 
     def __ne__(self, other):
-        """Checks for inequality between two Confidence objects."""
+        """Check for inequality between two Confidence objects."""
         if isinstance(other, Confidence):
             return self.value != other.value
         return self.value != other
@@ -623,7 +623,7 @@ class Confidence(PhyloElement):
     # Arithmetic operators, including reverse
 
     def __add__(self, other):
-        """Conducts additions between value of two Confidence objects."""
+        """Conduct additions between value of two Confidence objects."""
         return self.value + other
 
     def __radd__(self, other):
@@ -671,7 +671,7 @@ class Confidence(PhyloElement):
         return other.__floordiv__(self.value)
 
     def __mod__(self, other):
-        """Conducts modulus between value of two Confidence objects."""
+        """Conduct modulus between value of two Confidence objects."""
         return self.value % other
 
     def __rmod__(self, other):
@@ -694,7 +694,7 @@ class Confidence(PhyloElement):
     # Unary arithmetic operations: -, +, abs()
 
     def __neg__(self):
-        """Conducts negation of a Confidence object."""
+        """Conduct negation of a Confidence object."""
         return -self.value
 
     def __pos__(self):
@@ -708,16 +708,16 @@ class Confidence(PhyloElement):
     # (and under Python 2 only long)
 
     def __float__(self):
-        """Returns float value of Confidence object."""
+        """Return float value of Confidence object."""
         return float(self.value)
 
     def __int__(self):
-        """Returns integer value of Confidence object."""
+        """Return integer value of Confidence object."""
         return int(self.value)
 
     if sys.version_info[0] < 3:
         def __long__(self):
-            """Returns long value of Confidence object."""
+            """Return long value of Confidence object."""
             return long(self.value)  # noqa : F821
 
 
@@ -827,7 +827,7 @@ class Events(PhyloElement):
         return [k for k, v in self.__dict__.items() if v is not None]
 
     def values(self):
-        """Returns values from a key-value pair in an Events dict."""
+        """Return values from a key-value pair in an Events dict."""
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
@@ -849,7 +849,7 @@ class Events(PhyloElement):
         setattr(self, key, None)
 
     def __iter__(self):
-        """Iterates over the keys present in a Events dict."""
+        """Iterate over the keys present in a Events dict."""
         return iter(self.keys())
 
     def __contains__(self, key):
@@ -895,7 +895,7 @@ class MolSeq(PhyloElement):
         self.is_aligned = is_aligned
 
     def __str__(self):
-        """Returns the value of the Molecular Sequence object."""
+        """Return the value of the Molecular Sequence object."""
         return self.value
 
 

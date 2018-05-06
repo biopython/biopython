@@ -1,12 +1,14 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
 # Revisions copyright 2008-2017 by Peter Cock.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# Contact:       Leighton Pritchard, Scottish Crop Research Institute,
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
+# Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
-#                L.Pritchard@scri.ac.uk
+#                Leighton.Pritchard@hutton.ac.uk
 ################################################################################
 
 """AbstractDrawer module (considered to be a private module, the API may change!).
@@ -40,7 +42,7 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Polygon
 
 from math import pi, sin, cos
-
+from itertools import islice
 
 ################################################################################
 # METHODS
@@ -150,14 +152,15 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
     x_corner = min(boxheight * 0.5 * corner, boxwidth * 0.5)
     y_corner = min(boxheight * 0.5 * corner, boxheight * 0.5)
 
-    return Polygon([x1, y1 + y_corner,
-                    x1, y2 - y_corner,
-                    x1 + x_corner, y2,
-                    x2 - x_corner, y2,
-                    x2, y2 - y_corner,
-                    x2, y1 + y_corner,
-                    x2 - x_corner, y1,
-                    x1 + x_corner, y1],
+    points = [x1, y1 + y_corner,
+              x1, y2 - y_corner,
+              x1 + x_corner, y2,
+              x2 - x_corner, y2,
+              x2, y2 - y_corner,
+              x2, y1 + y_corner,
+              x2 - x_corner, y1,
+              x1 + x_corner, y1]
+    return Polygon(deduplicate(points),
                    strokeColor=strokecolor,
                    strokeWidth=1,
                    strokeLineJoin=1,  # 1=round
@@ -190,7 +193,7 @@ def draw_polygon(list_of_points,
         xy_list.append(x)
         xy_list.append(y)
 
-    return Polygon(xy_list,
+    return Polygon(deduplicate(xy_list),
                    strokeColor=strokecolor,
                    fillColor=color,
                    strokewidth=0,
@@ -250,13 +253,16 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftbase = boxheight - shafttop
     headbase = boxwidth - headlength
     midheight = 0.5 * boxheight
-    return Polygon([x1, y1 + shafttop,
-                    x1 + headbase, y1 + shafttop,
-                    x1 + headbase, y2,
-                    x2, y1 + midheight,
-                    x1 + headbase, y1,
-                    x1 + headbase, y1 + shaftbase,
-                    x1, y1 + shaftbase],
+
+    points = [x1, y1 + shafttop,
+              x1 + headbase, y1 + shafttop,
+              x1 + headbase, y2,
+              x2, y1 + midheight,
+              x1 + headbase, y1,
+              x1 + headbase, y1 + shaftbase,
+              x1, y1 + shaftbase]
+
+    return Polygon(deduplicate(points),
                    strokeColor=strokecolor,
                    # strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
@@ -264,6 +270,28 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                    strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
+
+
+def deduplicate(points):
+    """Remove adjacent duplicate points.
+
+    This is important for use with the Polygon class since reportlab has a
+    bug with duplicate points.
+
+    Arguments:
+     - points - list of points [x1, y1, x2, y2,...]
+
+    Returns a list in the same format with consecutive duplicates removed
+    """
+    assert len(points) % 2 == 0
+    if len(points) < 2:
+        return points
+    newpoints = points[0:2]
+    for x, y in zip(islice(points, 2, None, 2), islice(points, 3, None, 2)):
+        if x != newpoints[-2] or y != newpoints[-1]:
+            newpoints.append(x)
+            newpoints.append(y)
+    return newpoints
 
 
 def angle2trig(theta):

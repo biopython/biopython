@@ -1,12 +1,13 @@
 # Copyright 2008-2015 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# This module is for reading and writing PIR or NBRF format files as
-# SeqRecord objects.  The code is based on Bio.SeqIO.FastaIO
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "pir" (aka PIR or NBRF) file format.
+
+This module is for reading and writing PIR or NBRF format files as
+SeqRecord objects.
 
 You are expected to use this module via the Bio.SeqIO functions, or if
 the file contains a sequence alignment, optionally via Bio.AlignIO instead.
@@ -108,7 +109,7 @@ _pir_alphabets = {"P1": generic_protein,
 
 
 def PirIterator(handle):
-    """Generator function to iterate over Fasta records (as SeqRecord objects).
+    """Iterate over Fasta records as SeqRecord objects.
 
     handle - input file
     alphabet - optional alphabet

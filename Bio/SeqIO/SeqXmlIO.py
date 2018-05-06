@@ -1,11 +1,13 @@
 # Copyright 2010 by Thomas Schmitt.
-# All rights reserved.
 #
-# This module is for reading and writing SeqXML format files as
-# SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "seqxml" file format, SeqXML.
 
-You are expected to use this module via the Bio.SeqIO functions.
+This module is for reading and writing SeqXML format files as
+SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for
 FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
@@ -42,7 +44,7 @@ class XMLRecordIterator(object):
     """
 
     def __init__(self, handle, recordTag, namespace=None):
-        """Creating the object and initializing the XML parser."""
+        """Create the object and initializing the XML parser."""
         self._recordTag = recordTag
         self._namespace = namespace
         self._events = pulldom.parse(handle)
@@ -94,7 +96,7 @@ class XMLRecordIterator(object):
                     raise
 
     def _attributes(self, node):
-        """Return the attributes of a DOM node as dictionary."""
+        """Return the attributes of a DOM node as dictionary (PRIVATE)."""
         return dict((node.attributes.item(i).name, node.attributes.item(i).value)
                     for i in range(node.attributes.length))
 
@@ -116,7 +118,7 @@ class SeqXmlIterator(XMLRecordIterator):
         self._ncbiTaxId = None
 
     def _attr_seqXML(self, attr_dict, record):
-        """Parse the document metadata."""
+        """Parse the document metadata (PRIVATE)."""
         if "source" in attr_dict:
             self._source = attr_dict["source"]
         if "sourceVersion" in attr_dict:
@@ -129,7 +131,7 @@ class SeqXmlIterator(XMLRecordIterator):
             self._speciesName = attr_dict["speciesName"]
 
     def _attr_property(self, attr_dict, record):
-        """Parse key value pair properties and store them as annotations."""
+        """Parse key value pair properties and store them as annotations (PRIVATE)."""
         if "name" not in attr_dict:
             raise ValueError("Malformed property element.")
 
@@ -144,7 +146,7 @@ class SeqXmlIterator(XMLRecordIterator):
                 record.annotations[attr_dict["name"]], value]
 
     def _attr_species(self, attr_dict, record):
-        """Parse the species information."""
+        """Parse the species information (PRIVATE)."""
         if "name" not in attr_dict or "ncbiTaxID" not in attr_dict:
             raise ValueError("Malformed species element!")
 
@@ -154,7 +156,7 @@ class SeqXmlIterator(XMLRecordIterator):
         record.annotations["ncbi_taxid"] = attr_dict["ncbiTaxID"]
 
     def _attr_entry(self, attr_dict, record):
-        """New entry set id and the optional entry source."""
+        """Set new entry with id and the optional entry source (PRIVATE)."""
         if "id" not in attr_dict:
             raise ValueError("Malformed entry! Identifier is missing.")
 
@@ -172,28 +174,28 @@ class SeqXmlIterator(XMLRecordIterator):
             record.annotations["organism"] = self._speciesName
 
     def _elem_DNAseq(self, node, record):
-        """Parse DNA sequence."""
+        """Parse DNA sequence (PRIVATE)."""
         if not (node.hasChildNodes() and len(node.firstChild.data) > 0):
             raise ValueError("Sequence length should be greater than 0.")
 
         record.seq = Seq(node.firstChild.data, Alphabet.generic_dna)
 
     def _elem_RNAseq(self, node, record):
-        """Parse RNA sequence."""
+        """Parse RNA sequence (PRIVATE)."""
         if not (node.hasChildNodes() and len(node.firstChild.data) > 0):
             raise ValueError("Sequence length should be greater than 0.")
 
         record.seq = Seq(node.firstChild.data, Alphabet.generic_rna)
 
     def _elem_AAseq(self, node, record):
-        """Parse protein sequence."""
+        """Parse protein sequence (PRIVATE)."""
         if not (node.hasChildNodes() and len(node.firstChild.data) > 0):
             raise ValueError("Sequence length should be greater than 0.")
 
         record.seq = Seq(node.firstChild.data, Alphabet.generic_protein)
 
     def _elem_description(self, node, record):
-        """Parse the description."""
+        """Parse the description (PRIVATE)."""
         if node.hasChildNodes() and len(node.firstChild.data) > 0:
             record.description = node.firstChild.data
 
@@ -281,7 +283,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         self.xml_generator.endDocument()
 
     def _write_species(self, record):
-        """Write the species if given."""
+        """Write the species if given (PRIVATE)."""
         local_ncbi_taxid = None
         if "ncbi_taxid" in record.annotations:
             local_ncbi_taxid = record.annotations["ncbi_taxid"]
@@ -293,7 +295,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                     local_ncbi_taxid = None
                 else:
                     ValueError('Multiple entries for record.annotations["ncbi_taxid"], %r'
-                                     % local_ncbi_taxid)
+                               % local_ncbi_taxid)
         if "organism" in record.annotations and local_ncbi_taxid:
             local_org = record.annotations["organism"]
 
@@ -313,7 +315,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 self.xml_generator.endElement("species")
 
     def _write_description(self, record):
-        """Write the description if given."""
+        """Write the description if given (PRIVATE)."""
         if record.description:
 
             if not isinstance(record.description, basestring):
@@ -330,7 +332,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 self.xml_generator.endElement("description")
 
     def _write_seq(self, record):
-        """Write the sequence.
+        """Write the sequence (PRIVATE).
 
         Note that SeqXML requires a DNA, RNA or protein alphabet.
         """
@@ -359,7 +361,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         self.xml_generator.endElement(seqElem)
 
     def _write_dbxrefs(self, record):
-        """Write all database cross references."""
+        """Write all database cross references (PRIVATE)."""
         if record.dbxrefs is not None:
 
             for dbxref in record.dbxrefs:
@@ -376,7 +378,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
                 self.xml_generator.endElement("DBRef")
 
     def _write_properties(self, record):
-        """Write all annotations that are key value pairs with values of a primitive type or list of primitive types."""
+        """Write all annotations that are key value pairs with values of a primitive type or list of primitive types (PRIVATE)."""
         for key, value in record.annotations.items():
 
             if key not in ("organism", "ncbi_taxid", "source"):

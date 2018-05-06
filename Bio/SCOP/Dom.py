@@ -37,7 +37,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses DOM records.
+        """Parse DOM records (PRIVATE).
 
         Records consist of 4 tab deliminated fields;
         sid, pdbid, residues, hierarchy
@@ -66,7 +66,7 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DOM file as a Dom record for each line.
+    """Iterate over a DOM file as a Dom record for each line.
 
     Arguments:
      - handle -- file-like object.

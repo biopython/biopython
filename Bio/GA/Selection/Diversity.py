@@ -50,7 +50,7 @@ class DiversitySelection(AbstractSelection):
         self.random_tries = 10
 
     def _get_new_organism(self, new_pop, old_pop):
-        """Get a new organism from old_pop that isn't in new_pop.
+        """Get a new organism from old_pop that isn't in new_pop (PRIVATE).
 
         This attempts to select an organism from old_pop that isn't in
         new_pop. If we can't do this in the number of tries specified

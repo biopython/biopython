@@ -13,24 +13,24 @@ class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
 
     def __init__(self, nodes=()):
-        """Initializes a new MultiGraph object."""
+        """Initialize a new MultiGraph object."""
         self._adjacency_list = {}    # maps parent -> set of (child, label) pairs
         for n in nodes:
             self._adjacency_list[n] = set()
         self._label_map = {}         # maps label -> set of (parent, child) pairs
 
     def __eq__(self, g):
-        """Returns true if g is equal to this graph."""
-        return isinstance(g, MultiGraph) and \
-               (self._adjacency_list == g._adjacency_list) and \
-               (self._label_map == g._label_map)
+        """Return true if g is equal to this graph."""
+        return (isinstance(g, MultiGraph)
+                and self._adjacency_list == g._adjacency_list
+                and self._label_map == g._label_map)
 
     def __ne__(self, g):
-        """Returns true if g is not equal to this graph."""
+        """Return true if g is not equal to this graph."""
         return not self.__eq__(g)
 
     def __repr__(self):
-        """Returns a unique string representation of this graph."""
+        """Return a unique string representation of this graph."""
         s = "<MultiGraph: "
         for key in sorted(self._adjacency_list):
             values = sorted(self._adjacency_list[key])
@@ -38,7 +38,7 @@ class MultiGraph(object):
         return s + ">"
 
     def __str__(self):
-        """Returns a concise string description of this graph."""
+        """Return a concise string description of this graph."""
         nodenum = len(self._adjacency_list)
         edgenum = reduce(lambda x, y: x + y,
                          [len(v) for v in self._adjacency_list.values()])
@@ -49,12 +49,12 @@ class MultiGraph(object):
                str(labelnum) + " unique label(s)>"
 
     def add_node(self, node):
-        """Adds a node to this graph."""
+        """Add a node to this graph."""
         if node not in self._adjacency_list:
             self._adjacency_list[node] = set()
 
     def add_edge(self, source, to, label=None):
-        """Adds an edge to this graph."""
+        """Add an edge to this graph."""
         if source not in self._adjacency_list:
             raise ValueError("Unknown <from> node: " + str(source))
         if to not in self._adjacency_list:
@@ -66,31 +66,31 @@ class MultiGraph(object):
         self._label_map[label].add((source, to))
 
     def child_edges(self, parent):
-        """Returns a list of (child, label) pairs for parent."""
+        """Return a list of (child, label) pairs for parent."""
         if parent not in self._adjacency_list:
             raise ValueError("Unknown <parent> node: " + str(parent))
         return sorted(self._adjacency_list[parent])
 
     def children(self, parent):
-        """Returns a list of unique children for parent."""
+        """Return a list of unique children for parent."""
         return sorted(set(x[0] for x in self.child_edges(parent)))
 
     def edges(self, label):
-        """Returns a list of all the edges with this label."""
+        """Return a list of all the edges with this label."""
         if label not in self._label_map:
             raise ValueError("Unknown label: " + str(label))
         return sorted(self._label_map[label])
 
     def labels(self):
-        """Returns a list of all the edge labels in this graph."""
+        """Return a list of all the edge labels in this graph."""
         return list(self._label_map.keys())
 
     def nodes(self):
-        """Returns a list of the nodes in this graph."""
+        """Return a list of the nodes in this graph."""
         return list(self._adjacency_list.keys())
 
     def parent_edges(self, child):
-        """Returns a list of (parent, label) pairs for child."""
+        """Return a list of (parent, label) pairs for child."""
         if child not in self._adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
@@ -101,11 +101,11 @@ class MultiGraph(object):
         return sorted(parents)
 
     def parents(self, child):
-        """Returns a list of unique parents for child."""
+        """Return a list of unique parents for child."""
         return sorted(set(x[0] for x in self.parent_edges(child)))
 
     def remove_node(self, node):
-        """Removes node and all edges connected to it."""
+        """Remove node and all edges connected to it."""
         if node not in self._adjacency_list:
             raise ValueError("Unknown node: " + str(node))
         # remove node (and all out-edges) from adjacency list
@@ -125,7 +125,7 @@ class MultiGraph(object):
                 del self._label_map[label]
 
     def remove_edge(self, parent, child, label):
-        """Removes edge (NOT IMPLEMENTED)."""
+        """Remove edge (NOT IMPLEMENTED)."""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
 

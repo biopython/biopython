@@ -251,7 +251,7 @@ class HSP(_BaseHSP):
     _NON_STICKY_ATTRS = ('_items', )
 
     def __init__(self, fragments=()):
-        """Initializes an HSP object.
+        """Initialize an HSP object.
 
         :param fragments: fragments contained in the HSP object
         :type fragments: iterable yielding HSPFragment
@@ -792,7 +792,7 @@ class HSPFragment(_BaseHSP):
 
     # sequence properties #
     def _set_seq(self, seq, seq_type):
-        """Checks the given sequence for attribute setting.
+        """Check the given sequence for attribute setting (PRIVATE).
 
         :param seq: sequence to check
         :type seq: string or SeqRecord

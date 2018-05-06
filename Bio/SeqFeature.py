@@ -3,9 +3,11 @@
 # Copyright 2005-2016 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Represent a Sequence Feature holding info about a part of a sequence.
 
 This is heavily modeled after the Biocorba SeqFeature objects, and
@@ -669,6 +671,11 @@ class FeatureLocation(object):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
+        if isinstance(self.start.position, int) and \
+                isinstance(self.end.position, int) and self.start > self.end:
+            raise ValueError('End location ({}) must be greater than or equal '
+                             'to start location ({})'.format(self.end,
+                                                             self.start))
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db

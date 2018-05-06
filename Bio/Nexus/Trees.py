@@ -73,7 +73,7 @@ class Tree(Nodes.Chain):
             self._add_subtree(parent_id=root.id, tree=subtree_info)
 
     def _parse(self, tree):
-        """Parse (a,b,c...)[[[xx]:]yy] into subcomponents and travels down recursively."""
+        """Parse (a,b,c...)[[[xx]:]yy] into subcomponents and travels down recursively (PRIVATE)."""
         # Remove any leading/trailing white space - want any string starting
         # with " (..." should be recognised as a leaf, "(..."
         tree = tree.strip()
@@ -120,7 +120,7 @@ class Tree(Nodes.Chain):
             return [subclades, val]
 
     def _add_subtree(self, parent_id=None, tree=None):
-        """Add leaf or tree (in newick format) to a parent_id."""
+        """Add leaf or tree (in newick format) to a parent_id (PRIVATE)."""
         if parent_id is None:
             raise TreeError('Need node_id to connect to.')
         for st in tree:
@@ -136,7 +136,7 @@ class Tree(Nodes.Chain):
                 self.add(leaf, parent_id)
 
     def _add_nodedata(self, nd, st):
-        """Add data to the node parsed from the comments, taxon and support."""
+        """Add data to the node parsed from the comments, taxon and support (PRIVATE)."""
         if isinstance(st[1][-1], str) and st[1][-1].startswith(NODECOMMENT_START):
             nd.comment = st[1].pop(-1)
         # if the first element is a string, it's the subtree node taxon
@@ -157,7 +157,7 @@ class Tree(Nodes.Chain):
         return nd
 
     def _get_values(self, text):
-        """Extract values (support/branchlength) from xx[:yyy], xx."""
+        """Extract values (support/branchlength) from xx[:yyy], xx (PRIVATE)."""
         if text == '':
             return None
         nodecomment = None
@@ -187,7 +187,7 @@ class Tree(Nodes.Chain):
         return values
 
     def _walk(self, node=None):
-        """Return all node_ids downwards from a node."""
+        """Return all node_ids downwards from a node (PRIVATE)."""
         if node is None:
             node = self.root
         for n in self.node(node).succ:
@@ -681,7 +681,7 @@ class Tree(Nodes.Chain):
     def root_with_outgroup(self, outgroup=None):
 
         def _connect_subtree(parent, child):
-            """Hook subtree starting with node child to parent."""
+            """Attach subtree starting with node child to parent (PRIVATE)."""
             for i, branch in enumerate(self.unrooted):
                 if parent in branch[:2] and child in branch[:2]:
                     branch = self.unrooted.pop(i)
@@ -793,11 +793,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
     # countclades={}
     alltaxa = set(trees[0].get_taxa())
     # calculate calde frequencies
-    c = 0
     for t in trees:
-        c += 1
-        # if c%100==0:
-        #    print(c)
         if alltaxa != set(t.get_taxa()):
             raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)

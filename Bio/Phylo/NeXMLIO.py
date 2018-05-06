@@ -199,7 +199,7 @@ class Parser(object):
 
     @classmethod
     def _make_tree(cls, node, node_dict, children):
-        """Traverse the tree creating a nested clade structure.
+        """Traverse the tree creating a nested clade structure (PRIVATE).
 
         Return a NeXML.Clade, and calls itself recursively for each child,
         traversing the  entire tree and creating a nested structure of NeXML.Clade
@@ -287,7 +287,7 @@ class Writer(object):
         return count
 
     def _write_tree(self, clade, tree, parent=None, rooted=False):
-        """Recursively process tree, adding nodes and edges to Tree object.
+        """Recursively process tree, adding nodes and edges to Tree object (PRIVATE).
 
         Returns a set of all OTUs encountered.
         """

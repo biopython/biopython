@@ -99,7 +99,10 @@ class _NcbibaseblastCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def _validate_incompatibilities(self, incompatibles):
-        """Used by the BLAST+ _validate method (PRIVATE)."""
+        """Validate parameters for incompatibilities (PRIVATE).
+
+        Used by the _validate method.
+        """
         for a in incompatibles:
             if self._get_parameter(a):
                 for b in incompatibles[a]:
@@ -152,7 +155,8 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-gilist", "gilist"],
                     """Restrict search of database to list of GI's.
 
-                    Incompatible with: negative_gilist, seqidlist, remote, subject, subject_loc""",
+                    Incompatible with: negative_gilist, seqidlist, negative_seqidlist,
+                    remote, subject, subject_loc""",
                     filename=True,
                     equate=False),
             _Option(["-negative_gilist", "negative_gilist"],
@@ -165,6 +169,12 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     """Restrict search of database to list of SeqID's.
 
                     Incompatible with: gilist, negative_gilist, remote, subject, subject_loc""",
+                    filename=True,
+                    equate=False),
+            _Option(["-negative_seqidlist", "negative_seqidlist"],
+                    """Restrict search of database to everything except the listed SeqID's.
+
+                    Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
                     filename=True,
                     equate=False),
             _Option(["-entrez_query", "entrez_query"],
@@ -281,7 +291,9 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             _Option(["-subject", "subject"],
                     """Subject sequence(s) to search.
 
-                    Incompatible with: db, gilist, negative_gilist.
+                    Incompatible with: db, gilist, seqidlist, negative_gilist,
+                    negative_seqidlist, db_soft_mask, db_hard_mask
+
                     See also subject_loc.""",
                     filename=True,
                     equate=False),
@@ -289,7 +301,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
                     """Location on the subject sequence (Format: start-stop).
 
                     Incompatible with: db, gilist, seqidlist, negative_gilist,
-                    db_soft_mask, db_hard_mask, remote.
+                    negative_seqidlist, db_soft_mask, db_hard_mask, remote.
 
                     See also subject.""",
                     equate=False),

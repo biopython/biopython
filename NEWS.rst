@@ -8,12 +8,43 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released) Biopython 1.71
+(In progress, not yet released) Biopython 1.72
 ==============================================
 
 This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
-It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
-(although support for Jython is deprecated).
+It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+
+Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
+SeqIO.write (especially when used in a for loop).
+
+The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
+inclusive end co-ordindates to better handle searches at end points. This
+will require you to rebuild any existing MAF index files.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
+The Entrez module now allows users to set a custom directory location for DTD
+and XSD files. This change allows Entrez to be used in code deployments
+such as AWS Lambda, which restricts write access to specific directories.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Blaise Li
+- Chad Parmet
+- Chris Rands
+- Peter Cock
+- Spencer Bliven
+- Wibowo 'Bow' Arindrarto
+
+
+3 April 2018: Biopython 1.71
+============================
+
+This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
+It has also been tested on PyPy2.7 v5.10.0 and PyPy3.5 v5.10.1.
 
 Python 3 is the primary development platform for Biopython. We will drop
 support for Python 2.7 no later than 2020, in line with the end-of-life or
@@ -36,6 +67,10 @@ for its existing reverse_complement method etc.
 The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
 a pairwise sequence alignment as text now indicates gaps and mis-matches.
 
+Bio.SeqIO now supports reading and writing two-line-per-record FASTA files
+under the format name "fasta-2line", useful if you wish to work without
+line-wrapped sequences.
+
 Bio.PDB now contains a writer for the mmCIF file format, which has been the
 standard PDB archive format since 2014. This allows structural objects to be
 written out and facilitates conversion between the PDB and mmCIF file formats.
@@ -46,9 +81,31 @@ wrapper and include a new wrapper for fuzzpro.
 The restriction enzyme list in Bio.Restriction has been updated to the
 November 2017 release of REBASE.
 
+New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2) 
+were added to Bio.Data.CodonTable. Note that tables 27, 28 and 31 contain
+no dedicated stop codons; the stop codons in these codes have a context
+dependent encoding as either STOP or as amino acid. 
+
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
+IO functions such as ``SeqIO.parse`` now accept any objects which can be passed
+to the builtin ``open`` function. Specifically, this allows using
+``pathlib.Path`` objects under Python 3.6 and newer, as per `PEP 519
+<https://www.python.org/dev/peps/pep-0519/>`_.
+
+Bio.SearchIO can now parse InterProScan XML files.
+
+For Python 3 compatibility, comparision operators for the entities within a
+Bio.PDB Structure object were implemented. These allow the comparison of
+models, chains, residues, and atoms with the common operators  (==, !=, >, ...)
+Comparisons are based on IDs and take the parents of the entity up to the
+model level into account. For consistent behaviour of all entities the operators
+for atoms were modified to also consider the parent IDs. NOTE: this represents a
+change in behaviour in respect to v1.70 for Atom comparisons. In order to mimic
+the behaviour of previous versions, comparison will have to be done for Atom IDs
+and alternative locations specifically.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
@@ -64,8 +121,10 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
+- James Jeffryes (first contribution)
 - Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
+- Joerg Schaarschmidt (first contribution)
 - João Rodrigues
 - Jeroen Van Goey
 - Jun Aruga (first contribution)
@@ -76,14 +135,17 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Nicolas Fontrodona (first contribution)
 - Peter Cock
+- Philip Bergstrom (first contribution)
 - rht (first contribution)
 - Saket Choudhary
 - Shuichiro MAKIGAKI (first contribution)
 - Shyam Saladi (first contribution)
+- Siong Kong
 - Spencer Bliven
 - Stefans Mezulis
 - Steve Bond
 - Yasar L. Ahmed (first contribution)
+- Zachary Sailer (first contribution)
 - Zaid Ur-Rehman (first contribution)
 
 
@@ -143,7 +205,7 @@ possible, especially the following contributors:
 - Ariel Aptekmann (first contribution)
 - Ben Fulton
 - Bertrand Caron (first contribution)
-- Chris Rands
+- Chris Rands (first contribution)
 - Connor T. Skennerton
 - Eric Rasche
 - Eric Talevich

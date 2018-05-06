@@ -124,6 +124,8 @@ class Hit(_BaseSearchObject):
         self._description = None
         self._description_alt = []
         self._query_description = None
+        self.attributes = {}
+        self.dbxrefs = []
 
         # TODO - Move this into the for look below in case
         # hsps is a single use iterator?
@@ -182,6 +184,15 @@ class Hit(_BaseSearchObject):
             hid_line += trim_str('\n       %s' % self.description,
                     80, '...')
         lines.append(hid_line)
+
+        # set attributes lines
+        for key, value in sorted(self.attributes.items()):
+            lines.append(' %s: %s' % (key, value))
+
+        # set dbxrefs line
+        if self.dbxrefs:
+            lines.append("Database cross-references: " +
+                         ", ".join(self.dbxrefs))
 
         # set hsp line and table
         if not self.hsps:

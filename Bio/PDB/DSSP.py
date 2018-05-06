@@ -214,9 +214,9 @@ def make_dssp_dict(filename):
 
 
 def _make_dssp_dict(handle):
-    """Internal function used by mask_dssp_dict (PRIVATE).
+    """Return a DSSP dictionary, used by mask_dssp_dict (PRIVATE).
 
-    Return a DSSP dictionary that maps (chainid, resid) to an amino acid,
+    DSSP dictionary maps (chainid, resid) to an amino acid,
     secondary structure symbol, solvent accessibility value, and hydrogen bond
     information (relative dssp indices and hydrogen bond energies) from an open
     DSSP file object.
@@ -485,10 +485,10 @@ class DSSP(AbstractResiduePropertyMap):
                 raise PDBException("Structure/DSSP mismatch at %s" % res)
 
             dssp_vals = (dssp_index, aa, ss, rel_acc, phi, psi,
-                            NH_O_1_relidx, NH_O_1_energy,
-                            O_NH_1_relidx, O_NH_1_energy,
-                            NH_O_2_relidx, NH_O_2_energy,
-                            O_NH_2_relidx, O_NH_2_energy)
+                         NH_O_1_relidx, NH_O_1_energy,
+                         O_NH_1_relidx, O_NH_1_energy,
+                         NH_O_2_relidx, NH_O_2_energy,
+                         O_NH_2_relidx, O_NH_2_energy)
 
             dssp_map[key] = dssp_vals
             dssp_list.append(dssp_vals)

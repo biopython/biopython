@@ -77,7 +77,7 @@ class StructureAlignment(object):
         self.duos = duos
 
     def _test_equivalence(self, r1, aa1):
-        """Test if aa in sequence fits aa in structure."""
+        """Test if aa in sequence fits aa in structure (PRIVATE)."""
         resname = r1.get_resname()
         resname = SCOPData.protein_letters_3to1[resname]
         assert(aa1 == resname)
@@ -91,6 +91,6 @@ class StructureAlignment(object):
         return self.map12, self.map21
 
     def get_iterator(self):
-        """Iterator over all residue pairs."""
+        """Create an iterator over all residue pairs."""
         for i in range(0, len(self.duos)):
             yield self.duos[i]

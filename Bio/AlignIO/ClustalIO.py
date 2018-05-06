@@ -217,7 +217,8 @@ class ClustalIterator(AlignmentIterator):
                 break
 
             for i in range(len(ids)):
-                assert line[0] != " ", "Unexpected line:\n%s" % repr(line)
+                if line[0] == " ":
+                    raise ValueError("Unexpected line:\n%s" % repr(line))
                 fields = line.rstrip().split()
 
                 # We expect there to be two fields, there can be an optional
@@ -233,8 +234,8 @@ class ClustalIterator(AlignmentIterator):
                 if fields[1] != line[seq_cols]:
                     start = len(fields[0]) + \
                         line[len(fields[0]):].find(fields[1])
-                    assert start == seq_cols.start, \
-                        'Old location %s -> %i:XX' % (seq_cols, start)
+                    if start != seq_cols.start:
+                        raise ValueError('Old location %s -> %i:XX' % (seq_cols, start))
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end
@@ -287,9 +288,9 @@ class ClustalIterator(AlignmentIterator):
             alignment._version = version
         if consensus:
             alignment_length = len(seqs[0])
-            assert len(consensus) == alignment_length, \
-                "Alignment length is %i, consensus length is %i, '%s'" \
-                % (alignment_length, len(consensus), consensus)
+            if len(consensus) != alignment_length:
+                raise ValueError("Alignment length is %i, consensus length is %i, '%s'"
+                                 % (alignment_length, len(consensus), consensus))
             alignment.column_annotations["clustal_consensus"] = consensus
             # For backward compatibility prior to .column_annotations:
             alignment._star_info = consensus

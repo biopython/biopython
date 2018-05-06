@@ -1,12 +1,14 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
 # Revisions copyright 2008-2009 by Peter Cock.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# Contact:       Leighton Pritchard, Scottish Crop Research Institute,
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
+# Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
-#                L.Pritchard@scri.ac.uk
+#                Leighton.Pritchard@hutton.ac.uk
 ################################################################################
 
 """Linear Drawer module.
@@ -27,7 +29,7 @@ from reportlab.lib import colors
 # GenomeDiagram imports
 from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
 from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from ._AbstractDrawer import intermediate_points, angle2trig
+from ._AbstractDrawer import intermediate_points, angle2trig, deduplicate
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
 
@@ -115,12 +117,11 @@ class LinearDrawer(AbstractDrawer):
            should be taken up in drawing
          - cross_track_links List of tuples each with four entries (track A,
            feature A, track B, feature B) to be linked.
-
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
-                                  x, y, xl, xr, yt, yb, start, end,
-                                  tracklines, cross_track_links)
+                                x, y, xl, xr, yt, yb, start, end,
+                                tracklines, cross_track_links)
 
         # Useful measurements on the page
         self.fragments = fragments
@@ -314,8 +315,7 @@ class LinearDrawer(AbstractDrawer):
                "Tick at %i, but showing %r to %r for track" \
                % (tickpos, track.start, track.end)
         fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
-        assert fragment >= 0, \
-               "Fragment %i, tickpos %i" % (fragment, tickpos)
+        assert fragment >= 0, "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
         tickx += self.x0                # Tick X co-ord
         ticktop = tctr + ticklen        # Y co-ord of tick top
@@ -331,9 +331,9 @@ class LinearDrawer(AbstractDrawer):
             else:
                 tickstring = str(tickpos)
             label = String(0, 0, tickstring,  # Make label string
-                   fontName=track.scale_font,
-                   fontSize=track.scale_fontsize,
-                   fillColor=track.scale_color)
+                           fontName=track.scale_font,
+                           fontSize=track.scale_fontsize,
+                           fillColor=track.scale_color)
             labelgroup = Group(label)
             rotation = angle2trig(track.scale_fontangle)
             labelgroup.transform = (rotation[0], rotation[1], rotation[2],
@@ -383,7 +383,7 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x_right = self.xlim - self.x0
             scale_elements.append(Line(self.x0 + x_left, tctr, self.x0 + x_right, tctr,
-                                   strokeColor=track.scale_color))
+                                       strokeColor=track.scale_color))
             # Y-axis start marker
             scale_elements.append(Line(self.x0 + x_left, tbtm, self.x0 + x_left, ttop,
                                        strokeColor=track.scale_color))
@@ -644,11 +644,9 @@ class LinearDrawer(AbstractDrawer):
         endA = cross_link.endA
         endB = cross_link.endB
 
-        if not self.is_in_bounds(startA) \
-        and not self.is_in_bounds(endA):
+        if not self.is_in_bounds(startA) and not self.is_in_bounds(endA):
             return None
-        if not self.is_in_bounds(startB) \
-        and not self.is_in_bounds(endB):
+        if not self.is_in_bounds(startB) and not self.is_in_bounds(endB):
             return None
 
         if startA < self.start:
@@ -780,12 +778,12 @@ class LinearDrawer(AbstractDrawer):
                     else:
                         extra = [self.x0, 0.3 * yA + 0.7 * yB,
                                  self.x0, 0.7 * yA + 0.3 * yB]
-                answer.append(Polygon([xAs, yA, xAe, yA] + extra,
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA] + extra),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif fragment < start_fragmentA or end_fragmentA < fragment:
                 if cross_link.flip:
                     # Just draw B as a triangle to left
@@ -800,48 +798,48 @@ class LinearDrawer(AbstractDrawer):
                     else:
                         extra = [self.x0, 0.7 * yA + 0.3 * yB,
                                  self.x0, 0.3 * yA + 0.7 * yB]
-                answer.append(Polygon([xBs, yB, xBe, yB] + extra,
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xBs, yB, xBe, yB] + extra),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip and ((crop_leftA and not crop_rightA) or
-                                    (crop_leftB and not crop_rightB)):
+                                      (crop_leftB and not crop_rightB)):
                 # On left end of fragment... force "crossing" to margin
-                answer.append(Polygon([xAs, yA, xAe, yA,
-                                       self.x0, 0.5 * (yA + yB),
-                                       xBe, yB, xBs, yB],
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
+                                                   self.x0, 0.5 * (yA + yB),
+                                                   xBe, yB, xBs, yB]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip and ((crop_rightA and not crop_leftA) or
                                       (crop_rightB and not crop_leftB)):
                 # On right end... force "crossing" to margin
-                answer.append(Polygon([xAs, yA, xAe, yA,
-                                       xBe, yB, xBs, yB,
-                                       self.x0 + self.pagewidth, 0.5 * (yA + yB)],
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
+                                                   xBe, yB, xBs, yB,
+                                                   self.x0 + self.pagewidth, 0.5 * (yA + yB)]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             elif cross_link.flip:
-                answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBs, yB, xBe, yB]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
             else:
-                answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
-                               strokeColor=strokecolor,
-                               fillColor=fillcolor,
-                               # default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1,  # 1=round
-                               strokewidth=0))
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBe, yB, xBs, yB]),
+                                      strokeColor=strokecolor,
+                                      fillColor=fillcolor,
+                                      # default is mitre/miter which can stick out too much:
+                                      strokeLineJoin=1,  # 1=round
+                                      strokewidth=0))
         return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
@@ -995,27 +993,27 @@ class LinearDrawer(AbstractDrawer):
         pos, val = data[0]
         lastfrag, lastx = self.canvas_location(pos)
         lastx += self.x0        # Start xy co-ords
-        lasty = trackheight * (val - midval) / resolution + \
-                self.fragment_lines[lastfrag][0] + ctr
+        lasty = (trackheight * (val - midval) / resolution
+                 + self.fragment_lines[lastfrag][0] + ctr)
         lastval = val
         # Add a series of lines linking consecutive data points
         for pos, val in data:
             frag, x = self.canvas_location(pos)
             x += self.x0        # next xy co-ords
-            y = trackheight * (val - midval) / resolution + \
-                self.fragment_lines[frag][0] + ctr
+            y = (trackheight * (val - midval) / resolution
+                 + self.fragment_lines[frag][0] + ctr)
             if frag == lastfrag:    # Points on the same fragment: draw the line
                 line_elements.append(Line(lastx, lasty, x, y,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
             else:   # Points not on the same fragment, so interpolate
-                tempy = trackheight * (val - midval) / resolution + \
-                        self.fragment_lines[lastfrag][0] + ctr
+                tempy = (trackheight * (val - midval) / resolution
+                         + self.fragment_lines[lastfrag][0] + ctr)
                 line_elements.append(Line(lastx, lasty, self.xlim, tempy,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
-                tempy = trackheight * (val - midval) / resolution + \
-                        self.fragment_lines[frag][0] + ctr
+                tempy = (trackheight * (val - midval) / resolution
+                         + self.fragment_lines[frag][0] + ctr)
                 line_elements.append(Line(self.x0, tempy, x, y,
                                           strokeColor=graph.poscolor,
                                           strokeWidth=graph.linewidth))
@@ -1201,7 +1199,7 @@ class LinearDrawer(AbstractDrawer):
         return fragment, x_offset
 
     def _draw_sigil_box(self, bottom, center, top, x1, x2, strand, **kwargs):
-        """Draw BOX sigil."""
+        """Draw BOX sigil (PRIVATE)."""
         if strand == 1:
             y1 = center
             y2 = top
@@ -1214,7 +1212,7 @@ class LinearDrawer(AbstractDrawer):
         return draw_box((x1, y1), (x2, y2), **kwargs)
 
     def _draw_sigil_octo(self, bottom, center, top, x1, x2, strand, **kwargs):
-        """Draw OCTO sigil, a box with the corners cut off."""
+        """Draw OCTO sigil, a box with the corners cut off (PRIVATE)."""
         if strand == 1:
             y1 = center
             y2 = top
@@ -1265,7 +1263,7 @@ class LinearDrawer(AbstractDrawer):
             points.extend((xmax, y1 + (teeth - i) * height / teeth,
                            xmax - headlength, y1 + (teeth - i - 1) * height / teeth))
 
-        return Polygon(points,
+        return Polygon(deduplicate(points),
                        strokeColor=strokecolor,
                        strokeWidth=1,
                        strokeLineJoin=1,  # 1=round
@@ -1273,7 +1271,7 @@ class LinearDrawer(AbstractDrawer):
                        **kwargs)
 
     def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
-        """Draw ARROW sigil."""
+        """Draw ARROW sigil (PRIVATE)."""
         if strand == 1:
             y1 = center
             y2 = top
@@ -1289,7 +1287,7 @@ class LinearDrawer(AbstractDrawer):
         return draw_arrow((x1, y1), (x2, y2), orientation=orientation, **kwargs)
 
     def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
-        """Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        """Draw BIGARROW sigil, like ARROW but straddles the axis (PRIVATE)."""
         if strand == -1:
             orientation = "left"
         else:

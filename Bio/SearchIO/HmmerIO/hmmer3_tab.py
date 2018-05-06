@@ -35,7 +35,7 @@ class Hmmer3TabParser(object):
                 yield qresult
 
     def _parse_row(self):
-        """Returns a dictionary of parsed row values."""
+        """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(' ') if x]
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
@@ -78,7 +78,7 @@ class Hmmer3TabParser(object):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects."""
+        """Return QueryResult objects (PRIVATE)."""
         # state values, determines what to do for each line
         state_EOF = 0
         state_QRES_NEW = 1
@@ -154,7 +154,7 @@ class Hmmer3TabIndexer(SearchIndexer):
     _query_id_idx = 2
 
     def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
+        """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         query_id_idx = self._query_id_idx
@@ -184,19 +184,19 @@ class Hmmer3TabIndexer(SearchIndexer):
 
                 if curr_key != qresult_key:
                     adj_end = end_offset - len(line)
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            adj_end - start_offset
+                    yield (_bytes_to_string(qresult_key), start_offset,
+                           adj_end - start_offset)
                     qresult_key = curr_key
                     start_offset = adj_end
 
             line = handle.readline()
             if not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield (_bytes_to_string(qresult_key), start_offset,
+                       end_offset - start_offset)
                 break
 
     def get_raw(self, offset):
-        """Returns the raw bytes string of a QueryResult object from the given offset."""
+        """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         query_id_idx = self._query_id_idx
@@ -228,7 +228,7 @@ class Hmmer3TabWriter(object):
         self.handle = handle
 
     def write_file(self, qresults):
-        """Writes to the handle.
+        """Write to the handle.
 
         Returns a tuple of how many QueryResult, Hit, and HSP objects were written.
 
@@ -255,7 +255,7 @@ class Hmmer3TabWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self, first_qresult=None):
-        """Returns the header string of a HMMER table output."""
+        """Return the header string of a HMMER table output (PRIVATE)."""
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         if first_qresult is not None:
@@ -267,28 +267,30 @@ class Hmmer3TabWriter(object):
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
-        header = "#%*s %22s %22s %33s\n" % \
-                (tnamew + qnamew + taccw + qaccw + 2, "",
-                "--- full sequence ----", "--- best 1 domain ----",
-                "--- domain number estimation ----")
-        header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew - 1, " target name",
-                        taccw, "accession", qnamew, "query name", qaccw,
-                        "accession", "  E-value", " score", " bias",
-                        "  E-value", " score", " bias", "exp",
-                        "reg", "clu", " ov", "env", "dom", "rep",
-                        "inc", "description of target")
-        header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew - 1, "-------------------",
-                taccw, "----------", qnamew, "--------------------", qaccw,
-                "----------", "---------", "------", "-----", "---------",
-                "------", "-----", "---", "---", "---", "---", "---", "---",
-                "---", "---", "---------------------")
+        header = ("#%*s %22s %22s %33s\n"
+                  % (tnamew + qnamew + taccw + qaccw + 2, "",
+                     "--- full sequence ----", "--- best 1 domain ----",
+                     "--- domain number estimation ----"))
+        header += ("#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s "
+                   "%3s %3s %3s %3s %3s %3s %s\n"
+                   % (tnamew - 1, " target name",
+                      taccw, "accession", qnamew, "query name", qaccw,
+                      "accession", "  E-value", " score", " bias",
+                      "  E-value", " score", " bias", "exp",
+                      "reg", "clu", " ov", "env", "dom", "rep",
+                      "inc", "description of target"))
+        header += ("#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s "
+                   "%3s %3s %3s %3s %3s %s\n"
+                   % (tnamew - 1, "-------------------",
+                      taccw, "----------", qnamew, "--------------------", qaccw,
+                      "----------", "---------", "------", "-----", "---------",
+                      "------", "-----", "---", "---", "---", "---", "---", "---",
+                      "---", "---", "---------------------"))
 
         return header
 
     def _build_row(self, qresult):
-        """Returns a string or one row or more of the QueryResult object."""
+        """Return a string or one row or more of the QueryResult object (PRIVATE)."""
         rows = ''
 
         # calculate whitespace required

@@ -34,7 +34,7 @@ class StructureBuilder(object):
         self.header = {}
 
     def _is_completely_disordered(self, residue):
-        """Return 1 if all atoms in the residue have a non blank altloc."""
+        """Return 1 if all atoms in the residue have a non blank altloc (PRIVATE)."""
         atom_list = residue.get_unpacked_list()
         for atom in atom_list:
             altloc = atom.get_altloc()
@@ -57,7 +57,7 @@ class StructureBuilder(object):
         self.line_counter = line_counter
 
     def init_structure(self, structure_id):
-        """Initiate a new Structure object with given id.
+        """Initialize a new Structure object with given id.
 
         Arguments:
          - id - string
@@ -66,7 +66,7 @@ class StructureBuilder(object):
         self.structure = Structure(structure_id)
 
     def init_model(self, model_id, serial_num=None):
-        """Initiate a new Model object with given id.
+        """Create a new Model object with given id.
 
         Arguments:
          - id - int
@@ -77,7 +77,7 @@ class StructureBuilder(object):
         self.structure.add(self.model)
 
     def init_chain(self, chain_id):
-        """Initiate a new Chain object with given id.
+        """Create a new Chain object with given id.
 
         Arguments:
          - chain_id - string
@@ -102,7 +102,7 @@ class StructureBuilder(object):
         self.segid = segid
 
     def init_residue(self, resname, field, resseq, icode):
-        """Initiate a new Residue object.
+        """Create a new Residue object.
 
         Arguments:
          - resname - string, e.g. "ASN"
@@ -171,7 +171,7 @@ class StructureBuilder(object):
 
     def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
                   serial_number=None, element=None):
-        """Initiate a new Atom object.
+        """Create a new Atom object.
 
         Arguments:
          - name - string, atom name, e.g. CA, spaces should be stripped

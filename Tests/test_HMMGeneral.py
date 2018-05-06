@@ -41,6 +41,28 @@ def test_assertion(name, result, expected):
            % (expected, result, name)
 
 
+class TrainingSequenceTest(unittest.TestCase):
+    def test_empty_state_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_valid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('12', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_invalid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('1', NumberAlphabet())
+        with self.assertRaises(ValueError):
+            Trainer.TrainingSequence(emission_seq, state_seq)
+
+
 class MarkovModelBuilderTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
@@ -377,8 +399,6 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         previous_vars = {('1', 0): .5,
                          ('2', 0): .7}
         s_value = self.dp._calculate_s_value(1, previous_vars)
-
-        # print(s_value)
 
 
 class AbstractTrainerTest(unittest.TestCase):

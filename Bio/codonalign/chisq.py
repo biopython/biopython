@@ -43,7 +43,7 @@ def chisqprob(x, df):
 
 
 def _igamc(a, x):
-    """Complemented incomplete Gamma integral.
+    """Complemented incomplete Gamma integral (PRIVATE).
 
     Parameters
     ----------
@@ -113,7 +113,7 @@ def _igamc(a, x):
 
 
 def _igam(a, x):
-    """Left tail of incomplete Gamma function.
+    """Left tail of incomplete Gamma function (PRIVATE).
 
     Computes this formula::
 

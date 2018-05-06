@@ -1,10 +1,10 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
 # Copyright 2009-2015 by Peter Cock. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code for more fancy file handles.
 
 Classes:
@@ -46,16 +46,20 @@ except ImportError:
 def as_handle(handleish, mode='r', **kwargs):
     r"""Context manager to ensure we are using a handle.
 
-    Context manager for arguments that can be passed to
-    SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
+    Context manager for arguments that can be passed to SeqIO and AlignIO read, write,
+    and parse methods: either file objects or path-like objects (strings, pathlib.Path
+    instances, or more generally, anything that can be handled by the builtin 'open'
+    function).
 
-    When given a string, returns a file handle open to handleish with provided
-    mode which will be closed when the manager exits.
+    When given a path-like object, returns an open file handle to that path, with provided
+    mode, which will be closed when the manager exits.
 
     All other inputs are returned, and are *not* closed.
 
     Arguments:
-     - handleish  - Either a string or file handle
+     - handleish  - Either a file handle or path-like object (anything which can be
+                    passed to the builtin 'open' function: str, bytes, and under
+                    Python >= 3.6, pathlib.Path, os.DirEntry)
      - mode       - Mode to open handleish (used only if handleish is a string)
      - kwargs     - Further arguments to pass to open(...)
 
@@ -78,6 +82,15 @@ def as_handle(handleish, mode='r', **kwargs):
     been deprecated (this happens automatically in text mode).
 
     """
+    # If we're running under a version of Python that supports PEP 519, try
+    # to convert `handleish` to a string with `os.fspath`.
+    if hasattr(os, 'fspath'):
+        try:
+            handleish = os.fspath(handleish)
+        except TypeError:
+            # handleish isn't path-like, and it remains unchanged -- we'll yield it below
+            pass
+
     if isinstance(handleish, basestring):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")

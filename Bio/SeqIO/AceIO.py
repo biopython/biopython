@@ -1,9 +1,9 @@
 # Copyright 2008-2015 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "ace" file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -20,7 +20,7 @@ from Bio.Sequencing import Ace
 
 
 def AceIterator(handle):
-    """Returns SeqRecord objects from an ACE file.
+    """Return SeqRecord objects from an ACE file.
 
     This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
     by iterating over the file in a single pass, we are forced to ignore any

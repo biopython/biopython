@@ -35,7 +35,7 @@ else:
 # General tree-traversal algorithms
 
 def _level_traverse(root, get_children):
-    """Traverse a tree in breadth-first (level) order."""
+    """Traverse a tree in breadth-first (level) order (PRIVATE)."""
     Q = collections.deque([root])
     while Q:
         v = Q.popleft()
@@ -44,7 +44,7 @@ def _level_traverse(root, get_children):
 
 
 def _preorder_traverse(root, get_children):
-    """Traverse a tree in depth-first pre-order (parent before children)."""
+    """Traverse a tree in depth-first pre-order (parent before children) (PRIVATE)."""
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -55,7 +55,7 @@ def _preorder_traverse(root, get_children):
 
 
 def _postorder_traverse(root, get_children):
-    """Traverse a tree in depth-first post-order (children before parent)."""
+    """Traverse a tree in depth-first post-order (children before parent) (PRIVATE)."""
     def dfs(elem):
         for v in get_children(elem):
             for u in dfs(v):
@@ -66,7 +66,7 @@ def _postorder_traverse(root, get_children):
 
 
 def _sorted_attrs(elem):
-    """Get a flat list of elem's attributes, sorted for consistency."""
+    """Get a flat list of elem's attributes, sorted for consistency (PRIVATE)."""
     singles = []
     lists = []
     # Sort attributes for consistent results
@@ -85,14 +85,14 @@ def _sorted_attrs(elem):
 # Factory functions to generalize searching for clades/nodes
 
 def _identity_matcher(target):
-    """Match a node to the target object by identity."""
+    """Match a node to the target object by identity (PRIVATE)."""
     def match(node):
         return (node is target)
     return match
 
 
 def _class_matcher(target_cls):
-    """Match a node if it's an instance of the given class."""
+    """Match a node if it's an instance of the given class (PRIVATE)."""
     def match(node):
         return isinstance(node, target_cls)
     return match
@@ -108,7 +108,7 @@ def _string_matcher(target):
 
 
 def _attribute_matcher(kwargs):
-    """Match a node by specified attribute values.
+    """Match a node by specified attribute values (PRIVATE).
 
     ``terminal`` is a special case: True restricts the search to external (leaf)
     nodes, False restricts to internal nodes, and None allows all tree elements
@@ -151,7 +151,7 @@ def _attribute_matcher(kwargs):
 
 
 def _function_matcher(matcher_func):
-    """Safer attribute lookup -- returns False instead of raising an error."""
+    """Safer attribute lookup -- returns False instead of raising an error (PRIVATE)."""
     def match(node):
         try:
             return matcher_func(node)
@@ -161,7 +161,7 @@ def _function_matcher(matcher_func):
 
 
 def _object_matcher(obj):
-    """Retrieve a matcher function by passing an arbitrary object.
+    """Retrieve a matcher function by passing an arbitrary object (PRIVATE).
 
     i.e. passing a `TreeElement` such as a `Clade` or `Tree` instance returns an
     identity matcher, passing a type such as the `PhyloXML.Taxonomy` class
@@ -188,7 +188,7 @@ def _object_matcher(obj):
 
 
 def _combine_matchers(target, kwargs, require_spec):
-    """Merge target specifications with keyword arguments.
+    """Merge target specifications with keyword arguments (PRIVATE).
 
     Dispatch the components to the various matcher functions, then merge into a
     single boolean function.
@@ -208,7 +208,7 @@ def _combine_matchers(target, kwargs, require_spec):
 
 
 def _combine_args(first, *rest):
-    """Convert ``[targets]`` or ``*targets`` arguments to a single iterable.
+    """Convert ``[targets]`` or ``*targets`` arguments to a single iterable (PRIVATE).
 
     This helps other functions work like the built-in functions `max` and
     `min`.
@@ -267,7 +267,7 @@ class TreeMixin(object):
     # Traversal methods
 
     def _filter_search(self, filter_func, order, follow_attrs):
-        """Perform a BFS or DFS traversal through all elements in this tree.
+        """Perform a BFS or DFS traversal through all elements in this tree (PRIVATE).
 
         :returns: generator of all elements for which `filter_func` is True.
 
@@ -446,7 +446,7 @@ class TreeMixin(object):
         return mrca
 
     def count_terminals(self):
-        """Counts the number of terminal (leaf) nodes within this tree."""
+        """Count the number of terminal (leaf) nodes within this tree."""
         return _utils.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):  # noqa: D402
@@ -542,7 +542,7 @@ class TreeMixin(object):
                 return False
 
     def is_parent_of(self, target=None, **kwargs):
-        """True if target is a descendent of this tree.
+        """Check if target is a descendent of this tree.
 
         Not required to be a direct descendent.
 
@@ -552,7 +552,7 @@ class TreeMixin(object):
         return self.get_path(target, **kwargs) is not None
 
     def is_preterminal(self):
-        """True if all direct descendents are terminal."""
+        """Check if all direct descendents are terminal."""
         if self.root.is_terminal():
             return False
         for clade in self.root.clades:
@@ -568,7 +568,7 @@ class TreeMixin(object):
     # Tree manipulation methods
 
     def collapse(self, target=None, **kwargs):
-        """Deletes target from the tree, relinking its children to its parent.
+        """Delete target from the tree, relinking its children to its parent.
 
         :returns: the parent clade.
 
@@ -787,7 +787,7 @@ class Tree(TreeElement, TreeMixin):
 
     @property
     def clade(self):
-        """The first clade in this tree (not itself)."""
+        """Return first clade in this tree (not itself)."""
         return self.root
 
     def as_phyloxml(self, **kwargs):
@@ -936,7 +936,7 @@ class Tree(TreeElement, TreeMixin):
     # Method assumed by TreeMixin
 
     def is_terminal(self):
-        """True if the root of this tree is terminal."""
+        """Check if the root of this tree is terminal."""
         return (not self.root.clades)
 
     # Convention from SeqRecord and Alignment classes
@@ -971,9 +971,9 @@ class Tree(TreeElement, TreeMixin):
     # Pretty-printer for the entire tree hierarchy
 
     def __str__(self):
-        """String representation of the entire tree.
+        """Return a string representation of the entire tree.
 
-        Serializes each sub-clade recursively using ``repr`` to create a summary
+        Serialize each sub-clade recursively using ``repr`` to create a summary
         of the object structure.
         """
         TAB = '    '
@@ -1039,7 +1039,7 @@ class Clade(TreeElement, TreeMixin):
         return self
 
     def is_terminal(self):
-        """True if this is a terminal (leaf) node."""
+        """Check if this is a terminal (leaf) node."""
         return (not self.clades)
 
     # Sequence-type behavior methods
@@ -1058,7 +1058,7 @@ class Clade(TreeElement, TreeMixin):
         return iter(self.clades)
 
     def __len__(self):
-        """Number of clades directy under the root."""
+        """Return the number of clades directy under the root."""
         return len(self.clades)
 
     # Python 3:

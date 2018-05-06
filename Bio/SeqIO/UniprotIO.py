@@ -40,7 +40,7 @@ REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
 def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
-    """Generator function to parse UniProt XML as SeqRecord objects.
+    """Iterate over UniProt XML as SeqRecord objects.
 
     parses an XML entry at a time from any UniProt XML file
     returns a SeqRecord for each iteration
@@ -395,7 +395,10 @@ class Parser(object):
             if journal_name:
                 if pub_date and j_volume and j_first and j_last:
                     reference.journal = REFERENCE_JOURNAL % dict(name=journal_name,
-                        volume=j_volume, first=j_first, last=j_last, pub_date=pub_date)
+                                                                 volume=j_volume,
+                                                                 first=j_first,
+                                                                 last=j_last,
+                                                                 pub_date=pub_date)
                 else:
                     reference.journal = journal_name
             reference.comment = ' | '.join((pub_type, pub_date, scopes_str, tissues_str))

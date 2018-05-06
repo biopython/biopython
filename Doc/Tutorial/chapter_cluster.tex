@@ -22,7 +22,7 @@ The data to be clustered are represented by a $n \times m$ Numerical Python arra
 
 \subsection*{Missing values}
 
-Often in microarray experiments, some of the data values are missing, which is indicated by an additional $n \times m$ Numerical Python integer array \verb|mask|. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing and is ignored in the analysis.
+The $n \times m$ Numerical Python integer array \verb|mask| indicates if any of the values in \verb|data| are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing and is ignored in the analysis.
 
 \subsection*{Random number generator}
 
@@ -159,9 +159,6 @@ As Kendall's $\tau$ is always between -1 and 1, the corresponding distance will 
 \subsection*{Weighting}
 
 For most of the distance functions available in \verb|Bio.Cluster|, a weight vector can be applied. The weight vector contains weights for the items in the data vector. If the weight for item $i$ is $w_i$, then that item is treated as if it occurred $w_i$ times in the data. The weight do not have to be integers.
-For the Spearman rank correlation and Kendall's
-$\tau$,
-weights do not have a well-defined meaning and are therefore not implemented.
 
 \subsection*{Calculating the distance matrix}
 \label{subsec:distancematrix}
@@ -176,11 +173,11 @@ where the following arguments are defined:
 \item \verb|data| (required)\\
 Array containing the data for the items.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|weight| (default: \verb|None|) \\
-The weights to be used when calculating distances. If \verb|weight==None|, then equal weights are assumed.
+The weights to be used when calculating distances. If \verb|weight| is \verb|None|, then equal weights are assumed.
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if the distances between the rows of \verb|data| are to be calculated (\verb|transpose==0|), or between the columns of \verb|data| (\verb|transpose==1|).
+Determines if the distances between the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or between the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
@@ -221,13 +218,13 @@ where the following arguments are defined:
 \item \verb|data| (required) \\
 Array containing the data for the items.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|clusterid| (default: \verb|None|) \\
 Vector of integers showing to which cluster each item belongs. If \verb|clusterid| is \verb|None|, then all items are assumed to belong to the same cluster.
 \item \verb|method| (default: \verb|'a'|) \\
 Specifies whether the arithmetic mean (\verb|method=='a'|) or the median (\verb|method=='m'|) is used to calculate the cluster center.
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose==0|), or the centroids of the columns of \verb|data| (\verb|transpose==1|).
+Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or the centroids of the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \end{itemize}
 
 This function returns the tuple \verb|(cdata, cmask)|. The centroid data are stored in the 2D Numerical Python array \verb|cdata|, with missing data indicated by the 2D Numerical Python integer array \verb|cmask|.  The dimensions of these arrays are $\left(\textrm{number of clusters}, \textrm{number of columns}\right)$ if \verb|transpose| is \verb|0|, or $\left(\textrm{number of rows}, \textrm{number of clusters}\right)$ if \verb|transpose| is \verb|1|. Each row (if \verb|transpose| is \verb|0|) or column (if \verb|transpose| is \verb|1|) contains the averaged data corresponding to the centroid of each cluster.
@@ -246,9 +243,9 @@ where the following arguments are defined:
 \item \verb|data| (required)\\
 Array containing the data for the items.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|weight| (default: \verb|None|) \\
-The weights to be used when calculating distances. If \verb|weight==None|, then equal weights are assumed.
+The weights to be used when calculating distances. If \verb|weight| is \verb|None|, then equal weights are assumed.
 \item \verb|index1| (default: \verb|0|) \\
 A list containing the indices of the items belonging to the first cluster. A cluster containing only one item $i$ can be represented either as a list \verb|[i]|, or as an integer \verb|i|.
 \item \verb|index2| (default: \verb|0|) \\
@@ -265,7 +262,8 @@ Specifies how the distance between clusters is defined:
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \item \verb|transpose| (default: \verb|0|) \\
-If \verb|transpose==0|, calculate the distance between the rows of \verb|data|. If \verb|transpose==1|, calculate the distance between the columns of \verb|data|.
+If \verb|transpose| is \verb|False|, calculate the distance between the rows of \verb|data|.
+If \verb|transpose| is \verb|True|, calculate the distance between the columns of \verb|data|.
 \end{itemize}
 
 \section{Partitioning algorithms}
@@ -315,9 +313,9 @@ Array containing the data for the items.
 \item \verb|nclusters| (default: \verb|2|) \\
 The number of clusters $k$.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|weight| (default: \verb|None|) \\
-The weights to be used when calculating distances. If \verb|weight==None|, then equal weights are assumed.
+The weights to be used when calculating distances. If \verb|weight| is \verb|None|, then equal weights are assumed.
 \item \verb|transpose| (default: \verb|0|) \\
 Determines if rows (\verb|transpose| is \verb|0|) or columns (\verb|transpose| is \verb|1|) are to be clustered.
 \item \verb|npass| (default: \verb|1|) \\
@@ -333,7 +331,7 @@ For other values of \verb|method|, the arithmetic mean is used.
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 Whereas all eight distance measures are accepted by \verb|kcluster|, from a theoretical viewpoint it is best to use the Euclidean distance for the $k$-means algorithm, and the city-block distance for $k$-medians.
 \item \verb|initialid| (default: \verb|None|) \\
-Specifies the initial clustering to be used for the EM algorithm. If \verb|initialid==None|, then a different random initial clustering is used for each of the \verb|npass| runs of the EM algorithm. If \verb|initialid| is not \verb|None|, then it should be equal to a 1D array containing the cluster number (between \verb|0| and \verb|nclusters-1|) for each item. Each cluster should contain at least one item. With the initial clustering specified, the EM algorithm is deterministic.
+Specifies the initial clustering to be used for the EM algorithm. If \verb|initialid| is \verb|None|, then a different random initial clustering is used for each of the \verb|npass| runs of the EM algorithm. If \verb|initialid| is not \verb|None|, then it should be equal to a 1D array containing the cluster number (between \verb|0| and \verb|nclusters-1|) for each item. Each cluster should contain at least one item. With the initial clustering specified, the EM algorithm is deterministic.
 \end{itemize}
 
 This function returns a tuple \verb|(clusterid, error, nfound)|, where \verb|clusterid| is an integer array containing the number of the cluster to which each row or cluster was assigned, \verb|error| is the within-cluster sum of distances for the optimal clustering solution, and \verb|nfound| is the number of times this optimal solution was found.
@@ -376,7 +374,7 @@ The number of clusters $k$.
 \item \verb|npass| (default: \verb|1|) \\
 The number of times the $k$-medoids clustering algorithm is performed, each time with a different (random) initial condition. If \verb|initialid| is given, the value of \verb|npass| is ignored, as the clustering algorithm behaves deterministically in that case.
 \item \verb|initialid| (default: \verb|None|) \\
-Specifies the initial clustering to be used for the EM algorithm. If \verb|initialid==None|, then a different random initial clustering is used for each of the \verb|npass| runs of the EM algorithm. If \verb|initialid| is not \verb|None|, then it should be equal to a 1D array containing the cluster number (between \verb|0| and \verb|nclusters-1|) for each item. Each cluster should contain at least one item. With the initial clustering specified, the EM algorithm is deterministic.
+Specifies the initial clustering to be used for the EM algorithm. If \verb|initialid| is \verb|None|, then a different random initial clustering is used for each of the \verb|npass| runs of the EM algorithm. If \verb|initialid| is not \verb|None|, then it should be equal to a 1D array containing the cluster number (between \verb|0| and \verb|nclusters-1|) for each item. Each cluster should contain at least one item. With the initial clustering specified, the EM algorithm is deterministic.
 \end{itemize}
 
 This function returns a tuple \verb|(clusterid, error, nfound)|, where \verb|clusterid| is an array containing the number of the cluster to which each item was assigned, \verb|error| is the within-cluster sum of distances for the optimal $k$-medoids clustering solution, and \verb|nfound| is the number of times the optimal solution was found. Note that the cluster number in \verb|clusterid| is defined as the item number of the item representing the cluster centroid.
@@ -416,6 +414,7 @@ Here, \verb|left| and \verb|right| are integers referring to the two items or su
 
 To create a new \verb|Node| object, we need to specify \verb|left| and \verb|right|; \verb|distance| is optional.
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Cluster import Node
 >>> Node(2, 3)
@@ -426,6 +425,7 @@ To create a new \verb|Node| object, we need to specify \verb|left| and \verb|rig
 
 The attributes \verb|left|, \verb|right|, and \verb|distance| of an existing \verb|Node| object can be modified directly:
 
+%cont-doctest
 \begin{verbatim}
 >>> node = Node(4, 5)
 >>> node.left = 6
@@ -438,6 +438,7 @@ An error is raised if \verb|left| and \verb|right| are not integers, or if \verb
 
 The Python class \verb|Tree| represents a full hierarchical clustering solution. A \verb|Tree| object can be created from a list of \verb|Node| objects:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Cluster import Node, Tree
 >>> nodes = [Node(1, 2, 0.2), Node(0, 3, 0.5), Node(-2, 4, 0.6), Node(-1, -3, 0.9)]
@@ -451,6 +452,7 @@ The Python class \verb|Tree| represents a full hierarchical clustering solution.
 
 The \verb|Tree| initializer checks if the list of nodes is a valid hierarchical clustering result:
 
+%cont-doctest
 \begin{verbatim}
 >>> nodes = [Node(1, 2, 0.2), Node(0, 2, 0.5)]
 >>> Tree(nodes)
@@ -461,6 +463,7 @@ ValueError: Inconsistent tree
 
 Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 
+%cont-doctest
 \begin{verbatim}
 >>> nodes = [Node(1, 2, 0.2), Node(0, -1, 0.5)]
 >>> tree = Tree(nodes)
@@ -472,8 +475,9 @@ Individual nodes in a \verb|Tree| object can be accessed using square brackets:
 (0, -1): 0.5
 \end{verbatim}
 
-As a \verb|Tree| object is read-only, we cannot change individual nodes in a \verb|Tree| object. However, we can convert the tree to a list of nodes, modify this list, and create a new tree from this list:
+As a \verb|Tree| object is immutable, we cannot change individual nodes in a \verb|Tree| object. However, we can convert the tree to a list of nodes, modify this list, and create a new tree from this list:
 
+%cont-doctest
 \begin{verbatim}
 >>> tree = Tree([Node(1, 2, 0.1), Node(0, -1, 0.5), Node(-2, 3, 0.9)])
 >>> print(tree)
@@ -525,11 +529,11 @@ where the following arguments are defined:
 \item \verb|data| \\
 Array containing the data for the items.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|weight| (default: \verb|None|) \\
-The weights to be used when calculating distances. If \verb|weight==None|, then equal weights are assumed.
+The weights to be used when calculating distances. If \verb|weight| is \verb|None|, then equal weights are assumed.
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if rows (\verb|transpose==0|) or columns (\verb|transpose==1|) are to be clustered.
+Determines if rows (\verb|transpose| is \verb|False|) or columns (\verb|transpose| is \verb|True|) are to be clustered.
 \item \verb|method| (default: \verb|'m'|) \\
 defines the linkage method to be used:
 \begin{itemize}
@@ -610,7 +614,7 @@ where
 $\left(N_x, N_y\right)$
 are the dimensions of the rectangle defining the topology.
 
-The function \verb|somcluster| implements the complete algorithm to calculate a Self-Organizing Map on a rectangular grid. First it initializes the random number generator. The node data are then initialized using the random number generator. The order in which genes or microarrays are used to modify the SOM is also randomized. The total number of iterations in the SOM algorithm is specified by the user.
+The function \verb|somcluster| implements the complete algorithm to calculate a Self-Organizing Map on a rectangular grid. First it initializes the random number generator. The node data are then initialized using the random number generator. The order in which genes or samples are used to modify the SOM is also randomized. The total number of iterations in the SOM algorithm is specified by the user.
 
 To run \verb|somcluster|, use
 \begin{verbatim}
@@ -622,9 +626,9 @@ where the following arguments are defined:
 \item \verb|data| (required) \\
 Array containing the data for the items.
 \item \verb|mask| (default: \verb|None|) \\
-Array of integers showing which data are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If \verb|mask==None|, then all data are present.
+Array of integers showing which data are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If \verb|mask| is \verb|None|, then all data are present.
 \item \verb|weight| (default: \verb|None|) \\
-contains the weights to be used when calculating distances. If \verb|weight==None|, then equal weights are assumed.
+contains the weights to be used when calculating distances. If \verb|weight| is \verb|None|, then equal weights are assumed.
 \item \verb|transpose| (default: \verb|0|) \\
 Determines if rows (\verb|transpose| is \verb|0|) or columns (\verb|transpose| is \verb|1|) are to be clustered.
 \item \verb|nxgrid, nygrid| (default: \verb|2, 1|) \\
@@ -753,10 +757,10 @@ A \verb|Record| object has the following attributes:
 
 \begin{itemize}
 \item \verb|data| \\
-The data array containing the gene expression data. Genes are stored row-wise, while microarrays are stored column-wise.
+The data array containing the gene expression data. Genes are stored row-wise, while samples are stored column-wise.
 
 \item \verb|mask| \\
-This array shows which elements in the \verb|data| array, if any, are missing. If \verb|mask[i,j]==0|, then \verb|data[i,j]| is missing. If no data were found to be missing, \verb|mask| is set to \verb|None|.
+This array shows which elements in the \verb|data| array, if any, are missing. If \verb|mask[i, j] == 0|, then \verb|data[i, j]| is missing. If no data were found to be missing, \verb|mask| is set to \verb|None|.
 
 \item \verb|geneid| \\
 This is a list containing a unique description for each gene (i.e., ORF numbers).
@@ -771,13 +775,13 @@ The weights that are to be used to calculate the distance in expression profile 
 The preferred order in which genes should be stored in an output file. If not present in the data file, \verb|gorder| is set to \verb|None|.
 
 \item \verb|expid| \\
-This is a list containing a description of each microarray, e.g. experimental condition.
+This is a list containing a description of each sample, e.g. experimental condition.
 
 \item \verb|eweight| \\
-The weights that are to be used to calculate the distance in expression profile between microarrays. If not present in the data file, \verb|eweight| is set to \verb|None|.
+The weights that are to be used to calculate the distance in expression profile between samples. If not present in the data file, \verb|eweight| is set to \verb|None|.
 
 \item \verb|eorder| \\
-The preferred order in which microarrays should be stored in an output file. If not present in the data file, \verb|eorder| is set to \verb|None|.
+The preferred order in which samples should be stored in an output file. If not present in the data file, \verb|eorder| is set to \verb|None|.
 
 \item \verb|uniqid| \\
 The string that was used instead of UNIQID in the data file.
@@ -794,7 +798,7 @@ To calculate the distance matrix between the items stored in the record, use
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if the distances between the rows of \verb|data| are to be calculated (\verb|transpose==0|), or between the columns of \verb|data| (\verb|transpose==1|).
+Determines if the distances between the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or between the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
@@ -814,7 +818,7 @@ Vector of integers showing to which cluster each item belongs. If \verb|clusteri
 \item \verb|method| (default: \verb|'a'|) \\
 Specifies whether the arithmetic mean (\verb|method=='a'|) or the median (\verb|method=='m'|) is used to calculate the cluster center.
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose==0|), or the centroids of the columns of \verb|data| (\verb|transpose==1|).
+Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or the centroids of the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \end{itemize}
 
 This function returns the tuple \verb|cdata, cmask|; see section \ref{subsec:clustercentroids} for a description.
@@ -842,7 +846,8 @@ Specifies how the distance between clusters is defined:
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \item \verb|transpose| (default: \verb|0|) \\
-If \verb|transpose==0|, calculate the distance between the rows of \verb|data|. If \verb|transpose==1|, calculate the distance between the columns of \verb|data|.
+If \verb|transpose| is \verb|False|, calculate the distance between the rows of \verb|data|.
+If \verb|transpose| is \verb|True|, calculate the distance between the columns of \verb|data|.
 \end{itemize}
 
 \subsection*{Performing hierarchical clustering}
@@ -854,7 +859,7 @@ To perform hierarchical clustering on the items stored in the record, use
 where the following arguments are defined:
 \begin{itemize}
 \item \verb|transpose| (default: \verb|0|) \\
-Determines if rows (\verb|transpose==0|) or columns (\verb|transpose==1|) are to be clustered.
+Determines if rows (\verb|transpose| is \verb|False|) or columns (\verb|transpose| is \verb|True|) are to be clustered.
 \item \verb|method| (default: \verb|'m'|) \\
 defines the linkage method to be used:
 \begin{itemize}
@@ -866,7 +871,7 @@ defines the linkage method to be used:
 \item \verb|dist| (default: \verb|'e'|, Euclidean distance) \\
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \item \verb|transpose| \\
-Determines if genes or microarrays are being clustered. If \verb|transpose==0|, genes (rows) are being clustered. If \verb|transpose==1|, microarrays (columns) are clustered.
+Determines if genes or samples are being clustered. If \verb|transpose| is \verb|False|, genes (rows) are being clustered. If \verb|transpose| is \verb|True|, samples (columns) are clustered.
 \end{itemize}
 
 This function returns a \verb|Tree| object. This object contains $\left(\textrm{number of items} - 1\right)$ nodes, where the number of items is the number of rows if rows were clustered, or the number of columns if columns were clustered. Each node describes a pairwise linking event, where the node attributes \verb|left| and \verb|right| each contain the number of one item or subnode, and \verb|distance| the distance between them. Items are numbered from 0 to $\left(\textrm{number of items} - 1\right)$, while clusters are numbered -1 to $-\left(\textrm{number of items}-1\right)$.
@@ -949,7 +954,7 @@ This is an example of a hierarchical clustering calculation, using single linkag
 
 The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluster| subdirectory and is from the paper \cite[Hihara \textit{et al.}, 2001]{hihara2001}.
 
-%TODO, Windows: doctest ../Tests/Cluster lib:numpy
+%doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -965,7 +970,7 @@ This will create the files \verb|cyano_result.cdt|, \verb|cyano_result.gtr|, and
 
 Similarly, we can save a $k$-means clustering solution:
 
-%TODO, Windows: doctest ../Tests/Cluster lib:numpy
+%doctest ../Tests/Cluster lib:numpy
 \begin{verbatim}
 >>> from Bio import Cluster
 >>> with open("cyano.txt") as handle:
@@ -978,20 +983,4 @@ Similarly, we can save a $k$-means clustering solution:
 
 This will create the files \verb|cyano_result_K_G2_A2.cdt|, \verb|cyano_result_K_G2.kgg|, and \verb|cyano_result_K_A2.kag|.
 
-\section{Auxiliary functions}
-
-\verb|median(data)|
-returns the median of the 1D array \verb|data|.
-
-\verb|mean(data)|
-returns the mean of the 1D array \verb|data|.
-
-\verb|version()|
-returns the version number of the underlying C Clustering Library as a string.
-
-%TODO, Windows: doctest . lib:numpy
-\begin{verbatim}
->>> from Bio import Cluster
->>> print(Cluster.version())
-1.50
 \end{verbatim}

@@ -1,3 +1,9 @@
+# Copyright 2013 Leighton Pritchard.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Classes and functions to visualise a KGML Pathway Map.
 
 The KGML definition is as of release KGML v0.7.1
@@ -128,10 +134,8 @@ class KGMLCanvas(object):
         # Instantiate canvas
         self.drawing = \
             canvas.Canvas(filename, bottomup=0,
-                          pagesize=(cwidth *
-                                        (1 + 2 * self.margins[0]),
-                                    cheight *
-                                        (1 + 2 * self.margins[1])))
+                          pagesize=(cwidth * (1 + 2 * self.margins[0]),
+                                    cheight * (1 + 2 * self.margins[1])))
         self.drawing.setFont(self.fontname, self.fontsize)
         # Transform the canvas to add the margins
         self.drawing.translate(self.margins[0] * self.pathway.bounds[1][0],
