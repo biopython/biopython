@@ -94,31 +94,6 @@ class ListElement(list):
 
 
 class DictionaryElement(dict):
-    def __repr__(self):
-        text = dict.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
-            return text
-        return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
-
-
-# A StructureElement is like a dictionary, but some of its keys can have
-# multiple values associated with it. These values are stored in a list
-# under each key.
-class StructureElement(dict):
-    def __init__(self, keys):
-        """Initialize the class."""
-        dict.__init__(self)
-        for key in keys:
-            dict.__setitem__(self, key, [])
-        self.listkeys = keys
-
-    def __setitem__(self, key, value):
-        if key in self.listkeys:
-            self[key].append(value)
-        else:
-            dict.__setitem__(self, key, value)
 
     def __repr__(self):
         text = dict.__repr__(self)
@@ -171,6 +146,12 @@ class Consumer(object):
     def __init__(self, name, attrs):
         return
 
+    def startElementHandler(self, name, attrs):
+        return False
+
+    def endElementHandler(self, name):
+        return False
+
     def consume(self, content):
         return
 
@@ -200,10 +181,26 @@ class ErrorConsumer(Consumer):
 
 class StringConsumer(Consumer):
 
+    consumable = set()
+
     def __init__(self, name, attrs):
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
+
+    def startElementHandler(self, name, attrs):
+        if name in self.consumable:
+            tag = "<%s>" % name
+            self.data.append(tag)
+            return True
+        return False
+
+    def endElementHandler(self, name):
+        if name in self.consumable:
+            tag = "</%s>" % name
+            self.data.append(tag)
+            return True
+        return False
 
     def consume(self, content):
         self.data.append(content)
@@ -217,7 +214,8 @@ class StringConsumer(Consumer):
         except UnicodeEncodeError:
             value = UnicodeElement(value)
         value.tag = self.tag
-        value.attributes = self.attributes
+        if self.attributes:
+            value.attributes = self.attributes
         return value
 
 
@@ -247,7 +245,8 @@ class ListConsumer(Consumer):
     def __init__(self, name, attrs):
         data = ListElement()
         data.tag = name
-        data.attributes = dict(attrs)
+        if attrs:
+            data.attributes = dict(attrs)
         self.data = data
 
     def store(self, key, value):
@@ -262,32 +261,18 @@ class ListConsumer(Consumer):
 
 class DictionaryConsumer(Consumer):
 
-    def __init__(self, name, attrs):
-        data = DictionaryElement()
-        data.tag = name
-        data.attributes = dict(attrs)
-        self.data = data
-
-    def store(self, key, value):
-        self.data[key] = value
-
-    @property
-    def value(self):
-        return self.data
-
-
-class StructureConsumer(Consumer): #FIXME merge with DictionaryConsumer
+    multiple = None
 
     def __init__(self, name, attrs):
         data = DictionaryElement()
         data.tag = name
         data.attributes = dict(attrs)
-        for key in self.listkeys:
+        for key in self.multiple:
             data[key] = []
         self.data = data
 
     def store(self, key, value):
-        if key in self.listkeys: 
+        if key in self.multiple:
             self.data[key].append(value)
         else:
             self.data[key] = value
@@ -304,18 +289,21 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        consumer = DictionaryConsumer(name, attrs)
+        cls = type(name,
+                   (DictionaryConsumer,),
+                   {"multiple": set()})
+        consumer = cls(name, attrs)
     elif name in ("ArticleIds", "History"):
         cls = type(name,
-                   (StructureConsumer,),
-                   {"listkeys": ["pubmed", "medline"]})
+                   (DictionaryConsumer,),
+                   {"multiple": set(["pubmed", "medline"])})
         consumer = cls(name, attrs)
     elif itemtype == "List":
         # Keys are unknown in this case
         consumer = ListConsumer(name, attrs)
     elif itemtype == "Integer":
         consumer = IntegerConsumer(name, attrs)
-    elif itemtype in ("String", "Date", "Unknown"):
+    elif itemtype in ("String", "Unknown", "Date"):
         consumer = StringConsumer(name, attrs)
     else:
         raise ValueError("Unknown item type %s" % name)
@@ -421,17 +409,19 @@ class DataHandler(object):
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
 
-            while len(records) > 1:  # Then the top record is finished
+            while len(records) >= 1:  # Then the top record is finished
                 record = records.pop(0)
                 yield record
 
             if not text:
+                sys.stdout.flush()
                 self.parser = None
                 if self.consumer:
                     # We have reached the end of the XML file
                     # No more XML data, but there is still some unfinished
                     # business
                     raise CorruptedXMLError("Premature end of XML stream")
+                return
 
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
@@ -449,6 +439,11 @@ class DataHandler(object):
             raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
 
     def startElementHandler(self, name, attrs):
+        # First, check if the current consumer can use the tag
+        if self.consumer is not None:
+            consumed = self.consumer.startElementHandler(name, attrs)
+            if consumed:
+                return
         # preprocessing the xml schema
         if self.is_schema:
             if len(attrs) == 1:
@@ -489,6 +484,11 @@ class DataHandler(object):
 
     def endElementHandler(self, name):
         consumer = self.consumer
+        # First, check if the current consumer can use the tag
+        if consumer is not None:
+            consumed = consumer.endElementHandler(name)
+            if consumed:
+                return
         self.consumer = consumer.parent
         value = consumer.value
         if self.consumer is None:
@@ -553,7 +553,16 @@ class DataHandler(object):
         # PCDATA declarations correspond to strings
         if model[0] in (expat.model.XML_CTYPE_MIXED,
                         expat.model.XML_CTYPE_EMPTY):
-            self.classes[name] = StringConsumer
+            if model[1] == expat.model.XML_CQUANT_REP:
+                tags = []
+                children = model[3]
+                for child in children:
+                    tag = child[2]
+                    tags.append(tag)
+                bases = (StringConsumer, )
+                self.classes[name] = type(str(name), bases, {'consumable': tags})
+            else:
+                self.classes[name] = StringConsumer
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
@@ -581,8 +590,8 @@ class DataHandler(object):
         # they raise an exception in Python.
 
         def count(model):
-            quantifier, name, children = model[1:]
-            if name is None:
+            quantifier, key, children = model[1:]
+            if key is None:
                 if quantifier in (expat.model.XML_CQUANT_PLUS,
                                   expat.model.XML_CQUANT_REP):
                     for child in children:
@@ -590,22 +599,25 @@ class DataHandler(object):
                 else:
                     for child in children:
                         count(child)
-            elif name.upper() != "ERROR":
+            elif key.upper() != "ERROR":
                 if quantifier in (expat.model.XML_CQUANT_NONE,
                                   expat.model.XML_CQUANT_OPT):
-                    single.append(name)
+                    single.append(key)
                 elif quantifier in (expat.model.XML_CQUANT_PLUS,
                                     expat.model.XML_CQUANT_REP):
-                    multiple.append(name)
+                    multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            self.classes[name] = ListConsumer
-        elif len(multiple) == 0:
-            self.classes[name] = DictionaryConsumer
+            keys = set(multiple)
+            bases = (ListConsumer, )
+            self.classes[name] = type(str(name), bases, {'keys': keys})
         else:
+            single = set(single)
+            multiple = set(multiple)
+            bases = (DictionaryConsumer,)
             self.classes[name] = type(str(name),
-                                      (StructureConsumer,),
-                                      {"listkeys": multiple})
+                                      bases,
+                                      {"multiple": multiple})
 
     def open_dtd_file(self, filename):
         self._initialize_directory()

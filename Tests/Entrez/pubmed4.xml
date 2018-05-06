@@ -1,0 +1,842 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st January 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180101.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">27797938</PMID>
+        <DateCompleted>
+            <Year>2017</Year>
+            <Month>08</Month>
+            <Day>03</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2018</Year>
+            <Month>04</Month>
+            <Day>17</Day>
+        </DateRevised>
+        <Article PubModel="Print-Electronic">
+            <Journal>
+                <ISSN IssnType="Electronic">1468-3288</ISSN>
+                <JournalIssue CitedMedium="Internet">
+                    <Volume>66</Volume>
+                    <Issue>6</Issue>
+                    <PubDate>
+                        <Year>2017</Year>
+                        <Month>06</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Gut</Title>
+                <ISOAbbreviation>Gut</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Leucocyte telomere length, genetic variants at the <i>TERT</i> gene region and risk of pancreatic cancer.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>1116-1122</MedlinePgn>
+            </Pagination>
+            <ELocationID EIdType="doi" ValidYN="Y">10.1136/gutjnl-2016-312510</ELocationID>
+            <Abstract>
+                <AbstractText Label="OBJECTIVE">Telomere shortening occurs as an early event in pancreatic tumorigenesis, and genetic variants at the telomerase reverse transcriptase (<i>TERT</i>) gene region have been associated with pancreatic cancer risk. However, it is unknown whether prediagnostic leucocyte telomere length is associated with subsequent risk of pancreatic cancer.</AbstractText>
+                <AbstractText Label="DESIGN">We measured prediagnostic leucocyte telomere length in 386 pancreatic cancer cases and 896 matched controls from five prospective US cohorts. ORs and 95% CIs were calculated using conditional logistic regression. Matching factors included year of birth, cohort (which also matches on sex), smoking status, fasting status and month/year of blood collection. We additionally examined single-nucleotide polymorphisms (SNPs) at the <i>TERT</i> region in relation to pancreatic cancer risk and leucocyte telomere length using logistic and linear regression, respectively.</AbstractText>
+                <AbstractText Label="RESULTS">Shorter prediagnostic leucocyte telomere length was associated with higher risk of pancreatic cancer (comparing extreme quintiles of telomere length, OR 1.72; 95% CI 1.07 to 2.78; p<sub>trend</sub>=0.048). Results remained unchanged after adjustment for diabetes, body mass index and physical activity. Three SNPs at <i>TERT</i> (linkage disequilibrium r<sup>2</sup>&lt;0.25) were associated with pancreatic cancer risk, including rs401681 (per minor allele OR 1.33; 95% CI 1.12 to 1.59; p=0.002), rs2736100 (per minor allele OR 1.36; 95% CI 1.13 to 1.63; p=0.001) and rs2736098 (per minor allele OR 0.75; 95% CI 0.63 to 0.90; p=0.002). The minor allele for rs401681 was associated with shorter telomere length (p=0.023).</AbstractText>
+                <AbstractText Label="CONCLUSIONS">Prediagnostic leucocyte telomere length and genetic variants at the <i>TERT</i> gene region were associated with risk of pancreatic cancer.</AbstractText>
+                <CopyrightInformation>Published by the BMJ Publishing Group Limited. For permission to use (where not already granted under a licence) please go to http://www.bmj.com/company/products-services/rights-and-licensing/.</CopyrightInformation>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Bao</LastName>
+                    <ForeName>Ying</ForeName>
+                    <Initials>Y</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Prescott</LastName>
+                    <ForeName>Jennifer</ForeName>
+                    <Initials>J</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Yuan</LastName>
+                    <ForeName>Chen</ForeName>
+                    <Initials>C</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Zhang</LastName>
+                    <ForeName>Mingfeng</ForeName>
+                    <Initials>M</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Laboratory of Translational Genomics, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Bethesda, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Kraft</LastName>
+                    <ForeName>Peter</ForeName>
+                    <Initials>P</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Biostatistics, Harvard School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Babic</LastName>
+                    <ForeName>Ana</ForeName>
+                    <Initials>A</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Morales-Oyarvide</LastName>
+                    <ForeName>Vicente</ForeName>
+                    <Initials>V</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Qian</LastName>
+                    <ForeName>Zhi Rong</ForeName>
+                    <Initials>ZR</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Buring</LastName>
+                    <ForeName>Julie E</ForeName>
+                    <Initials>JE</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Preventive Medicine, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Ambulatory Care and Prevention, Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Cochrane</LastName>
+                    <ForeName>Barbara B</ForeName>
+                    <Initials>BB</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Washington School of Nursing, Seattle, Washington, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Gaziano</LastName>
+                    <ForeName>J Michael</ForeName>
+                    <Initials>JM</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Preventive Medicine, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Massachusetts Veterans Epidemiology Research and Information Center (MAVERIC), VA Boston Healthcare System.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Giovannucci</LastName>
+                    <ForeName>Edward L</ForeName>
+                    <Initials>EL</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Nutrition, Harvard School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Manson</LastName>
+                    <ForeName>JoAnn E</ForeName>
+                    <Initials>JE</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Preventive Medicine, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Ng</LastName>
+                    <ForeName>Kimmie</ForeName>
+                    <Initials>K</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Ogino</LastName>
+                    <ForeName>Shuji</ForeName>
+                    <Initials>S</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Division of MPE Molecular Pathological Epidemiology, Department of Pathology, Brigham and Women's Hospital and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Rohan</LastName>
+                    <ForeName>Thomas E</ForeName>
+                    <Initials>TE</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology and Population Health, Albert Einstein College of Medicine, Bronx, New York, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Sesso</LastName>
+                    <ForeName>Howard D</ForeName>
+                    <Initials>HD</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Division of Preventive Medicine, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Stampfer</LastName>
+                    <ForeName>Meir J</ForeName>
+                    <Initials>MJ</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Nutrition, Harvard School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Fuchs</LastName>
+                    <ForeName>Charles S</ForeName>
+                    <Initials>CS</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>De Vivo</LastName>
+                    <ForeName>Immaculata</ForeName>
+                    <Initials>I</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Channing Division of Network Medicine, Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Epidemiology, Harvard T.H. Chan School of Public Health, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Amundadottir</LastName>
+                    <ForeName>Laufey T</ForeName>
+                    <Initials>LT</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Laboratory of Translational Genomics, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Bethesda, Maryland, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Wolpin</LastName>
+                    <ForeName>Brian M</ForeName>
+                    <Initials>BM</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medical Oncology, Dana-Farber Cancer Institute, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Medicine, Brigham and Women's Hospital, and Harvard Medical School, Boston, Massachusetts, USA.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <GrantList CompleteYN="Y">
+                <Grant>
+                    <GrantID>KL2 TR001100</GrantID>
+                    <Acronym>TR</Acronym>
+                    <Agency>NCATS NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH42129</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32111</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32100</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R35 CA197735</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32122</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH44221</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>U01 CA210171</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH24152</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>P01 CA087969</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>UL1 TR001863</GrantID>
+                    <Acronym>TR</Acronym>
+                    <Agency>NCATS NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL043851</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL034595</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32118</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA124908</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32115</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA034944-03</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>UM1 CA186107</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL026490</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA047988</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH42107</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32105</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL080467</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>UM1 CA167552</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>K07 CA140790</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL034595-07</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA049449</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA040360</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 HL026490-03</GrantID>
+                    <Acronym>HL</Acronym>
+                    <Agency>NHLBI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>P50 CA127003</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32119</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA097193</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH32108</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>R01 CA034944</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>N01WH22110</GrantID>
+                    <Acronym>WH</Acronym>
+                    <Agency>WHI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+            </GrantList>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D064888">Observational Study</PublicationType>
+                <PublicationType UI="D052061">Research Support, N.I.H., Extramural</PublicationType>
+                <PublicationType UI="D013486">Research Support, U.S. Gov't, Non-P.H.S.</PublicationType>
+                <PublicationType UI="D013485">Research Support, Non-U.S. Gov't</PublicationType>
+            </PublicationTypeList>
+            <ArticleDate DateType="Electronic">
+                <Year>2016</Year>
+                <Month>10</Month>
+                <Day>21</Day>
+            </ArticleDate>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>England</Country>
+            <MedlineTA>Gut</MedlineTA>
+            <NlmUniqueID>2985108R</NlmUniqueID>
+            <ISSNLinking>0017-5749</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>EC 2.7.7.49</RegistryNumber>
+                <NameOfSubstance UI="C509186">TERT protein, human</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>EC 2.7.7.49</RegistryNumber>
+                <NameOfSubstance UI="D019098">Telomerase</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>AIM</CitationSubset>
+        <CitationSubset>IM</CitationSubset>
+        <CommentsCorrectionsList>
+            <CommentsCorrections RefType="CommentIn">
+                <RefSource>Gut. 2017 Jun;66(6):1</RefSource>
+                <PMID Version="1">27920200</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Stat Med. 1989 May;8(5):551-61</RefSource>
+                <PMID Version="1">2657958</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>PLoS One. 2015 Feb 06;10(2):e0117575</RefSource>
+                <PMID Version="1">25658358</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Pediatr Res. 2002 Sep;52(3):377-81</RefSource>
+                <PMID Version="1">12193671</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2010 Mar;42(3):224-8</RefSource>
+                <PMID Version="1">20101243</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Natl Cancer Inst. 2014 Sep 17;106(10):null</RefSource>
+                <PMID Version="1">25231748</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Natl Cancer Inst. 2013 Apr 3;105(7):459-68</RefSource>
+                <PMID Version="1">23468462</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Hum Mol Genet. 2014 Dec 15;23(24):6616-33</RefSource>
+                <PMID Version="1">25027329</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Hum Genet. 1998 Jun;102(6):640-3</RefSource>
+                <PMID Version="1">9703424</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2009 Aug;41(8):899-904</RefSource>
+                <PMID Version="1">19578367</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Cancer. 2013 Dec 1;133(11):2672-80</RefSource>
+                <PMID Version="1">23674344</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Genes Dev. 2006 May 15;20(10):1218-49</RefSource>
+                <PMID Version="1">16702400</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Natl Cancer Inst. 2015 Apr 10;107(6):djv074</RefSource>
+                <PMID Version="1">25862531</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 2005 Aug 20-26;366(9486):662-4</RefSource>
+                <PMID Version="1">16112303</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2008 Dec;40(12):1404-6</RefSource>
+                <PMID Version="1">18978790</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Epidemiol. 2015 Oct;44(5):1673-83</RefSource>
+                <PMID Version="1">25239152</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2014 Jul;46(7):731-5</RefSource>
+                <PMID Version="1">24908248</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>JAMA. 2010 Jul 7;304(1):69-75</RefSource>
+                <PMID Version="1">20606151</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Epidemiol Biomarkers Prev. 2012 Nov;21(11):2095-100</RefSource>
+                <PMID Version="1">23093543</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Natl Cancer Inst. 2013 Apr 3;105(7):448-9</RefSource>
+                <PMID Version="1">23468461</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 2011 Aug 13;378(9791):607-20</RefSource>
+                <PMID Version="1">21620466</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>PLoS One. 2015 Jul 15;10(7):e0133174</RefSource>
+                <PMID Version="1">26177192</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>PLoS One. 2011;6(6):e20466</RefSource>
+                <PMID Version="1">21695195</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Aging Cell. 2008 Aug;7(4):451-8</RefSource>
+                <PMID Version="1">18462274</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Cancer. 2015 Nov 1;137(9):2175-83</RefSource>
+                <PMID Version="1">25940397</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2013 Apr;45(4):371-84, 384e1-2</RefSource>
+                <PMID Version="1">23535731</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>PLoS One. 2013 Sep 13;8(9):e72311</RefSource>
+                <PMID Version="1">24058443</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Epidemiol Biomarkers Prev. 2011 Jun;20(6):1238-50</RefSource>
+                <PMID Version="1">21467229</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Hum Mol Genet. 2016 Apr 15;25(8):1663-76</RefSource>
+                <PMID Version="1">27008888</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Res. 2014 Jul 1;74(13):3381-9</RefSource>
+                <PMID Version="1">24924775</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2014 Sep;46(9):994-1000</RefSource>
+                <PMID Version="1">25086665</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Cancer Epidemiol Biomarkers Prev. 2014 Nov;23(11):2447-54</RefSource>
+                <PMID Version="1">25103821</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2009 Feb;41(2):221-7</RefSource>
+                <PMID Version="1">19151717</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Aging Cell. 2009 Jun;8(3):251-7</RefSource>
+                <PMID Version="1">19302371</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2009 Sep;41(9):986-90</RefSource>
+                <PMID Version="1">19648918</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Am J Hum Genet. 1994 Nov;55(5):876-82</RefSource>
+                <PMID Version="1">7977349</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Genet. 2013 Apr;45(4):422-7, 427e1-2</RefSource>
+                <PMID Version="1">23535734</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Am J Pathol. 2002 Nov;161(5):1541-7</RefSource>
+                <PMID Version="1">12414502</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Hum Mol Genet. 2013 Jun 15;22(12):2520-8</RefSource>
+                <PMID Version="1">23535824</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Breast Cancer Res Treat. 2015 Jan;149(2):385-94</RefSource>
+                <PMID Version="1">25528024</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Natl Cancer Inst. 2012 Jun 6;104(11):840-54</RefSource>
+                <PMID Version="1">22523397</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nat Commun. 2013;4:1597</RefSource>
+                <PMID Version="1">23511462</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>CA Cancer J Clin. 2016 Jan-Feb;66(1):7-30</RefSource>
+                <PMID Version="1">26742998</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>EBioMedicine. 2015 Apr 13;2(6):591-6</RefSource>
+                <PMID Version="1">26288820</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Annu Rev Cell Dev Biol. 2006;22:531-57</RefSource>
+                <PMID Version="1">16824017</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Mov Disord. 2008 Jan 30;23(2):302-5</RefSource>
+                <PMID Version="1">18044760</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Exp Hematol. 2010 Oct;38(10):854-9</RefSource>
+                <PMID Version="1">20600576</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Hum Mol Genet. 2015 Sep 15;24(18):5356-66</RefSource>
+                <PMID Version="1">26138067</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Nucleic Acids Res. 2002 May 15;30(10):e47</RefSource>
+                <PMID Version="1">12000852</PMID>
+            </CommentsCorrections>
+        </CommentsCorrectionsList>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D000230" MajorTopicYN="N">Adenocarcinoma</DescriptorName>
+                <QualifierName UI="Q000453" MajorTopicYN="Y">epidemiology</QualifierName>
+                <QualifierName UI="Q000235" MajorTopicYN="Y">genetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000328" MajorTopicYN="N">Adult</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000368" MajorTopicYN="N">Aged</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000369" MajorTopicYN="N">Aged, 80 and over</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000483" MajorTopicYN="N">Alleles</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016022" MajorTopicYN="N">Case-Control Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D005260" MajorTopicYN="N">Female</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D005500" MajorTopicYN="N">Follow-Up Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D007962" MajorTopicYN="N">Leukocytes</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008297" MajorTopicYN="N">Male</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008875" MajorTopicYN="N">Middle Aged</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016017" MajorTopicYN="N">Odds Ratio</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D010190" MajorTopicYN="N">Pancreatic Neoplasms</DescriptorName>
+                <QualifierName UI="Q000453" MajorTopicYN="Y">epidemiology</QualifierName>
+                <QualifierName UI="Q000235" MajorTopicYN="Y">genetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D020641" MajorTopicYN="N">Polymorphism, Single Nucleotide</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D011446" MajorTopicYN="N">Prospective Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016032" MajorTopicYN="N">Randomized Controlled Trials as Topic</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D012307" MajorTopicYN="N">Risk Factors</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D019098" MajorTopicYN="N">Telomerase</DescriptorName>
+                <QualifierName UI="Q000235" MajorTopicYN="Y">genetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D059506" MajorTopicYN="Y">Telomere Shortening</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D014481" MajorTopicYN="N">United States</DescriptorName>
+                <QualifierName UI="Q000453" MajorTopicYN="N">epidemiology</QualifierName>
+            </MeshHeading>
+        </MeshHeadingList>
+        <KeywordList Owner="NOTNLM">
+            <Keyword MajorTopicYN="Y">PANCREATIC CANCER</Keyword>
+        </KeywordList>
+        <CoiStatement>Competing interests: None declared.</CoiStatement>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="received">
+                <Year>2016</Year>
+                <Month>06</Month>
+                <Day>27</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="revised">
+                <Year>2016</Year>
+                <Month>08</Month>
+                <Day>22</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="accepted">
+                <Year>2016</Year>
+                <Month>10</Month>
+                <Day>01</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pmc-release">
+                <Year>2018</Year>
+                <Month>06</Month>
+                <Day>01</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2016</Year>
+                <Month>11</Month>
+                <Day>1</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2017</Year>
+                <Month>8</Month>
+                <Day>5</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2016</Year>
+                <Month>11</Month>
+                <Day>1</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">27797938</ArticleId>
+            <ArticleId IdType="pii">gutjnl-2016-312510</ArticleId>
+            <ArticleId IdType="doi">10.1136/gutjnl-2016-312510</ArticleId>
+            <ArticleId IdType="pmc">PMC5442267</ArticleId>
+            <ArticleId IdType="mid">NIHMS857349</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>
