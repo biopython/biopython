@@ -94,31 +94,6 @@ class ListElement(list):
 
 
 class DictionaryElement(dict):
-    def __repr__(self):
-        text = dict.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
-            return text
-        return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
-
-
-# A StructureElement is like a dictionary, but some of its keys can have
-# multiple values associated with it. These values are stored in a list
-# under each key.
-class StructureElement(dict):
-    def __init__(self, keys):
-        """Initialize the class."""
-        dict.__init__(self)
-        for key in keys:
-            dict.__setitem__(self, key, [])
-        self.listkeys = keys
-
-    def __setitem__(self, key, value):
-        if key in self.listkeys:
-            self[key].append(value)
-        else:
-            dict.__setitem__(self, key, value)
 
     def __repr__(self):
         text = dict.__repr__(self)
@@ -166,6 +141,182 @@ class ValidationError(ValueError):
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
+class Consumer(object):
+
+    def __init__(self, name, attrs):
+        """Create a do-nothing Consumer object."""
+        return
+
+    def startElementHandler(self, name, attrs):
+        return False
+
+    def endElementHandler(self, name):
+        return False
+
+    def consume(self, content):
+        return
+
+    def store(self, key, value):
+        return
+
+    @property
+    def value(self):
+        return
+
+
+class ErrorConsumer(Consumer):
+
+    def __init__(self, name, attrs):
+        """Create a Consumer for ERROR messages in the XML data."""
+        self.data = []
+
+    def consume(self, content):
+        self.data.append(content)
+
+    @property
+    def value(self):
+        value = "".join(self.data)
+        if value == "":
+            return None
+        else:
+            raise RuntimeError(value)
+
+
+class StringConsumer(Consumer):
+
+    consumable = set()
+
+    def __init__(self, name, attrs):
+        """Create a Consumer for plain text elements in the XML data."""
+        self.tag = name
+        self.attributes = dict(attrs)
+        self.data = []
+
+    def startElementHandler(self, name, attrs):
+        if name in self.consumable:
+            tag = "<%s>" % name
+            self.data.append(tag)
+            return True
+        return False
+
+    def endElementHandler(self, name):
+        if name in self.consumable:
+            tag = "</%s>" % name
+            self.data.append(tag)
+            return True
+        return False
+
+    def consume(self, content):
+        self.data.append(content)
+
+    @property
+    def value(self):
+        value = "".join(self.data)
+        # Convert Unicode strings to plain strings if possible
+        try:
+            value = StringElement(value)
+        except UnicodeEncodeError:
+            value = UnicodeElement(value)
+        value.tag = self.tag
+        if self.attributes:
+            value.attributes = self.attributes
+        return value
+
+
+class IntegerConsumer(Consumer):
+
+    def __init__(self, name, attrs):
+        """Create a Consumer for integer elements in the XML data."""
+        self.tag = name
+        self.attributes = dict(attrs)
+        self.data = []
+
+    def consume(self, content):
+        self.data.append(content)
+
+    @property
+    def value(self):
+        value = int("".join(self.data))
+        value = IntegerElement(value)
+        value.tag = self.tag
+        value.attributes = self.attributes
+        return value
+
+
+class ListConsumer(Consumer):
+
+    keys = None
+
+    def __init__(self, name, attrs):
+        """Create a Consumer for list elements in the XML data."""
+        data = ListElement()
+        data.tag = name
+        if attrs:
+            data.attributes = dict(attrs)
+        self.data = data
+
+    def store(self, key, value):
+        if self.keys is not None and key not in self.keys:
+            raise ValueError("Unexpected item '%s' in list" % key)
+        self.data.append(value)
+
+    @property
+    def value(self):
+        return self.data
+
+
+class DictionaryConsumer(Consumer):
+
+    multiple = None
+
+    def __init__(self, name, attrs):
+        """Create a Consumer for dictionary elements in the XML data."""
+        data = DictionaryElement()
+        data.tag = name
+        data.attributes = dict(attrs)
+        for key in self.multiple:
+            data[key] = []
+        self.data = data
+
+    def store(self, key, value):
+        if key in self.multiple:
+            self.data[key].append(value)
+        else:
+            self.data[key] = value
+
+    @property
+    def value(self):
+        return self.data
+
+
+def select_item_consumer(name, attrs):
+    assert name == 'Item'
+    name = str(attrs["Name"])  # convert from Unicode
+    del attrs["Name"]
+    itemtype = str(attrs["Type"])  # convert from Unicode
+    del attrs["Type"]
+    if itemtype == "Structure":
+        cls = type(name,
+                   (DictionaryConsumer,),
+                   {"multiple": set()})
+        consumer = cls(name, attrs)
+    elif name in ("ArticleIds", "History"):
+        cls = type(name,
+                   (DictionaryConsumer,),
+                   {"multiple": set(["pubmed", "medline"])})
+        consumer = cls(name, attrs)
+    elif itemtype == "List":
+        # Keys are unknown in this case
+        consumer = ListConsumer(name, attrs)
+    elif itemtype == "Integer":
+        consumer = IntegerConsumer(name, attrs)
+    elif itemtype in ("String", "Unknown", "Date"):
+        consumer = StringConsumer(name, attrs)
+    else:
+        raise ValueError("Unknown item type %s" % name)
+    return consumer
+
+
 class DataHandler(object):
 
     from Bio import Entrez
@@ -177,16 +328,10 @@ class DataHandler(object):
     del Entrez
 
     def __init__(self, validate):
-        """Initialize the class."""
-        self.stack = []
-        self.errors = []
-        self.integers = []
-        self.strings = []
-        self.lists = []
-        self.dictionaries = []
-        self.structures = {}
-        self.items = []
+        """Create a DataHandler object."""
         self.dtd_urls = []
+        self.classes = {}
+        self.consumer = None
         self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
@@ -226,11 +371,11 @@ class DataHandler(object):
                 # the input data is not in XML format.
                 raise NotXMLError(e)
         try:
-            return self.object
+            return self.record
         except AttributeError:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, and expat didn't notice
-                # any errors, so self.object should be defined. If not, this is
+                # any errors, so self.record should be defined. If not, this is
                 # a bug.
                 raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
             else:
@@ -243,29 +388,6 @@ class DataHandler(object):
         while True:
             # Read in another block of the file...
             text = handle.read(BLOCK)
-            if not text:
-                # We have reached the end of the XML file
-                if self.stack:
-                    # No more XML data, but there is still some unfinished
-                    # business
-                    raise CorruptedXMLError("Premature end of XML stream")
-                try:
-                    for record in self.object:
-                        yield record
-                except AttributeError:
-                    if self.parser.StartElementHandler:
-                        # We saw the initial <!xml declaration, and expat
-                        # didn't notice any errors, so self.object should be
-                        # defined. If not, this is a bug.
-                        raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
-                    else:
-                        # We did not see the initial <!xml declaration, so
-                        # probably the input data is not in XML format.
-                        raise NotXMLError("XML declaration not found")
-                self.parser.Parse("", True)
-                self.parser = None
-                return
-
             try:
                 self.parser.Parse(text, False)
             except expat.ExpatError as e:
@@ -278,17 +400,35 @@ class DataHandler(object):
                     # We have not seen the initial <!xml declaration, so
                     # probably the input data is not in XML format.
                     raise NotXMLError(e)
+            try:
+                records = self.record
+            except AttributeError:
+                if self.parser.StartElementHandler:
+                    # We saw the initial <!xml declaration, and expat
+                    # didn't notice any errors, so self.record should be
+                    # defined. If not, this is a bug.
+                    raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+                else:
+                    # We did not see the initial <!xml declaration, so
+                    # probably the input data is not in XML format.
+                    raise NotXMLError("XML declaration not found")
 
-            if not self.stack:
-                # Haven't read enough from the XML file yet
-                continue
-
-            records = self.stack[0]
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
-            while len(records) > 1:  # Then the top record is finished
+
+            while len(records) >= 1:  # Then the top record is finished
                 record = records.pop(0)
                 yield record
+
+            if not text:
+                sys.stdout.flush()
+                self.parser = None
+                if self.consumer:
+                    # We have reached the end of the XML file
+                    # No more XML data, but there is still some unfinished
+                    # business
+                    raise CorruptedXMLError("Premature end of XML stream")
+                return
 
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
@@ -306,6 +446,11 @@ class DataHandler(object):
             raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
 
     def startElementHandler(self, name, attrs):
+        # First, check if the current consumer can use the tag
+        if self.consumer is not None:
+            consumed = self.consumer.startElementHandler(name, attrs)
+            if consumed:
+                return
         # preprocessing the xml schema
         if self.is_schema:
             if len(attrs) == 1:
@@ -321,97 +466,46 @@ class DataHandler(object):
                 else:
                     self.parse_xsd(ET.fromstring(handle.read()))
                     handle.close()
-        self.content = ""
-        if name in self.lists:
-            object = ListElement()
-        elif name in self.dictionaries:
-            object = DictionaryElement()
-        elif name in self.structures:
-            object = StructureElement(self.structures[name])
-        elif name in self.items:  # Only appears in ESummary
-            name = str(attrs["Name"])  # convert from Unicode
-            del attrs["Name"]
-            itemtype = str(attrs["Type"])  # convert from Unicode
-            del attrs["Type"]
-            if itemtype == "Structure":
-                object = DictionaryElement()
-            elif name in ("ArticleIds", "History"):
-                object = StructureElement(["pubmed", "medline"])
-            elif itemtype == "List":
-                object = ListElement()
-            else:
-                object = StringElement()
-            object.itemname = name
-            object.itemtype = itemtype
-        elif name in self.strings + self.errors + self.integers:
-            self.attributes = attrs
-            return
-        else:
+        cls = self.classes.get(name)
+        if cls is None:
             # Element not found in DTD
             if self.validating:
                 raise ValidationError(name)
             else:
                 # this will not be stored in the record
-                object = ""
-        if object != "":
-            object.tag = name
-            if attrs:
-                object.attributes = dict(attrs)
-            if len(self.stack) != 0:
-                current = self.stack[-1]
-                try:
-                    current.append(object)
-                except AttributeError:
-                    current[name] = object
-        self.stack.append(object)
+                consumer = Consumer(name, attrs)
+        else:
+            consumer = cls(name, attrs)
+        consumer.parent = self.consumer
+        if self.consumer is None:
+            # This is relevant only for Entrez.parse, not for Entrez.read.
+            # If self.consumer is None, then this is the first start tag we
+            # encounter, and it should refer to a list. Store this list in
+            # the record attribute, so that Entrez.parse can iterate over it.
+            # The record attribute will be set again at the last end tag;
+            # However, it doesn't hurt to set it twice.
+            value = consumer.value
+            if value is not None:
+                self.record = value
+        self.consumer = consumer
 
     def endElementHandler(self, name):
-        value = self.content
-        if name in self.errors:
-            if value == "":
+        consumer = self.consumer
+        # First, check if the current consumer can use the tag
+        if consumer is not None:
+            consumed = consumer.endElementHandler(name)
+            if consumed:
                 return
-            else:
-                raise RuntimeError(value)
-        elif name in self.integers:
-            value = IntegerElement(value)
-        elif name in self.strings:
-            # Convert Unicode strings to plain strings if possible
-            try:
-                value = StringElement(value)
-            except UnicodeEncodeError:
-                value = UnicodeElement(value)
-        elif name in self.items:
-            self.object = self.stack.pop()
-            if self.object.itemtype in ("List", "Structure"):
-                return
-            elif self.object.itemtype == "Integer" and value:
-                value = IntegerElement(value)
-            else:
-                # Convert Unicode strings to plain strings if possible
-                try:
-                    value = StringElement(value)
-                except UnicodeEncodeError:
-                    value = UnicodeElement(value)
-            name = self.object.itemname
-        else:
-            self.object = self.stack.pop()
-            value = re.sub(r"[\s]+", "", value)
-            if self.is_schema and value:
-                self.object.update({'data': value})
-            return
-        value.tag = name
-        if self.attributes:
-            value.attributes = dict(self.attributes)
-            del self.attributes
-        current = self.stack[-1]
-        if current != "":
-            try:
-                current.append(value)
-            except AttributeError:
-                current[name] = value
+        self.consumer = consumer.parent
+        value = consumer.value
+        if self.consumer is None:
+            self.record = value
+        elif value is not None:
+            name = value.tag
+            self.consumer.store(name, value)
 
     def characterDataHandler(self, content):
-        self.content += content
+        self.consumer.consume(content)
 
     def parse_xsd(self, root):
         is_dictionary = False
@@ -424,10 +518,10 @@ class DataHandler(object):
                 if "attribute" in element.tag:
                     is_dictionary = True
             if is_dictionary:
-                self.dictionaries.append(name)
+                self.classes[name] = DictionaryConsumer
                 is_dictionary = False
             else:
-                self.lists.append(name)
+                self.classes[name] = ListConsumer
 
     def elementDecl(self, name, model):
         """Call a call-back function for each element declaration in a DTD.
@@ -441,7 +535,7 @@ class DataHandler(object):
         or error.
         """
         if name.upper() == "ERROR":
-            self.errors.append(name)
+            self.classes[name] = ErrorConsumer
             return
         if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
@@ -454,7 +548,7 @@ class DataHandler(object):
                                         ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
-            self.items.append(name)
+            self.classes[name] = select_item_consumer
             return
         # First, remove ignorable parentheses around declarations
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
@@ -466,14 +560,28 @@ class DataHandler(object):
         # PCDATA declarations correspond to strings
         if model[0] in (expat.model.XML_CTYPE_MIXED,
                         expat.model.XML_CTYPE_EMPTY):
-            self.strings.append(name)
+            if model[1] == expat.model.XML_CQUANT_REP:
+                tags = []
+                children = model[3]
+                for child in children:
+                    tag = child[2]
+                    tags.append(tag)
+                bases = (StringConsumer, )
+                self.classes[name] = type(str(name), bases, {'consumable': tags})
+            else:
+                self.classes[name] = StringConsumer
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
                          expat.model.XML_CTYPE_SEQ) and
             model[1] in (expat.model.XML_CQUANT_PLUS,
                          expat.model.XML_CQUANT_REP)):
-            self.lists.append(name)
+            children = model[3]
+            if model[0] == expat.model.XML_CTYPE_SEQ:
+                assert len(children) == 1
+            keys = set([child[2] for child in children])
+            bases = (ListConsumer,)
+            self.classes[name] = type(str(name), bases, {'keys': keys})
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -489,8 +597,8 @@ class DataHandler(object):
         # they raise an exception in Python.
 
         def count(model):
-            quantifier, name, children = model[1:]
-            if name is None:
+            quantifier, key, children = model[1:]
+            if key is None:
                 if quantifier in (expat.model.XML_CQUANT_PLUS,
                                   expat.model.XML_CQUANT_REP):
                     for child in children:
@@ -498,20 +606,25 @@ class DataHandler(object):
                 else:
                     for child in children:
                         count(child)
-            elif name.upper() != "ERROR":
+            elif key.upper() != "ERROR":
                 if quantifier in (expat.model.XML_CQUANT_NONE,
                                   expat.model.XML_CQUANT_OPT):
-                    single.append(name)
+                    single.append(key)
                 elif quantifier in (expat.model.XML_CQUANT_PLUS,
                                     expat.model.XML_CQUANT_REP):
-                    multiple.append(name)
+                    multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            self.lists.append(name)
-        elif len(multiple) == 0:
-            self.dictionaries.append(name)
+            keys = set(multiple)
+            bases = (ListConsumer, )
+            self.classes[name] = type(str(name), bases, {'keys': keys})
         else:
-            self.structures.update({name: multiple})
+            single = set(single)
+            multiple = set(multiple)
+            bases = (DictionaryConsumer,)
+            self.classes[name] = type(str(name),
+                                      bases,
+                                      {"multiple": multiple})
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
