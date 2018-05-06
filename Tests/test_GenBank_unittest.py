@@ -262,7 +262,7 @@ KEYWORDS    """ in gb, gb)
                            id='123456789',
                            name='UnitTest',
                            description='Test case for date parsing')
-        with tempfile.TemporaryFile() as f:
+        with tempfile.TemporaryFile(mode="r+t") as f:
             SeqIO.write(record, f, 'genbank')
             f.seek(0)
             gb = SeqIO.read(f, "gb")
@@ -274,7 +274,7 @@ KEYWORDS    """ in gb, gb)
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = "24-DEC-2015"
-        with tempfile.TemporaryFile() as f:
+        with tempfile.TemporaryFile(mode="r+t") as f:
             SeqIO.write(record, f, 'genbank')
             f.seek(0)
             gb = SeqIO.read(f, "gb")
@@ -286,7 +286,7 @@ KEYWORDS    """ in gb, gb)
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = ["24-DEC-2015"]
-        with tempfile.TemporaryFile() as f:
+        with tempfile.TemporaryFile(mode="r+t") as f:
             SeqIO.write(record, f, 'genbank')
             f.seek(0)
             gb = SeqIO.read(f, "gb")
@@ -297,7 +297,7 @@ KEYWORDS    """ in gb, gb)
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
-        with tempfile.TemporaryFile() as f:
+        with tempfile.TemporaryFile(mode="r+t") as f:
             SeqIO.write(record, f, 'genbank')
             f.seek(0)
             gb = SeqIO.read(f, "gb")
@@ -309,7 +309,7 @@ KEYWORDS    """ in gb, gb)
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = datetime(2000, 2, 2)
-        with tempfile.TemporaryFile() as f:
+        with tempfile.TemporaryFile(mode="r+t") as f:
             SeqIO.write(record, f, 'genbank')
             f.seek(0)
             gb = SeqIO.read(f, "gb")
@@ -328,7 +328,7 @@ KEYWORDS    """ in gb, gb)
                                description='Test case for date parsing')
 
             record.annotations["date"] = invalid_date
-            with tempfile.TemporaryFile() as f:
+            with tempfile.TemporaryFile(mode="r+t") as f:
                 SeqIO.write(record, f, 'genbank')
                 f.seek(0)
                 gb = SeqIO.read(f, "gb")
