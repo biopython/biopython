@@ -167,7 +167,7 @@ class Consumer(object):
 class ErrorConsumer(Consumer):
 
     def __init__(self, name, attrs):
-        """Create a Consumer for ERROR messages in the XML data"""
+        """Create a Consumer for ERROR messages in the XML data."""
         self.data = []
 
     def consume(self, content):
@@ -187,7 +187,7 @@ class StringConsumer(Consumer):
     consumable = set()
 
     def __init__(self, name, attrs):
-        """Create a Consumer for plain text elements in the XML data"""
+        """Create a Consumer for plain text elements in the XML data."""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
@@ -226,7 +226,7 @@ class StringConsumer(Consumer):
 class IntegerConsumer(Consumer):
 
     def __init__(self, name, attrs):
-        """Create a Consumer for integer elements in the XML data"""
+        """Create a Consumer for integer elements in the XML data."""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
@@ -248,7 +248,7 @@ class ListConsumer(Consumer):
     keys = None
 
     def __init__(self, name, attrs):
-        """Create a Consumer for list elements in the XML data"""
+        """Create a Consumer for list elements in the XML data."""
         data = ListElement()
         data.tag = name
         if attrs:
