@@ -3653,8 +3653,6 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(records['PubmedArticle'][0]['MedlineCitation']['MedlineJournalInfo']['ISSNLinking'], '0017-5749')
         self.assertEqual(len(records['PubmedArticle'][0]['MedlineCitation']['ChemicalList']), 2)
 
-
-
     def test_omim(self):
         """Test parsing XML returned by EFetch, OMIM database."""
         # In OMIM show the full record for MIM number 601100 as XML
