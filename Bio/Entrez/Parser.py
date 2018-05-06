@@ -270,7 +270,7 @@ class DictionaryConsumer(Consumer):
     multiple = None
 
     def __init__(self, name, attrs):
-        """Create a Consumer for dictionary elements in the XML data"""
+        """Create a Consumer for dictionary elements in the XML data."""
         data = DictionaryElement()
         data.tag = name
         data.attributes = dict(attrs)
