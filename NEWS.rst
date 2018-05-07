@@ -28,6 +28,7 @@ used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 The Entrez module now allows users to set a custom directory location for DTD
 and XSD files. This change allows Entrez to be used in code deployments
 such as AWS Lambda, which restricts write access to specific directories.
+Improved support for parsing NCBI Entrez XML files that use XSD schemas.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
@@ -35,6 +36,7 @@ possible, especially the following contributors:
 - Blaise Li
 - Chad Parmet
 - Chris Rands
+- Michiel de Hoon
 - Peter Cock
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto

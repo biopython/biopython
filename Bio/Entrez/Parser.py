@@ -508,17 +508,26 @@ class DataHandler(object):
         self.consumer.consume(content)
 
     def parse_xsd(self, root):
-        is_dictionary = False
         name = ""
         for child in root:
+            is_dictionary = False
+            multiple = []
             for element in child.getiterator():
                 if "element" in element.tag:
                     if "name" in element.attrib:
                         name = element.attrib['name']
                 if "attribute" in element.tag:
                     is_dictionary = True
+                if "sequence" in element.tag:
+                    for grandchild in element:
+                        key = grandchild.attrib['ref']
+                        multiple.append(key)
             if is_dictionary:
-                self.classes[name] = DictionaryConsumer
+                bases = (DictionaryConsumer,)
+                multiple = set(multiple)
+                self.classes[name] = type(str(name),
+                                          bases,
+                                          {"multiple": multiple})
                 is_dictionary = False
             else:
                 self.classes[name] = ListConsumer
@@ -619,7 +628,6 @@ class DataHandler(object):
             bases = (ListConsumer, )
             self.classes[name] = type(str(name), bases, {'keys': keys})
         else:
-            single = set(single)
             multiple = set(multiple)
             bases = (DictionaryConsumer,)
             self.classes[name] = type(str(name),
