@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<IPGReportSet xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.ncbi.nlm.nih.gov/data_specs/schema/other/seq_report/IPGReportSet.xsd">
+
+<IPGReport  ipg="79092155" product_acc="KJV04014.1">
+<Product  accver="WP_045840896.1" name="methylmalonate-semialdehyde dehydrogenase (CoA acylating)" taxid="1356405" slen="513" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria"/>
+<ProteinList>
+<Protein  accver="KJV04014.1" source="INSDC" name="methylmalonic acid semialdehyde dehydrogenase mmsa" taxid="1356405" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria" priority="0">
+<CDSList>
+<CDS  accver="JZIS01000004.1" start="264437" stop="265978" strand="-" taxid="1356405" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria" strain="PML026" assembly="GCA_000963615.1"/>
+<CDS  accver="KQ031368.1" start="264437" stop="265978" strand="-" taxid="1356405" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria" strain="PML026" assembly="GCA_000963615.1"/></CDSList></Protein>
+<Protein  accver="WP_045840896.1" source="RefSeq" name="methylmalonate-semialdehyde dehydrogenase (CoA acylating)" taxid="1356405" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria" priority="1">
+<CDSList>
+<CDS  accver="NZ_KQ031368.1" start="264437" stop="265978" strand="-" taxid="1356405" org="Rhodococcus sp. PML026" kingdom_taxid="2" kingdom="Bacteria" strain="PML026" assembly="GCF_000963615.1"/></CDSList></Protein></ProteinList>
+<Statistics  prot_count="2" nuc_count="3" assmb_count="2"/></IPGReport></IPGReportSet>
