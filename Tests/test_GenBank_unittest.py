@@ -268,7 +268,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
-        """check if user provided date is inserted correctly"""
+        """Check if user provided date is inserted correctly"""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -283,7 +283,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
-        """check if date lists are handled correctly"""
+        """Check if date lists are handled correctly"""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -309,7 +309,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
-        """check if datetime objects are handled correctly"""
+        """Check if datetime objects are handled correctly"""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -324,7 +324,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "02-FEB-2000")
 
     def test_genbank_date_invalid(self):
-        """check if invalid dates are treated as default"""
+        """Check if invalid dates are treated as default"""
 
         invalid_dates = ("invalid date",
                          "29-2-1981",
