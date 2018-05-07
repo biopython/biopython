@@ -4241,10 +4241,6 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record['ProteinList'][0][1]['CDSList'][0][0].attributes['accver'], 'NZ_KQ031368.1')
         self.assertEqual(record['ProteinList'][0][1]['CDSList'][0][0].attributes['strand'], '-')
 
-
-
-
-
     def test_genbank(self):
         """Test error handling when presented with GenBank non-XML data."""
         # Access the nucleotide database using efetch, but return the data
