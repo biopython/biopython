@@ -441,7 +441,7 @@ setup(name='biopython',
       packages=PACKAGES,
       ext_modules=EXTENSIONS,
       package_data={
-          'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+          'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod', 'XSDs/*.xsd'],
       },
       install_requires=REQUIRES,
       )
