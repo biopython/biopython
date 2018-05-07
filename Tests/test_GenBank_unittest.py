@@ -254,7 +254,7 @@ KEYWORDS    """ in gb, gb)
 
     def test_genbank_date_default(self):
         """Check if default date is handled correctly"""
-        
+
         sequence_object = Seq("ATGC", generic_dna)
         # check if default value is inserted correctly
         record = SeqRecord(sequence_object,
