@@ -7,7 +7,6 @@
 import unittest
 from os import path
 import warnings
-import tempfile
 from datetime import datetime
 
 from Bio import BiopythonParserWarning
@@ -253,43 +252,49 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(name, new.name)
             self.assertEqual(seq_len, len(new))
 
-    def test_genbank_date(self):
-        """Check if different date formats are handled correctly"""
+    def test_genbank_date_default(self):
+        """Check if default date is handled correctly"""
+        
         sequence_object = Seq("ATGC", generic_dna)
-
         # check if default value is inserted correctly
         record = SeqRecord(sequence_object,
                            id='123456789',
                            name='UnitTest',
                            description='Test case for date parsing')
-        with tempfile.TemporaryFile(mode="r+t") as f:
-            SeqIO.write(record, f, 'genbank')
-            f.seek(0)
-            gb = SeqIO.read(f, "gb")
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
-        # check if user provided value is inserted correctly
+    def test_genbank_date_correct(self):
+        """check if user provided date is inserted correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = "24-DEC-2015"
-        with tempfile.TemporaryFile(mode="r+t") as f:
-            SeqIO.write(record, f, 'genbank')
-            f.seek(0)
-            gb = SeqIO.read(f, "gb")
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
-        # check if lists are handled correctly
+    def test_genbank_date_list(self):
+        """check if date lists are handled correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = ["24-DEC-2015"]
-        with tempfile.TemporaryFile(mode="r+t") as f:
-            SeqIO.write(record, f, 'genbank')
-            f.seek(0)
-            gb = SeqIO.read(f, "gb")
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
         record = SeqRecord(sequence_object,
@@ -297,30 +302,37 @@ KEYWORDS    """ in gb, gb)
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
-        with tempfile.TemporaryFile(mode="r+t") as f:
-            SeqIO.write(record, f, 'genbank')
-            f.seek(0)
-            gb = SeqIO.read(f, "gb")
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
-        # check if datetime objects are handled correctly
+    def test_genbank_date_datetime(self):
+        """check if datetime objects are handled correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
                            name='UnitTest',
                            description='Test case for date parsing')
         record.annotations["date"] = datetime(2000, 2, 2)
-        with tempfile.TemporaryFile(mode="r+t") as f:
-            SeqIO.write(record, f, 'genbank')
-            f.seek(0)
-            gb = SeqIO.read(f, "gb")
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "02-FEB-2000")
 
-        # check if invalid dates are treated as default
+    def test_genbank_date_invalid(self):
+        """check if invalid dates are treated as default"""
+
         invalid_dates = ("invalid date",
                          "29-2-1981",
                          "35-1-2018",
                          "1-1-80",
                          "1-9-99")
+
+        sequence_object = Seq("ATGC", generic_dna)
         for invalid_date in invalid_dates:
             record = SeqRecord(sequence_object,
                                id='123456789',
@@ -328,10 +340,10 @@ KEYWORDS    """ in gb, gb)
                                description='Test case for date parsing')
 
             record.annotations["date"] = invalid_date
-            with tempfile.TemporaryFile(mode="r+t") as f:
-                SeqIO.write(record, f, 'genbank')
-                f.seek(0)
-                gb = SeqIO.read(f, "gb")
+            handle = StringIO()
+            SeqIO.write(record, handle, 'genbank')
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
 
