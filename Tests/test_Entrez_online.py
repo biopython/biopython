@@ -45,7 +45,6 @@ URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython%40biopython.org"
 URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
-
 class EntrezOnlineCase(unittest.TestCase):
 
     def test_read_from_url(self):
