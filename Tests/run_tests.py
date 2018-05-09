@@ -38,7 +38,6 @@ import doctest
 import distutils.util
 import gc
 from io import BytesIO
-from Bio import MissingExternalDependencyError
 
 
 # Note, we want to be able to call run_tests.py BEFORE
@@ -256,11 +255,14 @@ def main(argv):
             return 0
         if opt == "--offline":
             print("Skipping any tests requiring internet access")
+            # This is a bit of a hack...
+            import requires_internet
+            requires_internet.check.available = False
             # Monkey patch for urlopen()
             import Bio._py3k
 
             def dummy_urlopen(url):
-                raise MissingExternalDependencyError("internet not available")
+                raise RuntimeError("internet not available")
 
             Bio._py3k.urlopen = dummy_urlopen
         if opt == "-g" or opt == "--generate":
