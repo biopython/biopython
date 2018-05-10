@@ -566,7 +566,7 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
-    if "api_key" not in params:
+    if api_key and "api_key" not in params:
         params["api_key"] = api_key
     return params
 
