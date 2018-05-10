@@ -12,6 +12,11 @@ results are parseable. Detailed tests on each Entrez service are not within the
 scope of this file as they are already covered in test_Entrez.py.
 
 """
+from Bio import Entrez
+from Bio import Medline
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+
 import doctest
 import os
 import locale
@@ -20,11 +25,6 @@ import unittest
 
 import requires_internet
 requires_internet.check()
-
-from Bio import Entrez
-from Bio import Medline
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 
 if os.name == 'java':
     try:
@@ -44,6 +44,7 @@ URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
 URL_EMAIL = "email=biopython%40biopython.org"
 URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
+
 
 class EntrezOnlineCase(unittest.TestCase):
 
