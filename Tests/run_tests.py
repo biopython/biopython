@@ -262,7 +262,7 @@ def main(argv):
             import Bio._py3k
 
             def dummy_urlopen(url):
-                raise RuntimeError("internet not available")
+                raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
             Bio._py3k.urlopen = dummy_urlopen
         if opt == "-g" or opt == "--generate":
