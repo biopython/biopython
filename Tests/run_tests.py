@@ -39,6 +39,7 @@ import distutils.util
 import gc
 from io import BytesIO
 
+
 # Note, we want to be able to call run_tests.py BEFORE
 # Biopython is installed, so we can't use this:
 # from Bio._py3k import StringIO
@@ -257,7 +258,13 @@ def main(argv):
             # This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
-            # The check() function should now report internet not available
+            # Monkey patch for urlopen()
+            import Bio._py3k
+
+            def dummy_urlopen(url):
+                raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
+
+            Bio._py3k.urlopen = dummy_urlopen
         if opt == "-g" or opt == "--generate":
             if len(args) > 1:
                 print("Only one argument (the test name) needed for generate")
