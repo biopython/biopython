@@ -48,6 +48,26 @@ URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 class EntrezOnlineCase(unittest.TestCase):
 
+    def test_no_api_key(self):
+        """Test Entrez.read without API key."""
+        cached = Entrez.api_key
+        Entrez.api_key = None  # default
+        try:
+            handle = Entrez.einfo()
+        finally:
+            # Do not want any failure here to break other tests
+            Entrez.api_key = cached
+        self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
+        self.assertIn(URL_TOOL, handle.url)
+        self.assertIn(URL_EMAIL, handle.url)
+        self.assertNotIn("api_key=", handle.url)
+        rec = Entrez.read(handle)
+        handle.close()
+        self.assertTrue(isinstance(rec, dict))
+        self.assertIn('DbList', rec)
+        # arbitrary number, just to make sure that DbList has contents
+        self.assertTrue(len(rec['DbList']) > 5)
+
     def test_read_from_url(self):
         """Test Entrez.read from URL"""
         handle = Entrez.einfo()
