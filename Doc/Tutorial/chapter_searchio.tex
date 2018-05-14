@@ -260,11 +260,11 @@ Each iteration returns a \verb|Hit| object:
 \begin{verbatim}
 >>> for hit in blast_qresult:
 ...     hit
-Hit(id="gi|262205317|ref|NR_030195.1|", query_id="42291", 1 hsps)
-Hit(id="gi|301171311|ref|NR_035856.1|", query_id="42291", 1 hsps)
-Hit(id="gi|270133242|ref|NR_032573.1|", query_id="42291", 1 hsps)
-Hit(id="gi|301171322|ref|NR_035857.1|", query_id="42291", 2 hsps)
-Hit(id="gi|301171267|ref|NR_035851.1|", query_id="42291", 1 hsps)
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
+Hit(id='gi|301171311|ref|NR_035856.1|', query_id='42291', 1 hsps)
+Hit(id='gi|270133242|ref|NR_032573.1|', query_id='42291', 1 hsps)
+Hit(id='gi|301171322|ref|NR_035857.1|', query_id='42291', 2 hsps)
+Hit(id='gi|301171267|ref|NR_035851.1|', query_id='42291', 1 hsps)
 ...
 \end{verbatim}
 
@@ -285,9 +285,9 @@ the slice notation:
 %cont-doctest
 \begin{verbatim}
 >>> blast_qresult[0]        # retrieves the top hit
-Hit(id="gi|262205317|ref|NR_030195.1|", query_id="42291", 1 hsps)
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
 >>> blast_qresult[-1]       # retrieves the last hit
-Hit(id="gi|397513516|ref|XM_003827011.1|", query_id="42291", 1 hsps)
+Hit(id='gi|397513516|ref|XM_003827011.1|', query_id='42291', 1 hsps)
 \end{verbatim}
 
 To retrieve multiple hits, you can slice \verb|QueryResult| objects using the
@@ -317,7 +317,7 @@ results:
 %cont-doctest
 \begin{verbatim}
 >>> blast_qresult["gi|262205317|ref|NR_030195.1|"]
-Hit(id="gi|262205317|ref|NR_030195.1|", query_id="42291", 1 hsps)
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='42291', 1 hsps)
 \end{verbatim}
 
 You can also get a full list of \verb|Hit| objects using \verb|hits| and a full
@@ -574,8 +574,8 @@ returns one \verb|HSP| object it contains:
 \begin{verbatim}
 >>> for hsp in blast_hit:
 ...     hsp
-HSP(hit_id="gi|301171322|ref|NR_035857.1|", query_id="42291", 1 fragments)
-HSP(hit_id="gi|301171322|ref|NR_035857.1|", query_id="42291", 1 fragments)
+HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
+HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='42291', 1 fragments)
 \end{verbatim}
 
 You can invoke \verb|len| on a \verb|Hit| to see how many \verb|HSP| objects it
@@ -597,7 +597,7 @@ only the sliced \verb|HSP| objects:
 %cont-doctest
 \begin{verbatim}
 >>> blat_hit[0]                 # retrieve single items
-HSP(hit_id="chr19", query_id="mystery_seq", 1 fragments)
+HSP(hit_id='chr19', query_id='mystery_seq', 1 fragments)
 >>> sliced_hit = blat_hit[4:9]  # retrieve multiple items
 >>> len(sliced_hit)
 5
@@ -725,7 +725,7 @@ you may also use \verb|.__dict__.keys()| for a quick list of what's available:
 
 \begin{verbatim}
 >>> blast_hsp.__dict__.keys()
-["bitscore", "evalue", "ident_num", "gap_num", "bitscore_raw", "pos_num", "_items"]
+['bitscore', 'evalue', 'ident_num', 'gap_num', 'bitscore_raw', 'pos_num', '_items']
 \end{verbatim}
 
 Finally, you may have noticed that the \verb|query| and \verb|hit| attributes
@@ -734,9 +734,9 @@ of our HSP are not just regular strings:
 %cont-doctest
 \begin{verbatim}
 >>> blast_hsp.query
-SeqRecord(seq=Seq("CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG", DNAAlphabet()), id="42291", name="aligned query sequence", description="mystery_seq", dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='42291', name='aligned query sequence', description='mystery_seq', dbxrefs=[])
 >>> blast_hsp.hit
-SeqRecord(seq=Seq("CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG", DNAAlphabet()), id="gi|262205317|ref|NR_030195.1|", name="aligned hit sequence", description="Homo sapiens microRNA 520b (MIR520B), microRNA", dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 \end{verbatim}
 
 They are \verb|SeqRecord| objects you saw earlier in
@@ -967,7 +967,7 @@ Some examples:
 >>> blast_frag.hit_strand       # hit sequence strand
 1
 >>> blast_frag.hit              # hit sequence, as a SeqRecord object
-SeqRecord(seq=Seq("CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG", DNAAlphabet()), id="gi|262205317|ref|NR_030195.1|", name="aligned hit sequence", description="Homo sapiens microRNA 520b (MIR520B), microRNA", dbxrefs=[])
+SeqRecord(seq=Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet()), id='gi|262205317|ref|NR_030195.1|', name='aligned hit sequence', description='Homo sapiens microRNA 520b (MIR520B), microRNA', dbxrefs=[])
 \end{verbatim}
 
 \section{A note about standards and conventions}
@@ -1046,10 +1046,10 @@ in it:
 >>> from Bio import SearchIO
 >>> qresult = SearchIO.read("tab_2226_tblastn_003.txt", "blast-tab")
 >>> qresult
-QueryResult(id="gi|16080617|ref|NP_391444.1|", 3 hits)
+QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> qresult2 = SearchIO.read("tab_2226_tblastn_007.txt", "blast-tab", comments=True)
 >>> qresult2
-QueryResult(id="gi|16080617|ref|NP_391444.1|", 3 hits)
+QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 \end{verbatim}
 
 These keyword arguments differs among file formats. Check the format
@@ -1100,9 +1100,9 @@ format name:
 >>> from Bio import SearchIO
 >>> idx = SearchIO.index("tab_2226_tblastn_001.txt", "blast-tab")
 >>> sorted(idx.keys())
-["gi|11464971:4-101", "gi|16080617|ref|NP_391444.1|"]
+['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|']
 >>> idx["gi|16080617|ref|NP_391444.1|"]
-QueryResult(id="gi|16080617|ref|NP_391444.1|", 3 hits)
+QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
 \end{verbatim}
 
@@ -1112,9 +1112,9 @@ Or also with the format-specific keyword argument:
 \begin{verbatim}
 >>> idx = SearchIO.index("tab_2226_tblastn_005.txt", "blast-tab", comments=True)
 >>> sorted(idx.keys())
-["gi|11464971:4-101", "gi|16080617|ref|NP_391444.1|", "random_s00"]
+['gi|11464971:4-101', 'gi|16080617|ref|NP_391444.1|', 'random_s00']
 >>> idx["gi|16080617|ref|NP_391444.1|"]
-QueryResult(id="gi|16080617|ref|NP_391444.1|", 3 hits)
+QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
 \end{verbatim}
 
@@ -1125,9 +1125,9 @@ Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 >>> key_function = lambda id: id.upper()    # capitalizes the keys
 >>> idx = SearchIO.index("tab_2226_tblastn_001.txt", "blast-tab", key_function=key_function)
 >>> sorted(idx.keys())
-["GI|11464971:4-101", "GI|16080617|REF|NP_391444.1|"]
+['GI|11464971:4-101', 'GI|16080617|REF|NP_391444.1|']
 >>> idx["GI|16080617|REF|NP_391444.1|"]
-QueryResult(id="gi|16080617|ref|NP_391444.1|", 3 hits)
+QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 >>> idx.close()
 \end{verbatim}
 
