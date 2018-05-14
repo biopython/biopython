@@ -152,7 +152,7 @@ class EmbossIterator(AlignmentIterator):
                     # (an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
-                    if start == end:
+                    if start >= end:
                         # Special case, either a single letter is present,
                         # or no letters at all.
                         if seq.replace("-", "") == "":
@@ -177,7 +177,7 @@ class EmbossIterator(AlignmentIterator):
                         seq_starts.append(start)
 
                     # Check the start...
-                    if start == end:
+                    if start >= end:
                         assert seq.replace("-", "") == "", line
                     elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
                         raise ValueError("Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
