@@ -929,6 +929,12 @@ class MultipleSeqAlignment(object):
 
 
 class PairwiseAlignment(object):
+    """Represents a pairwise sequence alignment.
+
+    Internally, the pairwise alignment is stored as the path through
+    the traceback matrix, i.e. a tuple of pairs of indices showing the
+    points in the traceback matrix where the path changes direction.
+    """
 
     def __init__(self, target, query, path, score):
         self.target = target
@@ -1141,6 +1147,17 @@ class PairwiseAlignment(object):
 
 
 class Alignments(object):
+    """Implements an iterator over pairwise alignments returned by the aligner.
+
+    This class also supports indexing, which is fast for increasing indices,
+    but may be slow for random access of a large number of alignments.
+
+    Note that pairwise aligners can return an astronomical number of alignments,
+    even for relatively short sequences, if they align poorly to each other. We
+    therefore recommend to first check the number of alignments, accessible as
+    len(alignments), which can be calculated quickly even if the number of
+    alignments is very large.
+    """
 
     def __init__(self, seqA, seqB, score, paths):
         self.seqA = seqA
@@ -1294,7 +1311,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
      ||| 
     -EVL-
     <BLANKLINE>
-"""
+
+    """
 
     def align(self, seqA, seqB):
         seqA = str(seqA)
