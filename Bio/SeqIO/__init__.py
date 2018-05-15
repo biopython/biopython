@@ -378,7 +378,6 @@ from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 from . import AbiIO
 from . import AceIO
-from . import CifIO
 from . import FastaIO
 from . import IgIO  # IntelliGenetics or MASE format
 from . import InsdcIO  # EMBL and GenBank
@@ -414,8 +413,8 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "swiss": SwissIO.SwissIterator,
                      "pdb-atom": PdbIO.PdbAtomIterator,
                      "pdb-seqres": PdbIO.PdbSeqresIterator,
-                     "cif-seqres": CifIO.CifSeqresIterator,
-                     "cif-atom": CifIO.CifAtomIterator,
+                     "cif-seqres": PdbIO.CifSeqresIterator,
+                     "cif-atom": PdbIO.CifAtomIterator,
                      "phd": PhdIO.PhdIterator,
                      "ace": AceIO.AceIterator,
                      "tab": TabIO.TabIterator,
