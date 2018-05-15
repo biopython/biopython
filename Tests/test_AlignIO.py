@@ -57,6 +57,7 @@ test_files = [
     ("emboss", 2, 1, 'Emboss/water2.txt'),
     ("emboss", 2, 1, 'Emboss/matcher_simple.txt'),
     ("emboss", 2, 5, 'Emboss/matcher_pair.txt'),
+    ("emboss", 2, 1, 'Emboss/emboss_pair_aln_full_blank_line.txt'),
     ("fasta-m10", 2, 4, 'Fasta/output001.m10'),
     ("fasta-m10", 2, 6, 'Fasta/output002.m10'),
     ("fasta-m10", 2, 3, 'Fasta/output003.m10'),

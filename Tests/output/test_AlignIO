@@ -527,6 +527,21 @@ Testing reading emboss format file Emboss/matcher_pair.txt with 5 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading emboss format file Emboss/emboss_pair_aln_full_blank_line.txt with 1 alignments
+ Alignment 0, with 2 sequences of length 1450
+  GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCC...AAA hg38_chrX_131691529_131830643_47210_48660
+  G--------------------------TTCAAGGCC...AAA mm10_chrX_50555743_50635321_27140_27743
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'mauve' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
  Alignment 0, with 2 sequences of length 108
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
