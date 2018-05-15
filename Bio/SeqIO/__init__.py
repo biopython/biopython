@@ -272,6 +272,11 @@ names are also used in Bio.AlignIO and include the following:
     - abi     - Applied Biosystem's sequencing trace format
     - abi-trim - Same as "abi" but with quality trimming with Mott's algorithm
     - ace     - Reads the contig sequences from an ACE assembly file.
+    - cif-atom - Uses Bio.PDB.MMCIFParser to determine the (partial) protein
+      sequence as it appears in the structure based on the atomic coordinates.
+    - cif-seqres - Reads a macromolecular Crystallographic Information File
+      (mmCIF) file to determine the complete protein sequence as defined by the
+      _pdbx_poly_seq_scheme records.
     - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
     - fasta   - The generic sequence file format where each record starts with
       an identifer line starting with a ">" character, followed by
