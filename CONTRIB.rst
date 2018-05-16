@@ -181,6 +181,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
+- Pamela Russell <https://github.com/pamelarussell>
 - Patrick Kunzmann <https://github.com/padix-key>
 - Paul T. Bathen
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
