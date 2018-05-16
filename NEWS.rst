@@ -39,7 +39,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Francesco Gastaldello
 - Michiel de Hoon
-- Pamela Russell
+- Pamela Russell (first contribution)
 - Peter Cock
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
