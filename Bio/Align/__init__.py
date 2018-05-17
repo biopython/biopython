@@ -1320,21 +1320,21 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     The alignment function can also use known matrices already included in
     Biopython ( Bio.SubsMat -> MatrixInfo ).
-    >>> from Bio.SubsMat import MatrixInfo
-    >>> aligner = Align.PairwiseAligner()
-    >>> aligner.substitution_matrix = MatrixInfo.blosum62
-    >>> alignments = aligner.align("KEVLA", "EVL")
-    >>> alignments = list(alignments)
-    >>> print("Number of alignments: %d" % len(alignments))
-    Number of alignments: 1
-    >>> alignment = alignments[0]
-    >>> print("Score = %.1f" % alignment.score)
-    Score = 13.0
-    >>> print(alignment)
-    KEVLA
-     ||| 
-    -EVL-
-    <BLANKLINE>
+        >>> from Bio.SubsMat import MatrixInfo
+        >>> aligner = Align.PairwiseAligner()
+        >>> aligner.substitution_matrix = MatrixInfo.blosum62
+        >>> alignments = aligner.align("KEVLA", "EVL")
+        >>> alignments = list(alignments)
+        >>> print("Number of alignments: %d" % len(alignments))
+        Number of alignments: 1
+        >>> alignment = alignments[0]
+        >>> print("Score = %.1f" % alignment.score)
+        Score = 13.0
+        >>> print(alignment)
+        KEVLA
+         ||| 
+        -EVL-
+        <BLANKLINE>
 
     """
 
