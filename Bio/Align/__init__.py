@@ -1185,6 +1185,11 @@ class Alignments(object):
         You would normally obtain an Alignments object by calling
         aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
         """
+        self.seqA = seqA
+        self.seqB = seqB
+        self.score = score
+        self.paths = paths
+        self.index = -1
 
     def __len__(self):
         return len(self.paths)
