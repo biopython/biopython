@@ -1035,9 +1035,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _re_simple_location.match(location_line):
             # e.g. "123..456"
             s, e = location_line.split("..")
-            cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
-                                                              int(e),
-                                                              strand)
+            try:
+                cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
+                                                                  int(e),
+                                                                  strand)
+            except ValueError as e:
+                # Could be non-integers, more likely bad origin wrapping
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Ignoring invalid location: %r" % location_line,
+                              BiopythonParserWarning)
+                cur_feature.location = None
             return
 
         if ",)" in location_line:
