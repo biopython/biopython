@@ -949,8 +949,8 @@ class PairwiseAlignment(object):
                      alignment.
          - score   - The alignment score.
 
-        You would normally obtain a PairwiseAlignment object by calling
-        by iterating over a PairwiseAlignments object.
+        You would normally obtain a PairwiseAlignment object by iterating
+        over a PairwiseAlignments object.
         """
         self.target = target
         self.query = query
