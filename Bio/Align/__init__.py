@@ -20,6 +20,7 @@ from Bio import Alphabet
 
 from Bio.Align import _aligners
 
+
 class MultipleSeqAlignment(object):
     """Represents a classical multiple sequence alignment (MSA).
 
@@ -931,11 +932,24 @@ class PairwiseAlignment(object):
     """Represents a pairwise sequence alignment.
 
     Internally, the pairwise alignment is stored as the path through
-    the traceback matrix, i.e. a tuple of pairs of indices showing the
-    points in the traceback matrix where the path changes direction.
+    the traceback matrix, i.e. a tuple of pairs of indices corresponding
+    to the vertices of the path in the traceback matrix.
     """
 
     def __init__(self, target, query, path, score):
+        """Initialize a new PairwiseAlignment object.
+
+        Arguments:
+         - target  - The first sequence, as a plain string, without gaps.
+         - query   - The second sequence, as a plain string, without gaps.
+         - path    - The path through the traceback matrix, defining an
+                     alignment.
+         - score   - The alignment score.
+
+        You would normally obtain a PairwiseAlignment object by calling
+        by iterating over an Alignments object.
+        """
+
         self.target = target
         self.query = query
         self.score = score
@@ -1159,11 +1173,18 @@ class Alignments(object):
     """
 
     def __init__(self, seqA, seqB, score, paths):
-        self.seqA = seqA
-        self.seqB = seqB
-        self.score = score
-        self.paths = paths
-        self.index = -1
+        """Initialize a new Alignments object.
+
+        Arguments:
+         - seqA  - The first sequence, as a plain string, without gaps.
+         - seqB  - The second sequence, as a plain string, without gaps.
+         - score - The alignment score.
+         - paths - An iterator over the paths in the traceback matrix;
+                   each path defines one alignment. 
+
+        You would normally obtain an Alignments object by calling
+        aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
+        """
 
     def __len__(self):
         return len(self.paths)
