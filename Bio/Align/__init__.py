@@ -949,7 +949,6 @@ class PairwiseAlignment(object):
         You would normally obtain a PairwiseAlignment object by calling
         by iterating over an Alignments object.
         """
-
         self.target = target
         self.query = query
         self.score = score
@@ -1180,7 +1179,7 @@ class Alignments(object):
          - seqB  - The second sequence, as a plain string, without gaps.
          - score - The alignment score.
          - paths - An iterator over the paths in the traceback matrix;
-                   each path defines one alignment. 
+                   each path defines one alignment.
 
         You would normally obtain an Alignments object by calling
         aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
