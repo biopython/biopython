@@ -1244,6 +1244,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     sequences.
 
     Some examples:
+
     >>> from Bio import Align
     >>> aligner = Align.PairwiseAligner()
     >>> alignments = aligner.align("ACCGT", "ACG")
@@ -1263,6 +1264,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     <BLANKLINE>
 
     Specify the aligner mode as local to generate local alignments:
+
     >>> aligner.mode = 'local'
     >>> alignments = aligner.align("ACCGT", "ACG")
     >>> for alignment in sorted(alignments):
@@ -1282,6 +1284,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     Do a global alignment.  Identical characters are given 2 points,
     1 point is deducted for each non-identical character.
+
     >>> aligner.mode = 'global'
     >>> aligner.match = 2
     >>> aligner.mismatch = -1
@@ -1302,6 +1305,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     Same as above, except now 0.5 points are deducted when opening a
     gap, and 0.1 points are deducted when extending it.
+
     >>> aligner.open_gap_score = -0.5
     >>> aligner.extend_gap_score = -0.1
     >>> aligner.target_end_gap_score = 0.0
@@ -1323,6 +1327,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     The alignment function can also use known matrices already included in
     Biopython:
+
     >>> from Bio.SubsMat import MatrixInfo
     >>> aligner = Align.PairwiseAligner()
     >>> aligner.substitution_matrix = MatrixInfo.blosum62
