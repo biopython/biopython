@@ -14,6 +14,7 @@ class, used in the Bio.AlignIO module.
 """
 from __future__ import print_function
 
+import sys # Only needed to check if we are using Python 2 or 3
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
@@ -52,6 +53,7 @@ class MultipleSeqAlignment(object):
     7
     >>> for record in align:
     ...     print("%s %i" % (record.id, len(record)))
+    ...
     gi|6273285|gb|AF191659.1|AF191 156
     gi|6273284|gb|AF191658.1|AF191 156
     gi|6273287|gb|AF191661.1|AF191 156
@@ -375,6 +377,7 @@ class MultipleSeqAlignment(object):
         >>> for record in align:
         ...    print(record.id)
         ...    print(record.seq)
+        ...
         Alpha
         ACTGCTAGCTAG
         Beta
@@ -947,7 +950,7 @@ class PairwiseAlignment(object):
          - score   - The alignment score.
 
         You would normally obtain a PairwiseAlignment object by calling
-        by iterating over an Alignments object.
+        by iterating over a PairwiseAlignments object.
         """
         self.target = target
         self.query = query
@@ -1046,12 +1049,7 @@ class PairwiseAlignment(object):
         aligned_seq1 += seq1[end1:] + '.' * (n - n1)
         aligned_seq2 += seq2[end2:] + '.' * (n - n2)
         pattern += '.' * n
-        text = """\
-%s
-%s
-%s
-""" % (aligned_seq1, pattern, aligned_seq2)
-        return text
+        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_psl(self):
         query = self.query
@@ -1158,7 +1156,7 @@ class PairwiseAlignment(object):
         return line
 
 
-class Alignments(object):
+class PairwiseAlignments(object):
     """Implements an iterator over pairwise alignments returned by the aligner.
 
     This class also supports indexing, which is fast for increasing indices,
@@ -1172,7 +1170,7 @@ class Alignments(object):
     """
 
     def __init__(self, seqA, seqB, score, paths):
-        """Initialize a new Alignments object.
+        """Initialize a new PairwiseAlignments object.
 
         Arguments:
          - seqA  - The first sequence, as a plain string, without gaps.
@@ -1181,7 +1179,7 @@ class Alignments(object):
          - paths - An iterator over the paths in the traceback matrix;
                    each path defines one alignment.
 
-        You would normally obtain an Alignments object by calling
+        You would normally obtain an PairwiseAlignments object by calling
         aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
         """
         self.seqA = seqA
@@ -1218,7 +1216,8 @@ class Alignments(object):
         self.alignment = alignment
         return alignment
 
-    next = __next__  # Python 2
+    if sys.version_info[0] < 3:  # Python 2
+        next = __next__
 
 
 class PairwiseAligner(_aligners.PairwiseAligner):
@@ -1251,14 +1250,15 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
+    ...
     Score = 3.0:
     ACCGT
-    | || 
+    |-||-
     A-CG-
     <BLANKLINE>
     Score = 3.0:
     ACCGT
-    || | 
+    ||-|-
     AC-G-
     <BLANKLINE>
 
@@ -1268,15 +1268,16 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> for alignment in sorted(alignments):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
+    ...
     Score = 3.0:
     ACCGT
-    | || 
-    A-CG 
+    |-||.
+    A-CG.
     <BLANKLINE>
     Score = 3.0:
     ACCGT
-    || | 
-    AC-G 
+    ||-|.
+    AC-G.
     <BLANKLINE>
 
     Do a global alignment.  Identical characters are given 2 points,
@@ -1287,14 +1288,15 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> for alignment in aligner.align("ACCGT", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
+    ...
     Score = 6.0:
     ACCGT
-    || | 
+    ||-|-
     AC-G-
     <BLANKLINE>
     Score = 6.0:
     ACCGT
-    | || 
+    |-||-
     A-CG-
     <BLANKLINE>
 
@@ -1307,19 +1309,20 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     >>> for alignment in aligner.align("ACCGT", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
+    ...
     Score = 5.5:
     ACCGT
-    | || 
+    |-||-
     A-CG-
     <BLANKLINE>
     Score = 5.5:
     ACCGT
-    || | 
+    ||-|-
     AC-G-
     <BLANKLINE>
 
     The alignment function can also use known matrices already included in
-    Biopython ( Bio.SubsMat -> MatrixInfo ).
+    Biopython:
     >>> from Bio.SubsMat import MatrixInfo
     >>> aligner = Align.PairwiseAligner()
     >>> aligner.substitution_matrix = MatrixInfo.blosum62
@@ -1332,7 +1335,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     Score = 13.0
     >>> print(alignment)
     KEVLA
-     ||| 
+    -|||-
     -EVL-
     <BLANKLINE>
 
@@ -1342,7 +1345,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         seqA = str(seqA)
         seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
-        alignments = Alignments(seqA, seqB, score, paths)
+        alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
 
     def score(self, seqA, seqB):
