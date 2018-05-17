@@ -78,6 +78,17 @@ class GenBankTests(unittest.TestCase):
             else:
                 self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
+    def test_001_genbank_bad_origin_wrapping_location(self):
+        """Bad origin wrapping."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                SeqIO.read(path.join("GenBank", "bad_origin_wrap.gb"), "genbank")
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Ignoring invalid location: '6801..100'")
+            else:
+                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
     def test_genbank_bad_loc_wrap_parsing(self):
         """Bad location wrapping."""
         with warnings.catch_warnings():
