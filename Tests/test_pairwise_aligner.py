@@ -195,14 +195,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(str(alignment), """\
 GAACT
-||  |
+||--|
 GA--T
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 3.0)
         self.assertEqual(str(alignment), """\
 GAACT
-| | |
+|-|-|
 G-A-T
 """)
 
@@ -267,15 +267,15 @@ Pairwise sequence aligner with parameters
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
- AxBx
- | | 
+.AxBx
+.|-|.
 zA-Bz
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
- AxBx
- | |.
+.AxBx
+.|-|X
 zA-Bz
 """)
 
@@ -310,15 +310,15 @@ Pairwise sequence aligner with parameters
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
- AxBx
- | | 
+.AxBx
+.|-|.
 zA-Bz
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
- AxBx
- | |.
+.AxBx
+.|-|X
 zA-Bz
 """)
 
@@ -360,14 +360,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 AA
- |
+-|
 -A
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 AA
-| 
+|-
 A-
 """)
 
@@ -407,14 +407,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2.9)
         self.assertEqual(str(alignment), """\
 GAA
-| |
+|-|
 G-A
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.9)
         self.assertEqual(str(alignment), """\
 GAA
-|| 
+||-
 GA-
 """)
 
@@ -452,7 +452,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2.9)
         self.assertEqual(str(alignment), """\
 GAACT
-||  |
+||--|
 GA--T
 """)
 
@@ -491,14 +491,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(str(alignment), """\
 G-CT-
-|  | 
+|--|-
 GA-TA
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(str(alignment), """\
 GC-T-
-|  | 
+|--|-
 G-ATA
 """)
 
@@ -538,7 +538,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.3)
         self.assertEqual(str(alignment), """\
 GACT
-|  |
+|--|
 G--T
 """)
 
@@ -576,14 +576,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 0.6)
         self.assertEqual(str(alignment), """\
 GACT
- . |
+-X-|
 -G-T
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 0.6)
         self.assertEqual(str(alignment), """\
 GACT
-| . 
+|-X-
 G-T-
 """)
 
@@ -623,7 +623,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, -1.2)
         self.assertEqual(str(alignment), """\
 GACT
-|  |
+|--|
 G--T
 """)
 
@@ -666,21 +666,21 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(str(alignment), """\
 GACT
-  .|
+--X|
 --GT
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(str(alignment), """\
 GACT
-|  |
+|--|
 G--T
 """)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.0)
         self.assertEqual(str(alignment), """\
 GACT
-|.  
+|X--
 GT--
 """)
 
@@ -729,14 +729,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(str(alignment), """\
 G-AT
-| .|
+|-X|
 GTCT
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.7)
         self.assertEqual(str(alignment), """\
 GA-T
-|. |
+|X-|
 GTCT
 """)
 
@@ -775,8 +775,8 @@ Pairwise sequence aligner with parameters
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.8)
         self.assertEqual(str(alignment), """\
-GAT  
-| |  
+GAT..
+|-|..
 G-TCT
 """)
 
@@ -823,21 +823,21 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 G-AAT
-| ..|
+|-XX|
 GTCCT
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 GA-AT
-|. .|
+|X-X|
 GTCCT
 """)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 GAA-T
-|.. |
+|XX-|
 GTCCT
 """)
         alignments = aligner.align(seq1, seq2)
@@ -846,21 +846,21 @@ GTCCT
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 G-AAT
-| ..|
+|-XX|
 GTCCT
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 GA-AT
-|. .|
+|X-X|
 GTCCT
 """)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 GAA-T
-|.. |
+|XX-|
 GTCCT
 """)
 
@@ -907,13 +907,13 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
 ATAT
-||. 
-ATT 
+||X.
+ATT.
 """)
         self.assertAlmostEqual(alignments[1].score, 3.0)
         self.assertEqual(str(alignments[1]), """\
 ATAT
-|| |
+||-|
 AT-T
 """)
 
@@ -949,8 +949,8 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
 ATAT
-||. 
-ATT 
+||X.
+ATT.
 """)
 
     def test_match_dictionary3(self):
@@ -984,8 +984,8 @@ Pairwise sequence aligner with parameters
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments[0].score, 3.0)
         self.assertEqual(str(alignments[0]), """\
-ATT 
-||. 
+ATT.
+||X.
 ATAT
 """)
 
@@ -1024,8 +1024,8 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1)
         self.assertEqual(str(alignment), """\
 abcde
-  |  
-  c  
+..|..
+..c..
 """)
 
     def test_align_one_char2(self):
@@ -1060,15 +1060,15 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 1)
         self.assertEqual(str(alignment), """\
 abcce
-  |  
-  c  
+..|..
+..c..
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 1)
         self.assertEqual(str(alignment), """\
 abcce
-   | 
-   c 
+...|.
+...c.
 """)
 
     def test_align_one_char3(self):
@@ -1105,7 +1105,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 0.2)
         self.assertEqual(str(alignment), """\
 abcde
-  |  
+--|--
 --c--
 """)
 
@@ -1176,7 +1176,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||          |||||||||||  
+--|||||||||||----------|||||||||||--
 --AABBBAAAACC----------CCAAAABBBAA--
 """)
 
@@ -1218,14 +1218,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, -10)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||          ......|||||||||||||  
+--|||----------XXXXXX|||||||||||||--
 --AAB----------BBAAAACCCCAAAABBBAA--
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -10)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-||.            ......|||||||||||||  
+||X------------XXXXXX|||||||||||||--
 AAB------------BBAAAACCCCAAAABBBAA--
 """)
 
@@ -1267,7 +1267,7 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(str(alignment), """\
 TT-CC-AA
-||    ||
+||----||
 TTG--GAA
 """)
         aligner.query_gap_score = gap_score
@@ -1287,28 +1287,28 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
 TT-CCAA
-|| . ||
+||-X-||
 TTGG-AA
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
 TTC--CAA
-||    ||
+||----||
 TT-GG-AA
 """)
         alignment = alignments[2]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
 TTCC-AA
-|| . ||
+||-X-||
 TT-GGAA
 """)
         alignment = alignments[3]
         self.assertAlmostEqual(alignment.score, -8.0)
         self.assertEqual(str(alignment), """\
 TT-CC-AA
-||    ||
+||----||
 TTG--GAA
 """)
 
@@ -1344,15 +1344,15 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+..|||||||||||||.....................
+..AABBBAAAACCCCAAAABBBAA............
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+.....................|||||||||||||..
+............AABBBAAAACCCCAAAABBBAA..
 """)
 
     def test_gap_here_only_local_2(self):
@@ -1392,15 +1392,15 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-  |||||||||||||                     
-  AABBBAAAACCCCAAAABBBAA            
+..|||||||||||||.....................
+..AABBBAAAACCCCAAAABBBAA............
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 13)
         self.assertEqual(str(alignment), """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-                     |||||||||||||  
-            AABBBAAAACCCCAAAABBBAA  
+.....................|||||||||||||..
+............AABBBAAAACCCCAAAABBBAA..
 """)
 
     def test_gap_here_only_local_3(self):
@@ -1441,14 +1441,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(str(alignment), """\
 TTCCAA
-||    
+||....
 TTGGAA
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(str(alignment), """\
 TTCCAA
-    ||
+....||
 TTGGAA
 """)
         aligner.query_gap = gap_score
@@ -1473,14 +1473,14 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(str(alignment), """\
 TTCCAA
-||    
+||....
 TTGGAA
 """)
         alignment = alignments[1]
         self.assertAlmostEqual(alignment.score, 2.0)
         self.assertEqual(str(alignment), """\
 TTCCAA
-    ||
+....||
 TTGGAA
 """)
 

@@ -1011,9 +1011,9 @@ class PairwiseAlignment(object):
         end1, end2 = path[0]
         if end1 > 0 or end2 > 0:
             end = max(end1, end2)
-            aligned_seq1 += " " * (end - end1) + seq1[:end1]
-            aligned_seq2 += " " * (end - end2) + seq2[:end2]
-            pattern += ' ' * end
+            aligned_seq1 += "." * (end - end1) + seq1[:end1]
+            aligned_seq2 += "." * (end - end2) + seq2[:end2]
+            pattern += '.' * end
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
@@ -1022,12 +1022,12 @@ class PairwiseAlignment(object):
                 gap = end2 - start2
                 aligned_seq1 += '-' * gap
                 aligned_seq2 += seq2[start2:end2]
-                pattern += ' ' * gap
+                pattern += '-' * gap
             elif end2 == start2:
                 gap = end1 - start1
                 aligned_seq1 += seq1[start1:end1]
                 aligned_seq2 += '-' * gap
-                pattern += ' ' * gap
+                pattern += '-' * gap
             else:
                 s1 = seq1[start1:end1]
                 s2 = seq2[start2:end2]
@@ -1037,15 +1037,15 @@ class PairwiseAlignment(object):
                     if c1 == c2:
                         pattern += '|'
                     else:
-                        pattern += '.'
+                        pattern += 'X'
             start1 = end1
             start2 = end2
         n1 -= end1
         n2 -= end2
         n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + ' ' * (n - n1)
-        aligned_seq2 += seq2[end2:] + ' ' * (n - n2)
-        pattern += ' ' * n
+        aligned_seq1 += seq1[end1:] + '.' * (n - n1)
+        aligned_seq2 += seq2[end2:] + '.' * (n - n2)
+        pattern += '.' * n
         text = """\
 %s
 %s
@@ -1320,21 +1320,21 @@ class PairwiseAligner(_aligners.PairwiseAligner):
 
     The alignment function can also use known matrices already included in
     Biopython ( Bio.SubsMat -> MatrixInfo ).
-        >>> from Bio.SubsMat import MatrixInfo
-        >>> aligner = Align.PairwiseAligner()
-        >>> aligner.substitution_matrix = MatrixInfo.blosum62
-        >>> alignments = aligner.align("KEVLA", "EVL")
-        >>> alignments = list(alignments)
-        >>> print("Number of alignments: %d" % len(alignments))
-        Number of alignments: 1
-        >>> alignment = alignments[0]
-        >>> print("Score = %.1f" % alignment.score)
-        Score = 13.0
-        >>> print(alignment)
-        KEVLA
-         ||| 
-        -EVL-
-        <BLANKLINE>
+    >>> from Bio.SubsMat import MatrixInfo
+    >>> aligner = Align.PairwiseAligner()
+    >>> aligner.substitution_matrix = MatrixInfo.blosum62
+    >>> alignments = aligner.align("KEVLA", "EVL")
+    >>> alignments = list(alignments)
+    >>> print("Number of alignments: %d" % len(alignments))
+    Number of alignments: 1
+    >>> alignment = alignments[0]
+    >>> print("Score = %.1f" % alignment.score)
+    Score = 13.0
+    >>> print(alignment)
+    KEVLA
+     ||| 
+    -EVL-
+    <BLANKLINE>
 
     """
 
