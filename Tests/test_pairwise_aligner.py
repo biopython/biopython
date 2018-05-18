@@ -161,6 +161,7 @@ Pairwise sequence aligner with parameters
         with self.assertRaises(TypeError):
             aligner.query_end_gap_score = 'wrong'
 
+
 class TestPairwiseGlobal(unittest.TestCase):
 
     def test_needlemanwunsch_simple1(self):
@@ -234,6 +235,7 @@ Pairwise sequence aligner with parameters
 """)
         score = aligner.score("CC", "ACCT")
         self.assertAlmostEqual(score, -7.0)
+
 
 class TestPairwiseLocal(unittest.TestCase):
 
@@ -321,6 +323,7 @@ zA-Bz
 .|-|X
 zA-Bz
 """)
+
 
 class TestPairwiseOpenPenalty(unittest.TestCase):
 
@@ -502,6 +505,7 @@ GC-T-
 G-ATA
 """)
 
+
 class TestPairwiseExtendPenalty(unittest.TestCase):
 
     def test_extend_penalty1(self):
@@ -587,6 +591,7 @@ GACT
 G-T-
 """)
 
+
 class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
 
     def test_penalize_extend_when_opening(self):
@@ -626,6 +631,7 @@ GACT
 |--|
 G--T
 """)
+
 
 class TestPairwisePenalizeEndgaps(unittest.TestCase):
 
@@ -868,10 +874,10 @@ GTCCT
 class TestPairwiseMatchDictionary(unittest.TestCase):
 
     match_dict = {
-        ("A", "A") : 1.5,
-        ("A", "T") : 0.5,
-        ("T", "A") : 0.5,
-        ("T", "T") : 1.0
+        ("A", "A"): 1.5,
+        ("A", "T"): 0.5,
+        ("T", "A"): 0.5,
+        ("T", "T"): 1.0
         }
 
     def test_match_dictionary1(self):
@@ -1151,7 +1157,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 -y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
         aligner.match = 1
@@ -1180,7 +1186,6 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --AABBBAAAACC----------CCAAAABBBAA--
 """)
 
-
     def test_gap_here_only_2(self):
         # Force a bad alignment.
         #
@@ -1190,9 +1195,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
-        #Very expensive to open a gap in seq1:
+        # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
-        #Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
@@ -1233,10 +1238,11 @@ AAB------------BBAAAACCCCAAAABBBAA--
         # Check if gap open and gap extend penalties are handled correctly.
         seq1 = "TTCCAA"
         seq2 = "TTGGAA"
-        def gap_score(i,n):
-            if i==3:
+
+        def gap_score(i, n):
+            if i == 3:
                 return -10
-            if n==1:
+            if n == 1:
                 return -1
             return -10
         aligner = Align.PairwiseAligner()
@@ -1319,7 +1325,7 @@ TTG--GAA
         # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 -y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
         aligner.match = 1
@@ -1364,9 +1370,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
-        #Very expensive to open a gap in seq1:
+        # Very expensive to open a gap in seq1:
         nogaps = lambda x, y: -2000 - y
-        #Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
@@ -1407,10 +1413,11 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         # Check if gap open and gap extend penalties are handled correctly.
         seq1 = "TTCCAA"
         seq2 = "TTGGAA"
-        def gap_score(i,n):
-            if i==3:
+
+        def gap_score(i, n):
+            if i == 3:
                 return -10
-            if n==1:
+            if n == 1:
                 return -1
             return -10
         aligner = Align.PairwiseAligner()
@@ -1488,7 +1495,8 @@ TTGGAA
         # Check if an Exception is propagated if the gap function raises one
         seq1 = "TTCCAA"
         seq2 = "TTGGAA"
-        def gap_score(i,n):
+
+        def gap_score(i, n):
             raise RuntimeError('broken gap function')
         aligner = Align.PairwiseAligner()
         aligner.target_gap_score = gap_score
@@ -1520,6 +1528,7 @@ TTGGAA
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
 
+
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
