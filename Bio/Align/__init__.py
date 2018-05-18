@@ -1199,7 +1199,7 @@ class PairwiseAlignments(object):
             self.index = -1
         while self.index < index:
             try:
-                alignment = self.next()
+                alignment = next(self)
             except StopIteration:
                 raise IndexError('index out of range')
         return alignment

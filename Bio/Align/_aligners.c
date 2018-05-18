@@ -4480,6 +4480,12 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                     case Local:
                         length = PathGenerator_smithwaterman_length(self);
                         break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
                 }
                 break;
             case Gotoh:
@@ -4490,6 +4496,12 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                     case Local:
                         length = PathGenerator_gotoh_local_length(self);
                         break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
                 }
                 break;
             case WatermanSmithBeyer:
@@ -4500,6 +4512,12 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                     case Local:
                         length = PathGenerator_waterman_smith_beyer_local_length(self);
                         break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
                 }
                 break;
             case Unknown:
