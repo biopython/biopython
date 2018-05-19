@@ -19,6 +19,9 @@ Functions:
  - match_all     Find all keys in a trie matching the beginning of the string.
  - find          Find keys in a trie matching anywhere in a string.
  - find_words    Find keys in a trie matching whole words in a string.
+
+This module is OBSOLETE. We encourage users to switch to alternative libraries
+implementing a trie data structure, for example pygtrie.
 """
 
 import string
