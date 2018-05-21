@@ -18,7 +18,7 @@ except ImportError:
         "Install NumPy if you want to use PDB formats with SeqIO.")
 
 from Bio import SeqIO
-from Bio import BiopythonWarning
+from Bio import BiopythonParserWarning
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
@@ -145,7 +145,7 @@ class TestPdbAtom(AtomTestGenerator('pdb', 'pdb-atom')):
         """Parse a PDB with no HEADER line."""
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
-            warnings.simplefilter("ignore", BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonParserWarning)
             chains = list(SeqIO.parse('PDB/1LCD.pdb', 'pdb-atom'))
 
         self.assertEqual(len(chains), 1)
@@ -155,7 +155,7 @@ class TestPdbAtom(AtomTestGenerator('pdb', 'pdb-atom')):
         """Read a single-chain PDB without a header by ATOM entries."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            warnings.simplefilter("ignore", BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonParserWarning)
             chain = SeqIO.read('PDB/a_structure.pdb', 'pdb-atom')
         self.assertEqual(chain.id, '????:A')
         self.assertEqual(chain.annotations['chain'], 'A')
@@ -169,7 +169,7 @@ class TestCifAtom(AtomTestGenerator('cif', 'cif-atom')):
         """Read a single-chain CIF without a header by ATOM entries."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
-            warnings.simplefilter("ignore", BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonParserWarning)
             chain = SeqIO.read('PDB/a_structure.cif', 'cif-atom')
         self.assertEqual(chain.id, '????:A')
         self.assertEqual(chain.annotations['chain'], 'A')

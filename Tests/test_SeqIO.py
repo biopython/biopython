@@ -511,13 +511,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     with warnings.catch_warnings():
         # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
         # location
+        # e.g. First line is not a 'HEADER'; can't determine PDB ID
         warnings.simplefilter("ignore", BiopythonParserWarning)
 
         # e.g. WARNING: Chain C is discontinuous at line 2645
         warnings.simplefilter("ignore", PDBConstructionWarning)
-
-        # e.g. First line is not a 'HEADER'; can't determine PDB ID
-        warnings.simplefilter("ignore", BiopythonWarning)
 
         # Try as an iterator using handle
         h = open(t_filename, mode)
