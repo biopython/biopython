@@ -435,7 +435,7 @@ def sanitize_name(name, width=None):
     """Sanitise sequence identifier for output.
 
     Removes the banned characters "[]()" and replaces the characters ":;"
-    with "|". The name is not to "width" characters if specified.
+    with "|". The name is truncated to "width" characters if specified.
     """
     name = name.strip()
     for char in "[](),":
