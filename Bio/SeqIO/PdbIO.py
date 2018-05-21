@@ -6,7 +6,7 @@ import collections
 import shutil
 import warnings
 
-from Bio import BiopythonWarning
+from Bio import BiopythonParserWarning
 from Bio._py3k import StringIO
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
@@ -68,7 +68,7 @@ def AtomIterator(pdb_id, struct):
                     res_out.append('X' * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
-                                  BiopythonWarning)
+                                  BiopythonParserWarning)
                     # Keep the normal part, drop the out-of-order segment
                     # (presumably modified or hetatm residues, e.g. 3BEG)
                     res_out.extend(restype(x) for x in residues[prev_idx:i])
@@ -260,7 +260,7 @@ def PdbAtomIterator(handle):
         pdb_id = firstline[62:66]
     else:
         warnings.warn("First line is not a 'HEADER'; can't determine PDB ID. "
-                      "Line: %r" % firstline, BiopythonWarning)
+                      "Line: %r" % firstline, BiopythonParserWarning)
         pdb_id = '????'
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
@@ -461,7 +461,7 @@ def CifAtomIterator(handle):
             pdb_id = pdb_id[0]
     else:
         warnings.warn("Could not find the '_entry.id' field; can't determine "
-                      "PDB ID.", BiopythonWarning)
+                      "PDB ID.", BiopythonParserWarning)
         pdb_id = '????'
 
     buffer.seek(0)
