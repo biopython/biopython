@@ -331,13 +331,13 @@ plain box, which was all that was available in the last publicly released standa
 GenomeDiagram was added to Biopython 1.50:
 
 \begin{verbatim}
-#Default uses a BOX sigil
+# Default uses a BOX sigil
 gd_feature_set.add_feature(feature)
 
-#You can make this explicit:
+# You can make this explicit:
 gd_feature_set.add_feature(feature, sigil="BOX")
 
-#Or opt for an arrow:
+# Or opt for an arrow:
 gd_feature_set.add_feature(feature, sigil="ARROW")
 \end{verbatim}
 
@@ -345,13 +345,13 @@ gd_feature_set.add_feature(feature, sigil="ARROW")
 Biopython 1.61 added three more sigils,
 
 \begin{verbatim}
-#Box with corners cut off (making it an octagon)
+# Box with corners cut off (making it an octagon)
 gd_feature_set.add_feature(feature, sigil="OCTO")
 
-#Box with jagged edges (useful for showing breaks in contains)
+# Box with jagged edges (useful for showing breaks in contains)
 gd_feature_set.add_feature(feature, sigil="JAGGY")
 
-#Arrow which spans the axis with strand used only for direction
+# Arrow which spans the axis with strand used only for direction
 gd_feature_set.add_feature(feature, sigil="BIGARROW")
 \end{verbatim}
 
@@ -389,13 +389,13 @@ the thickness of the arrow shaft, given as a proportion of the height of the
 bounding box:
 
 \begin{verbatim}
-#Full height shafts, giving pointed boxes:
+# Full height shafts, giving pointed boxes:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="brown",
                            arrowshaft_height=1.0)
-#Or, thin shafts:
+# Or, thin shafts:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="teal",
                            arrowshaft_height=0.2)
-#Or, very thin shafts:
+# Or, very thin shafts:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
                            arrowshaft_height=0.1)
 \end{verbatim}
@@ -421,13 +421,13 @@ Secondly, the length of the arrow head - given as a proportion of the height
 of the bounding box (defaulting to $0.5$, or $50\%$):
 
 \begin{verbatim}
-#Short arrow heads:
+# Short arrow heads:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="blue",
                            arrowhead_length=0.25)
-#Or, longer arrow heads:
+# Or, longer arrow heads:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="orange",
                            arrowhead_length=1)
-#Or, very very long arrow heads (i.e. all head, no shaft, so triangles):
+# Or, very very long arrow heads (i.e. all head, no shaft, so triangles):
 gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
                            arrowhead_length=10000)
 \end{verbatim}
@@ -453,7 +453,7 @@ Biopython 1.61 adds a new \verb|BIGARROW| sigil which always stradles
 the axis, pointing left for the reverse strand or right otherwise:
 
 \begin{verbatim}
-#A large arrow straddling the axis:
+# A large arrow straddling the axis:
 gd_feature_set.add_feature(feature, sigil="BIGARROW")
 \end{verbatim}
 
@@ -685,7 +685,7 @@ Here are the links we want to show between A and B, given as a list of
 tuples (percentage similarity score, gene in A, gene in B).
 
 \begin{verbatim}
-#Tuc2009 (NC_002703) vs bIL285 (AF323668)
+# Tuc2009 (NC_002703) vs bIL285 (AF323668)
 A_vs_B = [
     (99, "Tuc2009_01", "int"),
     (33, "Tuc2009_03", "orf4"),
@@ -718,7 +718,7 @@ A_vs_B = [
 Likewise for B and C:
 
 \begin{verbatim}
-#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
+# bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
 B_vs_C = [
     (42, "orf39", "lin2581"),
     (31, "orf40", "lin2580"),
@@ -766,7 +766,7 @@ to add cross links to the figure:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import CrossLink
 from reportlab.lib import colors
-#Note it might have been clearer to assign the track numbers explicitly...
+# Note it might have been clearer to assign the track numbers explicitly...
 for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [(A_rec, 3, B_rec, 2, A_vs_B),
                                          (B_rec, 2, C_rec, 1, B_vs_C)]:
     track_X = gd_diagram.tracks[tn_X]
@@ -953,8 +953,8 @@ entries = [("Chr I", "CHR_I/NC_003070.fna"),
            ("Chr IV", "CHR_IV/NC_003075.fna"),
            ("Chr V", "CHR_V/NC_003076.fna")]
 for (name, filename) in entries:
-   record = SeqIO.read(filename,"fasta")
-   print(name, len(record))
+    record = SeqIO.read(filename,"fasta")
+    print(name, len(record))
 \end{verbatim}
 
 \noindent This gave the lengths of the five chromosomes, which we'll now use in
