@@ -938,11 +938,12 @@ Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana
 \end{latexonly}
 
 You can skip this bit, but first I downloaded the five sequenced chromosomes
-from the NCBI's FTP site
-\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana} and then parsed
-them with \verb|Bio.SeqIO| to find out their lengths.  You could use the
-GenBank files for this, but it is faster to use the FASTA files for the
-whole chromosomes:
+as five individual FASTA files from the NCBI's FTP site
+\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Arabidopsis_thaliana/}
+and then parsed them with \verb|Bio.SeqIO| to find out their lengths.  You
+could use the GenBank files for this (and the next example uses those for
+plotting features), but if all you want is the length it is faster to use the
+FASTA files for the whole chromosomes:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -969,35 +970,35 @@ entries = [("Chr I", 30432563),
            ("Chr IV", 18585042),
            ("Chr V", 26992728)]
 
-max_len = 30432563 #Could compute this
-telomere_length = 1000000 #For illustration
+max_len = 30432563  # Could compute this from the entries dict
+telomere_length = 1000000  # For illustration
 
 chr_diagram = BasicChromosome.Organism()
-chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+chr_diagram.page_size = (29.7*cm, 21*cm)  # A4 landscape
 
 for name, length in entries:
     cur_chromosome = BasicChromosome.Chromosome(name)
-    #Set the scale to the MAXIMUM length plus the two telomeres in bp,
-    #want the same scale used on all five chromosomes so they can be
-    #compared to each other
+    # Set the scale to the MAXIMUM length plus the two telomeres in bp,
+    # want the same scale used on all five chromosomes so they can be
+    # compared to each other
     cur_chromosome.scale_num = max_len + 2 * telomere_length
 
-    #Add an opening telomere
+    # Add an opening telomere
     start = BasicChromosome.TelomereSegment()
     start.scale = telomere_length
     cur_chromosome.add(start)
 
-    #Add a body - using bp as the scale length here.
+    # Add a body - using bp as the scale length here.
     body = BasicChromosome.ChromosomeSegment()
     body.scale = length
     cur_chromosome.add(body)
 
-    #Add a closing telomere
+    # Add a closing telomere
     end = BasicChromosome.TelomereSegment(inverted=True)
     end.scale = telomere_length
     cur_chromosome.add(end)
 
-    #This chromosome is done
+    # This chromosome is done
     chr_diagram.add(cur_chromosome)
 
 chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
@@ -1023,7 +1024,7 @@ Continuing from the previous example, let's also show the tRNA genes.
 We'll get their locations by parsing the GenBank files for the five
 \textit{Arabidopsis thaliana} chromosomes. You'll need to download these
 files from the NCBI FTP site
-\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana},
+\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Arabidopsis_thaliana/},
 and preserve the subdirectory names or edit the paths below:
 
 \begin{verbatim}
@@ -1037,8 +1038,8 @@ entries = [("Chr I", "CHR_I/NC_003070.gbk"),
            ("Chr IV", "CHR_IV/NC_003075.gbk"),
            ("Chr V", "CHR_V/NC_003076.gbk")]
 
-max_len = 30432563 #Could compute this
-telomere_length = 1000000 #For illustration
+max_len = 30432563  # Could compute this from the entries dict
+telomere_length = 1000000  # For illustration
 
 chr_diagram = BasicChromosome.Organism()
 chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
@@ -1047,32 +1048,32 @@ for index, (name, filename) in enumerate(entries):
     record = SeqIO.read(filename,"genbank")
     length = len(record)
     features = [f for f in record.features if f.type=="tRNA"]
-    #Record an Artemis style integer color in the feature's qualifiers,
-    #1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple
+    # Record an Artemis style integer color in the feature's qualifiers,
+    # 1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple
     for f in features: f.qualifiers["color"] = [index+2]
 
     cur_chromosome = BasicChromosome.Chromosome(name)
-    #Set the scale to the MAXIMUM length plus the two telomeres in bp,
-    #want the same scale used on all five chromosomes so they can be
-    #compared to each other
+    # Set the scale to the MAXIMUM length plus the two telomeres in bp,
+    # want the same scale used on all five chromosomes so they can be
+    # compared to each other
     cur_chromosome.scale_num = max_len + 2 * telomere_length
 
-    #Add an opening telomere
+    # Add an opening telomere
     start = BasicChromosome.TelomereSegment()
     start.scale = telomere_length
     cur_chromosome.add(start)
 
-    #Add a body - again using bp as the scale length here.
+    # Add a body - again using bp as the scale length here.
     body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
     body.scale = length
     cur_chromosome.add(body)
 
-    #Add a closing telomere
+    # Add a closing telomere
     end = BasicChromosome.TelomereSegment(inverted=True)
     end.scale = telomere_length
     cur_chromosome.add(end)
 
-    #This chromosome is done
+    # This chromosome is done
     chr_diagram.add(cur_chromosome)
 
 chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
