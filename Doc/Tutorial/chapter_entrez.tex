@@ -49,7 +49,7 @@ To paraphrase:
 The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
 \item After May 1, 2018, NCBI will limit access to the E-utilities unless one have an API key (more info at \url{https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/}).
-Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the key is specified in any E-utility. Include {\tt api_key="MyAPIkey"} in the argument list or set it as a global variable:
+Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the key is specified in any E-utility. Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
 %doctest
 \begin{verbatim}
 >>> from Bio import Entrez
