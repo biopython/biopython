@@ -834,7 +834,7 @@ class GenBankWriter(_InsdcWriter):
 
         descr = record.description
         if descr == "<unknown description>":
-            descr = "."
+            descr = ""  # Trailing dot will be added later
 
         # The DEFINITION field must end with a period
         # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
