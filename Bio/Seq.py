@@ -2078,7 +2078,7 @@ class MutableSeq(object):
         return self.__class__(self.data * other, self.alphabet)
 
     def __imul__(self, other):
-        """Multiply MutableSeq in-place
+        """Multiply MutableSeq in-place.
 
         >>> from Bio.Seq import MutableSeq
         >>> from Bio.Alphabet import generic_dna
