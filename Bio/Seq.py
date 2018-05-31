@@ -345,6 +345,54 @@ class Seq(object):
         else:
             raise TypeError
 
+    def __mul__(self, other):
+        """Multiply Seq by integer
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> Seq('ATG') * 2
+        Seq('ATGATG', Alphabet())
+        >>> Seq('ATG', generic_dna) * 2
+        Seq('ATGATG', DNAAlphabet())
+        """
+
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
+    def __rmul__(self, other):
+        """Multiply integer by Seq
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> 2 * Seq('ATG')
+        Seq('ATGATG', Alphabet())
+        >>> 2 * Seq('ATG', generic_dna)
+        Seq('ATGATG', DNAAlphabet())
+        """
+
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
+    def __imul__(self, other):
+        """Multiply Seq in-place
+
+        Note although Seq is immutable, the in-place method is
+        included to match the behaviour for regular Python strings
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> seq = Seq('ATG', generic_dna)
+        >>> seq *= 2
+        >>> seq
+        Seq('ATGATG', DNAAlphabet())
+        """
+
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
     def tostring(self):  # Seq API requirement
         """Return the full sequence as a python string (DEPRECATED).
 
