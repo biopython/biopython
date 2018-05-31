@@ -2058,7 +2058,7 @@ class MutableSeq(object):
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply MutableSeq by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(self.data * other, self.alphabet)
 
     def __rmul__(self, other):
         """Multiply integer by MutableSeq.
@@ -2075,7 +2075,7 @@ class MutableSeq(object):
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply MutableSeq by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(self.data * other, self.alphabet)
 
     def __imul__(self, other):
         """Multiply MutableSeq in-place
@@ -2089,7 +2089,7 @@ class MutableSeq(object):
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply MutableSeq by non-int type")
-        return self.__class__(str(self) * other, self.alphabet)
+        return self.__class__(self.data * other, self.alphabet)
 
     def append(self, c):
         """Add a subsequence to the mutable sequence object.
