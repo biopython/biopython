@@ -859,7 +859,7 @@ You can use the index as a read only Python dictionary - without having to worry
 about which file the sequence comes from, e.g.
 
 \begin{verbatim}
->>> print(gb_vrl[``AB811634.1''].description)
+>>> print(gb_vrl["AB811634.1"].description)
 Equine encephalosis virus NS3 gene, complete cds, isolate: Kimron1.
 \end{verbatim}
 
@@ -872,10 +872,10 @@ get at the raw bytes of each record:
 % TODO - Under Python 3 you'd get the bytes string representation with
 % leading b single-quote, escaped newlines, and closing single-quote:
 %
-% >>> print(gb_vrl.get_raw(``GQ333173.1''))
+% >>> print(gb_vrl.get_raw("GQ333173.1"))
 % b'LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009\nDEFINITION...'
 \begin{verbatim}
->>> print(gb_vrl.get_raw(``AB811634.1''))
+>>> print(gb_vrl.get_raw("AB811634.1"))
 LOCUS       AB811634                 723 bp    RNA     linear   VRL 17-JUN-2015
 DEFINITION  Equine encephalosis virus NS3 gene, complete cds, isolate: Kimron1.
 ACCESSION   AB811634

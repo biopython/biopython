@@ -726,7 +726,7 @@ comparison itself only the string of letters in the sequence is used:
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna, generic_protein
 >>> dna_seq = Seq("ACGT", generic_dna)
->>> prot_seq = Seq(``ACGT'', generic_protein)
+>>> prot_seq = Seq("ACGT", generic_protein)
 >>> dna_seq == prot_seq
 BiopythonWarning: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
 True
