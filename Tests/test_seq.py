@@ -496,6 +496,22 @@ class TestSeqMultiplication(unittest.TestCase):
             with self.assertRaises(TypeError):
                 '' * seq
 
+    def test_imul_method(self):
+        """Test imul method; relies on addition and mull methods"""
+        for seq in test_seqs + protein_seqs:
+            original_seq = seq * 1  # make a copy
+            seq *= 3
+            self.assertEqual(seq, original_seq + original_seq + original_seq)
+
+    def test_imul_method_exceptions(self):
+        """Test imul method exceptions; relies on mull method"""
+        for seq in test_seqs + protein_seqs:
+            original_seq = seq * 1  # make a copy
+            with self.assertRaises(TypeError):
+                seq *= 3.0
+            with self.assertRaises(TypeError):
+                seq *= ''
+
 
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
