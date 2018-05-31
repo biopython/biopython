@@ -511,7 +511,7 @@ check all the features one by one in a loop:
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> for feature in record.features:
 ...     if my_snp in feature:
-...         print("%s %s" % (feature.type, feature.qualifiers.get('db_xref')))
+...         print("%s %s" % (feature.type, feature.qualifiers.get("db_xref")))
 ...
 source ['taxon:229193']
 gene ['GeneID:2767712']

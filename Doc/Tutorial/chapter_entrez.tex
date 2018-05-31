@@ -604,11 +604,11 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 >>> handle = open("Homo_sapiens.xml")
 >>> records = Entrez.parse(handle)
 >>> for record in records:
-...     status = record['Entrezgene_track-info']['Gene-track']['Gene-track_status']
-...     if status.attributes['value']=='discontinued':
+...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
+...     if status.attributes["value"]=="discontinued":
 ...         continue
-...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
-...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
+...     geneid = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_geneid"]
+...     genename = record["Entrezgene_gene"]["Gene-ref"]["Gene-ref_locus"]
 ...     print(geneid, genename)
 ...
 \end{verbatim}
