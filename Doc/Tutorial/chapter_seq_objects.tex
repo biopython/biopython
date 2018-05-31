@@ -111,7 +111,7 @@ makes no difference:
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> len(my_seq)
 32
 >>> my_seq.count("G")
@@ -127,7 +127,7 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.SeqUtils import GC
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> GC(my_seq)
 46.875
 \end{verbatim}

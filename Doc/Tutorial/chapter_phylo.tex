@@ -375,10 +375,10 @@ Fig.~\ref{fig:phylo-dot}):
 
 \begin{verbatim}
 >>> tree = Phylo.read("example.xml", "phyloxml")
->>> Phylo.draw_graphviz(tree, prog='dot')
+>>> Phylo.draw_graphviz(tree, prog="dot")
 >>> import pylab
 >>> pylab.show()                    # Displays the tree in an interactive viewer
->>> pylab.savefig('phylo-dot.png')  # Creates a PNG file of the same graphic
+>>> pylab.savefig("phylo-dot.png")  # Creates a PNG file of the same graphic
 \end{verbatim}
 
 \begin{htmlonly}
@@ -807,7 +807,7 @@ on taxon names) and a variety of options. A quick example:
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> from Bio.Phylo.Applications import PhymlCommandline
->>> cmd = PhymlCommandline(input='Tests/Phylip/random.phy')
+>>> cmd = PhymlCommandline(input="Tests/Phylip/random.phy")
 >>> out_log, err_log = cmd()
 \end{verbatim}
 
@@ -816,7 +816,7 @@ This generates a tree file and a stats file with the names
 [\textit{input~filename}]\verb|_phyml_stats.txt|. The tree file is in Newick format:
 
 \begin{verbatim}
->>> tree = Phylo.read('Tests/Phylip/random.phy_phyml_tree.txt', 'newick')
+>>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
 >>> Phylo.draw_ascii(tree)
 \end{verbatim}
 

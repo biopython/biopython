@@ -960,9 +960,9 @@ The example data \verb|cyano.txt| can be found in Biopython's \verb|Tests/Cluste
 >>> with open("cyano.txt") as handle:
 ...     record = Cluster.read(handle)
 ...
->>> genetree = record.treecluster(method='s')
+>>> genetree = record.treecluster(method="s")
 >>> genetree.scale()
->>> exptree = record.treecluster(dist='u', transpose=1)
+>>> exptree = record.treecluster(dist="u", transpose=1)
 >>> record.save("cyano_result", genetree, exptree)
 \end{verbatim}
 
