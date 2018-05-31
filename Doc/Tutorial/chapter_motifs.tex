@@ -460,10 +460,10 @@ T:   0.00   0.00   0.00   0.00  20.00   0.00
 The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
 \begin{verbatim}
 >>> motifs = jdb.fetch_motifs(
-...     collection = 'CORE',
-...     tax_group = ['vertebrates', 'insects'],
-...     tf_class = 'Winged Helix-Turn-Helix',
-...     tf_family = ['Forkhead', 'Ets'],
+...     collection = "CORE",
+...     tax_group = ["vertebrates", "insects"],
+...     tf_class = "Winged Helix-Turn-Helix",
+...     tf_family = ["Forkhead", "Ets"],
 ...     min_ic = 12
 ... )
 >>> for motif in motifs:
@@ -1213,7 +1213,7 @@ To facilitate searching for potential TFBSs using PSSMs, both the position-weigh
 \begin{verbatim}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
-...     motif = motifs.read(handle, 'sites')
+...     motif = motifs.read(handle, "sites")
 ...
 >>> print(motif.counts)
         0      1      2      3      4      5
