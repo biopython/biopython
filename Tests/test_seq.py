@@ -504,9 +504,8 @@ class TestSeqMultiplication(unittest.TestCase):
             self.assertEqual(seq, original_seq + original_seq + original_seq)
 
     def test_imul_method_exceptions(self):
-        """Test imul method exceptions; relies on mull method"""
+        """Test imul method exceptions"""
         for seq in test_seqs + protein_seqs:
-            original_seq = seq * 1  # make a copy
             with self.assertRaises(TypeError):
                 seq *= 3.0
             with self.assertRaises(TypeError):
