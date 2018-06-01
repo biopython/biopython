@@ -12,6 +12,7 @@ from Bio.Pathway import Reaction
 from Bio.Pathway.Rep.Graph import Graph
 from Bio.Pathway.Rep.MultiGraph import MultiGraph, df_search, bf_search
 
+
 class GraphTestCase(unittest.TestCase):
 
     def test_Equals(self):
