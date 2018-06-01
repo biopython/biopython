@@ -25,7 +25,7 @@ In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
-The Entrez module now support the NCBI API key. You can now set a custom
+The Entrez module now supports the NCBI API key. Also you can now set a custom
 directory for DTD and XSD files. This allows Entrez to be used in environments
 like AWS Lambda, which restricts write access to specific directories.
 Improved support for parsing NCBI Entrez XML files that use XSD schemas.
