@@ -36,9 +36,9 @@ class Graph(object):
         """Return a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
-            l = unique(list(self._adjacency_list[key])).tolist()
+            temp_list = unique(list(self._adjacency_list[key])).tolist()
             values = sorted([(x, self._edge_map[(key, x)])
-                      for x in l])
+                      for x in temp_list])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 

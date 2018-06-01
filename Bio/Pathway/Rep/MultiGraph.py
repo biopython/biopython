@@ -9,6 +9,7 @@
 from functools import reduce
 from numpy import unique
 
+
 # TODO - Subclass graph?
 class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
