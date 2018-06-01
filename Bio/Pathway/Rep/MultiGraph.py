@@ -1,4 +1,5 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2018 by Maximilian Greil. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -6,7 +7,7 @@
 # get set abstraction for graph representation
 
 from functools import reduce
-
+from numpy import unique
 
 # TODO - Subclass graph?
 class MultiGraph(object):
@@ -79,7 +80,7 @@ class MultiGraph(object):
         """Return a list of all the edges with this label."""
         if label not in self._label_map:
             raise ValueError("Unknown label: " + str(label))
-        return sorted(self._label_map[label])
+        return unique(list(self._label_map[label])).tolist()
 
     def labels(self):
         """Return a list of all the edge labels in this graph."""
