@@ -33,6 +33,9 @@ Improved support for parsing NCBI Entrez XML files that use XSD schemas.
 Internal changes to our C code mean that NumPy is no longer required at
 compile time - only at run time (and only for those modules which use NumPy).
 
+Seq, UnknownSeq, MutableSeq and derived classes now support integer
+multiplication methods, matching native Python string methods.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
