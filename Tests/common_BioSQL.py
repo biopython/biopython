@@ -543,11 +543,13 @@ class SeqInterfaceTest(unittest.TestCase):
         tripled = test_seq * 3
         # Test DBSeq.__mul__
         self.assertTrue(isinstance(tripled, Seq))
+        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
         self.assertEqual(tripled, str(test_seq) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__rmul__
         tripled = 3 * test_seq
         self.assertTrue(isinstance(tripled, Seq))
+        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
         self.assertEqual(tripled, str(test_seq) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
         # Test DBSeq.__imul__
@@ -555,6 +557,7 @@ class SeqInterfaceTest(unittest.TestCase):
         tripled = test_seq
         tripled *= 3
         self.assertTrue(isinstance(tripled, Seq))
+        self.assertFalse(isinstance(tripled, BioSeq.DBSeq))
         self.assertEqual(tripled, str(original) * 3)
         self.assertEqual(tripled.alphabet, alphabet)
 
