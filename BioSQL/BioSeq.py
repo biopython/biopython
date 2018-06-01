@@ -160,7 +160,7 @@ class DBSeq(Seq):
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() * other
 
-     def __rmull__(self, other):
+    def __rmull__(self, other):
         """Multiply integer by a sequence.
 
         The sequence is first converted to a Seq object before multiplication.
@@ -169,7 +169,7 @@ class DBSeq(Seq):
         # Let the Seq object deal with the alphabet issues etc
         return other * self.toseq()
 
-     def __imull__(self, other):
+    def __imull__(self, other):
         """Multiply sequence by integer in-place.
 
         The sequence is first converted to a Seq object before multiplication.
