@@ -30,6 +30,9 @@ directory for DTD and XSD files. This allows Entrez to be used in environments
 like AWS Lambda, which restricts write access to specific directories.
 Improved support for parsing NCBI Entrez XML files that use XSD schemas.
 
+Internal changes to our C code mean that NumPy is no longer required at
+compile time - only at run time (and only for those modules which use NumPy).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
