@@ -469,6 +469,49 @@ class TestSeqAddition(unittest.TestCase):
                 self.assertEqual(str(c), str(a) + str(b))
 
 
+class TestSeqMultiplication(unittest.TestCase):
+    def test_mul_method(self):
+        """Test mul method; relies on addition method"""
+        for seq in test_seqs + protein_seqs:
+            self.assertEqual(seq * 3, seq + seq + seq)
+
+    def test_mul_method_exceptions(self):
+        """Test mul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                seq * 3.0
+            with self.assertRaises(TypeError):
+                seq * ''
+
+    def test_rmul_method(self):
+        """Test rmul method; relies on addition method"""
+        for seq in test_seqs + protein_seqs:
+            self.assertEqual(3 * seq, seq + seq + seq)
+
+    def test_rmul_method_exceptions(self):
+        """Test rmul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                3.0 * seq
+            with self.assertRaises(TypeError):
+                '' * seq
+
+    def test_imul_method(self):
+        """Test imul method; relies on addition and mull methods"""
+        for seq in test_seqs + protein_seqs:
+            original_seq = seq * 1  # make a copy
+            seq *= 3
+            self.assertEqual(seq, original_seq + original_seq + original_seq)
+
+    def test_imul_method_exceptions(self):
+        """Test imul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                seq *= 3.0
+            with self.assertRaises(TypeError):
+                seq *= ''
+
+
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)

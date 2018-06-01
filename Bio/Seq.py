@@ -345,6 +345,51 @@ class Seq(object):
         else:
             raise TypeError
 
+    def __mul__(self, other):
+        """Multiply Seq by integer.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> Seq('ATG') * 2
+        Seq('ATGATG', Alphabet())
+        >>> Seq('ATG', generic_dna) * 2
+        Seq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
+    def __rmul__(self, other):
+        """Multiply integer by Seq.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> 2 * Seq('ATG')
+        Seq('ATGATG', Alphabet())
+        >>> 2 * Seq('ATG', generic_dna)
+        Seq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
+    def __imul__(self, other):
+        """Multiply Seq in-place.
+
+        Note although Seq is immutable, the in-place method is
+        included to match the behaviour for regular Python strings.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> seq = Seq('ATG', generic_dna)
+        >>> seq *= 2
+        >>> seq
+        Seq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply Seq by non-int type")
+        return self.__class__(str(self) * other, self.alphabet)
+
     def tostring(self):  # Seq API requirement
         """Return the full sequence as a python string (DEPRECATED).
 
@@ -1345,6 +1390,51 @@ class UnknownSeq(Seq):
         # Offload to the base class...
         return other + Seq(str(self), self.alphabet)
 
+    def __mul__(self, other):
+        """Multiply UnknownSeq by integer.
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> UnknownSeq(3) * 2
+        UnknownSeq(6, alphabet = Alphabet(), character = '?')
+        >>> UnknownSeq(3, generic_dna) * 2
+        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply UnknownSeq by non-int type")
+        return self.__class__(len(self) * other, self.alphabet)
+
+    def __rmul__(self, other):
+        """Multiply integer by UnknownSeq.
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> 2 * UnknownSeq(3)
+        UnknownSeq(6, alphabet = Alphabet(), character = '?')
+        >>> 2 * UnknownSeq(3, generic_dna)
+        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply UnknownSeq by non-int type")
+        return self.__class__(len(self) * other, self.alphabet)
+
+    def __imul__(self, other):
+        """Multiply UnknownSeq in-place.
+
+        Note although UnknownSeq is immutable, the in-place method is
+        included to match the behaviour for regular Python strings.
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> seq = UnknownSeq(3, generic_dna)
+        >>> seq *= 2
+        >>> seq
+        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply UnknownSeq by non-int type")
+        return self.__class__(len(self) * other, self.alphabet)
+
     def __getitem__(self, index):
         """Get a subsequence from the UnknownSeq object.
 
@@ -1952,6 +2042,54 @@ class MutableSeq(object):
             return self.__class__(str(other) + str(self), self.alphabet)
         else:
             raise TypeError
+
+    def __mul__(self, other):
+        """Multiply MutableSeq by integer.
+
+        Note this is not in-place and returns a new object,
+        matching native Python list multiplication.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> MutableSeq('ATG') * 2
+        MutableSeq('ATGATG', Alphabet())
+        >>> MutableSeq('ATG', generic_dna) * 2
+        MutableSeq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply MutableSeq by non-int type")
+        return self.__class__(self.data * other, self.alphabet)
+
+    def __rmul__(self, other):
+        """Multiply integer by MutableSeq.
+
+        Note this is not in-place and returns a new object,
+        matching native Python list multiplication.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> 2 * MutableSeq('ATG')
+        MutableSeq('ATGATG', Alphabet())
+        >>> 2 * MutableSeq('ATG', generic_dna)
+        MutableSeq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply MutableSeq by non-int type")
+        return self.__class__(self.data * other, self.alphabet)
+
+    def __imul__(self, other):
+        """Multiply MutableSeq in-place.
+
+        >>> from Bio.Seq import MutableSeq
+        >>> from Bio.Alphabet import generic_dna
+        >>> seq = MutableSeq('ATG', generic_dna)
+        >>> seq *= 2
+        >>> seq
+        MutableSeq('ATGATG', DNAAlphabet())
+        """
+        if not isinstance(other, int):
+            raise TypeError("can't multiply MutableSeq by non-int type")
+        return self.__class__(self.data * other, self.alphabet)
 
     def append(self, c):
         """Add a subsequence to the mutable sequence object.

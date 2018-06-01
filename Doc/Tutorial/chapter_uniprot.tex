@@ -174,8 +174,8 @@ The entries in this file can be parsed by the \verb+parse+ function in the \verb
 >>> handle = open("keywlist.txt")
 >>> records = KeyWList.parse(handle)
 >>> for record in records:
-...     print(record['ID'])
-...     print(record['DE'])
+...     print(record["ID"])
+...     print(record["DE"])
 \end{verbatim}
 
 This prints
@@ -416,7 +416,7 @@ To retrieve a Prosite or Prosite documentation record in raw format, use \verb|g
 
 \begin{verbatim}
 >>> from Bio import ExPASy
->>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> handle = ExPASy.get_prosite_raw("PS00001")
 >>> text = handle.read()
 >>> print(text)
 \end{verbatim}
@@ -426,7 +426,7 @@ To retrieve a Prosite record and parse it into a \verb|Bio.Prosite.Record| objec
 \begin{verbatim}
 >>> from Bio import ExPASy
 >>> from Bio import Prosite
->>> handle = ExPASy.get_prosite_raw('PS00001')
+>>> handle = ExPASy.get_prosite_raw("PS00001")
 >>> record = Prosite.read(handle)
 \end{verbatim}
 
@@ -435,7 +435,7 @@ The same function can be used to retrieve a Prosite documentation record and par
 \begin{verbatim}
 >>> from Bio import ExPASy
 >>> from Bio.ExPASy import Prodoc
->>> handle = ExPASy.get_prosite_raw('PDOC00001')
+>>> handle = ExPASy.get_prosite_raw("PDOC00001")
 >>> record = Prodoc.read(handle)
 \end{verbatim}
 
@@ -445,7 +445,7 @@ The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used 
 
 \begin{verbatim}
 >>> from Bio import ExPASy
->>> handle = ExPASy.get_prosite_entry('PS00001')
+>>> handle = ExPASy.get_prosite_entry("PS00001")
 >>> html = handle.read()
 >>> with open("myprositerecord.html", "w") as out_handle:
 ...     out_handle.write(html)
@@ -456,7 +456,7 @@ and similarly for a Prosite documentation record:
 
 \begin{verbatim}
 >>> from Bio import ExPASy
->>> handle = ExPASy.get_prodoc_entry('PDOC00001')
+>>> handle = ExPASy.get_prodoc_entry("PDOC00001")
 >>> html = handle.read()
 >>> with open("myprodocrecord.html", "w") as out_handle:
 ...     out_handle.write(html)

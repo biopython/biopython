@@ -111,7 +111,7 @@ makes no difference:
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> len(my_seq)
 32
 >>> my_seq.count("G")
@@ -127,7 +127,7 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.SeqUtils import GC
->>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> GC(my_seq)
 46.875
 \end{verbatim}
@@ -726,7 +726,7 @@ comparison itself only the string of letters in the sequence is used:
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna, generic_protein
 >>> dna_seq = Seq("ACGT", generic_dna)
->>> prot_seq = Seq(``ACGT'', generic_protein)
+>>> prot_seq = Seq("ACGT", generic_protein)
 >>> dna_seq == prot_seq
 BiopythonWarning: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
 True

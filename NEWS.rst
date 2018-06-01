@@ -25,10 +25,16 @@ In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
 used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
-The Entrez module now support the NCBI API key. You can now set a custom
+The Entrez module now supports the NCBI API key. Also you can now set a custom
 directory for DTD and XSD files. This allows Entrez to be used in environments
 like AWS Lambda, which restricts write access to specific directories.
 Improved support for parsing NCBI Entrez XML files that use XSD schemas.
+
+Internal changes to our C code mean that NumPy is no longer required at
+compile time - only at run time (and only for those modules which use NumPy).
+
+Seq, UnknownSeq, MutableSeq and derived classes now support integer
+multiplication methods, matching native Python string methods.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
@@ -91,10 +97,6 @@ were added to Bio.Data.CodonTable. Note that tables 27, 28 and 31 contain
 no dedicated stop codons; the stop codons in these codes have a context
 dependent encoding as either STOP or as amino acid. 
 
-In this release more of our code is now explicitly available under either our
-original "Biopython License Agreement", or the very similar but more commonly
-used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
-
 IO functions such as ``SeqIO.parse`` now accept any objects which can be passed
 to the builtin ``open`` function. Specifically, this allows using
 ``pathlib.Path`` objects under Python 3.6 and newer, as per `PEP 519
@@ -102,7 +104,7 @@ to the builtin ``open`` function. Specifically, this allows using
 
 Bio.SearchIO can now parse InterProScan XML files.
 
-For Python 3 compatibility, comparision operators for the entities within a
+For Python 3 compatibility, comparison operators for the entities within a
 Bio.PDB Structure object were implemented. These allow the comparison of
 models, chains, residues, and atoms with the common operators  (==, !=, >, ...)
 Comparisons are based on IDs and take the parents of the entity up to the
@@ -111,6 +113,10 @@ for atoms were modified to also consider the parent IDs. NOTE: this represents a
 change in behaviour in respect to v1.70 for Atom comparisons. In order to mimic
 the behaviour of previous versions, comparison will have to be done for Atom IDs
 and alternative locations specifically.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the

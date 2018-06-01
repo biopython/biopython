@@ -41,8 +41,8 @@ a Python dictionary that maps header records to their values.
 Example:
 
 \begin{verbatim}
->>> resolution = structure.header['resolution']
->>> keywords = structure.header['keywords']
+>>> resolution = structure.header["resolution"]
+>>> keywords = structure.header["keywords"]
 \end{verbatim}
 The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, \verb+release_date+, \verb+structure_method+, \verb+resolution+, \verb+structure_reference+ (which maps to a list of references), \verb+journal_reference+, \verb+author+, and \verb+compound+ (which maps to a dictionary with various information about the crystallized compound).
 
@@ -51,7 +51,7 @@ object, ie. directly from the PDB file:
 
 \begin{verbatim}
 >>> from Bio.PDB import parse_pdb_header
->>> with open(filename, 'r') as handle:
+>>> with open(filename, "r") as handle:
 ...     header_dict = parse_pdb_header(handle)
 ...
 \end{verbatim}
@@ -66,7 +66,7 @@ Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
 \end{verbatim}
 Then use this parser to create a structure object from the mmCIF file:
 \begin{verbatim}
->>> structure = parser.get_structure('1fat', '1fat.cif')
+>>> structure = parser.get_structure("1fat", "1fat.cif")
 \end{verbatim}
 
 To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
@@ -77,17 +77,17 @@ The dictionary is created from the mmCIF file as follows:
 
 \begin{verbatim}
 >>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
->>> mmcif_dict = MMCIF2Dict('1FAT.cif')
+>>> mmcif_dict = MMCIF2Dict("1FAT.cif")
 \end{verbatim}
 
 Example: get the solvent content from an mmCIF file:
 \begin{verbatim}
->>> sc = mmcif_dict['_exptl_crystal.density_percent_sol']
+>>> sc = mmcif_dict["_exptl_crystal.density_percent_sol"]
 \end{verbatim}
 
 Example: get the list of the $y$ coordinates of all atoms
 \begin{verbatim}
->>> y_list = mmcif_dict['_atom_site.Cartn_y']
+>>> y_list = mmcif_dict["_atom_site.Cartn_y"]
 \end{verbatim}
 
 
@@ -138,7 +138,7 @@ Example: saving a structure
 \begin{verbatim}
 >>> io = PDBIO()
 >>> io.set_structure(s)
->>> io.save('out.pdb')
+>>> io.save("out.pdb")
 \end{verbatim}
 If you want to write out a part of the structure, make use of the
 \texttt{Select} class (also in \texttt{PDBIO}). Select has four methods:
@@ -158,14 +158,14 @@ out glycine residues:
 \begin{verbatim}
 >>> class GlySelect(Select):
 ...     def accept_residue(self, residue):
-...         if residue.get_name()=='GLY':
+...         if residue.get_name()=="GLY":
 ...             return True
 ...         else:
 ...             return False
 ...
 >>> io = PDBIO()
 >>> io.set_structure(s)
->>> io.save('gly_only.pdb', GlySelect())
+>>> io.save("gly_only.pdb", GlySelect())
 \end{verbatim}
 If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
@@ -178,7 +178,7 @@ A similar interface can be used to write structures to the mmCIF file format:
 \begin{verbatim}
 >>> io = MMCIFIO()
 >>> io.set_structure(s)
->>> io.save('out.cif')
+>>> io.save("out.cif")
 \end{verbatim}
 The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
 mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
@@ -186,7 +186,7 @@ mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
 \begin{verbatim}
 >>> io = MMCIFIO()
 >>> io.set_dict(d)
->>> io.save('out.cif')
+>>> io.save("out.cif")
 \end{verbatim}
 
 \section{Structure representation}
@@ -363,7 +363,7 @@ identifier alone can be used:
 
 \begin{verbatim}
 # Full id
->>> residue=chain[(' ', 100, ' ')]
+>>> residue=chain[(" ", 100, " ")]
 # Shortcut id
 >>> residue=chain[100]
 \end{verbatim}
@@ -389,7 +389,7 @@ id:
 
 \begin{verbatim}
 # use full id
->>> res10 = chain[(' ', 10, ' ')]
+>>> res10 = chain[(" ", 10, " ")]
 # use shortcut
 >>> res10 = chain[10]
 \end{verbatim}
@@ -476,9 +476,9 @@ module:
 
 \begin{verbatim}
 # get atom coordinates as vectors
->>> n = residue['N'].get_vector()
->>> c = residue['C'].get_vector()
->>> ca = residue['CA'].get_vector()
+>>> n = residue["N"].get_vector()
+>>> c = residue["C"].get_vector()
+>>> ca = residue["CA"].get_vector()
 # center at origin
 >>> n = n - ca
 >>> c = c - ca
@@ -505,14 +505,14 @@ These are some examples:
 
 \begin{verbatim}
 >>> model = structure[0]
->>> chain = model['A']
+>>> chain = model["A"]
 >>> residue = chain[100]
->>> atom = residue['CA']
+>>> atom = residue["CA"]
 \end{verbatim}
 Note that you can use a shortcut:
 
 \begin{verbatim}
->>> atom = structure[0]['A'][100]['CA']
+>>> atom = structure[0]["A"][100]["CA"]
 \end{verbatim}
 
 \section{Disorder}
@@ -553,10 +553,10 @@ specify that a \texttt{Disordered\-Atom} object should behave like
 the \texttt{Atom} object associated with a specific altloc identifier:
 
 \begin{verbatim}
->>> atom.disordered_select('A') # select altloc A atom
+>>> atom.disordered_select("A") # select altloc A atom
 >>> print(atom.get_altloc())
 "A"
->>> atom.disordered_select('B') # select altloc B atom
+>>> atom.disordered_select("B") # select altloc B atom
 >>> print(atom.get_altloc())
 "B"
 \end{verbatim}
@@ -599,7 +599,7 @@ consisting of a Ser and a Cys residue. Make sure that residue 10 of
 this chain behaves as the Cys residue.
 \begin{verbatim}
 >>> residue = chain[10]
->>> residue.disordered_select('CYS')
+>>> residue.disordered_select("CYS")
 \end{verbatim}
 In addition, you can get a list of all \texttt{Atom} objects (ie.
 all \texttt{DisorderedAtom} objects are 'unpacked' to their individual
@@ -650,7 +650,7 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 
 \begin{verbatim}
 >>> p = PDBParser()
->>> structure = p.get_structure('X', 'pdb1fat.ent')
+>>> structure = p.get_structure("X", "pdb1fat.ent")
 >>> for model in structure:
 ...     for chain in model:
 ...         for residue in chain:
@@ -687,11 +687,11 @@ or if you want to iterate over all residues in a model:
 
 You can also use the \verb+Selection.unfold_entities+ function to get all residues from a structure:
 \begin{verbatim}
->>> res_list = Selection.unfold_entities(structure, 'R')
+>>> res_list = Selection.unfold_entities(structure, "R")
 \end{verbatim}
 or to get all atoms from a chain:
 \begin{verbatim}
->>> atom_list = Selection.unfold_entities(chain, 'A')
+>>> atom_list = Selection.unfold_entities(chain, "A")
 \end{verbatim}
 Obviously, \verb+A=atom, R=residue, C=chain, M=model, S=structure+.
 You can use this to go up in the hierarchy, e.g. to get a list of
@@ -699,8 +699,8 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 \verb+Atoms+:
 
 \begin{verbatim}
->>> residue_list = Selection.unfold_entities(atom_list, 'R')
->>> chain_list = Selection.unfold_entities(atom_list, 'C')
+>>> residue_list = Selection.unfold_entities(atom_list, "R")
+>>> chain_list = Selection.unfold_entities(atom_list, "C")
 \end{verbatim}
 For more info, see the API documentation.
 
@@ -822,8 +822,8 @@ Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
 The minus operator for atoms has been overloaded to return the distance between two atoms.
 \begin{verbatim}
 # Get some atoms
->>> ca1 = residue1['CA']
->>> ca2 = residue2['CA']
+>>> ca1 = residue1["CA"]
+>>> ca2 = residue2["CA"]
 # Simply subtract the atoms to get their distance
 >>> distance = ca1-ca2
 \end{verbatim}
@@ -915,9 +915,9 @@ Example:
 >>> model = structure[0]
 >>> hse = HSExposure()
 # Calculate HSEalpha
->>> exp_ca = hse.calc_hs_exposure(model, option='CA3')
+>>> exp_ca = hse.calc_hs_exposure(model, option="CA3")
 # Calculate HSEbeta
->>> exp_cb=hse.calc_hs_exposure(model, option='CB')
+>>> exp_cb=hse.calc_hs_exposure(model, option="CB")
 # Calculate classical coordination number
 >>> exp_fs = hse.calc_fs_exposure(model)
 # Print HSEalpha for a residue
@@ -1127,7 +1127,7 @@ The argument for this method is the PDB identifier of the structure.
 
 \begin{verbatim}
 >>> pdbl = PDBList()
->>> pdbl.retrieve_pdb_file('1FAT')
+>>> pdbl.retrieve_pdb_file("1FAT")
 \end{verbatim}
 
 The \texttt{PDBList} class can also be used as a command-line tool:
@@ -1171,7 +1171,7 @@ the local copy of the PDB is present) and calls the \texttt{update\_pdb}
 method:
 
 \begin{verbatim}
->>> pl = PDBList(pdb='/data/pdb')
+>>> pl = PDBList(pdb="/data/pdb")
 >>> pl.update_pdb()
 \end{verbatim}
 One can of course make a weekly \texttt{cronjob} out of this to keep
