@@ -137,7 +137,7 @@ class DBSeq(Seq):
         """Add another sequence or string to this sequence.
 
         The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object
+        The returned object is a Seq object, not a DBSeq object.
         """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
@@ -146,10 +146,37 @@ class DBSeq(Seq):
         """Add another sequence or string to the left.
 
         The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object
+        The returned object is a Seq object, not a DBSeq object.
         """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
+
+    def __mull__(self, other):
+        """Multiply sequence by an integer.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return self.toseq() * other
+
+     def __rmull__(self, other):
+        """Multiply integer by a sequence.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return other * self.toseq()
+
+     def __imull__(self, other):
+        """Multiply sequence by integer in-place.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return self.toseq() * other
 
 
 def _retrieve_seq_len(adaptor, primary_id):
