@@ -536,6 +536,28 @@ class SeqInterfaceTest(unittest.TestCase):
             test = other + test_seq
             self.assertEqual(str(test), str(other) + str(test_seq))
 
+    def test_multiplication(self):
+        """Check can multiply DBSeq objects by integers."""
+        test_seq = self.item.seq
+        alphabet = test_seq.alphabet
+        tripled = test_seq * 3
+        # Test DBSeq.__mul__
+        self.assertTrue(isinstance(tripled, Seq))
+        self.assertEqual(tripled, str(test_seq) * 3)
+        self.assertEqual(tripled.alphabet, alphabet)
+        # Test DBSeq.__rmul__
+        tripled = 3 * test_seq
+        self.assertTrue(isinstance(tripled, Seq))
+        self.assertEqual(tripled, str(test_seq) * 3)
+        self.assertEqual(tripled.alphabet, alphabet)
+        # Test DBSeq.__imul__
+        original = self.item.seq
+        tripled = test_seq
+        tripled *= 3
+        self.assertTrue(isinstance(tripled, Seq))
+        self.assertEqual(tripled, str(original) * 3)
+        self.assertEqual(tripled.alphabet, alphabet)
+
     def test_seq_slicing(self):
         """Check that slices of sequences are retrieved properly."""
         test_seq = self.item.seq
