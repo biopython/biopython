@@ -272,4 +272,5 @@ protein_letters_3to1 = {
     "YG ": "G", "YOF": "Y", "YRR": "N", "YYG": "G", "Z  ": "C",
     "Z01": "A", "ZAD": "A", "ZAL": "A", "ZBC": "C", "ZBU": "U",
     "ZCL": "F", "ZCY": "C", "ZDU": "U", "ZFB": "X", "ZGU": "G",
-    "ZHP": "N", "ZTH": "T", "ZU0": "T", "ZZJ": "A"}
+    "ZHP": "N", "ZTH": "T", "ZU0": "T", "ZZJ": "A",
+     "ASH": "D"}
