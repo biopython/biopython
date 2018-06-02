@@ -10,7 +10,7 @@ import unittest
 # modules to be tested
 from Bio.Pathway import Reaction
 from Bio.Pathway.Rep.Graph import Graph
-from Bio.Pathway.Rep.MultiGraph import MultiGraph, bf_search
+from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 
 class GraphTestCase(unittest.TestCase):
@@ -159,13 +159,6 @@ class MultiGraphTestCase(unittest.TestCase):
             str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
         self.assertListEqual(sorted(a.edges('label1')), ['a', 'b', 'c'])
         self.assertListEqual(sorted(a.labels()), ['label1', 'label2'])
-
-    def testSearchAlgorithms(self):
-        a = MultiGraph(['a', 'b', 'c'])
-        a.add_edge('a', 'b', 'label1')
-        a.add_edge('b', 'c', 'label1')
-        a.add_edge('b', 'a', 'label2')
-        self.assertListEqual(bf_search(a), ['a', 'b', 'c'])
 
 
 class ReactionTestCase(unittest.TestCase):
