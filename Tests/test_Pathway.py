@@ -79,7 +79,7 @@ class GraphTestCase(unittest.TestCase):
             str(a) == "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
         self.assertTrue(
             repr(a) == "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
-        self.assertListEqual(sorted(a.edges('label1')), ['a', 'b', 'c'])
+        self.assertListEqual(sorted(a.edges('label1')), [('a', 'b'), ('b', 'c')])
         self.assertListEqual(sorted(a.labels()), ['label1', 'label2'])
 
 
@@ -157,7 +157,7 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_edge('b', 'a', 'label2')
         self.assertTrue(
             str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
-        self.assertListEqual(sorted(a.edges('label1')), ['a', 'b', 'c'])
+        self.assertListEqual(sorted(a.edges('label1')), [('a', 'b'), ('b', 'c')])
         self.assertListEqual(sorted(a.labels()), ['label1', 'label2'])
 
 
