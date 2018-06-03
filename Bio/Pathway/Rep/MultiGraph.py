@@ -7,7 +7,6 @@
 # get set abstraction for graph representation
 
 from functools import reduce
-from numpy import unique
 
 
 # TODO - Subclass graph?
