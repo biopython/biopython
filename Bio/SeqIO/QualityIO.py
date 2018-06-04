@@ -217,7 +217,7 @@ Name: EAS54_6_R1_2_1_443_348
 Description: EAS54_6_R1_2_1_443_348
 Number of features: 0
 Per letter annotation for: phred_quality
-UnknownSeq(25, alphabet = SingleLetterAlphabet(), character = '?')
+UnknownSeq(25, alphabet=SingleLetterAlphabet(), character='?')
 >>> print(record.letter_annotations["phred_quality"])
 [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
