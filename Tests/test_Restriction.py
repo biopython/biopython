@@ -50,7 +50,7 @@ class SequenceTesting(unittest.TestCase):
     def test_formatted_seq(self):
         """Test several methods of FormattedSeq."""
         self.assertEqual(str(FormattedSeq(Seq('GATC'))),
-                         "FormattedSeq(Seq('GATC', Alphabet()), linear=True)")
+                         "FormattedSeq(Seq('GATC'), linear=True)")
         self.assertFalse(FormattedSeq(Seq('GATC')) ==
                          FormattedSeq(Seq('TAGC')))
         self.assertFalse(FormattedSeq(Seq('TAGC')) == Seq('TAGC'))
