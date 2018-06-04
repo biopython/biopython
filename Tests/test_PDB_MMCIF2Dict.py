@@ -75,6 +75,7 @@ class MMCIF2dictTests(unittest.TestCase):
         # https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax#lex
         self.assertEqual(list(mmcif._splitline("foo#bar")), ["foo#bar"])
         self.assertEqual(list(mmcif._splitline("foo #bar")), ["foo"])
+        self.assertEqual(list(mmcif._splitline("foo# bar")), ["foo#", "bar"])
         self.assertEqual(list(mmcif._splitline("#foo bar")), [])
 
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
