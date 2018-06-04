@@ -27,7 +27,7 @@ You can create an ambiguous sequence with the default generic alphabet like this
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
 >>> my_seq
-Seq('AGTACACTGGT', Alphabet())
+Seq('AGTACACTGGT')
 >>> my_seq.alphabet
 Alphabet()
 \end{verbatim}
@@ -238,7 +238,7 @@ If you \emph{really} wanted to do this, you'd have to first give both sequences 
 >>> protein_seq.alphabet = generic_alphabet
 >>> dna_seq.alphabet = generic_alphabet
 >>> protein_seq + dna_seq
-Seq('EVRNAKACGT', Alphabet())
+Seq('EVRNAKACGT')
 \end{verbatim}
 
 Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
@@ -822,7 +822,7 @@ just store a single letter ``N'' and the desired length as an integer.
 >>> from Bio.Seq import UnknownSeq
 >>> unk = UnknownSeq(20)
 >>> unk
-UnknownSeq(20, alphabet=Alphabet(), character='?')
+UnknownSeq(20, character='?')
 >>> print(unk)
 ????????????????????
 >>> len(unk)

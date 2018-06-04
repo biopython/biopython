@@ -782,7 +782,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_repr(self):
         self.assertEqual(
-            "UnknownSeq(6, alphabet=Alphabet(), character='?')",
+            "UnknownSeq(6, character='?')",
             repr(self.s))
 
     def test_add_method(self):

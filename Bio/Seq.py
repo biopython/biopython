@@ -120,18 +120,23 @@ class Seq(object):
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
+        if self.alphabet is Alphabet.generic_alphabet:
+            # Default used, we can omit it and simplify the representation
+            a = ""
+        else:
+            a = ", %r" % self.alphabet
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}', {3!r})".format(self.__class__.__name__,
-                                                    str(self)[:54],
-                                                    str(self)[-3:],
-                                                    self.alphabet)
+            return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
+                                                  str(self)[:54],
+                                                  str(self)[-3:],
+                                                  a)
         else:
-            return '{0}({1!r}, {2!r})'.format(self.__class__.__name__,
-                                              self._data,
-                                              self.alphabet)
+            return '{0}({1!r}{2!s})'.format(self.__class__.__name__,
+                                            self._data,
+                                            a)
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -279,7 +284,7 @@ class Seq(object):
         a generic alphabet:
 
         >>> Seq("") + ambig_dna_seq
-        Seq('ACRGT', Alphabet())
+        Seq('ACRGT')
 
         You can't add RNA and DNA sequences:
 
@@ -351,7 +356,7 @@ class Seq(object):
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
         >>> Seq('ATG') * 2
-        Seq('ATGATG', Alphabet())
+        Seq('ATGATG')
         >>> Seq('ATG', generic_dna) * 2
         Seq('ATGATG', DNAAlphabet())
         """
@@ -365,7 +370,7 @@ class Seq(object):
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
         >>> 2 * Seq('ATG')
-        Seq('ATGATG', Alphabet())
+        Seq('ATGATG')
         >>> 2 * Seq('ATG', generic_dna)
         Seq('ATGATG', DNAAlphabet())
         """
@@ -1263,7 +1268,7 @@ class UnknownSeq(Seq):
 
     >>> my_seq = Seq("N"*5)
     >>> my_seq
-    Seq('NNNNN', Alphabet())
+    Seq('NNNNN')
     >>> len(my_seq)
     5
     >>> print(my_seq)
@@ -1274,7 +1279,7 @@ class UnknownSeq(Seq):
 
     >>> unk_five = UnknownSeq(5)
     >>> unk_five
-    UnknownSeq(5, alphabet=Alphabet(), character='?')
+    UnknownSeq(5, character='?')
     >>> len(unk_five)
     5
     >>> print(unk_five)
@@ -1285,26 +1290,26 @@ class UnknownSeq(Seq):
 
     >>> unk_four = UnknownSeq(4)
     >>> unk_four
-    UnknownSeq(4, alphabet=Alphabet(), character='?')
+    UnknownSeq(4, character='?')
     >>> unk_four + unk_five
-    UnknownSeq(9, alphabet=Alphabet(), character='?')
+    UnknownSeq(9, character='?')
 
     If the alphabet or characters don't match up, the addition gives an
     ordinary Seq object:
 
     >>> unk_nnnn = UnknownSeq(4, character="N")
     >>> unk_nnnn
-    UnknownSeq(4, alphabet=Alphabet(), character='N')
+    UnknownSeq(4, character='N')
     >>> unk_nnnn + unk_four
-    Seq('NNNN????', Alphabet())
+    Seq('NNNN????')
 
     Combining with a real Seq gives a new Seq object:
 
     >>> known_seq = Seq("ACGT")
     >>> unk_four + known_seq
-    Seq('????ACGT', Alphabet())
+    Seq('????ACGT')
     >>> known_seq + unk_four
-    Seq('ACGT????', Alphabet())
+    Seq('ACGT????')
     """
 
     def __init__(self, length, alphabet=Alphabet.generic_alphabet,
@@ -1345,8 +1350,13 @@ class UnknownSeq(Seq):
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
-        return "UnknownSeq({0}, alphabet={1!r}, character={2!r})".format(
-            self._length, self.alphabet, self._character)
+        if self.alphabet is Alphabet.generic_alphabet:
+            # Default used, we can omit it and simplify the representation
+            a = ""
+        else:
+            a = ", alphabet=%r" % self.alphabet
+        return "UnknownSeq({0}{1!s}, character={2!r})".format(
+            self._length, a, self._character)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1396,7 +1406,7 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import generic_dna
         >>> UnknownSeq(3) * 2
-        UnknownSeq(6, alphabet=Alphabet(), character='?')
+        UnknownSeq(6, character='?')
         >>> UnknownSeq(3, generic_dna) * 2
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
@@ -1410,7 +1420,7 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import generic_dna
         >>> 2 * UnknownSeq(3)
-        UnknownSeq(6, alphabet=Alphabet(), character='?')
+        UnknownSeq(6, character='?')
         >>> 2 * UnknownSeq(3, generic_dna)
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
@@ -1612,11 +1622,11 @@ class UnknownSeq(Seq):
 
         >>> my_nuc = UnknownSeq(8)
         >>> my_nuc
-        UnknownSeq(8, alphabet=Alphabet(), character='?')
+        UnknownSeq(8, character='?')
         >>> print(my_nuc)
         ????????
         >>> my_nuc.complement()
-        UnknownSeq(8, alphabet=Alphabet(), character='?')
+        UnknownSeq(8, character='?')
         >>> print(my_nuc.complement())
         ????????
         """
@@ -1648,7 +1658,7 @@ class UnknownSeq(Seq):
 
         >>> my_dna = UnknownSeq(10, character="N")
         >>> my_dna
-        UnknownSeq(10, alphabet=Alphabet(), character='N')
+        UnknownSeq(10, character='N')
         >>> print(my_dna)
         NNNNNNNNNN
         >>> my_rna = my_dna.transcribe()
@@ -1666,7 +1676,7 @@ class UnknownSeq(Seq):
 
         >>> my_rna = UnknownSeq(20, character="N")
         >>> my_rna
-        UnknownSeq(20, alphabet=Alphabet(), character='N')
+        UnknownSeq(20, character='N')
         >>> print(my_rna)
         NNNNNNNNNNNNNNNNNNNN
         >>> my_dna = my_rna.back_transcribe()
@@ -1833,18 +1843,23 @@ class MutableSeq(object):
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
+        if self.alphabet is Alphabet.generic_alphabet:
+            # Default used, we can omit it and simplify the representation
+            a = ""
+        else:
+            a = ", %r" % self.alphabet
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}', {3!r})".format(self.__class__.__name__,
+            return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
                                                     str(self[:54]),
                                                     str(self[-3:]),
-                                                    self.alphabet)
+                                                    a)
         else:
-            return "{0}('{1}', {2!r})".format(self.__class__.__name__,
+            return "{0}('{1}'{2!s})".format(self.__class__.__name__,
                                               str(self),
-                                              self.alphabet)
+                                              a)
 
     def __str__(self):
         """Return the full sequence as a python string.
@@ -1955,7 +1970,7 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq[0] = 'T'
         >>> my_seq
-        MutableSeq('TCTCGACGTCG', Alphabet())
+        MutableSeq('TCTCGACGTCG')
         """
         # Note since Python 2.0, __setslice__ is deprecated
         # and __setitem__ is used instead.
@@ -1979,7 +1994,7 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> del my_seq[0]
         >>> my_seq
-        MutableSeq('CTCGACGTCG', Alphabet())
+        MutableSeq('CTCGACGTCG')
         """
         # Note since Python 2.0, __delslice__ is deprecated
         # and __delitem__ is used instead.
@@ -2052,7 +2067,7 @@ class MutableSeq(object):
         >>> from Bio.Seq import MutableSeq
         >>> from Bio.Alphabet import generic_dna
         >>> MutableSeq('ATG') * 2
-        MutableSeq('ATGATG', Alphabet())
+        MutableSeq('ATGATG')
         >>> MutableSeq('ATG', generic_dna) * 2
         MutableSeq('ATGATG', DNAAlphabet())
         """
@@ -2069,7 +2084,7 @@ class MutableSeq(object):
         >>> from Bio.Seq import MutableSeq
         >>> from Bio.Alphabet import generic_dna
         >>> 2 * MutableSeq('ATG')
-        MutableSeq('ATGATG', Alphabet())
+        MutableSeq('ATGATG')
         >>> 2 * MutableSeq('ATG', generic_dna)
         MutableSeq('ATGATG', DNAAlphabet())
         """
@@ -2097,7 +2112,7 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq.append('A')
         >>> my_seq
-        MutableSeq('ACTCGACGTCGA', Alphabet())
+        MutableSeq('ACTCGACGTCGA')
 
         No return value.
         """
@@ -2109,10 +2124,10 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq.insert(0,'A')
         >>> my_seq
-        MutableSeq('AACTCGACGTCG', Alphabet())
+        MutableSeq('AACTCGACGTCG')
         >>> my_seq.insert(8,'G')
         >>> my_seq
-        MutableSeq('AACTCGACGGTCG', Alphabet())
+        MutableSeq('AACTCGACGGTCG')
 
         No return value.
         """
@@ -2125,11 +2140,11 @@ class MutableSeq(object):
         >>> my_seq.pop()
         'G'
         >>> my_seq
-        MutableSeq('ACTCGACGTC', Alphabet())
+        MutableSeq('ACTCGACGTC')
         >>> my_seq.pop()
         'C'
         >>> my_seq
-        MutableSeq('ACTCGACGT', Alphabet())
+        MutableSeq('ACTCGACGT')
 
         Returns the last character of the sequence
         """
@@ -2143,10 +2158,10 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq.remove('C')
         >>> my_seq
-        MutableSeq('ATCGACGTCG', Alphabet())
+        MutableSeq('ATCGACGTCG')
         >>> my_seq.remove('A')
         >>> my_seq
-        MutableSeq('TCGACGTCG', Alphabet())
+        MutableSeq('TCGACGTCG')
 
         No return value.
         """
@@ -2346,10 +2361,10 @@ class MutableSeq(object):
         >>> my_seq = MutableSeq('ACTCGACGTCG')
         >>> my_seq.extend('A')
         >>> my_seq
-        MutableSeq('ACTCGACGTCGA', Alphabet())
+        MutableSeq('ACTCGACGTCGA')
         >>> my_seq.extend('TTT')
         >>> my_seq
-        MutableSeq('ACTCGACGTCGATTT', Alphabet())
+        MutableSeq('ACTCGACGTCGATTT')
 
         No return value.
         """
