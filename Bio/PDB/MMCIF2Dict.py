@@ -84,7 +84,10 @@ class MMCIF2Dict(dict):
                     quote_open_char = None
                     in_token = False
                     yield line[start_i:i]
-            elif not quote_open_char and c == "#" and ((i == 0) or (i > 0 and line[i - 1] in self.whitespace_chars)):
+            elif c == "#" and not in_token:
+                # Skip comments. "#" is a valid non-comment char inside of a
+                # quote and inside of an unquoted token (!?!?), so we need to
+                # check that the current char is not in a token.
                 return
             elif not in_token:
                 in_token = True
