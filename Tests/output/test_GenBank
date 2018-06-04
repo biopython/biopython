@@ -1433,7 +1433,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from NT_019265.gb with the FeatureParser
-Seq: UnknownSeq(1250660, alphabet = IUPACAmbiguousDNA(), character = 'N')
+Seq: UnknownSeq(1250660, alphabet=IUPACAmbiguousDNA(), character='N')
 Id: NT_019265.6
 Name: NT_019265
 Description: Homo sapiens chromosome 1 working draft sequence segment

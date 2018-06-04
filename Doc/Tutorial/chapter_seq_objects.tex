@@ -822,7 +822,7 @@ just store a single letter ``N'' and the desired length as an integer.
 >>> from Bio.Seq import UnknownSeq
 >>> unk = UnknownSeq(20)
 >>> unk
-UnknownSeq(20, alphabet = Alphabet(), character = '?')
+UnknownSeq(20, alphabet=Alphabet(), character='?')
 >>> print(unk)
 ????????????????????
 >>> len(unk)
@@ -838,7 +838,7 @@ the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 >>> from Bio.Alphabet import IUPAC
 >>> unk_dna = UnknownSeq(20, alphabet=IUPAC.ambiguous_dna)
 >>> unk_dna
-UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
 >>> print(unk_dna)
 NNNNNNNNNNNNNNNNNNNN
 \end{verbatim}
@@ -849,16 +849,16 @@ memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
 %cont-doctest
 \begin{verbatim}
 >>> unk_dna
-UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
 >>> unk_dna.complement()
-UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
 >>> unk_dna.reverse_complement()
-UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
 >>> unk_dna.transcribe()
-UnknownSeq(20, alphabet = IUPACAmbiguousRNA(), character = 'N')
+UnknownSeq(20, alphabet=IUPACAmbiguousRNA(), character='N')
 >>> unk_protein = unk_dna.translate()
 >>> unk_protein
-UnknownSeq(6, alphabet = ProteinAlphabet(), character = 'X')
+UnknownSeq(6, alphabet=ProteinAlphabet(), character='X')
 >>> print(unk_protein)
 XXXXXX
 >>> len(unk_protein)
