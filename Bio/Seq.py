@@ -1274,7 +1274,7 @@ class UnknownSeq(Seq):
 
     >>> unk_five = UnknownSeq(5)
     >>> unk_five
-    UnknownSeq(5, alphabet = Alphabet(), character = '?')
+    UnknownSeq(5, alphabet=Alphabet(), character='?')
     >>> len(unk_five)
     5
     >>> print(unk_five)
@@ -1285,16 +1285,16 @@ class UnknownSeq(Seq):
 
     >>> unk_four = UnknownSeq(4)
     >>> unk_four
-    UnknownSeq(4, alphabet = Alphabet(), character = '?')
+    UnknownSeq(4, alphabet=Alphabet(), character='?')
     >>> unk_four + unk_five
-    UnknownSeq(9, alphabet = Alphabet(), character = '?')
+    UnknownSeq(9, alphabet=Alphabet(), character='?')
 
     If the alphabet or characters don't match up, the addition gives an
     ordinary Seq object:
 
-    >>> unk_nnnn = UnknownSeq(4, character = "N")
+    >>> unk_nnnn = UnknownSeq(4, character="N")
     >>> unk_nnnn
-    UnknownSeq(4, alphabet = Alphabet(), character = 'N')
+    UnknownSeq(4, alphabet=Alphabet(), character='N')
     >>> unk_nnnn + unk_four
     Seq('NNNN????', Alphabet())
 
@@ -1345,7 +1345,7 @@ class UnknownSeq(Seq):
 
     def __repr__(self):
         """Return (truncated) representation of the sequence for debugging."""
-        return "UnknownSeq({0}, alphabet = {1!r}, character = {2!r})".format(
+        return "UnknownSeq({0}, alphabet={1!r}, character={2!r})".format(
             self._length, self.alphabet, self._character)
 
     def __add__(self, other):
@@ -1357,7 +1357,7 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import generic_protein
         >>> UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein)
-        UnknownSeq(15, alphabet = ProteinAlphabet(), character = 'X')
+        UnknownSeq(15, alphabet=ProteinAlphabet(), character='X')
 
         If the characters differ, an UnknownSeq object cannot be used, so a
         Seq object is returned:
@@ -1396,9 +1396,9 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import generic_dna
         >>> UnknownSeq(3) * 2
-        UnknownSeq(6, alphabet = Alphabet(), character = '?')
+        UnknownSeq(6, alphabet=Alphabet(), character='?')
         >>> UnknownSeq(3, generic_dna) * 2
-        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply UnknownSeq by non-int type")
@@ -1410,9 +1410,9 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> from Bio.Alphabet import generic_dna
         >>> 2 * UnknownSeq(3)
-        UnknownSeq(6, alphabet = Alphabet(), character = '?')
+        UnknownSeq(6, alphabet=Alphabet(), character='?')
         >>> 2 * UnknownSeq(3, generic_dna)
-        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply UnknownSeq by non-int type")
@@ -1429,7 +1429,7 @@ class UnknownSeq(Seq):
         >>> seq = UnknownSeq(3, generic_dna)
         >>> seq *= 2
         >>> seq
-        UnknownSeq(6, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
             raise TypeError("can't multiply UnknownSeq by non-int type")
@@ -1612,11 +1612,11 @@ class UnknownSeq(Seq):
 
         >>> my_nuc = UnknownSeq(8)
         >>> my_nuc
-        UnknownSeq(8, alphabet = Alphabet(), character = '?')
+        UnknownSeq(8, alphabet=Alphabet(), character='?')
         >>> print(my_nuc)
         ????????
         >>> my_nuc.complement()
-        UnknownSeq(8, alphabet = Alphabet(), character = '?')
+        UnknownSeq(8, alphabet=Alphabet(), character='?')
         >>> print(my_nuc.complement())
         ????????
         """
@@ -1648,12 +1648,12 @@ class UnknownSeq(Seq):
 
         >>> my_dna = UnknownSeq(10, character="N")
         >>> my_dna
-        UnknownSeq(10, alphabet = Alphabet(), character = 'N')
+        UnknownSeq(10, alphabet=Alphabet(), character='N')
         >>> print(my_dna)
         NNNNNNNNNN
         >>> my_rna = my_dna.transcribe()
         >>> my_rna
-        UnknownSeq(10, alphabet = RNAAlphabet(), character = 'N')
+        UnknownSeq(10, alphabet=RNAAlphabet(), character='N')
         >>> print(my_rna)
         NNNNNNNNNN
         """
@@ -1666,12 +1666,12 @@ class UnknownSeq(Seq):
 
         >>> my_rna = UnknownSeq(20, character="N")
         >>> my_rna
-        UnknownSeq(20, alphabet = Alphabet(), character = 'N')
+        UnknownSeq(20, alphabet=Alphabet(), character='N')
         >>> print(my_rna)
         NNNNNNNNNNNNNNNNNNNN
         >>> my_dna = my_rna.back_transcribe()
         >>> my_dna
-        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
         >>> print(my_dna)
         NNNNNNNNNNNNNNNNNNNN
         """
@@ -1686,11 +1686,11 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> my_seq = UnknownSeq(20, generic_dna, character="n")
         >>> my_seq
-        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'n')
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='n')
         >>> print(my_seq)
         nnnnnnnnnnnnnnnnnnnn
         >>> my_seq.upper()
-        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
         >>> print(my_seq.upper())
         NNNNNNNNNNNNNNNNNNNN
 
@@ -1708,11 +1708,11 @@ class UnknownSeq(Seq):
         >>> from Bio.Seq import UnknownSeq
         >>> my_seq = UnknownSeq(20, IUPAC.extended_protein)
         >>> my_seq
-        UnknownSeq(20, alphabet = ExtendedIUPACProtein(), character = 'X')
+        UnknownSeq(20, alphabet=ExtendedIUPACProtein(), character='X')
         >>> print(my_seq)
         XXXXXXXXXXXXXXXXXXXX
         >>> my_seq.lower()
-        UnknownSeq(20, alphabet = ProteinAlphabet(), character = 'x')
+        UnknownSeq(20, alphabet=ProteinAlphabet(), character='x')
         >>> print(my_seq.lower())
         xxxxxxxxxxxxxxxxxxxx
 
@@ -1731,7 +1731,7 @@ class UnknownSeq(Seq):
         NNNNNNNNN
         >>> my_protein = my_seq.translate()
         >>> my_protein
-        UnknownSeq(3, alphabet = ProteinAlphabet(), character = 'X')
+        UnknownSeq(3, alphabet=ProteinAlphabet(), character='X')
         >>> print(my_protein)
         XXX
 
@@ -1762,18 +1762,18 @@ class UnknownSeq(Seq):
         >>> from Bio.Alphabet import Gapped, generic_dna
         >>> my_dna = UnknownSeq(20, Gapped(generic_dna, "-"))
         >>> my_dna
-        UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = 'N')
+        UnknownSeq(20, alphabet=Gapped(DNAAlphabet(), '-'), character='N')
         >>> my_dna.ungap()
-        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
         >>> my_dna.ungap("-")
-        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        UnknownSeq(20, alphabet=DNAAlphabet(), character='N')
 
         If the UnknownSeq is using the gap character, then an empty Seq is
         returned:
 
         >>> my_gap = UnknownSeq(20, Gapped(generic_dna, "-"), character="-")
         >>> my_gap
-        UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = '-')
+        UnknownSeq(20, alphabet=Gapped(DNAAlphabet(), '-'), character='-')
         >>> my_gap.ungap()
         Seq('', DNAAlphabet())
         >>> my_gap.ungap("-")
