@@ -560,7 +560,7 @@ We can access a single \verb|SeqRecord| object via the keys and manipulate the o
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> print(repr(seq_record.seq))
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 \end{verbatim}
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
@@ -692,7 +692,7 @@ As an example, let's use the same GenBank file as before:
 >>> print(seq_record.description)
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 >>> seq_record.seq
-Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
+Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT')
 >>> orchid_dict.close()
 \end{verbatim}
 

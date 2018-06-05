@@ -40,7 +40,7 @@ However, where possible you should specify the alphabet explicitly when creating
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("AGTACACTGGT", IUPAC.unambiguous_dna)
 >>> my_seq
-Seq('AGTACACTGGT', IUPACUnambiguousDNA())
+Seq('AGTACACTGGT')
 >>> my_seq.alphabet
 IUPACUnambiguousDNA()
 \end{verbatim}
@@ -53,7 +53,7 @@ Unless of course, this really is an amino acid sequence:
 >>> from Bio.Alphabet import IUPAC
 >>> my_prot = Seq("AGTACACTGGT", IUPAC.protein)
 >>> my_prot
-Seq('AGTACACTGGT', IUPACProtein())
+Seq('AGTACACTGGT')
 >>> my_prot.alphabet
 IUPACProtein()
 \end{verbatim}
@@ -146,7 +146,7 @@ A more complicated example, let's get a slice of the sequence:
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> my_seq[4:12]
-Seq('GATGGGCC', IUPACUnambiguousDNA())
+Seq('GATGGGCC')
 \end{verbatim}
 
 Two things are interesting to note. First, this follows the normal conventions for Python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in Python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what Python does.
@@ -158,11 +158,11 @@ Also like a Python string, you can do slices with a start, stop and \emph{stride
 %cont-doctest
 \begin{verbatim}
 >>> my_seq[0::3]
-Seq('GCTGTAGTAAG', IUPACUnambiguousDNA())
+Seq('GCTGTAGTAAG')
 >>> my_seq[1::3]
-Seq('AGGCATGCATC', IUPACUnambiguousDNA())
+Seq('AGGCATGCATC')
 >>> my_seq[2::3]
-Seq('TAGCTAAGAC', IUPACUnambiguousDNA())
+Seq('TAGCTAAGAC')
 \end{verbatim}
 
 Another stride trick you might have seen with a Python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
@@ -170,7 +170,7 @@ Another stride trick you might have seen with a Python string is the use of a -1
 %cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
-Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
+Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG')
 \end{verbatim}
 
 \section{Turning Seq objects into strings}
@@ -251,11 +251,18 @@ Here is an example of adding a generic nucleotide sequence to an unambiguous IUP
 >>> nuc_seq = Seq("GATCGATGC", generic_nucleotide)
 >>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> nuc_seq
-Seq('GATCGATGC', NucleotideAlphabet())
+Seq('GATCGATGC')
+>>> nuc_seq.alphabet
+NucleotideAlphabet()
 >>> dna_seq
-Seq('ACGT', IUPACUnambiguousDNA())
->>> nuc_seq + dna_seq
-Seq('GATCGATGCACGT', NucleotideAlphabet())
+Seq('ACGT')
+>>> dna_seq.alphabet
+IUPACUnambiguousDNA()
+>>> mixed_seq = nuc_seq + dna_seq
+>>> mixed_seq
+Seq('GATCGATGCACGT')
+>>> mixed_seq.alphabet
+NucleotideAlphabet()
 \end{verbatim}
 
 You may often have many sequences to add together, which can be done with a for loop like this:
@@ -270,7 +277,7 @@ You may often have many sequences to add together, which can be done with a for 
 ...      concatenated += s
 ...
 >>> concatenated
-Seq('ACGTAACCGGTT', DNAAlphabet())
+Seq('ACGTAACCGGTT')
 \end{verbatim}
 
 Or, a more elegant approach is to the use built in \verb|sum| function with its optional start value argument (which otherwise defaults to zero):
@@ -281,7 +288,7 @@ Or, a more elegant approach is to the use built in \verb|sum| function with its 
 >>> from Bio.Alphabet import generic_dna
 >>> list_of_seqs = [Seq("ACGT", generic_dna), Seq("AACC", generic_dna), Seq("GGTT", generic_dna)]
 >>> sum(list_of_seqs, Seq("", generic_dna))
-Seq('ACGTAACCGGTT', DNAAlphabet())
+Seq('ACGTAACCGGTT')
 \end{verbatim}
 
 Unlike the Python string, the Biopython \verb|Seq| does not (currently) have a \verb|.join| method.
@@ -298,11 +305,11 @@ For example,
 >>> from Bio.Alphabet import generic_dna
 >>> dna_seq = Seq("acgtACGT", generic_dna)
 >>> dna_seq
-Seq('acgtACGT', DNAAlphabet())
+Seq('acgtACGT')
 >>> dna_seq.upper()
-Seq('ACGTACGT', DNAAlphabet())
+Seq('ACGTACGT')
 >>> dna_seq.lower()
-Seq('acgtacgt', DNAAlphabet())
+Seq('acgtacgt')
 \end{verbatim}
 
 These are useful for doing case insensitive matching:
@@ -324,9 +331,14 @@ sequences only, thus:
 >>> from Bio.Alphabet import IUPAC
 >>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> dna_seq
-Seq('ACGT', IUPACUnambiguousDNA())
->>> dna_seq.lower()
-Seq('acgt', DNAAlphabet())
+Seq('ACGT')
+>>> dna_seq.alphabet
+IUPACUnambiguousDNA()
+>>> dna_lower = dna_seq.lower()
+>>> dna_lower
+Seq('acgt')
+>>> dna_lower.alphabet
+DNAAlphabet()
 \end{verbatim}
 
 
@@ -342,11 +354,11 @@ complement of a \verb|Seq| object using its built-in methods:
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> my_seq
-Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
+Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC')
 >>> my_seq.complement()
-Seq('CTAGCTACCCGGATATATCCTAGCTTTTAGCG', IUPACUnambiguousDNA())
+Seq('CTAGCTACCCGGATATATCCTAGCTTTTAGCG')
 >>> my_seq.reverse_complement()
-Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
+Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC')
 \end{verbatim}
 
 As mentioned earlier, an easy way to just reverse a \verb|Seq| object (or a
@@ -355,7 +367,7 @@ Python string) is slice it with -1 step:
 %cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
-Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
+Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG')
 \end{verbatim}
 
 In all of these operations, the alphabet property is maintained. This is very
@@ -407,10 +419,10 @@ Now let's actually get down to doing a transcription in Biopython.  First, let's
 >>> from Bio.Alphabet import IUPAC
 >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
 >>> coding_dna
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 >>> template_dna = coding_dna.reverse_complement()
 >>> template_dna
-Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
+Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT')
 \end{verbatim}
 \noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
@@ -418,10 +430,14 @@ Now let's transcribe the coding strand into the corresponding mRNA, using the \v
 %cont-doctest
 \begin{verbatim}
 >>> coding_dna
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+>>> coding_dna.alphabet
+IUPACUnambiguousDNA()
 >>> messenger_rna = coding_dna.transcribe()
 >>> messenger_rna
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+>>> messenger_rna.alphabet
+IUPACUnambiguousRNA()
 \end{verbatim}
 \noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
 
@@ -429,7 +445,7 @@ If you do want to do a true biological transcription starting with the template 
 %cont-doctest
 \begin{verbatim}
 >>> template_dna.reverse_complement().transcribe()
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
 \end{verbatim}
 
 The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
@@ -439,9 +455,11 @@ The \verb|Seq| object also includes a back-transcription method for going from t
 >>> from Bio.Alphabet import IUPAC
 >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
 >>> messenger_rna
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+>>> messenger_rna.alphabet
+IUPACUnambiguousRNA()
 >>> messenger_rna.back_transcribe()
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 \end{verbatim}
 
 \emph{Note:} The \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
@@ -460,9 +478,12 @@ advantage of one of the \verb|Seq| object's biological methods:
 >>> from Bio.Alphabet import IUPAC
 >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
 >>> messenger_rna
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
->>> messenger_rna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG')
+>>> translation = messenger_rna.translate()
+>>> translation
+Seq('MAIVMGR*KGAR*')
+>>> translation.alphabet
+HasStopCodon(IUPACProtein(), '*')
 \end{verbatim}
 
 You can also translate directly from the coding strand DNA sequence:
@@ -472,9 +493,12 @@ You can also translate directly from the coding strand DNA sequence:
 >>> from Bio.Alphabet import IUPAC
 >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
 >>> coding_dna
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
->>> coding_dna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
+>>> translation = coding_dna.translate()
+>>> translation
+Seq('MAIVMGR*KGAR*')
+>>> translation.alphabet
+HasStopCodon(IUPACProtein(), '*')
 \end{verbatim}
 
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about some optional arguments, including different translation tables (Genetic Codes).
@@ -484,14 +508,14 @@ Suppose we are dealing with a mitochondrial sequence.  We need to tell the trans
 %cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*')
 \end{verbatim}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
 %cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2)
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*')
 \end{verbatim}
 
 Now, you may want to translate the nucleotides up to the first in frame stop codon,
@@ -499,13 +523,13 @@ and then stop (as happens in nature):
 %cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate()
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGR*KGAR*')
 >>> coding_dna.translate(to_stop=True)
-Seq('MAIVMGR', IUPACProtein())
+Seq('MAIVMGR')
 >>> coding_dna.translate(table=2)
-Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+Seq('MAIVMGRWKGAR*')
 >>> coding_dna.translate(table=2, to_stop=True)
-Seq('MAIVMGRWKGAR', IUPACProtein())
+Seq('MAIVMGRWKGAR')
 \end{verbatim}
 \noindent Notice that when you use the \verb|to_stop| argument, the stop codon itself
 is not translated - and the stop symbol is not included at the end of your protein
@@ -515,7 +539,7 @@ You can even specify the stop symbol if you don't like the default asterisk:
 %cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
-Seq('MAIVMGRWKGAR@', HasStopCodon(IUPACProtein(), '@'))
+Seq('MAIVMGRWKGAR@')
 \end{verbatim}
 
 Now, suppose you have a complete coding sequence CDS, which is to say a
@@ -527,22 +551,20 @@ you want (perhaps with the \verb|to_stop| option). However, what if your
 sequence uses a non-standard start codon? This happens a lot in bacteria --
 for example the gene yaaX in \texttt{E. coli} K12:
 
-%TODO - handle line wrapping in doctest?
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
->>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
-...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
-...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
-...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT" + \
+>>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA"
+...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT"
+...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT"
+...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT"
 ...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA",
 ...            generic_dna)
 >>> gene.translate(table="Bacterial")
-Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
-HasStopCodon(ExtendedIUPACProtein(), '*')
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*')
 >>> gene.translate(table="Bacterial", to_stop=True)
-Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
-ExtendedIUPACProtein())
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR')
 \end{verbatim}
 
 \noindent In the bacterial genetic code \texttt{GTG} is a valid start codon,
@@ -550,11 +572,10 @@ and while it does \emph{normally} encode Valine, if used as a start codon it
 should be translated as methionine. This happens if you tell Biopython your
 sequence is a complete CDS:
 
-%TODO - handle line wrapping in doctest?
+%cont-doctest
 \begin{verbatim}
 >>> gene.translate(table="Bacterial", cds=True)
-Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
-ExtendedIUPACProtein())
+Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR')
 \end{verbatim}
 
 In addition to telling Biopython to translate an alternative start codon as
@@ -767,7 +788,9 @@ However, you can convert it into a mutable sequence (a \verb|MutableSeq| object)
 \begin{verbatim}
 >>> mutable_seq = my_seq.tomutable()
 >>> mutable_seq
-MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA')
+>>> mutable_seq.alphabet
+IUPACUnambiguousDNA()
 \end{verbatim}
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
@@ -782,16 +805,16 @@ Either way will give you a sequence object which can be changed:
 %cont-doctest
 \begin{verbatim}
 >>> mutable_seq
-MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA')
 >>> mutable_seq[5] = "C"
 >>> mutable_seq
-MutableSeq('GCCATCGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCATCGTAATGGGCCGCTGAAAGGGTGCCCGA')
 >>> mutable_seq.remove("T")
 >>> mutable_seq
-MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA')
 >>> mutable_seq.reverse()
 >>> mutable_seq
-MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
+MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
 \end{verbatim}
 
 Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
@@ -804,7 +827,9 @@ Once you have finished editing your a \verb|MutableSeq| object, it's easy to get
 \begin{verbatim}
 >>> new_seq = mutable_seq.toseq()
 >>> new_seq
-Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
+Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG')
+>>> new_seq.alphabet
+IUPACUnambiguousDNA()
 \end{verbatim}
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
@@ -838,7 +863,7 @@ the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 >>> from Bio.Alphabet import IUPAC
 >>> unk_dna = UnknownSeq(20, alphabet=IUPAC.ambiguous_dna)
 >>> unk_dna
-UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
+UnknownSeq(20, character='N')
 >>> print(unk_dna)
 NNNNNNNNNNNNNNNNNNNN
 \end{verbatim}
@@ -849,16 +874,16 @@ memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
 %cont-doctest
 \begin{verbatim}
 >>> unk_dna
-UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
+UnknownSeq(20, character='N')
 >>> unk_dna.complement()
-UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
+UnknownSeq(20, character='N')
 >>> unk_dna.reverse_complement()
-UnknownSeq(20, alphabet=IUPACAmbiguousDNA(), character='N')
+UnknownSeq(20, character='N')
 >>> unk_dna.transcribe()
-UnknownSeq(20, alphabet=IUPACAmbiguousRNA(), character='N')
+UnknownSeq(20, character='N')
 >>> unk_protein = unk_dna.translate()
 >>> unk_protein
-UnknownSeq(6, alphabet=ProteinAlphabet(), character='X')
+UnknownSeq(6, character='X')
 >>> print(unk_protein)
 XXXXXX
 >>> len(unk_protein)
