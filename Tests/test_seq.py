@@ -97,13 +97,12 @@ class TestSeq(unittest.TestCase):
 
     def test_repr(self):
         """Test representation of Seq object"""
-        self.assertEqual("Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA())",
-                         repr(self.s))
+        self.assertEqual("Seq('TCAAAAGGATGCATCATG')", repr(self.s))
 
     def test_truncated_repr(self):
         seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
         expected = "Seq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGC" + \
-                   "ATCATG...GGA', IUPACAmbiguousDNA())"
+                   "ATCATG...GGA')"
         self.assertEqual(expected, repr(Seq.Seq(seq, IUPAC.ambiguous_dna)))
 
     def test_length(self):
@@ -633,13 +632,12 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_repr(self):
         self.assertEqual(
-            "MutableSeq('TCAAAAGGATGCATCATG', IUPACAmbiguousDNA())",
-            repr(self.mutable_s))
+            "MutableSeq('TCAAAAGGATGCATCATG')", repr(self.mutable_s))
 
     def test_truncated_repr(self):
         seq = "TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAAAGGA"
         expected = "MutableSeq('TCAAAAGGATGCATCATGTCAAAAGGATGCATCATGTCAAA" + \
-                   "AGGATGCATCATG...GGA', IUPACAmbiguousDNA())"
+                   "AGGATGCATCATG...GGA')"
         self.assertEqual(expected, repr(MutableSeq(seq, IUPAC.ambiguous_dna)))
 
     def test_equal_comparison(self):

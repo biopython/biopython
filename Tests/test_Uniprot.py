@@ -40,7 +40,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.id, "Q91G55")
         self.assertEqual(seq_record.name, "043L_IIV6")
         self.assertEqual(seq_record.description, "Uncharacterized protein 043L")
-        self.assertEqual(repr(seq_record.seq), "Seq('MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKI...IPI', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKI...IPI')")
 
         # self.assertEqual(seq_record.accessions, ['Q91G55']) #seq_record.accessions does not exist
         # self.assertEqual(seq_record.organism_classification, ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo'])
@@ -97,7 +97,7 @@ class TestUniprot(unittest.TestCase):
                          "FMRFamide-like neuropeptides 13")
         self.assertEqual(repr(seq_record.seq),
                          "Seq('MMTSLLTISMFVVAIQAFDSSEIRMLDEQYDTKNPFFQF"
-                         "LENSKRSDRPTRAMD...GRK', ProteinAlphabet())")
+                         "LENSKRSDRPTRAMD...GRK')")
 
         self.assertEqual(len(seq_record.annotations['references']), 7)
         self.assertEqual(seq_record.annotations['references'][5].authors,

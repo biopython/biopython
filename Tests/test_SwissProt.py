@@ -30,7 +30,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "Q13454")
         self.assertEqual(seq_record.name, "N33_HUMAN")
         self.assertEqual(seq_record.description, "N33 PROTEIN.")
-        self.assertEqual(repr(seq_record.seq), "Seq('MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGGGQKKKENLLAEKVE...DFE', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGGGQKKKENLLAEKVE...DFE')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -105,7 +105,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P54101")
         self.assertEqual(seq_record.name, "CSP_MOUSE")
         self.assertEqual(seq_record.description, "CYSTEINE STRING PROTEIN (CSP).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLALKYHPDKNPDNPEAA...GFN', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLALKYHPDKNPDNPEAA...GFN')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -183,7 +183,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P42655")
         self.assertEqual(seq_record.name, "143E_HUMAN")
         self.assertEqual(seq_record.description, "14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIG...ENQ', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIG...ENQ')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -301,7 +301,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P23082")
         self.assertEqual(seq_record.name, "NDOA_PSEPU")
         self.assertEqual(seq_record.description, "NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.")
-        self.assertEqual(repr(seq_record.seq), "Seq('TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYATDNLCTHGSARMSDG...DLS', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYATDNLCTHGSARMSDG...DLS')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -393,7 +393,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P24973")
         self.assertEqual(seq_record.name, "NU3M_BALPH")
         self.assertEqual(seq_record.description, "NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECGFDPMGSARLPFSMK...WAE', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECGFDPMGSARLPFSMK...WAE')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -466,7 +466,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P39896")
         self.assertEqual(seq_record.name, "TCMO_STRGA")
         self.assertEqual(seq_record.description, "TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO (EC 2.1.1.-).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGI...KPR', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGI...KPR')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -535,7 +535,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "O95832")
         self.assertEqual(seq_record.name, "CLD1_HUMAN")
         self.assertEqual(seq_record.description, "CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNIVTAQAMYEGLWMSC...DYV', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNIVTAQAMYEGLWMSC...DYV')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -613,7 +613,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P01892")
         self.assertEqual(seq_record.name, "1A02_HUMAN")
         self.assertEqual(seq_record.description, "HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.")
-        self.assertEqual(repr(seq_record.seq), "Seq('MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDD...CKV', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDD...CKV')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -854,7 +854,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "O23729")
         self.assertEqual(seq_record.name, "CHS3_BROFI")
         self.assertEqual(seq_record.description, "CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -923,7 +923,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "Q13639")
         self.assertEqual(seq_record.name, "5H4_HUMAN")
         self.assertEqual(seq_record.description, "5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIK...SDT', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIK...SDT')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -1031,7 +1031,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P16235")
         self.assertEqual(seq_record.name, "LSHR_RAT")
         self.assertEqual(seq_record.description, "LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R) (LSH-R) (LUTEINIZING HORMONE RECEPTOR).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAG...LTH', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAG...LTH')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -1185,7 +1185,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "Q9Y736")
         self.assertEqual(seq_record.name, "Q9Y736")
         self.assertEqual(seq_record.description, "UBIQUITIN.")
-        self.assertEqual(repr(seq_record.seq), "Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGR...GGN', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGR...GGN')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -1253,7 +1253,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P82909")
         self.assertEqual(seq_record.name, "P82909")
         self.assertEqual(seq_record.description, "MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).")
-        self.assertEqual(repr(seq_record.seq), "Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQH...GPE', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQH...GPE')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -1321,7 +1321,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "P12166")
         self.assertEqual(seq_record.name, "PSBL_ORYSA")
         self.assertEqual(seq_record.description, "PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).")
-        self.assertEqual(repr(seq_record.seq), "Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)
@@ -1482,7 +1482,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.id, "IPI00383150")
         self.assertEqual(seq_record.name, "IPI00383150.2")
         self.assertEqual(seq_record.description, "")
-        self.assertEqual(repr(seq_record.seq), "Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKV...TPC', ProteinAlphabet())")
+        self.assertEqual(repr(seq_record.seq), "Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKV...TPC')")
 
         with open(datafile) as test_handle:
             record = SwissProt.read(test_handle)

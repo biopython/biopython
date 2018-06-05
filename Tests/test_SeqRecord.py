@@ -138,11 +138,11 @@ Database cross-references: TestXRef
 Number of features: 4
 /k=v
 Per letter annotation for: fake
-Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
+Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         self.assertEqual(expected.lstrip(), str(self.record))
 
     def test_repr(self):
-        expected = "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet()), " \
+        expected = "SeqRecord(seq=Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX'), " \
                    "id='TestID', name='TestName', description='TestDescr', dbxrefs=['TestXRef'])"
         self.assertEqual(expected, repr(self.record))
 

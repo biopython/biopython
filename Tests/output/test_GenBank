@@ -1,7 +1,7 @@
 test_GenBank
 Testing parsers...
 ***Record from noref.gb with the FeatureParser
-Seq: Seq('GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA', IUPACAmbiguousDNA())
+Seq: Seq('GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA')
 Id: NM_006141.1
 Name: NM_006141
 Description: Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA
@@ -57,7 +57,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA', IUPACAmbiguousDNA())
+Seq: Seq('AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA')
 Id: X55053.1
 Name: ATCOR66M
 Description: A.thaliana cor6.6 mRNA
@@ -127,7 +127,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA', IUPACAmbiguousDNA())
+Seq: Seq('ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA')
 Id: X62281.1
 Name: ATKIN2
 Description: A.thaliana kin2 gene
@@ -253,7 +253,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC', IUPACAmbiguousDNA())
+Seq: Seq('AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC')
 Id: M81224.1
 Name: BNAKINI
 Description: Rapeseed Kin1 protein (kin1) mRNA, complete cds
@@ -331,7 +331,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC', IUPACAmbiguousDNA())
+Seq: Seq('GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC')
 Id: AJ237582.1
 Name: ARU237582
 Description: Armoracia rusticana csp14 gene (partial), exons 2-3
@@ -421,7 +421,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT', IUPACAmbiguousDNA())
+Seq: Seq('AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT')
 Id: L31939.1
 Name: BRRBIF72
 Description: Brassica rapa (clone bif72) kin mRNA, complete cds
@@ -479,7 +479,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from cor6_6.gb with the FeatureParser
-Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG', IUPACAmbiguousDNA())
+Seq: Seq('ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG')
 Id: AF297471.1
 Name: AF297471
 Description: Brassica napus BN28a (BN28a) gene, complete cds
@@ -553,7 +553,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from iro.gb with the FeatureParser
-Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCT...AAA', IUPACAmbiguousDNA())
+Seq: Seq('CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCT...AAA')
 Id: AL109817.1
 Name: IRO125195
 Description: Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195
@@ -645,7 +645,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from pri1.gb with the FeatureParser
-Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAA...GCA', IUPACAmbiguousDNA())
+Seq: Seq('GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAA...GCA')
 Id: U05344.1
 Name: HUGLUT1
 Description: Human fructose transporter (GLUT5) gene, promoter and exon 1
@@ -723,7 +723,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from arab1.gb with the FeatureParser
-Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT', IUPACAmbiguousDNA())
+Seq: Seq('AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT')
 Id: AC007323.5
 Name: AC007323
 Description: Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence
@@ -1000,7 +1000,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from protein_refseq.gb with the FeatureParser
-Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYR...FQN', IUPACProtein())
+Seq: Seq('MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYR...FQN')
 Id: NP_034640.1
 Name: NP_034640
 Description: interferon beta, fibroblast [Mus musculus]
@@ -1085,7 +1085,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from extra_keywords.gb with the FeatureParser
-Seq: Seq('TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCTGCAGGGTGTGGGAA...TTG', IUPACAmbiguousDNA())
+Seq: Seq('TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCTGCAGGGTGTGGGAA...TTG')
 Id: AL138972.1
 Name: DMBR25B3
 Description: Drosophila melanogaster BAC clone BACR25B3
@@ -1340,7 +1340,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from one_of.gb with the FeatureParser
-Seq: Seq('GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAAACCTACGGCAAGCA...GGC', IUPACAmbiguousDNA())
+Seq: Seq('GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAAACCTACGGCAAGCA...GGC')
 Id: U18266.1
 Name: HSTMPO1
 Description: Human thymopoietin (TMPO) gene, exon 1
@@ -1433,7 +1433,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from NT_019265.gb with the FeatureParser
-Seq: UnknownSeq(1250660, alphabet=IUPACAmbiguousDNA(), character='N')
+Seq: UnknownSeq(1250660, character='N')
 Id: NT_019265.6
 Name: NT_019265
 Description: Homo sapiens chromosome 1 working draft sequence segment
@@ -1513,7 +1513,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from origin_line.gb with the FeatureParser
-Seq: Seq('TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC', IUPACAmbiguousDNA())
+Seq: Seq('TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC')
 Id: NC_002678.1
 Name: NC_002678
 Description: Mesorhizobium loti, complete genome (edited)
@@ -1571,7 +1571,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from blank_seq.gb with the FeatureParser
-Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAV...SDC', IUPACProtein())
+Seq: Seq('MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAV...SDC')
 Id: NP_001832.1
 Name: NP_001832
 Description: cannabinoid receptor 2 (macrophage) [Homo sapiens]
@@ -1670,7 +1670,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from dbsource_wrap.gb with the FeatureParser
-Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDH...RCN', IUPACProtein())
+Seq: Seq('VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDH...RCN')
 Id: P01485
 Name: SCX3_BUTOC
 Description: Neurotoxin III
@@ -1755,7 +1755,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from gbvrl1_start.seq with the FeatureParser
-Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA', IUPACAmbiguousDNA())
+Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA')
 Id: AB000048.1
 Name: AB000048
 Description: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
@@ -1820,7 +1820,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from gbvrl1_start.seq with the FeatureParser
-Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA', IUPACAmbiguousDNA())
+Seq: Seq('ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA')
 Id: AB000049.1
 Name: AB000049
 Description: Feline panleukopenia virus DNA for nonstructural protein 1, complete cds
@@ -1885,7 +1885,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from gbvrl1_start.seq with the FeatureParser
-Seq: Seq('ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA', IUPACAmbiguousDNA())
+Seq: Seq('ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA')
 Id: AB000050.1
 Name: AB000050
 Description: Feline panleukopenia virus DNA for capsid protein 2, complete cds
@@ -1950,7 +1950,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from NC_005816.gb with the FeatureParser
-Seq: Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', IUPACAmbiguousDNA())
+Seq: Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG')
 Id: NC_005816.1
 Name: NC_005816
 Description: Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence
@@ -2352,7 +2352,7 @@ qualifiers:
 
 DB cross refs ['Project:58037']
 ***Record from no_end_marker.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA')
 Id: AB070938.1
 Name: AB070938
 Description: Streptomyces avermitilis melanin biosynthetic gene cluster
@@ -2389,7 +2389,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from wrong_sequence_indent.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA')
 Id: AB070938.1
 Name: AB070938
 Description: Streptomyces avermitilis melanin biosynthetic gene cluster
@@ -2426,7 +2426,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from invalid_locus_line_spacing.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA')
 Id: AB070938.1
 Name: AB070938
 Description: Streptomyces avermitilis melanin biosynthetic gene cluster
@@ -2461,7 +2461,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from empty_feature_qualifier.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA')
 Id: AB070938.1
 Name: AB070938
 Description: Streptomyces avermitilis melanin biosynthetic gene cluster
@@ -2499,7 +2499,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from invalid_misc_feature.gb with the FeatureParser
-Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA')
 Id: AB070938.1
 Name: AB070938
 Description: Streptomyces avermitilis melanin biosynthetic gene cluster
@@ -2536,7 +2536,7 @@ qualifiers:
 
 DB cross refs []
 ***Record from 1MRR_A.gp with the FeatureParser
-Seq: Seq('AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL', IUPACProtein())
+Seq: Seq('AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL')
 Id: 1MRR_A
 Name: 1MRR_A
 Description: Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization
