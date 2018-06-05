@@ -119,24 +119,21 @@ class Seq(object):
         self.alphabet = alphabet  # Seq API requirement
 
     def __repr__(self):
-        """Return (truncated) representation of the sequence for debugging."""
-        if self.alphabet is Alphabet.generic_alphabet:
-            # Default used, we can omit it and simplify the representation
-            a = ""
-        else:
-            a = ", %r" % self.alphabet
+        """Return (truncated) representation of the sequence for debugging.
+
+        Prior to Biopthon 1.72 this output would also report the alphabet.
+        This is now deliberately omitted as it is rarely useful here.
+        """
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
-                                                  str(self)[:54],
-                                                  str(self)[-3:],
-                                                  a)
+            return "{0}('{1}...{2}')".format(self.__class__.__name__,
+                                             str(self)[:54],
+                                             str(self)[-3:])
         else:
-            return '{0}({1!r}{2!s})'.format(self.__class__.__name__,
-                                            self._data,
-                                            a)
+            return '{0}({1!r})'.format(self.__class__.__name__,
+                                       self._data)
 
     def __str__(self):
         """Return the full sequence as a python string, use str(my_seq).
@@ -1381,14 +1378,13 @@ class UnknownSeq(Seq):
         return self._character * self._length
 
     def __repr__(self):
-        """Return (truncated) representation of the sequence for debugging."""
-        if self.alphabet is Alphabet.generic_alphabet:
-            # Default used, we can omit it and simplify the representation
-            a = ""
-        else:
-            a = ", alphabet=%r" % self.alphabet
+        """Return (truncated) representation of the sequence for debugging.
+
+        Prior to Biopthon 1.72 this output would also report the alphabet.
+        This is now deliberately omitted as it is rarely useful here.
+        """
         return "UnknownSeq({0}{1!s}, character={2!r})".format(
-            self._length, a, self._character)
+            self._length, self._character)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence.
@@ -1874,24 +1870,21 @@ class MutableSeq(object):
         self.alphabet = alphabet
 
     def __repr__(self):
-        """Return (truncated) representation of the sequence for debugging."""
-        if self.alphabet is Alphabet.generic_alphabet:
-            # Default used, we can omit it and simplify the representation
-            a = ""
-        else:
-            a = ", %r" % self.alphabet
+        """Return (truncated) representation of the sequence for debugging.
+
+        Prior to Biopthon 1.72 this output would also report the alphabet.
+        This is now deliberately omitted as it is rarely useful here.
+        """
         if len(self) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
-            return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
-                                                  str(self[:54]),
-                                                  str(self[-3:]),
-                                                  a)
+            return "{0}('{1}...{2}')".format(self.__class__.__name__,
+                                             str(self[:54]),
+                                             str(self[-3:]))
         else:
-            return "{0}('{1}'{2!s})".format(self.__class__.__name__,
-                                            str(self),
-                                            a)
+            return "{0}('{1}')".format(self.__class__.__name__,
+                                       str(self))
 
     def __str__(self):
         """Return the full sequence as a python string.
