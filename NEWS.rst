@@ -36,6 +36,9 @@ compile time - only at run time (and only for those modules which use NumPy).
 Seq, UnknownSeq, MutableSeq and derived classes now support integer
 multiplication methods, matching native Python string methods.
 
+Bio.SearchIO is no longer considered experimental, and so it does not raise
+warnings anymore when imported.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
