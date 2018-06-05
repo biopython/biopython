@@ -35,13 +35,15 @@ try:
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
 except ImportError:
-    sys.exit("We need the Python library setuptools to be installed. Try runnning: python -m ensurepip")
+    sys.exit("We need the Python library setuptools to be installed. "
+             "Try runnning: python -m ensurepip")
 
 if "bdist_wheel" in sys.argv:
     try:
-        import wheel
+        import wheel  # noqa: F401
     except ImportError:
-        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work. Try running: pip install wheel")
+        sys.exit("We need both setuptools AND wheel packages installed "
+                 "for bdist_wheel to work. Try running: pip install wheel")
 
 _CHECKED = None
 
@@ -176,8 +178,8 @@ class build_py_biopython(build_py):
         if not check_dependencies_once():
             return
         if is_jython() and "Bio.Restriction" in self.packages:
-            # Evil hack to work on Jython 2.7
-            # This is to avoid java.lang.RuntimeException: Method code too large!
+            # Evil hack to work on Jython 2.7 to avoid
+            # java.lang.RuntimeException: Method code too large!
             # from Bio/Restriction/Restriction_Dictionary.py
             self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
@@ -350,38 +352,30 @@ elif is_ironpython():
     EXTENSIONS = []
 else:
     EXTENSIONS = [
-    Extension('Bio.Align._aligners',
-              ['Bio/Align/_aligners.c'],
-              ),
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              ),
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-              ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-              ),
-    Extension('Bio.motifs._pwm',
-              ["Bio/motifs/_pwm.c"],
-              ),
-    Extension('Bio.Cluster._cluster',
-              ['Bio/Cluster/cluster.c', 'Bio/Cluster/clustermodule.c'],
-              ),
-    Extension('Bio.PDB.kdtrees',
-              ["Bio/PDB/kdtrees.c"],
-              ),
-    Extension('Bio.KDTree._CKDTree',
-              ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"],
-              ),
-    ]
+        Extension('Bio.Align._aligners',
+                  ['Bio/Align/_aligners.c']),
+        Extension('Bio.cpairwise2',
+                  ['Bio/cpairwise2module.c']),
+        Extension('Bio.Nexus.cnexus',
+                  ['Bio/Nexus/cnexus.c']),
+        Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
+                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"]),
+        Extension('Bio.motifs._pwm',
+                  ["Bio/motifs/_pwm.c"]),
+        Extension('Bio.Cluster._cluster',
+                  ['Bio/Cluster/cluster.c', 'Bio/Cluster/clustermodule.c']),
+        Extension('Bio.PDB.kdtrees',
+                  ["Bio/PDB/kdtrees.c"]),
+        Extension('Bio.KDTree._CKDTree',
+                  ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]),
+        ]
     if not is_pypy():
         # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-        extension = Extension('Bio.trie',
-                              ['Bio/triemodule.c', 'Bio/trie.c'],
-                              include_dirs=["Bio"]
-                             )
-        EXTENSIONS.append(extension)
+        EXTENSIONS.extend([
+                Extension('Bio.trie',
+                          ['Bio/triemodule.c', 'Bio/trie.c'],
+                          include_dirs=["Bio"]),
+                ])
 
 
 # We now define the Biopython version number in Bio/__init__.py
@@ -446,7 +440,10 @@ setup(name='biopython',
       packages=PACKAGES,
       ext_modules=EXTENSIONS,
       package_data={
-          'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod', 'XSDs/*.xsd'],
+          'Bio.Entrez': ['DTDs/*.dtd',
+                         'DTDs/*.ent',
+                         'DTDs/*.mod',
+                         'XSDs/*.xsd'],
       },
       install_requires=REQUIRES,
       )
