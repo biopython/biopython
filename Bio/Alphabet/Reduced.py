@@ -38,7 +38,9 @@ or hydrophobic (H) residues:
     >>> for aa in my_protein:
     ...     new_protein += Alphabet.Reduced.hp_model_tab[aa]
     >>> new_protein
-    Seq('HPPPPPHPPHHPHPHPPP', HPModel())
+    Seq('HPPPPPHPPHHPHPHPPP')
+    >>> new_protein.alphabet
+    HPModel()
 
 The following Alphabet classes are available:
 

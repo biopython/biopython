@@ -316,7 +316,7 @@ class SeqFeature(object):
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
         >>> f = SeqFeature(FeatureLocation(8, 15), type="domain")
         >>> f.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
 
         If the FeatureLocation is None, e.g. when parsing invalid locus
         locations in the GenBank parser, extract() will raise a ValueError.
@@ -438,7 +438,7 @@ class SeqFeature(object):
         >>> len(f)
         7
         >>> f.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
         >>> len(f.extract(seq))
         7
 
@@ -1049,7 +1049,7 @@ class FeatureLocation(object):
         >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
         >>> feature_loc = FeatureLocation(8, 15)
         >>> feature_loc.extract(seq)
-        Seq('VALIVIC', ProteinAlphabet())
+        Seq('VALIVIC')
 
         """
         if self.ref or self.ref_db:
@@ -1466,7 +1466,7 @@ class CompoundLocation(object):
         >>> fl2 = FeatureLocation(10, 15)
         >>> fl3 = CompoundLocation([fl1,fl2])
         >>> fl3.extract(seq)
-        Seq('QHKAMILIVIC', ProteinAlphabet())
+        Seq('QHKAMILIVIC')
 
         """
         # This copes with mixed strand features & all on reverse:

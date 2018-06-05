@@ -99,7 +99,7 @@ def read(handle, format):
     >>> with open("motifs/SRF.pfm") as handle:
     ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
-    Seq('GCCCATATATGG', IUPACUnambiguousDNA())
+    Seq('GCCCATATATGG')
 
     Or a single-motif MEME file,
 
@@ -107,7 +107,7 @@ def read(handle, format):
     >>> with open("motifs/meme.out") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+    Seq('CTCAATCGTA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
@@ -128,7 +128,7 @@ def read(handle, format):
     ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
-    Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+    Seq('TCTACGATTGAG')
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
