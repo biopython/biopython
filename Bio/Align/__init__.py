@@ -14,9 +14,12 @@ class, used in the Bio.AlignIO module.
 """
 from __future__ import print_function
 
+import sys  # Only needed to check if we are using Python 2 or 3
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
+
+from Bio.Align import _aligners
 
 
 class MultipleSeqAlignment(object):
@@ -50,6 +53,7 @@ class MultipleSeqAlignment(object):
     7
     >>> for record in align:
     ...     print("%s %i" % (record.id, len(record)))
+    ...
     gi|6273285|gb|AF191659.1|AF191 156
     gi|6273284|gb|AF191658.1|AF191 156
     gi|6273287|gb|AF191661.1|AF191 156
@@ -373,6 +377,7 @@ class MultipleSeqAlignment(object):
         >>> for record in align:
         ...    print(record.id)
         ...    print(record.seq)
+        ...
         Alpha
         ACTGCTAGCTAG
         Beta
@@ -924,6 +929,434 @@ class MultipleSeqAlignment(object):
             self._records.sort(key=lambda r: r.id, reverse=reverse)
         else:
             self._records.sort(key=key, reverse=reverse)
+
+
+class PairwiseAlignment(object):
+    """Represents a pairwise sequence alignment.
+
+    Internally, the pairwise alignment is stored as the path through
+    the traceback matrix, i.e. a tuple of pairs of indices corresponding
+    to the vertices of the path in the traceback matrix.
+    """
+
+    def __init__(self, target, query, path, score):
+        """Initialize a new PairwiseAlignment object.
+
+        Arguments:
+         - target  - The first sequence, as a plain string, without gaps.
+         - query   - The second sequence, as a plain string, without gaps.
+         - path    - The path through the traceback matrix, defining an
+                     alignment.
+         - score   - The alignment score.
+
+        You would normally obtain a PairwiseAlignment object by iterating
+        over a PairwiseAlignments object.
+        """
+        self.target = target
+        self.query = query
+        self.score = score
+        self.path = path
+
+    # For Python2 only
+    def __cmp__(self, other):
+        if self.path < other.path:
+            return -1
+        if self.path > other.path:
+            return +1
+        return 0
+
+    def __eq__(self, other):
+        return self.path == other.path
+
+    def __ne__(self, other):
+        return self.path != other.path
+
+    def __lt__(self, other):
+        return self.path < other.path
+
+    def __le__(self, other):
+        return self.path <= other.path
+
+    def __gt__(self, other):
+        return self.path > other.path
+
+    def __ge__(self, other):
+        return self.path >= other.path
+
+    def __format__(self, format_spec):
+        if format_spec == 'psl':
+            return self._format_psl()
+        return str(self)
+
+    def __str__(self):
+        query = self.query
+        target = self.target
+        try:
+            # check if query is a SeqRecord
+            query = query.seq
+        except AttributeError:
+            # query is a Seq object or a plain string
+            pass
+        try:
+            # check if target is a SeqRecord
+            target = target.seq
+        except AttributeError:
+            # target is a Seq object or a plain string
+            pass
+        seq1 = str(target)
+        seq2 = str(query)
+        n1 = len(seq1)
+        n2 = len(seq2)
+        aligned_seq1 = ""
+        aligned_seq2 = ""
+        pattern = ""
+        path = self.path
+        end1, end2 = path[0]
+        if end1 > 0 or end2 > 0:
+            end = max(end1, end2)
+            aligned_seq1 += "." * (end - end1) + seq1[:end1]
+            aligned_seq2 += "." * (end - end2) + seq2[:end2]
+            pattern += '.' * end
+        start1 = end1
+        start2 = end2
+        for end1, end2 in path[1:]:
+            gap = 0
+            if end1 == start1:
+                gap = end2 - start2
+                aligned_seq1 += '-' * gap
+                aligned_seq2 += seq2[start2:end2]
+                pattern += '-' * gap
+            elif end2 == start2:
+                gap = end1 - start1
+                aligned_seq1 += seq1[start1:end1]
+                aligned_seq2 += '-' * gap
+                pattern += '-' * gap
+            else:
+                s1 = seq1[start1:end1]
+                s2 = seq2[start2:end2]
+                aligned_seq1 += s1
+                aligned_seq2 += s2
+                for c1, c2 in zip(s1, s2):
+                    if c1 == c2:
+                        pattern += '|'
+                    else:
+                        pattern += 'X'
+            start1 = end1
+            start2 = end2
+        n1 -= end1
+        n2 -= end2
+        n = max(n1, n2)
+        aligned_seq1 += seq1[end1:] + '.' * (n - n1)
+        aligned_seq2 += seq2[end2:] + '.' * (n - n2)
+        pattern += '.' * n
+        return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
+
+    def _format_psl(self):
+        query = self.query
+        target = self.target
+        try:
+            Qname = query.id
+        except AttributeError:
+            Qname = "query"
+        else:
+            query = query.seq
+        try:
+            Tname = target.id
+        except AttributeError:
+            Tname = "target"
+        else:
+            target = target.seq
+        seq1 = str(target)
+        seq2 = str(query)
+        n1 = len(seq1)
+        n2 = len(seq2)
+        match = 0
+        mismatch = 0
+        repmatch = 0
+        Ns = 0
+        Qgapcount = 0
+        Qgapbases = 0
+        Tgapcount = 0
+        Tgapbases = 0
+        Qsize = n2
+        Qstart = 0
+        Qend = Qsize
+        Tsize = n1
+        Tstart = 0
+        Tend = Tsize
+        blockSizes = []
+        qStarts = []
+        tStarts = []
+        strand = '+'
+        start1 = 0
+        start2 = 0
+        start1, start2 = self.path[0]
+        for end1, end2 in self.path[1:]:
+            count1 = end1 - start1
+            count2 = end2 - start2
+            if count1 == 0:
+                if start2 == 0:
+                    Qstart += count2
+                elif end2 == n2:
+                    Qend -= count2
+                else:
+                    Qgapcount += 1
+                    Qgapbases += count2
+                start2 = end2
+            elif count2 == 0:
+                if start1 == 0:
+                    Tstart += count1
+                elif end1 == n1:
+                    Tend -= count1
+                else:
+                    Tgapcount += 1
+                    Tgapbases += count1
+                start1 = end1
+            else:
+                assert count1 == count2
+                tStarts.append(start1)
+                qStarts.append(start2)
+                blockSizes.append(count1)
+                for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
+                    if c1 == 'N' or c2 == 'N':
+                        Ns += 1
+                    elif c1 == c2:
+                        match += 1
+                    else:
+                        mismatch += 1
+                start1 = end1
+                start2 = end2
+        blockcount = len(blockSizes)
+        blockSizes = ",".join(map(str, blockSizes)) + ","
+        qStarts = ",".join(map(str, qStarts)) + ","
+        tStarts = ",".join(map(str, tStarts)) + ","
+        words = [str(match),
+                 str(mismatch),
+                 str(repmatch),
+                 str(Ns),
+                 str(Qgapcount),
+                 str(Qgapbases),
+                 str(Tgapcount),
+                 str(Tgapbases),
+                 strand,
+                 Qname,
+                 str(Qsize),
+                 str(Qstart),
+                 str(Qend),
+                 Tname,
+                 str(Tsize),
+                 str(Tstart),
+                 str(Tend),
+                 str(blockcount),
+                 blockSizes,
+                 qStarts,
+                 tStarts,
+                 ]
+        line = "\t".join(words) + "\n"
+        return line
+
+
+class PairwiseAlignments(object):
+    """Implements an iterator over pairwise alignments returned by the aligner.
+
+    This class also supports indexing, which is fast for increasing indices,
+    but may be slow for random access of a large number of alignments.
+
+    Note that pairwise aligners can return an astronomical number of alignments,
+    even for relatively short sequences, if they align poorly to each other. We
+    therefore recommend to first check the number of alignments, accessible as
+    len(alignments), which can be calculated quickly even if the number of
+    alignments is very large.
+    """
+
+    def __init__(self, seqA, seqB, score, paths):
+        """Initialize a new PairwiseAlignments object.
+
+        Arguments:
+         - seqA  - The first sequence, as a plain string, without gaps.
+         - seqB  - The second sequence, as a plain string, without gaps.
+         - score - The alignment score.
+         - paths - An iterator over the paths in the traceback matrix;
+                   each path defines one alignment.
+
+        You would normally obtain an PairwiseAlignments object by calling
+        aligner.align(seqA, seqB), where aligner is a PairwiseAligner object.
+        """
+        self.seqA = seqA
+        self.seqB = seqB
+        self.score = score
+        self.paths = paths
+        self.index = -1
+
+    def __len__(self):
+        return len(self.paths)
+
+    def __getitem__(self, index):
+        if index == self.index:
+            return self.alignment
+        if index < self.index:
+            self.paths.reset()
+            self.index = -1
+        while self.index < index:
+            try:
+                alignment = next(self)
+            except StopIteration:
+                raise IndexError('index out of range')
+        return alignment
+
+    def __iter__(self):
+        self.paths.reset()
+        self.index = -1
+        return self
+
+    def __next__(self):
+        path = next(self.paths)
+        self.index += 1
+        alignment = PairwiseAlignment(self.seqA, self.seqB, path, self.score)
+        self.alignment = alignment
+        return alignment
+
+    if sys.version_info[0] < 3:  # Python 2
+        next = __next__
+
+
+class PairwiseAligner(_aligners.PairwiseAligner):
+    """Performs pairwise sequence alignment using dynamic programming.
+
+    This provides functions to get global and local alignments between two
+    sequences.  A global alignment finds the best concordance between all
+    characters in two sequences.  A local alignment finds just the
+    subsequences that align the best.
+
+    To perform a pairwise sequence alignment, first create a PairwiseAligner
+    object.  This object stores the match and mismatch scores, as well as the
+    gap scores.  Typically, match scores are positive, while mismatch scores
+    and gap scores are negative or zero.  By default, the match score is 1,
+    and the mismatch and gap scores are zero.  Based on the values of the gap
+    scores, a PairwiseAligner object automatically chooses the appropriate
+    alignment algorithm (the Needleman-Wunsch, Smith-Waterman, Gotoh, or
+    Waterman-Smith-Beyer global or local alignment algorithm).
+
+    Calling the "score" method on the aligner with two sequences as arguments
+    will calculate the alignment score between the two sequences.
+    Calling the "align" method on the aligner with two sequences as arguments
+    will return a generator yielding the alignments between the two
+    sequences.
+
+    Some examples:
+
+    >>> from Bio import Align
+    >>> aligner = Align.PairwiseAligner()
+    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> for alignment in sorted(alignments):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 3.0:
+    ACCGT
+    |-||-
+    A-CG-
+    <BLANKLINE>
+    Score = 3.0:
+    ACCGT
+    ||-|-
+    AC-G-
+    <BLANKLINE>
+
+    Specify the aligner mode as local to generate local alignments:
+
+    >>> aligner.mode = 'local'
+    >>> alignments = aligner.align("ACCGT", "ACG")
+    >>> for alignment in sorted(alignments):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 3.0:
+    ACCGT
+    |-||.
+    A-CG.
+    <BLANKLINE>
+    Score = 3.0:
+    ACCGT
+    ||-|.
+    AC-G.
+    <BLANKLINE>
+
+    Do a global alignment.  Identical characters are given 2 points,
+    1 point is deducted for each non-identical character.
+
+    >>> aligner.mode = 'global'
+    >>> aligner.match = 2
+    >>> aligner.mismatch = -1
+    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 6.0:
+    ACCGT
+    ||-|-
+    AC-G-
+    <BLANKLINE>
+    Score = 6.0:
+    ACCGT
+    |-||-
+    A-CG-
+    <BLANKLINE>
+
+    Same as above, except now 0.5 points are deducted when opening a
+    gap, and 0.1 points are deducted when extending it.
+
+    >>> aligner.open_gap_score = -0.5
+    >>> aligner.extend_gap_score = -0.1
+    >>> aligner.target_end_gap_score = 0.0
+    >>> aligner.query_end_gap_score = 0.0
+    >>> for alignment in aligner.align("ACCGT", "ACG"):
+    ...     print("Score = %.1f:" % alignment.score)
+    ...     print(alignment)
+    ...
+    Score = 5.5:
+    ACCGT
+    |-||-
+    A-CG-
+    <BLANKLINE>
+    Score = 5.5:
+    ACCGT
+    ||-|-
+    AC-G-
+    <BLANKLINE>
+
+    The alignment function can also use known matrices already included in
+    Biopython:
+
+    >>> from Bio.SubsMat import MatrixInfo
+    >>> aligner = Align.PairwiseAligner()
+    >>> aligner.substitution_matrix = MatrixInfo.blosum62
+    >>> alignments = aligner.align("KEVLA", "EVL")
+    >>> alignments = list(alignments)
+    >>> print("Number of alignments: %d" % len(alignments))
+    Number of alignments: 1
+    >>> alignment = alignments[0]
+    >>> print("Score = %.1f" % alignment.score)
+    Score = 13.0
+    >>> print(alignment)
+    KEVLA
+    -|||-
+    -EVL-
+    <BLANKLINE>
+
+    """
+
+    def align(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
+        alignments = PairwiseAlignments(seqA, seqB, score, paths)
+        return alignments
+
+    def score(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        return _aligners.PairwiseAligner.score(self, seqA, seqB)
 
 
 if __name__ == "__main__":

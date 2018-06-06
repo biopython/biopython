@@ -350,6 +350,9 @@ elif is_ironpython():
     EXTENSIONS = []
 else:
     EXTENSIONS = [
+    Extension('Bio.Align._aligners',
+              ['Bio/Align/_aligners.c'],
+              ),
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c'],
               ),
