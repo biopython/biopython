@@ -39,6 +39,9 @@ multiplication methods, matching native Python string methods.
 Bio.SearchIO is no longer considered experimental, and so it does not raise
 warnings anymore when imported.
 
+A new pairwise sequence aligner is available in Bio.Align, as an alternative
+to the existing pairwise sequence aligner in Bio.pairwise2.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
