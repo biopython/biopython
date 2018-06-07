@@ -96,6 +96,7 @@ osx_clang_fix()
 
 
 def is_pypy():
+    """Check if running under the PyPy implementation of Python."""
     import platform
     try:
         if platform.python_implementation() == 'PyPy':
@@ -107,6 +108,7 @@ def is_pypy():
 
 
 def is_jython():
+    """Check if running under the Jython implementation of Python."""
     import platform
     try:
         if platform.python_implementation() == 'Jython':
@@ -119,6 +121,7 @@ def is_jython():
 
 
 def is_ironpython():
+    """Check if running under the IronPython implementation of Python."""
     return sys.platform == "cli"
     # TODO - Use platform as in Pypy test?
 
@@ -138,6 +141,7 @@ if is_jython():
 
 
 def check_dependencies_once():
+    """Check dependencies, will cache and re-use the result."""
     # Call check_dependencies, but cache the result for subsequent
     # calls.
     global _CHECKED
@@ -168,13 +172,17 @@ class install_biopython(install):
     """
 
     def run(self):
+        """Run the installation."""
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
 
 
 class build_py_biopython(build_py):
+    """Biopython builder."""
+
     def run(self):
+        """Run the build."""
         if not check_dependencies_once():
             return
         if is_jython() and "Bio.Restriction" in self.packages:
@@ -191,7 +199,10 @@ class build_py_biopython(build_py):
 
 
 class build_ext_biopython(build_ext):
+    """Biopython extension builder."""
+
     def run(self):
+        """Run the build."""
         if not check_dependencies_once():
             return
         build_ext.run(self)
@@ -208,16 +219,20 @@ class test_biopython(Command):
     python setup.py test
 
     """
+
     description = "Automatically run the test suite for Biopython."
     user_options = []
 
     def initialize_options(self):
+        """No-op, initialise options."""
         pass
 
     def finalize_options(self):
+        """No-op, finalise options."""
         pass
 
     def run(self):
+        """Run the tests."""
         this_dir = os.getcwd()
 
         # change to the test dir and run the tests
@@ -231,7 +246,7 @@ class test_biopython(Command):
 
 
 def can_import(module_name):
-    """can_import(module_name) -> module or None"""
+    """Check we can import the requested module."""
     try:
         return __import__(module_name)
     except ImportError:
