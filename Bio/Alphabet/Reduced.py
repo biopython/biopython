@@ -93,7 +93,6 @@ class Murphy15(Alphabet.ProteinAlphabet):
     """
 
     letters = "LCAGSTPFWEDNQKH"
-    size = 1
 
 
 murphy_15 = Murphy15()
@@ -128,7 +127,6 @@ class Murphy10(Alphabet.ProteinAlphabet):
     """
 
     letters = "LCAGSPFEKH"
-    size = 1
 
 
 murphy_10 = Murphy10()
@@ -163,7 +161,6 @@ class Murphy8(Alphabet.ProteinAlphabet):
     """
 
     letters = "LASPFEKH"
-    size = 1
 
 
 murphy_8 = Murphy8()
@@ -197,7 +194,6 @@ class Murphy4(Alphabet.ProteinAlphabet):
     """
 
     letters = "LAFE"
-    size = 1
 
 
 murphy_4 = Murphy4()
@@ -231,7 +227,6 @@ class HPModel(Alphabet.ProteinAlphabet):
     """
 
     letters = "HP"
-    size = 1
 
 
 hp_model = HPModel()
@@ -266,7 +261,6 @@ class PC5(Alphabet.ProteinAlphabet):
     """
 
     letters = "ARCTD"
-    size = 1
 
 
 pc5 = PC5()
