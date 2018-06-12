@@ -159,8 +159,18 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.  Use a backoff delay from 2 - 120 second wait
-    delay = 2.0
+    # Poll NCBI until the results are ready.
+    # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
+    # 1. Do not contact the server more often than once every 10 seconds.
+    # 2. Do not poll for any single RID more often than once a minute.
+    # 3. Use the URL parameter email and tool, so that the NCBI
+    #    can contact you if there is a problem.
+    # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
+    #    on weekdays if more than 50 searches will be submitted.
+    # --
+    # Start with 10s delay, thereafter at least a minute apart.
+    # Following our historic usage, back off to 2 minute delay.
+    delay = 10  # seconds
     previous = time.time()
     while True:
         current = time.time()
@@ -170,9 +180,11 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             previous = current + wait
         else:
             previous = current
-        if delay + .5 * delay <= 120:
-            delay += .5 * delay
-        else:
+        if delay == 10:
+            # Wasn't a quick return, must wait at least a minute
+            delay = 60
+        elif delay == 60:
+            # Be nice and trottle back to every two minutes
             delay = 120
 
         request = _Request(url_base,
