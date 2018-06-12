@@ -146,8 +146,9 @@ The values stored in this key is the list of database names shown in the XML abo
 \end{verbatim}
 
 For each of these databases, we can use EInfo again to obtain more information:
-%cont-doctest
+%doctest
 \begin{verbatim}
+>>> from Bio import Entrez
 >>> handle = Entrez.einfo(db="pubmed")
 >>> record = Entrez.read(handle)
 >>> record["DbInfo"]["Description"]
