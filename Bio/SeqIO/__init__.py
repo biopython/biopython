@@ -474,7 +474,8 @@ def write(sequences, handle, format):
        (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
 
-    You should close the handle after calling this function.
+    Note if providing a file handle, your code should close the handle
+    after calling this function (to ensure the data gets flushed to disk).
 
     Returns the number of records written (as an integer).
     """
