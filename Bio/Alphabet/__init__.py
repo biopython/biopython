@@ -20,9 +20,12 @@ class Alphabet(object):
     Attributes:
         - letters - list-like object containing the letters of the alphabet.
                Usually it is a string when letters are single characters.
+        - size    - size of the alphabet's letters (e.g. 1 when letters are
+               single characters).
 
     """
 
+    size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
     # In general, a list-like object. However,
     # assuming letters are single characters, use a
@@ -83,6 +86,7 @@ generic_alphabet = Alphabet()
 class SingleLetterAlphabet(Alphabet):
     """Generic alphabet with letters of size one."""
 
+    size = 1
     letters = None   # string of all letters in the alphabet
 
 
@@ -146,6 +150,7 @@ class SecondaryStructure(SingleLetterAlphabet):
 class ThreeLetterProtein(Alphabet):
     """Three letter protein alphabet."""
 
+    size = 3
     letters = [
         "Ala", "Asx", "Cys", "Asp", "Glu", "Phe", "Gly", "His", "Ile",
         "Lys", "Leu", "Met", "Asn", "Pro", "Gln", "Arg", "Ser", "Thr",
