@@ -55,10 +55,10 @@ class TestQblast(unittest.TestCase):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
                         10, "pan [ORGN]", {'megablast': 'FALSE'},
-                        ["XM_009432096", "XM_009432102", "XM_009432101",
-                         "XM_016930487", "XM_009432104", "XM_009432099",
-                         "XR_001710553", "XM_016930485", "XM_009432089",
-                         "XM_016930484"])
+                        ["XM_009432096.3", "XM_009432102.3", "XM_009432101.3",
+                         "XM_016930487.2", "XM_009432104.3", "XM_009432099.3",
+                         "XR_001710553.2", "XM_016930485.2", "XM_009432089.3",
+                         "XM_016930484.2"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX
