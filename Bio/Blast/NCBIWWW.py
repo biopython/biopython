@@ -168,9 +168,10 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
     #    on weekdays if more than 50 searches will be submitted.
     # --
-    # Start with 10s delay, thereafter at least a minute apart.
-    # Following our historic usage, back off to 2 minute delay.
-    delay = 10  # seconds
+    # Could start with a 10s delay, but expect most short queries
+    # will take longer thus at least 70s with delay. Therefore,
+    # start with 20s delay, thereafter once a minute.
+    delay = 20  # seconds
     previous = time.time()
     while True:
         current = time.time()
@@ -180,12 +181,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             previous = current + wait
         else:
             previous = current
-        if delay == 10:
+        if delay < 60:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
-        elif delay == 60:
-            # Be nice and trottle back to every two minutes
-            delay = 120
 
         request = _Request(url_base,
                            message,
