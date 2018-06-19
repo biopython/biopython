@@ -55,8 +55,8 @@ else:
 # from CaiIndices import SharpIndex # you can save your dictionary in this file.
 # X.SetCaiIndex(SharpIndex)
 
-infilename = ''
-outfilename = ''
+infilename = 'sample_genes.fas'
+outfilename = 'nRCA_test_output.csv'
   
 #open input and output csv
 outcsvfile = open(outfilename, 'w')
