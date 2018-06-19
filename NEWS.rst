@@ -46,6 +46,9 @@ warnings anymore when imported.
 A new pairwise sequence aligner is available in Bio.Align, as an alternative
 to the existing pairwise sequence aligner in Bio.pairwise2.
 
+The CodonUsage module now supports the normalized Relative Codon Adaptation
+index, in addition to the Codon Adaptation Index.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -55,6 +58,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Connor T. Skennerton
 - Francesco Gastaldello
+- Ivan Erill
 - Michiel de Hoon
 - Pamela Russell (first contribution)
 - Peter Cock
