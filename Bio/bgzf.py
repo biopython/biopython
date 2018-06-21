@@ -391,18 +391,25 @@ def BgzfBlocks(handle):
     data_start = 0
     while True:
         start_offset = handle.tell()
-        # This may raise StopIteration which is perfect here
-        block_length, data = _load_bgzf_block(handle)
+        try:
+            block_length, data = _load_bgzf_block(handle)
+        except StopIteration:
+            break
         data_len = len(data)
         yield start_offset, block_length, data_start, data_len
         data_start += data_len
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Load the next BGZF block of compressed data (PRIVATE)."""
+    """Load the next BGZF block of compressed data (PRIVATE).
+
+    Returns a tuple (block size and data), or at end of file
+    will raise StopIteration.
+    """
     magic = handle.read(4)
     if not magic:
-        # End of file
+        # End of file - should we signal this differently now?
+        # See https://www.python.org/dev/peps/pep-0479/
         raise StopIteration
     if magic != _bgzf_magic:
         raise ValueError(r"A BGZF (e.g. a BAM file) block should start with "
