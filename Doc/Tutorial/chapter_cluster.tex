@@ -414,7 +414,7 @@ Here, \verb|left| and \verb|right| are integers referring to the two items or su
 
 To create a new \verb|Node| object, we need to specify \verb|left| and \verb|right|; \verb|distance| is optional.
 
-%doctest
+%doctest . lib:numpy
 \begin{verbatim}
 >>> from Bio.Cluster import Node
 >>> Node(2, 3)
@@ -438,7 +438,7 @@ An error is raised if \verb|left| and \verb|right| are not integers, or if \verb
 
 The Python class \verb|Tree| represents a full hierarchical clustering solution. A \verb|Tree| object can be created from a list of \verb|Node| objects:
 
-%doctest
+%doctest . lib:numpy
 \begin{verbatim}
 >>> from Bio.Cluster import Node, Tree
 >>> nodes = [Node(1, 2, 0.2), Node(0, 3, 0.5), Node(-2, 4, 0.6), Node(-1, -3, 0.9)]
