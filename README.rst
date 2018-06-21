@@ -176,10 +176,6 @@ deprecated).
   This will offer to install Apple's XCode development suite - you can, but it
   is not needed and takes a lot of disk space.
 
-- NumPy, see http://www.numpy.org - this package is used in ``Bio.Cluster``,
-  ``Bio.PDB`` and a few other modules. We use the NumPy C API, which means it
-  must be installed *before* compiling Biopython's C code.
-
 Then either download and decompress our source code, or fetch it using git.
 Now change directory to the Biopython source code folder and run::
 
