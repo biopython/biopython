@@ -12,8 +12,15 @@ Bio.Cluster and the underlying C Clustering Library is described in
 M. de Hoon et al. (2004) https://doi.org/10.1093/bioinformatics/bth078
 """
 
-import numpy
 import numbers
+
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Please install numpy if you want to use Bio.Cluster. "
+        "See http://www.numpy.org/")
 
 from . import _cluster
 
