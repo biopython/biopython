@@ -7,7 +7,6 @@
 # get set abstraction for graph representation
 
 from functools import reduce
-from numpy import unique
 
 
 class Graph(object):
@@ -36,9 +35,8 @@ class Graph(object):
         """Return a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
-            temp_list = unique(list(self._adjacency_list[key])).tolist()
             values = sorted([(x, self._edge_map[(key, x)])
-                      for x in temp_list])
+                      for x in list(self._adjacency_list[key])])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
