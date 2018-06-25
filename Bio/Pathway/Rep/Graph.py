@@ -89,7 +89,7 @@ class Graph(object):
 
     def labels(self):
         """Return a list of all the edge labels in this graph."""
-        return list(self._label_map.keys())
+        return sorted(list(self._label_map.keys()))
 
     def nodes(self):
         """Return a list of the nodes in this graph."""
