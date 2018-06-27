@@ -136,7 +136,7 @@ def epost(db, **keywds):
 def efetch(db, **keywords):
     """Fetch Entrez results which are returned as a handle.
 
-    EFetch retrieves records in the requested format from a list of one or
+    EFetch retrieves records in the requested format from a list or set of one or
     more UIs or from user's environment.
 
     See the online documentation for an explanation of the parameters:
@@ -170,7 +170,7 @@ def efetch(db, **keywords):
     except KeyError:
         pass
     else:
-        if isinstance(ids, list):
+        if isinstance(ids, list) or isinstance(ids, set):
             ids = ",".join(ids)
             variables["id"] = ids
         elif isinstance(ids, int):
