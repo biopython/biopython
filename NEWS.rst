@@ -24,7 +24,7 @@ Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
 SeqIO.write (especially when used in a for loop).
 
 The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
-inclusive end co-ordindates to better handle searches at end points. This
+inclusive end co-ordinates to better handle searches at end points. This
 will require you to rebuild any existing MAF index files.
 
 In this release more of our code is now explicitly available under either our
