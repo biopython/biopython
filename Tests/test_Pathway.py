@@ -1,4 +1,5 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2018 by Maximilian Greil. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -69,6 +70,18 @@ class GraphTestCase(unittest.TestCase):
         b.add_edge('a', 'b', 'label5')
         self.assertEqual(a, b)  # , "incorrect node removal")
 
+    def testAdditionalFunctions(self):
+        a = Graph(['a', 'b', 'c'])
+        a.add_edge('a', 'b', 'label1')
+        a.add_edge('b', 'c', 'label1')
+        a.add_edge('b', 'a', 'label2')
+        self.assertTrue(
+            str(a) == "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertTrue(
+            repr(a) == "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
+        self.assertListEqual(a.edges('label1'), [('a', 'b'), ('b', 'c')])
+        self.assertListEqual(a.labels(), ['label1', 'label2'])
+
 
 class MultiGraphTestCase(unittest.TestCase):
 
@@ -136,6 +149,16 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(repr(b), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
         self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)  # , "incorrect node removal")
+
+    def testAdditionalFunctions(self):
+        a = MultiGraph(['a', 'b', 'c'])
+        a.add_edge('a', 'b', 'label1')
+        a.add_edge('b', 'c', 'label1')
+        a.add_edge('b', 'a', 'label2')
+        self.assertTrue(
+            str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertListEqual(a.edges('label1'), [('a', 'b'), ('b', 'c')])
+        self.assertListEqual(a.labels(), ['label1', 'label2'])
 
 
 class ReactionTestCase(unittest.TestCase):
