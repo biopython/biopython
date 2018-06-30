@@ -85,11 +85,11 @@ class Graph(object):
         """Return a list of all the edges with this label."""
         if label not in self._label_map:
             raise ValueError("Unknown label: " + str(label))
-        return sorted(list(self._label_map[label]))
+        return sorted(self._label_map[label])
 
     def labels(self):
         """Return a list of all the edge labels in this graph."""
-        return sorted(list(self._label_map.keys()))
+        return sorted(self._label_map.keys())
 
     def nodes(self):
         """Return a list of the nodes in this graph."""
