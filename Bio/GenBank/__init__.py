@@ -678,6 +678,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or 'linear' in mol_type:
                 raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
+
+            # Writing out records will fail if we have a lower case DNA
+            # or RNA string in here, so upper case it.
+            # This is a bit ugly, but we don't want to upper case e.g.
+            # the m in mRNA, but thanks to the strip we lost the spaces
+            # so we need to index from the back
+            if mol_type[-3:].upper() in ('DNA', 'RNA') and not mol_type[-3:].isupper():
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Non-upper case molecule type in LOCUS line: %s"
+                              % mol_type, BiopythonParserWarning)
+
             self.data.annotations['molecule_type'] = mol_type
 
     def data_file_division(self, division):
