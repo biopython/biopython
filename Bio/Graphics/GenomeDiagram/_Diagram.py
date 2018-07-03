@@ -36,7 +36,7 @@ from Bio.Graphics import _write
 
 
 def _first_defined(*args):
-    """Return the first non-null argument"""
+    """Return the first non-null argument (PRIVATE)."""
     for arg in args:
         if arg is not None:
             return arg
