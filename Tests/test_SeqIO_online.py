@@ -32,7 +32,7 @@ from Bio.File import UndoHandle
 from Bio._py3k import _as_string
 
 # This lets us set the email address to be sent to NCBI Entrez:
-Entrez.email = "biopython-dev@biopython.org"
+Entrez.email = "biopython@biopython.org"
 
 
 class ExPASyTests(unittest.TestCase):

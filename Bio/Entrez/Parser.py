@@ -377,7 +377,7 @@ class DataHandler(object):
                 # We saw the initial <!xml declaration, and expat didn't notice
                 # any errors, so self.record should be defined. If not, this is
                 # a bug.
-                raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+                raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance.")
             else:
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
@@ -407,7 +407,7 @@ class DataHandler(object):
                     # We saw the initial <!xml declaration, and expat
                     # didn't notice any errors, so self.record should be
                     # defined. If not, this is a bug.
-                    raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+                    raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers via the mailing list or GitHub for assistance.")
                 else:
                     # We did not see the initial <!xml declaration, so
                     # probably the input data is not in XML format.

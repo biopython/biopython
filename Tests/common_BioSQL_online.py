@@ -64,7 +64,7 @@ class TaxonomyTest(unittest.TestCase):
         global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
         global SYSTEM, SQL_FILE
 
-        Entrez.email = "biopython-dev@biopython.org"
+        Entrez.email = "biopython@biopython.org"
         # create TESTDB
         TESTDB = create_database()
 
