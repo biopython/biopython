@@ -33,6 +33,7 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 from __future__ import print_function
 
 import warnings
+from datetime import datetime
 from Bio import BiopythonWarning
 
 from Bio.Seq import UnknownSeq
@@ -496,15 +497,17 @@ class GenBankWriter(_InsdcWriter):
         # Cope with a list of one string:
         if isinstance(date, list) and len(date) == 1:
             date = date[0]
-        # TODO - allow a Python date object
-        if not isinstance(date, basestring) or len(date) != 11 \
-            or date[2] != "-" or date[6] != "-" \
-            or not date[:2].isdigit() or not date[7:].isdigit() \
-            or int(date[:2]) > 31 \
-            or date[3:6] not in ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-                                 "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]:
-            # TODO - Check is a valid date (e.g. not 31 Feb)
+        if isinstance(date, datetime):
+            date = date.strftime("%d-%b-%Y").upper()
+
+        months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+        if not isinstance(date, basestring) or len(date) != 11:
             return default
+        try:
+            datetime(int(date[-4:]), months.index(date[3:6]) + 1, int(date[0:2]))
+        except ValueError:
+            date = default
         return date
 
     @staticmethod
