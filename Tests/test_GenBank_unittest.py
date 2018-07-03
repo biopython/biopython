@@ -399,6 +399,36 @@ class OutputTests(unittest.TestCase):
         self.assertEqual("", new.description)
         self.assertEqual(old.seq, new.seq)
 
+    # Evil hack with 000 to manipulate sort order to ensure this is tested
+    # first (otherwise something silences the warning)
+    def test_000_write_invalid_but_parsed_locus_line(self):
+        """Make sure we survive writing slightly invalid LOCUS lines we could parse."""
+        # grab a valid file
+        with open(path.join('GenBank', 'NC_005816.gb'), 'r') as handle:
+            lines = handle.readlines()
+
+        # futz with the molecule type to make it lower case
+        invalid_line = "LOCUS       NC_005816               9609 bp    dna     circular BCT 21-JUL-2008\n"
+        lines[0] = invalid_line
+        fake_handle = StringIO("".join(lines))
+
+        # Make sure parsing this actually raises a warning
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            rec = SeqIO.read(fake_handle, 'genbank')
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(str(caught[0].message), "Non-upper case molecule type in LOCUS line: dna")
+
+        out_handle = StringIO()
+
+        ret = SeqIO.write([rec], out_handle, 'genbank')
+        self.assertEqual(ret, 1)
+
+        out_handle.seek(0)
+        out_lines = out_handle.readlines()
+        self.assertEqual(out_lines[0], invalid_line)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
