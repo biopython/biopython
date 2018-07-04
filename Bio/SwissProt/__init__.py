@@ -4,11 +4,7 @@
 # as part of this package.
 """Code to work with the sprotXX.dat file from SwissProt.
 
-http://www.expasy.ch/sprot/sprot-top.html
-
-Tested with:
-Release 56.9, 03-March-2009.
-
+https://web.expasy.org/docs/userman.html
 
 Classes:
  - Record             Holds SwissProt data.
