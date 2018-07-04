@@ -1113,7 +1113,7 @@ class CompoundLocation(object):
         12
 
         More generally, you can use the compound location's start and end which
-        give the full range covered, 0 <= start <= end <= full sequence length.
+        give the full span covered, 0 <= start <= end <= full sequence length.
 
         >>> f.start == min(f)
         True
