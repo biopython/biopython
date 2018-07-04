@@ -17,9 +17,9 @@ It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Brandon Invergo
 - Kai Blin
 - Maximilian Greil
-- Brandon Invergo
 - Peter Cock
 
 
