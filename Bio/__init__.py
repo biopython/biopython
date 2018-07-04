@@ -84,7 +84,7 @@ class BiopythonDeprecationWarning(BiopythonWarning):
 
     Code marked as deprecated is likely to be removed in a future version
     of Biopython. To avoid removal of this code, please contact the Biopython
-    developers by sending an email mailing list or log an issue on GitHub.
+    developers via the mailing list or GitHub.
     """
 
     pass
