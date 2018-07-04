@@ -376,6 +376,8 @@ class LineOneTests(unittest.TestCase):
              "circular", "DNA", "BCT"),
             ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
              "linear", None, "INV"),
+            ("LOCUS       pEH010                  5743 bp    DNA     circular",
+             "circular", "DNA", None),
         ]
         for (line, topo, mol_type, div) in tests:
             scanner = Scanner.GenBankScanner()

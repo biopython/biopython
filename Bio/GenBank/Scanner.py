@@ -1277,6 +1277,16 @@ class GenBankScanner(InsdcScanner):
             #    67:68      space
             #    68:79      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
+            if len(line) < 79:
+                # JBEI genbank files seem to miss a divison code and date
+                # See issue #1656 e.g.
+                # LOCUS       pEH010                  5743 bp    DNA     circular
+                warnings.warn("Truncated LOCUS line found - is this "
+                              "correct?\n:%r" % line, BiopythonParserWarning)
+                padding_len = 79 - len(line)
+                padding = " " * padding_len
+                line += padding
+
             assert line[40:44] in [' bp ', ' aa ', ' rc '], \
                 'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
@@ -1324,7 +1334,8 @@ class GenBankScanner(InsdcScanner):
 
             consumer.molecule_type(line[44:54].strip())
             consumer.topology(line[55:63].strip())
-            consumer.data_file_division(line[64:67])
+            if line[64:76].strip():
+                consumer.data_file_division(line[64:67])
             if line[68:79].strip():
                 consumer.date(line[68:79])
         elif line[self.GENBANK_INDENT:].strip().count(" ") == 0:
