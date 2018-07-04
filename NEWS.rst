@@ -19,6 +19,7 @@ possible, especially the following contributors:
 
 - Kai Blin
 - Maximilian Greil
+- Brandon Invergo
 - Peter Cock
 
 
