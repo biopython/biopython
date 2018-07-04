@@ -201,6 +201,6 @@ def read(results_file):
                                           multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
-    if len(results) == 0:
+    if not results:
         raise ValueError("Invalid results file")
     return results
