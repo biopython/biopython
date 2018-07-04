@@ -366,33 +366,41 @@ class LineOneTests(unittest.TestCase):
         # This is a bit low level, but can test pasing the LOCUS line only
         tests = [
             ("LOCUS       U00096",
-             None, None, None),
+             None, None, None, None),
             # This example is actually fungal, accession U49845 from Saccharomyces cerevisiae:
             ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999",
-             None, "DNA", "PLN"),
+             None, "DNA", "PLN", None),
             ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001",
-             "linear", "DNA", "BCT"),
+             "linear", "DNA", "BCT", None),
             ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008",
-             "circular", "DNA", "BCT"),
+             "circular", "DNA", "BCT", None),
             ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
-             "linear", None, "INV"),
+             "linear", None, "INV", None),
             ("LOCUS       pEH010                  5743 bp    DNA     circular",
-             "circular", "DNA", None),
+             "circular", "DNA", None, [BiopythonParserWarning]),
         ]
-        for (line, topo, mol_type, div) in tests:
-            scanner = Scanner.GenBankScanner()
-            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
-            scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get('topology', None)
-            self.assertEqual(t, topo,
-                             "Wrong topology %r not %r from %r" % (t, topo, line))
-            mt = consumer.data.annotations.get('molecule_type', None)
-            self.assertEqual(mt, mol_type,
-                             "Wrong molecule_type %r not %r from %r" %
-                             (mt, mol_type, line))
-            d = consumer.data.annotations.get('data_file_division', None)
-            self.assertEqual(d, div,
-                             "Wrong division %r not %r from %r" % (d, div, line))
+        for (line, topo, mol_type, div, warning_list) in tests:
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                scanner = Scanner.GenBankScanner()
+                consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+                scanner._feed_first_line(consumer, line)
+                t = consumer.data.annotations.get('topology', None)
+                self.assertEqual(t, topo,
+                                 "Wrong topology %r not %r from %r" % (t, topo, line))
+                mt = consumer.data.annotations.get('molecule_type', None)
+                self.assertEqual(mt, mol_type,
+                                 "Wrong molecule_type %r not %r from %r" %
+                                 (mt, mol_type, line))
+                d = consumer.data.annotations.get('data_file_division', None)
+                self.assertEqual(d, div,
+                                 "Wrong division %r not %r from %r" % (d, div, line))
+                if warning_list is None:
+                    self.assertEqual(len(caught), 0)
+                else:
+                    self.assertEqual(len(caught), len(warning_list))
+                    for i, warning_class in enumerate(warning_list):
+                        self.assertEqual(caught[i].category, warning_class)
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
