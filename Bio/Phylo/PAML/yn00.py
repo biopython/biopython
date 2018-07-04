@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2018 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -110,6 +110,9 @@ def read(results_file):
         raise IOError("Results file does not exist.")
     with open(results_file) as handle:
         lines = handle.readlines()
+    if not lines:
+        raise ValueError("Empty results file.  Did YN00 exit successfully?  "
+                         "Run 'Yn00.run()' with 'verbose=True'.")
     for line_num in range(len(lines)):
         line = lines[line_num]
         if "(A) Nei-Gojobori (1986) method" in line:
