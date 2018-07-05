@@ -1,3 +1,7 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Command line wrapper for samtools."""
 # Last Checked with samtools [0.1.20 and 1.2]
 # TODO samtools 1.x has additional options over 0.x which

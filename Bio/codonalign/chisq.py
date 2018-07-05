@@ -1,3 +1,10 @@
+# Copyright 1985, 1987 by Stephen L. Moshier
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+# Cephes Math Library Release 2.0:  April, 1987
+# Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+
 """Python implementation of chisqprob, to avoid SciPy dependency.
 
 Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
@@ -5,9 +12,6 @@ Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 
 import math
 
-# Cephes Math Library Release 2.0:  April, 1987
-# Copyright 1985, 1987 by Stephen L. Moshier
-# Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 MACHEP = 0.0000001     # the machine roundoff error / tolerance
 BIG = 4.503599627370496e15
 BIGINV = 2.22044604925031308085e-16
