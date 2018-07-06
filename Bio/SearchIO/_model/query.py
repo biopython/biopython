@@ -233,7 +233,7 @@ class QueryResult(_BaseSearchObject):
 
         def iterhits(self):
             """Return an iterator over the Hit objects."""
-            for hit in self._items.itervalues():
+            for hit in self._items.itervalues():  # noqa: B301
                 yield hit
 
         def iterhit_keys(self):
@@ -243,7 +243,7 @@ class QueryResult(_BaseSearchObject):
 
         def iteritems(self):
             """Return an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():
+            for item in self._items.iteritems():  # noqa: B301
                 yield item
 
     else:
