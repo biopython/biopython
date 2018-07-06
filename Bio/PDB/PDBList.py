@@ -83,11 +83,18 @@ class PDBList(object):
     http://www.pdb.org/.
     """
 
-    def __init__(self, server='ftp://ftp.wwpdb.org', pdb=os.getcwd(),
+    def __init__(self, server='ftp://ftp.wwpdb.org', pdb=None,
                  obsolete_pdb=None, verbose=True):
-        """Initialize the class with the default server or a custom one."""
+        """Initialize the class with the default server or a custom one.
+
+        Argument pdb is the local path to use, defaulting to the current
+        directory at the moment of initialisation.
+        """
         self.pdb_server = server  # remote pdb server
-        self.local_pdb = pdb  # local pdb file tree
+        if pdb:
+            self.local_pdb = pdb  # local pdb file tree
+        else:
+            self.local_pdb = os.getcwd()
 
         # enable or disable verbose
         self._verbose = verbose
