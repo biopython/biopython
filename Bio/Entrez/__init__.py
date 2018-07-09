@@ -170,12 +170,12 @@ def efetch(db, **keywords):
     except KeyError:
         pass
     else:
-        if isinstance(ids, list) or isinstance(ids, set):
+        try:
             ids = ",".join(ids)
-            variables["id"] = ids
-        elif isinstance(ids, int):
-            ids = str(ids)
-            variables["id"] = ids
+        except TypeError:
+            if isinstance(ids, int):
+                ids = str(ids)
+        variables["id"] = ids
 
         if ids.count(",") >= 200:
             # NCBI prefers an HTTP POST instead of an HTTP GET if there are

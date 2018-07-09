@@ -84,7 +84,7 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_parse_from_url(self):
         """Test Entrez.parse from URL"""
-        handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
+        handle = Entrez.efetch(db='protein', id={15718680, 157427902, 119703751},
                                retmode='xml')
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
