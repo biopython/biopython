@@ -1,7 +1,5 @@
-# Copyright Yair Benita Y.Benita@pharm.uu.nl. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright Yair Benita Y.Benita@pharm.uu.nl
+# Biopython (http://biopython.org) license applies
 
 """Calculate isoelectric points of polypeptides using methods of Bjellqvist.
 
