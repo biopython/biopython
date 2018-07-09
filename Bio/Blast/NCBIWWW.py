@@ -80,7 +80,6 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
-
     programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
     if program not in programs:
         raise ValueError("Program specified is %s. Expected one of %s"
@@ -184,7 +183,6 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
-    qblast.previous = time.time()
     while True:
         current = time.time()
         wait = qblast.previous + delay - current
@@ -217,6 +215,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             break
 
     return StringIO(results)
+
+
 qblast.previous = time.time()
 
 
