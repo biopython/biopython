@@ -1,7 +1,9 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SearchIO parser for BLAST+ XML output formats."""
 # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
@@ -235,7 +237,7 @@ class BlastXmlParser(object):
             yield qresult
 
     def _parse_preamble(self):
-        """Parse all tag data prior to the first query result."""
+        """Parse all tag data prior to the first query result (PRIVATE)."""
         # dictionary for containing all information prior to the first query
         meta = {}
         # dictionary for fallback information
@@ -280,7 +282,7 @@ class BlastXmlParser(object):
         return meta, fallback
 
     def _parse_qresult(self):
-        """Parse query results."""
+        """Parse query results (PRIVATE)."""
         # parse the queries
         for event, qresult_elem in self.xml_iter:
             # </Iteration> marks the end of a single query
@@ -501,8 +503,7 @@ class BlastXmlParser(object):
                     setattr(frag, val_info[0], value)
 
             # set the similarity characters into aln_annotation dict
-            frag.aln_annotation['similarity'] = \
-                    hsp_frag_elem.findtext('Hsp_midline')
+            frag.aln_annotation['similarity'] = hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
             # since 'x-from' could be bigger than 'x-to', we need to figure
@@ -762,7 +763,7 @@ class BlastXmlWriter(object):
             self.frag_counter
 
     def _write_elem_block(self, block_name, map_name, obj, opt_dict=None):
-        """Write sibling XML elements.
+        """Write sibling XML elements (PRIVATE).
 
         :param block_name: common element name prefix
         :type block_name: string
@@ -791,7 +792,7 @@ class BlastXmlWriter(object):
                 self.xml.simpleElement(elem, content)
 
     def _write_preamble(self, qresult):
-        """Write the XML file preamble."""
+        """Write the XML file preamble (PRIVATE)."""
         xml = self.xml
 
         for elem, attr in _WRITE_MAPS['preamble']:
@@ -819,14 +820,14 @@ class BlastXmlWriter(object):
                 xml.simpleElement(elem, content)
 
     def _write_param(self, qresult):
-        """Write the parameter block of the preamble."""
+        """Write the parameter block of the preamble (PRIVATE)."""
         xml = self.xml
         xml.startParent('Parameters')
         self._write_elem_block('Parameters_', 'param', qresult)
         xml.endParent()
 
     def _write_qresults(self, qresults):
-        """Write QueryResult objects into iteration elements."""
+        """Write QueryResult objects into iteration elements (PRIVATE)."""
         xml = self.xml
 
         for num, qresult in enumerate(qresults):
@@ -864,7 +865,7 @@ class BlastXmlWriter(object):
             xml.endParent()
 
     def _write_hits(self, hits):
-        """Write Hit objects."""
+        """Write Hit objects (PRIVATE)."""
         xml = self.xml
 
         for num, hit in enumerate(hits):
@@ -896,7 +897,7 @@ class BlastXmlWriter(object):
             xml.endParents(2)
 
     def _write_hsps(self, hsps):
-        """Write HSP objects."""
+        """Write HSP objects (PRIVATE)."""
         xml = self.xml
         for num, hsp in enumerate(hsps):
             xml.startParent('Hsp')

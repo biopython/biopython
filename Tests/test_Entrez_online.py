@@ -12,6 +12,11 @@ results are parseable. Detailed tests on each Entrez service are not within the
 scope of this file as they are already covered in test_Entrez.py.
 
 """
+from Bio import Entrez
+from Bio import Medline
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+
 import doctest
 import os
 import locale
@@ -20,11 +25,6 @@ import unittest
 
 import requires_internet
 requires_internet.check()
-
-from Bio import Entrez
-from Bio import Medline
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
 
 if os.name == 'java':
     try:
@@ -37,14 +37,36 @@ if os.name == 'java':
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
-Entrez.email = "biopython-dev@biopython.org"
+Entrez.email = "biopython@biopython.org"
+Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 URL_HEAD = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
-URL_EMAIL = "email=biopython-dev%40biopython.org"
+URL_EMAIL = "email=biopython%40biopython.org"
+URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 
 class EntrezOnlineCase(unittest.TestCase):
+
+    def test_no_api_key(self):
+        """Test Entrez.read without API key."""
+        cached = Entrez.api_key
+        Entrez.api_key = None  # default
+        try:
+            handle = Entrez.einfo()
+        finally:
+            # Do not want any failure here to break other tests
+            Entrez.api_key = cached
+        self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
+        self.assertIn(URL_TOOL, handle.url)
+        self.assertIn(URL_EMAIL, handle.url)
+        self.assertNotIn("api_key=", handle.url)
+        rec = Entrez.read(handle)
+        handle.close()
+        self.assertTrue(isinstance(rec, dict))
+        self.assertIn('DbList', rec)
+        # arbitrary number, just to make sure that DbList has contents
+        self.assertTrue(len(rec['DbList']) > 5)
 
     def test_read_from_url(self):
         """Test Entrez.read from URL"""
@@ -52,6 +74,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         rec = Entrez.read(handle)
         handle.close()
         self.assertTrue(isinstance(rec, dict))
@@ -66,6 +89,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=15718680%2C157427902%2C119703751", handle.url)
         recs = list(Entrez.parse(handle))
         handle.close()
@@ -81,6 +105,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=22347800%2C48526535", handle.url)
         recs = Entrez.read(handle)
         handle.close()
@@ -95,6 +120,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "esearch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         search_record = Entrez.read(handle)
         handle.close()
         self.assertEqual(2, len(search_record['IdList']))
@@ -106,6 +132,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=186972394", handle.url)
         record = SeqIO.read(handle, 'genbank')
         handle.close()
@@ -120,6 +147,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=19304878", handle.url)
         record = Medline.read(handle)
         handle.close()
@@ -152,6 +180,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=15718680%2C157427902%2C119703751", handle.url)
         handle.close()
 
@@ -161,6 +190,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(handle.url.startswith(URL_HEAD + "elink.fcgi"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
         self.assertIn(URL_EMAIL, handle.url)
+        self.assertIn(URL_API_KEY, handle.url)
         self.assertIn("id=15718680", handle.url)
         self.assertIn("id=157427902", handle.url)
         self.assertIn("id=119703751", handle.url)
@@ -224,6 +254,7 @@ class EntrezOnlineCase(unittest.TestCase):
             self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
             self.assertIn(URL_TOOL, handle.url)
             self.assertIn(URL_EMAIL, handle.url)
+            self.assertIn(URL_API_KEY, handle.url)
             self.assertIn("id=200079209", handle.url)
             result = handle.read()
             expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
@@ -232,16 +263,14 @@ class EntrezOnlineCase(unittest.TestCase):
         finally:
             locale.setlocale(locale.LC_ALL, oldloc)
 
-
-# NCBI XML does not currently match the XSD file
-#    def test_fetch_xml_schemas(self):
-#        handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
-#        records = list(Entrez.parse(handle, validate=False))
-#        handle.close()
-#        self.assertEqual(len(records), 1)
-#        self.assertIn("Product", records[0])
-#        self.assertIn("Statistics", records[0])
-#        self.assertIn("RedundantGiList", records[0])
+    def test_fetch_xml_schemas(self):
+        handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
+        records = list(Entrez.parse(handle, validate=False))
+        handle.close()
+        self.assertEqual(len(records), 1)
+        self.assertIn("Product", records[0])
+        self.assertIn("Statistics", records[0])
+        self.assertIn("ProteinList", records[0])
 
 
 if __name__ == "__main__":

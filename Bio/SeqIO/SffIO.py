@@ -254,7 +254,7 @@ _flag = b"\xff"
 
 
 def _check_mode(handle):
-    """Ensure handle not opened in text mode.
+    """Ensure handle not opened in text mode (PRIVATE).
 
     Ensures mode is not set for Universal new line
     and ensures mode is binary for Windows
@@ -354,9 +354,9 @@ def _sff_file_header(handle):
         warnings.warn("Your SFF file is invalid, post header %i byte "
                       "null padding region contained data." % padding,
                       BiopythonParserWarning)
-    return header_length, index_offset, index_length, \
-           number_of_reads, number_of_flows_per_read, \
-           flow_chars, key_sequence
+    return (header_length, index_offset, index_length,
+            number_of_reads, number_of_flows_per_read,
+            flow_chars, key_sequence)
 
 
 def _sff_do_slow_index(handle):
@@ -474,10 +474,10 @@ def _sff_find_roche_index(handle):
         if index_length != fmt_size + fmt2_size + xml_size + data_size:
             raise ValueError("Problem understanding .mft index header, %i != %i + %i + %i + %i"
                              % (index_length, fmt_size, fmt2_size, xml_size, data_size))
-        return number_of_reads, header_length, \
-               index_offset, index_length, \
-               index_offset + fmt_size + fmt2_size, xml_size, \
-               index_offset + fmt_size + fmt2_size + xml_size, data_size
+        return (number_of_reads, header_length,
+                index_offset, index_length,
+                index_offset + fmt_size + fmt2_size, xml_size,
+                index_offset + fmt_size + fmt2_size + xml_size, data_size)
     elif magic_number == _srt:  # 779317876
         # Roche 454 sorted index
         # I've had this from Roche tool sfffile when the read identifiers
@@ -490,10 +490,10 @@ def _sff_find_roche_index(handle):
         if data != _null * 4:
             raise ValueError(
                 "Did not find expected null four bytes in .srt index")
-        return number_of_reads, header_length, \
-               index_offset, index_length, \
-               0, 0, \
-               index_offset + fmt_size + 4, index_length - fmt_size - 4
+        return (number_of_reads, header_length,
+                index_offset, index_length,
+                0, 0,
+                index_offset + fmt_size + 4, index_length - fmt_size - 4)
     elif magic_number == _hsh:
         raise ValueError("Hash table style indexes (.hsh) in SFF files are "
                          "not (yet) supported")
@@ -706,7 +706,7 @@ _powers_of_36 = [36 ** i for i in range(6)]
 
 
 def _string_as_base_36(string):
-    """Interpret a string as a base-36 number as per 454 manual."""
+    """Interpret a string as a base-36 number as per 454 manual (PRIVATE)."""
     total = 0
     for c, power in zip(string[::-1], _powers_of_36):
         # For reference: ord('0') = 48, ord('9') = 57
@@ -726,7 +726,7 @@ def _string_as_base_36(string):
 
 
 def _get_read_xy(read_name):
-    """Extract coordinates from last 5 characters of read name."""
+    """Extract coordinates from last 5 characters of read name (PRIVATE)."""
     number = _string_as_base_36(read_name[9:])
     return divmod(number, 4096)
 
@@ -739,7 +739,7 @@ _time_denominators = [13 * 32 * 24 * 60 * 60,
 
 
 def _get_read_time(read_name):
-    """Extract time from first 6 characters of read name."""
+    """Extract time from first 6 characters of read name (PRIVATE)."""
     time_list = []
     remainder = _string_as_base_36(read_name[:6])
     for denominator in _time_denominators:
@@ -751,7 +751,7 @@ def _get_read_time(read_name):
 
 
 def _get_read_region(read_name):
-    """Extract region from read name."""
+    """Extract region from read name (PRIVATE)."""
     return int(read_name[8])
 
 
@@ -1136,8 +1136,10 @@ class SffWriter(SequenceWriter):
             off3 -= off2
             assert offset == off0 + off1 + off2 + off3, \
                 "%i -> %i %i %i %i" % (offset, off0, off1, off2, off3)
-            off3, off2, off1, off0 = off3 // 16581375, off2 // 65025, \
-                                     off1 // 255, off0
+            off3, off2, off1, off0 = (off3 // 16581375,
+                                      off2 // 65025,
+                                      off1 // 255,
+                                      off0)
             assert off0 < 255 and off1 < 255 and off2 < 255 and off3 < 255, \
                 "%i -> %i %i %i %i" % (offset, off0, off1, off2, off3)
             handle.write(name + struct.pack(fmt2, 0,
@@ -1301,10 +1303,10 @@ class SffWriter(SequenceWriter):
         read_flow_fmt = ">%iH" % self._number_of_flows_per_read
         read_flow_size = struct.calcsize(read_flow_fmt)
         temp_fmt = ">%iB" % seq_len  # used for flow index and quals
-        data += struct.pack(read_flow_fmt, *flow_values) \
-                + struct.pack(temp_fmt, *flow_index) \
-                + seq \
-                + struct.pack(temp_fmt, *quals)
+        data += (struct.pack(read_flow_fmt, *flow_values)
+                 + struct.pack(temp_fmt, *flow_index)
+                 + seq
+                 + struct.pack(temp_fmt, *quals))
         # now any final padding...
         padding = (read_flow_size + seq_len * 3) % 8
         if padding:

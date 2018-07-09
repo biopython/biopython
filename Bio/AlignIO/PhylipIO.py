@@ -145,7 +145,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                         break
                 handle.write("\n")
             block += 1
-            if block * 50 > length_of_seqs:
+            if block * 50 >= length_of_seqs:
                 break
             handle.write("\n")
 

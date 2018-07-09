@@ -9,6 +9,14 @@
 import unittest
 import warnings
 
+try:
+    import numpy
+    del numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.PDB.")
+
 from Bio import BiopythonDeprecationWarning
 
 

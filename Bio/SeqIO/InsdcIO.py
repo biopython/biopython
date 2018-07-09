@@ -1,9 +1,9 @@
 # Copyright 2007-2016 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package..
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "genbank" and "embl" file formats.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -33,6 +33,7 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 from __future__ import print_function
 
 import warnings
+from datetime import datetime
 from Bio import BiopythonWarning
 
 from Bio.Seq import UnknownSeq
@@ -271,8 +272,8 @@ def _insdc_location_string(location, rec_length):
         if location.strand == -1:
             # Special case, put complement outside the join/order/... and reverse order
             return "complement(%s(%s))" % (location.operator,
-                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length)
-                            for p in parts[::-1]))
+                                           ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(p, rec_length)
+                                                    for p in parts[::-1]))
         else:
             return "%s(%s)" % (location.operator,
                                ",".join(_insdc_location_string(p, rec_length) for p in parts))
@@ -334,7 +335,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
     def _wrap_location(self, location):
-        """Split a feature location into lines (break at commas)."""
+        """Split a feature location into lines (break at commas) (PRIVATE)."""
         # TODO - Rewrite this not to recurse!
         length = self.MAX_WIDTH - self.QUALIFIER_INDENT
         if len(location) <= length:
@@ -350,7 +351,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             self._wrap_location(location[index + 1:])
 
     def _write_feature(self, feature, record_length):
-        """Write a single SeqFeature object to features table."""
+        """Write a single SeqFeature object to features table (PRIVATE)."""
         assert feature.type, feature
         location = _insdc_location_string(feature.location, record_length)
         f_type = feature.type.replace(" ", "_")
@@ -369,7 +370,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _get_annotation_str(record, key, default=".", just_first=False):
-        """Get an annotation dictionary entry (as a string).
+        """Get an annotation dictionary entry (as a string) (PRIVATE).
 
         Some entries are lists, in which case if just_first=True the first entry
         is returned.  If just_first=False (default) this verifies there is only
@@ -388,7 +389,7 @@ class _InsdcWriter(SequentialSequenceWriter):
 
     @staticmethod
     def _split_multi_line(text, max_len):
-        """Return a list of strings.
+        """Return a list of strings (PRIVATE).
 
         Any single words which are too long get returned as a whole line
         (e.g. URLs) without an exception or warning.
@@ -416,7 +417,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         return answer
 
     def _split_contig(self, record, max_len):
-        """Return a list of strings, splits on commas."""
+        """Return a list of strings, splits on commas (PRIVATE)."""
         # TODO - Merge this with _write_multi_line method?
         # It would need the addition of the comma splitting logic...
         # are there any other cases where that would be sensible?
@@ -496,15 +497,17 @@ class GenBankWriter(_InsdcWriter):
         # Cope with a list of one string:
         if isinstance(date, list) and len(date) == 1:
             date = date[0]
-        # TODO - allow a Python date object
-        if not isinstance(date, basestring) or len(date) != 11 \
-            or date[2] != "-" or date[6] != "-" \
-            or not date[:2].isdigit() or not date[7:].isdigit() \
-            or int(date[:2]) > 31 \
-            or date[3:6] not in ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-                                 "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]:
-            # TODO - Check is a valid date (e.g. not 31 Feb)
+        if isinstance(date, datetime):
+            date = date.strftime("%d-%b-%Y").upper()
+
+        months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+        if not isinstance(date, basestring) or len(date) != 11:
             return default
+        try:
+            datetime(int(date[-4:]), months.index(date[3:6]) + 1, int(date[0:2]))
+        except ValueError:
+            date = default
         return date
 
     @staticmethod
@@ -585,7 +588,7 @@ class GenBankWriter(_InsdcWriter):
             return " " * max_topology_len
 
     def _write_the_first_line(self, record):
-        """Write the LOCUS line."""
+        """Write the LOCUS line (PRIVATE)."""
         locus = record.name
         if not locus or locus == "<unknown name>":
             locus = record.id
@@ -632,7 +635,7 @@ class GenBankWriter(_InsdcWriter):
                 warnings.warn("Molecule type %r too long" % mol_type,
                               BiopythonWarning)
                 mol_type = None
-        if mol_type == "protein":
+        if mol_type in ["protein", "PROTEIN"]:
             mol_type = ""
 
         if mol_type:
@@ -684,8 +687,8 @@ class GenBankWriter(_InsdcWriter):
         assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
             'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
         assert line[47:54].strip() == "" \
-            or 'DNA' in line[47:54].strip() \
-            or 'RNA' in line[47:54].strip(), \
+            or 'DNA' in line[47:54].strip().upper() \
+            or 'RNA' in line[47:54].strip().upper(), \
                'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
         assert line[54:55] == ' ', \
             'LOCUS line does not contain space at position 55:\n' + line
@@ -834,7 +837,7 @@ class GenBankWriter(_InsdcWriter):
 
         descr = record.description
         if descr == "<unknown description>":
-            descr = "."
+            descr = ""  # Trailing dot will be added later
 
         # The DEFINITION field must end with a period
         # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
@@ -1021,7 +1024,7 @@ class EmblWriter(_InsdcWriter):
             self._write_single_line(tag, line)
 
     def _write_the_first_lines(self, record):
-        """Write the ID and AC lines."""
+        """Write the ID and AC lines (PRIVATE)."""
         if "." in record.id and record.id.rsplit(".", 1)[1].isdigit():
             version = "SV " + record.id.rsplit(".", 1)[1]
             accession = self._get_annotation_str(record, "accession",

@@ -90,18 +90,18 @@ T:   4.00   0.00   2.00   0.00   0.00
 You can access these counts as a dictionary:
 %cont-doctest
 \begin{verbatim}
->>> m.counts['A']
+>>> m.counts["A"]
 [3, 7, 0, 2, 1]
 \end{verbatim}
 but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 %cont-doctest
 \begin{verbatim}
->>> m.counts['T', 0]
+>>> m.counts["T", 0]
 4
->>> m.counts['T', 2]
+>>> m.counts["T", 2]
 2
->>> m.counts['T', 3]
+>>> m.counts["T", 3]
 0
 \end{verbatim}
 You can also directly access columns of the counts matrix
@@ -120,7 +120,7 @@ IUPACUnambiguousDNA()
 'GATC'
 >>> sorted(m.alphabet.letters)
 ['A', 'C', 'G', 'T']
->>> m.counts['A',:]
+>>> m.counts["A",:]
 (3, 7, 0, 2, 1)
 >>> m.counts[0,:]
 (3, 7, 0, 2, 1)
@@ -460,10 +460,10 @@ T:   0.00   0.00   0.00   0.00  20.00   0.00
 The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
 \begin{verbatim}
 >>> motifs = jdb.fetch_motifs(
-...     collection = 'CORE',
-...     tax_group = ['vertebrates', 'insects'],
-...     tf_class = 'Winged Helix-Turn-Helix',
-...     tf_family = ['Forkhead', 'Ets'],
+...     collection = "CORE",
+...     tax_group = ["vertebrates", "insects"],
+...     tf_class = "Winged Helix-Turn-Helix",
+...     tf_family = ["Forkhead", "Ets"],
 ...     min_ic = 12
 ... )
 >>> for motif in motifs:
@@ -625,7 +625,7 @@ In addition to using an index into the record, as we did above,
 you can also find it by its name:
 %cont-doctest
 \begin{verbatim}
->>> motif = record['Motif 1']
+>>> motif = record["Motif 1"]
 \end{verbatim}
 Each motif has an attribute \verb+.instances+ with the sequence instances
 in which the motif was found, providing some information on each instance:
@@ -725,7 +725,7 @@ store any additional information about the motif:
 >>> motif = record[0]
 >>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
 Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
->>> motif['ID'] # Using motif as a dictionary
+>>> motif["ID"] # Using motif as a dictionary
 'motif1'
 \end{verbatim}
 
@@ -822,7 +822,7 @@ You can export the motifs in the TRANSFAC format by capturing this output
 in a string and saving it in a file:
 \begin{verbatim}
 >>> text = str(record)
->>> with open("mytransfacfile.dat", 'w') as out_handle:
+>>> with open("mytransfacfile.dat", "w") as out_handle:
 ...     out_handle.write(text)
 ...
 \end{verbatim}
@@ -869,7 +869,7 @@ This function can be used regardless of whether the motifs originated from a TRA
 %cont-doctest
 \begin{verbatim}
 >>> two_motifs = [arnt, srf]
->>> print(motifs.write(two_motifs, 'transfac'))
+>>> print(motifs.write(two_motifs, "transfac"))
 P0      A      C      G      T
 01      4     16      0      0      C
 02     19      0      1      0      A
@@ -947,7 +947,7 @@ the human genome is about 40\%, you may want to choose the
 pseudocounts accordingly:
 %cont-doctest
 \begin{verbatim}
->>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+>>> pwm = m.counts.normalize(pseudocounts={"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6})
 >>> print(pwm)
         0      1      2      3      4
 A:   0.40   0.84   0.07   0.29   0.18
@@ -1018,7 +1018,7 @@ unequal probabilities for A, C, G, T, use the \verb+background+ argument.
 For example, against a background with a 40\% GC content, use
 %cont-doctest
 \begin{verbatim}
->>> background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
 >>> pssm = pwm.log_odds(background)
 >>> print(pssm)
         0      1      2      3      4
@@ -1213,7 +1213,7 @@ To facilitate searching for potential TFBSs using PSSMs, both the position-weigh
 \begin{verbatim}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
-...     motif = motifs.read(handle, 'sites')
+...     motif = motifs.read(handle, "sites")
 ...
 >>> print(motif.counts)
         0      1      2      3      4      5
@@ -1300,7 +1300,7 @@ T: 0.25
 Again, if you modify the background distribution, the position-specific scoring matrix is recalculated:
 %cont-doctest
 \begin{verbatim}
->>> motif.background = {'A': 0.2, 'C': 0.3, 'G': 0.3, 'T': 0.2}
+>>> motif.background = {"A": 0.2, "C": 0.3, "G": 0.3, "T": 0.2}
 >>> print(motif.pssm)
         0      1      2      3      4      5
 A:   0.13   1.78  -1.09  -1.09  -1.09  -1.09
@@ -1400,8 +1400,8 @@ T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
 To make the motifs comparable, we choose the same values for the pseudocounts and the background distribution as our motif \verb|m|:
 %cont-doctest
 \begin{verbatim}
->>> m_reb1.pseudocounts = {'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6}
->>> m_reb1.background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> m_reb1.pseudocounts = {"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6}
+>>> m_reb1.background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
 >>> pssm_reb1 = m_reb1.pssm
 >>> print(pssm_reb1)
         0      1      2      3      4      5      6      7      8

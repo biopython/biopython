@@ -357,7 +357,7 @@ class Scop(object):
             else:
                 n = Domain(scop=self)
                 cur.execute("select sid, residues, pdbid from cla where sunid=%s",
-                               sunid)
+                            sunid)
 
                 n.sid, n.residues, pdbid = cur.fetchone()
                 n.residues = Residues.Residues(n.residues)
@@ -473,7 +473,7 @@ class Scop(object):
         for n in self._sidDict.values():
             c = n.toClaRecord()
             cur.execute("INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                         (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
+                        (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
                          n.getAscendent('cl').sunid, n.getAscendent('cf').sunid,
                          n.getAscendent('sf').sunid, n.getAscendent('fa').sunid,
                          n.getAscendent('dm').sunid, n.getAscendent('sp').sunid,
@@ -490,7 +490,7 @@ class Scop(object):
 
         for n in self._sunidDict.values():
             cur.execute("INSERT INTO des VALUES (%s,%s,%s,%s)",
-                         (n.sunid, n.type, n.sccs, n.description))
+                        (n.sunid, n.type, n.sccs, n.description))
 
 
 class Node(object):
@@ -680,7 +680,7 @@ class Astral(object):
     """
 
     def __init__(self, dir_path=None, version=None, scop=None,
-                  astral_file=None, db_handle=None):
+                 astral_file=None, db_handle=None):
         """Initialize the astral database.
 
         You must provide either a directory of SCOP files:
@@ -875,7 +875,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
 
 
 def _open(cgi, params=None, get=1):
-    """Open a handle to SCOP, returns an UndoHandle.
+    """Open a handle to SCOP, returns an UndoHandle (PRIVATE).
 
     Open a handle to SCOP.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  get is a boolean

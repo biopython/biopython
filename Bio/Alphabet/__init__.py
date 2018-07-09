@@ -1,10 +1,11 @@
 # Copyright 2000-2002 by Andrew Dalke.
 # Revisions copyright 2007-2010 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Alphabets used in Seq objects etc to declare sequence type and letters.
 
 This is used by sequences which contain a finite number of similar words.
@@ -262,7 +263,8 @@ def _get_base_alphabet(alphabet):
     a = alphabet
     while isinstance(a, AlphabetEncoder):
         a = a.alphabet
-    assert isinstance(a, Alphabet), "Invalid alphabet found, %s" % repr(a)
+    if not isinstance(a, Alphabet):
+        raise TypeError("Invalid alphabet found, %s." % repr(a))
     return a
 
 

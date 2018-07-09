@@ -69,6 +69,15 @@ class MMCIF2dictTests(unittest.TestCase):
         self.assertEqual(list(mmcif._splitline("foo 'bar'a' b")), ["foo", "bar'a", "b"])
         self.assertEqual(list(mmcif._splitline("foo \"bar' a\" b")), ["foo", "bar' a", "b"])
         self.assertEqual(list(mmcif._splitline("foo '' b")), ["foo", "", "b"])
+
+        # A hash (#) starts a comment iff it is preceded by whitespace or is at
+        # the beginning of a line:
+        # https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax#lex
+        self.assertEqual(list(mmcif._splitline("foo#bar")), ["foo#bar"])
+        self.assertEqual(list(mmcif._splitline("foo #bar")), ["foo"])
+        self.assertEqual(list(mmcif._splitline("foo# bar")), ["foo#", "bar"])
+        self.assertEqual(list(mmcif._splitline("#foo bar")), [])
+
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'bar"))
         self.assertRaises(ValueError, list, mmcif._splitline("foo 'ba'r  "))
         self.assertRaises(ValueError, list, mmcif._splitline("foo \"bar'"))
@@ -94,17 +103,19 @@ class MMCIF2dictTests(unittest.TestCase):
             "First line\n    Second line\nThird line")
 
     def test_inline_comments(self):
-        """Comments may begin outside of column 1."""
+        """Comments may begin outside of column 1 if preceded by whitespace."""
         mmcif_dict = MMCIF2Dict(io.StringIO(textwrap.dedent(u"""\
             data_verbatim_test
-            _test_key_value foo # Ignore this comment
+            _test_key_value_1 foo # Ignore this comment
+            _test_key_value_2 foo#NotIgnored
             loop_
             _test_loop
             a b c d # Ignore this comment
             e f g
 
         """)))
-        self.assertEqual(mmcif_dict["_test_key_value"], "foo")
+        self.assertEqual(mmcif_dict["_test_key_value_1"], "foo")
+        self.assertEqual(mmcif_dict["_test_key_value_2"], "foo#NotIgnored")
         self.assertEqual(mmcif_dict["_test_loop"], list("abcdefg"))
 
     def test_loop_keyword_case_insensitive(self):

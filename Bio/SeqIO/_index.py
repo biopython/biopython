@@ -1,15 +1,17 @@
 # Copyright 2009-2011 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Dictionary like indexing of sequence files (PRIVATE).
 
 You are not expected to access this module, or any of its code, directly. This
-is all handled internally by the Bio.SeqIO.index(...) function which is the
-public interface for this functionality.
+is all handled internally by the Bio.SeqIO.index(...) and index_db(...)
+functions which are the public interface for this functionality.
 
 The basic idea is that we scan over a sequence file, looking for new record
-markers. We then try and extract the string that Bio.SeqIO.parse/read would
+markers. We then try to extract the string that Bio.SeqIO.parse/read would
 use as the record id, ideally without actually parsing the full record. We
 then use a subclassed Python dictionary to record the file offset for the
 record start against the record id.
@@ -19,8 +21,9 @@ record may not trigger an exception until it is accessed. This is by design.
 
 This means our dictionary like objects have in memory ALL the keys (all the
 record identifiers), which shouldn't be a problem even with second generation
-sequencing. If this is an issue later on, storing the keys and offsets in a
-temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
+sequencing. If memory is an issue, the index_db(...) interface stores the
+keys and offsets in an SQLite database - which can be re-used to avoid
+re-indexing the file for use another time.
 """
 
 from __future__ import print_function

@@ -48,6 +48,13 @@ To paraphrase:
 \end{verbatim}
 The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
+\item After May 1, 2018, NCBI will limit access to the E-utilities unless one have an API key (more info at \url{https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/}).
+Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the key is specified in any E-utility. Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
+%DO NOT run this as a doctest, will set an invalid API key!
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.api_key = "MyAPIkey"
+\end{verbatim}
 \end{itemize}
 
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
@@ -59,7 +66,7 @@ EInfo provides field index term counts, last update, and available links for eac
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.einfo()
 >>> result = handle.read()
 >>> handle.close()
@@ -139,8 +146,10 @@ The values stored in this key is the list of database names shown in the XML abo
 \end{verbatim}
 
 For each of these databases, we can use EInfo again to obtain more information:
-%cont-doctest
+%doctest . internet
 \begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.einfo(db="pubmed")
 >>> record = Entrez.read(handle)
 >>> record["DbInfo"]["Description"]
@@ -221,11 +230,11 @@ Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
->>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax='20')
+>>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax="20")
 >>> record = Entrez.read(handle)
 >>> print("{} computational journals found".format(record["Count"]))
 117 computational Journals found
->>> print("The first 20 are\n{}".format(record['IdList']))
+>>> print("The first 20 are\n{}".format(record["IdList"]))
 ['101660833', '101664671', '101661657', '101659814', '101657941',
  '101653734', '101669877', '101649614', '101647835', '101639023',
  '101627224', '101647801', '101589678', '101585369', '101645372',
@@ -284,10 +293,10 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
 >>> record = Entrez.read(handle)
->>> info = record[0]['TitleMainList'][0]
+>>> info = record[0]["TitleMainList"][0]
 >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
 Journal info
 id: 101660833
@@ -307,7 +316,7 @@ One common usage is downloading sequences in the FASTA or GenBank/GenPept plain 
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> print(handle.read())
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
@@ -400,8 +409,9 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 %doctest . internet
 \begin{verbatim}
->>> from Bio import Entrez
 >>> from Bio import SeqIO
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
@@ -444,6 +454,7 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
 >>> record = Entrez.read(handle)
 >>> handle.close()
@@ -468,7 +479,7 @@ Let's use ELink to find articles related to the Biopython application note publi
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> pmid = "19304878"
 >>> record = Entrez.read(Entrez.elink(dbfrom="pubmed", id=pmid))
 \end{verbatim}
@@ -548,7 +559,7 @@ In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``B
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="biopython")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
@@ -567,7 +578,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"      # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.espell(term="biopythooon")
 >>> record = Entrez.read(handle)
 >>> record["Query"]
@@ -594,14 +605,15 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 
 \begin{verbatim}
 >>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = open("Homo_sapiens.xml")
 >>> records = Entrez.parse(handle)
 >>> for record in records:
-...     status = record['Entrezgene_track-info']['Gene-track']['Gene-track_status']
-...     if status.attributes['value']=='discontinued':
+...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
+...     if status.attributes["value"]=="discontinued":
 ...         continue
-...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
-...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
+...     geneid = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_geneid"]
+...     genename = record["Entrezgene_gene"]["Gene-ref"]["Gene-ref_locus"]
 ...     print(geneid, genename)
 ...
 \end{verbatim}
@@ -805,7 +817,7 @@ PDB file parser and structure class implemented in Python.
 Instead of parsing Medline records stored in files, you can also parse Medline records downloaded by \verb+Bio.Entrez.efetch+. For example, let's look at all Medline records in PubMed related to Biopython:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
@@ -835,7 +847,7 @@ For comparison, here we show an example using the XML format:
 \begin{verbatim}
 >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
 >>> records = Entrez.read(handle)
->>> for record in records['PubmedArticle']:
+>>> for record in records["PubmedArticle"]:
 ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
 Biopython: freely available Python tools for computational molecular biology and
  bioinformatics.
@@ -876,7 +888,7 @@ You can search the ``gds'' database (GEO datasets) with ESearch:
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="gds", term="GSE16")
 >>> record = Entrez.read(handle)
 >>> handle.close()
@@ -1012,7 +1024,7 @@ In this example, we will query PubMed for all articles having to do with orchids
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="orchid")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
@@ -1025,6 +1037,7 @@ Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of t
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
 >>> record = Entrez.read(handle)
 >>> handle.close()
@@ -1098,7 +1111,7 @@ Here we'll show a simple example of performing a remote Entrez query. In section
 First, we use EGQuery to find out the number of results we will get before actually downloading them.  EGQuery will tell us how many search results were found in each of the databases, but for this example we are only interested in nucleotides:
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="Cypripedioideae")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
@@ -1113,6 +1126,7 @@ Let's use the \verb+retmax+ argument to restrict the maximum number of records r
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
 >>> record = Entrez.read(handle)
 >>> handle.close()
@@ -1193,7 +1207,7 @@ First, we want to make a query and find out the ids of the records to retrieve. 
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.egquery(term="Opuntia AND rpl16")
 >>> record = Entrez.read(handle)
 >>> for row in record["eGQueryResult"]:
@@ -1274,7 +1288,7 @@ Staying with a plant example, let's now find the lineage of the Cypripedioideae 
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
@@ -1336,7 +1350,7 @@ additional argument of \verb|usehistory="y"|,
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "history.user@example.com"
+>>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
 >>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
 ...                                usehistory="y", idtype="acc")
 >>> search_results = Entrez.read(search_handle)
@@ -1463,7 +1477,7 @@ Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
 
 \begin{verbatim}
 >>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"
+>>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
 >>> pmid = "14630660"
 >>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
 ...                                    LinkName="pubmed_pmc_refs", id=pmid))

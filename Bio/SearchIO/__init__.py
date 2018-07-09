@@ -198,17 +198,10 @@ from __future__ import print_function
 from Bio._py3k import basestring
 
 import sys
-import warnings
 
-from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
-
-
-warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
-        'significant changes prior to its future official release.',
-        BiopythonExperimentalWarning)
 
 
 __all__ = ('read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert')
@@ -231,6 +224,7 @@ _ITERATOR_MAP = {
         # as we need it distinguish hit / target coordinates
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        'interproscan-xml': ('InterproscanIO', 'InterproscanXmlParser'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
 }
 
@@ -556,8 +550,8 @@ def index_db(index_filename, filenames=None, format=None,
         filenames = [filenames]
 
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" \
-               % (index_filename, filenames, format, key_function)
+    repr = ("SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)"
+            % (index_filename, filenames, format, key_function))
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
@@ -614,8 +608,7 @@ def write(qresults, handle, format=None, **kwargs):
     with as_handle(handle, 'w') as target_file:
         writer = writer_class(target_file, **kwargs)
         # count how many qresults, hits, and hsps
-        qresult_count, hit_count, hsp_count, frag_count = \
-                writer.write_file(qresults)
+        qresult_count, hit_count, hsp_count, frag_count = writer.write_file(qresults)
 
     return qresult_count, hit_count, hsp_count, frag_count
 

@@ -5,8 +5,9 @@
 # as part of this package.
 
 import unittest
-import warnings
 from os import path
+import warnings
+from datetime import datetime
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
@@ -75,6 +76,17 @@ class GenBankTests(unittest.TestCase):
                 SeqIO.read(path.join("GenBank", "negative_location.gb"), "genbank")
             except BiopythonParserWarning as e:
                 self.assertEqual(str(e), "Couldn't parse feature location: '-2..492'")
+            else:
+                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
+    def test_001_genbank_bad_origin_wrapping_location(self):
+        """Bad origin wrapping."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                SeqIO.read(path.join("GenBank", "bad_origin_wrap.gb"), "genbank")
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Ignoring invalid location: '6801..100'")
             else:
                 self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
@@ -251,6 +263,100 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(name, new.name)
             self.assertEqual(seq_len, len(new))
 
+    def test_genbank_date_default(self):
+        """Check if default date is handled correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
+        # check if default value is inserted correctly
+        record = SeqRecord(sequence_object,
+                           id='123456789',
+                           name='UnitTest',
+                           description='Test case for date parsing')
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
+        self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+
+    def test_genbank_date_correct(self):
+        """Check if user provided date is inserted correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
+        record = SeqRecord(sequence_object,
+                           id='123456789',
+                           name='UnitTest',
+                           description='Test case for date parsing')
+        record.annotations["date"] = "24-DEC-2015"
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
+        self.assertEqual(gb.annotations["date"], "24-DEC-2015")
+
+    def test_genbank_date_list(self):
+        """Check if date lists are handled correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
+        record = SeqRecord(sequence_object,
+                           id='123456789',
+                           name='UnitTest',
+                           description='Test case for date parsing')
+        record.annotations["date"] = ["24-DEC-2015"]
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
+        self.assertEqual(gb.annotations["date"], "24-DEC-2015")
+
+        record = SeqRecord(sequence_object,
+                           id='123456789',
+                           name='UnitTest',
+                           description='Test case for date parsing')
+        record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
+        self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+
+    def test_genbank_date_datetime(self):
+        """Check if datetime objects are handled correctly"""
+
+        sequence_object = Seq("ATGC", generic_dna)
+        record = SeqRecord(sequence_object,
+                           id='123456789',
+                           name='UnitTest',
+                           description='Test case for date parsing')
+        record.annotations["date"] = datetime(2000, 2, 2)
+        handle = StringIO()
+        SeqIO.write(record, handle, 'genbank')
+        handle.seek(0)
+        gb = SeqIO.read(handle, "gb")
+        self.assertEqual(gb.annotations["date"], "02-FEB-2000")
+
+    def test_genbank_date_invalid(self):
+        """Check if invalid dates are treated as default"""
+
+        invalid_dates = ("invalid date",
+                         "29-2-1981",
+                         "35-1-2018",
+                         "1-1-80",
+                         "1-9-99")
+
+        sequence_object = Seq("ATGC", generic_dna)
+        for invalid_date in invalid_dates:
+            record = SeqRecord(sequence_object,
+                               id='123456789',
+                               name='UnitTest',
+                               description='Test case for date parsing')
+
+            record.annotations["date"] = invalid_date
+            handle = StringIO()
+            SeqIO.write(record, handle, 'genbank')
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
+            self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
@@ -260,31 +366,41 @@ class LineOneTests(unittest.TestCase):
         # This is a bit low level, but can test pasing the LOCUS line only
         tests = [
             ("LOCUS       U00096",
-             None, None, None),
+             None, None, None, None),
             # This example is actually fungal, accession U49845 from Saccharomyces cerevisiae:
             ("LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999",
-             None, "DNA", "PLN"),
+             None, "DNA", "PLN", None),
             ("LOCUS       AB070938                6497 bp    DNA     linear   BCT 11-OCT-2001",
-             "linear", "DNA", "BCT"),
+             "linear", "DNA", "BCT", None),
             ("LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008",
-             "circular", "DNA", "BCT"),
+             "circular", "DNA", "BCT", None),
             ("LOCUS       SCX3_BUTOC                64 aa            linear   INV 16-OCT-2001",
-             "linear", None, "INV"),
+             "linear", None, "INV", None),
+            ("LOCUS       pEH010                  5743 bp    DNA     circular",
+             "circular", "DNA", None, [BiopythonParserWarning]),
         ]
-        for (line, topo, mol_type, div) in tests:
-            scanner = Scanner.GenBankScanner()
-            consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
-            scanner._feed_first_line(consumer, line)
-            t = consumer.data.annotations.get('topology', None)
-            self.assertEqual(t, topo,
-                             "Wrong topology %r not %r from %r" % (t, topo, line))
-            mt = consumer.data.annotations.get('molecule_type', None)
-            self.assertEqual(mt, mol_type,
-                             "Wrong molecule_type %r not %r from %r" %
-                             (mt, mol_type, line))
-            d = consumer.data.annotations.get('data_file_division', None)
-            self.assertEqual(d, div,
-                             "Wrong division %r not %r from %r" % (d, div, line))
+        for (line, topo, mol_type, div, warning_list) in tests:
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                scanner = Scanner.GenBankScanner()
+                consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
+                scanner._feed_first_line(consumer, line)
+                t = consumer.data.annotations.get('topology', None)
+                self.assertEqual(t, topo,
+                                 "Wrong topology %r not %r from %r" % (t, topo, line))
+                mt = consumer.data.annotations.get('molecule_type', None)
+                self.assertEqual(mt, mol_type,
+                                 "Wrong molecule_type %r not %r from %r" %
+                                 (mt, mol_type, line))
+                d = consumer.data.annotations.get('data_file_division', None)
+                self.assertEqual(d, div,
+                                 "Wrong division %r not %r from %r" % (d, div, line))
+                if warning_list is None:
+                    self.assertEqual(len(caught), 0)
+                else:
+                    self.assertEqual(len(caught), len(warning_list))
+                    for i, warning_class in enumerate(warning_list):
+                        self.assertEqual(caught[i].category, warning_class)
 
     def test_topology_embl(self):
         """Check EMBL ID line parsing."""
@@ -373,6 +489,50 @@ class OutputTests(unittest.TestCase):
             self.assertEqual(old.name, new.name)
             self.assertEqual(old.description, new.description)
             self.assertEqual(old.seq, new.seq)
+
+    def test_seqrecord_default_description(self):
+        """Read in file using SeqRecord default description."""
+        old = SeqRecord(Seq("ACGT", generic_dna),
+                        id="example",
+                        name="short")
+        self.assertEqual(old.description, "<unknown description>")
+        txt = old.format("gb")
+        self.assertIn("DEFINITION  .\n", txt)
+        new = SeqIO.read(StringIO(txt), "gb")
+        self.assertEqual(old.id, new.id)
+        self.assertEqual(old.name, new.name)
+        self.assertEqual("", new.description)
+        self.assertEqual(old.seq, new.seq)
+
+    # Evil hack with 000 to manipulate sort order to ensure this is tested
+    # first (otherwise something silences the warning)
+    def test_000_write_invalid_but_parsed_locus_line(self):
+        """Make sure we survive writing slightly invalid LOCUS lines we could parse."""
+        # grab a valid file
+        with open(path.join('GenBank', 'NC_005816.gb'), 'r') as handle:
+            lines = handle.readlines()
+
+        # futz with the molecule type to make it lower case
+        invalid_line = "LOCUS       NC_005816               9609 bp    dna     circular BCT 21-JUL-2008\n"
+        lines[0] = invalid_line
+        fake_handle = StringIO("".join(lines))
+
+        # Make sure parsing this actually raises a warning
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            rec = SeqIO.read(fake_handle, 'genbank')
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(str(caught[0].message), "Non-upper case molecule type in LOCUS line: dna")
+
+        out_handle = StringIO()
+
+        ret = SeqIO.write([rec], out_handle, 'genbank')
+        self.assertEqual(ret, 1)
+
+        out_handle.seek(0)
+        out_lines = out_handle.readlines()
+        self.assertEqual(out_lines[0], invalid_line)
 
 
 if __name__ == "__main__":

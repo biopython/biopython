@@ -36,6 +36,9 @@ Variables:
 
     - email        Set the Entrez email parameter (default is not set).
     - tool         Set the Entrez tool parameter (default is ``biopython``).
+    - api_key      Personal API key from NCBI. If not set, only 3 queries per
+                   seconds are allowed. 10 queries per seconds otherwise with a
+                   valid API key.
 
 Functions:
 
@@ -107,6 +110,7 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 email = None
 tool = "biopython"
+api_key = None
 
 
 # XXX retmode?
@@ -502,9 +506,11 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     This function also enforces the "up to three queries per second rule"
     to avoid abusing the NCBI servers.
     """
-    # NCBI requirement: At most three queries per second.
+    # NCBI requirement: At most three queries per second if no API key is provided.
     # Equivalently, at least a third of second between queries
-    delay = 0.333333334
+    params = _construct_params(params)
+    options = _encode_options(ecitmatch, params)
+    delay = 0.1 if api_key else 0.333333334
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:
@@ -512,9 +518,6 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         _open.previous = current + wait
     else:
         _open.previous = current
-
-    params = _construct_params(params)
-    options = _encode_options(ecitmatch, params)
 
     # By default, post is None. Set to a boolean to over-ride length choice:
     if post is None and len(options) > 1000:
@@ -563,6 +566,8 @@ is A.N.Other@example.com, you can specify it as follows:
 In case of excessive usage of the E-utilities, NCBI will attempt to contact
 a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
+    if api_key and "api_key" not in params:
+        params["api_key"] = api_key
     return params
 
 

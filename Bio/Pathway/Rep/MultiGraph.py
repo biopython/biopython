@@ -1,4 +1,5 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2018 by Maximilian Greil. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -21,9 +22,9 @@ class MultiGraph(object):
 
     def __eq__(self, g):
         """Return true if g is equal to this graph."""
-        return isinstance(g, MultiGraph) and \
-               (self._adjacency_list == g._adjacency_list) and \
-               (self._label_map == g._label_map)
+        return (isinstance(g, MultiGraph)
+                and self._adjacency_list == g._adjacency_list
+                and self._label_map == g._label_map)
 
     def __ne__(self, g):
         """Return true if g is not equal to this graph."""
@@ -83,7 +84,7 @@ class MultiGraph(object):
 
     def labels(self):
         """Return a list of all the edge labels in this graph."""
-        return list(self._label_map.keys())
+        return sorted(self._label_map.keys())
 
     def nodes(self):
         """Return a list of the nodes in this graph."""

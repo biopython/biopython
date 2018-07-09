@@ -1,9 +1,10 @@
 # Copyright 2011 by Wibowo Arindrarto (w.arindrarto@gmail.com)
 # Revisions copyright 2011-2016 by Peter Cock.
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO parser for the ABI format.
 
 ABI is the format used by Applied Biosystem's sequencing machines to store
@@ -480,7 +481,7 @@ def _abi_parse_header(header, handle):
 
 
 def _abi_trim(seq_record):
-    """Trims the sequence using Richard Mott's modified trimming algorithm.
+    """Trims the sequence using Richard Mott's modified trimming algorithm (PRIVATE).
 
     Arguments:
         - seq_record - SeqRecord object to be trimmed.
@@ -529,7 +530,7 @@ def _abi_trim(seq_record):
 
 
 def _parse_tag_data(elem_code, elem_num, raw_data):
-    """Return single data value.
+    """Return single data value (PRIVATE).
 
     Arguments:
      - elem_code - What kind of data

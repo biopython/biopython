@@ -31,7 +31,7 @@ class Chain(object):
         self.id = -1
 
     def _get_id(self):
-        """Get a new id for a node in the chain."""
+        """Get a new id for a node in the chain (PRIVATE)."""
         self.id += 1
         return self.id
 

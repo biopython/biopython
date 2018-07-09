@@ -3,9 +3,11 @@
 # Copyright 2005-2016 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Represent a Sequence Feature holding info about a part of a sequence.
 
 This is heavily modeled after the Biocorba SeqFeature objects, and
@@ -334,6 +336,78 @@ class SeqFeature(object):
             raise ValueError("The feature's .location is None. Check the "
                              "sequence file for a valid location.")
         return self.location.extract(parent_sequence)
+
+    def translate(self, parent_sequence, table="Standard", start_offset=None,
+                  stop_symbol="*", to_stop=False, cds=False, gap=None):
+        """Get a translation of the feature's sequence.
+
+        This method is intended for CDS or other features that code proteins
+        and is a shortcut that will both extract the feature and
+        translate it, taking into account the codon_start and transl_table
+        qualifiers, if they are present. If they are not present the
+        value of the arguments "table" and "start_offset" are used.
+
+        The arguments stop_symbol, to_stop, cds and gap have the same meaning
+        as Seq.translate, refer to that documentation for further information.
+
+        Arguments:
+         - parent_sequence - This method will translate DNA or RNA sequences,
+           and those with a nucleotide or generic alphabet. Trying to
+           translate a protein sequence raises an exception.
+         - table - Which codon table to use if there is no transl_table
+           qualifier for this feature. This can be either a name
+           (string), an NCBI identifier (integer), or a CodonTable
+           object (useful for non-standard genetic codes).  This
+           defaults to the "Standard" table.
+         - start_offset - offset at which the first complete codon of a
+           coding feature can be found, relative to the first base of
+           that feature. Has a valid value of 0, 1 or 2. NOTE: this
+           uses python's 0-based numbering whereas the codon_start
+           qualifier in files from NCBI use 1-based numbering.
+           Will override a codon_start qualifier
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
+        >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
+        >>> f.qualifiers['transl_table'] = [11]
+        >>> f.translate(seq)
+        Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
+
+        Now use the start_offset argument to change the frame. Note
+        this uses python 0-based numbering
+
+        >>> f.translate(seq, start_offset=1)
+        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+
+        Alternatively use the codon_start qualifier to do the same
+        thing. Note: this uses 1-based numbering, which is found
+        in files from NCBI
+
+        >>> f.qualifiers['codon_start'] = [2]
+        >>> f.translate(seq)
+        Seq('VTLTDNVSD', ExtendedIUPACProtein())
+        """
+        # see if this feature should be translated in a different
+        # frame using the "codon_start" qualifier
+        if start_offset is None:
+            try:
+                start_offset = int(self.qualifiers["codon_start"][0]) - 1
+            except KeyError:
+                start_offset = 0
+
+        if start_offset not in [0, 1, 2]:
+            raise ValueError("The start_offset must be 0, 1, or 2. "
+                             "The supplied value is {}. Check the value "
+                             "of either the codon_start qualifier or "
+                             "the start_offset argument".format(start_offset))
+
+        feat_seq = self.extract(parent_sequence)[start_offset:]
+        codon_table = self.qualifiers.get("transl_table", [table])[0]
+
+        return feat_seq.translate(table=codon_table, stop_symbol=stop_symbol,
+                to_stop=to_stop, cds=cds, gap=gap)
 
     # Python 3:
     def __bool__(self):
@@ -669,6 +743,11 @@ class FeatureLocation(object):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
+        if isinstance(self.start.position, int) and \
+                isinstance(self.end.position, int) and self.start > self.end:
+            raise ValueError('End location ({}) must be greater than or equal '
+                             'to start location ({})'.format(self.end,
+                                                             self.start))
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db
@@ -1034,7 +1113,7 @@ class CompoundLocation(object):
         12
 
         More generally, you can use the compound location's start and end which
-        give the full range covered, 0 <= start <= end <= full sequence length.
+        give the full span covered, 0 <= start <= end <= full sequence length.
 
         >>> f.start == min(f)
         True

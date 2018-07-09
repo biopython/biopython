@@ -23,7 +23,7 @@ _default_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
 
 
 def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
-    """Wrap the input line  for KEGG output.
+    """Wrap the input line  for KEGG output (PRIVATE).
 
     Arguments:
      - info - String holding the information we want wrapped
@@ -66,7 +66,7 @@ def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
 
 
 def _write_kegg(item, info, indent=KEGG_ITEM_LENGTH):
-    """Write a indented KEGG record item.
+    """Write a indented KEGG record item (PRIVATE).
 
     Arguments:
      - item - The name of the item to be written.

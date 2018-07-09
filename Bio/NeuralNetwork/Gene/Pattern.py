@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Generic functionality useful for all gene representations.
 
@@ -10,10 +11,9 @@ types of patterns available for representing gene information (ie. motifs,
 signatures and schemas). These are the general classes which should be
 handle any of the different specific patterns.
 """
-# standard library
+
 import random
 
-# biopython
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq, MutableSeq
 

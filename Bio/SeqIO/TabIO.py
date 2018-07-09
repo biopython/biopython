@@ -1,8 +1,9 @@
-# Copyright 2008-2015 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "tab" (simple tab separated) file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -37,6 +38,7 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
@@ -89,11 +91,14 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
 
 
 class TabWriter(SequentialSequenceWriter):
-    """Class to write simple tab separated format files.
+    """Class to write simple tab separated format files (OBSOLETE).
 
     Each line consists of "id(tab)sequence" only.
 
     Any description, name or other annotation is not recorded.
+
+    This class is now obsolete. Please use the function ``as_tab`` instead,
+    or the top level ``Bio.SeqIO.write()`` function with ``format="tab"``.
     """
 
     def write_record(self, record):
@@ -101,16 +106,19 @@ class TabWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
+        self.handle.write(as_tab(record))
 
-        title = self.clean(record.id)
-        seq = self._get_seq_string(record)  # Catches sequence being None
-        assert "\t" not in title
-        assert "\n" not in title
-        assert "\r" not in title
-        assert "\t" not in seq
-        assert "\n" not in seq
-        assert "\r" not in seq
-        self.handle.write("%s\t%s\n" % (title, seq))
+
+def as_tab(record):
+    title = _clean(record.id)
+    seq = _get_seq_string(record)  # Catches sequence being None
+    assert "\t" not in title
+    assert "\n" not in title
+    assert "\r" not in title
+    assert "\t" not in seq
+    assert "\n" not in seq
+    assert "\r" not in seq
+    return "%s\t%s\n" % (title, seq)
 
 
 if __name__ == "__main__":

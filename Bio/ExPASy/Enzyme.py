@@ -92,7 +92,7 @@ class Record(dict):
                                         self["ID"], self["DE"])
             else:
                 return "%s (%s)" % (self.__class__.__name__,
-                                       self["ID"])
+                                    self["ID"])
         else:
             return "%s ( )" % (self.__class__.__name__)
 

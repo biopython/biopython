@@ -8,15 +8,8 @@
 import os
 import unittest
 
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.SearchIO import parse
-    from Bio.SearchIO.BlastIO.blast_tab import _LONG_SHORT_MAP as all_fields
+from Bio.SearchIO import parse
+from Bio.SearchIO.BlastIO.blast_tab import _LONG_SHORT_MAP as all_fields
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
@@ -406,6 +399,17 @@ class BlastTabCases(unittest.TestCase):
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, next, qresults)
         self.assertEqual(3, counter)
+
+    def test_tab_2226_tblastn_005_comments_false(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_005)"
+
+        tab_file = get_file('tab_2226_tblastn_005.txt')
+        exc_msg = ("Encountered unexpected character '#' at the beginning of"
+                   " a line. Set comments=True if the file is a commented"
+                   " file.")
+        qresults = parse(tab_file, FMT)
+        with self.assertRaises(ValueError, msg=exc_msg):
+            next(qresults)
 
     def test_tab_2226_tblastn_006(self):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_006)"

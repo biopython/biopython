@@ -1,10 +1,15 @@
-#!/usr/bin/env python
+# Copyright 2001 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """General test for the NeuralNetwork libraries.
 
 This exercises various elements of the BackPropagation NeuralNetwork
 libraries.
 """
-# standard library
+
 import random
 import unittest
 
@@ -95,6 +100,11 @@ class ExampleManagerTest(unittest.TestCase):
         manager.add_examples(self.examples)
         assert len(manager.validation_examples) == self.num_examples, \
                "Did not partition correctly to validation_examples."
+
+    def test_value_error(self):
+        """Test when the sum of input percentages exceed 1.0"""
+        with self.assertRaises(ValueError):
+            ExampleManager(0.6, 0.6)
 
 
 if __name__ == "__main__":

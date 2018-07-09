@@ -1,7 +1,8 @@
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
 
 """Represent Neural Networks.
 
@@ -16,7 +17,7 @@ http://www.enme.ucalgary.ca/~nascheme/python/bpnn.py
 My sincerest thanks to him for making this available for me to work from,
 and my apologies for anything I mangled.
 """
-# standard library
+
 import math
 
 
@@ -86,8 +87,7 @@ class BasicNetwork(object):
                 for prediction_num in range(len(predictions)):
                     real_value = example.outputs[prediction_num]
                     predicted_value = predictions[prediction_num]
-                    validation_error += \
-                            0.5 * math.pow((real_value - predicted_value), 2)
+                    validation_error += 0.5 * math.pow((real_value - predicted_value), 2)
 
             # see if we have gone far enough to stop
             if stopping_criteria(num_iterations, training_error,

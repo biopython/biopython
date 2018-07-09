@@ -469,6 +469,49 @@ class TestSeqAddition(unittest.TestCase):
                 self.assertEqual(str(c), str(a) + str(b))
 
 
+class TestSeqMultiplication(unittest.TestCase):
+    def test_mul_method(self):
+        """Test mul method; relies on addition method"""
+        for seq in test_seqs + protein_seqs:
+            self.assertEqual(seq * 3, seq + seq + seq)
+
+    def test_mul_method_exceptions(self):
+        """Test mul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                seq * 3.0
+            with self.assertRaises(TypeError):
+                seq * ''
+
+    def test_rmul_method(self):
+        """Test rmul method; relies on addition method"""
+        for seq in test_seqs + protein_seqs:
+            self.assertEqual(3 * seq, seq + seq + seq)
+
+    def test_rmul_method_exceptions(self):
+        """Test rmul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                3.0 * seq
+            with self.assertRaises(TypeError):
+                '' * seq
+
+    def test_imul_method(self):
+        """Test imul method; relies on addition and mull methods"""
+        for seq in test_seqs + protein_seqs:
+            original_seq = seq * 1  # make a copy
+            seq *= 3
+            self.assertEqual(seq, original_seq + original_seq + original_seq)
+
+    def test_imul_method_exceptions(self):
+        """Test imul method exceptions"""
+        for seq in test_seqs + protein_seqs:
+            with self.assertRaises(TypeError):
+                seq *= 3.0
+            with self.assertRaises(TypeError):
+                seq *= ''
+
+
 class TestMutableSeq(unittest.TestCase):
     def setUp(self):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
@@ -739,7 +782,7 @@ class TestUnknownSeq(unittest.TestCase):
 
     def test_repr(self):
         self.assertEqual(
-            "UnknownSeq(6, alphabet = Alphabet(), character = '?')",
+            "UnknownSeq(6, character='?')",
             repr(self.s))
 
     def test_add_method(self):
@@ -1273,6 +1316,24 @@ class TestTranslating(unittest.TestCase):
         seq = "GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"  # no start codon
         with self.assertRaises(TranslationError):
             Seq.translate(seq, table=2, cds=True)
+
+    def test_translation_using_tables_with_ambiguous_stop_codons(self):
+        """Check for error and warning messages.
+
+        Here, 'ambiguous stop codons' means codons of unambiguous sequence
+        but with a context sensitive encoding as STOP or an amino acid.
+        Thus, these codons appear within the codon table in the forward
+        table as well as in the list of stop codons.
+        """
+        seq = "ATGGGCTGA"
+        with self.assertRaises(ValueError):
+            Seq.translate(seq, table=28, to_stop=True)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            Seq.translate(seq, table=28)
+            message = str(w[-1].message)
+            self.assertTrue(message.startswith("This table contains"))
+            self.assertTrue(message.endswith("be translated as amino acid."))
 
 
 class TestStopCodons(unittest.TestCase):

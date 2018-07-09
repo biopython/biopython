@@ -45,8 +45,9 @@ class CodonAlignment(MultipleSeqAlignment):
                 raise TypeError("CodonSeq objects are expected in each "
                                 "SeqRecord in CodonAlignment")
 
-        assert self.get_alignment_length() % 3 == 0, \
-            "Alignment length is not a triple number"
+        if self.get_alignment_length() % 3 != 0:
+            raise ValueError("Alignment length is not a multiple of "
+                             "three (i.e. a whole number of codons)")
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
@@ -86,17 +87,17 @@ class CodonAlignment(MultipleSeqAlignment):
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
             return "".join(str(rec[col_index]) for rec in
-                                                    self._records[row_index])
+                           self._records[row_index])
         else:
+            from Bio.Alphabet import generic_nucleotide
             if alphabet is None:
-                from Bio.Alphabet import generic_nucleotide
                 return MultipleSeqAlignment((rec[col_index] for rec in
-                                                    self._records[row_index]),
-                                             generic_nucleotide)
+                                             self._records[row_index]),
+                                            generic_nucleotide)
             else:
                 return MultipleSeqAlignment((rec[col_index] for rec in
-                                                    self._records[row_index]),
-                                             generic_nucleotide)
+                                             self._records[row_index]),
+                                            generic_nucleotide)
 
     def get_aln_length(self):
         return self.get_alignment_length() // 3
@@ -173,7 +174,7 @@ class CodonAlignment(MultipleSeqAlignment):
         needed by CodonAlignment is met.
         """
         rec = [SeqRecord(CodonSeq(str(i.seq), alphabet=alphabet), id=i.id)
-                 for i in align._records]
+               for i in align._records]
         return cls(rec, alphabet=alphabet)
 
 

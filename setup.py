@@ -35,13 +35,15 @@ try:
     from setuptools.command.build_ext import build_ext
     from setuptools import Extension
 except ImportError:
-    sys.exit("We need the Python library setuptools to be installed. Try runnning: python -m ensurepip")
+    sys.exit("We need the Python library setuptools to be installed. "
+             "Try runnning: python -m ensurepip")
 
 if "bdist_wheel" in sys.argv:
     try:
-        import wheel
+        import wheel  # noqa: F401
     except ImportError:
-        sys.exit("We need both setuptools AND wheel packages installed for bdist_wheel to work. Try running: pip install wheel")
+        sys.exit("We need both setuptools AND wheel packages installed "
+                 "for bdist_wheel to work. Try running: pip install wheel")
 
 _CHECKED = None
 
@@ -94,6 +96,7 @@ osx_clang_fix()
 
 
 def is_pypy():
+    """Check if running under the PyPy implementation of Python."""
     import platform
     try:
         if platform.python_implementation() == 'PyPy':
@@ -105,6 +108,7 @@ def is_pypy():
 
 
 def is_jython():
+    """Check if running under the Jython implementation of Python."""
     import platform
     try:
         if platform.python_implementation() == 'Jython':
@@ -117,6 +121,7 @@ def is_jython():
 
 
 def is_ironpython():
+    """Check if running under the IronPython implementation of Python."""
     return sys.platform == "cli"
     # TODO - Use platform as in Pypy test?
 
@@ -136,6 +141,7 @@ if is_jython():
 
 
 def check_dependencies_once():
+    """Check dependencies, will cache and re-use the result."""
     # Call check_dependencies, but cache the result for subsequent
     # calls.
     global _CHECKED
@@ -154,19 +160,8 @@ def check_dependencies():
     # means overwrite previous installations.  If the user has
     # forced an installation, should we also ignore dependencies?
 
-    # We only check for NumPy, as this is a compile time dependency
-    if is_Numpy_installed():
-        return True
-    if is_jython():
-        return True  # NumPy is not available for Jython (for now)
-    if is_ironpython():
-        return True  # We're ignoring NumPy under IronPython (for now)
-
-    sys.exit("""Missing required dependency NumPy (Numerical Python).
-
-Unless running under Jython or IronPython, we require NumPy be installed
-when compiling Biopython. See http://www.numpy.org for details.
-""")
+    # Currently there are no compile time dependencies
+    return True
 
 
 class install_biopython(install):
@@ -177,30 +172,37 @@ class install_biopython(install):
     """
 
     def run(self):
+        """Run the installation."""
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
 
 
 class build_py_biopython(build_py):
+    """Biopython builder."""
+
     def run(self):
+        """Run the build."""
         if not check_dependencies_once():
             return
         if is_jython() and "Bio.Restriction" in self.packages:
-            # Evil hack to work on Jython 2.7
-            # This is to avoid java.lang.RuntimeException: Method code too large!
+            # Evil hack to work on Jython 2.7 to avoid
+            # java.lang.RuntimeException: Method code too large!
             # from Bio/Restriction/Restriction_Dictionary.py
             self.packages.remove("Bio.Restriction")
         # Add software that requires Numpy to be installed.
-        if is_Numpy_installed():
-            # Should be everything (i.e. C Python or PyPy)
-            # except Jython and IronPython
+        if is_jython() or is_ironpython():
+            pass
+        else:
             self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
 
 
 class build_ext_biopython(build_ext):
+    """Biopython extension builder."""
+
     def run(self):
+        """Run the build."""
         if not check_dependencies_once():
             return
         build_ext.run(self)
@@ -217,16 +219,20 @@ class test_biopython(Command):
     python setup.py test
 
     """
+
     description = "Automatically run the test suite for Biopython."
     user_options = []
 
     def initialize_options(self):
+        """No-op, initialise options."""
         pass
 
     def finalize_options(self):
+        """No-op, finalise options."""
         pass
 
     def run(self):
+        """Run the tests."""
         this_dir = os.getcwd()
 
         # change to the test dir and run the tests
@@ -240,15 +246,11 @@ class test_biopython(Command):
 
 
 def can_import(module_name):
-    """can_import(module_name) -> module or None"""
+    """Check we can import the requested module."""
     try:
         return __import__(module_name)
     except ImportError:
         return None
-
-
-def is_Numpy_installed():
-    return bool(can_import("numpy"))
 
 
 # Using requirements.txt is preferred for an application
@@ -320,6 +322,7 @@ PACKAGES = [
     'Bio.SearchIO.BlastIO',
     'Bio.SearchIO.HmmerIO',
     'Bio.SearchIO.ExonerateIO',
+    'Bio.SearchIO.InterproscanIO',
     'Bio.SeqIO',
     'Bio.SeqUtils',
     'Bio.Sequencing',
@@ -362,58 +365,32 @@ if is_jython():
 elif is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
-elif is_pypy():
-    # Two out of three ain't bad?
-    EXTENSIONS = [
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              ),
-    # Bio.trie has a problem under PyPy2 v5.6 and 5.7
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    ]
 else:
     EXTENSIONS = [
-    Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c'],
-              ),
-    Extension('Bio.trie',
-              ['Bio/triemodule.c',
-               'Bio/trie.c'],
-              include_dirs=["Bio"]
-              ),
-    Extension('Bio.Nexus.cnexus',
-              ['Bio/Nexus/cnexus.c']
-              ),
-    ]
-
-# Add extensions that requires NumPy to build
-if is_Numpy_installed():
-    import numpy
-    numpy_include_dir = numpy.get_include()
-    EXTENSIONS.append(
-        Extension('Bio.Cluster.cluster',
-                  ['Bio/Cluster/clustermodule.c',
-                   'Bio/Cluster/cluster.c'],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.KDTree._CKDTree',
-                  ["Bio/KDTree/KDTree.c",
-                   "Bio/KDTree/KDTreemodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
-        Extension('Bio.motifs._pwm',
-                  ["Bio/motifs/_pwm.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
-    EXTENSIONS.append(
+        Extension('Bio.Align._aligners',
+                  ['Bio/Align/_aligners.c']),
+        Extension('Bio.cpairwise2',
+                  ['Bio/cpairwise2module.c']),
+        Extension('Bio.Nexus.cnexus',
+                  ['Bio/Nexus/cnexus.c']),
         Extension('Bio.PDB.QCPSuperimposer.qcprotmodule',
-                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"],
-                  include_dirs=[numpy_include_dir],
-                  ))
+                  ["Bio/PDB/QCPSuperimposer/qcprotmodule.c"]),
+        Extension('Bio.motifs._pwm',
+                  ["Bio/motifs/_pwm.c"]),
+        Extension('Bio.Cluster._cluster',
+                  ['Bio/Cluster/cluster.c', 'Bio/Cluster/clustermodule.c']),
+        Extension('Bio.PDB.kdtrees',
+                  ["Bio/PDB/kdtrees.c"]),
+        Extension('Bio.KDTree._CKDTree',
+                  ["Bio/KDTree/KDTree.c", "Bio/KDTree/KDTreemodule.c"]),
+        ]
+    if not is_pypy():
+        # Bio.trie has a problem under PyPy2 v5.6 and 5.7
+        EXTENSIONS.extend([
+                Extension('Bio.trie',
+                          ['Bio/triemodule.c', 'Bio/trie.c'],
+                          include_dirs=["Bio"]),
+                ])
 
 
 # We now define the Biopython version number in Bio/__init__.py
@@ -426,18 +403,27 @@ for line in open('Bio/__init__.py'):
 
 # We now load in our reStructuredText README.rst file to pass
 # explicitly in the metadata since at time of writing PyPI
-# did not do this for us:
-with open("README.rst") as handle:
-    readme_rst = handle.read()
+# did not do this for us.
+#
+# Without declaring an encoding, if there was a problematic
+# character in the file, it would work on Python 2 but might
+# fail on Python 3 depending on the user's locale. By explicitly
+# checking ASCII (could use latin1 or UTF8 if needed later),
+# if any invalid character does appear in our README, this will
+# fail and alert us immediately on either platform.
+with open("README.rst", "rb") as handle:
+    # Only Python 3's open has an encoding argument.
+    # Opening in binary and doing decoding like this to work
+    # on both Python 2 and 3.
+    readme_rst = handle.read().decode("ascii")
 
 setup(name='biopython',
       version=__version__,
       author='The Biopython Contributors',
       author_email='biopython@biopython.org',
-      url='http://www.biopython.org/',
+      url='https://biopython.org/',
       description='Freely available tools for computational molecular biology.',
       long_description=readme_rst,
-      download_url='http://biopython.org/DIST/',
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Intended Audience :: Developers',
@@ -469,7 +455,10 @@ setup(name='biopython',
       packages=PACKAGES,
       ext_modules=EXTENSIONS,
       package_data={
-          'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+          'Bio.Entrez': ['DTDs/*.dtd',
+                         'DTDs/*.ent',
+                         'DTDs/*.mod',
+                         'XSDs/*.xsd'],
       },
       install_requires=REQUIRES,
       )

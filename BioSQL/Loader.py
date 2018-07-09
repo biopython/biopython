@@ -1,9 +1,11 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
 # Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
@@ -130,7 +132,7 @@ class DatabaseLoader(object):
             return self.adaptor.last_id("term")
 
     def _add_dbxref(self, dbname, accession, version):
-        """Insert a dbxref and return its id."""
+        """Insert a dbxref and return its id (PRIVATE)."""
         self.adaptor.execute(
             "INSERT INTO dbxref(dbname, accession, version)"
             " VALUES (%s, %s, %s)", (dbname, accession, version))
@@ -336,7 +338,7 @@ class DatabaseLoader(object):
         return answer
 
     def _update_left_right_taxon_values(self, left_value):
-        """Update the left and right taxon values in the table."""
+        """Update the left and right taxon values in the table (PRIVATE)."""
         if not left_value:
             return
         # Due to the UNIQUE constraint on the left and right values in the taxon
@@ -656,7 +658,7 @@ class DatabaseLoader(object):
         return bioentry_id
 
     def _load_bioentry_date(self, record, bioentry_id):
-        """Add the effective date of the entry into the database.
+        """Add the effective date of the entry into the database (PRIVATE).
 
         record - a SeqRecord object with an annotated date
         bioentry_id - corresponding database identifier
@@ -1073,7 +1075,7 @@ class DatabaseLoader(object):
                 self._get_seqfeature_dbxref(seqfeature_id, dbxref_id, rank + 1)
 
     def _get_dbxref_id(self, db, accession):
-        """Get DB cross-reference for accession.
+        """Get DB cross-reference for accession (PRIVATE).
 
         Arguments:
          - db - String, the name of the external database containing

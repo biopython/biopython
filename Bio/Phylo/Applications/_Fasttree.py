@@ -1,7 +1,10 @@
-# Copyright 2013 by Nate Sutton.  Based on code in _Phyml.py by Eric Talevich.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its license.
-# Please see the LICENSE file that should have been included as part of this
-# package.
+# Copyright 2013 by Nate Sutton.
+# Based on code in _Phyml.py by Eric Talevich.
+# All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Command-line wrapper for tree inference program Fasttree."""
 from __future__ import print_function
 
@@ -10,12 +13,12 @@ from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 
 def _is_int(x):
-    """Test whether the argument can be serialized as an integer."""
+    """Test whether the argument can be serialized as an integer (PRIVATE)."""
     return isinstance(x, int) or str(x).isdigit()
 
 
 def _is_numeric(x):
-    """Test whether the argument can be serialized as a number."""
+    """Test whether the argument can be serialized as a number (PRIVATE)."""
     try:
         float(str(x))
         return True

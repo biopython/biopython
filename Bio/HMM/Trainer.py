@@ -295,7 +295,7 @@ class BaumWelchTrainer(AbstractTrainer):
         return transition_counts
 
     def update_emissions(self, emission_counts, training_seq,
-                           forward_vars, backward_vars, training_seq_prob):
+                         forward_vars, backward_vars, training_seq_prob):
         """Add the contribution of a new training sequence to the emissions.
 
         Arguments:
@@ -364,16 +364,15 @@ class KnownStateTrainer(AbstractTrainer):
                                                         transition_counts)
 
         # update the markov model from the counts
-        ml_transitions, ml_emissions = \
-                        self.estimate_params(transition_counts,
-                                             emission_counts)
+        ml_transitions, ml_emissions = self.estimate_params(transition_counts,
+                                                            emission_counts)
         self._markov_model.transition_prob = ml_transitions
         self._markov_model.emission_prob = ml_emissions
 
         return self._markov_model
 
     def _count_emissions(self, training_seq, emission_counts):
-        """Add emissions from the training sequence to the current counts.
+        """Add emissions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
          - training_seq -- A TrainingSequence with states and emissions
@@ -393,7 +392,7 @@ class KnownStateTrainer(AbstractTrainer):
         return emission_counts
 
     def _count_transitions(self, state_seq, transition_counts):
-        """Add transitions from the training sequence to the current counts.
+        """Add transitions from the training sequence to the current counts (PRIVATE).
 
         Arguments:
          - state_seq -- A Seq object with the states of the current training

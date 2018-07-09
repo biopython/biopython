@@ -1,9 +1,11 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
 # Revisions 2007-2016 copyright by Peter Cock.  All rights reserved.
 # Revisions 2008-2009 copyright by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # Note that BioSQL (including the database schema and scripts) is
 # available and licensed separately.  Please consult www.biosql.org
@@ -135,7 +137,7 @@ class DBSeq(Seq):
         """Add another sequence or string to this sequence.
 
         The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object
+        The returned object is a Seq object, not a DBSeq object.
         """
         # Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
@@ -144,10 +146,37 @@ class DBSeq(Seq):
         """Add another sequence or string to the left.
 
         The sequence is first converted to a Seq object before the addition.
-        The returned object is a Seq object, not a DBSeq object
+        The returned object is a Seq object, not a DBSeq object.
         """
         # Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
+
+    def __mul__(self, other):
+        """Multiply sequence by an integer.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return self.toseq() * other
+
+    def __rmul__(self, other):
+        """Multiply integer by a sequence.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return other * self.toseq()
+
+    def __imul__(self, other):
+        """Multiply sequence by integer in-place.
+
+        The sequence is first converted to a Seq object before multiplication.
+        The returned object is a Seq object, not a DBSeq object.
+        """
+        # Let the Seq object deal with the alphabet issues etc
+        return self.toseq() * other
 
 
 def _retrieve_seq_len(adaptor, primary_id):
@@ -217,7 +246,7 @@ def _retrieve_seq(adaptor, primary_id):
 
 
 def _retrieve_dbxrefs(adaptor, primary_id):
-    """Retrieve the database cross references for the sequence."""
+    """Retrieve the database cross references for the sequence (PRIVATE)."""
     _dbxrefs = []
     dbxrefs = adaptor.execute_and_fetchall(
         "SELECT dbname, accession, version"

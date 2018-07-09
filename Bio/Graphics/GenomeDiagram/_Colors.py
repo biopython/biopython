@@ -1,11 +1,13 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# Contact:       Leighton Pritchard, Scottish Crop Research Institute,
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
+# Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
-#                L.Pritchard@scri.ac.uk
+#                Leighton.Pritchard@hutton.ac.uk
 ################################################################################
 
 """Colors module.
@@ -61,25 +63,26 @@ class ColorTranslator(object):
         Argument filename is the location of a file containing
         colorscheme information.
         """
-        self._artemis_colorscheme = {0: (colors.Color(1, 1, 1,), "pathogenicity, adaptation, chaperones"),
-               1: (colors.Color(0.39, 0.39, 0.39), "energy metabolism"),
-               2: (colors.Color(1, 0, 0), "information transfer"),
-               3: (colors.Color(0, 1, 0), "surface"),
-               4: (colors.Color(0, 0, 1), "stable RNA"),
-               5: (colors.Color(0, 1, 1), "degradation of large molecules"),
-               6: (colors.Color(1, 0, 1), "degradation of small molecules"),
-               7: (colors.Color(1, 1, 0), "central/intermediary/miscellaneous metabolism"),
-               8: (colors.Color(0.60, 0.98, 0.60), "unknown"),
-               9: (colors.Color(0.53, 0.81, 0.98), "regulators"),
-               10: (colors.Color(1, 0.65, 0), "conserved hypotheticals"),
-               11: (colors.Color(0.78, 0.59, 0.39), "pseudogenes and partial genes"),
-               12: (colors.Color(1, 0.78, 0.78), "phage/IS elements"),
-               13: (colors.Color(0.70, 0.70, 0.70), "some miscellaneous information"),
-               14: (colors.Color(0, 0, 0), ""),
-               15: (colors.Color(1, 0.25, 0.25), "secondary metabolism"),
-               16: (colors.Color(1, 0.5, 0.5), ""),
-               17: (colors.Color(1, 0.75, 0.75), "")
-                }      # Hardwired Artemis color scheme
+        self._artemis_colorscheme = {
+            0: (colors.Color(1, 1, 1,), "pathogenicity, adaptation, chaperones"),
+            1: (colors.Color(0.39, 0.39, 0.39), "energy metabolism"),
+            2: (colors.Color(1, 0, 0), "information transfer"),
+            3: (colors.Color(0, 1, 0), "surface"),
+            4: (colors.Color(0, 0, 1), "stable RNA"),
+            5: (colors.Color(0, 1, 1), "degradation of large molecules"),
+            6: (colors.Color(1, 0, 1), "degradation of small molecules"),
+            7: (colors.Color(1, 1, 0), "central/intermediary/miscellaneous metabolism"),
+            8: (colors.Color(0.60, 0.98, 0.60), "unknown"),
+            9: (colors.Color(0.53, 0.81, 0.98), "regulators"),
+            10: (colors.Color(1, 0.65, 0), "conserved hypotheticals"),
+            11: (colors.Color(0.78, 0.59, 0.39), "pseudogenes and partial genes"),
+            12: (colors.Color(1, 0.78, 0.78), "phage/IS elements"),
+            13: (colors.Color(0.70, 0.70, 0.70), "some miscellaneous information"),
+            14: (colors.Color(0, 0, 0), ""),
+            15: (colors.Color(1, 0.25, 0.25), "secondary metabolism"),
+            16: (colors.Color(1, 0.5, 0.5), ""),
+            17: (colors.Color(1, 0.75, 0.75), ""),
+        }      # Hardwired Artemis color scheme
         self._colorscheme = {}
         if filename is not None:
             self.read_colorscheme(filename)  # Imported color scheme
@@ -147,7 +150,7 @@ class ColorTranslator(object):
                     else:
                         comment = ""
                     self._colorscheme[label] = (self.int255_color((red, green, blue)),
-                                                 comment)
+                                                comment)
                 except ValueError:
                     raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 

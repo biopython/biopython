@@ -8,12 +8,80 @@ http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released) Biopython 1.71
+(In progress, not yet released) Biopython 1.73
 ==============================================
 
+This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7.
+It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Brandon Invergo
+- Kai Blin
+- Maximilian Greil
+- Peter Cock
+
+
+21 June 2018: Biopython 1.72
+============================
+
 This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
-It has also been tested on PyPy v5.7, PyPy3.5 v5.8 beta, and Jython 2.7
-(although support for Jython is deprecated).
+It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+
+Internal changes to Bio.SeqIO have sped up the SeqRecord .format method and
+SeqIO.write (especially when used in a for loop).
+
+The MAF alignment indexing in Bio.AlignIO.MafIO has been updated to use
+inclusive end co-ordinates to better handle searches at end points. This
+will require you to rebuild any existing MAF index files.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+
+The Entrez module now supports the NCBI API key. Also you can now set a custom
+directory for DTD and XSD files. This allows Entrez to be used in environments
+like AWS Lambda, which restricts write access to specific directories.
+Improved support for parsing NCBI Entrez XML files that use XSD schemas.
+
+Internal changes to our C code mean that NumPy is no longer required at
+compile time - only at run time (and only for those modules which use NumPy).
+
+Seq, UnknownSeq, MutableSeq and derived classes now support integer
+multiplication methods, matching native Python string methods.
+
+A translate method has been added to Bio.SeqFeature that will extract a
+feature and translate it using the codon_start and transl_table qualifiers
+of the feature if they are present.
+
+Bio.SearchIO is no longer considered experimental, and so it does not raise
+warnings anymore when imported.
+
+A new pairwise sequence aligner is available in Bio.Align, as an alternative
+to the existing pairwise sequence aligner in Bio.pairwise2.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Benjamin Vaisvil (first contribution)
+- Blaise Li
+- Chad Parmet
+- Chris Rands
+- Connor T. Skennerton
+- Francesco Gastaldello
+- Michiel de Hoon
+- Pamela Russell (first contribution)
+- Peter Cock
+- Spencer Bliven
+- Wibowo 'Bow' Arindrarto
+
+
+3 April 2018: Biopython 1.71
+============================
+
+This release of Biopython supports Python 2.7, 3.4, 3.5 and 3.6.
+It has also been tested on PyPy2.7 v5.10.0 and PyPy3.5 v5.10.1.
 
 Python 3 is the primary development platform for Biopython. We will drop
 support for Python 2.7 no later than 2020, in line with the end-of-life or
@@ -50,14 +118,31 @@ wrapper and include a new wrapper for fuzzpro.
 The restriction enzyme list in Bio.Restriction has been updated to the
 November 2017 release of REBASE.
 
-In this release more of our code is now explicitly available under either our
-original "Biopython License Agreement", or the very similar but more commonly
-used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
+New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2) 
+were added to Bio.Data.CodonTable. Note that tables 27, 28 and 31 contain
+no dedicated stop codons; the stop codons in these codes have a context
+dependent encoding as either STOP or as amino acid. 
 
 IO functions such as ``SeqIO.parse`` now accept any objects which can be passed
 to the builtin ``open`` function. Specifically, this allows using
 ``pathlib.Path`` objects under Python 3.6 and newer, as per `PEP 519
 <https://www.python.org/dev/peps/pep-0519/>`_.
+
+Bio.SearchIO can now parse InterProScan XML files.
+
+For Python 3 compatibility, comparison operators for the entities within a
+Bio.PDB Structure object were implemented. These allow the comparison of
+models, chains, residues, and atoms with the common operators  (==, !=, >, ...)
+Comparisons are based on IDs and take the parents of the entity up to the
+model level into account. For consistent behaviour of all entities the operators
+for atoms were modified to also consider the parent IDs. NOTE: this represents a
+change in behaviour in respect to v1.70 for Atom comparisons. In order to mimic
+the behaviour of previous versions, comparison will have to be done for Atom IDs
+and alternative locations specifically.
+
+In this release more of our code is now explicitly available under either our
+original "Biopython License Agreement", or the very similar but more commonly
+used "3-Clause BSD License".  See the ``LICENSE.rst`` file for more details.
 
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
@@ -70,11 +155,14 @@ possible, especially the following contributors:
 - Ariel Aptekmann
 - Chris Rands
 - Christian Brueffer
+- Connor T. Skennerton
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
+- James Jeffryes (first contribution)
 - Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
+- Joerg Schaarschmidt (first contribution)
 - João Rodrigues
 - Jeroen Van Goey
 - Jun Aruga (first contribution)
@@ -97,7 +185,6 @@ possible, especially the following contributors:
 - Yasar L. Ahmed (first contribution)
 - Zachary Sailer (first contribution)
 - Zaid Ur-Rehman (first contribution)
-
 
 
 10 July 2017: Biopython 1.70
@@ -156,7 +243,7 @@ possible, especially the following contributors:
 - Ariel Aptekmann (first contribution)
 - Ben Fulton
 - Bertrand Caron (first contribution)
-- Chris Rands
+- Chris Rands (first contribution)
 - Connor T. Skennerton
 - Eric Rasche
 - Eric Talevich

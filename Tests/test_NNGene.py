@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-
+# Copyright 2001 Brad Chapman.  All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,18 +9,18 @@
 This exercises the Motif, Schema and Signature methods of representing
 genes, as well as generic Pattern methods.
 """
-# standard library
+
 from __future__ import print_function
 
 import os
 import unittest
+import warnings
 
-# Biopython
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
+from Bio.SeqRecord import SeqRecord
 
-import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)
@@ -263,6 +263,14 @@ class MotifFinderTest(unittest.TestCase):
         self.assertEqual(bottom, "AATGGCAT",
                          "Got unexpected bottom motif %s" % bottom)
 
+    def test_inconsistent_alphabets(self):
+        """Find all motifs in a set of sequences."""
+        record1 = SeqRecord(Seq('AAA', alphabet=IUPAC.unambiguous_dna))
+        record2 = SeqRecord(Seq('AAA', alphabet=IUPAC.ambiguous_dna))
+        bad_records = [record1, record2]
+        with self.assertRaises(ValueError):
+            self.motif_finder.find(bad_records, 3)
+
 
 class MotifCoderTest(unittest.TestCase):
     """Test the ability to encode sequences as a set of motifs."""
@@ -496,16 +504,31 @@ class SchemaFactoryTest(unittest.TestCase):
                            "*": "AGTC"}
 
         self.schema = Schema.Schema(ambiguity_chars)
+        self.motifs = {"GATCGAA": 20,
+                       "GATCGAT": 15,
+                       "GATTGAC": 25,
+                       "TTTTTTT": 10}
+
+    def test_no_motifs(self):
+        """Test generating schema when no motif given."""
+        motif_bank = Pattern.PatternRepository({})
+        with self.assertRaises(ValueError):
+            self.factory.from_motifs(motif_bank, .5, 2)
+
+    def test_exceed_maximum_tries(self):
+        """Test maximum tries exceeded."""
+        with self.assertRaises(RuntimeError):
+            self.factory._get_unique_schema(['A*'], ['AT'], 1)
+
+    def test_unexpected_motif(self):
+        """Test when unexpected motif found."""
+        with self.assertRaises(ValueError):
+            self.factory._schema_from_motif(
+                'AAAAAAA', self.motifs.keys(), 1)
 
     def test_easy_from_motifs(self):
         """Generating schema from a simple list of motifs."""
-        motifs = {"GATCGAA": 20,
-                  "GATCGAT": 15,
-                  "GATTGAC": 25,
-                  "TTTTTTT": 10}
-
-        motif_bank = Pattern.PatternRepository(motifs)
-
+        motif_bank = Pattern.PatternRepository(self.motifs)
         schema_bank = self.factory.from_motifs(motif_bank, .5, 2)
         if VERBOSE:
             print("\nSchemas:")
@@ -616,6 +639,10 @@ class SignatureCoderTest(unittest.TestCase):
             self.assertEqual(predicted, expected,
                              "Non-expected representation %s for %s, wanted %s"
                              % (predicted, seq_string, expected))
+
+    def test_inconsistent_signature_sizes(self):
+        with self.assertRaises(ValueError):
+            Signature.SignatureCoder([('GAC', 'GAC'), ('AA', 'TTT')], 1)
 
 
 if __name__ == "__main__":

@@ -85,11 +85,11 @@ class Reaction(object):
 
     def __eq__(self, r):
         """Return true iff self is equal to r."""
-        return isinstance(r, Reaction) and \
-               self.reactants == r.reactants and \
-               self.catalysts == r.catalysts and \
-               self.data == r.data and \
-               self.reversible == r.reversible
+        return (isinstance(r, Reaction)
+                and self.reactants == r.reactants
+                and self.catalysts == r.catalysts
+                and self.data == r.data
+                and self.reversible == r.reversible)
 
     def __ne__(self, r):
         """Return true iff self is not equal to r."""

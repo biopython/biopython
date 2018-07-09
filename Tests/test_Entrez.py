@@ -3,20 +3,27 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Offline tests for the URL construction of NCBI's Entrez services."""
+"""Offline tests for two Entrez features.
+
+(1) the URL construction of NCBI's Entrez services.
+(2) setting a custom directory for DTD and XSD downloads.
+"""
 
 import unittest
 import warnings
 
 from Bio import Entrez
+from Bio.Entrez import Parser
 
 
 # This lets us set the email address to be sent to NCBI Entrez:
-Entrez.email = "biopython-dev@biopython.org"
+Entrez.email = "biopython@biopython.org"
+Entrez.api_key = "5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 URL_HEAD = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 URL_TOOL = "tool=biopython"
-URL_EMAIL = "email=biopython-dev%40biopython.org"
+URL_EMAIL = "email=biopython%40biopython.org"
+URL_API_KEY = "api_key=5cfd4026f9df285d6cfc723c662d74bcbe09"
 
 
 class TestURLConstruction(unittest.TestCase):
@@ -43,6 +50,7 @@ class TestURLConstruction(unittest.TestCase):
         options = Entrez._encode_options(ecitmatch=True, params=params)
         result_url = Entrez._construct_cgi(cgi, post=post, options=options)
         self.assertIn("retmode=xml", result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_einfo(self):
         """Test constructed url for request to Entrez."""
@@ -90,6 +98,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_TOOL, result_url)
         self.assertIn(URL_EMAIL, result_url)
         self.assertIn("id=22347800%2C48526535", result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_elink2(self):
         """Commas: Link from protein to gene."""
@@ -107,6 +116,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_elink3(self):
         """Multiple ID entries: Find one-to-one links from protein to gene."""
@@ -125,6 +135,7 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn("id=15718680", result_url)
         self.assertIn("id=157427902", result_url)
         self.assertIn("id=119703751", result_url)
+        self.assertIn(URL_API_KEY, result_url)
 
     def test_construct_cgi_efetch(self):
         cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
@@ -141,6 +152,35 @@ class TestURLConstruction(unittest.TestCase):
         self.assertIn(URL_EMAIL, result_url)
         self.assertTrue("id=15718680%2C157427902%2C119703751" in result_url,
                         result_url)
+        self.assertIn(URL_API_KEY, result_url)
+
+
+class CustomDirectoryTest(unittest.TestCase):
+    """Offline unit test for custom directory feature.
+
+    Allow user to specify a custom directory for Entrez DTD/XSD files by setting Parser.DataHandler.directory.
+    """
+    def test_custom_directory(self):
+        import tempfile
+        import os
+        import shutil
+
+        handler = Parser.DataHandler(validate=False)
+
+        # Create a temporary directory
+        tmpdir = tempfile.mkdtemp()
+        # Set the custom directory to the temporary directory.
+        # This assignment statement will also initialize the local DTD and XSD directories.
+        handler.directory = tmpdir
+
+        # Confirm that the two temp directories are named what we want.
+        self.assertEqual(handler.local_dtd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'DTDs'))
+        self.assertEqual(handler.local_xsd_dir, os.path.join(handler.directory, 'Bio', 'Entrez', 'XSDs'))
+
+        # And that they were created.
+        self.assertTrue(os.path.isdir(handler.local_dtd_dir))
+        self.assertTrue(os.path.isdir(handler.local_xsd_dir))
+        shutil.rmtree(tmpdir)
 
 
 if __name__ == "__main__":

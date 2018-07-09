@@ -1,7 +1,9 @@
-# Copyright 2000 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 1999-2003 by Jeffrey Chang.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Collection of modules for dealing with biological data in Python.
 
 The Biopython Project is an international association of developers
@@ -10,7 +12,7 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
-__version__ = "1.71.dev0"
+__version__ = "1.73.dev0"
 
 
 class MissingExternalDependencyError(Exception):

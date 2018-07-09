@@ -1,10 +1,11 @@
 # Copyright 2002 by Jeffrey Chang.
 # Copyright 2016 by Markus Piotrowski.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Pairwise sequence alignment using a dynamic programming algorithm.
 
 This provides functions to get global and local alignments between two
@@ -64,7 +65,7 @@ printout, use the ``format_alignment`` method of the module:
 All alignment functions have the following arguments:
 
 - Two sequences: strings, Biopython sequence objects or lists.
-  Lists are useful for suppling sequences which contain residues that are
+  Lists are useful for supplying sequences which contain residues that are
   encoded by more than one letter.
 
 - ``penalize_extend_when_opening``: boolean (default: False).
@@ -427,7 +428,11 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
            penalize_extend_when_opening, penalize_end_gaps,
            align_globally, gap_char, force_generic, score_only,
            one_alignment_only):
-    """Return a list of alignments between two sequences or its score (PRIVATE)."""
+    """Return optimal alignments between two sequences (PRIVATE).
+
+    This method either returns a list of optimal alignments (with the same
+    score) or just the optimal score.
+    """
     if not sequenceA or not sequenceB:
         return []
     try:
@@ -451,15 +456,15 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
        and isinstance(gap_B_fn, affine_penalty):
         open_A, extend_A = gap_A_fn.open, gap_A_fn.extend
         open_B, extend_B = gap_B_fn.open, gap_B_fn.extend
-        x = _make_score_matrix_fast(
+        matrices = _make_score_matrix_fast(
             sequenceA, sequenceB, match_fn, open_A, extend_A, open_B,
             extend_B, penalize_extend_when_opening, penalize_end_gaps,
             align_globally, score_only)
     else:
-        x = _make_score_matrix_generic(
+        matrices = _make_score_matrix_generic(
             sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             penalize_end_gaps, align_globally, score_only)
-    score_matrix, trace_matrix = x
+    score_matrix, trace_matrix = matrices
 
     # print("SCORE %s" % print_matrix(score_matrix))
     # print("TRACEBACK %s" % print_matrix(trace_matrix))
@@ -468,7 +473,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # starting points.
     starts = _find_start(score_matrix, align_globally)
     # Find the highest score.
-    best_score = max([x[0] for x in starts])
+    best_score = max([_[0] for _ in starts])
 
     # If they only want the score, then return it.
     if score_only:
@@ -481,19 +486,32 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
               if rint(abs(score - best_score)) <= rint(tolerance)]
 
     # Recover the alignments and return them.
-    return _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
-                               trace_matrix, align_globally, gap_char,
-                               one_alignment_only, gap_A_fn, gap_B_fn)
+    alignments = _recover_alignments(sequenceA, sequenceB, starts,
+                                     score_matrix, trace_matrix,
+                                     align_globally, gap_char,
+                                     one_alignment_only, gap_A_fn, gap_B_fn)
+    if not alignments:
+        # This may happen, see recover_alignments for explanation
+        score_matrix, trace_matrix = _reverse_matrices(score_matrix,
+                                                       trace_matrix)
+        starts = [(z, (y, x)) for z, (x, y) in starts]
+        alignments = _recover_alignments(sequenceB, sequenceA, starts,
+                                         score_matrix, trace_matrix,
+                                         align_globally, gap_char,
+                                         one_alignment_only, gap_B_fn,
+                                         gap_A_fn, reverse=True)
+    return alignments
 
 
 def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
                                gap_B_fn, penalize_end_gaps, align_globally,
                                score_only):
-    """Generate a score and traceback matrix according to Needleman-Wunsch (PRIVATE).
+    """Generate a score and traceback matrix (PRIVATE).
 
-    This implementation allows the usage of general gap functions and is rather
-    slow. It is automatically called if you define your own gap functions. You
-    can force the usage of this method with ``force_generic=True``.
+    This implementation according to Needleman-Wunsch allows the usage of
+    general gap functions and is rather slow. It is automatically called if
+    you define your own gap functions. You can force the usage of this method
+    with ``force_generic=True``.
     """
     # Create the score and traceback matrices. These should be in the
     # shape:
@@ -680,7 +698,7 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
             # Now the trace_matrix. The edges of the backtrace are encoded
             # binary: 1 = open gap in seqA, 2 = match/mismatch of seqA and
             # seqB, 4 = open gap in seqB, 8 = extend gap in seqA, and
-            # 16 = extend gap in seqA. This values can be summed up.
+            # 16 = extend gap in seqB. This values can be summed up.
             # Thus, the trace score 7 means that the best score can either
             # come from opening a gap in seqA (=1), pairing two characters
             # of seqA and seqB (+2=3) or opening a gap in seqB (+4=7).
@@ -714,7 +732,7 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
 
 def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                         trace_matrix, align_globally, gap_char,
-                        one_alignment_only, gap_A_fn, gap_B_fn):
+                        one_alignment_only, gap_A_fn, gap_B_fn, reverse=False):
     """Do the backtracing and return a list of alignments (PRIVATE).
 
     Recover the alignments by following the traceback matrix.  This
@@ -769,6 +787,13 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
         #                                    -B       B-
         # Thus we need to keep track if a gap in seqA was opened (col_gap)
         # and stop the backtrace (dead_end) if a gap in seqB follows.
+        #
+        # Attention: This may fail, if the gap-penalties for both strands are
+        # different. In this case the second aligment may be the only optimal
+        # alignment. Thus it can happen that no alignment is returned. For
+        # this case a workaround was implemented, which reverses the input and
+        # the matrices (this happens in _reverse_matrices) and repeats the
+        # backtrace. The variable 'reverse' keeps track of this.
         dead_end = False
         ali_seqA, ali_seqB, end, row, col, col_gap, trace = in_process.pop()
 
@@ -837,8 +862,12 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                 begin = max(row, col)
                 trace = 0
         if not dead_end:
-            tracebacks.append((ali_seqA[::-1], ali_seqB[::-1], score, begin,
-                               end))
+            if not reverse:
+                tracebacks.append((ali_seqA[::-1], ali_seqB[::-1], score,
+                                   begin, end))
+            else:
+                tracebacks.append((ali_seqB[::-1], ali_seqA[::-1], score,
+                                   begin, end))
             if one_alignment_only:
                 break
     return _clean_alignments(tracebacks)
@@ -861,6 +890,26 @@ def _find_start(score_matrix, align_globally):
                 score = score_matrix[row][col]
                 starts.append((score, (row, col)))
     return starts
+
+
+def _reverse_matrices(score_matrix, trace_matrix):
+    """Reverse score and trace matrices (PRIVATE)."""
+    reverse_score_matrix = []
+    reverse_trace_matrix = []
+    reverse_trace = {1: 4, 2: 2, 3: 6, 4: 1, 5: 5, 6: 3, 7: 7, 8: 16, 9: 20,
+                     10: 18, 11: 22, 12: 17, 13: 21, 14: 19, 15: 23, 16: 8,
+                     17: 12, 18: 10, 19: 14, 20: 9, 21: 13, 22: 11, 23: 15,
+                     24: 24, 25: 28, 26: 26, 27: 30, 28: 25, 29: 29, 30: 27,
+                     31: 31, None: None}
+    for col in range(len(score_matrix[0])):
+        new_score_row = []
+        new_trace_row = []
+        for row in range(len(score_matrix)):
+            new_score_row.append(score_matrix[row][col])
+            new_trace_row.append(reverse_trace[trace_matrix[row][col]])
+        reverse_score_matrix.append(new_score_row)
+        reverse_trace_matrix.append(new_trace_row)
+    return reverse_score_matrix, reverse_trace_matrix
 
 
 def _clean_alignments(alignments):

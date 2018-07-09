@@ -1,10 +1,10 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
 # Copyright 2009-2015 by Peter Cock. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code for more fancy file handles.
 
 Classes:
@@ -82,7 +82,16 @@ def as_handle(handleish, mode='r', **kwargs):
     been deprecated (this happens automatically in text mode).
 
     """
-    try:
+    # If we're running under a version of Python that supports PEP 519, try
+    # to convert `handleish` to a string with `os.fspath`.
+    if hasattr(os, 'fspath'):
+        try:
+            handleish = os.fspath(handleish)
+        except TypeError:
+            # handleish isn't path-like, and it remains unchanged -- we'll yield it below
+            pass
+
+    if isinstance(handleish, basestring):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")
         if 'encoding' in kwargs:
@@ -91,7 +100,7 @@ def as_handle(handleish, mode='r', **kwargs):
         else:
             with open(handleish, mode, **kwargs) as fp:
                 yield fp
-    except TypeError:
+    else:
         yield handleish
 
 

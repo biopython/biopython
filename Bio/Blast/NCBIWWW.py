@@ -21,6 +21,7 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
+import time
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
@@ -76,14 +77,14 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+    https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
-    import time
 
-    assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
-    if url_base == "https://blast.ncbi.nlm.nih.gov/Blast.cgi" and num_threads is not None:
-        raise ValueError('The "num_threads" option cannot be used on NCBI public servers.')
+    programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    if program not in programs:
+        raise ValueError("Program specified is %s. Expected one of %s"
+                         % (program, ", ".join(programs)))
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -170,21 +171,31 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.  Use a backoff delay from 2 - 120 second wait
-    delay = 2.0
-    previous = time.time()
+    # Poll NCBI until the results are ready.
+    # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
+    # 1. Do not contact the server more often than once every 10 seconds.
+    # 2. Do not poll for any single RID more often than once a minute.
+    # 3. Use the URL parameter email and tool, so that the NCBI
+    #    can contact you if there is a problem.
+    # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
+    #    on weekdays if more than 50 searches will be submitted.
+    # --
+    # Could start with a 10s delay, but expect most short queries
+    # will take longer thus at least 70s with delay. Therefore,
+    # start with 20s delay, thereafter once a minute.
+    delay = 20  # seconds
+    qblast.previous = time.time()
     while True:
         current = time.time()
-        wait = previous + delay - current
+        wait = qblast.previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            previous = current + wait
+            qblast.previous = current + wait
         else:
-            previous = current
-        if delay + .5 * delay <= 120:
-            delay += .5 * delay
-        else:
-            delay = 120
+            qblast.previous = current
+        if delay < 60:
+            # Wasn't a quick return, must wait at least a minute
+            delay = 60
 
         request = _Request(url_base,
                            message,
@@ -206,6 +217,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             break
 
     return StringIO(results)
+qblast.previous = time.time()
 
 
 def _parse_qblast_ref_page(handle):

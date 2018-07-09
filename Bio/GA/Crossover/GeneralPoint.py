@@ -102,7 +102,7 @@ class GeneralPointCrossover(object):
         return new_org
 
     def _generate_locs(self, bound):
-        """Generalized Location Generator.
+        """Generalized Location Generator (PRIVATE).
 
         Arguments:
          - bound (int)   - upper bound
@@ -121,7 +121,7 @@ class GeneralPointCrossover(object):
         return [0] + results + [bound]  # [0, +n points+, bound]
 
     def _crossover(self, x, no, locs):
-        """Generalized Crossover Function.
+        """Generalized Crossover Function (PRIVATE).
 
         Arguments:
          - x (int) - genome number [0|1]

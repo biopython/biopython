@@ -18,15 +18,9 @@ from copy import deepcopy
 
 from search_tests_common import compare_search_obj
 
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 

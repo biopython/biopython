@@ -526,7 +526,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_keywords(keyword_string):
-        """Split a string of keywords into a nice clean list."""
+        """Split a string of keywords into a nice clean list (PRIVATE)."""
         # process the keywords into a python list
         if keyword_string == "" or keyword_string == ".":
             keywords = ""
@@ -540,7 +540,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_accessions(accession_string):
-        """Split a string of accession numbers into a list."""
+        """Split a string of accession numbers into a list (PRIVATE)."""
         # first replace all line feeds with spaces
         # Also, EMBL style accessions are split with ';'
         accession = accession_string.replace("\n", " ").replace(";", " ")
@@ -549,7 +549,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _split_taxonomy(taxonomy_string):
-        """Split a string with taxonomy info into a list."""
+        """Split a string with taxonomy info into a list (PRIVATE)."""
         if not taxonomy_string or taxonomy_string == ".":
             # Missing data, no taxonomy
             return []
@@ -571,7 +571,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _clean_location(location_string):
-        """Clean whitespace out of a location string.
+        """Clean whitespace out of a location string (PRIVATE).
 
         The location parser isn't a fan of whitespace, so we clean it out
         before feeding it into the parser.
@@ -583,7 +583,7 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _remove_newlines(text):
-        """Remove any newlines in the passed text, returning the new string."""
+        """Remove any newlines in the passed text, returning the new string (PRIVATE)."""
         # get rid of newlines in the qualifier value
         newlines = ["\n", "\r"]
         for ws in newlines:
@@ -593,18 +593,18 @@ class _BaseGenBankConsumer(object):
 
     @staticmethod
     def _normalize_spaces(text):
-        """Replace multiple spaces in the passed text with single spaces."""
+        """Replace multiple spaces in the passed text with single spaces (PRIVATE)."""
         # get rid of excessive spaces
         return ' '.join(x for x in text.split(" ") if x)
 
     @staticmethod
     def _remove_spaces(text):
-        """Remove all spaces from the passed text."""
+        """Remove all spaces from the passed text (PRIVATE)."""
         return text.replace(" ", "")
 
     @staticmethod
     def _convert_to_python_numbers(start, end):
-        """Convert a start and end range to python notation.
+        """Convert a start and end range to python notation (PRIVATE).
 
         In GenBank, starts and ends are defined in "biological" coordinates,
         where 1 is the first base and [i, j] means to include both i and j.
@@ -678,6 +678,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if mol_type:
             if "circular" in mol_type or 'linear' in mol_type:
                 raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
+
+            # Writing out records will fail if we have a lower case DNA
+            # or RNA string in here, so upper case it.
+            # This is a bit ugly, but we don't want to upper case e.g.
+            # the m in mRNA, but thanks to the strip we lost the spaces
+            # so we need to index from the back
+            if mol_type[-3:].upper() in ('DNA', 'RNA') and not mol_type[-3:].isupper():
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Non-upper case molecule type in LOCUS line: %s"
+                              % mol_type, BiopythonParserWarning)
+
             self.data.annotations['molecule_type'] = mol_type
 
     def data_file_division(self, division):
@@ -908,7 +920,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_reference.location = all_locations
 
     def _split_reference_locations(self, location_string):
-        """Get reference locations out of a string of reference information.
+        """Get reference locations out of a string of reference information (PRIVATE).
 
         The passed string should be of the form::
 
@@ -1035,9 +1047,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _re_simple_location.match(location_line):
             # e.g. "123..456"
             s, e = location_line.split("..")
-            cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
-                                                              int(e),
-                                                              strand)
+            try:
+                cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
+                                                                  int(e),
+                                                                  strand)
+            except ValueError as e:
+                # Could be non-integers, more likely bad origin wrapping
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn("Ignoring invalid location: %r" % location_line,
+                              BiopythonParserWarning)
+                cur_feature.location = None
             return
 
         if ",)" in location_line:

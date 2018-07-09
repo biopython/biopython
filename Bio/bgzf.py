@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-# Copyright 2010-2015 by Peter Cock.
+# Copyright 2010-2018 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""Read and write BGZF compressed files (the GZIP variant used in BAM).
 
 The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
@@ -389,18 +391,25 @@ def BgzfBlocks(handle):
     data_start = 0
     while True:
         start_offset = handle.tell()
-        # This may raise StopIteration which is perfect here
-        block_length, data = _load_bgzf_block(handle)
+        try:
+            block_length, data = _load_bgzf_block(handle)
+        except StopIteration:
+            break
         data_len = len(data)
         yield start_offset, block_length, data_start, data_len
         data_start += data_len
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    """Load the next BGZF block of compressed data (PRIVATE)."""
+    """Load the next BGZF block of compressed data (PRIVATE).
+
+    Returns a tuple (block size and data), or at end of file
+    will raise StopIteration.
+    """
     magic = handle.read(4)
     if not magic:
-        # End of file
+        # End of file - should we signal this differently now?
+        # See https://www.python.org/dev/peps/pep-0479/
         raise StopIteration
     if magic != _bgzf_magic:
         raise ValueError(r"A BGZF (e.g. a BAM file) block should start with "
@@ -860,10 +869,19 @@ if __name__ == "__main__":
         print("See also the tool bgzip that comes with samtools")
         sys.exit(0)
 
+    # Ensure we have binary mode handles
+    # (leave stderr as default text mode)
+    if sys.version_info[0] >= 3:
+        stdin = sys.stdin.buffer
+        stdout = sys.stdout.buffer
+    else:
+        stdin = sys.stdin
+        stdout = sys.stdout
+
     sys.stderr.write("Producing BGZF output from stdin...\n")
-    w = BgzfWriter(fileobj=sys.stdout)
+    w = BgzfWriter(fileobj=stdout)
     while True:
-        data = sys.stdin.read(65536)
+        data = stdin.read(65536)
         w.write(data)
         if not data:
             break

@@ -1,7 +1,9 @@
-# Copyright 2008-2017 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2008-2018 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Multiple sequence alignment input/output as alignment objects.
 
@@ -233,9 +235,10 @@ def write(alignments, handle, format):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-    assert isinstance(count, int), "Internal error - the underlying %s " \
-           "writer should have returned the alignment count, not %s" \
-           % (format, repr(count))
+    if not isinstance(count, int):
+        raise RuntimeError("Internal error - the underlying %s "
+                           "writer should have returned the alignment count, not %s"
+                           % (format, repr(count)))
 
     return count
 
@@ -257,7 +260,9 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     combined into a single MultipleSeqAlignment.
     """
     from Bio import SeqIO
-    assert format in SeqIO._FormatToIterator
+
+    if format not in SeqIO._FormatToIterator:
+        raise ValueError("Unknown format '%s'" % format)
 
     if seq_count:
         # Use the count to split the records into batches.
@@ -367,12 +372,13 @@ def parse(handle, format, seq_count=None, alphabet=None):
         elif format in SeqIO._FormatToIterator:
             # Exploit the existing SeqIO parser to the dirty work!
             i = _SeqIO_to_alignment_iterator(fp, format,
-                                                alphabet=alphabet,
-                                                seq_count=seq_count)
+                                             alphabet=alphabet,
+                                             seq_count=seq_count)
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        # This imposes some overhead... wait until we drop Python 2.4 to fix it
+        # TODO: As of Python 3.3, can write "yield from i" instead. See PEP380.
+        # For loop imposes some overhead... wait until we drop Python 2.7 to fix it.
         for a in i:
             yield a
 
@@ -438,7 +444,8 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first) == seq_count
+        if len(first) != seq_count:
+            raise RuntimeError("More sequences found in alignment than specified in seq_count: %s." % seq_count)
     return first
 
 

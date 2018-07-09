@@ -1,9 +1,10 @@
 # Copyright 2010 by Eric Talevich. All rights reserved.
 # Copyright 2012 by Wibowo Arindrarto. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Common utility functions for various Bio submodules."""
 
 from __future__ import print_function

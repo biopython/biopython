@@ -2,12 +2,10 @@
 # Copyright 2011 by Andreas Wilm. All rights reserved.
 # Based on ClustalW wrapper copyright 2009 by Cymon J. Cox.
 #
-# Wrapper for Clustal Omega by Andreas Wilm (2011). Used _Clustalw.py
-# as template.
-#
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Command line wrapper for the multiple alignment program Clustal Omega."""
 
 from __future__ import print_function

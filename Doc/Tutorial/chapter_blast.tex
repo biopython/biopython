@@ -413,13 +413,13 @@ threshold. The following code does this:
 >>> for alignment in blast_record.alignments:
 ...     for hsp in alignment.hsps:
 ...         if hsp.expect < E_VALUE_THRESH:
-...             print('****Alignment****')
-...             print('sequence:', alignment.title)
-...             print('length:', alignment.length)
-...             print('e value:', hsp.expect)
-...             print(hsp.query[0:75] + '...')
-...             print(hsp.match[0:75] + '...')
-...             print(hsp.sbjct[0:75] + '...')
+...             print("****Alignment****")
+...             print("sequence:", alignment.title)
+...             print("length:", alignment.length)
+...             print("e value:", hsp.expect)
+...             print(hsp.query[0:75] + "...")
+...             print(hsp.match[0:75] + "...")
+...             print(hsp.sbjct[0:75] + "...")
 \end{verbatim}
 
 This will print out summary reports like the following:
@@ -512,13 +512,13 @@ This will parse the BLAST report into a Blast Record class (either a Blast or a 
 >>> for alignment in blast_record.alignments:
 ...     for hsp in alignment.hsps:
 ...         if hsp.expect < E_VALUE_THRESH:
-...             print('****Alignment****')
-...             print('sequence:', alignment.title)
-...             print('length:', alignment.length)
-...             print('e value:', hsp.expect)
-...             print(hsp.query[0:75] + '...')
-...             print(hsp.match[0:75] + '...')
-...             print(hsp.sbjct[0:75] + '...')
+...             print("****Alignment****")
+...             print("sequence:", alignment.title)
+...             print("length:", alignment.length)
+...             print("e value:", hsp.expect)
+...             print(hsp.query[0:75] + "...")
+...             print(hsp.match[0:75] + "...")
+...             print(hsp.sbjct[0:75] + "...")
 \end{verbatim}
 
 If you also read the section~\ref{sec:parsing-blast} on parsing BLAST XML output, you'll notice that the above code is identical to what is found in that section. Once you parse something into a record class you can deal with it independent of the format of the original BLAST info you were parsing. Pretty snazzy!
@@ -558,14 +558,14 @@ Each call to next will return a new record that we can deal with. Now we can ite
 ...     for alignment in blast_record.alignments:
 ...         for hsp in alignment.hsps:
 ...             if hsp.expect < E_VALUE_THRESH:
-...                 print('****Alignment****')
-...                 print('sequence:', alignment.title)
-...                 print('length:', alignment.length)
-...                 print('e value:', hsp.expect)
+...                 print("****Alignment****")
+...                 print("sequence:", alignment.title)
+...                 print("length:", alignment.length)
+...                 print("e value:", hsp.expect)
 ...                 if len(hsp.query) > 75:
-...                     dots = '...'
+...                     dots = "..."
 ...                 else:
-...                     dots = ''
+...                     dots = ""
 ...                 print(hsp.query[0:75] + dots)
 ...                 print(hsp.match[0:75] + dots)
 ...                 print(hsp.sbjct[0:75] + dots)

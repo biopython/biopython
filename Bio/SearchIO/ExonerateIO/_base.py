@@ -22,13 +22,13 @@ _RE_TRANS = re.compile(r'[53ISCF]')
 
 
 def _set_frame(frag):
-    """Set the HSPFragment frames."""
+    """Set the HSPFragment frames (PRIVATE)."""
     frag.hit_frame = (frag.hit_start % 3 + 1) * frag.hit_strand
     frag.query_frame = (frag.query_start % 3 + 1) * frag.query_strand
 
 
 def _make_triplets(seq, phase=0):
-    """Select a valid amino acid sequence given a 3-letter code input.
+    """Select a valid amino acid sequence given a 3-letter code input (PRIVATE).
 
     This function takes a single three-letter amino acid sequence and the phase
     of the sequence to return the longest intact amino acid sequence possible.
@@ -57,7 +57,7 @@ def _make_triplets(seq, phase=0):
 
 
 def _get_fragments_coord(frags):
-    """Return the letter coordinate of the given list of fragments.
+    """Return the letter coordinate of the given list of fragments (PRIVATE).
 
     This function takes a list of three-letter amino acid sequences and
     returns a list of coordinates for each fragment had all the input
@@ -84,7 +84,7 @@ def _get_fragments_coord(frags):
 
 
 def _get_fragments_phase(frags):
-    """Return the phases of the given list of 3-letter amino acid fragments.
+    """Return the phases of the given list of 3-letter amino acid fragments (PRIVATE).
 
     This is an internal private function and is meant for parsing Exonerate's
     three-letter amino acid output.
@@ -172,7 +172,7 @@ def _adjust_aa_seq(fraglist):
 
 
 def _split_fragment(frag):
-    """Split one HSPFragment containing frame-shifted alignment into two."""
+    """Split one HSPFragment containing frame-shifted alignment into two (PRIVATE)."""
     # given an HSPFragment object with frameshift(s), this method splits it
     # into fragments without frameshifts by sequentially chopping it off
     # starting from the beginning
@@ -236,7 +236,7 @@ def _split_fragment(frag):
 
 
 def _create_hsp(hid, qid, hspd):
-    """Return a list of HSP objects from the given parsed HSP values."""
+    """Return a list of HSP objects from the given parsed HSP values (PRIVATE)."""
     frags = []
     # we are iterating over query_ranges, but hit_ranges works just as well
     for idx, qcoords in enumerate(hspd['query_ranges']):
@@ -291,7 +291,7 @@ def _create_hsp(hid, qid, hspd):
 
 
 def _parse_hit_or_query_line(line):
-    """Parse the 'Query:' line of exonerate alignment outputs."""
+    """Parse the 'Query:' line of exonerate alignment outputs (PRIVATE)."""
     try:
         mark, id, desc = line.split(' ', 2)
     except ValueError:  # no desc

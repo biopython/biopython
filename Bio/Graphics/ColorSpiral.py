@@ -1,8 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2012 by Leighton Pritchard.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Generate RGB colours suitable for distinguishing categorical data.
 
 This module provides a class that implements a spiral 'path' through HSV
@@ -94,7 +95,7 @@ class ColorSpiral(object):
             # For each value of n, t indicates the angle through which the
             # spiral has turned, to this point
             t = (1. / self._b) * (log(n + (k * offset)) -
-                                    log((1 + offset) * k * self._a))
+                                  log((1 + offset) * k * self._a))
             # Put 0 <= h <= 2*pi, where h is the angular part of the polar
             # co-ordinates for this point on the spiral
             h = t

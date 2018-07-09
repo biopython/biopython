@@ -808,6 +808,8 @@ trie    Create a new trie object.\n\
 save    Save a trie to a handle.\n\
 load    Load a trie from a handle.\n\
 \n\
+This module is OBSOLETE. We encourage users to switch to alternative\n\
+libraries implementing a trie data structure, for example pygtrie.\n\
 ";
 
 #if PY_MAJOR_VERSION >= 3

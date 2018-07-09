@@ -1,8 +1,9 @@
 # Copyright 2015-2015 by Eric Rasche.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.AlignIO support for "xmfa" output from Mauve/ProgressiveMauve.
 
 You are expected to use this module via the Bio.AlignIO functions (or the
@@ -135,7 +136,7 @@ class MauveWriter(SequentialAlignmentWriter):
         self.handle.write('=\n')
 
     def _write_record(self, record, record_idx=0):
-        """Write a single SeqRecord to the file."""
+        """Write a single SeqRecord to the file (PRIVATE)."""
         if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 

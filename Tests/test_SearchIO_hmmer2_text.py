@@ -7,14 +7,7 @@
 import unittest
 from os import path
 
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-
-
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.SearchIO import parse, read
+from Bio.SearchIO import parse, read
 
 
 class HmmpfamTests(unittest.TestCase):
@@ -211,6 +204,16 @@ class HmmpfamTests(unittest.TestCase):
                          str(hsp.aln_annotation['similarity']))
         self.assertEqual('-------CFL---------------------------GCLVTNWVLNRS-----------------',
                          str(hsp.query.seq))
+
+    def test_hmmpfam_23_break_in_end_of_seq(self):
+        """Test parsing hmmpfam 2.3 file with a line break in the end of seq marker.
+
+        file (text_23_hmmpfam_004.out)
+        """
+        results = parse(path.join("Hmmer", "text_23_hmmpfam_004.out"), self.fmt)
+        res = next(results)
+        self.assertEqual('PKSI-KS', res[0].id)
+        self.assertEqual('PKSI-FK', res[1].id)
 
     def test_hmmpfam_24(self):
         """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""

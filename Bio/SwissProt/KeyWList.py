@@ -6,8 +6,8 @@
 """Code to parse the keywlist.txt file from SwissProt/UniProt.
 
 See:
- - http://www.expasy.ch/sprot/sprot-top.html
- - ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/docs/keywlist.txt
+ - https://www.uniprot.org/docs/keywlist
+ - https://www.uniprot.org/docs/keywlist.txt
 
 Classes:
  - Record            Stores the information about one keyword or one category

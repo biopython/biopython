@@ -1,8 +1,10 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2002 by Jeffrey Chang.
+# All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """A state-emitting MarkovModel.
 
 Note terminology similar to Manning and Schutze is used.
@@ -251,11 +253,10 @@ def _baum_welch(N, M, training_outputs,
     for i in range(MAX_ITERATIONS):
         llik = LOG0
         for outputs in training_outputs:
-            x = _baum_welch_one(
+            llik += _baum_welch_one(
                 N, M, outputs,
                 lp_initial, lp_transition, lp_emission,
                 lpseudo_initial, lpseudo_transition, lpseudo_emission,)
-            llik += x
         if update_fn is not None:
             update_fn(i, llik)
         if prev_llik is not None and numpy.fabs(prev_llik - llik) < 0.1:
@@ -266,7 +267,7 @@ def _baum_welch(N, M, training_outputs,
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
-    return [numpy.exp(x) for x in (lp_initial, lp_transition, lp_emission)]
+    return [numpy.exp(_) for _ in (lp_initial, lp_transition, lp_emission)]
 
 
 def _baum_welch_one(N, M, outputs,

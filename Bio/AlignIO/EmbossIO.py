@@ -152,7 +152,7 @@ class EmbossIterator(AlignmentIterator):
                     # (an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
-                    if start == end:
+                    if start >= end:
                         # Special case, either a single letter is present,
                         # or no letters at all.
                         if seq.replace("-", "") == "":
@@ -166,10 +166,10 @@ class EmbossIterator(AlignmentIterator):
                         start = int(start) - 1  # python counting
                         end = int(end)
 
+                    if index < 0 or index >= number_of_seqs:
+                        raise ValueError("Expected index %i in range [0,%i)"
+                                         % (index, number_of_seqs))
                     # The identifier is truncated...
-                    assert 0 <= index and index < number_of_seqs, \
-                           "Expected index %i in range [0,%i)" \
-                           % (index, number_of_seqs)
                     assert id == ids[index] or id == ids[index][:len(id)]
 
                     if len(seq_starts) == index:
@@ -177,21 +177,20 @@ class EmbossIterator(AlignmentIterator):
                         seq_starts.append(start)
 
                     # Check the start...
-                    if start == end:
+                    if start >= end:
                         assert seq.replace("-", "") == "", line
-                    else:
-                        assert start - seq_starts[index] == len(seqs[index].replace("-", "")), \
-                        "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
-                            % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
-                               start, line)
-
+                    elif start - seq_starts[index] != len(seqs[index].replace("-", "")):
+                        raise ValueError("Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s"
+                                         % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
+                                            start, line))
                     seqs[index] += seq
 
                     # Check the end ...
-                    assert end == seq_starts[index] + len(seqs[index].replace("-", "")), \
-                        "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s" \
+                    if end != seq_starts[index] + len(seqs[index].replace("-", "")):
+                        raise ValueError(
+                            "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s"
                             % (len(seqs[index].replace("-", "")), index, id, repr(seqs[index]),
-                               seq_starts[index], end, line)
+                               seq_starts[index], end, line))
 
                     index += 1
                     if index >= number_of_seqs:

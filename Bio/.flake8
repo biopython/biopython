@@ -7,7 +7,18 @@ ignore =
     # =======================
     # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-    E122,E123,E126,E127,E128,E501,E731,F401,F812,F841,W503,
+    #
+    # These are ignored by default:
+    E122,E123,E126,W503,
+    # These are not ignored by default:
+    # E127	continuation line over-indented for visual indent
+    # E128	continuation line under-indented for visual indent
+    # E501	line too long (XX > 79 characters)
+    # E731	do not assign a lambda expression, use a def
+    # F401	module imported but unused
+    # F841	local variable name is assigned to but never used
+    # TODO: Fix some of these?
+    E127,E128,E501,E731,F401,F841,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
@@ -25,11 +36,6 @@ ignore =
     # D211	No blank lines allowed before class docstring
     # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ===========================================
-    # pydocstyle: D4## - Docstring Content Issues
-    # ===========================================
-    # D401	First line should be in imperative mood
-    D401,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================

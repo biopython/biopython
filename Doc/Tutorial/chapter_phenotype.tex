@@ -60,7 +60,7 @@ There are several ways to access WellRecord objects from a PlateRecord objects:
   \item[Well identifier]
     If you know the well identifier (row + column identifiers) you can access the desired well directly.
     \begin{verbatim}
-    >>> record['A02']
+    >>> record["A02"]
     \end{verbatim}
 
   \item[Well plate coordinates]
@@ -116,7 +116,7 @@ in the example below only the first ten time points are shown.
 \begin{verbatim}
 >>> from Bio import phenotype
 >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
->>> well = record['A02']  
+>>> well = record["A02"]
 \end{verbatim}
 %rest of code snippet output is truncated
 \begin{verbatim}
@@ -183,10 +183,10 @@ with the corrected data.
 
 %cont-doctest
 \begin{verbatim}
->>> corrected = record.subtract_control(control='A01')
->>> record['A01'][63]
+>>> corrected = record.subtract_control(control="A01")
+>>> record["A01"][63]
 336.0
->>> corrected['A01'][63]
+>>> corrected["A01"][63]
 0.0
 \end{verbatim}
 
@@ -242,7 +242,7 @@ the logistic and then the richards function. The user can also specify one of th
 \begin{verbatim}
 >>> from Bio import phenotype
 >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
->>> well = record['A02'] 
+>>> well = record["A02"]
 >>> well.fit()
 >>> print("Function fitted: %s" % well.model)
 Function fitted: gompertz

@@ -1,8 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2000 Brad Chapman.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Extract information from alignment objects.
 
 In order to try and avoid huge alignment objects with tons of functions,
@@ -179,7 +180,7 @@ class SummaryInfo(object):
         return Seq(consensus, consensus_alpha)
 
     def _guess_consensus_alphabet(self, ambiguous):
-        """Pick an (ungapped) alphabet for an alignment consesus sequence.
+        """Pick an (ungapped) alphabet for an alignment consesus sequence (PRIVATE).
 
         This just looks at the sequences we have, checks their type, and
         returns as appropriate type which seems to make sense with the
@@ -319,7 +320,7 @@ class SummaryInfo(object):
         return start_dict
 
     def _get_all_letters(self):
-        """Return a string containing the expected letters in the alignment."""
+        """Return a string containing the expected letters in the alignment (PRIVATE)."""
         all_letters = self.alignment._alphabet.letters
         if all_letters is None or \
                 (isinstance(self.alignment._alphabet, Alphabet.Gapped) and
@@ -337,7 +338,7 @@ class SummaryInfo(object):
         return all_letters
 
     def _get_base_replacements(self, skip_items=None):
-        """Get a zeroed dictionary of all possible letter combinations.
+        """Get a zeroed dictionary of all possible letter combinations (PRIVATE).
 
         This looks at the type of alphabet and gets the letters for it.
         It then creates a dictionary with all possible combinations of these

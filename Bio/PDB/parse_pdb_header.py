@@ -65,7 +65,7 @@ def _get_references(inl):
 
 # bring dates to format: 1909-01-08
 def _format_date(pdb_date):
-    """Convert dates from DD-Mon-YY to YYYY-MM-DD format."""
+    """Convert dates from DD-Mon-YY to YYYY-MM-DD format (PRIVATE)."""
     date = ""
     year = int(pdb_date[7:])
     if year < 50:
@@ -83,17 +83,17 @@ def _format_date(pdb_date):
 
 
 def _chop_end_codes(line):
-    """Chops lines ending with  '     1CSA  14' and the like."""
+    """Chops lines ending with  '     1CSA  14' and the like (PRIVATE)."""
     return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z", "", line)
 
 
 def _chop_end_misc(line):
-    """Chops lines ending with  '     14-JUL-97  1CSA' and the like."""
+    """Chops lines ending with  '     14-JUL-97  1CSA' and the like (PRIVATE)."""
     return re.sub("\s\s\s\s+.*\Z", "", line)
 
 
 def _nice_case(line):
-    """Make A Lowercase String With Capitals."""
+    """Make A Lowercase String With Capitals (PRIVATE)."""
     line_lower = line.lower()
     s = ""
     i = 0
@@ -103,8 +103,7 @@ def _nice_case(line):
         if c >= 'a' and c <= 'z' and nextCap:
             c = c.upper()
             nextCap = 0
-        elif c == ' ' or c == '.' or c == ',' or c == ';' or c == ':' or c == '\t' or\
-             c == '-' or c == '_':
+        elif c in ' .,;:\t-_':
             nextCap = 1
         s += c
         i += 1

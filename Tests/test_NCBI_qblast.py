@@ -43,8 +43,6 @@ print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 
 class TestQblast(unittest.TestCase):
 
-    import time
-
     def test_blastp_nr_actin(self):
         # Simple protein blast filtered for rat only, using protein
         # GI:160837788 aka NP_075631.2
@@ -52,7 +50,6 @@ class TestQblast(unittest.TestCase):
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         'rat [ORGN]', {'megablast': 'FALSE'},
                         ['9506405', '13592137', '37589612', '149064087', '56912225'])
-        time.sleep(2)
 
     def test_specific_organism(self):
         # Try to blast agianst nr database with the "organism" option.
@@ -61,17 +58,15 @@ class TestQblast(unittest.TestCase):
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         None, {'megablast': 'FALSE', 'organism': 'rat (taxid:10114)'},
                         ['9506405', '13592137', '37589612', '149064087', '56912225'])
-        time.sleep(2)
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
                         10, "pan [ORGN]", {'megablast': 'FALSE'},
-                        ["XM_009432096.2", "XM_009432102.2", "XM_009432101.2",
-                         "XM_016930487.1", "XM_009432104.2", "XM_009432099.2",
-                         "XR_001710553.1", "XM_016930485.1", "XM_009432089.2",
-                         "XM_016930484.1"])
-        time.sleep(2)
+                        ["XM_009432096.3", "XM_009432102.3", "XM_009432101.3",
+                         "XM_016930487.2", "XM_009432104.3", "XM_009432099.3",
+                         "XR_001710553.2", "XM_016930485.2", "XM_009432089.3",
+                         "XM_016930484.2"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX
@@ -88,7 +83,6 @@ class TestQblast(unittest.TestCase):
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
                         0.0000001, None, {'megablast': 'FALSE'},
                         ["21554275", "18409071", "296087288", "566183510"])
-        time.sleep(2)
 
     def test_discomegablast(self):
         self.run_qblast("blastn", "nr",
@@ -137,7 +131,6 @@ class TestQblast(unittest.TestCase):
                             'template_length': 18,
                             'megablast': 'on',
                         }, ['XM_635681.1', 'XM_008496783.1'])
-        time.sleep(2)
 
     def test_SRA_db(self):
         # Try to blast agianst sra database with "organism" option.
@@ -149,7 +142,6 @@ class TestQblast(unittest.TestCase):
                         10, None, {"organism": "SRX2911477"},
                         ["SRR5675886.6928865.1", "SRR5675886.6894837.1",
                          "SRR5675886.6865755.1", "SRR5675886.6680098.1"])
-        time.sleep(2)
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         try:

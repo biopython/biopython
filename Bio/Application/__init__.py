@@ -1,9 +1,11 @@
 # Copyright 2001-2004 Brad Chapman.
 # Revisions copyright 2009-2013 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """General mechanisms to access applications in Biopython.
 
 This module is not intended for direct use. It provides the basic objects which
@@ -210,7 +212,8 @@ class AbstractCommandline(object):
         aliases = set()
         for p in parameters:
             if not p.names:
-                assert isinstance(p, _StaticArgument), p
+                if not isinstance(p, _StaticArgument):
+                    raise TypeError("Expected %r to be of type _StaticArgument" % p)
                 continue
             for name in p.names:
                 if name in aliases:
@@ -219,18 +222,18 @@ class AbstractCommandline(object):
                 aliases.add(name)
             name = p.names[-1]
             if _re_prop_name.match(name) is None:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name in python"
-                                 % repr(name))
+                                 % name)
             if name in _reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name because it is "
-                                 "a reserved word in python" % repr(name))
+                                 "a reserved word in python" % name)
             if name in _local_reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name due to the "
                                  "way the AbstractCommandline class works"
-                                 % repr(name))
+                                 % name)
 
             # Beware of binding-versus-assignment confusion issues
             def getter(name):
@@ -308,19 +311,19 @@ class AbstractCommandline(object):
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
-        answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
+        answer = "%s(cmd=%r" % (self.__class__.__name__, self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
                 else:
-                    answer += ", %s=%s" \
-                              % (parameter.names[-1], repr(parameter.value))
+                    answer += ", %s=%r" \
+                              % (parameter.names[-1], parameter.value)
         answer += ")"
         return answer
 
     def _get_parameter(self, name):
-        """Get a commandline option value."""
+        """Get a commandline option value (PRIVATE)."""
         for parameter in self.parameters:
             if name in parameter.names:
                 if isinstance(parameter, _Switch):
@@ -330,7 +333,7 @@ class AbstractCommandline(object):
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name):
-        """Reset or clear a commandline option value."""
+        """Reset or clear a commandline option value (PRIVATE)."""
         cleared_option = False
         for parameter in self.parameters:
             if name in parameter.names:
@@ -370,7 +373,7 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
-        """Check whether the given value is valid.
+        """Check whether the given value is valid (PRIVATE).
 
         No return value - it either works or raises a ValueError.
 
@@ -381,7 +384,9 @@ class AbstractCommandline(object):
         """
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
-            assert is_good in [0, 1, True, False]
+            if is_good not in [0, 1, True, False]:
+                raise ValueError("Result of check_function: %r is of an unexpected value"
+                                 % is_good)
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
                                  % (value, name))
@@ -574,8 +579,9 @@ class _Option(_AbstractParameter):
     def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("Should be a string: %r for %s"
+                            % (description, names[-1]))
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -663,8 +669,9 @@ class _Argument(_AbstractParameter):
         #    raise ValueError("The names argument to _Argument should be a "
         #                     "single entry list with a PEP8 property name.")
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("Should be a string: %r for %s"
+                            % (description, names[-1]))
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -687,9 +694,10 @@ class _ArgumentList(_Argument):
     # TODO - Option to require at least one value? e.g. min/max count?
 
     def __str__(self):
-        assert isinstance(self.value, list), \
-                "Arguments should be a list"
-        assert self.value, "Requires at least one filename"
+        if not isinstance(self.value, list):
+            raise TypeError("Arguments should be a list")
+        if not self.value:
+            raise ValueError("Requires at least one filename")
         # A trailing space is required so that parameters following the last filename
         # do not appear merged.
         # e.g.:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
@@ -751,7 +759,7 @@ def _escape_filename(filename):
 
 
 def _test():
-    """Run the Bio.Application module's doctests."""
+    """Run the Bio.Application module's doctests (PRIVATE)."""
     import doctest
     doctest.testmod(verbose=1)
 

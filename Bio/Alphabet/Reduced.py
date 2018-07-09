@@ -1,9 +1,10 @@
 # Copyright 2004 by Iddo Friedberg.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Reduced alphabets which lump together several amino-acids into one letter.
 
 Reduced (redundant or simplified) alphabets are used to represent protein
@@ -92,7 +93,7 @@ class Murphy15(Alphabet.ProteinAlphabet):
     """
 
     letters = "LCAGSTPFWEDNQKH"
-    size = 15
+    size = 1
 
 
 murphy_15 = Murphy15()
@@ -127,7 +128,7 @@ class Murphy10(Alphabet.ProteinAlphabet):
     """
 
     letters = "LCAGSPFEKH"
-    size = 10
+    size = 1
 
 
 murphy_10 = Murphy10()
@@ -162,7 +163,7 @@ class Murphy8(Alphabet.ProteinAlphabet):
     """
 
     letters = "LASPFEKH"
-    size = 8
+    size = 1
 
 
 murphy_8 = Murphy8()
@@ -196,7 +197,7 @@ class Murphy4(Alphabet.ProteinAlphabet):
     """
 
     letters = "LAFE"
-    size = 4
+    size = 1
 
 
 murphy_4 = Murphy4()
@@ -230,7 +231,7 @@ class HPModel(Alphabet.ProteinAlphabet):
     """
 
     letters = "HP"
-    size = 2
+    size = 1
 
 
 hp_model = HPModel()
@@ -265,7 +266,7 @@ class PC5(Alphabet.ProteinAlphabet):
     """
 
     letters = "ARCTD"
-    size = 5
+    size = 1
 
 
 pc5 = PC5()

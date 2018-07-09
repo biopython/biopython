@@ -430,6 +430,19 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
+_FormatToString = {
+    "fasta": FastaIO.as_fasta,
+    "fasta-2line": FastaIO.as_fasta_2line,
+    "tab": TabIO.as_tab,
+    "fastq": QualityIO.as_fastq,
+    "fastq-sanger": QualityIO.as_fastq,
+    "fastq-solexa": QualityIO.as_fastq_solexa,
+    "fastq-illumina": QualityIO.as_fastq_illumina,
+    "qual": QualityIO.as_qual,
+}
+
+# This could exclude file formats covered by _FormatToString?
+# Right now used in the unit tests as proxy for all supported outputs...
 _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "fasta-2line": FastaIO.FastaTwoLineWriter,
                    "gb": InsdcIO.GenBankWriter,
@@ -461,7 +474,8 @@ def write(sequences, handle, format):
        (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
 
-    You should close the handle after calling this function.
+    Note if providing a file handle, your code should close the handle
+    after calling this function (to ensure the data gets flushed to disk).
 
     Returns the number of records written (as an integer).
     """
@@ -491,8 +505,14 @@ def write(sequences, handle, format):
         mode = 'w'
 
     with as_handle(handle, mode) as fp:
-        # Map the file format to a writer class
-        if format in _FormatToWriter:
+        # Map the file format to a writer function/class
+        if format in _FormatToString:
+            format_function = _FormatToString[format]
+            count = 0
+            for record in sequences:
+                fp.write(format_function(record))
+                count += 1
+        elif format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
@@ -963,8 +983,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     # Map the file format to a sequence iterator:
     from ._index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
-               % (index_filename, filenames, format, alphabet, key_function)
+    repr = ("SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)"
+            % (index_filename, filenames, format, alphabet, key_function))
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""

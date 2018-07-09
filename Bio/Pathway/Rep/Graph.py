@@ -1,4 +1,5 @@
 # Copyright 2002 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2018 by Maximilian Greil. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -21,10 +22,10 @@ class Graph(object):
 
     def __eq__(self, g):
         """Return true if g is equal to this graph."""
-        return isinstance(g, Graph) and \
-               (self._adjacency_list == g._adjacency_list) and \
-               (self._label_map == g._label_map) and \
-               (self._edge_map == g._edge_map)
+        return (isinstance(g, Graph)
+                and self._adjacency_list == g._adjacency_list
+                and self._label_map == g._label_map
+                and self._edge_map == g._edge_map)
 
     def __ne__(self, g):
         """Return true if g is not equal to this graph."""
@@ -35,7 +36,7 @@ class Graph(object):
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
             values = sorted([(x, self._edge_map[(key, x)])
-                      for x in self._adjacency_list[key].list()])
+                      for x in list(self._adjacency_list[key])])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
@@ -84,11 +85,11 @@ class Graph(object):
         """Return a list of all the edges with this label."""
         if label not in self._label_map:
             raise ValueError("Unknown label: " + str(label))
-        return self._label_map[label].list()
+        return sorted(self._label_map[label])
 
     def labels(self):
         """Return a list of all the edge labels in this graph."""
-        return list(self._label_map.keys())
+        return sorted(self._label_map.keys())
 
     def nodes(self):
         """Return a list of the nodes in this graph."""

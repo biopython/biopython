@@ -431,7 +431,7 @@ def combine(matrices):
 
 
 def _kill_comments_and_break_lines(text):
-    r"""Delete []-delimited comments out of a file and break into lines separated by ';'.
+    r"""Delete []-delimited comments out of a file and break into lines separated by ';' (PRIVATE).
 
     stripped_text=_kill_comments_and_break_lines(text):
     Nested and multiline comments are allowed. [ and ] symbols within single
@@ -444,6 +444,8 @@ def _kill_comments_and_break_lines(text):
 
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
+    if not text:
+        return ""
     contents = iter(text)
     newtext = []
     newline = []
@@ -497,7 +499,7 @@ def _kill_comments_and_break_lines(text):
 
 
 def _adjust_lines(lines):
-    """Adjust linebreaks to match ';', strip leading/trailing whitespace.
+    """Adjust linebreaks to match ';', strip leading/trailing whitespace (PRIVATE).
 
     list_of_commandlines=_adjust_lines(input_text)
     Lines are adjusted so that no linebreaks occur within a commandline
@@ -517,7 +519,7 @@ def _adjust_lines(lines):
 
 
 def _replace_parenthesized_ambigs(seq, rev_ambig_values):
-    """Replace ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
+    """Replace ambigs in xxx(ACG)xxx format by IUPAC ambiguity code (PRIVATE)."""
     opening = seq.find('(')
     while opening > -1:
         closing = seq.find(')')
@@ -675,7 +677,7 @@ class Nexus(object):
                 self._unknown_nexus_block(title, contents)
 
     def _get_nexus_block(self, file_contents):
-        """Return a generator for looping through Nexus blocks."""
+        """Return a generator for looping through Nexus blocks (PRIVATE)."""
         inblock = False
         blocklines = []
         while file_contents:
@@ -850,7 +852,7 @@ class Nexus(object):
         #    self.taxlabels.append(taxon)
 
     def _check_taxlabels(self, taxon):
-        """Check for presence of taxon in self.taxlabels."""
+        """Check for presence of taxon in self.taxlabels (PRIVATE)."""
         # According to NEXUS standard, underscores shall be treated as spaces...,
         # so checking for identity is more difficult
         nextaxa = dict((t.replace(' ', '_'), t) for t in self.taxlabels)
@@ -858,7 +860,7 @@ class Nexus(object):
         return nextaxa.get(nexid)
 
     def _charlabels(self, options):
-        """Get labels for characters."""
+        """Get labels for characters (PRIVATE)."""
         self.charlabels = {}
         opts = CharBuffer(options)
         while True:
@@ -1073,7 +1075,7 @@ class Nexus(object):
                 raise NexusError('Format error in line %s.' % options)
 
     def _utree(self, options):
-        """Use 'utree' to denote an unrooted tree (ex: clustalx)."""
+        """Use 'utree' to denote an unrooted tree (ex: clustalx) (PRIVATE)."""
         self._tree(options)
 
     def _tree(self, options):
@@ -1159,7 +1161,7 @@ class Nexus(object):
         self.taxpartitions[name] = taxpartition
 
     def _codonposset(self, options):
-        """Read codon positions from a codons block as written from McClade.
+        """Read codon positions from a codons block as written from McClade (PRIVATE).
 
         Here codonposset is just a fancy name for a character partition with
         the name CodonPositions and the partitions N,1,2,3
@@ -1216,7 +1218,7 @@ class Nexus(object):
         return name, indices
 
     def _name_n_vector(self, opts, separator='='):
-        """Extract name and check that it's not in vector format."""
+        """Extract name and check that it's not in vector format (PRIVATE)."""
         rest = opts.rest()
         name = opts.next_word()
         # we ignore * before names
@@ -1288,7 +1290,7 @@ class Nexus(object):
         return plain_list
 
     def _resolve(self, identifier, set_type=None):
-        """Translate identifier in list into character/taxon index.
+        """Translate identifier in list into character/taxon index (PRIVATE).
 
         Characters (which are referred to by their index in Nexus.py):
             Plain numbers are returned minus 1 (Nexus indices to python indices)
@@ -1691,7 +1693,7 @@ class Nexus(object):
             else:
                 cstatus.extend(b for b in self.ambiguous_values[c] if b not in cstatus)
         if self.missing in cstatus and narrow and len(cstatus) > 1:
-            cstatus = [c for c in cstatus if c != self.missing]
+            cstatus = [_ for _ in cstatus if _ != self.missing]
         cstatus.sort()
         return cstatus
 
@@ -1827,7 +1829,7 @@ class Nexus(object):
         return self.charlabels
 
     def _adjust_charlabels(self, exclude=None, insert=None):
-        """Return adjusted indices of self.charlabels if characters are excluded or inserted."""
+        """Return adjusted indices of self.charlabels if characters are excluded or inserted (PRIVATE)."""
         if exclude and insert:
             raise NexusError('Can\'t exclude and insert at the same time')
         if not self.charlabels:

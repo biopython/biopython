@@ -109,7 +109,7 @@ _atomic_radii = {
 
 
 def _get_atom_radius(atom, rtype='united'):
-    """Translate an atom object to an atomic radius defined in MSMS.
+    """Translate an atom object to an atomic radius defined in MSMS (PRIVATE).
 
     Uses information from the parent residue and the atom object to define
     the atom type.
@@ -433,7 +433,7 @@ def _get_atom_radius(atom, rtype='united'):
 
 
 def _read_vertex_array(filename):
-    """Read the vertex list into a Numeric array."""
+    """Read the vertex list into a Numeric array (PRIVATE)."""
     with open(filename, "r") as fp:
         vertex_list = []
         for l in fp:
@@ -526,10 +526,9 @@ class ResidueDepth(AbstractPropertyMap):
         """Initialize the class."""
         # Issue warning if pdb_file is given
         if pdb_file is not None:
-            warnings.warn(("ResidueDepth no longer requires a pdb file."
-                           " This argument will be removed in a future release"
-                           " of Biopython."),
-                           BiopythonDeprecationWarning)
+            warnings.warn("ResidueDepth no longer requires a pdb file. "
+                          "This argument will be removed in a future release "
+                          "of Biopython.", BiopythonDeprecationWarning)
 
         depth_dict = {}
         depth_list = []
@@ -554,17 +553,3 @@ class ResidueDepth(AbstractPropertyMap):
             residue.xtra['EXP_RD'] = rd
             residue.xtra['EXP_RD_CA'] = ca_rd
         AbstractPropertyMap.__init__(self, depth_dict, depth_keys, depth_list)
-
-
-if __name__ == "__main__":
-
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure("X", sys.argv[1])
-    model = s[0]
-
-    rd = ResidueDepth(model)
-
-    for item in rd:
-        print(item)

@@ -8,7 +8,7 @@ People are listed alphabetically, as verfied with Unix sort::
     $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
 This is certainly not comprehensive, and if you've been overlooked (sorry!),
-please open an issue on GitHub or mention it on the development mailing list.
+please open an issue on GitHub or mention it on the mailing list.
 
 - Aaron Gallagher <habnabit at gmail>
 - Aaron Kitzmiller <https://github.com/aaronk>
@@ -41,6 +41,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Ben Fulton <https://github.com/benfulton>
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
+- Benjamin Vaisvil <https://github.com/bvaisvil>
 - Bernhard Thiel <https://github.com/Bernhard10>
 - Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
@@ -57,6 +58,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
 - Cecilia Alsmark <Cecilia.Alsmark at domain ebc.uu.se>
+- Chad Parmet <https://github.com/cparmet>
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
@@ -70,7 +72,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Claude Paroz <claude at two (as digit) xlibre dot net>
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
-- Cymon J Cox <cymon at domain duke.edu>
+- Cymon J Cox <https://github.com/cymon>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
@@ -109,6 +111,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <j.a.casbon at domain qmul.ac.uk>
+- James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
@@ -116,11 +119,13 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
+- Jian-Long Huang <https://github.com/jlhg>
 - Jimmy O'Donnell <https://github.com/jimmyodonnell>
 - Joanna & Dominik Kasprzak
 - Joao Rodrigues <anaryin at the domain gmail dot com>
 - Joe Cora <https://github.com/JoeCora>
 - Joe Greener <https://github.com/jgreener64>
+- Joerg Schaarschmidt <https://github.com/schaarj>
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
@@ -176,6 +181,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Owen Solberg <https://github.com/odoublewen>
+- Pamela Russell <https://github.com/pamelarussell>
 - Patrick Kunzmann <https://github.com/padix-key>
 - Paul T. Bathen
 - Peter Bienstman <Peter.Bienstman at domain rug.ac.be>
@@ -186,6 +192,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
+- Robert Ernst <https://github.com/rernst>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
@@ -209,7 +216,7 @@ please open an issue on GitHub or mention it on the development mailing list.
 - Thomas Hamelryck <thamelry at domain binf.ku.dk>
 - Thomas Holder <https://github.com/speleo3>
 - Thomas Rosleff Soerensen <rosleff at domain mpiz-koeln.mpg.de>
-- Thomas Schmitt <Thomas dot Schmitt at Swedish domain sbc.su>
+- Thomas Schmitt <https://github.com/wurstbonbon>
 - Thomas Sicheritz-Ponten <thomas at domain cbs.dtu.dk>
 - Tiago Antao <https://github.com/tiagoantao>
 - Tyghe Vallard <https://github.com/necrolyte2>

@@ -445,9 +445,9 @@ class SeqRecord(object):
 
             if biosql_available and isinstance(self, DBSeqRecord):
                 answer = SeqRecord(self.seq[index],
-                                        id=self.id,
-                                        name=self.name,
-                                        description=self.description)
+                                   id=self.id,
+                                   name=self.name,
+                                   description=self.description)
             else:
                 answer = self.__class__(self.seq[index],
                                         id=self.id,
@@ -708,6 +708,12 @@ class SeqRecord(object):
             # Follow python convention and default to using __str__
             return str(self)
         from Bio import SeqIO
+
+        # Easy case, can call string-building function directly
+        if format_spec in SeqIO._FormatToString:
+            return SeqIO._FormatToString[format_spec](self)
+
+        # Harder case, make a temp handle instead
         if format_spec in SeqIO._BinaryFormats:
             # Return bytes on Python 3
             from io import BytesIO
@@ -749,6 +755,10 @@ class SeqRecord(object):
 
     def __ge__(self, other):
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    # Make SeqRecord unhashable explicit, required for Python 2.
+    # See github issue 929 for related discussion.
+    __hash__ = None
 
     # Note Python 3 does not use __cmp__ and there is no need to
     # define __cmp__ on Python 2 as have all of  _lt__ etc defined.

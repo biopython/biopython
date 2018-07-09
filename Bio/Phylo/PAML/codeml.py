@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2018 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -194,6 +194,9 @@ def read(results_file):
         raise IOError("Results file does not exist.")
     with open(results_file) as handle:
         lines = handle.readlines()
+    if not lines:
+        raise ValueError("Empty results file.  Did CODEML exit successfully?  "
+                         "Run 'Codeml.run()' with 'verbose=True'.")
     (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
             results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models,
