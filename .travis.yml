@@ -136,7 +136,7 @@ before_install:
 # This is minimal and used under all stages
 install:
   - pip install --upgrade pip setuptools
-  - pip install tox
+  - pip install tox==3.0.0
   - tox -c .travis-tox.ini -e $TOXENV --notest
 
 script:
