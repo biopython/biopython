@@ -230,6 +230,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Xiaoyu Zhuo <https://github.com/xzhuo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
+- Yang Wu <https://github.com/yangwu91>
 - Yasar L. Ahmed <https://github.com/pyahmed>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>

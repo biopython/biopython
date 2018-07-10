@@ -5,6 +5,7 @@
 
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
+# Yang Wu added a delay check.
 
 """Code to invoke the NCBI BLAST server over the internet.
 
@@ -20,6 +21,7 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
+import time
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
@@ -73,8 +75,6 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
-    import time
-
     programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
     if program not in programs:
         raise ValueError("Program specified is %s. Expected one of %s"
@@ -172,15 +172,14 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
-    previous = time.time()
     while True:
         current = time.time()
-        wait = previous + delay - current
+        wait = qblast.previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            previous = current + wait
+            qblast.previous = current + wait
         else:
-            previous = current
+            qblast.previous = current
         if delay < 60:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
@@ -205,6 +204,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             break
 
     return StringIO(results)
+
+
+qblast.previous = time.time()
 
 
 def _parse_qblast_ref_page(handle):
