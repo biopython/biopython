@@ -1,3 +1,7 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Make sure the translation functions work.
 # Start simple - unambiguous DNA to unambiguous protein
 
