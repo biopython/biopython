@@ -42,6 +42,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Alona Levy-Jurgenson (first contribution)
+- Ariel Aptekmann
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
