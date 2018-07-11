@@ -1470,6 +1470,30 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[9]), "CTCAATCGTA")
         handle.close()
 
+    def test_minimal_meme_parser(self):
+        """Parse motifs/minimal_test.meme file."""
+        handle = open("motifs/minimal_test.meme")
+        record = motifs.parse(handle, 'minimal')
+        self.assertEqual(record.version, '4')
+        self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(len(record.sequences), 0)
+        self.assertEqual(record.command, '')
+        self.assertEqual(len(record), 2)
+        motif = record[0]
+        self.assertEqual(motif.name, "KRP")
+        self.assertEqual(record["KRP"], motif)
+        self.assertEqual(motif.num_occurrences, 17)
+        self.assertEqual(motif.length, 19)
+        self.assertEqual(str(motif.consensus), 'TGTGATCGAGGTCACACTT')
+        self.assertAlmostEqual(motif.background['A'], 0.30269730269730266)
+        self.assertAlmostEqual(motif.background['C'], 0.1828171828171828)
+        self.assertAlmostEqual(motif.background['G'], 0.20879120879120877)
+        self.assertAlmostEqual(motif.background['T'], 0.30569430569430567)
+        self.assertAlmostEqual(motif.evalue, 4.1e-09)
+        self.assertEqual(motif.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances, None)
+        handle.close()
+
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
         handle = open("motifs/meme.rna.oops.txt")
