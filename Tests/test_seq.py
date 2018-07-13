@@ -431,6 +431,8 @@ class TestSeqAddition(unittest.TestCase):
         """Test resulting sequence has gap types '-' and '.'"""
         with self.assertRaises(ValueError):
             self.rna[3] + self.rna[4]
+        with self.assertRaises(ValueError):
+            self.rna[3] += self.rna[4]
 
     def test_addition_dna_with_dna(self):
         for a in self.dna:
@@ -454,6 +456,10 @@ class TestSeqAddition(unittest.TestCase):
                     a + b
                 with self.assertRaises(TypeError):
                     b + a
+                with self.assertRaises(TypeError):
+                    a += b
+                with self.assertRaises(TypeError):
+                    b += a
 
     def test_addition_proteins(self):
         self.protein.pop(2)
@@ -476,6 +482,8 @@ class TestSeqAddition(unittest.TestCase):
         b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
         with self.assertRaises(ValueError):
             a + b
+        with self.assertRaises(ValueError):
+            a += b
 
     def test_exception_when_added_protein_has_several_stop_codon_types(self):
         """Test resulting protein has stop codon types '*' and '@'"""
@@ -485,12 +493,16 @@ class TestSeqAddition(unittest.TestCase):
             Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-"))
         with self.assertRaises(ValueError):
             a + b
+        with self.assertRaises(ValueError):
+            a += b
 
     def test_exception_when_adding_protein_with_nucleotides(self):
         for a in self.protein[0:5]:
             for b in self.dna[0:3] + self.rna[0:4]:
                 with self.assertRaises(TypeError):
                     a + b
+                with self.assertRaises(TypeError):
+                    a += b
 
     def test_adding_generic_nucleotide_with_other_nucleotides(self):
         for a in self.nuc:
