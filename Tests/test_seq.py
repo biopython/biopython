@@ -405,12 +405,27 @@ class TestSeqAddition(unittest.TestCase):
                 c = a + b
                 self.assertEqual(str(c), str(a) + str(b))
 
+    def test_addition_dna_rna_with_generic_nucleotides_inplace(self):
+        for a in self.dna + self.rna:
+            for b in self.nuc:
+                c = a + b
+                a += b
+                self.assertEqual(c, a)
+
     def test_addition_rna_with_rna(self):
         self.rna.pop(3)
         for a in self.rna:
             for b in self.rna:
                 c = a + b
                 self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_rna_with_rna_inplace(self):
+        self.rna.pop(3)
+        for a in self.rna:
+            for b in self.rna:
+                c = a + b
+                a += b
+                self.assertEqual(c, a)
 
     def test_exception_when_added_rna_has_more_than_one_gap_type(self):
         """Test resulting sequence has gap types '-' and '.'"""
@@ -422,6 +437,13 @@ class TestSeqAddition(unittest.TestCase):
             for b in self.dna:
                 c = a + b
                 self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_dna_with_dna_inplace(self):
+        for a in self.dna:
+            for b in self.dna:
+                c = a + b
+                a += b
+                self.assertEqual(c, a)
 
     def test_addition_dna_with_rna(self):
         self.dna.pop(4)
@@ -439,6 +461,14 @@ class TestSeqAddition(unittest.TestCase):
             for b in self.protein:
                 c = a + b
                 self.assertEqual(str(c), str(a) + str(b))
+
+    def test_addition_proteins_inplace(self):
+        self.protein.pop(2)
+        for a in self.protein:
+            for b in self.protein:
+                c = a + b
+                a += b
+                self.assertEqual(c, a)
 
     def test_exception_when_added_protein_has_more_than_one_gap_type(self):
         """Test resulting protein has gap types '-' and '.'"""
