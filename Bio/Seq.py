@@ -361,7 +361,7 @@ class Seq(object):
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply Seq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -375,7 +375,7 @@ class Seq(object):
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply Seq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
 
     def __imul__(self, other):
@@ -392,7 +392,7 @@ class Seq(object):
         Seq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply Seq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
 
     def tostring(self):  # Seq API requirement
@@ -1411,7 +1411,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply UnknownSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(len(self) * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -1425,7 +1425,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply UnknownSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(len(self) * other, self.alphabet)
 
     def __imul__(self, other):
@@ -1442,7 +1442,7 @@ class UnknownSeq(Seq):
         UnknownSeq(6, alphabet=DNAAlphabet(), character='N')
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply UnknownSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(len(self) * other, self.alphabet)
 
     def __getitem__(self, index):
@@ -2072,7 +2072,7 @@ class MutableSeq(object):
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply MutableSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(self.data * other, self.alphabet)
 
     def __rmul__(self, other):
@@ -2089,7 +2089,7 @@ class MutableSeq(object):
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply MutableSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(self.data * other, self.alphabet)
 
     def __imul__(self, other):
@@ -2103,7 +2103,7 @@ class MutableSeq(object):
         MutableSeq('ATGATG', DNAAlphabet())
         """
         if not isinstance(other, int):
-            raise TypeError("can't multiply MutableSeq by non-int type")
+            raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(self.data * other, self.alphabet)
 
     def append(self, c):
