@@ -498,6 +498,13 @@ class TestSeqAddition(unittest.TestCase):
                 c = a + b
                 self.assertEqual(str(c), str(a) + str(b))
 
+    def test_adding_generic_nucleotide_with_other_nucleotides_inplace(self):
+        for a in self.nuc:
+            for b in self.dna + self.rna + self.nuc:
+                c = b + a
+                b += a  # can't change 'a' as need value next iteration
+                self.assertEqual(c, b)
+
 
 class TestSeqMultiplication(unittest.TestCase):
     def test_mul_method(self):
