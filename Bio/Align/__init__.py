@@ -22,9 +22,11 @@ from Bio import Alphabet
 try:
     from Bio.Align import _aligners
 except ImportError as e:
-    raise ImportError("""{}: you should not try to import directly from the
+    new_exc =  ImportError("""{}: you should not import directly from the
                          biopython source directory; please exit the source
                          tree and re-launch your code from there""".format(e))
+    new_exc.__cause__ = None
+    raise new_exc
 
 
 class MultipleSeqAlignment(object):
