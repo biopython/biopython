@@ -19,7 +19,12 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
 
-from Bio.Align import _aligners
+try:
+    from Bio.Align import _aligners
+except ImportError as e:
+    raise ImportError("""{}: you should not try to import directly from the
+                         biopython source directory; please exit the source
+                         tree and re-launch your code from there""".format(e))
 
 
 class MultipleSeqAlignment(object):
