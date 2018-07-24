@@ -172,9 +172,11 @@ def efetch(db, **keywords):
     else:
         try:
             ids = ",".join(ids)
-        except TypeError:
+        except TypeError as e:
             if isinstance(ids, int):
                 ids = str(ids)
+            else:
+                raise e
         variables["id"] = ids
 
         if ids.count(",") >= 200:
