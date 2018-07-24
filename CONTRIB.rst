@@ -108,6 +108,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <idoerg at domain burnham.org>
+- Ivan Erill <erill at domain umbc.edu>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <j.a.casbon at domain qmul.ac.uk>
