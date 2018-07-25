@@ -367,6 +367,10 @@ def AbiIterator(handle, alphabet=None, trim=False):
     header = struct.unpack(_HEADFMT,
                            handle.read(struct.calcsize(_HEADFMT)))
 
+    # Set default sample ID value, which we expect to be present in most cases
+    # in the SMPL1 tag, but may be missing.
+    sample_id = '<unknown id>'
+
     raw = dict()
     for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
         key = tag_name + str(tag_number)
@@ -409,7 +413,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
             file_name = basename(handle.name).replace('.fsa', '')
         except AttributeError:
             file_name = ""
-        sample_id = raw.get('LIMS1', '<unknown id>')
+        sample_id = raw.get('LIMS1') or sample_id
         description = raw.get('CTID1', '<unknown description>')
         record = SeqRecord(Seq(''),
                            id=sample_id,
