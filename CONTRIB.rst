@@ -42,7 +42,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
-- Bernhard Thiel <https://github.com/Bernhard10>
+- Bernhard C. Thiel <https://github.com/Bernhard10>
 - Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
 - Bertrand Néron <https://github.com/bneron>
