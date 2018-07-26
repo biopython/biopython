@@ -1264,6 +1264,13 @@ class ChangingIdTests(unittest.TestCase):
         model = next(iter(self.struc))
         self.assertIn("R", model)
 
+    def test_change_id_to_self(self):
+        """Changing the id to itself does nothing (does not raise)."""
+        chain = next(iter(self.struc.get_chains()))
+        chain_id = chain.id
+        chain.id = chain_id
+        self.assertEqual(chain.id, chain_id)
+
     def test_change_residue_id(self):
         """Change the id of a residue."""
         chain = next(iter(self.struc.get_chains()))
