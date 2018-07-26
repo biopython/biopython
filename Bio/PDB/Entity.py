@@ -165,6 +165,8 @@ class Entity(object):
 
         @raises: ValueError
         """
+        if value == self._id:
+            return
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
