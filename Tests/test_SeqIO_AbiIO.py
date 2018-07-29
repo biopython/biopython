@@ -264,6 +264,16 @@ class TestAbi(unittest.TestCase):
             else:
                 self.assertEqual(str(record.seq), test_data[trace]['seq'])
 
+    def test_no_smpl1(self):
+        """Test parsing of ABIF file without the normally expected SMPL1 tag."""
+        record = SeqIO.read("Abi/no_smpl1.ab1", "abi")
+        self.assertEqual(record.id, "<unknown id>")
+        raw_keys = record.annotations["abif_raw"]
+        self.assertEqual(set(raw_keys), {'FWO_1', 'AEPt1', 'AEPt2', 'APXV1',
+            'APrV1', 'DATA9', 'DATA10', 'DATA11', 'DATA12', 'DATA1', 'DATA2',
+            'DATA3', 'DATA4', 'PBAS1', 'PBAS2', 'PLOC1', 'PLOC2', 'PCON1',
+            'PCON2'})
+
     def test_raw(self):
         """Test access to raw ABIF tags."""
         record = SeqIO.read("Abi/A6_1-DB3.ab1", "abi")
