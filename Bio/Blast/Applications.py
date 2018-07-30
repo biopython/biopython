@@ -1235,7 +1235,8 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
 
 
 def _test():
-    """Run the Bio.Blast.Applications module's doctests."""
+    """Run the Bio.Blast.Applications module's doctests.(PRIVATE)."""
+
     import doctest
     doctest.testmod(verbose=1)
 
