@@ -737,6 +737,22 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, Seq, (1066))
         self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
 
+    def test_join(self):
+        """Checks if Seq join correctly concatinates sequence with the spacer."""
+        # Only expect it to take Seq objects only!
+
+        spacer = Seq('NNNNN')
+        file = 'Fasta/f003'
+        seqlist = list(SeqIO.parse(file, 'fasta'))
+
+        concatenated = spacer.join(record.seq for record in SeqIO.parse(file, 'fasta'))
+
+        temp_data = ""
+        for seq in seqlist:
+            temp_data += seq.seq._data + spacer._data
+
+        self.assertEqual(concatenated._data, temp_data[: - len(spacer._data) ])
+
     # TODO - Addition...
 
 

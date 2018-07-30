@@ -25,6 +25,7 @@ import string  # for maketrans only
 import array
 import sys
 import warnings
+import collections 
 
 from Bio._py3k import range
 from Bio._py3k import basestring
@@ -1259,6 +1260,45 @@ class Seq(object):
             raise ValueError("Unexpected gap character, {0!r}".format(gap))
         return Seq(str(self).replace(gap, ""), alpha)
 
+    def join(self, other):
+        """Return a concatination of all sequences in the iterable 'other', spaced with the sequence from self.
+        
+        Accepts Seq objects and Strings as objects to be concatinated with the spacer
+
+        >>> spacer = Seq('NNNNN')
+        >>> seqlist = list(Seq("AAA"),Seq("TTT"),Seq("PPP"))
+        >>> concatenated = spacer.join(seqlist)
+        >>> concatenated
+        Seq('AAANNNNNTTTNNNNNPPP')
+
+        Throws error if other is not an iterable and if objects inside of the iterable are not Seq or String objects
+        """
+
+        if not isinstance(other, collections.Iterable):
+            raise ValueError("Input must be an iterable")
+        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+        temp_data = ""
+        a = self.alphabet
+        for c in other:
+            if isinstance(c, SeqRecord):
+                return NotImplemented
+            elif hasattr(c, "alphabet"): 
+                if not Alphabet._check_type_compatible([self.alphabet,
+                                                            c.alphabet]):
+                    raise TypeError(
+                        "Incompatible alphabets {0!r} and {1!r}".format(
+                            self.alphabet, c.alphabet))
+                a = Alphabet._consensus_alphabet([self.alphabet, c.alphabet])
+                temp_data += c._data + self._data
+            elif isinstance(c, basestring):
+                temp_data += c + self._data
+            else:
+                raise ValueError("Input must be an iterable of Seqs or Strings")
+                                # remove the last addition of the spacer
+        return self.__class__(temp_data[: - len(self._data)], a )
+            
+
+
 
 class UnknownSeq(Seq):
     """Read-only sequence object of known length but unknown contents.
@@ -2133,6 +2173,7 @@ class MutableSeq(object):
         """
         self.data.insert(i, c)
 
+
     def pop(self, i=(-1)):
         """Remove a subsequence of a single letter at given index.
 
@@ -2780,6 +2821,8 @@ def _test():
     import doctest
     doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
     print("Done")
+
+
 
 
 if __name__ == "__main__":
