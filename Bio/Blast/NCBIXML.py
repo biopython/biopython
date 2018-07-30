@@ -37,10 +37,10 @@ class _XMLparser(ContentHandler):
         self._debug_ignore_list = []
 
     def _secure_name(self, name):
-        """Remove 'dangerous' from tag names.
+        """Remove 'dangerous' from tag names.(PRIVATE).
 
         Arguments:
-         - name -- name to be 'secured'
+         - name -- name to be 'secured'.
 
         """
         # Replace '-' with '_' in XML tag names
@@ -154,16 +154,21 @@ class BlastParser(_XMLparser):
 
     def reset(self):
         """Reset all the data allowing reuse of the BlastParser() object."""
+
         self._records = []
         self._header = Record.Header()
         self._parameters = Record.Parameters()
         self._parameters.filter = None  # Maybe I should update the class?
 
     def _start_Iteration(self):
+        """Start interaction (PRIVATE)."""
+
         self._blast = Record.Blast()
         pass
 
     def _end_Iteration(self):
+        """End interaction (PRIVATE)."""
+
         # We stored a lot of generic "top level" information
         # in self._header (an object of type Record.Header)
         self._blast.reference = self._header.reference
@@ -222,14 +227,14 @@ class BlastParser(_XMLparser):
 
     # Header
     def _end_BlastOutput_program(self):
-        """BLAST program, e.g., blastp, blastn, etc.
+        """BLAST program, e.g., blastp, blastn, etc.(PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
-        """Version number and date of the BLAST engine.
+        """Version number and date of the BLAST engine.(PRIVATE).
 
         e.g. "BLASTX 2.2.12 [Aug-07-2005]" but there can also be
         variants like "BLASTP 2.2.18+" without the date.
@@ -324,6 +329,7 @@ class BlastParser(_XMLparser):
 
     def _end_Parameters_expect(self):
         """Expect values cutoff (PRIVATE)."""
+
         # NOTE: In old text output there was a line:
         # Number of sequences better than 1.0e-004: 1
         # As far as I can see, parameters.num_seqs_better_e
@@ -339,32 +345,37 @@ class BlastParser(_XMLparser):
 
     def _end_Parameters_sc_match(self):
         """Match score for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
+
         self._parameters.sc_match = int(self._value)
 
     def _end_Parameters_sc_mismatch(self):
         """Mismatch penalty for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
+
         self._parameters.sc_mismatch = int(self._value)
 
     def _end_Parameters_gap_open(self):
         """Gap existence cost (-G) (PRIVATE)."""
+
         self._parameters.gap_penalties = int(self._value)
 
     def _end_Parameters_gap_extend(self):
         """Gap extension cose (-E) (PRIVATE)."""
+
         self._parameters.gap_penalties = (self._parameters.gap_penalties,
                                          int(self._value))
 
     def _end_Parameters_filter(self):
         """Record filtering options (-F) (PRIVATE)."""
+
         self._parameters.filter = self._value
 
     # def _end_Parameters_pattern(self):
-    #     """Pattern used for phi-blast search
+    #     """Pattern used for phi-blast search (PRIVATE).
     #     """
     #     pass # XXX TODO PSI
 
     # def _end_Parameters_entrez_query(self):
-    #     """Entrez query used to limit search
+    #     """Entrez query used to limit search (PRIVATE).
     #     """
     #     pass # XXX TODO PSI
 
@@ -385,11 +396,13 @@ class BlastParser(_XMLparser):
 
     def _end_Hit_id(self):
         """Record the identifier of the database sequence (PRIVATE)."""
+
         self._hit.hit_id = self._value
         self._hit.title = self._value + ' '
 
     def _end_Hit_def(self):
         """Record the definition line of the database sequence (PRIVATE)."""
+
         self._hit.hit_def = self._value
         self._hit.title += self._value
         self._descr.title = self._hit.title
