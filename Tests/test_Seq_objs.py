@@ -742,6 +742,187 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(TypeError, MutableSeq, (Seq("A")))
         self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
 
+    def test_join_Seq_ValueError(self):
+        """Checks that a ValueError is thrown for all non-iterable types."""
+        # No iterable types which contain non-accepted types either.
+
+        spacer = Seq('NNNNN')
+        self.assertRaises(ValueError, spacer.join, 5)
+        self.assertRaises(ValueError, spacer.join, "ATG")
+        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
+        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
+        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+
+    def test_join_UnknownSeq_ValueError(self):
+        """Checks that a ValueError is thrown for all non-iterable types."""
+        # No iterable types which contain non-accepted types either.
+
+        spacer = UnknownSeq(5, character="-")
+        self.assertRaises(ValueError, spacer.join, 5)
+        self.assertRaises(ValueError, spacer.join, "ATG")
+        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
+        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
+        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+
+    def test_join_MutableSeq_ValueError(self):
+        """Checks that a ValueError is thrown for all non-iterable types."""
+        # No iterable types which contain non-accepted types either.
+
+        spacer = MutableSeq("MMMMM")
+        self.assertRaises(ValueError, spacer.join, 5)
+        self.assertRaises(ValueError, spacer.join, "ATG")
+        self.assertRaises(ValueError, spacer.join, Seq("ATG"))
+        self.assertRaises(ValueError, spacer.join, MutableSeq("ATG"))
+        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+
+    def test_join_Seq_TypeError(self):
+        """Checks that a TypeError is thrown for incompatible alphabets."""
+
+        spacer = Seq('NNNNN', generic_dna)
+        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_rna), Seq('NNNNN', generic_rna)])
+        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), Seq('NNNNN', generic_protein)])
+
+    def test_join_UnknownSeq_TypeError(self):
+        """Checks that a TypeError is thrown for incompatible alphabets."""
+
+        spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
+        self.assertRaises(TypeError, spacer.join, [UnknownSeq(5, character="-", alphabet=generic_rna), UnknownSeq(5, character="-", alphabet=generic_rna)])
+        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), UnknownSeq(5, character="-", alphabet=generic_protein)])
+
+    def test_join_MutableSeq_TypeError(self):
+        """Checks that a TypeError is thrown for incompatible alphabets."""
+
+        spacer = MutableSeq('NNNNN', generic_dna)
+        self.assertRaises(TypeError, spacer.join, [MutableSeq('NNNNN', generic_rna), MutableSeq('NNNNN', generic_rna)])
+        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), MutableSeq('NNNNN', generic_protein)])
+
+    def test_join_Seq(self):
+        """Checks if Seq join correctly concatenates sequence with the spacer."""
+        # Only expect it to take Seq objects and/or strings in an iterable!
+
+        spacer1 = Seq('', generic_dna)
+        spacers = [spacer1, Seq('NNNNN', generic_dna), Seq('GGG', generic_nucleotide)]
+        example_strings = ["ATG", "ATG", "ATG", "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+
+        # strings with empty spacer
+        str_concatenated = spacer1.join(example_strings)
+
+        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated.alphabet, spacer1.alphabet)
+
+        for spacer in spacers:
+            seq_concatenated = spacer.join(example_strings_seqs)
+            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
+
+    def test_join_Seq_with_file(self):
+        """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
+        filename = 'Fasta/f003'
+        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        seqlist_as_strings = [str(_) for _ in seqlist]
+
+        spacer = Seq('NNNNN')
+        spacer1 = Seq('')
+        # seq objects with spacer
+        seq_concatenated = spacer.join(seqlist)
+        # seq objects with empty spacer
+        seq_concatenated1 = spacer1.join(seqlist)
+
+        ref_data = ref_data1 = ""
+        ref_data = str(spacer).join(seqlist_as_strings)
+        ref_data1 = str(spacer1).join(seqlist_as_strings)
+
+        self.assertEqual(str(seq_concatenated), ref_data)
+        self.assertEqual(str(seq_concatenated1), ref_data1)
+        with self.assertRaises(TypeError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
+
+    def test_join_UnknownSeq(self):
+        """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
+        # Only expect it to take Seq objects and/or strings in an iterable!
+
+        spacer1 = UnknownSeq(0, character="-", alphabet=generic_dna)
+        spacers = [spacer1, UnknownSeq(5, character="-", alphabet=generic_dna), UnknownSeq(5, character="-", alphabet=generic_nucleotide)]
+
+        example_strings = ["ATG", "ATG", "ATG", "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+
+        # strings with empty spacer
+        str_concatenated = spacer1.join(example_strings)
+
+        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated.alphabet, spacer1.alphabet)
+
+        for spacer in spacers:
+            seq_concatenated = spacer.join(example_strings_seqs)
+            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
+
+    def test_join_UnknownSeq_with_file(self):
+        """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
+        filename = 'Fasta/f003'
+        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        seqlist_as_strings = [str(_) for _ in seqlist]
+
+        spacer = UnknownSeq(0, character="-", alphabet=generic_dna)
+        spacer1 = UnknownSeq(5, character="-", alphabet=generic_dna)
+        # seq objects with spacer
+        seq_concatenated = spacer.join(seqlist)
+        # seq objects with empty spacer
+        seq_concatenated1 = spacer1.join(seqlist)
+
+        ref_data = ref_data1 = ""
+        ref_data = str(spacer).join(seqlist_as_strings)
+        ref_data1 = str(spacer1).join(seqlist_as_strings)
+
+        self.assertEqual(str(seq_concatenated), ref_data)
+        self.assertEqual(str(seq_concatenated1), ref_data1)
+        with self.assertRaises(TypeError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
+
+    def test_join_MutableSeq(self):
+        """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
+        # Only expect it to take Seq objects and/or strings in an iterable!
+
+        spacer1 = MutableSeq('', generic_dna)
+        spacers = [spacer1, MutableSeq('NNNNN', generic_dna), MutableSeq('GGG', generic_nucleotide)]
+        example_strings = ["ATG", "ATG", "ATG", "ATG"]
+        example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
+
+        # strings with empty spacer
+        str_concatenated = spacer1.join(example_strings)
+
+        self.assertEqual(str(str_concatenated), "".join(example_strings))
+        self.assertEqual(str_concatenated.alphabet, spacer1.alphabet)
+
+        for spacer in spacers:
+            seq_concatenated = spacer.join(example_strings_seqs)
+            self.assertEqual(str(seq_concatenated), str(spacer).join(example_strings))
+            self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
+
+    def test_join_MutableSeq_with_file(self):
+        """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
+        filename = 'Fasta/f003'
+        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        seqlist_as_strings = [str(_) for _ in seqlist]
+
+        spacer = MutableSeq('NNNNN')
+        spacer1 = MutableSeq('')
+        # seq objects with spacer
+        seq_concatenated = spacer.join(seqlist)
+        # seq objects with empty spacer
+        seq_concatenated1 = spacer1.join(seqlist)
+
+        ref_data = ref_data1 = ""
+        ref_data = str(spacer).join(seqlist_as_strings)
+        ref_data1 = str(spacer1).join(seqlist_as_strings)
+
+        self.assertEqual(str(seq_concatenated), ref_data)
+        self.assertEqual(str(seq_concatenated1), ref_data1)
+        with self.assertRaises(TypeError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
+
     # TODO - Addition...
 
 
