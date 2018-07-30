@@ -22,6 +22,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Maximilian Greil
 - Peter Cock
+- Wibowo 'Bow' Arindrarto
 
 
 21 June 2018: Biopython 1.72
