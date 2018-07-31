@@ -1278,17 +1278,24 @@ class Seq(object):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
         temp_data = ""
-        a = self.alphabet
+        if self._data == "" : # if the spacer is empty it will initially default to the type of the first sequence
+            a = None
+        else :
+            a = self.alphabet
         for c in other:
             if isinstance(c, SeqRecord):
                 return NotImplemented
             elif hasattr(c, "alphabet"): 
-                if not Alphabet._check_type_compatible([self.alphabet,
-                                                            c.alphabet]):
-                    raise TypeError(
-                        "Incompatible alphabets {0!r} and {1!r}".format(
-                            self.alphabet, c.alphabet))
-                a = Alphabet._consensus_alphabet([self.alphabet, c.alphabet])
+                if a == None :
+                    a = c.alphabet
+                else :
+                    if not Alphabet._check_type_compatible([a,
+                                                                c.alphabet]):
+                        raise TypeError(
+                            "Incompatible alphabets {0!r} and {1!r}".format(
+                                a, c.alphabet))
+                    
+                    a = Alphabet._consensus_alphabet([a, c.alphabet])
                 temp_data += c._data + self._data
             elif isinstance(c, basestring):
                 temp_data += c + self._data

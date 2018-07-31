@@ -741,17 +741,23 @@ class StringMethodTests(unittest.TestCase):
         """Checks if Seq join correctly concatinates sequence with the spacer."""
         # Only expect it to take Seq objects only!
 
-        spacer = Seq('NNNNN')
         file = 'Fasta/f003'
         seqlist = list(SeqIO.parse(file, 'fasta'))
+        
+        spacer = Seq('NNNNN')
+        spacer1 = Seq('')
 
         concatenated = spacer.join(record.seq for record in SeqIO.parse(file, 'fasta'))
+        concatenated1 = spacer1.join(record.seq for record in SeqIO.parse(file, 'fasta'))
 
         temp_data = ""
+        temp_data1 = ""
         for seq in seqlist:
             temp_data += seq.seq._data + spacer._data
+            temp_data1 += seq.seq._data + spacer1._data
 
         self.assertEqual(concatenated._data, temp_data[: - len(spacer._data) ])
+        self.assertEqual(concatenated1._data, temp_data1[: - len(spacer1._data) ])
 
     # TODO - Addition...
 
