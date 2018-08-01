@@ -743,7 +743,6 @@ class StringMethodTests(unittest.TestCase):
 
         file = 'Fasta/f003'
         seqlist = list(SeqIO.parse(file, 'fasta'))
-        
         spacer = Seq('NNNNN')
         spacer1 = Seq('')
 
@@ -756,8 +755,8 @@ class StringMethodTests(unittest.TestCase):
             temp_data += seq.seq._data + spacer._data
             temp_data1 += seq.seq._data + spacer1._data
 
-        self.assertEqual(concatenated._data, temp_data[: - len(spacer._data) ])
-        self.assertEqual(concatenated1._data, temp_data1[: - len(spacer1._data) ])
+        self.assertEqual(concatenated._data, temp_data[: - len(spacer._data)])
+        self.assertEqual(concatenated1._data, temp_data1[: - len(spacer1._data)])
 
     # TODO - Addition...
 
