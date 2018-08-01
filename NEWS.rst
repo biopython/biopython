@@ -22,6 +22,7 @@ possible, especially the following contributors:
 - Kai Blin
 - Maximilian Greil
 - Peter Cock
+- Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
 
