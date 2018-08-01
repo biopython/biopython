@@ -1226,7 +1226,7 @@ class LinearDrawer(AbstractDrawer):
 
     def _draw_sigil_jaggy(self, bottom, center, top, x1, x2, strand,
                           color, border=None, **kwargs):
-        """Draw JAGGY sigil.
+        """Draw JAGGY sigil (PRIVATE).
 
         Although we may in future expose the head/tail jaggy lengths, for now
         both the left and right edges are drawn jagged.

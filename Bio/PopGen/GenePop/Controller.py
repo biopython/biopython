@@ -249,7 +249,9 @@ class GenePopController(object):
     def _test_pop_hz_both(self, fname, type, ext, enum_test=True,
                           dememorization=10000, batches=20,
                           iterations=5000):
-        """Use Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Hardy-Weinberg test for (PRIVATE)
+
+        heterozygote deficiency/excess.
 
         Returns a population iterator containing a dictionary where
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
@@ -268,7 +270,9 @@ class GenePopController(object):
     def _test_global_hz_both(self, fname, type, ext, enum_test=True,
                              dememorization=10000, batches=20,
                              iterations=5000):
-        """Use Global Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Global Hardy-Weinberg test for (PRIVATE)
+
+        heterozygote deficiency/excess.
 
         Returns a triple with:
          - A list per population containing (pop_name, P-val, SE, switches).

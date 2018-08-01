@@ -334,7 +334,7 @@ class JASPAR5(object):
         return int_id
 
     def _fetch_motif_by_internal_id(self, int_id):
-        # fetch basic motif information
+        """Fetch basic motif information (PRIVATE)."""
         cur = self.dbh.cursor()
         cur.execute("""select BASE_ID, VERSION, COLLECTION, NAME from MATRIX
                        where id = %s""", (int_id,))

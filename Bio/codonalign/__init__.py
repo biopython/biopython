@@ -232,7 +232,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
-    """Check if the nucleotide can be translated into the protein.
+    """Check if the nucleotide can be translated into the protein (PRIVATE).
 
     Expects two SeqRecord objects.
     """
@@ -423,7 +423,9 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                          shift_id_pos):
-    """Find a regular expression matching a potentially shifted anchor.
+    """Find a regular expression matching (PRIVATE)
+
+    a potentially shifted anchor.
 
     Arguments:
      - sh_anc    - shifted anchor sequence
