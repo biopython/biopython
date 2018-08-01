@@ -95,7 +95,9 @@ class ComparativeScatterPlot(object):
 
     def _draw_scatter_plot(self, cur_drawing, x_start, y_start,
                            x_end, y_end):
-        """Draw a scatter plot on the drawing with the given coordinates."""
+        """Draw a scatter plot (PRIVATE)
+
+        on the drawing with the given coordinates."""
         scatter_plot = LinePlot()
 
         # set the dimensions of the scatter plot
