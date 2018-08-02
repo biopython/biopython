@@ -1266,7 +1266,7 @@ class Seq(object):
         Accepts Seq objects and Strings as objects to be concatinated with the spacer
 
         >>> spacer = Seq('NNNNN')
-        >>> seqlist = list(Seq("AAA"),Seq("TTT"),Seq("PPP"))
+        >>> seqlist = list([Seq("AAA"),Seq("TTT"),Seq("PPP")])
         >>> concatenated = spacer.join(seqlist)
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')

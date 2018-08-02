@@ -742,7 +742,7 @@ class StringMethodTests(unittest.TestCase):
         # Only expect it to take Seq objects only!
 
         file = 'Fasta/f003'
-        seqlist = list(SeqIO.parse(file, 'fasta'))
+        seqlist = SeqIO.parse(file, 'fasta')
         spacer = Seq('NNNNN')
         spacer1 = Seq('')
 
