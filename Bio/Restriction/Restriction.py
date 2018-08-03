@@ -2330,9 +2330,8 @@ class Analysis(RestrictionBatch, PrintFormat):
         return start <= site < end
 
     def _test_reverse(self, start, end, site):
-        """Test if site is between end and start, (PRIVATE)
+        """Test if site is between end and start, for circular sequences (PRIVATE).
 
-        for circular sequences.
         Internal use only.
         """
         return start <= site <= len(self.sequence) or 1 <= site < end

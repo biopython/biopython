@@ -423,9 +423,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                          shift_id_pos):
-    """Find a regular expression matching (PRIVATE)
-
-    a potentially shifted anchor.
+    """Find a regular expression matching a potentially shifted anchor (PRIVATE).
 
     Arguments:
      - sh_anc    - shifted anchor sequence
