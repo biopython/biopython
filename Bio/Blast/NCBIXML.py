@@ -345,28 +345,23 @@ class BlastParser(_XMLparser):
 
     def _end_Parameters_sc_match(self):
         """Match score for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
-
         self._parameters.sc_match = int(self._value)
 
     def _end_Parameters_sc_mismatch(self):
         """Mismatch penalty for nucleotide-nucleotide comparison (-r) (PRIVATE)."""
-
         self._parameters.sc_mismatch = int(self._value)
 
     def _end_Parameters_gap_open(self):
         """Gap existence cost (-G) (PRIVATE)."""
-
         self._parameters.gap_penalties = int(self._value)
 
     def _end_Parameters_gap_extend(self):
         """Gap extension cose (-E) (PRIVATE)."""
-
         self._parameters.gap_penalties = (self._parameters.gap_penalties,
                                          int(self._value))
 
     def _end_Parameters_filter(self):
         """Record filtering options (-F) (PRIVATE)."""
-
         self._parameters.filter = self._value
 
     # def _end_Parameters_pattern(self):
@@ -381,6 +376,7 @@ class BlastParser(_XMLparser):
 
     # Hits
     def _start_Hit(self):
+        """Start filling records (PRIVATE)."""
         self._blast.alignments.append(Record.Alignment())
         self._blast.descriptions.append(Record.Description())
         self._blast.multiple_alignment = []
@@ -389,6 +385,7 @@ class BlastParser(_XMLparser):
         self._descr.num_alignments = 0
 
     def _end_Hit(self):
+        """Clear variables (PRIVATE)."""
         # Cleanup
         self._blast.multiple_alignment = None
         self._hit = None
