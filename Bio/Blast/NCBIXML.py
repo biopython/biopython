@@ -154,7 +154,6 @@ class BlastParser(_XMLparser):
 
     def reset(self):
         """Reset all the data allowing reuse of the BlastParser() object."""
-
         self._records = []
         self._header = Record.Header()
         self._parameters = Record.Parameters()
@@ -162,13 +161,11 @@ class BlastParser(_XMLparser):
 
     def _start_Iteration(self):
         """Start interaction (PRIVATE)."""
-
         self._blast = Record.Blast()
         pass
 
     def _end_Iteration(self):
         """End interaction (PRIVATE)."""
-
         # We stored a lot of generic "top level" information
         # in self._header (an object of type Record.Header)
         self._blast.reference = self._header.reference
