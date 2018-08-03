@@ -326,7 +326,6 @@ class BlastParser(_XMLparser):
 
     def _end_Parameters_expect(self):
         """Expect values cutoff (PRIVATE)."""
-
         # NOTE: In old text output there was a line:
         # Number of sequences better than 1.0e-004: 1
         # As far as I can see, parameters.num_seqs_better_e
@@ -390,13 +389,11 @@ class BlastParser(_XMLparser):
 
     def _end_Hit_id(self):
         """Record the identifier of the database sequence (PRIVATE)."""
-
         self._hit.hit_id = self._value
         self._hit.title = self._value + ' '
 
     def _end_Hit_def(self):
         """Record the definition line of the database sequence (PRIVATE)."""
-
         self._hit.hit_def = self._value
         self._hit.title += self._value
         self._descr.title = self._hit.title
