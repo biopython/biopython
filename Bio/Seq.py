@@ -1261,7 +1261,7 @@ class Seq(object):
         return Seq(str(self).replace(gap, ""), alpha)
 
     def join(self, other):
-        """Return a concatination of all sequences in the iterable 'other', spaced with the sequence from self.
+        """Return a merge of the sequences in other, spaced by the sequence from self.
 
         Accepts Seq objects and Strings as objects to be concatinated with the spacer
 
@@ -1271,13 +1271,17 @@ class Seq(object):
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')
 
-        Throws error if other is not an iterable and if objects inside of the iterable are not Seq or String objects
+        Throws error if other is not an iterable and if objects inside of the iterable
+        are not Seq or String objects
         """
-        if not isinstance(other, collections.Iterable):
+        if not isinstance(other, collections.Iterable):  # doesn't detect single strings
+            raise ValueError("Input must be an iterable")
+        if isinstance(other, basestring):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
         temp_data = ""
-        if self._data == "":  # if the spacer is empty it will initially default to the type of the first sequence
+        # if the spacer is empty it will initially default none
+        if self._data == "":
             a = None
         else:
             a = self.alphabet
@@ -1285,7 +1289,7 @@ class Seq(object):
             if isinstance(c, SeqRecord):
                 return NotImplemented
             elif hasattr(c, "alphabet"):
-                if a is None:
+                if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet
                 else:
                     if not Alphabet._check_type_compatible([a,
@@ -1299,6 +1303,10 @@ class Seq(object):
                 temp_data += c + self._data
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
+        if a is None:  # arguments are all alphabet-less strings
+            a = self.alphabet
+        if self._data == "":
+            return self.__class__(temp_data, a)
         return self.__class__(temp_data[: - len(self._data)], a)  # remove the last addition of the spacer
 
 
