@@ -787,6 +787,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertRaises(ValueError, spacer.join, "ATG")
         self.assertRaises(ValueError, spacer.join, test_seq)
         self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(file, 'fasta')))
 
     # TODO - Addition...
 
