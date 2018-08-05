@@ -55,6 +55,7 @@ import unittest
 import doctest
 import os
 import sys
+import platform
 import warnings
 from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
@@ -259,16 +260,19 @@ class TutorialTestCase(unittest.TestCase):
         global original_path
         os.chdir(original_path)
         #  remove files created from chapter_phylo.tex
-        os.remove(os.path.join(tutorial_base, "examples/tree1.nwk"))
-        os.remove(os.path.join(tutorial_base, "examples/other_trees.nwk"))
+        # files don't get created during test with python3.5
+        if os.path.exists(os.path.join(tutorial_base, "examples/tree1.nwk")):
+            os.remove(os.path.join(tutorial_base, "examples/tree1.nwk"))
+            os.remove(os.path.join(tutorial_base, "examples/other_trees.nwk"))
         #  remove files created from chapter_cluster.tex
         tutorial_cluster_base = os.path.abspath("../Tests/")
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr"))
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.cdt"))
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.gtr"))
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_A2.kag"))
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5.kgg"))
-        os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5_A2.cdt"))
+        if os.path.exists(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr")):
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr"))
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.cdt"))
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.gtr"))
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_A2.kag"))
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5.kgg"))
+            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5_A2.cdt"))
 
 
 # This is to run the doctests if the script is called directly:
