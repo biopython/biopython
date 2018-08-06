@@ -1683,9 +1683,9 @@ class WithinPosition(int, AbstractPosition):
 
     def __new__(cls, position, left, right):
         """Create a WithinPosition object."""
-        assert position == left or position == right, \
-            "WithinPosition: %r should match left %r or right %r" \
-            % (position, left, right)
+        if not (position == left or position == right):
+            raise RuntimeError("WithinPosition: %r should match left %r or "
+                               "right %r" % (position, left, right))
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -2033,8 +2033,9 @@ class OneOfPosition(int, AbstractPosition):
 
         position is an integer specifying the default behaviour.
         """
-        assert position in choices, \
-            "OneOfPosition: %r should match one of %r" % (position, choices)
+        if position not in choices:
+            raise ValueError("OneOfPosition: %r should match one "
+                             "of %r" % (position, choices))
         obj = int.__new__(cls, position)
         obj.position_choices = choices
         return obj

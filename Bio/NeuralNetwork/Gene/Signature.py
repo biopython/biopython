@@ -74,9 +74,9 @@ class SignatureFinder(object):
         for seq_record in seq_records:
             # if we are working with alphabets, make sure we are consistent
             if alphabet is not None:
-                assert seq_record.seq.alphabet == alphabet, \
-                       "Working with alphabet %s and got %s" % \
-                       (alphabet, seq_record.seq.alphabet)
+                if seq_record.seq.alphabet != alphabet:
+                    raise TypeError("Working with alphabet %s and got %s" %
+                                    (alphabet, seq_record.seq.alphabet))
 
             # now start finding signatures in the sequence
             largest_sig_size = sig_size * 2 + max_gap

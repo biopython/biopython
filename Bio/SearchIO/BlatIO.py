@@ -228,9 +228,9 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
     :type strand: int, choice of -1, 0, or 1
 
     """
-    assert len(starts) == len(blksizes), \
-            "Unequal start coordinates and block sizes list (%r vs %r)" \
-            % (len(starts), len(blksizes))
+    if len(starts) != len(blksizes):
+            raise RuntimeError("Unequal start coordinates and block sizes list"
+                               " (%r vs %r)" % (len(starts), len(blksizes)))
     # see: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
     # no need to reorient if it's already the positive strand
     if strand >= 0:
@@ -443,11 +443,15 @@ class BlatPslParser(object):
 
     def _validate_cols(self, cols):
         if not self.pslx:
-            assert len(cols) == 21, "Invalid PSL line: %r. " \
-            "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
+            if len(cols) != 21:
+                raise ValueError("Invalid PSL line: %r. Expected 21 "
+                                 "tab-separated columns, found %i"
+                                 % (self.line, len(cols)))
         else:
-            assert len(cols) == 23, "Invalid PSLX line: %r. " \
-            "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
+            if len(cols) != 23:
+                raise ValueError("Invalid PSLX line: %r. Expected 23 "
+                                 "tab-separated columns, found %i"
+                                 % (self.line, len(cols)))
 
     def _parse_qresult(self):
         """Yield QueryResult objects (PRIVATE)."""

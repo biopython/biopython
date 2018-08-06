@@ -437,16 +437,17 @@ def _load_bgzf_block(handle, text_mode=False):
     data = d.decompress(handle.read(deflate_size)) + d.flush()
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
-    assert expected_size == len(data), \
-        "Decompressed to %i, not %i" % (len(data), expected_size)
+    if expected_size != len(data):
+        raise RuntimeError("Decompressed to %i, "
+                           "not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:
         crc = struct.pack("<i", crc)
     else:
         crc = struct.pack("<I", crc)
-    assert expected_crc == crc, \
-        "CRC is %s, not %s" % (crc, expected_crc)
+    if expected_crc != crc:
+        raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
         return block_size, _as_string(data)
     else:
@@ -764,8 +765,9 @@ class BgzfWriter(object):
                              0)
         compressed = c.compress(block) + c.flush()
         del c
-        assert len(compressed) < 65536, \
-            "TODO - Didn't compress enough, try less data in this block"
+        if len(compressed) > 65536:
+            raise RuntimeError("TODO - Didn't compress enough, "
+                               "try less data in this block")
         crc = zlib.crc32(block)
         # Should cope with a mix of Python platforms...
         if crc < 0:

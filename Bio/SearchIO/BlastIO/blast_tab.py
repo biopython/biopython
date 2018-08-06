@@ -321,8 +321,9 @@ class BlastTabParser(object):
         """Return a dictionary of parsed row values (PRIVATE)."""
         fields = self.fields
         columns = self.line.strip().split('\t')
-        assert len(fields) == len(columns), "Expected %i columns, found: " \
-            "%i" % (len(fields), len(columns))
+        if len(fields) != len(columns):
+            raise ValueError("Expected %i columns, found: "
+                             "%i" % (len(fields), len(columns)))
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):

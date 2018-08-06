@@ -194,8 +194,10 @@ def _set_hsp_seqs(hsp, parsed, program):
             start = start + start_adj
             stop = stop + start_adj - stop_adj
             parsed[seq_type]['seq'] = pseq['seq'][start:stop]
-    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), "%r %r" \
-            % (len(parsed['query']['seq']), len(parsed['hit']['seq']))
+    if len(parsed['query']['seq']) != len(parsed['hit']['seq']):
+        raise ValueError("Length mismatch: %r %r"
+                         % (len(parsed['query']['seq']),
+                            len(parsed['hit']['seq'])))
     if 'similarity' in hsp.aln_annotation:
         # only using 'start' since FASTA seems to have trimmed the 'excess'
         # end part
@@ -256,9 +258,9 @@ def _get_aln_slice_coords(parsed_hsp):
         start = disp_start - start
         stop = disp_start - stop + 1
     stop += seq_stripped.count('-')
-    assert 0 <= start and start < stop and stop <= len(seq_stripped), \
-           "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-           % (seq, start, stop, parsed_hsp)
+    if not (0 <= start and start < stop and stop <= len(seq_stripped)):
+        raise ValueError("Problem with sequence start/stop,"
+                         "\n%s[%i:%i]\n%s" % (seq, start, stop, parsed_hsp))
     return start, stop
 
 
@@ -453,8 +455,8 @@ class FastaM10Parser(object):
             elif self.line.startswith('>'):
                 if state == _STATE_NONE:
                     # make sure it's the correct query
-                    assert query_id.startswith(self.line[1:].split(' ')[0]), \
-                            "%r vs %r" % (query_id, self.line)
+                    if not query_id.startswith(self.line[1:].split(' ')[0]):
+                        raise ValueError("%r vs %r" % (query_id, self.line))
                     state = _STATE_QUERY_BLOCK
                     parsed_hsp['query']['seq'] = ''
                 elif state == _STATE_QUERY_BLOCK:

@@ -89,17 +89,17 @@ class Pathway(object):
     def add_entry(self, entry):
         """Add an Entry element to the pathway."""
         # We insist that the node ID is an integer
-        assert _is_int_or_long(entry.id), \
-            "Node ID must be an integer, got %s (%s)" % (type(entry.id),
-                                                         entry.id)
+        if not _is_int_or_long(entry.id):
+            raise TypeError("Node ID must be an integer, got %s (%s)"
+                            % (type(entry.id), entry.id))
         entry._pathway = self           # Let the entry know about the pathway
         self.entries[entry.id] = entry
 
     def remove_entry(self, entry):
         """Remove an Entry element from the pathway."""
-        assert _is_int_or_long(entry.id), \
-            "Node ID must be an integer, got %s (%s)" % (type(entry.id),
-                                                         entry.id)
+        if not _is_int_or_long(entry.id):
+            raise TypeError("Node ID must be an integer, got %s (%s)"
+                            % (type(entry.id), entry.id))
         # We need to remove the entry from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -108,19 +108,20 @@ class Pathway(object):
     def add_reaction(self, reaction):
         """Add a Reaction element to the pathway."""
         # We insist that the node ID is an integer and corresponds to an entry
-        assert _is_int_or_long(reaction.id), \
-            "Node ID must be an integer, got %s (%s)" % (type(reaction.id),
-                                                         reaction.id)
-        assert reaction.id in self.entries, \
-            "Reaction ID %d has no corresponding entry" % reaction.id
+        if not _is_int_or_long(reaction.id):
+            raise ValueError("Node ID must be an integer, got %s (%s)"
+                             % (type(reaction.id), reaction.id))
+        if reaction.id not in self.entries:
+            raise ValueError("Reaction ID %d has no corresponding"
+                             " entry" % reaction.id)
         reaction._pathway = self    # Let the reaction know about the pathway
         self._reactions[reaction.id] = reaction
 
     def remove_reaction(self, reaction):
         """Remove a Reaction element from the pathway."""
-        assert _is_int_or_long(reaction.id), \
-            "Node ID must be an integer, got %s (%s)" % (type(reaction.id),
-                                                         reaction.id)
+        if not _is_int_or_long(reaction.id):
+            raise TypeError("Node ID must be an integer, got %s (%s)"
+                            % (type(reaction.id), reaction.id))
         # We need to remove the reaction from any other elements that may
         # contain it, which means removing those elements
         # TODO
@@ -155,8 +156,9 @@ class Pathway(object):
         return self._name
 
     def _setname(self, value):
-        assert value.startswith('path:'), \
-            "Pathway name should begin with 'path:', got %s" % value
+        if not value.startswith('path:'):
+            raise ValueError("Pathway name should begin with 'path:', "
+                             "got %s" % value)
         self._name = value
 
     def _delname(self):
@@ -302,8 +304,9 @@ class Entry(object):
         the component already exists.
         """
         if self._pathway is not None:
-            assert element.id in self._pathway.entries, \
-                "Component %s is not an entry in the pathway" % element.id
+            if element.id not in self._pathway.entries:
+                raise ValueError("Component %s is not an entry in the "
+                                 "pathway" % element.id)
         self.components.add(element)
 
     def remove_component(self, value):
@@ -653,16 +656,17 @@ class Reaction(object):
     def add_substrate(self, substrate_id):
         """Add a substrate, identified by its node ID, to the reaction."""
         if self._pathway is not None:
-            assert int(substrate_id) in self._pathway.entries, \
-                "Couldn't add substrate, no node ID %d in Pathway" % \
-                int(substrate_id)
+            if int(substrate_id) not in self._pathway.entries:
+                raise ValueError("Couldn't add substrate, no node ID %d in "
+                                 "Pathway" % int(substrate_id))
         self._substrates.add(substrate_id)
 
     def add_product(self, product_id):
         """Add a product, identified by its node ID, to the reaction."""
         if self._pathway is not None:
-            assert int(product_id) in self._pathway.entries, \
-                "Couldn't add product, no node ID %d in Pathway" % product_id
+            if int(product_id) not in self._pathway.entries:
+                raise ValueError("Couldn't add product, no node ID %d in "
+                                 "Pathway" % product_id)
         self._products.add(int(product_id))
 
     # The node ID is also the node ID of the Entry that corresponds to the

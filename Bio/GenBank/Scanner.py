@@ -597,7 +597,7 @@ class EmblScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Eh? '%s'" % self.line)
+            raise ValueError("Footer format unexpected: '%s'" % self.line)
 
         # Note that the SQ line can be split into several lines...
         misc_lines = []
@@ -623,8 +623,9 @@ class EmblScanner(InsdcScanner):
                 raise ValueError("Blank line in sequence data")
             if line == '//':
                 break
-            assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
-                repr(self.line)
+            if self.line[:self.HEADER_WIDTH] != (" " * self.HEADER_WIDTH):
+                raise ValueError("Problem with characters in header line, "
+                                 " or incorrect header width: " + self.line)
             # Remove tailing number now, remove spaces later
             linersplit = line.rsplit(None, 1)
             if len(linersplit) == 2 and linersplit[1].isdigit():
@@ -1117,7 +1118,7 @@ class GenBankScanner(InsdcScanner):
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
         if self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
-            raise ValueError("Eh? '%s'" % self.line)
+            raise ValueError("Footer format unexpected:  '%s'" % self.line)
 
         misc_lines = []
         while self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS \

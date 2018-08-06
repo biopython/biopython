@@ -1049,9 +1049,10 @@ class Nexus(object):
         # check that taxlabels is identical with matrix.keys. If not, it's a problem
         matrixkeys = sorted(self.matrix)
         taxlabelssort = sorted(self.taxlabels[:])
-        assert matrixkeys == taxlabelssort, \
-            "ERROR: TAXLABELS must be identical with MATRIX. " + \
-            "Please Report this as a bug, and send in data file."
+        if matrixkeys != taxlabelssort:
+            raise ValueError("ERROR: TAXLABELS must be identical with MATRIX. "
+                             "Please Report this as a bug, "
+                             "and send in data file.")
 
     def _translate(self, options):
         """Translate a Nexus file (PRIVATE)."""
@@ -1772,8 +1773,9 @@ class Nexus(object):
         else:
             unique_name = name
 
-        assert unique_name not in self.matrix, \
-            "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
+        if unique_name in self.matrix:
+            raise ValueError("ERROR. There is a discrepancy between taxlabels "
+                             "and matrix keys. Report this as a bug.")
 
         self.matrix[unique_name] = Seq(sequence, self.alphabet)
         self.ntax += 1
@@ -1888,8 +1890,10 @@ class Nexus(object):
             else:
                 sequence = sequence[:end + 1] + missing * (length - end - 1)
                 sequence = start * missing + sequence[start:]
-            assert length == len(sequence), \
-                "Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s" % taxon
+            if length != len(sequence):
+                raise RuntimeError("Illegal sequence manipulation in "
+                                   "Nexus.terminal_gap_to_missing in taxon %s"
+                                   % taxon)
             self.matrix[taxon] = Seq(sequence, self.alphabet)
 
 

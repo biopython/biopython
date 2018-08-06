@@ -1241,8 +1241,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # Try and append the version number to the accession for the full id
         if not self.data.id:
-            assert 'accessions' not in self.data.annotations, \
-                   self.data.annotations['accessions']
+            if 'accessions' in self.data.annotations:
+                raise ValueError("Problem adding version number to accession: "
+                                 + str(self.data.annotations['accessions']))
             self.data.id = self.data.name  # Good fall back?
         elif self.data.id.count('.') == 0:
             try:

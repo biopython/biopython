@@ -31,6 +31,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Kai Blin
 - Maximilian Greil
+- Nick Negretti
 - Peter Cock
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
@@ -131,10 +132,10 @@ wrapper and include a new wrapper for fuzzpro.
 The restriction enzyme list in Bio.Restriction has been updated to the
 November 2017 release of REBASE.
 
-New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2) 
+New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2)
 were added to Bio.Data.CodonTable. Note that tables 27, 28 and 31 contain
 no dedicated stop codons; the stop codons in these codes have a context
-dependent encoding as either STOP or as amino acid. 
+dependent encoding as either STOP or as amino acid.
 
 IO functions such as ``SeqIO.parse`` now accept any objects which can be passed
 to the builtin ``open`` function. Specifically, this allows using

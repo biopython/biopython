@@ -315,13 +315,13 @@ class LinearDrawer(AbstractDrawer):
 
         Returns a drawing element that is the tick on the scale
         """
-        assert self.start <= tickpos and tickpos <= self.end, \
-               "Tick at %i, but showing %i to %i" \
-               % (tickpos, self.start, self.end)
-        assert (track.start is None or track.start <= tickpos) and \
-               (track.end is None or tickpos <= track.end), \
-               "Tick at %i, but showing %r to %r for track" \
-               % (tickpos, track.start, track.end)
+        if self.start >= tickpos and tickpos >= self.end:
+            raise RuntimeError("Tick at %i, but showing %i to %i"
+                               % (tickpos, self.start, self.end))
+        if not ((track.start is None or track.start <= tickpos)
+                and (track.end is None or tickpos <= track.end)):
+            raise RuntimeError("Tick at %i, but showing %r to %r for track"
+                               % (tickpos, track.start, track.end))
         fragment, tickx = self.canvas_location(tickpos)  # Tick co-ordinates
         assert fragment >= 0, "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
