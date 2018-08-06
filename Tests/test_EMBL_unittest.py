@@ -13,15 +13,15 @@ from Bio import BiopythonParserWarning
 
 class EMBLTests(unittest.TestCase):
     def test_embl_content_after_co(self):
-        """Test an AssertionError is thrown by content after a CO line"""
+        """Test a ValueError is thrown by content after a CO line"""
         def parse_content_after_co():
             rec = SeqIO.read(path.join('EMBL', 'xx_after_co.embl'), 'embl')
 
-        self.assertRaises(AssertionError, parse_content_after_co)
+        self.assertRaises(ValueError, parse_content_after_co)
 
         try:
             parse_content_after_co()
-        except AssertionError as e:
+        except ValueError as e:
             self.assertEqual(str(e), "Unexpected content after SQ or CO line: 'XX'")
         else:
             self.assertTrue(False, "Error message without explanation raised by content after CO line")

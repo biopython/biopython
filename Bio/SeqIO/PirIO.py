@@ -264,8 +264,9 @@ class PirWriter(SequentialSequenceWriter):
             else:
                 code = "XX"
 
-        assert code in _pir_alphabets, "Sequence code must be one of " + \
-                                       _pir_alphabets.keys() + "."
+        if code not in _pir_alphabets:
+            raise TypeError("Sequence code must be one of " +
+                            _pir_alphabets.keys() + ".")
         assert "\n" not in title
         assert "\r" not in description
 

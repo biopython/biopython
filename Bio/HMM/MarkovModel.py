@@ -194,8 +194,9 @@ class MarkovModelBuilder(object):
 
         # ensure that all referenced states are valid
         for state in initial_prob:
-            assert state in self._state_alphabet.letters, \
-                   "State %s was not found in the sequence alphabet" % state
+            if state not in self._state_alphabet.letters:
+                raise ValueError("State %s was not found in the sequence "
+                                 "alphabet" % state)
 
         # distribute the residual probability, if any
         num_states_not_set =\
@@ -344,8 +345,9 @@ class MarkovModelBuilder(object):
         """
         # check the sanity of adding these states
         for state in [from_state, to_state]:
-            assert state in self._state_alphabet.letters, \
-                   "State %s was not found in the sequence alphabet" % state
+            if state not in self._state_alphabet.letters:
+                raise ValueError("State %s was not found in the sequence "
+                                 "alphabet" % state)
 
         # ensure that the states are not already set
         if (from_state, to_state) not in self.transition_prob and \

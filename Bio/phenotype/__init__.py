@@ -141,9 +141,10 @@ def write(plates, handle, format):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        assert isinstance(count, int), "Internal error - the underlying %s " \
-            "writer should have returned the record count, not %s" \
-            % (format, repr(count))
+        if not isinstance(count, int):
+            raise TypeError("Internal error - the underlying %s "
+                            "writer should have returned the record count, "
+                            "not %s" % (format, repr(count)))
 
     return count
 

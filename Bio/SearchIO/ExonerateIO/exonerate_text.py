@@ -405,8 +405,9 @@ class ExonerateTextParser(_BaseExonerateParser):
                         re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])]
 
             # check that inter_lens's length is len opp_type block - 1
-            assert len(inter_lens) == len(hsp[opp_type]) - 1, \
-                    "%r vs %r" % (len(inter_lens), len(hsp[opp_type]) - 1)
+            if len(inter_lens) != len(hsp[opp_type]) - 1:
+                raise ValueError("Length mismatch: %r vs %r"
+                                 % (len(inter_lens), len(hsp[opp_type]) - 1))
             # fill the hsp query and hit coordinates
             hsp['%s_ranges' % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner

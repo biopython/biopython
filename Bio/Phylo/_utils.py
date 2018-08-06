@@ -377,8 +377,9 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         def format_branch_label(clade):
             return branch_labels.get(clade)
     else:
-        assert callable(branch_labels), \
-            "branch_labels must be either a dict or a callable (function)"
+        if not callable(branch_labels):
+            raise TypeError("branch_labels must be either a "
+                            "dict or a callable (function)")
         format_branch_label = branch_labels
 
     # options for displaying label colors.

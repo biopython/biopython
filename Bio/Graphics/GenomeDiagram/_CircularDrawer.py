@@ -1189,9 +1189,9 @@ class CircularDrawer(AbstractDrawer):
             headangle = max(min(headangle, endangle), startangle)
         else:
             headangle = max(min(headangle, startangle), endangle)
-        assert startangle <= headangle <= endangle \
-            or endangle <= headangle <= startangle, \
-            (startangle, headangle, endangle, angle)
+        if not (startangle <= headangle <= endangle
+                or endangle <= headangle <= startangle):
+            raise RuntimeError(startangle, headangle, endangle, angle)
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
@@ -1325,8 +1325,9 @@ class CircularDrawer(AbstractDrawer):
             headangle = endangle
             tailangle = min(startangle + min(height * tail_length_ratio / (center * teeth), angle), endangle)
 
-        assert startangle <= tailangle <= headangle <= endangle, \
-            (startangle, tailangle, headangle, endangle, angle)
+        if not startangle <= tailangle <= headangle <= endangle:
+            raise RuntimeError(startangle, tailangle,
+                               headangle, endangle, angle)
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)

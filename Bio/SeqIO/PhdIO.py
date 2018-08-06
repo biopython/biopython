@@ -106,11 +106,13 @@ class PhdWriter(SequentialSequenceWriter):
         # 'solexa_quality' scores if present, else raises a value error
         phred_qualities = QualityIO._get_phred_quality(record)
         peak_locations = record.letter_annotations.get("peak_location")
-        assert len(record.seq) == len(phred_qualities), "Number of " + \
-            "phd quality scores does not match length of sequence"
+        if len(record.seq) != len(phred_qualities):
+            raise ValueError("Number of phd quality scores does not match "
+                             "length of sequence")
         if peak_locations:
-            assert len(record.seq) == len(peak_locations), "Number " + \
-                "of peak location scores does not match length of sequence"
+            if len(record.seq) != len(peak_locations):
+                raise ValueError("Number of peak location scores does not "
+                                 "match length of sequence")
         if None in phred_qualities:
             raise ValueError("A quality value of None was found")
         if record.description.startswith("%s " % record.id):

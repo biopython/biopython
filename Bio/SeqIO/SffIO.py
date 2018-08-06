@@ -969,9 +969,10 @@ def _check_eof(handle, index_offset, index_length):
         # in case this is a network handle or similar
         handle.read(index_offset + index_length - offset)
         offset = index_offset + index_length
-        assert offset == handle.tell(), \
-            "Wanted %i, got %i, index is %i to %i" \
-            % (offset, handle.tell(), index_offset, index_offset + index_length)
+        if offset != handle.tell():
+            raise ValueError("Wanted %i, got %i, index is %i to %i"
+                             % (offset, handle.tell(), index_offset,
+                                index_offset + index_length))
 
     if offset % 8:
         padding = 8 - (offset % 8)
@@ -1001,8 +1002,9 @@ def _check_eof(handle, index_offset, index_length):
                       % (padding, extra), BiopythonParserWarning)
 
     offset = handle.tell()
-    assert offset % 8 == 0, \
-        "Wanted offset %i %% 8 = %i to be zero" % (offset, offset % 8)
+    if offset % 8 != 0:
+        raise ValueError("Wanted offset %i %% 8 = %i to be zero"
+                         % (offset, offset % 8))
     # Should now be at the end of the file...
     extra = handle.read(4)
     if extra == _sff:
@@ -1134,14 +1136,16 @@ class SffWriter(SequenceWriter):
             off3 -= off1
             off2 = off3 % 16581375
             off3 -= off2
-            assert offset == off0 + off1 + off2 + off3, \
-                "%i -> %i %i %i %i" % (offset, off0, off1, off2, off3)
+            if offset != off0 + off1 + off2 + off3:
+                raise RuntimeError("%i -> %i %i %i %i"
+                                   % (offset, off0, off1, off2, off3))
             off3, off2, off1, off0 = (off3 // 16581375,
                                       off2 // 65025,
                                       off1 // 255,
                                       off0)
-            assert off0 < 255 and off1 < 255 and off2 < 255 and off3 < 255, \
-                "%i -> %i %i %i %i" % (offset, off0, off1, off2, off3)
+            if not (off0 < 255 and off1 < 255 and off2 < 255 and off3 < 255):
+                raise RuntimeError("%i -> %i %i %i %i"
+                                   % (offset, off0, off1, off2, off3))
             handle.write(name + struct.pack(fmt2, 0,
                                             off3, off2, off1, off0, 255))
             index_len += len(name) + 6
@@ -1156,9 +1160,10 @@ class SffWriter(SequenceWriter):
         else:
             padding = 0
         offset = handle.tell()
-        assert offset == self._index_start + self._index_length + padding, \
-            "%i vs %i + %i + %i" % (offset, self._index_start,
-                                    self._index_length, padding)
+        if offset != self._index_start + self._index_length + padding:
+            raise RuntimeError("%i vs %i + %i + %i"
+                               % (offset, self._index_start,
+                                  self._index_length, padding))
         # Must now go back and update the index header with index size...
         handle.seek(self._index_start)
         handle.write(struct.pack(fmt, 778921588,  # magic number
