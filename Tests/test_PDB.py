@@ -127,6 +127,14 @@ class HeaderTests(unittest.TestCase):
         parser = PDBParser()
         struct = parser.get_structure('1A8O', 'PDB/1A8O.pdb')
         self.assertAlmostEqual(struct.header['resolution'], 1.7)
+        self.assertAlmostEqual(struct.header['cell'][0], 41.98)
+        self.assertAlmostEqual(struct.header['cell'][1], 41.98)
+        self.assertAlmostEqual(struct.header['cell'][2], 88.92)
+        self.assertAlmostEqual(struct.header['cell'][3], 90.0)
+        self.assertAlmostEqual(struct.header['cell'][4], 90.0)
+        self.assertAlmostEqual(struct.header['cell'][5], 90.0)
+        self.assertEqual(struct.header['cell_z'], 8)
+
         # Case-insensitive string comparisons
         known_strings = {
             'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
@@ -138,6 +146,7 @@ class HeaderTests(unittest.TestCase):
             'name': ' hiv capsid c-terminal domain',
             'release_date': '1998-10-14',
             'structure_method': 'x-ray diffraction',
+            'spacegroup': 'P 43 21 2  ',
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())
@@ -146,6 +155,15 @@ class HeaderTests(unittest.TestCase):
         """Parse the header of another PDB file (2BEG)."""
         parser = PDBParser()
         struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
+        self.assertEqual(struct.header['resolution'], None)
+        self.assertAlmostEqual(struct.header['cell'][0], 1.0)
+        self.assertAlmostEqual(struct.header['cell'][1], 1.0)
+        self.assertAlmostEqual(struct.header['cell'][2], 1.0)
+        self.assertAlmostEqual(struct.header['cell'][3], 90.0)
+        self.assertAlmostEqual(struct.header['cell'][4], 90.0)
+        self.assertAlmostEqual(struct.header['cell'][5], 90.0)
+        self.assertEqual(struct.header['cell_z'], 1)
+
         known_strings = {
             'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
             'deposition_date': '2005-10-24',
@@ -156,6 +174,7 @@ class HeaderTests(unittest.TestCase):
             'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
             'release_date': '2005-11-22',
             'structure_method': 'solution nmr',
+            'spacegroup': 'P 1        ',
         }
         for key, expect in known_strings.items():
             self.assertEqual(struct.header[key].lower(), expect.lower())

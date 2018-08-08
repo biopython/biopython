@@ -115,7 +115,8 @@ def parse_pdb_header(infile):
 
     Dictionary keys are: head, deposition_date, release_date, structure_method,
     resolution, structure_reference, journal_reference, author and
-    compound.
+    compound. Additional keys: cell, cell_z and spacegroup describe
+    the unit cell, number of molecules per asymmetric unit, and the spacegroup.
     """
     header = []
     with File.as_handle(infile, 'r') as f:
@@ -139,6 +140,9 @@ def _parse_pdb_header_list(header):
         'structure_reference': "unknown",
         'journal_reference': "unknown",
         'author': "",
+        'cell': (1.0, 1.0, 1.0, 90.0, 90.0, 90.0),
+        'cell_z': 1,
+        'spacegroup': "P1",
         'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
 
     dict['structure_reference'] = _get_references(header)
@@ -245,6 +249,16 @@ def _parse_pdb_header_list(header):
                 except ValueError:
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
+        elif key == "CRYST1":
+            # get the symmetry & the cell parameters
+            dict['cell'] = (float(hh[6:15]),
+                            float(hh[15:24]),
+                            float(hh[24:33]),
+                            float(hh[33:40]),
+                            float(hh[40:47]),
+                            float(hh[47:55]))
+            dict['spacegroup'] = hh[55:66]
+            dict['cell_z'] = int(hh[66:70])
         else:
             # print(key)
             pass
