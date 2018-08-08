@@ -73,6 +73,7 @@ xml_2226_tblastn_002.xml     single query, no hits
 xml_2226_tblastn_003.xml     single query, hits @ single hsp
 xml_2226_tblastn_004.xml     single query, multiple hsps per hit present
 xml_2226_tblastn_005.xml     multiple queries, remote search on NCBI's database
+xml_2226_tblastn_009_err.xml     custom XML having several bodies into one single file source
 xml_2226_tblastx_001.xml     multiple queries
 xml_2226_tblastx_002.xml     single query, no hits
 xml_2226_tblastx_003.xml     single query, multiple hsps per hit present
