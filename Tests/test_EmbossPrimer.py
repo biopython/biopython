@@ -202,8 +202,6 @@ class PrimersearchParseTest(unittest.TestCase):
             h.close()
 
     def test_in_depth_normal_parse(self):
-        """Make sure the output from a simple primersearch file is correct.
-                """
         file = self.test_files[0]
         h = open(file, "r")
         amp_iterator = PrimerSearch.parse(h)
