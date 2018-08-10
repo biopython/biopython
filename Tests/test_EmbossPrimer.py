@@ -13,6 +13,7 @@ import os
 import unittest
 
 # local stuff
+from Bio.Seq import Seq
 from Bio.Emboss import PrimerSearch, Primer3
 
 
@@ -211,11 +212,17 @@ class PrimersearchParseTest(unittest.TestCase):
             if counter == 0:
                 self.assertEqual(amp_info.primer_name, 'Test')
                 self.assertEqual(amp_info.length, 218)
+                self.assertEqual(amp_info.forward_seq, Seq('CCGGTTTCTCTGGTTGAAAA'))
+                self.assertEqual(amp_info.forward_pos, 114)
+                self.assertEqual(amp_info.forward_mismatches, 0)
+
+                self.assertEqual(amp_info.reverse_seq, Seq('AGTGACACCAGCAGGG'))
+                self.assertEqual(amp_info.reverse_pos, 103)
+                self.assertEqual(amp_info.reverse_mismatches, 2)
 
             counter += 1
         self.assertEqual(counter, 2, 'Two amplifiers expected')
         h.close()
-
 
     def test_in_depth_normal_read(self):
         """Make sure the output from a simple primersearch file is correct.
@@ -236,8 +243,8 @@ class PrimersearchParseTest(unittest.TestCase):
             "TEL1N from chromosome I, complete sequence.\n"
             "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
             "with 0 mismatches\n"
-            "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
-            "[114] with 0 mismatches"
+            "\tAGTGACACCAGCAGGG hits reverse strand at "
+            "[103] with 2 mismatches"
         )
         self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,test_info)
 
