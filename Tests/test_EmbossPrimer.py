@@ -246,7 +246,7 @@ class PrimersearchParseTest(unittest.TestCase):
             "\tAGTGACACCAGCAGGG hits reverse strand at "
             "[103] with 2 mismatches"
         )
-        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,test_info)
+        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info, test_info)
 
 
 class PrimerSearchInputTest(unittest.TestCase):
