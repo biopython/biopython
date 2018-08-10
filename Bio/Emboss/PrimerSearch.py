@@ -45,35 +45,48 @@ class OutputRecord(object):
 class Amplifier(object):
     """Represent a single amplification from a primer."""
 
-    def __init__(self):
+    def __init__(self, primer_name):
         """Initialize the class."""
+        self.primer_name = primer_name
         self.hit_info = ""
         self.length = 0
+
+
+def parse(handle):
+    current_aplifier = None
+    current_primer_name = None
+    for line in handle:
+        print('AAAAAAA')
+        if not line.strip():
+            continue
+
+        elif line.startswith("Primer name"):
+            current_primer_name = line.split()[-1]
+        elif line.startswith("Amplimer"):
+            if current_aplifier is not None:
+                current_aplifier.hit_info = current_aplifier.hit_info.rstrip()
+                yield current_aplifier
+            current_aplifier = Amplifier(current_primer_name)
+        elif line.startswith("\tSequence: "):
+            current_aplifier.hit_info = line.replace("\tSequence: ", "")
+        elif line.startswith("\tAmplimer length: "):
+            length = line.split()[-2]
+            current_aplifier.length = int(length)
+        else:
+            current_aplifier.hit_info += line
+    if current_aplifier is not None:
+        current_aplifier.hit_info = current_aplifier.hit_info.rstrip()
+        yield current_aplifier
 
 
 def read(handle):
     """Get output from primersearch into a PrimerSearchOutputRecord."""
     record = OutputRecord()
 
-    for line in handle:
-        if not line.strip():
-            continue
-        elif line.startswith("Primer name"):
-            name = line.split()[-1]
-            record.amplifiers[name] = []
-        elif line.startswith("Amplimer"):
-            amplifier = Amplifier()
-            record.amplifiers[name].append(amplifier)
-        elif line.startswith("\tSequence: "):
-            amplifier.hit_info = line.replace("\tSequence: ", "")
-        elif line.startswith("\tAmplimer length: "):
-            length = line.split()[-2]
-            amplifier.length = int(length)
+    for amplifier in parse(handle):
+        if amplifier.primer_name in record.amplifiers:
+            record.amplifiers[amplifier.primer_name].append(amplifier)
         else:
-            amplifier.hit_info += line
-
-    for name in record.amplifiers:
-        for amplifier in record.amplifiers[name]:
-            amplifier.hit_info = amplifier.hit_info.rstrip()
+            record.amplifiers[amplifier.primer_name] = [amplifier]
 
     return record

@@ -202,6 +202,23 @@ class PrimersearchParseTest(unittest.TestCase):
 
     def test_in_depth_normal_parse(self):
         """Make sure the output from a simple primersearch file is correct.
+                """
+        file = self.test_files[0]
+        h = open(file, "r")
+        amp_iterator = PrimerSearch.parse(h)
+        counter = 0
+        for amp_info in amp_iterator:
+            if counter == 0:
+                self.assertEqual(amp_info.primer_name, 'Test')
+                self.assertEqual(amp_info.length, 218)
+
+            counter += 1
+        self.assertEqual(counter, 2, 'Two amplifiers expected')
+        h.close()
+
+
+    def test_in_depth_normal_read(self):
+        """Make sure the output from a simple primersearch file is correct.
         """
         file = self.test_files[0]
         h = open(file, "r")
@@ -210,17 +227,19 @@ class PrimersearchParseTest(unittest.TestCase):
 
         self.assertEqual(len(amp_info.amplifiers), 1)
         self.assertIn("Test", amp_info.amplifiers)
-        self.assertEqual(len(amp_info.amplifiers["Test"]), 1)
+        self.assertEqual(len(amp_info.amplifiers["Test"]), 2)
 
         self.assertEqual(amp_info.amplifiers["Test"][0].length, 218)
-        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,
-                         "AC074298 AC074298 \n"
-                         "\tTelomere associated sequence for Arabidopsis thaliana "
-                         "TEL1N from chromosome I, complete sequence.\n"
-                         "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
-                         "with 0 mismatches\n"
-                         "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
-                         "[114] with 0 mismatches")
+        test_info = (
+            "AC074298 AC074298 \n"
+            "\tTelomere associated sequence for Arabidopsis thaliana "
+            "TEL1N from chromosome I, complete sequence.\n"
+            "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 "
+            "with 0 mismatches\n"
+            "\tTCACATTCCCAAATGTAGATCG hits reverse strand at "
+            "[114] with 0 mismatches"
+        )
+        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,test_info)
 
 
 class PrimerSearchInputTest(unittest.TestCase):
