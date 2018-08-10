@@ -87,12 +87,12 @@ def parse(handle):
             if match:
                 if match.group(2) == 'forward':
                     current_aplifier.forward_seq = Seq(match.group(1))
-                    current_aplifier.forward_pos = int(match[3])
-                    current_aplifier.forward_mismatches = int(match[4])
+                    current_aplifier.forward_pos = int(match.group(3))
+                    current_aplifier.forward_mismatches = int(match.group((4)))
                 else:
                     current_aplifier.reverse_seq = Seq(match.group(1))
-                    current_aplifier.reverse_pos = int(match[3])
-                    current_aplifier.reverse_mismatches = int(match[4])
+                    current_aplifier.reverse_pos = int(match.group(3))
+                    current_aplifier.reverse_mismatches = int(match.group(4))
 
             current_aplifier.hit_info += line
 
