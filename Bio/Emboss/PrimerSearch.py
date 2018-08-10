@@ -65,7 +65,6 @@ def parse(handle):
     current_aplifier = None
     current_primer_name = None
     re_match_info = re.compile('\s+([GATC]+) hits (forward|reverse) strand at \[?(\d+)\]? with (\d+) mismatches')
-#\[?(\d+)\]?
 
     for line in handle:
         if not line.strip():
@@ -113,4 +112,3 @@ def read(handle):
             record.amplifiers[amplifier.primer_name] = [amplifier]
 
     return record
-
