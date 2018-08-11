@@ -47,6 +47,9 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
+from reportlab import rl_config
+rl_config.invariant = True
+
 
 def fill_and_border(base_color, alpha=0.5):
     try:
