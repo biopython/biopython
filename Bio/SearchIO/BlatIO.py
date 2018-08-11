@@ -229,8 +229,8 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
 
     """
     if len(starts) != len(blksizes):
-            raise RuntimeError("Unequal start coordinates and block sizes list"
-                               " (%r vs %r)" % (len(starts), len(blksizes)))
+        raise RuntimeError("Unequal start coordinates and block sizes list"
+                           " (%r vs %r)" % (len(starts), len(blksizes)))
     # see: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
     # no need to reorient if it's already the positive strand
     if strand >= 0:
