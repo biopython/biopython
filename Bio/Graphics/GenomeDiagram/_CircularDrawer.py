@@ -1335,7 +1335,6 @@ class CircularDrawer(AbstractDrawer):
                                "Angle: %s" % (startangle, tailangle, headangle,
                                               endangle, angle))
 
-
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
         headcos, headsin = cos(headangle), sin(headangle)
