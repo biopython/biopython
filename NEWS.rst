@@ -31,7 +31,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Kai Blin
 - Maximilian Greil
-- Nick Negretti
+- Nick Negretti (first contribution)
 - Peter Cock
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto

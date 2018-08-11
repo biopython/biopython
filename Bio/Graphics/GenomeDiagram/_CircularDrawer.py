@@ -1191,7 +1191,10 @@ class CircularDrawer(AbstractDrawer):
             headangle = max(min(headangle, startangle), endangle)
         if not (startangle <= headangle <= endangle
                 or endangle <= headangle <= startangle):
-            raise RuntimeError(startangle, headangle, endangle, angle)
+            raise RuntimeError("Problem drawing arrow, invalid positions. "
+                               "Start angle: %s, Head angle: %s, "
+                               "End angle: %s, Angle: %s"
+                               % (startangle, headangle, endangle, angle))
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
@@ -1326,8 +1329,12 @@ class CircularDrawer(AbstractDrawer):
             tailangle = min(startangle + min(height * tail_length_ratio / (center * teeth), angle), endangle)
 
         if not startangle <= tailangle <= headangle <= endangle:
-            raise RuntimeError(startangle, tailangle,
-                               headangle, endangle, angle)
+            raise RuntimeError("Problem drawing jaggy sigil, invalid "
+                               "positions. Start angle: %s, "
+                               "Tail angle: %s, Head angle: %s, End angle %s, "
+                               "Angle: %s" % (startangle, tailangle, headangle,
+                                              endangle, angle))
+
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
