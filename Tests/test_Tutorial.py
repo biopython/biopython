@@ -259,12 +259,12 @@ class TutorialTestCase(unittest.TestCase):
     def tearDown(self):
         global original_path
         os.chdir(original_path)
-        #  remove files created from chapter_phylo.tex
-        # files don't get created during test with python3.5
+        # files currently don't get created during test with python3.5 and pypy
+        # remove files created from chapter_phylo.tex
         if os.path.exists(os.path.join(tutorial_base, "examples/tree1.nwk")):
             os.remove(os.path.join(tutorial_base, "examples/tree1.nwk"))
             os.remove(os.path.join(tutorial_base, "examples/other_trees.nwk"))
-        #  remove files created from chapter_cluster.tex
+        # remove files created from chapter_cluster.tex
         tutorial_cluster_base = os.path.abspath("../Tests/")
         if os.path.exists(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr")):
             os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr"))
