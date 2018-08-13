@@ -903,7 +903,7 @@ class CircularDrawer(AbstractDrawer):
         return greytrack_bgs, greytrack_labels
 
     def canvas_angle(self, base):
-        """Given base-pair position, return (angle, cosine, sin)(PRIVATE)."""
+        """Given base-pair position, return (angle, cosine, sin) (PRIVATE)."""
         angle = self.sweep * 2 * pi * (base - self.start) / self.length
         return (angle, cos(angle), sin(angle))
 
@@ -1143,7 +1143,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_sigil_big_arrow(self, bottom, center, top,
                               startangle, endangle, strand,
                               **kwargs):
-        """Draw BIGARROW sigil,like ARROW but straddles the axis (PRIVATE)."""
+        """Draw BIGARROW sigil, like ARROW but straddles the axis (PRIVATE)."""
         if strand == -1:
             orientation = "left"
         else:

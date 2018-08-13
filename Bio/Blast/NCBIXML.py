@@ -37,7 +37,7 @@ class _XMLparser(ContentHandler):
         self._debug_ignore_list = []
 
     def _secure_name(self, name):
-        """Remove 'dangerous' from tag names.(PRIVATE).
+        """Remove 'dangerous' from tag names (PRIVATE).
 
         Arguments:
          - name -- name to be 'secured'.
@@ -224,14 +224,14 @@ class BlastParser(_XMLparser):
 
     # Header
     def _end_BlastOutput_program(self):
-        """BLAST program, e.g., blastp, blastn, etc.(PRIVATE).
+        """BLAST program, e.g., blastp, blastn, etc. (PRIVATE).
 
         Save this to put on each blast record object
         """
         self._header.application = self._value.upper()
 
     def _end_BlastOutput_version(self):
-        """Version number and date of the BLAST engine.(PRIVATE).
+        """Version number and date of the BLAST engine (PRIVATE).
 
         e.g. "BLASTX 2.2.12 [Aug-07-2005]" but there can also be
         variants like "BLASTP 2.2.18+" without the date.

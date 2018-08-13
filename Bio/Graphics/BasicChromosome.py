@@ -486,7 +486,7 @@ class ChromosomeSegment(_ChromosomeComponent):
 
 
 def _spring_layout(desired, minimum, maximum, gap=0):
-    """Try to layout label co-ordinates or other floats, (PRIVATE).
+    """Try to layout label co-ordinates or other floats (PRIVATE).
 
     Originally written for the y-axis vertical positioning of labels on a
     chromosome diagram (where the minimum gap between y-axis co-ordinates is
