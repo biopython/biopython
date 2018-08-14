@@ -55,7 +55,6 @@ import unittest
 import doctest
 import os
 import sys
-import platform
 import warnings
 from Bio import BiopythonExperimentalWarning, MissingExternalDependencyError
 
@@ -261,18 +260,22 @@ class TutorialTestCase(unittest.TestCase):
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex
-        if os.path.exists(os.path.join(tutorial_base, "examples/tree1.nwk")):
-            os.remove(os.path.join(tutorial_base, "examples/tree1.nwk"))
-            os.remove(os.path.join(tutorial_base, "examples/other_trees.nwk"))
+        delete_phylo_tutorial = [
+            "examples/tree1.nwk", "examples/other_trees.nwk"
+            ]
+        for file in delete_phylo_tutorial:
+            if os.path.exists(os.path.join(tutorial_base, file)):
+                os.remove(os.path.join(tutorial_base, file))
         # remove files created from chapter_cluster.tex
         tutorial_cluster_base = os.path.abspath("../Tests/")
-        if os.path.exists(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr")):
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.atr"))
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.cdt"))
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result.gtr"))
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_A2.kag"))
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5.kgg"))
-            os.remove(os.path.join(tutorial_cluster_base, "Cluster/cyano_result_K_G5_A2.cdt"))
+        delete_cluster_tutorial = [
+            "Cluster/cyano_result.atr", "Cluster/cyano_result.cdt",
+            "Cluster/cyano_result.gtr", "Cluster/cyano_result_K_A2.kag",
+            "Cluster/cyano_result_K_G5.kgg", "Cluster/cyano_result_K_G5_A2.cdt"
+            ]
+        for file in delete_cluster_tutorial:
+            if os.path.exists(os.path.join(tutorial_cluster_base, file)):
+                os.remove(os.path.join(tutorial_cluster_base, file))
 
 
 # This is to run the doctests if the script is called directly:
