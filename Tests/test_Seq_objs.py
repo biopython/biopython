@@ -843,6 +843,66 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(concatenated5), temp_data5[: - spacer2._length])
         self.assertEqual(concatenated5.alphabet, generic_dna)  # both spacer and only seq have same alphabet
 
+        self.assertRaises(ValueError, spacer.join, 5)
+        self.assertRaises(ValueError, spacer.join, "ATG")
+        self.assertRaises(ValueError, spacer.join, test_seq)
+        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(file, 'fasta')))
+
+    def test_join_MutableSeq(self):
+        """Checks if Seq join correctly concatinates sequence with the spacer."""
+        # Only expect it to take Seq objects and/or strings in an iterable!
+
+        file = 'Fasta/f003'
+        seqlist = SeqIO.parse(file, 'fasta')
+        spacer = MutableSeq('NNNNN')
+        spacer1 = MutableSeq('')
+        spacer2 = MutableSeq('GGG', generic_dna)
+        example_strings = ["ATG", "ATG", "ATG", "ATG"]
+        test_seq = Seq("ATG", generic_dna)
+        example_strings_seqs = ["ATG", "ATG", test_seq, "ATG"]
+
+        # seq objects with spacer
+        concatenated = spacer.join(record.seq for record in SeqIO.parse(file, 'fasta'))
+        # seq objects with empty spacer
+        concatenated1 = spacer1.join(record.seq for record in SeqIO.parse(file, 'fasta'))
+        # strings with empty spacer
+        concatenated2 = spacer1.join(example_strings)
+        # strings and seqs
+        concatenated3 = spacer.join(example_strings_seqs)
+        concatenated4 = spacer1.join(example_strings_seqs)
+        concatenated5 = spacer2.join(example_strings_seqs)
+
+        temp_data = ""
+        temp_data1 = ""
+        temp_data3 = ""
+        temp_data5 = ""
+        for seq in seqlist:
+            temp_data += str(seq.seq) + str(spacer)
+            temp_data1 += str(seq.seq) + str(spacer1)
+        for seq in example_strings:
+            temp_data3 += seq + str(spacer)
+            temp_data5 += seq + str(spacer2)
+
+        self.assertEqual(str(concatenated), temp_data[: - len(spacer.data)])
+        self.assertEqual(str(concatenated1), temp_data1)
+        self.assertEqual(concatenated1.__class__, MutableSeq)
+        self.assertEqual(str(concatenated2), "".join(example_strings))
+        self.assertEqual(concatenated2.alphabet, spacer1.alphabet)
+        self.assertEqual(concatenated2.__class__, MutableSeq)
+        self.assertEqual(str(concatenated3), temp_data3[: - len(spacer.data)])
+        self.assertEqual(concatenated3.alphabet, spacer.alphabet)  # same as spacer since spacer isn't an empty seq, generic wins
+        self.assertEqual(str(concatenated4), "".join(example_strings))
+        self.assertEqual(concatenated4.alphabet, test_seq.alphabet)  # spacer is empty string so alphabet should match the only Seq object
+        self.assertEqual(str(concatenated5), temp_data5[: - len(spacer2.data)])
+        self.assertEqual(concatenated5.alphabet, generic_dna)  # both spacer and only seq have same alphabet
+
+        self.assertRaises(ValueError, spacer.join, 5)
+        self.assertRaises(ValueError, spacer.join, "ATG")
+        self.assertRaises(ValueError, spacer.join, test_seq)
+        self.assertRaises(ValueError, spacer.join, ["ATG", "ATG", 5, "ATG"])
+        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(file, 'fasta')))
+
     # TODO - Addition...
 
 
