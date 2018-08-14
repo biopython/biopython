@@ -1298,9 +1298,9 @@ class Seq(object):
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
-                temp_data += c._data + self._data
+                temp_data += str(c) + str(self)
             elif isinstance(c, basestring):
-                temp_data += c + self._data
+                temp_data += c + str(self)
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
         if a is None:  # arguments are all alphabet-less strings
@@ -1848,6 +1848,67 @@ class UnknownSeq(Seq):
             return UnknownSeq(self._length, s.alphabet, self._character)
         else:
             return Seq("", s.alphabet)
+
+    def join(self, other):
+        """Return a merge of the sequences in other, spaced by the sequence from self.
+
+        Accepts Seq/UnknownSeq objects and Strings as objects to be concatinated with
+        the spacer
+
+        >>> spacer = UnknownSeq(5)
+        >>> seqlist = list([Seq("AAA"),Seq("TTT"),Seq("PPP")])
+        >>> concatenated = spacer.join(seqlist)
+        >>> concatenated
+        Seq('AAA?????TTT?????PPP')
+
+        Throws error if other is not an iterable and if objects inside of the iterable
+        are not Seq/UnknownSeq or String objects.
+
+        Will only return an UnknownSeq object of all of the objects to be joined are
+        also UnknownSeqs with the same character as the spacer, similar to how the
+        addition of an UnknownSeq and another UnknownSeq would work.
+        """
+        if not isinstance(other, collections.Iterable):  # doesn't detect single strings
+            raise ValueError("Input must be an iterable")
+        if isinstance(other, basestring):
+            raise ValueError("Input must be an iterable")
+        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
+        temp_data = ""
+        # if the spacer is empty it will initially default none
+        if self._length == 0:
+            a = None
+        else:
+            a = self.alphabet
+        type_is_unknown = True
+        for c in other:
+            if isinstance(c, SeqRecord):
+                return NotImplemented
+            elif hasattr(c, "alphabet"):
+                if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
+                    a = c.alphabet
+                else:
+                    if not Alphabet._check_type_compatible([a,
+                                                                c.alphabet]):
+                        raise TypeError(
+                            "Incompatible alphabets {0!r} and {1!r}".format(
+                                a, c.alphabet))
+                    a = Alphabet._consensus_alphabet([a, c.alphabet])
+                if not isinstance(c, UnknownSeq):
+                    type_is_unknown = False
+                temp_data += str(c) + str(self)
+            elif isinstance(c, basestring):
+                temp_data += c + str(self)
+                type_is_unknown = False
+            else:
+                raise ValueError("Input must be an iterable of Seqs or Strings")
+        if a is None:  # arguments are all alphabet-less strings
+            a = self.alphabet
+        if temp_data.count(self._character) == len(temp_data) and type_is_unknown is True:
+            return UnknownSeq(len(temp_data), a, self._character)
+        if self._length == 0:
+            return Seq(temp_data, a)
+
+        return Seq(temp_data[: - self._length], a)  # remove the last addition of the spacer, object will be a Seq
 
 
 class MutableSeq(object):
