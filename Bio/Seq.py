@@ -1263,10 +1263,10 @@ class Seq(object):
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts all Seq objects and Strings as objects to be concatinated with the spacer
+        Accepts all Seq objects and Strings as objects to be concatenated with the spacer
 
         >>> spacer = Seq('NNNNN')
-        >>> seqlist = list([Seq("AAA"),Seq("TTT"),Seq("PPP")])
+        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
         >>> concatenated = spacer.join(seqlist)
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')
@@ -1292,22 +1292,21 @@ class Seq(object):
                 if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet
                 else:
-                    if not Alphabet._check_type_compatible([a,
-                                                                c.alphabet]):
+                    if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
-                temp_data += str(c) + str(self)
+                temp_data += str(self) + str(c)
             elif isinstance(c, basestring):
-                temp_data += c + str(self)
+                temp_data += str(self) + str(c)
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
         if a is None:  # arguments are all alphabet-less strings
             a = self.alphabet
         if self._data == "":
             return self.__class__(temp_data, a)
-        return self.__class__(temp_data[: - len(self._data)], a)  # remove the last addition of the spacer
+        return self.__class__(temp_data[len(self._data):], a)  # remove the last addition of the spacer
 
 
 class UnknownSeq(Seq):
@@ -1852,11 +1851,11 @@ class UnknownSeq(Seq):
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts Seq/UnknownSeq objects and Strings as objects to be concatinated with
+        Accepts Seq/UnknownSeq objects and Strings as objects to be concatenated with
         the spacer
 
         >>> spacer = UnknownSeq(5)
-        >>> seqlist = list([Seq("AAA"),Seq("TTT"),Seq("PPP")])
+        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
         >>> concatenated = spacer.join(seqlist)
         >>> concatenated
         Seq('AAA?????TTT?????PPP')
@@ -1887,17 +1886,16 @@ class UnknownSeq(Seq):
                 if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet
                 else:
-                    if not Alphabet._check_type_compatible([a,
-                                                                c.alphabet]):
+                    if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
                 if not isinstance(c, UnknownSeq):
                     type_is_unknown = False
-                temp_data += str(c) + str(self)
+                temp_data += str(self) + str(c)
             elif isinstance(c, basestring):
-                temp_data += c + str(self)
+                temp_data += str(self) + c
                 type_is_unknown = False
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
@@ -1908,7 +1906,7 @@ class UnknownSeq(Seq):
         if self._length == 0:
             return Seq(temp_data, a)
 
-        return Seq(temp_data[: - self._length], a)  # remove the last addition of the spacer, object will be a Seq
+        return Seq(temp_data[self._length:], a)  # remove the last addition of the spacer, object will be a Seq
 
 
 class MutableSeq(object):
@@ -2530,10 +2528,10 @@ class MutableSeq(object):
     def join(self, other):
         """Return a merge of the sequences in other, spaced by the sequence from self.
 
-        Accepts all Seq objects and Strings as objects to be concatinated with the spacer
+        Accepts all Seq objects and Strings as objects to be concatenated with the spacer
 
         >>> spacer = MutableSeq('NNNNN')
-        >>> seqlist = list([Seq("AAA"),Seq("TTT"),Seq("PPP")])
+        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
         >>> concatenated = spacer.join(seqlist)
         >>> concatenated
         MutableSeq('AAANNNNNTTTNNNNNPPP')
@@ -2559,22 +2557,21 @@ class MutableSeq(object):
                 if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet
                 else:
-                    if not Alphabet._check_type_compatible([a,
-                                                                c.alphabet]):
+                    if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
-                temp_data += str(c) + str(self)
+                temp_data += str(self) + str(c)
             elif isinstance(c, basestring):
-                temp_data += c + str(self)
+                temp_data += str(self) + str(c)
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
         if a is None:  # arguments are all alphabet-less strings
             a = self.alphabet
         if len(self.data) == 0:
             return self.__class__(temp_data, a)
-        return self.__class__(temp_data[: - len(self.data)], a)  # remove the last addition of the spacer
+        return self.__class__(temp_data[len(self.data):], a)  # remove the last addition of the spacer
 
 
 # The transcribe, backward_transcribe, and translate functions are
