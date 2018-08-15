@@ -258,6 +258,24 @@ class TutorialTestCase(unittest.TestCase):
     def tearDown(self):
         global original_path
         os.chdir(original_path)
+        # files currently don't get created during test with python3.5 and pypy
+        # remove files created from chapter_phylo.tex
+        delete_phylo_tutorial = [
+            "examples/tree1.nwk", "examples/other_trees.nwk"
+            ]
+        for file in delete_phylo_tutorial:
+            if os.path.exists(os.path.join(tutorial_base, file)):
+                os.remove(os.path.join(tutorial_base, file))
+        # remove files created from chapter_cluster.tex
+        tutorial_cluster_base = os.path.abspath("../Tests/")
+        delete_cluster_tutorial = [
+            "Cluster/cyano_result.atr", "Cluster/cyano_result.cdt",
+            "Cluster/cyano_result.gtr", "Cluster/cyano_result_K_A2.kag",
+            "Cluster/cyano_result_K_G5.kgg", "Cluster/cyano_result_K_G5_A2.cdt"
+            ]
+        for file in delete_cluster_tutorial:
+            if os.path.exists(os.path.join(tutorial_cluster_base, file)):
+                os.remove(os.path.join(tutorial_cluster_base, file))
 
 
 # This is to run the doctests if the script is called directly:
