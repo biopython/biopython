@@ -17,4 +17,10 @@ ignore =
     # D103	Missing docstring in public function
     # D104	Missing docstring in public package
     # D105	Missing docstring in magic method
-    D101,D102,D103,D105
+    D101,D102,D103,D105,
+    # ====================
+    # flake8-bugbear: B###
+    # ====================
+    # B007	Loop control variable not used within the loop body.
+    #           If this is intended, start the name with an underscore.
+    B007,

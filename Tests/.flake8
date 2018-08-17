@@ -57,6 +57,12 @@ ignore =
     D400,D401,
     # We ignore D412 deliberately:
     D412,
+    # ====================
+    # flake8-bugbear: B###
+    # ====================
+    # B007	Loop control variable not used within the loop body.
+    #     	If this is intended, start the name with an underscore.
+    B007,
     # =========================================
     # flake8-commas (in case installed locally)
     # =========================================

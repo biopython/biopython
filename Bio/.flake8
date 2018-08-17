@@ -36,6 +36,12 @@ ignore =
     # D211	No blank lines allowed before class docstring
     # We ignore D203 deliberately in favour of passing D211,
     D203,
+    # ====================
+    # flake8-bugbear: B###
+    # ====================
+    # B007	Loop control variable not used within the loop body.
+    #           If this is intended, start the name with an underscore.
+    B007,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
