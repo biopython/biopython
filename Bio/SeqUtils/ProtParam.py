@@ -1,5 +1,8 @@
-# Copyright Yair Benita Y.Benita@pharm.uu.nl
-# Biopython (http://biopython.org) license applies
+# Copyright 2003 by Yair Benita <Y.Benita@pharm.uu.nl>
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """Simple protein analysis.
 
