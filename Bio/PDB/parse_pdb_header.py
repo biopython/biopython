@@ -1,11 +1,17 @@
 #!/usr/bin/env python
+# Copyright 2004 Kristian Rother
 #
-# parse_pdb_header.py
-# parses header of PDB files into a python dictionary.
-# emerged from the Columba database project www.columba-db.de.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 #
-# author: Kristian Rother
-#
+"""Parse header of PDB files into a python dictionary.
+
+Emerged from the Columba database project www.columba-db.de.
+
+Original author: Kristian Rother.
+"""
+
 # license: same as Biopython, read LICENSE.TXT from current Biopython release.
 #
 # last modified: 9.2.2004
@@ -20,8 +26,6 @@
 # Renamed some clearly private functions to _something (ie. parse_pdb_header_list
 # is now _parse_pdb_header_list)
 # Thomas 9/05/04
-
-"""Parse the header of a PDB file."""
 
 from __future__ import print_function
 

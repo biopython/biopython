@@ -146,6 +146,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
 - Kozo Nishida <https://github.com/kozo2>
 - Kristian Davidsen <https://github.com/krdav>
+- Kristian Rother <https://github.com/krother>
 - Kuan-Yi Li <https://github.com/kuanyili>
 - Kurt Graff <https://github.com/graph1994>
 - Kyle Ellrott <https://github.com/kellrott>
