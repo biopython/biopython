@@ -1,6 +1,12 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Example of generating a substitution matrix from an alignment."""
-# standard library
+
 from __future__ import print_function
 
 # Biopython

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-# Created: Sun Oct 15 16:16:20 2000
-# Last changed: Time-stamp: <01/02/15 09:01:27 thomas>
-# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: getgene.py
+# Copyright 2000 Thomas Hamelryck.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """Example indexing plain text SwissProt files.
 

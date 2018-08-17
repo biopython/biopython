@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Example showing how to deal with internet BLAST from Biopython.
 
 This code is described in great detail in the BLAST section of the Biopython

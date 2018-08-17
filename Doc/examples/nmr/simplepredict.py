@@ -1,48 +1,53 @@
 #!/usr/bin/env python
-
-# ** What is this code? **
+# Copyright 2004 Robert Bussell, Jr.  All rights reserved.
 #
-# This is an example script for using new biopython modules for
-# generating NOE crosspeak peaklists from diagonal peaklist within
-# the framework of nmrview.
-# nmrview is not required to run this script, only an installed
-# version of python.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Generate NOE crosspeak peaklists from diagonal peaklist.
+
+** What is this code? **
+
+This is an example script for using new biopython modules for
+generating NOE crosspeak peaklists from diagonal peaklist within
+the framework of nmrview.
+nmrview is not required to run this script, only an installed
+version of python.
 
 
-# ** What's important? **
-#
-# The xpktools.py and NOEtools.py modules are what I'm trying to
-# demonstrate.  They provide methods and a data class for performing
-# some general analysis on NMR data taken directly from peaklist.
-# The code in this script will demonstrate how they are used.
+** What's important? **
+
+The xpktools.py and NOEtools.py modules are what I'm trying to
+demonstrate.  They provide methods and a data class for performing
+some general analysis on NMR data taken directly from peaklist.
+The code in this script will demonstrate how they are used.
 
 
-# ** Who wrote this code? **
-# Robert Bussell, Jr.
-# rgb2003@med.cornell.edu
+** Who wrote this code? **
+
+Robert Bussell, Jr.
+rgb2003@med.cornell.edu
 
 
-# ** Running this script **
-#
-# To run this script on a UNIX/Linux system, make it executable and
-# modify the first line of this script to point to python if necessary.
-# First try running the code with the peaklist that I provide to get
-# the feel of how things work, then you can use your own peaklist if you
-# modify the variables under the "INITS" code block to make it work
-# with your data.  The modules xpktools and NOEtools can be called from
-# your own scripts when you have them in place on your computer.
-# NOTE: It is very important to have an intact peaklist.  If you copy and
-# paste mine into a file be prepared to remove inappropriate line breaks.
+** Running this script **
+
+To run this script on a UNIX/Linux system, make it executable and
+modify the first line of this script to point to python if necessary.
+First try running the code with the peaklist that I provide to get
+the feel of how things work, then you can use your own peaklist if you
+modify the variables under the "INITS" code block to make it work
+with your data.  The modules xpktools and NOEtools can be called from
+your own scripts when you have them in place on your computer.
+NOTE: It is very important to have an intact peaklist.  If you copy and
+paste mine into a file be prepared to remove inappropriate line breaks.
 
 
-# ** Output of this script **
-#
-# This script generates a human readable standard output version of the
-# NOE coordinates as well as an nmrview peaklist out_example.xpk.
+** Output of this script **
 
-# ***********************************************************************
-
-# ***** LOAD MODULES *****
+This script generates a human readable standard output version of the
+NOE coordinates as well as an nmrview peaklist out_example.xpk.
+"""
 
 from __future__ import print_function
 import string
