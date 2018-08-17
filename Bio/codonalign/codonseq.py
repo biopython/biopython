@@ -455,7 +455,7 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
 
 
 def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
-    """Count differences between two codons (three-letter string; PRIVATE).
+    """Count differences between two codons, three-letter string (PRIVATE).
 
     The function will take multiple pathways from codon1 to codon2
     into account.

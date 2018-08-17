@@ -846,7 +846,7 @@ class TwoCuts(AbstractCut):
 
     @classmethod
     def _rev_modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         for internal use only.
 
@@ -2289,7 +2289,7 @@ class Analysis(RestrictionBatch, PrintFormat):
                (repr(self.rb), repr(self.sequence), self.linear)
 
     def _sub_set(self, wanted):
-        """Filter result for keys which are in wanted.
+        """Filter result for keys which are in wanted (PRIVATE).
 
         A._sub_set(other_set) -> dict.
 
@@ -2302,7 +2302,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         return dict((k, v) for k, v in self.mapping.items() if k in wanted)
 
     def _boundaries(self, start, end):
-        """Set boundaries to correct values.
+        """Set boundaries to correct values (PRIVATE).
 
         Format the boundaries for use with the methods that limit the
         search to only part of the sequence given to analyse.
@@ -2323,14 +2323,14 @@ class Analysis(RestrictionBatch, PrintFormat):
             return start, end, self._test_normal
 
     def _test_normal(self, start, end, site):
-        """Test if site is between start and end.
+        """Test if site is between start and end (PRIVATE).
 
         Internal use only
         """
         return start <= site < end
 
     def _test_reverse(self, start, end, site):
-        """Test if site is between end and start (for circular sequences).
+        """Test if site is between end and start, for circular sequences (PRIVATE).
 
         Internal use only.
         """

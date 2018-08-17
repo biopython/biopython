@@ -302,7 +302,7 @@ class Writer(object):
     def _info_factory(self, plain, confidence_as_branch_length,
                       branch_length_only, max_confidence, format_confidence,
                       format_branch_length):
-        """Return a function that creates a nicely formatted node tag."""
+        """Return a function that creates a nicely formatted node tag (PRIVATE)."""
         if plain:
             # Plain tree only. That's easy.
             def make_info_string(clade, terminal=False):
