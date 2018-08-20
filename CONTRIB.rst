@@ -111,7 +111,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Iddo Friedberg <idoerg at domain burnham.org>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
-- James Casbon <j.a.casbon at domain qmul.ac.uk>
+- James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
