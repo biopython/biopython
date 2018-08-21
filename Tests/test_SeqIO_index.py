@@ -673,6 +673,8 @@ for filename1, format, alphabet in tests:
     tasks = [(filename1, None)]
     if do_bgzf and os.path.isfile(filename1 + ".bgz"):
         tasks.append((filename1 + ".bgz", "bgzf"))
+    if do_bgzf and os.path.isfile(filename1 + ".gz"):
+        tasks.append((filename1 + ".gz", "gz"))
     for filename2, comp in tasks:
 
         def funct(fn, fmt, alpha, c):
