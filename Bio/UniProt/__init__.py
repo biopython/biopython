@@ -16,43 +16,17 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import _binary_to_string_handle
 
-def search(text, format="tab", sort="score", oragnism="", columns=(),
-           isoform=False, compress=False, offset=0, limit=0):
-    """
-    Performs a query over the UniProt API.
-    More at: https://www.uniprot.org/help/api_queries
 
-    :param text: Text to be queried.
-    :param format: The format to be retrieved. Possible:
-                    - tab
-                    - html
-                    - xls
-                    - fasta
-                    - gff
-                    - txt
-                    - xml
-                    - rdf
-                    - list
-                    - rss
-    :param sort: How the query results should be sorted. Default is by the score
-    of the search.
-    :param oragnism: Specifies the organism for which the query should be done.
-    :param columns: Which columns should be retrieved in a tuple format.
-    Possible:
-        citation, clusters, comments, domains, domain, ec, id, entry name,
-        existence, families, features, genes, go, go-id, interactor, keywords,
-        last-modified, length, organism, organism-id, pathway, protein names,
-        reviewed, 3d, version, virus hosts.
-    :param isoform: Include isoform sequences (used together with fasta output
-    format).
-    :param compress: Returns results gzipped.
-    :param offset: Offset of the first result taken.
-    :param limit: The amount of results taken.
-    :return: Result of the query as TextIOWrapper.
+def search(text, output_format="tab", sort="score", oragnism="", columns=(),
+           isoform=False, compress=False, offset=0, limit=0):
+    """Perform a query over the UniProt API.
+    
+    More at: https://www.uniprot.org/help/api_queries
     """
+    
     cgi = "https://www.uniprot.org/uniprot/?"
     variables = {"query": text,
-                 "format": format,
+                 "format": output_format,
                  "sort": sort,
                  "offset": str(offset)}
     if oragnism:
