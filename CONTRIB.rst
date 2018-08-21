@@ -173,7 +173,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
-- Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
+- Michiel de Hoon <https://github.com/mdehoon>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>
