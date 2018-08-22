@@ -1604,7 +1604,7 @@ class WithinPosition(int, AbstractPosition):
     - left - The start (left) position of the boundary
     - right - The end (right) position of the boundary
 
-    This allows dealing with a position like ((1.4)..100). This
+    This allows dealing with a location like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
     and 4. Since this is a start coordinate, it should acts like
     it is at position 1 (or in Python counting, 0).
