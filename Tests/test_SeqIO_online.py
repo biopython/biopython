@@ -22,6 +22,7 @@ requires_internet.check()
 # We want to test these:
 from Bio import Entrez
 from Bio import ExPASy
+from Bio import UniProt
 
 # In order to check any sequences returned
 from Bio import SeqIO
@@ -94,6 +95,21 @@ for database, formats, entry, length, checksum in [
             funct(database, formats, entry, length, checksum))
     del funct
 del database, formats, entry, length, checksum
+
+
+class UniProtTests(unittest.TestCase):
+    """Test for UniPort module."""
+
+    def test_search(self):
+        """UniProt.search("O48109")"""
+        identifier = "O48109"
+        handle = UniProt.search(identifier, columns=("organism",))
+        self.assertEqual(handle.read(),
+                         "Organism\nPython regius (Ball python) (Boa regia)\n")
+        handle = UniProt.search(identifier, output_format="fasta")
+        self.assertEqual(handle.readline().split("|")[1],
+                         identifier)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
