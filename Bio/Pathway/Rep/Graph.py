@@ -36,7 +36,7 @@ class Graph(object):
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
             values = sorted([(x, self._edge_map[(key, x)])
-                      for x in list(self._adjacency_list[key])])
+                            for x in list(self._adjacency_list[key])])
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 

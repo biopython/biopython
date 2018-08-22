@@ -385,7 +385,7 @@ class QueryResult(_BaseSearchObject):
         if qid is not None:
             if hqid != qid:
                 raise ValueError("Expected Hit with query ID %r, found %r "
-                        "instead." % (qid, hqid))
+                                 "instead." % (qid, hqid))
         else:
             self.id = hqid
         # same thing with descriptions
@@ -394,7 +394,7 @@ class QueryResult(_BaseSearchObject):
         if qdesc is not None:
             if hqdesc != qdesc:
                 raise ValueError("Expected Hit with query description %r, "
-                        "found %r instead." % (qdesc, hqdesc))
+                                 "found %r instead." % (qdesc, hqdesc))
         else:
             self.description = hqdesc
 
@@ -440,7 +440,7 @@ class QueryResult(_BaseSearchObject):
     # properties #
     id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
     description = optionalcascade('_description', 'query_description',
-            """QueryResult description""")
+                                  """QueryResult description""")
 
     @property
     def hsps(self):
@@ -497,7 +497,7 @@ class QueryResult(_BaseSearchObject):
             self[hit_key] = hit
         else:
             raise ValueError("The ID or alternative IDs of Hit %r exists in "
-                    "this QueryResult." % hit_key)
+                             "this QueryResult." % hit_key)
 
     def hit_filter(self, func=None):
         """Create new QueryResult object whose Hit objects pass the filter function.

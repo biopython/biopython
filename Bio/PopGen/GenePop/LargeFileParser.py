@@ -28,10 +28,10 @@ def get_indiv(line):
     try:
         allele_list = [(int(marker[0:marker_len]),
                        int(marker[marker_len:]))
-                   for marker in markers]
+                       for marker in markers]
     except ValueError:  # Haploid
         allele_list = [(int(marker[0:marker_len]),)
-                   for marker in markers]
+                       for marker in markers]
     return indiv_name, allele_list, marker_len
 
 

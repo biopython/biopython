@@ -479,13 +479,13 @@ class PlateRecord(object):
         if len(self._wells) > 4:
             # Show the last well and the first three
             return "%s('%s, ..., %s')" % (self.__class__.__name__,
-                                      ', '.join(
-                                          ["%s['%s']" % (str(self[x].__class__.__name__), self[x].id)
-                                           for x in sorted(self._wells.keys())[:3]]),
-                                      "%s['%s']" % (
-                                          self[
+                                          ', '.join(["%s['%s']" %
+                                                    (str(self[x].__class__.__name__), self[x].id)
+                                                    for x in
+                                                    sorted(self._wells.keys())[:3]]),
+                                          "%s['%s']" % (self[
                                               sorted(self._wells.keys())[-1]].__class__.__name__,
-                                          self[sorted(self._wells.keys())[-1]].id))
+                                              self[sorted(self._wells.keys())[-1]].id))
         else:
             return "%s(%s)" % (self.__class__.__name__,
                                ', '.join(
@@ -735,9 +735,9 @@ class WellRecord(object):
         if len(self) > 7:
             # Shows the last time point and the first five
             return "%s('%s, ..., %s')" % (self.__class__.__name__,
-                                      ', '.join([str(x)
-                                                 for x in self.get_raw()[:5]]),
-                                      str(self.get_raw()[-1]))
+                                          ', '.join([str(x) for x
+                                                     in self.get_raw()[:5]]),
+                                          str(self.get_raw()[-1]))
         else:
             return "%s(%s)" % (self.__class__.__name__,
                                ', '.join([str(x) for x in self.get_raw()]))
@@ -893,10 +893,10 @@ def JsonIterator(handle):
             # No luck
             if len(pID) == 0:
                 warnings.warn('Non-standard plate ID found (%s)' % plateID,
-                             BiopythonParserWarning)
+                              BiopythonParserWarning)
             elif int(pID) < 0:
                 warnings.warn('Non-standard plate ID found (%s), using %s' %
-                             (plateID, _platesPrefix + abs(int(pID))))
+                              (plateID, _platesPrefix + abs(int(pID))))
                 plateID = _platesPrefix + abs(int(pID))
             else:
                 if plateID.startswith(_platesPrefixMammalian):
@@ -986,10 +986,10 @@ def CsvIterator(handle):
                 # No luck
                 if len(pID) == 0:
                     warnings.warn('Non-standard plate ID found (%s)' % plateID,
-                                 BiopythonParserWarning)
+                                  BiopythonParserWarning)
                 elif int(pID) < 0:
                     warnings.warn('Non-standard plate ID found (%s), using %s' %
-                                 (plateID, _platesPrefix + abs(int(pID))))
+                                  (plateID, _platesPrefix + abs(int(pID))))
                     plateID = _platesPrefix + abs(int(pID))
                 else:
                     if plateID.startswith(_platesPrefixMammalian):

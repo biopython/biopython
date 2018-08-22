@@ -604,7 +604,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     m_groupdict[shift_start.index(i)].isupper():
                 shift_index = shift_start.index(i)
                 shift_val = 6 - (shift_pos[shift_index][1] -
-                            shift_pos[shift_index][0])
+                                 shift_pos[shift_index][0])
                 rf_table.append(i)
                 rf_table.append(i + 3 - shift_val)
                 i = shift_pos[shift_index][1]

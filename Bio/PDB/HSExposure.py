@@ -24,7 +24,7 @@ class _AbstractHSExposure(AbstractPropertyMap):
     """
 
     def __init__(self, model, radius, offset, hse_up_key, hse_down_key,
-            angle_key=None):
+                 angle_key=None):
         """Initialize.
 
         :param model: model
@@ -153,7 +153,8 @@ class HSExposureCA(_AbstractHSExposure):
         :type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
-                'EXP_HSE_A_U', 'EXP_HSE_A_D', 'EXP_CB_PCB_ANGLE')
+                                     'EXP_HSE_A_U', 'EXP_HSE_A_D',
+                                     'EXP_CB_PCB_ANGLE')
 
     def _get_cb(self, r1, r2, r3):
         """Calculate approx CA-CB direction (PRIVATE).
@@ -245,7 +246,7 @@ class HSExposureCB(_AbstractHSExposure):
         :type offset: int
         """
         _AbstractHSExposure.__init__(self, model, radius, offset,
-                'EXP_HSE_B_U', 'EXP_HSE_B_D')
+                                     'EXP_HSE_B_U', 'EXP_HSE_B_D')
 
     def _get_cb(self, r1, r2, r3):
         """Calculate CB-CA vector (PRIVATE).

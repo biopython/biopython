@@ -225,7 +225,8 @@ class Motif(object):
         self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
-                "Specify either instances or counts, don't specify both")
+                            "Specify either instances or counts, "
+                            "don't specify both")
         elif counts is not None:
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna

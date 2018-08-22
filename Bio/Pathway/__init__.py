@@ -104,9 +104,9 @@ class Reaction(object):
         """Return a debugging string representation of self."""
         return "Reaction(" + \
                ",".join(map(repr, [self.reactants,
-                                  self.catalysts,
-                                  self.data,
-                                  self.reversible])) + ")"
+                                   self.catalysts,
+                                   self.data,
+                                   self.reversible])) + ")"
 
     def __str__(self):
         """Return a string representation of self."""

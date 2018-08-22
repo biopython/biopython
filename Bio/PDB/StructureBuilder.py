@@ -143,9 +143,11 @@ class StructureBuilder(object):
                 else:
                     if resname == duplicate_residue.resname:
                         warnings.warn("WARNING: Residue ('%s', %i, '%s','%s')"
-                                      " already defined with the same name at line  %i."
-                              % (field, resseq, icode, resname, self.line_counter),
-                              PDBConstructionWarning)
+                                      " already defined with the same name "
+                                      "at line  %i."
+                                      % (field, resseq, icode, resname,
+                                         self.line_counter),
+                                      PDBConstructionWarning)
                         self.residue = duplicate_residue
                         return
                     # Make a new DisorderedResidue object and put all
