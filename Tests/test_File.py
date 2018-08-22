@@ -11,6 +11,7 @@ import sys
 import tempfile
 import unittest
 
+from Bio import bgzf
 from Bio import File
 from Bio._py3k import StringIO
 
@@ -65,6 +66,23 @@ class UndoHandleTests(unittest.TestCase):
                 new += tmp
             self.assertEqual(data, new)
             h.close()
+
+
+class RandomAccess(unittest.TestCase):
+
+    def test_plain(self):
+        with File._open_for_random_access("Quality/example.fastq") as handle:
+            self.assertTrue("r" in handle.mode)
+            self.assertTrue("b" in handle.mode)
+
+    def test_bgzf(self):
+        with File._open_for_random_access("Quality/example.fastq.bgz") as handle:
+            self.assertIsInstance(handle, bgzf.BgzfReader)
+
+    def test_gzip(self):
+        self.assertRaises(ValueError,
+                          File._open_for_random_access,
+                          "Quality/example.fastq.gz")
 
 
 class AsHandleTestCase(unittest.TestCase):
