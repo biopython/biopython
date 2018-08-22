@@ -30,6 +30,7 @@ possible, especially the following contributors:
 - Catherine Lesuisse
 - Chris Rands
 - Kai Blin
+- Konstantin Vdovkin
 - Maximilian Greil
 - Peter Cock
 - Spencer Bliven

@@ -118,6 +118,15 @@ def _open_for_random_access(filename):
         assert "BGZF" in str(e)
         # Not a BGZF file after all, rewind to start:
         handle.seek(0)
+
+    first_bytes = handle.read(2)
+    if first_bytes == b"\x1f\x8b":
+        handle.close()
+        import gzip
+        return gzip.open(filename, 'rb')
+
+    handle.seek(0)
+
     return handle
 
 

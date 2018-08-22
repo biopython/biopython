@@ -144,6 +144,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kian Ho <https://github.com/kianho>
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
+- Konstantin Vdovkin <https://github.com/rtf-const>
 - Kozo Nishida <https://github.com/kozo2>
 - Kristian Davidsen <https://github.com/krdav>
 - Kristian Rother <https://github.com/krother>
