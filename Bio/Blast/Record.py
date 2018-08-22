@@ -183,13 +183,13 @@ class HSP(object):
                  % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
-                                       str(self.query),
-                                       str(self.query_end)))
+                                             str(self.query),
+                                             str(self.query_end)))
             lines.append("               %s"
                          % (str(self.match)))
             lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
-                                       str(self.sbjct),
-                                       str(self.sbjct_end)))
+                                             str(self.sbjct),
+                                             str(self.sbjct_end)))
         else:
             lines.append("Query:%s %s...%s %s"
                          % (str(self.query_start).rjust(8),

@@ -394,11 +394,11 @@ class Tree(Nodes.Chain):
                 print('Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2), tree2.name))
             raise TreeError('Can\'t compare trees with different taxon compositions.')
         t1 = [(set(self.get_taxa(n)), self.node(n).data.support) for n in self.all_ids() if
-            self.node(n).succ and
-            (self.node(n).data and self.node(n).data.support and self.node(n).data.support >= threshold)]
+              self.node(n).succ and
+              (self.node(n).data and self.node(n).data.support and self.node(n).data.support >= threshold)]
         t2 = [(set(tree2.get_taxa(n)), tree2.node(n).data.support) for n in tree2.all_ids() if
-            tree2.node(n).succ and
-            (tree2.node(n).data and tree2.node(n).data.support and tree2.node(n).data.support >= threshold)]
+              tree2.node(n).succ and
+              (tree2.node(n).data and tree2.node(n).data.support and tree2.node(n).data.support >= threshold)]
         conflict = []
         for (st1, sup1) in t1:
             for (st2, sup2) in t2:

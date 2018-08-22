@@ -252,7 +252,7 @@ class Record(object):
 
     def __repr__(self):
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
-                          self.ID, self.symbol, self.title)
+                                   self.ID, self.symbol, self.title)
 
 
 def parse(handle):

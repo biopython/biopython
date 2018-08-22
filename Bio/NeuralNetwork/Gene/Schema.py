@@ -304,14 +304,14 @@ class DifferentialSchemaFitness(object):
         num_pos = 0
         for seq_record in self._pos_seqs:
             cur_counts = self._schema_eval.num_matches(motif,
-                                                      str(seq_record.seq))
+                                                       str(seq_record.seq))
             num_pos += cur_counts
 
         # get the counts in the negative examples
         num_neg = 0
         for seq_record in self._neg_seqs:
             cur_counts = self._schema_eval.num_matches(motif,
-                                                      str(seq_record.seq))
+                                                       str(seq_record.seq))
 
             num_neg += cur_counts
 
@@ -539,7 +539,7 @@ class SchemaCoder(object):
         if max_count > 0:
             for count_num in range(len(schema_counts)):
                 schema_counts[count_num] = (float(schema_counts[count_num]) -
-                                           float(min_count)) / float(max_count)
+                                            float(min_count)) / float(max_count)
 
         return schema_counts
 

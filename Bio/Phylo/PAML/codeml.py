@@ -198,9 +198,9 @@ def read(results_file):
         raise ValueError("Empty results file.  Did CODEML exit successfully?  "
                          "Run 'Codeml.run()' with 'verbose=True'.")
     (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
-            results)
+                                                                      results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models,
-            multi_genes)
+                                          multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
     if len(results) == 0:

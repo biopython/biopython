@@ -65,10 +65,10 @@ class CodonAlignment(MultipleSeqAlignment):
 
         if rows <= 60:
             lines.extend([self._str_line(rec, length=60)
-                    for rec in self._records])
+                         for rec in self._records])
         else:
             lines.extend([self._str_line(rec, length=60)
-                    for rec in self._records[:18]])
+                         for rec in self._records[:18]])
             lines.append("...")
             lines.append(self._str_line(self._records[-1], length=60))
         return "\n".join(lines)
@@ -110,7 +110,7 @@ class CodonAlignment(MultipleSeqAlignment):
         sequences
         """
         alignments = [SeqRecord(rec.seq.toSeq(), id=rec.id) for
-                rec in self._records]
+                      rec in self._records]
         return MultipleSeqAlignment(alignments)
 
     def get_dn_ds_matrix(self, method="NG86", codon_table=default_codon_table):

@@ -883,7 +883,7 @@ class EmblScanner(InsdcScanner):
                     warnings.warn("Malformed DR line in EMBL file.", BiopythonParserWarning)
                 else:
                     consumer.dblink("%s:%s" % (parts[0].strip(),
-                                           parts[1].strip()))
+                                               parts[1].strip()))
             elif line_type == 'RA':
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))

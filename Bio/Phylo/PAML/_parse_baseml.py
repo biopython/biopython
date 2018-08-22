@@ -116,7 +116,7 @@ def parse_kappas(lines, parameters):
                 if line_floats:
                     parameters["branches"][branch] = \
                         {"t": line_floats[0], "kappa": line_floats[1],
-                        "TS": line_floats[2], "TV": line_floats[3]}
+                         "TS": line_floats[2], "TV": line_floats[3]}
         # Find kappa under REV
         # Example match:
         # kappa under REV: 999.00000 145.76453  0.00001  0.00001  0.00001

@@ -137,7 +137,7 @@ class InputLayer(AbstractLayer):
                                self.values[this_node])
 
                 delta = (learning_rate * error_deriv +
-                        momentum * self.weight_changes[(this_node, next_node)])
+                         momentum * self.weight_changes[(this_node, next_node)])
 
                 # apply the change to the weight
                 self.weights[(this_node, next_node)] += delta
@@ -227,7 +227,7 @@ class HiddenLayer(AbstractLayer):
                                self.values[this_node])
 
                 delta = (learning_rate * error_deriv +
-                        momentum * self.weight_changes[(this_node, next_node)])
+                         momentum * self.weight_changes[(this_node, next_node)])
 
                 # apply the change to the weight
                 self.weights[(this_node, next_node)] += delta

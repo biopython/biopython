@@ -484,7 +484,7 @@ def index(filename, format=None, key_function=None, **kwargs):
 
 
 def index_db(index_filename, filenames=None, format=None,
-        key_function=None, **kwargs):
+             key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -614,7 +614,7 @@ def write(qresults, handle, format=None, **kwargs):
 
 
 def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-        out_kwargs=None):
+            out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.

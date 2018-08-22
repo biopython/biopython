@@ -18,7 +18,7 @@ ignore =
     # F401	module imported but unused
     # F841	local variable name is assigned to but never used
     # TODO: Fix some of these?
-    E127,E128,E501,E731,F401,F841,
+    E501,E731,F401,F841,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
