@@ -1051,13 +1051,25 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
                                                                   int(e),
                                                                   strand)
-            except ValueError as e:
+            except ValueError as error:
                 # Could be non-integers, more likely bad origin wrapping
                 import warnings
                 from Bio import BiopythonParserWarning
                 warnings.warn("Ignoring invalid location: %r" % location_line,
                               BiopythonParserWarning)
-                cur_feature.location = None
+                if s > e:
+                    warnings.warn("Attempting to fix invalid location, as it "
+                                  "looks like bad origin wrapping. Please fix "
+                                  "input file, as this could have inconsistant"
+                                  " behavior",
+                                  BiopythonParserWarning)
+                    f1 = SeqFeature.FeatureLocation(int(s),
+                                                    self._expected_size,
+                                                    strand)
+                    f2 = SeqFeature.FeatureLocation(0, int(e), strand)
+                    cur_feature.location = f1 + f2
+                else:
+                    cur_feature.location = None
             return
 
         if ",)" in location_line:
