@@ -146,3 +146,4 @@ def slice_sequence_with_features(seq: SeqRecord, sl: slice, keep_all_features: b
             ns.features.append(nf)
 
     return ns
+
