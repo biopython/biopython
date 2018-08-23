@@ -1051,24 +1051,25 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
                                                                   int(e),
                                                                   strand)
-            except ValueError as error:
+            except ValueError:
                 # Could be non-integers, more likely bad origin wrapping
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Ignoring invalid location: %r" % location_line,
-                              BiopythonParserWarning)
-                if s > e:
-                    warnings.warn("Attempting to fix invalid location, as it "
-                                  "looks like bad origin wrapping. Please fix "
-                                  "input file, as this could have inconsistant"
-                                  " behavior",
+                print(self._seq_type)
+                if s > e and "circular" in self._seq_type.lower():
+                    warnings.warn("Attempting to fix invalid location %r as "
+                                  "it looks like incorrect origin wrapping. "
+                                  "Please fix input file, this could have "
+                                  "unintended behavior." % location_line,
                                   BiopythonParserWarning)
-                    f1 = SeqFeature.FeatureLocation(int(s),
+                    f1 = SeqFeature.FeatureLocation(int(s) - 1,
                                                     self._expected_size,
                                                     strand)
                     f2 = SeqFeature.FeatureLocation(0, int(e), strand)
                     cur_feature.location = f1 + f2
                 else:
+                    warnings.warn("Ignoring invalid location: %r" % location_line,
+                                  BiopythonParserWarning)
                     cur_feature.location = None
             return
 
