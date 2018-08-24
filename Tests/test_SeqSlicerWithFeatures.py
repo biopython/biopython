@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from Bio import SeqIO
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, SeqFeature, FeatureLocation, WithinPosition, \
@@ -8,7 +9,10 @@ from Bio.SeqUtils.SeqSlicerWithFeatures import slice_sequence_with_features
 
 class SeqSlicerTestsGenuine(unittest.TestCase):
     def setUp(self):
-        self.seq = SeqIO.read('SeqSlicer/NC_005816.gb', format='gb')
+        self.seq = SeqIO.read(
+            os.path.join('SeqSlicer', 'NC_005816.gb'),
+            format='gb'
+        )
         # """
         #  source          1..9609
         #                  /organism="Yersinia pestis biovar Microtus str. 91001"
@@ -62,7 +66,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         #                  /db_xref="CDD:194099"
         # """
 
-        self.compound = SeqIO.read('SeqSlicer/arab1.gb', format='gb')
+        self.compound = SeqIO.read(
+            os.path.join('SeqSlicer', 'arab1.gb'),
+            format='gb'
+        )
         # """
         #  CDS             join(3462..3615,3698..3978,4077..4307,4408..4797,
         #          4876..5028,5141..5332)
@@ -75,7 +82,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         #          /db_xref="GI:6715633"
         # """
 
-        self.uniprot_up = SeqIO.read('SeqSlicer/uniprot_up.dat', format='swiss')
+        self.uniprot_up = SeqIO.read(
+            os.path.join('SeqSlicer', 'uniprot_up.dat'),
+            format='swiss'
+        )
         # """
         # FT   DISULFID      7      ?       Interchain (between basic and acidic
         # FT                                chains). {ECO:0000255}.
@@ -220,7 +230,13 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
 
 class SeqSlicerTestArtificial(unittest.TestCase):
     def setUp(self):
-        self.seq = SeqIO.read('SeqSlicer/gb_artificial.gbk', format='gb')
+        self.seq = SeqIO.read(
+            os.path.join('SeqSlicer', 'gb_artificial.gbk'),
+            format='gb')
+        self.oneof = SeqIO.read(
+            os.path.join('SeqSlicer', 'one_of.gb'),
+            format='gb'
+        )
 
     def test_slice(self):
         # Test WithinPosition preserving.
@@ -347,6 +363,10 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertIsInstance(fea[0].location.start, BeforePosition)
         self.assertIsInstance(fea[0].location.end, WithinPosition)
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a)))
+
+    def test_oneof_raies(self):
+        with self.assertRaises(NotImplementedError):
+            slice_sequence_with_features(self.oneof, slice(1180, 2210))
 
 
 if __name__ == "__main__":

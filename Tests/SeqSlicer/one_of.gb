@@ -1,0 +1,115 @@
+LOCUS       HSTMPO1      2509 bp    DNA             PRI       01-JUL-1995
+DEFINITION  Human thymopoietin (TMPO) gene, exon 1.
+ACCESSION   U18266
+VERSION     U18266.1  GI:885676
+KEYWORDS    .
+SEGMENT     1 of 6
+SOURCE      human.
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 2509)
+  AUTHORS   Harris,C.A., Andryuk,P.J., Cline,S.W., Siekierka,J.J. and
+            Goldstein,G.
+  TITLE     Structure and mapping of the human thymopoietin (TMPO) gene and
+            relationship of TMPO beta to rat lamin-associated polypeptide 2
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 2509)
+  AUTHORS   Harris,C.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-DEC-1994) Crafford A. Harris, Immunobiology Research
+            Institute, Route 22 East, Annandale, NJ 08801-0999, USA
+FEATURES             Location/Qualifiers
+     source          1..2509
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+                     /chromosome="12"
+                     /map="12q22; 64% (% distance from centromere to telomere)"
+                     /clone="P1.516 (DMPC-HFFno.1B-0943F)"
+                     /clone_lib="DuPont Merck Hum Fibroblast P1 Library no.1
+                     Series B (compressed) (Genome Systems Inc)"
+     5'UTR           one-of(1888,1901)..2200
+                     /gene="TMPO"
+     gene            join(1888..2509,U18267.1:1..270,U18268.1:1..309,
+                     U18270.1:1..6905,U18269.1:1..128,U18271.1:1..3234)
+                     /gene="TMPO"
+     exon            one-of(1888,1901)..2479
+                     /gene="TMPO"
+                     /number=1
+     CDS             join(2201..2479,U18267.1:120..246,U18268.1:130..288,
+                     U18270.1:4691..4788,U18269.1:82..>128)
+                     /gene="TMPO"
+                     /codon_start=1
+                     /product="thymopoietin beta"
+                     /protein_id="AAB60434.1"
+                     /db_xref="GI:885684"
+                     /translation="MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQH
+                     LTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKP
+                     RQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSST
+                     PLPTISSSAENTRQNGSNDSDRYSDNEEDSKIELKLEKREPLKGRAKTPVTLKQRRVE
+                     HNQSYSQAGITETEWTSGS"
+     CDS             join(2201..2479,U18267.1:120..246,U18268.1:130..288,
+                     U18270.1:39..1558)
+                     /gene="TMPO"
+                     /codon_start=1
+                     /product="thymopoietin alpha"
+                     /protein_id="AAB60433.1"
+                     /db_xref="GI:885683"
+                     /translation="MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQH
+                     LTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKP
+                     RQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSST
+                     PLPTISSSAENTRQNGSNDSDRYSDNEEGKKKEHKKVKSTRDIVPFSELGTTPSGGGF
+                     FQGISFPEISTRPPLGSTELQAAKKVHTSKGDLPREPLVATNLPGRGQLQKLASERNL
+                     FISCKSSHDRCLEKSSSSSSQPEHSAMLVSTAASPSLIKETTTGYYKDIVENICGREK
+                     SGIQPLCPERSHISDQSPLSSKRKALEESESSQLISPPLAQAIRDYVNSLLVQGGVGS
+                     LPGTSNSMPPLDVENIQKRIDQSKFQETEFLSPPRKVPRLSEKSVEERDSGSFVAFQN
+                     IPGSELMSSFAKTVVSHSLTTLGLEVAKQSQHDKIDASELSFPFHESILKVIEEEWQQ
+                     VDRQLPSLACKYPVSSREATQILSVPKVDDEILGFISEATPLGGIQAASTESCNQQLD
+                     LALCRAYEAAASALQIATHTAFVAKAMQADISEAAQILSSDPSRTHQALGILSKTYDA
+                     ASYICEAAFDEVKMAAHTMGNATVGRRYLWLKDCKINLASKNKLASTPFKGGTLFGGE
+                     VCKVIKKRGNKH"
+BASE COUNT      667 a    587 c    656 g    599 t
+ORIGIN      
+        1 gaattcagat agaatgtaga caagagggat ggtgaggaaa acctacggca agcagctcta
+       61 taatttctgg aaagtgacca ggaggctcgt ggatgatggc aggaaggaga gtagaaagtg
+      121 atttagccag aagatatgaa cttcaaatat ttttgaagca gaaaagagca gaaatggttt
+      181 ggaagtagca atcaggacca aagagaccac ccaaactcaa tagcccaacc tcttagcctt
+      241 agggtatgca gaatctgaaa agtgtaatct caattttgga gctctacagc agtaaatctg
+      301 caagtaacca cctgtagcta atgtccaggg attaaaaaaa agataatgaa aatgtttttg
+      361 cccaggaaac attaatttca ggcgtatcta gaatgcagtt cttgcattat acgtactggg
+      421 ttaccagtca ttgcaaagtc atggtccttt gcctctcagc tcagttcccc ttctgaagat
+      481 aaaaacattt gcctatgtgt ccagggaagc tgtgaggaca aaaaaccaag caacttttac
+      541 aagggatcat aaaaacctac ctaacaactt gctaattaaa acctgatttt taatttgcat
+      601 tattgagctt aataccattg cttaaatgta tgtgaatact gagattttta taaaggaatt
+      661 agttacctct aggaaaataa ttatcactaa aagaaataat atcgcaattt gaataaaagt
+      721 aagtcgctta aatcatagga aacattttta gtgaaggcgt ttgttttaaa tgtattctaa
+      781 cctagcaatg tagaaagcag gcaaacattt aaaaaaaatt taaccagttt ctaaaacata
+      841 gtttggagct cagattctgg ggaaatgatt aacacaccct acatccaagg tctcctttcc
+      901 tttctagaaa gaaagcatct ttaaacatac atattcatca gaaatacaaa tatttgtcat
+      961 cagtgatact aatttccagg caaacatttt aattgcagtc aatgtattag attctaccag
+     1021 gttttaattt ggatcggtaa tacgggtttg attagggttc taggcctaat tataggtcac
+     1081 tagtcttcct ttaggattat gtaccatctg ttattttaaa ttgaccattg agggggttcc
+     1141 caagggttct ccttcgtttt gttatcaaac gttaggttta ggattcttgc gggtggtggg
+     1201 atccaaagcc agagacggtt tcaacaaaaa tgcaagcgcg aatttgtctt gcgtctgaac
+     1261 gcactgttca aattaaacaa tttagacatg ccccaactat gacactaaga agtgaatggt
+     1321 atagtacact tttgtcacaa attcaagggt aatttaagtg cccgatggta gaggtctggc
+     1381 ttcccctggg tttctggaac aaaagaagcg ttcgcgagga gaggggtaac tccccgccct
+     1441 ccccctccca aagtaaatca aatcaaggaa tatgagtgcc tgcagacaag cctcgcttct
+     1501 tttcttcccc ttcagggcta gcgtttgggg aaggcaaggc tgcggctact cttggagctt
+     1561 cagtgtcccg ggaggaagaa aggcccagcc aagggtcctc acactggcgt ggaattcggc
+     1621 gcgttcgtag gcgatcgacc ccagagacga aagctgcttc tcaagctggg ggagggagag
+     1681 gaaacggcgc acaaaagcag tacgacctgt cccttatcgg cgtctaaggg gaagggtgga
+     1741 gaaaacgaaa acagaagcgg gccgggagcc tcggctcccg ccccagcgcc ttttaaactg
+     1801 cgtttctacc tcctctcgct cagcgcggcg gctaatggaa cccgcgcgag ccgtctcgcc
+     1861 aatcaccgcc gcgcttcctc ccgtcgcccg ccaatggcgg cgcgcgttct tggggcgtgg
+     1921 gcgaagcagg ctgctcgcct cctgcctgta gtgtgtgggc tggggttggt gcgagcttcc
+     1981 agcttggccg cagttggttc gtagttcggc tctggggtct tttgtgtccg ggtctggctt
+     2041 ggctttgtgt ccgcgagttt ttgttccgct ccgcagcgct cttcccgggc aggagccgtg
+     2101 aggctcggag gcggcagcgc ggtccccggc caggagcaag cgcgccggcg tgagcggcgg
+     2161 cggcaaaggc tgtggggagg gggcttcgca gatccccgag atgccggagt tcctggaaga
+     2221 cccctcggtc ctgacaaaag acaagttgaa gagtgagttg gtcgccaaca atgtgacgct
+     2281 gccggccggg gagcagcgca aagacgtgta cgtccagctc tacctgcagc acctcacggc
+     2341 tcgcaaccgg ccgccgctcc ccgccggcac caacagcaag gggcccccgg acttctccag
+     2401 tgacgaagag cgcgagccca ccccggtcct cggctctggg gccgccgccg cgggccggag
+     2461 ccgagcagcc gtcggcaggg taaggacgcg gggccggggc tacaaaggc
+//

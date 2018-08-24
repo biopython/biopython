@@ -3,7 +3,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, BeforePos
     WithinPosition, CompoundLocation
 
 
-def move_position(pos, move: int, keep_all: bool, slice_len: int):
+def _move_position(pos, move: int, keep_all: bool, slice_len: int):
     tt = type(pos)
     if isinstance(pos, (ExactPosition, BeforePosition, AfterPosition)):
         if int(pos) + move < 0:
@@ -49,26 +49,26 @@ def move_position(pos, move: int, keep_all: bool, slice_len: int):
         raise NotImplementedError('slicing for position {} not implemented'.format(type(pos)))
 
 
-def start_violation_pos(x, sl: slice):
+def _start_violation_pos(x, sl: slice):
     return x.start.position < sl.start < x.end.position
 
 
-def end_violation_pos(x, sl: slice):
+def _end_violation_pos(x, sl: slice):
     return x.start.position < sl.stop < x.end.position
 
 
-def outside(x, sl: slice):
+def _outside(x, sl: slice):
     return sl.start > x.end.position or sl.stop < x.start.position
 
 
-def slice_feature(feature: FeatureLocation, sl: slice, keep_all_features: bool, seq_len: int):
+def _slice_feature(feature: FeatureLocation, sl: slice, keep_all_features: bool, seq_len: int):
     # the boundary checking (whether the slicing would be applied) uses feature 'start' and 'end' position
     #  if they are not equal to min("all feature positions") and max("all feature positions") it is possible
     #  that feature will not be detected
     #  this is by design
     #  =================
     #  we rely on the start/end position being defined as important pointers (and checking would also be complicated)
-    if start_violation_pos(feature, sl) or end_violation_pos(feature, sl):
+    if _start_violation_pos(feature, sl) or _end_violation_pos(feature, sl):
         if isinstance(feature, CompoundLocation):
             of = []
             for ff in feature.parts:
@@ -77,11 +77,11 @@ def slice_feature(feature: FeatureLocation, sl: slice, keep_all_features: bool, 
 
                 # However we need to check whether the location object is not fully outside the slice
                 #  (and discard those which are outside)
-                if outside(ff, sl):
+                if _outside(ff, sl):
                     continue
 
-                mps = move_position(ff.start, - sl.start, keep_all_features, seq_len)
-                mpe = move_position(ff.end, - sl.start, keep_all_features, seq_len)
+                mps = _move_position(ff.start, - sl.start, keep_all_features, seq_len)
+                mpe = _move_position(ff.end, - sl.start, keep_all_features, seq_len)
                 if mps is not None and mpe is not None:
                     fl = FeatureLocation(mps, mpe, ff.strand)
 
@@ -98,8 +98,8 @@ def slice_feature(feature: FeatureLocation, sl: slice, keep_all_features: bool, 
                 return CompoundLocation(of, operator=feature.operator)
         else:
 
-            mps = move_position(feature.start, - sl.start, keep_all_features, seq_len)
-            mpe = move_position(feature.end, - sl.start, keep_all_features, seq_len)
+            mps = _move_position(feature.start, - sl.start, keep_all_features, seq_len)
+            mpe = _move_position(feature.end, - sl.start, keep_all_features, seq_len)
 
             if mps is not None and mpe is not None:
 
@@ -115,27 +115,37 @@ def slice_sequence_with_features(seq: SeqRecord, sl: slice, keep_all_features: b
     """
     Return SeqRecord slice with features not fully within the slice.
 
-    This is an attempt to make slicing function for Bio.Seq which retains features which are not fully in slice
-      it is intended for visualization purposes where part of a feature also provides valuable information
+    This function is able to slice the SeqRecord with SeqFeatures in such way that features crossing boundary of the
+      slice are preserved.
+
+    Accepted position objects are ExactPosition, BeforePosition, AfterPosition, BetweenPosition and WithinPosition.
+
+    If one of location object is uncertain (that is Between position or WithinPosition), and slice requested is to this
+     position, the whole Feature object is dropped, unless "keep_all_features" is set to True.
+
+    When one position of SeqFeature is UnknownPosition -> slicing throws TypeError (from biopython).
+
+    When one position of SefFeature is OneOfPositions -> slicing throws NotImplementedError (from here)
+
+    Original usage was for sequence visualization.
 
     # location variants:
+    - FeatureLocation - simple                                                              OK
     - CompoundLocation - Collection of FeatureLocation objects (for joins etc).             -> solved
+    # position variants
     - ExactPosition - Specify the position as being exact.                                  OK
     - WithinPosition - Specify a position occurring within some range.                      -> solved
-    - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).           -> solved
+    - BetweenPosition - Specify a position occurring between a range (OBSOLETE?).           -> not tested -> no parsable example -> should be OK
     - BeforePosition - Specify the position as being found before some base.                OK
     - AfterPosition - Specify the position as being found after some base.                  OK
     - OneOfPosition - Specify a position where the location can be multiple positions.      ? Not is spec -> raise
     - UnknownPosition - Represents missing information like '?' in UniProt.                 raise
-
-    Biopython raises on feature with UnknownPosition
-    OneOfPosition - do not implement.
     """
     ns = seq[sl.start:sl.stop]
 
     seq_len = len(ns)
     for feat in seq.features:
-        fl = slice_feature(feat.location, sl, keep_all_features, seq_len)
+        fl = _slice_feature(feat.location, sl, keep_all_features, seq_len)
         if fl is not None:
             nf = SeqFeature(
                 fl,
