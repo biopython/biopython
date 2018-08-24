@@ -4,7 +4,6 @@ import os
 from Bio import SeqIO
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, SeqFeature, FeatureLocation, WithinPosition, \
     CompoundLocation
-from Bio.SeqUtils.SeqSlicerWithFeatures import slice_sequence_with_features
 
 
 class SeqSlicerTestsGenuine(unittest.TestCase):
@@ -96,7 +95,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ------==============------
         #     |----------------|
 
-        a = slice_sequence_with_features(self.seq, slice(109, 210))
+        a = self.seq.slice_with_features(slice(109, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -110,7 +109,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ------=========-------------------
         #                  |----------|
 
-        a = slice_sequence_with_features(self.seq, slice(109, 210))
+        a = self.seq.slice_with_features(slice(109, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:194099' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 0)
 
@@ -119,7 +118,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ------=========-----------
         #          |----------|
 
-        a = slice_sequence_with_features(self.seq, slice(120, 210))
+        a = self.seq.slice_with_features(slice(120, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -133,7 +132,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----------==========----------
         #       |----------|
 
-        a = slice_sequence_with_features(self.seq, slice(109, 200))
+        a = self.seq.slice_with_features(slice(109, 200))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -147,7 +146,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----------==========----------
         #       |----------|
 
-        a = slice_sequence_with_features(self.seq, slice(120, 200))
+        a = self.seq.slice_with_features(slice(120, 200))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -161,7 +160,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----======------======------=======-------======-----
         #   |-----------------------------------------------|
 
-        a = slice_sequence_with_features(self.compound, slice(3400, 5400))
+        a = self.compound.slice_with_features(slice(3400, 5400))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -175,7 +174,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----======------======------=======-------======-----
         #           |----|
 
-        a = slice_sequence_with_features(self.compound, slice(3620, 3680))
+        a = self.compound.slice_with_features(slice(3620, 3680))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 0)
 
@@ -184,7 +183,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----======------======------=======-------======-----
         #            |-------------|
 
-        a = slice_sequence_with_features(self.compound, slice(3620, 4050))
+        a = self.compound.slice_with_features(slice(3620, 4050))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -198,7 +197,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----======------======------=======-------======-----
         #            |--------------------------|
 
-        a = slice_sequence_with_features(self.compound, slice(3620, 4350))
+        a = self.compound.slice_with_features(slice(3620, 4350))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -212,7 +211,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # ----======------======------=======-------======-----
         #                   |-------------|
 
-        a = slice_sequence_with_features(self.compound, slice(3700, 4100))
+        a = self.compound.slice_with_features(slice(3700, 4100))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -225,7 +224,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # This should raise an error even when doing normal slice well outside the feature location.
 
         with self.assertRaises(TypeError):
-            self.uniprot_up[1:4]
+            self.uniprot_up.slice_with_features(slice(1, 4))
 
 
 class SeqSlicerTestArtificial(unittest.TestCase):
@@ -246,7 +245,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #      |----------------|
 
-        a = slice_sequence_with_features(self.seq, slice(680, 900))
+        a = self.seq.slice_with_features(slice(680, 900))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -263,7 +262,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #             |----|
 
-        a = slice_sequence_with_features(self.seq, slice(700, 750))
+        a = self.seq.slice_with_features(slice(700, 750))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -280,7 +279,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #       |------|
 
-        a = slice_sequence_with_features(self.seq, slice(600, 700))
+        a = self.seq.slice_with_features(slice(600, 700))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -297,7 +296,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #               |------|
 
-        a = slice_sequence_with_features(self.seq, slice(700, 900))
+        a = self.seq.slice_with_features(slice(700, 900))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -314,7 +313,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #          |------|
 
-        a = slice_sequence_with_features(self.seq, slice(688, 750))
+        a = self.seq.slice_with_features(slice(688, 750))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 0)
 
@@ -326,7 +325,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #          |------|
 
-        a = slice_sequence_with_features(self.seq, slice(688, 750), keep_all_features=True)
+        a = self.seq.slice_with_features(slice(688, 750), keep_all_features=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -343,7 +342,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------========...---------
         #           |------|
 
-        a = slice_sequence_with_features(self.seq, slice(920, 955))
+        a = self.seq.slice_with_features(slice(920, 955))
         fea = [f for f in a.features if f.type == 'gene' and 'within2' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 0)
 
@@ -355,7 +354,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------========...---------
         #           |------|
 
-        a = slice_sequence_with_features(self.seq, slice(920, 955), keep_all_features=True)
+        a = self.seq.slice_with_features(slice(920, 955), keep_all_features=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within2' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -366,7 +365,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
 
     def test_oneof_raies(self):
         with self.assertRaises(NotImplementedError):
-            slice_sequence_with_features(self.oneof, slice(1180, 2210))
+            self.oneof.slice_with_features(slice(1180, 2210))
 
 
 if __name__ == "__main__":
