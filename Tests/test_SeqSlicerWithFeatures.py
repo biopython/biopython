@@ -3,7 +3,7 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, SeqFeature, FeatureLocation, WithinPosition, \
     CompoundLocation
-from SeqSlicerWithFeatures import slice_sequence_with_features
+from Bio.SeqUtils.SeqSlicerWithFeatures import slice_sequence_with_features
 
 
 class SeqSlicerTestsGenuine(unittest.TestCase):
@@ -82,9 +82,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # """
 
     def test_slice(self):
-        # check classic slicing
+        # Check classic slicing.
         # ------==============------
         #     |----------------|
+
         a = slice_sequence_with_features(self.seq, slice(109, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -95,21 +96,19 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (1, len(a) - 1))
 
     def test_slice_removing(self):
-        """
-        Test if slice removes feature outside location
+        # Test if slice removes feature outside location.
         # ------=========-------------------
         #                  |----------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(109, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:194099' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 0)
 
     def test_slice_before(self):
-        """
-        Check if slices to feature -> BeforePosition created
+        # Check if slices to feature -> BeforePosition created.
         # ------=========-----------
         #          |----------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(120, 210))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -120,11 +119,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a) - 1))
 
     def test_slice_after(self):
-        """
-        Check if slices to feature -> AfterPosition created
+        # Check if slices to feature -> AfterPosition created.
         # ----------==========----------
         #       |----------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(109, 200))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -135,11 +133,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (1, len(a)))
 
     def test_slice_inside(self):
-        """
-        Check if slices to feature -> AfterPosition created
+        # Check if slices to feature -> AfterPosition created
         # ----------==========----------
         #       |----------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(120, 200))
         fea = [f for f in a.features if f.type != 'repeat_region' and 'CDD:186341' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -150,10 +147,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a)))
 
     def test_compound_within(self):
-        """
+        # Test CompoundLocation.
         # ----======------======------=======-------======-----
         #   |-----------------------------------------------|
-        """
+
         a = slice_sequence_with_features(self.compound, slice(3400, 5400))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -164,19 +161,19 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (61, 1932))
 
     def test_compound_inside1(self):
-        """
+        # The CompoundLocation inside slice.
         # ----======------======------=======-------======-----
         #           |----|
-        """
+
         a = slice_sequence_with_features(self.compound, slice(3620, 3680))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 0)
 
     def test_compound_inside2(self):
-        """
+        # The CompoundLocation to FeatureLocation.
         # ----======------======------=======-------======-----
         #            |-------------|
-        """
+
         a = slice_sequence_with_features(self.compound, slice(3620, 4050))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -187,10 +184,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (77, len(a) - 72))
 
     def test_compound_inside3(self):
-        """
+        # The CompoundLocation drop features outside slice.
         # ----======------======------=======-------======-----
         #            |--------------------------|
-        """
+
         a = slice_sequence_with_features(self.compound, slice(3620, 4350))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -201,10 +198,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (77, len(a) - 43))
 
     def test_compound_slice_inside(self):
-        """
+        # The CompoundLocation slice to 2 different features.
         # ----======------======------=======-------======-----
         #                   |-------------|
-        """
+
         a = slice_sequence_with_features(self.compound, slice(3700, 4100))
         fea = [f for f in a.features if 'GI:6715633' in f.qualifiers['db_xref']]
         self.assertEqual(len(fea), 1)
@@ -215,9 +212,8 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a)))
 
     def test_uniprot_unknown(self):
-        """
-        This should raise an error even when doing normal slice well outside the feature location.
-        """
+        # This should raise an error even when doing normal slice well outside the feature location.
+
         with self.assertRaises(TypeError):
             self.uniprot_up[1:4]
 
@@ -227,12 +223,13 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.seq = SeqIO.read('SeqSlicer/gb_artificial.gbk', format='gb')
 
     def test_slice(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # Test WithinPosition preserving.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #      |----------------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(680, 900))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -243,12 +240,13 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (6, 120))
 
     def test_slice_inner(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # The WithinPosition -> BeforePosition.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #             |----|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(700, 750))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -259,12 +257,13 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, 50))
 
     def test_slice_inside_left(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # The WithinPosition preserve and move.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #       |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(600, 700))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -275,12 +274,13 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (86, 100))
 
     def test_slice_inside_right(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # The WithinPosition drop with slice right.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #               |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(700, 900))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -291,23 +291,25 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, 100))
 
     def test_slice_to_uncertain(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # The WithinPosition drop whole feature.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #          |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(688, 750))
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 0)
 
     def test_slice_to_uncertain_keep(self):
-        """
-             gene            (687.690)..800
-                     /gene="within"
+        # The WithinPosition preserve feature with keep_all_features flag.
+        #
+        #      gene            (687.690)..800
+        #              /gene="within"
         # --------...========---------
         #          |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(688, 750), keep_all_features=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -318,23 +320,25 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a)))
 
     def test_slice_to_uncertain_r(self):
-        """
-        gene            900..(950.960)
-                        /gene="within2"
+        # The WithinPosition as end pos - drop.
+        #
+        # gene            900..(950.960)
+        #                 /gene="within2"
         # --------========...---------
         #           |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(920, 955))
         fea = [f for f in a.features if f.type == 'gene' and 'within2' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 0)
 
     def test_slice_to_uncertain_keep_r(self):
-        """
-        gene            900..(950.960)
-                        /gene="within2"
+        # The WithinPosition as end pos - preserve.
+        #
+        # gene            900..(950.960)
+        #                 /gene="within2"
         # --------========...---------
         #           |------|
-        """
+
         a = slice_sequence_with_features(self.seq, slice(920, 955), keep_all_features=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within2' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
@@ -343,6 +347,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         self.assertIsInstance(fea[0].location.start, BeforePosition)
         self.assertIsInstance(fea[0].location.end, WithinPosition)
         self.assertEqual((int(fea[0].location.start), int(fea[0].location.end)), (0, len(a)))
+
 
 if __name__ == "__main__":
     unittest.main()

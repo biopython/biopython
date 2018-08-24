@@ -113,6 +113,8 @@ def slice_feature(feature: FeatureLocation, sl: slice, keep_all_features: bool, 
 
 def slice_sequence_with_features(seq: SeqRecord, sl: slice, keep_all_features: bool = False) -> SeqRecord:
     """
+    Return SeqRecord slice with features not fully within the slice.
+
     This is an attempt to make slicing function for Bio.Seq which retains features which are not fully in slice
       it is intended for visualization purposes where part of a feature also provides valuable information
 
@@ -146,4 +148,3 @@ def slice_sequence_with_features(seq: SeqRecord, sl: slice, keep_all_features: b
             ns.features.append(nf)
 
     return ns
-
