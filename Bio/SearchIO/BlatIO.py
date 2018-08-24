@@ -630,12 +630,12 @@ class BlatPslWriter(object):
         header = 'psLayout version 3\n'
 
         # adapted from BLAT's source: lib/psl.c#L496
-        header += "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT " \
-                  "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   " \
-                  "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts" \
-                  "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases" \
-                  "\t      \tname     \tsize\tstart\tend\tname     \tsize" \
-                  "\tstart\tend\tcount\n%s\n" % ('-' * 159)
+        header += ("\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
+                   "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   "
+                   "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts"
+                   "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases"
+                   "\t      \tname     \tsize\tstart\tend\tname     \tsize"
+                   "\tstart\tend\tcount\n%s\n" % ('-' * 159))
 
         return header
 

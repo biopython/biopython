@@ -134,16 +134,17 @@ def parse_pdb_header(infile):
 
 def _parse_pdb_header_list(header):
     # database fields
-    dict = {'name': "",
-            'head': '',
-            'deposition_date': "1909-01-08",
-            'release_date': "1909-01-08",
-            'structure_method': "unknown",
-            'resolution': 0.0,
-            'structure_reference': "unknown",
-            'journal_reference': "unknown",
-            'author': "",
-            'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
+    dict = {
+        'name': "",
+        'head': '',
+        'deposition_date': "1909-01-08",
+        'release_date': "1909-01-08",
+        'structure_method': "unknown",
+        'resolution': 0.0,
+        'structure_reference': "unknown",
+        'journal_reference': "unknown",
+        'author': "",
+        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
