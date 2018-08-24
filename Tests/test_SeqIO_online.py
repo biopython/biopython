@@ -102,12 +102,19 @@ class UniProtTests(unittest.TestCase):
     def test_search(self):
         """UniPort.search("O48109")"""
         identifier = "O48109"
-        handle = UniProt.search(identifier, columns=("organism",))
-        self.assertEqual(handle.read(),
-                         "Organism\nPython regius (Ball python) (Boa regia)\n")
         handle = UniProt.search(identifier, output_format="fasta")
-        self.assertEqual(handle.readline().split("|")[1],
-                         identifier)
+        records = list(SeqIO.parse(handle, "fasta"))
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0].id, "sp|O48109|CYB_PYTRG")
+        self.assertEqual(len(records[0]), 371)
+        self.assertEqual(seguid(records[0]), "/lZIKaiUBqo5Tsx44ifwT0ay8U4")
+
+        handle = search(identifier, output_format="xml")
+        records = list(SeqIO.parse(handle, "uniprot-xml"))
+        self.assertEqual(len(records), 1)
+        self.assertEqual(len(records[0]), 371)
+        self.assertEqual(records[0].id, identifier)
+        self.assertEqual(seguid(records[0].seq), "Own5zJR+CD+Oas6vplJmN0XT+80")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
