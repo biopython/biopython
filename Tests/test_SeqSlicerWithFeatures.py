@@ -10,7 +10,7 @@ from Bio.SeqUtils.SeqSlicerWithFeatures import slice_sequence_with_features
 class SeqSlicerTestsGenuine(unittest.TestCase):
     def setUp(self):
         self.seq = SeqIO.read(
-            os.path.join('SeqSlicer', 'NC_005816.gb'),
+            os.path.join('GenBank', 'NC_005816.gb'),
             format='gb'
         )
         # """
@@ -67,7 +67,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # """
 
         self.compound = SeqIO.read(
-            os.path.join('SeqSlicer', 'arab1.gb'),
+            os.path.join('GenBank', 'arab1.gb'),
             format='gb'
         )
         # """
@@ -83,7 +83,7 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
         # """
 
         self.uniprot_up = SeqIO.read(
-            os.path.join('SeqSlicer', 'uniprot_up.dat'),
+            os.path.join('UniProt', 'uniprot_up.dat'),
             format='swiss'
         )
         # """
@@ -231,10 +231,10 @@ class SeqSlicerTestsGenuine(unittest.TestCase):
 class SeqSlicerTestArtificial(unittest.TestCase):
     def setUp(self):
         self.seq = SeqIO.read(
-            os.path.join('SeqSlicer', 'gb_artificial.gbk'),
+            os.path.join('GenBank', 'gb_artificial.gbk'),
             format='gb')
         self.oneof = SeqIO.read(
-            os.path.join('SeqSlicer', 'one_of.gb'),
+            os.path.join('GenBank', 'one_of.gb'),
             format='gb'
         )
 
