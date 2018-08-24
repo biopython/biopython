@@ -105,6 +105,24 @@ class GenBankTests(unittest.TestCase):
             else:
                 self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
+    def test_implicit_orign_wrap_extract_and_translate(self):
+        """Test that features wrapped around origin give expected data."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            with open(path.join("GenBank", "bad_origin_wrap_CDS.gb")) as handle:
+                seq_record = SeqIO.read(handle, "genbank")
+                seq_features = seq_record.features
+                self.assertEqual(str(seq_features[1].extract(seq_record).seq.lower()),
+                                 "atgccctataaaacccagggctgccttggaaaaggcgcaacccc"
+                                 "aaccccctcgagccgcggcatataa")
+                self.assertEqual(str(seq_features[2].extract(seq_record).seq.lower()),
+                                 "atgccgcggctcgagggggttggggttgcgccttttccaaggca"
+                                 "gccctgggttttatag")
+                self.assertEqual(str(seq_features[1].extract(seq_record).seq.translate()),
+                                 "MPYKTQGCLGKGATPTPSSRGI*")
+                self.assertEqual(str(seq_features[2].extract(seq_record).seq.translate()),
+                                 "MPRLEGVGVAPFPRQPWVL*")
+
     def test_genbank_bad_loc_wrap_parsing(self):
         """Bad location wrapping."""
         with warnings.catch_warnings():

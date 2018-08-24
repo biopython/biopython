@@ -1,0 +1,35 @@
+LOCUS       Exported                 256 bp ds-DNA     circular SYN 24-AUG-2018
+DEFINITION  Not really pLK0.1 puro, example for testing only.
+ACCESSION   .
+VERSION     .
+KEYWORDS    pLKO.1 puro
+SOURCE      synthetic DNA construct
+  ORGANISM  synthetic DNA construct
+REFERENCE   1  (bases 1 to 256)
+  AUTHORS   .
+  TITLE     .
+  JOURNAL   .
+  PUBMED    .
+REFERENCE   .
+  AUTHORS   .
+  TITLE     Direct Submission
+  JOURNAL   .
+FEATURES             Location/Qualifiers
+     source          1..256
+                     /organism="synthetic DNA construct"
+                     /mol_type="other DNA"
+     CDS             complement(238..50)
+                     /codon_start=1
+                     /label=Reverse spanning CDS
+                     /translation="MPYKTQGCLGKGATPTPSSRGI"
+     CDS             242..45
+                     /codon_start=1
+                     /label=Forward spanning CDS
+                     /translation="MPRLEGVGVAPFPRQPWVL"
+ORIGIN
+        1 ggggttgggg ttgcgccttt tccaaggcag ccctgggttt tatagggcat atggctgctc
+       61 tgggcgtggt tccgggaaac gcagcggcgc cgaccctggt tgtcgcacat tcttcacgtc
+      121 cgttcgcagc gtcacccgga tcttcgccgc tctgctccgc ccctaaacta aagaattaca
+      181 aaaacaaatt acaaaaattc aaaattttcg ggtttattac agggacagca gagatcctta
+      241 tatgccgcgg ctcgag
+//

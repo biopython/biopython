@@ -1055,21 +1055,26 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 # Could be non-integers, more likely bad origin wrapping
                 import warnings
                 from Bio import BiopythonParserWarning
-                print(self._seq_type)
-                if s > e and "circular" in self._seq_type.lower():
+                if int(s) > int(e) and "circular" in self._seq_type.lower():
                     warnings.warn("Attempting to fix invalid location %r as "
                                   "it looks like incorrect origin wrapping. "
                                   "Please fix input file, this could have "
                                   "unintended behavior." % location_line,
                                   BiopythonParserWarning)
+
                     f1 = SeqFeature.FeatureLocation(int(s) - 1,
                                                     self._expected_size,
                                                     strand)
                     f2 = SeqFeature.FeatureLocation(0, int(e), strand)
-                    cur_feature.location = f1 + f2
+
+                    if strand == -1:
+                        # For complementary features spanning the origin
+                        cur_feature.location = f2 + f1
+                    else:
+                        cur_feature.location = f1 + f2
                 else:
-                    warnings.warn("Ignoring invalid location: %r" % location_line,
-                                  BiopythonParserWarning)
+                    warnings.warn("Ignoring invalid location: %r" %
+                                  location_line, BiopythonParserWarning)
                     cur_feature.location = None
             return
 
