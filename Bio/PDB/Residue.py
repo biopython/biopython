@@ -93,7 +93,7 @@ class Residue(Entity):
     def get_atom(self):
         warnings.warn("`get_atom` has been deprecated and we intend to remove it"
                       " in a future release of Biopython. Please use `get_atoms` instead.",
-                     BiopythonDeprecationWarning)
+                      BiopythonDeprecationWarning)
         for a in self:
             yield a
 

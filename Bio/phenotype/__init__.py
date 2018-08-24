@@ -97,8 +97,8 @@ import warnings
 
 
 warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
-        'significant changes prior to its future official release.',
-        BiopythonExperimentalWarning)
+              'significant changes prior to its future official release.',
+              BiopythonExperimentalWarning)
 
 # Convention for format names is "mainname-format" in lower case.
 

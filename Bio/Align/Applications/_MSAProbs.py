@@ -44,8 +44,7 @@ class MSAProbsCommandline(AbstractCommandline):
     def __init__(self, cmd="msaprobs", **kwargs):
         """Initialize the class."""
         # order of parameters is the same as in msaprobs -help
-        self.parameters = \
-            [
+        self.parameters = [
             _Option(["-o", "--outfile", "outfile"],
                     "specify the output file name (STDOUT by default)",
                     filename=True,
@@ -71,9 +70,9 @@ class MSAProbsCommandline(AbstractCommandline):
             _Option(["-version", "version"],
                     "print out version of MSAPROBS"),
             _Argument(["infile"],
-                    "Multiple sequence input file",
-                    filename=True),
-            ]
+                      "Multiple sequence input file",
+                      filename=True),
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 

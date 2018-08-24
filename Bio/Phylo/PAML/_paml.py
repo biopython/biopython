@@ -78,7 +78,7 @@ class Paml(object):
             self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
             self._rel_alignment = os.path.relpath(self.alignment,
-                self.working_dir)
+                                                  self.working_dir)
         if self.out_file is not None:
             self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 

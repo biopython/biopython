@@ -274,7 +274,7 @@ def _calc_millibad(psl, is_protein):
     total = size_mul * (psl['matches'] + psl['repmatches'] + psl['mismatches'])
     if total != 0:
         millibad = (1000 * (psl['mismatches'] * size_mul + psl['qnuminsert'] +
-                round(3 * log(1 + size_dif)))) / total
+                    round(3 * log(1 + size_dif)))) / total
 
     return millibad
 
@@ -307,12 +307,12 @@ def _create_hsp(hid, qid, psl):
     blocksize_multiplier = 3 if is_protein else 1
     # query block starts
     qstarts = _reorient_starts(psl['qstarts'],
-            psl['blocksizes'], psl['qsize'], qstrand)
+                               psl['blocksizes'], psl['qsize'], qstrand)
     # hit block starts
     if len(psl['strand']) == 2:
         hstarts = _reorient_starts(psl['tstarts'],
-                [blocksize_multiplier * i for i in psl['blocksizes']],
-                psl['tsize'], hstrand)
+                                   [blocksize_multiplier * i for i in
+                                   psl['blocksizes']], psl['tsize'], hstrand)
     else:
         hstarts = psl['tstarts']
     # set query and hit coords
@@ -630,12 +630,12 @@ class BlatPslWriter(object):
         header = 'psLayout version 3\n'
 
         # adapted from BLAT's source: lib/psl.c#L496
-        header += "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
-        "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   \tT    "
-        "\tT  \tblock\tblockSizes \tqStarts\t tStarts\n     " \
-        "\tmatch\tmatch\t   \tcount\tbases\tcount\tbases\t      \tname     "
-        "\tsize\tstart\tend\tname     \tsize\tstart\tend\tcount"
-        "\n%s\n" % ('-' * 159)
+        header += ("\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
+                   "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   "
+                   "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts"
+                   "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases"
+                   "\t      \tname     \tsize\tstart\tend\tname     \tsize"
+                   "\tstart\tend\tcount\n%s\n" % ('-' * 159))
 
         return header
 
@@ -676,7 +676,8 @@ class BlatPslWriter(object):
                 else:
                     strand = '-'
                 qstarts = _reorient_starts([x[0] for x in hsp.query_range_all],
-                        hsp.query_span_all, qresult.seq_len, hsp[0].query_strand)
+                                           hsp.query_span_all, qresult.seq_len,
+                                           hsp[0].query_strand)
 
                 if hsp[0].hit_strand == 1:
                     hstrand = 1
@@ -687,7 +688,8 @@ class BlatPslWriter(object):
                     hstrand = -1
                     strand += '-'
                 hstarts = _reorient_starts([x[0] for x in hsp.hit_range_all],
-                        hsp.hit_span_all, hit.seq_len, hstrand)
+                                           hsp.hit_span_all, hit.seq_len,
+                                           hstrand)
 
                 line.append(strand)
                 line.append(qresult.id)

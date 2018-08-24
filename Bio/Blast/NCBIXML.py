@@ -354,7 +354,7 @@ class BlastParser(_XMLparser):
     def _end_Parameters_gap_extend(self):
         """Gap extension cose (-E) (PRIVATE)."""
         self._parameters.gap_penalties = (self._parameters.gap_penalties,
-                                         int(self._value))
+                                          int(self._value))
 
     def _end_Parameters_filter(self):
         """Record filtering options (-F) (PRIVATE)."""

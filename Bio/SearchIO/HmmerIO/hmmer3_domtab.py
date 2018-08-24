@@ -318,13 +318,16 @@ class Hmmer3DomtabHmmhitWriter(object):
                     ali_to = hsp.hit_end
                     ali_from = hsp.hit_start + 1
 
-                rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d" \
-                " %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n" % \
-                (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew, qresult.id,
-                qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore,
-                hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue,
-                hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to,
-                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
+                rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d" \
+                        " %3d %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld" \
+                        " %5d %5d %4.2f %s\n" % \
+                        (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew,
+                         qresult.id, qaccw, qresult_acc, qresult.seq_len,
+                         hit.evalue, hit.bitscore, hit.bias, hsp.domain_index,
+                         len(hit.hsps), hsp.evalue_cond, hsp.evalue,
+                         hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from,
+                         ali_to, hsp.env_start + 1, hsp.env_end, hsp.acc_avg,
+                         hit.description)
 
         return rows
 

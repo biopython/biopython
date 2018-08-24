@@ -299,7 +299,7 @@ def _force_alphabet(alignment_iterator, alphabet):
                               given_base_class):
                 raise ValueError("Specified alphabet %s clashes with "
                                  "that determined from the file, %s"
-                           % (repr(alphabet), repr(record.seq.alphabet)))
+                                 % (repr(alphabet), repr(record.seq.alphabet)))
             record.seq.alphabet = alphabet
         align._alphabet = alphabet
         yield align

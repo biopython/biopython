@@ -163,7 +163,7 @@ class Hmmer3TextParser(object):
         """Parse a HMMER3 hit block, beginning with the hit table (PRIVATE)."""
         # get to the end of the hit table delimiter and read one more line
         self._read_until(lambda line:
-                line.startswith('    ------- ------ -----'))
+                         line.startswith('    ------- ------ -----'))
         self.line = read_forward(self.handle)
 
         # assume every hit is in inclusion threshold until the inclusion
@@ -181,7 +181,7 @@ class Hmmer3TextParser(object):
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
             elif self.line.startswith('   [No hits detected that satisfy '
-                    'reporting'):
+                                      'reporting'):
                 while True:
                     self.line = read_forward(self.handle)
                     if self.line.startswith('Internal pipeline'):
@@ -237,8 +237,8 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------') or
-                    line.startswith('   [No individual domains'))
+                             line.startswith(' ---   ------ ----- --------') or
+                             line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit

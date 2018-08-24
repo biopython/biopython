@@ -407,7 +407,7 @@ class SeqFeature(object):
         codon_table = self.qualifiers.get("transl_table", [table])[0]
 
         return feat_seq.translate(table=codon_table, stop_symbol=stop_symbol,
-                to_stop=to_stop, cds=cds, gap=gap)
+                                  to_stop=to_stop, cds=cds, gap=gap)
 
     # Python 3:
     def __bool__(self):

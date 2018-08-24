@@ -301,13 +301,15 @@ class Hmmer3TabWriter(object):
         taccw = max(10, len(qresult[0].accession))
 
         for hit in qresult:
-            rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f %5.1f " \
-            "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw,
-            hit.accession, qnamew, qresult.id, qaccw, qresult.accession, hit.evalue,
-            hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
-            hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num,
-            hit.overlap_num, hit.env_num, hit.domain_obs_num,
-            hit.domain_reported_num, hit.domain_included_num, hit.description)
+            rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f" \
+                    " %5.1f %5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % \
+                    (tnamew, hit.id, taccw, hit.accession, qnamew, qresult.id,
+                     qaccw, qresult.accession, hit.evalue, hit.bitscore,
+                     hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
+                     hit.hsps[0].bias, hit.domain_exp_num, hit.region_num,
+                     hit.cluster_num, hit.overlap_num, hit.env_num,
+                     hit.domain_obs_num, hit.domain_reported_num,
+                     hit.domain_included_num, hit.description)
 
         return rows
 

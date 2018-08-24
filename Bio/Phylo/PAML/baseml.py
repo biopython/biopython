@@ -17,7 +17,7 @@ class Baseml(Paml):
     """An interface to BASEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
-                out_file=None):
+                 out_file=None):
         """Initialize the Baseml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -86,7 +86,7 @@ class Baseml(Paml):
                     if option[0] == "model" and option[1] in [9, 10]:
                         if self._options["model_options"] is not None:
                             ctl_handle.write("model = %s  %s" % (option[1],
-                                            self._options["model_options"]))
+                                             self._options["model_options"]))
                             continue
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
