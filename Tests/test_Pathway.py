@@ -180,11 +180,11 @@ class ReactionTestCase(unittest.TestCase):
     def test_rev(self):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
         self.assertEqual(self.r_prod.reverse(), self.r_dest,
-                          "reversed reaction not equal to similar")
+                         "reversed reaction not equal to similar")
         self.assertEqual(self.r_4.reverse(), Reaction({"c": 1, "d": 1, "a": -1, "e": -2}),
                          "reversed reaction not equal to similar")
         self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
-                          "double reversal not identity")
+                         "double reversal not identity")
 
 
 if __name__ == "__main__":
