@@ -116,9 +116,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp_test.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.standard_test_procedure(cline)
 
@@ -143,9 +143,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp_test.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -156,9 +156,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp with spaces.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.standard_test_procedure(cline)
 
