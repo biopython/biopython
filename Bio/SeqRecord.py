@@ -1276,7 +1276,6 @@ class SeqRecord(object):
           slice are preserved.
 
         Examples:
-
         Consider model:  (--- sequence, === feature, ! slice boundary)
         g -------==============----------
         g    !........!
@@ -1285,17 +1284,17 @@ class SeqRecord(object):
         g --========
 
         Behavior with different cases of slices
-        feature     100..200:
+          feature     100..200:
           slice(50, 250)  ->  feature 50..150
           slice(150, 250) ->  feature <0..50                    [ExactPosition -> BeforePosition]
           slice(50, 150)  ->  feature 50..>100                  [ExactPosition -> AfterPosition]
 
-        feature     <100..200
+          feature     <100..200
           slice(50, 200)  ->  feature <50..150
           slice(150, 250) ->  feature <0..50
           slice(50, 150)  ->  feature <50..>100
 
-        feature     (100.110)..200
+          feature     (100.110)..200
           slice(50, 250)  ->  feature  (50.60)..150
           slice(150, 250) ->  feature  <0..150                   [WithinPosition -> BeforePosition]
           slice(50, 150)  ->  feature  (50.60)..>100             [ExactPosition -> AfterPosition]
