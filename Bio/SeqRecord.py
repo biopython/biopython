@@ -11,7 +11,7 @@
 
 from Bio._py3k import basestring
 from Bio.SeqFeature import FeatureLocation, SeqFeature, CompoundLocation, ExactPosition, BeforePosition, AfterPosition,\
-    BetweenPosition, WithinPosition
+    BetweenPosition, WithinPosition, UnknownPosition
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -1268,7 +1268,7 @@ class SeqRecord(object):
             raise TypeError("Unexpected letter_annotations argument %r" % letter_annotations)
         return answer
 
-    def slice_with_features(self, sl: slice, keep: bool = False):
+    def slice_with_features(self, sl, keep=False):
         """
         Return SeqRecord slice with features not fully within the slice.
 
@@ -1322,7 +1322,7 @@ class SeqRecord(object):
         seq_len = len(ns)
         for feat in self.features:
             fl = _slice_feature(
-                feat=feat.location,
+                f_loc=feat.location,
                 sl=sl,
                 keep_all_features=keep,
                 sequence_len=seq_len
@@ -1341,7 +1341,7 @@ class SeqRecord(object):
         return ns
 
 
-def _move_position(pos, move: int, keep_all: bool, slice_len: int):
+def _move_position(pos, move, keep_all, slice_len):
     """Move position respecting position type. (PRIVATE to slice_with_features)."""
     tt = type(pos)
     if isinstance(pos, (ExactPosition, BeforePosition, AfterPosition)):
@@ -1388,7 +1388,7 @@ def _move_position(pos, move: int, keep_all: bool, slice_len: int):
         raise NotImplementedError('slicing for position {} not implemented'.format(type(pos)))
 
 
-def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, sequence_len: int):
+def _slice_feature(f_loc, sl, keep_all_features, sequence_len):
     """
     Slice feature object (PRIVATE to slice_with_features).
 
@@ -1396,10 +1396,13 @@ def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, se
      if they are not equal to min("all feature positions") and max("all feature positions") it is possible
      that feature will not be detected.
     """
-    if feat.start.position < sl.start < feat.end.position or feat.start.position < sl.stop < feat.end.position:
-        if isinstance(feat, CompoundLocation):
+    if f_loc.nofuzzy_start is None or f_loc.nofuzzy_end is None:
+        # Ensure that UnknownPosition is checked before trying to compare with int
+        raise NotImplementedError('slicing for position {} is not implemented'.format(type(f_loc)))
+    if f_loc.start.position < sl.start < f_loc.end.position or f_loc.start.position < sl.stop < f_loc.end.position:
+        if isinstance(f_loc, CompoundLocation):
             of = []
-            for ff in feat.parts:
+            for ff in f_loc.parts:
                 # this must be without location boundaries checking
                 #  - only location objects adjacent to slice boundaries can cross it
 
@@ -1429,15 +1432,15 @@ def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, se
                 #            |-------------|
                 return of[0]
             else:
-                return CompoundLocation(of, operator=feat.operator)
+                return CompoundLocation(of, operator=f_loc.operator)
         else:
 
-            mps = _move_position(feat.start, - sl.start, keep_all_features, sequence_len)
-            mpe = _move_position(feat.end, - sl.start, keep_all_features, sequence_len)
+            mps = _move_position(f_loc.start, - sl.start, keep_all_features, sequence_len)
+            mpe = _move_position(f_loc.end, - sl.start, keep_all_features, sequence_len)
 
             if mps is not None and mpe is not None:
 
-                fl = FeatureLocation(mps, mpe, feat.strand)
+                fl = FeatureLocation(mps, mpe, f_loc.strand)
                 return fl
             else:
                 return None
