@@ -41,7 +41,7 @@ if "EMBOSS_ROOT" in os.environ:
         del name
     else:
         raise MissingExternalDependencyError(
-                  "$EMBOSS_ROOT=%r which does not exist!" % path)
+            "$EMBOSS_ROOT=%r which does not exist!" % path)
     del path
 if sys.platform != "win32":
     from Bio._py3k import getoutput
@@ -206,9 +206,11 @@ def compare_records(old_list, new_list):
     for old, new in zip(old_list, new_list):
         # Note the name matching is a bit fuzzy, e.g. truncation and
         # no spaces in PHYLIP files.
-        if old.id != new.id and old.name != new.name \
-        and (old.id not in new.id) and (new.id not in old.id) \
-        and (old.id.replace(" ", "_") != new.id.replace(" ", "_")):
+        if ((old.id != new.id and
+             old.name != new.name and
+             (old.id not in new.id) and
+             (new.id not in old.id) and
+             (old.id.replace(" ", "_") != new.id.replace(" ", "_")))):
             raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                              % (old.id, old.name, new.id, new.name))
         if len(old.seq) != len(new.seq):
@@ -340,18 +342,18 @@ class SeqRetSeqIOTests(unittest.TestCase):
         """Check SeqIO & EMBOSS reading each other's conversions of a PIR file."""
         # Skip genbank here, EMBOSS mangles the LOCUS line:
         self.check_SeqIO_with_EMBOSS("NBRF/clustalw.pir", "pir",
-                               skip_formats=["genbank"])
+                                     skip_formats=["genbank"])
         # Skip EMBL here, EMBOSS mangles the ID line
         # Skip GenBank, EMBOSS 6.0.1 on Windows won't output proteins as GenBank
         self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
-                               skip_formats=["embl", "genbank"])
+                                     skip_formats=["embl", "genbank"])
 
     def test_clustalw(self):
         """Check SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
-                                   skip_formats=["embl", "genbank"])
+                                     skip_formats=["embl", "genbank"])
         self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
-                                   skip_formats=["embl", "genbank"])
+                                     skip_formats=["embl", "genbank"])
 
 
 class SeqRetAlignIOTests(unittest.TestCase):
@@ -361,7 +363,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         clean_up()
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
-                              skip_formats=()):
+                                skip_formats=()):
         """Can AlignIO read seqret's conversion of the file?"""
         self.assertTrue(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(filename, old_format))
@@ -428,7 +430,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
-                               skip_formats=["nexus"])  # TODO - why not nexus?
+                                       skip_formats=["nexus"])  # TODO - why not nexus?
         self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
@@ -467,9 +469,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
             if local:
                 # Local alignment
                 self.assertTrue(str(alignment[0].seq).replace("-", "")
-                             in query_seq)
+                                in query_seq)
                 self.assertTrue(str(alignment[1].seq).replace("-", "").upper()
-                             in str(target.seq).upper())
+                                in str(target.seq).upper())
             else:
                 # Global alignment
                 self.assertEqual(str(query_seq), str(alignment[0].seq).replace("-", ""))
@@ -574,11 +576,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
     def test_needle_piped(self):
         """Run needle with asis trick, output piped to stdout."""
         cline = NeedleCommandline(cmd=exes["needle"],
-                                 asequence="asis:ACCCGGGCGCGGT",
-                                 bsequence="asis:ACCCGAGCGCGGT",
-                                 gapopen=10,
-                                 gapextend=0.5,
-                                 auto=True, filter=True)
+                                  asequence="asis:ACCCGGGCGCGGT",
+                                  bsequence="asis:ACCCGAGCGCGGT",
+                                  gapopen=10,
+                                  gapextend=0.5,
+                                  auto=True, filter=True)
         self.assertEqual(str(cline),
                          exes["needle"] + " -auto -filter" +
                          " -asequence=asis:ACCCGGGCGCGGT" +
@@ -732,11 +734,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
     def test_needle_needs_output(self):
         """Run needle without output file or stdout/filter should give error."""
         cline = NeedleCommandline(cmd=exes["needle"],
-                                 asequence="asis:ACCCGGGCGCGGT",
-                                 bsequence="asis:ACCCGAGCGCGGT",
-                                 gapopen=10,
-                                 gapextend=0.5,
-                                 auto=True)
+                                  asequence="asis:ACCCGGGCGCGGT",
+                                  bsequence="asis:ACCCGAGCGCGGT",
+                                  gapopen=10,
+                                  gapextend=0.5,
+                                  auto=True)
         self.assertTrue(cline.auto)
         self.assertTrue(not cline.stdout)
         self.assertTrue(not cline.filter)
@@ -842,7 +844,7 @@ def check_translation(sequence, translation, table=None):
             codon = sequence[i * 3:i * 3 + 3]
             if amino != str(codon.translate(t)):
                 raise ValueError("%s -> %s not %s (table %s)"
-                         % (codon, amino, codon.translate(t), t))
+                                 % (codon, amino, codon.translate(t), t))
         # Shouldn't reach this line:
         raise ValueError("%s -> %s (table %s)"
                          % (sequence, translation, t))
