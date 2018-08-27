@@ -11,7 +11,7 @@
 
 from Bio._py3k import basestring
 from Bio.SeqFeature import FeatureLocation, SeqFeature, CompoundLocation, ExactPosition, BeforePosition, AfterPosition,\
-    BetweenPosition, WithinPosition, UnknownPosition
+    BetweenPosition, WithinPosition, UncertainPosition
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -1344,7 +1344,7 @@ class SeqRecord(object):
 def _move_position(pos, move, keep_all, slice_len):
     """Move position respecting position type. (PRIVATE to slice_with_features)."""
     tt = type(pos)
-    if isinstance(pos, (ExactPosition, BeforePosition, AfterPosition)):
+    if isinstance(pos, (ExactPosition, BeforePosition, AfterPosition, UncertainPosition)):
         if int(pos) + move < 0:
             return BeforePosition(0)
         elif int(pos) + move > slice_len:
