@@ -1321,7 +1321,12 @@ class SeqRecord(object):
 
         seq_len = len(ns)
         for feat in self.features:
-            fl = _slice_feature(feat.location, sl, keep, seq_len)
+            fl = _slice_feature(
+                feat=feat.location,
+                sl=sl,
+                keep_all_features=keep,
+                sequence_len=seq_len
+            )
             if fl is not None:
                 nf = SeqFeature(
                     fl,
@@ -1383,7 +1388,7 @@ def _move_position(pos, move: int, keep_all: bool, slice_len: int):
         raise NotImplementedError('slicing for position {} not implemented'.format(type(pos)))
 
 
-def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, seq_len: int):
+def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, sequence_len: int):
     """
     Slice feature object (PRIVATE to slice_with_features).
 
@@ -1403,8 +1408,8 @@ def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, se
                 if sl.start > ff.end.position or sl.stop < ff.start.position:
                     continue
 
-                mps = _move_position(ff.start, - sl.start, keep_all_features, seq_len)
-                mpe = _move_position(ff.end, - sl.start, keep_all_features, seq_len)
+                mps = _move_position(ff.start, - sl.start, keep_all_features, sequence_len)
+                mpe = _move_position(ff.end, - sl.start, keep_all_features, sequence_len)
                 if mps is not None and mpe is not None:
                     # only features with complete positioning can be included.
                     fl = FeatureLocation(mps, mpe, ff.strand)
@@ -1427,8 +1432,8 @@ def _slice_feature(feat: FeatureLocation, sl: slice, keep_all_features: bool, se
                 return CompoundLocation(of, operator=feat.operator)
         else:
 
-            mps = _move_position(feat.start, - sl.start, keep_all_features, seq_len)
-            mpe = _move_position(feat.end, - sl.start, keep_all_features, seq_len)
+            mps = _move_position(feat.start, - sl.start, keep_all_features, sequence_len)
+            mpe = _move_position(feat.end, - sl.start, keep_all_features, sequence_len)
 
             if mps is not None and mpe is not None:
 

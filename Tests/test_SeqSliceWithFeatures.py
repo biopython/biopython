@@ -325,7 +325,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------...========---------
         #          |------|
 
-        a = self.seq.slice_with_features(slice(688, 750), keep_all_features=True)
+        a = self.seq.slice_with_features(slice(688, 750), keep=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within1' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
@@ -354,7 +354,7 @@ class SeqSlicerTestArtificial(unittest.TestCase):
         # --------========...---------
         #           |------|
 
-        a = self.seq.slice_with_features(slice(920, 955), keep_all_features=True)
+        a = self.seq.slice_with_features(slice(920, 955), keep=True)
         fea = [f for f in a.features if f.type == 'gene' and 'within2' in f.qualifiers['gene']]
         self.assertEqual(len(fea), 1)
         self.assertIsInstance(fea[0], SeqFeature)
