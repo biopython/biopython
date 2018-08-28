@@ -96,6 +96,7 @@ for database, formats, entry, length, checksum in [
     del funct
 del database, formats, entry, length, checksum
 
+
 class UniProtTests(unittest.TestCase):
     """Test for UniPort module."""
 
@@ -109,12 +110,13 @@ class UniProtTests(unittest.TestCase):
         self.assertEqual(len(records[0]), 371)
         self.assertEqual(seguid(records[0]), "/lZIKaiUBqo5Tsx44ifwT0ay8U4")
 
-        handle = search(identifier, output_format="xml")
+        handle = UniProt.search(identifier, output_format="xml")
         records = list(SeqIO.parse(handle, "uniprot-xml"))
         self.assertEqual(len(records), 1)
         self.assertEqual(len(records[0]), 371)
         self.assertEqual(records[0].id, identifier)
         self.assertEqual(seguid(records[0].seq), "Own5zJR+CD+Oas6vplJmN0XT+80")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
