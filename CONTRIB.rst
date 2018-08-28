@@ -136,6 +136,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
 - Jun Aruga <https://github.com/junaruga>
+- Jure Fabjan <https://github.com/JureFabjan>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Katharine Lindner <katel at domain worldpath.net>
