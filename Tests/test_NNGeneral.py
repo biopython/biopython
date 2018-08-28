@@ -68,8 +68,9 @@ class ExampleManagerTest(unittest.TestCase):
         # figure out the expected number of examples in each category
         expected_train = manager.training_percent * self.num_examples
         expected_validation = manager.validation_percent * self.num_examples
-        expected_test = self.num_examples - expected_train \
-                        - expected_validation
+        expected_test = (self.num_examples -
+                         expected_train -
+                         expected_validation)
 
         manager.add_examples(self.examples)
 

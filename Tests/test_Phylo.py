@@ -82,8 +82,8 @@ class IOTests(unittest.TestCase):
         self.assertEqual(tree2.count_terminals(), 4)
         # Check internal node labels were retained
         internal_names = set(c.name
-                for c in tree2.get_nonterminals()
-                if c is not None)
+                             for c in tree2.get_nonterminals()
+                             if c is not None)
         self.assertEqual(internal_names, set(('E', 'F')))
 
     def test_newick_read_scinot(self):
@@ -211,7 +211,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         tree.root_with_outgroup('36_BRAFL', '37_BRAFL',
-                outgroup_branch_length=0.5)
+                                outgroup_branch_length=0.5)
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         # On small contrived trees, testing edge cases
@@ -279,7 +279,7 @@ class MixinTests(unittest.TestCase):
         # Iteration and regexps
         tree = self.phylogenies[10]
         for point, alt in zip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
-                               (472, 10, 452)):
+                              (472, 10, 452)):
             self.assertTrue(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
@@ -305,7 +305,7 @@ class MixinTests(unittest.TestCase):
         """TreeMixin: find_clades() method."""
         # boolean filter
         for clade, name in zip(self.phylogenies[10].find_clades(name=True),
-                                list('ABCD')):
+                               list('ABCD')):
             self.assertTrue(isinstance(clade, PhyloXML.Clade))
             self.assertEqual(clade.name, name)
         # finding deeper attributes
@@ -383,7 +383,7 @@ class MixinTests(unittest.TestCase):
     def test_is_bifurcating(self):
         """TreeMixin: is_bifurcating() method."""
         for tree, is_b in zip(self.phylogenies,
-                (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
+                              (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
             self.assertEqual(tree.is_bifurcating(), is_b)
 
     def test_is_monophyletic(self):
@@ -414,8 +414,8 @@ class MixinTests(unittest.TestCase):
         parent = tree.collapse(tree.clade[0])
         self.assertEqual(len(parent), 3)
         for clade, name, blength in zip(parent,
-                ('C', 'A', 'B'),
-                (0.4, 0.162, 0.29)):
+                                        ('C', 'A', 'B'),
+                                        (0.4, 0.162, 0.29)):
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blength)
 
@@ -497,8 +497,8 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 6)
         self.assertEqual(len(tree.get_nonterminals()), 4)
         for clade, name, blen in zip(C[0],
-                ('C00', 'C01', 'C02'),
-                (0.5, 0.5, 0.5)):
+                                     ('C00', 'C01', 'C02'),
+                                     (0.5, 0.5, 0.5)):
             self.assertTrue(clade.is_terminal())
             self.assertEqual(clade.name, name)
             self.assertEqual(clade.branch_length, blen)

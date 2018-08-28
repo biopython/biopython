@@ -134,7 +134,8 @@ class TestMarkovModel(unittest.TestCase):
                                     )
         p_initial, p_transition, p_emission = x
         markov_model = MarkovModel.MarkovModel(states, alphabet,
-                                     p_initial, p_transition, p_emission)
+                                               p_initial, p_transition,
+                                               p_emission)
         self.assertEqual(markov_model.states, ['CP', 'IP'])
         self.assertEqual(markov_model.alphabet, ['cola', 'ice_t', 'lem'])
         self.assertEqual(len(markov_model.p_initial), 2)

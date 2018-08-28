@@ -32,13 +32,13 @@ def compare_reference(old_r, new_r):
     of the BioSQL table structure.
     """
     assert old_r.title == new_r.title, \
-           "%s vs %s" % (old_r.title, new_r.title)
+        "%s vs %s" % (old_r.title, new_r.title)
     assert old_r.authors == new_r.authors, \
-           "%s vs %s" % (old_r.authors, new_r.authors)
+        "%s vs %s" % (old_r.authors, new_r.authors)
     assert old_r.journal == new_r.journal, \
-           "%s vs %s" % (old_r.journal, new_r.journal)
+        "%s vs %s" % (old_r.journal, new_r.journal)
     assert old_r.medline_id == new_r.medline_id, \
-           "%s vs %s" % (old_r.medline_id, new_r.medline_id)
+        "%s vs %s" % (old_r.medline_id, new_r.medline_id)
 
     if old_r.pubmed_id and new_r.pubmed_id:
         assert old_r.pubmed_id == new_r.pubmed_id
