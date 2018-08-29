@@ -145,107 +145,128 @@ class TestUniprot(unittest.TestCase):
 
         # test comment entries
         self.assertEqual(seq_record.annotations["comment_allergen"],
-                ['Causes an allergic reaction in human.'])
+                         ['Causes an allergic reaction in human.'])
         self.assertEqual(seq_record.annotations["comment_alternativeproducts_isoform"],
-                ['Q8W1X2-1', 'Q8W1X2-2'])
+                         ['Q8W1X2-1', 'Q8W1X2-2'])
         self.assertEqual(seq_record.annotations["comment_biotechnology"],
-                         ['Green fluorescent protein has been engineered to produce a '
-                          'vast number of variously colored mutants, fusion proteins, '
-                          'and biosensors. Fluorescent proteins and its mutated allelic '
-                          'forms, blue, cyan and yellow have become a useful and '
-                          'ubiquitous tool for making chimeric proteins, where they '
-                          'function as a fluorescent protein tag. Typically they '
-                          'tolerate N- and C-terminal fusion to a broad variety of '
-                          'proteins. They have been expressed in most known cell types '
-                          'and are used as a noninvasive fluorescent marker in living '
-                          'cells and organisms. They enable a wide range of applications '
-                          'where they have functioned as a cell lineage tracer, reporter '
-                          'of gene expression, or as a measure of protein-protein '
-                          'interactions.', 'Can also be used as a molecular thermometer, '
-                          'allowing accurate temperature measurements in fluids. The '
-                          'measurement process relies on the detection of the blinking '
-                          'of GFP using fluorescence correlation spectroscopy.'])
+                         ['Green fluorescent protein has been engineered to '
+                          'produce a vast number of variously colored '
+                          'mutants, fusion proteins, and biosensors. '
+                          'Fluorescent proteins and its mutated allelic '
+                          'forms, blue, cyan and yellow have become a useful '
+                          'and ubiquitous tool for making chimeric proteins, '
+                          'where they function as a fluorescent protein tag. '
+                          'Typically they tolerate N- and C-terminal fusion '
+                          'to a broad variety of proteins. They have been '
+                          'expressed in most known cell types and are used '
+                          'as a noninvasive fluorescent marker in living '
+                          'cells and organisms. They enable a wide range of '
+                          'applications where they have functioned as a cell '
+                          'lineage tracer, reporter of gene expression, or as '
+                          'a measure of protein-protein interactions.',
+                          'Can also be used as a molecular thermometer, '
+                          'allowing accurate temperature measurements in '
+                          'fluids. The measurement process relies on the '
+                          'detection of the blinking of GFP using '
+                          'fluorescence correlation spectroscopy.'])
         self.assertEqual(seq_record.annotations["comment_catalyticactivity"],
-                ['ATP + acetyl-CoA + HCO(3)(-) = ADP + phosphate + malonyl-CoA.',
-                'ATP + biotin-[carboxyl-carrier-protein] + CO(2) = ADP + '
-                'phosphate + carboxy-biotin-[carboxyl-carrier-protein].'])
+                         ['ATP + acetyl-CoA + HCO(3)(-) = ADP + phosphate '
+                          '+ malonyl-CoA.',
+                          'ATP + biotin-[carboxyl-carrier-protein] '
+                          '+ CO(2) = ADP + phosphate + '
+                          'carboxy-biotin-[carboxyl-carrier-protein].'])
         self.assertEqual(seq_record.annotations["comment_caution"],
-                ['Could be the product of a pseudogene. The existence of a '
-                'transcript at this locus is supported by only one sequence '
-                'submission (PubMed:2174397).'])
+                         ['Could be the product of a pseudogene. The '
+                          'existence of a transcript at this locus is '
+                          'supported by only one sequence submission '
+                          '(PubMed:2174397).'])
         self.assertEqual(seq_record.annotations["comment_cofactor"],
-                ['Biotin (By similarity).', 'Binds 2 manganese ions per '
-                'subunit (By similarity).'])
+                         ['Biotin (By similarity).', 'Binds 2 manganese ions '
+                          'per subunit (By similarity).'])
         self.assertEqual(seq_record.annotations["comment_developmentalstage"],
-                ['Expressed from the comma stage of embryogenesis, during all '
-                'larval stages, and in low levels in adults.'])
+                         ['Expressed from the comma stage of embryogenesis, '
+                          'during all larval stages, and in low levels in '
+                          'adults.'])
         self.assertEqual(seq_record.annotations["comment_disease"],
-                ['Defects in MC2R are the cause of glucocorticoid deficiency '
-                'type 1 (GCCD1) [MIM:202200]; also known as familial '
-                'glucocorticoid deficiency type 1 (FGD1). GCCD1 is an '
-                'autosomal recessive disorder due to congenital '
-                'insensitivity or resistance to adrenocorticotropin (ACTH). '
-                'It is characterized by progressive primary adrenal '
-                'insufficiency, without mineralocorticoid deficiency.'])
+                         ['Defects in MC2R are the cause of glucocorticoid '
+                          'deficiency type 1 (GCCD1) [MIM:202200]; also known '
+                          'as familial glucocorticoid deficiency type 1 '
+                          '(FGD1). GCCD1 is an autosomal recessive disorder '
+                          'due to congenital insensitivity or resistance to '
+                          'adrenocorticotropin (ACTH). It is characterized by '
+                          'progressive primary adrenal insufficiency, without '
+                          'mineralocorticoid deficiency.'])
         self.assertEqual(seq_record.annotations["comment_disruptionphenotype"],
-                ['Mice display impaired B-cell development which does not '
-                'progress pass the progenitor stage.'])
+                         ['Mice display impaired B-cell development which '
+                          'does not progress pass the progenitor stage.'])
         self.assertEqual(seq_record.annotations["comment_domain"],
-                ['Two regions, an N-terminal (aa 96-107) and a C-terminal '
-                '(aa 274-311) are required for binding FGF2.'])
+                         ['Two regions, an N-terminal (aa 96-107) and a '
+                          'C-terminal (aa 274-311) are required for binding '
+                          'FGF2.'])
         self.assertEqual(seq_record.annotations["comment_enzymeregulation"],
-                ['By phosphorylation. The catalytic activity is inhibited by '
-                'soraphen A, a polyketide isolated from the myxobacterium '
-                'Sorangium cellulosum and a potent inhibitor of fungal growth.'])
+                         ['By phosphorylation. The catalytic activity is '
+                          'inhibited by soraphen A, a polyketide isolated '
+                          'from the myxobacterium Sorangium cellulosum and '
+                          'a potent inhibitor of fungal growth.'])
         self.assertEqual(seq_record.annotations["comment_function"],
-                ['FMRFamides and FMRFamide-like peptides are neuropeptides. '
-                'AADGAPLIRF-amide and APEASPFIRF-amide inhibit muscle tension '
-                'in somatic muscle. APEASPFIRF-amide is a potent inhibitor of '
-                'the activity of dissected pharyngeal myogenic muscle system.'])
+                         ['FMRFamides and FMRFamide-like peptides are '
+                          'neuropeptides. AADGAPLIRF-amide and '
+                          'APEASPFIRF-amide inhibit muscle tension in somatic '
+                          'muscle. APEASPFIRF-amide is a potent inhibitor of '
+                          'the activity of dissected pharyngeal myogenic '
+                          'muscle system.'])
         self.assertEqual(seq_record.annotations["comment_induction"],
-                ['Repressed in presence of fatty acids. Repressed 3-fold by '
-                'lipid precursors, inositol and choline, and also controlled '
-                'by regulatory factors INO2, INO4 and OPI1.'])
+                         ['Repressed in presence of fatty acids. Repressed '
+                          '3-fold by ''lipid precursors, inositol and '
+                          'choline, and also controlled by regulatory '
+                          'factors INO2, INO4 and OPI1.'])
         self.assertEqual(seq_record.annotations["comment_interaction_intactId"],
-                ['EBI-356720', 'EBI-746969', 'EBI-720116'])
+                         ['EBI-356720', 'EBI-746969', 'EBI-720116'])
         self.assertEqual(seq_record.annotations["comment_massspectrometry"],
-                ['88..98:1032|MALDI', '100..110:1133.7|MALDI'])
+                         ['88..98:1032|MALDI', '100..110:1133.7|MALDI'])
         self.assertEqual(seq_record.annotations["comment_miscellaneous"],
-                ['Present with 20200 molecules/cell in log phase SD medium.'])
+                         ['Present with 20200 molecules/cell in log phase '
+                          'SD medium.'])
         self.assertEqual(seq_record.annotations["comment_onlineinformation"],
-                ['NIEHS-SNPs@http://egp.gs.washington.edu/data/api5/'])
+                         ['NIEHS-SNPs@http://egp.gs.washington.edu/data/api5/'])
         self.assertEqual(seq_record.annotations["comment_pathway"],
-                ['Lipid metabolism; malonyl-CoA biosynthesis; malonyl-CoA '
-                'from acetyl-CoA: step 1/1.'])
+                         ['Lipid metabolism; malonyl-CoA biosynthesis; '
+                         'malonyl-CoA from acetyl-CoA: step 1/1.'])
         self.assertEqual(seq_record.annotations["comment_RNAediting"],
-                ['Partially edited. RNA editing generates receptor isoforms '
-                'that differ in their ability to interact with the '
-                'phospholipase C signaling cascade in a transfected cell '
-                'line, suggesting that this RNA processing event may '
-                'contribute to the modulation of serotonergic '
-                'neurotransmission in the central nervous system.'])
+                         ['Partially edited. RNA editing generates receptor '
+                          'isoforms that differ in their ability to interact '
+                          'with the phospholipase C signaling cascade in a '
+                          'transfected cell line, suggesting that this RNA '
+                          'processing event may contribute to the modulation '
+                          'of serotonergic neurotransmission in the central '
+                          'nervous system.'])
         self.assertEqual(seq_record.annotations["comment_PTM"],
-                ['Acetylation at Lys-251 impairs antiapoptotic function.'])
+                         ['Acetylation at Lys-251 impairs '
+                          'antiapoptotic function.'])
         self.assertEqual(seq_record.annotations["comment_pharmaceutical"],
-                ['Could be used as a possible therapeutic agent for treating '
-                'rheumatoid arthritis.'])
+                         ['Could be used as a possible therapeutic agent for '
+                          'treating rheumatoid arthritis.'])
         self.assertEqual(seq_record.annotations["comment_polymorphism"],
-                ['Position 23 is polymorphic; the frequencies in unrelated '
-                'Caucasians are 0.87 for Cys and 0.13 for Ser.'])
+                         ['Position 23 is polymorphic; the frequencies in '
+                          'unrelated Caucasians are 0.87 for Cys and 0.13 '
+                          'for Ser.'])
         self.assertEqual(seq_record.annotations["comment_similarity"],
-                ['Belongs to the FARP (FMRFamide related peptide) family.'])
+                         ['Belongs to the FARP (FMRFamide related peptide) '
+                          'family.'])
         self.assertEqual(seq_record.annotations["comment_subcellularlocation_location"],
-                ['Secreted'])
+                         ['Secreted'])
         self.assertEqual(seq_record.annotations["comment_subunit"],
-                ['Homodimer.'])
+                         ['Homodimer.'])
         self.assertEqual(seq_record.annotations["comment_tissuespecificity"],
-                ['Each flp gene is expressed in a distinct set of neurons. '
-                'Flp-13 is expressed in the ASE sensory neurons, the DD motor '
-                'neurons, the 15, M3 and M5 cholinergic pharyngeal '
-                'motoneurons, and the ASG, ASK and BAG neurons.'])
+                         ['Each flp gene is expressed in a distinct set of '
+                          'neurons. Flp-13 is expressed in the ASE sensory '
+                          'neurons, the DD motor neurons, the 15, M3 and M5 '
+                          'cholinergic pharyngeal motoneurons, and the ASG, '
+                          'ASK and BAG neurons.'])
         self.assertEqual(seq_record.annotations["comment_toxicdose"],
-                ['LD(50) is 50 ug/kg in mouse by intracerebroventricular '
-                'injection and 600 ng/g in Blatella germanica.'])
+                         ['LD(50) is 50 ug/kg in mouse by '
+                          'intracerebroventricular injection '
+                          'and 600 ng/g in Blatella germanica.'])
 
     def test_sp016(self):
         "Parsing SwissProt file sp016"
@@ -313,7 +334,7 @@ class TestUniprot(unittest.TestCase):
                 pass
             elif not isinstance(old.annotations[key], type(new.annotations[key])):
                 raise TypeError("%s gives %s vs %s" %
-                                 (key, old.annotations[key], new.annotations[key]))
+                                (key, old.annotations[key], new.annotations[key]))
             elif key in ["organism"]:
                 if old.annotations[key] == new.annotations[key]:
                     pass
@@ -340,8 +361,8 @@ class TestUniprot(unittest.TestCase):
                              (f1.location, f1.type, f2.location, f2.type))
             """
             self.assertEqual(repr(f1.location), repr(f2.location),
-                            "%s %s vs %s %s" %
-                            (f1.location, f1.type, f2.location, f2.type))
+                             "%s %s vs %s %s" %
+                             (f1.location, f1.type, f2.location, f2.type))
 
     def test_Q13639(self):
         """Compare SwissProt text and uniprot XML versions of Q13639."""

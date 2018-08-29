@@ -27,18 +27,21 @@ from Bio.HMM import Trainer
 
 # create some simple alphabets
 class NumberAlphabet(Alphabet.Alphabet):
-    """Numbers as the states of the model."""
+    """Numbers as the states of the model.
+    """
     letters = ['1', '2']
 
 
 class LetterAlphabet(Alphabet.Alphabet):
-    """Letters as the emissions of the model."""
+    """Letters as the emissions of the model.
+    """
     letters = ['A', 'B']
 
 
 # -- helper functions
 def test_assertion(name, result, expected):
-    """Helper function to test an assertion and print out a reasonable error."""
+    """Helper function to test an assertion and print out a reasonable error.
+    """
     assert result == expected, "Expected %s, got %s for %s" % (expected,
                                                                result,
                                                                name)
@@ -72,7 +75,8 @@ class MarkovModelBuilderTest(unittest.TestCase):
                                                          LetterAlphabet())
 
     def test_test_initialize(self):
-        """Making sure MarkovModelBuilder is initialized correctly."""
+        """Making sure MarkovModelBuilder is initialized correctly.
+        """
         expected_transition_prob = {}
         expected_transition_pseudo = {}
 
@@ -93,7 +97,8 @@ class MarkovModelBuilderTest(unittest.TestCase):
                        expected_emission_pseudo)
 
     def test_allow_all_transitions(self):
-        """Testing allow_all_transitions."""
+        """Testing allow_all_transitions.
+        """
         self.mm_builder.allow_all_transitions()
 
         expected_prob = {('2', '1'): 0, ('1', '1'): 0,
@@ -167,7 +172,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
                                                          LetterAlphabet())
 
     def test_transitions_from(self):
-        """Testing the calculation of transitions_from."""
+        """Testing the calculation of transitions_from
+        """
         self.mm_builder.allow_transition('1', '2', 1.0)
         self.mm_builder.allow_transition('2', '1', 0.5)
         self.mm_builder.allow_transition('2', '2', 0.5)
@@ -194,7 +200,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        fake_state, expected_fake_state)
 
     def test_transitions_to(self):
-        """Testing the calculation of transitions_to."""
+        """Testing the calculation of transitions_to
+        """
         self.mm_builder.allow_transition('1', '1', 0.5)
         self.mm_builder.allow_transition('1', '2', 0.5)
         self.mm_builder.allow_transition('2', '1', 1.0)
@@ -221,7 +228,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        fake_state, expected_fake_state)
 
     def test_allow_transition(self):
-        """Testing allow_transition."""
+        """Testing allow_transition
+        """
         self.mm_builder.allow_transition('1', '2', 1.0)
         self.mm_builder.set_initial_probabilities({})
         self.mm = self.mm_builder.get_markov_model()
@@ -255,7 +263,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        state_2, expected_state_2)
 
     def test_simple_hmm(self):
-        """Test a simple model with 2 states and 2 symbols."""
+        """Test a simple model with 2 states and 2 symbols.
+        """
 
         # set initial probabilities
         prob_initial = [0.4, 0.6]
@@ -392,7 +401,8 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         self.dp = DynamicProgramming.ScaledDPAlgorithms(mm, training_seq)
 
     def test_calculate_s_value(self):
-        """Testing the calculation of s values."""
+        """Testing the calculation of s values.
+        """
         previous_vars = {('1', 0): .5,
                          ('2', 0): .7}
         s_value = self.dp._calculate_s_value(1, previous_vars)
@@ -405,7 +415,8 @@ class AbstractTrainerTest(unittest.TestCase):
         self.test_trainer = Trainer.AbstractTrainer(hmm)
 
     def test_ml_estimator(self):
-        """Test the maximum likelihood estimator for simple cases."""
+        """Test the maximum likelihood estimator for simple cases.
+        """
         # set up a simple dictionary
         counts = {('A', 'A'): 10,
                   ('A', 'B'): 20,
@@ -432,7 +443,8 @@ class AbstractTrainerTest(unittest.TestCase):
                                                    test_result[0])
 
     def test_log_likelihood(self):
-        """Calculate log likelihood."""
+        """Calculate log likelihood.
+        """
         probs = [.25, .13, .12, .17]
 
         log_prob = self.test_trainer.log_likelihood(probs)
