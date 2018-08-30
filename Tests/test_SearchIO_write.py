@@ -20,17 +20,17 @@ class WriteCases(unittest.TestCase):
             os.remove(self.out)
 
     def parse_write_and_compare(self, source_file, source_format, out_file,
-            out_format, **kwargs):
+                                out_format, **kwargs):
         """Compares parsed QueryResults after they have been written to a file."""
         source_qresults = list(SearchIO.parse(source_file, source_format,
-                **kwargs))
+                               **kwargs))
         SearchIO.write(source_qresults, out_file, out_format, **kwargs)
         out_qresults = list(SearchIO.parse(out_file, out_format, **kwargs))
         for source, out in zip(source_qresults, out_qresults):
             self.assertTrue(compare_search_obj(source, out))
 
     def read_write_and_compare(self, source_file, source_format, out_file,
-            out_format, **kwargs):
+                               out_format, **kwargs):
         """Compares read QueryResults after it has been written to a file."""
         source_qresult = SearchIO.read(source_file, source_format, **kwargs)
         SearchIO.write(source_qresult, out_file, out_format, **kwargs)
@@ -86,13 +86,13 @@ class BlastTabWriteCases(WriteCases):
         """Test blast-tabc writing from blast-tabc, BLAST 2.2.28+, multiple queries (tab_2228_tblastx_001.txt)"""
         source = os.path.join('Blast', 'tab_2228_tblastx_001.txt')
         fields = ['qseqid', 'qgi', 'qacc', 'qaccver', 'qlen', 'sseqid',
-                'sallseqid', 'sgi', 'sallgi', 'sacc', 'saccver', 'sallacc',
-                'slen', 'qstart', 'qend', 'sstart', 'send', 'qseq', 'sseq',
-                'evalue', 'bitscore', 'score', 'length', 'pident', 'nident',
-                'mismatch', 'positive', 'gapopen', 'gaps', 'ppos', 'frames',
-                'qframe', 'sframe', 'btop', 'staxids', 'sscinames', 'scomnames',
-                'sblastnames', 'sskingdoms', 'stitle', 'salltitles', 'sstrand',
-                'qcovs', 'qcovhsp']
+                  'sallseqid', 'sgi', 'sallgi', 'sacc', 'saccver', 'sallacc',
+                  'slen', 'qstart', 'qend', 'sstart', 'send', 'qseq', 'sseq',
+                  'evalue', 'bitscore', 'score', 'length', 'pident', 'nident',
+                  'mismatch', 'positive', 'gapopen', 'gaps', 'ppos', 'frames',
+                  'qframe', 'sframe', 'btop', 'staxids', 'sscinames',
+                  'scomnames', 'sblastnames', 'sskingdoms', 'stitle',
+                  'salltitles', 'sstrand', 'qcovs', 'qcovhsp']
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True, fields=fields)
 
 

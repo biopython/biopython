@@ -102,61 +102,61 @@ class ParseTests(unittest.TestCase):
     test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
 
+    # lvl-2 clades, sub-clade counts, lvl-3 clades
     test_shape_apaf = _test_shape_factory(EX_APAF,
-            # lvl-2 clades, sub-clade counts, lvl-3 clades
-                (((2, (2, 2)),
-                    (2, (2, 2)),
-                  ),
-                 ),
-            )
+                                          (((2, (2, 2)),
+                                            (2, (2, 2)),
+                                            ),
+                                           ),
+                                          )
     test_shape_bcl2 = _test_shape_factory(EX_BCL2,
-                (((2, (2, 2)),
-                    (2, (2, 2)),
-                  ),
-                 ),
-            )
+                                          (((2, (2, 2)),
+                                            (2, (2, 2)),
+                                            ),
+                                           ),
+                                          )
     test_shape_phylo = _test_shape_factory(EX_PHYLO,
-                (((2, (0, 0)),
-                    (0, ()),
-                  ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((0, ()),
-                    (2, (0, 0)),
-                   ),
-                  ((3, (0, 0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                  ((2, (0, 0)),
-                    (0, ()),
-                   ),
-                 ),
-            )
+                                           (((2, (0, 0)),
+                                               (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((0, ()),
+                                             (2, (0, 0)),
+                                             ),
+                                            ((3, (0, 0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                             (0, ()),
+                                             ),
+                                            ((2, (0, 0)),
+                                               (0, ()),
+                                             ),
+                                            ),
+                                           )
     test_shape_dollo = _test_shape_factory(EX_DOLLO,
                                            (((2, (2, 2)),
                                              (2, (2, 2)),),),)
@@ -198,11 +198,11 @@ class TreeTests(unittest.TestCase):
         # Monitor lizards
         self.assertEqual(trees[9].name, 'monitor lizards')
         self.assertEqual(trees[9].description,
-                'a pylogeny of some monitor lizards')
+                         'a pylogeny of some monitor lizards')
         self.assertEqual(trees[9].rooted, True)
         # Network (unrooted)
         self.assertEqual(trees[6].name,
-                'network, node B is connected to TWO nodes: AB and C')
+                         'network, node B is connected to TWO nodes: AB and C')
         self.assertEqual(trees[6].rooted, False)
 
     def test_Clade(self):
@@ -264,15 +264,15 @@ class TreeTests(unittest.TestCase):
         handle.close()
         self.assertEqual(tree.name, 'testing confidence')
         for conf, type, val in zip(tree.confidences,
-                ('bootstrap', 'probability'),
-                (89.0, 0.71)):
+                                   ('bootstrap', 'probability'),
+                                   (89.0, 0.71)):
             self.assertTrue(isinstance(conf, PX.Confidence))
             self.assertEqual(conf.type, type)
             self.assertAlmostEqual(conf.value, val)
         self.assertEqual(tree.clade.name, 'b')
         self.assertAlmostEqual(tree.clade.width, 0.2)
         for conf, val in zip(tree.clade[0].confidences,
-                (0.9, 0.71)):
+                             (0.9, 0.71)):
             self.assertTrue(isinstance(conf, PX.Confidence))
             self.assertEqual(conf.type, 'probability')
             self.assertAlmostEqual(conf.value, val)
@@ -336,12 +336,19 @@ class TreeTests(unittest.TestCase):
         self.assertTrue(isinstance(darch, PX.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
         for domain, start, end, conf, value in zip(darch.domains,
-                (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
-                (90, 414, 643, 685, 729, 771, 910, 1031, 1113, 1155, 1204),
-                (7.0e-26, 7.2e-117, 2.4e-6, 1.1e-12, 2.4e-7, 4.7e-14, 2.5e-8,
-                 4.6e-6, 6.3e-7, 1.4e-7, 0.3),
-                ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
-                 'WD40', 'WD40', 'WD40', 'WD40')):
+                                                   (6, 109, 605, 647, 689, 733,
+                                                    872, 993, 1075, 1117, 1168),
+                                                   (90, 414, 643, 685, 729,
+                                                    771, 910, 1031, 1113, 1155,
+                                                    1204),
+                                                   (7.0e-26, 7.2e-117, 2.4e-6,
+                                                    1.1e-12, 2.4e-7, 4.7e-14,
+                                                    2.5e-8, 4.6e-6, 6.3e-7,
+                                                    1.4e-7, 0.3),
+                                                   ('CARD', 'NB-ARC', 'WD40',
+                                                    'WD40', 'WD40', 'WD40',
+                                                    'WD40', 'WD40', 'WD40',
+                                                    'WD40', 'WD40')):
             self.assertTrue(isinstance(domain, PX.ProteinDomain))
             self.assertEqual(domain.start + 1, start)
             self.assertEqual(domain.end, end)
@@ -433,7 +440,7 @@ class TreeTests(unittest.TestCase):
                 ('P81431', 'Q54II4', 'Q04945'),
                 ('Alcohol dehydrogenase class-3',
                  'Reticulon-4-interacting protein 1 homolog, '
-                         'mitochondrial precursor',
+                 'mitochondrial precursor',
                  'NADH-dependent butanol dehydrogenase B'),
                 ('TDATGKPIKCMAAIAWEAKKPLSIEEVEVAPPKSGEVRIKILHSGVCHTD',
                  'MKGILLNGYGESLDLLEYKTDLPVPKPIKSQVLIKIHSTSINPLDNVMRK',
@@ -492,7 +499,7 @@ class TreeTests(unittest.TestCase):
         self.assertTrue(isinstance(uri, PX.Uri))
         self.assertEqual(uri.desc, 'EMBL REPTILE DATABASE')
         self.assertEqual(uri.value,
-                'http://www.embl-heidelberg.de/~uetz/families/Varanidae.html')
+                         'http://www.embl-heidelberg.de/~uetz/families/Varanidae.html')
 
 
 # ---------------------------------------------------------
@@ -654,7 +661,7 @@ class MethodTests(unittest.TestCase):
         # Add sequences to the terminals
         alphabet = Alphabet.Gapped(Alphabet.generic_dna)
         for tip, seqstr in zip(tree.get_terminals(),
-                ('AA--TTA', 'AA--TTG', 'AACCTTC')):
+                               ('AA--TTA', 'AA--TTG', 'AACCTTC')):
             tip.sequences.append(PX.Sequence.from_seqrecord(
                 SeqRecord(Seq(seqstr, alphabet), id=str(tip))))
         # Check the alignment

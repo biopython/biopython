@@ -22,15 +22,15 @@ gi|671626|emb|CAA85685.1|           ---------MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTD
 
 gi|4959044|gb|AAD34209.1|AF069      LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW 100
 gi|671626|emb|CAA85685.1|           VTPQPG-----------------VPPEEAGAAVAAESSTGT--------- 65
-                                    :   **                  **:...   *.*** ..         
+                                    :   **                  **:...   *.*** ..
 
 gi|4959044|gb|AAD34209.1|AF069      LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT 150
 gi|671626|emb|CAA85685.1|           WTTVWTDGLTSLDRYKG-----RCYHIEPVPG------------------ 92
-                                     .:*   * *: .* :*        : :* .*                  
+                                     .:*   * *: .* :*        : :* .*
 
 gi|4959044|gb|AAD34209.1|AF069      SENESEPSTRRLSVENMESSSQRQMENSASESASARPSRAERNSTEAVTE 200
 gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRLEDLRIP 141
-                                     *::.  .    .:: :*..*  :* .*   .. .  :    .  :    
+                                     *::.  .    .:: :*..*  :* .*   .. .  :    .  :
 
 gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
 gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
@@ -64,7 +64,7 @@ E_coli_GlnH                    TDTAFVPFEFKQG--DKYVGFDVDLWAAIAKELKLDYELKPMDFSGIIP
 Deinococcus_radiodurans        MEGTYPPFTSKNE-QGELVGFDVDIAKAVAQKLNLKPEFVLTEWSGILAG
 HISJ_E_COLI                    TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS
 HISJ_E_COLI                    TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS
-                                     **       .:  *::::.   : :.   .        ..:   
+                                     **       .:  *::::.   : :.   .        ..:
 
 V_Harveyi_PATH                 LETGRIDTISNQITMTDARKAKYLFADPYVVDG-AQI
 B_subtilis_YXEM                LQTGKLDTISNQVAVTDERKETYNFTKPYAYAG-TQI
@@ -87,42 +87,42 @@ aln_example3 = \
 Test1seq             ------------------------------------------------------------
 AT3G20900.1-SEQ      ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGTGAACAAAAAAAAAACTCAATCCAC
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             -----AGTTACAATAACTGACGAAGCTAAGTAGGCTACTAATTAACGTCATCAACCTAAT
 AT3G20900.1-SEQ      ATCAAAGTTACAATAACTGACGAAGCTAAGTAGGCTAGAAATTAAAGTCATCAACCTAAT
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             ACATAGCACTTAGAAAAAAGTGAAGTAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
 AT3G20900.1-SEQ      ACATAGCACTTAGAAAAAAGTGAAGCAAGAAAATATAAAATAATAAAAGGGTGGGTTATC
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             AATTGATAGTGTAAATCATCGTATTCCGGTGATATACCCTACCACAAAAACTCAAACCGA
 AT3G20900.1-SEQ      AATTGATAGTGTAAATCATAGTTGATTTTTGATATACCCTACCACAAAAACTCAAACCGA
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             CTTGATTCAAATCATCTCAATAAATTAGCGCCAAAATAATGAAAAAAATAATAACAAACA
 AT3G20900.1-SEQ      CTTGATTCAAATCATCTCAAAAAACAAGCGCCAAAATAATGAAAAAAATAATAACAAAAA
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             AAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
 AT3G20900.1-SEQ      CAAACAAACCAAAATAAGAAAAAACATTACGCAAAACATAATAATTTACTCTTCGTTATT
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             GTATTAACAAATCAAAGAGCTGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
 AT3G20900.1-SEQ      GTATTAACAAATCAAAGAGATGAATTTTGATCACCTGCTAATACTACTTTCTGTATTGAT
 AT3G20900.1-CDS      ------------------------------------------------------------
-                                                                                 
+
 
 Test1seq             CCTATATCAACGTAAACAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
 AT3G20900.1-SEQ      CCTATATCAAAAAAAAAAAAGATACTAATAATTAACTAAAAGTACGTTCATCGATCGTGT
 AT3G20900.1-CDS      ------------------------------------------------------ATGAAC
-                                                                             *   
+                                                                             *
 
 Test1seq             TCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
 AT3G20900.1-SEQ      GCGTTGACGAAGAAGAGCTCTATCTCCGGCGGAGCAAAGAAAACGATCTGTCTCCGTCGT
@@ -142,7 +142,7 @@ AT3G20900.1-CDS      GGTATCCTAGACTTCTTGGCTTTCGGGGTACAACAACCGCCTGGTGACGTCAGCACCGC
 Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
 AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
-                     *************************  
+                     *************************
 """  # noqa : W291
 
 aln_example4 = \
@@ -197,8 +197,8 @@ class TestClustalIO(unittest.TestCase):
 
     def test_write_read(self):
         """Checking write/read."""
-        alignments = list(ClustalIterator(StringIO(aln_example1))) \
-                   + list(ClustalIterator(StringIO(aln_example2))) * 2
+        alignments = (list(ClustalIterator(StringIO(aln_example1)))
+                      + list(ClustalIterator(StringIO(aln_example2))) * 2)
         handle = StringIO()
         self.assertEqual(3, ClustalWriter(handle).write_file(alignments))
         handle.seek(0)

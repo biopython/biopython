@@ -105,10 +105,10 @@ class FastaIOTests(unittest.TestCase):
                 self.assertEqual(alignments[2][0].id, "gi|10955264|ref|NP_052605.1|")
                 self.assertEqual(alignments[2][0].annotations["original_length"], 126)
                 self.assertEqual(alignments[2][1].seq, "TELNSELAKAMKVDAQRG-AFVS"
-                                                        "QVLPNSSAAKAGIKAGDVITSL"
-                                                        "NGKPISSFAALRA-QVGTMPVG"
-                                                        "SKLTLGLLRDG-KQVNVNLELQ"
-                                                        "QSS")
+                                                       "QVLPNSSAAKAGIKAGDVITSL"
+                                                       "NGKPISSFAALRA-QVGTMPVG"
+                                                       "SKLTLGLLRDG-KQVNVNLELQ"
+                                                       "QSS")
                 self.assertEqual(alignments[2][1].id, "gi|15829419|ref|NP_308192.1|")
                 self.assertEqual(alignments[2][1].annotations["original_length"], 474)
                 self.assertEqual(len(alignments[3]), 2)
@@ -172,8 +172,8 @@ class FastaIOTests(unittest.TestCase):
                 self.assertEqual(alignments[0][0].id, "gi|152973837|ref|YP_001338874.1|")
                 self.assertEqual(alignments[0][0].annotations["original_length"], 183)
                 self.assertEqual(alignments[0][1].seq, "VRLTAEEDQ--EIRKRAAECG-K"
-                                                        "TVSGFLRAAALGKKVNSLTDDR"
-                                                        "VLKEVMRLGA")
+                                                       "TVSGFLRAAALGKKVNSLTDDR"
+                                                       "VLKEVMRLGA")
                 self.assertEqual(alignments[0][1].id, "gi|10955263|ref|NP_052604.1|")
                 self.assertEqual(alignments[0][1].annotations["original_length"], 107)
                 self.assertEqual(len(alignments[1]), 2)
