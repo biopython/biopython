@@ -33,18 +33,21 @@ class StopTrainingTest(unittest.TestCase):
 
         stopper.last_error = 1.0
         do_stop = stopper.stopping_criteria(5, 1.0, 1.5)
-        assert do_stop == 1, \
-               "Did not tell us to stop when validation error increased."
+        self.assertEqual(do_stop, 1,
+                         "Did not tell us to stop when "
+                         "validation error increased.")
 
         stopper.last_error = 1.0
         do_stop = stopper.stopping_criteria(1, 1.0, 1.5)
-        assert do_stop == 0, \
-               "Told us to stop before we reached the minimum iterations."
+        self.assertEqual(do_stop, 0,
+                         "Told us to stop before we reached "
+                         "the minimum iterations.")
 
         stopper.last_error = 1.0
         do_stop = stopper.stopping_criteria(25, 1.0, 0.5)
-        assert do_stop == 1, \
-               "Did not tell us to stop when reaching maximum iterations."
+        self.assertEqual(do_stop, 1,
+                         "Did not tell us to stop when "
+                         "reaching maximum iterations.")
 
 
 class ExampleManagerTest(unittest.TestCase):
@@ -80,27 +83,28 @@ class ExampleManagerTest(unittest.TestCase):
                                (expected_test, len(manager.test_examples))]:
 
             wrong_percent = abs(expect - actual) / self.num_examples
-            assert wrong_percent < .1, \
-                   "Deviation in how examples were added, expect %s, got %s" \
-                   % (expect, actual)
+            self.assertLess(wrong_percent, .1,
+                            "Deviation in how examples were "
+                            "added, expect %s, got %s"
+                            % (expect, actual))
 
     def test_partioning_examples(self):
         """Test that we can change how to partition the test examples.
         """
         manager = ExampleManager(0, 0)
         manager.add_examples(self.examples)
-        assert len(manager.test_examples) == self.num_examples, \
-               "Did not partition correctly to test_examples."
+        self.assertEqual(len(manager.test_examples), self.num_examples,
+                         "Did not partition correctly to test_examples.")
 
         manager = ExampleManager(1.0, 0)
         manager.add_examples(self.examples)
-        assert len(manager.train_examples) == self.num_examples, \
-               "Did not partition correctly to train_examples."
+        self.assertEqual(len(manager.train_examples) == self.num_examples,
+                         "Did not partition correctly to train_examples.")
 
         manager = ExampleManager(0, 1.0)
         manager.add_examples(self.examples)
-        assert len(manager.validation_examples) == self.num_examples, \
-               "Did not partition correctly to validation_examples."
+        self.assertEqual(len(manager.validation_examples) == self.num_examples,
+                         "Did not partition correctly to validation_examples.")
 
     def test_value_error(self):
         """Test when the sum of input percentages exceed 1.0"""

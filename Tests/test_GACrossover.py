@@ -117,7 +117,7 @@ class UniformTest(unittest.TestCase):
                                                            self.org_3)
 
         self.assertTrue(len(new_org_1.genome) > len(new_org_2.genome),
-                     "Strings are of wrong sizes after uniform crossover.")
+                        "Strings are of wrong sizes after uniform crossover.")
 
         self.assertEqual(str(new_org_2.genome).count("1"),
                          str(new_org_1.genome).count("3"),
@@ -185,7 +185,8 @@ class InterleaveTest(unittest.TestCase):
                                                             self.org_2)
 
         self.assertEqual(len(new_org_1.genome), len(new_org_2.genome),
-            "Strings are of different sizes after interleave point crossover.")
+                         "Strings are of different sizes after "
+                         "interleave point crossover.")
 
         self.assertEqual(str(new_org_1.genome).count("1"),
                          str(new_org_2.genome).count("2"),
@@ -404,8 +405,8 @@ class SafeFitnessTest(unittest.TestCase):
         new_org_1, new_org_2 = crossover.do_crossover(self.org_1, self.org_2)
 
         self.assertTrue(new_org_1.fitness > self.org_1.fitness and
-                     new_org_2.fitness > self.org_2.fitness,
-                     "Did not get new organism when it had higher fitness.")
+                        new_org_2.fitness > self.org_2.fitness,
+                        "Did not get new organism when it had higher fitness.")
 
     def test_keep_lower(self):
         """Make sure we do normal crossover functionality when specified.
@@ -424,16 +425,16 @@ class SafeFitnessTest(unittest.TestCase):
         new_org_1, new_org_2 = crossover.do_crossover(self.org_1, self.org_2)
 
         self.assertNotEqual(str(new_org_1), str(self.org_1),
-                         "Retained lower fitness organism in crossover.")
+                            "Retained lower fitness organism in crossover.")
         self.assertNotEqual(str(new_org_2), str(self.org_2),
-                         "Retained lower fitness organism in crossover.")
+                            "Retained lower fitness organism in crossover.")
 
         self.test_crossover.type = "higher"
         new_org_1, new_org_2 = crossover.do_crossover(self.org_1, self.org_2)
 
         self.assertTrue(new_org_1.fitness > self.org_1.fitness and
-                     new_org_2.fitness > self.org_2.fitness,
-                     "Did not get new organism under higher fitness conditions.")
+                        new_org_2.fitness > self.org_2.fitness,
+                        "Did not get new organism under higher fitness conditions.")
 
 
 if __name__ == "__main__":
