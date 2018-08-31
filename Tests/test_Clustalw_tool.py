@@ -120,9 +120,10 @@ class ClustalWTestCase(unittest.TestCase):
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
-            self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
-            self.assertTrue(str(record.seq).replace("-", "") ==
-                   str(input_records[record.id].seq))
+            self.assertEqual(str(record.seq),
+                             str(output_records[record.id].seq))
+            self.assertEqual(str(record.seq).replace("-", ""),
+                             str(input_records[record.id].seq))
 
         # Check the DND file was created.
         # TODO - Try and parse this with Bio.Nexus?

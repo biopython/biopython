@@ -556,19 +556,21 @@ class IndexDictTests(unittest.TestCase):
             else:
                 handle = StringIO(_bytes_to_string(raw))
             if format == "sff":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._proxy._flows_per_read,
-                            rec_dict._proxy._flow_chars,
-                            rec_dict._proxy._key_sequence,
-                            rec_dict._proxy._alphabet,
-                            trim=False)
+                rec2 = SeqIO.SffIO._sff_read_seq_record(
+                    handle,
+                    rec_dict._proxy._flows_per_read,
+                    rec_dict._proxy._flow_chars,
+                    rec_dict._proxy._key_sequence,
+                    rec_dict._proxy._alphabet,
+                    trim=False)
             elif format == "sff-trim":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._proxy._flows_per_read,
-                            rec_dict._proxy._flow_chars,
-                            rec_dict._proxy._key_sequence,
-                            rec_dict._proxy._alphabet,
-                            trim=True)
+                rec2 = SeqIO.SffIO._sff_read_seq_record(
+                    handle,
+                    rec_dict._proxy._flows_per_read,
+                    rec_dict._proxy._flow_chars,
+                    rec_dict._proxy._key_sequence,
+                    rec_dict._proxy._alphabet,
+                    trim=True)
             elif format == "uniprot-xml":
                 self.assertTrue(raw.startswith(b"<entry "))
                 self.assertTrue(raw.endswith(b"</entry>"))
@@ -680,7 +682,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 
@@ -689,7 +691,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 
@@ -698,7 +700,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 

@@ -78,11 +78,13 @@ if sys.version_info[0] >= 3:
     fixers = refactor.get_fixers_from_package("lib2to3.fixes")
     fixers.remove("lib2to3.fixes.fix_print")  # Already using print function
     rt = refactor.RefactoringTool(fixers)
-    assert rt.refactor_docstring(">>> print(2+2)\n4\n", "example1") == \
-                                 ">>> print(2+2)\n4\n"
-    assert rt.refactor_docstring('>>> print("Two plus two is", 2+2)\n'
-                                 'Two plus two is 4\n', "example2") == \
-                                 '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
+    assert rt.refactor_docstring(
+        ">>> print(2+2)\n4\n", "example1") == \
+        ">>> print(2+2)\n4\n"
+    assert rt.refactor_docstring(
+        '>>> print("Two plus two is", 2+2)\n'
+        'Two plus two is 4\n', "example2") == \
+        '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
 # Cache this to restore the cwd at the end of the tests
 original_path = os.path.abspath(".")

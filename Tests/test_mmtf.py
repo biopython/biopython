@@ -30,7 +30,7 @@ class ParseMMTF(unittest.TestCase):
             self.assertEqual(mmtf_atom.occupancy, mmcif_atom.occupancy)
             self.assertEqual(mmtf_atom.altloc, mmcif_atom.altloc)
             self.assertEqual(mmtf_atom.full_id,
-                                   mmcif_atom.full_id)  # (structure id, model id, chain id, residue id, atom id)
+                             mmcif_atom.full_id)  # (structure id, model id, chain id, residue id, atom id)
             self.assertEqual(mmtf_atom.id, mmcif_atom.name)  # id of atom is the atom name (e.g. "CA")
             # self.assertEqual(mmtf_atom.serial_number,mmcif_atom.serial_number) # mmCIF serial number is none
             self.assertEqual(mmtf_atom - mmtf_atom, 0)

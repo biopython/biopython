@@ -98,12 +98,12 @@ class ExampleManagerTest(unittest.TestCase):
 
         manager = ExampleManager(1.0, 0)
         manager.add_examples(self.examples)
-        self.assertEqual(len(manager.train_examples) == self.num_examples,
+        self.assertEqual(len(manager.train_examples), self.num_examples,
                          "Did not partition correctly to train_examples.")
 
         manager = ExampleManager(0, 1.0)
         manager.add_examples(self.examples)
-        self.assertEqual(len(manager.validation_examples) == self.num_examples,
+        self.assertEqual(len(manager.validation_examples), self.num_examples,
                          "Did not partition correctly to validation_examples.")
 
     def test_value_error(self):
