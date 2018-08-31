@@ -91,7 +91,7 @@ class AsHandleTestCase(unittest.TestCase):
 
             self.assertFalse(handle.closed,
                              "Exiting as_handle given a file-like object "
-                             "cshould not lose the file")
+                             "should not close the file")
 
     def test_string_path(self):
         "Test as_handle with a string path argument"
