@@ -63,8 +63,8 @@ class ClustalOmegaTestCase(unittest.TestCase):
 
         # Test if ClustalOmega executed successfully.
         self.assertTrue(error.strip() == "" or
-               error.startswith("WARNING: Sequence type is DNA.") or
-               error.startswith("WARNING: DNA alignment is still experimental."))
+                        error.startswith("WARNING: Sequence type is DNA.") or
+                        error.startswith("WARNING: DNA alignment is still experimental."))
 
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
@@ -214,10 +214,10 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         newtree_file = "temp_test.dnd"
 
         cline = ClustalOmegaCommandline(clustalo_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    guidetree_out=newtree_file,
-                                    outfmt="clustal")
+                                        infile=input_file,
+                                        outfile=output_file,
+                                        guidetree_out=newtree_file,
+                                        outfmt="clustal")
 
         self.standard_test_procedure(cline)
         cline.guidetree_out = "temp with space.dnd"

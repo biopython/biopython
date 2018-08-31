@@ -39,7 +39,7 @@ class InterproscanXmlCases(unittest.TestCase):
         # test parsed values of qresult
         self.assertEqual('AT5G23090.4', qresult.id)
         self.assertEqual('pacid=19665592 transcript=AT5G23090.4 locus=AT5G23090 ID=AT5G23090.4.TAIR10 annot-version=TAIR10',
-                qresult.description)
+                         qresult.description)
         self.assertEqual(4, len(qresult))
 
         hit = qresult[0]

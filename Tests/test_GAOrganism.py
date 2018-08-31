@@ -57,16 +57,15 @@ class CreatePopulationTest(unittest.TestCase):
         new_pop = Organism.function_population(genome_generator,
                                                num_orgs, fitness_calculator)
 
-        assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pop))
-
+        self.assertEqual(len(new_pop), num_orgs, "Expected %s organisms, "
+                         "got %s" % (num_orgs, len(new_pop)))
         for org in new_pop:
-            assert isinstance(org, Organism.Organism), \
-                   "Expected to get an organism, got %r" % org
+            self.assertIsInstance(org, Organism.Organism,
+                                  "Expected to get an organism, got %r" % org)
 
             exp_fit = fitness_calculator(org.genome)
-            assert org.fitness == exp_fit, \
-                   "Expected fitness of %s, got %s" % (org.fitness, exp_fit)
+            self.assertEqual(org.fitness, exp_fit, "Expected fitness of %s, "
+                             "got %s" % (org.fitness, exp_fit))
 
     def test_random_population(self):
         """Create a population randomly from a alphabet.
@@ -76,20 +75,20 @@ class CreatePopulationTest(unittest.TestCase):
         new_pop = Organism.random_population(self.alphabet, genome_size,
                                              num_orgs, fitness_calculator)
 
-        assert len(new_pop) == num_orgs, "Expected %s organisms, got %s" \
-               % (num_orgs, len(new_pop))
+        self.assertEqual(len(new_pop), num_orgs, "Expected %s organisms, "
+                         "got %s " % (num_orgs, len(new_pop)))
 
         for org in new_pop:
-            assert isinstance(org, Organism.Organism), \
-                   "Expected to get an organism, got %r" % org
+            self.assertIsInstance(org, Organism.Organism,
+                                  "Expected to get an organism, got %r" % org)
 
             exp_fit = fitness_calculator(org.genome)
-            assert org.fitness == exp_fit, \
-                   "Expected fitness of %s, got %s" % (org.fitness, exp_fit)
+            self.assertEqual(org.fitness, exp_fit, "Expected fitness of %s, "
+                             "got %s" % (org.fitness, exp_fit))
 
-            assert len(org.genome) == genome_size, \
-                   "Expected genome size of %s, got %s" % (len(org.genome),
-                                                           genome_size)
+            self.assertEqual(len(org.genome), genome_size, "Expected genome "
+                             "size of %s, got %s"
+                             % (len(org.genome), genome_size))
 
     def test_random_population_types(self):
         """Creating a random population with different types of alphabets.
@@ -131,24 +130,24 @@ class OrganismTest(unittest.TestCase):
         dif_genome = MutableSeq("1111", self.alphabet)
         dif_organism = Organism.Organism(dif_genome, fitness_calculator)
 
-        assert str(self.organism) == str(same_organism), \
-               "Comparison doesn't work for identical organisms."
+        self.assertEqual(str(self.organism), str(same_organism),
+                         "Comparison doesn't work for identical organisms.")
 
-        assert str(self.organism) != str(dif_organism), \
-               "Comparison doesn't work for different organism."
+        self.assertNotEqual(str(self.organism), str(dif_organism),
+                            "Comparison doesn't work for different organism.")
 
     def test_organism_fitness(self):
         """Test the ability to deal with the fitness of the genome.
         """
-        assert self.organism.fitness == 1234, \
-               "Unexpected fitness %s" % self.organism.fitness
+        self.assertEqual(self.organism.fitness, 1234,
+                         "Unexpected fitness %s" % self.organism.fitness)
 
         new_genome = MutableSeq("1111", self.alphabet)
         self.organism.genome = new_genome
         self.organism.recalculate_fitness()
 
-        assert self.organism.fitness == 1111, \
-               "Unexpected fitness %s" % self.organism.fitness
+        self.assertEqual(self.organism.fitness, 1111,
+                         "Unexpected fitness %s" % self.organism.fitness)
 
     def test_organism_copy(self):
         """Test copying of organisms.
@@ -157,8 +156,8 @@ class OrganismTest(unittest.TestCase):
 
         new_organism.genome.append("1")
 
-        assert str(new_organism.genome) != str(self.organism.genome), \
-               "Did not provide a copy of the organism."
+        self.assertNotEqual(str(new_organism.genome), str(self.organism.genome),
+                            "Did not provide a copy of the organism.")
 
     def test_provide_fitness(self):
         """Test that providing a pre-calculated fitness works.

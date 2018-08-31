@@ -250,16 +250,18 @@ class OrganismGraphicTest(unittest.TestCase):
         sys.stdout = save_stdout
 
         self.assertTrue(expected_string in properties,
-               "Unexpected results from dumpProperties: \n %s" % properties)
+                        "Unexpected results from dumpProperties: \n %s"
+                        % properties)
 
         properties = test_widget.getProperties()
         self.assertEqual(properties["label_size"], 6,
-               "Unexpected results from getProperties: %s" % properties)
+                         "Unexpected results from getProperties: %s"
+                         % properties)
 
         test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(test_widget.start_x_position, 12,
-               "setProperties doesn't seem to work right: %s"
-               % test_widget.start_x_position)
+                         "setProperties doesn't seem to work right: %s"
+                         % test_widget.start_x_position)
 
 
 class OrganismSubAnnotationsTest(unittest.TestCase):
@@ -454,10 +456,10 @@ class ChromosomeCountTest(unittest.TestCase):
 
         seg_info = self.count_display.get_segment_info()
 
-        assert seg_info[test_count_num][0] == test_count_value, \
-               "Did not set and retrieve counts correctly."
-        assert seg_info[test_label_num][1] == test_label_value, \
-               "Did not set and retrieve label correctly."
+        self.assertEqual(seg_info[test_count_num][0], test_count_value,
+                         "Did not set and retrieve counts correctly.")
+        self.assertEqual(seg_info[test_label_num][1], test_label_value,
+                         "Did not set and retrieve label correctly.")
 
 
 if __name__ == "__main__":

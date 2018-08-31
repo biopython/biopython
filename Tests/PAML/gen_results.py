@@ -21,16 +21,16 @@ def codeml(vers=None, verbose=False):
     else:
         versions = VERSIONS
     tests = [("aa_model0", "aa_alignment.phylip", "species.tree"),
-            ("aa_pairwise", "aa_alignment.phylip", "species.tree"),
-            ("all_NSsites", "alignment.phylip", "species.tree"),
-            ("branchsiteA", "alignment.phylip", "species.tree"),
-            ("clademodelC", "alignment.phylip", "species.tree"),
-            ("freeratio", "alignment.phylip", "species.tree"),
-            ("ngene2_mgene02", "lysinYangSwanson2002.nuc", "lysin.trees"),
-            ("ngene2_mgene34", "lysinYangSwanson2002.nuc", "lysin.trees"),
-            ("pairwise", "alignment.phylip", "species.tree"),
-            ("SE", "alignment.phylip", "species.tree"),
-            ("m2a_rel", "alignment.phylip", "species.tree")]
+             ("aa_pairwise", "aa_alignment.phylip", "species.tree"),
+             ("all_NSsites", "alignment.phylip", "species.tree"),
+             ("branchsiteA", "alignment.phylip", "species.tree"),
+             ("clademodelC", "alignment.phylip", "species.tree"),
+             ("freeratio", "alignment.phylip", "species.tree"),
+             ("ngene2_mgene02", "lysinYangSwanson2002.nuc", "lysin.trees"),
+             ("ngene2_mgene34", "lysinYangSwanson2002.nuc", "lysin.trees"),
+             ("pairwise", "alignment.phylip", "species.tree"),
+             ("SE", "alignment.phylip", "species.tree"),
+             ("m2a_rel", "alignment.phylip", "species.tree")]
 
     for test in tests:
         print(test[0])
@@ -65,7 +65,7 @@ def baseml(vers=None, verbose=False):
     else:
         versions = VERSIONS
     tests = [("model", list(range(0, 9))), ("nhomo", [1, 3, 4]),
-            ("nparK", list(range(1, 5))), ("alpha1rho1", None), ("SE", None)]
+             ("nparK", list(range(1, 5))), ("alpha1rho1", None), ("SE", None)]
     alignment = os.path.join("Alignments", "alignment.phylip")
     tree = os.path.join("Trees", "species.tree")
     for test in tests:
@@ -79,28 +79,28 @@ def baseml(vers=None, verbose=False):
                             test[0] == "nparK" and n in [3, 4]):
                         continue
                     print("\t\tn = {0}".format(n))
-                    ctl_file = os.path.join("Control_files", "baseml",
-                        "{0}{1}.ctl".format(test[0], n))
+                    ctl_file = (os.path.join("Control_files", "baseml",
+                                "{0}{1}.ctl".format(test[0], n)))
                     bml.read_ctl_file(ctl_file)
                     bml.alignment = alignment
                     bml.tree = tree
                     out_file = "{0}{1}-{2}.out".format(test[0], n, version)
-                    bml.out_file = os.path.join("Results", "baseml", test[0],
-                        out_file)
+                    bml.out_file = (os.path.join("Results", "baseml", test[0],
+                                    out_file))
                     bin = "baseml{0}".format(version)
                     bml.run(command=bin, verbose=verbose)
             else:
                 if (version in ["4_3", "4_4", "4_4c", "4_5"] and
                         test[0] == "alpha1rho1"):
                     continue
-                ctl_file = os.path.join("Control_files", "baseml",
-                    "{0}.ctl".format(test[0]))
+                ctl_file = (os.path.join("Control_files", "baseml",
+                            "{0}.ctl".format(test[0])))
                 bml.read_ctl_file(ctl_file)
                 bml.alignment = alignment
                 bml.tree = tree
                 out_file = "{0}-{1}.out".format(test[0], version)
-                bml.out_file = os.path.join("Results", "baseml", test[0],
-                    out_file)
+                bml.out_file = (os.path.join("Results", "baseml", test[0],
+                                out_file))
                 bin = "baseml{0}".format(version)
                 bml.run(command=bin, verbose=verbose)
 
@@ -117,8 +117,8 @@ def yn00(vers=None, verbose=False):
         yn = yn00.Yn00()
         for version in versions:
             print("\t{0}".format(version.replace('_', '.')))
-            ctl_file = os.path.join("Control_files", "yn00",
-                "{0}.ctl".format(test))
+            ctl_file = (os.path.join("Control_files", "yn00",
+                        "{0}.ctl".format(test)))
             yn.read_ctl_file(ctl_file)
             out_file = "{0}-{1}.out".format(test, version)
             yn.out_file = os.path.join("Results", 'yn00', out_file)
