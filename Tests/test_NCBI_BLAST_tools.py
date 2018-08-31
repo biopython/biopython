@@ -87,10 +87,11 @@ class Pairwise(unittest.TestCase):
     def test_blastp(self):
         """Pairwise BLASTP search"""
         global exe_names
-        cline = Applications.NcbiblastpCommandline(exe_names["blastp"],
-                        query="Fasta/rose.pro",
-                        subject="GenBank/NC_005816.faa",
-                        evalue=1)
+        cline = Applications.NcbiblastpCommandline(
+            exe_names["blastp"],
+            query="Fasta/rose.pro",
+            subject="GenBank/NC_005816.faa",
+            evalue=1)
         self.assertEqual(str(cline), _escape_filename(exe_names["blastp"]) +
                          " -query Fasta/rose.pro -evalue 1" +
                          " -subject GenBank/NC_005816.faa")
@@ -123,10 +124,11 @@ class Pairwise(unittest.TestCase):
     def test_blastn(self):
         """Pairwise BLASTN search"""
         global exe_names
-        cline = Applications.NcbiblastnCommandline(exe_names["blastn"],
-                        query="GenBank/NC_005816.ffn",
-                        subject="GenBank/NC_005816.fna",
-                        evalue="0.000001")
+        cline = Applications.NcbiblastnCommandline(
+            exe_names["blastn"],
+            query="GenBank/NC_005816.ffn",
+            subject="GenBank/NC_005816.fna",
+            evalue="0.000001")
         self.assertEqual(str(cline), _escape_filename(exe_names["blastn"]) +
                          " -query GenBank/NC_005816.ffn -evalue 0.000001" +
                          " -subject GenBank/NC_005816.fna")
@@ -146,10 +148,11 @@ class Pairwise(unittest.TestCase):
     def test_tblastn(self):
         """Pairwise TBLASTN search"""
         global exe_names
-        cline = Applications.NcbitblastnCommandline(exe_names["tblastn"],
-                        query="GenBank/NC_005816.faa",
-                        subject="GenBank/NC_005816.fna",
-                        evalue="1e-6")
+        cline = Applications.NcbitblastnCommandline(
+            exe_names["tblastn"],
+            query="GenBank/NC_005816.faa",
+            subject="GenBank/NC_005816.fna",
+            evalue="1e-6")
         self.assertEqual(str(cline), _escape_filename(exe_names["tblastn"]) +
                          " -query GenBank/NC_005816.faa -evalue 1e-6" +
                          " -subject GenBank/NC_005816.fna")
@@ -292,8 +295,8 @@ class CheckCompleteArgList(unittest.TestCase):
                           "update Biopython, or report this issue if you are "
                           "already using the latest version. (Extra args: %s; "
                           "Missing: %s)" % (exe_name,
-                          ",".join(sorted(extra)),
-                          ",".join(sorted(missing))))
+                                            ",".join(sorted(extra)),
+                                            ",".join(sorted(missing))))
 
         # An almost trivial example to test any validation
         if "-query" in names:

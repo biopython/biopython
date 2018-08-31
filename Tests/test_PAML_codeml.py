@@ -133,53 +133,53 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.run, ctl_file=list())
+                          self.cml.run, ctl_file=list())
 
     def testCtlFileExistsOnRun(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.run, ctl_file="nonexistent")
+                          self.cml.run, ctl_file="nonexistent")
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.cml.read_ctl_file, list())
+                          self.cml.read_ctl_file, list())
         self.assertRaises((AttributeError, KeyError),
-            self.cml.read_ctl_file, self.bad_ctl_file1)
+                          self.cml.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError,
-            self.cml.read_ctl_file, self.bad_ctl_file2)
+                          self.cml.read_ctl_file, self.bad_ctl_file2)
         self.assertRaises(TypeError,
-            self.cml.read_ctl_file, self.bad_ctl_file3)
+                          self.cml.read_ctl_file, self.bad_ctl_file3)
         target_options = {"noisy": 0,
-                        "verbose": 0,
-                        "runmode": 0,
-                        "seqtype": 1,
-                        "CodonFreq": 2,
-                        "ndata": None,
-                        "clock": 0,
-                        "aaDist": None,
-                        "aaRatefile": None,
-                        "model": 0,
-                        "NSsites": [0],
-                        "icode": 0,
-                        "Mgene": 0,
-                        "fix_kappa": 0,
-                        "kappa": 4.54006,
-                        "fix_omega": 0,
-                        "omega": 1,
-                        "fix_alpha": 1,
-                        "alpha": 0,
-                        "Malpha": 0,
-                        "ncatG": None,
-                        "getSE": 0,
-                        "RateAncestor": 0,
-                        "Small_Diff": None,
-                        "cleandata": 1,
-                        "fix_blength": 1,
-                        "method": 0,
-                        "rho": None,
-                        "fix_rho": None}
+                          "verbose": 0,
+                          "runmode": 0,
+                          "seqtype": 1,
+                          "CodonFreq": 2,
+                          "ndata": None,
+                          "clock": 0,
+                          "aaDist": None,
+                          "aaRatefile": None,
+                          "model": 0,
+                          "NSsites": [0],
+                          "icode": 0,
+                          "Mgene": 0,
+                          "fix_kappa": 0,
+                          "kappa": 4.54006,
+                          "fix_omega": 0,
+                          "omega": 1,
+                          "fix_alpha": 1,
+                          "alpha": 0,
+                          "Malpha": 0,
+                          "ncatG": None,
+                          "getSE": 0,
+                          "RateAncestor": 0,
+                          "Small_Diff": None,
+                          "cleandata": 1,
+                          "fix_blength": 1,
+                          "method": 0,
+                          "rho": None,
+                          "fix_rho": None}
         self.cml.read_ctl_file(self.ctl_file)
         # Compare the dictionary keys:
         self.assertEqual(sorted(self.cml._options), sorted(target_options))
@@ -190,15 +190,15 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileExistsOnRead(self):
         self.assertRaises((EnvironmentError, IOError),
-            self.cml.read_ctl_file, ctl_file="nonexistent")
+                          self.cml.read_ctl_file, ctl_file="nonexistent")
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            codeml.read, list())
+                          codeml.read, list())
 
     def testResultsExist(self):
         self.assertRaises((EnvironmentError, IOError),
-            codeml.read, "nonexistent")
+                          codeml.read, "nonexistent")
 
     def testResultsParsable(self):
         self.assertRaises(ValueError, codeml.read, self.results_file)
@@ -207,8 +207,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "SE")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -229,8 +229,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "all_NSsites")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There should be 4 top-level items: 'codon model', 'model',
@@ -248,7 +248,7 @@ class ModTest(unittest.TestCase):
                 self.assertIn("parameters", model, version_msg)
                 params = model["parameters"]
                 self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
-                    version_msg)
+                                 version_msg)
                 self.assertIn("branches", params, version_msg)
                 branches = params["branches"]
                 # There are 7 branches in the test case (specific to these
@@ -256,14 +256,14 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(branches), 7, version_msg)
                 if "site classes" in params:
                     self.assertEqual(len(params["site classes"]),
-                                 SITECLASSES[model_num], version_msg)
+                                     SITECLASSES[model_num], version_msg)
 
     def testParseNSsite3(self):
         res_dir = os.path.join(self.results_dir, "codeml", "NSsite3")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There should be 5 top-level items: 'codon model', 'model',
@@ -272,7 +272,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results), 5, version_msg)
             self.assertIn('site-class model', results, version_msg)
             self.assertEqual(results['site-class model'], 'discrete',
-                    version_msg)
+                             version_msg)
             self.assertIn("NSsites", results, version_msg)
             # There should be 1 NSsites classe: 3
             self.assertEqual(len(results["NSsites"]), 1, version_msg)
@@ -284,7 +284,7 @@ class ModTest(unittest.TestCase):
             self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
             self.assertEqual(len(params), SITECLASS_PARAMS[3],
-                version)
+                             version)
             self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             self.assertEqual(len(site_classes), 4, version_msg)
@@ -293,8 +293,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "branchsiteA")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There are 5 top-level items in this case:
@@ -315,7 +315,7 @@ class ModTest(unittest.TestCase):
             site_classes = params["site classes"]
             # Branch Site A adds another site class
             self.assertEqual(len(site_classes), SITECLASSES[2] + 1,
-                version)
+                             version)
             for class_num in [0, 1, 2, 3]:
                 self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
@@ -326,11 +326,11 @@ class ModTest(unittest.TestCase):
 
     def testParseCladeModelC(self):
         cladeC_res_dir = os.path.join(self.results_dir, "codeml",
-            "clademodelC")
+                                      "clademodelC")
         for results_file in os.listdir(cladeC_res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(cladeC_res_dir, results_file)
             results = codeml.read(results_path)
             # 5 top-level items again in this case
@@ -349,7 +349,7 @@ class ModTest(unittest.TestCase):
             self.assertIn("site classes", params, version_msg)
             site_classes = params["site classes"]
             self.assertEqual(len(site_classes), SITECLASSES[2],
-                version)
+                             version)
             for class_num in [0, 1, 2]:
                 self.assertIn(class_num, site_classes, version_msg)
                 site_class = site_classes[class_num]
@@ -362,8 +362,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene02")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -385,8 +385,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene1")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -403,8 +403,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene34")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -429,8 +429,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "freeratio")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -457,8 +457,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise models have an extra top-level item: pairwise
@@ -478,8 +478,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertIn("pairwise", results)
@@ -503,8 +503,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Amino Acid analysis has different top-levels:
@@ -525,8 +525,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise AA analysis has one top-level fewer than non-pairwise
@@ -557,8 +557,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "m2a_rel")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version %s" \
-                        % version.replace('_', '.')
+            version_msg = ("Improper parsing for version %s"
+                           % version.replace('_', '.'))
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertIn("NSsites", results)

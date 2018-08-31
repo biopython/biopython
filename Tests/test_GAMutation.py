@@ -62,8 +62,8 @@ class MutationHelper(object):
                 num_mutations += 1
 
         percent_mutants = float(num_mutations) / float(self.num_trials)
-        assert percent_mutants > expected_percent, \
-               "Did not receive an acceptable number of mutations."
+        self.assertGreater(percent_mutants, expected_percent,
+                           "Did not receive an acceptable number of mutations.")
 
     def _never_mutate(self, mutator):
         """Test that a mutator does not cause unexpected mutations.
@@ -172,18 +172,20 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_mutator.type = "same"
         new_org = mutator.mutate(self.org)
-        assert (new_org == self.org), \
-               "Did not retain organism for same fitness."
+        self.assertEqual(new_org, self.org,
+                         "Did not retain organism for same fitness.")
 
         self.test_mutator.type = "lower"
         new_org = mutator.mutate(self.org)
-        assert (new_org == self.org), \
-               "Did not retain organism when crossover had lower fitness."
+        self.assertEqual(new_org, self.org,
+                         "Did not retain organism when crossover "
+                         "had lower fitness.")
 
         self.test_mutator.type = "higher"
         new_org = mutator.mutate(self.org)
-        assert (new_org.fitness > self.org.fitness), \
-                "Did not get new organism when it had higher fitness."
+        self.assertGreater(new_org.fitness, self.org.fitness,
+                           "Did not get new organism when it had "
+                           "higher fitness.")
 
     def test_keep_new(self):
         """Make sure we always keep the new organism when specified.
@@ -192,18 +194,19 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_mutator.type = "same"
         new_org = mutator.mutate(self.org)
-        assert (new_org == self.org), \
-               "Did not retain organism for same fitness."
+        self.assertEqual(new_org, self.org,
+                         "Did not retain organism for same fitness.")
 
         self.test_mutator.type = "lower"
         new_org = mutator.mutate(self.org)
-        assert (new_org.fitness < self.org.fitness), \
-               "Did not get new organism when it had lower fitness."
+        self.assertLess(new_org.fitness, self.org.fitness,
+                        "Did not get new organism when it had lower fitness.")
 
         self.test_mutator.type = "higher"
         new_org = mutator.mutate(self.org)
-        assert (new_org.fitness > self.org.fitness), \
-                "Did not get new organism under higher fitness conditions."
+        self.assertGreater(new_org.fitness, self.org.fitness,
+                           "Did not get new organism under higher "
+                           "fitness conditions.")
 
 
 if __name__ == "__main__":
