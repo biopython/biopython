@@ -89,8 +89,8 @@ class PatternIOTest(unittest.TestCase):
         with open(self.test_file, "r") as input_handle:
             read_schemas = self.pattern_io.read(input_handle)
         self.assertEqual(schemas, read_schemas,
-                             "Read incorrect schemas %s, expected %s."
-                             % (read_schemas, schemas))
+                         "Read incorrect schemas %s, expected %s."
+                         % (read_schemas, schemas))
 
         # --- make sure inappropriate alphabets are reported
         schemas = ["GTR", "G*C"]  # '*' not in the unambigous alphabet
@@ -150,7 +150,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
             for pattern in patterns:
                 self.assertIn(pattern, list(self.motifs.keys()),
-                                "Got unexpected pattern %s" % pattern)
+                              "Got unexpected pattern %s" % pattern)
 
     def test_get_top_percentage(self):
         """Retrieve the top percentge of patterns from the repository."""
@@ -162,7 +162,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
             for pattern in patterns:
                 self.assertIn(pattern, list(self.motifs.keys()),
-                                "Got unexpected pattern %s" % pattern)
+                              "Got unexpected pattern %s" % pattern)
 
     def test_get_top(self):
         """Retrieve a certain number of the top patterns."""
@@ -174,7 +174,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
             for pattern in patterns:
                 self.assertIn(pattern, list(self.motifs.keys()),
-                                "Got unexpected pattern %s" % pattern)
+                              "Got unexpected pattern %s" % pattern)
 
     def test_get_differing(self):
         """Retrieve patterns from both sides of the list (top and bottom)."""
@@ -252,9 +252,9 @@ class MotifFinderTest(unittest.TestCase):
 
     def test_find_differences(self):
         """Find the difference in motif counts between two sets of sequences."""
-        motif_repository = \
+        motif_repository = (
                self.motif_finder.find_differences(self.test_records,
-                                                  self.diff_records, 8)
+                                                  self.diff_records, 8))
 
         top, bottom = motif_repository.get_differing(1, 1)
 

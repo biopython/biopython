@@ -65,7 +65,7 @@ class TogoFields(unittest.TestCase):
                                            'acc_version', 'gi', 'keywords',
                                            'organism', 'common_name',
                                            'taxonomy', 'comment', 'seq']),
-                                           fields)
+                        fields)
 
     def test_ddbj(self):
         """Check supported fields for ddbj database"""
@@ -77,7 +77,7 @@ class TogoFields(unittest.TestCase):
                                            'acc_version', 'gi', 'keywords',
                                            'organism', 'common_name',
                                            'taxonomy', 'comment', 'seq']),
-                                           fields)
+                        fields)
 
     def test_uniprot(self):
         """Check supported fields for uniprot database"""
@@ -100,7 +100,8 @@ class TogoEntry(unittest.TestCase):
         data = Medline.read(handle)
         handle.close()
         self.assertEqual(data["TI"],
-             'From genomics to chemical genomics: new developments in KEGG.')
+                         'From genomics to chemical genomics: '
+                         'new developments in KEGG.')
         self.assertEqual(data["AU"], ['Kanehisa M', 'Goto S', 'Hattori M',
                                       'Aoki-Kinoshita KF', 'Itoh M',
                                       'Kawashima S', 'Katayama T', 'Araki M',
@@ -112,7 +113,8 @@ class TogoEntry(unittest.TestCase):
         data = handle.read().strip()
         handle.close()
         self.assertEqual(data,
-             'From genomics to chemical genomics: new developments in KEGG.')
+                         'From genomics to chemical genomics: '
+                         'new developments in KEGG.')
 
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
@@ -120,7 +122,8 @@ class TogoEntry(unittest.TestCase):
         data = handle.read().strip()
         handle.close()
         self.assertEqual(data,
-             'From genomics to chemical genomics: new developments in KEGG.')
+                         'From genomics to chemical genomics: '
+                         'new developments in KEGG.')
 
     def test_pubmed_16381885_au(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
@@ -166,15 +169,16 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(len(records), 2)
         self.assertEqual(records[0]["TI"],
-             'From genomics to chemical genomics: new developments in KEGG.')
+                         'From genomics to chemical genomics: '
+                         'new developments in KEGG.')
         self.assertEqual(records[0]["AU"], ['Kanehisa M', 'Goto S',
                                             'Hattori M', 'Aoki-Kinoshita KF',
                                             'Itoh M', 'Kawashima S',
                                             'Katayama T', 'Araki M',
                                             'Hirakawa M'])
         self.assertEqual(records[1]["TI"],
-             'DDBJ launches a new archive database with analytical tools ' +
-             'for next-generation sequence data.')
+                         'DDBJ launches a new archive database with '
+                         'analytical tools for next-generation sequence data.')
         self.assertEqual(records[1]["AU"], ['Kaminuma E', 'Mashima J',
                                             'Kodama Y', 'Gojobori T',
                                             'Ogasawara O', 'Okubo K',

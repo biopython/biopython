@@ -125,8 +125,9 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %i vs %i for %r vs %r" % (len(obj_a),
-                len(obj_b), obj_a, obj_b)
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for " \
+            "%r vs %r" % (len(obj_a), len(obj_b), obj_a, obj_b)
+
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
 
@@ -147,7 +148,7 @@ def compare_attrs(obj_a, obj_b, attrs):
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
         if attr in ('_hit', '_query') and (val_a is not None and val_b is
-                not None):
+                                           not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
                 assert str(val_a.seq) == str(val_b.seq), \
@@ -165,7 +166,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
-                    values_b)
+                                                           values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == '_alphabet':
             alph_a = val_a.__class__.__name__

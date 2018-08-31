@@ -390,7 +390,7 @@ class BgzfTests(unittest.TestCase):
         h.flush()
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
-                        ((offset2 << 16) - (offset1 << 16)))
+                         ((offset2 << 16) - (offset1 << 16)))
 
         # Flushing should change the offset
         h.flush()
