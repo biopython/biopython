@@ -109,7 +109,7 @@ def _hw_func(stream, is_locus, has_fisher=False):
     if is_locus:
         hook = "Locus "
     else:
-        hook = " Pop : "
+        hook = "Pop : "
     while line != "":
         if line.startswith(hook):
             stream.readline()
