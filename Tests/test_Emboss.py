@@ -206,11 +206,11 @@ def compare_records(old_list, new_list):
     for old, new in zip(old_list, new_list):
         # Note the name matching is a bit fuzzy, e.g. truncation and
         # no spaces in PHYLIP files.
-        if ((old.id != new.id and
-             old.name != new.name and
-             (old.id not in new.id) and
-             (new.id not in old.id) and
-             (old.id.replace(" ", "_") != new.id.replace(" ", "_")))):
+        if (old.id != new.id and
+                old.name != new.name and
+                (old.id not in new.id) and
+                (new.id not in old.id) and
+                (old.id.replace(" ", "_") != new.id.replace(" ", "_"))):
             raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                              % (old.id, old.name, new.id, new.name))
         if len(old.seq) != len(new.seq):
