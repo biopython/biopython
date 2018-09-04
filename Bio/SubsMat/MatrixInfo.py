@@ -1730,8 +1730,8 @@ del _temp
 
 
 # from https://www.genome.jp/dbget-bin/www_bget?aaindex:GRAR740104,
-# but subtracted from 215 
-# as per original reference now available at 
+# but subtracted from 215
+# as per original reference now available at
 # https://web.archive.org/web/19991111011852/http://www.embl-heidelberg.de:80/~vogt/matrices/grant.cmp
 # which was found to have incorrect amino acid characters (issue 308)
 def _temp():
@@ -1788,8 +1788,9 @@ def _temp():
         ('Y', 'G'): 68, ('Y', 'H'): 132, ('Y', 'I'): 182, ('Y', 'K'): 130,
         ('Y', 'L'): 179, ('Y', 'M'): 179, ('Y', 'N'): 72, ('Y', 'P'): 105,
         ('Y', 'Q'): 116, ('Y', 'R'): 138, ('Y', 'S'): 71, ('Y', 'T'): 123,
-        ('Y', 'W'): 178, ('Y', 'Y'): 215    
+        ('Y', 'W'): 178, ('Y', 'Y'): 215
         }
+
 
 grant = _temp()
 del _temp
