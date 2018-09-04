@@ -19,6 +19,12 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+The "grant" matrix in Bio.SubsMat.MatrixInfo has been replaced as our original
+values taken from Gerhard Vogt's old webpages at EMBL Heidelberg were
+discovered to be in error. The new values have been transformed following
+Vogt's approach, taking the global maximum 215 minus the similarity scores
+from the original paper Grantham (1974), to give a distance measure.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
