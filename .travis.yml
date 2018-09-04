@@ -72,6 +72,7 @@ addons:
     - probcons
     - samtools
     - wise
+    - t-coffee
 
 # We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
 #
