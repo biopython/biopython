@@ -75,6 +75,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Connor T. Skennerton <https://github.com/ctSkennerton>
 - Cymon J Cox <https://github.com/cymon>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
+- Darcy Mason <https://github.com/darcymason>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
