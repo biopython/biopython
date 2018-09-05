@@ -35,6 +35,7 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Darcy Mason (first contribution)
 - Kai Blin
 - Konstantin Vdovkin (first contribution)
 - Maximilian Greil
