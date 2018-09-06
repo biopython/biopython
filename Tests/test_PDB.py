@@ -990,7 +990,7 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(nresidues, 158)
         finally:
             os.remove(filename)
-            
+
     def test_mmcifio_write_residue(self):
         """Write a single residue using MMCIFIO."""
         io = MMCIFIO()
