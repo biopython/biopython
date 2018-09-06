@@ -233,7 +233,7 @@ class MMCIFIO(object):
             return "\n;" + val + "\n;\n"
         elif self._requires_quote(val):
             # Choose quote character
-            if "' " in val:
+            if "'" in val:
                 return "{v: <{width}}".format(v="\"" + val + "\"", width=col_width)
             else:
                 return "{v: <{width}}".format(v="'" + val + "'", width=col_width)
