@@ -85,8 +85,8 @@ class MMCIFIO(object):
                             parent_id = pdb_object.parent.id
                             sb.structure[0]['A'].id = parent_id
                         except ValueError:
-                            pass
-                        sb.structure[0]['A'].add(pdb_object)
+                            parent_id="A"
+                        sb.structure[0][parent_id].add(pdb_object)
                     else:
                         # Atom
                         sb.init_residue('DUM', ' ', 1, ' ')
@@ -233,7 +233,7 @@ class MMCIFIO(object):
             return "\n;" + val + "\n;\n"
         elif self._requires_quote(val):
             # Choose quote character
-            if "' " in val:
+            if "'" in val:
                 return "{v: <{width}}".format(v="\"" + val + "\"", width=col_width)
             else:
                 return "{v: <{width}}".format(v="'" + val + "'", width=col_width)
