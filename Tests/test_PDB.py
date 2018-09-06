@@ -977,19 +977,22 @@ class WriteTest(unittest.TestCase):
     def test_mmcifio_write_structure(self):
         """Write a full structure using MMCIFIO."""
         io = MMCIFIO()
-        struct1 = self.structure
-        # Write full model to temp file
-        io.set_structure(struct1)
-        filenumber, filename = tempfile.mkstemp()
-        os.close(filenumber)
-        try:
-            io.save(filename)
-            struct2 = self.mmcif_parser.get_structure("1a8o", filename)
-            nresidues = len(list(struct2.get_residues()))
-            self.assertEqual(len(struct2), 1)
-            self.assertEqual(nresidues, 158)
-        finally:
-            os.remove(filename)
+        for struct1 in self.structure, self.dna_structure:
+            num_chains = len(struct1)
+            num_residues = len(list(struct1.get_residues()))
+            # Write full model to temp file
+            io.set_structure(struct1)
+            filenumber, filename = tempfile.mkstemp()
+            os.close(filenumber)
+            try:
+                io.save(filename)
+                struct2 = self.mmcif_parser.get_structure("1a8o", filename)
+                nresidues = len(list(struct2.get_residues()))
+                self.assertEqual(len(struct2), num_chains)
+                self.assertEqual(nresidues, num_residues)
+            finally:
+                os.remove(filename)
+
     def test_mmcifio_write_residue(self):
         """Write a single residue using MMCIFIO."""
         io = MMCIFIO()
