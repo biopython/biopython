@@ -85,7 +85,7 @@ class MMCIFIO(object):
                             parent_id = pdb_object.parent.id
                             sb.structure[0]['A'].id = parent_id
                         except ValueError:
-                            parent_id="A"
+                            parent_id = "A"
                         sb.structure[0][parent_id].add(pdb_object)
                     else:
                         # Atom
