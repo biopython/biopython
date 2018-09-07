@@ -165,13 +165,13 @@ class BwaTestCase(unittest.TestCase):
                             "Error generating sam files:\n%s\nOutput starts:%s"
                             % (cmdline, headline))
                         
-        def test_sammem(self):
+        def test_mem(self):
             """Test for generating samfile by paired end sequencing using BWA-MEM."""
             self.create_fasta_index()
 
             cmdline = BwaMemCommandline(bwa_exe)
             cmdline.set_parameter("reference", self.reference_file)
-            cmdline.set_parameter("read_file1", self.infile1)
+            cmdline.set_parameter("read_file", self.infile1)
             cmdline.set_parameter("mate_file", self.infile2)
             stdout, stderr = cmdline(stdout=self.samfile)
 
