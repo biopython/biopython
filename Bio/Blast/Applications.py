@@ -19,6 +19,7 @@ Wrappers for the new NCBI BLAST+ tools (written in C++):
  - NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
  - NcbideltablastCommandline - Protein-Protein domain enhanced lookup time accelerated blast
  - NcbiblastformatterCommandline - Convert ASN.1 to other BLAST output formats
+ - NcbimakeblastdbCommandline - Application to create BLAST databases
 
 For further details, see:
 
@@ -1232,6 +1233,54 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
                     Incompatible with:  remote, subject""")
         ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+
+class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
+    """Wrapper for the NCBI BLAST+ program makeblastdb.
+
+    Application to create BLAST databases.
+
+    Need to add these commands:
+    USAGE
+    makeblastdb
+    # [-h]
+    # [-help]
+    # [-in input_file]
+    [-input_type type]
+
+    -dbtype molecule_type
+
+    [-title database_title]
+    [-parse_seqids]
+    [-hash_index]
+    [-mask_data mask_data_files]
+    [-mask_id mask_algo_ids]
+    [-mask_desc mask_algo_descriptions]
+    [-gi_mask]
+    [-gi_mask_name gi_based_mask_names]
+    # [-out database_name]
+    [-max_file_sz number_of_bytes]
+    [-logfile File_Name]
+    [-taxid TaxID]
+    [-taxid_map TaxIDMapFile]
+    # [-version]
+    """
+
+    def __init__(self, cmd="blast_formatter", **kwargs):
+        """Initialize the class."""
+        self.parameters = [
+            # Input options
+            _Option(["-dbtype", "dbtype"],
+                    "Molecule type of target db ('nucl' or 'prot')",
+                    equate=False,
+                    is_required=True,
+                    checker_function=lambda x: x == 'nucl' or x == 'prot'),
+            _Option(["-in", "input_file"],
+                    "input_file",
+                    filename=True,
+                    equate=False),
+        ]
+        _NcbibaseblastCommandline.__init__(self, cmd, **kwargs)
 
 
 def _test():
