@@ -1238,35 +1238,30 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
 class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
     """Wrapper for the NCBI BLAST+ program makeblastdb.
 
-    Application to create BLAST databases.
+    This is a wrapper for the NCBI BLAST+ makeblastdb application
+    to create BLAST databases. By default, this creates a blast database
+    with the same name as the input file.
 
-    Need to add these commands:
-    USAGE
-    makeblastdb
-    # [-h]
-    # [-help]
-    # [-in input_file]
-    [-input_type type]
+    >>> from Bio.Blast.Applications import NcbimakeblastdbCommandline
+    >>> cline = NcbimakeblastdbCommandline(dbtype="prot",
+    ...                                   input_file="NC_005816.faa")
+    >>> cline
+    NcbimakeblastdbCommandline(cmd='makeblastdb', dbtype='prot', input_file='NC_005816.faa')
+    >>> print(cline)
+    makeblastdb -dbtype prot -in NC_005816.faa
 
-    -dbtype molecule_type
-
-    [-title database_title]
-    [-parse_seqids]
-    [-hash_index]
-    [-mask_data mask_data_files]
-    [-mask_id mask_algo_ids]
-    [-mask_desc mask_algo_descriptions]
-    [-gi_mask]
-    [-gi_mask_name gi_based_mask_names]
-    # [-out database_name]
-    [-max_file_sz number_of_bytes]
-    [-logfile File_Name]
-    [-taxid TaxID]
-    [-taxid_map TaxIDMapFile]
-    # [-version]
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
 
-    def __init__(self, cmd="blast_formatter", **kwargs):
+    def _input_type_checker(command, x):
+        expression = (x == 'asn1_bin' or
+                      x == 'asn1_txt' or
+                      x == 'blastdb' or
+                      x == 'fasta')
+        return expression
+
+    def __init__(self, cmd="makeblastdb", **kwargs):
         """Initialize the class."""
         self.parameters = [
             # Input options
@@ -1276,11 +1271,86 @@ class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
                     is_required=True,
                     checker_function=lambda x: x == 'nucl' or x == 'prot'),
             _Option(["-in", "input_file"],
-                    "input_file",
+                    "Input file/database name",
+                    filename=True,
+                    equate=False),
+            _Option(["-input_type", "input_type"],
+                    "Type of the data specified in input_file. "
+                    "Default = 'fasta'",
+                    filename=False,
+                    equate=False,
+                    checker_function=self._input_type_checker),
+            _Option(["-title", "title"],
+                    "Title for BLAST database",
+                    filename=False,
+                    equate=False),
+            _Switch(["-parse_seqids", "parse_seqids"],
+                    "Option to parse seqid for FASTA input if set, for all "
+                    "other input types seqids are parsed automatically"),
+            _Switch(["-hash_index", "hash_index"],
+                    "Create index of sequence hash values."),
+            _Option(["-mask_data", "mask_data"],
+                    "Comma-separated list of input files containing masking "
+                    "data as produced by NCBI masking applications "
+                    "(e.g. dustmasker, segmasker, windowmasker)",
+                    filename=True,
+                    equate=False),
+            _Option(["-mask_id", "mask_id"],
+                    "Comma-separated list of strings to uniquely identify the "
+                    "masking algorithm",
+                    filename=False,
+                    equate=False),
+            _Option(["-mask_desc", "mask_desc"],
+                    "Comma-separated list of free form strings to describe "
+                    "the masking algorithm details",
+                    filename=False,
+                    equate=False),
+            _Switch(["-gi_mask", "gi_mask"],
+                    "Create GI indexed masking data."),
+            _Option(["-gi_mask_name", "gi_mask_name"],
+                    "Comma-separated list of masking data output files.",
+                    filename=False,
+                    equate=False),
+            _Option(["-max_file_sz", "max_file_sz"],
+                    "Maximum file size for BLAST database files. "
+                    "Default = '1GB'",
+                    filename=False,
+                    equate=False),
+            _Option(["-logfile", "logfile"],
+                    "File to which the program log should be redirected",
+                    filename=True,
+                    equate=False),
+            _Option(["-taxid", "taxid"],
+                    "Taxonomy ID to assign to all sequences",
+                    filename=False,
+                    equate=False,
+                    checker_function=lambda x: type(x)(int(x)) == x),
+            _Option(["-taxid_map", "taxid_map"],
+                    "Text file mapping sequence IDs to taxonomy IDs. "
+                    "Format:<SequenceId> <TaxonomyId><newline>",
                     filename=True,
                     equate=False),
         ]
         _NcbibaseblastCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"mask_id": ["gi_mask"],
+                         "gi_mask": ["mask_id"],
+                         "taxid": ["taxid_map"]}
+        self._validate_incompatibilities(incompatibles)
+        if self.mask_id and not self.mask_data:
+            raise ValueError("Option mask_id requires mask_data to be set.")
+        if self.mask_desc and not self.mask_id:
+            raise ValueError("Option mask_desc requires mask_id to be set.")
+        if self.gi_mask and not self.parse_seqids:
+            raise ValueError("Option gi_mask requires parse_seqids to be set.")
+        if self.gi_mask_name and not (self.mask_data and self.gi_mask):
+            raise ValueError("Option gi_mask_name requires mask_data and "
+                             "gi_mask to be set.")
+        if self.taxid_map and not self.parse_seqids:
+            raise ValueError("Option taxid_map requires parse_seqids "
+                             "to be set.")
+        AbstractCommandline._validate(self)
 
 
 def _test():
