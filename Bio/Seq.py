@@ -219,7 +219,10 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -229,7 +232,36 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -1853,13 +1885,13 @@ class MutableSeq(object):
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
             return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
-                                                  str(self[:54]),
-                                                  str(self[-3:]),
-                                                  a)
+                                                    str(self[:54]),
+                                                    str(self[-3:]),
+                                                    a)
         else:
             return "{0}('{1}'{2!s})".format(self.__class__.__name__,
-                                            str(self),
-                                            a)
+                                              str(self),
+                                              a)
 
     def __str__(self):
         """Return the full sequence as a python string.
@@ -1929,7 +1961,10 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data < other.data
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -1941,7 +1976,40 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data <= other.data
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data > other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data >= other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
