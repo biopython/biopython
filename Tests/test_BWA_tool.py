@@ -164,7 +164,7 @@ class BwaTestCase(unittest.TestCase):
             self.assertTrue(headline.startswith("@SQ"),
                             "Error generating sam files:\n%s\nOutput starts:%s"
                             % (cmdline, headline))
-       
+
         def test_mem(self):
             """Test for generating samfile by paired end sequencing using BWA-MEM."""
             self.create_fasta_index()
