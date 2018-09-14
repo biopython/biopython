@@ -23,7 +23,6 @@ class BwaIndexCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> index_cmd = BwaIndexCommandline(infile=reference_genome, algorithm="bwtsw")
@@ -74,7 +73,6 @@ class BwaAlignCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaAlignCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -188,7 +186,6 @@ class BwaSamseCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaSamseCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -238,7 +235,6 @@ class BwaSampeCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaSampeCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file1 = "/path/to/read_1.fq"
@@ -315,7 +311,6 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaBwaswCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -400,7 +395,6 @@ class BwaMemCommandline(AbstractCommandline):
 
     Examples
     --------
-    
     >>> from Bio.Sequencing.Applications import BwaMemCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
