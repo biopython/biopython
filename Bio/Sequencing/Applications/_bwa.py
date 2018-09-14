@@ -399,7 +399,7 @@ class BwaMemCommandline(AbstractCommandline):
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
     >>> output_sam_file = "/path/to/output.sam"
-    >>> align_cmd = BwaMemCommandline(reference=reference_genome, read_file=read_file)
+    >>> align_cmd = BwaMemCommandline(reference=reference_genome, read_file1=read_file)
     >>> print(align_cmd)
     bwa mem /path/to/reference_genome.fasta /path/to/read_1.fq
 
