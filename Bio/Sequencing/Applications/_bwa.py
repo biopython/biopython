@@ -14,7 +14,6 @@ from Bio.Application import _StaticArgument
 
 class BwaIndexCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) index.
-
     Index database sequences in the FASTA format, equivalent to::
 
         $ bwa index [-p prefix] [-a algoType] [-c] <in.db.fasta>
@@ -23,7 +22,7 @@ class BwaIndexCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaIndexCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> index_cmd = BwaIndexCommandline(infile=reference_genome, algorithm="bwtsw")
@@ -65,7 +64,6 @@ class BwaIndexCommandline(AbstractCommandline):
 
 class BwaAlignCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) aln.
-
     Run a BWA alignment, equivalent to::
 
         $ bwa aln [...] <in.db.fasta> <in.query.fq> > <out.sai>
@@ -74,7 +72,7 @@ class BwaAlignCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaAlignCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -178,7 +176,6 @@ class BwaAlignCommandline(AbstractCommandline):
 
 class BwaSamseCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) samse.
-
     Generate alignments in the SAM format given single-end reads.
     Equvialent to::
 
@@ -188,7 +185,7 @@ class BwaSamseCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaSamseCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -228,7 +225,6 @@ class BwaSamseCommandline(AbstractCommandline):
 
 class BwaSampeCommandline(AbstractCommandline):
     r"""Command line wrapper for Burrows Wheeler Aligner (BWA) sampe.
-
     Generate alignments in the SAM format given paired-end reads.
     Equivalent to::
 
@@ -238,7 +234,7 @@ class BwaSampeCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaSampeCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file1 = "/path/to/read_1.fq"
@@ -306,7 +302,6 @@ class BwaSampeCommandline(AbstractCommandline):
 
 class BwaBwaswCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) bwasw.
-
     Align query sequences from FASTQ files. Equivalent to::
 
         $ bwa bwasw [...] <in.db.fasta> <in.fq>
@@ -315,7 +310,7 @@ class BwaBwaswCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaBwaswCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
@@ -391,7 +386,6 @@ class BwaBwaswCommandline(AbstractCommandline):
 
 class BwaMemCommandline(AbstractCommandline):
     """Command line wrapper for Burrows Wheeler Aligner (BWA) mem.
-
     Run a BWA-MEM alignment, with single- or paired-end reads, equivalent to::
 
         $ bwa mem [...] <in.db.fasta> <in1.fq> <in2.fq> > <out.sam>
@@ -400,7 +394,7 @@ class BwaMemCommandline(AbstractCommandline):
 
     Examples
     --------
-    
+
     >>> from Bio.Sequencing.Applications import BwaMemCommandline
     >>> reference_genome = "/path/to/reference_genome.fasta"
     >>> read_file = "/path/to/read_1.fq"
