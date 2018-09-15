@@ -1235,16 +1235,17 @@ class NcbideltablastCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
+class NcbimakeblastdbCommandline(AbstractCommandline):
     """Wrapper for the NCBI BLAST+ program makeblastdb.
 
     This is a wrapper for the NCBI BLAST+ makeblastdb application
     to create BLAST databases. By default, this creates a blast database
-    with the same name as the input file.
+    with the same name as the input file. The default output location
+    is the same directory as the input.
 
     >>> from Bio.Blast.Applications import NcbimakeblastdbCommandline
     >>> cline = NcbimakeblastdbCommandline(dbtype="prot",
-    ...                                   input_file="NC_005816.faa")
+    ...                                    input_file="NC_005816.faa")
     >>> cline
     NcbimakeblastdbCommandline(cmd='makeblastdb', dbtype='prot', input_file='NC_005816.faa')
     >>> print(cline)
@@ -1254,17 +1255,23 @@ class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
     subprocess module, as described in the Biopython tutorial.
     """
 
-    def _input_type_checker(command, x):
-        expression = (x == 'asn1_bin' or
-                      x == 'asn1_txt' or
-                      x == 'blastdb' or
-                      x == 'fasta')
-        return expression
-
     def __init__(self, cmd="makeblastdb", **kwargs):
         """Initialize the class."""
         self.parameters = [
-            # Input options
+            # Basic input options
+            _Switch(["-h", "h"],
+                    "Print USAGE and DESCRIPTION; ignore other arguments."),
+            _Switch(["-help", "help"],
+                    "Print USAGE, DESCRIPTION and ARGUMENTS description; "
+                    "ignore other arguments."),
+            _Switch(["-version", "version"],
+                    "Print version number;  ignore other arguments."),
+            # Output configuration options
+            _Option(["-out", "out"],
+                    "Output file for alignment.",
+                    filename=True,
+                    equate=False),
+            # makeblastdb specific options
             _Option(["-dbtype", "dbtype"],
                     "Molecule type of target db ('nucl' or 'prot')",
                     equate=False,
@@ -1276,7 +1283,7 @@ class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
                     equate=False),
             _Option(["-input_type", "input_type"],
                     "Type of the data specified in input_file. "
-                    "Default = 'fasta'",
+                    "Default = 'fasta'. Added in BLAST 2.2.26.",
                     filename=False,
                     equate=False,
                     checker_function=self._input_type_checker),
@@ -1331,13 +1338,21 @@ class NcbimakeblastdbCommandline(_NcbibaseblastCommandline):
                     filename=True,
                     equate=False),
         ]
-        _NcbibaseblastCommandline.__init__(self, cmd, **kwargs)
+        AbstractCommandline.__init__(self, cmd, **kwargs)
+
+    def _input_type_checker(command, x):
+        expression = (x == 'asn1_bin' or
+                      x == 'asn1_txt' or
+                      x == 'blastdb' or
+                      x == 'fasta')
+        return expression
 
     def _validate(self):
         incompatibles = {"mask_id": ["gi_mask"],
                          "gi_mask": ["mask_id"],
                          "taxid": ["taxid_map"]}
-        self._validate_incompatibilities(incompatibles)
+        _NcbibaseblastCommandline._validate_incompatibilities(self,
+                                                              incompatibles)
         if self.mask_id and not self.mask_data:
             raise ValueError("Option mask_id requires mask_data to be set.")
         if self.mask_desc and not self.mask_id:
