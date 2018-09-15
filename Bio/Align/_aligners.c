@@ -19,6 +19,9 @@
 #define Iy_MATRIX 0x4
 #define DONE 0x8
 
+#define OVERFLOW_ERROR -1
+#define MEMORY_ERROR -2
+
 #define CHARINDEX(s) (c = s, c >= 'a' ? c - 'a' : c - 'A')
 
 
@@ -33,7 +36,6 @@ typedef struct {
     double score;
     unsigned int trace : 3;
     unsigned int path : 4;
-    Py_ssize_t count;
 } Cell;
 
 typedef struct {
@@ -4171,7 +4173,7 @@ static PyMethodDef PathGenerator_methods[] = {
 
 #define SAFE_ADD(t, s) \
 {   term = t; \
-    if (term > PY_SSIZE_T_MAX - s) return -1; \
+    if (term > PY_SSIZE_T_MAX - s) { count = OVERFLOW_ERROR; goto exit; } \
     s += term; \
 }
 
@@ -4189,7 +4191,7 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
     Py_ssize_t temp;
     Py_ssize_t* counts;
     counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return -1;
+    if (!counts) return MEMORY_ERROR;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) {
         trace = M[0][j].trace;
@@ -4213,10 +4215,9 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
             counts[j] = count;
         }
     }
+exit:
     PyMem_Free(counts);
     return count;
-exit:
-    return -1;
 }
 
 static Py_ssize_t
@@ -4235,7 +4236,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
     Py_ssize_t temp;
     Py_ssize_t* counts;
     counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return -1;
+    if (!counts) return MEMORY_ERROR;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) {
         trace = M[0][j].trace;
@@ -4243,7 +4244,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
         if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
         if (count==0) count = 1;
         counts[j] = count;
-        if (M[0][j].score >= threshold) SAFE_ADD(count, total);
+        if (trace && M[0][j].score >= threshold) SAFE_ADD(count, total);
     }
     for (i = 1; i <= nA; i++) {
         trace = M[i][0].trace;
@@ -4261,13 +4262,13 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
             temp = counts[j];
             if (count==0) count = 1;
             counts[j] = count;
-            if (M[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
         }
     }
-    PyMem_Free(counts);
-    return total;
+    count = total;
 exit:
-    return -1;
+    PyMem_Free(counts);
+    return count;
 }
 
 static Py_ssize_t
@@ -4282,7 +4283,7 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
     const double threshold = self->threshold;
-    Py_ssize_t count = -1;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     Py_ssize_t tempM;
     Py_ssize_t tempIx;
@@ -4359,7 +4360,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     Cell** Iy = self->Iy.affine;
     const double threshold = self->threshold;
     Py_ssize_t term;
-    Py_ssize_t count;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
     Py_ssize_t tempM;
     Py_ssize_t tempIx;
@@ -4397,7 +4398,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (count==0) count = 1;
             tempM = countsM[j];
             countsM[j] = count;
-            if (M[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             trace = Ix[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(tempM, count);
@@ -4405,7 +4406,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j], count);
             tempIx = countsIx[j];
             countsIx[j] = count;
-            if (Ix[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (trace && Ix[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             trace = Iy[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(countsM[j-1], count);
@@ -4413,14 +4414,15 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j-1], count);
             tempIy = countsIy[j];
             countsIy[j] = count;
-            if (Iy[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (trace && Iy[i][j].score >= threshold) SAFE_ADD(count, total);
         }
     }
+    count = total;
 exit:
     if (countsM) PyMem_Free(countsM);
     if (countsIx) PyMem_Free(countsIx);
     if (countsIy) PyMem_Free(countsIy);
-    return total;
+    return count;
 }
 
 static Py_ssize_t
@@ -4437,7 +4439,7 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     CellXY** Ix = self->Ix.general;
     CellXY** Iy = self->Iy.general;
     const double threshold = self->threshold;
-    Py_ssize_t count;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
@@ -4494,6 +4496,7 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     if (M[nA][nB].score > threshold) SAFE_ADD(M[nA][nB].count, count);
     if (Ix[nA][nB].score > threshold) SAFE_ADD(Ix[nA][nB].count, count);
     if (Iy[nA][nB].score > threshold) SAFE_ADD(Iy[nA][nB].count, count);
+exit:
     return count;
 }
 
@@ -4512,7 +4515,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     CellXY** Iy = self->Iy.general;
     const double threshold = self->threshold;
     Py_ssize_t term;
-    Py_ssize_t count;
+    Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
@@ -4523,7 +4526,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(Iy[i-1][j-1].count, count);
             if (count==0) count = 1;
             M[i][j].count = count;
-            if (M[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             tracep = Ix[i][j].traceM;
             if (tracep) {
@@ -4568,7 +4571,9 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             Iy[i][j].count = count;
         }
     }
-    return total;
+    count = total;
+exit:
+    return count;
 }
 
 static Py_ssize_t PathGenerator_length(PathGenerator* self) {
@@ -4630,10 +4635,17 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
         }
         self->length = length;
     }
-    if (length == -1) {
-        PyErr_Format(PyExc_OverflowError,
-                     "number of optimal alignments is larger than %zd",
-                     PY_SSIZE_T_MAX);
+    switch (length) {
+        case OVERFLOW_ERROR:
+            PyErr_Format(PyExc_OverflowError,
+                         "number of optimal alignments is larger than %zd",
+                         PY_SSIZE_T_MAX);
+            break;
+        case MEMORY_ERROR:
+            PyErr_SetString(PyExc_MemoryError, "Out of memory");
+            break;
+        default:
+            break;
     }
     return length;
 }
