@@ -4361,32 +4361,65 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     Py_ssize_t term;
     Py_ssize_t count;
     Py_ssize_t total = 0;
-    for (i = 0; i <= nA; i++) {
-        for (j = 0; j <= nB; j++) {
+    Py_ssize_t tempM;
+    Py_ssize_t tempIx;
+    Py_ssize_t tempIy;
+    Py_ssize_t* countsM = NULL;
+    Py_ssize_t* countsIx = NULL;
+    Py_ssize_t* countsIy = NULL;
+    countsM = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!countsM) goto exit;
+    countsIx = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!countsIx) goto exit;
+    countsIy = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!countsIy) goto exit;
+    countsM[0] = 1;
+    countsIx[0] = 0;
+    countsIy[0] = 0;
+    for (j = 1; j <= nB; j++) {
+        countsM[j] = 1;
+        countsIx[j] = 0;
+        countsIy[j] = 0;
+    }
+    for (i = 1; i <= nA; i++) {
+        tempM = countsM[0];
+        countsM[0] = 1;
+        tempIx = countsIx[0];
+        countsIx[0] = 0;
+        tempIy = countsIy[0];
+        countsIy[0] = 0;
+        for (j = 1; j <= nB; j++) {
             count = 0;
             trace = M[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M[i-1][j-1].count, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix[i-1][j-1].count, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy[i-1][j-1].count, count);
+            if (trace & M_MATRIX) SAFE_ADD(tempM, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(tempIx, count);
+            if (trace & Iy_MATRIX) SAFE_ADD(tempIy, count);
             if (count==0) count = 1;
-            M[i][j].count = count;
+            tempM = countsM[j];
+            countsM[j] = count;
             if (M[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             trace = Ix[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M[i-1][j].count, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix[i-1][j].count, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy[i-1][j].count, count);
-            Ix[i][j].count = count;
+            if (trace & M_MATRIX) SAFE_ADD(tempM, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(countsIx[j], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j], count);
+            tempIx = countsIx[j];
+            countsIx[j] = count;
             if (Ix[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             trace = Iy[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M[i][j-1].count, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix[i][j-1].count, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy[i][j-1].count, count);
-            Iy[i][j].count = count;
+            if (trace & M_MATRIX) SAFE_ADD(countsM[j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(countsIx[j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j-1], count);
+            tempIy = countsIy[j];
+            countsIy[j] = count;
             if (Iy[i][j].score >= threshold) SAFE_ADD(count, total);
         }
     }
+exit:
+    if (countsM) PyMem_Free(countsM);
+    if (countsIx) PyMem_Free(countsIx);
+    if (countsIy) PyMem_Free(countsIy);
     return total;
 }
 
