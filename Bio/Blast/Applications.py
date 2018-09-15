@@ -1351,8 +1351,17 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
         incompatibles = {"mask_id": ["gi_mask"],
                          "gi_mask": ["mask_id"],
                          "taxid": ["taxid_map"]}
-        _NcbibaseblastCommandline._validate_incompatibilities(self,
-                                                              incompatibles)
+
+        # Copied from _NcbibaseblastCommandline class above.
+        # Code repeated here for python2 and 3 comptaibility,
+        # because this is not a _NcbibaseblastCommandline subclass.
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
+                        raise ValueError("Options %s and %s are incompatible."
+                                         % (a, b))
+
         if self.mask_id and not self.mask_data:
             raise ValueError("Option mask_id requires mask_data to be set.")
         if self.mask_desc and not self.mask_id:

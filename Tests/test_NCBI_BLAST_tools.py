@@ -386,9 +386,11 @@ class CheckCompleteArgList(unittest.TestCase):
             extra = extra.difference(["-save_each_pssm", "-save_pssm_after_last_round"])
         if exe_name == "makeblastdb":
             # -input_type is new in BLAST+ 2.2.26+ so will look like extra
-            # arg on older versions.
+            # arg on older versions. -mask_desc and -mask_id were added after
+            # 2.2.28+, but not documented in changelog.
             # -dbtype also ignored here, as it was set to initialize class.
-            extra = extra.difference(["-input_type", "-dbtype"])
+            extra = extra.difference(["-input_type", "-mask_desc",
+                                      "-mask_id", "-dbtype"])
         # This was added in BLAST+ 2.7.1 (or maybe 2.7.0) to most/all the tools,
         # so will be seen as an extra argument on older versions:
         if "-negative_seqidlist" in extra:
