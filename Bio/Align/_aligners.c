@@ -42,7 +42,6 @@ typedef struct {
     double score;
     unsigned int trace : 3;
     struct {int i; int j;} path;
-    Py_ssize_t count;
 } CellM; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 typedef struct {
@@ -50,7 +49,6 @@ typedef struct {
     int* traceM;
     int* traceXY;
     struct {int i; int j;} path;
-    Py_ssize_t count;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 static int _convert_single_letter(PyObject* item)
