@@ -4441,7 +4441,6 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     const double threshold = self->threshold;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
-
     Py_ssize_t** countM = NULL;
     Py_ssize_t** countIx = NULL;
     Py_ssize_t** countIy = NULL;
@@ -4463,18 +4462,18 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
         for (j = 0; j <= nB; j++) {
             count = 0;
             trace = M[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M[i-1][j-1].count, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix[i-1][j-1].count, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy[i-1][j-1].count, count);
+            if (trace & M_MATRIX) SAFE_ADD(countM[i-1][j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(countIx[i-1][j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(countIy[i-1][j-1], count);
             if (count == 0) count = 1; /* happens at M[0][0] only */
-            M[i][j].count = count;
+            countM[i][j] = count;
             count = 0;
             tracep = Ix[i][j].traceM;
             if (tracep) {
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(M[k][j].count, count);
+                    SAFE_ADD(countM[k][j], count);
                     tracep++;
                 }
             }
@@ -4483,18 +4482,18 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(Iy[k][j].count, count);
+                    SAFE_ADD(countIy[k][j], count);
                     tracep++;
                 }
             }
-            Ix[i][j].count = count;
+            countIx[i][j] = count;
             count = 0;
             tracep = Iy[i][j].traceM;
             if (tracep) {
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(M[i][k].count, count);
+                    SAFE_ADD(countM[i][k], count);
                     tracep++;
                 }
             }
@@ -4503,17 +4502,17 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(Ix[i][k].count, count);
+                    SAFE_ADD(countIx[i][k], count);
                     tracep++;
                 }
             }
-            Iy[i][j].count = count;
+            countIy[i][j] = count;
         }
     }
     count = 0;
-    if (M[nA][nB].score > threshold) SAFE_ADD(M[nA][nB].count, count);
-    if (Ix[nA][nB].score > threshold) SAFE_ADD(Ix[nA][nB].count, count);
-    if (Iy[nA][nB].score > threshold) SAFE_ADD(Iy[nA][nB].count, count);
+    if (M[nA][nB].score > threshold) SAFE_ADD(countM[nA][nB], count);
+    if (Ix[nA][nB].score > threshold) SAFE_ADD(countIx[nA][nB], count);
+    if (Iy[nA][nB].score > threshold) SAFE_ADD(countIy[nA][nB], count);
 exit:
     if (countM) {
         if (countIx) {
@@ -4552,15 +4551,32 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
+    Py_ssize_t** countM = NULL;
+    Py_ssize_t** countIx = NULL;
+    Py_ssize_t** countIy = NULL;
+    countM = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countM) goto exit;
+    countIx = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countIx) goto exit;
+    countIy = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countIy) goto exit;
+    for (i = 0; i <= nA; i++) {
+        countM[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!M[i]) goto exit;
+        countIx[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Ix[i]) goto exit;
+        countIy[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Iy[i]) goto exit;
+    }
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             count = 0;
             trace = M[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M[i-1][j-1].count, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix[i-1][j-1].count, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy[i-1][j-1].count, count);
+            if (trace & M_MATRIX) SAFE_ADD(countM[i-1][j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(countIx[i-1][j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(countIy[i-1][j-1], count);
             if (count==0) count = 1;
-            M[i][j].count = count;
+            countM[i][j] = count;
             if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             tracep = Ix[i][j].traceM;
@@ -4568,7 +4584,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(M[k][j].count, count);
+                    SAFE_ADD(countM[k][j], count);
                     tracep++;
                 }
             }
@@ -4577,19 +4593,19 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(Iy[k][j].count, count);
+                    SAFE_ADD(countIy[k][j], count);
                     tracep++;
                 }
             }
             if (count == 0) count = 1;
-            Ix[i][j].count = count;
+            countIx[i][j] = count;
             count = 0;
             tracep = Iy[i][j].traceM;
             if (tracep) {
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(M[i][k].count, count);
+                    SAFE_ADD(countM[i][k], count);
                     tracep++;
                 }
             }
@@ -4598,16 +4614,33 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                 while (1) {
                     k = *tracep;
                     if (k < 0) break;
-                    SAFE_ADD(Ix[i][k].count, count);
+                    SAFE_ADD(countIx[i][k], count);
                     tracep++;
                 }
             }
             if (count == 0) count = 1;
-            Iy[i][j].count = count;
+            countIy[i][j] = count;
         }
     }
     count = total;
 exit:
+    if (countM) {
+        if (countIx) {
+            if (countIy) {
+                for (i = 0; i <= nA; i++) {
+                    if (!countM[i]) break;
+                    PyMem_Free(countM[i]);
+                    if (!countIx[i]) break;
+                    PyMem_Free(countIx[i]);
+                    if (!countIy[i]) break;
+                    PyMem_Free(countIy[i]);
+                }
+                PyMem_Free(countIy);
+            }
+            PyMem_Free(countIx);
+        }
+        PyMem_Free(countM);
+    }
     return count;
 }
 
