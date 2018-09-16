@@ -4441,6 +4441,24 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     const double threshold = self->threshold;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
+
+    Py_ssize_t** countM = NULL;
+    Py_ssize_t** countIx = NULL;
+    Py_ssize_t** countIy = NULL;
+    countM = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countM) goto exit;
+    countIx = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countIx) goto exit;
+    countIy = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!countIy) goto exit;
+    for (i = 0; i <= nA; i++) {
+        countM[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!M[i]) goto exit;
+        countIx[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Ix[i]) goto exit;
+        countIy[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Iy[i]) goto exit;
+    }
     for (i = 0; i <= nA; i++) {
         for (j = 0; j <= nB; j++) {
             count = 0;
@@ -4497,6 +4515,23 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     if (Ix[nA][nB].score > threshold) SAFE_ADD(Ix[nA][nB].count, count);
     if (Iy[nA][nB].score > threshold) SAFE_ADD(Iy[nA][nB].count, count);
 exit:
+    if (countM) {
+        if (countIx) {
+            if (countIy) {
+                for (i = 0; i <= nA; i++) {
+                    if (!countM[i]) break;
+                    PyMem_Free(countM[i]);
+                    if (!countIx[i]) break;
+                    PyMem_Free(countIx[i]);
+                    if (!countIy[i]) break;
+                    PyMem_Free(countIy[i]);
+                }
+                PyMem_Free(countIy);
+            }
+            PyMem_Free(countIx);
+        }
+        PyMem_Free(countM);
+    }
     return count;
 }
 
