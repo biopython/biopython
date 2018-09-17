@@ -19,6 +19,7 @@
 #define Ix_MATRIX 0x2
 #define Iy_MATRIX 0x4
 #define DONE 0x8
+#define NONE 0x7
 
 #define OVERFLOW_ERROR -1
 #define MEMORY_ERROR -2
@@ -2714,7 +2715,7 @@ static PyGetSetDef Aligner_getset[] = {
         score = 0; \
         trace = 0; \
     } \
-    if (score > epsilon && score > maximum - epsilon) { \
+    else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
             if (im < i) { \
                 for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
@@ -2743,7 +2744,7 @@ static PyGetSetDef Aligner_getset[] = {
         score = 0; \
         trace = 0; \
     } \
-    if (score > epsilon && score > maximum - epsilon) { \
+    else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
             if (im < i) { \
                 for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
@@ -2818,7 +2819,6 @@ static PyGetSetDef Aligner_getset[] = {
         score = -DBL_MAX; \
         trace = 0; \
     } \
-    else if (score > maximum) maximum = score; \
     cell.score = score; \
     cell.trace = trace;
 
@@ -2840,7 +2840,25 @@ static PyGetSetDef Aligner_getset[] = {
         score = 0; \
         trace = 0; \
     } \
-    else if (score > maximum) maximum = score; \
+    else if (score > maximum - epsilon) { \
+        if (score > maximum + epsilon) { \
+            maximum = score; \
+            if (im < i) { \
+                for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
+                im++; \
+                for ( ; im < i; im++) { \
+                    for (jm = 0; jm <= nB; jm++) { \
+                        M[im][jm].trace &= ~ENDPOINT; \
+                    } \
+                } \
+                jm = 0; \
+            } \
+            for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
+            im = i; \
+            jm = j; \
+        } \
+        trace |= ENDPOINT; \
+    } \
     cell.score = score; \
     cell.trace = trace;
 
@@ -2865,6 +2883,28 @@ static PyGetSetDef Aligner_getset[] = {
         traceXY[ng] = gap; \
         ng++; \
     }
+
+#define SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(cell, score1, score2, score3, score4) \
+    trace = M_MATRIX; \
+    score = score1; \
+    if (score2 > score + epsilon) { \
+        score = score2; \
+        trace = Ix_MATRIX; \
+    } \
+    else if (score2 > score - epsilon) trace |= Ix_MATRIX; \
+    if (score3 > score + epsilon) { \
+        score = score3; \
+        trace = Iy_MATRIX; \
+    } \
+    else if (score3 > score - epsilon) trace |= Iy_MATRIX; \
+    score += score4; \
+    if (score < epsilon) { \
+        score = 0; \
+        trace = 0; \
+    } \
+    else if (score > maximum) maximum = score; \
+    cell.score = score; \
+    cell.trace = trace;
 
 /* -------------- allocation & deallocation ------------- */
 
@@ -3307,7 +3347,7 @@ static PyObject* _next_smithwaterman(PathGenerator* self)
     Cell** M = self->M.affine;
     int path = M[0][0].path;
 
-    if (path == DONE) return NULL;
+    if (path == DONE || path == NONE) return NULL;
 
     path = M[i][j].path;
     if (path) {
@@ -3341,7 +3381,9 @@ static PyObject* _next_smithwaterman(PathGenerator* self)
         }
     }
 
-    if (!path) {
+    if (path) {
+        trace = M[i][j].trace;
+    } else {
         /* Find a suitable end point for a path.
          * Only allow start points ending at the M matrix. */
         while (1) {
@@ -3351,23 +3393,27 @@ static PyObject* _next_smithwaterman(PathGenerator* self)
                 j = 0;
             }
             else {
-                /* we reached the end of the alignment without finding
+                /* we reached the end of the sequences without finding
                  * an alternative path */
                 M[0][0].path = DONE;
                 return NULL;
             }
-            if (M[i][j].trace & ENDPOINT) break;
+            trace = M[i][j].trace;
+            if (trace & ENDPOINT) {
+                trace &= DIAGONAL; /* exclude paths ending in a gap */
+                break;
+            }
         }
         M[i][j].path = 0;
     }
 
     /* Follow the traceback until we reach the origin. */
     while (1) {
-        trace = M[i][j].trace;
         if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
         else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
         else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
         else break;
+        trace = M[i][j].trace;
     }
     self->iA = i;
     self->iB = j;
@@ -3527,7 +3573,6 @@ static PyObject* _next_gotoh_local(PathGenerator* self)
     int iB = self->iB;
     const int nA = self->nA;
     const int nB = self->nB;
-    const double threshold = self->threshold;
     Cell** M = self->M.affine;
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
@@ -3594,7 +3639,7 @@ static PyObject* _next_gotoh_local(PathGenerator* self)
     }
 
     if (path == 0) {
-        /* Find the starting point for a new path. */
+        /* Find the end point for a new path. */
         while (1) {
             if (iB < nB) iB++;
             else if (iA < nA) {
@@ -3607,7 +3652,7 @@ static PyObject* _next_gotoh_local(PathGenerator* self)
                 M[0][0].path = DONE;
                 return NULL;
             }
-            if (M[iA][iB].score >= threshold) {
+            if (M[iA][iB].trace & ENDPOINT) {
                 M[iA][iB].path = 0;
                 break;
             }
@@ -4169,7 +4214,6 @@ PathGenerator_reset(PathGenerator* self)
 {
     switch (self->mode) {
         case Local:
-            if (self->threshold <= 0) /* no solutions were found */ break;
             self->iA = 0;
             self->iB = 0;
         case Global:
@@ -4177,7 +4221,7 @@ PathGenerator_reset(PathGenerator* self)
                 case NeedlemanWunschSmithWaterman:
                 case Gotoh: {
                     Cell** M = self->M.affine;
-                    M[0][0].path = 0;
+                    if (M[0][0].path != NONE) M[0][0].path = 0;
                     break;
                 }
                 case WatermanSmithBeyer: {
@@ -4277,13 +4321,13 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
         for (j = 1; j <= nB; j++) {
             trace = M[i][j].trace;
             count = 0;
+            if (trace & DIAGONAL) SAFE_ADD(temp, count);
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
             if (trace & VERTICAL) SAFE_ADD(counts[j], count);
-            if (trace & DIAGONAL) SAFE_ADD(temp, count);
             temp = counts[j];
             if (count==0) count = 1;
             counts[j] = count;
-            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
         }
     }
     count = total;
@@ -4378,7 +4422,6 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     Cell** M = self->M.affine;
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
-    const double threshold = self->threshold;
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
@@ -4418,7 +4461,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (count==0) count = 1;
             tempM = countsM[j];
             countsM[j] = count;
-            if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
             trace = Ix[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(tempM, count);
@@ -4426,7 +4469,6 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j], count);
             tempIx = countsIx[j];
             countsIx[j] = count;
-            if (trace && Ix[i][j].score >= threshold) SAFE_ADD(count, total);
             count = 0;
             trace = Iy[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(countsM[j-1], count);
@@ -4434,7 +4476,6 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(countsIy[j-1], count);
             tempIy = countsIy[j];
             countsIy[j] = count;
-            if (trace && Iy[i][j].score >= threshold) SAFE_ADD(count, total);
         }
     }
     count = total;
@@ -4962,7 +5003,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (paths) {
         PyObject* result;
         paths->M.affine = M;
-        if (maximum==0) M[0][0].path = DONE;
+        if (maximum==0) M[0][0].path = NONE;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
         return result;
@@ -5418,6 +5459,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     char c;
     int i;
     int j;
+    int im = nA;
+    int jm = nB;
     int kA;
     int kB;
     const double gap_open_A = self->target_open_gap_score;
@@ -5965,7 +6008,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             kB = CHARINDEX(sB[j-1]);
             nm = 0;
             ng = 0;
-            SELECT_TRACE_GOTOH_LOCAL_ALIGN(M[i][j],
+            SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(M[i][j],
                                            M[i-1][j-1].score,
                                            Ix[i-1][j-1].score,
                                            Iy[i-1][j-1].score,
