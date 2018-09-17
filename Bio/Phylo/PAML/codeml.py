@@ -167,13 +167,13 @@ class Codeml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
-        """Run codeml using the current configuration and then parse the results.
+        """Run codeml using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that CODEML
-        requires relative paths.
+        If parse is True then read and return the results. Otherwise
+        return None.
+
+        The arguments may be passed as either absolute or relative
+        paths, despite the fact that CODEML requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
