@@ -155,13 +155,14 @@ class Baseml(Paml):
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
             parse=True):
-        """Run baseml using the current configuration and then parse the results.
+        """Run baseml using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that BASEML
-        requires relative paths.
+        Checks tree attribute is specified and exists, then runs baseml.
+        If parse is True then read and return the result. Otherwise
+        return None.
+
+        The arguments may be passed as either absolute or relative paths,
+        despite the fact that BASEML requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
