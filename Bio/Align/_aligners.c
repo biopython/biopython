@@ -3386,7 +3386,6 @@ static PyObject* _next_gotoh_global(PathGenerator* self)
     Cell** M = self->M.affine;
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
-    const double threshold = self->threshold;
 
     m = M_MATRIX;
     path = M[i][j].path;
@@ -3455,17 +3454,17 @@ static PyObject* _next_gotoh_global(PathGenerator* self)
         /* Generate a new path. */
         switch (m) {
             case M_MATRIX:
-                if (M[nA][nB].score >= threshold) {
+                if (M[nA][nB].trace & ENDPOINT) {
                    /* m = M_MATRIX; */
                    break;
                 }
             case Ix_MATRIX:
-                if (Ix[nA][nB].score >= threshold) {
+                if (Ix[nA][nB].trace & ENDPOINT) {
                    m = Ix_MATRIX;
                    break;
                 }
             case Iy_MATRIX:
-                if (Iy[nA][nB].score >= threshold) {
+                if (Iy[nA][nB].trace & ENDPOINT) {
                    m = Iy_MATRIX;
                    break;
                 }
@@ -4304,7 +4303,6 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     Cell** M = self->M.affine;
     Cell** Ix = self->Ix.affine;
     Cell** Iy = self->Iy.affine;
-    const double threshold = self->threshold;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     Py_ssize_t tempM;
@@ -4359,9 +4357,9 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
         }
     }
     count = 0;
-    if (M[nA][nB].score >= threshold) SAFE_ADD(countsM[nB], count);
-    if (Ix[nA][nB].score >= threshold) SAFE_ADD(countsIx[nB], count);
-    if (Iy[nA][nB].score >= threshold) SAFE_ADD(countsIy[nB], count);
+    if (M[nA][nB].trace & ENDPOINT) SAFE_ADD(countsM[nB], count);
+    if (Ix[nA][nB].trace & ENDPOINT) SAFE_ADD(countsIx[nB], count);
+    if (Iy[nA][nB].trace & ENDPOINT) SAFE_ADD(countsIy[nB], count);
 exit:
     if (countsM) PyMem_Free(countsM);
     if (countsIx) PyMem_Free(countsIx);
@@ -5392,13 +5390,17 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
+        double threshold;
         SELECT_SCORE_GLOBAL(M[nA][nB].score,
                             Ix[nA][nB].score,
                             Iy[nA][nB].score);
         paths->M.affine = M;
         paths->Ix.affine = Ix;
         paths->Iy.affine = Iy;
-        paths->threshold = score - epsilon;
+        threshold = score - epsilon;
+        if (M[nA][nB].score >= threshold) M[nA][nB].trace |= ENDPOINT;
+        if (Ix[nA][nB].score >= threshold) Ix[nA][nB].trace |= ENDPOINT;
+        if (Iy[nA][nB].score >= threshold) Iy[nA][nB].trace |= ENDPOINT;
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
         return result;
