@@ -170,10 +170,8 @@ class Baseml(Paml):
             raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
-            results = read(self.out_file)
-        else:
-            results = None
-        return results
+            return read(self.out_file)
+        return None
 
 
 def read(results_file):
