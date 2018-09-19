@@ -169,7 +169,7 @@ class Codeml(Paml):
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
         """Run codeml using the current configuration.
 
-        If parse is True then read and return the results. Otherwise
+        If parse is True then read and return the results, otherwise
         return None.
 
         The arguments may be passed as either absolute or relative

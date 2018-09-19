@@ -157,9 +157,9 @@ class Baseml(Paml):
             parse=True):
         """Run baseml using the current configuration.
 
-        Checks tree attribute is specified and exists, then runs baseml.
-        If parse is True then read and return the result. Otherwise
-        return None.
+        Check that the tree attribute is specified and exists, and then
+        run baseml. If parse is True then read and return the result,
+        otherwise return none.
 
         The arguments may be passed as either absolute or relative paths,
         despite the fact that BASEML requires relative paths.
