@@ -101,7 +101,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Frederik Gwinner
 - Fábio Madeira <https://github.com/biomadeira>
 - Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
-- Gavin E Crooks <gec at domain compbio.berkeley.edu>
+- Gavin E Crooks <https://github.com/gecrooks>
 - Gert Hulselmans <https://github.com/ghuls>
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
