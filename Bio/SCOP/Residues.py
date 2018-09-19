@@ -1,10 +1,9 @@
 # Copyright 2000 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-# Gavin E. Crooks 2001-11-03
-# Minor extensions, some bug fixes, and major changes to the interface
+# Revisions copyright 2001 by Gavin E. Crooks. All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """A collection of residues from a PDB structure."""
 
 import re
