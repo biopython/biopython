@@ -1,10 +1,10 @@
 # Copyright 2002 by Yves Bastide and Brad Chapman.
 # Copyright 2007 by Sebastian Bassi
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Functions to calculate assorted sequence checksums."""
 
 # crc32, crc64, gcg, and seguid
