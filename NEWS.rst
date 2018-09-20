@@ -42,6 +42,7 @@ possible, especially the following contributors:
 - Maximilian Greil
 - Nick Negretti (first contribution)
 - Peter Cock
+- Rona Costello (first contribution)
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
