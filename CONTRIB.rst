@@ -118,7 +118,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
-- Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
+- Jeffrey Finkelstein <https://github.com/jfinkels/>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
 - Jian-Long Huang <https://github.com/jlhg>
