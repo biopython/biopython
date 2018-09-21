@@ -1341,11 +1341,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def _input_type_checker(command, x):
-        expression = (x == 'asn1_bin' or
-                      x == 'asn1_txt' or
-                      x == 'blastdb' or
-                      x == 'fasta')
-        return expression
+        return x in ('asn1_bin', 'asn1_txt', 'blastdb', 'fasta')
 
     def _validate(self):
         incompatibles = {"mask_id": ["gi_mask"],
