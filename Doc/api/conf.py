@@ -19,7 +19,7 @@ from Bio import __version__
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 # needs_sphinx = '1.0'
-needs_sphinx = '1.7'
+needs_sphinx = '1.8'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -77,17 +77,15 @@ todo_include_todos = True
 
 # -- Options for autodoc --------------------------------------------------
 
-# Can also set $SPHINX_APIDOC_OPTIONS before running sphinx-apidoc,
-# but this is clearer:
-# autodoc_default_flags = ['members', 'undoc-members', 'private-members',
-#                          'special-members', 'inherited-members',
-#                          'show-inheritance']
-autodoc_default_flags = ['members', 'undoc-members', 'special-members',
-                         'show-inheritance']
-autodoc_member_order = 'bysource'
-# This is a new setting, see
-# https://github.com/sphinx-doc/sphinx/pull/4076
-autodoc_exclude_members = ['__dict__', '__weakref__', '__module__']
+# This requires Sphinx 1.8.0b1 or later:
+autodoc_default_values = {
+    'members': None,
+    'undoc-members': None,
+    'special-members': None,
+    'show-inheritance': None,
+    'member-order': 'bysource',
+    'exclude-members': '__dict__,__weakref__,__module__',
+}
 
 # To avoid import errors.
 autodoc_mock_imports = ['MySQLdb']
