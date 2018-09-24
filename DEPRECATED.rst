@@ -45,8 +45,9 @@ is deprecated as of Release 1.70.
 
 Bio.GA
 ======
-This was deprecated in Biopython 1.70. Please consider using a dedicated
-genetic algorithm library like DEAP instead.
+This was deprecated in Biopython 1.70, and removed in Release 1.73.
+Please consider using a dedicated genetic algorithm library like DEAP
+instead.
 
 Bio.NeuralNetwork
 =================
