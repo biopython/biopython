@@ -51,8 +51,9 @@ instead.
 
 Bio.NeuralNetwork
 =================
-This was deprecated in Biopython 1.70. Please consider using a dedicated
-machine learning library like scikit-learn or TensorFlow instead.
+This was deprecated in Biopython 1.70, and removed in Release 1.73.
+Please consider using a dedicated machine learning library like
+scikit-learn or TensorFlow instead.
 
 Bio.Phylo.CDAOIO.CDAOError
 ==========================
