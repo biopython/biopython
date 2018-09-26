@@ -56,9 +56,8 @@ def SimpleFastaParser(handle):
     lines = []
     for line in handle:
         if line[0] == '>':
-            if lines:
-                yield title, ''.join(lines).replace(" ", "").replace("\r", "")
-                lines = []
+            yield title, ''.join(lines).replace(" ", "").replace("\r", "")
+            lines = []
             title = line[1:].rstrip()
             continue
         lines.append(line.rstrip())
