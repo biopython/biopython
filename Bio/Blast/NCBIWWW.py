@@ -174,12 +174,12 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     delay = 20  # seconds
     while True:
         current = time.time()
-        wait = qblast.previous + delay - current
+        wait = qblast._previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            qblast.previous = current + wait
+            qblast._previous = current + wait
         else:
-            qblast.previous = current
+            qblast._previous = current
         if delay < 60:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
@@ -206,7 +206,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     return StringIO(results)
 
 
-qblast.previous = 0
+qblast._previous = 0
 
 
 def _parse_qblast_ref_page(handle):
