@@ -46,6 +46,8 @@ def SimpleFastaParser(handle):
         if line[0] == '>':
             title = line[1:].rstrip()
             break
+    else:   # no break encountered
+        return  # Premature end of file, or just empty?
 
     # Main logic
     # Note, remove trailing whitespace, and any internal spaces
@@ -61,8 +63,7 @@ def SimpleFastaParser(handle):
             continue
         lines.append(line.rstrip())
 
-    if lines:
-        yield title, ''.join(lines).replace(" ", "").replace("\r", "")
+    yield title, ''.join(lines).replace(" ", "").replace("\r", "")
 
 
 def FastaTwoLineParser(handle):
@@ -98,7 +99,7 @@ def FastaTwoLineParser(handle):
     ValueError: Expected FASTA record starting with '>' character. Perhaps this file is using FASTA line wrapping? Got: 'MTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI'
 
     """
-    idx = None
+    idx = -1  # for empty file
     for idx, line in enumerate(handle):
         if idx % 2 == 0:  # title line
             if line[0] != '>':
@@ -124,12 +125,8 @@ def FastaTwoLineParser(handle):
                                  "Have '>{}' and '{}'".format(title, line))
             yield title, line
 
-    if idx is None:
-        # empty file
-        pass
-    elif idx % 2 == 0:
+    if idx % 2 == 0:  # on a header line
         raise ValueError("Should be at end of file, but line= '{}'".format(line))
-
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
