@@ -128,6 +128,7 @@ def FastaTwoLineParser(handle):
     if idx % 2 == 0:  # on a header line
         raise ValueError("Should be at end of file, but line= '{}'".format(line))
 
+
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Iterate over Fasta records as SeqRecord objects.
 
