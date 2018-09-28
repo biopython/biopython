@@ -12,6 +12,7 @@ from Bio._py3k import StringIO
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_nucleotide, generic_dna
+from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
 
 
 def title_to_ids(title):
@@ -139,6 +140,64 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual("", record.id)
         self.assertEqual("", record.name)
         self.assertEqual("", record.description)
+
+
+class TestSimpleFastaParsers(unittest.TestCase):
+    """Test SimpleFastaParser and FastaTwoLineParser directly."""
+
+    # Regular cases input strings and outputs
+    ins_two_line = [">1\nACGT", ">1\nACGT",
+                    ">1\nACGT\n>2\nACGT"]
+    outs_two_line = [[("1", "ACGT")], [("1", "ACGT")],
+                     [("1", "ACGT"), ("2", "ACGT")]]
+
+    ins_multiline = [">1\nACGT\nACGT",
+                     ">1\nACGT\nACGT\n>2\nACGT\nACGT"]
+    outs_multiline = [[("1", "ACGTACGT")],
+                      [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
+
+    # Edge case input strings and outputs
+    ins_edges = [">\nACGT", ">1\n", ">1",
+                 ">1\n>1", ">1>1\n>1"]
+    outs_edges = [[("", "ACGT")], [("1", "")], [("1", "")],
+                  [("1", ""), ("1", "")], [("1>1", ""), ("1", "")]]
+
+    # Exceptions input strings
+    ins_exc = ['>1\n\n', '>1\n>1', '>1']
+
+    def test_regular_SimpleFastaParser(self):
+        """"Test regular SimpleFastaParser cases."""
+        for inp, out in zip(self.ins_two_line, self.outs_two_line):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp+'\n')
+            self.assertEqual(list(SimpleFastaParser(handle1)), out)
+            self.assertEqual(list(SimpleFastaParser(handle2)), out)
+        for inp, out in zip(self.ins_multiline, self.outs_multiline):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp+'\n')
+            self.assertEqual(list(SimpleFastaParser(handle1)), out)
+            self.assertEqual(list(SimpleFastaParser(handle2)), out)
+
+    def test_regular_FastaTwoLineParser(self):
+        """Test regular FastaTwoLineParser cases."""
+        for inp, out in zip(self.ins_two_line, self.outs_two_line):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp+'\n')
+            self.assertEqual(list(FastaTwoLineParser(handle1)), out)
+            self.assertEqual(list(FastaTwoLineParser(handle2)), out)
+
+    def test_edgecases_SimpleFastaParser(self):
+        """Test SimpleFastaParser edge-cases."""
+        for inp, out in zip(self.ins_edges, self.outs_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(SimpleFastaParser(handle)), out)
+
+    def test_exceptions_FastaTwoLineParser(self):
+        """Test FastaTwoLineParser exceptions."""
+        for inp in self.ins_exc + self.ins_multiline:
+            handle = StringIO(inp)
+            with self.assertRaises(ValueError):
+                list(FastaTwoLineParser(handle))
 
 
 single_nucleic_files = ['Fasta/lupine.nu', 'Fasta/elderberry.nu',
