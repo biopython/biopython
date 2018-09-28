@@ -1195,7 +1195,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             return
 
         # keep GenBank's escaping requirement "" while removing single quotes "
-        value = value.replace('""', '^^').replace('"', '').replace('^', '"')
+        # remove empty values (unique case of double quotes)
+        value = re.sub('^""$', '', value)
+        # remove single quotes unless for escaping purposes ""
+        value = value.replace('""', '~~').replace('"', '').replace('~', '"')
+
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)
 
