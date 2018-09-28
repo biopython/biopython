@@ -169,12 +169,12 @@ class TestSimpleFastaParsers(unittest.TestCase):
         """"Test regular SimpleFastaParser cases."""
         for inp, out in zip(self.ins_two_line, self.outs_two_line):
             handle1 = StringIO(inp)
-            handle2 = StringIO(inp+'\n')
+            handle2 = StringIO(inp + '\n')
             self.assertEqual(list(SimpleFastaParser(handle1)), out)
             self.assertEqual(list(SimpleFastaParser(handle2)), out)
         for inp, out in zip(self.ins_multiline, self.outs_multiline):
             handle1 = StringIO(inp)
-            handle2 = StringIO(inp+'\n')
+            handle2 = StringIO(inp + '\n')
             self.assertEqual(list(SimpleFastaParser(handle1)), out)
             self.assertEqual(list(SimpleFastaParser(handle2)), out)
 
@@ -182,7 +182,7 @@ class TestSimpleFastaParsers(unittest.TestCase):
         """Test regular FastaTwoLineParser cases."""
         for inp, out in zip(self.ins_two_line, self.outs_two_line):
             handle1 = StringIO(inp)
-            handle2 = StringIO(inp+'\n')
+            handle2 = StringIO(inp + '\n')
             self.assertEqual(list(FastaTwoLineParser(handle1)), out)
             self.assertEqual(list(FastaTwoLineParser(handle2)), out)
 
