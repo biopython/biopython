@@ -5,6 +5,7 @@
 
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
+# Yang Wu modified and updated parameters on Jan 2018.
 
 """Code to invoke the NCBI BLAST server over the internet.
 
@@ -20,6 +21,7 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
+import time
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
 
@@ -38,7 +40,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
-           template_type=None, template_length=None,
+           template_type=None, template_length=None, organism=None, num_threads=None,
            ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
@@ -67,14 +69,17 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - service        plain, psi, phi, rpsblast, megablast (lower case)
+     - organism       Specify an organism while using nr/nt database, or an SRA accession
+                      for SRA, EST and other databases. The organism also could be specified
+                      by "entrez_query". For example: "entrez_query='rat [ORGN]'" is identical
+                      to "organism='rat (taxid:10114)'".
+     - num_threads    Supported only on the cloud.
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
     https://ncbi.github.io/blast-cloud/dev/api.html
 
     """
-    import time
-
     programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
     if program not in programs:
         raise ValueError("Program specified is %s. Expected one of %s"
@@ -85,6 +90,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # Additional parameters are taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node9.html on 8 Oct 2010
     # To perform a PSI-BLAST or PHI-BLAST search the service ("Put" and "Get" commands) must be specified
     # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
+    # The aforementioned webpages were not valid on Jan 19, 2018. Current API webpage is:
+    # https://ncbi.github.io/blast-cloud/dev/api.html
     parameters = [
         ('AUTO_FORMAT', auto_format),
         ('COMPOSITION_BASED_STATISTICS', composition_based_statistics),
@@ -101,7 +108,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ('LAYOUT', layout),
         ('LCASE_MASK', lcase_mask),
         ('MEGABLAST', megablast),
-        ('MATRIX_NAME', matrix_name),
+        ('MATRIX', matrix_name),
         ('NUCL_PENALTY', nucl_penalty),
         ('NUCL_REWARD', nucl_reward),
         ('OTHER_ADVANCED', other_advanced),
@@ -123,6 +130,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         ('UNGAPPED_ALIGNMENT', ungapped_alignment),
         ('WORD_SIZE', word_size),
         ('CMD', 'Put'),
+        ('EQ_MENU', organism),
+        ('NUM_THREADS', num_threads)
         ]
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
@@ -138,6 +147,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
+    # The aforementioned webpage was not valid on Jan 19, 2018. Current API webpage is:
+    # https://ncbi.github.io/blast-cloud/dev/api.html
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS', alignments),
@@ -172,15 +183,14 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
-    previous = time.time()
     while True:
         current = time.time()
-        wait = previous + delay - current
+        wait = qblast.previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            previous = current + wait
+            qblast.previous = current + wait
         else:
-            previous = current
+            qblast.previous = current
         if delay < 60:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
@@ -205,6 +215,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             break
 
     return StringIO(results)
+
+
+qblast.previous = time.time()
 
 
 def _parse_qblast_ref_page(handle):
