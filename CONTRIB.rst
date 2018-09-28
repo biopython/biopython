@@ -21,6 +21,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Allis Tauri <https://github.com/allista>
+- Alona Levy-Jurgenson <https://github.com/alonalj>
 - Anders Pitman <https://github.com/anderspitman>
 - Andrea Pierleoni <andrea at the Italian domain biocomp dot unibo>
 - Andrea Rizzi <https://github.com/andrrizzi>

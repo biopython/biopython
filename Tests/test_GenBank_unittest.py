@@ -248,6 +248,28 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(list(f.qualifiers),
                          ['organism', 'mol_type', 'strain', 'db_xref', 'dev_stage'])
 
+    def test_qualifier_escaping(self):
+        """Check qualifier escaping is preserved."""
+
+        genbank_file = "GenBank/NC_000932.gb"
+        genbank_qualif_esc = "GenBank/NC_000932_qualif_esc.gb"
+
+        # create escaped qualifiers
+        record = SeqIO.read(genbank_file, "gb")
+        f = record.features[0]
+        f.qualifiers['double_quotes_1'] = 'Arabidopsis ""thaliana""'
+        f.qualifiers['double_quotes_2'] = 'Arabidopsis "" thaliana'
+        f.qualifiers['double_quotes_3'] = '"Arabidopsis thaliana"'
+
+        # write with escaped qualifiers, re-read and test
+        SeqIO.write(record, genbank_qualif_esc, "gb")
+        record = SeqIO.read(genbank_qualif_esc, "gb")
+        f = record.features[0]
+        self.assertEqual(f.qualifiers['double_quotes_1'][0], 'Arabidopsis ""thaliana""')
+        self.assertEqual(f.qualifiers['double_quotes_2'][0], 'Arabidopsis "" thaliana')
+        self.assertEqual(f.qualifiers['double_quotes_3'][0], '""Arabidopsis thaliana""')
+
+
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
