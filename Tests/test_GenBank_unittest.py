@@ -269,7 +269,6 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(f.qualifiers['double_quotes_2'][0], 'Arabidopsis "" thaliana')
         self.assertEqual(f.qualifiers['double_quotes_3'][0], '""Arabidopsis thaliana""')
 
-
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
