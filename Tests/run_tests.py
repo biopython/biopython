@@ -151,6 +151,7 @@ DOCTEST_MODULES = [
     "Bio.UniProt.GOA",
     "Bio.Wise",
     "Bio.Wise.psw",
+    "Scripts.testseq",
 ]
 # Silently ignore any doctests for modules requiring numpy!
 if numpy:
@@ -172,6 +173,12 @@ except ImportError:
     # Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
+
+# Skip doctests for all modules outside of Bio & BioSQL prior to Python 3.3
+if sys.version_info < (3, 3):
+    for i, name in enumerate(DOCTEST_MODULES):
+        if not name.startswith(("Bio.", "BioSQL.")):
+            DOCTEST_MODULES.remove(name)
 
 # Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
