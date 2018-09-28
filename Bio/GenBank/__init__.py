@@ -1185,18 +1185,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         Can receive None, since you can have valueless keys such as /pseudo
         """
-        # Hack to try to preserve historical behaviour of /pseudo etc
-        if value is None:
-            # if the key doesn't exist yet, add an empty string
-            if key not in self._cur_feature.qualifiers:
-                self._cur_feature.qualifiers[key] = [""]
-                return
-            # otherwise just skip this key
-            return
-
-        value = value.replace('"', '')
-        if self._feature_cleaner is not None:
-            value = self._feature_cleaner.clean_value(key, value)
+        if value is not None:
+            # TODO - Should only remove start/end quotes?
+            value = value.replace('"', '')
+            if self._feature_cleaner is not None:
+                value = self._feature_cleaner.clean_value(key, value)
 
         # if the qualifier name exists, append the value
         if key in self._cur_feature.qualifiers:

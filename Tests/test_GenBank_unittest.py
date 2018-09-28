@@ -23,6 +23,41 @@ from Bio._py3k import StringIO
 class GenBankTests(unittest.TestCase):
     """GenBank tests."""
 
+    def test_empty_qualifier_pseudo(self):
+        """Parsing /pseudo empty qualifier."""
+        rec = SeqIO.read("GenBank/blank_seq.gb", "gb")
+        self.assertEqual(len(rec), 360)
+        self.assertEqual(len(rec.features), 4)
+        f = rec.features[3]
+        self.assertEqual(f.type, "CDS")
+        self.assertEqual(sorted(list(f.qualifiers)),
+                         ['coded_by', 'db_xref', 'gene', 'pseudo'])
+        self.assertEqual(f.qualifiers["coded_by"],
+                         ['NM_001841.1:127..1209'])
+        self.assertEqual(f.qualifiers["db_xref"],
+                         ['LocusID:1269', 'MIM:605051'])
+        self.assertEqual(f.qualifiers["gene"], ['CNR2'])
+        self.assertEqual(f.qualifiers["pseudo"], [None])
+        self.assertTrue("\n                     /pseudo\n" in
+                        rec.format("gb"))
+        self.assertTrue("\nFT                   /pseudo\n" in
+                        rec.format("embl"))
+
+    def test_empty_qualifier_note(self):
+        rec = SeqIO.read("GenBank/empty_feature_qualifier.gb", "gb")
+        self.assertEqual(len(rec), 6497)
+        self.assertEqual(len(rec.features), 1)
+        f = rec.features[0]
+        self.assertEqual(f.type, "source")
+        self.assertEqual(sorted(list(f.qualifiers)),
+                         ['db_xref', 'mol_type', 'note', 'organism'])
+        self.assertEqual(f.qualifiers["note"],
+                         ["This is a correct note, the following one isn't", None])
+        self.assertTrue("\n                     /note\n" in
+                        rec.format("gb"))
+        self.assertTrue("\nFT                   /note\n" in
+                        rec.format("embl"))
+
     def test_invalid_product_line_raises_value_error(self):
         """Parsing invalid product line."""
         def parse_invalid_product_line():
