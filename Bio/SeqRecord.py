@@ -324,18 +324,20 @@ class SeqRecord(object):
         """Return a sub-sequence or an individual letter.
 
         Slicing, e.g. my_record[5:10], returns a new SeqRecord for
-        that sub-sequence with appropriate annotation preserved.  The
-        name, id and description are kept.
+        that sub-sequence with some annotation preserved as follows:
 
-        Any per-letter-annotations are sliced to match the requested
-        sub-sequence.  Unless a stride is used, all those features
-        which fall fully within the subsequence are included (with
-        their locations adjusted accordingly).
-
-        However, the annotations dictionary and the dbxrefs list are
-        not used for the new SeqRecord, as in general they may not
-        apply to the subsequence.  If you want to preserve them, you
-        must explicitly copy them to the new SeqRecord yourself.
+        * The name, id and description are kept as-is.
+        * Any per-letter-annotations are sliced to match the requested
+          sub-sequence.
+        * Unless a stride is used, all those features which fall fully
+          within the subsequence are included (with their locations
+          adjusted accordingly). If you want to preserve any truncated
+          features (e.g. GenBank/EMBL source features), you must
+          explicitly add them to the new SeqRecord yourself.
+        * The annotations dictionary and the dbxrefs list are not used
+          for the new SeqRecord, as in general they may not apply to the
+          subsequence. If you want to preserve them, you must explicitly
+          copy them to the new SeqRecord yourself.
 
         Using an integer index, e.g. my_record[5] is shorthand for
         extracting that letter from the sequence, my_record.seq[5].

@@ -69,10 +69,10 @@ class EntrezTests(unittest.TestCase):
             if entry in gi_to_acc:
                 entry = gi_to_acc[entry]
             self.assertTrue((entry in record.name) or
-                         (entry in record.id) or
-                         ("gi" in record.annotations and
-                          record.annotations["gi"] == entry),
-                         "%s got %s, %s" % (entry, record.name, record.id))
+                            (entry in record.id) or
+                            ("gi" in record.annotations and
+                             record.annotations["gi"] == entry),
+                            "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
 

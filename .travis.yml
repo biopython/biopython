@@ -72,6 +72,8 @@ addons:
     - probcons
     - samtools
     - wise
+    - t-coffee
+    - ncbi-blast+
 
 # We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
 #
@@ -99,6 +101,9 @@ before_install:
   - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
   # This will create ./bin/Genepop and a harmless ./info/ folder.
   - tar -jxvf genepop-4.5.1-0.tar.bz2
+  # Setup environment for t-coffee
+  - mkdir -p $HOME/tcoffee_temp
+  - export HOME_4_TCOFFEE=$HOME/tcoffee_temp
   # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
   # We therefore deactivate that, and download and unzip portable PyPy binaries.
   - |

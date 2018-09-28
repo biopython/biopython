@@ -51,7 +51,7 @@ class BlastnXmlCases(unittest.TestCase):
         # test parsed values of qresult
         self.assertEqual('gi|1348916|gb|G26684.1|G26684', qresult.id)
         self.assertEqual('human STS STS_D11570, sequence tagged site',
-                qresult.description)
+                         qresult.description)
         self.assertEqual(285, qresult.seq_len)
         self.assertEqual(371021, qresult.stat_db_num)
         self.assertEqual(1233631384, qresult.stat_db_len)
@@ -130,9 +130,10 @@ class BlastnXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
-                'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
-                'sequences\", J Comput Biol 2000; 7(1-2):203-14.',
-                        qresult.reference)
+                         'Webb Miller (2000), \"A greedy algorithm for '
+                         'aligning DNA sequences\", J Comput Biol 2000; '
+                         '7(1-2):203-14.',
+                         qresult.reference)
         self.assertEqual(1.0, qresult.param_score_match)
         self.assertEqual(-2.0, qresult.param_score_mismatch)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
@@ -171,8 +172,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|356995852|ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU '
-                'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
+                         'domain, class 5, transcription factor 1 (Pou5f1), '
+                         'transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -213,8 +214,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|94721341|ref|NM_001040441.1|', hit.id)
         self.assertEqual('Homo sapiens zinc '
-                'finger and BTB domain containing 8A (ZBTB8A), mRNA',
-                        hit.description)
+                         'finger and BTB domain containing 8A (ZBTB8A), mRNA',
+                         hit.description)
         self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
@@ -257,8 +258,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|332865372|ref|XM_003318468.1|', hit.id)
         self.assertEqual('PREDICTED: Pan '
-                'troglodytes zinc finger protein 273, transcript variant 1 '
-                '(ZNF273), mRNA', hit.description)
+                         'troglodytes zinc finger protein 273, transcript '
+                         'variant 1 (ZNF273), mRNA', hit.description)
         self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
@@ -295,9 +296,10 @@ class BlastnXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
-                'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
-                'sequences\", J Comput Biol 2000; 7(1-2):203-14.',
-                        qresult.reference)
+                         'Webb Miller (2000), \"A greedy algorithm for '
+                         'aligning DNA sequences\", J Comput Biol 2000; '
+                         '7(1-2):203-14.',
+                         qresult.reference)
         self.assertEqual(1.0, qresult.param_score_match)
         self.assertEqual(-2.0, qresult.param_score_mismatch)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
@@ -333,9 +335,10 @@ class BlastnXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
-                'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
-                'sequences\", J Comput Biol 2000; 7(1-2):203-14.',
-                        qresult.reference)
+                         'Webb Miller (2000), \"A greedy algorithm for '
+                         'aligning DNA sequences\", J Comput Biol 2000; '
+                         '7(1-2):203-14.',
+                         qresult.reference)
         self.assertEqual(1.0, qresult.param_score_match)
         self.assertEqual(-2.0, qresult.param_score_mismatch)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
@@ -347,8 +350,8 @@ class BlastnXmlCases(unittest.TestCase):
 
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription '
-                'factor 1 (Pou5f1), transcript variant 1, mRNA',
-                        qresult.description)
+                         'factor 1 (Pou5f1), transcript variant 1, mRNA',
+                         qresult.description)
         self.assertEqual(490, qresult.seq_len)
         self.assertEqual(23, qresult.stat_db_num)
         self.assertEqual(67750, qresult.stat_db_len)
@@ -361,8 +364,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|356995852|ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU '
-                'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
+                         'domain, class 5, transcription factor 1 (Pou5f1), '
+                         'transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -399,8 +402,8 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
-                'strand=+ repeatMasking=none',
-                        qresult.description)
+                         'strand=+ repeatMasking=none',
+                         qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual(23, qresult.stat_db_num)
         self.assertEqual(67750, qresult.stat_db_len)
@@ -413,8 +416,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|94721341|ref|NM_001040441.1|', hit.id)
         self.assertEqual('Homo sapiens zinc '
-                'finger and BTB domain containing 8A (ZBTB8A), mRNA',
-                        hit.description)
+                         'finger and BTB domain containing 8A (ZBTB8A), mRNA',
+                         hit.description)
         self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
@@ -457,8 +460,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|332865372|ref|XM_003318468.1|', hit.id)
         self.assertEqual('PREDICTED: Pan '
-                'troglodytes zinc finger protein 273, transcript variant 1 '
-                '(ZNF273), mRNA', hit.description)
+                         'troglodytes zinc finger protein 273, transcript '
+                         'variant 1 (ZNF273), mRNA', hit.description)
         self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
@@ -496,9 +499,10 @@ class BlastnXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
-                'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
-                'sequences\", J Comput Biol 2000; 7(1-2):203-14.',
-                        qresult.reference)
+                         'Webb Miller (2000), \"A greedy algorithm for '
+                         'aligning DNA sequences\", J Comput Biol 2000; '
+                         '7(1-2):203-14.',
+                         qresult.reference)
         self.assertEqual(1.0, qresult.param_score_match)
         self.assertEqual(-2.0, qresult.param_score_mismatch)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
@@ -525,8 +529,8 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription '
-                'factor 1 (Pou5f1), transcript variant 1, mRNA',
-                        qresult.description)
+                         'factor 1 (Pou5f1), transcript variant 1, mRNA',
+                         qresult.description)
         self.assertEqual(490, qresult.seq_len)
         self.assertEqual(2933984, qresult.stat_db_num)
         self.assertEqual(4726730735, qresult.stat_db_len)
@@ -539,8 +543,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|356995852|ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU '
-                'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
+                         'domain, class 5, transcription factor 1 (Pou5f1), '
+                         'transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -569,7 +573,7 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
-                'strand=+ repeatMasking=none', qresult.description)
+                         'strand=+ repeatMasking=none', qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual(2933984, qresult.stat_db_num)
         self.assertEqual(4726730735, qresult.stat_db_len)
@@ -582,7 +586,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|332237160|ref|XM_003267724.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys ATG14 autophagy '
-                'related 14 homolog (S. cerevisiae) (ATG14), mRNA', hit.description)
+                         'related 14 homolog (S. cerevisiae) (ATG14), mRNA',
+                         hit.description)
         self.assertEqual(4771, hit.seq_len)
         self.assertEqual(1, len(hit))
 
@@ -607,7 +612,8 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|332254616|ref|XM_003276378.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys S100P binding '
-                'protein, transcript variant 2 (S100PBP), mRNA', hit.description)
+                         'protein, transcript variant 2 (S100PBP), mRNA',
+                         hit.description)
         self.assertEqual(4345, hit.seq_len)
         self.assertEqual(1, len(hit))
 
@@ -655,8 +661,9 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('nr', qresult.target)
 
         self.assertEqual('gi|49176427|ref|NP_418280.3|', qresult.id)
-        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12]',
-                qresult.description)
+        self.assertEqual('component of Sec-independent translocase '
+                         '[Escherichia coli K12]',
+                         qresult.description)
         self.assertEqual(103, qresult.seq_len)
         self.assertEqual(2934173, qresult.stat_db_num)
         self.assertEqual(1011751523, qresult.stat_db_len)
@@ -667,28 +674,36 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(212, len(qresult))
         # check for alternative ID results
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|26250604|ref|NP_756644.1|'])
+                         qresult['gi|26250604|ref|NP_756644.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|30064867|ref|NP_839038.1|'])
+                         qresult['gi|30064867|ref|NP_839038.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|24115132|ref|NP_709642.1|'])
+                         qresult['gi|24115132|ref|NP_709642.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|24054404|gb|AAN45349.1|'])
+                         qresult['gi|24054404|gb|AAN45349.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|2367310|gb|AAC76839.1|'])
+                         qresult['gi|2367310|gb|AAC76839.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|30043127|gb|AAP18849.1|'])
+                         qresult['gi|30043127|gb|AAP18849.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|26111035|gb|AAN83218.1|'])
+                         qresult['gi|26111035|gb|AAN83218.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|3193217|gb|AAC19240.1|'])
+                         qresult['gi|3193217|gb|AAC19240.1|'])
+
         self.assertEqual(qresult['gi|49176427|ref|NP_418280.3|'],
-                qresult['gi|7444818|pir||E65188'])
+                         qresult['gi|7444818|pir||E65188'])
 
         hit = qresult[0]
         self.assertEqual('gi|49176427|ref|NP_418280.3|', hit.id)
         self.assertEqual('component of Sec-independent translocase '
-                '[Escherichia coli K12]', hit.description)
+                         '[Escherichia coli K12]', hit.description)
         self.assertEqual(10, len(hit.id_all))
         self.assertEqual(10, len(hit.description_all))
         self.assertEqual(103, hit.seq_len)
@@ -889,8 +904,14 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.18', qresult.version)
-        self.assertEqual('~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+        self.assertEqual('~Reference: Altschul, Stephen F., '
+                         'Thomas L. Madden, Alejandro A. Schaffer, '
+                         '~Jinghui Zhang, Zheng Zhang, Webb Miller, '
+                         'and David J. Lipman (1997), ~"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search~programs",  '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(1e-05, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1011,11 +1032,12 @@ class BlastpXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
-                'PSI-BLAST: a new generation of protein database search '
-                'programs\", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), \"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs\", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1041,7 +1063,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
+                         'subsp. subtilis str. 168]', qresult.description)
         self.assertEqual(102, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
@@ -1054,8 +1076,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|308175296|ref|YP_003922001.1|', hit.id)
         self.assertEqual('membrane bound '
-                'lipoprotein [Bacillus amyloliquefaciens DSM 7]',
-                hit.description)
+                         'lipoprotein [Bacillus amyloliquefaciens DSM 7]',
+                         hit.description)
         self.assertEqual(100, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
@@ -1175,11 +1197,12 @@ class BlastpXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
-                'PSI-BLAST: a new generation of protein database search '
-                'programs\", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), \"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs\", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1215,11 +1238,12 @@ class BlastpXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
-                'PSI-BLAST: a new generation of protein database search '
-                'programs\", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), \"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs\", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1230,7 +1254,7 @@ class BlastpXmlCases(unittest.TestCase):
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
+                         'subsp. subtilis str. 168]', qresult.description)
         self.assertEqual(102, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
@@ -1281,11 +1305,12 @@ class BlastpXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
-                'PSI-BLAST: a new generation of protein database search '
-                'programs\", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), \"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs\", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1387,11 +1412,12 @@ class BlastpXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
-                'PSI-BLAST: a new generation of protein database search '
-                'programs\", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), \"Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs\", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('F', qresult.param_filter)
@@ -1427,20 +1453,24 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(5, len(qresult))
         # check for alternative ID results
         self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
-                qresult['gi|221311516|ref|ZP_03593363.1|'])
+                         qresult['gi|221311516|ref|ZP_03593363.1|'])
+
         self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
-                qresult['gi|221315843|ref|ZP_03597648.1|'])
+                         qresult['gi|221315843|ref|ZP_03597648.1|'])
+
         self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
-                qresult['gi|221320757|ref|ZP_03602051.1|'])
+                         qresult['gi|221320757|ref|ZP_03602051.1|'])
+
         self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
-                qresult['gi|221325043|ref|ZP_03606337.1|'])
+                         qresult['gi|221325043|ref|ZP_03606337.1|'])
+
         self.assertEqual(qresult['gi|16080617|ref|NP_391444.1|'],
-                qresult['gi|321313111|ref|YP_004205398.1|'])
+                         qresult['gi|321313111|ref|YP_004205398.1|'])
 
         hit = qresult[0]
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus '
-                'subtilis subsp. subtilis str. 168]', hit.description)
+                         'subtilis subsp. subtilis str. 168]', hit.description)
         self.assertEqual(6, len(hit.id_all))
         self.assertEqual(6, len(hit.description_all))
         self.assertEqual(102, hit.seq_len)
@@ -1700,11 +1730,12 @@ class BlastxXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), "Gapped BLAST '
-                'and PSI-BLAST: a new generation of protein database search '
-                'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), "Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein '
+                         'database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -1730,7 +1761,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
-                'strand=+ repeatMasking=none', qresult.description)
+                         'strand=+ repeatMasking=none', qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
@@ -1820,11 +1851,11 @@ class BlastxXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), "Gapped BLAST '
-                'and PSI-BLAST: a new generation of protein database search '
-                'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), "Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein database '
+                         'search programs", Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -1858,11 +1889,11 @@ class BlastxXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), "Gapped BLAST '
-                'and PSI-BLAST: a new generation of protein database search '
-                'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), "Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein database '
+                         'search programs", Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -1964,11 +1995,11 @@ class BlastxXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
-                'Miller, and David J. Lipman (1997), "Gapped BLAST '
-                'and PSI-BLAST: a new generation of protein database search '
-                'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
+                         'Miller, and David J. Lipman (1997), "Gapped BLAST '
+                         'and PSI-BLAST: a new generation of protein database '
+                         'search programs", Nucleic Acids Res. 25:3389-3402.',
+                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -1994,7 +2025,7 @@ class BlastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
-                'strand=+ repeatMasking=none', qresult.description)
+                         'strand=+ repeatMasking=none', qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual(12646943, qresult.stat_db_num)
         self.assertEqual(4397139428, qresult.stat_db_len)
@@ -2007,7 +2038,7 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|332258565|ref|XP_003278367.1|', hit.id)
         self.assertEqual('PREDICTED: UPF0764 protein C16orf89-like [Nomascus '
-                'leucogenys]', hit.description)
+                         'leucogenys]', hit.description)
         self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
@@ -2174,10 +2205,11 @@ class TblastnXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2203,7 +2235,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
+                         'subsp. subtilis str. 168]', qresult.description)
         self.assertEqual(102, qresult.seq_len)
         self.assertEqual(23, qresult.stat_db_num)
         self.assertEqual(67750, qresult.stat_db_len)
@@ -2332,10 +2364,11 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2368,10 +2401,11 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2430,10 +2464,11 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2534,10 +2569,11 @@ class TblastnXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2781,10 +2817,11 @@ class TblastxXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2899,10 +2936,11 @@ class TblastxXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -2935,10 +2973,11 @@ class TblastxXmlCases(unittest.TestCase):
 
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -3040,10 +3079,11 @@ class TblastxXmlCases(unittest.TestCase):
         # test meta variables, only for the first one
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
-                'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
-                'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
-                'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+                         'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, '
+                         'Webb Miller, and David J. Lipman (1997), '
+                         '"Gapped BLAST and PSI-BLAST: a new generation of '
+                         'protein database search programs", '
+                         'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(10.0, qresult.param_evalue_threshold)
         self.assertEqual('L;', qresult.param_filter)
@@ -3079,15 +3119,16 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(5, len(qresult))
         # check for alternative ID results
         self.assertEqual(qresult['gi|296147483|ref|NM_001183135.1|'],
-                qresult['gi|116616412|gb|EF059095.1|'])
+                         qresult['gi|116616412|gb|EF059095.1|'])
 
         hit = qresult[0]
         self.assertEqual('gi|296147483|ref|NM_001183135.1|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) '
-                'mRNA, complete cds', hit.description)
+                         'mRNA, complete cds', hit.description)
         self.assertEqual('gi|116616412|gb|EF059095.1|', hit.id_all[1])
         self.assertEqual('Synthetic construct Saccharomyces cerevisiae '
-                'clone FLH203015.01X MON2, complete sequence', hit.description_all[1])
+                         'clone FLH203015.01X MON2, complete sequence',
+                         hit.description_all[1])
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(7, len(hit))
 
@@ -3130,7 +3171,7 @@ class TblastxXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|254579534|ref|XM_002495708.1|', hit.id)
         self.assertEqual('Zygosaccharomyces rouxii hypothetical protein '
-                '(ZYRO0C02266g) mRNA, complete cds', hit.description)
+                         '(ZYRO0C02266g) mRNA, complete cds', hit.description)
         self.assertEqual(4866, hit.seq_len)
         self.assertEqual(4, len(hit))
 
@@ -3168,7 +3209,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
             self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                    " {1}".format(exp_warning, len(w)))
+                             " {1}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.blast_id, 'Query_1')
         hit1 = qresult[0]
@@ -3189,7 +3230,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
             self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                    " {1}".format(exp_warning, len(w)))
+                             " {1}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.blast_id, 'Query_1')
         hit1 = qresult[0]
@@ -3210,7 +3251,7 @@ class BlastXmlSpecialCases(unittest.TestCase):
             warnings.simplefilter('always', BiopythonParserWarning)
             qresult = next(qresults)
             self.assertEqual(exp_warning, len(w), "Expected {0} warning(s), got"
-                    " {1}".format(exp_warning, len(w)))
+                             " {1}".format(exp_warning, len(w)))
 
         self.assertEqual(qresult.id, 'Query_1')
         self.assertEqual(qresult.description, 'gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds')

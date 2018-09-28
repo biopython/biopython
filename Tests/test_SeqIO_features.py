@@ -85,7 +85,7 @@ def compare_record(old, new, expect_minor_diffs=False):
             common_words = set(old.annotations[key].split()).intersection(new.annotations[key].split())
             if not common_words:
                 raise ValueError("Annotation mis-match for molecule_type:\n%s\n%s"
-                                % (old.annotations[key], new.annotations[key]))
+                                 % (old.annotations[key], new.annotations[key]))
             continue
         if key == "comment":
             # Ignore whitespace

@@ -1,7 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Biopython interface for sequence search program outputs.
 
@@ -484,7 +485,7 @@ def index(filename, format=None, key_function=None, **kwargs):
 
 
 def index_db(index_filename, filenames=None, format=None,
-        key_function=None, **kwargs):
+             key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -614,7 +615,7 @@ def write(qresults, handle, format=None, **kwargs):
 
 
 def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-        out_kwargs=None):
+            out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.

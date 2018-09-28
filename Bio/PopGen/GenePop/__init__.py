@@ -37,10 +37,10 @@ def get_indiv(line):
     try:
         allele_list = [(int_no_zero(marker[0:marker_len]),
                        int_no_zero(marker[marker_len:]))
-                   for marker in markers]
+                       for marker in markers]
     except ValueError:  # Haploid
         allele_list = [(int_no_zero(marker[0:marker_len]),)
-                   for marker in markers]
+                       for marker in markers]
     return indiv_name, allele_list, marker_len
 
 

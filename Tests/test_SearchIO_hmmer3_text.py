@@ -83,11 +83,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('67899******************************************************************96',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # last hit
         hit = qresult[4]
@@ -119,11 +119,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.77, hsp.acc_avg)
         self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('345666667778888899************************99..9999999988876554',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -188,13 +188,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('HHHHHHHHHHHHCHHHHHHHHHHHHHHHHHSGGGGGGGCCCTTTT.HHHHHTSCHHHHHHHHHHHHHHHHHHCTTSHHHHHHHHHHHHHHHHTT-.--HHHHCCHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qkalvkaswekvkanaeeigaeilkrlfkaypdtkklFkkfgdls.aedlksspkfkahakkvlaaldeavknldnddnlkaalkklgarHakrg.vdpanfklfgeal',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKsEDEMKASEDLKKHGATVLTALGGILKK---KGHHEAEIKPLAQSHATKHkIPVKYLEFISECI',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('5789*********************************************************************...6899***********************999998',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test third result
         qresult = next(qresults)
@@ -237,11 +237,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.94, hsp.acc_avg)
         self.assertEqual('kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsgtYtCva',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('8************************99..78888888****************************************9',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('Ig_2', hit.id)
@@ -271,11 +271,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.71, hsp.acc_avg)
         self.assertEqual('kpvlvapp.svvtegenvtLtCsapgnptprvqwykdg.vels......qsqnq........lfipnvsaedsgtYtCra....rnseggktstsveltv',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGeDEHPqclnsqP---HargssraiFSVGPVSPSRRWWYRCYAydsnSPYEWSLPSDLLELLV',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('799998885779*************85.899***9988655554443320...134455543444669************88443344588888888766',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test fourth result
         qresult = next(qresults)
@@ -318,13 +318,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.98, hsp.acc_avg)
         self.assertEqual('HHHHHHHHHHHHHHHHHHTTTTSTTHHHHHHHHHHG-HHHHHHHHHHHHHHHHHHCCS-TTTS-CCCHHHHHHHCHHHHHHHHHHHHHHHC-TT-..................HHHHHHHHHHHHHHCTTS-CHHCHCS...HHHHHCHHCCSCCCHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -344,13 +344,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('HHCTTS-CHHCHCS.HHHHHCHHCCSCC',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('899*********98.8888899998776',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
@@ -381,13 +381,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.87, hsp.acc_avg)
         self.assertEqual('HHHHHHHSCTHHHHHHHHHHHTTTSTHHHHHHHHHHHHHHHHHSCCHHHHHHHHCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('56788886699*********.6555899******************........999999****99999887',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -407,13 +407,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.85, hsp.acc_avg)
         self.assertEqual('HCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QTLPPQRRRDIQQTLTQNM',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('6899*******99998865',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test fifth result
         qresult = next(qresults)
@@ -456,11 +456,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('67899******************************************************************96',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
@@ -491,13 +491,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.98, hsp.acc_avg)
         self.assertEqual('SS--SS--HHHHHHHHHHCCTSSS--HHHHHHHHHH----HHHHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('79****************************************************997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
@@ -528,11 +528,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual('aLGarLralReraGLtqeevAerlg......vSastlsrlE',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('6999***********************************99',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -552,11 +552,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('rgrpsaavlaalaralgldpaera',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('CPKPSLQQITHIANQLGLEKDVVR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('678**************9988765',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
@@ -587,11 +587,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.91, hsp.acc_avg)
         self.assertEqual('hnPYPskevkeelakqTglsrkqidnWFiNaRr',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQ',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('56779*************************996',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
@@ -622,11 +622,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.77, hsp.acc_avg)
         self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('345666667778888899************************99..9999999988876554',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -702,13 +702,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('HHHHHHHHHHHHCHHHHHHHHHHHHHHHHHSGGGGGGGCCCTTTT.HHHHHTSCHHHHHHHHHHHHHHHHHHCTTSHHHHHHHHHHHHHHHHTT-.--HHHHCCHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qkalvkaswekvkanaeeigaeilkrlfkaypdtkklFkkfgdls.aedlksspkfkahakkvlaaldeavknldnddnlkaalkklgarHakrg.vdpanfklfgeal',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKsEDEMKASEDLKKHGATVLTALGGILKK---KGHHEAEIKPLAQSHATKHkIPVKYLEFISECI',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('5789*********************************************************************...6899***********************999998',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -762,11 +762,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.94, hsp.acc_avg)
         self.assertEqual('kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsgtYtCva',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('8************************99..78888888****************************************9',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('Ig_2', hit.id)
@@ -796,11 +796,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.71, hsp.acc_avg)
         self.assertEqual('kpvlvapp.svvtegenvtLtCsapgnptprvqwykdg.vels......qsqnq........lfipnvsaedsgtYtCra....rnseggktstsveltv',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGeDEHPqclnsqP---HargssraiFSVGPVSPSRRWWYRCYAydsnSPYEWSLPSDLLELLV',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('799998885779*************85.899***9988655554443320...134455543444669************88443344588888888766',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -854,13 +854,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.98, hsp.acc_avg)
         self.assertEqual('HHHHHHHHHHHHHHHHHHTTTTSTTHHHHHHHHHHG-HHHHHHHHHHHHHHHHHHCCS-TTTS-CCCHHHHHHHCHHHHHHHHHHHHHHHC-TT-..................HHHHHHHHHHHHHHCTTS-CHHCHCS...HHHHHCHHCCSCCCHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -880,13 +880,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('HHCTTS-CHHCHCS.HHHHHCHHCCSCC',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('899*********98.8888899998776',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
@@ -917,13 +917,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.87, hsp.acc_avg)
         self.assertEqual('HHHHHHHSCTHHHHHHHHHHHTTTSTHHHHHHHHHHHHHHHHHSCCHHHHHHHHCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('56788886699*********.6555899******************........999999****99999887',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -943,13 +943,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.85, hsp.acc_avg)
         self.assertEqual('HCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QTLPPQRRRDIQQTLTQNM',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('6899*******99998865',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -1003,11 +1003,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('67899******************************************************************96',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
@@ -1038,13 +1038,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.98, hsp.acc_avg)
         self.assertEqual('SS--SS--HHHHHHHHHHCCTSSS--HHHHHHHHHH----HHHHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('79****************************************************997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
@@ -1075,11 +1075,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual('aLGarLralReraGLtqeevAerlg......vSastlsrlE',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('6999***********************************99',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -1099,11 +1099,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('rgrpsaavlaalaralgldpaera',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('CPKPSLQQITHIANQLGLEKDVVR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('678**************9988765',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
@@ -1134,11 +1134,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.91, hsp.acc_avg)
         self.assertEqual('hnPYPskevkeelakqTglsrkqidnWFiNaRr',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('KCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQ',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('56779*************************996',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
@@ -1169,11 +1169,11 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.77, hsp.acc_avg)
         self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('345666667778888899************************99..9999999988876554',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -1413,13 +1413,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.98, hsp.acc_avg)
         self.assertEqual('HHHHHHHHHHHHHHHHHHTTTTSTTHHHHHHHHHHG-HHHHHHHHHHHHHHHHHHCCS-TTTS-CCCHHHHHHHCHHHHHHHHHHHHHHHC-TT-..................HHHHHHHHHHHHHHCTTS-CHHCHCS...HHHHHCHHCCSCCCHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -1439,13 +1439,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('HHCTTS-CHHCHCS.HHHHHCHHCCSCC',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('899*********98.8888899998776',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
@@ -1476,13 +1476,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.87, hsp.acc_avg)
         self.assertEqual('HHHHHHHSCTHHHHHHHHHHHTTTSTHHHHHHHHHHHHHHHHHSCCHHHHHHHHCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('56788886699*********.6555899******************........999999****99999887',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
@@ -1502,13 +1502,13 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.85, hsp.acc_avg)
         self.assertEqual('HCS-HHHHHHHHHHHHHHH',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('QTLPPQRRRDIQQTLTQNM',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('6899*******99998865',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -1655,13 +1655,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
     def test_30_hmmsearch_001(self):
         "Test parsing hmmersearch 3.0 (text_30_hmmsearch_001)"
@@ -1733,13 +1733,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -1759,13 +1759,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
@@ -1797,13 +1797,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -1823,13 +1823,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         # self.assertRaises(StopIteration, next, qresults)
@@ -2003,13 +2003,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -2029,13 +2029,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
@@ -2067,13 +2067,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -2093,13 +2093,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         # self.assertRaises(StopIteration, next, qresults)
@@ -2166,13 +2166,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -2192,13 +2192,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
@@ -2230,13 +2230,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
@@ -2256,13 +2256,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG',
-                hsp.aln_annotation['CS'])
+                         hsp.aln_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
         # test if we've properly finished iteration
         self.assertRaises(StopIteration, next, qresults)
@@ -2318,11 +2318,11 @@ class PhmmerCases(unittest.TestCase):
         self.assertEqual('[]', hsp.env_endtype)
         self.assertEqual(1.00, hsp.acc_avg)
         self.assertEqual('mafsaedvlkeydrrrrmealllslyypndrklldykewspprvqvecpkapvewnnppsekglivghfsgikykgekaqasevdvnkm',
-                str(hsp.query.seq)[:89])
+                         str(hsp.query.seq)[:89])
         self.assertEqual('MAFSAEDVLKEYDRRRRMEALLLSLYYPNDRKLLDYKEWSPPRVQVECPKAPVEWNNPPSEKGLIVGHFSGIKYKGEKAQASEVDVNKM',
-                str(hsp.hit.seq)[:89])
+                         str(hsp.hit.seq)[:89])
         self.assertEqual('89***************************************************************************************',
-                hsp.aln_annotation['PP'][:89])
+                         hsp.aln_annotation['PP'][:89])
 
         # last query, last hit
         qresult = qresults[-1]
@@ -2364,11 +2364,11 @@ class PhmmerCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.84, hsp.acc_avg)
         self.assertEqual('cpqswygspqlereivckmsgaphypnyyp',
-                str(hsp.query.seq))
+                         str(hsp.query.seq))
         self.assertEqual('YPDCSYGMSQLERSIVVACEGSPYVPVHFD',
-                str(hsp.hit.seq))
+                         str(hsp.hit.seq))
         self.assertEqual('68889******************9887764',
-                hsp.aln_annotation['PP'])
+                         hsp.aln_annotation['PP'])
 
 
 if __name__ == "__main__":

@@ -407,7 +407,7 @@ class SeqFeature(object):
         codon_table = self.qualifiers.get("transl_table", [table])[0]
 
         return feat_seq.translate(table=codon_table, stop_symbol=stop_symbol,
-                to_stop=to_stop, cds=cds, gap=gap)
+                                  to_stop=to_stop, cds=cds, gap=gap)
 
     # Python 3:
     def __bool__(self):
@@ -1604,7 +1604,7 @@ class WithinPosition(int, AbstractPosition):
     - left - The start (left) position of the boundary
     - right - The end (right) position of the boundary
 
-    This allows dealing with a position like ((1.4)..100). This
+    This allows dealing with a location like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
     and 4. Since this is a start coordinate, it should acts like
     it is at position 1 (or in Python counting, 0).
@@ -1683,9 +1683,9 @@ class WithinPosition(int, AbstractPosition):
 
     def __new__(cls, position, left, right):
         """Create a WithinPosition object."""
-        assert position == left or position == right, \
-            "WithinPosition: %r should match left %r or right %r" \
-            % (position, left, right)
+        if not (position == left or position == right):
+            raise RuntimeError("WithinPosition: %r should match left %r or "
+                               "right %r" % (position, left, right))
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -2033,8 +2033,9 @@ class OneOfPosition(int, AbstractPosition):
 
         position is an integer specifying the default behaviour.
         """
-        assert position in choices, \
-            "OneOfPosition: %r should match one of %r" % (position, choices)
+        if position not in choices:
+            raise ValueError("OneOfPosition: %r should match one "
+                             "of %r" % (position, choices))
         obj = int.__new__(cls, position)
         obj.position_choices = choices
         return obj

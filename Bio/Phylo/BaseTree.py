@@ -835,9 +835,10 @@ class Tree(TreeElement, TreeMixin):
         # Hideous kludge because Py2.x doesn't allow keyword args after *args
         outgroup_branch_length = kwargs.get('outgroup_branch_length')
         if outgroup_branch_length is not None:
-            assert 0 <= outgroup_branch_length <= prev_blen, \
-                "outgroup_branch_length must be between 0 and the " \
-                "original length of the branch leading to the outgroup."
+            if not (0 <= outgroup_branch_length <= prev_blen):
+                raise ValueError("outgroup_branch_length must be between 0 "
+                                 "and the original length of the branch "
+                                 "leading to the outgroup.")
 
         if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup

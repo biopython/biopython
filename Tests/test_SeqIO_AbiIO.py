@@ -270,9 +270,10 @@ class TestAbi(unittest.TestCase):
         self.assertEqual(record.id, "<unknown id>")
         raw_keys = record.annotations["abif_raw"]
         self.assertEqual(set(raw_keys), {'FWO_1', 'AEPt1', 'AEPt2', 'APXV1',
-            'APrV1', 'DATA9', 'DATA10', 'DATA11', 'DATA12', 'DATA1', 'DATA2',
-            'DATA3', 'DATA4', 'PBAS1', 'PBAS2', 'PLOC1', 'PLOC2', 'PCON1',
-            'PCON2'})
+                                         'APrV1', 'DATA9', 'DATA10', 'DATA11',
+                                         'DATA12', 'DATA1', 'DATA2', 'DATA3',
+                                         'DATA4', 'PBAS1', 'PBAS2', 'PLOC1',
+                                         'PLOC2', 'PCON1', 'PCON2'})
 
     def test_raw(self):
         """Test access to raw ABIF tags."""

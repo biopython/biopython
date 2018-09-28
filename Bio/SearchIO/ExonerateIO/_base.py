@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 import re
@@ -203,9 +203,9 @@ def _split_fragment(frag):
         # coordinates for the split strand
         qstart, hstart = qpos, hpos
         qpos += (len(split) - sum(str(split.query.seq).count(x)
-            for x in ('-', '<', '>'))) * qstep
+                 for x in ('-', '<', '>'))) * qstep
         hpos += (len(split) - sum(str(split.hit.seq).count(x)
-            for x in ('-', '<', '>'))) * hstep
+                 for x in ('-', '<', '>'))) * hstep
 
         split.hit_start = min(hstart, hpos)
         split.query_start = min(qstart, qpos)
@@ -283,7 +283,7 @@ def _create_hsp(hid, qid, hspd):
     hsp = HSP(frags)
     # set hsp-specific attributes
     for attr in ('score', 'hit_split_codons', 'query_split_codons',
-            'model', 'vulgar_comp', 'cigar_comp', 'alphabet'):
+                 'model', 'vulgar_comp', 'cigar_comp', 'alphabet'):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])
 
@@ -432,7 +432,7 @@ class _BaseExonerateParser(object):
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
                     self.read_until(lambda line:
-                            line.strip().startswith('Query:'))
+                                    line.strip().startswith('Query:'))
                     header = self._parse_alignment_header()
                 # parse the block contents
                 cur = self.parse_alignment_block(header)

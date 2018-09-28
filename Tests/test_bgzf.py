@@ -390,7 +390,7 @@ class BgzfTests(unittest.TestCase):
         h.flush()
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
-                        ((offset2 << 16) - (offset1 << 16)))
+                         ((offset2 << 16) - (offset1 << 16)))
 
         # Flushing should change the offset
         h.flush()
@@ -415,6 +415,29 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(h.read(5), "Magic")
 
         h.close()
+
+    def test_many_blocks_in_single_read(self):
+        n = 1000
+
+        h = bgzf.open(self.temp_file, 'wb')
+        # create a file with a lot of a small blocks
+        for i in range(n):
+            h.write(b'\x01\x02\x03\x04')
+            h.flush()
+        h.write(b'\nABCD')
+        h.close()
+
+        h = bgzf.open(self.temp_file, 'rb')
+        data = h.read(4 * n)
+        self.assertEqual(len(data), 4 * n)
+        self.assertEqual(data[:4], b'\x01\x02\x03\x04')
+        self.assertEqual(data[-4:], b'\x01\x02\x03\x04')
+
+        h.seek(0)
+        data = h.readline()
+        self.assertEqual(len(data), 4 * n + 1)
+        self.assertEqual(data[:4], b'\x01\x02\x03\x04')
+        self.assertEqual(data[-5:], b'\x01\x02\x03\x04\n')
 
 
 if __name__ == "__main__":

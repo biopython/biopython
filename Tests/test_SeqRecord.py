@@ -441,7 +441,7 @@ class TestTranslation(unittest.TestCase):
 
     def test_preserve(self):
         t = self.s.translate(cds=True, id=True, name=True, description=True,
-                        dbxrefs=True, annotations=True)
+                             dbxrefs=True, annotations=True)
         self.assertEqual(t.seq, "MV")
         self.assertEqual(t.id, "TestID")
         self.assertEqual(t.name, "TestName")

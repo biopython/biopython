@@ -1,8 +1,9 @@
-# Copyright 2006-2017 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-#
+# Copyright 2006-2018 by Peter Cock.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 # Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
@@ -520,9 +521,10 @@ def write(sequences, handle, format):
             # and write that using Bio.AlignIO
             alignment = MultipleSeqAlignment(sequences)
             alignment_count = AlignIO.write([alignment], fp, format)
-            assert alignment_count == 1, \
-                "Internal error - the underlying writer " \
-                " should have returned 1, not %r" % alignment_count
+            if alignment_count != 1:
+                raise RuntimeError("Internal error - the underlying writer "
+                                   "should have returned 1, not %r"
+                                   % alignment_count)
             count = len(alignment)
             del alignment_count, alignment
         elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
@@ -531,9 +533,10 @@ def write(sequences, handle, format):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        assert isinstance(count, int), "Internal error - the underlying %s " \
-            "writer should have returned the record count, not %r" \
-            % (format, count)
+        if not isinstance(count, int):
+            raise RuntimeError("Internal error - the underlying %s writer "
+                               "should have returned the record count, not %r"
+                               % (format, count))
 
     return count
 

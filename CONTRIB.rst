@@ -75,6 +75,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Connor T. Skennerton <https://github.com/ctSkennerton>
 - Cymon J Cox <https://github.com/cymon>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
+- Darcy Mason <https://github.com/darcymason>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
@@ -100,7 +101,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Frederik Gwinner
 - Fábio Madeira <https://github.com/biomadeira>
 - Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
-- Gavin E Crooks <gec at domain compbio.berkeley.edu>
+- Gavin E Crooks <https://github.com/gecrooks>
 - Gert Hulselmans <https://github.com/ghuls>
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
@@ -111,13 +112,13 @@ please open an issue on GitHub or mention it on the mailing list.
 - Iddo Friedberg <idoerg at domain burnham.org>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
-- James Casbon <j.a.casbon at domain qmul.ac.uk>
+- James Casbon <https://github.com/jamescasbon>
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
-- Jeffrey Chang <jchang at domain smi.stanford.edu>
-- Jeffrey Finkelstein <jeffrey.finkelstein at domain gmail.com>
+- Jeffrey Chang <https://github.com/jchang>
+- Jeffrey Finkelstein <https://github.com/jfinkels/>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
 - Jian-Long Huang <https://github.com/jlhg>
@@ -136,6 +137,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Joshua Meyers <https://github.com/JoshuaMeyers>
 - João D Ferreira <https://github.com/jdferreira>
 - Jun Aruga <https://github.com/junaruga>
+- Juraj Szász <https:/github.com/sars1492>
 - Jure Fabjan <https://github.com/JureFabjan>
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
@@ -145,6 +147,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kian Ho <https://github.com/kianho>
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
+- Konstantin Vdovkin <https://github.com/rtf_const>
 - Kozo Nishida <https://github.com/kozo2>
 - Kristian Davidsen <https://github.com/krdav>
 - Kristian Rother <https://github.com/krother>
@@ -171,13 +174,14 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michael Hoffman <https://github.com/michaelmhoffman>
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
-- Michiel de Hoon <mdehoon at domain c2b2.columbia.edu>
+- Michiel de Hoon <https://github.com/mdehoon>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
+- Nick Negretti <https://github.com/nimne/>
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe/>
 - Noam Kremen <https://github.com/noamkremen>
@@ -197,8 +201,10 @@ please open an issue on GitHub or mention it on the mailing list.
 - Richard Neher <https://github.com/rneher>
 - Robert Ernst <https://github.com/rernst>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
+- Rona Costello <https://github.com/RonaCostello>
 - Sacha Laurent <https://github.com/Cashalow>
 - Saket Choudhary <https://github.com/saketkc>
+- Sean Davis <https://github.com/seandavi>
 - Sebastian Bassi <https://about.me/bassi>
 - Sergei Lebedev <https://github.com/superbobry>
 - Sergio Valqui <https://github.com/svalqui>

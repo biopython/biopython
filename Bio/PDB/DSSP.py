@@ -290,8 +290,10 @@ def _make_dssp_dict(handle):
                 raise ValueError(exc)
         res_id = (" ", resseq, icode)
         dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi, dssp_index,
-                NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
-                NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
+                                   NH_O_1_relidx, NH_O_1_energy,
+                                   O_NH_1_relidx, O_NH_1_energy,
+                                   NH_O_2_relidx, NH_O_2_energy,
+                                   O_NH_2_relidx, O_NH_2_energy)
         keys.append((chainid, res_id))
     return dssp, keys
 
@@ -494,7 +496,7 @@ class DSSP(AbstractResiduePropertyMap):
             dssp_list.append(dssp_vals)
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
-                dssp_list)
+                                            dssp_list)
 
 
 if __name__ == "__main__":

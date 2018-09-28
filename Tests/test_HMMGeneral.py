@@ -42,8 +42,9 @@ class LetterAlphabet(Alphabet.Alphabet):
 def test_assertion(name, result, expected):
     """Helper function to test an assertion and print out a reasonable error.
     """
-    assert result == expected, "Expected %s, got %s for %s" \
-           % (expected, result, name)
+    assert result == expected, "Expected %s, got %s for %s" % (expected,
+                                                               result,
+                                                               name)
 
 
 class TrainingSequenceTest(unittest.TestCase):
@@ -86,14 +87,14 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         assertions = []
         test_assertion("Transition prob", self.mm_builder.transition_prob,
-                          expected_transition_prob)
+                       expected_transition_prob)
         test_assertion("Transition pseudo",
-                          self.mm_builder.transition_pseudo,
-                          expected_transition_pseudo)
+                       self.mm_builder.transition_pseudo,
+                       expected_transition_pseudo)
         test_assertion("Emission prob", self.mm_builder.emission_prob,
-                           expected_emission_prob)
+                       expected_emission_prob)
         test_assertion("Emission pseudo", self.mm_builder.emission_pseudo,
-                           expected_emission_pseudo)
+                       expected_emission_pseudo)
 
     def test_allow_all_transitions(self):
         """Testing allow_all_transitions.
@@ -168,7 +169,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
-                                                    LetterAlphabet())
+                                                         LetterAlphabet())
 
     def test_transitions_from(self):
         """Testing the calculation of transitions_from
@@ -291,10 +292,11 @@ class HiddenMarkovModelTest(unittest.TestCase):
                 observed_emissions = [first_letter, second_letter]
                 viterbi = model.viterbi(observed_emissions, NumberAlphabet)
                 self._checkSimpleHmm(prob_initial, prob_transition,
-                                 prob_emission, viterbi, observed_emissions)
+                                     prob_emission, viterbi,
+                                     observed_emissions)
 
     def _checkSimpleHmm(self, prob_initial, prob_transition, prob_emission,
-                         viterbi, observed_emissions):
+                        viterbi, observed_emissions):
         max_prob = 0
 
         # expected first and second states in the sequence, calculated below
@@ -372,10 +374,10 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # state 1, then emitting an A, then transitioning 1 -> 2, then
         # emitting a B.
         # Note that probabilities are converted into log space.
-        expected_prob = math.log(prob_1_initial)\
-        + math.log(prob_1_A)\
-        + math.log(prob_1_to_2)\
-        + math.log(prob_2_B)
+        expected_prob = (math.log(prob_1_initial)
+                         + math.log(prob_1_A)
+                         + math.log(prob_1_to_2)
+                         + math.log(prob_2_B))
         test_assertion("log probability of most probable path",
                        prob, expected_prob)
 
@@ -447,8 +449,8 @@ class AbstractTrainerTest(unittest.TestCase):
 
         log_prob = self.test_trainer.log_likelihood(probs)
         expected_log_prob = -7.31873556778
-        assert abs(expected_log_prob - log_prob) < 0.1, \
-          "Bad probability calculated: %s" % log_prob
+        assert abs(expected_log_prob
+                   - log_prob) < 0.1, "Bad probability calculated: %s" % log_prob
 
 
 # run the tests

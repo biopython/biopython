@@ -117,49 +117,49 @@ class NexusTest1(unittest.TestCase):
                                         23: "y",
                                         29: "1,2,3 can't decide for a name?!",
                                         47: "final"})
-        self.assertEqual(n.charsets, {
-                "big": [0, 2, 4, 6],
-                "bigchunk": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46],
-                "byname": [0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
-                "c1": [0, 1, 2, 3, 4, 5, 6, 7],
-                "c2": [8, 9, 10, 11, 12, 13, 14, 15],
-                "c3": [16, 17, 18, 19, 20, 21, 22, 23],
-                "firsthalf": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-                "mix": [0, 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
-                "mux": [0, 1, 4, 7, 8, 10, 13, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 31, 34, 37, 40, 43, 46],
-                "pos1": [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45],
-                "pos2": [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
-                "pos3": [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47],
-                "secondhalf": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
-                })
-        self.assertEqual(n.taxsets, {
-                "normal": ["isn'that [a] strange name?",
-                           'one should be punished, for (that)!',
-                           't1',
-                           't5',
-                           't6',
-                           't8'],
-                "reference": ["isn'that [a] strange name?",
-                              'one should be punished, for (that)!',
-                              't1',
-                              't2 the name',
-                              't5',
-                              't6'],
-                "tbyname1": ["isn'that [a] strange name?",
-                             'one should be punished, for (that)!',
-                             't1',
-                             't2 the name',
-                             't5',
-                             't6'],
-                "tbyname2": ["isn'that [a] strange name?",
-                             'one should be punished, for (that)!',
-                             't2 the name',
-                             't5',
-                             't6',
-                             't7'],
-                "tbyname3": ['t1',
-                             't2 the name'],
-                })
+        self.assertEqual(n.charsets,
+                         {"big": [0, 2, 4, 6],
+                          "bigchunk": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46],
+                          "byname": [0, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+                          "c1": [0, 1, 2, 3, 4, 5, 6, 7],
+                          "c2": [8, 9, 10, 11, 12, 13, 14, 15],
+                          "c3": [16, 17, 18, 19, 20, 21, 22, 23],
+                          "firsthalf": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                          "mix": [0, 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
+                          "mux": [0, 1, 4, 7, 8, 10, 13, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 31, 34, 37, 40, 43, 46],
+                          "pos1": [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45],
+                          "pos2": [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
+                          "pos3": [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47],
+                          "secondhalf": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+                          })
+        self.assertEqual(n.taxsets,
+                         {"normal": ["isn'that [a] strange name?",
+                                     'one should be punished, for (that)!',
+                                     't1',
+                                     't5',
+                                     't6',
+                                     't8'],
+                          "reference": ["isn'that [a] strange name?",
+                                        'one should be punished, for (that)!',
+                                        't1',
+                                        't2 the name',
+                                        't5',
+                                        't6'],
+                          "tbyname1": ["isn'that [a] strange name?",
+                                       'one should be punished, for (that)!',
+                                       't1',
+                                       't2 the name',
+                                       't5',
+                                       't6'],
+                          "tbyname2": ["isn'that [a] strange name?",
+                                       'one should be punished, for (that)!',
+                                       't2 the name',
+                                       't5',
+                                       't6',
+                                       't7'],
+                          "tbyname3": ['t1',
+                                       't2 the name'],
+                          })
         self.assertEqual(len(n.charpartitions), 2)
         self.assertIn('codons', n.charpartitions)
         self.assertIn('part', n.charpartitions)
@@ -216,29 +216,29 @@ class NexusTest1(unittest.TestCase):
                                         'pos2': [2],
                                         'pos3': [1],
                                         })
-        self.assertEqual(nf1.taxsets, {
-                'normal': ["isn'that [a] strange name?",
-                           'one should be punished, for (that)!',
-                           't5',
-                           't6',
-                           't8'],
-                'reference': ["isn'that [a] strange name?",
-                              'one should be punished, for (that)!',
-                              't2 the name',
-                              't5',
-                              't6'],
-                'tbyname1': ["isn'that [a] strange name?",
-                             'one should be punished, for (that)!',
-                             't2 the name',
-                             't5',
-                             't6'],
-                'tbyname2': ["isn'that [a] strange name?",
-                             'one should be punished, for (that)!',
-                             't2 the name',
-                             't5',
-                             't6'],
-                'tbyname3': ['t2 the name'],
-                })
+        self.assertEqual(nf1.taxsets,
+                         {'normal': ["isn'that [a] strange name?",
+                                     'one should be punished, for (that)!',
+                                     't5',
+                                     't6',
+                                     't8'],
+                          'reference': ["isn'that [a] strange name?",
+                                        'one should be punished, for (that)!',
+                                        't2 the name',
+                                        't5',
+                                        't6'],
+                          'tbyname1': ["isn'that [a] strange name?",
+                                       'one should be punished, for (that)!',
+                                       't2 the name',
+                                       't5',
+                                       't6'],
+                          'tbyname2': ["isn'that [a] strange name?",
+                                       'one should be punished, for (that)!',
+                                       't2 the name',
+                                       't5',
+                                       't6'],
+                          'tbyname3': ['t2 the name'],
+                          })
         self.assertEqual(len(nf1.charpartitions), 2)
         self.assertIn('codons', nf1.charpartitions)
         self.assertIn('part', nf1.charpartitions)
@@ -462,8 +462,8 @@ Root:  16
                                                       ('Torreya', 100.0, None, None)])
         tree.prune('Torreya')
         self.assertEqual(tree.all_ids(), [0, 1, 3])
-        ts1c = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
-                "25.000000)90.000000;"
+        ts1c = ("(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"
+                "25.000000)90.000000;")
         tree = Trees.Tree(ts1c)
         self.assertEqual(self._get_flat_nodes(tree), [(None, 90.0, None, None),
                                                       ('Cephalotaxus', 125.0, None, None),
@@ -486,10 +486,10 @@ Root:  16
                                                       ('Taxus', 0.0, 50.0, None),
                                                       ('Torreya', 0.0, 50.0, None)])
 
-        ts2 = "(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"\
-          "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"\
-          "t7:0.482152)E:0.0268148, ((t5:0.0984167,t3:0.488578)G:0.0349662,"\
-          "t1:0.130208)F:0.0318288)D:0.0273876);"
+        ts2 = ("(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"
+               "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"
+               "t7:0.482152)E:0.0268148, ((t5:0.0984167,t3:0.488578)G:0.0349662,"
+               "t1:0.130208)F:0.0318288)D:0.0273876);")
         tree = Trees.Tree(ts2)
         tree.branchlength2support()
         supports = []
@@ -502,10 +502,10 @@ Root:  16
                                     0.0273876, 0.0268148, 0.301171, 0.482152,
                                     0.0318288, 0.0349662, 0.0984167, 0.488578,
                                     0.130208])
-        ts3 = "(((B 9:0.385832, (C 8:0.445135, C4:0.41401)C:0.024032)B:0.041436,"\
-          "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"\
-          "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"\
-          "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        ts3 = ("(((B 9:0.385832, (C 8:0.445135, C4:0.41401)C:0.024032)B:0.041436,"
+               "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"
+               "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"
+               "F 1:0.130208)F:0.0318288)D:0.0273876);")
         self.assertFalse(tree.is_identical(Trees.Tree(ts3)))
         tree = Trees.Tree(ts3)
         self.assertTrue(tree.is_bifurcating())
@@ -536,20 +536,20 @@ Root:  16
 
     def test_merge_with_support(self):
         """Test merge_with_support and consensus method."""
-        ts1 = "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"\
-          "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"\
-          "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"\
-          "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        ts1 = ("(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"
+               "A 6:0.392496)A:0.0291131, t2:0.497673, ((E 0:0.301171,"
+               "E 7:0.482152)E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,"
+               "F 1:0.130208)F:0.0318288)D:0.0273876);")
 
-        tbs1 = "(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"\
-                  "A 6:0.392496)A:0.0291131, t2:0.497673, ((G 5:0.0984167,"\
-                  "G 3:0.488578)E:0.0268148, ((E 0:0.301171, E 7:0.482152)G:0.0349662,"\
-                  "F 1:0.130208)F:0.0318288)D:0.0273876);"
+        tbs1 = ("(((B 9:0.385832, (C 8:0.445135, C 4:0.41401)C:0.024032)B:0.041436,"
+                "A 6:0.392496)A:0.0291131, t2:0.497673, ((G 5:0.0984167,"
+                "G 3:0.488578)E:0.0268148, ((E 0:0.301171, E 7:0.482152)G:0.0349662,"
+                "F 1:0.130208)F:0.0318288)D:0.0273876);")
 
-        tbs2 = "(((B 9:0.385832,A 6:0.392496 C:0.024032)B:0.041436, (C 8:0.445135,"\
-                  "C 4:0.41401))A:0.0291131, t2:0.497673, ((E 0:0.301171, E 7:0.482152)"\
-                  "E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,F 1:0.130208)"\
-                  "F:0.0318288)D:0.0273876);"
+        tbs2 = ("(((B 9:0.385832,A 6:0.392496 C:0.024032)B:0.041436, (C 8:0.445135,"
+                "C 4:0.41401))A:0.0291131, t2:0.497673, ((E 0:0.301171, E 7:0.482152)"
+                "E:0.0268148, ((G 5:0.0984167,G 3:0.488578)G:0.0349662,F 1:0.130208)"
+                "F:0.0318288)D:0.0273876);")
 
         t1 = Trees.Tree(ts1)
         tb1 = Trees.Tree(tbs1)
@@ -567,8 +567,8 @@ Root:  16
             data = node.get_data()
             supports.append(data.support)
         self.assertTrue(supports, [0.0, 1.0, 0.04, 1.0, 0.5, 1.0, 1.0, 1.0,
-                                    1.0, 1.0, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0,
-                                    1.0])
+                                   1.0, 1.0, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0,
+                                   1.0])
 
     def test_large_newick(self):
         with open(os.path.join(self.testfile_dir, "int_node_labels.nwk")) as large_ex_handle:
@@ -581,10 +581,11 @@ Root:  16
             new_nodes = []
             for cur_node in cur_nodes:
                 nodedata.append((cur_node.data.taxon,
-                    cur_node.data.branchlength, cur_node.data.support,
-                    cur_node.data.comment))
+                                 cur_node.data.branchlength,
+                                 cur_node.data.support,
+                                 cur_node.data.comment))
                 new_nodes.extend([tree.node(nid) for nid in
-                    cur_node.get_succ()])
+                                  cur_node.get_succ()])
             cur_nodes = new_nodes
         return nodedata
 

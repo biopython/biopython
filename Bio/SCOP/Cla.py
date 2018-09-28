@@ -1,10 +1,10 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# Modifications Copyright 2010 Jeffrey Finkelstein. All rights reserved.
+# Revisions copyright 2010 Jeffrey Finkelstein. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Handle the SCOP CLAssification file, which describes SCOP domains.
 
 The file format is described in the scop

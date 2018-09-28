@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for BLAT output formats.
 
 This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
@@ -228,9 +228,9 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
     :type strand: int, choice of -1, 0, or 1
 
     """
-    assert len(starts) == len(blksizes), \
-            "Unequal start coordinates and block sizes list (%r vs %r)" \
-            % (len(starts), len(blksizes))
+    if len(starts) != len(blksizes):
+        raise RuntimeError("Unequal start coordinates and block sizes list"
+                           " (%r vs %r)" % (len(starts), len(blksizes)))
     # see: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
     # no need to reorient if it's already the positive strand
     if strand >= 0:
@@ -274,7 +274,7 @@ def _calc_millibad(psl, is_protein):
     total = size_mul * (psl['matches'] + psl['repmatches'] + psl['mismatches'])
     if total != 0:
         millibad = (1000 * (psl['mismatches'] * size_mul + psl['qnuminsert'] +
-                round(3 * log(1 + size_dif)))) / total
+                    round(3 * log(1 + size_dif)))) / total
 
     return millibad
 
@@ -307,12 +307,12 @@ def _create_hsp(hid, qid, psl):
     blocksize_multiplier = 3 if is_protein else 1
     # query block starts
     qstarts = _reorient_starts(psl['qstarts'],
-            psl['blocksizes'], psl['qsize'], qstrand)
+                               psl['blocksizes'], psl['qsize'], qstrand)
     # hit block starts
     if len(psl['strand']) == 2:
         hstarts = _reorient_starts(psl['tstarts'],
-                [blocksize_multiplier * i for i in psl['blocksizes']],
-                psl['tsize'], hstrand)
+                                   [blocksize_multiplier * i for i in
+                                   psl['blocksizes']], psl['tsize'], hstrand)
     else:
         hstarts = psl['tstarts']
     # set query and hit coords
@@ -443,11 +443,15 @@ class BlatPslParser(object):
 
     def _validate_cols(self, cols):
         if not self.pslx:
-            assert len(cols) == 21, "Invalid PSL line: %r. " \
-            "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
+            if len(cols) != 21:
+                raise ValueError("Invalid PSL line: %r. Expected 21 "
+                                 "tab-separated columns, found %i"
+                                 % (self.line, len(cols)))
         else:
-            assert len(cols) == 23, "Invalid PSLX line: %r. " \
-            "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
+            if len(cols) != 23:
+                raise ValueError("Invalid PSLX line: %r. Expected 23 "
+                                 "tab-separated columns, found %i"
+                                 % (self.line, len(cols)))
 
     def _parse_qresult(self):
         """Yield QueryResult objects (PRIVATE)."""
@@ -626,12 +630,12 @@ class BlatPslWriter(object):
         header = 'psLayout version 3\n'
 
         # adapted from BLAT's source: lib/psl.c#L496
-        header += "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
-        "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   \tT    "
-        "\tT  \tblock\tblockSizes \tqStarts\t tStarts\n     " \
-        "\tmatch\tmatch\t   \tcount\tbases\tcount\tbases\t      \tname     "
-        "\tsize\tstart\tend\tname     \tsize\tstart\tend\tcount"
-        "\n%s\n" % ('-' * 159)
+        header += ("\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
+                   "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   "
+                   "\tT    \tT  \tblock\tblockSizes \tqStarts\t tStarts"
+                   "\n     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases"
+                   "\t      \tname     \tsize\tstart\tend\tname     \tsize"
+                   "\tstart\tend\tcount\n%s\n" % ('-' * 159))
 
         return header
 
@@ -672,7 +676,8 @@ class BlatPslWriter(object):
                 else:
                     strand = '-'
                 qstarts = _reorient_starts([x[0] for x in hsp.query_range_all],
-                        hsp.query_span_all, qresult.seq_len, hsp[0].query_strand)
+                                           hsp.query_span_all, qresult.seq_len,
+                                           hsp[0].query_strand)
 
                 if hsp[0].hit_strand == 1:
                     hstrand = 1
@@ -683,7 +688,8 @@ class BlatPslWriter(object):
                     hstrand = -1
                     strand += '-'
                 hstarts = _reorient_starts([x[0] for x in hsp.hit_range_all],
-                        hsp.hit_span_all, hit.seq_len, hstrand)
+                                           hsp.hit_span_all, hit.seq_len,
+                                           hstrand)
 
                 line.append(strand)
                 line.append(qresult.id)

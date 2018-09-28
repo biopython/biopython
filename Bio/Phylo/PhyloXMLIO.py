@@ -350,8 +350,9 @@ class Parser(object):
         for event, elem in self.context:
             namespace, tag = _split_namespace(elem.tag)
             if event == 'start' and tag == 'clade':
-                assert phylogeny.root is None, \
-                    "Phylogeny object should only have 1 clade"
+                if phylogeny.root is not None:
+                    raise ValueError("Phylogeny object should only have "
+                                     "1 clade")
                 phylogeny.root = self._parse_clade(elem)
                 continue
             if event == 'end':

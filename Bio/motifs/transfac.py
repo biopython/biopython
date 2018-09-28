@@ -114,8 +114,10 @@ def read(handle):
             record.version = value
         elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
             counts = {}
-            assert value.split()[:4] == ['A', 'C', 'G', 'T'], \
-                'A TRANSFAC matrix "{0:s}" line should be followed by "A C G T": "{0:s}"'.format(key, line)
+            if value.split()[:4] != ['A', 'C', 'G', 'T']:
+                raise ValueError('A TRANSFAC matrix "{0:s}" line should be '
+                                 'followed by "A C G T": '
+                                 '"{0:s}"'.format(key, line))
             length = 0
             for c in "ACGT":
                 counts[c] = []
@@ -141,8 +143,10 @@ def read(handle):
                         BiopythonParserWarning)
                 else:
                     length += 1
-                assert i == length, \
-                    'The TRANSFAC matrix row number does not match the position in the matrix: "{0:s}"'.format(line)
+                if i != length:
+                    raise ValueError('The TRANSFAC matrix row number does not '
+                                     'match the position in the matrix: '
+                                     '"{0:s}"'.format(line))
                 if len(key) == 1:
                     warnings.warn(
                         'A TRANSFAC matrix line should have a 2 digit key at the start of the lin ("{0:02d}"), '
@@ -150,23 +154,29 @@ def read(handle):
                         BiopythonParserWarning)
                 assert len(key_value) == 2, 'A TRANSFAC matrix line should have a key and a value: "{0:s}"'.format(line)
                 values = value.split()[:4]
-                assert len(values) == 4, \
-                    'A TRANSFAC matrix line should have a value for each nucleotide (A, C, G and T): "{0:s}"'.format(
-                        line)
+                if len(values) != 4:
+                    raise ValueError('A TRANSFAC matrix line should have a '
+                                     'value for each nucleotide '
+                                     '(A, C, G and T): "{0:s}"'.format(line))
                 for c, v in zip("ACGT", values):
                     counts[c].append(float(v))
         if line == 'XX':
             pass
         elif key == 'RN':
             index, separator, accession = value.partition(";")
-            assert index[0] == '[', \
-                'The index "{0:s}" in a TRANSFAC RN line should start with a "[": "{0:s}"'.format(index, line)
-            assert index[-1] == ']', \
-                'The index "{0:s}" in a TRANSFAC RN line should end with a "]": "{0:s}"'.format(index, line)
+            if index[0] != '[':
+                raise ValueError('The index "{0:s}" in a TRANSFAC RN line '
+                                 'should start with a '
+                                 '"[": "{0:s}"'.format(index, line))
+            if index[-1] != ']':
+                raise ValueError('The index "{0:s}" in a TRANSFAC RN line '
+                                 'should end with a '
+                                 '"]": "{0:s}"'.format(index, line))
             index = int(index[1:-1])
-            assert len(references) == index - 1, \
-                'The index "{0:d}" of the TRANSFAC RN line does not match the current number ' \
-                'of seen references "{1:d}": "{2:s}"'.format(index, len(references) + 1, line)
+            if len(references) != index - 1:
+                raise ValueError('The index "{0:d}" of the TRANSFAC RN line '
+                                 'does not match the current number of seen '
+                                 'references ''"{1:d}": "{2:s}"'.format(index, len(references) + 1, line))
             reference = {key: value}
             references.append(reference)
         elif key == '//':

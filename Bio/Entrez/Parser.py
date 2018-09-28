@@ -563,7 +563,7 @@ class DataHandler(object):
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
                             expat.model.XML_CTYPE_CHOICE) and
                model[1] in (expat.model.XML_CQUANT_NONE,
-                           expat.model.XML_CQUANT_OPT) and
+                            expat.model.XML_CQUANT_OPT) and
                len(model[3]) == 1):
             model = model[3][0]
         # PCDATA declarations correspond to strings

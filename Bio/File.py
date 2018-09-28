@@ -109,15 +109,26 @@ def _open_for_random_access(filename):
 
     This functionality is used by the Bio.SeqIO and Bio.SearchIO index
     and index_db functions.
+
+    If the file is gzipped but not BGZF, a specific ValueError is raised.
     """
     handle = open(filename, "rb")
-    from . import bgzf
-    try:
-        return bgzf.BgzfReader(mode="rb", fileobj=handle)
-    except ValueError as e:
-        assert "BGZF" in str(e)
-        # Not a BGZF file after all, rewind to start:
-        handle.seek(0)
+    magic = handle.read(2)
+    handle.seek(0)
+
+    if magic == b"\x1f\x8b":
+        # This is a gzipped file, but is it BGZF?
+        from . import bgzf
+        try:
+            # If it is BGZF, we support that
+            return bgzf.BgzfReader(mode="rb", fileobj=handle)
+        except ValueError as e:
+            assert "BGZF" in str(e)
+            # Not a BGZF file after all,
+            handle.close()
+            raise ValueError("Gzipped files are not suitable for indexing, "
+                             "please use BGZF (blocked gzip format) instead.")
+
     return handle
 
 

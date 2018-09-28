@@ -19,6 +19,12 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+The "grant" matrix in Bio.SubsMat.MatrixInfo has been replaced as our original
+values taken from Gerhard Vogt's old webpages at EMBL Heidelberg were
+discovered to be in error. The new values have been transformed following
+Vogt's approach, taking the global maximum 215 minus the similarity scores
+from the original paper Grantham (1974), to give a distance measure.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
@@ -29,9 +35,14 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Darcy Mason (first contribution)
+- Juraj Szász (first contribution)
 - Kai Blin
+- Konstantin Vdovkin (first contribution)
 - Maximilian Greil
+- Nick Negretti (first contribution)
 - Peter Cock
+- Rona Costello (first contribution)
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
@@ -131,10 +142,10 @@ wrapper and include a new wrapper for fuzzpro.
 The restriction enzyme list in Bio.Restriction has been updated to the
 November 2017 release of REBASE.
 
-New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2) 
+New codon tables 27-31 from NCBI (NCBI genetic code table version 4.2)
 were added to Bio.Data.CodonTable. Note that tables 27, 28 and 31 contain
 no dedicated stop codons; the stop codons in these codes have a context
-dependent encoding as either STOP or as amino acid. 
+dependent encoding as either STOP or as amino acid.
 
 IO functions such as ``SeqIO.parse`` now accept any objects which can be passed
 to the builtin ``open`` function. Specifically, this allows using

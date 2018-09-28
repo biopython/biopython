@@ -569,10 +569,12 @@ class ParseTest(unittest.TestCase):
             len_special = len(special)
             # Placed N, CA, C, O first?
             self.assertEqual(new[:len_special], special,
-                            "Sorted residue did not place N, CA, C, O first: %s" % new)
+                             "Sorted residue did not place N, CA, C, "
+                             "O first: %s" % new)
             # Placed everyone else alphabetically?
             self.assertEqual(new[len_special:], sorted(new[len_special:]),
-                            "After N, CA, C, O order Should be alphabetical: %s" % new)
+                             "After N, CA, C, O order Should be "
+                             "alphabetical: %s" % new)
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]['A'])][79:81]
         self.assertEqual(residues, [80, 81])
@@ -672,7 +674,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(new[0:special_len], special,
                              "Sorted residue did not place N, CA, C, O first: %s" % new)
             self.assertEqual(new[special_len:], sorted(new[special_len:]),
-                                 "After N, CA, C, O should be alphabet: %s" % new)
+                             "After N, CA, C, O should be alphabet: %s" % new)
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""

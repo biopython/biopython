@@ -258,20 +258,20 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(271, hsp.query_end)
         self.assertEqual('..', hsp.query_endtype)
         self.assertEqual('ENHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQG--',
-                str(hsp.query.seq)[:40])
+                         str(hsp.query.seq)[:40])
         self.assertEqual('+++++  L+++++e++k+ewP++Wp+ + +l  l++++  ',
-                str(hsp.aln_annotation['similarity'])[:40])
+                         str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('WVSMSHITA-ENCkLLEILCLLL----NEQELQLGAAECL',
-                str(hsp.query.seq)[-40:])
+                         str(hsp.query.seq)[-40:])
         self.assertEqual(0, hsp.hit_start)
         self.assertEqual(178, hsp.hit_end)
         self.assertEqual('[]', hsp.hit_endtype)
         self.assertEqual('pkflrnKLalalaelakqewPsnWpsffpdlvsllsssss',
-                str(hsp.hit.seq)[:40])
+                         str(hsp.hit.seq)[:40])
         self.assertEqual('W+++++i + ++++ll++l+ lL    +  +l++ A+eCL',
-                str(hsp.aln_annotation['similarity'])[-40:])
+                         str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual('Wipiglianvnpi.llnllfslLsgpesdpdlreaAveCL',
-                str(hsp.hit.seq)[-40:])
+                         str(hsp.hit.seq)[-40:])
 
         # fourth qresult, second from last hit
         hit = res[-2]
@@ -430,9 +430,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+P+++DWRe kg  VtpVK+QG qCGSCWAFSa g lEg+',
-                str(hsp.aln_annotation['similarity'])[:40])
+                         str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('+VKNSWG++WG++GY++ia+++n    n+CG+a+ asypi',
-                str(hsp.aln_annotation['similarity'])[-40:])
+                         str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual(113, hsp.hit_start)
         self.assertEqual(332, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)
@@ -465,9 +465,9 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual('IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi', str(hsp.query.seq)[-40:])
         self.assertEqual(337, len(hsp.query.seq))
         self.assertEqual('+Pe +DWR+ kg aVtpVK+QG +CGSCWAFSav ++Eg+',
-                str(hsp.aln_annotation['similarity'])[:40])
+                         str(hsp.aln_annotation['similarity'])[:40])
         self.assertEqual('++KNSWGt WGEnGY+ri+Rg+++s ++ CG+ ++  yp+',
-                str(hsp.aln_annotation['similarity'])[-40:])
+                         str(hsp.aln_annotation['similarity'])[-40:])
         self.assertEqual(133, hsp.hit_start)
         self.assertEqual(343, hsp.hit_end)
         self.assertEqual('..', hsp.hit_endtype)

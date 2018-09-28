@@ -85,7 +85,8 @@ class AbstractPropertyMap(object):
         """
         import warnings
         from Bio import BiopythonDeprecationWarning
-        warnings.warn("This function is deprecated; use 'id in mapping' instead", BiopythonDeprecationWarning)
+        warnings.warn("This function is deprecated; use 'id in mapping' "
+                      "instead", BiopythonDeprecationWarning)
         return id in self
 
     def keys(self):
@@ -118,7 +119,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                                     property_list)
 
     def _translate_id(self, ent_id):
         chain_id, res_id = ent_id
@@ -131,7 +132,7 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                                     property_list)
 
     def _translate_id(self, ent_id):
         if len(ent_id) == 4:

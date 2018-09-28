@@ -78,7 +78,7 @@ def _format_date(pdb_date):
         century = 1900
     date = str(century + year) + "-"
     all_months = ['xxx', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-    'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                  'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
         month = '0' + month
@@ -134,7 +134,8 @@ def parse_pdb_header(infile):
 
 def _parse_pdb_header_list(header):
     # database fields
-    dict = {'name': "",
+    dict = {
+        'name': "",
         'head': '',
         'deposition_date': "1909-01-08",
         'release_date': "1909-01-08",

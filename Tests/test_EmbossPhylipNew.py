@@ -93,10 +93,10 @@ class DistanceTests(unittest.TestCase):
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline = FDNADistCommandline(exes["fdnadist"],
-                                         method='j',
-                                         sequence=filename,
-                                         outfile="test_file",
-                                         auto=True)
+                                        method='j',
+                                        sequence=filename,
+                                        outfile="test_file",
+                                        auto=True)
         else:
             cline = FProtDistCommandline(exes["fprotdist"],
                                          method='j',

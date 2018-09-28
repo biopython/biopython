@@ -368,11 +368,11 @@ class TestQual(unittest.TestCase):
     def test_qual_negative(self):
         """Check QUAL negative scores mapped to PHRED zero"""
         data = """>1117_10_107_F3
-23 31 -1 -1 -1 29 -1 -1 20 32 -1 18 25 7 -1 6 -1 -1 -1 30 -1 20 13 7 -1 -1 21 30 -1 24 -1 22 -1 -1 22 14 -1 12 26 21 -1 5 -1 -1 -1 20 -1 -1 12 28 
+23 31 -1 -1 -1 29 -1 -1 20 32 -1 18 25 7 -1 6 -1 -1 -1 30 -1 20 13 7 -1 -1 21 30 -1 24 -1 22 -1 -1 22 14 -1 12 26 21 -1 5 -1 -1 -1 20 -1 -1 12 28
 >1117_10_146_F3
-20 33 -1 -1 -1 29 -1 -1 28 28 -1 7 16 5 -1 30 -1 -1 -1 14 -1 4 13 4 -1 -1 11 13 -1 5 -1 7 -1 -1 10 16 -1 4 12 15 -1 8 -1 -1 -1 16 -1 -1 10 4 
+20 33 -1 -1 -1 29 -1 -1 28 28 -1 7 16 5 -1 30 -1 -1 -1 14 -1 4 13 4 -1 -1 11 13 -1 5 -1 7 -1 -1 10 16 -1 4 12 15 -1 8 -1 -1 -1 16 -1 -1 10 4
 >1117_10_1017_F3
-33 33 -1 -1 -1 27 -1 -1 17 16 -1 28 24 11 -1 6 -1 -1 -1 29 -1 8 29 24 -1 -1 8 8 -1 20 -1 13 -1 -1 8 13 -1 28 10 24 -1 10 -1 -1 -1 4 -1 -1 7 6 
+33 33 -1 -1 -1 27 -1 -1 17 16 -1 28 24 11 -1 6 -1 -1 -1 29 -1 8 29 24 -1 -1 8 8 -1 20 -1 13 -1 -1 8 13 -1 28 10 24 -1 10 -1 -1 -1 4 -1 -1 7 6
 >1117_11_136_F3
 16 22 -1 -1 -1 33 -1 -1 30 27 -1 27 28 32 -1 29 -1 -1 -1 27 -1 18 9 6 -1 -1 23 16 -1 26 -1 5 7 -1 22 7 -1 18 14 8 -1 8 -1 -1 -1 11 -1 -1 4 24"""  # noqa : W291
         h = StringIO(data)
@@ -463,21 +463,21 @@ class TestWriteRead(unittest.TestCase):
     def test_generated(self):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT" * 500, generic_dna), id="Test", description="Long " * 500,
-                           letter_annotations={"phred_quality": [40, 30, 20, 10] * 500})
+                            letter_annotations={"phred_quality": [40, 30, 20, 10] * 500})
         record2 = SeqRecord(MutableSeq("NGGC" * 1000), id="Mut", description="very " * 1000 + "long",
-                           letter_annotations={"phred_quality": [0, 5, 5, 10] * 1000})
+                            letter_annotations={"phred_quality": [0, 5, 5, 10] * 1000})
         record3 = SeqRecord(UnknownSeq(2000, character="N"), id="Unk", description="l" + ("o" * 1000) + "ng",
-                           letter_annotations={"phred_quality": [0, 1] * 1000})
+                            letter_annotations={"phred_quality": [0, 1] * 1000})
         record4 = SeqRecord(Seq("ACGT" * 500), id="no_descr", description="", name="",
-                           letter_annotations={"phred_quality": [40, 50, 60, 62] * 500})
+                            letter_annotations={"phred_quality": [40, 50, 60, 62] * 500})
         record5 = SeqRecord(Seq("", generic_dna), id="empty_p", description="(could have been trimmed lots)",
-                           letter_annotations={"phred_quality": []})
+                            letter_annotations={"phred_quality": []})
         record6 = SeqRecord(Seq(""), id="empty_s", description="(could have been trimmed lots)",
-                           letter_annotations={"solexa_quality": []})
+                            letter_annotations={"solexa_quality": []})
         record7 = SeqRecord(Seq("ACNN" * 500), id="Test_Sol", description="Long " * 500,
-                           letter_annotations={"solexa_quality": [40, 30, 0, -5] * 500})
+                            letter_annotations={"solexa_quality": [40, 30, 0, -5] * 500})
         record8 = SeqRecord(Seq("ACGT"), id="HighQual", description="With very large qualities that even Sanger FASTQ can't hold!",
-                           letter_annotations={"solexa_quality": [0, 10, 100, 1000]})
+                            letter_annotations={"solexa_quality": [0, 10, 100, 1000]})
         # TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"]:

@@ -1051,13 +1051,31 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
                                                                   int(e),
                                                                   strand)
-            except ValueError as e:
+            except ValueError:
                 # Could be non-integers, more likely bad origin wrapping
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Ignoring invalid location: %r" % location_line,
-                              BiopythonParserWarning)
-                cur_feature.location = None
+                if int(s) > int(e) and "circular" in self._seq_type.lower():
+                    warnings.warn("Attempting to fix invalid location %r as "
+                                  "it looks like incorrect origin wrapping. "
+                                  "Please fix input file, this could have "
+                                  "unintended behavior." % location_line,
+                                  BiopythonParserWarning)
+
+                    f1 = SeqFeature.FeatureLocation(int(s) - 1,
+                                                    self._expected_size,
+                                                    strand)
+                    f2 = SeqFeature.FeatureLocation(0, int(e), strand)
+
+                    if strand == -1:
+                        # For complementary features spanning the origin
+                        cur_feature.location = f2 + f1
+                    else:
+                        cur_feature.location = f1 + f2
+                else:
+                    warnings.warn("Ignoring invalid location: %r" %
+                                  location_line, BiopythonParserWarning)
+                    cur_feature.location = None
             return
 
         if ",)" in location_line:
@@ -1241,8 +1259,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # Try and append the version number to the accession for the full id
         if not self.data.id:
-            assert 'accessions' not in self.data.annotations, \
-                   self.data.annotations['accessions']
+            if 'accessions' in self.data.annotations:
+                raise ValueError("Problem adding version number to accession: "
+                                 + str(self.data.annotations['accessions']))
             self.data.id = self.data.name  # Good fall back?
         elif self.data.id.count('.') == 0:
             try:

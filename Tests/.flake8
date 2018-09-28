@@ -19,7 +19,7 @@ ignore =
     # F405	name may be undefined, or defined from star imports: module
     # F841	local variable name is assigned to but never used
     # TODO: Fix some of these?
-    E127,E128,E402,E501,E731,F401,F405,F841,
+    E402,E501,E731,F401,F405,F841,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
