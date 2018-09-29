@@ -1198,7 +1198,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # remove empty values (unique case of double quotes)
         value = re.sub('^""$', '', value)
         # remove single quotes unless for escaping purposes ""
-        value = value.replace('""', '~~').replace('"', '').replace('~', '"')
+        value = value.replace('""', '~^').replace('"', '').replace('~^', '""')
 
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)
