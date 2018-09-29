@@ -157,13 +157,15 @@ class TestSimpleFastaParsers(unittest.TestCase):
                       [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
 
     # Edge case input strings and outputs
-    ins_edges = [">\nACGT", ">1\n", ">1",
-                 ">1\n>1", ">1>1\n>1"]
-    outs_edges = [[("", "ACGT")], [("1", "")], [("1", "")],
-                  [("1", ""), ("1", "")], [("1>1", ""), ("1", "")]]
+    ins_two_line_edges = [">\nACGT", ">1\n\n",
+                          ">1>1\n\n>1\n\n"]
+    outs_two_line_edges = [[("", "ACGT")], [("1", "")],
+                           [("1>1", ""), ("1", "")]]
 
-    # Exceptions input strings
-    ins_exc = ['>1\n\n', '>1\n>1', '>1']
+    ins_simple_edges = [">1", ">1\n\n\n",
+                        ">\n>1\n>2"]
+    outs_simple_edges = [[("1", "")], [("1", "")],
+                         [("", ""), ("1", ""), ("2", "")]]
 
     def test_regular_SimpleFastaParser(self):
         """"Test regular SimpleFastaParser cases."""
@@ -188,13 +190,22 @@ class TestSimpleFastaParsers(unittest.TestCase):
 
     def test_edgecases_SimpleFastaParser(self):
         """Test SimpleFastaParser edge-cases."""
-        for inp, out in zip(self.ins_edges, self.outs_edges):
+        for inp, out in zip(self.ins_two_line_edges, self.outs_two_line_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(SimpleFastaParser(handle)), out)
+        for inp, out in zip(self.ins_simple_edges, self.outs_simple_edges):
             handle = StringIO(inp)
             self.assertEqual(list(SimpleFastaParser(handle)), out)
 
+    def test_edgecases_FastaTwoLineParser(self):
+        """Test FastaTwoLineParser edge-cases."""
+        for inp, out in zip(self.ins_two_line_edges, self.outs_two_line_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(FastaTwoLineParser(handle)), out)
+
     def test_exceptions_FastaTwoLineParser(self):
         """Test FastaTwoLineParser exceptions."""
-        for inp in self.ins_exc + self.ins_multiline:
+        for inp in self.ins_multiline + self.ins_simple_edges:
             handle = StringIO(inp)
             with self.assertRaises(ValueError):
                 list(FastaTwoLineParser(handle))
