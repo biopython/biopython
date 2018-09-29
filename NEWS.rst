@@ -32,7 +32,7 @@ Python PEP8, PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Alona Levy-Jurgenson (first contribution)
+- Alona Levy Jurgenson (first contribution)
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
