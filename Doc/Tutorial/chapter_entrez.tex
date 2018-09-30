@@ -636,6 +636,9 @@ This will print:
 ...
 \end{verbatim}
 
+\section{HTML escape characters}
+
+Nowadays, Pubmed records may contain HTML tags to indicate subscripts, superscripts, and mathematical symbols via MathML. By default, the parser treats all text as plain text without markup. This may result in strings that are not valid HTML. For example, $c_p < 1$ can be represented as \verb+c<sub>p</sub> < 1+, which is not valid HTML because of the less-than sign. If you want to ensure that all strings returned by the parser are valid HTML, use the \verb+escape+ argument to the \verb+Entrez.read+ or \verb+Entrez.parse+ functions. If \verb+True+, the parser will replace all characters disallowed in HTML by their HTML-escaped equivalent. In the example above, the parser will generate \verb+c<sub>p</sub> &lt; 1+ if \verb+Entrez.read+ or \verb+Entrez.parse+ was called with \verb+escape=True+.
 
 \section{Handling errors}
 
