@@ -42,6 +42,7 @@ import warnings
 from xml.parsers import expat
 from io import BytesIO
 import xml.etree.ElementTree as ET
+from xml.sax.saxutils import escape
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
@@ -327,12 +328,13 @@ class DataHandler(object):
 
     del Entrez
 
-    def __init__(self, validate):
+    def __init__(self, validate, escape):
         """Create a DataHandler object."""
         self.dtd_urls = []
         self.classes = {}
         self.consumer = None
         self.validating = validate
+        self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -434,7 +436,10 @@ class DataHandler(object):
         # XML declaration found; set the handlers
         self.parser.StartElementHandler = self.startElementHandler
         self.parser.EndElementHandler = self.endElementHandler
-        self.parser.CharacterDataHandler = self.characterDataHandler
+        if self.escaping:
+            self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+        else:
+            self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
 
@@ -504,7 +509,11 @@ class DataHandler(object):
             name = value.tag
             self.consumer.store(name, value)
 
-    def characterDataHandler(self, content):
+    def characterDataHandlerRaw(self, content):
+        self.consumer.consume(content)
+
+    def characterDataHandlerEscape(self, content):
+        content = escape(content)
         self.consumer.consume(content)
 
     def parse_xsd(self, root):
