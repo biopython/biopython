@@ -2540,7 +2540,7 @@ class MutableSeq(object):
         are not Seq or String objects
         """
         seq_joined = self.toseq().join(other)  # call to Seqs join method and then back to MutableSeq
-        return seq_joined.tomutable()
+        return seq_joined
 
 
 # The transcribe, backward_transcribe, and translate functions are
