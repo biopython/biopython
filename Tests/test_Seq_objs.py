@@ -887,10 +887,10 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(concatenated), temp_data[: - len(spacer.data)])
         self.assertEqual(str(concatenated1), temp_data1)
-        self.assertEqual(concatenated1.__class__, MutableSeq)
+        self.assertEqual(concatenated1.__class__, Seq)  # should return a Seq
         self.assertEqual(str(concatenated2), "".join(example_strings))
         self.assertEqual(concatenated2.alphabet, spacer1.alphabet)
-        self.assertEqual(concatenated2.__class__, MutableSeq)
+        self.assertEqual(concatenated2.__class__, Seq)
         self.assertEqual(str(concatenated3), (temp_data3)[: - len(spacer.data)])
         self.assertEqual(concatenated3.alphabet, spacer.alphabet)  # same as spacer since spacer isn't an empty seq, generic wins
         self.assertEqual(str(concatenated4), "".join(example_strings))
