@@ -447,6 +447,11 @@ def read(handle, validate=True, escape=False):
     are not represented in the DTD. If validate is False, the parser will
     simply skip such tags.
 
+    If escape is True, all characters that are not valid HTML are replaced
+    by HTML escape characters to guarantee that the returned strings are
+    valid HTML fragments. For example, a less-than sign (<) is replaced by
+    &lt;. If escape is False (default), the string is returned as is.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -478,6 +483,11 @@ def parse(handle, validate=True, escape=False):
     against the DTD, and raise an error if the XML file contains tags that
     are not represented in the DTD. If validate is False, the parser will
     simply skip such tags.
+
+    If escape is True, all characters that are not valid HTML are replaced
+    by HTML escape characters to guarantee that the returned strings are
+    valid HTML fragments. For example, a less-than sign (<) is replaced by
+    &lt;. If escape is False (default), the string is returned as is.
 
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
