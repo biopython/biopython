@@ -2539,39 +2539,9 @@ class MutableSeq(object):
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
         """
-        if not isinstance(other, collections.Iterable):  # doesn't detect single strings
-            raise ValueError("Input must be an iterable")
-        if isinstance(other, basestring):
-            raise ValueError("Input must be an iterable")
-        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-        temp_data = ""
-        # if the spacer is empty it will initially default none
-        if len(self.data) == 0:
-            a = None
-        else:
-            a = self.alphabet
-        for c in other:
-            if isinstance(c, SeqRecord):
-                return NotImplemented
-            elif hasattr(c, "alphabet"):
-                if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
-                    a = c.alphabet
-                else:
-                    if not Alphabet._check_type_compatible([a, c.alphabet]):
-                        raise TypeError(
-                            "Incompatible alphabets {0!r} and {1!r}".format(
-                                a, c.alphabet))
-                    a = Alphabet._consensus_alphabet([a, c.alphabet])
-                temp_data += str(self) + str(c)
-            elif isinstance(c, basestring):
-                temp_data += str(self) + str(c)
-            else:
-                raise ValueError("Input must be an iterable of Seqs or Strings")
-        if a is None:  # arguments are all alphabet-less strings
-            a = self.alphabet
-        if len(self.data) == 0:
-            return self.__class__(temp_data, a)
-        return self.__class__(temp_data[len(self.data):], a)  # remove the last addition of the spacer
+
+        seq_joined = self.toseq().join(others) # call to Seqs join method and then back to MutableSeq
+        return seq_joined.tomutable()
 
 
 # The transcribe, backward_transcribe, and translate functions are
