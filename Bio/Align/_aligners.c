@@ -42,7 +42,7 @@ typedef struct {
 
 typedef struct {
     double score;
-    unsigned int trace : 3;
+    unsigned int trace : 4;
     struct {int i; int j;} path;
 } CellM; /* Used for the Waterman-Smith-Beyer algorithm. */
 
@@ -5431,19 +5431,18 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
-        double threshold;
         SELECT_SCORE_GLOBAL(M[nA][nB].score,
                             Ix[nA][nB].score,
                             Iy[nA][nB].score);
         paths->M.affine = M;
         paths->Ix.affine = Ix;
         paths->Iy.affine = Iy;
-        threshold = score - epsilon;
-        if (M[nA][nB].score >= threshold) M[nA][nB].trace |= ENDPOINT;
-        if (Ix[nA][nB].score >= threshold) Ix[nA][nB].trace |= ENDPOINT;
-        if (Iy[nA][nB].score >= threshold) Iy[nA][nB].trace |= ENDPOINT;
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
+        score -= epsilon;
+        if (M[nA][nB].score >= score) M[nA][nB].trace |= ENDPOINT;
+        if (Ix[nA][nB].score >= score) Ix[nA][nB].trace |= ENDPOINT;
+        if (Iy[nA][nB].score >= score) Iy[nA][nB].trace |= ENDPOINT;
         return result;
     }
     else _deallocate_gotoh_matrices(nA, M, Ix, Iy);
@@ -5840,6 +5839,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
         paths->threshold = score - epsilon;
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
+        score -= epsilon;
+        if (M[nA][nB].score >= score) M[nA][nB].trace |= ENDPOINT;
+        if (Ix[nA][nB].score >= score) Ix[nA][nB].traceM[0] |= ENDPOINT;
+        if (Iy[nA][nB].score >= score) Iy[nA][nB].traceM[0] |= ENDPOINT;
         return result;
     }
 
