@@ -113,8 +113,14 @@ def FastaTwoLineParser(handle):
                                  "Have '>{}' and '{}'".format(title, line))
             yield title, line.strip()
 
-    if idx % 2 == 0:  # on a header line
-        raise ValueError("Should be at end of file, but line= '{}'".format(line))
+    if idx == -1:
+        pass  # empty file
+    elif idx % 2 == 0:  # on a title line
+        raise ValueError("Missing sequence line at end of file "
+                         "if this is strict two-line-per-record FASTA format. "
+                         "Have title line '{}'".format(line))
+    else:
+        assert line[0] != '>', "line[0] == '>' ; this should be impossible!"
 
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):

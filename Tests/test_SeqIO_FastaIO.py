@@ -158,9 +158,9 @@ class TestSimpleFastaParsers(unittest.TestCase):
 
     # Edge case input strings and outputs
     ins_two_line_edges = [">\nACGT", ">1\n\n",
-                          ">1>1\n\n>1\n\n"]
+                          ">1>1\n\n>1\n\n", ""]
     outs_two_line_edges = [[("", "ACGT")], [("1", "")],
-                           [("1>1", ""), ("1", "")]]
+                           [("1>1", ""), ("1", "")], []]
 
     ins_simple_edges = [">1", ">1\n\n\n",
                         ">\n>1\n>2"]
