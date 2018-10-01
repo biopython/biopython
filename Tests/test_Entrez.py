@@ -165,7 +165,7 @@ class CustomDirectoryTest(unittest.TestCase):
         import os
         import shutil
 
-        handler = Parser.DataHandler(validate=False)
+        handler = Parser.DataHandler(validate=False, escape=False)
 
         # Create a temporary directory
         tmpdir = tempfile.mkdtemp()
