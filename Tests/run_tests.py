@@ -173,10 +173,6 @@ except ImportError:
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
-# Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
-if sys.version_info[0] == 3:
-    DOCTEST_MODULES.remove("Bio.Seq")
-
 
 # Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
 def _have_bug17666():
