@@ -1194,14 +1194,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # otherwise just skip this key
             return
 
-        # remove enclosing quotation marks
+        # Remove enclosing quotation marks
         value = re.sub('^"|"$', '', value)
 
-        # Handle escaping requirements for quotation marks
-        # remove escaping if exists
-        value = re.sub('""', '"', value)
-        # add back " in case of improperly escaped empty quotes
-        value = re.sub(' " ', ' "" ', value)
+        # Handle NCBI escaping
+        # Warn if escaping is not according to standard
+        if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
+                          '(two double - quotes), but here it was not.', BiopythonParserWarning)
+        # Undo escaping, repeated double quotes -> one double quote
+        value = value.replace('""', '"')
 
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)

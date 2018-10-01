@@ -251,40 +251,40 @@ KEYWORDS    """ in gb, gb)
     def test_qualifier_escaping(self):
         """Check qualifier escaping is preserved."""
 
-        genbank_qualif_esc = "GenBank/qualifier_escaping.gb"
-
-        # Read escaped and partially escaped qualifiers properly
-        record = SeqIO.read(genbank_qualif_esc, "gb")
+        # Make sure parsing improperly escaped qualifiers raises a warning
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read("GenBank/qualifier_escaping_read.gb", "gb")
+            self.assertEqual(len(caught), 4)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(str(caught[0].message), 'The NCBI states double-quote characters like " should be escaped'
+                                                     ' as "" (two double - quotes), but here it was not.')
+        # Check records parsed as expected
         f1 = record.features[0]
         f2 = record.features[1]
         f3 = record.features[2]
         f4 = record.features[3]
-        self.assertEqual(f1.qualifiers['note'][0], 'Already "escaped"')
-        self.assertEqual(f2.qualifiers['note'][0], 'Not "properly" "escaped"')
-        self.assertEqual(f3.qualifiers['note'][0], '"Whole sentence is escaped"')
-        self.assertEqual(f4.qualifiers['note'][0], 'One empty "" quote escaped but another "" is not')
-
-        # Write with properly escaped qualifiers
         f5 = record.features[4]
-        f6 = record.features[5]
-        f7 = record.features[6]
-        f8 = record.features[7]
-        f5.qualifiers['note'][0] = 'Already ""escaped""'
-        f6.qualifiers['note'][0] = 'Not "properly" "escaped"'
-        f7.qualifiers['note'][0] = '""Whole sentence is escaped""'
-        f8.qualifiers['note'][0] = 'One empty """" quote escaped but another "" is not'
-        SeqIO.write(record, genbank_qualif_esc, "gb")
+        self.assertEqual(f1.qualifiers['note'][0], '"This" is "already" "escaped"')
+        self.assertEqual(f2.qualifiers['note'][0], 'One missing "quotation mark" here')
+        self.assertEqual(f3.qualifiers['note'][0], 'End not properly "escaped"')
+        self.assertEqual(f4.qualifiers['note'][0], '"Start" not properly escaped')
+        self.assertEqual(f5.qualifiers['note'][0], 'Middle not "properly" escaped')
 
+        # Write some properly escaped qualifiers
+        genbank_out = "GenBank/qualifier_escaping_write.gb"
+        record = SeqIO.read(genbank_out, "gb")
+        f1 = record.features[0]
+        f2 = record.features[1]
+        f1.qualifiers['note'][0] = '"Should" now "be" escaped in "file"'
+        f2.qualifiers['note'][0] = '"Should also be escaped in file"'
+        SeqIO.write(record, genbank_out, "gb")
         # Read newly escaped qualifiers and test
-        record = SeqIO.read(genbank_qualif_esc, "gb")
-        f5 = record.features[4]
-        f6 = record.features[5]
-        f7 = record.features[6]
-        f8 = record.features[7]
-        self.assertEqual(f5.qualifiers['note'][0], 'Already "escaped"')
-        self.assertEqual(f6.qualifiers['note'][0], 'Not "properly" "escaped"')
-        self.assertEqual(f7.qualifiers['note'][0], '"Whole sentence is escaped"')
-        self.assertEqual(f8.qualifiers['note'][0], 'One empty "" quote escaped but another "" is not')
+        record = SeqIO.read(genbank_out, "gb")
+        f1 = record.features[0]
+        f2 = record.features[1]
+        self.assertEqual(f1.qualifiers['note'][0], '"Should" now "be" escaped in "file"')
+        self.assertEqual(f2.qualifiers['note'][0], '"Should also be escaped in file"')
 
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
