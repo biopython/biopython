@@ -258,7 +258,8 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(len(caught), 4)
             self.assertEqual(caught[0].category, BiopythonParserWarning)
             self.assertEqual(str(caught[0].message), 'The NCBI states double-quote characters like " should be escaped'
-                                                     ' as "" (two double - quotes), but here it was not.')
+                                                     ' as "" (two double - quotes), but here it was not: '
+                                                     '%r' % 'One missing ""quotation mark" here')
         # Check records parsed as expected
         f1 = record.features[0]
         f2 = record.features[1]

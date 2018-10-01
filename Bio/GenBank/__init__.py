@@ -1203,7 +1203,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             import warnings
             from Bio import BiopythonParserWarning
             warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
-                          '(two double - quotes), but here it was not.', BiopythonParserWarning)
+                          '(two double - quotes), but here it was not: %r' % value, BiopythonParserWarning)
         # Undo escaping, repeated double quotes -> one double quote
         value = value.replace('""', '"')
 
