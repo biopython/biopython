@@ -102,30 +102,25 @@ def FastaTwoLineParser(handle):
     for idx, line in enumerate(handle):
         if idx % 2 == 0:  # title line
             if line[0] != '>':
-                if line.strip():
-                    raise ValueError("Expected FASTA record starting with '>' character. "
-                                     "Perhaps this file is using FASTA line wrapping? "
-                                     "Got: '{}'".format(line))
-                else:
-                    raise ValueError("Expected FASTA record starting with '>' character. "
-                                     "If using two-lines-per-record, there should be no "
-                                     "blank lines between records, or at the end of file.")
+                raise ValueError("Expected FASTA record starting with '>' character. "
+                                 "Perhaps this file is using FASTA line wrapping? "
+                                 "Got: '{}'".format(line))
             title = line[1:].rstrip()
-
         else:  # sequence line
-            line = line.strip()
-            if not line:
-                raise ValueError("Premature end of FASTA file (or this is not strict "
-                                 "two-line-per-record FASTA format), expected one line "
-                                 "of sequence following: '{}'".format(title))
-            elif line[0] == '>':
+            if line[0] == '>':
                 raise ValueError("Two '>' FASTA lines in a row. Missing sequence line "
                                  "if this is strict two-line-per-record FASTA format. "
                                  "Have '>{}' and '{}'".format(title, line))
-            yield title, line
+            yield title, line.strip()
 
-    if idx % 2 == 0:  # on a header line
-        raise ValueError("Should be at end of file, but line= '{}'".format(line))
+    if idx == -1:
+        pass  # empty file
+    elif idx % 2 == 0:  # on a title line
+        raise ValueError("Missing sequence line at end of file "
+                         "if this is strict two-line-per-record FASTA format. "
+                         "Have title line '{}'".format(line))
+    else:
+        assert line[0] != '>', "line[0] == '>' ; this should be impossible!"
 
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
