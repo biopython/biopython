@@ -251,23 +251,40 @@ KEYWORDS    """ in gb, gb)
     def test_qualifier_escaping(self):
         """Check qualifier escaping is preserved."""
 
-        genbank_file = "GenBank/NC_000932.gb"
-        genbank_qualif_esc = "GenBank/NC_000932_qualif_esc.gb"
+        genbank_qualif_esc = "GenBank/qualifier_escaping.gb"
 
-        # create escaped qualifiers
-        record = SeqIO.read(genbank_file, "gb")
-        f = record.features[0]
-        f.qualifiers['double_quotes_1'] = 'Arabidopsis ""thaliana""'
-        f.qualifiers['double_quotes_2'] = 'Arabidopsis "" thaliana'
-        f.qualifiers['double_quotes_3'] = '"Arabidopsis thaliana"'
-
-        # write with escaped qualifiers, re-read and test
-        SeqIO.write(record, genbank_qualif_esc, "gb")
+        # Read escaped and partially escaped qualifiers properly
         record = SeqIO.read(genbank_qualif_esc, "gb")
-        f = record.features[0]
-        self.assertEqual(f.qualifiers['double_quotes_1'][0], 'Arabidopsis ""thaliana""')
-        self.assertEqual(f.qualifiers['double_quotes_2'][0], 'Arabidopsis "" thaliana')
-        self.assertEqual(f.qualifiers['double_quotes_3'][0], '""Arabidopsis thaliana""')
+        f1 = record.features[0]
+        f2 = record.features[1]
+        f3 = record.features[2]
+        f4 = record.features[3]
+        self.assertEqual(f1.qualifiers['note'][0], 'Already "escaped"')
+        self.assertEqual(f2.qualifiers['note'][0], 'Not "properly" "escaped"')
+        self.assertEqual(f3.qualifiers['note'][0], '"Whole sentence is escaped"')
+        self.assertEqual(f4.qualifiers['note'][0], 'One empty "" quote escaped but another "" is not')
+
+        # Write with properly escaped qualifiers
+        f5 = record.features[4]
+        f6 = record.features[5]
+        f7 = record.features[6]
+        f8 = record.features[7]
+        f5.qualifiers['note'][0] = 'Already ""escaped""'
+        f6.qualifiers['note'][0] = 'Not "properly" "escaped"'
+        f7.qualifiers['note'][0] = '""Whole sentence is escaped""'
+        f8.qualifiers['note'][0] = 'One empty """" quote escaped but another "" is not'
+        SeqIO.write(record, genbank_qualif_esc, "gb")
+
+        # Read newly escaped qualifiers and test
+        record = SeqIO.read(genbank_qualif_esc, "gb")
+        f5 = record.features[4]
+        f6 = record.features[5]
+        f7 = record.features[6]
+        f8 = record.features[7]
+        self.assertEqual(f5.qualifiers['note'][0], 'Already "escaped"')
+        self.assertEqual(f6.qualifiers['note'][0], 'Not "properly" "escaped"')
+        self.assertEqual(f7.qualifiers['note'][0], '"Whole sentence is escaped"')
+        self.assertEqual(f8.qualifiers['note'][0], 'One empty "" quote escaped but another "" is not')
 
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""

@@ -1194,11 +1194,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # otherwise just skip this key
             return
 
-        # keep GenBank's escaping requirement "" while removing single quotes "
-        # remove empty values (unique case of double quotes)
-        value = re.sub('^""$', '', value)
-        # remove single quotes unless for escaping purposes ""
-        value = value.replace('""', '~^').replace('"', '').replace('~^', '""')
+        # remove enclosing quotation marks
+        value = re.sub('^"|"$', '', value)
+
+        # Handle NCBI escaping requirements for quotation marks
+        # remove escaping if exists
+        value = re.sub('""', '"', value)
+        # add back " in case of improperly escaped empty quotes
+        value = re.sub(' " ', ' "" ', value)
 
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)

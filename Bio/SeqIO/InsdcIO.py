@@ -303,6 +303,16 @@ class _InsdcWriter(SequentialSequenceWriter):
             # Value-less entry like /pseudo
             self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
             return
+
+        # Adhere to escaping guidelines
+        if type(value) == str and '"' in value:
+            # add escaping, except where user already escaped
+            value = value.replace('"', '""').replace('""""', '""')
+            # remove above escaping where user already escaped
+            value = value.replace('""""', '""')
+            # add back escaping of empty quotes (unique case)
+            value = value.replace(' "" ', ' """" ')
+
         # Quick hack with no line wrapping, may be useful for testing:
         # self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
