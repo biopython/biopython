@@ -1197,7 +1197,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # remove enclosing quotation marks
         value = re.sub('^"|"$', '', value)
 
-        # Handle NCBI escaping requirements for quotation marks
+        # Handle escaping requirements for quotation marks
         # remove escaping if exists
         value = re.sub('""', '"', value)
         # add back " in case of improperly escaped empty quotes
