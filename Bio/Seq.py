@@ -2534,7 +2534,7 @@ class MutableSeq(object):
         >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
         >>> concatenated = spacer.join(seqlist)
         >>> concatenated
-        MutableSeq('AAANNNNNTTTNNNNNPPP')
+        Seq('AAANNNNNTTTNNNNNPPP')
 
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
