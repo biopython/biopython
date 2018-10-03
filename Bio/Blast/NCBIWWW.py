@@ -127,6 +127,17 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
+    # handle authentication for BLAST cloud
+    if username is not None and password is not None:
+        # create a password manager
+        password_mgr = _HTTPPasswordMgrWithDefaultRealm()
+
+        # Add the username and password.
+        password_mgr.add_password(None, url_base, username, password)
+        handler = _HTTPBasicAuthHandler(password_mgr)
+        opener = _build_opener(handler)
+        _install_opener(opener)
+
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
