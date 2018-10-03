@@ -606,15 +606,19 @@ class Feature(object):
     Attributes:
      - key - The key name of the featue (ie. source)
      - location - The string specifying the location of the feature.
-     - qualfiers - A listing Qualifier objects in the feature.
+     - qualfiers - A list of Qualifier objects in the feature.
 
     """
 
-    def __init__(self):
+    def __init__(self, key="", location=""):
         """Initialize."""
-        self.key = ''
-        self.location = ''
+        self.key = key
+        self.location = location
         self.qualifiers = []
+
+    def __repr__(self):
+        """Representation of the object for debugging or logging."""
+        return "Feature(key=%r, location=%r)" % (self.key, self.location)
 
     def __str__(self):
         """Return feature as a GenBank format string."""
@@ -645,7 +649,11 @@ class Qualifier(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, key="", value=""):
         """Initialize."""
-        self.key = ''
-        self.value = ''
+        self.key = key
+        self.value = value
+
+    def __repr__(self):
+        """Representation of the object for debugging or logging."""
+        return "Qualifier(key=%r, value=%r)" % (self.key, self.value)
