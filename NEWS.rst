@@ -29,6 +29,10 @@ Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
 
+Double-quote characters in GenBank feature qualifier values in ``Bio.SeqIO``
+are now escaped as per the NCBI standard. Improperly escaped values trigger a
+warning on parsing.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 

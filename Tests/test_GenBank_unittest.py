@@ -248,8 +248,8 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(list(f.qualifiers),
                          ['organism', 'mol_type', 'strain', 'db_xref', 'dev_stage'])
 
-    def test_qualifier_escaping(self):
-        """Check qualifier escaping is preserved."""
+    def test_qualifier_escaping_read(self):
+        """Check qualifier escaping is preserved when parsing."""
 
         # Make sure parsing improperly escaped qualifiers raises a warning
         with warnings.catch_warnings(record=True) as caught:
@@ -258,7 +258,8 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(len(caught), 4)
             self.assertEqual(caught[0].category, BiopythonParserWarning)
             self.assertEqual(str(caught[0].message), 'The NCBI states double-quote characters like " should be escaped'
-                                                     ' as "" (two double - quotes), but here it was not.')
+                                                     ' as "" (two double - quotes), but here it was not: '
+                                                     '%r' % 'One missing ""quotation mark" here')
         # Check records parsed as expected
         f1 = record.features[0]
         f2 = record.features[1]
@@ -271,7 +272,10 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(f4.qualifiers['note'][0], '"Start" not properly escaped')
         self.assertEqual(f5.qualifiers['note'][0], 'Middle not "properly" escaped')
 
-        # Write some properly escaped qualifiers
+    def test_qualifier_escaping_write(self):
+        """Check qualifier escaping is preserved when writing."""
+
+        # Write some properly escaped qualifiers and test
         genbank_out = "GenBank/qualifier_escaping_write.gb"
         record = SeqIO.read(genbank_out, "gb")
         f1 = record.features[0]
