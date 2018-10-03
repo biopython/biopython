@@ -397,6 +397,22 @@ class InsdcScanner(object):
                 if q_value is None:
                     consumer.feature_qualifier(q_key, q_value)
                 else:
+                    # Handle NCBI escaping
+                    # Temporarily remove enclosing quotes
+                    if len(q_value) > 1 and q_value[0] == '"' and q_value[-1] == '"':
+                        q_value_unquoted = q_value[1:-1]
+                    else:
+                        q_value_unquoted = q_value
+                    # Warn if escaping is not according to standard
+                    if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', q_value_unquoted):
+                        import warnings
+                        from Bio import BiopythonParserWarning
+                        warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
+                                      '(two double - quotes), but here it was not: %r'
+                                      % q_value_unquoted, BiopythonParserWarning)
+                    # Undo escaping, repeated double quotes -> one double quote
+                    if q_value.strip() != '""':
+                        q_value = q_value.replace('""', '"')
                     consumer.feature_qualifier(q_key, q_value.replace("\n", " "))
 
     def _feed_misc_lines(self, consumer, lines):

@@ -1194,7 +1194,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # otherwise just skip this key
             return
 
-        value = value.replace('"', '')
+        # Remove enclosing quotation marks
+        value = re.sub('^"|"$', '', value)
+
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)
 

@@ -303,6 +303,10 @@ class _InsdcWriter(SequentialSequenceWriter):
             # Value-less entry like /pseudo
             self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
             return
+
+        if type(value) == str:
+            value = value.replace('"', '""')  # NCBI says escape " as "" in qualifier values
+
         # Quick hack with no line wrapping, may be useful for testing:
         # self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
