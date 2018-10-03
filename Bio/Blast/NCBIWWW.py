@@ -159,49 +159,82 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.
-    # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
-    # 1. Do not contact the server more often than once every 10 seconds.
-    # 2. Do not poll for any single RID more often than once a minute.
-    # 3. Use the URL parameter email and tool, so that the NCBI
-    #    can contact you if there is a problem.
-    # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
-    #    on weekdays if more than 50 searches will be submitted.
-    # --
-    # Could start with a 10s delay, but expect most short queries
-    # will take longer thus at least 70s with delay. Therefore,
-    # start with 20s delay, thereafter once a minute.
-    delay = 20  # seconds
-    while True:
-        current = time.time()
-        wait = qblast._previous + delay - current
-        if wait > 0:
-            time.sleep(wait)
-            qblast._previous = current + wait
-        else:
-            qblast._previous = current
-        if delay < 60:
-            # Wasn't a quick return, must wait at least a minute
-            delay = 60
+    if url_base == NCBI_BLAST_URL:
+        # Poll NCBI until the results are ready.
+        # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
+        # 1. Do not contact the server more often than once every 10 seconds.
+        # 2. Do not poll for any single RID more often than once a minute.
+        # 3. Use the URL parameter email and tool, so that the NCBI
+        #    can contact you if there is a problem.
+        # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
+        #    on weekdays if more than 50 searches will be submitted.
+        # --
+        # Could start with a 10s delay, but expect most short queries
+        # will take longer thus at least 70s with delay. Therefore,
+        # start with 20s delay, thereafter once a minute.
+        delay = 20  # seconds
+        while True:
+            current = time.time()
+            wait = qblast._previous + delay - current
+            if wait > 0:
+                time.sleep(wait)
+                qblast._previous = current + wait
+            else:
+                qblast._previous = current
+            if delay < 60:
+                # Wasn't a quick return, must wait at least a minute
+                delay = 60
 
-        request = _Request(url_base,
-                           message,
-                           {"User-Agent": "BiopythonClient"})
-        handle = _urlopen(request)
-        results = _as_string(handle.read())
+            request = _Request(url_base,
+                               message,
+                               {"User-Agent": "BiopythonClient"})
+            handle = _urlopen(request)
+            results = _as_string(handle.read())
 
-        # Can see an "\n\n" page while results are in progress,
-        # if so just wait a bit longer...
-        if results == "\n\n":
-            continue
-        # XML results don't have the Status tag when finished
-        if "Status=" not in results:
-            break
-        i = results.index("Status=")
-        j = results.index("\n", i)
-        status = results[i + len("Status="):j].strip()
-        if status.upper() == "READY":
-            break
+            # Can see an "\n\n" page while results are in progress,
+            # if so just wait a bit longer...
+            if results == "\n\n":
+                continue
+            # XML results don't have the Status tag when finished
+            if "Status=" not in results:
+                break
+            i = results.index("Status=")
+            j = results.index("\n", i)
+            status = results[i + len("Status="):j].strip()
+            if status.upper() == "READY":
+                break
+    else:
+        # NCBI Cloud (private) instance until the results are ready.
+        # Sends a request every 10 seconds
+        delay = 10
+        previous = 0
+        while True:
+            current = time.time()
+            wait = previous + delay - current
+            if wait > 0:
+                time.sleep(wait)
+                previous = current + wait
+            else:
+                previous = current
+
+            request = _Request(url_base,
+                               message,
+                               {"User-Agent": "BiopythonClient"})
+            handle = _urlopen(request)
+            results = _as_string(handle.read())
+
+            # Can see an "\n\n" page while results are in progress,
+            # if so just wait a bit longer...
+            if results == "\n\n":
+                continue
+            # XML results don't have the Status tag when finished
+            if "Status=" not in results:
+                break
+            i = results.index("Status=")
+            j = results.index("\n", i)
+            status = results[i + len("Status="):j].strip()
+            if status.upper() == "READY":
+                break
 
     return StringIO(results)
 
