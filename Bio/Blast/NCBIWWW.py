@@ -207,15 +207,14 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         # NCBI Cloud (private) instance until the results are ready.
         # Sends a request every 10 seconds
         delay = 10
-        previous = 0
         while True:
             current = time.time()
-            wait = previous + delay - current
+            wait = qblast._previous + delay - current
             if wait > 0:
                 time.sleep(wait)
-                previous = current + wait
+                qblast._previous = current + wait
             else:
-                previous = current
+                qblast._previous = current
 
             request = _Request(url_base,
                                message,
