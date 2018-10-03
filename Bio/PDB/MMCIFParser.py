@@ -57,6 +57,7 @@ class MMCIFParser(object):
          - filename - name of mmCIF file, OR an open text mode file handle
 
         """
+
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
@@ -90,6 +91,7 @@ class MMCIFParser(object):
         b_factor_list = mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list = mmcif_dict["_atom_site.occupancy"]
         fieldname_list = mmcif_dict["_atom_site.group_PDB"]
+
         try:
             serial_list = [int(n) for n in mmcif_dict["_atom_site.pdbx_PDB_model_num"]]
         except KeyError:
@@ -99,16 +101,25 @@ class MMCIFParser(object):
             # Invalid model number (malformed file)
             raise PDBConstructionException("Invalid model number")
         try:
-            aniso_u11 = mmcif_dict["_atom_site.aniso_U[1][1]"]
-            aniso_u12 = mmcif_dict["_atom_site.aniso_U[1][2]"]
-            aniso_u13 = mmcif_dict["_atom_site.aniso_U[1][3]"]
-            aniso_u22 = mmcif_dict["_atom_site.aniso_U[2][2]"]
-            aniso_u23 = mmcif_dict["_atom_site.aniso_U[2][3]"]
-            aniso_u33 = mmcif_dict["_atom_site.aniso_U[3][3]"]
+            aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
+            aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
+            aniso_u13 = mmcif_dict["_atom_site_anisotrop.U[1][3]"]
+            aniso_u22 = mmcif_dict["_atom_site_anisotrop.U[2][2]"]
+            aniso_u23 = mmcif_dict["_atom_site_anisotrop.U[2][3]"]
+            aniso_u33 = mmcif_dict["_atom_site_anisotrop.U[3][3]"]
             aniso_flag = 1
         except KeyError:
             # no anisotropic B factors
             aniso_flag = 0
+
+        if aniso_flag == 1:
+            # create aniso_dict indexed by _atom_site_anisotrop.id
+            aniso_dict = {}
+            for idx, val in enumerate(mmcif_dict["_atom_site_anisotrop.id"]):
+                aniso_dict[val.strip()] = (aniso_u11[idx], aniso_u12[idx],
+                                   aniso_u13[idx], aniso_u22[idx], aniso_u23[idx],
+                                   aniso_u33[idx])
+
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
         if "_atom_site.auth_seq_id" in mmcif_dict:
@@ -197,11 +208,11 @@ class MMCIFParser(object):
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                                         name, element=element)
             if aniso_flag == 1:
-                u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, 'f')
-                structure_builder.set_anisou(anisou_array)
+                if mmcif_dict["_atom_site.id"][i] in aniso_dict.keys():
+                    u = aniso_dict[mmcif_dict["_atom_site.id"][i]]
+                    mapped_anisou = [float(_) for _ in u]
+                    anisou_array = numpy.array(mapped_anisou, 'f')
+                    structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
             a = float(mmcif_dict["_cell.length_a"])
@@ -337,16 +348,24 @@ class FastMMCIFParser(object):
             raise PDBConstructionException("Invalid model number")
 
         try:
-            aniso_u11 = mmcif_dict["_atom_site.aniso_U[1][1]"]
-            aniso_u12 = mmcif_dict["_atom_site.aniso_U[1][2]"]
-            aniso_u13 = mmcif_dict["_atom_site.aniso_U[1][3]"]
-            aniso_u22 = mmcif_dict["_atom_site.aniso_U[2][2]"]
-            aniso_u23 = mmcif_dict["_atom_site.aniso_U[2][3]"]
-            aniso_u33 = mmcif_dict["_atom_site.aniso_U[3][3]"]
+            aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
+            aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
+            aniso_u13 = mmcif_dict["_atom_site_anisotrop.U[1][3]"]
+            aniso_u22 = mmcif_dict["_atom_site_anisotrop.U[2][2]"]
+            aniso_u23 = mmcif_dict["_atom_site_anisotrop.U[2][3]"]
+            aniso_u33 = mmcif_dict["_atom_site_anisotrop.U[3][3]"]
             aniso_flag = 1
         except KeyError:
             # no anisotropic B factors
             aniso_flag = 0
+
+        if aniso_flag == 1:
+            # create aniso_dict indexed by _atom_site_anisotrop.id
+            aniso_dict = {}
+            for idx, val in enumerate(mmcif_dict["_atom_site_anisotrop.id"]):
+                aniso_dict[val.strip()] = (aniso_u11[idx], aniso_u12[idx],
+                                   aniso_u13[idx], aniso_u22[idx], aniso_u23[idx],
+                                   aniso_u33[idx])
 
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
@@ -438,8 +457,8 @@ class FastMMCIFParser(object):
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                                         name, element=element)
             if aniso_flag == 1:
-                u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, 'f')
-                structure_builder.set_anisou(anisou_array)
+                if mmcif_dict["_atom_site.id"][i] in aniso_dict.keys():
+                    u = aniso_dict[mmcif_dict["_atom_site.id"][i]]
+                    mapped_anisou = [float(_) for _ in u]
+                    anisou_array = numpy.array(mapped_anisou, 'f')
+                    structure_builder.set_anisou(anisou_array)
