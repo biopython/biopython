@@ -638,7 +638,23 @@ This will print:
 
 \section{HTML escape characters}
 
-Nowadays, Pubmed records may contain HTML tags to indicate subscripts, superscripts, and mathematical symbols via MathML. By default, the parser treats all text as plain text without markup. This may result in strings that are not valid HTML. For example, $c_p < 1$ can be represented as \verb+c<sub>p</sub> < 1+, which is not valid HTML because of the less-than sign. If you want to ensure that all strings returned by the parser are valid HTML, use the \verb+escape+ argument to the \verb+Entrez.read+ or \verb+Entrez.parse+ functions. If \verb+True+, the parser will replace all characters disallowed in HTML by their HTML-escaped equivalent. In the example above, the parser will generate \verb+c<sub>p</sub> &lt; 1+ if \verb+Entrez.read+ or \verb+Entrez.parse+ was called with \verb+escape=True+.
+Pubmed records may contain HTML tags to indicate e.g. subscripts, superscripts, or italic text, as well as mathematical symbols via MathML. By default, the \verb+Bio.Entrez+ parser treats all text as plain text without markup; for example, the fragment ``$P < 0.05$'' in the abstract of a Pubmed record, which is encoded as
+\begin{verbatim}
+<i>P</i> &lt; 0.05
+\end{verbatim}
+in the XML returned by Entrez, is converted to the Python string
+\begin{verbatim}
+'<i>P</i> < 0.05'
+\end{verbatim}
+by the \verb+Bio.Entrez+ parser. While this is more human-readable, it is not valid HTML due to the less-than sign, and makes further processing of the text e.g. by an HTML parser impractical. To ensure that all strings returned by the parser are valid HTML, call \verb+Entrez.read+ or \verb+Entrez.parse+ with the \verb+escape+ argument set to \verb+True+:
+\begin{verbatim}
+>>> record = Entrez.read(handle, escape=True)
+\end{verbatim}
+The parser will then replace all characters disallowed in HTML by their HTML-escaped equivalent; in the example above, the parser will generate
+\begin{verbatim}
+'<i>P</i> &lt; 0.05'
+\end{verbatim}
+which is a valid HTML fragment. By default, \verb+escape+ is \verb+False+.
 
 \section{Handling errors}
 
