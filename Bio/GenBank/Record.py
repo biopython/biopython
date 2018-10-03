@@ -631,6 +631,15 @@ class Feature(object):
                 if no_space_key in qualifier.key:
                     space_wrap = 0
 
+            quoted = False
+            # Temporarily remove quotes to handle NCBI escaping
+            if len(qualifier.value) > 1 and qualifier.value[0] == '"' and qualifier.value[-1] == '"':
+                    quoted = True
+                    qualifier.value = qualifier.value[1:-1]
+            qualifier.value = qualifier.value.replace('"', '""')  # NCBI says escape " as "" in qualifier values
+            if quoted:  # Add back quotes
+                qualifier.value = '"' + qualifier.value + '"'
+
             output += _wrapped_genbank(qualifier.key + qualifier.value,
                                        Record.GB_FEATURE_INDENT, space_wrap)
         return output
