@@ -292,7 +292,7 @@ KEYWORDS    """ in gb, gb)
 
         genbank_out = "qualifier_escaping_write.gb"
         # Write using SeqIO
-        record = SeqIO.read('GenBank/'+genbank_out, "gb")
+        record = SeqIO.read('GenBank/' + genbank_out, "gb")
         f1 = record.features[0]
         f2 = record.features[1]
         f1.qualifiers['note'][0] = '"Should" now "be" escaped in "file"'
