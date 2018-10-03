@@ -173,8 +173,9 @@ except ImportError:
     DOCTEST_MODULES.remove("Bio.SeqIO")
     DOCTEST_MODULES.remove("Bio.SearchIO")
 
-# Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
-if sys.version_info[0] == 3:
+# Skip Bio.Seq doctest under Python 2, see http://bugs.python.org/issue7490
+# Can't easily write exceptions with consistent class name in python 2 and 3
+if sys.version_info[0] == 2:
     DOCTEST_MODULES.remove("Bio.Seq")
 
 
