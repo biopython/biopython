@@ -19,6 +19,10 @@ from Bio._py3k import _as_string, _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
+from Bio._py3k import HTTPPasswordMgrWithDefaultRealm as _HTTPPasswordMgrWithDefaultRealm
+from Bio._py3k import HTTPBasicAuthHandler as _HTTPBasicAuthHandler
+from Bio._py3k import build_opener as _build_opener
+from Bio._py3k import install_opener as _install_opener
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
@@ -38,7 +42,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
-           template_type=None, template_length=None,
+           template_type=None, template_length=None, username=None, password=None
            ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
