@@ -43,6 +43,7 @@ possible, especially the following contributors:
 - Nick Negretti (first contribution)
 - Peter Cock
 - Rona Costello (first contribution)
+- Soroush Saffari (first contribution)
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
 
