@@ -21,6 +21,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Allis Tauri <https://github.com/allista>
+- Alona Levy-Jurgenson <https://github.com/alonalj>
 - Anders Pitman <https://github.com/anderspitman>
 - Andrea Pierleoni <andrea at the Italian domain biocomp dot unibo>
 - Andrea Rizzi <https://github.com/andrrizzi>
@@ -131,6 +132,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Johann Visagie <wjv at domain cityip.co.za>
 - John Bradley <https://github.com/johnbradley>
 - John Kern <https://github.com/kern3020>
+- John Ma <https://github.com/JohnMCMa>
 - Jonathan Taylor <jonathan dot taylor at utoronto dot ca>
 - Jordan Willis <https://github.com/jwillis0720>
 - Jose Blanca <https://github.com/JoseBlanca>
