@@ -211,7 +211,6 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
 qblast._previous = 0
 
 
-
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
 
