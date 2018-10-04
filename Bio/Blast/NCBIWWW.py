@@ -159,8 +159,6 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-
-
     # Poll NCBI until the results are ready.
     # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
     # 1. Do not contact the server more often than once every 10 seconds.
@@ -188,8 +186,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             delay = 60
 
         request = _Request(url_base,
-                            message,
-                            {"User-Agent": "BiopythonClient"})
+                           message,
+                           {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
         results = _as_string(handle.read())
 
