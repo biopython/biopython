@@ -1,10 +1,8 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-# Gavin E. Crooks 2001-10-10
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """ASTRAL RAF (Rapid Access Format) Sequence Maps.
 
 The ASTRAL RAF Sequence Maps record the relationship between the PDB SEQRES

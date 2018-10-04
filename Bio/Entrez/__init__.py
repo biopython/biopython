@@ -433,7 +433,7 @@ def ecitmatch(**keywds):
     return _open(cgi, variables, ecitmatch=True)
 
 
-def read(handle, validate=True):
+def read(handle, validate=True, escape=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -447,6 +447,11 @@ def read(handle, validate=True):
     are not represented in the DTD. If validate is False, the parser will
     simply skip such tags.
 
+    If escape is True, all characters that are not valid HTML are replaced
+    by HTML escape characters to guarantee that the returned strings are
+    valid HTML fragments. For example, a less-than sign (<) is replaced by
+    &lt;. If escape is False (default), the string is returned as is.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -454,12 +459,12 @@ def read(handle, validate=True):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
-    handler = DataHandler(validate)
+    handler = DataHandler(validate, escape)
     record = handler.read(handle)
     return record
 
 
-def parse(handle, validate=True):
+def parse(handle, validate=True, escape=False):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -479,6 +484,11 @@ def parse(handle, validate=True):
     are not represented in the DTD. If validate is False, the parser will
     simply skip such tags.
 
+    If escape is True, all characters that are not valid HTML are replaced
+    by HTML escape characters to guarantee that the returned strings are
+    valid HTML fragments. For example, a less-than sign (<) is replaced by
+    &lt;. If escape is False (default), the string is returned as is.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -486,7 +496,7 @@ def parse(handle, validate=True):
     the tag name in my_element.tag.
     """
     from .Parser import DataHandler
-    handler = DataHandler(validate)
+    handler = DataHandler(validate, escape)
     records = handler.parse(handle)
     return records
 

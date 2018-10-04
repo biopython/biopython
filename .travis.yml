@@ -73,6 +73,7 @@ addons:
     - samtools
     - wise
     - t-coffee
+    - ncbi-blast+
 
 # We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
 #

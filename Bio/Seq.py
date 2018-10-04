@@ -219,7 +219,10 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -229,7 +232,36 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -1075,7 +1107,7 @@ class Seq(object):
         >>> coding_dna.translate(table=1, cds=True)
         Traceback (most recent call last):
             ...
-        TranslationError: First codon 'GTG' is not a start codon
+        Bio.Data.CodonTable.TranslationError: First codon 'GTG' is not a start codon
 
         If the sequence has no in-frame stop codon, then the to_stop argument
         has no effect:
@@ -1929,7 +1961,10 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data < other.data
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -1941,7 +1976,40 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data <= other.data
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data > other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data >= other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -2505,7 +2573,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     >>> _translate_str("TA?", table)
     Traceback (most recent call last):
        ...
-    TranslationError: Codon 'TA?' is invalid
+    Bio.Data.CodonTable.TranslationError: Codon 'TA?' is invalid
 
     In a change to older versions of Biopython, partial codons are now
     always regarded as an error (previously only checked if cds=True)
@@ -2521,11 +2589,11 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     >>> _translate_str("AAACCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    TranslationError: First codon 'AAA' is not a start codon
+    Bio.Data.CodonTable.TranslationError: First codon 'AAA' is not a start codon
     >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    TranslationError: Extra in frame stop codon found.
+    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon found.
     """
     sequence = sequence.upper()
     amino_acids = []

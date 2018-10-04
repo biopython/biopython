@@ -8,7 +8,7 @@
 
 """Additional protein alphabets used in the SCOP database and PDB files.
 
-See Bio.SCOP for more information about SCOP and Biopython"s SCOP module.
+See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
 """
 
 
