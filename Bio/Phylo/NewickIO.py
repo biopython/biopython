@@ -26,7 +26,7 @@ tokens = [
     (r"\(", 'open parens'),
     (r"\)", 'close parens'),
     (r"[^\s\(\)\[\]\'\:\;\,]+", 'unquoted node label'),
-    (r"\:[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
+    (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
     (r"\,", 'comma'),
     (r"\[(\\.|[^\]])*\]", 'comment'),
     (r"\'(\\.|[^\'])*\'", 'quoted node label'),
