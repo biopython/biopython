@@ -39,6 +39,7 @@ import sys
 import re
 import os
 import warnings
+from collections import Counter
 from xml.parsers import expat
 from io import BytesIO
 import xml.etree.ElementTree as ET
@@ -193,15 +194,26 @@ class StringConsumer(Consumer):
         self.attributes = dict(attrs)
         self.data = []
 
-    def startElementHandler(self, name, attrs):
-        if name in self.consumable:
-            tag = "<%s>" % name
+    def startElementHandler(self, name, attrs, prefix=None):
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        if key in self.consumable:
+            tag = "<%s" % name
+            for key, value in attrs.items():
+                tag += ' %s="%s"' % (key, value)
+            tag += ">"
             self.data.append(tag)
             return True
         return False
 
-    def endElementHandler(self, name):
-        if name in self.consumable:
+    def endElementHandler(self, name, prefix=None):
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        if key in self.consumable:
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -338,7 +350,9 @@ class DataHandler(object):
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
-        self.is_schema = False
+        self.schema_namespace = None
+        self.namespace_level = Counter()
+        self.namespace_prefix = {}
         self._directory = None
 
     def read(self, handle):
@@ -442,35 +456,75 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
+        self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
 
-    def startNamespaceDeclHandler(self, prefix, un):
-        # This is an xml schema
-        if "Schema" in un:
-            self.is_schema = True
+    def startNamespaceDeclHandler(self, prefix, uri):
+        if prefix == 'xsi':
+            # This is an xml schema
+            self.schema_namespace = uri
+            self.parser.StartElementHandler = self.schemaHandler
         else:
-            raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
+            # Note that the DTD for MathML specifies a default attribute
+            # that declares the namespace for each MathML element. This means
+            # that MathML element in the XML has an invisible MathML namespace
+            # declaration that triggers a call to startNamespaceDeclHandler
+            # and endNamespaceDeclHandler. Therefore we need to count how often
+            # startNamespaceDeclHandler and endNamespaceDeclHandler were called
+            # to find out their first and last invocation for each namespace.
+            self.namespace_level[prefix] += 1
+            self.namespace_prefix[uri] = prefix
+
+    def endNamespaceDeclHandler(self, prefix):
+        if prefix != 'xsi':
+            self.namespace_level[prefix] -= 1
+            if self.namespace_level[prefix] == 0:
+                for key, value in self.namespace_prefix.items():
+                    if value == prefix:
+                        break
+                else:
+                    raise RuntimeError("Failed to find namespace prefix")
+                del self.namespace_prefix[key]
+
+    def schemaHandler(self, name, attrs):
+        # process the XML schema before processing the element
+        key = "%s noNamespaceSchemaLocation" % self.schema_namespace
+        schema = attrs[key]
+        handle = self.open_xsd_file(os.path.basename(schema))
+        # if there is no local xsd file grab the url and parse the file
+        if not handle:
+            handle = _urlopen(schema)
+            text = handle.read()
+            self.save_xsd_file(os.path.basename(schema), text)
+            handle.close()
+            self.parse_xsd(ET.fromstring(text))
+        else:
+            self.parse_xsd(ET.fromstring(handle.read()))
+            handle.close()
+        # continue handling the element
+        self.startElementHandler(name, attrs)
+        # reset the element handler
+        self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, name, attrs):
+        # check if the name is in a namespace
+        prefix = None
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+                if self.namespace_level[prefix] == 1:
+                    attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
-            consumed = self.consumer.startElementHandler(name, attrs)
+            if prefix:
+                consumed = self.consumer.startElementHandler(name, attrs, prefix)
+            else:
+                consumed = self.consumer.startElementHandler(name, attrs)
             if consumed:
                 return
-        # preprocessing the xml schema
-        if self.is_schema:
-            if len(attrs) == 1:
-                schema = list(attrs.values())[0]
-                handle = self.open_xsd_file(os.path.basename(schema))
-                # if there is no local xsd file grab the url and parse the file
-                if not handle:
-                    handle = _urlopen(schema)
-                    text = handle.read()
-                    self.save_xsd_file(os.path.basename(schema), text)
-                    handle.close()
-                    self.parse_xsd(ET.fromstring(text))
-                else:
-                    self.parse_xsd(ET.fromstring(handle.read()))
-                    handle.close()
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
@@ -495,10 +549,21 @@ class DataHandler(object):
         self.consumer = consumer
 
     def endElementHandler(self, name):
+        prefix = None
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
-            consumed = consumer.endElementHandler(name)
+            if prefix:
+                consumed = consumer.endElementHandler(name, prefix)
+            else:
+                consumed = consumer.endElementHandler(name)
             if consumed:
                 return
         self.consumer = consumer.parent
@@ -584,6 +649,12 @@ class DataHandler(object):
                 for child in children:
                     tag = child[2]
                     tags.append(tag)
+                    if tag in self.classes:
+                        try:
+                            keys = self.classes[tag].keys
+                        except AttributeError:
+                            continue
+                        tags.extend(keys)
                 bases = (StringConsumer, )
                 self.classes[name] = type(str(name), bases, {'consumable': tags})
             else:
