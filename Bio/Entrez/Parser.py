@@ -462,12 +462,20 @@ class DataHandler(object):
         if prefix == 'xsi':
             # This is an xml schema
             self.schema_namespace = uri
+            self.parser.StartElementHandler = self.schemaHandler
         else:
+            # Note that the DTD for MathML specifies a default attribute
+            # that declares the namespace for each MathML element. This means
+            # that MathML element in the XML has an invisible MathML namespace
+            # declaration that triggers a call to startNamespaceDeclHandler
+            # and endNamespaceDeclHandler. Therefore we need to count how often
+            # startNamespaceDeclHandler and endNamespaceDeclHandler were called
+            # to find out their first and last invocation for each namespace.
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
 
     def endNamespaceDeclHandler(self, prefix):
-        if not self.schema_namespace:
+        if prefix != 'xsi':
             self.namespace_level[prefix] -= 1
             if self.namespace_level[prefix] == 0:
                 for key, value in self.namespace_prefix.items():
@@ -477,23 +485,27 @@ class DataHandler(object):
                     raise RuntimeError("Failed to find namespace prefix")
                 del self.namespace_prefix[key]
 
+    def schemaHandler(self, name, attrs):
+        # process the XML schema before processing the element
+        key = "%s noNamespaceSchemaLocation" % self.schema_namespace
+        schema = attrs[key]
+        handle = self.open_xsd_file(os.path.basename(schema))
+        # if there is no local xsd file grab the url and parse the file
+        if not handle:
+            handle = _urlopen(schema)
+            text = handle.read()
+            self.save_xsd_file(os.path.basename(schema), text)
+            handle.close()
+            self.parse_xsd(ET.fromstring(text))
+        else:
+            self.parse_xsd(ET.fromstring(handle.read()))
+            handle.close()
+        # continue handling the element
+        self.startElementHandler(name, attrs)
+        # reset the element handler
+        self.parser.StartElementHandler = self.startElementHandler
+
     def startElementHandler(self, name, attrs):
-        # preprocessing the xml schema
-        if self.schema_namespace:
-            key = "%s noNamespaceSchemaLocation" % self.schema_namespace
-            schema = attrs[key]
-            handle = self.open_xsd_file(os.path.basename(schema))
-            # if there is no local xsd file grab the url and parse the file
-            if not handle:
-                handle = _urlopen(schema)
-                text = handle.read()
-                self.save_xsd_file(os.path.basename(schema), text)
-                handle.close()
-                self.parse_xsd(ET.fromstring(text))
-            else:
-                self.parse_xsd(ET.fromstring(handle.read()))
-                handle.close()
-            self.schema_namespace = None
         # check if the name is in a namespace
         prefix = None
         if self.namespace_prefix:
