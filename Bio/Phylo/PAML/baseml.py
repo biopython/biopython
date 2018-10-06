@@ -18,7 +18,7 @@ class Baseml(Paml):
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
                  out_file=None):
-        """Initialize the Baseml instance.
+        """Initialize the BASEML instance.
 
         The user may optionally pass in strings specifying the locations
         of the input alignment and tree files, the working directory and
@@ -60,7 +60,7 @@ class Baseml(Paml):
         """Dynamically build a BASEML control file from the options.
 
         The control file is written to the location specified by the
-        ctl_file property of the baseml class.
+        ctl_file property of the BASEML class.
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
@@ -91,7 +91,11 @@ class Baseml(Paml):
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Baseml instance."""
+        """Parse a control file and load the options into the BASEML instance.
+
+        Check that the file exists and that the lines in the file are valid.
+        Then update each BASEML options to the new option if supplied or None
+        if not supplied. Otherwise raise an exception."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -155,11 +159,11 @@ class Baseml(Paml):
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
             parse=True):
-        """Run baseml using the current configuration.
+        """Run BASEML using the current configuration.
 
         Check that the tree attribute is specified and exists, and then
-        run baseml. If parse is True then read and return the result,
-        otherwise return none.
+        run BASEML. If parse is True then read and return the result. If
+        parse is False return None. Otherwise raise an exception.
 
         The arguments may be passed as either absolute or relative paths,
         despite the fact that BASEML requires relative paths.
@@ -175,7 +179,11 @@ class Baseml(Paml):
 
 
 def read(results_file):
-    """Parse a BASEML results file."""
+    """Parse a BASEML results file.
+
+    Check that the file exits, that the results file is not empty, and then
+    parse the file. Check there is a version in the results and then return
+    the results. Otherwise raise an exception."""
     results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
