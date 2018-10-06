@@ -39,6 +39,7 @@ import sys
 import re
 import os
 import warnings
+from collections import Counter
 from xml.parsers import expat
 from io import BytesIO
 import xml.etree.ElementTree as ET
@@ -194,14 +195,17 @@ class StringConsumer(Consumer):
         self.data = []
 
     def startElementHandler(self, name, attrs):
-        if name in self.consumable:
-            tag = "<%s>" % name
+        if name in self.consumable: # or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
+            tag = "<%s" % name
+            # for key, value in attrs.items():
+            #     tag += ' %s="%s"' % (key, value)
+            tag += ">"
             self.data.append(tag)
             return True
         return False
 
     def endElementHandler(self, name):
-        if name in self.consumable:
+        if name in self.consumable: #  or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -339,6 +343,8 @@ class DataHandler(object):
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
         self.is_schema = False
+        # self.namespace_level = Counter()
+        # self.namespace_prefix = {}
         self._directory = None
 
     def read(self, handle):
@@ -442,15 +448,37 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
+        # self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
 
-    def startNamespaceDeclHandler(self, prefix, un):
-        # This is an xml schema
-        if "Schema" in un:
+    def startNamespaceDeclHandler(self, prefix, uri):
+        if "Schema" in uri:
+            # This is an xml schema
             self.is_schema = True
-        else:
-            raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
+        # else:
+            # self.namespace_level[prefix] += 1
+            # self.namespace_prefix[uri] = prefix
+
+    # def endNamespaceDeclHandler(self, prefix):
+     #    if not self.is_schema:
+      #       self.namespace_level[prefix] -= 1
+       #      if self.namespace_level[prefix] == 0:
+        #         for key, value in self.namespace_prefix.items():
+         #            if value == prefix:
+          #               break
+           #      else:
+            #         raise RuntimeError("Failed to find namespace prefix")
+             #    del self.namespace_prefix[key]
 
     def startElementHandler(self, name, attrs):
+        # if self.namespace_prefix:
+        #     try:
+        #         uri, name = name.split()
+        #     except ValueError:
+        #         pass
+        #     else:
+        #         prefix = self.namespace_prefix[uri]
+        #         if self.namespace_level[prefix] == 1:
+        #             attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
             consumed = self.consumer.startElementHandler(name, attrs)
@@ -495,6 +523,11 @@ class DataHandler(object):
         self.consumer = consumer
 
     def endElementHandler(self, name):
+        # if self.namespace_prefix:
+        #     try:
+        #         uri, name = name.split()
+        #     except ValueError:
+        #         pass
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
@@ -584,6 +617,12 @@ class DataHandler(object):
                 for child in children:
                     tag = child[2]
                     tags.append(tag)
+                    # if tag in self.classes:
+                    #     try:
+                    #         keys = self.classes[tag].keys
+                    #     except AttributeError:
+                    #         continue
+                    #     tags.extend(keys)
                 bases = (StringConsumer, )
                 self.classes[name] = type(str(name), bases, {'consumable': tags})
             else:
