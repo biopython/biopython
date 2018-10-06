@@ -13,7 +13,7 @@ and Threonines?
 
 \section{Sequences and Alphabets}
 
-The alphabet object is perhaps the important thing that makes the \verb|Seq| object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio.Alphabet| module. We'll use the IUPAC alphabets (\url{http://www.chem.qmw.ac.uk/iupac/}) here to deal with some of our favorite objects: DNA, RNA and Proteins.
+The alphabet object is perhaps the important thing that makes the \verb|Seq| object more than just a string. The currently available alphabets for Biopython are defined in the \verb|Bio.Alphabet| module. We'll use the IUPAC alphabets (\url{https://www.bioinformatics.org/sms/iupac.html}) here to deal with some of our favorite objects: DNA, RNA and Proteins.
 
 \verb|Bio.Alphabet.IUPAC| provides basic definitions for proteins, DNA and RNA, but additionally provides the ability to extend and customize the basic definitions. For instance, for proteins, there is a basic IUPACProtein class, but there is an additional ExtendedIUPACProtein class providing for the additional elements ``U'' (or ``Sec'' for selenocysteine) and ``O'' (or ``Pyl'' for pyrrolysine), plus the ambiguous symbols ``B'' (or ``Asx'' for asparagine or aspartic acid), ``Z'' (or ``Glx'' for glutamine or glutamic acid), ``J'' (or ``Xle'' for leucine isoleucine) and ``X'' (or ``Xxx'' for an unknown amino acid). For DNA you've got choices of IUPACUnambiguousDNA, which provides for just the basic letters, IUPACAmbiguousDNA (which provides for ambiguity letters for every possible situation) and ExtendedIUPACDNA, which allows letters for modified bases. Similarly, RNA can be represented by IUPACAmbiguousRNA or IUPACUnambiguousRNA.
 
@@ -479,7 +479,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about some optional arguments, including different translation tables (Genetic Codes).
 
-The translation tables available in Biopython are based on those \href{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
+The translation tables available in Biopython are based on those \href{https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
 %cont-doctest
 \begin{verbatim}
@@ -570,7 +570,7 @@ In the previous sections we talked about the \verb|Seq| object translation metho
 Section~\ref{sec:seq-module-functions}).
 Internally these use codon table objects derived from the NCBI information at
 \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}, also shown on
-\url{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi} in a much more readable layout.
+\url{https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi} in a much more readable layout.
 
 As before, let's just focus on two choices: the Standard translation table, and the
 translation table for Vertebrate Mitochondrial DNA.
