@@ -57,7 +57,6 @@ class MMCIFParser(object):
          - filename - name of mmCIF file, OR an open text mode file handle
 
         """
-
         with warnings.catch_warnings():
             if self.QUIET:
                 warnings.filterwarnings("ignore", category=PDBConstructionWarning)
@@ -117,8 +116,8 @@ class MMCIFParser(object):
             aniso_dict = {}
             for idx, val in enumerate(mmcif_dict["_atom_site_anisotrop.id"]):
                 aniso_dict[val.strip()] = (aniso_u11[idx], aniso_u12[idx],
-                                   aniso_u13[idx], aniso_u22[idx], aniso_u23[idx],
-                                   aniso_u33[idx])
+                                           aniso_u13[idx], aniso_u22[idx],
+                                           aniso_u23[idx], aniso_u33[idx])
 
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
@@ -364,8 +363,8 @@ class FastMMCIFParser(object):
             aniso_dict = {}
             for idx, val in enumerate(mmcif_dict["_atom_site_anisotrop.id"]):
                 aniso_dict[val.strip()] = (aniso_u11[idx], aniso_u12[idx],
-                                   aniso_u13[idx], aniso_u22[idx], aniso_u23[idx],
-                                   aniso_u33[idx])
+                                           aniso_u13[idx], aniso_u22[idx],
+                                           aniso_u23[idx], aniso_u33[idx])
 
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
