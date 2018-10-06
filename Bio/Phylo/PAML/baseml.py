@@ -69,7 +69,7 @@ class Baseml(Paml):
         """Dynamically build a BASEML control file from the options.
 
         The control file is written to the location specified by the
-        ctl_file property of the baseml class.
+        ctl_file property of the BASEML class.
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
@@ -100,7 +100,11 @@ class Baseml(Paml):
                 ctl_handle.write(f"{option[0]} = {option[1]}\n")
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Baseml instance."""
+        """Parse a control file and load the options into the BASEML instance.
+
+        Check that the file exists and that the lines in the file are valid.
+        Then update each BASEML options to the new option if supplied or None
+        if not supplied. Otherwise raise an exception."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise FileNotFoundError(f"File not found: {ctl_file!r}")
@@ -167,8 +171,8 @@ class Baseml(Paml):
         """Run baseml using the current configuration.
 
         Check that the tree attribute is specified and exists, and then
-        run baseml. If parse is True then read and return the result,
-        otherwise return none.
+        run BASEML. If parse is True then read and return the result. If
+        parse is False return None. Otherwise raise an exception.
 
         The arguments may be passed as either absolute or relative paths,
         despite the fact that BASEML requires relative paths.
@@ -184,7 +188,11 @@ class Baseml(Paml):
 
 
 def read(results_file):
-    """Parse a BASEML results file."""
+    """Parse a BASEML results file.
+
+    Check that the file exits, that the results file is not empty, and then
+    parse the file. Check there is a version in the results and then return
+    the results. Otherwise raise an exception."""
     results = {}
     if not os.path.exists(results_file):
         raise FileNotFoundError("Results file does not exist.")
