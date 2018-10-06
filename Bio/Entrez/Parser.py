@@ -194,8 +194,12 @@ class StringConsumer(Consumer):
         self.attributes = dict(attrs)
         self.data = []
 
-    def startElementHandler(self, name, attrs):
-        if name in self.consumable or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
+    def startElementHandler(self, name, attrs, prefix=None):
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        if key in self.consumable:
             tag = "<%s" % name
             for key, value in attrs.items():
                 tag += ' %s="%s"' % (key, value)
@@ -204,8 +208,12 @@ class StringConsumer(Consumer):
             return True
         return False
 
-    def endElementHandler(self, name):
-        if name in self.consumable or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
+    def endElementHandler(self, name, prefix=None):
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        if key in self.consumable:
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -487,6 +495,7 @@ class DataHandler(object):
                 handle.close()
             self.schema_namespace = None
         # check if the name is in a namespace
+        prefix = None
         if self.namespace_prefix:
             try:
                 uri, name = name.split()
@@ -498,7 +507,10 @@ class DataHandler(object):
                     attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
-            consumed = self.consumer.startElementHandler(name, attrs)
+            if prefix:
+                consumed = self.consumer.startElementHandler(name, attrs, prefix)
+            else:
+                consumed = self.consumer.startElementHandler(name, attrs)
             if consumed:
                 return
         cls = self.classes.get(name)
@@ -525,15 +537,21 @@ class DataHandler(object):
         self.consumer = consumer
 
     def endElementHandler(self, name):
+        prefix = None
         if self.namespace_prefix:
             try:
                 uri, name = name.split()
             except ValueError:
                 pass
+            else:
+                prefix = self.namespace_prefix[uri]
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
-            consumed = consumer.endElementHandler(name)
+            if prefix:
+                consumed = consumer.endElementHandler(name, prefix)
+            else:
+                consumed = consumer.endElementHandler(name)
             if consumed:
                 return
         self.consumer = consumer.parent
