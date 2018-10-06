@@ -12,7 +12,7 @@ import subprocess
 
 
 class PamlError(EnvironmentError):
-    """paml has failed.
+    """PAML has failed.
 
     Run with verbose=True to view the error message.
     """
@@ -71,7 +71,7 @@ class Paml:
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory (PRIVATE).
 
-        paml requires that all paths specified in the control file be
+        PAML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
         absolute paths.
         """
@@ -83,14 +83,14 @@ class Paml:
             self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
     def run(self, ctl_file, verbose, command):
-        """Run a paml program using the current configuration.
+        """Run a PAML program using the current configuration.
 
         Check that the class attributes exist and raise an error
         if not. Then run the command and check if it succeeds with
         a return code of 0, otherwise raise an error.
 
         The arguments may be passed as either absolute or relative
-        paths, despite the fact that paml requires relative paths.
+        paths, despite the fact that PAML requires relative paths.
         """
         if self.alignment is None:
             raise ValueError("Alignment file not specified.")
@@ -127,7 +127,7 @@ class Paml:
                 % (command, result_code)
             )
         if result_code < 0:
-            # If the paml process is killed by a signal somehow
+            # If the PAML process is killed by a signal somehow
             raise OSError(
                 "The %s process was killed (return code %i)." % (command, result_code)
             )
