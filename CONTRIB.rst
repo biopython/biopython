@@ -84,6 +84,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - David Winter <david dot winter at gmail dot com>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
+- Edward Haigh <lambda at edwardhaigh dot com>
 - Edward Liaw <https://github.com/edliaw>
 - Emmanuel Noutahi <https://github.com/maclandrol>
 - Eric Rasche <https://github.com/erasche>
