@@ -195,17 +195,17 @@ class StringConsumer(Consumer):
         self.data = []
 
     def startElementHandler(self, name, attrs):
-        if name in self.consumable: # or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
+        if name in self.consumable or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
             tag = "<%s" % name
-            # for key, value in attrs.items():
-            #     tag += ' %s="%s"' % (key, value)
+            for key, value in attrs.items():
+                tag += ' %s="%s"' % (key, value)
             tag += ">"
             self.data.append(tag)
             return True
         return False
 
     def endElementHandler(self, name):
-        if name in self.consumable: #  or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
+        if name in self.consumable or name in ("math", "mrow", "msubsup", "mi", "mn", "mo"):
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -342,9 +342,9 @@ class DataHandler(object):
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
-        self.is_schema = False
-        # self.namespace_level = Counter()
-        # self.namespace_prefix = {}
+        self.schema_namespace = None
+        self.namespace_level = Counter()
+        self.namespace_prefix = {}
         self._directory = None
 
     def read(self, handle):
@@ -448,57 +448,59 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
-        # self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
+        self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
 
     def startNamespaceDeclHandler(self, prefix, uri):
-        if "Schema" in uri:
+        if prefix == 'xsi':
             # This is an xml schema
-            self.is_schema = True
-        # else:
-            # self.namespace_level[prefix] += 1
-            # self.namespace_prefix[uri] = prefix
+            self.schema_namespace = uri
+        else:
+            self.namespace_level[prefix] += 1
+            self.namespace_prefix[uri] = prefix
 
-    # def endNamespaceDeclHandler(self, prefix):
-     #    if not self.is_schema:
-      #       self.namespace_level[prefix] -= 1
-       #      if self.namespace_level[prefix] == 0:
-        #         for key, value in self.namespace_prefix.items():
-         #            if value == prefix:
-          #               break
-           #      else:
-            #         raise RuntimeError("Failed to find namespace prefix")
-             #    del self.namespace_prefix[key]
+    def endNamespaceDeclHandler(self, prefix):
+        if not self.schema_namespace:
+            self.namespace_level[prefix] -= 1
+            if self.namespace_level[prefix] == 0:
+                for key, value in self.namespace_prefix.items():
+                    if value == prefix:
+                        break
+                else:
+                    raise RuntimeError("Failed to find namespace prefix")
+                del self.namespace_prefix[key]
 
     def startElementHandler(self, name, attrs):
-        # if self.namespace_prefix:
-        #     try:
-        #         uri, name = name.split()
-        #     except ValueError:
-        #         pass
-        #     else:
-        #         prefix = self.namespace_prefix[uri]
-        #         if self.namespace_level[prefix] == 1:
-        #             attrs = {'xmlns': uri}
+        # preprocessing the xml schema
+        if self.schema_namespace:
+            key = "%s noNamespaceSchemaLocation" % self.schema_namespace
+            schema = attrs[key]
+            handle = self.open_xsd_file(os.path.basename(schema))
+            # if there is no local xsd file grab the url and parse the file
+            if not handle:
+                handle = _urlopen(schema)
+                text = handle.read()
+                self.save_xsd_file(os.path.basename(schema), text)
+                handle.close()
+                self.parse_xsd(ET.fromstring(text))
+            else:
+                self.parse_xsd(ET.fromstring(handle.read()))
+                handle.close()
+            self.schema_namespace = None
+        # check if the name is in a namespace
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+                if self.namespace_level[prefix] == 1:
+                    attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
             consumed = self.consumer.startElementHandler(name, attrs)
             if consumed:
                 return
-        # preprocessing the xml schema
-        if self.is_schema:
-            if len(attrs) == 1:
-                schema = list(attrs.values())[0]
-                handle = self.open_xsd_file(os.path.basename(schema))
-                # if there is no local xsd file grab the url and parse the file
-                if not handle:
-                    handle = _urlopen(schema)
-                    text = handle.read()
-                    self.save_xsd_file(os.path.basename(schema), text)
-                    handle.close()
-                    self.parse_xsd(ET.fromstring(text))
-                else:
-                    self.parse_xsd(ET.fromstring(handle.read()))
-                    handle.close()
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
@@ -523,11 +525,11 @@ class DataHandler(object):
         self.consumer = consumer
 
     def endElementHandler(self, name):
-        # if self.namespace_prefix:
-        #     try:
-        #         uri, name = name.split()
-        #     except ValueError:
-        #         pass
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
@@ -617,12 +619,12 @@ class DataHandler(object):
                 for child in children:
                     tag = child[2]
                     tags.append(tag)
-                    # if tag in self.classes:
-                    #     try:
-                    #         keys = self.classes[tag].keys
-                    #     except AttributeError:
-                    #         continue
-                    #     tags.extend(keys)
+                    if tag in self.classes:
+                        try:
+                            keys = self.classes[tag].keys
+                        except AttributeError:
+                            continue
+                        tags.extend(keys)
                 bases = (StringConsumer, )
                 self.classes[name] = type(str(name), bases, {'consumable': tags})
             else:
