@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2008-2010 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2009-2016 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -4502,7 +4503,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(article['AuthorList'][1]['Initials'], 'EM')
         self.assertEqual(article['AuthorList'][1].attributes, {'ValidYN': 'Y'})
         self.assertEqual(len(article['Abstract']), 1)
-        self.assertEqual(article['Abstract']['AbstractText'][0], """\
+        self.assertEqual(article['Abstract']['AbstractText'][0], u"""\
 Maximal Lactate Steady State (MLSS) and Lactate Threshold (LT) are physiologically-related and fundamental concepts within the sports and exercise sciences. Literature supporting their relationship, however, is scarce. Among the recognized LTs, we were particularly interested in the disused "Minimum Lactate Equivalent" (LE<sub>min</sub>), first described in the early 1980s. We hypothesized that velocity at LT, conceptually comprehended as in the old days (LE<sub>min</sub>), could predict velocity at MLSS (<sub>V</sub>MLSS) more accurate than some other blood lactate-related thresholds (BL<sub>R</sub>Ts) routinely used nowadays by many sport science practitioners. Thirteen male endurance-trained [<sub>V</sub>MLSS 15.0 ± 1.1 km·h<sup>-1</sup>; maximal oxygen uptake ( <math xmlns="http://www.w3.org/1998/Math/MathML">
                         <msub>
                             <mrow>
