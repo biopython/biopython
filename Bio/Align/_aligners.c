@@ -3802,7 +3802,7 @@ static PyObject* _next_waterman_smith_beyer_global(PathGenerator* self)
                 i = iA - 1;
                 j = iB - 1;
                 trace = M[iA][iB].trace;
-               switch (m) {
+                switch (m) {
                     case M_MATRIX:
                         if (trace & Ix_MATRIX) {
                             m = Ix_MATRIX;
@@ -5840,9 +5840,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
         score -= epsilon;
-        if (M[nA][nB].score >= score) M[nA][nB].trace |= ENDPOINT;
-        if (Ix[nA][nB].score >= score) Ix[nA][nB].traceM[0] |= ENDPOINT;
-        if (Iy[nA][nB].score >= score) Iy[nA][nB].traceM[0] |= ENDPOINT;
         return result;
     }
 
