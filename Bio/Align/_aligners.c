@@ -3500,17 +3500,17 @@ static PyObject* _next_gotoh_global(PathGenerator* self)
         /* Generate a new path. */
         switch (m) {
             case M_MATRIX:
-                if (M[nA][nB].trace & ENDPOINT) {
+                if (M[nA][nB].trace) {
                    /* m = M_MATRIX; */
                    break;
                 }
             case Ix_MATRIX:
-                if (Ix[nA][nB].trace & ENDPOINT) {
+                if (Ix[nA][nB].trace) {
                    m = Ix_MATRIX;
                    break;
                 }
             case Iy_MATRIX:
-                if (Iy[nA][nB].trace & ENDPOINT) {
+                if (Iy[nA][nB].trace) {
                    m = Iy_MATRIX;
                    break;
                 }
@@ -4401,9 +4401,9 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
         }
     }
     count = 0;
-    if (M[nA][nB].trace & ENDPOINT) SAFE_ADD(countsM[nB], count);
-    if (Ix[nA][nB].trace & ENDPOINT) SAFE_ADD(countsIx[nB], count);
-    if (Iy[nA][nB].trace & ENDPOINT) SAFE_ADD(countsIy[nB], count);
+    if (M[nA][nB].trace) SAFE_ADD(countsM[nB], count);
+    if (Ix[nA][nB].trace) SAFE_ADD(countsIx[nB], count);
+    if (Iy[nA][nB].trace) SAFE_ADD(countsIy[nB], count);
 exit:
     if (countsM) PyMem_Free(countsM);
     if (countsIx) PyMem_Free(countsIx);
@@ -5440,9 +5440,9 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
         score -= epsilon;
-        if (M[nA][nB].score >= score) M[nA][nB].trace |= ENDPOINT;
-        if (Ix[nA][nB].score >= score) Ix[nA][nB].trace |= ENDPOINT;
-        if (Iy[nA][nB].score >= score) Iy[nA][nB].trace |= ENDPOINT;
+        if (M[nA][nB].score < score) M[nA][nB].trace = 0;
+        if (Ix[nA][nB].score < score) Ix[nA][nB].trace = 0;
+        if (Iy[nA][nB].score < score) Iy[nA][nB].trace = 0;
         return result;
     }
     else _deallocate_gotoh_matrices(nA, M, Ix, Iy);
