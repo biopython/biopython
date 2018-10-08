@@ -359,7 +359,6 @@ typedef struct {
     int iB;
     Mode mode;
     Algorithm algorithm;
-    double threshold;
     Py_ssize_t length;
 } PathGenerator;
 
@@ -4837,7 +4836,6 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
     }
     generator->algorithm = algorithm;
     generator->mode = aligner->mode;
-    generator->threshold = 0;
     generator->length = 0;
 
     return generator;
@@ -4913,7 +4911,6 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (paths) {
         PyObject* result;
         paths->M.affine = M;
-        paths->threshold = score - epsilon;
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
         return result;
@@ -5546,7 +5543,6 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         paths->M.affine = M;
         paths->Ix.affine = Ix;
         paths->Iy.affine = Iy;
-        paths->threshold = maximum - epsilon;
         if (maximum==0) M[0][0].path = DONE;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
@@ -5820,7 +5816,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
         paths->M.general = M;
         paths->Ix.general = Ix;
         paths->Iy.general = Iy;
-        paths->threshold = score - epsilon;
         if (M[nA][nB].score < score - epsilon) M[nA][nB].trace = 0;
         if (Ix[nA][nB].score < score - epsilon) {
             traceM = PyMem_Realloc(Ix[nA][nB].traceM, sizeof(int));
@@ -6104,7 +6099,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
         paths->M.general = M;
         paths->Ix.general = Ix;
         paths->Iy.general = Iy;
-        paths->threshold = maximum - epsilon;
         if (maximum==0) M[0][0].path.j = -1; /* DONE */
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
