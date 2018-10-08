@@ -43,9 +43,8 @@ class Select(object):
 
 
 class _PDBIOBase(object):
-    """
-    Provides the set_structure method for PDBIO and MMCIFIO
-    """
+    """Base class to provide the set_structure method for PDBIO and MMCIFIO."""
+
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""
         if pdb_object.level == "S":
