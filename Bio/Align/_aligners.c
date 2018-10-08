@@ -2878,7 +2878,17 @@ static PyGetSetDef Aligner_getset[] = {
         score = 0; \
         trace = 0; \
     } \
-    else if (score > maximum) maximum = score; \
+    else if (score > maximum - epsilon) { \
+        if (score > maximum + epsilon) { \
+            maximum = score; \
+            for ( ; im < i; im++, jm = 0) \
+                for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
+            for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
+            im = i; \
+            jm = j; \
+        } \
+        trace |= ENDPOINT; \
+    } \
     cell.score = score; \
     cell.trace = trace;
 
@@ -3915,7 +3925,6 @@ static PyObject* _next_waterman_smith_beyer_local(PathGenerator* self)
     CellM** M = self->M.general;
     CellXY** Ix = self->Ix.general;
     CellXY** Iy = self->Iy.general;
-    const double threshold = self->threshold;
 
     if (M[0][0].path.j < 0) return NULL; /* DONE */
     m = 0;
@@ -4034,8 +4043,7 @@ static PyObject* _next_waterman_smith_beyer_local(PathGenerator* self)
     }
  
     if (m == 0) {
-        /* We are at [nA][nB]. Find a suitable end point for a path.
-         * Only allow start points ending at the M matrix. */
+        /* We are at [nA][nB]. Find a suitable end point for a path. */
         while (1) {
             if (iB < nB) iB++;
             else if (iA < nA) {
@@ -4047,7 +4055,7 @@ static PyObject* _next_waterman_smith_beyer_local(PathGenerator* self)
                 M[0][0].path.j = -1;
                 return NULL;
             }
-            if (M[iA][iB].score >= threshold) break;
+            if (M[iA][iB].trace & ENDPOINT) break;
         }
         M[iA][iB].path.i = -1;
         M[iA][iB].path.j = -1;
@@ -4585,7 +4593,6 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     CellM** M = self->M.general;
     CellXY** Ix = self->Ix.general;
     CellXY** Iy = self->Iy.general;
-    const double threshold = self->threshold;
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
@@ -4615,7 +4622,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
             if (count==0) count = 1;
             M_count[i][j] = count;
-            if (trace && M[i][j].score >= threshold) SAFE_ADD(count, total);
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
             tracep = Ix[i][j].traceM;
             if (tracep) {
@@ -5976,6 +5983,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     char c;
     int i;
     int j;
+    int im = nA;
+    int jm = nB;
     int k;
     int kA;
     int kB;
