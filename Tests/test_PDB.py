@@ -866,7 +866,7 @@ class WriteTest(unittest.TestCase):
             self.parser = PDBParser(PERMISSIVE=1)
             self.mmcif_parser = MMCIFParser()
             self.structure = self.parser.get_structure("example", "PDB/1A8O.pdb")
-            self.dna_structure = self.parser.get_structure("rna_example", "PDB/1LCD.pdb")
+            self.dna_structure = self.parser.get_structure("dna_example", "PDB/1LCD.pdb")
             self.mmcif_file = "PDB/1A8O.cif"
             self.mmcif_multimodel_pdb_file = "PDB/1SSU_mod.pdb"
             self.mmcif_multimodel_mmcif_file = "PDB/1SSU_mod.cif"
@@ -990,7 +990,7 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(nresidues, 158)
         finally:
             os.remove(filename)
-            
+
     def test_mmcifio_write_residue(self):
         """Write a single residue using MMCIFIO."""
         io = MMCIFIO()
@@ -1012,7 +1012,7 @@ class WriteTest(unittest.TestCase):
         """Write a single dna residue using MMCIFIO."""
         io = MMCIFIO()
         struct1 = self.dna_structure
-        residue1 = list(struct1.get_residues())[0]
+        residue1 = list(struct1[0]["B"].get_residues())[0]
         io.set_structure(residue1)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
@@ -1023,6 +1023,28 @@ class WriteTest(unittest.TestCase):
             self.assertEqual(nresidues, 1)
             first_atom = list(struct2.get_atoms())[0]
             self.assertEqual(first_atom.get_name(), "O5'")
+            self.assertEqual(struct2[0].child_list[0].id, "B")
+        finally:
+            os.remove(filename)
+
+    def test_mmcifio_write_atom(self):
+        """Write a single dna residue using MMCIFIO."""
+        io = MMCIFIO()
+        struct1 = self.dna_structure
+        atom1 = list(struct1[0]["B"].get_atoms())[0]
+        io.set_structure(atom1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            io.save(filename)
+            struct2 = self.mmcif_parser.get_structure("1lcd", filename)
+            natoms = len(list(struct2.get_atoms()))
+            self.assertEqual(natoms, 1)
+            first_atom = list(struct2.get_atoms())[0]
+            self.assertEqual(first_atom.get_name(), atom1.get_name())
+            self.assertEqual(struct2[0].child_list[0].id, "B")
+            self.assertEqual(struct2[0]["B"][(' ', 1, ' ')].resname, "DUM")
+
         finally:
             os.remove(filename)
 

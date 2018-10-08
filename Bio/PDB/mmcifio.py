@@ -15,7 +15,7 @@ from collections import defaultdict
 
 from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.PDBIO import Select
+from Bio.PDB.PDBIO import Select, _PDBIOBase
 
 # If certain entries should have a certain order of keys, that is specified here
 mmcif_order = {
@@ -45,7 +45,7 @@ mmcif_order = {
 }
 
 
-class MMCIFIO(object):
+class MMCIFIO(_PDBIOBase):
     """Write a Structure object or a mmCIF dictionary as a mmCIF file.
 
     Example:
@@ -61,45 +61,7 @@ class MMCIFIO(object):
         """Initialise."""
         pass
 
-    def set_structure(self, pdb_object):
-        """Check what object the user is providing and build a structure."""
-        # This is duplicated from the PDBIO class
-        if pdb_object.level == "S":
-            structure = pdb_object
-        else:
-            sb = StructureBuilder()
-            sb.init_structure('pdb')
-            sb.init_seg(' ')
-            # Build parts as necessary
-            if pdb_object.level == "M":
-                sb.structure.add(pdb_object)
-                self.structure = sb.structure
-            else:
-                sb.init_model(0)
-                if pdb_object.level == "C":
-                    sb.structure[0].add(pdb_object)
-                else:
-                    sb.init_chain('A')
-                    if pdb_object.level == "R":
-                        try:
-                            parent_id = pdb_object.parent.id
-                            sb.structure[0]['A'].id = parent_id
-                        except ValueError:
-                            parent_id = "A"
-                        sb.structure[0][parent_id].add(pdb_object)
-                    else:
-                        # Atom
-                        sb.init_residue('DUM', ' ', 1, ' ')
-                        try:
-                            parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]['A'].id = parent_id
-                        except ValueError:
-                            pass
-                        sb.structure[0]['A'].child_list[0].add(pdb_object)
-
-            # Return structure
-            structure = sb.structure
-        self.structure = structure
+    # self.set_structure is inhereted from _PDBIOBase
 
     def set_dict(self, dic):
         """Set the mmCIF dictionary to be written out."""
