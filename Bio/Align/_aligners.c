@@ -2717,16 +2717,8 @@ static PyGetSetDef Aligner_getset[] = {
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
-            if (im < i) { \
+            for ( ; im < i; im++, jm = 0) \
                 for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
-                im++; \
-                for ( ; im < i; im++) { \
-                    for (jm = 0; jm <= nB; jm++) { \
-                        M[im][jm].trace &= ~ENDPOINT; \
-                    } \
-                } \
-                jm = 0; \
-            } \
             for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
             im = i; \
             jm = j; \
@@ -2746,16 +2738,8 @@ static PyGetSetDef Aligner_getset[] = {
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
-            if (im < i) { \
+            for ( ; im < i; im++, jm = 0) \
                 for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
-                im++; \
-                for ( ; im < i; im++) { \
-                    for (jm = 0; jm <= nB; jm++) { \
-                        M[im][jm].trace &= ~ENDPOINT; \
-                    } \
-                } \
-                jm = 0; \
-            } \
             for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
             im = i; \
             jm = j; \
@@ -2843,16 +2827,8 @@ static PyGetSetDef Aligner_getset[] = {
     else if (score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
             maximum = score; \
-            if (im < i) { \
+            for ( ; im < i; im++, jm = 0) \
                 for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
-                im++; \
-                for ( ; im < i; im++) { \
-                    for (jm = 0; jm <= nB; jm++) { \
-                        M[im][jm].trace &= ~ENDPOINT; \
-                    } \
-                } \
-                jm = 0; \
-            } \
             for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
             im = i; \
             jm = j; \
