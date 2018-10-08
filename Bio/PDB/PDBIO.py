@@ -41,6 +41,7 @@ class Select(object):
         """Overload this to reject atoms for output."""
         return 1
 
+
 class _PDBIOBase(object):
     """
     Provides the set_structure method for PDBIO and MMCIFIO
@@ -65,20 +66,21 @@ class _PDBIOBase(object):
                     try:
                         if pdb_object.level == "R":
                             chain_id = pdb_object.parent.id
-                        else: # Atom
+                        else:  # Atom
                             chain_id = pdb_object.parent.parent.id
                     except (AttributeError, ValueError):
                         chain_id = "A"
                     sb.init_chain(chain_id)
                     if pdb_object.level == "R":
                         sb.structure[0][chain_id].add(pdb_object)
-                    else: # Atom
+                    else:  # Atom
                         sb.init_residue('DUM', ' ', 1, ' ')
                         sb.structure[0][chain_id].child_list[0].add(pdb_object)
 
             # Return structure
             structure = sb.structure
         self.structure = structure
+
 
 class PDBIO(_PDBIOBase):
     """Write a Structure object (or a subset of a Structure object) as a PDB file.
