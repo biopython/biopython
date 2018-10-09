@@ -3197,58 +3197,50 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
     int kB;
     const double gap_extend_A = self->target_extend_gap_score;
     const double gap_extend_B = self->query_extend_gap_score;
-    double** F;
     double score;
+    double* scores;
     double temp;
     double maximum = 0;
     PyObject* result = NULL;
 
     /* Smith-Waterman algorithm */
-    F = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!F) goto exit;
-    for (i = 0; i <= nA; i++) {
-        F[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!F[i]) goto exit;
-    }
+    scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!scores) goto exit;
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
      */
     for (j = 0; j <= nB; j++)
-        F[0][j] = 0;
+        scores[j] = 0;
     for (i = 1; i < nA; i++) {
         kA = CHARINDEX(sA[i-1]);
-        F[i][0] = 0;
+        temp = 0;
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_SCORE_LOCAL3(F[i-1][j-1] + self->substitution_matrix[kA][kB],
-                                F[i-1][j] + gap_extend_B,
-                                F[i][j-1] + gap_extend_A);
-            F[i][j] = score;
+            SELECT_SCORE_LOCAL3(temp + self->substitution_matrix[kA][kB],
+                                scores[j] + gap_extend_B,
+                                scores[j-1] + gap_extend_A);
+            temp = scores[j];
+            scores[j] = score;
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_SCORE_LOCAL1(F[i-1][nB-1] + self->substitution_matrix[kA][kB]);
-        F[i][nB] = score;
+        SELECT_SCORE_LOCAL1(temp + self->substitution_matrix[kA][kB]);
+        temp = scores[nB];
+        scores[nB] = score;
     }
     kA = CHARINDEX(sA[nA-1]);
-    F[nA][0] = 0;
+    temp = 0;
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_SCORE_LOCAL1(F[nA-1][j-1] + self->substitution_matrix[kA][kB]);
-        F[nA][j] = score;
+        SELECT_SCORE_LOCAL1(temp + self->substitution_matrix[kA][kB]);
+        temp = scores[j];
+        scores[j] = score;
     }
     kB = CHARINDEX(sB[nB-1]);
-    SELECT_SCORE_LOCAL1(F[nA-1][nB-1] + self->substitution_matrix[kA][kB]);
-    F[nA][nB] = score;
+    SELECT_SCORE_LOCAL1(temp + self->substitution_matrix[kA][kB]);
     result = PyFloat_FromDouble(maximum);
 exit:
-    if (F) {
-        for (i = 0; i <= nA; i++) {
-            if (!F[i]) break;
-            PyMem_Free(F[i]);
-        }
-        PyMem_Free(F);
-    }
+    if (scores) PyMem_Free(scores);
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
 }
