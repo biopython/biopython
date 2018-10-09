@@ -3130,64 +3130,58 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_extend_A = self->target_right_extend_gap_score;
     const double left_gap_extend_B = self->query_left_extend_gap_score;
     const double right_gap_extend_B = self->query_right_extend_gap_score;
-    double** F;
     double score;
     double temp;
     PyObject* result = NULL;
 
+    double* scores;
+
     /* Needleman-Wunsch algorithm */
-    F = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!F) goto exit;
-    for (i = 0; i <= nA; i++) {
-        F[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!F[i]) goto exit;
-    }
+    scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!scores) goto exit;
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
      */
-    F[0][0] = 0.0;
-    for (j = 1; j <= nB; j++)
-        F[0][j] = j * left_gap_extend_A;
+    scores[0] = 0.0;
+    for (j = 1; j <= nB; j++) scores[j] = j * left_gap_extend_A;
     for (i = 1; i < nA; i++) {
         kA = CHARINDEX(sA[i-1]);
-        F[i][0] = i * left_gap_extend_B;
+        temp = scores[0];
+        scores[0] = i * left_gap_extend_B;
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_SCORE_GLOBAL(F[i-1][j-1] + self->substitution_matrix[kA][kB],
-                                F[i-1][j] + gap_extend_B,
-                                F[i][j-1] + gap_extend_A);
-            F[i][j] = score;
+            SELECT_SCORE_GLOBAL(temp + self->substitution_matrix[kA][kB],
+                                scores[j] + gap_extend_B,
+                                scores[j-1] + gap_extend_A);
+            temp = scores[j];
+            scores[j] = score;
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_SCORE_GLOBAL(F[i-1][nB-1] + self->substitution_matrix[kA][kB],
-                            F[i-1][nB] + right_gap_extend_B,
-                            F[i][nB-1] + gap_extend_A);
-        F[i][nB] = score;
+        SELECT_SCORE_GLOBAL(temp + self->substitution_matrix[kA][kB],
+                            scores[nB] + right_gap_extend_B,
+                            scores[nB-1] + gap_extend_A);
+        temp = scores[nB];
+        scores[nB] = score;
     }
     kA = CHARINDEX(sA[nA-1]);
-    F[nA][0] = nA * right_gap_extend_B;
+    temp = scores[0];
+    scores[0] = nA * right_gap_extend_B;
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_SCORE_GLOBAL(F[nA-1][j-1] + self->substitution_matrix[kA][kB],
-                            F[nA-1][j] + gap_extend_B,
-                            F[nA][j-1] + right_gap_extend_A);
-        F[nA][j] = score;
+        SELECT_SCORE_GLOBAL(temp + self->substitution_matrix[kA][kB],
+                            scores[j] + gap_extend_B,
+                            scores[j-1] + right_gap_extend_A);
+        temp = scores[j];
+        scores[j] = score;
     }
     kB = CHARINDEX(sB[nB-1]);
-    SELECT_SCORE_GLOBAL(F[nA-1][nB-1] + self->substitution_matrix[kA][kB],
-                        F[nA-1][nB] + right_gap_extend_B,
-                        F[nA][nB-1] + right_gap_extend_A);
-    F[nA][nB] = score;
+    SELECT_SCORE_GLOBAL(temp + self->substitution_matrix[kA][kB],
+                        scores[nB] + right_gap_extend_B,
+                        scores[nB-1] + right_gap_extend_A);
     result = PyFloat_FromDouble(score);
 exit:
-    if (F) {
-        for (i = 0; i <= nA; i++) {
-            if (!F[i]) break;
-            PyMem_Free(F[i]);
-        }
-        PyMem_Free(F);
-    }
+    if (scores) PyMem_Free(scores);
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
 }
