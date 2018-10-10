@@ -332,14 +332,12 @@ We can now iterate over the records one at a time. For example, we can make a li
 
 \section{Accessing the ExPASy server}
 
-Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
+Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Four kinds of queries are available from ExPASy:
 \begin{description}
 \item[get\_prodoc\_entry]To download a Prosite documentation record in HTML format
 \item[get\_prosite\_entry]To download a Prosite record in HTML format
 \item[get\_prosite\_raw]To download a Prosite or Prosite documentation record in raw format
 \item[get\_sprot\_raw]To download a Swiss-Prot record in raw format
-\item[sprot\_search\_ful]To search for a Swiss-Prot record
-\item[sprot\_search\_de]To search for a Swiss-Prot record
 \end{description}
 To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
 
@@ -382,7 +380,7 @@ If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exi
 Now, you may remark that I knew the records' accession numbers
 beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
 or an accession number. When you don't have them handy, right now you
-could ise \url{https://www.uniprot.org/} but we do not have a Python
+could use \url{https://www.uniprot.org/} but we do not have a Python
 wrapper for searching this from a script. Perhaps you could contribute
 here?
 
