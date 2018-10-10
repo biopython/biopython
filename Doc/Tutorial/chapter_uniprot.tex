@@ -381,32 +381,10 @@ If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exi
 
 Now, you may remark that I knew the records' accession numbers
 beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
-or an accession number. When you don't have them handy, you can use
-one of the \verb|sprot_search_de()| or \verb|sprot_search_ful()|
-functions.
-
-\verb|sprot_search_de()| searches in the ID, DE, GN, OS and OG lines;
-\verb|sprot_search_ful()| searches in (nearly) all the fields. They
-are detailed on
-\url{http://www.expasy.org/cgi-bin/sprot-search-de} and
-\url{http://www.expasy.org/cgi-bin/sprot-search-ful}
-respectively. Note that they don't search in TrEMBL by default
-(argument \verb|trembl|). Note also that they return HTML pages;
-however, accession numbers are quite easily extractable:
-
-\begin{verbatim}
->>> from Bio import ExPASy
->>> import re
-
->>> handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
->>> # or:
->>> # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
->>> html_results = handle.read()
->>> if "Number of sequences found" in html_results:
-...     ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
-... else:
-...     ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
-\end{verbatim}
+or an accession number. When you don't have them handy, right now you
+could ise \url{https://www.uniprot.org/} but we do not have a Python
+wrapper for searching this from a script. Perhaps you could contribute
+here?
 
 \subsection{Retrieving Prosite and Prosite documentation records}
 

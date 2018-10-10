@@ -43,6 +43,11 @@ Jython
 Biopython is mostly working under Jython 2.7.0, but support for Jython
 is deprecated as of Release 1.70.
 
+Bio.ExPASy.sprot_search_ful and ExPASy.sprot_search_de
+======================================================
+These two functions were labelled as broken in Release 1.70, and removed in
+Release 1.73, since the underlying web-server API no longer exists.
+
 Bio.GA
 ======
 This was deprecated in Biopython 1.70, and removed in Release 1.73.
