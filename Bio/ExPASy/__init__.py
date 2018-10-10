@@ -13,8 +13,6 @@ Functions:
  - get_prosite_entry Interface to the get-prosite-entry CGI script.
  - get_prosite_raw   Interface to the get-prosite-raw CGI script.
  - get_sprot_raw     Interface to the get-sprot-raw CGI script.
- - sprot_search_ful  Interface to the sprot-search-ful CGI script.
- - sprot_search_de   Interface to the sprot-search-de CGI script.
 
 """
 
@@ -113,35 +111,3 @@ def get_sprot_raw(id):
     """
     url = "http://www.uniprot.org/uniprot/%s.txt" % id
     return _binary_to_string_handle(_urlopen(url))
-
-
-def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
-                     cgi='https://www.expasy.org/cgi-bin/sprot-search-ful'):
-    """Search SwissProt by full text (BROKEN)."""
-    variables = {'SEARCH': text}
-    if make_wild:
-        variables['makeWild'] = 'on'
-    if swissprot:
-        variables['S'] = 'on'
-    if trembl:
-        variables['T'] = 'on'
-    options = _urlencode(variables)
-    fullcgi = "%s?%s" % (cgi, options)
-    handle = _binary_to_string_handle(_urlopen(fullcgi))
-    return handle
-
-
-def sprot_search_de(text, swissprot=1, trembl=None,
-                    cgi='https://www.expasy.org/cgi-bin/sprot-search-de'):
-    """Search SwissProt (BROKEN).
-
-    Search by name, description, gene name, species, or organelle.
-    """
-    variables = {'SEARCH': text}
-    if swissprot:
-        variables['S'] = 'on'
-    if trembl:
-        variables['T'] = 'on'
-    options = _urlencode(variables)
-    fullcgi = "%s?%s" % (cgi, options)
-    return _binary_to_string_handle(_urlopen(fullcgi))
