@@ -9,13 +9,13 @@
 from __future__ import print_function
 
 __GC_CONTENT_VALUE = {
-    "G" : 1.,
-    "C" : 1.,
-    "A" : 0.,
-    "T" : 0.,
-    "S" : 1.,
-    "W" : 0.,
-    "N" : 0.5
+    "G": 1.,
+    "C": 1.,
+    "A": 0.,
+    "T": 0.,
+    "S": 1.,
+    "W": 0.,
+    "N": 0.5
 }
 __GC_CONTENT_VALUE_AMBG = {
     "M" : 0.5,
@@ -29,9 +29,10 @@ __GC_CONTENT_VALUE_AMBG = {
     "V" : 0.66,
 }
 
+
 def calc_gc_content(seq, interpret_all=False):
-    """ Calculates G+C content, returns a fraction (float between 0 and 1).
-    
+    """Calculates G+C content, returns a fraction (float between 0 and 1).
+
     Copes mixed case sequences, and with the ambiguous nucleotides S (G or C)
     and N ( A or C or G or T ) when counting the G and C content.  
 
@@ -75,8 +76,8 @@ def calc_gc_content(seq, interpret_all=False):
 
 
 def calc_at_content(seq, interpret_all=False):
-    """ Calculates A+T content, returns a fraction (float between 0 and 1).
-    
+    """Calculates A+T content, returns a fraction (float between 0 and 1).
+
     Copes mixed case sequences, and with the ambiguous nucleotides W (A or T)
     and N ( A or C or G or T ) when counting the A and T content.  
 
@@ -132,12 +133,13 @@ def calc_gc_skew(seq, interpret_all=False):
     Returns None if there is no G+C content.
     """
 
-    g_dict = {"G":1., "S":0.5, "K":0.5,"R":0.5, 
-                "B":0.33,"D":0.33,
-                "V":0.33,"N":0.25}
-    c_dict = {"C":1., "S":0.5, "M":0.5,"Y":0.5, 
-                "B":0.33,"H":0.33,
-                "V":0.33,"N":0.25}
+    g_dict = {"G": 1., "S": 0.5, "K": 0.5,"R": 0.5,
+                "B": 0.33,"D": 0.33,
+                "V": 0.33,"N": 0.25}
+
+    c_dict = {"C": 1., "S": 0.5, "M": 0.5,"Y": 0.5,
+                "B": 0.33,"H": 0.33,
+                "V": 0.33,"N": 0.25}
 
     len_seq = len(seq)
     if not len_seq:
@@ -156,7 +158,7 @@ def calc_gc_skew(seq, interpret_all=False):
 
 def calc_at_skew(seq, interpret_all=False):
     """Calculates AT skew (A-T)/(A+T) for the whole sequence. 
-    
+
     Returns the ratio (float).
 
     When interpret_all is True includes also ambiguous nucleotides,
@@ -168,12 +170,12 @@ def calc_at_skew(seq, interpret_all=False):
     Returns None if there is no G+C content.
     """
 
-    a_dict = {"A":1., "W":0.5, "M":0.5,"R":0.5, 
-                "H":0.33,"D":0.33,
-                "V":0.33,"N":0.25}
-    t_dict = {"T":1., "S":0.5, "K":0.5,"Y":0.5, 
-                "B":0.33,"H":0.33,
-                "D":0.33,"N":0.25}
+    a_dict = {"A": 1., "W": 0.5, "M": 0.5,"R": 0.5,
+                "H": 0.33,"D": 0.33,
+                "V": 0.33,"N": 0.25}
+    t_dict = {"T": 1., "S": 0.5, "K": 0.5,"Y": 0.5,
+                "B": 0.33,"H": 0.33,
+                "D": 0.33,"N": 0.25}
 
     len_seq = len(seq)
     if not len_seq:
@@ -188,6 +190,3 @@ def calc_at_skew(seq, interpret_all=False):
     skew = (a-t)/float(a+t)
 
     return skew
-
-
-
