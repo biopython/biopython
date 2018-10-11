@@ -14,6 +14,7 @@ from Bio.SeqUtils import GC, seq1, seq3, GC_skew
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+from Bio.SeqUtils.NucUtils import calc_gc_content,calc_at_content,calc_gc_skewt,calc_at_skew
 
 
 def u_crc32(seq):
@@ -151,6 +152,35 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertEqual(seq3(s1).upper(), s3.upper())
         self.assertEqual(seq1(seq3(s1)), s1)
         self.assertEqual(seq3(seq1(s3)).upper(), s3.upper())
+
+    def test_calc_gc_content(self):
+        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        self.assertEqual(calc_gc_content(seq), .5625)
+        self.assertEqual(calc_gc_content(seq), calc_gc_content(seq.lower()))
+        self.assertEqual(calc_gc_content(seq), calc_gc_content(seq,True))
+        seq_amb = "AcbwStT"
+        self.assertEqual(calc_gc_content(seq_amb,True), 0.38)
+
+    def test_calc_at_content(self):
+        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        self.assertEqual(calc_at_content(seq), .4375)
+        self.assertEqual(calc_at_content(seq), calc_at_content(seq.lower()))
+        self.assertEqual(calc_at_content(seq), calc_at_content(seq,True))
+        seq_amb = "AcbwStT"
+        self.assertEqual(calc_at_content(seq_amb,True), 0.62)
+
+    def test_calc_gc_skew(self):
+        self.assertEqual(calc_gc_skew("A"*50),None)
+        self.assertEqual(calc_gc_skew(""),0)
+        self.assertEqual(calc_gc_skew("ACGGACCGTATAggcaAGAGATGATGCCSW"),0.2)
+        self.assertEqual(calc_gc_skew("ACGGACCGTATAggcaAGAGATGATGCCSW",True),0.1875)
+
+    def test_calc_at_skew(self):
+        self.assertEqual(calc_gc_skew("C"*50),None)
+        self.assertEqual(calc_gc_skew(""),0)
+        self.assertEqual(calc_gc_skew("ATcccggcgTAAgcTttaTTcTTAASW"),-0.2)
+        self.assertEqual(calc_gc_skew("ATcccggcgTAAgcTttaTTcTTAASW",True),-0.1875)
+        
 
 
 if __name__ == "__main__":

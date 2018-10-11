@@ -141,6 +141,7 @@ DOCTEST_MODULES = [
     "Bio.SeqFeature",
     "Bio.SeqRecord",
     "Bio.SeqUtils",
+    "Bio.SeqUtils.NucUtils",
     "Bio.SeqUtils.CheckSum",
     "Bio.SeqUtils.MeltingTemp",
     "Bio.SeqUtils.ProtParam",
