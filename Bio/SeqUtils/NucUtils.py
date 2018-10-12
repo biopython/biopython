@@ -45,19 +45,19 @@ def calc_gc_content(seq, interpret_all=False):
     The percentage is calculated against the full length, e.g.:
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> GC("ACTGS")
+    >>> calc_gc_content("ACTGS")
     0.6
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> GC("ACTGN")
+    >>> calc_gc_content("ACTGN")
     0.5
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> GC("ACTGB")
+    >>> calc_gc_content("ACTGB")
     0.4
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> GC("ACTGB",True)
+    >>> calc_gc_content("ACTGB",True)
     0.532
 
     Note that this will return zero for an empty sequence.
@@ -90,20 +90,20 @@ def calc_at_content(seq, interpret_all=False):
     The percentage is calculated against the full length, e.g.:
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> GC("ACTGS")
+    >>> calc_at_content("ACTGS")
     0.4
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> GC("ACTGN")
+    >>> calc_at_content("ACTGN")
     0.5
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> GC("ACTGB")
-    0.6
+    >>> calc_at_content("ACTGBNNN")
+    0.5625
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> GC("ACTGB",True)
-    0.468
+    >>> calc_at_content("ACTGBNNN",True)
+    0.48
 
     Note that this will return zero for an empty sequence.
     """
