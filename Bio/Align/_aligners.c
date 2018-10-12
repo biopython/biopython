@@ -5142,121 +5142,110 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
     const double gap_open_B = self->query_open_gap_score;
     const double gap_extend_A = self->target_extend_gap_score;
     const double gap_extend_B = self->query_extend_gap_score;
-    double** M = NULL;
-    double** Ix = NULL;
-    double** Iy = NULL;
+    double* M_scores = NULL;
+    double* Ix_scores = NULL;
+    double* Iy_scores = NULL;
     double score;
     double temp;
+    double M_temp;
+    double Ix_temp;
+    double Iy_temp;
     double maximum = 0.0;
     PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
-    M = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!M) goto exit;
-    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!Ix) goto exit;
-    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!Iy) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!M[i]) goto exit;
-        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!Ix[i]) goto exit;
-        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!Iy[i]) goto exit;
-    }
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!M_scores) goto exit;
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!Ix_scores) goto exit;
+    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!Iy_scores) goto exit;
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
      */
-    M[0][0] = 0;
-    Ix[0][0] = -DBL_MAX;
-    Iy[0][0] = -DBL_MAX;
-    for (i = 1; i <= nA; i++) {
-        M[i][0] = -DBL_MAX;
-        Ix[i][0] = 0;
-        Iy[i][0] = -DBL_MAX;
-    }
+    M_scores[0] = 0;
+    Ix_scores[0] = -DBL_MAX;
+    Iy_scores[0] = -DBL_MAX;
     for (j = 1; j <= nB; j++) {
-        M[0][j] = -DBL_MAX;
-        Ix[0][j] = -DBL_MAX;
-        Iy[0][j] = 0;
+        M_scores[j] = -DBL_MAX;
+        Ix_scores[j] = -DBL_MAX;
+        Iy_scores[j] = 0;
     }
 
     for (i = 1; i < nA; i++) {
+        M_temp = M_scores[0];
+        Ix_temp = Ix_scores[0];
+        Iy_temp = Iy_scores[0];
+        M_scores[0] = -DBL_MAX;
+        Ix_scores[0] = 0;
+        Iy_scores[0] = -DBL_MAX;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_SCORE_LOCAL3(M[i-1][j] + gap_open_B,
-                                Ix[i-1][j] + gap_extend_B,
-                                Iy[i-1][j] + gap_open_B);
-            Ix[i][j] = score;
-            SELECT_SCORE_LOCAL3(M[i][j-1] + gap_open_A,
-                                Iy[i][j-1] + gap_extend_A,
-                                Ix[i][j-1] + gap_open_A);
-            Iy[i][j] = score;
-            SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[i-1][j-1],
-                                           Ix[i-1][j-1],
-                                           Iy[i-1][j-1],
+            SELECT_SCORE_GOTOH_LOCAL_ALIGN(M_temp,
+                                           Ix_temp,
+                                           Iy_temp,
                                            self->substitution_matrix[kA][kB]);
-            M[i][j] = score;
+            M_temp = M_scores[j];
+            M_scores[j] = score;
+            SELECT_SCORE_LOCAL3(M_temp + gap_open_B,
+                                Ix_scores[j] + gap_extend_B,
+                                Iy_scores[j] + gap_open_B);
+            Ix_temp = Ix_scores[j];
+            Ix_scores[j] = score;
+            SELECT_SCORE_LOCAL3(M_scores[j-1] + gap_open_A,
+                                Ix_scores[j-1] + gap_open_A,
+                                Iy_scores[j-1] + gap_extend_A);
+            Iy_temp = Iy_scores[j];
+            Iy_scores[j] = score;
         }
 
         kB = CHARINDEX(sB[nB-1]);
 
-        Ix[i][nB] = 0;
-        Iy[i][nB] = 0;
-        SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[i-1][nB-1],
-                                       Ix[i-1][nB-1],
-                                       Iy[i-1][nB-1],
+        Ix_scores[nB] = 0;
+        Iy_scores[nB] = 0;
+        SELECT_SCORE_GOTOH_LOCAL_ALIGN(M_temp,
+                                       Ix_temp,
+                                       Iy_temp,
                                        self->substitution_matrix[kA][kB]);
-        M[i][nB] = score;
+        M_temp = M_scores[nB];
+        M_scores[nB] = score;
     }
 
+    M_temp = M_scores[0];
+    Ix_temp = Ix_scores[0];
+    Iy_temp = Iy_scores[0];
+    M_scores[0] = -DBL_MAX;
+    Ix_scores[0] = 0;
+    Iy_scores[0] = -DBL_MAX;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        Ix[nA][j] = 0;
-        Iy[nA][j] = 0;
-        SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[nA-1][j-1],
-                                       Ix[nA-1][j-1],
-                                       Iy[nA-1][j-1],
+        SELECT_SCORE_GOTOH_LOCAL_ALIGN(M_temp,
+                                       Ix_temp,
+                                       Iy_temp,
                                        self->substitution_matrix[kA][kB]);
-        M[nA][j] = score;
+        M_temp = M_scores[j];
+        M_scores[j] = score;
+        Ix_temp = Ix_scores[j];
+        Iy_temp = Iy_scores[j];
+        Ix_scores[j] = 0;
+        Iy_scores[j] = 0;
     }
 
     kB = CHARINDEX(sB[nB-1]);
-    Ix[nA][nB] = 0;
-    Iy[nA][nB] = 0;
-    SELECT_SCORE_GOTOH_LOCAL_ALIGN(M[nA-1][nB-1],
-                                   Ix[nA-1][nB-1],
-                                   Iy[nA-1][nB-1],
+    SELECT_SCORE_GOTOH_LOCAL_ALIGN(M_temp,
+                                   Ix_temp,
+                                   Iy_temp,
                                    self->substitution_matrix[kA][kB]);
-    M[nA][nB] = score;
 
     result = PyFloat_FromDouble(maximum);
 
 exit:
-    if (M) {
-        /* If M is NULL, then Ix is also NULL. */
-        if (Ix) {
-            /* If Ix is NULL, then Iy is also NULL. */
-            if (Iy) {
-                /* If Iy is NULL, then M[i], Ix[i], and Iy[i] are also NULL. */
-                for (i = 0; i <= nA; i++) {
-                    if (!M[i]) break;
-                    PyMem_Free(M[i]);
-                    if (!Ix[i]) break;
-                    PyMem_Free(Ix[i]);
-                    if (!Iy[i]) break;
-                    PyMem_Free(Iy[i]);
-                }
-                PyMem_Free(Iy);
-            }
-            PyMem_Free(Ix);
-        }
-        PyMem_Free(M);
-    }
+    if (M_scores) PyMem_Free(M_scores);
+    if (Ix_scores) PyMem_Free(Ix_scores);
+    if (Iy_scores) PyMem_Free(Iy_scores);
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
 }
