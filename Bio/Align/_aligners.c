@@ -5122,9 +5122,9 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     result = PyFloat_FromDouble(score);
 
 exit:
-    PyMem_Free(M_scores);
-    PyMem_Free(Ix_scores);
-    PyMem_Free(Iy_scores);
+    if (M_scores) PyMem_Free(M_scores);
+    if (Ix_scores) PyMem_Free(Ix_scores);
+    if (Iy_scores) PyMem_Free(Iy_scores);
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
 }
