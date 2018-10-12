@@ -5003,133 +5003,128 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_open_B = self->query_right_open_gap_score;
     const double right_gap_extend_A = self->target_right_extend_gap_score;
     const double right_gap_extend_B = self->query_right_extend_gap_score;
-    double** M = NULL;
-    double** Ix = NULL;
-    double** Iy = NULL;
+    double* M_scores = NULL;
+    double* Ix_scores = NULL;
+    double* Iy_scores = NULL;
     double score;
     double temp;
+    double M_temp;
+    double Ix_temp;
+    double Iy_temp;
     PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
-    M = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!M) goto exit;
-    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!Ix) goto exit;
-    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
-    if (!Iy) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!M[i]) goto exit;
-        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!Ix[i]) goto exit;
-        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
-        if (!Iy[i]) goto exit;
-    }
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!M_scores) goto exit;
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!Ix_scores) goto exit;
+    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
+    if (!Iy_scores) goto exit;
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
      */
-    M[0][0] = 0;
-    Ix[0][0] = -DBL_MAX;
-    Iy[0][0] = -DBL_MAX;
-    for (i = 1; i <= nA; i++) {
-        M[i][0] = -DBL_MAX;
-        Ix[i][0] = left_gap_open_B + left_gap_extend_B * (i-1);
-        Iy[i][0] = -DBL_MAX;
-    }
+    M_scores[0] = 0;
+    Ix_scores[0] = -DBL_MAX;
+    Iy_scores[0] = -DBL_MAX;
     for (j = 1; j <= nB; j++) {
-        M[0][j] = -DBL_MAX;
-        Ix[0][j] = -DBL_MAX;
-        Iy[0][j] = left_gap_open_A + left_gap_extend_A * (j-1);
+        M_scores[j] = -DBL_MAX;
+        Ix_scores[j] = -DBL_MAX;
+        Iy_scores[j] = left_gap_open_A + left_gap_extend_A * (j-1);
     }
 
     for (i = 1; i < nA; i++) {
+        M_temp = M_scores[0];
+        Ix_temp = Ix_scores[0];
+        Iy_temp = Iy_scores[0];
+        M_scores[0] = -DBL_MAX;
+        Ix_scores[0] = left_gap_open_B + left_gap_extend_B * (i-1);
+        Iy_scores[0] = -DBL_MAX;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_SCORE_GLOBAL(M[i-1][j] + gap_open_B,
-                                Ix[i-1][j] + gap_extend_B,
-                                Iy[i-1][j] + gap_open_B);
-            Ix[i][j] = score;
-            SELECT_SCORE_GLOBAL(M[i][j-1] + gap_open_A,
-                                Iy[i][j-1] + gap_extend_A,
-                                Ix[i][j-1] + gap_open_A);
-            Iy[i][j] = score;
-            SELECT_SCORE_GLOBAL(M[i-1][j-1],
-                                Ix[i-1][j-1],
-                                Iy[i-1][j-1]);
-            M[i][j] = score + self->substitution_matrix[kA][kB];
+            SELECT_SCORE_GLOBAL(M_temp,
+                                Ix_temp,
+                                Iy_temp);
+            M_temp = M_scores[j];
+            M_scores[j] = score + self->substitution_matrix[kA][kB];
+            SELECT_SCORE_GLOBAL(M_temp + gap_open_B,
+                                Ix_scores[j] + gap_extend_B,
+                                Iy_scores[j] + gap_open_B);
+            Ix_temp = Ix_scores[j];
+            Ix_scores[j] = score;
+            SELECT_SCORE_GLOBAL(M_scores[j-1] + gap_open_A,
+                                Ix_scores[j-1] + gap_open_A,
+                                Iy_scores[j-1] + gap_extend_A);
+            Iy_temp = Iy_scores[j];
+            Iy_scores[j] = score;
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_SCORE_GLOBAL(M[i-1][nB] + right_gap_open_B,
-                            Ix[i-1][nB] + right_gap_extend_B,
-                            Iy[i-1][nB] + right_gap_open_B);
-        Ix[i][nB] = score;
-        SELECT_SCORE_GLOBAL(M[i][nB-1] + gap_open_A,
-                            Iy[i][nB-1] + gap_extend_A,
-                            Ix[i][nB-1] + gap_open_A);
-        Iy[i][nB] = score;
-        SELECT_SCORE_GLOBAL(M[i-1][nB-1],
-                            Ix[i-1][nB-1],
-                            Iy[i-1][nB-1]);
-        M[i][nB] = score + self->substitution_matrix[kA][kB];
+        SELECT_SCORE_GLOBAL(M_temp,
+                            Ix_temp,
+                            Iy_temp);
+        M_temp = M_scores[nB];
+        M_scores[nB] = score + self->substitution_matrix[kA][kB];
+        SELECT_SCORE_GLOBAL(M_temp + right_gap_open_B,
+                            Ix_scores[nB] + right_gap_extend_B,
+                            Iy_scores[nB] + right_gap_open_B);
+        Ix_scores[nB] = score;
+        SELECT_SCORE_GLOBAL(M_scores[nB-1] + gap_open_A,
+                            Iy_scores[nB-1] + gap_extend_A,
+                            Ix_scores[nB-1] + gap_open_A);
+        Iy_scores[nB] = score;
     }
 
+    M_temp = M_scores[0];
+    Ix_temp = Ix_scores[0];
+    Iy_temp = Iy_scores[0];
+    M_scores[0] = -DBL_MAX;
+    Ix_scores[0] = left_gap_open_B + left_gap_extend_B * (i-1);
+    Iy_scores[0] = -DBL_MAX;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_SCORE_GLOBAL(M[nA-1][j] + gap_open_B,
-                            Ix[nA-1][j] + gap_extend_B,
-                            Iy[nA-1][j] + gap_open_B);
-        Ix[nA][j] = score;
-        SELECT_SCORE_GLOBAL(M[nA][j-1] + right_gap_open_A,
-                            Iy[nA][j-1] + right_gap_extend_A,
-                            Ix[nA][j-1] + right_gap_open_A);
-        Iy[nA][j] = score;
-        SELECT_SCORE_GLOBAL(M[nA-1][j-1],
-                            Ix[nA-1][j-1],
-                            Iy[nA-1][j-1]);
-        M[nA][j] = score + self->substitution_matrix[kA][kB];
+        SELECT_SCORE_GLOBAL(M_temp,
+                            Ix_temp,
+                            Iy_temp);
+        M_temp = M_scores[j];
+        M_scores[j] = score + self->substitution_matrix[kA][kB];
+        SELECT_SCORE_GLOBAL(M_temp + gap_open_B,
+                            Ix_scores[j] + gap_extend_B,
+                            Iy_scores[j] + gap_open_B);
+        Ix_temp = Ix_scores[j];
+        Ix_scores[j] = score;
+        SELECT_SCORE_GLOBAL(M_scores[j-1] + right_gap_open_A,
+                            Iy_scores[j-1] + right_gap_extend_A,
+                            Ix_scores[j-1] + right_gap_open_A);
+        Iy_temp = Iy_scores[j];
+        Iy_scores[j] = score;
     }
 
     kB = CHARINDEX(sB[nB-1]);
-    SELECT_SCORE_GLOBAL(M[nA-1][nB] + right_gap_open_B,
-                        Ix[nA-1][nB] + right_gap_extend_B,
-                        Iy[nA-1][nB] + right_gap_open_B);
-    Ix[nA][nB] = score;
-    SELECT_SCORE_GLOBAL(M[nA][nB-1] + right_gap_open_A,
-                        Iy[nA][nB-1] + right_gap_extend_A,
-                        Ix[nA][nB-1] + right_gap_open_A);
-    Iy[nA][nB] = score;
-    SELECT_SCORE_GLOBAL(M[nA-1][nB-1],
-                        Ix[nA-1][nB-1],
-                        Iy[nA-1][nB-1]);
-    M[nA][nB] = score + self->substitution_matrix[kA][kB];
+    SELECT_SCORE_GLOBAL(M_temp,
+                        Ix_temp,
+                        Iy_temp);
+    M_temp = M_scores[nB];
+    M_scores[nB] = score + self->substitution_matrix[kA][kB];
+    SELECT_SCORE_GLOBAL(M_temp + right_gap_open_B,
+                        Ix_scores[nB] + right_gap_extend_B,
+                        Iy_scores[nB] + right_gap_open_B);
+    Ix_temp = Ix_scores[nB];
+    Ix_scores[nB] = score;
+    SELECT_SCORE_GLOBAL(M_scores[nB-1] + right_gap_open_A,
+                        Ix_scores[nB-1] + right_gap_open_A,
+                        Iy_scores[nB-1] + right_gap_extend_A);
+    Iy_temp = Iy_scores[nB];
+    Iy_scores[nB] = score;
 
-    SELECT_SCORE_GLOBAL(M[nA][nB], Ix[nA][nB], Iy[nA][nB]);
+    SELECT_SCORE_GLOBAL(M_scores[nB], Ix_scores[nB], Iy_scores[nB]);
     result = PyFloat_FromDouble(score);
 
 exit:
-    if (M) {
-        /* If M is NULL, then Ix is also NULL. */
-        if (Ix) {
-            /* If Ix is NULL, then Iy is also NULL. */
-            if (Iy) {
-                /* If Iy is NULL, then M[i], Ix[i], and Iy[i] are also NULL. */
-                for (i = 0; i <= nA; i++) {
-                    if (!M[i]) break;
-                    PyMem_Free(M[i]);
-                    if (!Ix[i]) break;
-                    PyMem_Free(Ix[i]);
-                    if (!Iy[i]) break;
-                    PyMem_Free(Iy[i]);
-                }
-                PyMem_Free(Iy);
-            }
-            PyMem_Free(Ix);
-        }
-        PyMem_Free(M);
-    }
+    PyMem_Free(M_scores);
+    PyMem_Free(Ix_scores);
+    PyMem_Free(Iy_scores);
     if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return result;
 }
