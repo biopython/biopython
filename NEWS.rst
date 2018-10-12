@@ -36,6 +36,7 @@ warning on parsing.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aleksandra Jarmolinska (first contribution)
 - Alona Levy-Jurgenson (first contribution)
 - Brandon Invergo
 - Catherine Lesuisse
