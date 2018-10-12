@@ -18,29 +18,29 @@ __GC_CONTENT_VALUE = {
     "N": 0.5
 }
 __GC_CONTENT_VALUE_AMBG = {
-    "M" : 0.5,
-    "K" : 0.5,
-    "R" : 0.5,
-    "Y" : 0.5,
+    "M": 0.5,
+    "K": 0.5,
+    "R": 0.5,
+    "Y": 0.5,
 
-    "B" : 0.66,
-    "D" : 0.33,
-    "H" : 0.33,
-    "V" : 0.66,
+    "B": 0.66,
+    "D": 0.33,
+    "H": 0.33,
+    "V": 0.66,
 }
 
 
 def calc_gc_content(seq, interpret_all=False):
-    """Calculates G+C content, returns a fraction (float between 0 and 1).
+    """Calculate G+C content, returns a fraction (float between 0 and 1).
 
     Copes mixed case sequences, and with the ambiguous nucleotides S (G or C)
-    and N ( A or C or G or T ) when counting the G and C content.  
+    and N ( A or C or G or T ) when counting the G and C content.
 
     When interpret_all is True, includes probability of other ambiguous
     to be C or G:
-        - for M,K,R,Y it is 0.5
-        - for B,V it is 0.66
-        - for D,H it is 0.33.
+    - for M,K,R,Y it is 0.5
+    - for B,V it is 0.66
+    - for D,H it is 0.33.
 
     The percentage is calculated against the full length, e.g.:
 
@@ -67,25 +67,25 @@ def calc_gc_content(seq, interpret_all=False):
         return 0.
 
     gc = sum(__GC_CONTENT_VALUE.get(x.upper(),
-             __GC_CONTENT_VALUE_AMBG.get(x.upper(),0.) if interpret_all else 0.) 
-            for x in seq)
+             __GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+             for x in seq)
     if not gc:
         return None
 
-    return gc/len_seq
+    return gc / len_seq
 
 
 def calc_at_content(seq, interpret_all=False):
-    """Calculates A+T content, returns a fraction (float between 0 and 1).
+    """Calculate A+T content, return a fraction (float between 0 and 1).
 
     Copes mixed case sequences, and with the ambiguous nucleotides W (A or T)
-    and N ( A or C or G or T ) when counting the A and T content.  
+    and N ( A or C or G or T ) when counting the A and T content.
 
     When interpret_all is True, includes probability of other ambiguous
     to be A or T:
-        - for M,K,R,Y it is 0.5
-        - for B,V it is 0.33
-        - for D,H it is 0.66.
+    - for M,K,R,Y it is 0.5
+    - for B,V it is 0.33
+    - for D,H it is 0.66.
 
     The percentage is calculated against the full length, e.g.:
 
@@ -111,82 +111,81 @@ def calc_at_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    at = sum(1-__GC_CONTENT_VALUE.get(x.upper(),
-             __GC_CONTENT_VALUE_AMBG.get(x.upper(),0.) if interpret_all else 0.) 
-            for x in seq)
+    at = sum(1 - __GC_CONTENT_VALUE.get(x.upper(),
+             __GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+             for x in seq)
     if not at:
         return None
 
-    return at/len_seq
+    return at / len_seq
+
 
 def calc_gc_skew(seq, interpret_all=False):
-    """Calculates GC skew (G-C)/(G+C) for the whole sequence. 
-    
+    """Calculate GC skew (G-C)/(G+C) for the whole sequence.
+
     Returns the ratio (float).
 
     When interpret_all is True includes also ambiguous nucleotides,
     as their probability of being G or C:
-        - G is 0.5 in S, K and R, 0.33 in B, D, and V and 0.25 in N
-        - C is 0.5 in S, M and Y, 0.33 in B, H, and V and 0.25 in N.
+    - G is 0.5 in S, K and R, 0.33 in B, D, and V and 0.25 in N
+    - C is 0.5 in S, M and Y, 0.33 in B, H, and V and 0.25 in N.
 
     Returns zero for an empty sequence.
     Returns None if there is no G+C content.
     """
+    g_dict = {"G": 1., "S": 0.5, "K": 0.5, "R": 0.5,
+              "B": 0.33, "D": 0.33,
+              "V": 0.33, "N": 0.25}
 
-    g_dict = {"G": 1., "S": 0.5, "K": 0.5,"R": 0.5,
-                "B": 0.33,"D": 0.33,
-                "V": 0.33,"N": 0.25}
-
-    c_dict = {"C": 1., "S": 0.5, "M": 0.5,"Y": 0.5,
-                "B": 0.33,"H": 0.33,
-                "V": 0.33,"N": 0.25}
+    c_dict = {"C": 1., "S": 0.5, "M": 0.5, "Y": 0.5,
+              "B": 0.33, "H": 0.33,
+              "V": 0.33, "N": 0.25}
 
     len_seq = len(seq)
     if not len_seq:
         return 0
 
-    g = sum(g_dict.get(x.upper(),0.) if interpret_all else x.upper()=="G" for x in seq)
-    c = sum(c_dict.get(x.upper(),0.) if interpret_all else x.upper()=="C" for x in seq)
+    g = sum(g_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "G" for x in seq)
+    c = sum(c_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "C" for x in seq)
 
-    if not g+c:
+    if not g + c:
         return None
 
-    skew = (g-c)/float(g+c)
+    skew = (g - c) / float(g + c)
 
     return skew
 
 
 def calc_at_skew(seq, interpret_all=False):
-    """Calculates AT skew (A-T)/(A+T) for the whole sequence. 
+    """Calculate AT skew (A-T)/(A+T) for the whole sequence.
 
     Returns the ratio (float).
 
     When interpret_all is True includes also ambiguous nucleotides,
     as their probability of being G or C:
-        - A is 0.5 in W, M and R, 0.33 in D, H, and V and 0.25 in N
-        - C is 0.5 in W, K and Y, 0.33 in B, D, and H and 0.25 in N.
+    - A is 0.5 in W, M and R, 0.33 in D, H, and V and 0.25 in N
+    - C is 0.5 in W, K and Y, 0.33 in B, D, and H and 0.25 in N.
 
     Returns zero for an empty sequence.
     Returns None if there is no G+C content.
     """
-
-    a_dict = {"A": 1., "W": 0.5, "M": 0.5,"R": 0.5,
-                "H": 0.33,"D": 0.33,
-                "V": 0.33,"N": 0.25}
-    t_dict = {"T": 1., "S": 0.5, "K": 0.5,"Y": 0.5,
-                "B": 0.33,"H": 0.33,
-                "D": 0.33,"N": 0.25}
+    a_dict = {"A": 1., "W": 0.5, "M": 0.5, "R": 0.5,
+              "H": 0.33, "D": 0.33,
+              "V": 0.33, "N": 0.25}
+    t_dict = {"T": 1., "S": 0.5, "K": 0.5, "Y": 0.5,
+              "B": 0.33, "H": 0.33,
+              "D": 0.33, "N": 0.25}
 
     len_seq = len(seq)
     if not len_seq:
         return 0
 
-    a = sum(a_dict.get(x.upper(),0.) if interpret_all else x.upper()=="A" for x in seq)
-    t = sum(t_dict.get(x.upper(),0.) if interpret_all else x.upper()=="T" for x in seq)
+    a = sum(a_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "A" for x in seq)
+    t = sum(t_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "T" for x in seq)
 
-    if not a+t:
+    if not a + t:
         return None
 
-    skew = (a-t)/float(a+t)
+    skew = (a - t) / float(a + t)
 
     return skew
