@@ -2677,23 +2677,24 @@ static PyGetSetDef Aligner_getset[] = {
     if (score < 0) score = 0; \
     else if (score > maximum) maximum = score;
 
-#define SELECT_TRACE_NEEDLEMAN_WUNSCH(cell, score1, score2, score3) \
-    score = score1; \
-    trace = HORIZONTAL; \
-    temp = score2; \
+#define SELECT_TRACE_NEEDLEMAN_WUNSCH(score2, score3) \
+    score = temp + self->substitution_matrix[kA][kB]; \
+    trace = DIAGONAL; \
+    temp = scores[j-1] + score2; \
+    if (temp > score + epsilon) { \
+        score = temp; \
+        trace = HORIZONTAL; \
+    } \
+    else if (temp > score - epsilon) trace |= HORIZONTAL; \
+    temp = scores[j] + score3; \
     if (temp > score + epsilon) { \
         score = temp; \
         trace = VERTICAL; \
     } \
     else if (temp > score - epsilon) trace |= VERTICAL; \
-    temp = score3; \
-    if (temp > score + epsilon) { \
-        score = temp; \
-        trace = DIAGONAL; \
-    } \
-    else if (temp > score - epsilon) trace |= DIAGONAL; \
-    cell.score = score; \
-    cell.trace = trace;
+    temp = scores[j]; \
+    scores[j] = score; \
+    M[i][j].trace = trace;
 
 #define SELECT_TRACE_SMITH_WATERMAN_HVD(cell, score1, score2, score3) \
     trace = HORIZONTAL; \
@@ -4847,51 +4848,45 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     double score;
     int trace;
     double temp;
+    double* scores;
     PathGenerator* paths = NULL;
 
     /* Needleman-Wunsch algorithm */
     M = _allocate_needlemanwunsch_smithwaterman_matrix(nA, nB);
     if (!M) goto exit;
-    M[0][0].score = 0;
+    scores = malloc((nB+1)*sizeof(double));
+    if (!scores) goto exit;
     M[0][0].trace = 0;
+    scores[0] = 0;
     for (j = 1; j <= nB; j++) {
-        M[0][j].score = j * left_gap_extend_A;
         M[0][j].trace = HORIZONTAL;
+        scores[j] = j * left_gap_extend_A;
     }
     for (i = 1; i < nA; i++) {
-        M[i][0].score = i * left_gap_extend_B;
+        temp = scores[0];
         M[i][0].trace = VERTICAL;
+        scores[0] = i * left_gap_extend_B;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_TRACE_NEEDLEMAN_WUNSCH(M[i][j],
-                M[i][j-1].score + gap_extend_A,
-                M[i-1][j].score + gap_extend_B,
-                M[i-1][j-1].score + self->substitution_matrix[kA][kB]);
+            SELECT_TRACE_NEEDLEMAN_WUNSCH(gap_extend_A, gap_extend_B);
         }
-        kB = CHARINDEX(sB[nB-1]);
-        SELECT_TRACE_NEEDLEMAN_WUNSCH(M[i][nB],
-            M[i][nB-1].score + gap_extend_A,
-            M[i-1][nB].score + right_gap_extend_B,
-            M[i-1][nB-1].score + self->substitution_matrix[kA][kB]);
+        kB = CHARINDEX(sB[j-1]);
+        SELECT_TRACE_NEEDLEMAN_WUNSCH(gap_extend_A, right_gap_extend_B);
     }
-    M[nA][0].score = i * left_gap_extend_B;
+    temp = scores[0];
     M[nA][0].trace = VERTICAL;
+    scores[0] = i * left_gap_extend_B;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_TRACE_NEEDLEMAN_WUNSCH(M[nA][j],
-            M[nA][j-1].score + right_gap_extend_A,
-            M[nA-1][j].score + gap_extend_B,
-            M[nA-1][j-1].score + self->substitution_matrix[kA][kB]);
+        SELECT_TRACE_NEEDLEMAN_WUNSCH(right_gap_extend_A, gap_extend_B);
     }
-    kB = CHARINDEX(sB[nB-1]);
-    SELECT_TRACE_NEEDLEMAN_WUNSCH(M[nA][nB],
-        M[nA][nB-1].score + right_gap_extend_A,
-        M[nA-1][nB].score + right_gap_extend_B,
-        M[nA-1][nB-1].score + self->substitution_matrix[kA][kB]);
+    kB = CHARINDEX(sB[j-1]);
+    SELECT_TRACE_NEEDLEMAN_WUNSCH(right_gap_extend_A, right_gap_extend_B);
     M[0][0].path = 0;
     M[nA][nB].path = 0;
+    PyMem_Free(scores);
 
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
@@ -4901,9 +4896,9 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
         Py_DECREF(paths);
         return result;
     }
-    else _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
 
 exit:
+    if (M) _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return NULL;
 }
