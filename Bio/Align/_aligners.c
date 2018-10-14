@@ -2677,16 +2677,16 @@ static PyGetSetDef Aligner_getset[] = {
     if (score < 0) score = 0; \
     else if (score > maximum) maximum = score;
 
-#define SELECT_TRACE_NEEDLEMAN_WUNSCH(score2, score3) \
+#define SELECT_TRACE_NEEDLEMAN_WUNSCH(hgap, vgap) \
     score = temp + self->substitution_matrix[kA][kB]; \
     trace = DIAGONAL; \
-    temp = scores[j-1] + score2; \
+    temp = scores[j-1] + hgap; \
     if (temp > score + epsilon) { \
         score = temp; \
         trace = HORIZONTAL; \
     } \
     else if (temp > score - epsilon) trace |= HORIZONTAL; \
-    temp = scores[j] + score3; \
+    temp = scores[j] + vgap; \
     if (temp > score + epsilon) { \
         score = temp; \
         trace = VERTICAL; \
@@ -2696,21 +2696,21 @@ static PyGetSetDef Aligner_getset[] = {
     scores[j] = score; \
     M[i][j].trace = trace;
 
-#define SELECT_TRACE_SMITH_WATERMAN_HVD(cell, score1, score2, score3) \
-    trace = HORIZONTAL; \
-    score = score1; \
-    temp = score2; \
+#define SELECT_TRACE_SMITH_WATERMAN_HVD(hgap, vgap) \
+    trace = DIAGONAL; \
+    score = temp + self->substitution_matrix[kA][kB]; \
+    temp = scores[j-1] + hgap; \
+    if (temp > score + epsilon) { \
+        score = temp; \
+        trace = HORIZONTAL; \
+    } \
+    else if (temp > score - epsilon) trace |= HORIZONTAL; \
+    temp = scores[j] + vgap; \
     if (temp > score + epsilon) { \
         score = temp; \
         trace = VERTICAL; \
     } \
     else if (temp > score - epsilon) trace |= VERTICAL; \
-    temp = score3; \
-    if (temp > score + epsilon) { \
-        score = temp; \
-        trace = DIAGONAL; \
-    } \
-    else if (temp > score - epsilon) trace |= DIAGONAL; \
     if (score < epsilon) { \
         score = 0; \
         trace = 0; \
@@ -2725,12 +2725,13 @@ static PyGetSetDef Aligner_getset[] = {
         } \
         trace |= ENDPOINT; \
     } \
-    cell.score = score; \
-    cell.trace = trace; \
-    if (score > maximum) maximum = score;
+    M[i][j].trace = trace; \
+    if (score > maximum) maximum = score; \
+    temp = scores[j]; \
+    scores[j] = score;
 
-#define SELECT_TRACE_SMITH_WATERMAN_D(cell, score1) \
-    score = score1; \
+#define SELECT_TRACE_SMITH_WATERMAN_D \
+    score = temp + self->substitution_matrix[kA][kB]; \
     trace = DIAGONAL; \
     if (score < epsilon) { \
         score = 0; \
@@ -2746,9 +2747,10 @@ static PyGetSetDef Aligner_getset[] = {
         } \
         trace |= ENDPOINT; \
     } \
-    cell.score = score; \
-    cell.trace = trace; \
-    if (score > maximum) maximum = score;
+    M[i][j].trace = trace; \
+    if (score > maximum) maximum = score; \
+    temp = scores[j]; \
+    scores[j] = score
 
 #define SELECT_TRACE_GOTOH_GLOBAL_GAP(cell, score1, score2, score3) \
     trace = M_MATRIX; \
@@ -4920,6 +4922,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     Cell** M = NULL;
     double maximum = 0;
     double score = 0;
+    double* scores = NULL;
     double temp;
     int trace;
     PathGenerator* paths = NULL;
@@ -4927,39 +4930,34 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* Smith-Waterman algorithm */
     M = _allocate_needlemanwunsch_smithwaterman_matrix(nA, nB);
     if (!M) goto exit;
-    M[0][0].score = 0;
-    M[0][0].trace = 0;
+    scores = malloc((nB+1)*sizeof(double));
+    if (!scores) goto exit;
     M[0][0].path = 0;
-    for (j = 1; j <= nB; j++) {
-        M[0][j].score = 0;
+    for (j = 0; j <= nB; j++) {
         M[0][j].trace = 0;
+        scores[j] = 0;
     }
     for (i = 1; i < nA; i++) {
-        M[i][0].score = 0;
+        temp = 0;
         M[i][0].trace = 0;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
-            SELECT_TRACE_SMITH_WATERMAN_HVD(M[i][j],
-                M[i][j-1].score + gap_extend_A,
-                M[i-1][j].score + gap_extend_B,
-                M[i-1][j-1].score + self->substitution_matrix[kA][kB]);
+            SELECT_TRACE_SMITH_WATERMAN_HVD(gap_extend_A, gap_extend_B);
         }
         kB = CHARINDEX(sB[nB-1]);
-        SELECT_TRACE_SMITH_WATERMAN_D(M[i][nB],
-            M[i-1][nB-1].score + self->substitution_matrix[kA][kB]);
+        SELECT_TRACE_SMITH_WATERMAN_D;
     }
-    M[nA][0].score = 0;
     M[nA][0].trace = 0;
+    temp = 0;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
         kB = CHARINDEX(sB[j-1]);
-        SELECT_TRACE_SMITH_WATERMAN_D(M[nA][j],
-            M[nA-1][j-1].score + self->substitution_matrix[kA][kB]);
+        SELECT_TRACE_SMITH_WATERMAN_D;
     }
     kB = CHARINDEX(sB[nB-1]);
-    SELECT_TRACE_SMITH_WATERMAN_D(M[nA][nB],
-        M[nA-1][nB-1].score + self->substitution_matrix[kA][kB]);
+    SELECT_TRACE_SMITH_WATERMAN_D;
+    PyMem_Free(scores);
 
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
@@ -4973,6 +4971,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     else _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
 
 exit:
+    if (scores) PyMem_Free(scores);
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return NULL;
 }
