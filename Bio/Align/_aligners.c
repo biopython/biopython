@@ -2897,34 +2897,6 @@ static PyGetSetDef Aligner_getset[] = {
 /* -------------- allocation & deallocation ------------- */
 
 static void
-_deallocate_needlemanwunsch_smithwaterman_matrix(Py_ssize_t nA, Cell** M)
-{
-    int i;
-    if (!M) return;
-    for (i = 0; i <= nA; i++) {
-        if (!M[i]) break;
-        PyMem_Free(M[i]);
-    }
-    PyMem_Free(M);
-}
-
-static Cell**
-_allocate_needlemanwunsch_smithwaterman_matrix(Py_ssize_t nA, Py_ssize_t nB)
-{
-    int i;
-    Cell** M = PyMem_Malloc((nA+1)*sizeof(Cell*));
-    if (!M) return NULL;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
-        if (!M[i]) goto exit;
-    }
-    return M;
-exit:
-    _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
-    return NULL;
-}
-
-static void
 _deallocate_gotoh_matrices(Py_ssize_t nA, Cell** M, Cell** Ix, Cell** Iy)
 {
     int i;
@@ -4146,12 +4118,14 @@ PathGenerator_next(PathGenerator* self)
 static void
 PathGenerator_dealloc(PathGenerator* self)
 {
+    int i;
     const int nA = self->nA;
     const Algorithm algorithm = self->algorithm;
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman: {
             Cell** M = self->M.affine;
-            _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
+            for (i = 0; i <= nA; i++) PyMem_Free(M[i]);
+            PyMem_Free(M);
             break;
         }
         case Gotoh: {
@@ -4850,12 +4824,16 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     double score;
     int trace;
     double temp;
-    double* scores;
+    double* scores = NULL;
     PathGenerator* paths = NULL;
 
     /* Needleman-Wunsch algorithm */
-    M = _allocate_needlemanwunsch_smithwaterman_matrix(nA, nB);
+    M = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
+        if (!M[i]) goto exit;
+    }
     scores = malloc((nB+1)*sizeof(double));
     if (!scores) goto exit;
     M[0][0].trace = 0;
@@ -4900,7 +4878,13 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     }
 
 exit:
-    if (M) _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
+    if (M) {
+        for (i = 0; i <= nA; i++) {
+            if (!M[i]) break;
+            PyMem_Free(M[i]);
+        }
+        PyMem_Free(M);
+    }
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return NULL;
 }
@@ -4928,8 +4912,12 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     PathGenerator* paths = NULL;
 
     /* Smith-Waterman algorithm */
-    M = _allocate_needlemanwunsch_smithwaterman_matrix(nA, nB);
+    M = PyMem_Malloc((nA+1)*sizeof(Cell*));
     if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Cell));
+        if (!M[i]) goto exit;
+    }
     scores = malloc((nB+1)*sizeof(double));
     if (!scores) goto exit;
     M[0][0].path = 0;
@@ -4968,10 +4956,15 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
         Py_DECREF(paths);
         return result;
     }
-    else _deallocate_needlemanwunsch_smithwaterman_matrix(nA, M);
 
 exit:
-    if (scores) PyMem_Free(scores);
+    if (M) {
+        for (i = 0; i <= nA; i++) {
+            if (!M[i]) break;
+            PyMem_Free(M[i]);
+        }
+        PyMem_Free(M);
+    }
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return NULL;
 }
