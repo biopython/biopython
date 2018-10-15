@@ -1,4 +1,5 @@
-# Copyright 2018 Aleksandra Jarmolinska.  All rights reserved.
+# Copyright 2018 Aleksandra Jarmolinska. Based on code by Thomas Sicheritz-Ponten,
+# Cecilia Alsmark, Markus Piotrowski and Peter Cock. All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -8,7 +9,7 @@
 
 from __future__ import print_function
 
-__GC_CONTENT_VALUE = {
+_GC_CONTENT_VALUE = {
     "G": 1.,
     "C": 1.,
     "A": 0.,
@@ -17,7 +18,7 @@ __GC_CONTENT_VALUE = {
     "W": 0.,
     "N": 0.5
 }
-__GC_CONTENT_VALUE_AMBG = {
+_GC_CONTENT_VALUE_AMBG = {
     "M": 0.5,
     "K": 0.5,
     "R": 0.5,
@@ -33,8 +34,9 @@ __GC_CONTENT_VALUE_AMBG = {
 def calc_gc_content(seq, interpret_all=False):
     """Calculate G+C content, returns a fraction (float between 0 and 1).
 
-    Copes mixed case sequences, and with the ambiguous nucleotides S (G or C)
-    and N ( A or C or G or T ) when counting the G and C content.
+    Copes with mixed case sequences, and with the ambiguous nucleotides S 
+    (can be either G or C) and N (can be any base: A or C or G or T ) 
+    when counting the G and C content.
 
     When interpret_all is True, includes probability of other ambiguous
     to be C or G:
@@ -57,7 +59,7 @@ def calc_gc_content(seq, interpret_all=False):
     0.4
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> calc_gc_content("ACTGB",True)
+    >>> calc_gc_content("ACTGB", True)
     0.532
 
     Note that this will return zero for an empty sequence.
@@ -66,8 +68,8 @@ def calc_gc_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    gc = sum(__GC_CONTENT_VALUE.get(x.upper(),
-             __GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+    gc = sum(_GC_CONTENT_VALUE.get(x.upper(),
+             _GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
              for x in seq)
     if not gc:
         return None
@@ -78,8 +80,9 @@ def calc_gc_content(seq, interpret_all=False):
 def calc_at_content(seq, interpret_all=False):
     """Calculate A+T content, return a fraction (float between 0 and 1).
 
-    Copes mixed case sequences, and with the ambiguous nucleotides W (A or T)
-    and N ( A or C or G or T ) when counting the A and T content.
+    Copes with mixed case sequences, and with the ambiguous nucleotides 
+    W (can be either A or T) and N (can be any base: A or C or G or T ) 
+    when counting the A and T content.
 
     When interpret_all is True, includes probability of other ambiguous
     to be A or T:
@@ -102,7 +105,7 @@ def calc_at_content(seq, interpret_all=False):
     0.5625
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> calc_at_content("ACTGBNNN",True)
+    >>> calc_at_content("ACTGBNNN", True)
     0.48
 
     Note that this will return zero for an empty sequence.
@@ -111,8 +114,8 @@ def calc_at_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    at = sum(1 - __GC_CONTENT_VALUE.get(x.upper(),
-             __GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+    at = sum(1 - _GC_CONTENT_VALUE.get(x.upper(),
+             _GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
              for x in seq)
     if not at:
         return None
