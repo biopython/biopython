@@ -34,6 +34,8 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import (ambiguous_dna_complement,
                                 ambiguous_rna_complement)
+from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
+from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
 from Bio.Data import CodonTable
 
 
@@ -2603,8 +2605,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         valid_letters = set(table.nucleotide_alphabet.letters.upper())
     else:
         # Assume the worst case, ambiguous DNA or RNA:
-        valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
-                            IUPAC.ambiguous_rna.letters.upper())
+        valid_letters = set(_ambiguous_dna_letters.upper() +
+                            _ambiguous_rna_letters.upper())
     n = len(sequence)
 
     # Check for tables with 'ambiguous' (dual-coding) stop codons:
