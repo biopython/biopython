@@ -17,8 +17,8 @@ def _calc_gc_content_values():
     unamb = "GCTASWN"
     for b, opts in ambiguous_dna_values.items():
         d = gc_u if b in unamb else gc_a
-        d[b] = float(opts.count("C")+opts.count("G")) / len(opts)
-        d[b.lower()] = float(opts.count("C")+opts.count("G")) / len(opts)
+        d[b] = float(opts.count("C") + opts.count("G")) / len(opts)
+        d[b.lower()] = float(opts.count("C") + opts.count("G")) / len(opts)
     return gc_u, gc_a
 
 
