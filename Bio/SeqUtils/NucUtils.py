@@ -10,24 +10,28 @@
 from __future__ import print_function
 from Bio.Data.IUPACData import ambiguous_dna_values
 
+
 def _calc_gc_content_values():
     gc_u = {}
     gc_a = {}
     unamb = "GCTASWN"
-    for b,opts in ambiguous_dna_values.items():
+    for b, opts in ambiguous_dna_values.items():
         d = gc_u if b in unamb else gc_a
-        d[b] = float(opts.count("C")+opts.count("G"))/len(opts)
-        d[b.lower()] = float(opts.count("C")+opts.count("G"))/len(opts)
-    return gc_u,gc_a
+        d[b] = float(opts.count("C")+opts.count("G")) / len(opts)
+        d[b.lower()] = float(opts.count("C")+opts.count("G")) / len(opts)
+    return gc_u, gc_a
+
 
 _GC_CONTENT_VALUE, _GC_CONTENT_VALUE_AMBG = _calc_gc_content_values()
 
+
 def _calc_base_values(base):
     d = {}
-    for b,opts in ambiguous_dna_values.items():
-        d[b] = float(opts.count(base))/len(opts)
-        d[b.lower()] = float(opts.count(base))/len(opts)
+    for b, opts in ambiguous_dna_values.items():
+        d[b] = float(opts.count(base)) / len(opts)
+        d[b.lower()] = float(opts.count(base)) / len(opts)
     return d
+
 
 def calc_gc_content(seq, interpret_all=False):
     """Calculate G+C content, returns a fraction (float between 0 and 1).
@@ -166,9 +170,9 @@ def calc_at_skew(seq, interpret_all=False):
     Returns zero for an empty sequence.
     Returns None if there is no G+C content.
     """
-    a_dict =  _calc_base_values("A")
+    a_dict = _calc_base_values("A")
 
-    t_dict =  _calc_base_values("T")
+    t_dict = _calc_base_values("T")
 
     len_seq = len(seq)
     if not len_seq:
@@ -183,4 +187,3 @@ def calc_at_skew(seq, interpret_all=False):
     skew = (a - t) / float(a + t)
 
     return skew
-
