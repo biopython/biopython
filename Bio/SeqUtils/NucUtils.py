@@ -8,34 +8,32 @@
 
 
 from __future__ import print_function
+from Bio.Data.IUPACData import ambiguous_dna_values
 
-_GC_CONTENT_VALUE = {
-    "G": 1.,
-    "C": 1.,
-    "A": 0.,
-    "T": 0.,
-    "S": 1.,
-    "W": 0.,
-    "N": 0.5
-}
-_GC_CONTENT_VALUE_AMBG = {
-    "M": 0.5,
-    "K": 0.5,
-    "R": 0.5,
-    "Y": 0.5,
+def _calc_gc_content_values():
+    gc_u = {}
+    gc_a = {}
+    unamb = "GCTASWN"
+    for b,opts in ambiguous_dna_values.items():
+        d = gc_u if b in unamb else gc_a
+        d[b] = float(opts.count("C")+opts.count("G"))/len(opts)
+        d[b.lower()] = float(opts.count("C")+opts.count("G"))/len(opts)
+    return gc_u,gc_a
 
-    "B": 0.66,
-    "D": 0.33,
-    "H": 0.33,
-    "V": 0.66,
-}
+_GC_CONTENT_VALUE, _GC_CONTENT_VALUE_AMBG = _calc_gc_content_values()
 
+def _calc_base_values(base):
+    d = {}
+    for b,opts in ambiguous_dna_values.items():
+        d[b] = float(opts.count(base))/len(opts)
+        d[b.lower()] = float(opts.count(base))/len(opts)
+    return d
 
 def calc_gc_content(seq, interpret_all=False):
     """Calculate G+C content, returns a fraction (float between 0 and 1).
 
-    Copes with mixed case sequences, and with the ambiguous nucleotides S 
-    (can be either G or C) and N (can be any base: A or C or G or T ) 
+    Copes with mixed case sequences, and with the ambiguous nucleotides
+    S (can be either G or C) and N (can be any base: A or C or G or T )
     when counting the G and C content.
 
     When interpret_all is True, includes probability of other ambiguous
@@ -55,12 +53,12 @@ def calc_gc_content(seq, interpret_all=False):
     0.5
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> calc_gc_content("ACTGB")
-    0.4
+    >>> calc_gc_content("ACTGBHNN")
+    0.375
 
     >>> from Bio.SeqUtils.NucUtils import calc_gc_content
-    >>> calc_gc_content("ACTGB", True)
-    0.532
+    >>> calc_gc_content("ACTGBHNN", True)
+    0.5
 
     Note that this will return zero for an empty sequence.
     """
@@ -68,8 +66,8 @@ def calc_gc_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    gc = sum(_GC_CONTENT_VALUE.get(x.upper(),
-             _GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+    gc = sum(_GC_CONTENT_VALUE.get(x,
+             _GC_CONTENT_VALUE_AMBG.get(x, 0.) if interpret_all else 0.)
              for x in seq)
     if not gc:
         return None
@@ -80,8 +78,8 @@ def calc_gc_content(seq, interpret_all=False):
 def calc_at_content(seq, interpret_all=False):
     """Calculate A+T content, return a fraction (float between 0 and 1).
 
-    Copes with mixed case sequences, and with the ambiguous nucleotides 
-    W (can be either A or T) and N (can be any base: A or C or G or T ) 
+    Copes with mixed case sequences, and with the ambiguous nucleotides
+    W (can be either A or T) and N (can be any base: A or C or G or T )
     when counting the A and T content.
 
     When interpret_all is True, includes probability of other ambiguous
@@ -101,12 +99,12 @@ def calc_at_content(seq, interpret_all=False):
     0.5
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> calc_at_content("ACTGBNNN")
-    0.5625
+    >>> calc_at_content("ACTGBHNN")
+    0.625
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
-    >>> calc_at_content("ACTGBNNN", True)
-    0.48
+    >>> calc_at_content("ACTGBHNN", True)
+    0.5
 
     Note that this will return zero for an empty sequence.
     """
@@ -114,8 +112,8 @@ def calc_at_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    at = sum(1 - _GC_CONTENT_VALUE.get(x.upper(),
-             _GC_CONTENT_VALUE_AMBG.get(x.upper(), 0.) if interpret_all else 0.)
+    at = sum(1 - _GC_CONTENT_VALUE.get(x,
+             _GC_CONTENT_VALUE_AMBG.get(x, 0.) if interpret_all else 0.)
              for x in seq)
     if not at:
         return None
@@ -136,20 +134,16 @@ def calc_gc_skew(seq, interpret_all=False):
     Returns zero for an empty sequence.
     Returns None if there is no G+C content.
     """
-    g_dict = {"G": 1., "S": 0.5, "K": 0.5, "R": 0.5,
-              "B": 0.33, "D": 0.33,
-              "V": 0.33, "N": 0.25}
+    g_dict = _calc_base_values("G")
 
-    c_dict = {"C": 1., "S": 0.5, "M": 0.5, "Y": 0.5,
-              "B": 0.33, "H": 0.33,
-              "V": 0.33, "N": 0.25}
+    c_dict = _calc_base_values("C")
 
     len_seq = len(seq)
     if not len_seq:
         return 0
 
-    g = sum(g_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "G" for x in seq)
-    c = sum(c_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "C" for x in seq)
+    g = sum(g_dict.get(x, 0.) if interpret_all else x in "Gg" for x in seq)
+    c = sum(c_dict.get(x, 0.) if interpret_all else x in "Cc" for x in seq)
 
     if not g + c:
         return None
@@ -172,19 +166,16 @@ def calc_at_skew(seq, interpret_all=False):
     Returns zero for an empty sequence.
     Returns None if there is no G+C content.
     """
-    a_dict = {"A": 1., "W": 0.5, "M": 0.5, "R": 0.5,
-              "H": 0.33, "D": 0.33,
-              "V": 0.33, "N": 0.25}
-    t_dict = {"T": 1., "S": 0.5, "K": 0.5, "Y": 0.5,
-              "B": 0.33, "H": 0.33,
-              "D": 0.33, "N": 0.25}
+    a_dict =  _calc_base_values("A")
+
+    t_dict =  _calc_base_values("T")
 
     len_seq = len(seq)
     if not len_seq:
         return 0
 
-    a = sum(a_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "A" for x in seq)
-    t = sum(t_dict.get(x.upper(), 0.) if interpret_all else x.upper() == "T" for x in seq)
+    a = sum(a_dict.get(x, 0.) if interpret_all else x in "Aa" for x in seq)
+    t = sum(t_dict.get(x, 0.) if interpret_all else x in "Tt" for x in seq)
 
     if not a + t:
         return None
@@ -192,3 +183,4 @@ def calc_at_skew(seq, interpret_all=False):
     skew = (a - t) / float(a + t)
 
     return skew
+
