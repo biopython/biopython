@@ -162,6 +162,9 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertEqual(calc_gc_content(seq_amb, True), 0.375)
         self.assertEqual(calc_gc_content("A" * 50), None)
         self.assertEqual(calc_gc_content(""), 0)
+        self.assertEqual(calc_gc_content("?"), None)
+        self.assertEqual(calc_gc_content("B"), None)
+        self.assertEqual(calc_gc_content("B", True), 2. / 3)
 
     def test_calc_at_content(self):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
@@ -169,9 +172,12 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertEqual(calc_at_content(seq), calc_at_content(seq.lower()))
         self.assertEqual(calc_at_content(seq), calc_at_content(seq, True))
         seq_amb = "AcbwStTD"
-        self.assertEqual(calc_at_content(seq_amb, True), 0.6250000000000001)
+        self.assertEqual(calc_at_content(seq_amb, True), 0.625)
         self.assertEqual(calc_at_content("C" * 50), None)
         self.assertEqual(calc_at_content(""), 0)
+        self.assertEqual(calc_at_content("?"), None)
+        self.assertEqual(calc_at_content("B"), None)
+        self.assertEqual(calc_at_content("B", True), 1. / 3)
 
     def test_calc_gc_skew(self):
         self.assertEqual(calc_gc_skew("A" * 50), None)
