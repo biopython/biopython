@@ -192,7 +192,7 @@ def _parse_pdb_header_list(header):
         'author': "",
         'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}},
         'has_missing_residues': False,
-        'missing_residues' : []}
+        'missing_residues': []}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
