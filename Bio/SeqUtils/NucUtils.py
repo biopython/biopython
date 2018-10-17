@@ -116,7 +116,7 @@ def calc_at_content(seq, interpret_all=False):
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
     >>> calc_at_content("ACTGBHNN")
-    0.625
+    0.375
 
     >>> from Bio.SeqUtils.NucUtils import calc_at_content
     >>> calc_at_content("ACTGBHNN", True)
