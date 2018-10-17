@@ -18,11 +18,23 @@ def _calc_gc_content_values():
     for b, opts in ambiguous_dna_values.items():
         d = gc_u if b in unamb else gc_a
         d[b] = float(opts.count("C") + opts.count("G")) / len(opts)
-        d[b.lower()] = float(opts.count("C") + opts.count("G")) / len(opts)
+        d[b.lower()] = d[b]
     return gc_u, gc_a
 
 
+def _calc_at_content_values():
+    at_u = {}
+    at_a = {}
+    unamb = "GCTASWN"
+    for b, opts in ambiguous_dna_values.items():
+        d = at_u if b in unamb else at_a
+        d[b] = float(opts.count("A") + opts.count("T")) / len(opts)
+        d[b.lower()] = d[b]
+    return at_u, at_a
+
+
 _GC_CONTENT_VALUE, _GC_CONTENT_VALUE_AMBG = _calc_gc_content_values()
+_AT_CONTENT_VALUE, _AT_CONTENT_VALUE_AMBG = _calc_at_content_values()
 
 
 def _calc_base_values(base):
@@ -116,8 +128,8 @@ def calc_at_content(seq, interpret_all=False):
     if not len_seq:
         return 0.
 
-    at = sum(1 - _GC_CONTENT_VALUE.get(x,
-             _GC_CONTENT_VALUE_AMBG.get(x, 0.) if interpret_all else 0.)
+    at = sum(_AT_CONTENT_VALUE.get(x,
+             _AT_CONTENT_VALUE_AMBG.get(x, 0.) if interpret_all else 0.)
              for x in seq)
     if not at:
         return None
