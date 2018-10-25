@@ -368,8 +368,8 @@ def CifSeqresIterator(handle):
     # Look through _struct_ref_seq records, look up the corresponding
     # _struct_ref and add an entry to the metadata list for this chain.
     for fields in zip(records["_struct_ref_seq.ref_id"],
-                                  records["_struct_ref_seq.pdbx_PDB_id_code"],
-                                  records["_struct_ref_seq.pdbx_strand_id"]):
+                      records["_struct_ref_seq.pdbx_PDB_id_code"],
+                      records["_struct_ref_seq.pdbx_strand_id"]):
         ref_id, pdb_id, chain_id = fields
         struct_ref = struct_refs[ref_id]
 
