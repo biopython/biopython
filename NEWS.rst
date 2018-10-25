@@ -35,8 +35,8 @@ warning on parsing.
 
 There is a new command line wrapper for the BWA-MEM sequence mapper.
 
-FASTA files are now parsed slightly faster with ``SeqIO.parse()`` due to
-internal changes in ``SimpleFastaParser``.
+The string-based FASTA parsers in ``Bio.SeqIO.FastaIO`` have been optimised,
+which also speeds up parsing FASTA files using ``Bio.SeqIO.parse()``.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
