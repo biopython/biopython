@@ -33,6 +33,11 @@ Double-quote characters in GenBank feature qualifier values in ``Bio.SeqIO``
 are now escaped as per the NCBI standard. Improperly escaped values trigger a
 warning on parsing.
 
+There is a new command line wrapper for the BWA-MEM sequence mapper.
+
+FASTA files are now parsed slightly faster with ``SeqIO.parse()`` due to
+internal changes in ``SimpleFastaParser``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
