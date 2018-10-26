@@ -26,7 +26,10 @@ class MMCIF2Dict(dict):
             loop_flag = False
             key = None
             tokens = self._tokenize(handle)
-            token = next(tokens)
+            try:
+                token = next(tokens)
+            except StopIteration:
+                return  # for Python 3.7 and PEP 479
             self[token[0:5]] = token[5:]
             i = 0
             n = 0
