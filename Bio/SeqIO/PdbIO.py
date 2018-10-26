@@ -10,7 +10,6 @@ from Bio import BiopythonParserWarning
 from Bio._py3k import StringIO
 from Bio.Alphabet import generic_protein
 from Bio.Data.SCOPData import protein_letters_3to1
-from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -333,6 +332,9 @@ def CifSeqresIterator(handle):
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
 
+    # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
+    from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
     records = MMCIF2Dict(handle)
@@ -443,6 +445,7 @@ def CifAtomIterator(handle):
 
     # Only import parser when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIFParser import MMCIFParser
+    from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
     # The PdbAtomIterator uses UndoHandle to peek at the first line and get the
     # PDB ID. The equivalent for mmCIF is the _entry.id field. AFAIK, the mmCIF
