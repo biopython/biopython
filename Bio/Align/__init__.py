@@ -28,6 +28,7 @@ except ImportError as e:
     new_exc.__cause__ = None
     raise new_exc
 
+from Bio.Align import _aligners_old
 
 class MultipleSeqAlignment(object):
     """Represents a classical multiple sequence alignment (MSA).
@@ -1364,6 +1365,19 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         seqA = str(seqA)
         seqB = str(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
+
+class PairwiseAligner_Old(_aligners_old.PairwiseAligner):
+    def align(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        score, paths = _aligners_old.PairwiseAligner.align(self, seqA, seqB)
+        alignments = PairwiseAlignments(seqA, seqB, score, paths)
+        return alignments
+
+    def score(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        return _aligners_old.PairwiseAligner.score(self, seqA, seqB)
 
 
 if __name__ == "__main__":

@@ -916,8 +916,12 @@ static PyObject*
 Aligner_get_gap_score(Aligner* self, void* closure)
 {   
     if (self->target_gap_function || self->query_gap_function) {
-        PyErr_SetString(PyExc_ValueError, "using a gap score function");
-        return NULL;
+        if (self->target_gap_function != self->query_gap_function) {
+            PyErr_SetString(PyExc_ValueError, "gap scores are different");
+            return NULL;
+        }
+        Py_INCREF(self->target_gap_function);
+        return self->target_gap_function;
     }
     else {
         const double score = self->target_open_gap_score;
@@ -1605,8 +1609,8 @@ static char Aligner_target_gap_score__doc__[] = "target gap score";
 static PyObject*
 Aligner_get_target_gap_score(Aligner* self, void* closure)
 {   if (self->target_gap_function) {
-        PyErr_SetString(PyExc_ValueError, "using a gap score function");
-        return NULL;
+        Py_INCREF(self->target_gap_function);
+        return self->target_gap_function;
     }
     else {
         const double score = self->target_open_gap_score;
@@ -1725,8 +1729,8 @@ static char Aligner_query_gap_score__doc__[] = "query gap score";
 static PyObject*
 Aligner_get_query_gap_score(Aligner* self, void* closure)
 {   if (self->query_gap_function) {
-        PyErr_SetString(PyExc_ValueError, "using a gap score function");
-        return NULL;
+        Py_INCREF(self->query_gap_function);
+        return self->query_gap_function;
     }
     else {
         const double score = self->query_open_gap_score;
