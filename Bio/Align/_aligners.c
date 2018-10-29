@@ -277,7 +277,9 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         j2 = j1;
     }
     else {
-        printf("RUNTIME ERROR\n");
+        PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+        return NULL;
     }
 
     while (1) {
