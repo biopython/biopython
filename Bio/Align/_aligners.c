@@ -4145,13 +4145,20 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 iA = i-1;
                 iB = j-1;
                 trace = M[i][j].trace;
-                if (trace & M_MATRIX) m = M_MATRIX;
-                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
-                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else {
+                if (trace & M_MATRIX) {
+                    m = M_MATRIX;
+                    M[iA][iB].path = DIAGONAL;
+                }
+                else if (trace & Ix_MATRIX) {
+                    m = Ix_MATRIX;
+                    Ix[iA][iB].path = DIAGONAL;
+                }
+                else if (trace & Iy_MATRIX) {
+                    m = Iy_MATRIX;
+                    Iy[iA][iB].path = DIAGONAL;
+                } else {
                     self->iA = i;
                     self->iB = j;
-                    M[i][j].path = DIAGONAL;
                     return _create_path_waterman_smith_beyer(M, Ix, Iy, i, j);
                 }
         }
