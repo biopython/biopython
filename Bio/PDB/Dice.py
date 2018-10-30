@@ -57,7 +57,7 @@ class ChainSelector(object):
         return 0
 
     def accept_atom(self, atom):
-        """Verify is atoms are not Hydrogen."""
+        """Verify if atoms are not Hydrogen."""
         # atoms - get rid of hydrogens
         name = atom.get_id()
         if _hydrogen.match(name):

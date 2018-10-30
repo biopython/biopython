@@ -18,7 +18,7 @@ class AbstractPropertyMap(object):
         self.property_list = property_list
 
     def _translate_id(self, entity_id):
-        """Return entity identifier."""
+        """Return entity identifier (PRIVATE)."""
         return entity_id
 
     def __contains__(self, id):
