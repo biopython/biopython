@@ -874,8 +874,11 @@ class WriteTest(unittest.TestCase):
         """Write a full structure using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
+        # Ensure that set_structure doesn't alter parent
+        parent = struct1.parent
         # Write full model to temp file
         io.set_structure(struct1)
+        self.assertIs(parent, struct1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -892,8 +895,11 @@ class WriteTest(unittest.TestCase):
         io = PDBIO()
         struct1 = self.structure
         residue1 = list(struct1.get_residues())[0]
+        # Ensure that set_structure doesn't alter parent
+        parent = residue1.parent
         # Write full model to temp file
         io.set_structure(residue1)
+        self.assertIs(parent, residue1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -912,8 +918,11 @@ class WriteTest(unittest.TestCase):
         atm = Atom.Atom('CA', [0.1, 0.1, 0.1], 1.0, 1.0, ' ', 'CA', 1, 'C')
         res.add(atm)
 
+        # Ensure that set_structure doesn't alter parent
+        parent = res.parent
         # Write full model to temp file
         io.set_structure(res)
+        self.assertIs(parent, res.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -939,8 +948,11 @@ class WriteTest(unittest.TestCase):
 
         io = PDBIO()
         struct1 = self.structure
+        # Ensure that set_structure doesn't alter parent
+        parent = struct1.parent
         # Write to temp file
         io.set_structure(struct1)
+        self.assertIs(parent, struct1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
