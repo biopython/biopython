@@ -9,6 +9,8 @@ from __future__ import print_function
 
 
 class AbstractPropertyMap(object):
+    """Define base class, map holder of residue properties."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         self.property_dict = property_dict
@@ -16,6 +18,7 @@ class AbstractPropertyMap(object):
         self.property_list = property_list
 
     def _translate_id(self, entity_id):
+        """Return entity identifier."""
         return entity_id
 
     def __contains__(self, id):
@@ -116,12 +119,15 @@ class AbstractPropertyMap(object):
 
 
 class AbstractResiduePropertyMap(AbstractPropertyMap):
+    """Define class for residue properties map."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                                      property_list)
 
     def _translate_id(self, ent_id):
+        """Return entity identifier on residue (PRIVATE)."""
         chain_id, res_id = ent_id
         if isinstance(res_id, int):
             ent_id = (chain_id, (' ', res_id, ' '))
@@ -129,12 +135,15 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
 
 class AbstractAtomPropertyMap(AbstractPropertyMap):
+    """Define class for atom properties map."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
                                      property_list)
 
     def _translate_id(self, ent_id):
+        """Return entity identifier on atoms (PRIVATE)."""
         if len(ent_id) == 4:
             chain_id, res_id, atom_name, icode = ent_id
         else:

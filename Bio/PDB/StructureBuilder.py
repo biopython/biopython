@@ -22,7 +22,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class StructureBuilder(object):
-    """Deals with contructing the Structure object.
+    """Deals with constructing the Structure object.
 
     The StructureBuilder class is used by the PDBParser classes to
     translate a file to a Structure object.
@@ -45,6 +45,7 @@ class StructureBuilder(object):
     # Public methods called by the Parser classes
 
     def set_header(self, header):
+        """Set header."""
         self.header = header
 
     def set_line_counter(self, line_counter):
@@ -266,4 +267,5 @@ class StructureBuilder(object):
         return self.structure
 
     def set_symmetry(self, spacegroup, cell):
+        """Set symmetry."""
         pass

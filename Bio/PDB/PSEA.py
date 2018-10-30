@@ -69,7 +69,7 @@ def psea2HEC(pseq):
 
 
 def annotate(m, ss_seq):
-    """Apply seconardary structure information to residues in model."""
+    """Apply secondary structure information to residues in model."""
     c = m.get_list()[0]
     all = c.get_list()
     residues = []
@@ -86,6 +86,11 @@ def annotate(m, ss_seq):
 
 
 class PSEA(object):
+    """Define PSEA class.
+
+    PSEA object is a wrapper to PSEA program for secondary structure assignment.
+    """
+
     def __init__(self, model, filename):
         """Initialize the class."""
         ss_seq = psea(filename)
@@ -107,5 +112,5 @@ if __name__ == "__main__":
     p = PDBParser()
     s = p.get_structure('X', sys.argv[1])
 
-    # Annotate structure with PSEA sceondary structure info
+    # Annotate structure with PSEA secondary structure info
     PSEA(s[0], sys.argv[1])

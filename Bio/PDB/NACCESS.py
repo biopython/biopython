@@ -8,6 +8,7 @@
 """Interface for the program NACCESS.
 
 See: http://wolf.bms.umist.ac.uk/naccess/
+Atomic Solvent Accessible Area Calculations
 
 errors likely to occur with the binary:
 default values are often due to low default settings in accall.pars
@@ -29,7 +30,7 @@ from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtom
 
 def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
                 naccess='naccess', temp_path='/tmp/'):
-
+    """Run naccess for a pdb file."""
     # make temp directory;
     tmp_path = tempfile.mkdtemp(dir=temp_path)
 
@@ -83,7 +84,7 @@ def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
 
 
 def process_rsa_data(rsa_data):
-    # process the .rsa output file: residue level SASA data
+    """Process the .rsa output file: residue level SASA data."""
     naccess_rel_dict = {}
     for line in rsa_data:
         if line.startswith('RES'):
@@ -108,7 +109,7 @@ def process_rsa_data(rsa_data):
 
 
 def process_asa_data(rsa_data):
-    # process the .asa output file: atomic level SASA data
+    """Process the .asa output file: atomic level SASA data."""
     naccess_atom_dict = {}
     for line in rsa_data:
         full_atom_id = line[12:16]
@@ -124,6 +125,7 @@ def process_asa_data(rsa_data):
 
 
 class NACCESS(AbstractResiduePropertyMap):
+    """Define NACCESS class for residue properties map."""
 
     def __init__(self, model, pdb_file=None,
                  naccess_binary='naccess', tmp_directory='/tmp'):
@@ -155,6 +157,7 @@ class NACCESS(AbstractResiduePropertyMap):
 
 
 class NACCESS_atomic(AbstractAtomPropertyMap):
+    """Define NACCESS atomic class for atom properties map."""
 
     def __init__(self, model, pdb_file=None,
                  naccess_binary='naccess', tmp_directory='/tmp'):

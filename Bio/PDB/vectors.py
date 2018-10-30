@@ -239,6 +239,7 @@ class Vector(object):
             self._ar = numpy.array((x, y, z), 'd')
 
     def __repr__(self):
+        """Return vector 3D coordinates."""
         x, y, z = self._ar
         return "<Vector %.2f, %.2f, %.2f>" % (x, y, z)
 
@@ -286,12 +287,15 @@ class Vector(object):
             return Vector(a)
 
     def __getitem__(self, i):
+        """Return value of array index i."""
         return self._ar[i]
 
     def __setitem__(self, i, value):
+        """Assign values to array index i."""
         self._ar[i] = value
 
     def __contains__(self, i):
+        """Validate if i is in array."""
         return i in self._ar
 
     def norm(self):

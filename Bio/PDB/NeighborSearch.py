@@ -134,11 +134,14 @@ if __name__ == "__main__":
     from numpy.random import random
 
     class Atom(object):
+        """Define atom class for testing."""
+
         def __init__(self):
             """Initialize the class."""
             self.coord = (100 * random(3))
 
         def get_coord(self):
+            """Return coordinates."""
             return self.coord
 
     for i in range(0, 20):

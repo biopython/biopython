@@ -15,6 +15,7 @@ from Bio.PDB.mmtf.DefaultParser import StructureDecoder
 
 
 def get_from_decoded(decoder):
+    """Return structure from decoder."""
     structure_decoder = StructureDecoder()
     decoder.pass_data_on(structure_decoder)
     return structure_decoder.structure_bulder.get_structure()

@@ -17,23 +17,28 @@ class Structure(Entity):
         Entity.__init__(self, id)
 
     def __repr__(self):
+        """Return the structure identifier."""
         return "<Structure id=%s>" % self.get_id()
 
     def get_models(self):
+        """Return models."""
         for m in self:
             yield m
 
     def get_chains(self):
+        """Return chains from models."""
         for m in self.get_models():
             for c in m:
                 yield c
 
     def get_residues(self):
+        """Return residues from chains."""
         for c in self.get_chains():
             for r in c:
                 yield r
 
     def get_atoms(self):
+        """Return atoms from residue."""
         for r in self.get_residues():
             for a in r:
                 yield a
