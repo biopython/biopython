@@ -30,17 +30,20 @@ class ChainSelector(object):
         self.model_id = model_id
 
     def accept_model(self, model):
+        """Verify if model match the model identifier."""
         # model - only keep model 0
         if model.get_id() == self.model_id:
             return 1
         return 0
 
     def accept_chain(self, chain):
+        """Verify if chain match chain identifier."""
         if chain.get_id() == self.chain_id:
             return 1
         return 0
 
     def accept_residue(self, residue):
+        """Verify if a residue sequence is between the start and end sequence."""
         # residue - between start and end
         hetatm_flag, resseq, icode = residue.get_id()
         if hetatm_flag != " ":
@@ -54,6 +57,7 @@ class ChainSelector(object):
         return 0
 
     def accept_atom(self, atom):
+        """Verify is atoms are not Hydrogen."""
         # atoms - get rid of hydrogens
         name = atom.get_id()
         if _hydrogen.match(name):

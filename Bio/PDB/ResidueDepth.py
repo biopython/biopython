@@ -513,6 +513,7 @@ def residue_depth(residue, surface):
 
 
 def ca_depth(residue, surface):
+    """Return CA depth."""
     if not residue.has_id("CA"):
         return None
     ca = residue["CA"]

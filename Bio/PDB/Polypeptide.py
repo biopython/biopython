@@ -366,8 +366,8 @@ class _PPBuilder(object):
             pp = None
             for next_res in chain_it:
                 if accept(prev_res, aa_only) \
-                and accept(next_res, aa_only) \
-                and is_connected(prev_res, next_res):
+                        and accept(next_res, aa_only) \
+                        and is_connected(prev_res, next_res):
                     if pp is None:
                         pp = Polypeptide()
                         pp.append(prev_res)
