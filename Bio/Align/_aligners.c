@@ -3982,9 +3982,9 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
 
-    if (M[0][0].old_path.j < 0) return NULL; /* DONE */
+    if (M[0][0].path == DONE) return NULL;
     m = 0;
-    if (M[iA][iB].old_path.i >= 0) {
+    if (M[iA][iB].path) {
         /* We already have a path. Prune the path to see if there are
          * any alternative paths. */
         m = M_MATRIX;
@@ -3993,16 +3993,49 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
         while (1) {
             switch (m) {
                 case M_MATRIX:
-                    iA = M[i][j].old_path.i;
-                    iB = M[i][j].old_path.j;
+                    if (M[i][j].path == HORIZONTAL) {
+                        iA = i;
+                        iB = j + M[i][j].step;
+                    }
+                    else if (M[i][j].path == VERTICAL) {
+                        iA = i + M[i][j].step;
+                        iB = j;
+                    }
+                    else if (M[i][j].path == DIAGONAL) {
+                        iA = i + 1;
+                        iB = j + 1;
+                    }
+                    else iA = -1;
                     break;
                 case Ix_MATRIX:
-                    iA = Ix[i][j].old_path.i;
-                    iB = Ix[i][j].old_path.j;
+                    if (Ix[i][j].path == HORIZONTAL) {
+                        iA = i;
+                        iB = j + Ix[i][j].step;
+                    }
+                    else if (Ix[i][j].path == VERTICAL) {
+                        iA = i + Ix[i][j].step;
+                        iB = j;
+                    }
+                    else if (Ix[i][j].path == DIAGONAL) {
+                        iA = i + 1;
+                        iB = j + 1;
+                    }
+                    else printf("RUNTIME ERROR 12\n");
                     break;
                 case Iy_MATRIX:
-                    iA = Iy[i][j].old_path.i;
-                    iB = Iy[i][j].old_path.j;
+                    if (Iy[i][j].path == HORIZONTAL) {
+                        iA = i;
+                        iB = j + Iy[i][j].step;
+                    }
+                    else if (Iy[i][j].path == VERTICAL) {
+                        iA = i + Iy[i][j].step;
+                        iB = j;
+                    }
+                    else if (Iy[i][j].path == DIAGONAL) {
+                        iA = i + 1;
+                        iB = j + 1;
+                    }
+                    else printf("RUNTIME ERROR 12\n");
                     break;
             }
             if (iA < 0) {
@@ -4119,7 +4152,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
             else {
                 /* exhausted this generator */
                 M[0][0].old_path.j = -1;
-                M[0][0].path = 0;
+                M[0][0].path = DONE;
                 return NULL;
             }
             if (M[iA][iB].trace & ENDPOINT) break;
@@ -6268,7 +6301,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
         paths->Iy = Iy;
         if (maximum==0) {
             M[0][0].old_path.j = -1; /* DONE */
-            M[0][0].path = 0; /* DONE */
+            M[0][0].path = DONE;
         }
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
