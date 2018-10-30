@@ -440,7 +440,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 i2 = i1 + 1;
                 j2 = j1 + 1;
             }
-            else if (Iy[i1][j1].path == 0) {
+            else if (Ix[i1][j1].path == 0) {
                 i2 = -1;
             }
             else printf("RUNTIME ERROR 43\n");
@@ -4021,6 +4021,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     if (j >= 0) {
                         M[i][j].old_path.i = iA;
                         M[i][j].old_path.j = iB;
+                        M[i][j].path = HORIZONTAL;
+                        M[i][j].step = iB - j;
                         break;
                     }
                 } else if (m==Ix_MATRIX) {
@@ -4032,6 +4034,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     m = Ix_MATRIX;
                     Ix[i][j].old_path.i = iA;
                     Ix[i][j].old_path.j = iB;
+                    Ix[i][j].path = HORIZONTAL;
+                    Ix[i][j].step = iB - j;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -4048,6 +4052,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     if (i >= 0) {
                         M[i][j].old_path.i = iA;
                         M[i][j].old_path.j = iB;
+                        M[i][j].path = VERTICAL;
+                        M[i][j].step = iA - i;
                         break;
                     }
                 } else if (m==Iy_MATRIX) {
@@ -4059,6 +4065,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     m = Iy_MATRIX;
                     Iy[i][j].old_path.i = iA;
                     Iy[i][j].old_path.j = iB;
+                    Iy[i][j].path = VERTICAL;
+                    Iy[i][j].step = iA - i;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -4075,6 +4083,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                             m = Ix_MATRIX;
                             Ix[i][j].old_path.i = iA;
                             Ix[i][j].old_path.j = iB;
+                            Ix[i][j].path = DIAGONAL;
                             break;
                         }
                     case Ix_MATRIX:
@@ -4082,6 +4091,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                             m = Iy_MATRIX;
                             Iy[i][j].old_path.i = iA;
                             Iy[i][j].old_path.j = iB;
+                            Iy[i][j].path = DIAGONAL;
                             break;
                         }
                     case Iy_MATRIX:
@@ -4170,14 +4180,41 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
         }
         switch (m) {
             case M_MATRIX:
+                if (iA == i) {
+                    M[iA][iB].path = HORIZONTAL;
+                    M[iA][iB].step = j - iB;
+                }
+                else if (iB == j) {
+                    M[iA][iB].path = VERTICAL;
+                    M[iA][iB].step = i - iA;
+                }
+                else M[iA][iB].path = DIAGONAL;
                 M[iA][iB].old_path.i = i;
                 M[iA][iB].old_path.j = j;
                 break;
             case Ix_MATRIX:
+                if (iA == i) {
+                    Ix[iA][iB].path = HORIZONTAL;
+                    Ix[iA][iB].step = j - iB;
+                }
+                else if (iB == j) {
+                    Ix[iA][iB].path = VERTICAL;
+                    Ix[iA][iB].step = i - iA;
+                }
+                else Ix[iA][iB].path = DIAGONAL;
                 Ix[iA][iB].old_path.i = i;
                 Ix[iA][iB].old_path.j = j;
                 break;
             case Iy_MATRIX:
+                if (iA == i) {
+                    Iy[iA][iB].path = HORIZONTAL;
+                    Iy[iA][iB].step = j - iB;
+                }
+                else if (iB == j) {
+                    Iy[iA][iB].path = VERTICAL;
+                    Iy[iA][iB].step = i - iA;
+                }
+                else Iy[iA][iB].path = DIAGONAL;
                 Iy[iA][iB].old_path.i = i;
                 Iy[iA][iB].old_path.j = j;
                 break;
