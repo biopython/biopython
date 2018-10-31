@@ -262,22 +262,24 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     int j2;
     int n = 1;
     int direction = 0;
-    if (M[i1][j1].path & DIAGONAL) {
-        i2 = i1 + 1;
-        j2 = j1 + 1;
-    }
-    else if (M[i1][j1].path & HORIZONTAL) {
-        i2 = i1;
-        j2 = j1 + M[i1][j1].step;
-    }
-    else if (M[i1][j1].path & VERTICAL) {
-        i2 = i1 + M[i1][j1].step;
-        j2 = j1;
-    }
-    else {
-        PyErr_SetString(PyExc_RuntimeError,
-                        "Unexpected path in _create_path_waterman_smith_beyer");
-        return NULL;
+    int path = M[i1][j1].path;
+    switch (path) {
+        case DIAGONAL:
+            i2 = i1 + 1;
+            j2 = j1 + 1;
+            break;
+        case HORIZONTAL:
+            i2 = i1;
+            j2 = j1 + M[i1][j1].step;
+            break;
+        case VERTICAL:
+            i2 = i1 + M[i1][j1].step;
+            j2 = j1;
+            break;
+        default:
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected path in _create_path_waterman_smith_beyer");
+            return NULL;
     }
 
     while (1) {
@@ -285,21 +287,27 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         else if (i1==i2) {
             i1 = i2;
             j1 = j2;
-            if (Iy[i1][j1].path == 0) i2 = -1;
-            else if (Iy[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + Iy[i1][j1].step;
-            }
-            else if (Iy[i1][j1].path == VERTICAL) {
-                i2 = i1 + Iy[i1][j1].step;
-                j2 = j1;
-            }
-            else if (Iy[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else {
-                printf("RUNTIME ERROR\n");
+            path = Iy[i1][j1].path;
+            switch (path) {
+                case 0:
+                    i2 = -1;
+                    break;
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + Iy[i1][j1].step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + Iy[i1][j1].step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                default:
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
             if (direction != HORIZONTAL) {
                 n++;
@@ -309,21 +317,27 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         else if (j1==j2) {
             i1 = i2;
             j1 = j2;
-            if (Ix[i1][j1].path == 0) i2 = -1;
-            else if (Ix[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + Ix[i1][j1].step;
-            }
-            else if (Ix[i1][j1].path == VERTICAL) {
-                i2 = i1 + Ix[i1][j1].step;
-                j2 = j1;
-            }
-            else if (Ix[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else {
-                printf("RUNTIME ERROR\n");
+            path = Ix[i1][j1].path;
+            switch (path) {
+                case 0:
+                    i2 = -1;
+                    break;
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + Ix[i1][j1].step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + Ix[i1][j1].step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                default:
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
             if (direction != VERTICAL) {
                 n++;
