@@ -49,7 +49,6 @@ typedef struct {
 typedef struct {
     double score;
     unsigned int trace : 4;
-    struct {int i; int j;} old_path;
     unsigned char path : 4;
     unsigned int step;
 } CellM; /* Used for the Waterman-Smith-Beyer algorithm. */
@@ -58,7 +57,6 @@ typedef struct {
     double score;
     int* traceM;
     int* traceXY;
-    struct {int i; int j;} old_path;
     unsigned char path : 4;
     unsigned int step;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
@@ -3109,9 +3107,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
             Iy[i][j].traceXY = NULL;
         }
         M[i][0].trace = 0;
-        M[i][0].old_path.i = -1;
-        Ix[i][0].old_path.i = -1;
-        Iy[i][0].old_path.i = -1;
         M[i][0].path = 0;
         Ix[i][0].path = 0;
         Iy[i][0].path = 0;
@@ -3171,7 +3166,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 break;
         }
     }
-    M[0][0].old_path.j = 0;
     M[0][0].path = 0;
     *pM = M;
     *pIx = Ix;
@@ -4052,8 +4046,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     traceM++;
                     j = *traceM;
                     if (j >= 0) {
-                        M[i][j].old_path.i = iA;
-                        M[i][j].old_path.j = iB;
                         M[i][j].path = HORIZONTAL;
                         M[i][j].step = iB - j;
                         break;
@@ -4065,8 +4057,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 j = *traceXY;
                 if (j >= 0) {
                     m = Ix_MATRIX;
-                    Ix[i][j].old_path.i = iA;
-                    Ix[i][j].old_path.j = iB;
                     Ix[i][j].path = HORIZONTAL;
                     Ix[i][j].step = iB - j;
                     break;
@@ -4083,8 +4073,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     traceM++;
                     i = *traceM;
                     if (i >= 0) {
-                        M[i][j].old_path.i = iA;
-                        M[i][j].old_path.j = iB;
                         M[i][j].path = VERTICAL;
                         M[i][j].step = iA - i;
                         break;
@@ -4096,8 +4084,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 i = *traceXY;
                 if (i >= 0) {
                     m = Iy_MATRIX;
-                    Iy[i][j].old_path.i = iA;
-                    Iy[i][j].old_path.j = iB;
                     Iy[i][j].path = VERTICAL;
                     Iy[i][j].step = iA - i;
                     break;
@@ -4114,16 +4100,12 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     case M_MATRIX:
                         if (trace & Ix_MATRIX) {
                             m = Ix_MATRIX;
-                            Ix[i][j].old_path.i = iA;
-                            Ix[i][j].old_path.j = iB;
                             Ix[i][j].path = DIAGONAL;
                             break;
                         }
                     case Ix_MATRIX:
                         if (trace & Iy_MATRIX) {
                             m = Iy_MATRIX;
-                            Iy[i][j].old_path.i = iA;
-                            Iy[i][j].old_path.j = iB;
                             Iy[i][j].path = DIAGONAL;
                             break;
                         }
@@ -4151,14 +4133,11 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
             }
             else {
                 /* exhausted this generator */
-                M[0][0].old_path.j = -1;
                 M[0][0].path = DONE;
                 return NULL;
             }
             if (M[iA][iB].trace & ENDPOINT) break;
         }
-        M[iA][iB].old_path.i = -1;
-        M[iA][iB].old_path.j = -1;
         M[iA][iB].path = 0;
         m = M_MATRIX;
         i = iA;
@@ -4222,8 +4201,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     M[iA][iB].step = i - iA;
                 }
                 else M[iA][iB].path = DIAGONAL;
-                M[iA][iB].old_path.i = i;
-                M[iA][iB].old_path.j = j;
                 break;
             case Ix_MATRIX:
                 if (iA == i) {
@@ -4235,8 +4212,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     Ix[iA][iB].step = i - iA;
                 }
                 else Ix[iA][iB].path = DIAGONAL;
-                Ix[iA][iB].old_path.i = i;
-                Ix[iA][iB].old_path.j = j;
                 break;
             case Iy_MATRIX:
                 if (iA == i) {
@@ -4248,8 +4223,6 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     Iy[iA][iB].step = i - iA;
                 }
                 else Iy[iA][iB].path = DIAGONAL;
-                Iy[iA][iB].old_path.i = i;
-                Iy[iA][iB].old_path.j = j;
                 break;
         }
         i = iA;
@@ -4350,8 +4323,6 @@ PathGenerator_reset(PathGenerator* self)
                 }
                 case WatermanSmithBeyer: {
                     CellM** M = self->M.general;
-                    M[0][0].old_path.i = -1;
-                    M[0][0].old_path.j = 0;
                     M[0][0].path = 0;
                     break;
                 }
@@ -6212,7 +6183,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                                            Ix[i-1][j-1].score,
                                            Iy[i-1][j-1].score,
                                            self->substitution_matrix[kA][kB]);
-            M[i][j].old_path.i = -1;
             M[i][j].path = 0;
             if (i == nA || j == nB) {
                 Ix[i][j].score = score;
@@ -6246,7 +6216,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceM[nm] = -1;
             traceXY[ng] = -1;
             Ix[i][j].score = score;
-            Ix[i][j].old_path.i = -1;
             Ix[i][j].path = 0;
             traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
@@ -6287,7 +6256,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceM[nm] = -1;
             traceXY[ng] = -1;
             Iy[i][j].score = score;
-            Iy[i][j].old_path.i = -1;
             Iy[i][j].path = 0;
         }
     }
@@ -6299,10 +6267,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
         paths->M.general = M;
         paths->Ix = Ix;
         paths->Iy = Iy;
-        if (maximum==0) {
-            M[0][0].old_path.j = -1; /* DONE */
-            M[0][0].path = DONE;
-        }
+        if (maximum==0) M[0][0].path = DONE;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
         return result;
