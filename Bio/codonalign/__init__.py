@@ -34,32 +34,31 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
 
     Arguments:
      - pro_align  - a protein MultipleSeqAlignment object
-     - nucl_align - an object returned by SeqIO.parse or SeqIO.index
+     - nucl_seqs - an object returned by SeqIO.parse or SeqIO.index
        or a collection of SeqRecord.
      - alphabet   - alphabet for the returned codon alignment
      - corr_dict  - a dict that maps protein id to nucleotide id
      - complete_protein - whether the sequence begins with a start
        codon
-     - frameshift - whether to apply frameshift detection
 
     Return a CodonAlignment object
-
-    >>> from Bio.Alphabet import IUPAC
+    
+    This example answers this Biostarts question: https://www.biostars.org/p/89741/
+    >>> from Bio.Alphabet import IUPAC, generic_protein
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
-    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-    >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
-    >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
+    >>> from Bio.codonalign import build
+    >>> seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+    >>> seq2 = SeqRecord(Seq('ATGCGT', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    >>> pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')
+    >>> pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print(codon_aln)
-    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
-    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
-    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
+    CodonAlphabet(Standard) CodonAlignment with 2 rows and 9 columns (3 codons)
+    ATGTCTCGT pro1
+    ATG---CGT pro2
 
     """
     # TODO
