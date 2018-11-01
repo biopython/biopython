@@ -291,10 +291,8 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             i1 = i2;
             j1 = j2;
             path = Iy[i1][j1].path;
+            if (!path) break;
             switch (path) {
-                case 0:
-                    i2 = -1;
-                    break;
                 case HORIZONTAL:
                     i2 = i1;
                     j2 = j1 + Iy[i1][j1].step;
@@ -312,7 +310,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
             }
-            if (!path) break;
         }
         else if (j1==j2) {
             if (direction != VERTICAL) {
@@ -322,10 +319,8 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             i1 = i2;
             j1 = j2;
             path = Ix[i1][j1].path;
+            if (!path) break;
             switch (path) {
-                case 0:
-                    i2 = -1;
-                    break;
                 case HORIZONTAL:
                     i2 = i1;
                     j2 = j1 + Ix[i1][j1].step;
@@ -343,7 +338,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
             }
-            if (!path) break;
         }
         else {
             if (direction != DIAGONAL) {
@@ -353,10 +347,8 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             i1 = i2;
             j1 = j2;
             path = M[i1][j1].path;
+            if (!path) break;
             switch (path) {
-                case 0:
-                    i2 = -1;
-                    break;
                 case HORIZONTAL:
                     i2 = i1;
                     j2 = j1 + M[i1][j1].step;
@@ -374,7 +366,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
             }
-            if (!path) break;
         }
     }
 
