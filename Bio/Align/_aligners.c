@@ -284,6 +284,10 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
 
     while (1) {
         if (i1==i2) {
+            if (direction != HORIZONTAL) {
+                n++;
+                direction = HORIZONTAL;
+            }
             i1 = i2;
             j1 = j2;
             path = Iy[i1][j1].path;
@@ -308,13 +312,13 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
             }
-            if (direction != HORIZONTAL) {
-                n++;
-                direction = HORIZONTAL;
-            }
             if (!path) break;
         }
         else if (j1==j2) {
+            if (direction != VERTICAL) {
+                n++;
+                direction = VERTICAL;
+            }
             i1 = i2;
             j1 = j2;
             path = Ix[i1][j1].path;
@@ -339,13 +343,13 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
             }
-            if (direction != VERTICAL) {
-                n++;
-                direction = VERTICAL;
-            }
             if (!path) break;
         }
         else {
+            if (direction != DIAGONAL) {
+                n++;
+                direction = DIAGONAL;
+            }
             i1 = i2;
             j1 = j2;
             path = M[i1][j1].path;
@@ -369,10 +373,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                     PyErr_SetString(PyExc_RuntimeError,
                         "Unexpected path in _create_path_waterman_smith_beyer");
                     return NULL;
-            }
-            if (direction != DIAGONAL) {
-                n++;
-                direction = DIAGONAL;
             }
             if (!path) break;
         }
