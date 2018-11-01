@@ -283,7 +283,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     }
 
     while (1) {
-        if (!path) break;
         if (i1==i2) {
             i1 = i2;
             j1 = j2;
@@ -313,6 +312,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 n++;
                 direction = HORIZONTAL;
             }
+            if (!path) break;
         }
         else if (j1==j2) {
             i1 = i2;
@@ -343,6 +343,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 n++;
                 direction = VERTICAL;
             }
+            if (!path) break;
         }
         else {
             i1 = i2;
@@ -373,6 +374,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 n++;
                 direction = DIAGONAL;
             }
+            if (!path) break;
         }
     }
 
