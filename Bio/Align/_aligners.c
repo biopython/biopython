@@ -347,21 +347,27 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         else {
             i1 = i2;
             j1 = j2;
-            if (M[i1][j1].path == 0) i2 = -1;
-            else if (M[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + M[i1][j1].step;
-            }
-            else if (M[i1][j1].path == VERTICAL) {
-                i2 = i1 + M[i1][j1].step;
-                j2 = j1;
-            }
-            else if (M[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else {
-                printf("RUNTIME ERROR\n");
+            path = M[i1][j1].path;
+            switch (path) {
+                case 0:
+                    i2 = -1;
+                    break;
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + M[i1][j1].step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + M[i1][j1].step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                default:
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
             if (direction != DIAGONAL) {
                 n++;
@@ -372,19 +378,25 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
 
     i1 = i;
     j1 = j;
-    if (M[i1][j1].path == HORIZONTAL) {
-        i2 = i1;
-        j2 = j1 + M[i1][j1].step;
+    path = M[i1][j1].path;
+    switch (path) {
+        case HORIZONTAL:
+            i2 = i1;
+            j2 = j1 + M[i1][j1].step;
+            break;
+        case VERTICAL:
+            i2 = i1 + M[i1][j1].step;
+            j2 = j1;
+            break;
+        case DIAGONAL:
+            i2 = i1 + 1;
+            j2 = j1 + 1;
+            break;
+        default:
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected path in _create_path_waterman_smith_beyer");
+            return NULL;
     }
-    else if (M[i1][j1].path == VERTICAL) {
-        i2 = i1 + M[i1][j1].step;
-        j2 = j1;
-    }
-    else if (M[i1][j1].path == DIAGONAL) {
-        i2 = i1 + 1;
-        j2 = j1 + 1;
-    }
-    else printf("RUNTIME ERROR\n");
     tuple = PyTuple_New(n);
     if (!tuple) return NULL;
     n = 0;
