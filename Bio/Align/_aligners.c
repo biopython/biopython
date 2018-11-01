@@ -283,8 +283,8 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     }
 
     while (1) {
-        if (i2 < 0) break;
-        else if (i1==i2) {
+        if (!path) break;
+        if (i1==i2) {
             i1 = i2;
             j1 = j2;
             path = Iy[i1][j1].path;
