@@ -58,7 +58,6 @@ typedef struct {
     int* traceM;
     int* traceXY;
     unsigned char path : 4;
-    unsigned int step;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 static int _convert_single_letter(PyObject* item)
@@ -274,7 +273,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 }
                 j1 += step;
                 path = Iy[i1][j1].path;
-                step = Iy[i1][j1].step;
+                step = M[i1][j1].step;
                 break;
             case VERTICAL:
                 if (direction != VERTICAL) {
@@ -283,7 +282,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 }
                 i1 += step;
                 path = Ix[i1][j1].path;
-                step = Ix[i1][j1].step;
+                step = M[i1][j1].step;
                 break;
             case DIAGONAL:
                 if (direction != DIAGONAL) {
@@ -360,12 +359,12 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             case HORIZONTAL:
                 j1 = j2;
                 path = Iy[i1][j1].path;
-                step = Iy[i1][j1].step;
+                step = M[i1][j1].step;
                 break;
             case VERTICAL:
                 i1 = i2;
                 path = Ix[i1][j1].path;
-                step = Ix[i1][j1].step;
+                step = M[i1][j1].step;
                 break;
             case DIAGONAL:
                 i1 = i2;
@@ -3662,11 +3661,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     break;
                 case Ix_MATRIX:
                     path = Ix[i][j].path;
-                    step = Ix[i][j].step;
+                    step = M[i][j].step;
                     break;
                 case Iy_MATRIX:
                     path = Iy[i][j].path;
-                    step = Iy[i][j].step;
+                    step = M[i][j].step;
                     break;
             }
             if (path == HORIZONTAL) {
@@ -3707,7 +3706,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 if (j >= 0) {
                     m = Ix_MATRIX;
                     Ix[i][j].path = HORIZONTAL;
-                    Ix[i][j].step = iB - j;
+                    M[i][j].step = iB - j;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -3734,7 +3733,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 if (i >= 0) {
                     m = Iy_MATRIX;
                     Iy[i][j].path = VERTICAL;
-                    Iy[i][j].step = iA - i;
+                    M[i][j].step = iA - i;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -3859,11 +3858,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 break;
             case Ix_MATRIX:
                 Ix[iA][iB].path = HORIZONTAL;
-                Ix[iA][iB].step = j - iB;
+                M[iA][iB].step = j - iB;
                 break;
             case Iy_MATRIX:
                 Iy[iA][iB].path = VERTICAL;
-                Iy[iA][iB].step = i - iA;
+                M[iA][iB].step = i - iA;
                 break;
         }
         i = iA;
@@ -3915,10 +3914,10 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 case Ix_MATRIX:
                     if (Ix[i][j].path == HORIZONTAL) {
                         iA = i;
-                        iB = j + Ix[i][j].step;
+                        iB = j + M[i][j].step;
                     }
                     else if (Ix[i][j].path == VERTICAL) {
-                        iA = i + Ix[i][j].step;
+                        iA = i + M[i][j].step;
                         iB = j;
                     }
                     else if (Ix[i][j].path == DIAGONAL) {
@@ -3930,10 +3929,10 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 case Iy_MATRIX:
                     if (Iy[i][j].path == HORIZONTAL) {
                         iA = i;
-                        iB = j + Iy[i][j].step;
+                        iB = j + M[i][j].step;
                     }
                     else if (Iy[i][j].path == VERTICAL) {
-                        iA = i + Iy[i][j].step;
+                        iA = i + M[i][j].step;
                         iB = j;
                     }
                     else if (Iy[i][j].path == DIAGONAL) {
@@ -3969,7 +3968,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 if (j >= 0) {
                     m = Ix_MATRIX;
                     Ix[i][j].path = HORIZONTAL;
-                    Ix[i][j].step = iB - j;
+                    M[i][j].step = iB - j;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -3996,7 +3995,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 if (i >= 0) {
                     m = Iy_MATRIX;
                     Iy[i][j].path = VERTICAL;
-                    Iy[i][j].step = iA - i;
+                    M[i][j].step = iA - i;
                     break;
                 }
                 /* no alternative found; continue pruning */
@@ -4116,22 +4115,22 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
             case Ix_MATRIX:
                 if (iA == i) {
                     Ix[iA][iB].path = HORIZONTAL;
-                    Ix[iA][iB].step = j - iB;
+                    M[iA][iB].step = j - iB;
                 }
                 else if (iB == j) {
                     Ix[iA][iB].path = VERTICAL;
-                    Ix[iA][iB].step = i - iA;
+                    M[iA][iB].step = i - iA;
                 }
                 else Ix[iA][iB].path = DIAGONAL;
                 break;
             case Iy_MATRIX:
                 if (iA == i) {
                     Iy[iA][iB].path = HORIZONTAL;
-                    Iy[iA][iB].step = j - iB;
+                    M[iA][iB].step = j - iB;
                 }
                 else if (iB == j) {
                     Iy[iA][iB].path = VERTICAL;
-                    Iy[iA][iB].step = i - iA;
+                    M[iA][iB].step = i - iA;
                 }
                 else Iy[iA][iB].path = DIAGONAL;
                 break;
