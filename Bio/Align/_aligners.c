@@ -305,29 +305,34 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     i1 = i;
     j1 = j;
     path = M[i1][j1].path;
-    switch (path) {
-        case HORIZONTAL:
-            i2 = i1;
-            j2 = j1 + M[i1][j1].step;
-            break;
-        case VERTICAL:
-            i2 = i1 + M[i1][j1].step;
-            j2 = j1;
-            break;
-        case DIAGONAL:
-            i2 = i1 + 1;
-            j2 = j1 + 1;
-            break;
-        default:
-            PyErr_SetString(PyExc_RuntimeError,
-                "Unexpected path in _create_path_waterman_smith_beyer");
-            return NULL;
-    }
+    step = M[i1][j1].step;
     tuple = PyTuple_New(n);
     if (!tuple) return NULL;
     n = 0;
     direction = 0;
     while (1) {
+        switch (path) {
+            case HORIZONTAL:
+                i2 = i1;
+                j2 = j1 + step;
+                break;
+            case VERTICAL:
+                i2 = i1 + step;
+                j2 = j1;
+                break;
+            case DIAGONAL:
+                i2 = i1 + 1;
+                j2 = j1 + 1;
+                break;
+            case 0:
+                i2 = -1;
+                break;
+            default:
+                Py_DECREF(tuple);
+                PyErr_SetString(PyExc_RuntimeError,
+                    "Unexpected path in _create_path_waterman_smith_beyer");
+                return NULL;
+        }
         if ((i1==i2 && direction != HORIZONTAL)
          || (j1==j2 && direction != VERTICAL)
          || (direction != DIAGONAL)
@@ -374,28 +379,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             path = M[i1][j1].path;
             step = M[i1][j1].step;
             direction = DIAGONAL;
-        }
-        switch (path) {
-            case HORIZONTAL:
-                i2 = i1;
-                j2 = j1 + step;
-                break;
-            case VERTICAL:
-                i2 = i1 + step;
-                j2 = j1;
-                break;
-            case DIAGONAL:
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-                break;
-            case 0:
-                i2 = -1;
-                break;
-            default:
-                Py_DECREF(tuple);
-                PyErr_SetString(PyExc_RuntimeError,
-                    "Unexpected path in _create_path_waterman_smith_beyer");
-                return NULL;
         }
     }
     Py_DECREF(tuple); /* all references were stolen */
