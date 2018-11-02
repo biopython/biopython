@@ -268,38 +268,30 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     while (path) {
         switch (path) {
             case HORIZONTAL:
-                i2 = i1;
-                j2 = j1 + step;
                 if (direction != HORIZONTAL) {
                     n++;
                     direction = HORIZONTAL;
                 }
-                i1 = i2;
-                j1 = j2;
+                j1 += step;
                 path = Iy[i1][j1].path;
                 step = Iy[i1][j1].step;
                 break;
             case VERTICAL:
-                i2 = i1 + step;
-                j2 = j1;
                 if (direction != VERTICAL) {
                     n++;
                     direction = VERTICAL;
                 }
-                i1 = i2;
-                j1 = j2;
+                i1 += step;
                 path = Ix[i1][j1].path;
                 step = Ix[i1][j1].step;
                 break;
             case DIAGONAL:
-                i2 = i1 + 1;
-                j2 = j1 + 1;
                 if (direction != DIAGONAL) {
                     n++;
                     direction = DIAGONAL;
                 }
-                i1 = i2;
-                j1 = j2;
+                i1++;
+                j1++;
                 path = M[i1][j1].path;
                 step = M[i1][j1].step;
                 break;
