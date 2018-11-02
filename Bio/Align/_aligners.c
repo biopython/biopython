@@ -254,20 +254,18 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
     PyObject* tuple;
     PyObject* row;
     PyObject* value;
-    int i1 = i;
-    int j1 = j;
-    int i2;
-    int j2;
+    const int ii = i;
+    const int jj = j;
     int n = 1;
     int direction = 0;
-    int path = M[i1][j1].path;
-    int step = M[i1][j1].step;
+    int path = M[i][j].path;
+    int step = M[i][j].step;
 
     while (path) {
         switch (path) {
-            case HORIZONTAL: j1 += step; break;
-            case VERTICAL: i1 += step; break;
-            case DIAGONAL: i1++; j1++; break;
+            case HORIZONTAL: j += step; break;
+            case VERTICAL: i += step; break;
+            case DIAGONAL: i++; j++; break;
             default:
                 PyErr_SetString(PyExc_RuntimeError,
                     "Unexpected path in _create_path_waterman_smith_beyer");
@@ -277,14 +275,14 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             n++;
             direction = path;
         }
-        path = M[i1][j1].path;
-        step = M[i1][j1].step;
+        path = M[i][j].path;
+        step = M[i][j].step;
     }
 
-    i1 = i;
-    j1 = j;
-    path = M[i1][j1].path;
-    step = M[i1][j1].step;
+    i = ii;
+    j = jj;
+    path = M[i][j].path;
+    step = M[i][j].step;
     tuple = PyTuple_New(n);
     if (!tuple) return NULL;
     n = 0;
@@ -294,9 +292,9 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             row = PyTuple_New(2);
             if (!row) break;
 #if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(i1);
+            value = PyLong_FromLong(i);
 #else
-            value = PyInt_FromLong(i1);
+            value = PyInt_FromLong(i);
 #endif
             if (!value) {
                 Py_DECREF(row); /* all references were stolen */
@@ -304,9 +302,9 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             }
             PyTuple_SET_ITEM(row, 0, value);
 #if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(j1);
+            value = PyLong_FromLong(j);
 #else
-            value = PyInt_FromLong(j1);
+            value = PyInt_FromLong(j);
 #endif
             PyTuple_SET_ITEM(row, 1, value);
             PyTuple_SET_ITEM(tuple, n, row);
@@ -314,26 +312,13 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             direction = path;
         }
         switch (path) {
-            case HORIZONTAL:
-                i2 = i1;
-                j2 = j1 + step;
-                j1 = j2;
-                break;
-            case VERTICAL:
-                i2 = i1 + step;
-                j2 = j1;
-                i1 = i2;
-                break;
-            case DIAGONAL:
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-                i1 = i2;
-                j1 = j2;
-                break;
+            case HORIZONTAL: j += step; break;
+            case VERTICAL: i += step; break;
+            case DIAGONAL: i++; j++; break;
             default: return tuple;
         }
-        path = M[i1][j1].path;
-        step = M[i1][j1].step;
+        path = M[i][j].path;
+        step = M[i][j].step;
     }
     Py_DECREF(tuple); /* all references were stolen */
     return NULL;
