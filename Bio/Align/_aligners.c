@@ -265,39 +265,20 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
 
     while (path) {
         switch (path) {
-            case HORIZONTAL:
-                if (direction != HORIZONTAL) {
-                    n++;
-                    direction = HORIZONTAL;
-                }
-                j1 += step;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
-            case VERTICAL:
-                if (direction != VERTICAL) {
-                    n++;
-                    direction = VERTICAL;
-                }
-                i1 += step;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
-            case DIAGONAL:
-                if (direction != DIAGONAL) {
-                    n++;
-                    direction = DIAGONAL;
-                }
-                i1++;
-                j1++;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
+            case HORIZONTAL: j1 += step; break;
+            case VERTICAL: i1 += step; break;
+            case DIAGONAL: i1++; j1++; break;
             default:
                 PyErr_SetString(PyExc_RuntimeError,
                     "Unexpected path in _create_path_waterman_smith_beyer");
                 return NULL;
         }
+        if (direction != path) {
+            n++;
+            direction = path;
+        }
+        path = M[i1][j1].path;
+        step = M[i1][j1].step;
     }
 
     i1 = i;
@@ -322,14 +303,6 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                 i2 = i1 + 1;
                 j2 = j1 + 1;
                 break;
-            case 0:
-                i2 = -1;
-                break;
-            default:
-                Py_DECREF(tuple);
-                PyErr_SetString(PyExc_RuntimeError,
-                    "Unexpected path in _create_path_waterman_smith_beyer");
-                return NULL;
         }
         if (path != direction) {
             row = PyTuple_New(2);
@@ -353,27 +326,15 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
             PyTuple_SET_ITEM(tuple, n, row);
             n++;
         }
+        if (!path) return tuple;
         direction = path;
         switch (path) {
-            case HORIZONTAL:
-                j1 = j2;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
-            case VERTICAL:
-                i1 = i2;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
-            case DIAGONAL:
-                i1 = i2;
-                j1 = j2;
-                path = M[i1][j1].path;
-                step = M[i1][j1].step;
-                break;
-            default:
-                return tuple;
+            case HORIZONTAL: j1 = j2; break;
+            case VERTICAL: i1 = i2; break;
+            case DIAGONAL: i1 = i2; j1 = j2; break;
         }
+        path = M[i1][j1].path;
+        step = M[i1][j1].step;
     }
     Py_DECREF(tuple); /* all references were stolen */
     return NULL;
