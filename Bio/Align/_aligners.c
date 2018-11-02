@@ -57,7 +57,6 @@ typedef struct {
     double score;
     int* traceM;
     int* traceXY;
-    unsigned char path : 4;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 static int _convert_single_letter(PyObject* item)
@@ -272,7 +271,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                     direction = HORIZONTAL;
                 }
                 j1 += step;
-                path = Iy[i1][j1].path;
+                path = M[i1][j1].path;
                 step = M[i1][j1].step;
                 break;
             case VERTICAL:
@@ -281,7 +280,7 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
                     direction = VERTICAL;
                 }
                 i1 += step;
-                path = Ix[i1][j1].path;
+                path = M[i1][j1].path;
                 step = M[i1][j1].step;
                 break;
             case DIAGONAL:
@@ -358,12 +357,12 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         switch (path) {
             case HORIZONTAL:
                 j1 = j2;
-                path = Iy[i1][j1].path;
+                path = M[i1][j1].path;
                 step = M[i1][j1].step;
                 break;
             case VERTICAL:
                 i1 = i2;
-                path = Ix[i1][j1].path;
+                path = M[i1][j1].path;
                 step = M[i1][j1].step;
                 break;
             case DIAGONAL:
@@ -3018,8 +3017,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         }
         M[i][0].trace = 0;
         M[i][0].path = 0;
-        Ix[i][0].path = 0;
-        Iy[i][0].path = 0;
         Iy[i][0].score = -DBL_MAX;
         if (i==0) {
             M[0][0].score = 0;
@@ -3660,11 +3657,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     step = M[i][j].step;
                     break;
                 case Ix_MATRIX:
-                    path = Ix[i][j].path;
+                    path = M[i][j].path;
                     step = M[i][j].step;
                     break;
                 case Iy_MATRIX:
-                    path = Iy[i][j].path;
+                    path = M[i][j].path;
                     step = M[i][j].step;
                     break;
             }
@@ -3705,7 +3702,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 j = *traceXY;
                 if (j >= 0) {
                     m = Ix_MATRIX;
-                    Ix[i][j].path = HORIZONTAL;
+                    M[i][j].path = HORIZONTAL;
                     M[i][j].step = iB - j;
                     break;
                 }
@@ -3732,7 +3729,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 i = *traceXY;
                 if (i >= 0) {
                     m = Iy_MATRIX;
-                    Iy[i][j].path = VERTICAL;
+                    M[i][j].path = VERTICAL;
                     M[i][j].step = iA - i;
                     break;
                 }
@@ -3748,13 +3745,13 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     case M_MATRIX:
                         if (trace & Ix_MATRIX) {
                             m = Ix_MATRIX;
-                            Ix[i][j].path = DIAGONAL;
+                            M[i][j].path = DIAGONAL;
                             break;
                         }
                     case Ix_MATRIX:
                         if (trace & Iy_MATRIX) {
                             m = Iy_MATRIX;
-                            Iy[i][j].path = DIAGONAL;
+                            M[i][j].path = DIAGONAL;
                             break;
                         }
                     case Iy_MATRIX:
@@ -3810,11 +3807,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 }
                 else if (trace & Ix_MATRIX) {
                     m = Ix_MATRIX;
-                    Ix[iA][iB].path = DIAGONAL;
+                    M[iA][iB].path = DIAGONAL;
                 }
                 else if (trace & Iy_MATRIX) {
                     m = Iy_MATRIX;
-                    Iy[iA][iB].path = DIAGONAL;
+                    M[iA][iB].path = DIAGONAL;
                 } else {
                     return _create_path_waterman_smith_beyer(M, Ix, Iy, i, j);
                 }
@@ -3857,11 +3854,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 else M[iA][iB].path = DIAGONAL;
                 break;
             case Ix_MATRIX:
-                Ix[iA][iB].path = HORIZONTAL;
+                M[iA][iB].path = HORIZONTAL;
                 M[iA][iB].step = j - iB;
                 break;
             case Iy_MATRIX:
-                Iy[iA][iB].path = VERTICAL;
+                M[iA][iB].path = VERTICAL;
                 M[iA][iB].step = i - iA;
                 break;
         }
@@ -3912,30 +3909,30 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     else iA = -1;
                     break;
                 case Ix_MATRIX:
-                    if (Ix[i][j].path == HORIZONTAL) {
+                    if (M[i][j].path == HORIZONTAL) {
                         iA = i;
                         iB = j + M[i][j].step;
                     }
-                    else if (Ix[i][j].path == VERTICAL) {
+                    else if (M[i][j].path == VERTICAL) {
                         iA = i + M[i][j].step;
                         iB = j;
                     }
-                    else if (Ix[i][j].path == DIAGONAL) {
+                    else if (M[i][j].path == DIAGONAL) {
                         iA = i + 1;
                         iB = j + 1;
                     }
                     else printf("RUNTIME ERROR 12\n");
                     break;
                 case Iy_MATRIX:
-                    if (Iy[i][j].path == HORIZONTAL) {
+                    if (M[i][j].path == HORIZONTAL) {
                         iA = i;
                         iB = j + M[i][j].step;
                     }
-                    else if (Iy[i][j].path == VERTICAL) {
+                    else if (M[i][j].path == VERTICAL) {
                         iA = i + M[i][j].step;
                         iB = j;
                     }
-                    else if (Iy[i][j].path == DIAGONAL) {
+                    else if (M[i][j].path == DIAGONAL) {
                         iA = i + 1;
                         iB = j + 1;
                     }
@@ -3967,7 +3964,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 j = *traceXY;
                 if (j >= 0) {
                     m = Ix_MATRIX;
-                    Ix[i][j].path = HORIZONTAL;
+                    M[i][j].path = HORIZONTAL;
                     M[i][j].step = iB - j;
                     break;
                 }
@@ -3994,7 +3991,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 i = *traceXY;
                 if (i >= 0) {
                     m = Iy_MATRIX;
-                    Iy[i][j].path = VERTICAL;
+                    M[i][j].path = VERTICAL;
                     M[i][j].step = iA - i;
                     break;
                 }
@@ -4010,13 +4007,13 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     case M_MATRIX:
                         if (trace & Ix_MATRIX) {
                             m = Ix_MATRIX;
-                            Ix[i][j].path = DIAGONAL;
+                            M[i][j].path = DIAGONAL;
                             break;
                         }
                     case Ix_MATRIX:
                         if (trace & Iy_MATRIX) {
                             m = Iy_MATRIX;
-                            Iy[i][j].path = DIAGONAL;
+                            M[i][j].path = DIAGONAL;
                             break;
                         }
                     case Iy_MATRIX:
@@ -4089,11 +4086,11 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 }
                 else if (trace & Ix_MATRIX) {
                     m = Ix_MATRIX;
-                    Ix[iA][iB].path = DIAGONAL;
+                    M[iA][iB].path = DIAGONAL;
                 }
                 else if (trace & Iy_MATRIX) {
                     m = Iy_MATRIX;
-                    Iy[iA][iB].path = DIAGONAL;
+                    M[iA][iB].path = DIAGONAL;
                 } else {
                     self->iA = i;
                     self->iB = j;
@@ -4114,25 +4111,25 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 break;
             case Ix_MATRIX:
                 if (iA == i) {
-                    Ix[iA][iB].path = HORIZONTAL;
+                    M[iA][iB].path = HORIZONTAL;
                     M[iA][iB].step = j - iB;
                 }
                 else if (iB == j) {
-                    Ix[iA][iB].path = VERTICAL;
+                    M[iA][iB].path = VERTICAL;
                     M[iA][iB].step = i - iA;
                 }
-                else Ix[iA][iB].path = DIAGONAL;
+                else M[iA][iB].path = DIAGONAL;
                 break;
             case Iy_MATRIX:
                 if (iA == i) {
-                    Iy[iA][iB].path = HORIZONTAL;
+                    M[iA][iB].path = HORIZONTAL;
                     M[iA][iB].step = j - iB;
                 }
                 else if (iB == j) {
-                    Iy[iA][iB].path = VERTICAL;
+                    M[iA][iB].path = VERTICAL;
                     M[iA][iB].step = i - iA;
                 }
-                else Iy[iA][iB].path = DIAGONAL;
+                else M[iA][iB].path = DIAGONAL;
                 break;
         }
         i = iA;
@@ -5886,8 +5883,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     /* traceback */
     SELECT_SCORE_GLOBAL(M[nA][nB].score, Ix[nA][nB].score, Iy[nA][nB].score);
     M[nA][nB].path = 0;
-    Ix[nA][nB].path = 0;
-    Iy[nA][nB].path = 0;
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
@@ -6126,7 +6121,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceM[nm] = -1;
             traceXY[ng] = -1;
             Ix[i][j].score = score;
-            Ix[i][j].path = 0;
+            M[i][j].path = 0;
             traceM = PyMem_Realloc(traceM, (nm+1)*sizeof(int));
             if (!traceM) goto exit;
             Ix[i][j].traceM = traceM;
@@ -6166,7 +6161,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceM[nm] = -1;
             traceXY[ng] = -1;
             Iy[i][j].score = score;
-            Iy[i][j].path = 0;
+            M[i][j].path = 0;
         }
     }
 
