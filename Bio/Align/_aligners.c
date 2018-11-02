@@ -357,64 +357,88 @@ _create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
         else if (i1==i2) {
             i1 = i2;
             j1 = j2;
-            if (Iy[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + Iy[i1][j1].step;
+            path = Iy[i1][j1].path;
+            step = Iy[i1][j1].step;
+            switch (path) {
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                case 0:
+                    i2 = -1;
+                    break;
+                default:
+                    Py_DECREF(tuple);
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
-            else if (Iy[i1][j1].path == VERTICAL) {
-                i2 = i1 + Iy[i1][j1].step;
-                j2 = j1;
-            }
-            else if (Iy[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else if (Iy[i1][j1].path == 0) {
-                i2 = -1;
-            }
-            else printf("RUNTIME ERROR 42\n");
             direction = HORIZONTAL;
         }
         else if (j1==j2) {
             i1 = i2;
             j1 = j2;
-            if (Ix[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + Ix[i1][j1].step;
+            path = Ix[i1][j1].path;
+            step = Ix[i1][j1].step;
+            switch (path) {
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                case 0:
+                    i2 = -1;
+                    break;
+                default:
+                    Py_DECREF(tuple);
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
-            else if (Ix[i1][j1].path == VERTICAL) {
-                i2 = i1 + Ix[i1][j1].step;
-                j2 = j1;
-            }
-            else if (Ix[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else if (Ix[i1][j1].path == 0) {
-                i2 = -1;
-            }
-            else printf("RUNTIME ERROR 43\n");
             direction = VERTICAL;
         }
         else {
             i1 = i2;
             j1 = j2;
-            if (M[i1][j1].path == HORIZONTAL) {
-                i2 = i1;
-                j2 = j1 + M[i1][j1].step;
+            path = M[i1][j1].path;
+            step = M[i1][j1].step;
+            switch (path) {
+                case HORIZONTAL:
+                    i2 = i1;
+                    j2 = j1 + M[i1][j1].step;
+                    break;
+                case VERTICAL:
+                    i2 = i1 + M[i1][j1].step;
+                    j2 = j1;
+                    break;
+                case DIAGONAL:
+                    i2 = i1 + 1;
+                    j2 = j1 + 1;
+                    break;
+                case 0:
+                    i2 = -1;
+                    break;
+                default:
+                    Py_DECREF(tuple);
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in _create_path_waterman_smith_beyer");
+                    return NULL;
             }
-            else if (M[i1][j1].path == VERTICAL) {
-                i2 = i1 + M[i1][j1].step;
-                j2 = j1;
-            }
-            else if (M[i1][j1].path == DIAGONAL) {
-                i2 = i1 + 1;
-                j2 = j1 + 1;
-            }
-            else if (M[i1][j1].path == 0) {
-                i2 = -1;
-            }
-            else printf("RUNTIME ERROR 50\n");
             direction = DIAGONAL;
         }
     }
