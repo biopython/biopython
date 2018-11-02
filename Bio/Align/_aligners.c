@@ -249,8 +249,7 @@ _create_path_gotoh(Trace3** trace3, int i, int j) {
 }
 
 static PyObject*
-_create_path_waterman_smith_beyer(CellM** M, CellXY** Ix, CellXY** Iy,
-                                  int i, int j) {
+_create_path_waterman_smith_beyer(CellM** M, int i, int j) {
     PyObject* tuple;
     PyObject* row;
     PyObject* value;
@@ -3596,20 +3595,8 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
         i = 0;
         j = 0;
         while (1) {
-            switch (m) {
-                case M_MATRIX:
-                    path = M[i][j].path;
-                    step = M[i][j].step;
-                    break;
-                case Ix_MATRIX:
-                    path = M[i][j].path;
-                    step = M[i][j].step;
-                    break;
-                case Iy_MATRIX:
-                    path = M[i][j].path;
-                    step = M[i][j].step;
-                    break;
-            }
+            path = M[i][j].path;
+            step = M[i][j].step;
             if (path == HORIZONTAL) {
                 iA = i;
                 iB = j + step;
@@ -3758,7 +3745,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     m = Iy_MATRIX;
                     M[iA][iB].path = DIAGONAL;
                 } else {
-                    return _create_path_waterman_smith_beyer(M, Ix, Iy, i, j);
+                    return _create_path_waterman_smith_beyer(M, i, j);
                 }
                 i = iA;
                 j = iB;
@@ -4039,7 +4026,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 } else {
                     self->iA = i;
                     self->iB = j;
-                    return _create_path_waterman_smith_beyer(M, Ix, Iy, i, j);
+                    return _create_path_waterman_smith_beyer(M, i, j);
                 }
         }
         switch (m) {
