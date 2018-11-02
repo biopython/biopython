@@ -41,16 +41,17 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
      - complete_protein - whether the sequence begins with a start
        codon
 
-    Return a CodonAlignment object
-    
-    This example answers this Biostarts question: https://www.biostars.org/p/89741/
-    >>> from Bio.Alphabet import IUPAC, generic_protein
+    Return a CodonAlignment object.
+
+    The example below answers this Biostars question: https://www.biostars.org/p/89741/
+
+    >>> from Bio.Alphabet import generic_dna, generic_protein
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
     >>> from Bio.codonalign import build
-    >>> seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('ATGCGT', alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+    >>> seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=generic_dna), id='pro1')
+    >>> seq2 = SeqRecord(Seq('ATGCGT', alphabet=generic_dna), id='pro2')
     >>> pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')
     >>> pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
