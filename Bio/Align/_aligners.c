@@ -3773,27 +3773,15 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 }
                 break;
         }
-        switch (m) {
-            case M_MATRIX:
-                if (i==iA) {
-                    M[iA][iB].path = HORIZONTAL;
-                    M[iA][iB].step = j - iB;
-                }
-                else if (j==iB) {
-                    M[iA][iB].path = VERTICAL;
-                    M[iA][iB].step = i - iA;
-                }
-                else M[iA][iB].path = DIAGONAL;
-                break;
-            case Ix_MATRIX:
-                M[iA][iB].path = HORIZONTAL;
-                M[iA][iB].step = j - iB;
-                break;
-            case Iy_MATRIX:
-                M[iA][iB].path = VERTICAL;
-                M[iA][iB].step = i - iA;
-                break;
+        if (i==iA) {
+            M[iA][iB].path = HORIZONTAL;
+            M[iA][iB].step = j - iB;
         }
+        else if (j==iB) {
+            M[iA][iB].path = VERTICAL;
+            M[iA][iB].step = i - iA;
+        }
+        else M[iA][iB].path = DIAGONAL;
         i = iA;
         j = iB;
     }
@@ -3824,53 +3812,19 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
         i = iA;
         j = iB;
         while (1) {
-            switch (m) {
-                case M_MATRIX:
-                    if (M[i][j].path == HORIZONTAL) {
-                        iA = i;
-                        iB = j + M[i][j].step;
-                    }
-                    else if (M[i][j].path == VERTICAL) {
-                        iA = i + M[i][j].step;
-                        iB = j;
-                    }
-                    else if (M[i][j].path == DIAGONAL) {
-                        iA = i + 1;
-                        iB = j + 1;
-                    }
-                    else iA = -1;
-                    break;
-                case Ix_MATRIX:
-                    if (M[i][j].path == HORIZONTAL) {
-                        iA = i;
-                        iB = j + M[i][j].step;
-                    }
-                    else if (M[i][j].path == VERTICAL) {
-                        iA = i + M[i][j].step;
-                        iB = j;
-                    }
-                    else if (M[i][j].path == DIAGONAL) {
-                        iA = i + 1;
-                        iB = j + 1;
-                    }
-                    else printf("RUNTIME ERROR 12\n");
-                    break;
-                case Iy_MATRIX:
-                    if (M[i][j].path == HORIZONTAL) {
-                        iA = i;
-                        iB = j + M[i][j].step;
-                    }
-                    else if (M[i][j].path == VERTICAL) {
-                        iA = i + M[i][j].step;
-                        iB = j;
-                    }
-                    else if (M[i][j].path == DIAGONAL) {
-                        iA = i + 1;
-                        iB = j + 1;
-                    }
-                    else printf("RUNTIME ERROR 12\n");
-                    break;
+            if (M[i][j].path == HORIZONTAL) {
+                iA = i;
+                iB = j + M[i][j].step;
             }
+            else if (M[i][j].path == VERTICAL) {
+                iA = i + M[i][j].step;
+                iB = j;
+            }
+            else if (M[i][j].path == DIAGONAL) {
+                iA = i + 1;
+                iB = j + 1;
+            }
+            else iA = -1;
             if (iA < 0) {
                 m = 0;
                 iA = i;
