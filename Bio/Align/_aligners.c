@@ -3972,41 +3972,15 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                     return _create_path_waterman_smith_beyer(M, i, j);
                 }
         }
-        switch (m) {
-            case M_MATRIX:
-                if (iA == i) {
-                    M[iA][iB].path = HORIZONTAL;
-                    while (j > iB) M[iA][--j].path = HORIZONTAL;
-                }
-                else if (iB == j) {
-                    M[iA][iB].path = VERTICAL;
-                    while (i > iA) M[--i][iB].path = VERTICAL;
-                }
-                else M[iA][iB].path = DIAGONAL;
-                break;
-            case Ix_MATRIX:
-                if (iA == i) {
-                    M[iA][iB].path = HORIZONTAL;
-                    while (j > iB) M[iA][--j].path = HORIZONTAL;
-                }
-                else if (iB == j) {
-                    M[iA][iB].path = VERTICAL;
-                    while (i > iA) M[--i][iB].path = VERTICAL;
-                }
-                else M[iA][iB].path = DIAGONAL;
-                break;
-            case Iy_MATRIX:
-                if (iA == i) {
-                    M[iA][iB].path = HORIZONTAL;
-                    while (j > iB) M[iA][--j].path = HORIZONTAL;
-                }
-                else if (iB == j) {
-                    M[iA][iB].path = VERTICAL;
-                    while (i > iA) M[--i][iB].path = VERTICAL;
-                }
-                else M[iA][iB].path = DIAGONAL;
-                break;
+        if (iA == i) {
+            M[iA][iB].path = HORIZONTAL;
+            while (j > iB) M[iA][--j].path = HORIZONTAL;
         }
+        else if (iB == j) {
+            M[iA][iB].path = VERTICAL;
+            while (i > iA) M[--i][iB].path = VERTICAL;
+        }
+        else M[iA][iB].path = DIAGONAL;
         i = iA;
         j = iB;
     }
