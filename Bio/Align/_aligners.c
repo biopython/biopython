@@ -3572,7 +3572,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
 static PyObject*
 PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
 {
-    int i, j;
+    int i = 0, j = 0;
     int iA, iB;
     int trace;
     int* traceXY;
@@ -3593,29 +3593,30 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
     if (path) {
         /* We already have a path. Prune the path to see if there are
          * any alternative paths. */
-        i = 0;
-        j = 0;
         while (1) {
-            path = M[i][j].path;
-            step = M[i][j].step;
-            if (path == HORIZONTAL) {
-                iA = i;
-                iB = j + step;
-            }
-            else if (path == VERTICAL) {
-                iA = i + step;
-                iB = j;
-            }
-            else if (path == DIAGONAL) {
-                iA = i + 1;
-                iB = j + 1;
-            }
-            else if (path == 0) {
+            if (!path) {
                 m <<= 1;
-                iA = -1;
                 break;
             }
-            else printf("RUNTIME ERROR\n");
+            step = M[i][j].step;
+            switch (path) {
+                case HORIZONTAL:
+                    iA = i;
+                    iB = j + step;
+                    break;
+                case VERTICAL:
+                    iA = i + step;
+                    iB = j;
+                    break;
+                case DIAGONAL:
+                    iA = i + 1;
+                    iB = j + 1;
+                    break;
+                default:
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in PathGenerator_next_waterman_smith_beyer_global");
+                    return NULL;
+            }
             if (i == iA) { /* HORIZONTAL */
                 traceXY = Iy[iA][iB].traceXY;
                 traceM = Iy[iA][iB].traceM;
@@ -3693,15 +3694,17 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                         m = M_MATRIX;
                         i = iA;
                         j = iB;
+                        path = M[i][j].path;
                         continue;
                 }
                 /* alternative found; build path until starting point */
                 break;
             }
+            path = M[i][j].path;
         }
-    } else iA = -1;
+    }
 
-    if (iA < 0) {
+    if (!path) {
         /* Find a suitable end point for a path. */
         switch (m) {
             case M_MATRIX:
@@ -3734,20 +3737,11 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 iA = i-1;
                 iB = j-1;
                 trace = M[i][j].trace;
-                if (trace & M_MATRIX) {
-                    m = M_MATRIX;
-                    M[iA][iB].path = DIAGONAL;
-                }
-                else if (trace & Ix_MATRIX) {
-                    m = Ix_MATRIX;
-                    M[iA][iB].path = DIAGONAL;
-                }
-                else if (trace & Iy_MATRIX) {
-                    m = Iy_MATRIX;
-                    M[iA][iB].path = DIAGONAL;
-                } else {
-                    return _create_path_waterman_smith_beyer(M, i, j);
-                }
+                if (trace & M_MATRIX) m = M_MATRIX;
+                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
+                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+                else return _create_path_waterman_smith_beyer(M, i, j);
+                M[iA][iB].path = DIAGONAL;
                 i = iA;
                 j = iB;
                 continue;
