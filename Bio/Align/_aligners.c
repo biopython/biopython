@@ -3574,8 +3574,6 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
 {
     int i, j;
     int iA, iB;
-    int path;
-    int step;
     int trace;
     int* traceXY;
     int* traceM;
@@ -3587,9 +3585,12 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
 
-    if (M[0][0].path == DONE) return NULL;
+    int path = M[0][0].path;
+    int step;
 
-    if (M[0][0].path) {
+    if (path == DONE) return NULL;
+
+    if (path) {
         /* We already have a path. Prune the path to see if there are
          * any alternative paths. */
         i = 0;
