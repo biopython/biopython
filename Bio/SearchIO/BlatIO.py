@@ -243,6 +243,7 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
 
 
 def _is_protein(psl):
+    """Validate if psl is protein (PRIVATE)."""
     # check if query is protein or not
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     if len(psl['strand']) == 2:
@@ -257,7 +258,7 @@ def _is_protein(psl):
 
 
 def _calc_millibad(psl, is_protein):
-    # calculates millibad
+    """Calculate millibad (PRIVATE)."""
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     size_mul = 3 if is_protein else 1
     millibad = 0
@@ -280,7 +281,7 @@ def _calc_millibad(psl, is_protein):
 
 
 def _calc_score(psl, is_protein):
-    # calculates score
+    """Calculate score (PRIVATE)."""
     # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
     size_mul = 3 if is_protein else 1
     return (size_mul * (psl['matches'] + (psl['repmatches'] >> 1))
@@ -290,6 +291,7 @@ def _calc_score(psl, is_protein):
 
 
 def _create_hsp(hid, qid, psl):
+    """Create high scoring pair object (PRIVATE)."""
     # protein flag
     is_protein = _is_protein(psl)
     # strand
@@ -391,6 +393,7 @@ class BlatPslParser(object):
         self.pslx = pslx
 
     def __iter__(self):
+        """Iterate over BlatPslParser, yields query result."""
         # break out if it's an empty file
         if not self.line:
             return
@@ -442,6 +445,7 @@ class BlatPslParser(object):
         return psl
 
     def _validate_cols(self, cols):
+        """Validate column's length of PSL or PSLX (PRIVATE)."""
         if not self.pslx:
             if len(cols) != 21:
                 raise ValueError("Invalid PSL line: %r. Expected 21 "
@@ -609,6 +613,7 @@ class BlatPslWriter(object):
         self.pslx = pslx
 
     def write_file(self, qresults):
+        """Write query results to file."""
         handle = self.handle
         qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
@@ -626,6 +631,7 @@ class BlatPslWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self):
+        """Build header, tab-separated string (PRIVATE)."""
         # for now, always use the psLayout version 3
         header = 'psLayout version 3\n'
 

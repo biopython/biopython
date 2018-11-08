@@ -317,6 +317,7 @@ class ExonerateTextParser(_BaseExonerateParser):
     _ALN_MARK = 'C4 Alignment:'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block, return query result, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']

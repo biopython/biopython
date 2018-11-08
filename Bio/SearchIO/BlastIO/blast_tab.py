@@ -212,6 +212,7 @@ class BlastTabParser(object):
         self.line = self.handle.readline().strip()
 
     def __iter__(self):
+        """Iterate over BlastTabParser, yield query result."""
         # stop iteration if file has no lines
         if not self.line:
             return

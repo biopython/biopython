@@ -30,6 +30,7 @@ class ExonerateCigarParser(_BaseExonerateParser):
     _ALN_MARK = 'cigar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for cigar format, return query result, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']

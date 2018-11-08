@@ -35,6 +35,7 @@ class BlastTextParser(object):
         self.blast_iter = NCBIStandalone.Iterator(handle, blast_parser)
 
     def __iter__(self):
+        """Iterate over BlastTextParser, yields query result."""
         for rec in self.blast_iter:
             # set attributes to SearchIO's
             # get id and desc

@@ -119,6 +119,7 @@ class ExonerateVulgarParser(_BaseExonerateParser):
     _ALN_MARK = 'vulgar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for vulgar format, return query result, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']
