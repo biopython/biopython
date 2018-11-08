@@ -214,6 +214,7 @@ class QueryResult(_BaseSearchObject):
     if hasattr(OrderedDict, 'iteritems'):
 
         def __iter__(self):
+            """Iterate over hit items."""
             return self.iterhits()
 
         @property
@@ -249,6 +250,7 @@ class QueryResult(_BaseSearchObject):
     else:
 
         def __iter__(self):
+            """Iterate over hits."""
             return iter(self.hits)
 
         @property
@@ -282,24 +284,29 @@ class QueryResult(_BaseSearchObject):
                 yield item
 
     def __contains__(self, hit_key):
+        """Return True if hit key in items or alternative hit identifiers."""
         if isinstance(hit_key, Hit):
             return self._hit_key_function(hit_key) in self._items
         return hit_key in self._items or hit_key in self.__alt_hit_ids
 
     def __len__(self):
+        """Return the number of items."""
         return len(self._items)
 
     # Python 3:
     def __bool__(self):
+        """Return True if there are items."""
         return bool(self._items)
 
     # Python 2:
     __nonzero__ = __bool__
 
     def __repr__(self):
+        """Return string QueryResult identifier and size."""
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
 
     def __str__(self):
+        """Return a string of the class QueryResult, including hits and hit details."""
         lines = []
 
         # set program and version line
@@ -341,6 +348,7 @@ class QueryResult(_BaseSearchObject):
         return '\n'.join(lines)
 
     def __getitem__(self, hit_key):
+        """Return a QueryResult object that matches the hit_key."""
         # retrieval using slice objects returns another QueryResult object
         if isinstance(hit_key, slice):
             # should we return just a list of Hits instead of a full blown
@@ -371,6 +379,7 @@ class QueryResult(_BaseSearchObject):
             return self._items[self.__alt_hit_ids[hit_key]]
 
     def __setitem__(self, hit_key, hit):
+        """Add an item of key hit_key and value hit."""
         # only accept string keys
         if not isinstance(hit_key, basestring):
             raise TypeError("QueryResult object keys must be a string.")
@@ -413,6 +422,7 @@ class QueryResult(_BaseSearchObject):
             self.__alt_hit_ids[alt_id] = hit_key
 
     def __delitem__(self, hit_key):
+        """Delete item of key hit_key."""
         # if hit_key an integer or slice, get the corresponding key first
         # and put it into a list
         if isinstance(hit_key, int):

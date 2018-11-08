@@ -25,6 +25,7 @@ class Hmmer3TabParser(object):
         self.line = self.handle.readline()
 
     def __iter__(self):
+        """Iterate over Hmmer3TabParser, yields query result."""
         header_mark = '#'
         # read through the header if it exists
         while self.line.startswith(header_mark):
