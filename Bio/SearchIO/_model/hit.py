@@ -147,7 +147,7 @@ class Hit(_BaseSearchObject):
             self.append(hsp)
 
     def __repr__(self):
-        """Return Hit id, query id, and number of hsp."""
+        """Return Hit id, query id, and number of hsps."""
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id,
                                                      len(self))
 

@@ -393,7 +393,7 @@ class BlatPslParser(object):
         self.pslx = pslx
 
     def __iter__(self):
-        """Iterate over BlatPslParser, yields query result."""
+        """Iterate over BlatPslParser, yields query results."""
         # break out if it's an empty file
         if not self.line:
             return

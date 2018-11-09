@@ -281,7 +281,7 @@ class HSP(_BaseHSP):
             self._items.append(fragment)
 
     def __repr__(self):
-        """Return string, hit_id, query_id and number of HSPs."""
+        """Return hit_id, query_id and number of HSPs."""
         return "%s(hit_id=%r, query_id=%r, %r fragments)" % \
                (self.__class__.__name__, self.hit_id, self.query_id, len(self))
 
@@ -737,7 +737,7 @@ class HSPFragment(_BaseHSP):
                 setattr(self, seq_type, None)
 
     def __repr__(self):
-        """Return string HSPFragment info; hit id, query id, number of columns."""
+        """Return HSPFragment info; hit id, query id, number of columns."""
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
         try:
             info += ", %i columns" % len(self)
