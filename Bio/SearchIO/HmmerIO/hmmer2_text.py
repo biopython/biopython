@@ -42,7 +42,7 @@ class Hmmer2TextParser(object):
         self._meta = self.parse_preamble()
 
     def __iter__(self):
-        """Iterate over Hmmer2TextParser, yields query result."""
+        """Iterate over Hmmer2TextParser, yields query results."""
         for qresult in self.parse_qresult():
             qresult.program = self._meta.get('program')
             qresult.target = self._meta.get('target')
@@ -320,7 +320,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
-        """Iterate over Hmmer2TextIndexer."""
+        """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

@@ -44,7 +44,7 @@ class Hmmer3TextParser(object):
         self._meta = self._parse_preamble()
 
     def __iter__(self):
-        """Iterate over query result."""
+        """Iterate over query results."""
         for qresult in self._parse_qresult():
             yield qresult
 
@@ -406,7 +406,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
-        """Iterate over Hmmer3TextIndexer; yields query result key, and offset."""
+        """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

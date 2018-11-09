@@ -233,7 +233,7 @@ class BlastXmlParser(object):
         self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
-        """Iterate over BlastXmlParser object yields query result."""
+        """Iterate over BlastXmlParser object yields query results."""
         for qresult in self._parse_qresult():
             yield qresult
 
