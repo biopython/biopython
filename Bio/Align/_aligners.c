@@ -55,6 +55,7 @@ typedef struct {
 typedef struct {
     double score;
     int* gapM;
+    int* gapXY;
     int* traceXY;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
 
@@ -2850,6 +2851,7 @@ static PyGetSetDef Aligner_getset[] = {
             ng = 0; \
         } \
         traceXY[ng] = gap; \
+        gapXY[ng] = k; \
         ng++; \
     }
 
@@ -2905,9 +2907,13 @@ _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                             for (j = 0; j <= nB; j++) {
                                 trace = Ix[i][j].gapM;
                                 if (trace) PyMem_Free(trace);
+                                trace = Ix[i][j].gapXY;
+                                if (trace) PyMem_Free(trace);
                                 trace = Ix[i][j].traceXY;
                                 if (trace) PyMem_Free(trace);
                                 trace = Iy[i][j].gapM;
+                                if (trace) PyMem_Free(trace);
+                                trace = Iy[i][j].gapXY;
                                 if (trace) PyMem_Free(trace);
                                 trace = Iy[i][j].traceXY;
                                 if (trace) PyMem_Free(trace);
@@ -2950,8 +2956,10 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         if (!Iy[i]) goto exit;
         for (j = 0; j <= nB; j++) {
             Ix[i][j].gapM = NULL;
+            Ix[i][j].gapXY = NULL;
             Ix[i][j].traceXY = NULL;
             Iy[i][j].gapM = NULL;
+            Iy[i][j].gapXY = NULL;
             Iy[i][j].traceXY = NULL;
         }
         M[i][0].trace = 0;
@@ -2975,12 +2983,17 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                     if (!trace) goto exit;
                     Ix[i][0].traceXY = trace;
                     trace[0] = -1;
+                    trace = PyMem_Malloc(sizeof(int));
+                    if (!trace) goto exit;
+                    Ix[i][0].gapXY = trace;
+                    trace[0] = 0;
                     break;
                 case Local:
                     M[i][0].score = 0;
                     Ix[i][0].score = -DBL_MAX;
                     Ix[i][0].gapM = NULL;
                     Ix[i][0].traceXY = NULL;
+                    Ix[i][0].gapXY = NULL;
                     break;
             }
         }
@@ -2988,6 +3001,7 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
     for (i = 1; i <= nB; i++) {
         M[0][i].trace = 0;
         Ix[0][i].gapM = NULL;
+        Ix[0][i].gapXY = NULL;
         Ix[0][i].traceXY = NULL;
         Ix[0][i].score = -DBL_MAX;
         switch (mode) {
@@ -3003,12 +3017,17 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 if (!trace) goto exit;
                 Iy[0][i].traceXY = trace;
                 trace[0] = -1;
+                trace = PyMem_Malloc(sizeof(int));
+                if (!trace) goto exit;
+                Iy[0][i].gapXY = trace;
+                trace[0] = 0;
                 break;
             case Local:
                 M[0][i].score = 0;
                 Iy[0][i].score = -DBL_MAX;
                 Iy[0][i].gapM = NULL;
                 Iy[0][i].traceXY = NULL;
+                Iy[0][i].gapXY = NULL;
                 break;
         }
     }
@@ -3570,8 +3589,8 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
     int i = 0, j = 0;
     int iA, iB;
     int trace;
-    int* traceXY;
     int* gapM;
+    int* gapXY;
 
     int m = M_MATRIX;
     const int nA = self->nA;
@@ -3614,8 +3633,8 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     return NULL;
             }
             if (i == iA) { /* HORIZONTAL */
-                traceXY = Iy[iA][iB].traceXY;
                 gapM = Iy[iA][iB].gapM;
+                gapXY = Iy[iA][iB].gapXY;
                 if (m==M_MATRIX) {
                     gap = iB - j;
                     while (*gapM != gap) gapM++;
@@ -3627,13 +3646,14 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                         break;
                     }
                 } else if (m==Ix_MATRIX) {
-                    while (*traceXY != j) traceXY++;
-                    traceXY++;
+                    gap = iB - j;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
                 }
-                j = *traceXY;
-                if (j >= 0) {
+                gap = *gapXY;
+                if (gap) {
                     m = Ix_MATRIX;
-                    M[i][j].path = HORIZONTAL;
+                    j = iB - gap;
                     while (j < iB) M[i][--iB].path = HORIZONTAL;
                     break;
                 }
@@ -3642,8 +3662,8 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 j = iB;
             }
             else if (j==iB) { /* VERTICAL */
-                traceXY = Ix[iA][iB].traceXY;
                 gapM = Ix[iA][iB].gapM;
+                gapXY = Ix[iA][iB].gapXY;
                 if (m==M_MATRIX) {
                     gap = iA - i;
                     while (*gapM != gap) gapM++;
@@ -3655,13 +3675,14 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                         break;
                     }
                 } else if (m==Iy_MATRIX) {
-                    while (*traceXY != i) traceXY++;
-                    traceXY++;
+                    gap = iA - i;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
                 }
-                i = *traceXY;
-                if (i >= 0) {
+                gap = *gapXY;
+                if (gap) {
                     m = Iy_MATRIX;
-                    M[i][j].path = VERTICAL;
+                    i = iA - gap;
                     while (i < iA) M[--iA][j].path = VERTICAL;
                     break;
                 }
@@ -3711,12 +3732,12 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                     break;
                 }
             case Ix_MATRIX:
-                if (Ix[nA][nB].gapM[0] || Ix[nA][nB].traceXY[0] != -1) {
+                if (Ix[nA][nB].gapM[0] || Ix[nA][nB].gapXY[0]) {
                     m = Ix_MATRIX;
                     break;
                 }
             case Iy_MATRIX:
-                if (Iy[nA][nB].gapM[0] || Iy[nA][nB].traceXY[0] != -1) {
+                if (Iy[nA][nB].gapM[0] || Iy[nA][nB].gapXY[0]) {
                     m = Iy_MATRIX;
                     break;
                 }
@@ -3742,30 +3763,24 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 M[i][j].path = DIAGONAL;
                 break;
             case Ix_MATRIX:
-                traceXY = Ix[i][j].traceXY;
                 gap = Ix[i][j].gapM[0];
-                if (gap) {
-                    iA = i - gap;
-                    m = M_MATRIX;
-                }
+                if (gap) m = M_MATRIX;
                 else {
-                    iA = *traceXY;
+                    gap = Ix[i][j].gapXY[0];
                     m = Iy_MATRIX;
                 }
+                iA = i - gap;
                 while (iA < i) M[--i][j].path = VERTICAL;
                 M[i][j].path = VERTICAL;
                 break;
             case Iy_MATRIX:
-                traceXY = Iy[i][j].traceXY;
                 gap = Iy[i][j].gapM[0];
-                if (gap) {
-                    iB = j - gap;
-                    m = M_MATRIX;
-                }
+                if (gap) m = M_MATRIX;
                 else {
-                    iB = *traceXY;
+                    gap = Iy[i][j].gapXY[0];
                     m = Ix_MATRIX;
                 }
+                iB = j - gap;
                 while (iB < j) M[i][--j].path = HORIZONTAL;
                 M[i][j].path = HORIZONTAL;
                 break;
@@ -3778,8 +3793,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
 {
     int i, j, m;
     int trace = 0;
-    int* traceXY;
     int* gapM;
+    int* gapXY;
 
     int iA = self->iA;
     int iB = self->iB;
@@ -3829,8 +3844,8 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 break;
             }
             if (i == iA) { /* HORIZONTAL */
-                traceXY = Iy[iA][iB].traceXY;
                 gapM = Iy[iA][iB].gapM;
+                gapXY = Iy[iA][iB].gapXY;
                 if (m==M_MATRIX) {
                     gap = iB - j;
                     while (*gapM != gap) gapM++;
@@ -3842,12 +3857,14 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                         break;
                     }
                 } else if (m==Ix_MATRIX) {
-                    while (*traceXY != j) traceXY++;
-                    traceXY++;
+                    gap = iB - j;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
                 }
-                j = *traceXY;
-                if (j >= 0) {
+                gap = *gapXY;
+                if (gap) {
                     m = Ix_MATRIX;
+                    j = iB - gap;
                     M[i][j].path = HORIZONTAL;
                     while (iB > j) M[i][--iB].path = HORIZONTAL;
                     break;
@@ -3857,7 +3874,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 j = iB;
             }
             else if (j == iB) { /* VERTICAL */
-                traceXY = Ix[iA][iB].traceXY;
+                gapXY = Ix[iA][iB].gapXY;
                 gapM = Ix[iA][iB].gapM;
                 if (m==M_MATRIX) {
                     gap = iA - i;
@@ -3870,12 +3887,14 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                         break;
                     }
                 } else if (m==Iy_MATRIX) {
-                    while (*traceXY != i) traceXY++;
-                    traceXY++;
+                    gap = iA - i;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
                 }
-                i = *traceXY;
-                if (i >= 0) {
+                gap = *gapXY;
+                if (gap) {
                     m = Iy_MATRIX;
+                    i = iA - gap;
                     M[i][j].path = VERTICAL;
                     while (iA > i) M[--iA][j].path = VERTICAL;
                     break;
@@ -3940,33 +3959,29 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     while (1) {
         switch (m) {
             case Ix_MATRIX:
-                traceXY = Ix[i][j].traceXY;
                 gapM = Ix[i][j].gapM;
+                gapXY = Ix[i][j].gapXY;
                 iB = j;
                 gap = *gapM;
-                if (gap) {
-                    iA = i - gap;
-                    m = M_MATRIX;
-                }
+                if (gap) m = M_MATRIX;
                 else {
-                    iA = *traceXY;
+                    gap = *gapXY;
                     m = Iy_MATRIX;
                 }
+                iA = i - gap;
                 while (i > iA) M[--i][iB].path = VERTICAL;
                 break;
             case Iy_MATRIX:
-                traceXY = Iy[i][j].traceXY;
                 gapM = Iy[i][j].gapM;
+                gapXY = Iy[i][j].gapXY;
                 iA = i;
                 gap = *gapM;
-                if (gap) {
-                    iB = j - gap;
-                    m = M_MATRIX;
-                }
+                if (gap) m = M_MATRIX;
                 else {
-                    iB = *traceXY;
+                    gap = *gapXY;
                     m = Ix_MATRIX;
                 }
+                iB = j - gap;
                 while (j > iB) M[iA][--j].path = HORIZONTAL;
                 break;
             case M_MATRIX:
@@ -4342,9 +4357,7 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
 {
     int i;
     int j;
-    int k;
     int trace;
-    int* tracep;
     int* gaps;
     int gap;
     const int nA = self->nA;
@@ -4390,13 +4403,13 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
                     gaps++;
                 }
             }
-            tracep = Ix[i][j].traceXY;
-            if (tracep) {
+            gaps = Ix[i][j].gapXY;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(Iy_count[k][j], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(Iy_count[i-gap][j], count);
+                    gaps++;
                 }
             }
             Ix_count[i][j] = count;
@@ -4410,13 +4423,13 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
                     gaps++;
                 }
             }
-            tracep = Iy[i][j].traceXY;
-            if (tracep) {
+            gaps = Iy[i][j].gapXY;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(Ix_count[i][k], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(Ix_count[i][j-gap], count);
+                    gaps++;
                 }
             }
             Iy_count[i][j] = count;
@@ -4425,9 +4438,9 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     count = 0;
     if (M[nA][nB].trace)
         SAFE_ADD(M_count[nA][nB], count);
-    if (Ix[nA][nB].gapM[0] || Ix[nA][nB].traceXY[0] != -1)
+    if (Ix[nA][nB].gapM[0] || Ix[nA][nB].gapXY[0])
         SAFE_ADD(Ix_count[nA][nB], count);
-    if (Iy[nA][nB].gapM[0] || Iy[nA][nB].traceXY[0] != -1)
+    if (Iy[nA][nB].gapM[0] || Iy[nA][nB].gapXY[0])
         SAFE_ADD(Iy_count[nA][nB], count);
 exit:
     if (M_count) {
@@ -4455,9 +4468,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
 {
     int i;
     int j;
-    int k;
     int trace;
-    int* tracep;
     int* gaps;
     int gap;
     const int nA = self->nA;
@@ -4505,13 +4516,13 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                     gaps++;
                 }
             }
-            tracep = Ix[i][j].traceXY;
-            if (tracep) {
+            gaps = Ix[i][j].gapXY;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(Iy_count[k][j], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(Iy_count[i-gap][j], count);
+                    gaps++;
                 }
             }
             if (count == 0) count = 1;
@@ -4526,13 +4537,13 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                     gaps++;
                 }
             }
-            tracep = Iy[i][j].traceXY;
-            if (tracep) {
+            gaps = Iy[i][j].gapXY;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(Ix_count[i][k], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(Ix_count[i][j-gap], count);
+                    gaps++;
                 }
             }
             if (count == 0) count = 1;
@@ -5660,6 +5671,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     double temp;
     int trace;
     int* gapM;
+    int* gapXY;
     int* traceXY;
     int ok = 1;
 
@@ -5689,6 +5701,9 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             traceXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
+            gapXY = PyMem_Malloc((i+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Ix[i][j].gapXY = gapXY;
             nm = 0;
             ng = 0;
             score = -DBL_MAX;
@@ -5707,6 +5722,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             traceXY[ng] = -1;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Ix[i][j].gapXY = gapXY;
+            gapXY[ng] = 0;
             Ix[i][j].score = score;
             gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
@@ -5714,6 +5733,9 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             traceXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
+            gapXY = PyMem_Malloc((j+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Iy[i][j].gapXY = gapXY;
             nm = 0;
             ng = 0;
             score = -DBL_MAX;
@@ -5729,6 +5751,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             if (!gapM) goto exit;
             Iy[i][j].gapM = gapM;
             gapM[nm] = 0;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Iy[i][j].gapXY = gapXY;
+            gapXY[ng] = 0;
             traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
@@ -5755,12 +5781,20 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             if (!traceXY) goto exit;
             traceXY[0] = -1;
             Ix[nA][nB].traceXY = traceXY;
+            gapXY = PyMem_Realloc(Ix[nA][nB].gapXY, sizeof(int));
+            if (!gapXY) goto exit;
+            gapXY[0] = 0;
+            Ix[nA][nB].gapXY = gapXY;
         }
         if (Iy[nA][nB].score < score - epsilon) {
             gapM = PyMem_Realloc(Iy[nA][nB].gapM, sizeof(int));
             if (!gapM) goto exit;
             gapM[0] = 0;
             Iy[nA][nB].gapM = gapM;
+            gapXY = PyMem_Realloc(Iy[nA][nB].gapXY, sizeof(int));
+            if (!gapXY) goto exit;
+            gapXY[0] = 0;
+            Iy[nA][nB].gapXY = gapXY;
             traceXY = PyMem_Realloc(Iy[nA][nB].traceXY, sizeof(int));
             if (!traceXY) goto exit;
             traceXY[0] = -1;
@@ -5921,6 +5955,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     double temp;
     int trace;
     int* gapM;
+    int* gapXY;
     int* traceXY;
     int nm;
     int ng;
@@ -5948,15 +5983,20 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             if (i == nA || j == nB) {
                 Ix[i][j].score = score;
                 Ix[i][j].gapM = NULL;
+                Ix[i][j].gapXY = NULL;
                 Ix[i][j].traceXY = NULL;
                 Iy[i][j].score = score;
                 Iy[i][j].gapM = NULL;
+                Iy[i][j].gapXY = NULL;
                 Iy[i][j].traceXY = NULL;
                 continue;
             }
             gapM = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapM) goto exit;
             Ix[i][j].gapM = gapM;
+            gapXY = PyMem_Malloc((i+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Ix[i][j].gapXY = gapXY;
             traceXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
@@ -5975,6 +6015,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             }
             else if (score > maximum) maximum = score;
             gapM[nm] = 0;
+            gapXY[ng] = 0;
             traceXY[ng] = -1;
             Ix[i][j].score = score;
             M[i][j].path = 0;
@@ -5986,12 +6027,19 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             if (!traceXY) goto exit;
             Ix[i][j].traceXY = traceXY;
             traceXY[ng] = -1;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Ix[i][j].gapXY = gapXY;
+            gapXY[ng] = 0;
             gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
             Iy[i][j].gapM = gapM;
             traceXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
+            gapXY = PyMem_Malloc((j+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Iy[i][j].gapXY = gapXY;
             nm = 0;
             ng = 0;
             score = -DBL_MAX;
@@ -6015,8 +6063,12 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             traceXY = PyMem_Realloc(traceXY, (ng+1)*sizeof(int));
             if (!traceXY) goto exit;
             Iy[i][j].traceXY = traceXY;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            Iy[i][j].gapXY = gapXY;
             gapM[nm] = 0;
             traceXY[ng] = -1;
+            gapXY[ng] = 0;
             Iy[i][j].score = score;
             M[i][j].path = 0;
         }
