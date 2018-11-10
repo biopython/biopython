@@ -939,6 +939,20 @@ class MultipleSeqAlignment(object):
             self._records.sort(key=key, reverse=reverse)
 
 
+class PairwiseAligner_Old(_aligners_old.PairwiseAligner):
+    def align(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        score, paths = _aligners_old.PairwiseAligner.align(self, seqA, seqB)
+        alignments = PairwiseAlignments(seqA, seqB, score, paths)
+        return alignments
+
+    def score(self, seqA, seqB):
+        seqA = str(seqA)
+        seqB = str(seqB)
+        return _aligners_old.PairwiseAligner.score(self, seqA, seqB)
+
+
 class PairwiseAlignment(object):
     """Represents a pairwise sequence alignment.
 

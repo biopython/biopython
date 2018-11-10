@@ -4479,6 +4479,8 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     int k;
     int trace;
     int* tracep;
+    int* gaps;
+    int gap;
     const int nA = self->nA;
     const int nB = self->nB;
     CellM** M = self->M.general;
@@ -4515,13 +4517,13 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             M_count[i][j] = count;
             if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
-            tracep = Ix[i][j].traceM;
-            if (tracep) {
+            gaps = Ix[i][j].gapM;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(M_count[k][j], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i-gap][j], count);
+                    gaps++;
                 }
             }
             tracep = Ix[i][j].traceXY;
@@ -4536,13 +4538,13 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             if (count == 0) count = 1;
             Ix_count[i][j] = count;
             count = 0;
-            tracep = Iy[i][j].traceM;
-            if (tracep) {
+            gaps = Iy[i][j].gapM;
+            if (gaps) {
                 while (1) {
-                    k = *tracep;
-                    if (k < 0) break;
-                    SAFE_ADD(M_count[i][k], count);
-                    tracep++;
+                    gap = *gaps;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i][j-gap], count);
+                    gaps++;
                 }
             }
             tracep = Iy[i][j].traceXY;
