@@ -4552,6 +4552,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     Py_ssize_t** countM = NULL;
     Py_ssize_t** countIx = NULL;
     Py_ssize_t** countIy = NULL;
+    if (threshold < 0) return 0;
     countM = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!countM) goto exit;
     countIx = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
@@ -5619,7 +5620,7 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
             for (k = 1; k <= j; k++) {
                 ok = _call_target_gap_function(self, i, k, &gapscore);
                 if (!ok) goto exit;
-                SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Iy[i][j-k]);
+                SELECT_SCORE_WATERMAN_SMITH_BEYER(M[i][j-k], Ix[i][j-k]);
             }
             Iy[i][j] = score;
         }
