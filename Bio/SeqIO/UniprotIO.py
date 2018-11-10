@@ -53,7 +53,7 @@ def UniprotIterator(handle, alphabet=Alphabet.generic_protein, return_raw_commen
     # check if file is empty
     from Bio.File import UndoHandle
     if UndoHandle(handle).readlines() == []:
-      raise ValueError("Empty file.")
+        raise ValueError("Empty file.")
 
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
         raise ValueError("Wrong alphabet %r" % alphabet)
