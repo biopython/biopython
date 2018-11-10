@@ -82,6 +82,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - David Nicholson <https://github.com/danich1>
 - David Weisman <david.weisman at domain acm.org>
 - David Winter <david dot winter at gmail dot com>
+- Devang Thakkar <https://github.com/devangthakkar>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
 - Edward Liaw <https://github.com/edliaw>
