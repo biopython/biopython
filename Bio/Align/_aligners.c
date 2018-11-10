@@ -99,7 +99,7 @@ static int _convert_single_letter(PyObject* item)
 }
 
 static PyObject*
-_create_path_needleman_wunsch_smith_waterman(Trace** M, int i, int j) {
+_create_path(Trace** M, int i, int j) {
     PyObject* tuple;
     PyObject* row;
     PyObject* value;
@@ -3133,7 +3133,7 @@ static PyObject* PathGenerator_next_needlemanwunsch(PathGenerator* self)
         else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
         else break;
     }
-    return _create_path_needleman_wunsch_smith_waterman(M, 0, 0);
+    return _create_path(M, 0, 0);
 }
 
 static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
@@ -3216,7 +3216,7 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
     }
     self->iA = i;
     self->iB = j;
-    return _create_path_needleman_wunsch_smith_waterman(M, i, j);
+    return _create_path(M, i, j);
 }
 
 static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
@@ -3656,7 +3656,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 if (trace & M_MATRIX) m = M_MATRIX;
                 else if (trace & Ix_MATRIX) m = Ix_MATRIX;
                 else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else return _create_path_needleman_wunsch_smith_waterman(M, i, j);
+                else return _create_path(M, i, j);
                 i--;
                 j--;
                 M[i][j].path = DIAGONAL;
@@ -3893,7 +3893,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 else {
                     self->iA = i;
                     self->iB = j;
-                    return _create_path_needleman_wunsch_smith_waterman(M, i, j);
+                    return _create_path(M, i, j);
                 }
                 M[iA][iB].path = DIAGONAL;
                 break;
