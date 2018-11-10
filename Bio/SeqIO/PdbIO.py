@@ -255,6 +255,8 @@ def PdbAtomIterator(handle):
     from Bio.File import UndoHandle
     undo_handle = UndoHandle(handle)
     firstline = undo_handle.peekline()
+    if undo_handle.readlines() == []:
+        raise ValueError("Empty file.")
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
     else:
@@ -458,6 +460,8 @@ def CifAtomIterator(handle):
 
     buffer.seek(0)
     mmcif_dict = MMCIF2Dict(buffer)
+    if mmcif_dict == {}:
+        raise ValueError("Empty file.")
     if "_entry.id" in mmcif_dict:
         pdb_id = mmcif_dict["_entry.id"]
         if isinstance(pdb_id, list):
