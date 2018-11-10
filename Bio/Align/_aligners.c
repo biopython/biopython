@@ -48,12 +48,6 @@ typedef struct {
 
 typedef struct {
     double score;
-    unsigned int trace : 4;
-    unsigned char path : 4;
-} CellM; /* Used for the Waterman-Smith-Beyer algorithm. */
-
-typedef struct {
-    double score;
     int* gapM;
     int* gapXY;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
@@ -247,80 +241,9 @@ _create_path_gotoh(Trace3** trace3, int i, int j) {
     return NULL;
 }
 
-static PyObject*
-_create_path_waterman_smith_beyer(CellM** M, int i, int j) {
-    PyObject* tuple;
-    PyObject* row;
-    PyObject* value;
-    const int ii = i;
-    const int jj = j;
-    int n = 1;
-    int direction = 0;
-    int path = M[i][j].path;
-
-    while (path) {
-        switch (path) {
-            case HORIZONTAL: j++; break;
-            case VERTICAL: i++; break;
-            case DIAGONAL: i++; j++; break;
-            default:
-                PyErr_SetString(PyExc_RuntimeError,
-                    "Unexpected path in _create_path_waterman_smith_beyer");
-                return NULL;
-        }
-        if (direction != path) {
-            n++;
-            direction = path;
-        }
-        path = M[i][j].path;
-    }
-
-    i = ii;
-    j = jj;
-    path = M[i][j].path;
-    tuple = PyTuple_New(n);
-    if (!tuple) return NULL;
-    n = 0;
-    direction = 0;
-    while (1) {
-        if (path != direction) {
-            row = PyTuple_New(2);
-            if (!row) break;
-#if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(i);
-#else
-            value = PyInt_FromLong(i);
-#endif
-            if (!value) {
-                Py_DECREF(row); /* all references were stolen */
-                break;
-            }
-            PyTuple_SET_ITEM(row, 0, value);
-#if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(j);
-#else
-            value = PyInt_FromLong(j);
-#endif
-            PyTuple_SET_ITEM(row, 1, value);
-            PyTuple_SET_ITEM(tuple, n, row);
-            n++;
-            direction = path;
-        }
-        switch (path) {
-            case HORIZONTAL: do j++; while (M[i][j].path == HORIZONTAL); break;
-            case VERTICAL: do i++; while (M[i][j].path == VERTICAL); break;
-            case DIAGONAL: i++; j++; break;
-            default: return tuple;
-        }
-        path = M[i][j].path;
-    }
-    Py_DECREF(tuple); /* all references were stolen */
-    return NULL;
-}
-
 typedef struct {
     PyObject_HEAD
-    union { Trace** trace1; CellM** general; } M;
+    Trace** M;
     Trace3** trace3;
     CellXY** Ix; 
     CellXY** Iy; 
@@ -2815,7 +2738,7 @@ static PyGetSetDef Aligner_getset[] = {
 
 #define SELECT_TRACE_WATERMAN_SMITH_BEYER_GLOBAL_ALIGN(score4) \
     trace = M_MATRIX; \
-    score = M[i-1][j-1].score; \
+    score = M_scores[i-1][j-1]; \
     temp = Ix[i-1][j-1].score; \
     if (temp > score + epsilon) { \
         score = temp; \
@@ -2828,7 +2751,7 @@ static PyGetSetDef Aligner_getset[] = {
         trace = Iy_MATRIX; \
     } \
     else if (temp > score - epsilon) trace |= Iy_MATRIX; \
-    M[i][j].score = score + score4; \
+    M_scores[i][j] = score + score4; \
     M[i][j].trace = trace;
 
 #define SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(score1, score2) \
@@ -2853,7 +2776,7 @@ static PyGetSetDef Aligner_getset[] = {
         ng++; \
     }
 
-#define SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(cell, score1, score2, score3, score4) \
+#define SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(score1, score2, score3, score4) \
     trace = M_MATRIX; \
     score = score1; \
     if (score2 > score + epsilon) { \
@@ -2882,14 +2805,14 @@ static PyGetSetDef Aligner_getset[] = {
         } \
         trace |= ENDPOINT; \
     } \
-    cell.score = score; \
-    cell.trace = trace;
+    M_scores[i][j] = score; \
+    M[i][j].trace = trace;
 
 /* -------------- allocation & deallocation ------------- */
 
 static void
 _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                        CellM** M, CellXY** Ix, CellXY** Iy,
+                                        Trace** M, CellXY** Ix, CellXY** Iy,
                                         Mode mode)
 {
     int i, j;
@@ -2927,22 +2850,22 @@ _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
 
 static int
 _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                      CellM*** pM, CellXY*** pIx, CellXY*** pIy,
+                                      Trace*** pM, CellXY*** pIx, CellXY*** pIy,
                                       Mode mode)
 {
     int i, j;
     int* trace;
-    CellM** M = NULL;
+    Trace** M = NULL;
     CellXY** Ix = NULL;
     CellXY** Iy = NULL;
-    M = PyMem_Malloc((nA+1)*sizeof(CellM*));
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     Ix = PyMem_Malloc((nA+1)*sizeof(CellXY*));
     if (!Ix) goto exit;
     Iy = PyMem_Malloc((nA+1)*sizeof(CellXY*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(CellM));
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
         Ix[i] = PyMem_Malloc((nB+1)*sizeof(CellXY));
         if (!Ix[i]) goto exit;
@@ -2958,13 +2881,11 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         M[i][0].path = 0;
         Iy[i][0].score = -DBL_MAX;
         if (i==0) {
-            M[0][0].score = 0;
             Ix[0][0].score = -DBL_MAX;
         }
         else {
             switch (mode) {
                 case Global:
-                    M[i][0].score = -DBL_MAX;
                     Ix[i][0].score = 0;
                     trace = PyMem_Malloc(2*sizeof(int));
                     if (!trace) goto exit;
@@ -2977,7 +2898,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                     trace[0] = 0;
                     break;
                 case Local:
-                    M[i][0].score = 0;
                     Ix[i][0].score = -DBL_MAX;
                     Ix[i][0].gapM = NULL;
                     Ix[i][0].gapXY = NULL;
@@ -2992,7 +2912,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         Ix[0][i].score = -DBL_MAX;
         switch (mode) {
             case Global:
-                M[0][i].score = -DBL_MAX;
                 Iy[0][i].score = 0;
                 trace = PyMem_Malloc(2*sizeof(int));
                 if (!trace) goto exit;
@@ -3005,7 +2924,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 trace[0] = 0;
                 break;
             case Local:
-                M[0][i].score = 0;
                 Iy[0][i].score = -DBL_MAX;
                 Iy[0][i].gapM = NULL;
                 Iy[0][i].gapXY = NULL;
@@ -3163,7 +3081,7 @@ static PyObject* PathGenerator_next_needlemanwunsch(PathGenerator* self)
     int trace = 0;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace** M = self->M.trace1;
+    Trace** M = self->M;
 
     path = M[i][j].path;
     if (path == DONE) return NULL;
@@ -3225,7 +3143,7 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
     int j = self->iB;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace** M = self->M.trace1;
+    Trace** M = self->M;
     int path = M[0][0].path;
 
     if (path == DONE || path == NONE) return NULL;
@@ -3576,7 +3494,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
     int m = M_MATRIX;
     const int nA = self->nA;
     const int nB = self->nB;
-    CellM** M = self->M.general;
+    Trace** M = self->M;
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
 
@@ -3738,7 +3656,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
                 if (trace & M_MATRIX) m = M_MATRIX;
                 else if (trace & Ix_MATRIX) m = Ix_MATRIX;
                 else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else return _create_path_waterman_smith_beyer(M, i, j);
+                else return _create_path_needleman_wunsch_smith_waterman(M, i, j);
                 i--;
                 j--;
                 M[i][j].path = DIAGONAL;
@@ -3781,7 +3699,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     int iB = self->iB;
     const int nA = self->nA;
     const int nB = self->nB;
-    CellM** M = self->M.general;
+    Trace** M = self->M;
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
 
@@ -3975,7 +3893,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 else {
                     self->iA = i;
                     self->iB = j;
-                    return _create_path_waterman_smith_beyer(M, i, j);
+                    return _create_path_needleman_wunsch_smith_waterman(M, i, j);
                 }
                 M[iA][iB].path = DIAGONAL;
                 break;
@@ -4027,7 +3945,7 @@ PathGenerator_dealloc(PathGenerator* self)
     const Algorithm algorithm = self->algorithm;
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman: {
-            Trace** M = self->M.trace1;
+            Trace** M = self->M;
             for (i = 0; i <= nA; i++) PyMem_Free(M[i]);
             PyMem_Free(M);
             break;
@@ -4039,7 +3957,7 @@ PathGenerator_dealloc(PathGenerator* self)
             break;
         }
         case WatermanSmithBeyer: {
-            CellM** M = self->M.general;
+            Trace** M = self->M;
             CellXY** Ix = self->Ix;
             CellXY** Iy = self->Iy;
             const Mode mode = self->mode;
@@ -4067,7 +3985,7 @@ PathGenerator_reset(PathGenerator* self)
         case Global:
             switch (self->algorithm) {
                 case NeedlemanWunschSmithWaterman: {
-                    Trace** M = self->M.trace1;
+                    Trace** M = self->M;
                     if (M[0][0].path != NONE) M[0][0].path = 0;
                     break;
                 }
@@ -4077,7 +3995,7 @@ PathGenerator_reset(PathGenerator* self)
                     break;
                 }
                 case WatermanSmithBeyer: {
-                    CellM** M = self->M.general;
+                    Trace** M = self->M;
                     M[0][0].path = 0;
                     break;
                 }
@@ -4113,7 +4031,7 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
     int trace;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace** M = self->M.trace1;
+    Trace** M = self->M;
     Py_ssize_t term;
     Py_ssize_t count;
     Py_ssize_t temp;
@@ -4156,7 +4074,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
     int trace;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace** M = self->M.trace1;
+    Trace** M = self->M;
     Py_ssize_t term;
     Py_ssize_t count;
     Py_ssize_t total = 0;
@@ -4343,7 +4261,7 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     int gap;
     const int nA = self->nA;
     const int nB = self->nB;
-    CellM** M = self->M.general;
+    Trace** M = self->M;
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
     Py_ssize_t count = MEMORY_ERROR;
@@ -4454,7 +4372,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     int gap;
     const int nA = self->nA;
     const int nB = self->nB;
-    CellM** M = self->M.general;
+    Trace** M = self->M;
     CellXY** Ix = self->Ix;
     CellXY** Iy = self->Iy;
     Py_ssize_t term;
@@ -4684,13 +4602,13 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:
         case Gotoh:
-            generator->M.trace1 = NULL;
+            generator->M = NULL;
             generator->Ix = NULL;
             generator->Iy = NULL;
             generator->trace3 = NULL;
             break;
         case WatermanSmithBeyer:
-            generator->M.general = NULL;
+            generator->M = NULL;
             generator->Ix = NULL;
             generator->Iy = NULL;
             break;
@@ -4774,7 +4692,7 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
-        paths->M.trace1 = M;
+        paths->M = M;
         result = Py_BuildValue("fO", score, paths);
         Py_DECREF(paths);
         return result;
@@ -4853,7 +4771,7 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
-        paths->M.trace1 = M;
+        paths->M = M;
         if (maximum==0) M[0][0].path = NONE;
         result = Py_BuildValue("fO", maximum, paths);
         Py_DECREF(paths);
@@ -5642,9 +5560,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     int kA;
     int kB;
     const double epsilon = self->epsilon;
-    CellM** M = NULL;
+    Trace** M = NULL;
     CellXY** Ix = NULL;
     CellXY** Iy = NULL;
+    double** M_scores = NULL;
     int ng;
     int nm;
     double score;
@@ -5660,6 +5579,15 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     /* Waterman-Smith-Beyer algorithm */
     if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &Ix, &Iy, Global))
         return NULL;
+    M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
+    if (!M_scores) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
+        if (!M_scores[i]) goto exit;
+        M_scores[i][0] = -DBL_MAX;
+    }
+    M_scores[0][0] = 0;
+    for (i = 1; i <= nB; i++) M_scores[0][i] = -DBL_MAX;
     for (i = 1; i <= nA; i++) {
         ok = _call_query_gap_function(self, 0, i, &score);
         if (!ok) goto exit;
@@ -5687,7 +5615,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             for (gap = 1; gap <= i; gap++) {
                 ok = _call_query_gap_function(self, j, gap, &gapscore);
                 if (!ok) goto exit;
-                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M[i-gap][j].score,
+                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i-gap][j],
                                                       Iy[i-gap][j].score);
             }
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
@@ -5711,7 +5639,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             for (gap = 1; gap <= j; gap++) {
                 ok = _call_target_gap_function(self, i, gap, &gapscore);
                 if (!ok) goto exit;
-                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M[i][j-gap].score,
+                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i][j-gap],
                                                       Ix[i][j-gap].score);
             }
             Iy[i][j].score = score;
@@ -5727,15 +5655,17 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     }
 
     /* traceback */
-    SELECT_SCORE_GLOBAL(M[nA][nB].score, Ix[nA][nB].score, Iy[nA][nB].score);
+    SELECT_SCORE_GLOBAL(M_scores[nA][nB], Ix[nA][nB].score, Iy[nA][nB].score);
     M[nA][nB].path = 0;
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
-        paths->M.general = M;
+        paths->M = M;
         paths->Ix = Ix;
         paths->Iy = Iy;
-        if (M[nA][nB].score < score - epsilon) M[nA][nB].trace = 0;
+        if (M_scores[nA][nB] < score - epsilon) M[nA][nB].trace = 0;
+        for (i = 0; i <= nA; i++) PyMem_Free(M_scores[i]);
+        PyMem_Free(M_scores);
         if (Ix[nA][nB].score < score - epsilon) {
             gapM = PyMem_Realloc(Ix[nA][nB].gapM, sizeof(int));
             if (!gapM) goto exit;
@@ -5766,6 +5696,8 @@ exit:
     if (ok) /* otherwise, an exception was already set */
         PyErr_SetString(PyExc_MemoryError, "Out of memory");
     _deallocate_watermansmithbeyer_matrices(nA, nB, M, Ix, Iy, Global);
+    for (i = 0; i <= nA; i++) PyMem_Free(M_scores[i]);
+    PyMem_Free(M_scores);
     return NULL;
 }
 
@@ -5903,9 +5835,10 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     int kA;
     int kB;
     const double epsilon = self->epsilon;
-    CellM** M = NULL;
+    Trace** M = NULL;
     CellXY** Ix = NULL;
     CellXY** Iy = NULL;
+    double** M_scores;
     double score;
     double gapscore;
     double temp;
@@ -5922,6 +5855,14 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     /* Waterman-Smith-Beyer algorithm */
     if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &Ix, &Iy, Local))
         return NULL;
+    M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
+    if (!M_scores) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
+        if (!M_scores[i]) goto exit;
+        M_scores[i][0] = 0;
+    }
+    for (i = 1; i <= nB; i++) M_scores[0][i] = 0;
 
     for (i = 1; i <= nA; i++) {
         kA = CHARINDEX(sA[i-1]);
@@ -5929,8 +5870,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             kB = CHARINDEX(sB[j-1]);
             nm = 0;
             ng = 0;
-            SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(M[i][j],
-                                           M[i-1][j-1].score,
+            SELECT_TRACE_WATERMAN_SMITH_BEYER_ALIGN(
+                                           M_scores[i-1][j-1],
                                            Ix[i-1][j-1].score,
                                            Iy[i-1][j-1].score,
                                            self->substitution_matrix[kA][kB]);
@@ -5954,7 +5895,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             for (gap = 1; gap <= i; gap++) {
                 ok = _call_query_gap_function(self, j, gap, &gapscore);
                 if (!ok) goto exit;
-                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M[i-gap][j].score,
+                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i-gap][j],
                                                       Iy[i-gap][j].score);
             }
             if (score < epsilon) {
@@ -5988,7 +5929,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             for (gap = 1; gap <= j; gap++) {
                 ok = _call_target_gap_function(self, i, gap, &gapscore);
                 if (!ok) goto exit;
-                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M[i][j-gap].score,
+                SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i][j-gap],
                                                       Ix[i][j-gap].score);
             }
             if (score < epsilon) {
@@ -6009,12 +5950,14 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             M[i][j].path = 0;
         }
     }
+    for (i = 0; i <= nA; i++) PyMem_Free(M_scores[i]);
+    PyMem_Free(M_scores);
 
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         PyObject* result;
-        paths->M.general = M;
+        paths->M = M;
         paths->Ix = Ix;
         paths->Iy = Iy;
         if (maximum==0) M[0][0].path = DONE;
@@ -6027,6 +5970,8 @@ exit:
     if (ok) /* otherwise, an exception was already set */
         PyErr_SetString(PyExc_MemoryError, "Out of memory");
     _deallocate_watermansmithbeyer_matrices(nA, nB, M, Ix, Iy, Local);
+    for (i = 0; i <= nA; i++) PyMem_Free(M_scores[i]);
+    PyMem_Free(M_scores);
     return NULL;
 }
  
