@@ -47,7 +47,6 @@ typedef struct {
 } Trace3;
 
 typedef struct {
-    double score;
     int* gapM;
     int* gapXY;
 } CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
@@ -2879,14 +2878,9 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         }
         M[i][0].trace = 0;
         M[i][0].path = 0;
-        Iy[i][0].score = -DBL_MAX;
-        if (i==0) {
-            Ix[0][0].score = -DBL_MAX;
-        }
-        else {
+        if (i > 0) {
             switch (mode) {
                 case Global:
-                    Ix[i][0].score = 0;
                     trace = PyMem_Malloc(2*sizeof(int));
                     if (!trace) goto exit;
                     Ix[i][0].gapM = trace;
@@ -2898,7 +2892,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                     trace[0] = 0;
                     break;
                 case Local:
-                    Ix[i][0].score = -DBL_MAX;
                     Ix[i][0].gapM = NULL;
                     Ix[i][0].gapXY = NULL;
                     break;
@@ -2909,10 +2902,8 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         M[0][i].trace = 0;
         Ix[0][i].gapM = NULL;
         Ix[0][i].gapXY = NULL;
-        Ix[0][i].score = -DBL_MAX;
         switch (mode) {
             case Global:
-                Iy[0][i].score = 0;
                 trace = PyMem_Malloc(2*sizeof(int));
                 if (!trace) goto exit;
                 Iy[0][i].gapM = trace;
@@ -2924,7 +2915,6 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 trace[0] = 0;
                 break;
             case Local:
-                Iy[0][i].score = -DBL_MAX;
                 Iy[0][i].gapM = NULL;
                 Iy[0][i].gapXY = NULL;
                 break;
@@ -5610,13 +5600,11 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     for (i = 1; i <= nA; i++) {
         ok = _call_query_gap_function(self, 0, i, &score);
         if (!ok) goto exit;
-        Ix[i][0].score = score;
         Ix_scores[i][0] = score;
     }
     for (j = 1; j <= nB; j++) {
         ok = _call_target_gap_function(self, 0, j, &score);
         if (!ok) goto exit;
-        Iy[0][j].score = score;
         Iy_scores[0][j] = score;
     }
     for (i = 1; i <= nA; i++) {
@@ -5647,7 +5635,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             if (!gapXY) goto exit;
             Ix[i][j].gapXY = gapXY;
             gapXY[ng] = 0;
-            Ix[i][j].score = score;
             Ix_scores[i][j] = score;
             gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
@@ -5664,7 +5651,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i][j-gap],
                                                       Ix_scores[i][j-gap]);
             }
-            Iy[i][j].score = score;
             Iy_scores[i][j] = score;
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
@@ -5942,11 +5928,9 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                                            self->substitution_matrix[kA][kB]);
             M[i][j].path = 0;
             if (i == nA || j == nB) {
-                Ix[i][j].score = score;
                 Ix_scores[i][j] = score;
                 Ix[i][j].gapM = NULL;
                 Ix[i][j].gapXY = NULL;
-                Iy[i][j].score = score;
                 Iy_scores[i][j] = score;
                 Iy[i][j].gapM = NULL;
                 Iy[i][j].gapXY = NULL;
@@ -5973,7 +5957,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             else if (score > maximum) maximum = score;
             gapM[nm] = 0;
             gapXY[ng] = 0;
-            Ix[i][j].score = score;
             Ix_scores[i][j] = score;
             M[i][j].path = 0;
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
@@ -6014,7 +5997,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             Iy[i][j].gapXY = gapXY;
             gapM[nm] = 0;
             gapXY[ng] = 0;
-            Iy[i][j].score = score;
             Iy_scores[i][j] = score;
             M[i][j].path = 0;
         }
