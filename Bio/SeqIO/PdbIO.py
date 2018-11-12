@@ -255,7 +255,7 @@ def PdbAtomIterator(handle):
     from Bio.File import UndoHandle
     undo_handle = UndoHandle(handle)
     firstline = undo_handle.peekline()
-    if undo_handle.readlines() == []:
+    if firstline == '':
         raise ValueError("Empty file.")
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
