@@ -51,8 +51,7 @@ def UniprotIterator(handle, alphabet=Alphabet.generic_protein, return_raw_commen
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
     # check if file is empty
-    from Bio.File import UndoHandle
-    if UndoHandle(handle).peekline() == '':
+    if handle.readline() == '':
         raise ValueError("Empty file.")
 
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
@@ -70,7 +69,7 @@ def UniprotIterator(handle, alphabet=Alphabet.generic_protein, return_raw_commen
             handle = StringIO(handle)
         else:
             raise TypeError("Requires an XML-containing handle"
-                            " (or XML as a string, but that's deprectaed)")
+                            " (or XML as a string, but that's deprecated)")
 
     if ElementTree is None:
         from Bio import MissingExternalDependencyError
