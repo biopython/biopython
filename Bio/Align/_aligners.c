@@ -53,11 +53,6 @@ typedef struct {
     int* IxIy;
 } Gaps; /* Used for the Waterman-Smith-Beyer algorithm. */
 
-typedef struct {
-    int* gapM;
-    int* gapXY;
-} CellXY; /* Used for the Waterman-Smith-Beyer algorithm. */
-
 static int _convert_single_letter(PyObject* item)
 {
     int i;
@@ -252,8 +247,6 @@ typedef struct {
     Trace** M;
     Gaps** gaps;
     Trace3** trace3;
-    CellXY** Ix; 
-    CellXY** Iy; 
     int nA;
     int nB;
     int iA;
@@ -2819,38 +2812,26 @@ static PyGetSetDef Aligner_getset[] = {
 
 static void
 _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                        Trace** M, Gaps** gaps,
-                                        CellXY** Ix, CellXY** Iy,
-                                        Mode mode)
+                                        Trace** M, Gaps** gaps)
 {
     int i, j;
     int* trace;
     if (M) {
-        if (Ix) {
-            if (Iy) {
-                for (i = 0; i <= nA; i++) {
-                    if (!M[i]) break;
-                    PyMem_Free(M[i]);
-                    if (Ix[i]) {
-                        if (Iy[i]) {
-                            for (j = 0; j <= nB; j++) {
-                                trace = Ix[i][j].gapM;
-                                if (trace) PyMem_Free(trace);
-                                trace = Ix[i][j].gapXY;
-                                if (trace) PyMem_Free(trace);
-                                trace = Iy[i][j].gapM;
-                                if (trace) PyMem_Free(trace);
-                                trace = Iy[i][j].gapXY;
-                                if (trace) PyMem_Free(trace);
-                            }
-                            PyMem_Free(Iy[i]);
-                        } else break;
-                        PyMem_Free(Ix[i]);
-                    } else break;
-                }
-                PyMem_Free(Iy);
+        for (i = 0; i <= nA; i++) {
+            if (!M[i]) break;
+            PyMem_Free(M[i]);
+            if (!gaps[i]) break;
+            for (j = 0; j <= nB; j++) {
+                trace = gaps[i][j].MIx;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].IyIx;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].MIy;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].IxIy;
+                if (trace) PyMem_Free(trace);
             }
-            PyMem_Free(Ix);
+            PyMem_Free(gaps[i]);
         }
         PyMem_Free(M);
     }
@@ -2859,21 +2840,14 @@ _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
 static int
 _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                                       Trace*** pM, Gaps*** pGaps,
-                                      CellXY*** pIx, CellXY*** pIy,
                                       Mode mode)
 {
     int i, j;
     int* trace;
     Trace** M = NULL;
     Gaps** gaps = NULL;
-    CellXY** Ix = NULL;
-    CellXY** Iy = NULL;
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
-    Ix = PyMem_Malloc((nA+1)*sizeof(CellXY*));
-    if (!Ix) goto exit;
-    Iy = PyMem_Malloc((nA+1)*sizeof(CellXY*));
-    if (!Iy) goto exit;
     gaps = PyMem_Malloc((nA+1)*sizeof(Gaps*));
     if (!gaps) goto exit;
     for (i = 0; i <= nA; i++) {
@@ -2881,15 +2855,7 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         if (!M[i]) goto exit;
         gaps[i] = PyMem_Malloc((nB+1)*sizeof(Gaps));
         if (!gaps[i]) goto exit;
-        Ix[i] = PyMem_Malloc((nB+1)*sizeof(CellXY));
-        if (!Ix[i]) goto exit;
-        Iy[i] = PyMem_Malloc((nB+1)*sizeof(CellXY));
-        if (!Iy[i]) goto exit;
         for (j = 0; j <= nB; j++) {
-            Ix[i][j].gapM = NULL;
-            Ix[i][j].gapXY = NULL;
-            Iy[i][j].gapM = NULL;
-            Iy[i][j].gapXY = NULL;
             gaps[i][j].MIx = NULL;
             gaps[i][j].IyIx = NULL;
             gaps[i][j].MIy = NULL;
@@ -2902,19 +2868,15 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
                 case Global:
                     trace = PyMem_Malloc(2*sizeof(int));
                     if (!trace) goto exit;
-                    Ix[i][0].gapM = trace;
                     gaps[i][0].MIx = trace;
                     trace[0] = i;
                     trace[1] = 0;
                     trace = PyMem_Malloc(sizeof(int));
                     if (!trace) goto exit;
-                    Ix[i][0].gapXY = trace;
                     gaps[i][0].IyIx = trace;
                     trace[0] = 0;
                     break;
                 case Local:
-                    Ix[i][0].gapM = NULL;
-                    Ix[i][0].gapXY = NULL;
                     gaps[i][0].MIx = NULL;
                     gaps[i][0].IyIx = NULL;
                     break;
@@ -2923,27 +2885,21 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
     }
     for (i = 1; i <= nB; i++) {
         M[0][i].trace = 0;
-        Ix[0][i].gapM = NULL;
-        Ix[0][i].gapXY = NULL;
         gaps[0][i].MIx = NULL;
         gaps[0][i].IyIx = NULL;
         switch (mode) {
             case Global:
                 trace = PyMem_Malloc(2*sizeof(int));
                 if (!trace) goto exit;
-                Iy[0][i].gapM = trace;
                 gaps[0][i].MIy = trace;
                 trace[0] = i;
                 trace[1] = 0;
                 trace = PyMem_Malloc(sizeof(int));
                 if (!trace) goto exit;
-                Iy[0][i].gapXY = trace;
                 gaps[0][i].IxIy = trace;
                 trace[0] = 0;
                 break;
             case Local:
-                Iy[0][i].gapM = NULL;
-                Iy[0][i].gapXY = NULL;
                 gaps[0][i].MIy = NULL;
                 gaps[0][i].IxIy = NULL;
                 break;
@@ -2951,12 +2907,10 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
     }
     M[0][0].path = 0;
     *pM = M;
-    *pIx = Ix;
-    *pIy = Iy;
     *pGaps = gaps;
     return 1;
 exit:
-    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps, Ix, Iy, mode);
+    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
     return 0;
 }
@@ -3977,11 +3931,8 @@ PathGenerator_dealloc(PathGenerator* self)
         case WatermanSmithBeyer: {
             Trace** M = self->M;
             Gaps** gaps = self->gaps;
-            CellXY** Ix = self->Ix;
-            CellXY** Iy = self->Iy;
-            const Mode mode = self->mode;
             const int nB = self->nB;
-            _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps, Ix, Iy, mode);
+            _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
             break;
         }
         case Unknown:
@@ -4620,14 +4571,11 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
         case NeedlemanWunschSmithWaterman:
         case Gotoh:
             generator->M = NULL;
-            generator->Ix = NULL;
-            generator->Iy = NULL;
             generator->trace3 = NULL;
             break;
         case WatermanSmithBeyer:
             generator->M = NULL;
-            generator->Ix = NULL;
-            generator->Iy = NULL;
+            generator->gaps = NULL;
             break;
         case Unknown:
         default:
@@ -5578,8 +5526,6 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     int kB;
     const double epsilon = self->epsilon;
     Trace** M = NULL;
-    CellXY** Ix = NULL;
-    CellXY** Iy = NULL;
     Gaps** gaps;
     double** M_scores = NULL;
     double** Ix_scores = NULL;
@@ -5597,7 +5543,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, &Ix, &Iy, Global))
+    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, Global))
         return NULL;
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
@@ -5642,11 +5588,9 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             SELECT_TRACE_WATERMAN_SMITH_BEYER_GLOBAL_ALIGN(self->substitution_matrix[kA][kB]);
             gapM = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapM) goto exit;
-            Ix[i][j].gapM = gapM;
             gaps[i][j].MIx = gapM;
             gapXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Ix[i][j].gapXY = gapXY;
             gaps[i][j].IyIx = gapXY;
             nm = 0;
             ng = 0;
@@ -5659,22 +5603,18 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             }
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
-            Ix[i][j].gapM = gapM;
             gaps[i][j].MIx = gapM;
             gapM[nm] = 0;
             gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Ix[i][j].gapXY = gapXY;
             gapXY[ng] = 0;
-            gaps[i][j].MIy = gapXY;
+            gaps[i][j].IyIx = gapXY;
             Ix_scores[i][j] = score;
             gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
-            Iy[i][j].gapM = gapM;
             gaps[i][j].MIy = gapM;
             gapXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Iy[i][j].gapXY = gapXY;
             gaps[i][j].IxIy = gapXY;
             nm = 0;
             ng = 0;
@@ -5688,12 +5628,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
             Iy_scores[i][j] = score;
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
-            Iy[i][j].gapM = gapM;
             gaps[i][j].MIy = gapM;
             gapM[nm] = 0;
             gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Iy[i][j].gapXY = gapXY;
             gaps[i][j].IxIy = gapXY;
             gapXY[ng] = 0;
         }
@@ -5706,33 +5644,27 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     if (paths) {
         PyObject* result;
         paths->M = M;
-        paths->Ix = Ix;
-        paths->Iy = Iy;
         paths->gaps = gaps;
         if (M_scores[nA][nB] < score - epsilon) M[nA][nB].trace = 0;
         if (Ix_scores[nA][nB] < score - epsilon) {
             gapM = PyMem_Realloc(gaps[nA][nB].MIx, sizeof(int));
             if (!gapM) goto exit;
             gapM[0] = 0;
-            Ix[nA][nB].gapM = gapM;
             gaps[nA][nB].MIx = gapM;
             gapXY = PyMem_Realloc(gaps[nA][nB].IyIx, sizeof(int));
             if (!gapXY) goto exit;
             gapXY[0] = 0;
-            Ix[nA][nB].gapXY = gapXY;
             gaps[nA][nB].IyIx = gapXY;
         }
         if (Iy_scores[nA][nB] < score - epsilon) {
             gapM = PyMem_Realloc(gaps[nA][nB].MIy, sizeof(int));
             if (!gapM) goto exit;
             gapM[0] = 0;
-            Iy[nA][nB].gapM = gapM;
             gaps[nA][nB].MIy = gapM;
             gapXY = PyMem_Realloc(gaps[nA][nB].IxIy, sizeof(int));
             if (!gapXY) goto exit;
             gapXY[0] = 0;
-            Iy[nA][nB].gapXY = gapXY;
-            gaps[nA][nB].IxIy = gapM;
+            gaps[nA][nB].IxIy = gapXY;
         }
         for (i = 0; i <= nA; i++) {
             PyMem_Free(M_scores[i]);
@@ -5751,7 +5683,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
 exit:
     if (ok) /* otherwise, an exception was already set */
         PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps, Ix, Iy, Global);
+    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
     if (M_scores) {
         for (i = 0; i <= nA; i++) {
             if (!M_scores[i]) break;
@@ -5912,8 +5844,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     const double epsilon = self->epsilon;
     Trace** M = NULL;
     Gaps** gaps = NULL;
-    CellXY** Ix = NULL;
-    CellXY** Iy = NULL;
     double** M_scores;
     double** Ix_scores;
     double** Iy_scores;
@@ -5931,7 +5861,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, &Ix, &Iy, Local))
+    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, Local))
         return NULL;
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
@@ -5971,20 +5901,18 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             M[i][j].path = 0;
             if (i == nA || j == nB) {
                 Ix_scores[i][j] = score;
-                Ix[i][j].gapM = NULL;
-                Ix[i][j].gapXY = NULL;
+                gaps[i][j].MIx = NULL;
+                gaps[i][j].IyIx = NULL;
+                gaps[i][j].MIy = NULL;
+                gaps[i][j].IxIy = NULL;
                 Iy_scores[i][j] = score;
-                Iy[i][j].gapM = NULL;
-                Iy[i][j].gapXY = NULL;
                 continue;
             }
             gapM = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapM) goto exit;
-            Ix[i][j].gapM = gapM;
             gaps[i][j].MIx = gapM;
             gapXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Ix[i][j].gapXY = gapXY;
             gaps[i][j].IyIx = gapXY;
             score = -DBL_MAX;
             for (gap = 1; gap <= i; gap++) {
@@ -6005,21 +5933,17 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             M[i][j].path = 0;
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
-            Ix[i][j].gapM = gapM;
             gaps[i][j].MIx = gapM;
             gapM[nm] = 0;
             gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Ix[i][j].gapXY = gapXY;
             gaps[i][j].IyIx = gapXY;
             gapXY[ng] = 0;
             gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
-            Iy[i][j].gapM = gapM;
             gaps[i][j].MIy = gapM;
             gapXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Iy[i][j].gapXY = gapXY;
             gaps[i][j].IxIy = gapXY;
             nm = 0;
             ng = 0;
@@ -6039,11 +5963,9 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             else if (score > maximum) maximum = score;
             gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
-            Iy[i][j].gapM = gapM;
             gaps[i][j].MIy = gapM;
             gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
-            Iy[i][j].gapXY = gapXY;
             gaps[i][j].IxIy = gapXY;
             gapM[nm] = 0;
             gapXY[ng] = 0;
@@ -6059,8 +5981,6 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     if (paths) {
         PyObject* result;
         paths->M = M;
-        paths->Ix = Ix;
-        paths->Iy = Iy;
         paths->gaps = gaps;
         if (maximum==0) M[0][0].path = DONE;
         result = Py_BuildValue("fO", maximum, paths);
@@ -6071,7 +5991,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
 exit:
     if (ok) /* otherwise, an exception was already set */
         PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps, Ix, Iy, Local);
+    _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
     for (i = 0; i <= nA; i++) PyMem_Free(M_scores[i]);
     PyMem_Free(M_scores);
     return NULL;
