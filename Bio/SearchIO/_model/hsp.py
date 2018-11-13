@@ -281,7 +281,7 @@ class HSP(_BaseHSP):
             self._items.append(fragment)
 
     def __repr__(self):
-        """Return hit_id, query_id and number of HSPs."""
+        """Return string representation of HSP object."""
         return "%s(hit_id=%r, query_id=%r, %r fragments)" % \
                (self.__class__.__name__, self.hit_id, self.query_id, len(self))
 
@@ -290,7 +290,7 @@ class HSP(_BaseHSP):
         return iter(self._items)
 
     def __contains__(self, fragment):
-        """Return if HSPFragment is on HSP items."""
+        """Return True if HSPFragment is on HSP items."""
         return fragment in self._items
 
     def __len__(self):
@@ -306,7 +306,7 @@ class HSP(_BaseHSP):
     __nonzero__ = __bool__
 
     def __str__(self):
-        """Return string HSP headers and fragments, fragments details."""
+        """Return a human readable summary of the HSP object."""
         lines = []
         # set hsp info line
         statline = []
@@ -1129,7 +1129,7 @@ class HSPFragment(_BaseHSP):
                          doc="Tuple of hit start and end coordinates.")
 
     def _query_range_get(self):
-        """Return the star and end of a query (PRIVATE)."""
+        """Return the start and end of a query (PRIVATE)."""
         return (self.query_start, self.query_end)
 
     query_range = property(fget=_query_range_get,

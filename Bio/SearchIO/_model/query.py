@@ -302,11 +302,11 @@ class QueryResult(_BaseSearchObject):
     __nonzero__ = __bool__
 
     def __repr__(self):
-        """Return QueryResult identifier and size."""
+        """Return string representation of the QueryResult object."""
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
 
     def __str__(self):
-        """Return a string of the class QueryResult, including hits and hit details."""
+        """Return a human readable summary of the QueryResult object."""
         lines = []
 
         # set program and version line

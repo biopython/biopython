@@ -147,7 +147,7 @@ class Hit(_BaseSearchObject):
             self.append(hsp)
 
     def __repr__(self):
-        """Return Hit id, query id, and number of hsps."""
+        """Return string representation of Hit object."""
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id,
                                                      len(self))
 
@@ -172,7 +172,7 @@ class Hit(_BaseSearchObject):
         return hsp in self._items
 
     def __str__(self):
-        """Return the string of hit and its values recursively."""
+        """Return a human readable summary of the Hit object."""
         lines = []
 
         # set query id line
@@ -236,7 +236,7 @@ class Hit(_BaseSearchObject):
         return '\n'.join(lines)
 
     def __getitem__(self, idx):
-        """Return item of index idx."""
+        """Return the HSP object at the given index."""
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
             obj = self.__class__(self.hsps[idx])
