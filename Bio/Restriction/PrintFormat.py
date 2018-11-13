@@ -424,7 +424,7 @@ class PrintFormat(object):
         """
         indentation = '\n' + (self.NameWidth + self.Indent) * ' '
         linesize = self.linesize - self.MaxSize
-        pat = re.compile("([\w,\s()]){1,%i}[,\.]" % linesize)
+        pat = re.compile(r"([\w,\s()]){1,%i}[,\.]" % linesize)
         several, Join = '', ''.join
         for name, sites in sorted(ls):
             stringsite = ''
