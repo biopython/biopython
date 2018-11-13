@@ -145,7 +145,7 @@ assert not _re_simple_compound.match("join(complement(149815..150200),complement
 assert not _re_complex_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 assert not _re_simple_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 
-_solo_bond = re.compile("bond\(%s\)" % _solo_location)
+_solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
 assert _solo_bond.match("bond(196)")
 assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
