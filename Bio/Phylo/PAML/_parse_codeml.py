@@ -5,7 +5,7 @@
 
 import re
 
-line_floats_re = re.compile("-*\d+\.\d+")
+line_floats_re = re.compile(r"-*\d+\.\d+")
 
 try:
     float("nan")
@@ -29,15 +29,15 @@ def parse_basics(lines, results):
     # model in the file
     multi_models = False
     multi_genes = False
-    version_re = re.compile(".+ \(in paml version (\d+\.\d+[a-z]*).*")
-    model_re = re.compile("Model:\s+(.+)")
-    num_genes_re = re.compile("\(([0-9]+) genes: separate data\)")
+    version_re = re.compile(r".+ \(in paml version (\d+\.\d+[a-z]*).*")
+    model_re = re.compile(r"Model:\s+(.+)")
+    num_genes_re = re.compile(r"\(([0-9]+) genes: separate data\)")
     # In codeml 4.1, the codon substitution model is headed by:
     # "Codon frequencies:"
     # In codeml 4.3+ it is headed by:
     # "Codon frequency model:"
-    codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
-    siteclass_re = re.compile("Site-class models:\s*([^\s]*)")
+    codon_freq_re = re.compile(r"Codon frequenc[a-z\s]{3,7}:\s+(.+)")
+    siteclass_re = re.compile(r"Site-class models:\s*([^\s]*)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -87,8 +87,8 @@ def parse_basics(lines, results):
 def parse_nssites(lines, results, multi_models, multi_genes):
     """Determine which NSsites models are present and parse them."""
     ns_sites = {}
-    model_re = re.compile("Model (\d+):\s+(.+)")
-    gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
+    model_re = re.compile(r"Model (\d+):\s+(.+)")
+    gene_re = re.compile(r"Gene\s+([0-9]+)\s+.+")
     siteclass_model = results.get("site-class model")
     if not multi_models:
         # If there's only one model in the results, find out
@@ -170,9 +170,9 @@ def parse_model(lines, results):
     dN_tree_flag = False
     w_tree_flag = False
     num_params = None
-    tree_re = re.compile("^\([\w #:',.()]*\);\s*$")
-    branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
-    model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
+    tree_re = re.compile(r"^\([\w #:',.()]*\);\s*$")
+    branch_re = re.compile(r"\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
+    model_params_re = re.compile(r"(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -186,7 +186,7 @@ def parse_model(lines, results):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
         if "lnL(ntime:" in line and line_floats:
             results["lnL"] = line_floats[0]
-            np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
+            np_res = re.match(r"lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)", line)
             if np_res is not None:
                 num_params = int(np_res.group(1))
         # Get parameter list. This can be useful for specifying starting
@@ -251,7 +251,7 @@ def parse_model(lines, results):
         # Find omega and kappa values for multi-gene files
         # Example match: "gene # 1: kappa =   1.72615 omega =   0.39333"
         elif "gene # " in line:
-            gene_num = int(re.match("gene # (\d+)", line).group(1))
+            gene_num = int(re.match(r"gene # (\d+)", line).group(1))
             if parameters.get("genes") is None:
                 parameters["genes"] = {}
             parameters["genes"][gene_num] = {"kappa": line_floats[0],
@@ -283,7 +283,7 @@ def parse_model(lines, results):
         # Example match:
         # "branch type 0:    0.31022   1.00000   0.00000"
         elif "branch type " in line:
-            branch_type = re.match("branch type (\d)", line)
+            branch_type = re.match(r"branch type (\d)", line)
             if branch_type:
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
@@ -366,7 +366,7 @@ def parse_siteclass_omegas(line, site_classes):
     # numbers to sometimes run into each other, so we must use a different
     # regular expression to account for this. i.e.:
     # w:   0.00012  1.00000109.87121
-    line_floats = re.findall("\d{1,3}\.\d{5}", line)
+    line_floats = re.findall(r"\d{1,3}\.\d{5}", line)
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -408,7 +408,7 @@ def parse_pairwise(lines, results):
     #  0.01262 999.00000  0.00100
     #
     # t= 0.0126  S=    81.4  N=   140.6  dN/dS= 0.0010  dN= 0.0000  dS= 0.0115
-    pair_re = re.compile("\d+ \((.+)\) ... \d+ \((.+)\)")
+    pair_re = re.compile(r"\d+ \((.+)\) ... \d+ \((.+)\)")
     pairwise = {}
     seq1 = None
     seq2 = None
@@ -446,7 +446,7 @@ def parse_distances(lines, results):
     sequences = []
     raw_aa_distances_flag = False
     ml_aa_distances_flag = False
-    matrix_row_re = re.compile("(.+)\s{5,15}")
+    matrix_row_re = re.compile(r"(.+)\s{5,15}")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
