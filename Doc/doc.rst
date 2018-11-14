@@ -54,7 +54,7 @@ need is to pick up a ``CodonTable`` object that is correct for your data.
 For example:
 
 .. code::
-    
+
     >>> from Bio.CodonAlign import CodonSeq
     >>> from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet
     >>> from Bio.Data.CodonTable import generic_by_id
@@ -407,7 +407,8 @@ If you are using maximum likelihood methdo to estimate dN and dS, you are
 also able to specify equilibrium codon frequency to ``cfreq`` argument.
 Available options include ``F1x4``, ``F3x4`` and ``F61``.
 
-It is also possible to get dN and dS matrix or a tree from a ``CodonAlignment`` object.
+It is also possible to get dN and dS matrix or a tree from a
+``CodonAlignment`` object.
 
 .. code::
 
@@ -443,7 +444,7 @@ evolutionary process. The test requires gene sequences sampled from different
 individuals of the same species. In the following example, we will use `Adh`
 gene from fluit fly to demonstrate how to conduct the test. The data includes
 11 individuals from `D. melanogaster`, 4 individuals from `D. simulans` and
-12 individuals from `D. yakuba`. The data is available from 
+12 individuals from `D. yakuba`. The data is available from
 `adh.zip <http://zruanweb.com/adh.zip>`__. A function called ``mktest`` will be
 used for the test.
 
