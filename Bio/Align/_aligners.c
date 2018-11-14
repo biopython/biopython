@@ -818,8 +818,13 @@ PathGenerator_dealloc(PathGenerator* self)
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman: {
             Trace** M = self->M;
-            for (i = 0; i <= nA; i++) PyMem_Free(M[i]);
-            PyMem_Free(M);
+            if (M) {
+                for (i = 0; i <= nA; i++) {
+                    if (!M[i]) break;
+                    PyMem_Free(M[i]);
+                }
+                PyMem_Free(M);
+            }
             break;
         }
         case Gotoh: {
@@ -4381,14 +4386,67 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
 }
 
 static PathGenerator*
-PathGenerator_create_WSB(Aligner* aligner, Py_ssize_t nA, Py_ssize_t nB,
+PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB,
+                          double epsilon, Mode mode)
+{
+    int i;
+    unsigned char trace = 0;
+    Trace** M;
+    PathGenerator* paths;
+
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->M = NULL;
+    paths->trace3 = NULL;
+    paths->algorithm = NeedlemanWunschSmithWaterman;
+    paths->mode = mode;
+    paths->length = 0;
+
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    paths->M = M;
+    if (!M) goto exit;
+    if (mode == Global) trace = VERTICAL;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
+        M[i][0].trace = trace;
+    }
+    M[0][0].trace = 0;
+    if (mode == Global) trace = HORIZONTAL;
+    for (i = 1; i <= nB; i++) M[0][i].trace = trace;
+    M[0][0].path = 0;
+    return paths;
+exit:
+    Py_DECREF(paths);
+    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    return NULL;
+}
+
+static PathGenerator*
+PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB,
                          double epsilon, Mode mode)
 {
     int i, j;
     int* trace;
     Trace** M = NULL;
     Gaps** gaps = NULL;
-    PathGenerator* paths = _create_path_generator(aligner, nA, nB, epsilon);
+    PathGenerator* paths;
+
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->algorithm = WatermanSmithBeyer;
+    paths->mode = mode;
+    paths->length = 0;
 
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
@@ -4605,7 +4663,7 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_extend_A = self->target_right_extend_gap_score;
     const double right_gap_extend_B = self->query_right_extend_gap_score;
     const double epsilon = self->epsilon;
-    Trace** M = NULL;
+    Trace** M;
     double score;
     int trace;
     double temp;
@@ -4613,26 +4671,19 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     PathGenerator* paths = NULL;
 
     /* Needleman-Wunsch algorithm */
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
-    if (!M) goto exit;
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (!paths) goto exit;
-    paths->M = M;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
-        if (!M[i]) goto exit;
-    }
+    paths = PathGenerator_create_NWSW(nA, nB, epsilon, Global);
+    if (!paths) return NULL;
     scores = malloc((nB+1)*sizeof(double));
-    if (!scores) goto exit;
-    M[0][0].trace = 0;
-    scores[0] = 0;
-    for (j = 1; j <= nB; j++) {
-        M[0][j].trace = HORIZONTAL;
-        scores[j] = j * left_gap_extend_A;
+    if (!scores) {
+        Py_DECREF(paths);
+        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        return NULL;
     }
+    M = paths->M;
+    scores[0] = 0;
+    for (j = 1; j <= nB; j++) scores[j] = j * left_gap_extend_A;
     for (i = 1; i < nA; i++) {
         temp = scores[0];
-        M[i][0].trace = VERTICAL;
         scores[0] = i * left_gap_extend_B;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
@@ -4643,7 +4694,6 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
         SELECT_TRACE_NEEDLEMAN_WUNSCH(gap_extend_A, right_gap_extend_B);
     }
     temp = scores[0];
-    M[nA][0].trace = VERTICAL;
     scores[0] = i * left_gap_extend_B;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
@@ -4652,22 +4702,10 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     }
     kB = CHARINDEX(sB[j-1]);
     SELECT_TRACE_NEEDLEMAN_WUNSCH(right_gap_extend_A, right_gap_extend_B);
-    M[0][0].path = 0;
-    M[nA][nB].path = 0;
     PyMem_Free(scores);
+    M[nA][nB].path = 0;
 
     return Py_BuildValue("fN", score, paths);
-
-exit:
-    if (M) {
-        for (i = 0; i <= nA; i++) {
-            if (!M[i]) break;
-            PyMem_Free(M[i]);
-        }
-        PyMem_Free(M);
-    }
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
 }
 
 static PyObject*
@@ -4693,22 +4731,17 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     PathGenerator* paths = NULL;
 
     /* Smith-Waterman algorithm */
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
-    if (!M) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
-        if (!M[i]) goto exit;
-    }
+    paths = PathGenerator_create_NWSW(nA, nB, epsilon, Local);
     scores = malloc((nB+1)*sizeof(double));
-    if (!scores) goto exit;
-    M[0][0].path = 0;
-    for (j = 0; j <= nB; j++) {
-        M[0][j].trace = 0;
-        scores[j] = 0;
+    if (!scores) {
+        Py_DECREF(paths);
+        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        return NULL;
     }
+    M = paths->M;
+    for (j = 0; j <= nB; j++) scores[j] = 0;
     for (i = 1; i < nA; i++) {
         temp = 0;
-        M[i][0].trace = 0;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
@@ -4717,7 +4750,6 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
         kB = CHARINDEX(sB[nB-1]);
         SELECT_TRACE_SMITH_WATERMAN_D;
     }
-    M[nA][0].trace = 0;
     temp = 0;
     kA = CHARINDEX(sA[nA-1]);
     for (j = 1; j < nB; j++) {
@@ -4728,23 +4760,10 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     SELECT_TRACE_SMITH_WATERMAN_D;
     PyMem_Free(scores);
 
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        paths->M = M;
-        if (maximum==0) M[0][0].path = NONE;
-        return Py_BuildValue("fN", maximum, paths);
-    }
+    if (maximum==0) M[0][0].path = NONE;
+    else M[0][0].path = 0;
 
-exit:
-    if (M) {
-        for (i = 0; i <= nA; i++) {
-            if (!M[i]) break;
-            PyMem_Free(M[i]);
-        }
-        PyMem_Free(M);
-    }
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
+    return Py_BuildValue("fN", maximum, paths);
 }
 
 static PyObject*
@@ -5528,7 +5547,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    paths = PathGenerator_create_WSB(self, nA, nB, epsilon, Global);
+    paths = PathGenerator_create_WSB(nA, nB, epsilon, Global);
     if (!paths) return NULL;
     M = paths->M;
     gaps = paths->gaps;
@@ -5841,7 +5860,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    paths = PathGenerator_create_WSB(self, nA, nB, epsilon, Local);
+    paths = PathGenerator_create_WSB(nA, nB, epsilon, Local);
     if (!paths) return NULL;
     M = paths->M;
     gaps = paths->gaps;
