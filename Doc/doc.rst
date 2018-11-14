@@ -337,8 +337,8 @@ Now let's look at a real example of building codon alignment. Here we will use
 epidermal growth factor (EGFR) gene to demonstrate how to obtain codon
 alignment. To reduce your effort, we have already collected EGFR sequences for
 `Homo sapiens`, `Bos taurus`, `Rattus norvegicus`, `Sus scrofa` and
-`Drosophila melanogaster`. You can download them from
-`here <http://zruanweb.com/egfr.zip>`_.
+`Drosophila melanogaster`. You can download
+`egfr.zip <http://zruanweb.com/egfr.zip>`__.
 Uncomressing the ``.zip``, you will see three files. ``egfr_nucl.fa`` is
 nucleotide sequences of EGFR and ``egfr_pro.aln`` is EGFR protein sequence
 alignment in ``clustal`` format. The ``egfr_id`` contains id correspondance
@@ -444,7 +444,7 @@ individuals of the same species. In the following example, we will use `Adh`
 gene from fluit fly to demonstrate how to conduct the test. The data includes
 11 individuals from `D. melanogaster`, 4 individuals from `D. simulans` and
 12 individuals from `D. yakuba`. The data is available from 
-`here <http://zruanweb.com/adh.zip>`_. A function called ``mktest`` will be
+`adh.zip <http://zruanweb.com/adh.zip>`__. A function called ``mktest`` will be
 used for the test.
 
 .. code:: verbatim
