@@ -26,7 +26,7 @@ is similar to ``Bio.Seq`` but with some extra attributes. To obtain a simple
 sequence whose length is a multiple of 3 (This can be violated if you have
 ``rf_table`` argument). For example:
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio.CodonAlign import CodonSeq
     >>> codon_seq = CodonSeq("AAATTTCCCGGG")
@@ -35,7 +35,7 @@ sequence whose length is a multiple of 3 (This can be violated if you have
 
 An error will raise up if the input sequence is not a multiple of 3.
 
-.. code:: verbatim
+.. code::
 
     >>> codon_seq = CodonSeq("AAATTTCCCGG")
     Traceback (most recent call last):
@@ -53,7 +53,7 @@ instance, and are in need of assigning an special codon alphabet by yourself,
 need is to pick up a ``CodonTable`` object that is correct for your data.
 For example:
 
-.. code:: verbatim
+.. code::
     
     >>> from Bio.CodonAlign import CodonSeq
     >>> from Bio.CodonAlign.CodonAlphabet import get_codon_alphabet
@@ -67,7 +67,7 @@ For example:
 The slice of ``CodonSeq`` is exactly the same with ``Seq`` and it will always
 return a ``Seq`` object if you sliced a ``CodonSeq``. For example:
 
-.. code:: verbatim
+.. code::
 
     >>> codon_seq1
     CodonSeq('AAA---CCCGGG', CodonAlphabet(Vertebrate Mitochondrial))
@@ -87,7 +87,7 @@ specify the ``rf_table`` when initiate a ``CodonSeq`` object. In fact,
 ``CodonSeq`` object will automatically assign a ``rf_table`` to the
 ``CodonSeq`` if you don't say anything about it.
 
-.. code:: verbatim
+.. code::
 
     >>> codon_seq1 = CodonSeq("AAACCCGGG")
     >>> codon_seq1
@@ -117,7 +117,7 @@ ungapped nucleotide sequence. This makes ``rf_table`` to be interchangeable
 between ``CodonSeq`` with the same sequence but different gaps inserted. For
 example,
 
-.. code:: verbatim
+.. code::
 
     >>> codon_seq1 = CodonSeq("AAACCC---GGG")
     >>> codon_seq1.rf_table
@@ -136,7 +136,7 @@ It is also easy to convert ``Seq`` object to ``CodonSeq`` object, but it is
 the user's responsibility to ensure all the necessary information is correct
 for a ``CodonSeq`` (mainly ``rf_table``).
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio.Seq import Seq
     >>> codon_seq = CodonSeq()
@@ -165,7 +165,7 @@ Similar to ``MultipleSeqAlignment``, you can use numpy style slice to a
 ``CodonAlignment``. However, once you sliced, the returned result will
 always be a ``MultipleSeqAlignment`` object.
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio.CodonAlign import default_codon_alphabet, CodonSeq, CodonAlignment
     >>> from Bio.Alphabet import generic_dna
@@ -196,7 +196,7 @@ always be a ``MultipleSeqAlignment`` object.
 You can write out ``CodonAlignment`` object just as what you do with
 ``MultipleSeqAlignment``.
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio import AlignIO
     >>> AlignIO.write(codon_aln, 'example.aln', 'clustal')
@@ -211,7 +211,7 @@ However, you can read the alignment data in as a ``MultipleSeqAlignment``
 object and convert them into ``CodonAlignment`` object using ``from_msa()``
 class method. For example,
 
-.. code:: verbatim
+.. code::
 
     >>> aln = AlignIO.read('example.aln', 'clustal')
     >>> codon_aln = CodonAlignment()
@@ -244,7 +244,7 @@ list of nucleotide ``SeqRecord`` object. By default, ``CodonAlign.build``
 assumes the order of the alignment and nucleotide sequences are in the same.
 For example:
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio import CodonAlign
     >>> from Bio.Alphabet import IUPAC
@@ -273,7 +273,7 @@ same.
 ``CodonAlign.build`` method is also able to handle key match. In this case,
 records with same id are paired. For example:
 
-.. code:: verbatim
+.. code::
 
     >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl1')
     >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl2')
@@ -299,7 +299,7 @@ program nucleotide sequence and protein sequence correspondance by generating
 a ``corr_dict``. ``corr_dict`` should be a dictionary that uses protein record
 id as key and nucleotide record id as item. Let's look at an example:
 
-.. code:: verbatim
+.. code::
 
     >>> nucl1 = SeqRecord(Seq('AAATTTCCCGGG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl1')
     >>> nucl2 = SeqRecord(Seq('AAATTACCCGCG', alphabet=IUPAC.IUPACUnambiguousDNA()), id='nucl2')
@@ -345,7 +345,7 @@ alignment in ``clustal`` format. The ``egfr_id`` contains id correspondance
 between protein records and nucleotide records. You can then try the following
 code (make sure the files are in your current python working directory):
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio import SeqIO, AlignIO
     >>> nucl = SeqIO.parse('egfr_nucl.fa', 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
@@ -379,7 +379,7 @@ obtained a codon alignment, it is quite easy to calculate dN and dS. For
 example (assuming you have EGFR codon alignmnet in the python working
 space):
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio.CodonAlign.CodonSeq import cal_dn_ds
     >>> print aln
@@ -409,7 +409,7 @@ Available options include ``F1x4``, ``F3x4`` and ``F61``.
 
 It is also possible to get dN and dS matrix or a tree from a ``CodonAlignment`` object.
 
-.. code:: verbatim
+.. code::
 
     >>> dn_matrix, ds_matrix = aln.get_dn_ds_matrxi()
     >>> print dn_matrix
@@ -447,7 +447,7 @@ gene from fluit fly to demonstrate how to conduct the test. The data includes
 `adh.zip <http://zruanweb.com/adh.zip>`__. A function called ``mktest`` will be
 used for the test.
 
-.. code:: verbatim
+.. code::
 
     >>> from Bio import SeqIO, AlignIO
     >>> from Bio.Alphabet import IUPAC
