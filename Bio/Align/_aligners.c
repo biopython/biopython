@@ -26,6 +26,12 @@
 
 #define CHARINDEX(s) (c = s, c >= 'a' ? c - 'a' : c - 'A')
 
+#define SAFE_ADD(t, s) \
+{   term = t; \
+    if (term > PY_SSIZE_T_MAX - s) { count = OVERFLOW_ERROR; goto exit; } \
+    s += term; \
+}
+
 
 typedef enum {NeedlemanWunschSmithWaterman,
               Gotoh,
@@ -255,6 +261,1535 @@ typedef struct {
     Algorithm algorithm;
     Py_ssize_t length;
 } PathGenerator;
+
+static Py_ssize_t
+PathGenerator_needlemanwunsch_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Py_ssize_t term;
+    Py_ssize_t count;
+    Py_ssize_t temp;
+    Py_ssize_t* counts;
+    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!counts) return MEMORY_ERROR;
+    counts[0] = 1;
+    for (j = 1; j <= nB; j++) {
+        trace = M[0][j].trace;
+        count = 0;
+        if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
+        counts[j] = count;
+    }
+    for (i = 1; i <= nA; i++) {
+        trace = M[i][0].trace;
+        count = 0;
+        if (trace & VERTICAL) SAFE_ADD(counts[0], count);
+        temp = counts[0];
+        counts[0] = count;
+        for (j = 1; j <= nB; j++) {
+            trace = M[i][j].trace;
+            count = 0;
+            if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
+            if (trace & VERTICAL) SAFE_ADD(counts[j], count);
+            if (trace & DIAGONAL) SAFE_ADD(temp, count);
+            temp = counts[j];
+            counts[j] = count;
+        }
+    }
+exit:
+    PyMem_Free(counts);
+    return count;
+}
+
+static Py_ssize_t
+PathGenerator_smithwaterman_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Py_ssize_t term;
+    Py_ssize_t count;
+    Py_ssize_t total = 0;
+    Py_ssize_t temp;
+    Py_ssize_t* counts;
+    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!counts) return MEMORY_ERROR;
+    counts[0] = 1;
+    for (j = 1; j <= nB; j++) counts[j] = 1;
+    for (i = 1; i <= nA; i++) {
+        temp = counts[0];
+        counts[0] = 1;
+        for (j = 1; j <= nB; j++) {
+            trace = M[i][j].trace;
+            count = 0;
+            if (trace & DIAGONAL) SAFE_ADD(temp, count);
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
+            if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
+            if (trace & VERTICAL) SAFE_ADD(counts[j], count);
+            temp = counts[j];
+            if (count==0) count = 1;
+            counts[j] = count;
+        }
+    }
+    count = total;
+exit:
+    PyMem_Free(counts);
+    return count;
+}
+
+static Py_ssize_t
+PathGenerator_gotoh_global_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace3** trace3 = self->trace3;
+    Py_ssize_t count = MEMORY_ERROR;
+    Py_ssize_t term;
+    Py_ssize_t M_temp;
+    Py_ssize_t Ix_temp;
+    Py_ssize_t Iy_temp;
+    Py_ssize_t* M_counts = NULL;
+    Py_ssize_t* Ix_counts = NULL;
+    Py_ssize_t* Iy_counts = NULL;
+    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!M_counts) goto exit;
+    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!Ix_counts) goto exit;
+    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!Iy_counts) goto exit;
+    M_counts[0] = 1;
+    Ix_counts[0] = 0;
+    Iy_counts[0] = 0;
+    for (j = 1; j <= nB; j++) {
+        M_counts[j] = 0;
+        Ix_counts[j] = 0;
+        Iy_counts[j] = 1;
+    }
+    for (i = 1; i <= nA; i++) {
+        M_temp = M_counts[0];
+        M_counts[0] = 0;
+        Ix_temp = Ix_counts[0];
+        Ix_counts[0] = 1;
+        Iy_temp = Iy_counts[0];
+        Iy_counts[0] = 0;
+        for (j = 1; j <= nB; j++) {
+            count = 0;
+            trace = trace3[i][j].M;
+            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
+            M_temp = M_counts[j];
+            M_counts[j] = count;
+            count = 0;
+            trace = trace3[i][j].Ix;
+            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
+            Ix_temp = Ix_counts[j];
+            Ix_counts[j] = count;
+            count = 0;
+            trace = trace3[i][j].Iy;
+            if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
+            Iy_temp = Iy_counts[j];
+            Iy_counts[j] = count;
+        }
+    }
+    count = 0;
+    if (trace3[nA][nB].M) SAFE_ADD(M_counts[nB], count);
+    if (trace3[nA][nB].Ix) SAFE_ADD(Ix_counts[nB], count);
+    if (trace3[nA][nB].Iy) SAFE_ADD(Iy_counts[nB], count);
+exit:
+    if (M_counts) PyMem_Free(M_counts);
+    if (Ix_counts) PyMem_Free(Ix_counts);
+    if (Iy_counts) PyMem_Free(Iy_counts);
+    return count;
+}
+
+static Py_ssize_t
+PathGenerator_gotoh_local_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace3** trace3 = self->trace3;
+    Py_ssize_t term;
+    Py_ssize_t count = MEMORY_ERROR;
+    Py_ssize_t total = 0;
+    Py_ssize_t M_temp;
+    Py_ssize_t Ix_temp;
+    Py_ssize_t Iy_temp;
+    Py_ssize_t* M_counts = NULL;
+    Py_ssize_t* Ix_counts = NULL;
+    Py_ssize_t* Iy_counts = NULL;
+    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!M_counts) goto exit;
+    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!Ix_counts) goto exit;
+    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+    if (!Iy_counts) goto exit;
+    M_counts[0] = 1;
+    Ix_counts[0] = 0;
+    Iy_counts[0] = 0;
+    for (j = 1; j <= nB; j++) {
+        M_counts[j] = 1;
+        Ix_counts[j] = 0;
+        Iy_counts[j] = 0;
+    }
+    for (i = 1; i <= nA; i++) {
+        M_temp = M_counts[0];
+        M_counts[0] = 1;
+        Ix_temp = Ix_counts[0];
+        Ix_counts[0] = 0;
+        Iy_temp = Iy_counts[0];
+        Iy_counts[0] = 0;
+        for (j = 1; j <= nB; j++) {
+            count = 0;
+            trace = trace3[i][j].M;
+            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
+            if (count==0) count = 1;
+            M_temp = M_counts[j];
+            M_counts[j] = count;
+            if (trace3[i][j].M & ENDPOINT) SAFE_ADD(count, total);
+            count = 0;
+            trace = trace3[i][j].Ix;
+            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
+            Ix_temp = Ix_counts[j];
+            Ix_counts[j] = count;
+            count = 0;
+            trace = trace3[i][j].Iy;
+            if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
+            Iy_temp = Iy_counts[j];
+            Iy_counts[j] = count;
+        }
+    }
+    count = total;
+exit:
+    if (M_counts) PyMem_Free(M_counts);
+    if (Ix_counts) PyMem_Free(Ix_counts);
+    if (Iy_counts) PyMem_Free(Iy_counts);
+    return count;
+}
+
+static Py_ssize_t
+PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    int* p;
+    int gap;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Gaps** gaps = self->gaps;
+    Py_ssize_t count = MEMORY_ERROR;
+    Py_ssize_t term;
+    Py_ssize_t** M_count = NULL;
+    Py_ssize_t** Ix_count = NULL;
+    Py_ssize_t** Iy_count = NULL;
+    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!M_count) goto exit;
+    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!Ix_count) goto exit;
+    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!Iy_count) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!M_count[i]) goto exit;
+        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Ix_count[i]) goto exit;
+        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Iy_count[i]) goto exit;
+    }
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            count = 0;
+            trace = M[i][j].trace;
+            if (trace & M_MATRIX) SAFE_ADD(M_count[i-1][j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_count[i-1][j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
+            if (count == 0) count = 1; /* happens at M[0][0] only */
+            M_count[i][j] = count;
+            count = 0;
+            p = gaps[i][j].MIx;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i-gap][j], count);
+                    p++;
+                }
+            }
+            p = gaps[i][j].IyIx;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(Iy_count[i-gap][j], count);
+                    p++;
+                }
+            }
+            Ix_count[i][j] = count;
+            count = 0;
+            p = gaps[i][j].MIy;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i][j-gap], count);
+                    p++;
+                }
+            }
+	    p = gaps[i][j].IxIy;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(Ix_count[i][j-gap], count);
+                    p++;
+                }
+            }
+            Iy_count[i][j] = count;
+        }
+    }
+    count = 0;
+    if (M[nA][nB].trace)
+        SAFE_ADD(M_count[nA][nB], count);
+    if (gaps[nA][nB].MIx[0] || gaps[nA][nB].IyIx[0])
+        SAFE_ADD(Ix_count[nA][nB], count);
+    if (gaps[nA][nB].MIy[0] || gaps[nA][nB].IxIy[0])
+        SAFE_ADD(Iy_count[nA][nB], count);
+exit:
+    if (M_count) {
+        if (Ix_count) {
+            if (Iy_count) {
+                for (i = 0; i <= nA; i++) {
+                    if (!M_count[i]) break;
+                    PyMem_Free(M_count[i]);
+                    if (!Ix_count[i]) break;
+                    PyMem_Free(Ix_count[i]);
+                    if (!Iy_count[i]) break;
+                    PyMem_Free(Iy_count[i]);
+                }
+                PyMem_Free(Iy_count);
+            }
+            PyMem_Free(Ix_count);
+        }
+        PyMem_Free(M_count);
+    }
+    return count;
+}
+
+static Py_ssize_t
+PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
+{
+    int i;
+    int j;
+    int trace;
+    int* p;
+    int gap;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Gaps** gaps = self->gaps;
+    Py_ssize_t term;
+    Py_ssize_t count = MEMORY_ERROR;
+    Py_ssize_t total = 0;
+    Py_ssize_t** M_count = NULL;
+    Py_ssize_t** Ix_count = NULL;
+    Py_ssize_t** Iy_count = NULL;
+    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!M_count) goto exit;
+    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!Ix_count) goto exit;
+    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
+    if (!Iy_count) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!M_count[i]) goto exit;
+        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Ix_count[i]) goto exit;
+        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
+        if (!Iy_count[i]) goto exit;
+    }
+    for (i = 0; i <= nA; i++) {
+        for (j = 0; j <= nB; j++) {
+            count = 0;
+            trace = M[i][j].trace;
+            if (trace & M_MATRIX) SAFE_ADD(M_count[i-1][j-1], count);
+            if (trace & Ix_MATRIX) SAFE_ADD(Ix_count[i-1][j-1], count);
+            if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
+            if (count==0) count = 1;
+            M_count[i][j] = count;
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
+            count = 0;
+            p = gaps[i][j].MIx;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i-gap][j], count);
+                    p++;
+                }
+            }
+            p = gaps[i][j].IyIx;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(Iy_count[i-gap][j], count);
+                    p++;
+                }
+            }
+            if (count == 0) count = 1;
+            Ix_count[i][j] = count;
+            count = 0;
+            p = gaps[i][j].MIy;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(M_count[i][j-gap], count);
+                    p++;
+                }
+            }
+            p = gaps[i][j].IxIy;
+            if (p) {
+                while (1) {
+                    gap = *p;
+                    if (!gap) break;
+                    SAFE_ADD(Ix_count[i][j-gap], count);
+                    p++;
+                }
+            }
+            if (count == 0) count = 1;
+            Iy_count[i][j] = count;
+        }
+    }
+    count = total;
+exit:
+    if (M_count) {
+        if (Ix_count) {
+            if (Iy_count) {
+                for (i = 0; i <= nA; i++) {
+                    if (!M_count[i]) break;
+                    PyMem_Free(M_count[i]);
+                    if (!Ix_count[i]) break;
+                    PyMem_Free(Ix_count[i]);
+                    if (!Iy_count[i]) break;
+                    PyMem_Free(Iy_count[i]);
+                }
+                PyMem_Free(Iy_count);
+            }
+            PyMem_Free(Ix_count);
+        }
+        PyMem_Free(M_count);
+    }
+    return count;
+}
+
+static Py_ssize_t PathGenerator_length(PathGenerator* self) {
+    Py_ssize_t length = self->length;
+    if (length == 0) {
+        switch (self->algorithm) {
+            case NeedlemanWunschSmithWaterman:
+                switch (self->mode) {
+                    case Global:
+                        length = PathGenerator_needlemanwunsch_length(self);
+                        break;
+                    case Local:
+                        length = PathGenerator_smithwaterman_length(self);
+                        break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
+                }
+                break;
+            case Gotoh:
+                switch (self->mode) {
+                    case Global:
+                        length = PathGenerator_gotoh_global_length(self);
+                        break;
+                    case Local:
+                        length = PathGenerator_gotoh_local_length(self);
+                        break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
+                }
+                break;
+            case WatermanSmithBeyer:
+                switch (self->mode) {
+                    case Global:
+                        length = PathGenerator_waterman_smith_beyer_global_length(self);
+                        break;
+                    case Local:
+                        length = PathGenerator_waterman_smith_beyer_local_length(self);
+                        break;
+                    default:
+                        /* should not happen, but some compilers complain that
+                         * that length can be used uninitialized.
+                         */
+                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
+                        return -1;
+                }
+                break;
+            case Unknown:
+            default:
+                PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
+                return -1;
+        }
+        self->length = length;
+    }
+    switch (length) {
+        case OVERFLOW_ERROR:
+            PyErr_Format(PyExc_OverflowError,
+                         "number of optimal alignments is larger than %zd",
+                         PY_SSIZE_T_MAX);
+            break;
+        case MEMORY_ERROR:
+            PyErr_SetString(PyExc_MemoryError, "Out of memory");
+            break;
+        default:
+            break;
+    }
+    return length;
+}
+
+static void
+_deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
+                                        Trace** M, Gaps** gaps)
+{
+    int i, j;
+    int* trace;
+    if (M) {
+        for (i = 0; i <= nA; i++) {
+            if (!M[i]) break;
+            PyMem_Free(M[i]);
+            if (!gaps[i]) break;
+            for (j = 0; j <= nB; j++) {
+                trace = gaps[i][j].MIx;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].IyIx;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].MIy;
+                if (trace) PyMem_Free(trace);
+                trace = gaps[i][j].IxIy;
+                if (trace) PyMem_Free(trace);
+            }
+            PyMem_Free(gaps[i]);
+        }
+        PyMem_Free(M);
+    }
+}
+
+static void
+PathGenerator_dealloc(PathGenerator* self)
+{
+    int i;
+    const int nA = self->nA;
+    const Algorithm algorithm = self->algorithm;
+    switch (algorithm) {
+        case NeedlemanWunschSmithWaterman: {
+            Trace** M = self->M;
+            for (i = 0; i <= nA; i++) PyMem_Free(M[i]);
+            PyMem_Free(M);
+            break;
+        }
+        case Gotoh: {
+            Trace3** trace3 = self->trace3;
+            for (i = 0; i <= nA; i++) PyMem_Free(trace3[i]);
+            PyMem_Free(trace3);
+            break;
+        }
+        case WatermanSmithBeyer: {
+            Trace** M = self->M;
+            Gaps** gaps = self->gaps;
+            const int nB = self->nB;
+            _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
+            break;
+        }
+        case Unknown:
+        default:
+            PyErr_WriteUnraisable((PyObject*)self);
+            return;
+    }
+    Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+static PyObject* PathGenerator_next_needlemanwunsch(PathGenerator* self)
+{
+    int i = 0;
+    int j = 0;
+    int path;
+    int trace = 0;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+
+    path = M[i][j].path;
+    if (path == DONE) return NULL;
+    if (path == 0) {
+        /* Generate the first path. */
+        i = nA;
+        j = nB;
+    }
+    else {
+        /* We already have a path. Prune the path to see if there are
+         * any alternative paths. */
+        while (1) {
+            if (path == HORIZONTAL) {
+                trace = M[i][++j].trace;
+                if (trace & VERTICAL) {
+                    M[--i][j].path = VERTICAL;
+                    break;
+                }
+                if (trace & DIAGONAL) {
+                    M[--i][--j].path = DIAGONAL;
+                    break;
+                }
+            }
+            else if (path == VERTICAL) {
+                trace = M[++i][j].trace;
+                if (trace & DIAGONAL) {
+                    M[--i][--j].path = DIAGONAL;
+                    break;
+                }
+            }
+            else /* DIAGONAL */ {
+                i++;
+                j++;
+            }
+            path = M[i][j].path;
+            if (!path) {
+                /* we reached the end of the alignment without finding
+                 * an alternative path */
+                M[0][0].path = DONE;
+                return NULL;
+            }
+        }
+    }
+    /* Follow the traceback until we reach the origin. */
+    while (1) {
+        trace = M[i][j].trace;
+        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
+        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
+        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
+        else break;
+    }
+    return _create_path(M, 0, 0);
+}
+
+static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
+{
+    int trace = 0;
+    int i = self->iA;
+    int j = self->iB;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    int path = M[0][0].path;
+
+    if (path == DONE || path == NONE) return NULL;
+
+    path = M[i][j].path;
+    if (path) {
+        /* We already have a path. Prune the path to see if there are
+         * any alternative paths. */
+        while (1) {
+            if (path == HORIZONTAL) {
+                trace = M[i][++j].trace;
+                if (trace & VERTICAL) {
+                    M[--i][j].path = VERTICAL;
+                    break;
+                }
+                else if (trace & DIAGONAL) {
+                    M[--i][--j].path = DIAGONAL;
+                    break;
+                }
+            }
+            else if (path == VERTICAL) {
+                trace = M[++i][j].trace;
+                if (trace & DIAGONAL) {
+                    M[--i][--j].path = DIAGONAL;
+                    break;
+                }
+            }
+            else /* DIAGONAL */ {
+                i++;
+                j++;
+            }
+            path = M[i][j].path;
+            if (!path) break;
+        }
+    }
+
+    if (path) {
+        trace = M[i][j].trace;
+    } else {
+        /* Find a suitable end point for a path.
+         * Only allow start points ending at the M matrix. */
+        while (1) {
+            if (j < nB) j++;
+            else if (i < nA) {
+                i++;
+                j = 0;
+            }
+            else {
+                /* we reached the end of the sequences without finding
+                 * an alternative path */
+                M[0][0].path = DONE;
+                return NULL;
+            }
+            trace = M[i][j].trace;
+            if (trace & ENDPOINT) {
+                trace &= DIAGONAL; /* exclude paths ending in a gap */
+                break;
+            }
+        }
+        M[i][j].path = 0;
+    }
+
+    /* Follow the traceback until we reach the origin. */
+    while (1) {
+        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
+        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
+        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
+        else break;
+        trace = M[i][j].trace;
+    }
+    self->iA = i;
+    self->iB = j;
+    return _create_path(M, i, j);
+}
+
+static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
+{
+    int i = 0;
+    int j = 0;
+    int m;
+    int path;
+    int trace = 0;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace3** trace3 = self->trace3;
+
+    m = M_MATRIX;
+    path = trace3[i][j].path;
+    if (path == DONE) return NULL;
+    if (path == 0) {
+        i = nA;
+        j = nB;
+    }
+    else {
+        /* We already have a path. Prune the path to see if there are
+         * any alternative paths. */
+        while (1) {
+            path = trace3[i][j].path;
+            if (path == 0) {
+                switch (m) {
+                    case M_MATRIX: m = Ix_MATRIX; break;
+                    case Ix_MATRIX: m = Iy_MATRIX; break;
+                    case Iy_MATRIX: m = 0; break;
+                }
+                break;
+            }
+            switch (path) {
+                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
+                case VERTICAL: trace = trace3[++i][j].Ix; break;
+                case DIAGONAL: trace = trace3[++i][++j].M; break;
+            }
+            switch (m) {
+                case M_MATRIX:
+                    if (trace & Ix_MATRIX) {
+                        m = Ix_MATRIX;
+                        break;
+                    }
+                case Ix_MATRIX:
+                    if (trace & Iy_MATRIX) {
+                        m = Iy_MATRIX;
+                        break;
+                    }
+                case Iy_MATRIX:
+                default:
+                    switch (path) {
+                        case HORIZONTAL: m = Iy_MATRIX; break;
+                        case VERTICAL: m = Ix_MATRIX; break;
+                        case DIAGONAL: m = M_MATRIX; break;
+                    }
+                    continue;
+            }
+            switch (path) {
+                case HORIZONTAL: j--; break;
+                case VERTICAL: i--; break;
+                case DIAGONAL: i--; j--; break;
+            }
+            trace3[i][j].path = path;
+            break;
+        }
+    }
+
+    if (path == 0) {
+        /* Generate a new path. */
+        switch (m) {
+            case M_MATRIX:
+                if (trace3[nA][nB].M) {
+                   /* m = M_MATRIX; */
+                   break;
+                }
+            case Ix_MATRIX:
+                if (trace3[nA][nB].Ix) {
+                   m = Ix_MATRIX;
+                   break;
+                }
+            case Iy_MATRIX:
+                if (trace3[nA][nB].Iy) {
+                   m = Iy_MATRIX;
+                   break;
+                }
+            default:
+                /* exhausted this generator */
+                trace3[0][0].path = DONE;
+                return NULL;
+        }
+    }
+
+    switch (m) {
+        case M_MATRIX:
+            trace = trace3[i][j].M;
+            path = DIAGONAL;
+            i--; j--;
+            break;
+        case Ix_MATRIX:
+            trace = trace3[i][j].Ix;
+            path = VERTICAL;
+            i--;
+            break;
+        case Iy_MATRIX:
+            trace = trace3[i][j].Iy;
+            path = HORIZONTAL;
+            j--;
+            break;
+    }
+
+    while (1) {
+        if (trace & M_MATRIX) {
+            trace3[i][j].path = path;
+            trace = trace3[i][j].M;
+            path = DIAGONAL;
+            i--; j--;
+        }
+        else if (trace & Ix_MATRIX) {
+            trace3[i][j].path = path;
+            trace = trace3[i][j].Ix;
+            path = VERTICAL;
+            i--;
+        }
+        else if (trace & Iy_MATRIX) {
+            trace3[i][j].path = path;
+            trace = trace3[i][j].Iy;
+            path = HORIZONTAL;
+            j--;
+        }
+        else break;
+    }
+    return _create_path_gotoh(trace3, 0, 0);
+}
+
+static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
+{
+    int trace = 0;
+    int i;
+    int j;
+    int m = M_MATRIX;
+    int iA = self->iA;
+    int iB = self->iB;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace3** trace3 = self->trace3;
+    int path = trace3[0][0].path;
+
+    if (path == DONE) return NULL;
+
+    path = trace3[iA][iB].path;
+
+    if (path) {
+        i = iA;
+        j = iB;
+        while (1) {
+            /* We already have a path. Prune the path to see if there are
+             * any alternative paths. */
+            path = trace3[i][j].path;
+            if (path == 0) {
+                m = M_MATRIX;
+                iA = i;
+                iB = j;
+                break;
+            }
+            switch (path) {
+                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
+                case VERTICAL: trace = trace3[++i][j].Ix; break;
+                case DIAGONAL: trace = trace3[++i][++j].M; break;
+            }
+            switch (m) {
+                case M_MATRIX:
+                    if (trace & Ix_MATRIX) {
+                        m = Ix_MATRIX;
+                        break;
+                    }
+                case Ix_MATRIX:
+                    if (trace & Iy_MATRIX) {
+                        m = Iy_MATRIX;
+                        break;
+                    }
+                case Iy_MATRIX:
+                default:
+                    switch (path) {
+                        case HORIZONTAL: m = Iy_MATRIX; break;
+                        case VERTICAL: m = Ix_MATRIX; break;
+                        case DIAGONAL: m = M_MATRIX; break;
+                    }
+                    continue;
+            }
+            switch (path) {
+                case HORIZONTAL: j--; break;
+                case VERTICAL: i--; break;
+                case DIAGONAL: i--; j--; break;
+            }
+            trace3[i][j].path = path;
+            break;
+        }
+    }
+
+    if (path == 0) {
+        /* Find the end point for a new path. */
+        while (1) {
+            if (iB < nB) iB++;
+            else if (iA < nA) {
+                iA++;
+                iB = 0;
+            }
+            else {
+                /* we reached the end of the alignment without finding
+                 * an alternative path */
+                trace3[0][0].path = DONE;
+                return NULL;
+            }
+            if (trace3[iA][iB].M & ENDPOINT) {
+                trace3[iA][iB].path = 0;
+                break;
+            }
+        }
+        m = M_MATRIX;
+        i = iA;
+        j = iB;
+    }
+
+    while (1) {
+        switch (m) {
+            case M_MATRIX: trace = trace3[i][j].M; break;
+            case Ix_MATRIX: trace = trace3[i][j].Ix; break;
+            case Iy_MATRIX: trace = trace3[i][j].Iy; break;
+        }
+        if (trace==0) {
+            self->iA = i;
+            self->iB = j;
+            return _create_path_gotoh(trace3, i, j);
+        }
+        switch (m) {
+            case M_MATRIX:
+                path = DIAGONAL;
+                i--;
+                j--;
+                break;
+            case Ix_MATRIX:
+                path = VERTICAL;
+                i--;
+                break;
+            case Iy_MATRIX:
+                path = HORIZONTAL;
+                j--;
+                break;
+        }
+        if (trace & M_MATRIX) m = M_MATRIX;
+        else if (trace & Ix_MATRIX) m = Ix_MATRIX;
+        else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+/*
+        switch (m) {
+            case M_MATRIX: M[i][j].path = path; break;
+            case Ix_MATRIX: Ix[i][j].path = path; break;
+            case Iy_MATRIX: Iy[i][j].path = path; break;
+        }
+*/
+        trace3[i][j].path = path;
+    }
+    return NULL;
+}
+
+static PyObject*
+PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
+{
+    int i = 0, j = 0;
+    int iA, iB;
+    int trace;
+    int* gapM;
+    int* gapXY;
+
+    int m = M_MATRIX;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Gaps** gaps = self->gaps;
+
+    int gap;
+    int path = M[0][0].path;
+
+    if (path == DONE) return NULL;
+
+    if (path) {
+        /* We already have a path. Prune the path to see if there are
+         * any alternative paths. */
+        while (1) {
+            if (!path) {
+                m <<= 1;
+                break;
+            }
+            switch (path) {
+                case HORIZONTAL:
+                    iA = i;
+                    iB = j;
+                    while (M[i][iB].path == HORIZONTAL) iB++;
+                    break;
+                case VERTICAL:
+                    iA = i;
+                    while (M[iA][j].path == VERTICAL) iA++;
+                    iB = j;
+                    break;
+                case DIAGONAL:
+                    iA = i + 1;
+                    iB = j + 1;
+                    break;
+                default:
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected path in PathGenerator_next_waterman_smith_beyer_global");
+                    return NULL;
+            }
+            if (i == iA) { /* HORIZONTAL */
+                gapM = gaps[iA][iB].MIy;
+                gapXY = gaps[iA][iB].IxIy;
+                if (m==M_MATRIX) {
+                    gap = iB - j;
+                    while (*gapM != gap) gapM++;
+                    gapM++;
+                    gap = *gapM;
+                    if (gap) {
+                        j = iB - gap;
+                        while (j < iB) M[i][--iB].path = HORIZONTAL;
+                        break;
+                    }
+                } else if (m==Ix_MATRIX) {
+                    gap = iB - j;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
+                }
+                gap = *gapXY;
+                if (gap) {
+                    m = Ix_MATRIX;
+                    j = iB - gap;
+                    while (j < iB) M[i][--iB].path = HORIZONTAL;
+                    break;
+                }
+                /* no alternative found; continue pruning */
+                m = Iy_MATRIX;
+                j = iB;
+            }
+            else if (j==iB) { /* VERTICAL */
+                gapM = gaps[iA][iB].MIx;
+                gapXY = gaps[iA][iB].IyIx;
+                if (m==M_MATRIX) {
+                    gap = iA - i;
+                    while (*gapM != gap) gapM++;
+                    gapM++;
+                    gap = *gapM;
+                    if (gap) {
+                        i = iA - gap;
+                        while (i < iA) M[--iA][j].path = VERTICAL;
+                        break;
+                    }
+                } else if (m==Iy_MATRIX) {
+                    gap = iA - i;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
+                }
+                gap = *gapXY;
+                if (gap) {
+                    m = Iy_MATRIX;
+                    i = iA - gap;
+                    while (i < iA) M[--iA][j].path = VERTICAL;
+                    break;
+                }
+                /* no alternative found; continue pruning */
+                m = Ix_MATRIX;
+                i = iA;
+            }
+            else { /* DIAGONAL */
+                i = iA - 1;
+                j = iB - 1;
+                trace = M[iA][iB].trace;
+                switch (m) {
+                    case M_MATRIX:
+                        if (trace & Ix_MATRIX) {
+                            m = Ix_MATRIX;
+                            M[i][j].path = DIAGONAL;
+                            break;
+                        }
+                    case Ix_MATRIX:
+                        if (trace & Iy_MATRIX) {
+                            m = Iy_MATRIX;
+                            M[i][j].path = DIAGONAL;
+                            break;
+                        }
+                    case Iy_MATRIX:
+                    default:
+                        /* no alternative found; continue pruning */
+                        m = M_MATRIX;
+                        i = iA;
+                        j = iB;
+                        path = M[i][j].path;
+                        continue;
+                }
+                /* alternative found; build path until starting point */
+                break;
+            }
+            path = M[i][j].path;
+        }
+    }
+
+    if (!path) {
+        /* Find a suitable end point for a path. */
+        switch (m) {
+            case M_MATRIX:
+                if (M[nA][nB].trace) {
+                    /* m = M_MATRIX; */
+                    break;
+                }
+            case Ix_MATRIX:
+                if (gaps[nA][nB].MIx[0] || gaps[nA][nB].IyIx[0]) {
+                    m = Ix_MATRIX;
+                    break;
+                }
+            case Iy_MATRIX:
+                if (gaps[nA][nB].MIy[0] || gaps[nA][nB].IxIy[0]) {
+                    m = Iy_MATRIX;
+                    break;
+                }
+            default:
+                M[0][0].path = DONE;
+                return NULL;
+        }
+        i = nA;
+        j = nB;
+    }
+
+    /* Follow the traceback until we reach the origin. */
+    while (1) {
+        switch (m) {
+            case M_MATRIX:
+                trace = M[i][j].trace;
+                if (trace & M_MATRIX) m = M_MATRIX;
+                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
+                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+                else return _create_path(M, i, j);
+                i--;
+                j--;
+                M[i][j].path = DIAGONAL;
+                break;
+            case Ix_MATRIX:
+                gap = gaps[i][j].MIx[0];
+                if (gap) m = M_MATRIX;
+                else {
+                    gap = gaps[i][j].IyIx[0];
+                    m = Iy_MATRIX;
+                }
+                iA = i - gap;
+                while (iA < i) M[--i][j].path = VERTICAL;
+                M[i][j].path = VERTICAL;
+                break;
+            case Iy_MATRIX:
+                gap = gaps[i][j].MIy[0];
+                if (gap) m = M_MATRIX;
+                else {
+                    gap = gaps[i][j].IxIy[0];
+                    m = Ix_MATRIX;
+                }
+                iB = j - gap;
+                while (iB < j) M[i][--j].path = HORIZONTAL;
+                M[i][j].path = HORIZONTAL;
+                break;
+        }
+    }
+}
+
+static PyObject*
+PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
+{
+    int i, j, m;
+    int trace = 0;
+    int* gapM;
+    int* gapXY;
+
+    int iA = self->iA;
+    int iB = self->iB;
+    const int nA = self->nA;
+    const int nB = self->nB;
+    Trace** M = self->M;
+    Gaps** gaps = self->gaps;
+
+    int gap;
+    int path = M[0][0].path;
+
+    if (path == DONE) return NULL;
+    m = 0;
+    path = M[iA][iB].path;
+    if (path) {
+        /* We already have a path. Prune the path to see if there are
+         * any alternative paths. */
+        m = M_MATRIX;
+        i = iA;
+        j = iB;
+        while (1) {
+            path = M[i][j].path;
+            switch (path) {
+                case HORIZONTAL:
+                    iA = i;
+                    iB = j;
+                    while (M[i][iB].path == HORIZONTAL) iB++;
+                    break;
+                case VERTICAL:
+                    iA = i;
+                    iB = j;
+                    while (M[iA][j].path == VERTICAL) iA++;
+                    break;
+                case DIAGONAL:
+                    iA = i + 1;
+                    iB = j + 1;
+                    break;
+                default:
+                    iA = -1;
+                    break;
+            }
+            if (iA < 0) {
+                m = 0;
+                iA = i;
+                iB = j;
+                break;
+            }
+            if (i == iA) { /* HORIZONTAL */
+                gapM = gaps[iA][iB].MIy;
+                gapXY = gaps[iA][iB].IxIy;
+                if (m==M_MATRIX) {
+                    gap = iB - j;
+                    while (*gapM != gap) gapM++;
+                    gapM++;
+                    gap = *gapM;
+                    if (gap) {
+                        j = iB - gap;
+                        while (j < iB) M[i][--iB].path = HORIZONTAL;
+                        break;
+                    }
+                } else if (m==Ix_MATRIX) {
+                    gap = iB - j;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
+                }
+                gap = *gapXY;
+                if (gap) {
+                    m = Ix_MATRIX;
+                    j = iB - gap;
+                    M[i][j].path = HORIZONTAL;
+                    while (iB > j) M[i][--iB].path = HORIZONTAL;
+                    break;
+                }
+                /* no alternative found; continue pruning */
+                m = Iy_MATRIX;
+                j = iB;
+            }
+            else if (j == iB) { /* VERTICAL */
+                gapM = gaps[iA][iB].MIx;
+                gapXY = gaps[iA][iB].IyIx;
+                if (m==M_MATRIX) {
+                    gap = iA - i;
+                    while (*gapM != gap) gapM++;
+                    gapM++;
+                    gap = *gapM;
+                    if (gap) {
+                        i = iA - gap;
+                        while (i < iA) M[--iA][j].path = VERTICAL;
+                        break;
+                    }
+                } else if (m==Iy_MATRIX) {
+                    gap = iA - i;
+                    while (*gapXY != gap) gapXY++;
+                    gapXY++;
+                }
+                gap = *gapXY;
+                if (gap) {
+                    m = Iy_MATRIX;
+                    i = iA - gap;
+                    M[i][j].path = VERTICAL;
+                    while (iA > i) M[--iA][j].path = VERTICAL;
+                    break;
+                }
+                /* no alternative found; continue pruning */
+                m = Ix_MATRIX;
+                i = iA;
+            }
+            else { /* DIAGONAL */
+                i = iA - 1;
+                j = iB - 1;
+                trace = M[iA][iB].trace;
+                switch (m) {
+                    case M_MATRIX:
+                        if (trace & Ix_MATRIX) {
+                            m = Ix_MATRIX;
+                            M[i][j].path = DIAGONAL;
+                            break;
+                        }
+                    case Ix_MATRIX:
+                        if (trace & Iy_MATRIX) {
+                            m = Iy_MATRIX;
+                            M[i][j].path = DIAGONAL;
+                            break;
+                        }
+                    case Iy_MATRIX:
+                    default:
+                        /* no alternative found; continue pruning */
+                        m = M_MATRIX;
+                        i = iA;
+                        j = iB;
+                        continue;
+                }
+                /* alternative found; build path until starting point */
+                break;
+            }
+        }
+    }
+ 
+    if (m == 0) {
+        /* We are at [nA][nB]. Find a suitable end point for a path. */
+        while (1) {
+            if (iB < nB) iB++;
+            else if (iA < nA) {
+                iA++;
+                iB = 0;
+            }
+            else {
+                /* exhausted this generator */
+                M[0][0].path = DONE;
+                return NULL;
+            }
+            if (M[iA][iB].trace & ENDPOINT) break;
+        }
+        M[iA][iB].path = 0;
+        m = M_MATRIX;
+        i = iA;
+        j = iB;
+    }
+
+    /* Follow the traceback until we reach the origin. */
+    while (1) {
+        switch (m) {
+            case Ix_MATRIX:
+                gapM = gaps[i][j].MIx;
+                gapXY = gaps[i][j].IyIx;
+                iB = j;
+                gap = *gapM;
+                if (gap) m = M_MATRIX;
+                else {
+                    gap = *gapXY;
+                    m = Iy_MATRIX;
+                }
+                iA = i - gap;
+                while (i > iA) M[--i][iB].path = VERTICAL;
+                break;
+            case Iy_MATRIX:
+                gapM = gaps[i][j].MIy;
+                gapXY = gaps[i][j].IxIy;
+                iA = i;
+                gap = *gapM;
+                if (gap) m = M_MATRIX;
+                else {
+                    gap = *gapXY;
+                    m = Ix_MATRIX;
+                }
+                iB = j - gap;
+                while (j > iB) M[iA][--j].path = HORIZONTAL;
+                break;
+            case M_MATRIX:
+                iA = i-1;
+                iB = j-1;
+                trace = M[i][j].trace;
+                if (trace & M_MATRIX) m = M_MATRIX;
+                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
+                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+                else {
+                    self->iA = i;
+                    self->iB = j;
+                    return _create_path(M, i, j);
+                }
+                M[iA][iB].path = DIAGONAL;
+                break;
+        }
+        i = iA;
+        j = iB;
+    }
+}
+
+static PyObject *
+PathGenerator_next(PathGenerator* self)
+{
+    const Mode mode = self->mode;
+    const Algorithm algorithm = self->algorithm;
+    switch (algorithm) {
+        case NeedlemanWunschSmithWaterman:
+            switch (mode) {
+                case Global:
+                    return PathGenerator_next_needlemanwunsch(self);
+                case Local:
+                    return PathGenerator_next_smithwaterman(self);
+            }
+        case Gotoh:
+            switch (mode) {
+                case Global:
+                    return PathGenerator_next_gotoh_global(self);
+                case Local:
+                    return PathGenerator_next_gotoh_local(self);
+            }
+        case WatermanSmithBeyer:
+            switch (mode) {
+                case Global:
+                    return PathGenerator_next_waterman_smith_beyer_global(self);
+                case Local:
+                    return PathGenerator_next_waterman_smith_beyer_local(self);
+            }
+        case Unknown:
+        default:
+            PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
+            return NULL;
+    }
+}
+
+static const char PathGenerator_reset__doc__[] = "reset the iterator";
+
+static PyObject*
+PathGenerator_reset(PathGenerator* self)
+{
+    switch (self->mode) {
+        case Local:
+            self->iA = 0;
+            self->iB = 0;
+        case Global:
+            switch (self->algorithm) {
+                case NeedlemanWunschSmithWaterman: {
+                    Trace** M = self->M;
+                    if (M[0][0].path != NONE) M[0][0].path = 0;
+                    break;
+                }
+                case Gotoh: {
+                    Trace3** trace3 = self->trace3;
+                    if (trace3[0][0].path != NONE) trace3[0][0].path = 0;
+                    break;
+                }
+                case WatermanSmithBeyer: {
+                    Trace** M = self->M;
+                    M[0][0].path = 0;
+                    break;
+                }
+                case Unknown:
+                default:
+                    break;
+        }
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyMethodDef PathGenerator_methods[] = {
+    {"reset",
+     (PyCFunction)PathGenerator_reset,
+     METH_NOARGS,
+     PathGenerator_reset__doc__
+    },
+    {NULL}  /* Sentinel */
+};
+
+static PySequenceMethods PathGenerator_as_sequence = {
+    (lenfunc)PathGenerator_length,  /* sq_length */
+    NULL,                           /* sq_concat */
+    NULL,                           /* sq_repeat */
+    NULL,                           /* sq_item */
+    NULL,                           /* sq_ass_item */
+    NULL,                           /* sq_contains */
+    NULL,                           /* sq_inplace_concat */
+    NULL,                           /* sq_inplace_repeat */
+};
+
+static PyTypeObject PathGenerator_Type = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "Path generator",               /* tp_name */
+    sizeof(PathGenerator),          /* tp_basicsize */
+    0,                              /* tp_itemsize */
+    (destructor)PathGenerator_dealloc,  /* tp_dealloc */
+    0,                              /* tp_print */
+    0,                              /* tp_getattr */
+    0,                              /* tp_setattr */
+    0,                              /* tp_reserved */
+    0,                              /* tp_repr */
+    0,                              /* tp_as_number */
+    &PathGenerator_as_sequence,     /* tp_as_sequence */
+    0,                              /* tp_as_mapping */
+    0,                              /* tp_hash */
+    0,                              /* tp_call */
+    0,                              /* tp_str */
+    0,                              /* tp_getattro */
+    0,                              /* tp_setattro */
+    0,                              /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,             /* tp_flags */
+    0,                              /* tp_doc */
+    0,                              /* tp_traverse */
+    0,                              /* tp_clear */
+    0,                              /* tp_richcompare */
+    0,                              /* tp_weaklistoffset */
+    PyObject_SelfIter,              /* tp_iter */
+    (iternextfunc)PathGenerator_next,      /* tp_iternext */
+    PathGenerator_methods,          /* tp_methods */
+};
 
 typedef struct {
     PyObject_HEAD
@@ -2810,42 +4345,51 @@ static PyGetSetDef Aligner_getset[] = {
 
 /* -------------- allocation & deallocation ------------- */
 
-static void
-_deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                        Trace** M, Gaps** gaps)
+static PathGenerator*
+_create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
 {
-    int i, j;
-    int* trace;
-    if (M) {
-        for (i = 0; i <= nA; i++) {
-            if (!M[i]) break;
-            PyMem_Free(M[i]);
-            if (!gaps[i]) break;
-            for (j = 0; j <= nB; j++) {
-                trace = gaps[i][j].MIx;
-                if (trace) PyMem_Free(trace);
-                trace = gaps[i][j].IyIx;
-                if (trace) PyMem_Free(trace);
-                trace = gaps[i][j].MIy;
-                if (trace) PyMem_Free(trace);
-                trace = gaps[i][j].IxIy;
-                if (trace) PyMem_Free(trace);
-            }
-            PyMem_Free(gaps[i]);
-        }
-        PyMem_Free(M);
+    Algorithm algorithm = aligner->algorithm;
+    PathGenerator* generator;
+    generator = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!generator) return NULL;
+
+    generator->iA = 0;
+    generator->iB = 0;
+    generator->nA = nA;
+    generator->nB = nB;
+    switch (algorithm) {
+        case NeedlemanWunschSmithWaterman:
+        case Gotoh:
+            generator->M = NULL;
+            generator->trace3 = NULL;
+            break;
+        case WatermanSmithBeyer:
+            generator->M = NULL;
+            generator->gaps = NULL;
+            break;
+        case Unknown:
+        default:
+            Py_DECREF(generator);
+            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
+            return NULL;
     }
+    generator->algorithm = algorithm;
+    generator->mode = aligner->mode;
+    generator->length = 0;
+
+    return generator;
 }
 
-static int
-_allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                      Trace*** pM, Gaps*** pGaps,
-                                      Mode mode)
+static PathGenerator*
+PathGenerator_create_WSB(Aligner* aligner, Py_ssize_t nA, Py_ssize_t nB,
+                         double epsilon, Mode mode)
 {
     int i, j;
     int* trace;
     Trace** M = NULL;
     Gaps** gaps = NULL;
+    PathGenerator* paths = _create_path_generator(aligner, nA, nB, epsilon);
+
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     gaps = PyMem_Malloc((nA+1)*sizeof(Gaps*));
@@ -2906,13 +4450,13 @@ _allocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
         }
     }
     M[0][0].path = 0;
-    *pM = M;
-    *pGaps = gaps;
-    return 1;
+    paths->M = M;
+    paths->gaps = gaps;
+    return paths;
 exit:
     _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
     PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return 0;
+    return NULL;
 }
 
 /* ----------------- alignment algorithms ----------------- */
@@ -2934,13 +4478,15 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_extend_B = self->query_right_extend_gap_score;
     double score;
     double temp;
-    PyObject* result = NULL;
 
     double* scores;
 
     /* Needleman-Wunsch algorithm */
     scores = PyMem_Malloc((nB+1)*sizeof(double));
-    if (!scores) goto exit;
+    if (!scores) {
+        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        return NULL;
+    }
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
@@ -2981,11 +4527,8 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
     SELECT_SCORE_GLOBAL(temp + self->substitution_matrix[kA][kB],
                         scores[nB] + right_gap_extend_B,
                         scores[nB-1] + right_gap_extend_A);
-    result = PyFloat_FromDouble(score);
-exit:
-    if (scores) PyMem_Free(scores);
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return result;
+    PyMem_Free(scores);
+    return PyFloat_FromDouble(score);
 }
 
 static PyObject*
@@ -3003,11 +4546,13 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double* scores;
     double temp;
     double maximum = 0;
-    PyObject* result = NULL;
 
     /* Smith-Waterman algorithm */
     scores = PyMem_Malloc((nB+1)*sizeof(double));
-    if (!scores) goto exit;
+    if (!scores) {
+        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        return NULL;
+    }
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
@@ -3040,1554 +4585,8 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
     }
     kB = CHARINDEX(sB[nB-1]);
     SELECT_SCORE_LOCAL1(temp + self->substitution_matrix[kA][kB]);
-    result = PyFloat_FromDouble(maximum);
-exit:
-    if (scores) PyMem_Free(scores);
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return result;
-}
-
-static PyObject* PathGenerator_next_needlemanwunsch(PathGenerator* self)
-{
-    int i = 0;
-    int j = 0;
-    int path;
-    int trace = 0;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-
-    path = M[i][j].path;
-    if (path == DONE) return NULL;
-    if (path == 0) {
-        /* Generate the first path. */
-        i = nA;
-        j = nB;
-    }
-    else {
-        /* We already have a path. Prune the path to see if there are
-         * any alternative paths. */
-        while (1) {
-            if (path == HORIZONTAL) {
-                trace = M[i][++j].trace;
-                if (trace & VERTICAL) {
-                    M[--i][j].path = VERTICAL;
-                    break;
-                }
-                if (trace & DIAGONAL) {
-                    M[--i][--j].path = DIAGONAL;
-                    break;
-                }
-            }
-            else if (path == VERTICAL) {
-                trace = M[++i][j].trace;
-                if (trace & DIAGONAL) {
-                    M[--i][--j].path = DIAGONAL;
-                    break;
-                }
-            }
-            else /* DIAGONAL */ {
-                i++;
-                j++;
-            }
-            path = M[i][j].path;
-            if (!path) {
-                /* we reached the end of the alignment without finding
-                 * an alternative path */
-                M[0][0].path = DONE;
-                return NULL;
-            }
-        }
-    }
-    /* Follow the traceback until we reach the origin. */
-    while (1) {
-        trace = M[i][j].trace;
-        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
-        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
-        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
-        else break;
-    }
-    return _create_path(M, 0, 0);
-}
-
-static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
-{
-    int trace = 0;
-    int i = self->iA;
-    int j = self->iB;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    int path = M[0][0].path;
-
-    if (path == DONE || path == NONE) return NULL;
-
-    path = M[i][j].path;
-    if (path) {
-        /* We already have a path. Prune the path to see if there are
-         * any alternative paths. */
-        while (1) {
-            if (path == HORIZONTAL) {
-                trace = M[i][++j].trace;
-                if (trace & VERTICAL) {
-                    M[--i][j].path = VERTICAL;
-                    break;
-                }
-                else if (trace & DIAGONAL) {
-                    M[--i][--j].path = DIAGONAL;
-                    break;
-                }
-            }
-            else if (path == VERTICAL) {
-                trace = M[++i][j].trace;
-                if (trace & DIAGONAL) {
-                    M[--i][--j].path = DIAGONAL;
-                    break;
-                }
-            }
-            else /* DIAGONAL */ {
-                i++;
-                j++;
-            }
-            path = M[i][j].path;
-            if (!path) break;
-        }
-    }
-
-    if (path) {
-        trace = M[i][j].trace;
-    } else {
-        /* Find a suitable end point for a path.
-         * Only allow start points ending at the M matrix. */
-        while (1) {
-            if (j < nB) j++;
-            else if (i < nA) {
-                i++;
-                j = 0;
-            }
-            else {
-                /* we reached the end of the sequences without finding
-                 * an alternative path */
-                M[0][0].path = DONE;
-                return NULL;
-            }
-            trace = M[i][j].trace;
-            if (trace & ENDPOINT) {
-                trace &= DIAGONAL; /* exclude paths ending in a gap */
-                break;
-            }
-        }
-        M[i][j].path = 0;
-    }
-
-    /* Follow the traceback until we reach the origin. */
-    while (1) {
-        if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
-        else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
-        else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
-        else break;
-        trace = M[i][j].trace;
-    }
-    self->iA = i;
-    self->iB = j;
-    return _create_path(M, i, j);
-}
-
-static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
-{
-    int i = 0;
-    int j = 0;
-    int m;
-    int path;
-    int trace = 0;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
-
-    m = M_MATRIX;
-    path = trace3[i][j].path;
-    if (path == DONE) return NULL;
-    if (path == 0) {
-        i = nA;
-        j = nB;
-    }
-    else {
-        /* We already have a path. Prune the path to see if there are
-         * any alternative paths. */
-        while (1) {
-            path = trace3[i][j].path;
-            if (path == 0) {
-                switch (m) {
-                    case M_MATRIX: m = Ix_MATRIX; break;
-                    case Ix_MATRIX: m = Iy_MATRIX; break;
-                    case Iy_MATRIX: m = 0; break;
-                }
-                break;
-            }
-            switch (path) {
-                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
-                case VERTICAL: trace = trace3[++i][j].Ix; break;
-                case DIAGONAL: trace = trace3[++i][++j].M; break;
-            }
-            switch (m) {
-                case M_MATRIX:
-                    if (trace & Ix_MATRIX) {
-                        m = Ix_MATRIX;
-                        break;
-                    }
-                case Ix_MATRIX:
-                    if (trace & Iy_MATRIX) {
-                        m = Iy_MATRIX;
-                        break;
-                    }
-                case Iy_MATRIX:
-                default:
-                    switch (path) {
-                        case HORIZONTAL: m = Iy_MATRIX; break;
-                        case VERTICAL: m = Ix_MATRIX; break;
-                        case DIAGONAL: m = M_MATRIX; break;
-                    }
-                    continue;
-            }
-            switch (path) {
-                case HORIZONTAL: j--; break;
-                case VERTICAL: i--; break;
-                case DIAGONAL: i--; j--; break;
-            }
-            trace3[i][j].path = path;
-            break;
-        }
-    }
-
-    if (path == 0) {
-        /* Generate a new path. */
-        switch (m) {
-            case M_MATRIX:
-                if (trace3[nA][nB].M) {
-                   /* m = M_MATRIX; */
-                   break;
-                }
-            case Ix_MATRIX:
-                if (trace3[nA][nB].Ix) {
-                   m = Ix_MATRIX;
-                   break;
-                }
-            case Iy_MATRIX:
-                if (trace3[nA][nB].Iy) {
-                   m = Iy_MATRIX;
-                   break;
-                }
-            default:
-                /* exhausted this generator */
-                trace3[0][0].path = DONE;
-                return NULL;
-        }
-    }
-
-    switch (m) {
-        case M_MATRIX:
-            trace = trace3[i][j].M;
-            path = DIAGONAL;
-            i--; j--;
-            break;
-        case Ix_MATRIX:
-            trace = trace3[i][j].Ix;
-            path = VERTICAL;
-            i--;
-            break;
-        case Iy_MATRIX:
-            trace = trace3[i][j].Iy;
-            path = HORIZONTAL;
-            j--;
-            break;
-    }
-
-    while (1) {
-        if (trace & M_MATRIX) {
-            trace3[i][j].path = path;
-            trace = trace3[i][j].M;
-            path = DIAGONAL;
-            i--; j--;
-        }
-        else if (trace & Ix_MATRIX) {
-            trace3[i][j].path = path;
-            trace = trace3[i][j].Ix;
-            path = VERTICAL;
-            i--;
-        }
-        else if (trace & Iy_MATRIX) {
-            trace3[i][j].path = path;
-            trace = trace3[i][j].Iy;
-            path = HORIZONTAL;
-            j--;
-        }
-        else break;
-    }
-    return _create_path_gotoh(trace3, 0, 0);
-}
-
-static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
-{
-    int trace = 0;
-    int i;
-    int j;
-    int m = M_MATRIX;
-    int iA = self->iA;
-    int iB = self->iB;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
-    int path = trace3[0][0].path;
-
-    if (path == DONE) return NULL;
-
-    path = trace3[iA][iB].path;
-
-    if (path) {
-        i = iA;
-        j = iB;
-        while (1) {
-            /* We already have a path. Prune the path to see if there are
-             * any alternative paths. */
-            path = trace3[i][j].path;
-            if (path == 0) {
-                m = M_MATRIX;
-                iA = i;
-                iB = j;
-                break;
-            }
-            switch (path) {
-                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
-                case VERTICAL: trace = trace3[++i][j].Ix; break;
-                case DIAGONAL: trace = trace3[++i][++j].M; break;
-            }
-            switch (m) {
-                case M_MATRIX:
-                    if (trace & Ix_MATRIX) {
-                        m = Ix_MATRIX;
-                        break;
-                    }
-                case Ix_MATRIX:
-                    if (trace & Iy_MATRIX) {
-                        m = Iy_MATRIX;
-                        break;
-                    }
-                case Iy_MATRIX:
-                default:
-                    switch (path) {
-                        case HORIZONTAL: m = Iy_MATRIX; break;
-                        case VERTICAL: m = Ix_MATRIX; break;
-                        case DIAGONAL: m = M_MATRIX; break;
-                    }
-                    continue;
-            }
-            switch (path) {
-                case HORIZONTAL: j--; break;
-                case VERTICAL: i--; break;
-                case DIAGONAL: i--; j--; break;
-            }
-            trace3[i][j].path = path;
-            break;
-        }
-    }
-
-    if (path == 0) {
-        /* Find the end point for a new path. */
-        while (1) {
-            if (iB < nB) iB++;
-            else if (iA < nA) {
-                iA++;
-                iB = 0;
-            }
-            else {
-                /* we reached the end of the alignment without finding
-                 * an alternative path */
-                trace3[0][0].path = DONE;
-                return NULL;
-            }
-            if (trace3[iA][iB].M & ENDPOINT) {
-                trace3[iA][iB].path = 0;
-                break;
-            }
-        }
-        m = M_MATRIX;
-        i = iA;
-        j = iB;
-    }
-
-    while (1) {
-        switch (m) {
-            case M_MATRIX: trace = trace3[i][j].M; break;
-            case Ix_MATRIX: trace = trace3[i][j].Ix; break;
-            case Iy_MATRIX: trace = trace3[i][j].Iy; break;
-        }
-        if (trace==0) {
-            self->iA = i;
-            self->iB = j;
-            return _create_path_gotoh(trace3, i, j);
-        }
-        switch (m) {
-            case M_MATRIX:
-                path = DIAGONAL;
-                i--;
-                j--;
-                break;
-            case Ix_MATRIX:
-                path = VERTICAL;
-                i--;
-                break;
-            case Iy_MATRIX:
-                path = HORIZONTAL;
-                j--;
-                break;
-        }
-        if (trace & M_MATRIX) m = M_MATRIX;
-        else if (trace & Ix_MATRIX) m = Ix_MATRIX;
-        else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-/*
-        switch (m) {
-            case M_MATRIX: M[i][j].path = path; break;
-            case Ix_MATRIX: Ix[i][j].path = path; break;
-            case Iy_MATRIX: Iy[i][j].path = path; break;
-        }
-*/
-        trace3[i][j].path = path;
-    }
-    return NULL;
-}
-
-static PyObject*
-PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
-{
-    int i = 0, j = 0;
-    int iA, iB;
-    int trace;
-    int* gapM;
-    int* gapXY;
-
-    int m = M_MATRIX;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Gaps** gaps = self->gaps;
-
-    int gap;
-    int path = M[0][0].path;
-
-    if (path == DONE) return NULL;
-
-    if (path) {
-        /* We already have a path. Prune the path to see if there are
-         * any alternative paths. */
-        while (1) {
-            if (!path) {
-                m <<= 1;
-                break;
-            }
-            switch (path) {
-                case HORIZONTAL:
-                    iA = i;
-                    iB = j;
-                    while (M[i][iB].path == HORIZONTAL) iB++;
-                    break;
-                case VERTICAL:
-                    iA = i;
-                    while (M[iA][j].path == VERTICAL) iA++;
-                    iB = j;
-                    break;
-                case DIAGONAL:
-                    iA = i + 1;
-                    iB = j + 1;
-                    break;
-                default:
-                    PyErr_SetString(PyExc_RuntimeError,
-                        "Unexpected path in PathGenerator_next_waterman_smith_beyer_global");
-                    return NULL;
-            }
-            if (i == iA) { /* HORIZONTAL */
-                gapM = gaps[iA][iB].MIy;
-                gapXY = gaps[iA][iB].IxIy;
-                if (m==M_MATRIX) {
-                    gap = iB - j;
-                    while (*gapM != gap) gapM++;
-                    gapM++;
-                    gap = *gapM;
-                    if (gap) {
-                        j = iB - gap;
-                        while (j < iB) M[i][--iB].path = HORIZONTAL;
-                        break;
-                    }
-                } else if (m==Ix_MATRIX) {
-                    gap = iB - j;
-                    while (*gapXY != gap) gapXY++;
-                    gapXY++;
-                }
-                gap = *gapXY;
-                if (gap) {
-                    m = Ix_MATRIX;
-                    j = iB - gap;
-                    while (j < iB) M[i][--iB].path = HORIZONTAL;
-                    break;
-                }
-                /* no alternative found; continue pruning */
-                m = Iy_MATRIX;
-                j = iB;
-            }
-            else if (j==iB) { /* VERTICAL */
-                gapM = gaps[iA][iB].MIx;
-                gapXY = gaps[iA][iB].IyIx;
-                if (m==M_MATRIX) {
-                    gap = iA - i;
-                    while (*gapM != gap) gapM++;
-                    gapM++;
-                    gap = *gapM;
-                    if (gap) {
-                        i = iA - gap;
-                        while (i < iA) M[--iA][j].path = VERTICAL;
-                        break;
-                    }
-                } else if (m==Iy_MATRIX) {
-                    gap = iA - i;
-                    while (*gapXY != gap) gapXY++;
-                    gapXY++;
-                }
-                gap = *gapXY;
-                if (gap) {
-                    m = Iy_MATRIX;
-                    i = iA - gap;
-                    while (i < iA) M[--iA][j].path = VERTICAL;
-                    break;
-                }
-                /* no alternative found; continue pruning */
-                m = Ix_MATRIX;
-                i = iA;
-            }
-            else { /* DIAGONAL */
-                i = iA - 1;
-                j = iB - 1;
-                trace = M[iA][iB].trace;
-                switch (m) {
-                    case M_MATRIX:
-                        if (trace & Ix_MATRIX) {
-                            m = Ix_MATRIX;
-                            M[i][j].path = DIAGONAL;
-                            break;
-                        }
-                    case Ix_MATRIX:
-                        if (trace & Iy_MATRIX) {
-                            m = Iy_MATRIX;
-                            M[i][j].path = DIAGONAL;
-                            break;
-                        }
-                    case Iy_MATRIX:
-                    default:
-                        /* no alternative found; continue pruning */
-                        m = M_MATRIX;
-                        i = iA;
-                        j = iB;
-                        path = M[i][j].path;
-                        continue;
-                }
-                /* alternative found; build path until starting point */
-                break;
-            }
-            path = M[i][j].path;
-        }
-    }
-
-    if (!path) {
-        /* Find a suitable end point for a path. */
-        switch (m) {
-            case M_MATRIX:
-                if (M[nA][nB].trace) {
-                    /* m = M_MATRIX; */
-                    break;
-                }
-            case Ix_MATRIX:
-                if (gaps[nA][nB].MIx[0] || gaps[nA][nB].IyIx[0]) {
-                    m = Ix_MATRIX;
-                    break;
-                }
-            case Iy_MATRIX:
-                if (gaps[nA][nB].MIy[0] || gaps[nA][nB].IxIy[0]) {
-                    m = Iy_MATRIX;
-                    break;
-                }
-            default:
-                M[0][0].path = DONE;
-                return NULL;
-        }
-        i = nA;
-        j = nB;
-    }
-
-    /* Follow the traceback until we reach the origin. */
-    while (1) {
-        switch (m) {
-            case M_MATRIX:
-                trace = M[i][j].trace;
-                if (trace & M_MATRIX) m = M_MATRIX;
-                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
-                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else return _create_path(M, i, j);
-                i--;
-                j--;
-                M[i][j].path = DIAGONAL;
-                break;
-            case Ix_MATRIX:
-                gap = gaps[i][j].MIx[0];
-                if (gap) m = M_MATRIX;
-                else {
-                    gap = gaps[i][j].IyIx[0];
-                    m = Iy_MATRIX;
-                }
-                iA = i - gap;
-                while (iA < i) M[--i][j].path = VERTICAL;
-                M[i][j].path = VERTICAL;
-                break;
-            case Iy_MATRIX:
-                gap = gaps[i][j].MIy[0];
-                if (gap) m = M_MATRIX;
-                else {
-                    gap = gaps[i][j].IxIy[0];
-                    m = Ix_MATRIX;
-                }
-                iB = j - gap;
-                while (iB < j) M[i][--j].path = HORIZONTAL;
-                M[i][j].path = HORIZONTAL;
-                break;
-        }
-    }
-}
-
-static PyObject*
-PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
-{
-    int i, j, m;
-    int trace = 0;
-    int* gapM;
-    int* gapXY;
-
-    int iA = self->iA;
-    int iB = self->iB;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Gaps** gaps = self->gaps;
-
-    int gap;
-    int path = M[0][0].path;
-
-    if (path == DONE) return NULL;
-    m = 0;
-    path = M[iA][iB].path;
-    if (path) {
-        /* We already have a path. Prune the path to see if there are
-         * any alternative paths. */
-        m = M_MATRIX;
-        i = iA;
-        j = iB;
-        while (1) {
-            path = M[i][j].path;
-            switch (path) {
-                case HORIZONTAL:
-                    iA = i;
-                    iB = j;
-                    while (M[i][iB].path == HORIZONTAL) iB++;
-                    break;
-                case VERTICAL:
-                    iA = i;
-                    iB = j;
-                    while (M[iA][j].path == VERTICAL) iA++;
-                    break;
-                case DIAGONAL:
-                    iA = i + 1;
-                    iB = j + 1;
-                    break;
-                default:
-                    iA = -1;
-                    break;
-            }
-            if (iA < 0) {
-                m = 0;
-                iA = i;
-                iB = j;
-                break;
-            }
-            if (i == iA) { /* HORIZONTAL */
-                gapM = gaps[iA][iB].MIy;
-                gapXY = gaps[iA][iB].IxIy;
-                if (m==M_MATRIX) {
-                    gap = iB - j;
-                    while (*gapM != gap) gapM++;
-                    gapM++;
-                    gap = *gapM;
-                    if (gap) {
-                        j = iB - gap;
-                        while (j < iB) M[i][--iB].path = HORIZONTAL;
-                        break;
-                    }
-                } else if (m==Ix_MATRIX) {
-                    gap = iB - j;
-                    while (*gapXY != gap) gapXY++;
-                    gapXY++;
-                }
-                gap = *gapXY;
-                if (gap) {
-                    m = Ix_MATRIX;
-                    j = iB - gap;
-                    M[i][j].path = HORIZONTAL;
-                    while (iB > j) M[i][--iB].path = HORIZONTAL;
-                    break;
-                }
-                /* no alternative found; continue pruning */
-                m = Iy_MATRIX;
-                j = iB;
-            }
-            else if (j == iB) { /* VERTICAL */
-                gapM = gaps[iA][iB].MIx;
-                gapXY = gaps[iA][iB].IyIx;
-                if (m==M_MATRIX) {
-                    gap = iA - i;
-                    while (*gapM != gap) gapM++;
-                    gapM++;
-                    gap = *gapM;
-                    if (gap) {
-                        i = iA - gap;
-                        while (i < iA) M[--iA][j].path = VERTICAL;
-                        break;
-                    }
-                } else if (m==Iy_MATRIX) {
-                    gap = iA - i;
-                    while (*gapXY != gap) gapXY++;
-                    gapXY++;
-                }
-                gap = *gapXY;
-                if (gap) {
-                    m = Iy_MATRIX;
-                    i = iA - gap;
-                    M[i][j].path = VERTICAL;
-                    while (iA > i) M[--iA][j].path = VERTICAL;
-                    break;
-                }
-                /* no alternative found; continue pruning */
-                m = Ix_MATRIX;
-                i = iA;
-            }
-            else { /* DIAGONAL */
-                i = iA - 1;
-                j = iB - 1;
-                trace = M[iA][iB].trace;
-                switch (m) {
-                    case M_MATRIX:
-                        if (trace & Ix_MATRIX) {
-                            m = Ix_MATRIX;
-                            M[i][j].path = DIAGONAL;
-                            break;
-                        }
-                    case Ix_MATRIX:
-                        if (trace & Iy_MATRIX) {
-                            m = Iy_MATRIX;
-                            M[i][j].path = DIAGONAL;
-                            break;
-                        }
-                    case Iy_MATRIX:
-                    default:
-                        /* no alternative found; continue pruning */
-                        m = M_MATRIX;
-                        i = iA;
-                        j = iB;
-                        continue;
-                }
-                /* alternative found; build path until starting point */
-                break;
-            }
-        }
-    }
- 
-    if (m == 0) {
-        /* We are at [nA][nB]. Find a suitable end point for a path. */
-        while (1) {
-            if (iB < nB) iB++;
-            else if (iA < nA) {
-                iA++;
-                iB = 0;
-            }
-            else {
-                /* exhausted this generator */
-                M[0][0].path = DONE;
-                return NULL;
-            }
-            if (M[iA][iB].trace & ENDPOINT) break;
-        }
-        M[iA][iB].path = 0;
-        m = M_MATRIX;
-        i = iA;
-        j = iB;
-    }
-
-    /* Follow the traceback until we reach the origin. */
-    while (1) {
-        switch (m) {
-            case Ix_MATRIX:
-                gapM = gaps[i][j].MIx;
-                gapXY = gaps[i][j].IyIx;
-                iB = j;
-                gap = *gapM;
-                if (gap) m = M_MATRIX;
-                else {
-                    gap = *gapXY;
-                    m = Iy_MATRIX;
-                }
-                iA = i - gap;
-                while (i > iA) M[--i][iB].path = VERTICAL;
-                break;
-            case Iy_MATRIX:
-                gapM = gaps[i][j].MIy;
-                gapXY = gaps[i][j].IxIy;
-                iA = i;
-                gap = *gapM;
-                if (gap) m = M_MATRIX;
-                else {
-                    gap = *gapXY;
-                    m = Ix_MATRIX;
-                }
-                iB = j - gap;
-                while (j > iB) M[iA][--j].path = HORIZONTAL;
-                break;
-            case M_MATRIX:
-                iA = i-1;
-                iB = j-1;
-                trace = M[i][j].trace;
-                if (trace & M_MATRIX) m = M_MATRIX;
-                else if (trace & Ix_MATRIX) m = Ix_MATRIX;
-                else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else {
-                    self->iA = i;
-                    self->iB = j;
-                    return _create_path(M, i, j);
-                }
-                M[iA][iB].path = DIAGONAL;
-                break;
-        }
-        i = iA;
-        j = iB;
-    }
-}
-
-static PyObject *
-PathGenerator_next(PathGenerator* self)
-{
-    const Mode mode = self->mode;
-    const Algorithm algorithm = self->algorithm;
-    switch (algorithm) {
-        case NeedlemanWunschSmithWaterman:
-            switch (mode) {
-                case Global:
-                    return PathGenerator_next_needlemanwunsch(self);
-                case Local:
-                    return PathGenerator_next_smithwaterman(self);
-            }
-        case Gotoh:
-            switch (mode) {
-                case Global:
-                    return PathGenerator_next_gotoh_global(self);
-                case Local:
-                    return PathGenerator_next_gotoh_local(self);
-            }
-        case WatermanSmithBeyer:
-            switch (mode) {
-                case Global:
-                    return PathGenerator_next_waterman_smith_beyer_global(self);
-                case Local:
-                    return PathGenerator_next_waterman_smith_beyer_local(self);
-            }
-        case Unknown:
-        default:
-            PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
-            return NULL;
-    }
-}
-
-static void
-PathGenerator_dealloc(PathGenerator* self)
-{
-    int i;
-    const int nA = self->nA;
-    const Algorithm algorithm = self->algorithm;
-    switch (algorithm) {
-        case NeedlemanWunschSmithWaterman: {
-            Trace** M = self->M;
-            for (i = 0; i <= nA; i++) PyMem_Free(M[i]);
-            PyMem_Free(M);
-            break;
-        }
-        case Gotoh: {
-            Trace3** trace3 = self->trace3;
-            for (i = 0; i <= nA; i++) PyMem_Free(trace3[i]);
-            PyMem_Free(trace3);
-            break;
-        }
-        case WatermanSmithBeyer: {
-            Trace** M = self->M;
-            Gaps** gaps = self->gaps;
-            const int nB = self->nB;
-            _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
-            break;
-        }
-        case Unknown:
-        default:
-            PyErr_WriteUnraisable((PyObject*)self);
-            return;
-    }
-    Py_TYPE(self)->tp_free((PyObject*)self);
-}
-
-static const char PathGenerator_reset__doc__[] = "reset the iterator";
-
-static PyObject*
-PathGenerator_reset(PathGenerator* self)
-{
-    switch (self->mode) {
-        case Local:
-            self->iA = 0;
-            self->iB = 0;
-        case Global:
-            switch (self->algorithm) {
-                case NeedlemanWunschSmithWaterman: {
-                    Trace** M = self->M;
-                    if (M[0][0].path != NONE) M[0][0].path = 0;
-                    break;
-                }
-                case Gotoh: {
-                    Trace3** trace3 = self->trace3;
-                    if (trace3[0][0].path != NONE) trace3[0][0].path = 0;
-                    break;
-                }
-                case WatermanSmithBeyer: {
-                    Trace** M = self->M;
-                    M[0][0].path = 0;
-                    break;
-                }
-                case Unknown:
-                default:
-                    break;
-        }
-    }
-    Py_INCREF(Py_None);
-    return Py_None;
-}
-
-static PyMethodDef PathGenerator_methods[] = {
-    {"reset",
-     (PyCFunction)PathGenerator_reset,
-     METH_NOARGS,
-     PathGenerator_reset__doc__
-    },
-    {NULL}  /* Sentinel */
-};
-
-#define SAFE_ADD(t, s) \
-{   term = t; \
-    if (term > PY_SSIZE_T_MAX - s) { count = OVERFLOW_ERROR; goto exit; } \
-    s += term; \
-}
-
-static Py_ssize_t
-PathGenerator_needlemanwunsch_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Py_ssize_t term;
-    Py_ssize_t count;
-    Py_ssize_t temp;
-    Py_ssize_t* counts;
-    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return MEMORY_ERROR;
-    counts[0] = 1;
-    for (j = 1; j <= nB; j++) {
-        trace = M[0][j].trace;
-        count = 0;
-        if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
-        counts[j] = count;
-    }
-    for (i = 1; i <= nA; i++) {
-        trace = M[i][0].trace;
-        count = 0;
-        if (trace & VERTICAL) SAFE_ADD(counts[0], count);
-        temp = counts[0];
-        counts[0] = count;
-        for (j = 1; j <= nB; j++) {
-            trace = M[i][j].trace;
-            count = 0;
-            if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
-            if (trace & VERTICAL) SAFE_ADD(counts[j], count);
-            if (trace & DIAGONAL) SAFE_ADD(temp, count);
-            temp = counts[j];
-            counts[j] = count;
-        }
-    }
-exit:
-    PyMem_Free(counts);
-    return count;
-}
-
-static Py_ssize_t
-PathGenerator_smithwaterman_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Py_ssize_t term;
-    Py_ssize_t count;
-    Py_ssize_t total = 0;
-    Py_ssize_t temp;
-    Py_ssize_t* counts;
-    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!counts) return MEMORY_ERROR;
-    counts[0] = 1;
-    for (j = 1; j <= nB; j++) counts[j] = 1;
-    for (i = 1; i <= nA; i++) {
-        temp = counts[0];
-        counts[0] = 1;
-        for (j = 1; j <= nB; j++) {
-            trace = M[i][j].trace;
-            count = 0;
-            if (trace & DIAGONAL) SAFE_ADD(temp, count);
-            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
-            if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
-            if (trace & VERTICAL) SAFE_ADD(counts[j], count);
-            temp = counts[j];
-            if (count==0) count = 1;
-            counts[j] = count;
-        }
-    }
-    count = total;
-exit:
-    PyMem_Free(counts);
-    return count;
-}
-
-static Py_ssize_t
-PathGenerator_gotoh_global_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
-    Py_ssize_t count = MEMORY_ERROR;
-    Py_ssize_t term;
-    Py_ssize_t M_temp;
-    Py_ssize_t Ix_temp;
-    Py_ssize_t Iy_temp;
-    Py_ssize_t* M_counts = NULL;
-    Py_ssize_t* Ix_counts = NULL;
-    Py_ssize_t* Iy_counts = NULL;
-    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!M_counts) goto exit;
-    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!Ix_counts) goto exit;
-    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!Iy_counts) goto exit;
-    M_counts[0] = 1;
-    Ix_counts[0] = 0;
-    Iy_counts[0] = 0;
-    for (j = 1; j <= nB; j++) {
-        M_counts[j] = 0;
-        Ix_counts[j] = 0;
-        Iy_counts[j] = 1;
-    }
-    for (i = 1; i <= nA; i++) {
-        M_temp = M_counts[0];
-        M_counts[0] = 0;
-        Ix_temp = Ix_counts[0];
-        Ix_counts[0] = 1;
-        Iy_temp = Iy_counts[0];
-        Iy_counts[0] = 0;
-        for (j = 1; j <= nB; j++) {
-            count = 0;
-            trace = trace3[i][j].M;
-            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
-            M_temp = M_counts[j];
-            M_counts[j] = count;
-            count = 0;
-            trace = trace3[i][j].Ix;
-            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
-            Ix_temp = Ix_counts[j];
-            Ix_counts[j] = count;
-            count = 0;
-            trace = trace3[i][j].Iy;
-            if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
-            Iy_temp = Iy_counts[j];
-            Iy_counts[j] = count;
-        }
-    }
-    count = 0;
-    if (trace3[nA][nB].M) SAFE_ADD(M_counts[nB], count);
-    if (trace3[nA][nB].Ix) SAFE_ADD(Ix_counts[nB], count);
-    if (trace3[nA][nB].Iy) SAFE_ADD(Iy_counts[nB], count);
-exit:
-    if (M_counts) PyMem_Free(M_counts);
-    if (Ix_counts) PyMem_Free(Ix_counts);
-    if (Iy_counts) PyMem_Free(Iy_counts);
-    return count;
-}
-
-static Py_ssize_t
-PathGenerator_gotoh_local_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
-    Py_ssize_t term;
-    Py_ssize_t count = MEMORY_ERROR;
-    Py_ssize_t total = 0;
-    Py_ssize_t M_temp;
-    Py_ssize_t Ix_temp;
-    Py_ssize_t Iy_temp;
-    Py_ssize_t* M_counts = NULL;
-    Py_ssize_t* Ix_counts = NULL;
-    Py_ssize_t* Iy_counts = NULL;
-    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!M_counts) goto exit;
-    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!Ix_counts) goto exit;
-    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-    if (!Iy_counts) goto exit;
-    M_counts[0] = 1;
-    Ix_counts[0] = 0;
-    Iy_counts[0] = 0;
-    for (j = 1; j <= nB; j++) {
-        M_counts[j] = 1;
-        Ix_counts[j] = 0;
-        Iy_counts[j] = 0;
-    }
-    for (i = 1; i <= nA; i++) {
-        M_temp = M_counts[0];
-        M_counts[0] = 1;
-        Ix_temp = Ix_counts[0];
-        Ix_counts[0] = 0;
-        Iy_temp = Iy_counts[0];
-        Iy_counts[0] = 0;
-        for (j = 1; j <= nB; j++) {
-            count = 0;
-            trace = trace3[i][j].M;
-            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
-            if (count==0) count = 1;
-            M_temp = M_counts[j];
-            M_counts[j] = count;
-            if (trace3[i][j].M & ENDPOINT) SAFE_ADD(count, total);
-            count = 0;
-            trace = trace3[i][j].Ix;
-            if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
-            Ix_temp = Ix_counts[j];
-            Ix_counts[j] = count;
-            count = 0;
-            trace = trace3[i][j].Iy;
-            if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
-            Iy_temp = Iy_counts[j];
-            Iy_counts[j] = count;
-        }
-    }
-    count = total;
-exit:
-    if (M_counts) PyMem_Free(M_counts);
-    if (Ix_counts) PyMem_Free(Ix_counts);
-    if (Iy_counts) PyMem_Free(Iy_counts);
-    return count;
-}
-
-static Py_ssize_t
-PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    int* p;
-    int gap;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Gaps** gaps = self->gaps;
-    Py_ssize_t count = MEMORY_ERROR;
-    Py_ssize_t term;
-    Py_ssize_t** M_count = NULL;
-    Py_ssize_t** Ix_count = NULL;
-    Py_ssize_t** Iy_count = NULL;
-    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!M_count) goto exit;
-    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!Ix_count) goto exit;
-    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!Iy_count) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!M_count[i]) goto exit;
-        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!Ix_count[i]) goto exit;
-        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!Iy_count[i]) goto exit;
-    }
-    for (i = 0; i <= nA; i++) {
-        for (j = 0; j <= nB; j++) {
-            count = 0;
-            trace = M[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M_count[i-1][j-1], count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_count[i-1][j-1], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
-            if (count == 0) count = 1; /* happens at M[0][0] only */
-            M_count[i][j] = count;
-            count = 0;
-            p = gaps[i][j].MIx;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(M_count[i-gap][j], count);
-                    p++;
-                }
-            }
-            p = gaps[i][j].IyIx;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(Iy_count[i-gap][j], count);
-                    p++;
-                }
-            }
-            Ix_count[i][j] = count;
-            count = 0;
-            p = gaps[i][j].MIy;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(M_count[i][j-gap], count);
-                    p++;
-                }
-            }
-	    p = gaps[i][j].IxIy;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(Ix_count[i][j-gap], count);
-                    p++;
-                }
-            }
-            Iy_count[i][j] = count;
-        }
-    }
-    count = 0;
-    if (M[nA][nB].trace)
-        SAFE_ADD(M_count[nA][nB], count);
-    if (gaps[nA][nB].MIx[0] || gaps[nA][nB].IyIx[0])
-        SAFE_ADD(Ix_count[nA][nB], count);
-    if (gaps[nA][nB].MIy[0] || gaps[nA][nB].IxIy[0])
-        SAFE_ADD(Iy_count[nA][nB], count);
-exit:
-    if (M_count) {
-        if (Ix_count) {
-            if (Iy_count) {
-                for (i = 0; i <= nA; i++) {
-                    if (!M_count[i]) break;
-                    PyMem_Free(M_count[i]);
-                    if (!Ix_count[i]) break;
-                    PyMem_Free(Ix_count[i]);
-                    if (!Iy_count[i]) break;
-                    PyMem_Free(Iy_count[i]);
-                }
-                PyMem_Free(Iy_count);
-            }
-            PyMem_Free(Ix_count);
-        }
-        PyMem_Free(M_count);
-    }
-    return count;
-}
-
-static Py_ssize_t
-PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
-{
-    int i;
-    int j;
-    int trace;
-    int* p;
-    int gap;
-    const int nA = self->nA;
-    const int nB = self->nB;
-    Trace** M = self->M;
-    Gaps** gaps = self->gaps;
-    Py_ssize_t term;
-    Py_ssize_t count = MEMORY_ERROR;
-    Py_ssize_t total = 0;
-    Py_ssize_t** M_count = NULL;
-    Py_ssize_t** Ix_count = NULL;
-    Py_ssize_t** Iy_count = NULL;
-    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!M_count) goto exit;
-    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!Ix_count) goto exit;
-    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
-    if (!Iy_count) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!M_count[i]) goto exit;
-        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!Ix_count[i]) goto exit;
-        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
-        if (!Iy_count[i]) goto exit;
-    }
-    for (i = 0; i <= nA; i++) {
-        for (j = 0; j <= nB; j++) {
-            count = 0;
-            trace = M[i][j].trace;
-            if (trace & M_MATRIX) SAFE_ADD(M_count[i-1][j-1], count);
-            if (trace & Ix_MATRIX) SAFE_ADD(Ix_count[i-1][j-1], count);
-            if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
-            if (count==0) count = 1;
-            M_count[i][j] = count;
-            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
-            count = 0;
-            p = gaps[i][j].MIx;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(M_count[i-gap][j], count);
-                    p++;
-                }
-            }
-            p = gaps[i][j].IyIx;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(Iy_count[i-gap][j], count);
-                    p++;
-                }
-            }
-            if (count == 0) count = 1;
-            Ix_count[i][j] = count;
-            count = 0;
-            p = gaps[i][j].MIy;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(M_count[i][j-gap], count);
-                    p++;
-                }
-            }
-            p = gaps[i][j].IxIy;
-            if (p) {
-                while (1) {
-                    gap = *p;
-                    if (!gap) break;
-                    SAFE_ADD(Ix_count[i][j-gap], count);
-                    p++;
-                }
-            }
-            if (count == 0) count = 1;
-            Iy_count[i][j] = count;
-        }
-    }
-    count = total;
-exit:
-    if (M_count) {
-        if (Ix_count) {
-            if (Iy_count) {
-                for (i = 0; i <= nA; i++) {
-                    if (!M_count[i]) break;
-                    PyMem_Free(M_count[i]);
-                    if (!Ix_count[i]) break;
-                    PyMem_Free(Ix_count[i]);
-                    if (!Iy_count[i]) break;
-                    PyMem_Free(Iy_count[i]);
-                }
-                PyMem_Free(Iy_count);
-            }
-            PyMem_Free(Ix_count);
-        }
-        PyMem_Free(M_count);
-    }
-    return count;
-}
-
-static Py_ssize_t PathGenerator_length(PathGenerator* self) {
-    Py_ssize_t length = self->length;
-    if (length == 0) {
-        switch (self->algorithm) {
-            case NeedlemanWunschSmithWaterman:
-                switch (self->mode) {
-                    case Global:
-                        length = PathGenerator_needlemanwunsch_length(self);
-                        break;
-                    case Local:
-                        length = PathGenerator_smithwaterman_length(self);
-                        break;
-                    default:
-                        /* should not happen, but some compilers complain that
-                         * that length can be used uninitialized.
-                         */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
-                }
-                break;
-            case Gotoh:
-                switch (self->mode) {
-                    case Global:
-                        length = PathGenerator_gotoh_global_length(self);
-                        break;
-                    case Local:
-                        length = PathGenerator_gotoh_local_length(self);
-                        break;
-                    default:
-                        /* should not happen, but some compilers complain that
-                         * that length can be used uninitialized.
-                         */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
-                }
-                break;
-            case WatermanSmithBeyer:
-                switch (self->mode) {
-                    case Global:
-                        length = PathGenerator_waterman_smith_beyer_global_length(self);
-                        break;
-                    case Local:
-                        length = PathGenerator_waterman_smith_beyer_local_length(self);
-                        break;
-                    default:
-                        /* should not happen, but some compilers complain that
-                         * that length can be used uninitialized.
-                         */
-                        PyErr_SetString(PyExc_RuntimeError, "Unknown mode");
-                        return -1;
-                }
-                break;
-            case Unknown:
-            default:
-                PyErr_SetString(PyExc_RuntimeError, "Unknown algorithm");
-                return -1;
-        }
-        self->length = length;
-    }
-    switch (length) {
-        case OVERFLOW_ERROR:
-            PyErr_Format(PyExc_OverflowError,
-                         "number of optimal alignments is larger than %zd",
-                         PY_SSIZE_T_MAX);
-            break;
-        case MEMORY_ERROR:
-            PyErr_SetString(PyExc_MemoryError, "Out of memory");
-            break;
-        default:
-            break;
-    }
-    return length;
-}
-
-static PySequenceMethods PathGenerator_as_sequence = {
-    (lenfunc)PathGenerator_length,  /* sq_length */
-    NULL,                           /* sq_concat */
-    NULL,                           /* sq_repeat */
-    NULL,                           /* sq_item */
-    NULL,                           /* sq_ass_item */
-    NULL,                           /* sq_contains */
-    NULL,                           /* sq_inplace_concat */
-    NULL,                           /* sq_inplace_repeat */
-};
-
-static PyTypeObject PathGenerator_Type = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    "Path generator",               /* tp_name */
-    sizeof(PathGenerator),          /* tp_basicsize */
-    0,                              /* tp_itemsize */
-    (destructor)PathGenerator_dealloc,  /* tp_dealloc */
-    0,                              /* tp_print */
-    0,                              /* tp_getattr */
-    0,                              /* tp_setattr */
-    0,                              /* tp_reserved */
-    0,                              /* tp_repr */
-    0,                              /* tp_as_number */
-    &PathGenerator_as_sequence,     /* tp_as_sequence */
-    0,                              /* tp_as_mapping */
-    0,                              /* tp_hash */
-    0,                              /* tp_call */
-    0,                              /* tp_str */
-    0,                              /* tp_getattro */
-    0,                              /* tp_setattro */
-    0,                              /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,             /* tp_flags */
-    0,                              /* tp_doc */
-    0,                              /* tp_traverse */
-    0,                              /* tp_clear */
-    0,                              /* tp_richcompare */
-    0,                              /* tp_weaklistoffset */
-    PyObject_SelfIter,              /* tp_iter */
-    (iternextfunc)PathGenerator_next,      /* tp_iternext */
-    PathGenerator_methods,          /* tp_methods */
-};
-
-static PathGenerator*
-_create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
-{
-    Algorithm algorithm = aligner->algorithm;
-    PathGenerator* generator;
-    generator = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
-    if (!generator) return NULL;
-
-    generator->iA = 0;
-    generator->iB = 0;
-    generator->nA = nA;
-    generator->nB = nB;
-    switch (algorithm) {
-        case NeedlemanWunschSmithWaterman:
-        case Gotoh:
-            generator->M = NULL;
-            generator->trace3 = NULL;
-            break;
-        case WatermanSmithBeyer:
-            generator->M = NULL;
-            generator->gaps = NULL;
-            break;
-        case Unknown:
-        default:
-            Py_DECREF(generator);
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
-            return NULL;
-    }
-    generator->algorithm = algorithm;
-    generator->mode = aligner->mode;
-    generator->length = 0;
-
-    return generator;
+    PyMem_Free(scores);
+    return PyFloat_FromDouble(maximum);
 }
 
 static PyObject*
@@ -4616,6 +4615,9 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* Needleman-Wunsch algorithm */
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
+    paths = _create_path_generator(self, nA, nB, epsilon);
+    if (!paths) goto exit;
+    paths->M = M;
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
@@ -4654,14 +4656,7 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     M[nA][nB].path = 0;
     PyMem_Free(scores);
 
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        PyObject* result;
-        paths->M = M;
-        result = Py_BuildValue("fO", score, paths);
-        Py_DECREF(paths);
-        return result;
-    }
+    return Py_BuildValue("fN", score, paths);
 
 exit:
     if (M) {
@@ -4735,12 +4730,9 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
 
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
-        PyObject* result;
         paths->M = M;
         if (maximum==0) M[0][0].path = NONE;
-        result = Py_BuildValue("fO", maximum, paths);
-        Py_DECREF(paths);
-        return result;
+        return Py_BuildValue("fN", maximum, paths);
     }
 
 exit:
@@ -4784,7 +4776,6 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double M_temp;
     double Ix_temp;
     double Iy_temp;
-    PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
     M_scores = PyMem_Malloc((nB+1)*sizeof(double));
@@ -4892,14 +4883,17 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     Iy_scores[nB] = score;
 
     SELECT_SCORE_GLOBAL(M_scores[nB], Ix_scores[nB], Iy_scores[nB]);
-    result = PyFloat_FromDouble(score);
+    PyMem_Free(M_scores);
+    PyMem_Free(Ix_scores);
+    PyMem_Free(Iy_scores);
+    return PyFloat_FromDouble(score);
 
 exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return result;
+    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    return NULL;
 }
 
 static PyObject*
@@ -4924,7 +4918,6 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double Ix_temp;
     double Iy_temp;
     double maximum = 0.0;
-    PyObject* result = NULL;
 
     /* Gotoh algorithm with three states */
     M_scores = PyMem_Malloc((nB+1)*sizeof(double));
@@ -5013,14 +5006,17 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
                                    Iy_temp,
                                    self->substitution_matrix[kA][kB]);
 
-    result = PyFloat_FromDouble(maximum);
+    PyMem_Free(M_scores);
+    PyMem_Free(Ix_scores);
+    PyMem_Free(Iy_scores);
+    return PyFloat_FromDouble(maximum);
 
 exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return result;
+    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    return NULL;
 }
 
 static PyObject*
@@ -5183,18 +5179,15 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
-        PyObject* result;
         SELECT_SCORE_GLOBAL(M_scores[nB],
                             Ix_scores[nB],
                             Iy_scores[nB]);
         paths->trace3 = trace3;
-        result = Py_BuildValue("fO", score, paths);
-        Py_DECREF(paths);
         score -= epsilon;
         if (M_scores[nB] < score) trace3[nA][nB].M = 0;
         if (Ix_scores[nB] < score) trace3[nA][nB].Ix = 0;
         if (Iy_scores[nB] < score) trace3[nA][nB].Iy = 0;
-        return result;
+        return Py_BuildValue("fN", score, paths);
     }
 exit:
     if (trace3) {
@@ -5343,12 +5336,9 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
-        PyObject* result;
         paths->trace3 = trace3;
         if (maximum==0) trace3[0][0].path = DONE;
-        result = Py_BuildValue("fO", maximum, paths);
-        Py_DECREF(paths);
-        return result;
+        return Py_BuildValue("fN", maximum, paths);
     }
 exit:
     if (trace3) {
@@ -5424,8 +5414,6 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
     double temp;
     int ok = 1;
 
-    PyObject* result = NULL;
-
     /* Waterman-Smith-Beyer algorithm */
     M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
@@ -5486,7 +5474,6 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
     }
     SELECT_SCORE_GLOBAL(M[nA][nB], Ix[nA][nB], Iy[nA][nB]);
 
-    result = PyFloat_FromDouble(score);
 exit:
     if (M) {
         /* If M is NULL, then Ix is also NULL. */
@@ -5509,8 +5496,7 @@ exit:
         PyMem_Free(M);
     }
     if (!ok) return NULL;
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return result;
+    return PyFloat_FromDouble(score);
 }
 
 static PyObject*
@@ -5525,7 +5511,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     int kA;
     int kB;
     const double epsilon = self->epsilon;
-    Trace** M = NULL;
+    Trace** M;
     Gaps** gaps;
     double** M_scores = NULL;
     double** Ix_scores = NULL;
@@ -5539,12 +5525,14 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     int* gapM;
     int* gapXY;
     int ok = 1;
-
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, Global))
-        return NULL;
+    paths = PathGenerator_create_WSB(self, nA, nB, epsilon, Global);
+    if (!paths) return NULL;
+    M = paths->M;
+    gaps = paths->gaps;
+
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
     for (i = 0; i <= nA; i++) {
@@ -5640,45 +5628,37 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     /* traceback */
     SELECT_SCORE_GLOBAL(M_scores[nA][nB], Ix_scores[nA][nB], Iy_scores[nA][nB]);
     M[nA][nB].path = 0;
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        PyObject* result;
-        paths->M = M;
-        paths->gaps = gaps;
-        if (M_scores[nA][nB] < score - epsilon) M[nA][nB].trace = 0;
-        if (Ix_scores[nA][nB] < score - epsilon) {
-            gapM = PyMem_Realloc(gaps[nA][nB].MIx, sizeof(int));
-            if (!gapM) goto exit;
-            gapM[0] = 0;
-            gaps[nA][nB].MIx = gapM;
-            gapXY = PyMem_Realloc(gaps[nA][nB].IyIx, sizeof(int));
-            if (!gapXY) goto exit;
-            gapXY[0] = 0;
-            gaps[nA][nB].IyIx = gapXY;
-        }
-        if (Iy_scores[nA][nB] < score - epsilon) {
-            gapM = PyMem_Realloc(gaps[nA][nB].MIy, sizeof(int));
-            if (!gapM) goto exit;
-            gapM[0] = 0;
-            gaps[nA][nB].MIy = gapM;
-            gapXY = PyMem_Realloc(gaps[nA][nB].IxIy, sizeof(int));
-            if (!gapXY) goto exit;
-            gapXY[0] = 0;
-            gaps[nA][nB].IxIy = gapXY;
-        }
-        for (i = 0; i <= nA; i++) {
-            PyMem_Free(M_scores[i]);
-            PyMem_Free(Ix_scores[i]);
-            PyMem_Free(Iy_scores[i]);
-        }
-        PyMem_Free(M_scores);
-        PyMem_Free(Ix_scores);
-        PyMem_Free(Iy_scores);
-        result = Py_BuildValue("fO", score, paths);
-        Py_DECREF(paths);
-        score -= epsilon;
-        return result;
+
+    if (M_scores[nA][nB] < score - epsilon) M[nA][nB].trace = 0;
+    if (Ix_scores[nA][nB] < score - epsilon) {
+        gapM = PyMem_Realloc(gaps[nA][nB].MIx, sizeof(int));
+        if (!gapM) goto exit;
+        gapM[0] = 0;
+        gaps[nA][nB].MIx = gapM;
+        gapXY = PyMem_Realloc(gaps[nA][nB].IyIx, sizeof(int));
+        if (!gapXY) goto exit;
+        gapXY[0] = 0;
+        gaps[nA][nB].IyIx = gapXY;
     }
+    if (Iy_scores[nA][nB] < score - epsilon) {
+        gapM = PyMem_Realloc(gaps[nA][nB].MIy, sizeof(int));
+        if (!gapM) goto exit;
+        gapM[0] = 0;
+        gaps[nA][nB].MIy = gapM;
+        gapXY = PyMem_Realloc(gaps[nA][nB].IxIy, sizeof(int));
+        if (!gapXY) goto exit;
+        gapXY[0] = 0;
+        gaps[nA][nB].IxIy = gapXY;
+    }
+    for (i = 0; i <= nA; i++) {
+        PyMem_Free(M_scores[i]);
+        PyMem_Free(Ix_scores[i]);
+        PyMem_Free(Iy_scores[i]);
+    }
+    PyMem_Free(M_scores);
+    PyMem_Free(Ix_scores);
+    PyMem_Free(Iy_scores);
+    return Py_BuildValue("fN", score, paths);
 
 exit:
     if (ok) /* otherwise, an exception was already set */
@@ -5843,7 +5823,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     int kB;
     const double epsilon = self->epsilon;
     Trace** M = NULL;
-    Gaps** gaps = NULL;
+    Gaps** gaps;
     double** M_scores;
     double** Ix_scores;
     double** Iy_scores;
@@ -5861,8 +5841,11 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     PathGenerator* paths = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    if (!_allocate_watermansmithbeyer_matrices(nA, nB, &M, &gaps, Local))
-        return NULL;
+    paths = PathGenerator_create_WSB(self, nA, nB, epsilon, Local);
+    if (!paths) return NULL;
+    M = paths->M;
+    gaps = paths->gaps;
+
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
     for (i = 0; i <= nA; i++) {
@@ -5977,16 +5960,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     PyMem_Free(M_scores);
 
     /* traceback */
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        PyObject* result;
-        paths->M = M;
-        paths->gaps = gaps;
-        if (maximum==0) M[0][0].path = DONE;
-        result = Py_BuildValue("fO", maximum, paths);
-        Py_DECREF(paths);
-        return result;
-    }
+    if (maximum==0) M[0][0].path = DONE;
+    return Py_BuildValue("fN", maximum, paths);
 
 exit:
     if (ok) /* otherwise, an exception was already set */
