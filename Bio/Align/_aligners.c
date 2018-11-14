@@ -48,15 +48,14 @@ typedef struct {
 typedef struct {
     unsigned char Ix : 4;
     unsigned char Iy : 4;
-    unsigned char path : 4;
-} Trace3;
+} GapsGotoh;
 
 typedef struct {
     int* MIx;
     int* IyIx;
     int* MIy;
     int* IxIy;
-} Gaps; /* Used for the Waterman-Smith-Beyer algorithm. */
+} GapsWSB; /* Used for the Waterman-Smith-Beyer algorithm. */
 
 static int _convert_single_letter(PyObject* item)
 {
@@ -175,83 +174,11 @@ _create_path(Trace** M, int i, int j) {
     return NULL;
 }
 
-static PyObject*
-_create_path_gotoh(Trace3** trace3, int i, int j) {
-    PyObject* tuple;
-    PyObject* row;
-    PyObject* value;
-    int path;
-    const int ii = i;
-    const int jj = j;
-    int n = 1;
-    int direction = 0;
-
-    path = trace3[i][j].path;
-    while (path) {
-        if (path != direction) {
-            n++;
-            direction = path;
-        }
-        switch (path) {
-            case HORIZONTAL: j++; break;
-            case VERTICAL: i++; break;
-            case DIAGONAL: i++; j++; break;
-        }
-        path = trace3[i][j].path;
-    }
-    i = ii;
-    j = jj;
-
-    direction = 0;
-    tuple = PyTuple_New(n);
-    if (!tuple) return NULL;
-    n = 0;
-    path = trace3[i][j].path;
-    while (1) {
-        if (path != direction) {
-            row = PyTuple_New(2);
-            if (!row) break;
-#if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(i);
-#else
-            value = PyInt_FromLong(i);
-#endif
-            if (!value) {
-                Py_DECREF(row); /* all references were stolen */
-                break;
-            }
-            PyTuple_SET_ITEM(row, 0, value);
-#if PY_MAJOR_VERSION >= 3
-            value = PyLong_FromLong(j);
-#else
-            value = PyInt_FromLong(j);
-#endif
-            if (!value) {
-                Py_DECREF(row); /* all references were stolen */
-                break;
-            }
-            PyTuple_SET_ITEM(row, 1, value);
-            PyTuple_SET_ITEM(tuple, n, row);
-            n++;
-            direction = path;
-        }
-        switch (path) {
-            case HORIZONTAL: j++; break;
-            case VERTICAL: i++; break;
-            case DIAGONAL: i++; j++; break;
-            default: return tuple;
-        }
-        path = trace3[i][j].path;
-    }
-    Py_DECREF(tuple); /* all references were stolen */
-    return NULL;
-}
-
 typedef struct {
     PyObject_HEAD
     Trace** M;
-    Gaps** gaps;
-    Trace3** trace3;
+    GapsGotoh** gaps_gotoh;
+    GapsWSB** gaps_wsb;
     int nA;
     int nB;
     int iA;
@@ -351,8 +278,8 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     int trace;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
     Trace** M = self->M;
+    GapsGotoh** gaps = self->gaps_gotoh;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     Py_ssize_t M_temp;
@@ -391,14 +318,14 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
             M_temp = M_counts[j];
             M_counts[j] = count;
             count = 0;
-            trace = trace3[i][j].Ix;
+            trace = gaps[i][j].Ix;
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
             Ix_temp = Ix_counts[j];
             Ix_counts[j] = count;
             count = 0;
-            trace = trace3[i][j].Iy;
+            trace = gaps[i][j].Iy;
             if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
@@ -408,8 +335,8 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     }
     count = 0;
     if (M[nA][nB].trace) SAFE_ADD(M_counts[nB], count);
-    if (trace3[nA][nB].Ix) SAFE_ADD(Ix_counts[nB], count);
-    if (trace3[nA][nB].Iy) SAFE_ADD(Iy_counts[nB], count);
+    if (gaps[nA][nB].Ix) SAFE_ADD(Ix_counts[nB], count);
+    if (gaps[nA][nB].Iy) SAFE_ADD(Iy_counts[nB], count);
 exit:
     if (M_counts) PyMem_Free(M_counts);
     if (Ix_counts) PyMem_Free(Ix_counts);
@@ -425,8 +352,8 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     int trace;
     const int nA = self->nA;
     const int nB = self->nB;
-    Trace3** trace3 = self->trace3;
     Trace** M = self->M;
+    GapsGotoh** gaps = self->gaps_gotoh;
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
@@ -468,14 +395,14 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             M_counts[j] = count;
             if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
-            trace = trace3[i][j].Ix;
+            trace = gaps[i][j].Ix;
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j], count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j], count);
             Ix_temp = Ix_counts[j];
             Ix_counts[j] = count;
             count = 0;
-            trace = trace3[i][j].Iy;
+            trace = gaps[i][j].Iy;
             if (trace & M_MATRIX) SAFE_ADD(M_counts[j-1], count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_counts[j-1], count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_counts[j-1], count);
@@ -502,7 +429,7 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Gaps** gaps = self->gaps;
+    GapsWSB** gaps = self->gaps_wsb;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     Py_ssize_t** M_count = NULL;
@@ -612,7 +539,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Gaps** gaps = self->gaps;
+    GapsWSB** gaps = self->gaps_wsb;
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
@@ -785,7 +712,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
 
 static void
 _deallocate_watermansmithbeyer_matrices(Py_ssize_t nA, Py_ssize_t nB,
-                                        Trace** M, Gaps** gaps)
+                                        Trace** M, GapsWSB** gaps)
 {
     int i, j;
     int* trace;
@@ -829,14 +756,14 @@ PathGenerator_dealloc(PathGenerator* self)
             break;
         }
         case Gotoh: {
-            Trace3** trace3 = self->trace3;
-            for (i = 0; i <= nA; i++) PyMem_Free(trace3[i]);
-            PyMem_Free(trace3);
+            GapsGotoh** gaps = self->gaps_gotoh;
+            for (i = 0; i <= nA; i++) PyMem_Free(gaps[i]);
+            PyMem_Free(gaps);
             break;
         }
         case WatermanSmithBeyer: {
             Trace** M = self->M;
-            Gaps** gaps = self->gaps;
+            GapsWSB** gaps = self->gaps_wsb;
             const int nB = self->nB;
             _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
             break;
@@ -1005,10 +932,10 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Trace3** trace3 = self->trace3;
+    GapsGotoh** gaps = self->gaps_gotoh;
 
     m = M_MATRIX;
-    path = trace3[i][j].path;
+    path = M[i][j].path;
     if (path == DONE) return NULL;
     if (path == 0) {
         i = nA;
@@ -1018,7 +945,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
         /* We already have a path. Prune the path to see if there are
          * any alternative paths. */
         while (1) {
-            path = trace3[i][j].path;
+            path = M[i][j].path;
             if (path == 0) {
                 switch (m) {
                     case M_MATRIX: m = Ix_MATRIX; break;
@@ -1028,8 +955,8 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
                 break;
             }
             switch (path) {
-                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
-                case VERTICAL: trace = trace3[++i][j].Ix; break;
+                case HORIZONTAL: trace = gaps[i][++j].Iy; break;
+                case VERTICAL: trace = gaps[++i][j].Ix; break;
                 case DIAGONAL: trace = M[++i][++j].trace; break;
             }
             switch (m) {
@@ -1057,7 +984,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
                 case VERTICAL: i--; break;
                 case DIAGONAL: i--; j--; break;
             }
-            trace3[i][j].path = path;
+            M[i][j].path = path;
             break;
         }
     }
@@ -1071,18 +998,18 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
                    break;
                 }
             case Ix_MATRIX:
-                if (trace3[nA][nB].Ix) {
+                if (gaps[nA][nB].Ix) {
                    m = Ix_MATRIX;
                    break;
                 }
             case Iy_MATRIX:
-                if (trace3[nA][nB].Iy) {
+                if (gaps[nA][nB].Iy) {
                    m = Iy_MATRIX;
                    break;
                 }
             default:
                 /* exhausted this generator */
-                trace3[0][0].path = DONE;
+                M[0][0].path = DONE;
                 return NULL;
         }
     }
@@ -1094,12 +1021,12 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
             i--; j--;
             break;
         case Ix_MATRIX:
-            trace = trace3[i][j].Ix;
+            trace = gaps[i][j].Ix;
             path = VERTICAL;
             i--;
             break;
         case Iy_MATRIX:
-            trace = trace3[i][j].Iy;
+            trace = gaps[i][j].Iy;
             path = HORIZONTAL;
             j--;
             break;
@@ -1108,25 +1035,25 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
     while (1) {
         if (trace & M_MATRIX) {
             trace = M[i][j].trace;
-            trace3[i][j].path = path;
+            M[i][j].path = path;
             path = DIAGONAL;
             i--; j--;
         }
         else if (trace & Ix_MATRIX) {
-            trace3[i][j].path = path;
-            trace = trace3[i][j].Ix;
+            M[i][j].path = path;
+            trace = gaps[i][j].Ix;
             path = VERTICAL;
             i--;
         }
         else if (trace & Iy_MATRIX) {
-            trace3[i][j].path = path;
-            trace = trace3[i][j].Iy;
+            M[i][j].path = path;
+            trace = gaps[i][j].Iy;
             path = HORIZONTAL;
             j--;
         }
         else break;
     }
-    return _create_path_gotoh(trace3, 0, 0);
+    return _create_path(M, 0, 0);
 }
 
 static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
@@ -1140,12 +1067,12 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Trace3** trace3 = self->trace3;
-    int path = trace3[0][0].path;
+    GapsGotoh** gaps = self->gaps_gotoh;
+    int path = M[0][0].path;
 
     if (path == DONE) return NULL;
 
-    path = trace3[iA][iB].path;
+    path = M[iA][iB].path;
 
     if (path) {
         i = iA;
@@ -1153,7 +1080,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
         while (1) {
             /* We already have a path. Prune the path to see if there are
              * any alternative paths. */
-            path = trace3[i][j].path;
+            path = M[i][j].path;
             if (path == 0) {
                 m = M_MATRIX;
                 iA = i;
@@ -1161,8 +1088,8 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
                 break;
             }
             switch (path) {
-                case HORIZONTAL: trace = trace3[i][++j].Iy; break;
-                case VERTICAL: trace = trace3[++i][j].Ix; break;
+                case HORIZONTAL: trace = gaps[i][++j].Iy; break;
+                case VERTICAL: trace = gaps[++i][j].Ix; break;
                 case DIAGONAL: trace = M[++i][++j].trace; break;
             }
             switch (m) {
@@ -1190,7 +1117,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
                 case VERTICAL: i--; break;
                 case DIAGONAL: i--; j--; break;
             }
-            trace3[i][j].path = path;
+            M[i][j].path = path;
             break;
         }
     }
@@ -1206,11 +1133,11 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
             else {
                 /* we reached the end of the alignment without finding
                  * an alternative path */
-                trace3[0][0].path = DONE;
+                M[0][0].path = DONE;
                 return NULL;
             }
             if (M[iA][iB].trace & ENDPOINT) {
-                trace3[iA][iB].path = 0;
+                M[iA][iB].path = 0;
                 break;
             }
         }
@@ -1222,13 +1149,14 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
     while (1) {
         switch (m) {
             case M_MATRIX: trace = M[i][j].trace; break;
-            case Ix_MATRIX: trace = trace3[i][j].Ix; break;
-            case Iy_MATRIX: trace = trace3[i][j].Iy; break;
+            case Ix_MATRIX: trace = gaps[i][j].Ix; break;
+            case Iy_MATRIX: trace = gaps[i][j].Iy; break;
         }
         if (trace==0) {
             self->iA = i;
             self->iB = j;
-            return _create_path_gotoh(trace3, i, j);
+            // return _create_path_gotoh(M, i, j);
+            return _create_path(M, i, j);
         }
         switch (m) {
             case M_MATRIX:
@@ -1255,7 +1183,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
             case Iy_MATRIX: Iy[i][j].path = path; break;
         }
 */
-        trace3[i][j].path = path;
+        M[i][j].path = path;
     }
     return NULL;
 }
@@ -1273,7 +1201,7 @@ PathGenerator_next_waterman_smith_beyer_global(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Gaps** gaps = self->gaps;
+    GapsWSB** gaps = self->gaps_wsb;
 
     int gap;
     int path = M[0][0].path;
@@ -1477,7 +1405,7 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace** M = self->M;
-    Gaps** gaps = self->gaps;
+    GapsWSB** gaps = self->gaps_wsb;
 
     int gap;
     int path = M[0][0].path;
@@ -1722,26 +1650,22 @@ PathGenerator_reset(PathGenerator* self)
         case Local:
             self->iA = 0;
             self->iB = 0;
-        case Global:
+        case Global: {
+            Trace** M = self->M;
             switch (self->algorithm) {
-                case NeedlemanWunschSmithWaterman: {
-                    Trace** M = self->M;
+                case NeedlemanWunschSmithWaterman:
+                case Gotoh: {
                     if (M[0][0].path != NONE) M[0][0].path = 0;
                     break;
                 }
-                case Gotoh: {
-                    Trace3** trace3 = self->trace3;
-                    if (trace3[0][0].path != NONE) trace3[0][0].path = 0;
-                    break;
-                }
                 case WatermanSmithBeyer: {
-                    Trace** M = self->M;
                     M[0][0].path = 0;
                     break;
                 }
                 case Unknown:
                 default:
                     break;
+            }
         }
     }
     Py_INCREF(Py_None);
@@ -4208,7 +4132,7 @@ static PyGetSetDef Aligner_getset[] = {
         trace = Iy_MATRIX; \
     } \
     else if (temp > score - epsilon) trace |= Iy_MATRIX; \
-    trace3[i][j].matrix = trace;
+    gaps[i][j].matrix = trace;
 
 #define SELECT_TRACE_GOTOH_GLOBAL_ALIGN \
     trace = M_MATRIX; \
@@ -4277,7 +4201,7 @@ static PyGetSetDef Aligner_getset[] = {
         score = -DBL_MAX; \
         trace = 0; \
     } \
-    trace3[i][j].matrix = trace;
+    gaps[i][j].matrix = trace;
 
 #define SELECT_TRACE_WATERMAN_SMITH_BEYER_GLOBAL_ALIGN(score4) \
     trace = M_MATRIX; \
@@ -4365,15 +4289,14 @@ _create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
     generator->iB = 0;
     generator->nA = nA;
     generator->nB = nB;
+    generator->M = NULL;
     switch (algorithm) {
         case NeedlemanWunschSmithWaterman:
         case Gotoh:
-            generator->M = NULL;
-            generator->trace3 = NULL;
+            generator->gaps_gotoh = NULL;
             break;
         case WatermanSmithBeyer:
-            generator->M = NULL;
-            generator->gaps = NULL;
+            generator->gaps_wsb = NULL;
             break;
         case Unknown:
         default:
@@ -4405,7 +4328,8 @@ PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB,
     paths->nA = nA;
     paths->nB = nB;
     paths->M = NULL;
-    paths->trace3 = NULL;
+    paths->gaps_gotoh = NULL;
+    paths->gaps_wsb = NULL;
     paths->algorithm = NeedlemanWunschSmithWaterman;
     paths->mode = mode;
     paths->length = 0;
@@ -4437,7 +4361,7 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB,
     int i, j;
     int* trace;
     Trace** M = NULL;
-    Gaps** gaps = NULL;
+    GapsWSB** gaps = NULL;
     PathGenerator* paths;
 
     paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
@@ -4453,12 +4377,12 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB,
 
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
-    gaps = PyMem_Malloc((nA+1)*sizeof(Gaps*));
+    gaps = PyMem_Malloc((nA+1)*sizeof(GapsWSB*));
     if (!gaps) goto exit;
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
-        gaps[i] = PyMem_Malloc((nB+1)*sizeof(Gaps));
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(GapsWSB));
         if (!gaps[i]) goto exit;
         for (j = 0; j <= nB; j++) {
             gaps[i][j].MIx = NULL;
@@ -4512,7 +4436,7 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB,
     }
     M[0][0].path = 0;
     paths->M = M;
-    paths->gaps = gaps;
+    paths->gaps_wsb = gaps;
     return paths;
 exit:
     _deallocate_watermansmithbeyer_matrices(nA, nB, M, gaps);
@@ -5063,7 +4987,7 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_extend_A = self->target_right_extend_gap_score;
     const double right_gap_extend_B = self->query_right_extend_gap_score;
     const double epsilon = self->epsilon;
-    Trace3** trace3 = NULL;
+    GapsGotoh** gaps = NULL;
     Trace** M = NULL;
     double* M_scores = NULL;
     double* Ix_scores = NULL;
@@ -5083,11 +5007,11 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (!Ix_scores) goto exit;
     Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
-    trace3 = PyMem_Malloc((nA+1)*sizeof(Trace3*));
-    if (!trace3) goto exit;
+    gaps = PyMem_Malloc((nA+1)*sizeof(GapsGotoh*));
+    if (!gaps) goto exit;
     for (i = 0; i <= nA; i++) {
-        trace3[i] = PyMem_Malloc((nB+1)*sizeof(Trace3));
-        if (!trace3[i]) goto exit;
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(GapsGotoh));
+        if (!gaps[i]) goto exit;
     }
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
@@ -5100,25 +5024,25 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     M_scores[0] = 0;
     M[0][0].trace = 0;
     Ix_scores[0] = -DBL_MAX;
-    trace3[0][0].Ix = 0;
+    gaps[0][0].Ix = 0;
     Iy_scores[0] = -DBL_MAX;
-    trace3[0][0].Iy = 0;
+    gaps[0][0].Iy = 0;
     for (i = 1; i <= nA; i++) {
         M[i][0].trace = 0;
-        trace3[i][0].Ix = Ix_MATRIX;
-        trace3[i][0].Iy = 0;
+        gaps[i][0].Ix = Ix_MATRIX;
+        gaps[i][0].Iy = 0;
     }
-    trace3[1][0].Ix = M_MATRIX;
+    gaps[1][0].Ix = M_MATRIX;
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = -DBL_MAX;
         M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
-        trace3[0][j].Ix = 0;
+        gaps[0][j].Ix = 0;
         Iy_scores[j] = left_gap_open_A + left_gap_extend_A * (j-1);
-        trace3[0][j].Iy = Iy_MATRIX;
+        gaps[0][j].Iy = Iy_MATRIX;
     }
-    trace3[0][1].Iy = M_MATRIX;
+    gaps[0][1].Iy = M_MATRIX;
 
     for (i = 1; i < nA; i++) {
         kA = CHARINDEX(sA[i-1]);
@@ -5202,8 +5126,8 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                   Ix_scores[j-1] + right_gap_open_A,
                                   Iy_scores[j-1] + right_gap_extend_A);
     Iy_scores[nB] = score;
-    trace3[0][0].path = 0;
-    trace3[nA][nB].path = 0;
+    M[0][0].path = 0;
+    M[nA][nB].path = 0;
 
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
@@ -5212,19 +5136,19 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
                             Ix_scores[nB],
                             Iy_scores[nB]);
         paths->M = M;
-        paths->trace3 = trace3;
+        paths->gaps_gotoh = gaps;
         if (M_scores[nB] < score - epsilon) M[nA][nB].trace = 0;
-        if (Ix_scores[nB] < score - epsilon) trace3[nA][nB].Ix = 0;
-        if (Iy_scores[nB] < score - epsilon) trace3[nA][nB].Iy = 0;
+        if (Ix_scores[nB] < score - epsilon) gaps[nA][nB].Ix = 0;
+        if (Iy_scores[nB] < score - epsilon) gaps[nA][nB].Iy = 0;
         return Py_BuildValue("fN", score, paths);
     }
 exit:
-    if (trace3) {
+    if (gaps) {
         for (i = 0; i <= nA; i++) {
-            if (!trace3[i]) break;
-            PyMem_Free(trace3[i]);
+            if (!gaps[i]) break;
+            PyMem_Free(gaps[i]);
         }
-        PyMem_Free(trace3);
+        PyMem_Free(gaps);
     }
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
@@ -5249,8 +5173,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     const double gap_extend_A = self->target_extend_gap_score;
     const double gap_extend_B = self->query_extend_gap_score;
     const double epsilon = self->epsilon;
-    Trace3** trace3 = NULL;
     Trace** M = NULL;
+    GapsGotoh** gaps = NULL;
     double* M_scores = NULL;
     double* Ix_scores = NULL;
     double* Iy_scores = NULL;
@@ -5271,11 +5195,11 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (!Ix_scores) goto exit;
     Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
-    trace3 = PyMem_Malloc((nA+1)*sizeof(Trace3*));
-    if (!trace3) goto exit;
+    gaps = PyMem_Malloc((nA+1)*sizeof(GapsGotoh*));
+    if (!gaps) goto exit;
     for (i = 0; i <= nA; i++) {
-        trace3[i] = PyMem_Malloc((nB+1)*sizeof(Trace3));
-        if (!trace3[i]) goto exit;
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(GapsGotoh));
+        if (!gaps[i]) goto exit;
     }
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
@@ -5288,17 +5212,17 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     Ix_scores[0] = -DBL_MAX;
     Iy_scores[0] = -DBL_MAX;
     M[0][0].trace = 0;
-    trace3[0][0].Ix = 0;
-    trace3[0][0].Iy = 0;
-    trace3[0][0].path = 0;
+    gaps[0][0].Ix = 0;
+    gaps[0][0].Iy = 0;
+    M[0][0].path = 0;
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = 0;
         M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
-        trace3[0][j].Ix = 0;
+        gaps[0][j].Ix = 0;
         Iy_scores[j] = -DBL_MAX;
-        trace3[0][j].Iy = 0;
+        gaps[0][j].Iy = 0;
     }
     for (i = 1; i < nA; i++) {
         M_temp = M_scores[0];
@@ -5308,8 +5232,8 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         Ix_scores[0] = -DBL_MAX;
         Iy_scores[0] = -DBL_MAX;
         M[i][0].trace = 0;
-        trace3[i][0].Ix = 0;
-        trace3[i][0].Iy = 0;
+        gaps[i][0].Ix = 0;
+        gaps[i][0].Iy = 0;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
@@ -5335,18 +5259,18 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_scores[j] = score;
         Ix_temp = Ix_scores[nB];
         Ix_scores[nB] = 0;
-        trace3[i][nB].Ix = 0;
+        gaps[i][nB].Ix = 0;
         Iy_temp = Iy_scores[nB];
         Iy_scores[nB] = 0;
-        trace3[i][nB].Iy = 0;
+        gaps[i][nB].Iy = 0;
     }
     M_temp = M_scores[0];
     M_scores[0] = 0;
     M[nA][0].trace = 0;
     Ix_temp = Ix_scores[0];
     Ix_scores[0] = -DBL_MAX;
-    trace3[nA][0].Ix = 0;
-    trace3[nA][0].Iy = 0;
+    gaps[nA][0].Ix = 0;
+    gaps[nA][0].Iy = 0;
     Iy_temp = Iy_scores[0];
     Iy_scores[0] = -DBL_MAX;
     kA = CHARINDEX(sA[nA-1]);
@@ -5357,33 +5281,33 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_scores[j] = score;
         Ix_temp = Ix_scores[j];
         Ix_scores[j] = 0;
-        trace3[nA][j].Ix = 0;
+        gaps[nA][j].Ix = 0;
         Iy_temp = Iy_scores[j];
         Iy_scores[j] = 0;
-        trace3[nA][j].Iy = 0;
+        gaps[nA][j].Iy = 0;
     }
     kB = CHARINDEX(sB[nB-1]);
     SELECT_TRACE_GOTOH_LOCAL_ALIGN
-    trace3[nA][nB].Ix = 0;
+    gaps[nA][nB].Ix = 0;
     Ix_scores[nB] = 0;
-    trace3[nA][nB].Iy = 0;
+    gaps[nA][nB].Iy = 0;
     Iy_scores[nB] = 0;
 
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
         paths->M = M;
-        paths->trace3 = trace3;
-        if (maximum==0) trace3[0][0].path = DONE;
+        paths->gaps_gotoh = gaps;
+        if (maximum==0) M[0][0].path = DONE;
         return Py_BuildValue("fN", maximum, paths);
     }
 exit:
-    if (trace3) {
+    if (gaps) {
         for (i = 0; i <= nA; i++) {
-            if (!trace3[i]) break;
-            PyMem_Free(trace3[i]);
+            if (!gaps[i]) break;
+            PyMem_Free(gaps[i]);
         }
-        PyMem_Free(trace3);
+        PyMem_Free(gaps);
     }
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
@@ -5549,7 +5473,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     int kB;
     const double epsilon = self->epsilon;
     Trace** M;
-    Gaps** gaps;
+    GapsWSB** gaps;
     double** M_scores = NULL;
     double** Ix_scores = NULL;
     double** Iy_scores = NULL;
@@ -5568,7 +5492,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     paths = PathGenerator_create_WSB(nA, nB, epsilon, Global);
     if (!paths) return NULL;
     M = paths->M;
-    gaps = paths->gaps;
+    gaps = paths->gaps_wsb;
 
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
@@ -5860,7 +5784,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     int kB;
     const double epsilon = self->epsilon;
     Trace** M = NULL;
-    Gaps** gaps;
+    GapsWSB** gaps;
     double** M_scores;
     double** Ix_scores;
     double** Iy_scores;
@@ -5881,7 +5805,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     paths = PathGenerator_create_WSB(nA, nB, epsilon, Local);
     if (!paths) return NULL;
     M = paths->M;
-    gaps = paths->gaps;
+    gaps = paths->gaps_wsb;
 
     M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
