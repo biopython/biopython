@@ -46,7 +46,6 @@ typedef struct {
 } Trace;
 
 typedef struct {
-    unsigned char M : 4;
     unsigned char Ix : 4;
     unsigned char Iy : 4;
     unsigned char path : 4;
@@ -353,6 +352,7 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace3** trace3 = self->trace3;
+    Trace** M = self->M;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t term;
     Py_ssize_t M_temp;
@@ -384,7 +384,7 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
         Iy_counts[0] = 0;
         for (j = 1; j <= nB; j++) {
             count = 0;
-            trace = trace3[i][j].M;
+            trace = M[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
@@ -407,7 +407,7 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
         }
     }
     count = 0;
-    if (trace3[nA][nB].M) SAFE_ADD(M_counts[nB], count);
+    if (M[nA][nB].trace) SAFE_ADD(M_counts[nB], count);
     if (trace3[nA][nB].Ix) SAFE_ADD(Ix_counts[nB], count);
     if (trace3[nA][nB].Iy) SAFE_ADD(Iy_counts[nB], count);
 exit:
@@ -426,6 +426,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     const int nA = self->nA;
     const int nB = self->nB;
     Trace3** trace3 = self->trace3;
+    Trace** M = self->M;
     Py_ssize_t term;
     Py_ssize_t count = MEMORY_ERROR;
     Py_ssize_t total = 0;
@@ -458,14 +459,14 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
         Iy_counts[0] = 0;
         for (j = 1; j <= nB; j++) {
             count = 0;
-            trace = trace3[i][j].M;
+            trace = M[i][j].trace;
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
             if (count==0) count = 1;
             M_temp = M_counts[j];
             M_counts[j] = count;
-            if (trace3[i][j].M & ENDPOINT) SAFE_ADD(count, total);
+            if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
             trace = trace3[i][j].Ix;
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
@@ -1003,6 +1004,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
     int trace = 0;
     const int nA = self->nA;
     const int nB = self->nB;
+    Trace** M = self->M;
     Trace3** trace3 = self->trace3;
 
     m = M_MATRIX;
@@ -1028,7 +1030,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
             switch (path) {
                 case HORIZONTAL: trace = trace3[i][++j].Iy; break;
                 case VERTICAL: trace = trace3[++i][j].Ix; break;
-                case DIAGONAL: trace = trace3[++i][++j].M; break;
+                case DIAGONAL: trace = M[++i][++j].trace; break;
             }
             switch (m) {
                 case M_MATRIX:
@@ -1064,7 +1066,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
         /* Generate a new path. */
         switch (m) {
             case M_MATRIX:
-                if (trace3[nA][nB].M) {
+                if (M[nA][nB].trace) {
                    /* m = M_MATRIX; */
                    break;
                 }
@@ -1087,7 +1089,7 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
 
     switch (m) {
         case M_MATRIX:
-            trace = trace3[i][j].M;
+            trace = M[i][j].trace;
             path = DIAGONAL;
             i--; j--;
             break;
@@ -1105,8 +1107,8 @@ static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
 
     while (1) {
         if (trace & M_MATRIX) {
+            trace = M[i][j].trace;
             trace3[i][j].path = path;
-            trace = trace3[i][j].M;
             path = DIAGONAL;
             i--; j--;
         }
@@ -1137,6 +1139,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
     int iB = self->iB;
     const int nA = self->nA;
     const int nB = self->nB;
+    Trace** M = self->M;
     Trace3** trace3 = self->trace3;
     int path = trace3[0][0].path;
 
@@ -1160,7 +1163,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
             switch (path) {
                 case HORIZONTAL: trace = trace3[i][++j].Iy; break;
                 case VERTICAL: trace = trace3[++i][j].Ix; break;
-                case DIAGONAL: trace = trace3[++i][++j].M; break;
+                case DIAGONAL: trace = M[++i][++j].trace; break;
             }
             switch (m) {
                 case M_MATRIX:
@@ -1206,7 +1209,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
                 trace3[0][0].path = DONE;
                 return NULL;
             }
-            if (trace3[iA][iB].M & ENDPOINT) {
+            if (M[iA][iB].trace & ENDPOINT) {
                 trace3[iA][iB].path = 0;
                 break;
             }
@@ -1218,7 +1221,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
 
     while (1) {
         switch (m) {
-            case M_MATRIX: trace = trace3[i][j].M; break;
+            case M_MATRIX: trace = M[i][j].trace; break;
             case Ix_MATRIX: trace = trace3[i][j].Ix; break;
             case Iy_MATRIX: trace = trace3[i][j].Iy; break;
         }
@@ -4222,7 +4225,7 @@ static PyGetSetDef Aligner_getset[] = {
         trace = Iy_MATRIX; \
     } \
     else if (temp > score - epsilon) trace |= Iy_MATRIX; \
-    trace3[i][j].M = trace;
+    M[i][j].trace = trace;
 
 #define SELECT_TRACE_GOTOH_LOCAL_ALIGN \
     trace = M_MATRIX; \
@@ -4246,14 +4249,14 @@ static PyGetSetDef Aligner_getset[] = {
         if (score > maximum + epsilon) { \
             maximum = score; \
             for ( ; im < i; im++, jm = 0) \
-                for ( ; jm <= nB; jm++) trace3[im][jm].M &= ~ENDPOINT; \
-            for ( ; jm < j; jm++) trace3[im][jm].M &= ~ENDPOINT; \
+                for ( ; jm <= nB; jm++) M[im][jm].trace &= ~ENDPOINT; \
+            for ( ; jm < j; jm++) M[im][jm].trace &= ~ENDPOINT; \
             im = i; \
             jm = j; \
         } \
         trace |= ENDPOINT; \
     } \
-    trace3[i][j].M = trace;
+    M[i][j].trace = trace;
 
 #define SELECT_TRACE_GOTOH_LOCAL_GAP(matrix, score1, score2, score3) \
     trace = M_MATRIX; \
@@ -5061,6 +5064,7 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     const double right_gap_extend_B = self->query_right_extend_gap_score;
     const double epsilon = self->epsilon;
     Trace3** trace3 = NULL;
+    Trace** M = NULL;
     double* M_scores = NULL;
     double* Ix_scores = NULL;
     double* Iy_scores = NULL;
@@ -5085,16 +5089,22 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
         trace3[i] = PyMem_Malloc((nB+1)*sizeof(Trace3));
         if (!trace3[i]) goto exit;
     }
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
+    }
 
     /* Gotoh algorithm with three states */
     M_scores[0] = 0;
-    trace3[0][0].M = 0;
+    M[0][0].trace = 0;
     Ix_scores[0] = -DBL_MAX;
     trace3[0][0].Ix = 0;
     Iy_scores[0] = -DBL_MAX;
     trace3[0][0].Iy = 0;
     for (i = 1; i <= nA; i++) {
-        trace3[i][0].M = 0;
+        M[i][0].trace = 0;
         trace3[i][0].Ix = Ix_MATRIX;
         trace3[i][0].Iy = 0;
     }
@@ -5102,7 +5112,7 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = -DBL_MAX;
-        trace3[0][j].M = 0;
+        M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
         trace3[0][j].Ix = 0;
         Iy_scores[j] = left_gap_open_A + left_gap_extend_A * (j-1);
@@ -5201,11 +5211,11 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
         SELECT_SCORE_GLOBAL(M_scores[nB],
                             Ix_scores[nB],
                             Iy_scores[nB]);
+        paths->M = M;
         paths->trace3 = trace3;
-        score -= epsilon;
-        if (M_scores[nB] < score) trace3[nA][nB].M = 0;
-        if (Ix_scores[nB] < score) trace3[nA][nB].Ix = 0;
-        if (Iy_scores[nB] < score) trace3[nA][nB].Iy = 0;
+        if (M_scores[nB] < score - epsilon) M[nA][nB].trace = 0;
+        if (Ix_scores[nB] < score - epsilon) trace3[nA][nB].Ix = 0;
+        if (Iy_scores[nB] < score - epsilon) trace3[nA][nB].Iy = 0;
         return Py_BuildValue("fN", score, paths);
     }
 exit:
@@ -5240,6 +5250,7 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     const double gap_extend_B = self->query_extend_gap_score;
     const double epsilon = self->epsilon;
     Trace3** trace3 = NULL;
+    Trace** M = NULL;
     double* M_scores = NULL;
     double* Ix_scores = NULL;
     double* Iy_scores = NULL;
@@ -5266,18 +5277,24 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         trace3[i] = PyMem_Malloc((nB+1)*sizeof(Trace3));
         if (!trace3[i]) goto exit;
     }
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    if (!M) goto exit;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
+    }
 
     M_scores[0] = 0;
     Ix_scores[0] = -DBL_MAX;
     Iy_scores[0] = -DBL_MAX;
-    trace3[0][0].M = 0;
+    M[0][0].trace = 0;
     trace3[0][0].Ix = 0;
     trace3[0][0].Iy = 0;
     trace3[0][0].path = 0;
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = 0;
-        trace3[0][j].M = 0;
+        M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
         trace3[0][j].Ix = 0;
         Iy_scores[j] = -DBL_MAX;
@@ -5290,7 +5307,7 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_scores[0] = 0;
         Ix_scores[0] = -DBL_MAX;
         Iy_scores[0] = -DBL_MAX;
-        trace3[i][0].M = 0;
+        M[i][0].trace = 0;
         trace3[i][0].Ix = 0;
         trace3[i][0].Iy = 0;
         kA = CHARINDEX(sA[i-1]);
@@ -5325,7 +5342,7 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     }
     M_temp = M_scores[0];
     M_scores[0] = 0;
-    trace3[nA][0].M = 0;
+    M[nA][0].trace = 0;
     Ix_temp = Ix_scores[0];
     Ix_scores[0] = -DBL_MAX;
     trace3[nA][0].Ix = 0;
@@ -5355,6 +5372,7 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* traceback */
     paths = _create_path_generator(self, nA, nB, epsilon);
     if (paths) {
+        paths->M = M;
         paths->trace3 = trace3;
         if (maximum==0) trace3[0][0].path = DONE;
         return Py_BuildValue("fN", maximum, paths);
