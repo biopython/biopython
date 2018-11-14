@@ -496,7 +496,7 @@ to `D. yakuba`. ``mktest`` will return the p-value of the test. We can see
 in this case, 0.00206 << 0.01, therefore, the gene is under strong negative
 selection according to MK test.
 
-X.4  Future Development
+X.5  Future Development
 -------------------------------------------
 
 Because of the limited time frame for Google Summer of Code project, some of
