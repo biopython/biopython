@@ -1,6 +1,6 @@
 
 Chapter XXX  Codon Alignment
-==============================================
+============================
 
 This chapter is about Codon Alignments, which is a special case of nucleotide
 alignment in which the trinucleotides correspond directly to amino acids in
@@ -18,7 +18,7 @@ Biopython.
 
 
 X.1  ``CodonSeq`` Class
--------------------------------------------
+-----------------------
 
 ``Bio.CodonAlign.CodonSeq`` object is the base object in Codon Alignment. It
 is similar to ``Bio.Seq`` but with some extra attributes. To obtain a simple
@@ -157,7 +157,7 @@ for a ``CodonSeq`` (mainly ``rf_table``).
 
 
 X.2  ``CodonAlignment`` Class
--------------------------------------------
+-----------------------------
 
 The ``CodonAlignment`` class is another new class in ``Codon.Align``. It's
 aim is to store codon alignment data and apply various analysis upon it.
@@ -230,7 +230,7 @@ for evolutionary analysis. We will cover them more in X.4.
 
 
 X.3  Build a Codon Alignment
--------------------------------------------
+----------------------------
 
 Building a codon alignment is the first step of many evolutionary anaysis.
 But how to do that?  ``Bio.CodonAlign`` provides you an easy funciton
@@ -368,7 +368,7 @@ this is shown as a UserWarning.
 
 
 X.4  Codon Alignment Application
--------------------------------------------
+--------------------------------
 
 The most important application of codon alignment is to estimate
 nonsynonymous substitutions per site (dN) and synonymous substitutions per
@@ -497,7 +497,7 @@ in this case, 0.00206 << 0.01, therefore, the gene is under strong negative
 selection according to MK test.
 
 X.5  Future Development
--------------------------------------------
+-----------------------
 
 Because of the limited time frame for Google Summer of Code project, some of
 the functions in ``CodonAlign`` is not tested comprehensively. In the
