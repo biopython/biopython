@@ -72,7 +72,7 @@ for line in open("gc.prt").readlines():
     elif line == ' Mitochondrial; Mycoplasma; Spiroplasma" ,\n':
         names[-1] = names[-1] + " Mitochondrial; Mycoplasma; Spiroplasma"
     elif line[:4] == "  id":
-        id = int(re.search('(\d+)', line).group(1))
+        id = int(re.search(r'(\d+)', line).group(1))
     elif line[:10] == "  ncbieaa ":
         aa = line[12:12 + 64]
     elif line[:10] == "  sncbieaa":
