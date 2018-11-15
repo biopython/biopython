@@ -36,7 +36,7 @@ SPECIAL_COMMANDS = ['charstatelabels', 'charlabels', 'taxlabels', 'taxset',
                     'charset', 'charpartition', 'taxpartition', 'matrix',
                     'tree', 'utree', 'translate', 'codonposset', 'title']
 KNOWN_NEXUS_BLOCKS = ['trees', 'data', 'characters', 'taxa', 'sets', 'codons']
-PUNCTUATION = r'()[]{}\,;:=*\'"`+-<>'
+PUNCTUATION = '()[]{}\\,;:=*\\\'"`+-<>'
 MRBAYESSAFE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
 WHITESPACE = ' \t\n'
 # SPECIALCOMMENTS = ['!','&','%','/','\\','@'] # original list of special comments
