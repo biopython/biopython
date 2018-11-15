@@ -544,7 +544,7 @@ def read_text_matrix(data_file):
         # print(j)
         row = alphabet[j]
         # row = rec[0]
-        if re.compile('[A-z\*]').match(rec[0]):
+        if re.compile(r'[A-z\*]').match(rec[0]):
             first_col = 1
         else:
             first_col = 0

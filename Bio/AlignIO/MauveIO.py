@@ -80,8 +80,8 @@ from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
 
 
-XMFA_HEADER_REGEX = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)")
-XMFA_HEADER_REGEX_BIOPYTHON = re.compile("> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)")
+XMFA_HEADER_REGEX = re.compile(r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>.*)")
+XMFA_HEADER_REGEX_BIOPYTHON = re.compile(r"> (?P<id>\d+):(?P<start>\d+)-(?P<end>\d+) (?P<strand>[+-]) (?P<name>[^#]*) # (?P<realname>.*)")
 ID_LINE_FMT = "> {seq_name}:{start}-{end} {strand} {file} # {ugly_hack}\n"
 
 

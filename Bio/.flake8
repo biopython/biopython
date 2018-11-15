@@ -9,9 +9,6 @@ ignore =
     # flake8 v3.6.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     # These are ignored by default:
     E122,E123,E126,W503,W504,
-    # This is a new warning
-    # W605 invalid escape sequence
-    W605,
     # These are not ignored by default:
     # E127	continuation line over-indented for visual indent
     # E128	continuation line under-indented for visual indent

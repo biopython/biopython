@@ -47,6 +47,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Darcy Mason (first contribution)
 - Juraj Szász (first contribution)
+- Jeremy LaBarage (first contribution)
 - Kai Blin
 - Konstantin Vdovkin (first contribution)
 - Maximilian Greil
