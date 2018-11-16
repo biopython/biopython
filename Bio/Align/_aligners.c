@@ -4277,37 +4277,75 @@ static PyGetSetDef Aligner_getset[] = {
 /* -------------- allocation & deallocation ------------- */
 
 static PathGenerator*
-_create_path_generator(const Aligner* aligner, int nA, int nB, double epsilon)
+PathGenerator_create_Gotoh(int nA, int nB, double epsilon, Mode mode)
 {
-    Algorithm algorithm = aligner->algorithm;
-    PathGenerator* generator;
-    generator = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
-    if (!generator) return NULL;
+    int i;
+    Trace** M;
+    TraceGapsGotoh** gaps;
+    PathGenerator* paths;
 
-    generator->iA = 0;
-    generator->iB = 0;
-    generator->nA = nA;
-    generator->nB = nB;
-    generator->M = NULL;
-    switch (algorithm) {
-        case NeedlemanWunschSmithWaterman:
-        case Gotoh:
-            generator->gaps.gotoh = NULL;
-            break;
-        case WatermanSmithBeyer:
-            generator->gaps.waterman_smith_beyer = NULL;
-            break;
-        case Unknown:
-        default:
-            Py_DECREF(generator);
-            PyErr_SetString(PyExc_RuntimeError, "unknown algorithm");
-            return NULL;
+    paths = (PathGenerator*)PyType_GenericAlloc(&PathGenerator_Type, 0);
+    if (!paths) return NULL;
+
+    paths->iA = 0;
+    paths->iB = 0;
+    paths->nA = nA;
+    paths->nB = nB;
+    paths->M = NULL;
+    paths->gaps.gotoh = NULL;
+    paths->algorithm = Gotoh;
+    paths->mode = mode;
+    paths->length = 0;
+
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
+    if (!M) goto exit;
+    paths->M = M;
+    for (i = 0; i <= nA; i++) {
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
+        if (!M[i]) goto exit;
+        M[i][0].trace = 0;
     }
-    generator->algorithm = algorithm;
-    generator->mode = aligner->mode;
-    generator->length = 0;
+    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
+    if (!gaps) goto exit;
+    paths->gaps.gotoh = gaps;
+    for (i = 0; i <= nA; i++) {
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsGotoh));
+        if (!gaps[i]) goto exit;
+    }
 
-    return generator;
+    gaps[0][0].Ix = 0;
+    gaps[0][0].Iy = 0;
+    if (mode == Global) {
+        for (i = 1; i <= nA; i++) {
+            gaps[i][0].Ix = Ix_MATRIX;
+            gaps[i][0].Iy = 0;
+        }
+        gaps[1][0].Ix = M_MATRIX;
+        for (i = 1; i <= nB; i++) {
+            M[0][i].trace = 0;
+            gaps[0][i].Ix = 0;
+            gaps[0][i].Iy = Iy_MATRIX;
+        }
+        gaps[0][1].Iy = M_MATRIX;
+    }
+    else if (mode == Local) {
+        for (i = 1; i < nA; i++) {
+            gaps[i][0].Ix = 0;
+            gaps[i][0].Iy = 0;
+        }
+        for (i = 1; i <= nB; i++) {
+            M[0][i].trace = 0;
+            gaps[0][i].Ix = 0;
+            gaps[0][i].Iy = 0;
+        }
+    }
+    M[0][0].path = 0;
+
+    return paths;
+exit:
+    Py_DECREF(paths);
+    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    return NULL;
 }
 
 static PathGenerator*
@@ -4594,7 +4632,7 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     int trace;
     double temp;
     double* scores = NULL;
-    PathGenerator* paths = NULL;
+    PathGenerator* paths;
 
     /* Needleman-Wunsch algorithm */
     paths = PathGenerator_create_NWSW(nA, nB, epsilon, Global);
@@ -4997,8 +5035,11 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     double M_temp;
     double Ix_temp;
     double Iy_temp;
+    PathGenerator* paths;
 
-    PathGenerator* paths = NULL;
+    /* Gotoh algorithm with three states */
+    paths = PathGenerator_create_Gotoh(nA, nB, epsilon, Global);
+    if (!paths) return NULL;
 
     M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
@@ -5006,42 +5047,19 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     if (!Ix_scores) goto exit;
     Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
-    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
-    if (!gaps) goto exit;
-    for (i = 0; i <= nA; i++) {
-        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsGotoh));
-        if (!gaps[i]) goto exit;
-    }
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
-    if (!M) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
-        if (!M[i]) goto exit;
-    }
+    M = paths->M;
+    gaps = paths->gaps.gotoh;
 
     /* Gotoh algorithm with three states */
     M_scores[0] = 0;
-    M[0][0].trace = 0;
     Ix_scores[0] = -DBL_MAX;
-    gaps[0][0].Ix = 0;
     Iy_scores[0] = -DBL_MAX;
-    gaps[0][0].Iy = 0;
-    for (i = 1; i <= nA; i++) {
-        M[i][0].trace = 0;
-        gaps[i][0].Ix = Ix_MATRIX;
-        gaps[i][0].Iy = 0;
-    }
-    gaps[1][0].Ix = M_MATRIX;
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = -DBL_MAX;
-        M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
-        gaps[0][j].Ix = 0;
         Iy_scores[j] = left_gap_open_A + left_gap_extend_A * (j-1);
-        gaps[0][j].Iy = Iy_MATRIX;
     }
-    gaps[0][1].Iy = M_MATRIX;
 
     for (i = 1; i < nA; i++) {
         kA = CHARINDEX(sA[i-1]);
@@ -5125,22 +5143,14 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
                                   Ix_scores[j-1] + right_gap_open_A,
                                   Iy_scores[j-1] + right_gap_extend_A);
     Iy_scores[nB] = score;
-    M[0][0].path = 0;
     M[nA][nB].path = 0;
 
     /* traceback */
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        SELECT_SCORE_GLOBAL(M_scores[nB],
-                            Ix_scores[nB],
-                            Iy_scores[nB]);
-        paths->M = M;
-        paths->gaps.gotoh = gaps;
-        if (M_scores[nB] < score - epsilon) M[nA][nB].trace = 0;
-        if (Ix_scores[nB] < score - epsilon) gaps[nA][nB].Ix = 0;
-        if (Iy_scores[nB] < score - epsilon) gaps[nA][nB].Iy = 0;
-        return Py_BuildValue("fN", score, paths);
-    }
+    SELECT_SCORE_GLOBAL(M_scores[nB], Ix_scores[nB], Iy_scores[nB]);
+    if (M_scores[nB] < score - epsilon) M[nA][nB].trace = 0;
+    if (Ix_scores[nB] < score - epsilon) gaps[nA][nB].Ix = 0;
+    if (Iy_scores[nB] < score - epsilon) gaps[nA][nB].Iy = 0;
+    return Py_BuildValue("fN", score, paths);
 exit:
     if (gaps) {
         for (i = 0; i <= nA; i++) {
@@ -5184,44 +5194,28 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     double Ix_temp;
     double Iy_temp;
     double maximum = 0.0;
-
-    PathGenerator* paths = NULL;
+    PathGenerator* paths;
 
     /* Gotoh algorithm with three states */
+    paths = PathGenerator_create_Gotoh(nA, nB, epsilon, Local);
+
     M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
     Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Ix_scores) goto exit;
     Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
-    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
-    if (!gaps) goto exit;
-    for (i = 0; i <= nA; i++) {
-        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsGotoh));
-        if (!gaps[i]) goto exit;
-    }
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
-    if (!M) goto exit;
-    for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
-        if (!M[i]) goto exit;
-    }
-
     M_scores[0] = 0;
     Ix_scores[0] = -DBL_MAX;
     Iy_scores[0] = -DBL_MAX;
-    M[0][0].trace = 0;
-    gaps[0][0].Ix = 0;
-    gaps[0][0].Iy = 0;
-    M[0][0].path = 0;
+
+    M = paths->M;
+    gaps = paths->gaps.gotoh;
 
     for (j = 1; j <= nB; j++) {
         M_scores[j] = 0;
-        M[0][j].trace = 0;
         Ix_scores[j] = -DBL_MAX;
-        gaps[0][j].Ix = 0;
         Iy_scores[j] = -DBL_MAX;
-        gaps[0][j].Iy = 0;
     }
     for (i = 1; i < nA; i++) {
         M_temp = M_scores[0];
@@ -5230,9 +5224,6 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_scores[0] = 0;
         Ix_scores[0] = -DBL_MAX;
         Iy_scores[0] = -DBL_MAX;
-        M[i][0].trace = 0;
-        gaps[i][0].Ix = 0;
-        gaps[i][0].Iy = 0;
         kA = CHARINDEX(sA[i-1]);
         for (j = 1; j < nB; j++) {
             kB = CHARINDEX(sB[j-1]);
@@ -5293,13 +5284,10 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     Iy_scores[nB] = 0;
 
     /* traceback */
-    paths = _create_path_generator(self, nA, nB, epsilon);
-    if (paths) {
-        paths->M = M;
-        paths->gaps.gotoh = gaps;
-        if (maximum==0) M[0][0].path = DONE;
-        return Py_BuildValue("fN", maximum, paths);
-    }
+    paths->M = M;
+    paths->gaps.gotoh = gaps;
+    if (maximum==0) M[0][0].path = DONE;
+    return Py_BuildValue("fN", maximum, paths);
 exit:
     if (gaps) {
         for (i = 0; i <= nA; i++) {
