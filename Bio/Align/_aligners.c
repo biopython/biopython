@@ -9,18 +9,20 @@
 // CHECK: PyTuple_New // DONE
 // CHECK: PyDict_SetItem // DONE
 // CHECK: PyMem_Malloc //DONE
+// CHECK: PyUnicode_Check
 // CHECK: PyUnicode_READY
-// CHECK: PyObject_CheckBuffer
-// CHECK: PyObject_GetBuffer
 // CHECK: PyUnicode_CompareWithASCIIString
-// CHECK: PyTuple_Check(key)
-// CHECK: PyTuple_GET_SIZE
-// CHECK: PyTuple_New
-// CHECK: PyInt_FromLong
-// CHECK: PyFloat_FromDouble
-// CHECK: PyObject_Repr
-// CHECK: PyString_Check
-// CHECK: Py_BuildValue
+// CHECK: PyObject_CheckBuffer // DONE
+// CHECK: PyObject_GetBuffer // DONE
+// CHECK: PyTuple_Check // DONE
+// CHECK: PyTuple_GET_SIZE // DONE
+// CHECK: PyInt_FromLong // DONE
+// CHECK: PyFloat_FromDouble // DONE
+// CHECK: PyObject_Repr // DONE
+// CHECK: PyString_Check // DONE
+// CHECK: PyDict_Check // DONE
+// CHECK: PyCallable_Check // DONE
+// CHECK: Py_BuildValue // DONE
 // CHECK: _call_query_gap_function
 // CHECK: _call_target_gap_function
 // CHECK: PathGenerator_create_NWSW
@@ -111,13 +113,17 @@ static int _convert_single_letter(PyObject* item)
 #endif
     {
         if (!PyObject_CheckBuffer(item)
-         || PyObject_GetBuffer(item, &view, PyBUF_FORMAT) == -1
-         || strcmp(view.format, "B") != 0
-         || view.len != 1) {
+         || PyObject_GetBuffer(item, &view, PyBUF_FORMAT) == -1) {
+            PyErr_SetString(PyExc_ValueError, "expected a single letter");
+            return -1;
+        }
+        if (strcmp(view.format, "B") != 0 || view.len != 1) {
+            PyBuffer_Release(&view);
             PyErr_SetString(PyExc_ValueError, "expected a single letter");
             return -1;
         }
         letter = *((char*)(view.buf));
+        PyBuffer_Release(&view);
     }
     if (letter >= 'a' && letter <= 'z') i = letter - 'a';
     else if (letter >= 'A' && letter <= 'Z') i = letter - 'A';
@@ -196,7 +202,7 @@ _create_path(Trace** M, int i, int j) {
         }
     }
     Py_DECREF(tuple); /* all references were stolen */
-    return NULL;
+    return PyErr_NoMemory();
 }
 
 typedef struct {
@@ -727,7 +733,7 @@ static Py_ssize_t PathGenerator_length(PathGenerator* self) {
                          PY_SSIZE_T_MAX);
             break;
         case MEMORY_ERROR:
-            PyErr_SetString(PyExc_MemoryError, "Out of memory");
+            PyErr_SetNone(PyExc_MemoryError);
             break;
         default:
             break;
@@ -1844,10 +1850,7 @@ Aligner_str(Aligner* self)
 #else
         char* s;
         PyObject* representation = PyObject_Repr(self->target_gap_function);
-        if (!representation) {
-            PyErr_SetString(PyExc_MemoryError, "Out of memory");
-            return NULL;
-        }
+        if (!representation) return PyErr_NoMemory();
         s = PyString_AsString(representation);
         n = sprintf(p, "  target gap function: %s\n", s);
         p += n;
@@ -1881,10 +1884,7 @@ Aligner_str(Aligner* self)
 #else
         char* s;
         PyObject* representation = PyObject_Repr(self->query_gap_function);
-        if (!representation) {
-            PyErr_SetString(PyExc_MemoryError, "Out of memory");
-            return NULL;
-        }
+        if (!representation) return PyErr_NoMemory();
         s = PyString_AsString(representation);
         n = sprintf(p, "  query gap function: %s\n", s);
         p += n;
@@ -1930,7 +1930,7 @@ Aligner_str(Aligner* self)
 #endif
 }
 
-static char Aligner_mode__doc__[] = "alignment mode (global or local)";
+static char Aligner_mode__doc__[] = "alignment mode ('global' or 'local')";
 
 static PyObject*
 Aligner_get_mode(Aligner* self, void* closure)
@@ -1950,29 +1950,35 @@ static int
 Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
 {
 #if PY_MAJOR_VERSION >= 3
-    if (!PyUnicode_Check(value)) {
+    if (PyUnicode_Check(value)) {
 #else
     char* mode;
-    if (!PyString_Check(value)) {
+    if (PyString_Check(value)) {
 #endif
-        PyErr_SetString(PyExc_TypeError, "invalid mode");
-        return -1;
-    }
 #if PY_MAJOR_VERSION >= 3
-    if (PyUnicode_CompareWithASCIIString(value, "global") == 0)
-       self->mode = Global;
-    else if (PyUnicode_CompareWithASCIIString(value, "local") == 0)
-       self->mode = Local;
+        if (PyUnicode_CompareWithASCIIString(value, "global") == 0) {
+            self->mode = Global;
+            return 0;
+        }
+        if (PyUnicode_CompareWithASCIIString(value, "local") == 0) {
+            self->mode = Local;
+            return 0;
+        }
 #else
-    mode = PyString_AsString(value);
-    if (strcmp(mode, "global") == 0) self->mode = Global;
-    else if (strcmp(mode, "local") == 0) self->mode = Local;
+        mode = PyString_AsString(value);
+        if (strcmp(mode, "global") == 0) {
+            self->mode = Global;
+            return 0;
+        }
+        if (strcmp(mode, "local") == 0) {
+            self->mode = Local;
+            return 0;
+        }
 #endif
-    else {
-        PyErr_SetString(PyExc_ValueError, "invalid mode");
-        return -1;
     }
-    return 0;
+    PyErr_SetString(PyExc_ValueError,
+                    "invalid mode (expected 'global' or 'local'");
+    return -1;
 }
 
 static char Aligner_match__doc__[] = "match score";
@@ -2140,7 +2146,7 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
     }
     if (!self->letters) self->letters = PyMem_Malloc(n*sizeof(int)); // DONE
     if (!self->letters) {
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        PyErr_SetNone(PyExc_MemoryError);
         return -1;
     }
     /* No errors - store the new substitution matrix */
@@ -4329,7 +4335,7 @@ PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     return paths;
 exit:
     Py_DECREF(paths);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    PyErr_SetNone(PyExc_MemoryError);
     return NULL;
 }
 
@@ -4401,7 +4407,7 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     return paths;
 exit:
     Py_DECREF(paths);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    PyErr_SetNone(PyExc_MemoryError);
     return NULL;
 }
 
@@ -4479,7 +4485,7 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     return paths;
 exit:
     Py_DECREF(paths);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    PyErr_SetNone(PyExc_MemoryError);
     return NULL;
 }
 
@@ -4507,10 +4513,7 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
 
     /* Needleman-Wunsch algorithm */
     scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
-    if (!scores) {
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
-        return NULL;
-    }
+    if (!scores) return PyErr_NoMemory();
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
@@ -4573,10 +4576,7 @@ Aligner_smithwaterman_score(Aligner* self, const char* sA, Py_ssize_t nA,
 
     /* Smith-Waterman algorithm */
     scores = PyMem_Malloc((nB+1)*sizeof(double));
-    if (!scores) {
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
-        return NULL;
-    }
+    if (!scores) return PyErr_NoMemory();
 
     /* The top row of the score matrix is a special case,
      * as there are no previously aligned characters.
@@ -4639,11 +4639,10 @@ Aligner_needlemanwunsch_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* Needleman-Wunsch algorithm */
     paths = PathGenerator_create_NWSW(nA, nB, Global);
     if (!paths) return NULL;
-    scores = malloc((nB+1)*sizeof(double));
+    scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!scores) {
         Py_DECREF(paths);
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
-        return NULL;
+        return PyErr_NoMemory();
     }
     M = paths->M;
     scores[0] = 0;
@@ -4699,11 +4698,10 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     /* Smith-Waterman algorithm */
     paths = PathGenerator_create_NWSW(nA, nB, Local);
     if (!paths) return NULL;
-    scores = malloc((nB+1)*sizeof(double));
+    scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!scores) {
         Py_DECREF(paths);
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
-        return NULL;
+        return PyErr_NoMemory();
     }
     M = paths->M;
     for (j = 0; j <= nB; j++) scores[j] = 0;
@@ -4878,8 +4876,7 @@ exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
+    return PyErr_NoMemory();
 }
 
 static PyObject*
@@ -5001,8 +4998,7 @@ exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
+    return PyErr_NoMemory();
 }
 
 static PyObject*
@@ -5159,8 +5155,7 @@ exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
+    return PyErr_NoMemory();
 }
 
 static PyObject*
@@ -5290,8 +5285,7 @@ exit:
     if (M_scores) PyMem_Free(M_scores);
     if (Ix_scores) PyMem_Free(Ix_scores);
     if (Iy_scores) PyMem_Free(Iy_scores);
-    PyErr_SetString(PyExc_MemoryError, "Out of memory");
-    return NULL;
+    return PyErr_NoMemory();
 }
 
 static int
@@ -5599,7 +5593,7 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
 
 exit:
     if (ok) /* otherwise, an exception was already set */
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        PyErr_SetNone(PyExc_MemoryError);
     Py_DECREF(paths);
     if (M_scores) {
         /* If M is NULL, then Ix is also NULL. */
@@ -5737,7 +5731,7 @@ exit:
         PyMem_Free(M);
     }
     if (!ok) return NULL;
-    if (!result) PyErr_SetString(PyExc_MemoryError, "Out of memory");
+    if (!result) return PyErr_NoMemory();
     return result;
 }
 
@@ -5900,7 +5894,7 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
 
 exit:
     if (ok) /* otherwise, an exception was already set */
-        PyErr_SetString(PyExc_MemoryError, "Out of memory");
+        PyErr_SetNone(PyExc_MemoryError);
     Py_DECREF(paths);
     if (M_scores) {
         /* If M is NULL, then Ix is also NULL. */
