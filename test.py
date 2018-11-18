@@ -2,7 +2,6 @@ import random
 from Bio.Align import PairwiseAligner, PairwiseAligner_Old
 
 def make_wsb_aligner(mode):
-    aligner = PairwiseAligner()
     algorithm = "Waterman-Smith-Beyer %s alignment algorithm" % mode
     breaks = [0, 3, 7]
     specificgaps = lambda x, y: (-2 - y) if x in breaks else (-0.5 - y)
@@ -46,14 +45,22 @@ def make_wsb_aligner2(mode):
 
 def make_nwsw_aligner(mode):
     aligner = PairwiseAligner()
+    aligner_old = PairwiseAligner_Old()
     aligner.mode = mode
     aligner.target_gap_score = -random.randint(1,16)/4.0
+    aligner_old.target_gap_score = aligner.target_gap_score
     aligner.target_left_gap_score = -random.randint(1,16)/4.0
     aligner.target_right_gap_score = -random.randint(1,16)/4.0
     aligner.query_gap_score = -random.randint(1,16)/4.0
+    aligner_old.query_gap_score = aligner.query_gap_score
     aligner.query_left_gap_score = -random.randint(1,16)/4.0
     aligner.query_right_gap_score = -random.randint(1,16)/4.0
-    return aligner
+    aligner_old.mode = mode
+    aligner_old.target_left_gap_score = aligner.target_left_gap_score
+    aligner_old.target_right_gap_score = aligner.target_right_gap_score
+    aligner_old.query_left_gap_score = aligner.query_left_gap_score
+    aligner_old.query_right_gap_score = aligner.query_right_gap_score
+    return aligner, aligner_old
 
 def make_gotoh_aligner(mode):
     aligner = PairwiseAligner()
@@ -74,7 +81,21 @@ def make_gotoh_aligner(mode):
         aligner.query_right_extend_gap_score = -random.randint(1,16)/4.0
         if aligner.algorithm == algorithm:
             break
-    return aligner
+    aligner_old = PairwiseAligner_Old()
+    aligner_old.mode = mode
+    aligner_old.target_internal_open_gap_score = aligner.target_internal_open_gap_score
+    aligner_old.target_internal_extend_gap_score = aligner.target_internal_extend_gap_score
+    aligner_old.target_left_open_gap_score = aligner.target_left_open_gap_score
+    aligner_old.target_left_extend_gap_score = aligner.target_left_extend_gap_score
+    aligner_old.target_right_open_gap_score = aligner.target_right_open_gap_score
+    aligner_old.target_right_extend_gap_score = aligner.target_right_extend_gap_score
+    aligner_old.query_internal_open_gap_score = aligner.query_internal_open_gap_score
+    aligner_old.query_internal_extend_gap_score = aligner.query_internal_extend_gap_score
+    aligner_old.query_left_open_gap_score = aligner.query_left_open_gap_score
+    aligner_old.query_left_extend_gap_score = aligner.query_left_extend_gap_score
+    aligner_old.query_right_open_gap_score = aligner.query_right_open_gap_score
+    aligner_old.query_right_extend_gap_score = aligner.query_right_extend_gap_score
+    return aligner, aligner_old
 
 def test_gap_here_only_local_1():
     seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
@@ -111,88 +132,209 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 ............AABBBAAAACCCCAAAABBBAA..
 """
 
-test_gap_here_only_local_1()
+if True:
+    breaks = [0, 3, 7]
+    specificgaps = lambda x, y: (-2 - y) if x in breaks else (-0.5 - y)
+    penalty  = -random.randint(0,4)/4.0
+    nogaps = lambda x, y: penalty - y
+    aligner = PairwiseAligner()
+    aligner.mode = "local"
+    aligner.match = 1
+    aligner.mismatch = -1
+    aligner.target_gap_score = nogaps
+    aligner.query_gap_score = specificgaps
+    s1 = "ACGT"
+    s2 = "GACT"
+    print aligner.algorithm
+    counter = 0
+    while True:
+        counter += 1
+        try:
+            # alignments = aligner.score(s1, s2)
+            alignments = aligner.align(s1, s2)
+            alignment = next(alignments)
+        except MemoryError:
+            continue
 
-for counter in range(10000):
-    aligner, aligner_old = make_wsb_aligner('global')
-    n1 = random.randint(16,24)
-    n2 = random.randint(16,24)
-    s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
-    s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
-    score = aligner.score(s1, s2)
-    score_old = aligner_old.score(s1, s2)
-    alignments = aligner.align(s1, s2)
-    alignments_old = aligner_old.align(s1, s2)
-    n = 0
-    for alignment, alignment_old in zip(alignments, alignments_old):
-        assert alignment == alignment_old
-        n += 1
-    assert n == len(alignments)
-    assert n == len(alignments_old)
-    assert alignments.score == score
-    assert alignments_old.score == score_old
-    assert score == score_old
-    if counter % 100 == 0: print counter
+raise Exception
 
-for counter in range(10000):
-    aligner, aligner_old = make_wsb_aligner2('global')
-    n1 = random.randint(16,24)
-    n2 = random.randint(16,24)
-    s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
-    s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
-    score = aligner.score(s1, s2)
-    score_old = aligner_old.score(s1, s2)
-    alignments = aligner.align(s1, s2)
-    alignments_old = aligner_old.align(s1, s2)
-    n = 0
-    for alignment, alignment_old in zip(alignments, alignments_old):
-        assert alignment == alignment_old
-        n += 1
-    assert n == len(alignments)
-    assert n == len(alignments_old)
-    assert alignments.score == score
-    assert alignments_old.score == score_old
-    assert score == score_old
-    if counter % 100 == 0: print counter
+if False:
+    test_gap_here_only_local_1()
 
-for counter in range(10000):
-    aligner, aligner_old = make_wsb_aligner('local')
-    n1 = random.randint(16,24)
-    n2 = random.randint(16,24)
-    s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
-    s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
-    score = aligner.score(s1, s2)
-    score_old = aligner_old.score(s1, s2)
-    alignments = aligner.align(s1, s2)
-    alignments_old = aligner_old.align(s1, s2)
-    n = 0
-    for alignment, alignment_old in zip(alignments, alignments_old):
-        assert alignment == alignment_old
-        n += 1
-    assert n == len(alignments)
-    assert n == len(alignments_old)
-    assert alignments.score == score
-    assert alignments_old.score == score_old
-    assert score == score_old
-    if counter % 100 == 0: print counter
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_nwsw_aligner('global')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
 
-for counter in range(10000):
-    aligner, aligner_old = make_wsb_aligner2('local')
-    n1 = random.randint(16,24)
-    n2 = random.randint(16,24)
-    s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
-    s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
-    score = aligner.score(s1, s2)
-    score_old = aligner_old.score(s1, s2)
-    alignments = aligner.align(s1, s2)
-    alignments_old = aligner_old.align(s1, s2)
-    n = 0
-    for alignment, alignment_old in zip(alignments, alignments_old):
-        assert alignment == alignment_old
-        n += 1
-    assert n == len(alignments)
-    assert n == len(alignments_old)
-    assert alignments.score == score
-    assert alignments_old.score == score_old
-    assert score == score_old
-    if counter % 100 == 0: print counter
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_nwsw_aligner('local')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_gotoh_aligner('global')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_gotoh_aligner('local')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        n1 = 1
+        n2 = 1
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_wsb_aligner('global')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_wsb_aligner2('global')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_wsb_aligner('local')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
+
+if False:
+    for counter in range(1000):
+        aligner, aligner_old = make_wsb_aligner2('local')
+        n1 = random.randint(16,24)
+        n2 = random.randint(16,24)
+        s1 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n1)])
+        s2 = ''.join(['ACGT'[random.randint(0,3)] for i in range(n2)])
+        score = aligner.score(s1, s2)
+        score_old = aligner_old.score(s1, s2)
+        alignments = aligner.align(s1, s2)
+        alignments_old = aligner_old.align(s1, s2)
+        n = 0
+        for alignment, alignment_old in zip(alignments, alignments_old):
+            assert alignment == alignment_old
+            n += 1
+        assert n == len(alignments)
+        assert n == len(alignments_old)
+        assert alignments.score == score
+        assert alignments_old.score == score_old
+        assert score == score_old
+        if counter % 100 == 0: print counter
