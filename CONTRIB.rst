@@ -110,7 +110,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
-- Iddo Friedberg <idoerg at domain burnham.org>
+- Iddo Friedberg <https://github.com/idoerg>
 - Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
