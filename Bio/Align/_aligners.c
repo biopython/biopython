@@ -5,32 +5,6 @@
  * package.
  */
 
-// CHECK: PyDict_New // DONE
-// CHECK: PyTuple_New // DONE
-// CHECK: PyDict_SetItem // DONE
-// CHECK: PyMem_Malloc //DONE
-// CHECK: PyUnicode_Check
-// CHECK: PyUnicode_READY
-// CHECK: PyUnicode_CompareWithASCIIString
-// CHECK: PyObject_CheckBuffer // DONE
-// CHECK: PyObject_GetBuffer // DONE
-// CHECK: PyTuple_Check // DONE
-// CHECK: PyTuple_GET_SIZE // DONE
-// CHECK: PyInt_FromLong // DONE
-// CHECK: PyFloat_FromDouble // DONE
-// CHECK: PyObject_Repr // DONE
-// CHECK: PyString_Check // DONE
-// CHECK: PyDict_Check // DONE
-// CHECK: PyCallable_Check // DONE
-// CHECK: Py_BuildValue // DONE
-// CHECK: _call_query_gap_function
-// CHECK: _call_target_gap_function
-// CHECK: PathGenerator_create_NWSW
-// CHECK: PathGenerator_create_Gotoh
-// CHECK: PathGenerator_create_WSB
-// CHECK: PyType_Ready
-// CHECK: PyArg_ParseTupleAndKeywords
-
 
 
 #define PY_SSIZE_T_CLEAN
@@ -232,7 +206,7 @@ PathGenerator_needlemanwunsch_length(PathGenerator* self)
     Py_ssize_t count;
     Py_ssize_t temp;
     Py_ssize_t* counts;
-    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!counts) return MEMORY_ERROR;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) {
@@ -276,7 +250,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
     Py_ssize_t total = 0;
     Py_ssize_t temp;
     Py_ssize_t* counts;
-    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!counts) return MEMORY_ERROR;
     counts[0] = 1;
     for (j = 1; j <= nB; j++) counts[j] = 1;
@@ -319,11 +293,11 @@ PathGenerator_gotoh_global_length(PathGenerator* self)
     Py_ssize_t* M_counts = NULL;
     Py_ssize_t* Ix_counts = NULL;
     Py_ssize_t* Iy_counts = NULL;
-    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!M_counts) goto exit;
-    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!Ix_counts) goto exit;
-    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!Iy_counts) goto exit;
     M_counts[0] = 1;
     Ix_counts[0] = 0;
@@ -394,11 +368,11 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
     Py_ssize_t* M_counts = NULL;
     Py_ssize_t* Ix_counts = NULL;
     Py_ssize_t* Iy_counts = NULL;
-    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    M_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!M_counts) goto exit;
-    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    Ix_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!Ix_counts) goto exit;
-    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+    Iy_counts = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
     if (!Iy_counts) goto exit;
     M_counts[0] = 1;
     Ix_counts[0] = 0;
@@ -466,18 +440,18 @@ PathGenerator_waterman_smith_beyer_global_length(PathGenerator* self)
     Py_ssize_t** M_count = NULL;
     Py_ssize_t** Ix_count = NULL;
     Py_ssize_t** Iy_count = NULL;
-    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!M_count) goto exit;
-    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!Ix_count) goto exit;
-    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!Iy_count) goto exit;
     for (i = 0; i <= nA; i++) {
-        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!M_count[i]) goto exit;
-        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!Ix_count[i]) goto exit;
-        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!Iy_count[i]) goto exit;
     }
     for (i = 0; i <= nA; i++) {
@@ -577,18 +551,18 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
     Py_ssize_t** M_count = NULL;
     Py_ssize_t** Ix_count = NULL;
     Py_ssize_t** Iy_count = NULL;
-    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    M_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!M_count) goto exit;
-    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    Ix_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!Ix_count) goto exit;
-    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*)); // DONE
+    Iy_count = PyMem_Malloc((nA+1)*sizeof(Py_ssize_t*));
     if (!Iy_count) goto exit;
     for (i = 0; i <= nA; i++) {
-        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        M_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!M_count[i]) goto exit;
-        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        Ix_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!Ix_count[i]) goto exit;
-        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t)); // DONE
+        Iy_count[i] = PyMem_Malloc((nB+1)*sizeof(Py_ssize_t));
         if (!Iy_count[i]) goto exit;
     }
     for (i = 0; i <= nA; i++) {
@@ -2065,21 +2039,21 @@ Aligner_get_substitution_matrix(Aligner* self, void* closure)
         const int* letters = self->letters;
         PyObject* key = NULL;
         PyObject* value = NULL;
-        PyObject* matrix = PyDict_New(); // DONE
+        PyObject* matrix = PyDict_New();
         if (!matrix) goto exit;
         for (i = 0; i < n; i++) {
             if (!letters[i]) continue;
             for (j = 0; j < n; j++) {
                 if (!letters[j]) continue;
 #if PY_MAJOR_VERSION >= 3
-                key = Py_BuildValue("(CC)", 'A' + i, 'A' + j); // DONE
+                key = Py_BuildValue("(CC)", 'A' + i, 'A' + j);
 #else
-                key = Py_BuildValue("(cc)", 'A' + i, 'A' + j); // DONE
+                key = Py_BuildValue("(cc)", 'A' + i, 'A' + j);
 #endif
                 if (!key) goto exit;
-                value = PyFloat_FromDouble(self->substitution_matrix[i][j]); // DONE
+                value = PyFloat_FromDouble(self->substitution_matrix[i][j]);
                 if (!value) goto exit;
-                if (PyDict_SetItem(matrix, key, value) == -1) goto exit; // DONE
+                if (PyDict_SetItem(matrix, key, value) == -1) goto exit;
                 Py_DECREF(key);
                 Py_DECREF(value);
                 value = NULL;
@@ -2144,7 +2118,7 @@ Aligner_set_substitution_matrix(Aligner* self, PyObject* values, void* closure)
         letters[i] = 1;
         letters[j] = 1;
     }
-    if (!self->letters) self->letters = PyMem_Malloc(n*sizeof(int)); // DONE
+    if (!self->letters) self->letters = PyMem_Malloc(n*sizeof(int));
     if (!self->letters) {
         PyErr_SetNone(PyExc_MemoryError);
         return -1;
@@ -4319,12 +4293,12 @@ PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     paths->mode = mode;
     paths->length = 0;
 
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*)); // DONE
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     paths->M = M;
     if (!M) goto exit;
     if (mode == Global) trace = VERTICAL;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace)); // DONE
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
         M[i][0].trace = trace;
     }
@@ -4360,19 +4334,19 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     paths->mode = mode;
     paths->length = 0;
 
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*)); // DONE
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     paths->M = M;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace)); // DONE
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
         M[i][0].trace = 0;
     }
-    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*)); // DONE
+    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
     if (!gaps) goto exit;
     paths->gaps.gotoh = gaps;
     for (i = 0; i <= nA; i++) {
-        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsGotoh)); // DONE
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsGotoh));
         if (!gaps[i]) goto exit;
     }
 
@@ -4433,19 +4407,19 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     paths->mode = mode;
     paths->length = 0;
 
-    M = PyMem_Malloc((nA+1)*sizeof(Trace*)); // DONE
+    M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     paths->M = M;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace)); // DONE
+        M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
     }
-    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsWatermanSmithBeyer*)); // DONE
+    gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsWatermanSmithBeyer*));
     if (!gaps) goto exit;
     paths->gaps.waterman_smith_beyer = gaps;
     for (i = 0; i <= nA; i++) gaps[i] = NULL;
     for (i = 0; i <= nA; i++) {
-        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsWatermanSmithBeyer)); // DONE
+        gaps[i] = PyMem_Malloc((nB+1)*sizeof(TraceGapsWatermanSmithBeyer));
         if (!gaps[i]) goto exit;
         for (j = 0; j <= nB; j++) {
             gaps[i][j].MIx = NULL;
@@ -4456,12 +4430,12 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
         M[i][0].trace = 0;
         M[i][0].path = 0;
         if (mode == Global) {
-            trace = PyMem_Malloc(2*sizeof(int)); // DONE
+            trace = PyMem_Malloc(2*sizeof(int));
             if (!trace) goto exit;
             gaps[i][0].MIx = trace;
             trace[0] = i;
             trace[1] = 0;
-            trace = PyMem_Malloc(sizeof(int)); // DONE
+            trace = PyMem_Malloc(sizeof(int));
             if (!trace) goto exit;
             gaps[i][0].IyIx = trace;
             trace[0] = 0;
@@ -4470,12 +4444,12 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     for (i = 1; i <= nB; i++) {
         M[0][i].trace = 0;
         if (mode == Global) {
-            trace = PyMem_Malloc(2*sizeof(int)); // DONE
+            trace = PyMem_Malloc(2*sizeof(int));
             if (!trace) goto exit;
             gaps[0][i].MIy = trace;
             trace[0] = i;
             trace[1] = 0;
-            trace = PyMem_Malloc(sizeof(int)); // DONE
+            trace = PyMem_Malloc(sizeof(int));
             if (!trace) goto exit;
             gaps[0][i].IxIy = trace;
             trace[0] = 0;
@@ -4512,7 +4486,7 @@ Aligner_needlemanwunsch_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double* scores;
 
     /* Needleman-Wunsch algorithm */
-    scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!scores) return PyErr_NoMemory();
 
     /* The top row of the score matrix is a special case,
@@ -4762,9 +4736,9 @@ Aligner_gotoh_global_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double Iy_temp;
 
     /* Gotoh algorithm with three states */
-    M_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Ix_scores) goto exit;
     Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
@@ -4903,11 +4877,11 @@ Aligner_gotoh_local_score(Aligner* self, const char* sA, Py_ssize_t nA,
     double maximum = 0.0;
 
     /* Gotoh algorithm with three states */
-    M_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Ix_scores) goto exit;
-    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
 
     /* The top row of the score matrix is a special case,
@@ -5040,11 +5014,11 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
     paths = PathGenerator_create_Gotoh(nA, nB, Global);
     if (!paths) return NULL;
 
-    M_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Ix_scores) goto exit;
-    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
     M = paths->M;
     gaps = paths->gaps.gotoh;
@@ -5194,11 +5168,11 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     M = paths->M;
     gaps = paths->gaps.gotoh;
 
-    M_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    M_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Ix_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Ix_scores) goto exit;
-    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+    Iy_scores = PyMem_Malloc((nB+1)*sizeof(double));
     if (!Iy_scores) goto exit;
     M_scores[0] = 0;
     Ix_scores[0] = -DBL_MAX;
@@ -5348,18 +5322,18 @@ Aligner_waterman_smith_beyer_global_score(Aligner* self,
     int ok = 1;
 
     /* Waterman-Smith-Beyer algorithm */
-    M = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -5466,20 +5440,20 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
     M = paths->M;
     gaps = paths->gaps.waterman_smith_beyer;
 
-    M_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Ix_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix_scores) goto exit;
-    Iy_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Iy_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy_scores) goto exit;
     for (i = 0; i <= nA; i++) {
-        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M_scores[i]) goto exit;
         M_scores[i][0] = -DBL_MAX;
-        Ix_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Ix_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix_scores[i]) goto exit;
         Ix_scores[i][0] = 0;
-        Iy_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Iy_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy_scores[i]) goto exit;
         Iy_scores[i][0] = -DBL_MAX;
     }
@@ -5505,10 +5479,10 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
         for (j = 1; j <= nB; j++) {
             kB = CHARINDEX(sB[j-1]);
             SELECT_TRACE_WATERMAN_SMITH_BEYER_GLOBAL_ALIGN(self->substitution_matrix[kA][kB]);
-            gapM = PyMem_Malloc((i+1)*sizeof(int)); // DONE
+            gapM = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIx = gapM;
-            gapXY = PyMem_Malloc((i+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Malloc((i+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IyIx = gapXY;
             nm = 0;
@@ -5520,19 +5494,19 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                 SELECT_TRACE_WATERMAN_SMITH_BEYER_GAP(M_scores[i-gap][j],
                                                       Iy_scores[i-gap][j]);
             }
-            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int)); // DONE
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIx = gapM;
             gapM[nm] = 0;
-            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
             gapXY[ng] = 0;
             gaps[i][j].IyIx = gapXY;
             Ix_scores[i][j] = score;
-            gapM = PyMem_Malloc((j+1)*sizeof(int)); // DONE
+            gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIy = gapM;
-            gapXY = PyMem_Malloc((j+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IxIy = gapXY;
             nm = 0;
@@ -5545,11 +5519,11 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
                                                       Ix_scores[i][j-gap]);
             }
             Iy_scores[i][j] = score;
-            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int)); // DONE
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIy = gapM;
             gapM[nm] = 0;
-            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IxIy = gapXY;
             gapXY[ng] = 0;
@@ -5562,21 +5536,21 @@ Aligner_waterman_smith_beyer_global_align(Aligner* self,
 
     if (M_scores[nA][nB] < score - epsilon) M[nA][nB].trace = 0;
     if (Ix_scores[nA][nB] < score - epsilon) {
-        gapM = PyMem_Realloc(gaps[nA][nB].MIx, sizeof(int)); // DONE
+        gapM = PyMem_Realloc(gaps[nA][nB].MIx, sizeof(int));
         if (!gapM) goto exit;
         gapM[0] = 0;
         gaps[nA][nB].MIx = gapM;
-        gapXY = PyMem_Realloc(gaps[nA][nB].IyIx, sizeof(int)); // DONE
+        gapXY = PyMem_Realloc(gaps[nA][nB].IyIx, sizeof(int));
         if (!gapXY) goto exit;
         gapXY[0] = 0;
         gaps[nA][nB].IyIx = gapXY;
     }
     if (Iy_scores[nA][nB] < score - epsilon) {
-        gapM = PyMem_Realloc(gaps[nA][nB].MIy, sizeof(int)); // DONE
+        gapM = PyMem_Realloc(gaps[nA][nB].MIy, sizeof(int));
         if (!gapM) goto exit;
         gapM[0] = 0;
         gaps[nA][nB].MIy = gapM;
-        gapXY = PyMem_Realloc(gaps[nA][nB].IxIy, sizeof(int)); // DONE
+        gapXY = PyMem_Realloc(gaps[nA][nB].IxIy, sizeof(int));
         if (!gapXY) goto exit;
         gapXY[0] = 0;
         gaps[nA][nB].IxIy = gapXY;
@@ -5641,18 +5615,18 @@ Aligner_waterman_smith_beyer_local_score(Aligner* self,
     PyObject* result = NULL;
 
     /* Waterman-Smith-Beyer algorithm */
-    M = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    M = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M) goto exit;
-    Ix = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Ix = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix) goto exit;
-    Iy = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Iy = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy) goto exit;
     for (i = 0; i <= nA; i++) {
-        M[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        M[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M[i]) goto exit;
-        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Ix[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix[i]) goto exit;
-        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Iy[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy[i]) goto exit;
     }
 
@@ -5773,20 +5747,20 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     M = paths->M;
     gaps = paths->gaps.waterman_smith_beyer;
 
-    M_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    M_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!M_scores) goto exit;
-    Ix_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Ix_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Ix_scores) goto exit;
-    Iy_scores = PyMem_Malloc((nA+1)*sizeof(double*)); // DONE
+    Iy_scores = PyMem_Malloc((nA+1)*sizeof(double*));
     if (!Iy_scores) goto exit;
     for (i = 0; i <= nA; i++) {
-        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        M_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!M_scores[i]) goto exit;
         M_scores[i][0] = 0;
-        Ix_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Ix_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Ix_scores[i]) goto exit;
         Ix_scores[i][0] = -DBL_MAX;
-        Iy_scores[i] = PyMem_Malloc((nB+1)*sizeof(double)); // DONE
+        Iy_scores[i] = PyMem_Malloc((nB+1)*sizeof(double));
         if (!Iy_scores[i]) goto exit;
         Iy_scores[i][0] = -DBL_MAX;
     }
@@ -5839,18 +5813,18 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
             gapXY[ng] = 0;
             Ix_scores[i][j] = score;
             M[i][j].path = 0;
-            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int)); // DONE
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIx = gapM;
             gapM[nm] = 0;
-            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IyIx = gapXY;
             gapXY[ng] = 0;
-            gapM = PyMem_Malloc((j+1)*sizeof(int)); // DONE
+            gapM = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIy = gapM;
-            gapXY = PyMem_Malloc((j+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Malloc((j+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IxIy = gapXY;
             nm = 0;
@@ -5869,10 +5843,10 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
                 ng = 0;
             }
             else if (score > maximum) maximum = score;
-            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int)); // DONE
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
             if (!gapM) goto exit;
             gaps[i][j].MIy = gapM;
-            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int)); // DONE
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
             if (!gapXY) goto exit;
             gaps[i][j].IxIy = gapXY;
             gapM[nm] = 0;
@@ -5976,6 +5950,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     Py_ssize_t nB;
     const Mode mode = self->mode;
     const Algorithm algorithm = _get_algorithm(self);
+
     static char *kwlist[] = {"sequenceA", "sequenceB", NULL};
     if(!PyArg_ParseTupleAndKeywords(args, keywords, "s#s#", kwlist,
                                     &sA, &nA, &sB, &nB))
