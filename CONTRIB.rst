@@ -111,6 +111,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
 - Iddo Friedberg <idoerg at domain burnham.org>
+- Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <https://github.com/jamescasbon>

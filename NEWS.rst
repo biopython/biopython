@@ -46,6 +46,7 @@ possible, especially the following contributors:
 - Catherine Lesuisse
 - Chris Rands
 - Darcy Mason (first contribution)
+- Ivan Antonov (first contribution)
 - Juraj Szász (first contribution)
 - Jeremy LaBarage (first contribution)
 - Kai Blin
