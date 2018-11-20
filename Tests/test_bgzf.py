@@ -438,7 +438,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(data), 4 * n + 1)
         self.assertEqual(data[:4], b'\x01\x02\x03\x04')
         self.assertEqual(data[-5:], b'\x01\x02\x03\x04\n')
-
+        h.close()
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
