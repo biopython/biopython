@@ -496,7 +496,7 @@ class AbstractCommandline(object):
             use_shell = True
         else:
             win_ver = platform.win32_ver()[0]
-            if win_ver in ["7", "8", "post2012Server"]:
+            if win_ver in ["7", "8", "post2012Server", "10"]:
                 use_shell = True
             else:
                 use_shell = False
