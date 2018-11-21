@@ -1163,6 +1163,54 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(clusterid[8], 2)
         self.assertAlmostEqual(error, 7.680, places=3)
 
+        # check if default weights can be used
+        matrix = distancematrix(data, mask=mask)
+        self.assertAlmostEqual(matrix[1][0], 1.687, places=3)
+
+        self.assertAlmostEqual(matrix[2][0], 21.365, places=3)
+        self.assertAlmostEqual(matrix[2][1], 38.560, places=3)
+
+        self.assertAlmostEqual(matrix[3][0], 4.900, places=3)
+        self.assertAlmostEqual(matrix[3][1], 7.793, places=3)
+        self.assertAlmostEqual(matrix[3][2], 22.490, places=3)
+
+        self.assertAlmostEqual(matrix[4][0], 3.687, places=3)
+        self.assertAlmostEqual(matrix[4][1], 6.367, places=3)
+        self.assertAlmostEqual(matrix[4][2], 22.025, places=3)
+        self.assertAlmostEqual(matrix[4][3], 0.087, places=3)
+
+        self.assertAlmostEqual(matrix[5][0], 0.040, places=3)
+        self.assertAlmostEqual(matrix[5][1], 2.890, places=3)
+        self.assertAlmostEqual(matrix[5][2], 34.810, places=3)
+        self.assertAlmostEqual(matrix[5][3], 0.640, places=3)
+        self.assertAlmostEqual(matrix[5][4], 0.490, places=3)
+
+        self.assertAlmostEqual(matrix[6][0], 1.557, places=3)
+        self.assertAlmostEqual(matrix[6][1], 0.990, places=3)
+        self.assertAlmostEqual(matrix[6][2], 34.065, places=3)
+        self.assertAlmostEqual(matrix[6][3], 3.937, places=3)
+        self.assertAlmostEqual(matrix[6][4], 3.017, places=3)
+        self.assertAlmostEqual(matrix[6][5], 3.610, places=3)
+
+        self.assertAlmostEqual(matrix[7][0], 14.005, places=3)
+        self.assertAlmostEqual(matrix[7][1], 9.050, places=3)
+        self.assertAlmostEqual(matrix[7][2], 65.610, places=3)
+        self.assertAlmostEqual(matrix[7][3], 30.465, places=3)
+        self.assertAlmostEqual(matrix[7][4], 27.380, places=3)
+        self.assertAlmostEqual(matrix[7][5], 0.000, places=3)
+        self.assertAlmostEqual(matrix[7][6], 16.385, places=3)
+
+        self.assertAlmostEqual(matrix[8][0], 14.167, places=3)
+        self.assertAlmostEqual(matrix[8][1], 25.553, places=3)
+        self.assertAlmostEqual(matrix[8][2], 0.010, places=3)
+        self.assertAlmostEqual(matrix[8][3], 17.187, places=3)
+        self.assertAlmostEqual(matrix[8][4], 16.380, places=3)
+        self.assertAlmostEqual(matrix[8][5], 33.640, places=3)
+        self.assertAlmostEqual(matrix[8][6], 22.497, places=3)
+        self.assertAlmostEqual(matrix[8][7], 36.745, places=3)
+
+
+
     def test_pca(self):
         if TestCluster.module == 'Bio.Cluster':
             from Bio.Cluster import pca
