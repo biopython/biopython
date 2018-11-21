@@ -48,8 +48,8 @@ possible, especially the following contributors:
 - Darcy Mason (first contribution)
 - Devang Thakkar (first contribution)
 - Ivan Antonov (first contribution)
-- Juraj Szász (first contribution)
 - Jeremy LaBarage (first contribution)
+- Juraj Szász (first contribution)
 - Kai Blin
 - Konstantin Vdovkin (first contribution)
 - Maximilian Greil
