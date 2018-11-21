@@ -1209,8 +1209,6 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][6], 22.497, places=3)
         self.assertAlmostEqual(matrix[8][7], 36.745, places=3)
 
-
-
     def test_pca(self):
         if TestCluster.module == 'Bio.Cluster':
             from Bio.Cluster import pca
