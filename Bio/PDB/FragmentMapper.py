@@ -295,16 +295,6 @@ class FragmentMapper(object):
                     raise PDBException(why)
         return fd
 
-    def has_key(self, res):
-        """Is this residue present? (DEPRECATED).
-
-        :type res: L{Residue}
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("has_key is deprecated; use 'res in object' instead", BiopythonDeprecationWarning)
-        return res in self
-
     def __contains__(self, res):
         """Check if the given residue is in any of the mapped fragments.
 
