@@ -14,7 +14,7 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    warnings.simplefilter('ignore', RuntimeWarning) # for the trie module
+    warnings.simplefilter('ignore', RuntimeWarning)  # for the trie module
     try:
         from Bio import trie
         from Bio import triefind
