@@ -836,6 +836,11 @@ void inittrie(void)
 {
     Py_TYPE(&Trie_Type) = &PyType_Type;
 
+    PyErr_WarnEx(NULL,
+"This module has been deprecated. We encourage users to switch "
+"to alternative libraries implementing a trie data structure, "
+"for example pygtrie.", 1);
+
     if (PyType_Ready(&Trie_Type) < 0)
 #if PY_MAJOR_VERSION >= 3
         return NULL;
