@@ -103,8 +103,9 @@ id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
-Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
-str(Bio.Seq.MutableSeq) instead of the tostring() methods.
+Deprecated in release 1.64, and removed in release 1.73.
+You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
+the tostring() methods.
 
 Iterator .next() methods
 ========================
