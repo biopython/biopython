@@ -440,6 +440,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(data[-5:], b'\x01\x02\x03\x04\n')
         h.close()
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
