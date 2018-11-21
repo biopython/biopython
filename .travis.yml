@@ -40,6 +40,13 @@ matrix:
       before_install: echo "Going to run basic checks"
     - stage: test
       python: 2.7
+      env: TOXENV=api
+      addons:
+        apt:
+          packages:
+      before_install: echo "Going to build API docs"
+    - stage: test
+      python: 2.7
       env: TOXENV=py27-cover
     - stage: test
       python: 3.4
@@ -145,7 +152,7 @@ install:
   - tox -c .travis-tox.ini -e $TOXENV --notest
 
 script:
-  - travis_wait tox -c .travis-tox.ini -e $TOXENV
+  - travis_wait 30 tox -c .travis-tox.ini -e $TOXENV
 
 notifications:
   email: false

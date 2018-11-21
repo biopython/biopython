@@ -323,10 +323,6 @@ class TestSeqStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.s.__radd__(dict())
 
-    def test_to_string_deprecated_method(self):
-        with self.assertWarns(BiopythonWarning):
-            self.s.tostring()
-
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
 
@@ -860,10 +856,6 @@ class TestMutableSeq(unittest.TestCase):
         seq = Seq.MutableSeq("ACTGTCGTCT", Alphabet.generic_protein)
         with self.assertRaises(ValueError):
             seq.reverse_complement()
-
-    def test_to_string_method(self):
-        with self.assertWarns(BiopythonWarning):
-            self.mutable_s.tostring()
 
     def test_extend_method(self):
         self.mutable_s.extend("GAT")

@@ -634,11 +634,11 @@ class FastaIOTests(unittest.TestCase):
                 self.assertEqual(alignments[8][1].seq, "RYIPEGMQCSCGIDYYTLKPEVN"
                                                        "NESFVIYMFVVHFTIPMIVIFFC"
                                                        "YGQLVFTVKEVRSCVGHWGHAH*"
-                                                       "VNGAQLHSQSCHSLDT*PCVPA"
-                                                       "\AAAQQQESATTQKAEKEVTRMV"
-                                                       "IIMVIAFLICWLPYAGVAFYIFT"
-                                                       "HQGSNFGPIFMTLPAFFAKSSSI"
-                                                       "YNPVIYIMMNKQ")
+                                                       "VNGAQLHSQSCHSLDT*PCVPA\\"
+                                                       "AAAQQQESATTQKAEKEVTRMVI"
+                                                       "IMVIAFLICWLPYAGVAFYIFTH"
+                                                       "QGSNFGPIFMTLPAFFAKSSSIY"
+                                                       "NPVIYIMMNKQ")
                 self.assertEqual(alignments[8][1].id, "gi|283855845|gb|GQ290303.1|")
                 self.assertEqual(alignments[8][1].annotations["original_length"], 4301)
                 self.assertEqual(len(alignments[9]), 2)

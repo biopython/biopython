@@ -494,7 +494,7 @@ class GenePopController(object):
             m = re.search("Mean sample size: ([.0-9]+)", line)
             if m is not None:
                 mean_sample_size = _gp_float(m.group(1))
-            m = re.search("Mean frequency of private alleles p\(1\)= ([.0-9]+)", line)
+            m = re.search(r"Mean frequency of private alleles p\(1\)= ([.0-9]+)", line)
             if m is not None:
                 mean_priv_alleles = _gp_float(m.group(1))
             m = re.search("N=10: ([.0-9]+)", line)
@@ -839,7 +839,7 @@ class GenePopController(object):
             f.readline()
             match = re.match(" b=(.+)", f.readline().rstrip())
             bb = _gp_float(match.group(1))
-            match = re.match(".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
+            match = re.match(r".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
             bblow = _gp_float(match.group(1))
             bbhigh = _gp_float(match.group(2))
         os.remove(fname + ".MIG")

@@ -8,9 +8,6 @@ ignore =
     # pycodestyle v2.4.0 default ignore is E121,E123,E126,E226,E24,E704,W503,W504
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     W503,W504,
-    # This is a new warning
-    # W605 invalid escape sequence
-    W605,
     # =====================================
     # pydocstyle: D### - Missing Docstrings
     # =====================================

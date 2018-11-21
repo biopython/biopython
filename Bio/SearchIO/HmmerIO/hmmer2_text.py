@@ -42,6 +42,7 @@ class Hmmer2TextParser(object):
         self._meta = self.parse_preamble()
 
     def __iter__(self):
+        """Iterate over Hmmer2TextParser, yields query results."""
         for qresult in self.parse_qresult():
             qresult.program = self._meta.get('program')
             qresult.target = self._meta.get('target')
@@ -181,8 +182,8 @@ class Hmmer2TextParser(object):
                self.line.startswith('--------'):
                 continue
 
-            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl, \
-            score, evalue = self.line.split()
+            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
+                score, evalue = self.line.split()
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
@@ -319,6 +320,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
+        """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

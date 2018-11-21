@@ -148,7 +148,7 @@ class BwaAlignCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Option(["-q", "q"],
-                    """Parameter for read trimming [0].
+                    r"""Parameter for read trimming [0].
 
                     BWA trims a read down to argmax_x{\sum_{i=x+1}^l(INT-q_i)} if q_l<INT
                     where l is the original read length.""",

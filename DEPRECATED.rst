@@ -103,8 +103,9 @@ id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
-Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
-str(Bio.Seq.MutableSeq) instead of the tostring() methods.
+Deprecated in release 1.64, and removed in release 1.73.
+You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
+the tostring() methods.
 
 Iterator .next() methods
 ========================
@@ -723,8 +724,8 @@ in Release 1.59, deprecated in Release 1.61, and removed in Release 1.64.
 
 Bio.SubsMat
 ===========
-The methods letter_sum and all_letters_sum were removed from the SeqMat class in
-Bio.SubsMat in Release 1.57.
+The methods letter_sum and all_letters_sum were removed from the SeqMat class
+in Bio.SubsMat in Release 1.57.
 
 Bio.Align
 =========
@@ -739,7 +740,8 @@ deprecated in Release 1.57 and removed in Release 1.69.
 Bio.ParserSupport
 =================
 ``Bio.ParserSupport`` was declared obsolete in Release 1.59, and deprecated in
-Release 1.63. The Martel specific ``EventGenerator`` was removed in Release 1.67.
+Release 1.63. The Martel specific ``EventGenerator`` was removed in Release
+1.67.
 
 ``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.

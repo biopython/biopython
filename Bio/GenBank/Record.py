@@ -606,15 +606,19 @@ class Feature(object):
     Attributes:
      - key - The key name of the featue (ie. source)
      - location - The string specifying the location of the feature.
-     - qualfiers - A listing Qualifier objects in the feature.
+     - qualfiers - A list of Qualifier objects in the feature.
 
     """
 
-    def __init__(self):
+    def __init__(self, key="", location=""):
         """Initialize."""
-        self.key = ''
-        self.location = ''
+        self.key = key
+        self.location = location
         self.qualifiers = []
+
+    def __repr__(self):
+        """Representation of the object for debugging or logging."""
+        return "Feature(key=%r, location=%r)" % (self.key, self.location)
 
     def __str__(self):
         """Return feature as a GenBank format string."""
@@ -622,17 +626,7 @@ class Feature(object):
         output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
                                    split_char=',')
         for qualifier in self.qualifiers:
-            output += " " * Record.GB_FEATURE_INDENT
-
-            # determine whether we can wrap on spaces
-            space_wrap = 1
-            for no_space_key in \
-                    Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
-                if no_space_key in qualifier.key:
-                    space_wrap = 0
-
-            output += _wrapped_genbank(qualifier.key + qualifier.value,
-                                       Record.GB_FEATURE_INDENT, space_wrap)
+            output += str(qualifier)
         return output
 
 
@@ -645,7 +639,23 @@ class Qualifier(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, key="", value=""):
         """Initialize."""
-        self.key = ''
-        self.value = ''
+        self.key = key
+        self.value = value
+
+    def __repr__(self):
+        """Representation of the object for debugging or logging."""
+        return "Qualifier(key=%r, value=%r)" % (self.key, self.value)
+
+    def __str__(self):
+        """Return feature qualifier as a GenBank format string."""
+        output = " " * Record.GB_FEATURE_INDENT
+        # determine whether we can wrap on spaces
+        space_wrap = 1
+        for no_space_key in Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
+            if no_space_key in self.key:
+                space_wrap = 0
+        # return double quotes as-is, leave it to the user to escape them
+        return output + _wrapped_genbank(self.key + self.value,
+                                         Record.GB_FEATURE_INDENT, space_wrap)

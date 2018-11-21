@@ -1,7 +1,7 @@
 \chapter{Quick Start -- What can you do with Biopython?}
 \label{chapter:quick-start}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of Python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your Python, the main Python web site provides quite a bit of free documentation to get started with (\url{http://www.python.org/doc/}).
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of Python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your Python, the main Python web site provides quite a bit of free documentation to get started with (\url{https://docs.python.org/2/}).
 
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run.
 
@@ -56,7 +56,7 @@ Now that you've got some idea of what it is like to interact with the Biopython 
 
 Before we jump right into parsers and everything else to do with Biopython, let's set up an example to motivate everything we do and make life more interesting. After all, if there wasn't any biology in this tutorial, why would you want you read it?
 
-Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{http://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{http://images.google.com/images?q=lady\%20slipper\%20orchid}{Google Image Search}).
+Since I love plants, I think we're just going to have to have a plant based example (sorry to all the fans of other organisms out there!).  Having just completed a recent trip to our local greenhouse, we've suddenly developed an incredible obsession with Lady Slipper Orchids (if you wonder why, have a look at some \href{https://www.flickr.com/search/?q=lady+slipper+orchid&s=int&z=t}{Lady Slipper Orchids photos on Flickr}, or try a \href{https://images.google.com/images?q=lady\%20slipper\%20orchid}{Google Image Search}).
 
 Of course, orchids are not only beautiful to look at, they are also extremely interesting for people studying evolution and systematics. So let's suppose we're thinking about writing a funding proposal to do a molecular study of Lady Slipper evolution, and would like to see what kind of research has already been done and how we can add to that.
 
@@ -73,7 +73,7 @@ That gives us enough to get started delving for more information. So, let's look
 
 A large part of much bioinformatics work involves dealing with the many types of file formats designed to hold biological data. These files are loaded with interesting biological data, and a special challenge is parsing these files into a format so that you can manipulate them with some kind of programming language. However the task of parsing these files can be frustrated by the fact that the formats can change quite regularly, and that formats may contain small subtleties which can break even the most well designed parsers.
 
-We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:Bio.SeqIO}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).
+We are now going to briefly introduce the \verb|Bio.SeqIO| module -- you can find out more in Chapter~\ref{chapter:Bio.SeqIO}.  We'll start with an online search for our friends, the lady slipper orchids. To keep this introduction simple, we're just using the NCBI website by hand.  Let's just take a look through the nucleotide databases at NCBI, using an Entrez online search (\url{https://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide}) for everything mentioning the text Cypripedioideae (this is the subfamily of lady slipper orchids).
 
 When this tutorial was originally written, this search gave us only 94 hits, which we saved as a FASTA formatted text file and as a GenBank formatted text file (files \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} and \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{\tt ls\_orchid.gbk}, also included with the Biopython source code under {\tt docs/tutorial/examples/}).
 
@@ -159,8 +159,8 @@ The next place to look for information about specific parsers and how to do cool
 One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from Python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
-  \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez} (and \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed}) from the NCBI -- See Chapter~\ref{chapter:entrez}.
-  \item \href{http://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot}.
+  \item \href{https://www.ncbi.nlm.nih.gov/Web/Search/entrezfs.html}{Entrez} (and \href{https://www.ncbi.nlm.nih.gov/PubMed/}{PubMed}) from the NCBI -- See Chapter~\ref{chapter:entrez}.
+  \item \href{https://www.expasy.org/}{ExPASy} -- See Chapter~\ref{chapter:swiss_prot}.
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP} -- See the \verb|Bio.SCOP.search()| function.
 \end{itemize}
 

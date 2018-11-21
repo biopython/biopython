@@ -82,6 +82,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - David Nicholson <https://github.com/danich1>
 - David Weisman <david.weisman at domain acm.org>
 - David Winter <david dot winter at gmail dot com>
+- Devang Thakkar <https://github.com/devangthakkar>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
 - Edward Liaw <https://github.com/edliaw>
@@ -110,7 +111,8 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
-- Iddo Friedberg <idoerg at domain burnham.org>
+- Iddo Friedberg <https://github.com/idoerg>
+- Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <https://github.com/jamescasbon>
@@ -120,7 +122,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
 - Jeffrey Finkelstein <https://github.com/jfinkels/>
-- Jeremy LaBarge <https://github.com/biojerm/>
+- Jeremy LaBarge <https://github.com/biojerm/biopython>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
 - Jian-Long Huang <https://github.com/jlhg>

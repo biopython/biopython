@@ -46,7 +46,9 @@ possible, especially the following contributors:
 - Catherine Lesuisse
 - Chris Rands
 - Darcy Mason (first contribution)
-- Jeremy LaBarge
+- Devang Thakkar (first contribution)
+- Ivan Antonov (first contribution)
+- Jeremy LaBarage (first contribution)
 - Juraj Szász (first contribution)
 - Kai Blin
 - Konstantin Vdovkin (first contribution)
@@ -170,11 +172,11 @@ For Python 3 compatibility, comparison operators for the entities within a
 Bio.PDB Structure object were implemented. These allow the comparison of
 models, chains, residues, and atoms with the common operators  (==, !=, >, ...)
 Comparisons are based on IDs and take the parents of the entity up to the
-model level into account. For consistent behaviour of all entities the operators
-for atoms were modified to also consider the parent IDs. NOTE: this represents a
-change in behaviour in respect to v1.70 for Atom comparisons. In order to mimic
-the behaviour of previous versions, comparison will have to be done for Atom IDs
-and alternative locations specifically.
+model level into account. For consistent behaviour of all entities the
+operators for atoms were modified to also consider the parent IDs. NOTE: this
+represents a change in behaviour in respect to v1.70 for Atom comparisons. In
+order to mimic the behaviour of previous versions, comparison will have to be
+done for Atom IDs and alternative locations specifically.
 
 In this release more of our code is now explicitly available under either our
 original "Biopython License Agreement", or the very similar but more commonly
@@ -1901,7 +1903,8 @@ the new Bio.SeqIO module.
 Bio.FormatIO has been removed (a gradual deprecation was not possible).
 Please look at Bio.SeqIO for sequence input/output instead.
 
-Fix for a bug in Bio.Cluster, which caused kcluster() to hang on some platforms.
+Fix for a bug in Bio.Cluster, which caused kcluster() to hang on some
+platforms.
 
 Bio.expressions has been deprecated.
 
@@ -2017,12 +2020,14 @@ Major Changes since v1.30. For a full list of changes please see the CVS
 IMPORTANT: Biopython now works with Python version >= 2.3
 
 NEW: Bio.Nexus -- thanks to Frank Kauff
-Bio.Nexus is a Nexus file parser. Nexus is a common format for phylogenetic trees.
+Bio.Nexus is a Nexus file parser. Nexus is a common format for phylogenetic
+trees.
 
 NEW: CAPS module -- Thanks to Jonathan Taylor.
 
-NEW: Restriction enzyme package contributed by Frederic Sohm. This includes classes for
-manipulating enzymes, updating from Rebase, as well as documentation and Tests.
+NEW: Restriction enzyme package contributed by Frederic Sohm. This includes
+classes for manipulating enzymes, updating from Rebase, as well as
+documentation and Tests.
 
 CHANGED: Bio.PDB -- thanks to Thomas Hamelryck.
 
@@ -2049,12 +2054,11 @@ in BioPython:
 - forward_complement, reverse_complement in Bio.GFF.easy
 - complement, antiparallel in Bio.SeqUtils
 
-These functions have now been deprecated, and will generate a DeprecationWarning
-when used.
-The functions complement and reverse_complement, when applied to a Seq object,
-will return a new Seq object. The same function applied to a MutableSeq object
-will modify the MutableSeq object itself, and don't return anything.
-
+These functions have now been deprecated, and will issue a DeprecationWarning
+when used. The functions complement and reverse_complement, when applied to a
+Seq object, will return a new Seq object. The same function applied to a
+MutableSeq object will modify the MutableSeq object itself, and don't return
+anything.
 
 
 May 14, 2004: Biopython 1.30
@@ -2078,13 +2082,14 @@ May 14, 2004: Biopython 1.30
 - Fasta parser updated to use Martel for parsing and indexing, allowing better
   speed and dealing with large data files.
 - Updated to Registry code. Now 'from Bio import db' gives you a number of new
-  retrieval options, including embl, fasta, genbak, interpro, prodoc and swissprot.
-- GenBank parser uses new Martel format. GenBank retrieval now uses EUtils instead
-  of the old non-working entrez scripts. GenBank indexing uses standard Mindy
-  indexing. Fix for valueless qualifiers in feature keys -- thanks to Leighton
-  Pritchard.
-- Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse headers
-  -- thanks to Kristian Rother.
+  retrieval options, including embl, fasta, genbak, interpro, prodoc and
+  swissprot.
+- GenBank parser uses new Martel format. GenBank retrieval now uses EUtils
+  instead of the old non-working entrez scripts. GenBank indexing uses standard
+  Mindy indexing. Fix for valueless qualifiers in feature keys -- thanks to
+  Leighton Pritchard.
+- Numerous updated to Bio.PDB modules -- thanks to Thomas. PDB can now parse
+  headers -- thanks to Kristian Rother.
 - Updates to the Ace parser -- thanks to Frank Kauff and Leighton Pritchard.
 
 - Added pgdb (PyGreSQL) support to BioSQL -- thanks to Marc Colosimo.
@@ -2108,8 +2113,8 @@ May 14, 2004: Biopython 1.30
 - Updates for Emboss commandlines, water and tranalign.
 - Fixes to the FormatIO system of file conversion.
 
-- C++ code (KDTree, Affy) now compiled by default on most platforms -- thanks to
-  Michael for some nice distutils hacks and many people for testing.
+- C++ code (KDTree, Affy) now compiled by default on most platforms -- thanks
+  to Michael for some nice distutils hacks and many people for testing.
 - Deprecated Bio.sequtils -- use Bio.SeqUtils instead.
 - Deprecated Bio.SVM -- use libsvm instead.
 - Deprecated Bio.kMeans and Bio.xkMeans -- use Bio.cluster instead.

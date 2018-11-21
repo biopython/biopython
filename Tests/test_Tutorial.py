@@ -125,7 +125,7 @@ def _extract(handle):
                 raise ValueError("Didn't find end of test starting: %r", lines[0])
             else:
                 raise ValueError("Didn't find end of test!")
-        elif line.startswith("\end{verbatim}"):
+        elif line.startswith("\\end{verbatim}"):
             break
         else:
             lines.append(line)

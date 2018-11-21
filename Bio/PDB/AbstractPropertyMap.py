@@ -63,35 +63,6 @@ class AbstractPropertyMap(object):
         """
         return len(self.property_dict)
 
-    def has_key(self, id):
-        """Check if the mapping has a property for this residue.
-
-        :param chain_id: chain id
-        :type chain_id: char
-
-        :param res_id: residue id
-        :type res_id: char
-
-        (Obsolete; use "id in mapping" instead.)
-
-        Examples
-        --------
-        >>> if apmap.has_key((chain_id, res_id)):
-        ...     res, prop = apmap[(chain_id, res_id)]
-
-        Is equivalent to:
-
-        >>> if (chain_id, res_id) in apmap:
-        ...     res, prop = apmap[(chain_id, res_id)]
-        ...
-
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This function is deprecated; use 'id in mapping' "
-                      "instead", BiopythonDeprecationWarning)
-        return id in self
-
     def keys(self):
         """Return the list of residues.
 

@@ -233,6 +233,7 @@ class BlastXmlParser(object):
         self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over BlastXmlParser object yields query results."""
         for qresult in self._parse_qresult():
             yield qresult
 
@@ -559,6 +560,7 @@ class BlastXmlIndexer(SearchIndexer):
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
 
     def __iter__(self):
+        """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
         blast_id_mark = _as_bytes('Query_')
@@ -566,7 +568,7 @@ class BlastXmlIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(0)
         re_desc = re.compile(_as_bytes(r'<Iteration_query-ID>(.*?)'
-                                       '</Iteration_query-ID>\s+?'
+                                       r'</Iteration_query-ID>\s+?'
                                        '<Iteration_query-def>'
                                        '(.*?)</Iteration_query-def>'))
         re_desc_end = re.compile(_as_bytes(r'</Iteration_query-def>'))
@@ -613,8 +615,10 @@ class BlastXmlIndexer(SearchIndexer):
             counter += 1
 
     def _parse(self, handle):
-        # overwrites SearchIndexer._parse, since we need to set the meta and
-        # fallback dictionaries to the parser
+        """Overwrite SearchIndexer parse (PRIVATE).
+
+        As we need to set the meta and fallback dictionaries to the parser.
+        """
         generator = self._parser(handle, **self._kwargs)
         generator._meta = self._meta
         generator._fallback = self._fallback
@@ -641,6 +645,7 @@ class _BlastXmlGenerator(XMLGenerator):
     """Event-based XML Generator."""
 
     def __init__(self, out, encoding='utf-8', indent=" ", increment=2):
+        """Initialize the class."""
         XMLGenerator.__init__(self, out, encoding)
         # the indentation character
         self._indent = indent
@@ -728,6 +733,7 @@ class _BlastXmlGenerator(XMLGenerator):
         self.endElement(name)
 
     def characters(self, content):
+        """Replace quotes and apostrophe."""
         content = escape(unicode(content))
         for a, b in ((u'"', u'&quot;'), (u"'", u'&apos;')):
             content = content.replace(a, b)

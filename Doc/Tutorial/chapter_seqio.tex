@@ -324,7 +324,7 @@ commonly used on Linux. We can use Python's \verb|gzip| module to open
 the compressed file for reading - which gives us a handle object:
 
 %TODO: Can we make the doctest code Python version specific?
-%This doctest fails on Python 2.7 due to http://bugs.python.org/issue30012
+%This doctest fails on Python 2.7 due to https://bugs.python.org/issue30012
 \begin{verbatim}
 >>> import gzip
 >>> from Bio import SeqIO
@@ -400,7 +400,7 @@ The NCBI will also let you ask for the file in other formats, in particular as
 a GenBank file. Until Easter 2009, the Entrez EFetch API let you use ``genbank''
 as the return type, however the NCBI now insist on using the official
 return types of ``gb'' (or ``gp'' for proteins) as described on
-\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
+\href{https://www.ncbi.nlm.nih.gov/books/NBK3837/}
 {EFetch for Sequence and other Molecular Biology Databases}.
 As a result, in Biopython 1.50 onwards, we support ``gb'' as an
 alias for ``genbank'' in \verb|Bio.SeqIO|.
@@ -891,8 +891,8 @@ you may want to compress it on disk. Unfortunately efficient random access
 is difficult with the more common file formats like gzip and bzip2. In this
 setting, BGZF (Blocked GNU Zip Format) can be very helpful. This is a variant
 of gzip (and can be decompressed using standard gzip tools) popularised by
-the BAM file format, \href{http://samtools.sourceforge.net/}{samtools}, and
-\href{http://samtools.sourceforge.net/tabix.shtml}{tabix}.
+the BAM file format, \href{https://www.htslib.org/}{samtools}, and
+\href{https://www.htslib.org/doc/tabix.html}}{tabix}.
 
 To create a BGZF compressed file you can use the command line tool \verb|bgzip|
 which comes with samtools. In our examples we use a filename extension

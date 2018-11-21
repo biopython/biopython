@@ -349,7 +349,7 @@ class TogoEntry(unittest.TestCase):
         # self.assertIn("16130152", record.name)
         self.assertIn("NP_416719.1", record.id)
         self.assertIn("NP_416719.1", record.name)
-        self.assertIn("porin protein", record.description)
+        self.assertIn(" porin ", record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
 

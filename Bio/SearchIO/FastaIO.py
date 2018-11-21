@@ -273,6 +273,7 @@ class FastaM10Parser(object):
         self._preamble = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over FastaM10Parser object yields query results."""
         for qresult in self._parse_qresult():
             # re-set desc, for hsp query description
             qresult.description = qresult.description
@@ -309,6 +310,7 @@ class FastaM10Parser(object):
         return hit_rows
 
     def _parse_qresult(self):
+        """Parse query result (PRIVATE)."""
         # initial qresult value
         qresult = None
         hit_rows = []
@@ -385,6 +387,7 @@ class FastaM10Parser(object):
             self.line = self.handle.readline()
 
     def _parse_hit(self, query_id):
+        """Parse hit on query identifier (PRIVATE)."""
         while True:
             self.line = self.handle.readline()
             if self.line.startswith('>>'):
@@ -525,6 +528,7 @@ class FastaM10Indexer(SearchIndexer):
         self._handle = UndoHandle(self._handle)
 
     def __iter__(self):
+        """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

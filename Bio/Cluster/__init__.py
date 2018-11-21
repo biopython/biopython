@@ -494,9 +494,14 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
         [4., 2., 6., 0.]
     """
     data = __check_data(data)
-    mask = __check_mask(mask, data.shape)
-    n = data.shape[1] if transpose else data.shape[0]
-    matrix = [numpy.empty(i, dtype='d') for i in range(n)]
+    shape = data.shape
+    mask = __check_mask(mask, shape)
+    if transpose:
+        ndata, nitems = shape
+    else:
+        nitems, ndata = shape
+    weight = __check_weight(weight, ndata)
+    matrix = [numpy.empty(i, dtype='d') for i in range(nitems)]
     _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
     return matrix
 

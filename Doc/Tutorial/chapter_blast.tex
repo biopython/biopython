@@ -31,12 +31,12 @@ to call the online version of BLAST.  This has three non-optional arguments:
 \begin{itemize}
 \item The first argument is the blast program to use for the search, as a
 lower case string. The options and descriptions of the programs are
-available at \url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.shtml}.
+available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
 Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
 and tblastx.
 \item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI web pages at
-\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.shtml}.
+the options for this are available on the NCBI Guide to BLAST 
+\url{ftp://ftp.ncbi.nlm.nih.gov/pub/factsheets/HowTo_BLASTGuide.pdf}.
 \item The third argument is a string containing your query sequence.  This
 can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
@@ -184,7 +184,7 @@ and there are also other tools which can produce imitation BLAST output files, s
 \subsection{Standalone NCBI BLAST+}
 
 The ``new''
-\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+\href{https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
 {NCBI BLAST+} suite was released in 2009. This replaces the old NCBI ``legacy'' BLAST
 package (see below).
 
@@ -249,7 +249,7 @@ To try to avoid confusion, we do not cover calling these old tools from Biopytho
 in this tutorial.
 
 You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
-(WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
+(WU-BLAST), and its successor, \href{https://blast.advbiocomp.com}{Advanced Biocomputing
 BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
 the command line tools \verb|wu-blastall| and \verb|ab-blastall|, which mimicked
 \verb|blastall| from the NCBI ``legacy'' BLAST suite.
