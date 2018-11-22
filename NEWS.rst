@@ -19,6 +19,12 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+The dictionary-like indexing in SeqIO and SearchIO will now explicitly preserve
+record order to match a behaviour change in the Python standard dict object.
+This means looping over the index will load the records in the on-disk order,
+which will be much faster (previously it would be effectively at random, based
+on the key hash sorting).
+
 The "grant" matrix in Bio.SubsMat.MatrixInfo has been replaced as our original
 values taken from Gerhard Vogt's old webpages at EMBL Heidelberg were
 discovered to be in error. The new values have been transformed following
