@@ -412,10 +412,13 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     unsuitable for dealing with files containing many queries. In that case, it
     is recommended that you use either `index` or `index_db`.
 
-    Since Python 3.6, the default dict class maintains key order, meaning
-    this dictionary will reflect the order of records given to it. As of
-    Biopython 1.72, on older versions of Python we explicitly use an
-    OrderedDict so that you can always assume the record order is preserved.
+    Since Python 3.7, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. For
+    CPython, this was already implemented in 3.6.
+
+    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+    than 3.6 (and for other Python older than 3.7) so that you can always
+    assume the record order is preserved.
     """
     qdict = _dict()
     for qresult in qresults:

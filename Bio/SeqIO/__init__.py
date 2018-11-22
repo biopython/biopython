@@ -748,9 +748,13 @@ def to_dict(sequences, key_function=None):
 
     If there are duplicate keys, an error is raised.
 
-    As of Biopython 1.69, this will return an OrderedDict, where the record
-    order provided is preserved. Earlier versions of Python used the typical
-    built-in dictionary class, which as of Python 3.6 also preserves the order.
+    Since Python 3.7, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. For
+    CPython, this was already implemented in 3.6.
+
+    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+    than 3.6 (and for other Python older than 3.7) so that you can always
+    assume the record order is preserved.
 
     Example usage, defaulting to using the record.id as key:
 
