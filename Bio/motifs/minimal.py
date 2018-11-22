@@ -46,9 +46,9 @@ def read(handle):
     """
     motif_number = 0
     record = Record()
-    __read_version(record, handle)
-    __read_alphabet(record, handle)
-    __read_background(record, handle)
+    _read_version(record, handle)
+    _read_alphabet(record, handle)
+    _read_background(record, handle)
 
     while True:
         for line in handle:
@@ -58,8 +58,8 @@ def read(handle):
             return record
         name = line.split()[1]
         motif_number += 1
-        length, num_occurrences, evalue = __read_motif_statistics(line, handle)
-        counts = __read_lpm(line, handle)
+        length, num_occurrences, evalue = _read_motif_statistics(line, handle)
+        counts = _read_lpm(line, handle)
         # {'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
         motif = motifs.Motif(alphabet=record.alphabet, counts=counts)
         motif.background = record.background
@@ -95,7 +95,7 @@ class Record(list):
 
 # Everything below is private
 
-def __read_background(record, handle):
+def _read_background(record, handle):
     for line in handle:
         if line.startswith('Background letter frequencies'):
             break
@@ -111,7 +111,7 @@ def __read_background(record, handle):
     record.background = {'A': A, 'C': C, 'G': G, 'T': T}
 
 
-def __read_version(record, handle):
+def _read_version(record, handle):
     for line in handle:
         if line.startswith('MEME version'):
             break
@@ -122,7 +122,7 @@ def __read_version(record, handle):
     record.version = ls[2]
 
 
-def __read_alphabet(record, handle):
+def _read_alphabet(record, handle):
     for line in handle:
         if line.startswith('ALPHABET'):
             break
@@ -138,7 +138,7 @@ def __read_alphabet(record, handle):
     record.alphabet = al
 
 
-def __read_lpm(line, handle):
+def _read_lpm(line, handle):
     counts = [[], [], [], []]
     for line in handle:
         freqs = line.split()
@@ -156,7 +156,7 @@ def __read_lpm(line, handle):
     return c
 
 
-def __read_motif_statistics(line, handle):
+def _read_motif_statistics(line, handle):
     # minimal :
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
     for line in handle:
@@ -168,7 +168,7 @@ def __read_motif_statistics(line, handle):
     return length, num_occurrences, evalue
 
 
-def __read_motif_name(handle):
+def _read_motif_name(handle):
     for line in handle:
         if 'sorted by position p-value' in line:
             break
