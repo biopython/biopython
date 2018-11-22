@@ -18,10 +18,12 @@ def read(handle):
 
     Example:
 
-    >>>from Bio.motifs import minimal
-    >>>record = minimal.read(open("test_minimal.meme"))
-    >>>for motif in record:
-    ...    print(motif.name, motif.evalue)
+    >>> from Bio.motifs import minimal
+    >>> with open("meme.output.txt") as f:
+    ...     record = meme.read(f)
+    ...
+    >>> for motif in record:
+    ...     print(motif.name, motif.evalue)
     ...
 
     You can access individual motifs in the record by their index or find a motif
@@ -32,6 +34,7 @@ def read(handle):
     >>> from Bio import motifs
     >>> with open("test_minimal.meme") as f:
     ...     record = motifs.parse(f, 'minimal')
+    ...
     >>> motif = record[0]
     >>> print(motif.name)
     LEXA
