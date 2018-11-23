@@ -446,6 +446,6 @@ setup(name='biopython',
       },
       packages=PACKAGES,
       ext_modules=EXTENSIONS,
-      include_package_data=True,  # done via MANIFEST.ini under setuptools
+      include_package_data=True,  # done via MANIFEST.in under setuptools
       install_requires=REQUIRES,
       )
