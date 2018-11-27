@@ -797,10 +797,12 @@ def _get_solexa_quality_str(record):
 
 
 def FastqStrictIterator(handle):
-    """In contrast to the FastqGeneralIterator, this iterator does allow for the
+    """Iterate over strictly four line Fastq records as string tuples.
+
+    In contrast to the FastqGeneralIterator, this iterator does allow for the
     splitting of records over multiple lines.  Line wrapping is out of vogue and
     hence this iterator provides a faster but stricter alternative to the
-    FastqGeneralIterator
+    FastqGeneralIterator.
 
     Iterate over Fastq records as string tuples (not as SeqRecord objects).
 
@@ -839,8 +841,8 @@ def FastqStrictIterator(handle):
             # Ensure the sequence and quality are of same length
             if len(line_2) != len(line_4):
                 raise ValueError("Lengths of sequence and quality values differs "
-                             " for %s (%i and %i)."
-                             % (line_1[1:], len(line_2, len(line_4))))
+                                 " for %s (%i and %i)."
+                                 % (line_1[1:], len(line_2, len(line_4))))
             # Return the record and then continue
             yield (line_1[1:], line_2, line_4)
         except IOError:
