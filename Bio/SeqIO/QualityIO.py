@@ -2052,12 +2052,5 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
 
 
 if __name__ == "__main__":
-    in_file = '../../../chr1_big.fq'
-
-    def use_parser(parser):
-        with open(in_file) as handle:
-            return list(parser(handle))
-    use_parser(FastqFourLineIterator)
-    use_parser(FastqPhredIterator)
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
