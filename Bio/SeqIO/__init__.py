@@ -286,6 +286,8 @@ names are also used in Bio.AlignIO and include the following:
       two lines per record (no line wrapping).
     - fastq   - A "FASTA like" format used by Sanger which also stores PHRED
       sequence quality values (with an ASCII offset of 33).
+    - fastq-4line - Stricter interpretation of the FASTQ format using exactly
+      two lines per record (no line wrapping).
     - fastq-sanger - An alias for "fastq" for consistency with BioPerl and EMBOSS
     - fastq-solexa - Original Solexa/Illumnia variant of the FASTQ format which
       encodes Solexa quality scores (not PHRED quality scores) with an
@@ -425,6 +427,7 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "tab": TabIO.TabIterator,
                      "pir": PirIO.PirIterator,
                      "fastq": QualityIO.FastqPhredIterator,
+                     "fastq-4line": QualityIO.FastqFourLineIterator,
                      "fastq-sanger": QualityIO.FastqPhredIterator,
                      "fastq-solexa": QualityIO.FastqSolexaIterator,
                      "fastq-illumina": QualityIO.FastqIlluminaIterator,

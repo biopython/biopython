@@ -796,6 +796,57 @@ def _get_solexa_quality_str(record):
                    for qp in qualities)
 
 
+def FastqStrictIterator(handle):
+    """In contrast to the FastqGeneralIterator, this iterator does allow for the
+    splitting of records over multiple lines.  Line wrapping is out of vogue and
+    hence this iterator provides a faster but stricter alternative to the
+    FastqGeneralIterator
+
+    Iterate over Fastq records as string tuples (not as SeqRecord objects).
+
+    This code does not try to interpret the quality string numerically.  It
+    just returns tuples of the title, sequence and quality as strings.  For
+    the sequence and quality, any whitespace (such as new lines) is removed.
+
+    Our SeqRecord based FASTQ iterators call this function internally, and then
+    turn the strings into a SeqRecord objects, mapping the quality string into
+    a list of numerical scores.  If you want to do a custom quality mapping,
+    then you might consider calling this function directly.
+
+    Because we now know that the records have four lines each, we can simply
+    iterate over groups of four lines without having to worry about identifying
+    what each line is.
+    """
+    for line in handle:
+        if line == '\n' or line == '':
+                continue
+        try:
+            line_1 = line.strip()
+            line_2 = next(handle).strip()
+            line_3 = next(handle).strip()
+            line_4 = next(handle).strip()
+
+            # check if file is in binary format
+            if isinstance(line_1[0], int):
+                raise ValueError("Is this handle in binary mode not text mode?")
+            # Check if start of title line is @
+            if line_1[0] != "@":
+                raise ValueError(
+                    "Records in Fastq files should start with '@' character.")
+            # Ensure there is no white space in the sequence
+            if " " in line_2 or "\t" in line_2:
+                raise ValueError("Whitespace is not allowed in the sequence.")
+            # Ensure the sequence and quality are of same length
+            if len(line_2) != len(line_4):
+                raise ValueError("Lengths of sequence and quality values differs "
+                             " for %s (%i and %i)."
+                             % (line_1[1:], len(line_2, len(line_4))))
+            # Return the record and then continue
+            yield (line_1[1:], line_2, line_4)
+        except IOError:
+            raise ValueError("Number of lines in the file should be a multiple of 4")
+
+
 # TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle):
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
@@ -1027,6 +1078,101 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
+        if title2ids:
+            id, name, descr = title2ids(title_line)
+        else:
+            descr = title_line
+            id = descr.split()[0]
+            name = id
+        record = SeqRecord(Seq(seq_string, alphabet),
+                           id=id, name=name, description=descr)
+        qualities = [q_mapping[letter] for letter in quality_string]
+        if qualities and (min(qualities) < 0 or max(qualities) > 93):
+            raise ValueError("Invalid character in quality string")
+        # For speed, will now use a dirty trick to speed up assigning the
+        # qualities. We do this to bypass the length check imposed by the
+        # per-letter-annotations restricted dict (as this has already been
+        # checked by FastqGeneralIterator). This is equivalent to:
+        # record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "phred_quality", qualities)
+        yield record
+
+
+def FastqFourLineIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+    """Iterate over FASTQ records as SeqRecord objects.
+
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
+     - title2ids - A function that, when given the title line from the FASTQ
+       file (without the beginning >), will return the id, name and
+       description (in that order) for the record as a tuple of strings.
+       If this is not given, then the entire title line will be used as
+       the description, and the first word as the id and name.
+
+    Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
+
+    For each sequence in a (Sanger style) FASTQ file there is a matching string
+    encoding the PHRED qualities (integers between 0 and about 90) using ASCII
+    values with an offset of 33.
+
+    For example, consider a file containing three short reads::
+
+        @EAS54_6_R1_2_1_413_324
+        CCCTTCTTGTCTTCAGCGTTTCTCC
+        +
+        ;;3;;;;;;;;;;;;7;;;;;;;88
+        @EAS54_6_R1_2_1_540_792
+        TTGGCAGGCCAAGGCCGATGGATCA
+        +
+        ;;;;;;;;;;;7;;;;;-;;;3;83
+        @EAS54_6_R1_2_1_443_348
+        GTTGCTTCTGGCGTGGGTGGGGGGG
+        +
+        ;;;;;;;;;;;9;7;;.7;393333
+
+    For each sequence (e.g. "CCCTTCTTGTCTTCAGCGTTTCTCC") there is a matching
+    string encoding the PHRED qualities using a ASCII values with an offset of
+    33 (e.g. ";;3;;;;;;;;;;;;7;;;;;;;88").
+
+    Using this module directly you might run:
+
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in FastqPhredIterator(handle):
+    ...         print("%s %s" % (record.id, record.seq))
+    EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
+    EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
+    EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
+
+    Typically however, you would call this via Bio.SeqIO instead with "fastq"
+    (or "fastq-sanger") as the format:
+
+    >>> from Bio import SeqIO
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "fastq"):
+    ...         print("%s %s" % (record.id, record.seq))
+    EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
+    EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
+    EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
+
+    If you want to look at the qualities, they are record in each record's
+    per-letter-annotation dictionary as a simple list of integers:
+
+    >>> print(record.letter_annotations["phred_quality"])
+    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+
+    """
+    assert SANGER_SCORE_OFFSET == ord("!")
+    # Originally, I used a list expression for each record:
+    #
+    # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
+    #
+    # Precomputing is faster, perhaps partly by avoiding the subtractions.
+    q_mapping = dict()
+    for letter in range(0, 255):
+        q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
+    for title_line, seq_string, quality_string in FastqStrictIterator(handle):
         if title2ids:
             id, name, descr = title2ids(title_line)
         else:
@@ -1906,5 +2052,12 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
 
 
 if __name__ == "__main__":
+    in_file = '../../../chr1_big.fq'
+
+    def use_parser(parser):
+        with open(in_file) as handle:
+            return list(parser(handle))
+    use_parser(FastqFourLineIterator)
+    use_parser(FastqPhredIterator)
     from Bio._utils import run_doctest
     run_doctest(verbose=0)
