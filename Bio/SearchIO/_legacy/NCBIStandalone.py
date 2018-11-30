@@ -36,10 +36,14 @@ from Bio.SearchIO._legacy.ParserSupport import (
 from Bio import File
 from Bio.Blast import Record
 
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 import warnings
-warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
-              "parsing BLAST output instead.", BiopythonDeprecationWarning)
+warnings.warn(
+    "Parsing BLAST plain text output file is not a well supported"
+    " functionality anymore. Consider generating your BLAST output for parsing"
+    " as XML or tabular format instead.",
+    BiopythonWarning
+)
 
 
 _score_e_re = re.compile(r'Score +E')
