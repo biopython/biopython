@@ -28,10 +28,11 @@ import sys
 import re
 
 from Bio._py3k import StringIO
-from Bio.ParserSupport import AbstractParser, AbstractConsumer
-from Bio.ParserSupport import read_and_call, read_and_call_until
-from Bio.ParserSupport import read_and_call_while, attempt_read_and_call
-from Bio.ParserSupport import is_blank_line, safe_peekline, safe_readline
+from Bio.SearchIO._legacy.ParserSupport import (
+    AbstractParser, AbstractConsumerread_and_call, read_and_call_until
+    read_and_call_while, attempt_read_and_call is_blank_line, safe_peekline,
+    safe_readline
+)
 from Bio import File
 from Bio.Blast import Record
 
