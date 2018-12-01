@@ -820,14 +820,14 @@ def FastqStrictIterator(handle):
     """
     try:
         first_line_1 = next(handle).rstrip()
-    except StopIteration:
-        raise ValueError('Empty file') from None
+    except StopIteration as e:
+        raise ValueError('Empty file')
     try:
         first_line_2 = next(handle).rstrip()
         first_line_3 = next(handle).rstrip()
         first_line_4 = next(handle).rstrip()
-    except StopIteration:
-        raise ValueError('Incomplete record encountered') from None
+    except StopIteration as e:
+        raise ValueError('Incomplete record encountered')
 
     # check if file is in binary format
     if first_line_1[0].isdigit():
@@ -868,8 +868,8 @@ def FastqStrictIterator(handle):
                                  % (line_1[1:], len(line_2, len(line_4))))
             # Return the record and then continue
             yield (line_1[1:], line_2, line_4)
-        except StopIteration:
-            raise ValueError('Incomplete record encountered') from None
+        except StopIteration as e:
+            raise ValueError('Incomplete record encountered')
 
 
 # TODO - Default to nucleotide or even DNA?
