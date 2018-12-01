@@ -807,8 +807,7 @@ def FastqStrictIterator(handle):
     Iterate over Fastq records as string tuples (not as SeqRecord objects).
 
     This code does not try to interpret the quality string numerically.  It
-    just returns tuples of the title, sequence and quality as strings.  For
-    the sequence and quality, any whitespace (such as new lines) is removed.
+    just returns tuples of the title, sequence and quality as strings.
 
     Our SeqRecord based FASTQ iterators call this function internally, and then
     turn the strings into a SeqRecord objects, mapping the quality string into
@@ -819,18 +818,42 @@ def FastqStrictIterator(handle):
     iterate over groups of four lines without having to worry about identifying
     what each line is.
     """
-    for line in handle:
-        if line == '\n' or line == '':
-                continue
-        try:
-            line_1 = line.strip()
-            line_2 = next(handle).strip()
-            line_3 = next(handle).strip()
-            line_4 = next(handle).strip()
+    try:
+        first_line_1 = next(handle).rstrip()
+    except StopIteration:
+        raise ValueError('Empty file') from None
+    try:
+        first_line_2 = next(handle).rstrip()
+        first_line_3 = next(handle).rstrip()
+        first_line_4 = next(handle).rstrip()
+    except StopIteration:
+        raise ValueError('Incomplete record encountered') from None
 
-            # check if file is in binary format
-            if isinstance(line_1[0], int):
-                raise ValueError("Is this handle in binary mode not text mode?")
+    # check if file is in binary format
+    if first_line_1[0].isdigit():
+        raise ValueError("Is this handle in binary mode not text mode?")
+    # Check if start of title line is @
+    if first_line_1[0] != "@":
+        raise ValueError(
+            "Records in Fastq files should start with '@' character.")
+    # Ensure there is no white space in the sequence
+    if " " in first_line_2 or "\t" in first_line_2:
+        raise ValueError("Whitespace is not allowed in the sequence.")
+    # Ensure the sequence and quality are of same length
+    if len(first_line_2) != len(first_line_4):
+        raise ValueError("Lengths of sequence and quality values differs "
+                         " for %s (%i and %i)."
+                         % (first_line_1[1:], len(first_line_2), len(first_line_4)))
+    # Return the record and then continue
+    yield (first_line_1[1:], first_line_2, first_line_4)
+
+    for line in handle:
+        try:
+            line_1 = line.rstrip()
+            line_2 = next(handle).rstrip()
+            line_3 = next(handle).rstrip()
+            line_4 = next(handle).rstrip()
+
             # Check if start of title line is @
             if line_1[0] != "@":
                 raise ValueError(
@@ -845,8 +868,8 @@ def FastqStrictIterator(handle):
                                  % (line_1[1:], len(line_2, len(line_4))))
             # Return the record and then continue
             yield (line_1[1:], line_2, line_4)
-        except IOError:
-            raise ValueError("Number of lines in the file should be a multiple of 4")
+        except StopIteration:
+            raise ValueError('Incomplete record encountered') from None
 
 
 # TODO - Default to nucleotide or even DNA?
