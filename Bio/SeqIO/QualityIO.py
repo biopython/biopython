@@ -821,7 +821,7 @@ def FastqStrictIterator(handle):
     try:
         first_line_1 = next(handle).rstrip()
     except StopIteration as e:
-        raise ValueError('Empty file')
+        return
     try:
         first_line_2 = next(handle).rstrip()
         first_line_3 = next(handle).rstrip()
