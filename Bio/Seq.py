@@ -429,18 +429,6 @@ class Seq(object):
             raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
 
-    def tostring(self):  # Seq API requirement
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring().
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return str(self)
-
     def tomutable(self):  # Needed?  Or use a function?
         """Return the full sequence as a MutableSeq object.
 
@@ -2444,31 +2432,6 @@ class MutableSeq(object):
         else:
             for c in other:
                 self.data.append(c)
-
-    def tostring(self):
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of my_seq.tostring()
-        as this method is officially deprecated.
-
-        Because str(my_seq) will give you the full sequence as a python string,
-        there is often no need to make an explicit conversion.  For example,
-
-        >>> my_seq = Seq("ATCGTG")
-        >>> my_name = "seq_1"
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq))
-        ID={seq_1}, sequence={ATCGTG}
-
-        On Biopython 1.44 or older you would have to have done this:
-
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
-        ID={seq_1}, sequence={ATCGTG}
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return "".join(self.data)
 
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.

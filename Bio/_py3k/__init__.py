@@ -154,8 +154,7 @@ else:
         return s
 
     def _as_unicode(s):
-        """Turn a (byte) string or a unicode string into a (byte) string (PRIVATE)."""
-        # Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:
+        """If s is a (byte) string, convert to a unicode string (PRIVATE)."""
         if isinstance(s, unicode):
             return s
         return s.decode()

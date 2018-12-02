@@ -257,7 +257,10 @@ class EntrezOnlineCase(unittest.TestCase):
             self.assertIn(URL_API_KEY, handle.url)
             self.assertIn("id=200079209", handle.url)
             result = handle.read()
-            expected_result = u'“field of injury”'  # Use of Unicode double qoutation marks U+201C and U+201D
+            if sys.version_info[0] < 3:
+                result = result.decode("UTF8")
+            # Use of Unicode double quotation marks U+201C and U+201D
+            expected_result = u'“field of injury”'
             self.assertEqual(result[342:359], expected_result)
             handle.close()
         finally:

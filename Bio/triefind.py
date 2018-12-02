@@ -20,12 +20,18 @@ Functions:
  - find          Find keys in a trie matching anywhere in a string.
  - find_words    Find keys in a trie matching whole words in a string.
 
-This module is OBSOLETE. We encourage users to switch to alternative libraries
+This module is DEPRECATED. We encourage users to switch to alternative libraries
 implementing a trie data structure, for example pygtrie.
 """
 
 import string
 import re
+
+from Bio import BiopythonDeprecationWarning
+import warnings
+warnings.warn("This module has been deprecated. We encourage users to switch "
+              "to alternative libraries implementing a trie data structure, "
+              "for example pygtrie.", BiopythonDeprecationWarning)
 
 
 def match(string, trie):

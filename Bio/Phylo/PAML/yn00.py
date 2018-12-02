@@ -122,8 +122,7 @@ def read(results_file):
     if not lines:
         raise ValueError("Empty results file.  Did YN00 exit successfully?  "
                          "Run 'Yn00.run()' with 'verbose=True'.")
-    for line_num in range(len(lines)):
-        line = lines[line_num]
+    for line_num, line in enumerate(lines):
         if "(A) Nei-Gojobori (1986) method" in line:
             ng86_start = line_num + 1
         elif "(B) Yang & Nielsen (2000) method" in line:
@@ -135,6 +134,6 @@ def read(results_file):
                                              sequences)
             results = _parse_yn00.parse_others(lines[line_num + 1:], results,
                                                sequences)
-    if len(results) == 0:
+    if not results:
         raise ValueError("Invalid results file.")
     return results

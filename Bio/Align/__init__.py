@@ -156,28 +156,7 @@ class MultipleSeqAlignment(object):
         {'tool': 'demo'}
         >>> align.column_annotations
         {'stats': 'CCCXCCC'}
-
-        NOTE - The older Bio.Align.Generic.Alignment class only accepted a
-        single argument, an alphabet.  This is still supported via a backwards
-        compatible "hack" so as not to disrupt existing scripts and users, but
-        is deprecated and will be removed in a future release.
         """
-        if isinstance(records, (Alphabet.Alphabet, Alphabet.AlphabetEncoder)):
-            if alphabet is None:
-                # TODO - Remove this backwards compatible mode!
-                alphabet = records
-                records = []
-                import warnings
-                from Bio import BiopythonDeprecationWarning
-                warnings.warn("Invalid records argument: While the old "
-                              "Bio.Align.Generic.Alignment class only "
-                              "accepted a single argument (the alphabet), the "
-                              "newer Bio.Align.MultipleSeqAlignment class "
-                              "expects a list/iterator of SeqRecord objects "
-                              "(which can be an empty list) and an optional "
-                              "alphabet argument", BiopythonDeprecationWarning)
-            else:
-                raise ValueError("Invalid records argument")
         if alphabet is not None:
             if not isinstance(alphabet, (Alphabet.Alphabet, Alphabet.AlphabetEncoder)):
                 raise ValueError("Invalid alphabet argument")

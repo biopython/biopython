@@ -9,14 +9,6 @@ include README.rst
 include DEPRECATED.rst
 include CONTRIBUTING.rst
 
-# These are now symlinks to the above *.rst files
-# (only doing this for the very long used files)
-include CONTRIB
-include LICENSE
-include NEWS
-include README
-include DEPRECATED
-
 include MANIFEST.in
 
 recursive-include Scripts *    # Include scripts.
@@ -63,3 +55,4 @@ global-exclude *.pyc *.pyo *.py{} *.py-e
 include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.ent  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.mod  # Include DTD files for Entrez
+include Bio/Entrez/XSDs/*.xsd  # Include XSD files for Entrez

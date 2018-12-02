@@ -29,6 +29,7 @@ def parse(handle, format):
     Currently supported formats (case is ignored):
      - AlignAce:      AlignAce output file format
      - MEME:          MEME output file motif
+     - MINIMAL:       MINIMAL MEME output file motif
      - MAST:          MAST output file motif
      - TRANSFAC:      TRANSFAC database file format
      - pfm:           JASPAR-style position-frequency matrix
@@ -71,6 +72,10 @@ def parse(handle, format):
     elif format == "meme":
         from Bio.motifs import meme
         record = meme.read(handle)
+        return record
+    elif format == "minimal":
+        from Bio.motifs import minimal
+        record = minimal.read(handle)
         return record
     elif format == "mast":
         from Bio.motifs import mast
