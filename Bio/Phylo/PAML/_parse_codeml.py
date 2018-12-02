@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Methods for parsing codeml results files."""
+
 import re
 
 line_floats_re = re.compile(r"-*\d+\.\d+")

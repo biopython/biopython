@@ -389,6 +389,7 @@ class Clade(PhyloElement, BaseTree.Clade):
     # Shortcuts for list attributes that are usually only 1 item
     # NB: Duplicated from Phylogeny class
     def _get_confidence(self):
+        """Return confident values (PRIVATE)."""
         if len(self.confidences) == 0:
             return None
         if len(self.confidences) > 1:
@@ -397,6 +398,7 @@ class Clade(PhyloElement, BaseTree.Clade):
         return self.confidences[0]
 
     def _set_confidence(self, value):
+        """Set the confidence value (PRIVATE)."""
         if value is None:
             # Special case: mirror the behavior of _get_confidence
             self.confidences = []
@@ -414,11 +416,13 @@ class Clade(PhyloElement, BaseTree.Clade):
                              "use Phylogeny.confidences instead")
 
     def _del_confidence(self):
+        """Delete confidences values (PRIVATE)."""
         self.confidences = []
 
     confidence = property(_get_confidence, _set_confidence, _del_confidence)
 
     def _get_taxonomy(self):
+        """Get taxonomy list for the clade (PRIVATE)."""
         if len(self.taxonomies) == 0:
             return None
         if len(self.taxonomies) > 1:
@@ -427,6 +431,7 @@ class Clade(PhyloElement, BaseTree.Clade):
         return self.taxonomies[0]
 
     def _set_taxonomy(self, value):
+        """Set a taxonomy for the clade (PRIVATE)."""
         if not isinstance(value, Taxonomy):
             raise ValueError("assigned value must be a Taxonomy instance")
         if len(self.taxonomies) == 0:
@@ -443,6 +448,7 @@ class Clade(PhyloElement, BaseTree.Clade):
 # PhyloXML wrapper for a special BaseTree attribute
 
 class BranchColor(PhyloElement, BaseTree.BranchColor):
+    """Manage Tree branch's color."""
 
     def __init__(self, *args, **kwargs):
         """Initialize parameters for the BranchColor object."""
@@ -607,47 +613,55 @@ class Confidence(PhyloElement):
     # Ordering -- see functools.total_ordering in Py2.7
 
     def __lt__(self, other):
+        """Return True if confidence is less than the other confidence."""
         if isinstance(other, Confidence):
             return self.value < other.value
         return self.value < other
 
     def __le__(self, other):
+        """Return True if confidence is less than or equal to the other confidence."""
         return self < other or self == other
 
     def __gt__(self, other):
+        """Return True if confidence is grater than the other confidence."""
         return not (self <= other)
 
     def __ge__(self, other):
+        """Return True if confidence is grater than or equal to the other confidence."""
         return not (self.value < other)
 
     # Arithmetic operators, including reverse
 
     def __add__(self, other):
-        """Conduct additions between value of two Confidence objects."""
+        """Conduct addition between values of two Confidence objects."""
         return self.value + other
 
     def __radd__(self, other):
+        """Conduct reverse addition between values of two Confidence objects."""
         return other + self.value
 
     def __sub__(self, other):
-        """Conduct subtraction between value of two Confidence objects."""
+        """Conduct subtraction between values of two Confidence objects."""
         return self.value - other
 
     def __rsub__(self, other):
+        """Conduct reverse subtraction between values of two Confidence objects."""
         return other - self.value
 
     def __mul__(self, other):
-        """Conduct multiplication between value of two Confidence objects."""
+        """Conduct multiplication between values of two Confidence objects."""
         return self.value * other
 
     def __rmul__(self, other):
+        """Conduct reverse multiplication between values of two Confidence objects."""
         return other * self.value
 
     def __div__(self, other):
-        """Conduct division between value of two Confidence objects."""
+        """Conduct division between values of two Confidence objects."""
         return self.value.__div__(other)
 
     def __rdiv__(self, other):
+        """Conduct revers division between values of two Confidence objects."""
         return other.__div__(self.value)
 
     def __truediv__(self, other):
@@ -658,6 +672,7 @@ class Confidence(PhyloElement):
         return self.value / other
 
     def __rtruediv__(self, other):
+        """Conduct revers Rational-style division."""
         return other / self.value
 
     def __floordiv__(self, other):
@@ -668,27 +683,45 @@ class Confidence(PhyloElement):
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):
+        """Conduct revers C-style and old-style division."""
         return other.__floordiv__(self.value)
 
     def __mod__(self, other):
-        """Conduct modulus between value of two Confidence objects."""
+        """Conduct modulus between values of two Confidence objects."""
         return self.value % other
 
     def __rmod__(self, other):
+        """Conduct reverse modulus between values of two Confidence objects."""
         return other % self.value
 
     def __divmod__(self, other):
+        """Return quotient and remainder.
+
+        of dividing the values of two Confidence objects.
+        """
         return divmod(self.value, other)
 
     def __rdivmod__(self, other):
+        """Return quotient and remainder.
+
+        of dividing and reversing the values of two Confidence objects.
+        """
         return divmod(other, self.value)
 
     def __pow__(self, other, modulo=None):
+        """Return the value of Confident object raised at power of.
+
+        the value of other Confident object.
+        """
         if modulo is not None:
             return pow(self.value, other, modulo)
         return pow(self.value, other)
 
     def __rpow__(self, other):
+        """Return the value of other Confident object raised at power of.
+
+        the value of Confident object.
+        """
         return pow(other, self.value)
 
     # Unary arithmetic operations: -, +, abs()
@@ -698,6 +731,7 @@ class Confidence(PhyloElement):
         return -self.value
 
     def __pos__(self):
+        """Return the value of a Confidence object."""
         return self.value
 
     def __abs__(self):
@@ -821,9 +855,11 @@ class Events(PhyloElement):
         self.confidence = confidence
 
     def items(self):
+        """Return Event's items."""
         return [(k, v) for k, v in self.__dict__.items() if v is not None]
 
     def keys(self):
+        """Return Event's keys."""
         return [k for k, v in self.__dict__.items() if v is not None]
 
     def values(self):
@@ -831,10 +867,12 @@ class Events(PhyloElement):
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
+        """Return number of Events."""
         # TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):
+        """Get value of Event with the given key."""
         if not hasattr(self, key):
             raise KeyError(key)
         val = getattr(self, key)
@@ -843,9 +881,11 @@ class Events(PhyloElement):
         return val
 
     def __setitem__(self, key, val):
+        """Add item to Event dict."""
         setattr(self, key, val)
 
     def __delitem__(self, key):
+        """Delete Event with given key."""
         setattr(self, key, None)
 
     def __iter__(self):
@@ -853,6 +893,7 @@ class Events(PhyloElement):
         return iter(self.keys())
 
     def __contains__(self, key):
+        """Return True if Event dict contains key."""
         return (hasattr(self, key) and getattr(self, key) is not None)
 
 
@@ -864,11 +905,12 @@ class Id(PhyloElement):
     """
 
     def __init__(self, value, provider=None):
-        """Initialize vakues for the identifier object."""
+        """Initialize values for the identifier object."""
         self.value = value
         self.provider = provider
 
     def __str__(self):
+        """Return identifier as a string."""
         if self.provider is not None:
             return '%s:%s' % (self.provider, self.value)
         return self.value
@@ -940,6 +982,7 @@ class Polygon(PhyloElement):
         self.points = points or []
 
     def __str__(self):
+        """Return list of points as a string."""
         return '%s([%s])' % (self.__class__.__name__,
                              ',\n'.join(map(str, self.points)))
 
@@ -1028,6 +1071,7 @@ class ProteinDomain(PhyloElement):
 
     @classmethod
     def from_seqfeature(cls, feat):
+        """Create ProteinDomain object from SeqFeature."""
         return ProteinDomain(feat.id,
                              feat.location.nofuzzy_start,
                              feat.location.nofuzzy_end,
@@ -1250,6 +1294,7 @@ class Sequence(PhyloElement):
         return seqrec
 
     def get_alphabet(self):
+        """Get the alphabet for the sequence."""
         alph = self.alphabets.get(self.type, Alphabet.generic_alphabet)
         if self.mol_seq and self.mol_seq.is_aligned:
             return Alphabet.Gapped(alph)
@@ -1384,8 +1429,7 @@ class Uri(PhyloElement):
         self.type = type
 
     def __str__(self):
+        """Return string representation of Uri."""
         if self.value:
             return self.value
-        """Initialize the class."""
-        """Initialize the class."""
         return repr(self)

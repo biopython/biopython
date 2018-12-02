@@ -15,6 +15,7 @@ from Bio._py3k import zip, range
 
 
 def _is_numeric(x):
+    """Return True if is numeric."""
     return _py3k._is_int_or_long(x) or isinstance(x, (float, complex))
 
 
@@ -287,6 +288,7 @@ class _Matrix(object):
         return len(self.names)
 
     def __repr__(self):
+        """Return Matrix as a string."""
         return self.__class__.__name__ \
             + "(names=%s, matrix=%s)" \
             % tuple(map(repr, (self.names, self.matrix)))
@@ -312,6 +314,7 @@ class DistanceMatrix(_Matrix):
         self._set_zero_diagonal()
 
     def __setitem__(self, item, value):
+        """Set Matrix's items to values."""
         _Matrix.__setitem__(self, item, value)
         self._set_zero_diagonal()
 
@@ -592,6 +595,7 @@ class DistanceTreeConstructor(TreeConstructor):
                             ". Available methods: " + ", ".join(self.methods))
 
     def build_tree(self, msa):
+        """Construct and return a Tree, Neighbor Joining or UPGMA."""
         if self.distance_calculator:
             dm = self.distance_calculator.get_distance(msa)
             tree = None

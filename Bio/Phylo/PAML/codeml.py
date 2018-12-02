@@ -3,6 +3,11 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of CODEML.
+
+Maximum likelihood analysis using codon substitution models.
+"""
+
 from __future__ import print_function
 
 import os.path

@@ -3,6 +3,11 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of baseml.
+
+Maximum likelihood analysis of nucleotide sequences.
+"""
+
 import os
 import os.path
 from ._paml import Paml

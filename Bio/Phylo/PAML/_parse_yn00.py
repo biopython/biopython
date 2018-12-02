@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Methods for parsing yn00 results files."""
+
 import re
 
 
