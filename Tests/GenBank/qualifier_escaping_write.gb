@@ -21,10 +21,10 @@ FEATURES             Location/Qualifiers
                      /db_xref="taxon:10090"
                      /chromosome="4"
                      /map="4 42.6 cM"
-                     /note=""Should" now "be" escaped in "file""
+                     /note="""Should"" now ""be"" escaped in ""file"""
      Protein         1..182
                      /product="interferon beta, fibroblast"
-                     /note=""Should also be escaped in file""
+                     /note="""Should also be escaped in file"""
 ORIGIN
         1 mnnrwilhaa fllcfsttal sinykqlqlq ertnirkcqe lleqlngkin ltyradfkip
        61 memtekmqks ytafaiqeml qnvflvfrnn fsstgwneti vvrlldelhq qtvflktvle
