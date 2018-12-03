@@ -32,7 +32,14 @@ To paraphrase:
 \begin{itemize}
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{https://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
-\item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
+\item If you are using a API key, you can make at most 10 queries per second, otherwise at most 3 queries per second.
+This is automatically enforced by Biopython.
+Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
+%DO NOT run this as a doctest, will set an invalid API key!
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.api_key = "MyAPIkey"
+\end{verbatim}
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
 %doctest
 \begin{verbatim}
@@ -48,13 +55,6 @@ To paraphrase:
 \end{verbatim}
 The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
-\item After May 1, 2018, NCBI will limit access to the E-utilities unless one have an API key (more info at \url{https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/}).
-Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the key is specified in any E-utility. Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
-%DO NOT run this as a doctest, will set an invalid API key!
-\begin{verbatim}
->>> from Bio import Entrez
->>> Entrez.api_key = "MyAPIkey"
-\end{verbatim}
 \end{itemize}
 
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
