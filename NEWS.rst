@@ -65,6 +65,7 @@ possible, especially the following contributors:
 - Rona Costello (first contribution)
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
+- Yi Hsiao (first contribution)
 
 
 21 June 2018: Biopython 1.72
