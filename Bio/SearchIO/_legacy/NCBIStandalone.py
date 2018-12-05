@@ -29,8 +29,8 @@ import re
 
 from Bio._py3k import StringIO
 from Bio.SearchIO._legacy.ParserSupport import (
-    AbstractParser, AbstractConsumerread_and_call, read_and_call_until
-    read_and_call_while, attempt_read_and_call is_blank_line, safe_peekline,
+    AbstractParser, AbstractConsumer, read_and_call, read_and_call_until,
+    read_and_call_while, attempt_read_and_call, is_blank_line, safe_peekline,
     safe_readline
 )
 from Bio import File
