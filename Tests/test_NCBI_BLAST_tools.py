@@ -4,8 +4,7 @@
 # as part of this package.
 #
 # This unit test attempts to locate the blastall executable and the nr
-# database, and if it finds them then do some standalone blast searches
-# using Bio.Blast.NCBIStandalone to call the command line tool.
+# database.
 
 from __future__ import print_function
 
@@ -118,10 +117,6 @@ class Pairwise(unittest.TestCase):
             # Assume this is NCBI BLAST+ 2.3.0 or later,
             self.assertEqual(1, stdoutdata.count("Query= "))
             self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
-
-        # TODO - Parse it? I think we'd need to update this obsole code :(
-        # records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
-        #                                       NCBIStandalone.BlastParser()))
 
     def test_blastn(self):
         """Pairwise BLASTN search"""
