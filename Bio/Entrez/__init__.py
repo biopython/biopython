@@ -520,7 +520,9 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     # Equivalently, at least a third of second between queries
     params = _construct_params(params)
     options = _encode_options(ecitmatch, params)
-    delay = 0.1 if api_key else 0.333333334
+    # Using just 0.333333334 seconds sometimes hit the NCBI rate limit,
+    # the slightly longer pause of 0.37 seconds has been more reliable.
+    delay = 0.1 if api_key else 0.37
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:
