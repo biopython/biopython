@@ -389,7 +389,7 @@ class Clade(PhyloElement, BaseTree.Clade):
     # Shortcuts for list attributes that are usually only 1 item
     # NB: Duplicated from Phylogeny class
     def _get_confidence(self):
-        """Return confident values (PRIVATE)."""
+        """Return confidence values (PRIVATE)."""
         if len(self.confidences) == 0:
             return None
         if len(self.confidences) > 1:
@@ -695,33 +695,21 @@ class Confidence(PhyloElement):
         return other % self.value
 
     def __divmod__(self, other):
-        """Return quotient and remainder.
-
-        of dividing the values of two Confidence objects.
-        """
+        """Return quotient and remainder, dividing the Confidence value by the given value."""
         return divmod(self.value, other)
 
     def __rdivmod__(self, other):
-        """Return quotient and remainder.
-
-        of dividing and reversing the values of two Confidence objects.
-        """
+        """Return quotient and remainder, dividing the given value by the Confidence value."""
         return divmod(other, self.value)
 
     def __pow__(self, other, modulo=None):
-        """Return the value of Confident object raised at power of.
-
-        the value of other Confident object.
-        """
+        """Return the value of Confidence object raised to the given power."""
         if modulo is not None:
             return pow(self.value, other, modulo)
         return pow(self.value, other)
 
     def __rpow__(self, other):
-        """Return the value of other Confident object raised at power of.
-
-        the value of Confident object.
-        """
+        """Return the given value raised to the power of the Confidence object value."""
         return pow(other, self.value)
 
     # Unary arithmetic operations: -, +, abs()

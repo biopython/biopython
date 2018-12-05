@@ -495,7 +495,7 @@ class Parser(object):
         return taxonomy
 
     def other(self, elem, namespace, localtag):
-        """Set non-phyloXML element."""
+        """Create an Other object, a non-phyloXML element."""
         return PX.Other(localtag, namespace, elem.attrib,
                         value=elem.text and elem.text.strip() or None,
                         children=[self.other(child, *_split_namespace(child.tag))
@@ -504,11 +504,11 @@ class Parser(object):
     # Complex types
 
     def accession(self, elem):
-        """Set accession."""
+        """Create accession object."""
         return PX.Accession(elem.text.strip(), elem.get('source'))
 
     def annotation(self, elem):
-        """Set annotation."""
+        """Create annotation object."""
         return PX.Annotation(
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
             confidence=_get_child_as(elem, 'confidence', self.confidence),
@@ -517,7 +517,7 @@ class Parser(object):
             **elem.attrib)
 
     def binary_characters(self, elem):
-        """Set binary characters."""
+        """Create binary characters object."""
         def bc_getter(elem):
             """Get binary characters from subnodes."""
             return _get_children_text(elem, 'bc')
@@ -534,26 +534,26 @@ class Parser(object):
             absent=_get_child_as(elem, 'absent', bc_getter))
 
     def clade_relation(self, elem):
-        """Set clade relationship."""
+        """Create clade relationship object."""
         return PX.CladeRelation(
             elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
             distance=elem.get('distance'),
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def color(self, elem):
-        """Set the branch color."""
+        """Create branch color object."""
         red, green, blue = (_get_child_text(elem, color, int) for color in
                             ('red', 'green', 'blue'))
         return PX.BranchColor(red, green, blue)
 
     def confidence(self, elem):
-        """Set confidence."""
+        """Create confidence object."""
         return PX.Confidence(
             _float(elem.text),
             elem.get('type'))
 
     def date(self, elem):
-        """Set clade/node date."""
+        """Create date object."""
         return PX.Date(
             unit=elem.get('unit'),
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
@@ -563,14 +563,14 @@ class Parser(object):
         )
 
     def distribution(self, elem):
-        """Set geographic distribution."""
+        """Create geographic distribution object."""
         return PX.Distribution(
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
             points=_get_children_as(elem, 'point', self.point),
             polygons=_get_children_as(elem, 'polygon', self.polygon))
 
     def domain(self, elem):
-        """Set individual domain."""
+        """Create protein domain object."""
         return PX.ProteinDomain(elem.text.strip(),
                                 int(elem.get('from')) - 1,
                                 int(elem.get('to')),
@@ -578,13 +578,13 @@ class Parser(object):
                                 id=elem.get('id'))
 
     def domain_architecture(self, elem):
-        """Set domain architecture of a protein."""
+        """Create domain architecture object."""
         return PX.DomainArchitecture(
             length=int(elem.get('length')),
             domains=_get_children_as(elem, 'domain', self.domain))
 
     def events(self, elem):
-        """Set events."""
+        """Create events object."""
         return PX.Events(
             type=_get_child_text(elem, 'type'),
             duplications=_get_child_text(elem, 'duplications', int),
@@ -593,19 +593,19 @@ class Parser(object):
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def id(self, elem):
-        """Set identifier."""
+        """Create identifier object."""
         provider = elem.get('provider') or elem.get('type')
         return PX.Id(elem.text.strip(), provider)
 
     def mol_seq(self, elem):
-        """Set molecular sequence."""
+        """Create molecular sequence object."""
         is_aligned = elem.get('is_aligned')
         if is_aligned is not None:
             is_aligned = _str2bool(is_aligned)
         return PX.MolSeq(elem.text.strip(), is_aligned=is_aligned)
 
     def point(self, elem):
-        """Set coordinates of a point."""
+        """Create point object, coordinates of a point."""
         return PX.Point(
             elem.get('geodetic_datum'),
             _get_child_text(elem, 'lat', float),
@@ -614,12 +614,12 @@ class Parser(object):
             alt_unit=elem.get('alt_unit'))
 
     def polygon(self, elem):
-        """Set list of points."""
+        """Create polygon object, list of points."""
         return PX.Polygon(
             points=_get_children_as(elem, 'point', self.point))
 
     def property(self, elem):
-        """Set properties from external resources."""
+        """Create properties from external resources."""
         return PX.Property(elem.text.strip(),
                            elem.get('ref'),
                            elem.get('applies_to'),
@@ -628,20 +628,20 @@ class Parser(object):
                            id_ref=elem.get('id_ref'))
 
     def reference(self, elem):
-        """Set literature reference."""
+        """Create literature reference object."""
         return PX.Reference(
             doi=elem.get('doi'),
             desc=_get_child_text(elem, 'desc'))
 
     def sequence_relation(self, elem):
-        """Set relationship between two sequences."""
+        """Create sequence relationship object, relationship between two sequences."""
         return PX.SequenceRelation(
             elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
             distance=_float(elem.get('distance')),
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def uri(self, elem):
-        """Set uri, expected to be a url."""
+        """Create uri object, expected to be a url."""
         return PX.Uri(elem.text.strip(),
                       desc=_collapse_wspace(elem.get('desc')),
                       type=elem.get('type'))
