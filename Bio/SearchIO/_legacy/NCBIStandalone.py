@@ -28,17 +28,22 @@ import sys
 import re
 
 from Bio._py3k import StringIO
-from Bio.ParserSupport import AbstractParser, AbstractConsumer
-from Bio.ParserSupport import read_and_call, read_and_call_until
-from Bio.ParserSupport import read_and_call_while, attempt_read_and_call
-from Bio.ParserSupport import is_blank_line, safe_peekline, safe_readline
+from Bio.SearchIO._legacy.ParserSupport import (
+    AbstractParser, AbstractConsumer, read_and_call, read_and_call_until,
+    read_and_call_while, attempt_read_and_call, is_blank_line, safe_peekline,
+    safe_readline
+)
 from Bio import File
 from Bio.Blast import Record
 
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 import warnings
-warnings.warn("This module has been deprecated. Consider Bio.SearchIO for "
-              "parsing BLAST output instead.", BiopythonDeprecationWarning)
+warnings.warn(
+    "Parsing BLAST plain text output file is not a well supported"
+    " functionality anymore. Consider generating your BLAST output for parsing"
+    " as XML or tabular format instead.",
+    BiopythonWarning
+)
 
 
 _score_e_re = re.compile(r'Score +E')

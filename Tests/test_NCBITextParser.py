@@ -7,10 +7,10 @@ import os
 import unittest
 
 import warnings
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio.Blast import NCBIStandalone
+    warnings.simplefilter('ignore', BiopythonWarning)
+    from Bio.SearchIO._legacy import NCBIStandalone
 
 
 class TestBlastRecord(unittest.TestCase):

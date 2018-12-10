@@ -261,6 +261,9 @@ For some time now, both the NCBI and Biopython have encouraged people to
 parse the XML output instead, however Bio.SearchIO will initially attempt
 to support plain text BLAST output.
 
+The module was removed in Release 1.72 from the public API. It lives now
+in maintenance mode in Bio.SearchIO._legacy to preserve existing functionality.
+
 Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
@@ -741,7 +744,7 @@ Bio.ParserSupport
 =================
 ``Bio.ParserSupport`` was declared obsolete in Release 1.59, and deprecated in
 Release 1.63. The Martel specific ``EventGenerator`` was removed in Release
-1.67.
+1.67, and the entire module was removed in Release 1.72.
 
 ``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.

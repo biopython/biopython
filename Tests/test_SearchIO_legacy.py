@@ -10,10 +10,10 @@ from Bio._py3k import StringIO
 from Bio import File
 
 import warnings
-from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
 with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio import ParserSupport
+    warnings.simplefilter('ignore', BiopythonWarning)
+    from Bio.SearchIO._legacy import ParserSupport
 
 # pyUnit
 

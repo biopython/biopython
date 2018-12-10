@@ -26,11 +26,6 @@ Functions:
 import sys
 from Bio._py3k import StringIO
 
-from Bio import BiopythonDeprecationWarning
-import warnings
-warnings.warn("Bio.ParserSupport is now deprecated will be removed in a "
-              "future release of Biopython.", BiopythonDeprecationWarning)
-
 
 class AbstractParser(object):
     """Base class for other parsers."""

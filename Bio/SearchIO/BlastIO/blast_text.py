@@ -19,7 +19,7 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio.Blast import NCBIStandalone
+    from Bio.SearchIO._legacy import NCBIStandalone
 
 
 __all__ = ('BlastTextParser', )
