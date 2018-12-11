@@ -82,7 +82,12 @@ def osx_clang_fix():
         from subprocess import getoutput
     else:
         from commands import getoutput
-    cc = getoutput("cc -v")
+    from distutils.ccompiler import new_compiler
+    from distutils.sysconfig import customize_compiler
+    # The compiler test should be made on the actual compiler that'll be used
+    compiler = new_compiler()
+    customize_compiler(compiler)
+    cc = getoutput("{} -v".format(compiler.compiler[0]))
     if "gcc" in cc or "clang" not in cc:
         return
     for flag in ["CFLAGS", "CPPFLAGS"]:

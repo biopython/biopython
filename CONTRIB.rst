@@ -164,6 +164,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
+- Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
