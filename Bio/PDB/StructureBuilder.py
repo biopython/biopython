@@ -86,9 +86,12 @@ class StructureBuilder(object):
         """
         if self.model.has_id(chain_id):
             self.chain = self.model[chain_id]
-            warnings.warn("WARNING: Chain %s is discontinuous at line %i."
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter("always", PDBConstructionWarning)
+                warnings.warn("WARNING: Chain %s is discontinuous at line %i."
                           % (chain_id, self.line_counter),
                           PDBConstructionWarning)
+                self.assertEqual(len(w), 3, w)
         else:
             self.chain = Chain(chain_id)
             self.model.add(self.chain)
