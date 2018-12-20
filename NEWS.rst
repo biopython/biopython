@@ -14,6 +14,10 @@ The latest news is at the top of this file.
 This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7.
 It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
 
 18 December 2018: Biopython 1.73
 ================================
