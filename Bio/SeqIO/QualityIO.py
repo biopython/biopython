@@ -370,7 +370,12 @@ from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 from math import log
 import warnings
 from Bio import BiopythonWarning, BiopythonParserWarning
-
+import sys
+from itertools import islice, tee
+if sys.version_info[0] == 3:
+    from itertools import zip_longest
+if sys.version_info[0] == 2:
+    from itertools import izip_longest as zip_longest
 
 # define score offsets. See discussion for differences between Sanger and
 # Solexa offsets.
@@ -817,59 +822,100 @@ def FastqStrictIterator(handle):
     Because we now know that the records have four lines each, we can simply
     iterate over groups of four lines without having to worry about identifying
     what each line is.
+
+    There are some quality checks that the FASTQ file must pass in order to be
+    a valid FASTQ file.  These checks can be classified into two levels: record
+    and file.  The checks that each record has to pass are defined in the check
+    function below.  As for the file level checks, it is enough to check for
+    them with the first record.  For example, it is sufficent to check if the
+    first record is in a binary format to ascertain if the file is in the
+    binary format.  Finally, since we are reading the records from an iterator
+    of lines, the reading process has been placed in a try block to gracefully
+    raise an Incomplete Record error in case the record is incomplete.
+
     """
+
+    def suppress_context(exc):
+        """Hide the secondary cause/context of the exception raised.
+
+        If an exception is caught in a try block, it has a context associated
+        with it.  In Python 3, this context and the attached 'During the
+        handling of this exception, another exception occurred' can be avoided
+        by raising the exception from None: raise ValueError('Error') from None
+        but this is not allowed in Python 2.  This function provides a more
+        uniform way to suppress the context for both Python 2 and 3.
+        """
+        exc.__cause__ = None
+        return exc
+
+    def check(line_1, line_2, line_3, line_4):
+        """Perform checks to test the validity of FASTQ records.
+
+        The FASTQ records are expected to meet some format requirements which
+        are checked here.  The first line of the record must begin with a '@'.
+        The second line, which is the read sequence, must not have any white
+        space within the sequence. Next, the length of the read sequence and
+        the quality sequence must be equal.
+        """
+
+        # Record level check 1: Check if start of title line is @
+        if line_1[0] != "@":
+            raise ValueError("FASTQ records should start with '@' character.")
+        # Record level check 2: Check if start of second title line is +
+        if line_3[0] != "+":
+        # if line_3 == "":
+            raise ValueError("Quality title should start with '+' character.")
+        # Record level check 3: If quality caption exists, check for equality
+        second_title = line_3[1:].rstrip()
+        if second_title and second_title != line_1[1:].rstrip():
+            raise ValueError("Sequence and quality captions differ.")
+        # Record level check 4: Ensure there is no white space in the sequence
+        if " " in line_2 or "\t" in line_2:
+            raise ValueError("Whitespace is not allowed in the sequence.")
+        # Record level check 5: Ensure the sequence and quality are of same length
+        if len(line_2) != len(line_4):
+            raise ValueError("Lengths of sequence and quality values differ "
+                             " for %s (%i and %i)."
+                             % (line_1[1:], len(line_2), len(line_4)))
+
+    # File level check 1: Ensure the file is not empty
     try:
-        first_line_1 = next(handle).rstrip()
+        first_1 = next(handle).rstrip()
     except StopIteration as e:
         return
-    try:
-        first_line_2 = next(handle).rstrip()
-        first_line_3 = next(handle).rstrip()
-        first_line_4 = next(handle).rstrip()
-    except StopIteration as e:
-        raise ValueError('Incomplete record encountered')
-
-    # check if file is in binary format
-    if first_line_1[0].isdigit():
+    # File level check 2: check if file is in binary format
+    if first_1[0].isdigit():
         raise ValueError("Is this handle in binary mode not text mode?")
-    # Check if start of title line is @
-    if first_line_1[0] != "@":
-        raise ValueError(
-            "Records in Fastq files should start with '@' character.")
-    # Ensure there is no white space in the sequence
-    if " " in first_line_2 or "\t" in first_line_2:
-        raise ValueError("Whitespace is not allowed in the sequence.")
-    # Ensure the sequence and quality are of same length
-    if len(first_line_2) != len(first_line_4):
-        raise ValueError("Lengths of sequence and quality values differs "
-                         " for %s (%i and %i)."
-                         % (first_line_1[1:], len(first_line_2), len(first_line_4)))
-    # Return the record and then continue
-    yield (first_line_1[1:], first_line_2, first_line_4)
+    
+    # Record level check 0: Ensure the first record is complete
+    try:
+        first_2 = next(handle).rstrip()
+        first_3 = next(handle).rstrip()
+        first_4 = next(handle).rstrip()
+    except StopIteration as e:
+        raise suppress_context(ValueError('Incomplete record encountered'))
+    # Record level checks 1, 2, 3, 4, 5: Defined within check()
+    check(first_1, first_2, first_3, first_4)
+    yield (first_1[1:], first_2, first_4)
 
-    for line in handle:
-        try:
-            line_1 = line.rstrip()
-            line_2 = next(handle).rstrip()
-            line_3 = next(handle).rstrip()
-            line_4 = next(handle).rstrip()
-
-            # Check if start of title line is @
-            if line_1[0] != "@":
-                raise ValueError(
-                    "Records in Fastq files should start with '@' character.")
-            # Ensure there is no white space in the sequence
-            if " " in line_2 or "\t" in line_2:
-                raise ValueError("Whitespace is not allowed in the sequence.")
-            # Ensure the sequence and quality are of same length
-            if len(line_2) != len(line_4):
-                raise ValueError("Lengths of sequence and quality values differs "
-                                 " for %s (%i and %i)."
-                                 % (line_1[1:], len(line_2, len(line_4))))
-            # Return the record and then continue
+    # Create four copies of each iterator to iterate over each independently
+    handles = tee(handle, 4)
+    # Record level check 0: Ensure the record is complete
+    try:
+        # zip the four iterators, one for each line, and iterate over them
+        for line_1, line_2, line_3, line_4 in zip_longest(
+            islice(handles[0], 0, None, 4), islice(handles[1], 1, None, 4),
+            islice(handles[2], 2, None, 4), islice(handles[3], 3, None, 4)):
+            
+            line_1, line_2 = line_1.rstrip(), line_2.rstrip()
+            line_3, line_4 = line_3.rstrip(), line_4.rstrip()
+            # Record level checks 1, 2, 3, 4: Defined within check()
+            check(line_1, line_2, line_3, line_4)
             yield (line_1[1:], line_2, line_4)
-        except StopIteration as e:
-            raise ValueError('Incomplete record encountered')
+    except AttributeError as e:
+        # If a record is incomplete, zip_longest uses None instead, which
+        # raises an AttributeError on using rstrip()
+        raise suppress_context(ValueError('Incomplete record encountered'))
 
 
 # TODO - Default to nucleotide or even DNA?
