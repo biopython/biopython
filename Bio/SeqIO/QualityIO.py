@@ -372,9 +372,9 @@ import warnings
 from Bio import BiopythonWarning, BiopythonParserWarning
 import sys
 from itertools import islice, tee
-if sys.version_info[0] == 3:
+try:
     from itertools import zip_longest
-if sys.version_info[0] == 2:
+except ImportError:
     from itertools import izip_longest as zip_longest
 
 # define score offsets. See discussion for differences between Sanger and
@@ -834,7 +834,6 @@ def FastqStrictIterator(handle):
     raise an Incomplete Record error in case the record is incomplete.
 
     """
-
     def suppress_context(exc):
         """Hide the secondary cause/context of the exception raised.
 
@@ -857,13 +856,11 @@ def FastqStrictIterator(handle):
         space within the sequence. Next, the length of the read sequence and
         the quality sequence must be equal.
         """
-
         # Record level check 1: Check if start of title line is @
         if line_1[0] != "@":
             raise ValueError("FASTQ records should start with '@' character.")
         # Record level check 2: Check if start of second title line is +
         if line_3[0] != "+":
-        # if line_3 == "":
             raise ValueError("Quality title should start with '+' character.")
         # Record level check 3: If quality caption exists, check for equality
         second_title = line_3[1:].rstrip()
@@ -886,7 +883,7 @@ def FastqStrictIterator(handle):
     # File level check 2: check if file is in binary format
     if first_1[0].isdigit():
         raise ValueError("Is this handle in binary mode not text mode?")
-    
+
     # Record level check 0: Ensure the first record is complete
     try:
         first_2 = next(handle).rstrip()
@@ -904,9 +901,9 @@ def FastqStrictIterator(handle):
     try:
         # zip the four iterators, one for each line, and iterate over them
         for line_1, line_2, line_3, line_4 in zip_longest(
-            islice(handles[0], 0, None, 4), islice(handles[1], 1, None, 4),
-            islice(handles[2], 2, None, 4), islice(handles[3], 3, None, 4)):
-            
+                islice(handles[0], 0, None, 4), islice(handles[1], 1, None, 4),
+                islice(handles[2], 2, None, 4), islice(handles[3], 3, None, 4)):
+
             line_1, line_2 = line_1.rstrip(), line_2.rstrip()
             line_3, line_4 = line_3.rstrip(), line_4.rstrip()
             # Record level checks 1, 2, 3, 4: Defined within check()
