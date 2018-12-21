@@ -10,7 +10,7 @@
 """Unit tests for the Bio.PDB.StructureAlignment module."""
 
 import unittest
-
+import warnings
 from Bio.PDB import StructureAlignment
 from Bio.PDB import PDBParser
 from Bio import AlignIO
