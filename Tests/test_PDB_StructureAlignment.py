@@ -37,7 +37,6 @@ class StructureAlignTests(unittest.TestCase):
         m1 = s1[0]
         m2 = s2[0]
         al = StructureAlignment(records, m1, m2)
-        
         self.assertFalse(al.map12 == al.map21)
         self.assertTrue(len(al.map12), 566)
         self.assertTrue(len(al.map21), 70)
