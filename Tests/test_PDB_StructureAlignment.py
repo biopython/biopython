@@ -13,6 +13,7 @@ import unittest
 import warnings
 from Bio.PDB import StructureAlignment
 from Bio.PDB import PDBParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio import AlignIO
 
 
