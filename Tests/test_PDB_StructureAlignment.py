@@ -34,7 +34,7 @@ class StructureAlignTests(unittest.TestCase):
         m2 = s2[0]
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
-             al = StructureAlignment(records, m1, m2)
+            al = StructureAlignment(records, m1, m2)
             self.assertEqual(len(w), 3, w)      
         self.assertFalse(al.map12 == al.map21)
         self.assertTrue(len(al.map12), 566)
