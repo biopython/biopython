@@ -863,8 +863,7 @@ def FastqStrictIterator(handle):
         if line_3[0] != "+":
             raise ValueError("Quality title should start with '+' character.")
         # Record level check 3: If quality caption exists, check for equality
-        second_title = line_3[1:].rstrip()
-        if second_title and second_title != line_1[1:].rstrip():
+        if line_3[1:-1] and line_3[1:] != line_1[1:]:
             raise ValueError("Sequence and quality captions differ.")
         # Record level check 4: Ensure there is no white space in the sequence
         if " " in line_2 or "\t" in line_2:
@@ -873,11 +872,11 @@ def FastqStrictIterator(handle):
         if len(line_2) != len(line_4):
             raise ValueError("Lengths of sequence and quality values differ "
                              " for %s (%i and %i)."
-                             % (line_1[1:], len(line_2), len(line_4)))
+                             % (line_1[1:-1], len(line_2), len(line_4)))
 
     # File level check 1: Ensure the file is not empty
     try:
-        first_1 = next(handle).rstrip()
+        first_1 = next(handle)
     except StopIteration as e:
         return
     # File level check 2: check if file is in binary format
@@ -887,31 +886,27 @@ def FastqStrictIterator(handle):
     # Record level check 0: Ensure the first record is complete
     try:
         first_2 = next(handle).rstrip()
-        first_3 = next(handle).rstrip()
+        first_3 = next(handle)
         first_4 = next(handle).rstrip()
     except StopIteration as e:
         raise suppress_context(ValueError('Incomplete record encountered'))
     # Record level checks 1, 2, 3, 4, 5: Defined within check()
     check(first_1, first_2, first_3, first_4)
-    yield (first_1[1:], first_2, first_4)
+    yield (first_1[1:-1], first_2, first_4)
 
-    # Create four copies of each iterator to iterate over each independently
-    handles = tee(handle, 4)
     # Record level check 0: Ensure the record is complete
     try:
-        # zip the four iterators, one for each line, and iterate over them
+        # zip the iterators, one for each line, and iterate over them
         for line_1, line_2, line_3, line_4 in zip_longest(
-                islice(handles[0], 0, None, 4), islice(handles[1], 1, None, 4),
-                islice(handles[2], 2, None, 4), islice(handles[3], 3, None, 4)):
-
-            line_1, line_2 = line_1.rstrip(), line_2.rstrip()
-            line_3, line_4 = line_3.rstrip(), line_4.rstrip()
-            # Record level checks 1, 2, 3, 4: Defined within check()
+                handle, handle, handle, handle):
+            # Avoid stripping newlines from line 1 and line 3 for speed
+            line_2, line_4 = line_2.rstrip(), line_4.rstrip()
+            # Record level checks 1, 2, 3, 4, 5: Defined within check()
             check(line_1, line_2, line_3, line_4)
-            yield (line_1[1:], line_2, line_4)
+            yield (line_1[1:-1], line_2, line_4)
     except AttributeError as e:
-        # If a record is incomplete, zip_longest uses None instead, which
-        # raises an AttributeError on using rstrip()
+        # If a record is incomplete, zip_longest uses None as the default
+        # fillvalue instead, which raises an AttributeError on using rstrip()
         raise suppress_context(ValueError('Incomplete record encountered'))
 
 
