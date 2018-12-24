@@ -370,8 +370,7 @@ from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 from math import log
 import warnings
 from Bio import BiopythonWarning, BiopythonParserWarning
-import sys
-from itertools import islice, tee
+from itertools import chain
 try:
     from itertools import zip_longest
 except ImportError:
@@ -834,19 +833,6 @@ def FastqStrictIterator(handle):
     raise an Incomplete Record error in case the record is incomplete.
 
     """
-    def suppress_context(exc):
-        """Hide the secondary cause/context of the exception raised.
-
-        If an exception is caught in a try block, it has a context associated
-        with it.  In Python 3, this context and the attached 'During the
-        handling of this exception, another exception occurred' can be avoided
-        by raising the exception from None: raise ValueError('Error') from None
-        but this is not allowed in Python 2.  This function provides a more
-        uniform way to suppress the context for both Python 2 and 3.
-        """
-        exc.__cause__ = None
-        return exc
-
     def check(line_1, line_2, line_3, line_4):
         """Perform checks to test the validity of FASTQ records.
 
@@ -883,31 +869,29 @@ def FastqStrictIterator(handle):
     if first_1[0].isdigit():
         raise ValueError("Is this handle in binary mode not text mode?")
 
-    # Record level check 0: Ensure the first record is complete
-    try:
-        first_2 = next(handle).rstrip()
-        first_3 = next(handle)
-        first_4 = next(handle).rstrip()
-    except StopIteration as e:
-        raise suppress_context(ValueError('Incomplete record encountered'))
-    # Record level checks 1, 2, 3, 4, 5: Defined within check()
-    check(first_1, first_2, first_3, first_4)
-    yield (first_1[1:-1], first_2, first_4)
-
-    # Record level check 0: Ensure the record is complete
-    try:
-        # zip the iterators, one for each line, and iterate over them
-        for line_1, line_2, line_3, line_4 in zip_longest(
-                handle, handle, handle, handle):
+    # Reset the handle
+    handle = chain([first_1], handle)
+    # zip the iterators, one for each line, and iterate over them
+    for line_1, line_2, line_3, line_4 in zip_longest(
+            handle, handle, handle, handle):
+        # Record level check 0: Ensure the record is complete
+        try:
             # Avoid stripping newlines from line 1 and line 3 for speed
             line_2, line_4 = line_2.rstrip(), line_4.rstrip()
-            # Record level checks 1, 2, 3, 4, 5: Defined within check()
-            check(line_1, line_2, line_3, line_4)
-            yield (line_1[1:-1], line_2, line_4)
-    except AttributeError as e:
-        # If a record is incomplete, zip_longest uses None as the default
-        # fillvalue instead, which raises an AttributeError on using rstrip()
-        raise suppress_context(ValueError('Incomplete record encountered'))
+        except AttributeError as e:
+            # If a record is incomplete, zip_longest uses None as the default
+            # fillvalue instead, which raises an AttributeError on using rstrip()
+            exc = ValueError('Incomplete record encountered')
+            # If an exception is caught in a try block, it has a context
+            # associated with it.  In Py3, this context and the attached
+            # 'During the handling of this exception, another exception occurred'
+            # can be avoided by raising the exception from None:
+            # raise ValueError('Error') from None but this is not allowed in Py2.
+            exc.__cause__ = None
+            raise exc
+        # Record level checks 1, 2, 3, 4, 5: Defined within check()
+        check(line_1, line_2, line_3, line_4)
+        yield (line_1[1:-1], line_2, line_4)
 
 
 # TODO - Default to nucleotide or even DNA?
