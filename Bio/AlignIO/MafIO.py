@@ -728,15 +728,48 @@ class MafIndex(object):
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
 
-        for seqid, seq in subseq.items():
-            seq = Seq(seq)
+        # previously, calling get_spliced(starts,ends,-1) with len(starts) > 1 and len(ends) > 1
+        # would return the exons in the wrong order, see issue #1308
+        # basically, the whole sequence would be reverse complemented; instead
+        # each exon has to be reverse complemented, and then concatenated to the resulting sequence
+        if strand != ref_first_strand:
+            #find how long each exon was
+            offsets = [end-start for start,end in zip(starts,ends)];
 
-            seq = seq if strand == ref_first_strand else seq.reverse_complement()
+            #find the starting position of each exon
+            positions = [0];
+            for offset in offsets:
+                positions.append(positions[-1] + offset);
 
-            result_multiseq.append(SeqRecord(seq,
-                                             id=seqid,
-                                             name=seqid,
-                                             description=""))
+            for seqid, seq in subseq.items():
+                temp_seq = "";
+
+                #split the sequence into exons
+                exons = [seq[i:j] for i,j in zip(positions,positions[1:])]
+
+                for exon in exons:
+                    #convert exon (string) to seq in order to reverse and complement it
+                    seq = Seq(exon).reverse_complement();
+                    #then concatenate it to the previous ones
+                    temp_seq += str(seq);
+
+                seq = Seq(temp_seq);
+                result_multiseq.append(SeqRecord(seq,
+                                                 id=seqid,
+                                                 name=seqid,
+                                                 description=""))
+
+        else:
+            for seqid, seq in subseq.items():
+
+                seq = Seq(seq);
+
+                seq = seq;
+
+                result_multiseq.append(SeqRecord(seq,
+                                                 id=seqid,
+                                                 name=seqid,
+                                                 description=""))
 
         return MultipleSeqAlignment(result_multiseq)
 
