@@ -546,6 +546,61 @@ if sqlite3:
             for seq_id, sequence in correct_sequences.items():
                 self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
 
+        def test_correct_spliced_sequences_negative_strand(self):
+            """Checking that spliced sequences are correct (negative strand)
+
+            We get spliced alignements from following MAF blocks
+            and check that the sequences are correct:
+
+            a score=19159.000000
+            s mm9.chr10                         3014644 45 + 129993255 CCTGTACC---CTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTG
+            s hg18.chr6                        15870786 46 - 170899992 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            i hg18.chr6                        I 9085 C 0
+            s panTro2.chr6                     16389355 46 - 173908612 CCTATACCTTTCTTTTATGAGAA-TTTTGTTTTAATCCTAAAC-TTTT
+            q panTro2.chr6                                             99999999999999999999999-9999999999999999999-9999
+            i panTro2.chr6                     I 9106 C 0
+            s calJac1.Contig6394                   6182 46 +    133105 CCTATACCTTTCTTTCATGAGAA-TTTTGTTTGAATCCTAAAC-TTTT
+            i calJac1.Contig6394               N 0 C 0
+            s loxAfr1.scaffold_75566               1167 34 -     10574 ------------TTTGGTTAGAA-TTATGCTTTAATTCAAAAC-TTCC
+            q loxAfr1.scaffold_75566                                   ------------99999699899-9999999999999869998-9997
+            i loxAfr1.scaffold_75566           N 0 C 0
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e otoGar1.scaffold_334.1-359464      181217 2931 -    359464 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
+
+            a score=40840.000000
+            s mm9.chr10                         3014689 53 + 129993255 GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCT-TTGGAAAGAGTTG
+            s hg18.chr6                        15870832 53 - 170899992 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            i hg18.chr6                        C 0 I 401
+            s panTro2.chr6                     16389401 53 - 173908612 GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTT-TGGGAAATAGTGG
+            q panTro2.chr6                                             9999999999999999999999999999999999999999-9999999999999
+            i panTro2.chr6                     C 0 I 400
+            s calJac1.Contig6394                   6228 53 +    133105 GGGATCATAAGCCATTTAATCTGTGAAATGTGAAATCTTT-TGGGAAACAGTGG
+            i calJac1.Contig6394               C 0 I 2
+            s otoGar1.scaffold_334.1-359464      184148 52 -    359464 GGAAGCATAAACT-TTTAATCTATGAAATATCAAATCACT-TGGGCAATAGCTG
+            q otoGar1.scaffold_334.1-359464                            7455455669566-99665699769895555689997599-9984787795599
+            i otoGar1.scaffold_334.1-359464    I 2931 I 2
+            s loxAfr1.scaffold_75566               1201 54 -     10574 GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG
+            q loxAfr1.scaffold_75566                                   899989799999979999999999999999797999999999999999999999
+            i loxAfr1.scaffold_75566           C 0 I 2
+            e tupBel1.scaffold_114895.1-498454   167376 4145 -    498454 I
+            e echTel1.scaffold_288249             87661 7564 +    100002 I
+            e ponAbe2.chr6                     16161448 8044 - 174210431 I
+            """
+
+            ali = self.idx.get_spliced([3014644, 3014689], [3014644 + 45, 3014689 + 53], -1)
+            seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
+            correct_sequences = {
+                "mm9.chr10": "CAAACTTTTAACACTGAAACAAAAATTCTCACCAAAGGGTACAGGCAACTCTTTCCAAAGGGACAAGACATTTAGCAGATTTAGAGTTTTATGCTCCC",
+                "hg18.chr6": "AAAAGTTTAGGATTAAAACAAAATTCTCATAAAAGAAAGGTATAGGCCACTATTTCCCAAAAGATTAGATATTTCACAGATTAAATGGTTTATGATCCC",
+                "panTro2.chr6": "AAAAGTTTAGGATTAAAACAAAATTCTCATAAAAGAAAGGTATAGGCCACTATTTCCCAAAAGATTAGATATTTCACAGATTAAATGGTTTATGATCCC",
+                "calJac1.Contig6394": "AAAAGTTTAGGATTCAAACAAAATTCTCATGAAAGAAAGGTATAGGCCACTGTTTCCCAAAAGATTTCACATTTCACAGATTAAATGGCTTATGATCCC",
+                "otoGar1.scaffold_334.1-359464": "CAGCTATTGCCCAAGTGATTTGATATTTCATAGATTAAAAGTTTATGCTTCC",
+                "loxAfr1.scaffold_75566": "GGAAGTTTTGAATTAAAGCATAATTCTAACCAAACAGCTTTTTCCCCTGAAGATTTGGCATTTCGCAGACTAAATGGTTTATACTCCC"}
+            for seq_id, sequence in correct_sequences.items():
+                self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
+
     class TestSearchBadMAF(unittest.TestCase):
         """Test index searching on an incorrectly-formatted MAF."""
 
