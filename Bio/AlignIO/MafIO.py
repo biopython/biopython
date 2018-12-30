@@ -633,8 +633,10 @@ class MafIndex(object):
                                          self._target_seqname)
                     # length including gaps (i.e. alignment length)
                     rec_length = len(seqrec)
+
                     rec_start = seqrec.annotations["start"]
                     ungapped_length = seqrec.annotations["size"]
+
                     # inclusive end in zero-based coordinates of the reference
                     rec_end = rec_start + ungapped_length - 1
                     # This is length in terms of actual letters in the reference
@@ -732,20 +734,35 @@ class MafIndex(object):
         # would return the exons in the wrong order, see issue #1308
         # basically, the whole sequence would be reverse complemented; instead
         # each exon has to be reverse complemented, and then concatenated to the resulting sequence
+
         if strand != ref_first_strand:
-            # find how long each exon was
+
+            # find how many bases are in each exon
             offsets = [end - start for start, end in zip(starts, ends)]
 
-            # find the starting position of each exon
+            # contains positions where to split
             positions = [0]
+
+            # this is reference sequence
+            ref_seq = subseq[self._target_seqname]
+
+            # find the positions where to split
+            index = 0
             for offset in offsets:
-                positions.append(positions[-1] + offset)
+                count_bases = 0
+                for element in ref_seq:
+                    if element == 'A' or element == 'C' or element == 'G' or element == 'T':
+                        count_bases += 1
+                    index += 1
+                    if count_bases == offset:
+                        positions.append(index)
 
             for seqid, seq in subseq.items():
                 temp_seq = ""
 
                 # split the sequence into exons
                 exons = [seq[i:j] for i, j in zip(positions, positions[1:])]
+
                 for exon in exons:
                     # convert exon (string) to seq in order to reverse and complement it
                     seq = Seq(exon).reverse_complement()
