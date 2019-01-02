@@ -67,6 +67,12 @@ class MMCIFParser(object):
 
     # Private methods
 
+    def _ensure_list(self, val):
+        if isinstance(val, list):
+            return val
+        else:
+            return [val]
+
     def _build_structure(self, structure_id):
 
         # two special chars as placeholders in the mmCIF format
@@ -99,12 +105,12 @@ class MMCIFParser(object):
             # Invalid model number (malformed file)
             raise PDBConstructionException("Invalid model number")
         try:
-            aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
-            aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
-            aniso_u13 = mmcif_dict["_atom_site_anisotrop.U[1][3]"]
-            aniso_u22 = mmcif_dict["_atom_site_anisotrop.U[2][2]"]
-            aniso_u23 = mmcif_dict["_atom_site_anisotrop.U[2][3]"]
-            aniso_u33 = mmcif_dict["_atom_site_anisotrop.U[3][3]"]
+            aniso_u11 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[1][1]"])
+            aniso_u12 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[1][2]"])
+            aniso_u13 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[1][3]"])
+            aniso_u22 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[2][2]"])
+            aniso_u23 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[2][3]"])
+            aniso_u33 = self._ensure_list(mmcif_dict["_atom_site_anisotrop.U[3][3]"])
             aniso_flag = 1
         except KeyError:
             # no anisotropic B factors
