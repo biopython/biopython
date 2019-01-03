@@ -695,8 +695,8 @@ class GenBankWriter(_InsdcWriter):
                                  'expected position:\n' + line)
 
             if not (splitline[4].strip() == ""
-                    or 'DNA' in line[47:54].strip().upper()
-                    or 'RNA' in line[47:54].strip().upper()):
+                    or 'DNA' in splitline[4].strip().upper()
+                    or 'RNA' in splitline[4].strip().upper()):
                 raise ValueError('LOCUS line does not contain valid '
                                  'sequence type (DNA, RNA, ...):\n' + line)
 
