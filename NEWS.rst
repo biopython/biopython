@@ -19,6 +19,13 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Bernhard Thiel
+- Lenna Peterson
+- Peter Cock
+
 18 December 2018: Biopython 1.73
 ================================
 
