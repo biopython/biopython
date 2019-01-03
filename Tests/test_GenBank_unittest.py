@@ -432,7 +432,7 @@ KEYWORDS    """ in gb, gb)
             handle.seek(0)
             gb = SeqIO.read(handle, "gb")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
-            
+
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines"""
         # Create file
@@ -469,6 +469,7 @@ KEYWORDS    """ in gb, gb)
             remove(path.join("GenBank", "long_header_genbank_test.gb"))
         if path.exists(path.join("GenBank", "long_header_genbank_test_out.gb")):
             remove(path.join("GenBank", "long_header_genbank_test_out.gb"))
+
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
