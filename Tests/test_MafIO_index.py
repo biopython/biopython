@@ -656,9 +656,9 @@ if sqlite3:
 
             for seqrec.id in seq_dict_result.keys():
                 if seqrec.id in seq_dict1:
-                  seq_dict_result[seqrec.id] += seq_dict1[seqrec.id]
+                    seq_dict_result[seqrec.id] += seq_dict1[seqrec.id]
                 if seqrec.id in seq_dict2:
-                  seq_dict_result[seqrec.id] += seq_dict2[seqrec.id]
+                    seq_dict_result[seqrec.id] += seq_dict2[seqrec.id]
 
             for seq_id, sequence in seq_dict_result.items():
                 self.assertEqual(seq_dict_result[seq_id].ungap('-'), seq_dict3[seq_id].ungap('-'))
@@ -718,9 +718,9 @@ if sqlite3:
 
             for seqrec.id in seq_dict_result.keys():
                 if seqrec.id in seq_dict1:
-                  seq_dict_result[seqrec.id] += seq_dict1[seqrec.id]
+                    seq_dict_result[seqrec.id] += seq_dict1[seqrec.id]
                 if seqrec.id in seq_dict2:
-                  seq_dict_result[seqrec.id] += seq_dict2[seqrec.id]
+                    seq_dict_result[seqrec.id] += seq_dict2[seqrec.id]
 
             for seq_id, sequence in seq_dict_result.items():
                 self.assertEqual(seq_dict_result[seq_id].ungap('-'), seq_dict3[seq_id].ungap('-'))
