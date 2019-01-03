@@ -1177,6 +1177,15 @@ class GenBankScanner(InsdcScanner):
         the column based layout.
 
         We also try to cope with GenBank like files with partial LOCUS lines.
+
+        As of release 229.0, the columns are no longer strictly in a given
+        position. See:
+          Historically, the LOCUS line has had a fixed length and its elements
+          have been presented at specific column positions...
+          But with the anticipated increases in the lengths of accession
+          numbers, and the advent of sequences that are gigabases long,
+          maintaining the column positions will not always be possible and the
+          overall length of the LOCUS line could exceed 79 characters.
         """
         #####################################
         # LOCUS line                        #
@@ -1387,6 +1396,8 @@ class GenBankScanner(InsdcScanner):
                 and line.split()[5] in ('linear', 'circular'):
             # Cope with invalidly spaced GenBank LOCUS lines like
             # LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
+            # This will also cope with extra long accession numbers and
+            # sequence lengths
             splitline = line.split()
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
@@ -1394,7 +1405,8 @@ class GenBankScanner(InsdcScanner):
             consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
-            warnings.warn("Attempting to parse malformed locus line:\n%r\n"
+            warnings.warn("Attempting to parse locus line that is extra "
+                          "long or malformed  :\n%r\n"
                           "Found locus %r size %r residue_type %r\n"
                           "Some fields may be wrong."
                           % (line, splitline[1], splitline[2], splitline[4]),

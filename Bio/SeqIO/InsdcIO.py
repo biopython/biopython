@@ -602,9 +602,14 @@ class GenBankWriter(_InsdcWriter):
         if len(locus) > 16:
             if len(locus) + 1 + len(str(len(record))) > 28:
                 # Locus name and record length to long to squeeze in.
-                raise ValueError("Locus identifier %r is too long" % locus)
-            else:
-                warnings.warn("Stealing space from length field to allow long name in LOCUS line", BiopythonWarning)
+                # Per updated GenBank standard (Dec 15, 2018) 229.0
+                # the Locus identifier can be any length, and a space
+                # is added after the identifier to keep the identifier
+                # and length fields separated
+                warnings.warn("Increasing length of locus line to allow "
+                              "long name. This will result in fields that "
+                              "are not in usual positions.", BiopythonWarning)
+
         if len(locus.split()) > 1:
             # locus could be unicode, and u'with space' versus 'with space'
             # causes trouble with doctest or print-and-compare tests, so
@@ -615,7 +620,10 @@ class GenBankWriter(_InsdcWriter):
         if len(record) > 99999999999:
             # Currently GenBank only officially support up to 350000, but
             # the length field can take eleven digits
-            raise ValueError("Sequence too long!")
+            warnings.warn("The sequence length is very long. The LOCUS "
+                          "line will be increased in length to compensate. "
+                          "This may cause unexpected behavior.",
+                          BiopythonWarning)
 
         # Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
@@ -659,10 +667,16 @@ class GenBankWriter(_InsdcWriter):
 
         division = self._get_data_division(record)
 
-        name_length = str(len(record)).rjust(28)
-        name_length = locus + name_length[len(locus):]
-        assert len(name_length) == 28, name_length
-        assert " " in name_length, name_length
+        # Accommodate longer header, with long accessions and lengths
+        if len(locus) > 16 and len(str(len(record))) > (11 - (len(locus) - 16)):
+            name_length = locus + ' ' + str(len(record))
+
+        # This is the older, standard 80 position header
+        else:
+            name_length = str(len(record)).rjust(28)
+            name_length = locus + name_length[len(locus):]
+            assert len(name_length) == 28, name_length
+            assert " " in name_length, name_length
 
         assert len(units) == 2
         assert len(division) == 3
@@ -673,49 +687,66 @@ class GenBankWriter(_InsdcWriter):
                topology,
                division,
                self._get_date(record))
-        assert len(line) == 79 + 1, repr(line)  # plus one for new line
+        # Extra long header
+        if len(line) > 80:
+            splitline = line.split()
+            if splitline[3] not in ['bp', 'aa']:
+                raise ValueError('LOCUS line does not contain size units at '
+                                 'expected position:\n' + line)
 
-        # We're bending the rules to allow an identifier over 16 characters
-        # if we can steal spaces from the length field:
-        # assert line[12:28].rstrip() == locus, \
-        #     'LOCUS line does not contain the locus at the expected position:\n' + line
-        # assert line[28:29] == " "
-        # assert line[29:40].lstrip() == str(len(record)), \
-        #     'LOCUS line does not contain the length at the expected position:\n' + line
-        assert line[12:40].split() == [locus, str(len(record))], line
+            if not (splitline[4].strip() == ""
+                    or 'DNA' in line[47:54].strip().upper()
+                    or 'RNA' in line[47:54].strip().upper()):
+                raise ValueError('LOCUS line does not contain valid '
+                                 'sequence type (DNA, RNA, ...):\n' + line)
 
-        # Tests copied from Bio.GenBank.Scanner
-        if line[40:44] not in [' bp ', ' aa ']:
-            raise ValueError('LOCUS line does not contain size units at '
-                             'expected position:\n' + line)
-        if line[44:47] not in ['   ', 'ss-', 'ds-', 'ms-']:
-            raise ValueError('LOCUS line does not have valid strand '
-                             'type (Single stranded, ...):\n' + line)
-        if not (line[47:54].strip() == ""
-                or 'DNA' in line[47:54].strip().upper()
-                or 'RNA' in line[47:54].strip().upper()):
-            raise ValueError('LOCUS line does not contain valid '
-                             'sequence type (DNA, RNA, ...):\n' + line)
-        if line[54:55] != ' ':
-            raise ValueError('LOCUS line does not contain space at '
-                             'position 55:\n' + line)
-        if line[55:63].strip() not in ['', 'linear', 'circular']:
-            raise ValueError('LOCUS line does not contain valid '
-                             'entry (linear, circular, ...):\n' + line)
-        if line[63:64] != ' ':
-            raise ValueError('LOCUS line does not contain space at '
-                             'position 64:\n' + line)
-        if line[67:68] != ' ':
-            raise ValueError('LOCUS line does not contain space at '
-                             'position 68:\n' + line)
-        if line[70:71] != '-':
-            raise ValueError('LOCUS line does not contain - at '
-                             'position 71 in date:\n' + line)
-        if line[74:75] != '-':
-            raise ValueError('LOCUS line does not contain - at '
-                             'position 75 in date:\n' + line)
+            self.handle.write(line)
 
-        self.handle.write(line)
+        # 80 position header
+        else:
+            assert len(line) == 79 + 1, repr(line)  # plus one for new line
+
+            # We're bending the rules to allow an identifier over 16 characters
+            # if we can steal spaces from the length field:
+            # assert line[12:28].rstrip() == locus, \
+            #     'LOCUS line does not contain the locus at the expected position:\n' + line
+            # assert line[28:29] == " "
+            # assert line[29:40].lstrip() == str(len(record)), \
+            #     'LOCUS line does not contain the length at the expected position:\n' + line
+            assert line[12:40].split() == [locus, str(len(record))], line
+
+            # Tests copied from Bio.GenBank.Scanner
+            if line[40:44] not in [' bp ', ' aa ']:
+                raise ValueError('LOCUS line does not contain size units at '
+                                 'expected position:\n' + line)
+            if line[44:47] not in ['   ', 'ss-', 'ds-', 'ms-']:
+                raise ValueError('LOCUS line does not have valid strand '
+                                 'type (Single stranded, ...):\n' + line)
+            if not (line[47:54].strip() == ""
+                    or 'DNA' in line[47:54].strip().upper()
+                    or 'RNA' in line[47:54].strip().upper()):
+                raise ValueError('LOCUS line does not contain valid '
+                                 'sequence type (DNA, RNA, ...):\n' + line)
+            if line[54:55] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 55:\n' + line)
+            if line[55:63].strip() not in ['', 'linear', 'circular']:
+                raise ValueError('LOCUS line does not contain valid '
+                                 'entry (linear, circular, ...):\n' + line)
+            if line[63:64] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 64:\n' + line)
+            if line[67:68] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 68:\n' + line)
+            if line[70:71] != '-':
+                raise ValueError('LOCUS line does not contain - at '
+                                 'position 71 in date:\n' + line)
+            if line[74:75] != '-':
+                raise ValueError('LOCUS line does not contain - at '
+                                 'position 75 in date:\n' + line)
+
+            self.handle.write(line)
 
     def _write_references(self, record):
         number = 0

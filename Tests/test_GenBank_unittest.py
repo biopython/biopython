@@ -5,7 +5,7 @@
 # as part of this package.
 
 import unittest
-from os import path
+from os import path, remove
 import warnings
 from datetime import datetime
 
@@ -294,15 +294,16 @@ KEYWORDS    """ in gb, gb)
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
         self.assertEqual(len(original), 1326)
+        # Acceptability of LOCUS line with length > 80 invalidates some of these tests
         for name, seq_len, ok in [
                 ("short", 1, True),
                 ("max_length_of_16", 1000, True),
                 ("overly_long_at_17", 1000, True),
                 ("excessively_long_at_22", 99999, True),
-                ("excessively_long_at_22", 100000, False),
+                # ("excessively_long_at_22", 100000, False),
                 ("pushing_the_limits_at_24", 999, True),
-                ("pushing_the_limits_at_24", 1000, False),
-                ("longest_possible_len_of_26", 10, False),  # 2 digits
+                # ("pushing_the_limits_at_24", 1000, False),
+                # ("longest_possible_len_of_26", 10, False),  # 2 digits
                 ("longest_possible_len_of_26", 9, True),  # 1 digit
                 ]:
             # Make the length match the desired target
@@ -431,7 +432,43 @@ KEYWORDS    """ in gb, gb)
             handle.seek(0)
             gb = SeqIO.read(handle, "gb")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
+            
+    def test_longer_locus_line(self):
+        """Check that we can read and write files with longer locus lines"""
+        # Create file
+        with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+            data = inhandle.readlines()
+            data[0] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
+        with open(path.join("GenBank", "long_header_genbank_test.gb"), 'w') as outfile:
+            outfile.writelines(data)
 
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                record = SeqIO.read(path.join("GenBank", "long_header_genbank_test.gb"), 'genbank')
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Attempting to parse locus line that is extra long or malformed  :\n"
+                                 "'LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\\n'\n"
+                                 "Found locus 'AZZZAA02123456789' size '10000000000' residue_type 'DNA'\n"
+                                 "Some fields may be wrong.")
+            else:
+                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            record = SeqIO.read(path.join("GenBank", "long_header_genbank_test.gb"), 'genbank')
+            SeqIO.write(record, path.join("GenBank", "long_header_genbank_test_out.gb"), 'genbank')
+
+            record_in = SeqIO.read(path.join("GenBank", "long_header_genbank_test_out.gb"), 'genbank')
+            self.assertEqual(record_in.id, "DS830848.1")
+            self.assertEqual(record_in.name, "AZZZAA02123456789")
+            self.assertEqual(len(record_in.seq), 10000000000)
+
+        # Clean up
+        if path.exists(path.join("GenBank", "long_header_genbank_test.gb")):
+            remove(path.join("GenBank", "long_header_genbank_test.gb"))
+        if path.exists(path.join("GenBank", "long_header_genbank_test_out.gb")):
+            remove(path.join("GenBank", "long_header_genbank_test_out.gb"))
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
@@ -453,6 +490,9 @@ class LineOneTests(unittest.TestCase):
              "linear", None, "INV", None),
             ("LOCUS       pEH010                  5743 bp    DNA     circular",
              "circular", "DNA", None, [BiopythonParserWarning]),
+            # This is a test of the format > 80 chars long
+            ("LOCUS       AZZZAA02123456789 1000000000 bp    DNA     linear   PRI 15-OCT-2018",
+             "linear", "DNA", "PRI", None)
         ]
         for (line, topo, mol_type, div, warning_list) in tests:
             with warnings.catch_warnings(record=True) as caught:
