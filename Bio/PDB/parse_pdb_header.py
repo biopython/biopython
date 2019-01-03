@@ -158,24 +158,24 @@ def _parse_remark_465(line):
                                               # context with missing res)
                 """)
     match = re.match(pattern, line, re.VERBOSE)
-    if match is not None:
-        residue = {}
-        if " " in match.group(1):
-            model, residue["res_name"] = match.group(1).split(" ")
-            residue["model"] = int(model)
-        else:
-            residue["model"] = None
-            residue["res_name"] = match.group(1)
-        residue["chain"] = match.group(2)
-        try:
-            residue["ssseq"] = int(match.group(3))
-        except ValueError:
-            residue["insertion"] = match.group(3)[-1]
-            residue["ssseq"] = int(match.group(3)[:-1])
-        else:
-            residue["insertion"] = None
-        return residue
-    return None
+    if match is None:
+        return None
+    residue = {}
+    if " " in match.group(1):
+        model, residue["res_name"] = match.group(1).split(" ")
+        residue["model"] = int(model)
+    else:
+        residue["model"] = None
+        residue["res_name"] = match.group(1)
+    residue["chain"] = match.group(2)
+    try:
+        residue["ssseq"] = int(match.group(3))
+    except ValueError:
+        residue["insertion"] = match.group(3)[-1]
+        residue["ssseq"] = int(match.group(3)[:-1])
+    else:
+        residue["insertion"] = None
+    return residue
 
 
 def _parse_pdb_header_list(header):
