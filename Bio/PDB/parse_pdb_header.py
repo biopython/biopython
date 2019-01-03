@@ -149,7 +149,7 @@ def _parse_remark_465(line):
         assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
     pattern = (r"""
                 (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
-                 [A-Z]?[A-Z]?[A-Z])           # Or only residue name with
+                 [A-Z]{1,3})                  # Or only residue name with
                                               # 1 (RNA) to 3 letters
                 \s ([A-Za-z0-9])              # A single character chain
                 \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
