@@ -1180,7 +1180,7 @@ class GenBankScanner(InsdcScanner):
 
         As of release 229.0, the columns are no longer strictly in a given
         position. See:
-        
+
         Historically, the LOCUS line has had a fixed length and its elements
         have been presented at specific column positions...
         But with the anticipated increases in the lengths of accession
