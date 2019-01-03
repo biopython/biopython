@@ -44,7 +44,7 @@ except ImportError:
     _sqlite = None
 
 from Bio.Alphabet import single_letter_alphabet
-from Bio.Seq import Seq
+from Bio.Seq import Seq, reverse_complement as _rc
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from .Interfaces import SequentialAlignmentWriter
@@ -761,13 +761,13 @@ class MafIndex(object):
                 temp_seq = ""
 
                 # split the sequence into exons
-                exons = [seq[i:j] for i, j in zip(positions, positions[1:])]
+                exons = [seq[exonstart:exonend] for exonstart, exonend in zip(positions, positions[1:])]
 
                 for exon in exons:
-                    # convert exon (string) to seq in order to reverse and complement it
-                    seq = Seq(exon).reverse_complement()
+                    # reverse and complement the exon
+                    seq = _rc(exon)
                     # then concatenate it to the previous ones
-                    temp_seq += str(seq)
+                    temp_seq += seq
 
                 seq = Seq(temp_seq)
                 result_multiseq.append(SeqRecord(seq,
