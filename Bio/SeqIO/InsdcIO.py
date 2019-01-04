@@ -618,8 +618,9 @@ class GenBankWriter(_InsdcWriter):
                 tmp = tmp[1:]
             raise ValueError("Invalid whitespace in %s for LOCUS line" % tmp)
         if len(record) > 99999999999:
-            # Currently GenBank only officially support up to 350000, but
-            # the length field can take eleven digits
+            # As of the GenBank release notes 229.0, the locus line can be
+            # any length. However, long locus lines may not be compatible
+            # with all software.
             warnings.warn("The sequence length is very long. The LOCUS "
                           "line will be increased in length to compensate. "
                           "This may cause unexpected behavior.",

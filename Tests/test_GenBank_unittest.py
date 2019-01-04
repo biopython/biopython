@@ -435,17 +435,20 @@ KEYWORDS    """ in gb, gb)
 
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines"""
-        # Create file
+        # Create example file from existing file
         with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
             data = inhandle.readlines()
             data[0] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
-        with open(path.join("GenBank", "long_header_genbank_test.gb"), 'w') as outfile:
-            outfile.writelines(data)
+
+        # Create memory file from modified genbank file
+        in_tmp = StringIO('w+t')
+        in_tmp.writelines(data)
+        in_tmp.seek(0)
 
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             try:
-                record = SeqIO.read(path.join("GenBank", "long_header_genbank_test.gb"), 'genbank')
+                record = SeqIO.read(in_tmp, 'genbank')
             except BiopythonParserWarning as e:
                 self.assertEqual(str(e), "Attempting to parse locus line that is extra long or malformed  :\n"
                                  "'LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\\n'\n"
@@ -456,19 +459,19 @@ KEYWORDS    """ in gb, gb)
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            record = SeqIO.read(path.join("GenBank", "long_header_genbank_test.gb"), 'genbank')
-            SeqIO.write(record, path.join("GenBank", "long_header_genbank_test_out.gb"), 'genbank')
+            in_tmp.seek(0)
+            record = SeqIO.read(in_tmp, 'genbank')
 
-            record_in = SeqIO.read(path.join("GenBank", "long_header_genbank_test_out.gb"), 'genbank')
+            # Create temporary output memory file
+            out_tmp = StringIO('w+t')
+            SeqIO.write(record, out_tmp, 'genbank')
+
+            # Check that the written file can be read back in
+            out_tmp.seek(0)
+            record_in = SeqIO.read(out_tmp, 'genbank')
             self.assertEqual(record_in.id, "DS830848.1")
             self.assertEqual(record_in.name, "AZZZAA02123456789")
             self.assertEqual(len(record_in.seq), 10000000000)
-
-        # Clean up
-        if path.exists(path.join("GenBank", "long_header_genbank_test.gb")):
-            remove(path.join("GenBank", "long_header_genbank_test.gb"))
-        if path.exists(path.join("GenBank", "long_header_genbank_test_out.gb")):
-            remove(path.join("GenBank", "long_header_genbank_test_out.gb"))
 
 
 class LineOneTests(unittest.TestCase):
