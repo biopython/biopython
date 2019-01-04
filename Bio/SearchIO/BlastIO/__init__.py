@@ -407,11 +407,17 @@ The blast-text parser provides the following object attributes:
    present as well. It is recommended that you use these instead of 'frames' directly.
 
 """
+import warnings
+from Bio import BiopythonWarning
 
 from .blast_tab import BlastTabParser, BlastTabIndexer, BlastTabWriter
 from .blast_xml import BlastXmlParser, BlastXmlIndexer, BlastXmlWriter
-from .blast_text import BlastTextParser
 
+# Suppress the NCBIStandalone depreciation warning when importing this module
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', r'.*Parsing BLAST plain text output '
+                            'file is not a well supported.*', BiopythonWarning)
+    from .blast_text import BlastTextParser
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
