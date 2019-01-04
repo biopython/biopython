@@ -10,8 +10,12 @@ import sys
 import unittest
 import warnings
 
-from Bio import BiopythonParserWarning
+from Bio import BiopythonParserWarning, BiopythonWarning
 from Bio.SearchIO import parse
+
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonWarning)
+    from Bio.SearchIO._legacy import NCBIStandalone
 
 
 # test case files are in the Blast directory
