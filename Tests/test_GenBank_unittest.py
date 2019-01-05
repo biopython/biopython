@@ -441,7 +441,7 @@ KEYWORDS    """ in gb, gb)
             data[0] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
 
         # Create memory file from modified genbank file
-        in_tmp = StringIO('w+t')
+        in_tmp = StringIO()
         in_tmp.writelines(data)
         in_tmp.seek(0)
 
@@ -463,7 +463,7 @@ KEYWORDS    """ in gb, gb)
             record = SeqIO.read(in_tmp, 'genbank')
 
             # Create temporary output memory file
-            out_tmp = StringIO('w+t')
+            out_tmp = StringIO()
             SeqIO.write(record, out_tmp, 'genbank')
 
             # Check that the written file can be read back in
