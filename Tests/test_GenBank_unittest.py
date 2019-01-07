@@ -518,6 +518,18 @@ KEYWORDS    """ in gb, gb)
                 self.assertEqual(record_in.name, "AZZZAA02123456789")
                 self.assertEqual(len(record_in.seq), 10000000000)
 
+            def read_longer_than_maxsize():
+                with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+                    data2 = inhandle.readlines()
+                    data2[0] = "LOCUS       AZZZAA02123456789 " + str(sys.maxsize + 1) + " bp    DNA     linear   PRI 15-OCT-2018\n"
+
+                long_in_tmp = StringIO()
+                long_in_tmp.writelines(data2)
+                long_in_tmp.seek(0)
+                record = SeqIO.read(long_in_tmp, 'genbank')
+
+            self.assertRaises(ValueError, read_longer_than_maxsize)
+
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
