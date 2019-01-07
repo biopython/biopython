@@ -1401,7 +1401,17 @@ class GenBankScanner(InsdcScanner):
             # sequence lengths
             splitline = line.split()
             consumer.locus(splitline[1])
-            consumer.size(splitline[2])
+            # Provide descriptive error message if the sequence is too long
+            # for python to handle
+            import sys
+            if int(splitline[2]) > sys.maxsize:
+                raise ValueError("Tried to load a sequence with a length %s, "
+                                 "your installation of python can only load "
+                                 "sesquences of length %s" % splitline[2],
+                                 sys.maxsize)
+            else:
+                consumer.size(splitline[2])
+
             consumer.residue_type(splitline[4])
             consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
