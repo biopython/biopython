@@ -1408,7 +1408,7 @@ class GenBankScanner(InsdcScanner):
                 raise ValueError("Tried to load a sequence with a length %s, "
                                  "your installation of python can only load "
                                  "sesquences of length %s" % (splitline[2],
-                                 sys.maxsize))
+                                                              sys.maxsize))
             else:
                 consumer.size(splitline[2])
 
