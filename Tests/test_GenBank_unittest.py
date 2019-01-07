@@ -450,7 +450,6 @@ KEYWORDS    """ in gb, gb)
             warnings.simplefilter("error", BiopythonParserWarning)
             try:
                 record = SeqIO.read(in_tmp, 'genbank')
-
             except BiopythonParserWarning as e:
                 self.assertEqual(str(e), "Attempting to parse locus line that is extra long or malformed  :\n"
                                  "'LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI 15-OCT-2018\\n'\n"
@@ -479,7 +478,8 @@ KEYWORDS    """ in gb, gb)
         def test_extremely_long_sequence(self):
             """Tests if extremely long sequences can be read.
 
-            This is only run if sys.maxsize > 2147483647"""
+            This is only run if sys.maxsize > 2147483647.
+            """
             # Create example file from existing file
             with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
                 data = inhandle.readlines()
