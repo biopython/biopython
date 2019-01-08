@@ -1179,14 +1179,15 @@ class GenBankScanner(InsdcScanner):
         We also try to cope with GenBank like files with partial LOCUS lines.
 
         As of release 229.0, the columns are no longer strictly in a given
-        position. See:
+        position. See GenBank format release notes:
 
-        Historically, the LOCUS line has had a fixed length and its elements
-        have been presented at specific column positions...
-        But with the anticipated increases in the lengths of accession
-        numbers, and the advent of sequences that are gigabases long,
-        maintaining the column positions will not always be possible and the
-        overall length of the LOCUS line could exceed 79 characters.
+            "Historically, the LOCUS line has had a fixed length and its
+            elements have been presented at specific column positions...
+            But with the anticipated increases in the lengths of accession
+            numbers, and the advent of sequences that are gigabases long,
+            maintaining the column positions will not always be possible and
+            the overall length of the LOCUS line could exceed 79 characters."
+
         """
         #####################################
         # LOCUS line                        #

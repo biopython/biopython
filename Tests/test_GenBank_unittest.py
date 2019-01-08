@@ -301,12 +301,11 @@ KEYWORDS    """ in gb, gb)
                 ("max_length_of_16", 1000, True),
                 ("overly_long_at_17", 1000, True),
                 ("excessively_long_at_22", 99999, True),
-                # ("excessively_long_at_22", 100000, False),
+                ("excessively_long_at_22", 100000, True),
                 ("pushing_the_limits_at_24", 999, True),
-                # ("pushing_the_limits_at_24", 1000, False),
-                # ("longest_possible_len_of_26", 10, False),  # 2 digits
-                ("longest_possible_len_of_26", 9, True),  # 1 digit
-                ]:
+                ("pushing_the_limits_at_24", 1000, True),
+                ("old_max_name_length_was_26", 10, True),  # 2 digits
+                ("old_max_name_length_was_26", 9, True)]:  # 1 digit
             # Make the length match the desired target
             record = original[:]
             # TODO - Implement Seq * int
@@ -329,8 +328,10 @@ KEYWORDS    """ in gb, gb)
             line = handle.readline()
             self.assertIn(" %s " % name, line)
             self.assertIn(" %i bp " % seq_len, line)
-            name_and_length = line[12:40]
-            self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
+            # Splitting based on whitespace rather than position due to
+            # updated GenBank specification
+            name_and_length = [line.split()[1], line.split()[2]]
+            self.assertEqual(name_and_length, [name, str(seq_len)], line)
             handle.seek(0)
             with warnings.catch_warnings():
                 # e.g. BiopythonParserWarning: GenBank LOCUS line
