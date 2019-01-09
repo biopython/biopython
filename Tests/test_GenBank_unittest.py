@@ -330,7 +330,7 @@ KEYWORDS    """ in gb, gb)
             self.assertIn(" %i bp " % seq_len, line)
             # Splitting based on whitespace rather than position due to
             # updated GenBank specification
-            name_and_length = [line.split()[1], line.split()[2]]
+            name_and_length = line.split()[1:3]
             self.assertEqual(name_and_length, [name, str(seq_len)], line)
             handle.seek(0)
             with warnings.catch_warnings():
