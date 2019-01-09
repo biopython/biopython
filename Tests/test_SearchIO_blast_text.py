@@ -7,13 +7,19 @@
 
 import os
 import unittest
+import warnings
 
 from Bio.SearchIO import parse
-
+from Bio import BiopythonWarning
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
 FMT = 'blast-text'
+
+# This prevents the NCBIStandalone usage warning from
+# printing to screen when running the test suite
+warnings.filterwarnings('ignore', r'Parsing BLAST plain text output '
+                        'file is not a well supported.*', BiopythonWarning)
 
 
 def get_file(filename):
@@ -34,6 +40,21 @@ class BaseBlastCases(unittest.TestCase):
 
 
 class BlastnCases(BaseBlastCases):
+    def test_000_unsupported_warning(self):
+        """Test that the 'unsupported' warning is generated."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonWarning)
+            try:
+                blast_file = get_file('text_2226_blastn_001.txt')
+                qresults = list(parse(blast_file, FMT))
+            except BiopythonWarning as e:
+                self.assertEqual(str(e),
+                                 "Parsing BLAST plain text output file is not "
+                                 "a well supported functionality anymore. "
+                                 "Consider generating your BLAST output for "
+                                 "parsing as XML or tabular format instead.")
+            else:
+                self.assertTrue(False, "Expected BiopythonWarning here on usage of NCBIStandalone.")
 
     def test_text_2226_blastn_001(self):
         """Test parsing blastn output (text_2226_blastn_001.txt)"""

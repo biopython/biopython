@@ -8,9 +8,12 @@ import unittest
 
 import warnings
 from Bio import BiopythonWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonWarning)
-    from Bio.SearchIO._legacy import NCBIStandalone
+from Bio.SearchIO._legacy import NCBIStandalone
+
+# This prevents the NCBIStandalone usage warning from
+# printing to screen when running the test suite
+warnings.filterwarnings('ignore', r'Parsing BLAST plain text output '
+                        'file is not a well supported.*', BiopythonWarning)
 
 
 class TestBlastRecord(unittest.TestCase):
