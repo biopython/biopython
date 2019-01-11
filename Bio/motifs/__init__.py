@@ -23,7 +23,7 @@ def create(instances, alphabet=None):
     return Motif(instances=instances, alphabet=alphabet)
 
 
-def parse(handle, format):
+def parse(handle, format, strict=True):
     """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
@@ -63,6 +63,9 @@ def parse(handle, format):
     GCCGGCGGCAGCTAAAAGGG
     GAGGCCGGGGAT
     CGACTCGTGCTTAGAAGG
+
+    If strict is True (default), the parser will issue a warning if the file
+    contents does not strictly comply with the specified file format.
     """
     format = format.lower()
     if format == "alignace":
@@ -83,7 +86,7 @@ def parse(handle, format):
         return record
     elif format == "transfac":
         from Bio.motifs import transfac
-        record = transfac.read(handle)
+        record = transfac.read(handle, strict)
         return record
     elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
@@ -93,7 +96,7 @@ def parse(handle, format):
         raise ValueError("Unknown format %s" % format)
 
 
-def read(handle, format):
+def read(handle, format, strict=True):
     """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
@@ -137,9 +140,12 @@ def read(handle, format):
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
+
+    If strict is True (default), the parser will issue a warning if the file
+    contents does not strictly comply with the specified file format.
     """
     format = format.lower()
-    motifs = parse(handle, format)
+    motifs = parse(handle, format, strict)
     if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
