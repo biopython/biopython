@@ -692,6 +692,7 @@ class DistanceTreeConstructor(TreeConstructor):
         min_i = 0
         min_j = 0
         inner_count = 0
+
         # special case for Minimum Alignment Matrices
         if len(dm) == 2:
             # minimum distance will always be [1,0]
@@ -706,52 +707,52 @@ class DistanceTreeConstructor(TreeConstructor):
             inner_clade.clades.append(clade2)
             clades[0] = inner_clade
             root = clades[0]
-        else:
-            while len(dm) > 2:
-                # calculate nodeDist
-                for i in range(0, len(dm)):
-                    node_dist[i] = 0
-                    for j in range(0, len(dm)):
-                        node_dist[i] += dm[i, j]
-                    node_dist[i] = node_dist[i] / (len(dm) - 2)
 
-                # find minimum distance pair
-                min_dist = dm[1, 0] - node_dist[1] - node_dist[0]
-                min_i = 0
-                min_j = 1
-                for i in range(1, len(dm)):
-                    for j in range(0, i):
-                        temp = dm[i, j] - node_dist[i] - node_dist[j]
-                        if min_dist > temp:
-                            min_dist = temp
-                            min_i = i
-                            min_j = j
+        while len(dm) > 2:
+            # calculate nodeDist
+            for i in range(0, len(dm)):
+                node_dist[i] = 0
+                for j in range(0, len(dm)):
+                    node_dist[i] += dm[i, j]
+                node_dist[i] = node_dist[i] / (len(dm) - 2)
 
-                # create clade
-                clade1 = clades[min_i]
-                clade2 = clades[min_j]
-                inner_count += 1
-                inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
-                inner_clade.clades.append(clade1)
-                inner_clade.clades.append(clade2)
-                # assign branch length
-                clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] -
-                                        node_dist[min_j]) / 2.0
-                clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
+            # find minimum distance pair
+            min_dist = dm[1, 0] - node_dist[1] - node_dist[0]
+            min_i = 0
+            min_j = 1
+            for i in range(1, len(dm)):
+                for j in range(0, i):
+                    temp = dm[i, j] - node_dist[i] - node_dist[j]
+                    if min_dist > temp:
+                        min_dist = temp
+                        min_i = i
+                        min_j = j
 
-                # update node list
-                clades[min_j] = inner_clade
-                del clades[min_i]
+            # create clade
+            clade1 = clades[min_i]
+            clade2 = clades[min_j]
+            inner_count += 1
+            inner_clade = BaseTree.Clade(None, "Inner" + str(inner_count))
+            inner_clade.clades.append(clade1)
+            inner_clade.clades.append(clade2)
+            # assign branch length
+            clade1.branch_length = (dm[min_i, min_j] + node_dist[min_i] -
+                                    node_dist[min_j]) / 2.0
+            clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
 
-                # rebuild distance matrix,
-                # set the distances of new node at the index of min_j
-                for k in range(0, len(dm)):
-                    if k != min_i and k != min_j:
-                        dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] -
-                                        dm[min_i, min_j]) / 2.0
+            # update node list
+            clades[min_j] = inner_clade
+            del clades[min_i]
 
-                dm.names[min_j] = "Inner" + str(inner_count)
-                del dm[min_i]
+            # rebuild distance matrix,
+            # set the distances of new node at the index of min_j
+            for k in range(0, len(dm)):
+                if k != min_i and k != min_j:
+                    dm[min_j, k] = (dm[min_i, k] + dm[min_j, k] -
+                                    dm[min_i, min_j]) / 2.0
+
+            dm.names[min_j] = "Inner" + str(inner_count)
+            del dm[min_i]
 
             # set the last clade as one of the child of the inner_clade
             root = None
