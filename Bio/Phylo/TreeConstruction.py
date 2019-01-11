@@ -726,7 +726,7 @@ class DistanceTreeConstructor(TreeConstructor):
                             min_dist = temp
                             min_i = i
                             min_j = j
-                
+
                 # create clade
                 clade1 = clades[min_i]
                 clade2 = clades[min_j]
