@@ -448,18 +448,6 @@ KEYWORDS    """ in gb, gb)
         in_tmp.seek(0)
 
         with warnings.catch_warnings():
-            warnings.simplefilter("error", BiopythonParserWarning)
-            try:
-                record = SeqIO.read(in_tmp, 'genbank')
-            except BiopythonParserWarning as e:
-                self.assertEqual(str(e), "Attempting to parse locus line that is extra long or malformed  :\n"
-                                 "'LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI 15-OCT-2018\\n'\n"
-                                 "Found locus 'AZZZAA021234567891234' size '2147483647' residue_type 'DNA'\n"
-                                 "Some fields may be wrong.")
-            else:
-                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
-
-        with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             in_tmp.seek(0)
             record = SeqIO.read(in_tmp, 'genbank')
@@ -490,18 +478,6 @@ KEYWORDS    """ in gb, gb)
             in_tmp = StringIO()
             in_tmp.writelines(data)
             in_tmp.seek(0)
-
-            with warnings.catch_warnings():
-                warnings.simplefilter("error", BiopythonParserWarning)
-                try:
-                    record = SeqIO.read(in_tmp, 'genbank')
-                except BiopythonParserWarning as e:
-                    self.assertEqual(str(e), "Attempting to parse locus line that is extra long or malformed  :\n"
-                                     "'LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\\n'\n"
-                                     "Found locus 'AZZZAA02123456789' size '10000000000' residue_type 'DNA'\n"
-                                     "Some fields may be wrong.")
-                else:
-                    self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
 
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")

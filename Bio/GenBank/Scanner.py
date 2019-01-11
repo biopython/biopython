@@ -1417,12 +1417,12 @@ class GenBankScanner(InsdcScanner):
             consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
-            warnings.warn("Attempting to parse locus line that is extra "
-                          "long or malformed  :\n%r\n"
-                          "Found locus %r size %r residue_type %r\n"
-                          "Some fields may be wrong."
-                          % (line, splitline[1], splitline[2], splitline[4]),
-                          BiopythonParserWarning)
+            if len(line) < 80:
+                warnings.warn("Attempting to parse malformed locus line:\n%r\n"
+                              "Found locus %r size %r residue_type %r\n"
+                              "Some fields may be wrong."
+                              % (line, splitline[1], splitline[2], splitline[4]),
+                              BiopythonParserWarning)
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
             # Cope with EnsEMBL genbank files which use space separation rather
             # than the expected column based layout. e.g.
