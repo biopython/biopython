@@ -692,7 +692,6 @@ class DistanceTreeConstructor(TreeConstructor):
         min_i = 0
         min_j = 0
         inner_count = 0
-        
         # special case for Minimum Alignment Matrices
         if len(dm) == 2:
             # minimum distance will always be [1,0]
@@ -700,17 +699,13 @@ class DistanceTreeConstructor(TreeConstructor):
             min_j = 0
             clade1 = clades[min_i]
             clade2 = clades[min_j]
-            
             clade1.branch_length = dm[min_i, min_j] / 2.0
             clade2.branch_length = dm[min_i, min_j] - clade1.branch_length
-
             inner_clade = BaseTree.Clade(None, "Inner")
             inner_clade.clades.append(clade1)
             inner_clade.clades.append(clade2)
-
             clades[0] = inner_clade
             root = clades[0]
-      
         else:
             while len(dm) > 2:
                 # calculate nodeDist
@@ -731,6 +726,7 @@ class DistanceTreeConstructor(TreeConstructor):
                             min_dist = temp
                             min_i = i
                             min_j = j
+                
                 # create clade
                 clade1 = clades[min_i]
                 clade2 = clades[min_j]
