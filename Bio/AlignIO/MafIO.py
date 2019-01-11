@@ -565,13 +565,15 @@ class MafIndex(object):
         """Return a multiple alignment of the exact sequence range provided.
 
         Accepts two lists of start and end positions on target_seqname, representing
-        exons to be spliced in silico.  Returns a *MultipleSeqAlignment* of the
-        desired sequences spliced together.
+        exons to be spliced in silico. A strand may also be provided.
+        Returns a *MultipleSeqAlignment* of the desired sequences spliced together.
+        When strand equals -1, the sequences are reverse complemented before the splice.
 
         *starts* should be a list of 0-based start coordinates of segments in the reference.
         *ends* should be the list of the corresponding segment ends
         (in the half-open UCSC convention:
-        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/).
+        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/)
+        *strand* should be either 1 or -1, representing either a positive or negative strand.
 
         To ask for the alignment portion corresponding to the first 100
         nucleotides of the reference sequence, you would use
