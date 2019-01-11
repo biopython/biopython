@@ -708,6 +708,8 @@ class DistanceTreeConstructor(TreeConstructor):
             clades[0] = inner_clade
             root = clades[0]
 
+            return BaseTree.Tree(root, rooted=False)
+
         while len(dm) > 2:
             # calculate nodeDist
             for i in range(0, len(dm)):
