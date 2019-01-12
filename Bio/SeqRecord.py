@@ -741,21 +741,27 @@ class SeqRecord(object):
         return len(self.seq)
 
     def __lt__(self, other):
+        """Define the less-than operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     def __le___(self, other):
+        """Define the less-than-or-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     def __eq__(self, other):
+        """Define the equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     def __ne__(self, other):
+        """Define the not-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     def __gt__(self, other):
+        """Define the greater-than operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     def __ge__(self, other):
+        """Define the greater-than-or-equal-to operand (not implemented)."""
         raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
 
     # Make SeqRecord unhashable explicit, required for Python 2.
