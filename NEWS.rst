@@ -19,11 +19,17 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+The NCBI now allows longer accessions in the GenBank file LOCUS line, meaning
+the fields may not always follow the historical column based positions. We
+no longer give a warning when parsing these. We now allow writing such files
+(although with a warning as support for reading them is not yet widespread).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Bernhard Thiel
 - Lenna Peterson
+- Nick Negretti
 - Peter Cock
 
 18 December 2018: Biopython 1.73
