@@ -367,7 +367,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
                     # phyloXML supports multiple confidences
                     return '/'.join(conf2str(cnf.value)
                                     for cnf in clade.confidences)
-                if clade.confidence:
+                if clade.confidence is not None:
                     return conf2str(clade.confidence)
                 return None
         else:
