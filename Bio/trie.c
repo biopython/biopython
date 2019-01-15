@@ -497,7 +497,7 @@ _iterate_helper(const Trie* trie,
 				 const void *value,
 				 void *data),
 		void *data,
-		char *current_key, const int max_key)
+		char *current_key, const unsigned int max_key)
 {
     int i;
     if(trie->value)
@@ -507,7 +507,7 @@ _iterate_helper(const Trie* trie,
 	const char *suffix = transition->suffix;
 	unsigned int keylen = strlen(current_key);
 
-	if((int)(keylen + strlen(suffix)) >= max_key) {
+	if(keylen + strlen(suffix) >= max_key) {
 	    /* BUG: This will fail silently.  It should raise some
 	       sort of error. */
 	    continue;
