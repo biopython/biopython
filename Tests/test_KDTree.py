@@ -12,17 +12,22 @@ except ImportError:
     raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.KDTree.")
 
-try:
-    from Bio.KDTree import _CKDTree
-    del _CKDTree
-except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(
-            "C module in Bio.KDTree not compiled")
-
-from Bio.KDTree.KDTree import KDTree
 from numpy import sum, sqrt, array
 from numpy import random
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    try:
+        from Bio.KDTree import _CKDTree
+        del _CKDTree
+    except ImportError:
+        from Bio import MissingExternalDependencyError
+        raise MissingExternalDependencyError(
+            "C module in Bio.KDTree not compiled")
+    from Bio.KDTree.KDTree import KDTree
+
 
 nr_points = 5000
 dim = 3
