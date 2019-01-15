@@ -5726,8 +5726,8 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     Trace** M = NULL;
     TraceGapsWatermanSmithBeyer** gaps;
     double** M_scores;
-    double** Ix_scores;
-    double** Iy_scores;
+    double** Ix_scores = NULL;
+    double** Iy_scores = NULL;
     double score;
     double gapscore;
     double temp;
