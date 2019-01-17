@@ -377,14 +377,8 @@ class SeqFeature(object):
         >>> f.qualifiers['transl_table'] = [11]
 
         Note that features of type CDS are subject to the usual
-        checks at translation:
-
-        >>> f.translate(seq)
-        Traceback (most recent call last):
-           ...
-        TranslationError: First codon 'GGT' is not a start codon
-
-        But you can override this behaviour by giving explicit arguments:
+        checks at translation. But you can override this behaviour
+        by giving explicit arguments:
 
         >>> f.translate(seq, cds=False)
         Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
