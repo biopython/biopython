@@ -137,15 +137,15 @@ class TestCompoundLocation(unittest.TestCase):
         loc2 = 5
         self.assertNotEqual(loc1, loc2)
 
+
 class TestSeqFeature(unittest.TestCase):
-    """Tests for the SeqFeature.SeqFeature class"""
+    """Tests for the SeqFeature.SeqFeature class."""
 
     def test_translation_checks_cds(self):
-        """Test that a CDS feature is subject to respective checks"""
+        """Test that a CDS feature is subject to respective checks."""
 
         seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         f.qualifiers['transl_table'] = [11]
         with self.assertRaises(TranslationError):
             f.translate(seq)
-

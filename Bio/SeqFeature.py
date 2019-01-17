@@ -384,14 +384,14 @@ class SeqFeature(object):
         Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
 
         Now use the start_offset argument to change the frame. Note
-        this uses python 0-based numbering
+        this uses python 0-based numbering.
 
         >>> f.translate(seq, start_offset=1, cds=False)
         Seq('VTLTDNVSD', ExtendedIUPACProtein())
 
         Alternatively use the codon_start qualifier to do the same
         thing. Note: this uses 1-based numbering, which is found
-        in files from NCBI
+        in files from NCBI.
 
         >>> f.qualifiers['codon_start'] = [2]
         >>> f.translate(seq, cds=False)
