@@ -382,7 +382,7 @@ class SeqFeature(object):
         >>> f.translate(seq)
         Traceback (most recent call last):
            ...
-        Bio.Data.CodonTable.TranslationError: First codon 'GGT' is not a start codon
+        TranslationError: First codon 'GGT' is not a start codon
 
         But you can override this behaviour by giving explicit arguments:
 
