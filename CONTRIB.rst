@@ -201,6 +201,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Peter Slickers <piet at domain clondiag.com>
 - Philip Bergstrom <https://github.com/phber>
 - Phillip Garland <pgarland at gmail>
+- Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
