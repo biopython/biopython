@@ -158,7 +158,7 @@ class Fragment(object):
 
         Examples
         --------
-        >>> rmsd = fragment1 - fragment2
+        >>> # rmsd = fragment1 - fragment2
 
         """
         sup = SVDSuperimposer()

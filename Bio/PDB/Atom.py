@@ -212,7 +212,7 @@ class Atom(object):
 
         Examples
         --------
-        >>> distance = atom1 - atom2
+        >>> # distance = atom1 - atom2
 
         """
         diff = self.coord - other.coord
@@ -366,9 +366,11 @@ class Atom(object):
 
         Examples
         --------
+        >>> from numpy import pi, array
+        >>> from .vectors import Vector, rotmat
         >>> rotation=rotmat(pi, Vector(1, 0, 0))
         >>> translation=array((0, 0, 1), 'f')
-        >>> atom.transform(rotation, translation)
+        >>> # atom.transform(rotation, translation)
 
         """
         self.coord = numpy.dot(self.coord, rot) + tran

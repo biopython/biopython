@@ -32,8 +32,8 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
-        >>> if (chain_id, res_id) in apmap:
-        ...     res, prop = apmap[(chain_id, res_id)]
+        >>> #if (chain_id, res_id) in apmap:
+        ... #    res, prop = apmap[(chain_id, res_id)]
         ...
 
         """

@@ -179,7 +179,6 @@ class Seq(object):
         During this transition period, please just do explicit comparisons:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> seq1 = Seq("ACGT")
         >>> seq2 = Seq("ACGT")
         >>> id(seq1) == id(seq2)

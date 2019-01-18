@@ -20,7 +20,7 @@ def read(handle):
 
     >>> from Bio.motifs import minimal
     >>> with open("meme.output.txt") as f:
-    ...     record = meme.read(f)
+    ...     record = minimal.read(f)
     ...
     >>> for motif in record:
     ...     print(motif.name, motif.evalue)

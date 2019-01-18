@@ -174,6 +174,7 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
 
        Examples are:
 
+           >>> from numpy import array
            >>> # option 1.:
            >>> distance = array([[0.0, 1.1, 2.3],
            ...                   [1.1, 0.0, 4.5],
@@ -258,6 +259,7 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
 
        Examples are:
 
+           >>> from numpy import array
            >>> # option 1.:
            >>> distance = array([[0.0, 1.1, 2.3],
            ...                   [1.1, 0.0, 4.5],
@@ -521,11 +523,16 @@ def pca(data):
     eigenvalue, with the largest eigenvalues appearing first. Here, nmin is
     the smaller of nrows and ncolumns.
     Adding the column means to the dot product of the coordinates and the
-    principal components,
+    principal components recreates the data matrix:
 
-    >>> columnmean + dot(coordinates, pc)
+    >>> from numpy import matrix, dot, amax, amin
+    >>> from Bio.Cluster import pca
+    >>> mat = matrix('0., 0., 0.; 1., 0., 0.; 7., 3., 0.; 4., 2., 6.')
+    >>> columnmean, coordinates, pc, _ = pca(matrix)
+    >>> m = mat - (columnmean + dot(coordinates, pc))
+    >>> amax(m) < 1e-15 and amin(m) > -1e-15
+    True
 
-    recreates the data matrix.
     """
     data = __check_data(data)
     nrows, ncols = data.shape

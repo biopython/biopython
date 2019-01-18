@@ -241,7 +241,7 @@ class PlateRecord(object):
 
         However, in general you get a sub-plate,
 
-        >>> print(align[1:5, 3:6])
+        >>> print(plate[1:5, 3:6])
         PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], ..., WellRecord['E06']')
 
         This should all seem familiar to anyone who has used the NumPy
@@ -567,6 +567,7 @@ class WellRecord(object):
     Two WellRecord objects can be summed up or subtracted from each other: a new
     WellRecord object is returned, having the left operand id.
 
+    >>> well1 = plate['A05']
     >>> well2 = well + well1
     >>> print(well2.id)
     A05
