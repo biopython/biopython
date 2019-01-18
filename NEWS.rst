@@ -31,6 +31,7 @@ possible, especially the following contributors:
 - Lenna Peterson
 - Nick Negretti
 - Peter Cock
+- Ralf Stephan
 
 18 December 2018: Biopython 1.73
 ================================
