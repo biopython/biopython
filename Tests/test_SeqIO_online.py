@@ -101,7 +101,7 @@ class UniProtTests(unittest.TestCase):
     """Test for UniPort module."""
 
     def test_search(self):
-        """UniPort.search("O48109")"""
+        """UniProt.search("O48109")"""
         identifier = "O48109"
         handle = UniProt.search(identifier, output_format="fasta")
         records = list(SeqIO.parse(handle, "fasta"))
