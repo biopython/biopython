@@ -30,12 +30,10 @@ class AbstractPropertyMap(object):
         :param res_id: residue id
         :type res_id: char
 
-        Examples
-        --------
-        >>> #if (chain_id, res_id) in apmap:
-        ... #    res, prop = apmap[(chain_id, res_id)]
-        ...
+        Example::
 
+            if (chain_id, res_id) in apmap:
+                res, prop = apmap[(chain_id, res_id)]
         """
         translated_id = self._translate_id(id)
         return translated_id in self.property_dict

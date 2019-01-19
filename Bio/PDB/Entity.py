@@ -281,14 +281,13 @@ class Entity(object):
         :param tran: the translation vector
         :type tran: size 3 Numeric array
 
-        Examples
-        --------
-        >>> from numpy import pi, array
-        >>> from Bio.PDB.vectors import Vector, rotmat
-        >>> rotation = rotmat(pi, Vector(1, 0, 0))
-        >>> translation = array((0, 0, 1), 'f')
-        >>> # entity.transform(rotation, translation)
+        Example::
 
+            from numpy import pi, array
+            from Bio.PDB.vectors import Vector, rotmat
+            rotation = rotmat(pi, Vector(1, 0, 0))
+            translation = array((0, 0, 1), 'f')
+            entity.transform(rotation, translation)
         """
         for o in self.get_list():
             o.transform(rot, tran)

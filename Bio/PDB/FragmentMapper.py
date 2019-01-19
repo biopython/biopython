@@ -156,10 +156,9 @@ class Fragment(object):
         :return: rmsd between fragments
         :rtype: float
 
-        Examples
-        --------
-        >>> # rmsd = fragment1 - fragment2
+        Example::
 
+            rmsd = fragment1 - fragment2
         """
         sup = SVDSuperimposer()
         sup.set(self.coords_ca, other.coords_ca)

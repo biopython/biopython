@@ -1,5 +1,4 @@
 [flake8]
-# Would like to enable this in future...
 doctests = True
 max-line-length = 92
 ignore =
