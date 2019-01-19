@@ -210,9 +210,12 @@ class Atom(object):
         :param other: the other atom
         :type other: L{Atom}
 
-        Example::
+        Examples
+        --------
+        This is an incomplete but illustrative example::
 
             distance = atom1 - atom2
+
         """
         diff = self.coord - other.coord
         return numpy.sqrt(numpy.dot(diff, diff))
@@ -363,13 +366,16 @@ class Atom(object):
         :param tran: the translation vector
         :type tran: size 3 Numeric array
 
-        Example::
+        Examples
+        --------
+        This is an incomplete but illustrative example::
 
             from numpy import pi, array
             from Bio.PDB.vectors import Vector, rotmat
             rotation = rotmat(pi, Vector(1, 0, 0))
             translation = array((0, 0, 1), 'f')
             atom.transform(rotation, translation)
+
         """
         self.coord = numpy.dot(self.coord, rot) + tran
 

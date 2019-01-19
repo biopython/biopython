@@ -51,7 +51,8 @@ _select = Select()
 class MMCIFIO(object):
     """Write a Structure object or a mmCIF dictionary as a mmCIF file.
 
-    Example:
+    Examples
+    --------
         >>> from Bio.PDB import MMCIFParser
         >>> p=MMCIFParser()
         >>> s=p.get_structure("1fat", "1fat.cif")
