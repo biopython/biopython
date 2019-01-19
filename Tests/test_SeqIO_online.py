@@ -98,7 +98,7 @@ del database, formats, entry, length, checksum
 
 
 class UniProtTests(unittest.TestCase):
-    """Test for UniPort module."""
+    """Test for UniProt module."""
 
     def test_search(self):
         """UniProt.search("O48109")"""
