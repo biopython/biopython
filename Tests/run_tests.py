@@ -132,7 +132,6 @@ DOCTEST_MODULES = [
     "Bio.Emboss.Applications",
     "Bio.Emboss.Primer3",
     "Bio.Emboss.PrimerSearch",
-    "Bio.Entrez",
     "Bio.Entrez.Parser",
     "Bio.ExPASy.Enzyme",
     "Bio.ExPASy.Prodoc",
