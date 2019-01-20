@@ -231,7 +231,6 @@ DOCTEST_MODULES = [
     "Bio.PopGen.GenePop.FileParser",
     "Bio.PopGen.GenePop",
     "Bio.PopGen.GenePop.LargeFileParser",
-    "Bio.PopGen.GenePop.Utils",
     "Bio.PopGen",
     "Bio._py3k",
     "Bio.Restriction.RanaConfig",
