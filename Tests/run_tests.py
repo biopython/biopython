@@ -235,7 +235,6 @@ DOCTEST_MODULES = [
     "Bio.PopGen",
     "Bio._py3k",
     "Bio.Restriction.RanaConfig",
-    "Bio.Restriction.Restriction_Dictionary",
     "Bio.SCOP.Cla",
     "Bio.SCOP.Des",
     "Bio.SCOP.Dom",
