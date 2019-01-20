@@ -182,7 +182,6 @@ DOCTEST_MODULES = [
     "Bio.motifs.alignace",
     "Bio.motifs.applications",
     "Bio.motifs.applications._xxmotif",
-    "Bio.motifs.jaspar.db",
     "Bio.motifs.jaspar",
     "Bio.motifs.matrix",
     "Bio.motifs.thresholds",
