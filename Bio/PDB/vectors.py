@@ -101,8 +101,10 @@ def rotaxis2m(theta, vector):
 
     Examples
     --------
-    >>> m = rotaxis(pi, Vector(1, 0, 0))
-    >>> rotated_vector = any_vector.left_multiply(m)
+    >>> from numpy import pi
+    >>> m = rotaxis2m(pi, Vector(1, 0, 0))
+    >>> Vector(1, 2, 3).left_multiply(m)
+    <Vector 1.00, -2.00, -3.00>
 
     """
     vector = vector.normalized()
@@ -137,10 +139,13 @@ def refmat(p, q):
 
     Examples
     --------
+    >>> p,q = Vector(1, 2, 3), Vector(2, 3, 5)
     >>> mirror = refmat(p, q)
     >>> qq = p.left_multiply(mirror)
     >>> print(q)
+    <Vector 2.00, 3.00, 5.00>
     >>> print(qq)  # q and qq should be the same
+    <Vector 1.65, 3.30, 4.94>
 
     """
     p = p.normalized()
@@ -170,9 +175,12 @@ def rotmat(p, q):
 
     Examples
     --------
+    >>> p,q = Vector(1, 2, 3), Vector(2, 3, 5)
     >>> r = rotmat(p, q)
     >>> print(q)
+    <Vector 2.00, 3.00, 5.00>
     >>> print(p.left_multiply(r))
+    <Vector 1.21, 1.82, 3.03>
 
     """
     rot = numpy.dot(refmat(q, -p), refmat(p, -p))

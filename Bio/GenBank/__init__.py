@@ -434,6 +434,9 @@ class LocationParserError(Exception):
     pass
 
 
+_cleaner = FeatureValueCleaner()
+
+
 class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
 
@@ -444,7 +447,7 @@ class FeatureParser(object):
     """
 
     def __init__(self, debug_level=0, use_fuzziness=1,
-                 feature_cleaner=FeatureValueCleaner()):
+                 feature_cleaner=_cleaner):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
