@@ -692,7 +692,11 @@ class DistanceTreeConstructor(TreeConstructor):
         min_i = 0
         min_j = 0
         inner_count = 0
-        # special case for Minimum Alignment Matrices
+        # special cases for Minimum Alignment Matrices
+        if len(dm) == 1:
+            root = clades[0]
+
+            return BaseTree.Tree(root, rooted=False)
         if len(dm) == 2:
             # minimum distance will always be [1,0]
             min_i = 1
