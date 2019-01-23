@@ -117,6 +117,7 @@ DOCTEST_MODULES = [
     "Bio.Blast.ParseBlastTable",
     "Bio.Blast.Record",
     "Bio.CAPS",
+    "Bio.Cluster",
     "Bio.codonalign",
     "Bio.codonalign.chisq",
     "Bio.codonalign.codonalignment",
