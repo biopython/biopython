@@ -697,7 +697,7 @@ class DistanceTreeConstructor(TreeConstructor):
             root = clades[0]
 
             return BaseTree.Tree(root, rooted=False)
-        if len(dm) == 2:
+        elif len(dm) == 2:
             # minimum distance will always be [1,0]
             min_i = 1
             min_j = 0
