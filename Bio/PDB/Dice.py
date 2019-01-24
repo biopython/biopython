@@ -5,21 +5,6 @@
 """Code for chopping up (dicing) a structure.
 
 This module is used internally by the Bio.PDB.extract() function.
-It extracts a section of a chain from start to end and saves
-the file in PDB format
-
-Example
---------
-Dice 2BEG.pdb, extract chain "B" from residues 18 to 20.
->>> from Bio.PDB import Dice
->>> from Bio.PDB import PDBParser
->>> parser = PDBParser()
->>> structure = parser.get_structure("scr", "PDB/2BEG.pdb")
->>> Dice.extract(structure, "B", 18, 20, "/tmp/2BEG_diced.pdb")
-
-The file  2BEG_diced.pdb will contain a section of chain "B" from residue
-18 to 20, three residues; VAL, PHE, PHE and their respective atoms,
-total 29 atoms.
 """
 
 import re
