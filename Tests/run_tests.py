@@ -638,6 +638,7 @@ class TestRunner(unittest.TextTestRunner):
                                          verbosity=verbosity)
 
     def runTest(self, name):
+        from Bio import MissingPythonDependencyError
         from Bio import MissingExternalDependencyError
         result = self._makeResult()
         output = StringIO()
@@ -680,7 +681,16 @@ class TestRunner(unittest.TextTestRunner):
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                module = __import__(name, fromlist=name.split("."))
+                try:
+                    module = __import__(name, fromlist=name.split("."))
+                except MissingPythonDependencyError:
+                    sys.stderr.write("skipped, missing Python dependency\n")
+                    return True
+                except ImportError as e:
+                    sys.stderr.write("FAIL, ImportError\n")
+                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.printErrors()
+                    return False
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
