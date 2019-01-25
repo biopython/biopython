@@ -24,3 +24,8 @@ ignore =
     # B007	Loop control variable not used within the loop body.
     #           If this is intended, start the name with an underscore.
     B007,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,
