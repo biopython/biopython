@@ -572,8 +572,11 @@ class MafIndex(object):
         *starts* should be a list of 0-based start coordinates of segments in the reference.
         *ends* should be the list of the corresponding segment ends
         (in the half-open UCSC convention:
-        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/)
+        http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/).
         *strand* should be either 1 or -1, representing either a positive or negative strand.
+
+        The start and end ordinates should be in translation rather than numerically
+        increasing order. This applies to both positive and negative strand.
 
         To ask for the alignment portion corresponding to the first 100
         nucleotides of the reference sequence, you would use
