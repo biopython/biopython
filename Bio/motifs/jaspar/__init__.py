@@ -108,6 +108,7 @@ class Motif(motifs.Motif):
         return self.matrix_id.__hash__()
 
     def __eq__(self, other):
+        """Return True if matrix IDs are the same."""
         return self.matrix_id == other.matrix_id
 
 
@@ -124,6 +125,7 @@ class Record(list):
         self.version = None
 
     def __str__(self):
+        """Return a string of all motifs in the Record."""
         return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
@@ -313,6 +315,11 @@ def _read_jaspar(handle):
 
 
 def calculate_pseudocounts(motif):
+    """Calculate pseudocounts, for compatibility with Perl TFBS modules.
+
+    Computes the root square of the total number of sequences multiplied by
+    the background nucleotide.
+    """
     alphabet = motif.alphabet
     background = motif.background
 

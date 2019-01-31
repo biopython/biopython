@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Module for the support of MEME motif format."""
 
 from __future__ import print_function
 
@@ -120,6 +121,7 @@ class Record(list):
         self.sequences = []
 
     def __getitem__(self, key):
+        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
                 if motif.name == key:
