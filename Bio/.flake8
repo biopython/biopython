@@ -45,4 +45,9 @@ ignore =
     # ================================================
     # C812	missing trailing comma
     # C815	missing trailing comma in Python 3.5+
-    C812,C815
+    C812,C815,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,

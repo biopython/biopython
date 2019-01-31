@@ -72,15 +72,3 @@ def extract(structure, chain_id, start, end, filename):
     io = PDBIO()
     io.set_structure(structure)
     io.save(filename, sel)
-
-
-if __name__ == "__main__":
-
-    from Bio.PDB.PDBParser import PDBParser
-
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure("scr", sys.argv[1])
-
-    extract(s, " ", 1, 100, "out.pdb")

@@ -15,3 +15,8 @@ ignore =
     # flake8-bugbear: B###
     # ====================
     B007,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,
