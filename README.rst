@@ -1,3 +1,6 @@
+This is Rob Miller's Biopython branch
+=====================================
+
 .. image:: https://img.shields.io/pypi/v/biopython.svg
    :alt: Biopython on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/biopython
