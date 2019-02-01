@@ -102,7 +102,7 @@ class InsdcScanner(object):
             else:
                 # Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-                        print("Skipping header line before record:\n" + line)
+                    print("Skipping header line before record:\n" + line)
         self.line = line
         return line
 

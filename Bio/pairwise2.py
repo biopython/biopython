@@ -947,9 +947,9 @@ def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
     if col:
         ali_seqB += sequenceB[col - 1::-1]
     if row > col:
-            ali_seqB += gap_char * (len(ali_seqA) - len(ali_seqB))
+        ali_seqB += gap_char * (len(ali_seqA) - len(ali_seqB))
     elif col > row:
-            ali_seqA += gap_char * (len(ali_seqB) - len(ali_seqA))
+        ali_seqA += gap_char * (len(ali_seqB) - len(ali_seqA))
     return ali_seqA, ali_seqB
 
 

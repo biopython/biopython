@@ -91,8 +91,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # if it's the last comp
         if idx == len(vcomps) - 1 or \
                 (label in 'MCGS' and vcomps[idx + 1][0] not in 'MCGS'):
-                qends.append(qpos)
-                hends.append(hpos)
+            qends.append(qpos)
+            hends.append(hpos)
 
     # adjust coordinates
     for seq_type in ('query_', 'hit_'):

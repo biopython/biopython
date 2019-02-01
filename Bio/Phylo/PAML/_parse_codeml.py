@@ -232,7 +232,7 @@ def parse_model(lines, results):
         elif "dN tree:" in line:
             dN_tree_flag = True
         elif "w ratios as labels for TreeView:" in line:
-                w_tree_flag = True
+            w_tree_flag = True
         # Find rates for multiple genes
         # Example match: "rates for 2 genes:     1  2.75551"
         elif "rates for" in line and line_floats:

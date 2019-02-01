@@ -466,18 +466,18 @@ class Record(object):
         return output
 
     def _wgs_line(self):
-            output = ""
-            if self.wgs:
-                    output += Record.BASE_FORMAT % "WGS"
-                    output += self.wgs
-            return output
+        output = ""
+        if self.wgs:
+            output += Record.BASE_FORMAT % "WGS"
+            output += self.wgs
+        return output
 
     def _wgs_scafld_line(self):
-            output = ""
-            if self.wgs_scafld:
-                    output += Record.BASE_FORMAT % "WGS_SCAFLD"
-                    output += self.wgs_scafld
-            return output
+        output = ""
+        if self.wgs_scafld:
+            output += Record.BASE_FORMAT % "WGS_SCAFLD"
+            output += self.wgs_scafld
+        return output
 
     def _contig_line(self):
         """Output for CONTIG location information from RefSeq (PRIVATE)."""

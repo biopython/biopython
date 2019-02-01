@@ -68,7 +68,7 @@ def _read_fragments(size, length, dir="."):
         # ID of fragment=rank in spec file
         fid = 0
         for l in fp.readlines():
-                    # skip comment and blank lines
+            # skip comment and blank lines
             if l[0] == "*" or l[0] == "\n":
                 continue
             sl = l.split()

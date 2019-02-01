@@ -631,34 +631,34 @@ def _diff_codon(codon1, codon2, fold_dict):
     purine = ('A', 'G')
     pyrimidine = ('T', 'C')
     for n, (i, j) in enumerate(zip(codon1, codon2)):
-            if i != j and (i in purine and j in purine):
-                if fold_num[n] == '0':
-                    P0 += 1
-                elif fold_num[n] == '2':
-                    P2 += 1
-                elif fold_num[n] == '4':
-                    P4 += 1
-                else:
-                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
-            if i != j and (i in pyrimidine and j in pyrimidine):
-                if fold_num[n] == '0':
-                    P0 += 1
-                elif fold_num[n] == '2':
-                    P2 += 1
-                elif fold_num[n] == '4':
-                    P4 += 1
-                else:
-                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
-            if i != j and ((i in purine and j in pyrimidine) or
-                           (i in pyrimidine and j in purine)):
-                if fold_num[n] == '0':
-                    Q0 += 1
-                elif fold_num[n] == '2':
-                    Q2 += 1
-                elif fold_num[n] == '4':
-                    Q4 += 1
-                else:
-                    raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+        if i != j and (i in purine and j in purine):
+            if fold_num[n] == '0':
+                P0 += 1
+            elif fold_num[n] == '2':
+                P2 += 1
+            elif fold_num[n] == '4':
+                P4 += 1
+            else:
+                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+        if i != j and (i in pyrimidine and j in pyrimidine):
+            if fold_num[n] == '0':
+                P0 += 1
+            elif fold_num[n] == '2':
+                P2 += 1
+            elif fold_num[n] == '4':
+                P4 += 1
+            else:
+                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+        if i != j and ((i in purine and j in pyrimidine) or
+                       (i in pyrimidine and j in purine)):
+            if fold_num[n] == '0':
+                Q0 += 1
+            elif fold_num[n] == '2':
+                Q2 += 1
+            elif fold_num[n] == '4':
+                Q4 += 1
+            else:
+                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
     return (P0, P2, P4, Q0, Q2, Q4)
 
 
