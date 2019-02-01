@@ -315,7 +315,7 @@ def _read_jaspar(handle):
 
 
 def calculate_pseudocounts(motif):
-    """Calculate pseudocounts, for compatibility with Perl TFBS modules.
+    """Calculate pseudocounts.
 
     Computes the root square of the total number of sequences multiplied by
     the background nucleotide.
