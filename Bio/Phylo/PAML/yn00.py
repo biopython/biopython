@@ -3,6 +3,12 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of yn00.
+
+Yang and Nielsen 2000,  estimating synonymous and nonsynonymous substitution
+rates in pairwise comparison of protein-coding DNA sequences.
+"""
+
 import os.path
 from ._paml import Paml
 from . import _parse_yn00
