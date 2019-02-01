@@ -7,13 +7,19 @@
 
 import os
 import unittest
+import warnings
 
 from Bio.SearchIO import parse
-
+from Bio import BiopythonWarning
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
 FMT = 'blast-text'
+
+# This prevents the NCBIStandalone usage warning from
+# printing to screen when running the test suite
+warnings.filterwarnings('ignore', r'Parsing BLAST plain text output '
+                        'file is not a well supported.*', BiopythonWarning)
 
 
 def get_file(filename):

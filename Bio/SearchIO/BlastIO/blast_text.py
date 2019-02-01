@@ -14,12 +14,7 @@ parser (which is now deprecated).
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio.SearchIO._legacy import NCBIStandalone
+from Bio.SearchIO._legacy import NCBIStandalone
 
 
 __all__ = ('BlastTextParser', )
