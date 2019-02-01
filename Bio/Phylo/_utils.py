@@ -240,7 +240,7 @@ def draw_ascii(tree, file=None, column_width=80):
         """Create a mapping of each clade to its column position."""
         depths = tree.depths()
         # If there are no branch lengths, assume unit branch lengths
-        if not max(depths.values()):
+        if max(depths.values()) == 0:
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
