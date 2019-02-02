@@ -5,6 +5,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
+"""Module for the support of MEME minimal motif format."""
 
 from __future__ import print_function
 from Bio.Alphabet import IUPAC
@@ -85,6 +86,7 @@ class Record(list):
         self.sequences = []
 
     def __getitem__(self, key):
+        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
                 if motif.name == key:
@@ -96,6 +98,7 @@ class Record(list):
 # Everything below is private
 
 def _read_background(record, handle):
+    """Read background letter frequencies (PRIVATE)."""
     for line in handle:
         if line.startswith('Background letter frequencies'):
             break
@@ -112,6 +115,7 @@ def _read_background(record, handle):
 
 
 def _read_version(record, handle):
+    """Read MEME version (PRIVATE)."""
     for line in handle:
         if line.startswith('MEME version'):
             break
@@ -123,6 +127,7 @@ def _read_version(record, handle):
 
 
 def _read_alphabet(record, handle):
+    """Read alphabet (PRIVATE)."""
     for line in handle:
         if line.startswith('ALPHABET'):
             break
@@ -139,6 +144,7 @@ def _read_alphabet(record, handle):
 
 
 def _read_lpm(line, handle):
+    """Read letter probability matrix (PRIVATE)."""
     counts = [[], [], [], []]
     for line in handle:
         freqs = line.split()
@@ -157,6 +163,7 @@ def _read_lpm(line, handle):
 
 
 def _read_motif_statistics(line, handle):
+    """Read motif statistics (PRIVATE)."""
     # minimal :
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
     for line in handle:
@@ -169,6 +176,7 @@ def _read_motif_statistics(line, handle):
 
 
 def _read_motif_name(handle):
+    """Read motif name (PRIVATE)."""
     for line in handle:
         if 'sorted by position p-value' in line:
             break

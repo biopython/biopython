@@ -19,6 +19,7 @@ from Bio._py3k import range
 
 
 def create(instances, alphabet=None):
+    """Create a Motif object."""
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
 
@@ -149,7 +150,7 @@ def read(handle, format):
 
 
 class Instances(list):
-    """A class representing instances of sequence motifs."""
+    """Class containing a list of sequences that made the motifs."""
 
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
@@ -185,12 +186,14 @@ class Instances(list):
         self.alphabet = alphabet
 
     def __str__(self):
+        """Return a string containing the sequences of the motif."""
         text = ""
         for instance in self:
             text += str(instance) + "\n"
         return text
 
     def count(self):
+        """Count nucleotides in a position."""
         counts = {}
         for letter in self.alphabet.letters:
             counts[letter] = [0] * self.length
@@ -212,6 +215,7 @@ class Instances(list):
                     break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
+        """Compute reverse complement of sequences."""
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
@@ -326,10 +330,12 @@ class Motif(object):
 
     @property
     def pwm(self):
+        """Compute position weight matrices."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
+        """Compute position specific scoring matrices."""
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):

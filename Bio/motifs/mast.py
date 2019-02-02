@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Module for the support of Motif Alignment and Search Tool (MAST)."""
 
 from __future__ import print_function
 
@@ -40,6 +41,7 @@ class Record(list):
         self.alphabet = None
 
     def __getitem__(self, key):
+        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
                 if motif.name == key:
@@ -63,6 +65,7 @@ def read(handle):
 
 
 def __read_version(record, handle):
+    """Read MAST Version (PRIVATE)."""
     for line in handle:
         if "MAST version" in line:
             break
