@@ -27,6 +27,8 @@ old and new versions of Biopython:
 
 """
 
+from __future__ import division
+
 import warnings
 
 from .vectors import m2rotaxis, vector_to_axis, rotaxis2m
