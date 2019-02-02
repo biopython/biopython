@@ -6,6 +6,7 @@
 """Vector class, including rotation-related functions."""
 
 from __future__ import print_function
+from __future__ import division
 
 import numpy
 
@@ -276,7 +277,7 @@ class Vector(object):
         """Return Vector.Vector (dot product)."""
         return sum(self._ar * other._ar)
 
-    def __div__(self, x):
+    def __truediv__(self, x):
         """Return Vector(coords/a)."""
         a = self._ar / numpy.array(x)
         return Vector(a)
