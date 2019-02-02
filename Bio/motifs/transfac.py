@@ -5,9 +5,7 @@
 
 """Parsing TRANSFAC files."""
 
-import warnings
 
-from Bio import BiopythonParserWarning
 from Bio import motifs
 from Bio.Alphabet import IUPAC
 
@@ -90,7 +88,7 @@ class Record(list):
         return write(self)
 
 
-def read(handle):
+def read(handle, strict=True):
     """Parse a transfac format handle into a Record object."""
     annotations = {}
     references = []
@@ -102,14 +100,18 @@ def read(handle):
             continue
         key_value = line.split(None, 1)
         key = key_value[0].strip()
-        assert len(key) == 2, 'The key value of a TRANSFAC motif line should have 2 characters: "{0:s}"'.format(line)
+        if strict:
+            if len(key) != 2:
+                raise ValueError('The key value of a TRANSFAC motif line '
+                                 'should have 2 characters: '
+                                 '"{0:s}"'.format(line))
         if len(key_value) == 2:
             value = key_value[1].strip()
-            if not line.partition('  ')[1]:
-                warnings.warn(
-                    'A TRANSFAC motif line should have 2 spaces between key and value columns: "{0:s}"'.format(line),
-                    BiopythonParserWarning
-                )
+            if strict:
+                if not line.partition('  ')[1]:
+                    raise ValueError('A TRANSFAC motif line should have 2 '
+                                     'spaces between key and value columns: '
+                                     '"{0:s}"'.format(line))
         if key == 'VV':
             record.version = value
         elif key in ('P0', 'PO'):  # Old TRANSFAC files use PO instead of P0
@@ -127,32 +129,38 @@ def read(handle):
                 key = key_value[0].strip()
                 if len(key_value) == 2:
                     value = key_value[1].strip()
-                    if not line.partition('  ')[1]:
-                        warnings.warn(
-                            'A TRANSFAC motif line should have 2 spaces between key and value columns: "{0:s}"'.format(
-                                line),
-                            BiopythonParserWarning)
+                    if strict:
+                        if not line.partition('  ')[1]:
+                            raise ValueError('A TRANSFAC motif line should '
+                                             'have 2 spaces between key and '
+                                             'value columns: '
+                                             '"{0:s}"'.format(line))
                 try:
                     i = int(key)
                 except ValueError:
                     break
                 if length == 0 and i == 0:
-                    warnings.warn(
-                        'A TRANSFAC matrix should start with "01" as first row of the matrix, '
-                        'but this matrix uses "00": "{0:s}"'.format(line),
-                        BiopythonParserWarning)
+                    if strict:
+                        raise ValueError('A TRANSFAC matrix should start with '
+                                         '"01" as first row of the matrix, '
+                                         'but this matrix uses "00": '
+                                         '"{0:s}"'.format(line))
                 else:
                     length += 1
                 if i != length:
                     raise ValueError('The TRANSFAC matrix row number does not '
                                      'match the position in the matrix: '
                                      '"{0:s}"'.format(line))
-                if len(key) == 1:
-                    warnings.warn(
-                        'A TRANSFAC matrix line should have a 2 digit key at the start of the lin ("{0:02d}"), '
-                        'but this matrix uses "{0:d}": "{1:s}".'.format(i, line),
-                        BiopythonParserWarning)
-                assert len(key_value) == 2, 'A TRANSFAC matrix line should have a key and a value: "{0:s}"'.format(line)
+                if strict:
+                    if len(key) == 1:
+                        raise ValueError('A TRANSFAC matrix line should have a '
+                                         '2 digit key at the start of the line '
+                                         '("{0:02d}"), but this matrix uses '
+                                         '"{0:d}": "{1:s}".'.format(i, line))
+                    if len(key_value) != 2:
+                        raise ValueError('A TRANSFAC matrix line should have '
+                                         'a key and a value: '
+                                         '"{0:s}"'.format(line))
                 values = value.split()[:4]
                 if len(values) != 4:
                     raise ValueError('A TRANSFAC matrix line should have a '

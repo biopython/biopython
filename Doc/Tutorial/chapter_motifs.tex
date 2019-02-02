@@ -709,6 +709,12 @@ To parse a TRANSFAC file, use
 ...     record = motifs.parse(handle, "TRANSFAC")
 ...
 \end{verbatim}
+If any discrepancies between the file contents and the TRANSFAC file format are detected, a \verb+ValueError+ is raised. Note that you may encounter files that do not follow the TRANSFAC format strictly. For example, the number of spaces between columns may be different, or a tab may be used instead of spaces. Use \verb+strict=False+ to enable parsing such files without raising a \verb+ValueError+:
+\begin{verbatim}
+>>> record = motifs.parse(handle, "TRANSFAC", strict=False)
+\end{verbatim}
+When parsing a non-compliant file, we recommend to check the record returned by \verb+motif.parse+ to ensure that it is consistent with the file contents.
+
 The overall version number, if available, is stored as \verb+record.version+:
 %cont-doctest
 \begin{verbatim}
