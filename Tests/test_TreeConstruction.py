@@ -181,10 +181,9 @@ class DistanceTreeConstructorTest(unittest.TestCase):
         self.assertTrue(Consensus._equal_topology(tree, ref_tree))
         # ref_tree.close()
 
+        # create a matrix of length 2
         calculator = DistanceCalculator('blosum62')
         self.min_dm = calculator.get_distance(self.aln)
-
-        # delete items to test a matrix of length 2
         for i in range(len(self.min_dm) - 2):
             del self.min_dm[len(self.min_dm) - 1]
 
