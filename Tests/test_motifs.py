@@ -1916,6 +1916,7 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts['T', 5],  0.0)
         handle.close()
 
+
 class MotifTestPWM(unittest.TestCase):
     """PWM motif tests."""
 
