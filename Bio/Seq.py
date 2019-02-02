@@ -1858,6 +1858,10 @@ class MutableSeq(object):
             self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
+        elif isinstance(data, Seq):
+            raise TypeError("The sequence data given to a MutableSeq object "
+                            "should be a string or an array "
+                            "(not a Seq object etc)")
         else:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
