@@ -64,8 +64,8 @@ def parse(handle, format, strict=True):
     GAGGCCGGGGAT
     CGACTCGTGCTTAGAAGG
 
-    If strict is True (default), the parser will issue a warning if the file
-    contents does not strictly comply with the specified file format.
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
     if format == "alignace":
@@ -141,8 +141,8 @@ def read(handle, format, strict=True):
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
 
-    If strict is True (default), the parser will issue a warning if the file
-    contents does not strictly comply with the specified file format.
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
     motifs = parse(handle, format, strict)
