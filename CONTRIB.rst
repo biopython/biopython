@@ -224,6 +224,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Stefans Mezulis <https://github.com/StefansM/>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
+- Stuart Nelis <https://github.com/biostu24>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
