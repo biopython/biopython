@@ -52,7 +52,7 @@ class MuscleCommandline(AbstractCommandline):
             ["pctid_kimura", "pctid_log"]
         OBJECTIVE_SCORES = ["sp", "ps", "dp", "xp", "spf", "spm"]
         TREE_ROOT_METHODS = ["pseudo", "midlongestspan", "minavgleafdist"]
-        SEQUENCE_TYPES = ["protein", "nucleo", "auto"]
+        SEQUENCE_TYPES = ["protein", "rna", "dna", "nucleo", "auto"]
         WEIGHTING_SCHEMES = ["none", "clustalw", "henikoff", "henikoffpb",
                              "gsc", "threeway"]
         self.parameters = [
