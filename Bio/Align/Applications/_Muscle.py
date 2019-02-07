@@ -52,7 +52,12 @@ class MuscleCommandline(AbstractCommandline):
             ["pctid_kimura", "pctid_log"]
         OBJECTIVE_SCORES = ["sp", "ps", "dp", "xp", "spf", "spm"]
         TREE_ROOT_METHODS = ["pseudo", "midlongestspan", "minavgleafdist"]
-        SEQUENCE_TYPES = ["protein", "nucleo", "auto"]
+
+        # The mucleotide arguments for  the sequence type parameter in MUSCLE (-seqtype)
+        # were updated at somepoint in MUSCLE version 3.8. Prior to the update
+        # 'nucleo' was used for nucleotide. This has been updated to 'rna' and 'dna'. 'nucleo' kept for
+        # backwards compatibility with older MUSCLE versions.
+        SEQUENCE_TYPES = ["protein", "rna", "dna", "nucleo", "auto"]
         WEIGHTING_SCHEMES = ["none", "clustalw", "henikoff", "henikoffpb",
                              "gsc", "threeway"]
         self.parameters = [
@@ -304,8 +309,10 @@ class MuscleCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             # seqtype         protein              auto     Sequence type.
-            #                nucleo
-            #                auto
+            #                 dna (MUSCLE version > 3.8)
+            #                 rna (MUSCLE version > 3.8)
+            #                 auto
+            #                 nucleo (only valid for MUSCLE versions < 3.8)
             _Option(["-seqtype", "seqtype"],
                     "Sequence type",
                     checker_function=lambda x: x in SEQUENCE_TYPES,
