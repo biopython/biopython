@@ -497,22 +497,3 @@ class DSSP(AbstractResiduePropertyMap):
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
                                             dssp_list)
-
-
-if __name__ == "__main__":
-    import sys
-
-    p = PDBParser()
-    s = p.get_structure('X', sys.argv[1])
-    model = s[0]
-    d = DSSP(model, sys.argv[1])
-
-    for r in d:
-        print(r)
-    print("Handled %i residues" % len(d))
-    print(sorted(d))
-    if ('A', 1) in d:
-        print(d[('A', 1)])
-        print(s[0]['A'][1].xtra)
-    # Secondary structure
-    print(''.join(item[1] for item in d))
