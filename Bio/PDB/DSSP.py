@@ -497,5 +497,3 @@ class DSSP(AbstractResiduePropertyMap):
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
                                             dssp_list)
-
-
