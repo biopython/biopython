@@ -140,9 +140,10 @@ other optional Python dependencies, which can be installed later if needed:
   This package is used by ``BioSQL`` to access a MySQL database, and is
   supported on Python 2 and 3 and PyPy too.
 
-- MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
-  This is an older alternative package used by ``BioSQL`` to access a MySQL
-  database, but it is not available for Python 3 or PyPy.
+- mysqlclient, see https://github.com/PyMySQL/mysqlclient-python (optional)
+  This is a fork of the older MySQLdb and is used by ``BioSQL`` to access a 
+  MySQL database. It is supported by Python 2.7, Python 3.5 and above, PyPy 2,
+  and PyPy 3.
 
 Note that some of these libraries are not available for PyPy or Jython,
 and not all are available for Python 3 yet either.
