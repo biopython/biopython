@@ -24,8 +24,6 @@ from __future__ import print_function
 
 from reportlab.lib import colors
 
-from Bio._py3k import range
-
 # GenomeDiagram imports
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
