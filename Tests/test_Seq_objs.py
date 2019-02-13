@@ -761,26 +761,24 @@ class StringMethodTests(unittest.TestCase):
         concatenated4 = spacer1.join(example_strings_seqs)
         concatenated5 = spacer2.join(example_strings_seqs)
 
-        temp_data = ""
-        temp_data1 = ""
-        temp_data3 = ""
-        temp_data5 = ""
+        temp_data = temp_data1 = temp_data2 = temp_data3 = ""
+
         for seq in seqlist:
             temp_data += seq.seq._data + spacer._data
             temp_data1 += seq.seq._data + spacer1._data
         for seq in example_strings:
-            temp_data3 += seq + spacer._data
-            temp_data5 += seq + spacer2._data
+            temp_data2 += seq + spacer._data
+            temp_data3 += seq + spacer2._data
 
-        # self.assertEqual(concatenated._data, temp_data[: - len(spacer._data)])
+        self.assertEqual(concatenated._data, temp_data[: - len(spacer._data)])
         self.assertEqual(concatenated1._data, temp_data1)
         self.assertEqual(concatenated2._data, "".join(example_strings))
         self.assertEqual(concatenated2.alphabet, spacer1.alphabet)
-        self.assertEqual(concatenated3._data, (temp_data3)[: - len(spacer._data)])
+        self.assertEqual(concatenated3._data, (temp_data2)[: - len(spacer._data)])
         self.assertEqual(concatenated3.alphabet, spacer.alphabet)  # same as spacer since spacer isn't an empty seq, generic wins
         self.assertEqual(concatenated4._data, "".join(example_strings))
         self.assertEqual(concatenated4.alphabet, test_seq.alphabet)  # spacer is empty string so alphabet should match the only Seq object
-        self.assertEqual(concatenated5._data, (temp_data5)[: - len(spacer2._data)])
+        self.assertEqual(concatenated5._data, (temp_data3)[: - len(spacer2._data)])
         self.assertEqual(concatenated5.alphabet, generic_dna)  # both spacer and only seq have same alphabet
 
         self.assertRaises(ValueError, spacer.join, 5)
@@ -815,12 +813,8 @@ class StringMethodTests(unittest.TestCase):
         concatenated4 = spacer1.join(example_strings_seqs)
         concatenated5 = spacer2.join(example_strings_seqs)
 
-        temp_data = ""
-        temp_data1 = ""
-        temp_data2 = ""
-        temp_data3 = ""
-        temp_data4 = ""
-        temp_data5 = ""
+        temp_data = temp_data1 = temp_data2 = temp_data3 = temp_data4 = temp_data5 = ""
+
         for seq in seqlist:
             temp_data += str(seq.seq) + str(spacer)
             temp_data1 += str(seq.seq) + str(spacer1)
@@ -874,16 +868,14 @@ class StringMethodTests(unittest.TestCase):
         concatenated4 = spacer1.join(example_strings_seqs)
         concatenated5 = spacer2.join(example_strings_seqs)
 
-        temp_data = ""
-        temp_data1 = ""
-        temp_data3 = ""
-        temp_data5 = ""
+        temp_data = temp_data1 = temp_data2 = temp_data3 = ""
+
         for seq in seqlist:
             temp_data += str(seq.seq) + str(spacer)
             temp_data1 += str(seq.seq) + str(spacer1)
         for seq in example_strings:
-            temp_data3 += seq + str(spacer)
-            temp_data5 += seq + str(spacer2)
+            temp_data2 += seq + str(spacer)
+            temp_data3 += seq + str(spacer2)
 
         self.assertEqual(str(concatenated), temp_data[: - len(spacer.data)])
         self.assertEqual(str(concatenated1), temp_data1)
@@ -891,11 +883,11 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(concatenated2), "".join(example_strings))
         self.assertEqual(concatenated2.alphabet, spacer1.alphabet)
         self.assertEqual(concatenated2.__class__, Seq)
-        self.assertEqual(str(concatenated3), (temp_data3)[: - len(spacer.data)])
+        self.assertEqual(str(concatenated3), (temp_data2)[: - len(spacer.data)])
         self.assertEqual(concatenated3.alphabet, spacer.alphabet)  # same as spacer since spacer isn't an empty seq, generic wins
         self.assertEqual(str(concatenated4), "".join(example_strings))
         self.assertEqual(concatenated4.alphabet, test_seq.alphabet)  # spacer is empty string so alphabet should match the only Seq object
-        self.assertEqual(str(concatenated5), (temp_data5)[: - len(spacer2.data)])
+        self.assertEqual(str(concatenated5), (temp_data3)[: - len(spacer2.data)])
         self.assertEqual(concatenated5.alphabet, generic_dna)  # both spacer and only seq have same alphabet
 
         self.assertRaises(ValueError, spacer.join, 5)
