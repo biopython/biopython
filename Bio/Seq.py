@@ -1308,7 +1308,7 @@ class Seq(object):
             a = self.alphabet
         for c in other:
             if isinstance(c, SeqRecord):
-                raise NotImplementedError("Join is not implemented for SeqRecords.")
+                raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
                 if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet
@@ -1902,7 +1902,7 @@ class UnknownSeq(Seq):
         type_is_unknown = True
         for c in other:
             if isinstance(c, SeqRecord):
-                raise NotImplementedError("Join is not implemented for SeqRecords.")
+                raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
                 if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
                     a = c.alphabet

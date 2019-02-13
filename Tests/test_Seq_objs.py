@@ -830,7 +830,7 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_join_UnknownSeq(self):
@@ -873,7 +873,7 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_join_MutableSeq(self):
@@ -915,7 +915,7 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(TypeError):
             spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_MutableSeq_init_typeerror(self):
