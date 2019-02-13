@@ -155,21 +155,3 @@ class GraphSet(object):
         outstr.append("%d graphs" % len(self._graphs))
         outstr = "\n".join(outstr)
         return outstr
-
-
-################################################################################
-# RUN AS SCRIPT
-################################################################################
-
-if __name__ == '__main__':
-
-    # Test code
-    gdgs = GraphSet(0, 'test data')
-
-    testdata1 = [(1, 10), (5, 15), (10, 20), (20, 40)]
-    testdata2 = [(250, .34), (251, .7), (252, .7), (253, .54), (254, .65)]
-
-    gdgs.add_graph(testdata1, 'TestData 1')
-    gdgs.add_graph(testdata2, 'TestData 2')
-
-    print(gdgs)

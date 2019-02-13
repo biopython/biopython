@@ -24,8 +24,6 @@ from __future__ import print_function
 
 from reportlab.lib import colors
 
-from Bio._py3k import range
-
 # GenomeDiagram imports
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
@@ -270,42 +268,3 @@ class Track(object):
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d sets" % len(self._sets))
         return "\n".join(outstr)
-
-
-################################################################################
-# RUN AS SCRIPT
-################################################################################
-
-if __name__ == '__main__':
-
-    # test code
-    from Bio import SeqIO
-    from random import normalvariate
-
-    genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
-
-    gdfs1 = FeatureSet(0, 'Nanoarchaeum equitans CDS - CDS')
-    gdfs2 = FeatureSet(1, 'Nanoarchaeum equitans CDS - gene')
-    for feature in genbank_entry.features:
-        if feature.type == 'CDS':
-            gdfs1.add_feature(feature)
-        if feature.type == 'gene':
-            gdfs2.add_feature(feature)
-
-    gdt = Track()
-    gdt.add_set(gdfs1)
-    gdt.add_set(gdfs2)
-
-    graphdata = []
-    for pos in range(1, len(genbank_entry.seq), 1000):
-        graphdata.append((pos, normalvariate(0.5, 0.1)))
-    gdgs = GraphSet(2, 'test data')
-    gdgs.add_graph(graphdata, 'Test Data')
-    gdt.add_set(gdgs)
-
-    print(gdt.get_ids())
-    sets = gdt.get_sets()
-    for set in sets:
-        print(set)
-
-    print(gdt.get_element_limits())
