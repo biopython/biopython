@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for Exonerate cigar output format."""
 
 import re
@@ -30,6 +30,7 @@ class ExonerateCigarParser(_BaseExonerateParser):
     _ALN_MARK = 'cigar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for cigar format, return query results, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']

@@ -1,11 +1,17 @@
 #!/usr/bin/env python
+# Copyright 2004 Kristian Rother
 #
-# parse_pdb_header.py
-# parses header of PDB files into a python dictionary.
-# emerged from the Columba database project www.columba-db.de.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 #
-# author: Kristian Rother
-#
+"""Parse header of PDB files into a python dictionary.
+
+Emerged from the Columba database project www.columba-db.de.
+
+Original author: Kristian Rother.
+"""
+
 # license: same as Biopython, read LICENSE.TXT from current Biopython release.
 #
 # last modified: 9.2.2004
@@ -21,8 +27,6 @@
 # is now _parse_pdb_header_list)
 # Thomas 9/05/04
 
-"""Parse the header of a PDB file."""
-
 from __future__ import print_function
 
 import re
@@ -34,9 +38,9 @@ def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal = ""
     for l in inl:
-        if re.search("\AJRNL", l):
+        if re.search(r"\AJRNL", l):
             journal += l[19:72].lower()
-    journal = re.sub("\s\s+", " ", journal)
+    journal = re.sub(r"\s\s+", " ", journal)
     return journal
 
 
@@ -46,10 +50,10 @@ def _get_references(inl):
     references = []
     actref = ""
     for l in inl:
-        if re.search("\AREMARK   1", l):
-            if re.search("\AREMARK   1 REFERENCE", l):
+        if re.search(r"\AREMARK   1", l):
+            if re.search(r"\AREMARK   1 REFERENCE", l):
                 if actref != "":
-                    actref = re.sub("\s\s+", " ", actref)
+                    actref = re.sub(r"\s\s+", " ", actref)
                     if actref != " ":
                         references.append(actref)
                     actref = ""
@@ -57,7 +61,7 @@ def _get_references(inl):
                 actref += l[19:72].lower()
 
     if actref != "":
-        actref = re.sub("\s\s+", " ", actref)
+        actref = re.sub(r"\s\s+", " ", actref)
         if actref != " ":
             references.append(actref)
     return references
@@ -74,7 +78,7 @@ def _format_date(pdb_date):
         century = 1900
     date = str(century + year) + "-"
     all_months = ['xxx', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-    'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                  'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
         month = '0' + month
@@ -84,12 +88,12 @@ def _format_date(pdb_date):
 
 def _chop_end_codes(line):
     """Chops lines ending with  '     1CSA  14' and the like (PRIVATE)."""
-    return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z", "", line)
+    return re.sub(r"\s\s\s\s+[\w]{4}.\s+\d*\Z", "", line)
 
 
 def _chop_end_misc(line):
     """Chops lines ending with  '     14-JUL-97  1CSA' and the like (PRIVATE)."""
-    return re.sub("\s\s\s\s+.*\Z", "", line)
+    return re.sub(r"\s\s\s\s+.*\Z", "", line)
 
 
 def _nice_case(line):
@@ -128,9 +132,56 @@ def parse_pdb_header(infile):
     return _parse_pdb_header_list(header)
 
 
+def _parse_remark_465(line):
+    """Parse missing residue remarks.
+
+    Returns a dictionary describing the missing residue.
+    The specification for REMARK 465 at
+    http://www.wwpdb.org/documentation/file-format-content/format33/remarks2.html#REMARK%20465
+    only gives templates, but does not say they have to be followed.
+    So we assume that not all pdb-files with a REMARK 465 can be understood.
+
+    Returns a dictionary with the following keys:
+    "model", "res_name", "chain", "ssseq", "insertion"
+    """
+    if line:
+        # Note that line has been stripped.
+        assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
+    pattern = re.compile(r"""
+                (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
+                 [A-Z]{1,3})                  # Or only residue name with
+                                              # 1 (RNA) to 3 letters
+                \s ([A-Za-z0-9])              # A single character chain
+                \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
+                                              # by an optional insertion code
+                                              # (Hetero-flags make no sense in
+                                              # context with missing res)
+                """, re.VERBOSE)
+    match = pattern.match(line)
+    if match is None:
+        return None
+    residue = {}
+    if " " in match.group(1):
+        model, residue["res_name"] = match.group(1).split(" ")
+        residue["model"] = int(model)
+    else:
+        residue["model"] = None
+        residue["res_name"] = match.group(1)
+    residue["chain"] = match.group(2)
+    try:
+        residue["ssseq"] = int(match.group(3))
+    except ValueError:
+        residue["insertion"] = match.group(3)[-1]
+        residue["ssseq"] = int(match.group(3)[:-1])
+    else:
+        residue["insertion"] = None
+    return residue
+
+
 def _parse_pdb_header_list(header):
     # database fields
-    dict = {'name': "",
+    dict = {
+        'name': "",
         'head': '',
         'deposition_date': "1909-01-08",
         'release_date': "1909-01-08",
@@ -139,7 +190,9 @@ def _parse_pdb_header_list(header):
         'structure_reference': "unknown",
         'journal_reference': "unknown",
         'author': "",
-        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
+        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}},
+        'has_missing_residues': False,
+        'missing_residues': []}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
@@ -148,7 +201,7 @@ def _parse_pdb_header_list(header):
     last_src_key = "misc"
 
     for hh in header:
-        h = re.sub("[\s\n\r]*\Z", "", hh)  # chop linebreaks off
+        h = re.sub(r"[\s\n\r]*\Z", "", hh)  # chop linebreaks off
         # key=re.sub("\s.+\s*","",h)
         key = h[:6].strip()
         # tail=re.sub("\A\w+\s+\d*\s*","",h)
@@ -163,22 +216,22 @@ def _parse_pdb_header_list(header):
             else:
                 dict['name'] = name
         elif key == "HEADER":
-            rr = re.search("\d\d-\w\w\w-\d\d", tail)
+            rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['deposition_date'] = _format_date(_nice_case(rr.group()))
             head = _chop_end_misc(tail).lower()
             dict['head'] = head
         elif key == "COMPND":
-            tt = re.sub("\;\s*\Z", "", _chop_end_codes(tail)).lower()
+            tt = re.sub(r"\;\s*\Z", "", _chop_end_codes(tail)).lower()
             # look for E.C. numbers in COMPND lines
-            rec = re.search('\d+\.\d+\.\d+\.\d+', tt)
+            rec = re.search(r'\d+\.\d+\.\d+\.\d+', tt)
             if rec:
                 dict['compound'][comp_molid]['ec_number'] = rec.group()
-                tt = re.sub("\((e\.c\.)*\d+\.\d+\.\d+\.\d+\)", "", tt)
+                tt = re.sub(r"\((e\.c\.)*\d+\.\d+\.\d+\.\d+\)", "", tt)
             tok = tt.split(":")
             if len(tok) >= 2:
                 ckey = tok[0]
-                cval = re.sub("\A\s*", "", tok[1])
+                cval = re.sub(r"\A\s*", "", tok[1])
                 if ckey == 'mol_id':
                     dict['compound'][cval] = {'misc': ''}
                     comp_molid = cval
@@ -189,12 +242,12 @@ def _parse_pdb_header_list(header):
             else:
                 dict['compound'][comp_molid][last_comp_key] += tok[0] + " "
         elif key == "SOURCE":
-            tt = re.sub("\;\s*\Z", "", _chop_end_codes(tail)).lower()
+            tt = re.sub(r"\;\s*\Z", "", _chop_end_codes(tail)).lower()
             tok = tt.split(":")
             # print(tok)
             if len(tok) >= 2:
                 ckey = tok[0]
-                cval = re.sub("\A\s*", "", tok[1])
+                cval = re.sub(r"\A\s*", "", tok[1])
                 if ckey == 'mol_id':
                     dict['source'][cval] = {'misc': ''}
                     comp_molid = cval
@@ -213,7 +266,7 @@ def _parse_pdb_header_list(header):
         elif key == "EXPDTA":
             expd = _chop_end_codes(tail)
             # chop junk at end of lines for some structures
-            expd = re.sub('\s\s\s\s\s\s\s.*\Z', '', expd)
+            expd = re.sub(r'\s\s\s\s\s\s\s.*\Z', '', expd)
             # if re.search('\Anmr',expd,re.IGNORECASE): expd='nmr'
             # if re.search('x-ray diffraction',expd,re.IGNORECASE): expd='x-ray diffraction'
             dict['structure_method'] = expd.lower()
@@ -221,7 +274,7 @@ def _parse_pdb_header_list(header):
             # make Annotation entries out of these!!!
             pass
         elif key == "REVDAT":
-            rr = re.search("\d\d-\w\w\w-\d\d", tail)
+            rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['release_date'] = _format_date(_nice_case(rr.group()))
         elif key == "JRNL":
@@ -239,12 +292,18 @@ def _parse_pdb_header_list(header):
         elif key == "REMARK":
             if re.search("REMARK   2 RESOLUTION.", hh):
                 r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", '', hh))
-                r = re.sub("\s+ANGSTROM.*", "", r)
+                r = re.sub(r"\s+ANGSTROM.*", "", r)
                 try:
                     dict['resolution'] = float(r)
                 except ValueError:
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
+            elif hh.startswith("REMARK 465"):
+                if tail:
+                    dict['has_missing_residues'] = True
+                    missing_res_info = _parse_remark_465(tail)
+                    if missing_res_info:
+                        dict['missing_residues'].append(missing_res_info)
         else:
             # print(key)
             pass

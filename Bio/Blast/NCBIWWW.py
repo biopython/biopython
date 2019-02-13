@@ -172,16 +172,16 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     # will take longer thus at least 70s with delay. Therefore,
     # start with 20s delay, thereafter once a minute.
     delay = 20  # seconds
-    previous = time.time()
     while True:
         current = time.time()
-        wait = previous + delay - current
+        wait = qblast._previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            previous = current + wait
+            qblast._previous = current + wait
         else:
-            previous = current
-        if delay < 60:
+            qblast._previous = current
+        # delay by at least 60 seconds only if running the request against the public NCBI API
+        if delay < 60 and url_base == NCBI_BLAST_URL:
             # Wasn't a quick return, must wait at least a minute
             delay = 60
 
@@ -203,8 +203,10 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         status = results[i + len("Status="):j].strip()
         if status.upper() == "READY":
             break
-
     return StringIO(results)
+
+
+qblast._previous = 0
 
 
 def _parse_qblast_ref_page(handle):

@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for HMMER plain text output format."""
 
 import re
@@ -44,6 +44,7 @@ class Hmmer3TextParser(object):
         self._meta = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over query results."""
         for qresult in self._parse_qresult():
             yield qresult
 
@@ -163,7 +164,7 @@ class Hmmer3TextParser(object):
         """Parse a HMMER3 hit block, beginning with the hit table (PRIVATE)."""
         # get to the end of the hit table delimiter and read one more line
         self._read_until(lambda line:
-                line.startswith('    ------- ------ -----'))
+                         line.startswith('    ------- ------ -----'))
         self.line = read_forward(self.handle)
 
         # assume every hit is in inclusion threshold until the inclusion
@@ -181,7 +182,7 @@ class Hmmer3TextParser(object):
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
             elif self.line.startswith('   [No hits detected that satisfy '
-                    'reporting'):
+                                      'reporting'):
                 while True:
                     self.line = read_forward(self.handle)
                     if self.line.startswith('Internal pipeline'):
@@ -237,8 +238,8 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------') or
-                    line.startswith('   [No individual domains'))
+                             line.startswith(' ---   ------ ----- --------') or
+                             line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
@@ -405,6 +406,7 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
+        """Iterate over Hmmer3TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

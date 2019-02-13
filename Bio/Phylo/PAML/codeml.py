@@ -3,6 +3,11 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of CODEML.
+
+Maximum likelihood analysis using codon substitution models.
+"""
+
 from __future__ import print_function
 
 import os.path
@@ -167,13 +172,13 @@ class Codeml(Paml):
             self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="codeml", parse=True):
-        """Run codeml using the current configuration and then parse the results.
+        """Run codeml using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that CODEML
-        requires relative paths.
+        If parse is True then read and return the results, otherwise
+        return None.
+
+        The arguments may be passed as either absolute or relative
+        paths, despite the fact that CODEML requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
@@ -181,10 +186,8 @@ class Codeml(Paml):
             raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
-            results = read(self.out_file)
-        else:
-            results = None
-        return results
+            return read(self.out_file)
+        return None
 
 
 def read(results_file):
@@ -198,11 +201,11 @@ def read(results_file):
         raise ValueError("Empty results file.  Did CODEML exit successfully?  "
                          "Run 'Codeml.run()' with 'verbose=True'.")
     (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
-            results)
+                                                                      results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models,
-            multi_genes)
+                                          multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
-    if len(results) == 0:
+    if not results:
         raise ValueError("Invalid results file")
     return results

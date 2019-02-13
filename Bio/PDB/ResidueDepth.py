@@ -481,8 +481,9 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
     make_surface = MSMS % (xyz_tmp, surface_tmp)
     os.system(make_surface)
     surface_file = surface_tmp + ".vert"
-    assert os.path.isfile(surface_file), \
-        "Failed to generate surface file using command:\n%s" % make_surface
+    if not os.path.isfile(surface_file):
+        raise RuntimeError("Failed to generate surface file using "
+                           "command:\n%s" % make_surface)
 
     # read surface vertices from vertex file
     surface = _read_vertex_array(surface_file)
@@ -512,6 +513,7 @@ def residue_depth(residue, surface):
 
 
 def ca_depth(residue, surface):
+    """Return CA depth."""
     if not residue.has_id("CA"):
         return None
     ca = residue["CA"]

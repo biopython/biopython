@@ -3,7 +3,7 @@
 
 Biopython has a regression testing framework (the file
 \verb|run_tests.py|) based on
-\href{http://docs.python.org/library/unittest.html}{unittest},
+\href{https://docs.python.org/3/library/unittest.html}{unittest},
 the standard unit testing framework for Python.  Providing comprehensive
 tests for modules is one of the most important aspects of making sure that
 the Biopython code is as bug-free as possible before going out.
@@ -95,7 +95,7 @@ python test_Cluster.py
 \subsection{Running the tests using Tox}
 
 Like most Python projects, you can also use
-\href{http://tox.readthedocs.org/en/latest/}{Tox} to run the tests on multiple
+\href{https://tox.readthedocs.org/en/latest/}{Tox} to run the tests on multiple
 Python versions, provided they are already installed in your system.
 
 We do not provide the configuration \texttt{tox.ini} file in our code base because
@@ -272,7 +272,7 @@ also be run individually which is helpful for testing or debugging.
 The \verb|unittest|-framework has been included with Python since version
 2.1, and is documented in the Python Library Reference (which I know you
 are keeping under your pillow, as recommended).  There is also
-\href{http://docs.python.org/library/unittest.html}{online documentaion
+\href{https://docs.python.org/3/library/unittest.html}{online documentaion
 for unittest}.
 If you are familiar with the \verb|unittest| system (or something similar
 like the nose test framework), you shouldn't have any trouble.  You may
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     unittest.main(testRunner=runner)
 \end{verbatim}
 
-In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
+In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{https://docs.python.org/3/library/unittest.html}{online reference}).
 
 These are the key points of \verb|unittest|-based tests:
 
@@ -431,7 +431,7 @@ In general instead include the docstring tests by adding them to the
 \label{section:doctest}
 
 Python modules, classes and functions support built in documentation using
-docstrings.  The \href{http://docs.python.org/library/doctest.html}{doctest
+docstrings.  The \href{https://docs.python.org/3/library/doctest.html}{doctest
 framework} (included with Python) allows the developer to embed working
 examples in the docstrings, and have these examples automatically tested.
 

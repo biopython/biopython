@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
+
 from __future__ import print_function
 
 import os
@@ -34,9 +36,11 @@ class Paml(object):
         self._options = {}  # will be set in subclasses
 
     def write_ctl_file(self):
+        """Write control file."""
         pass
 
     def read_ctl_file(self):
+        """Read control file."""
         pass
 
     def print_options(self):
@@ -78,18 +82,19 @@ class Paml(object):
             self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
             self._rel_alignment = os.path.relpath(self.alignment,
-                self.working_dir)
+                                                  self.working_dir)
         if self.out_file is not None:
             self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
     def run(self, ctl_file, verbose, command):
-        """Run a paml program using the current configuration and then parse the results.
+        """Run a paml program using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that paml
-        requires relative paths.
+        Check that the class attributes exist and raise an error
+        if not. Then run the command and check if it succeeds with
+        a return code of 0, otherwise raise an error.
+
+        The arguments may be passed as either absolute or relative
+        paths, despite the fact that paml requires relative paths.`
         """
         if self.alignment is None:
             raise ValueError("Alignment file not specified.")

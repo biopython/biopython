@@ -29,7 +29,7 @@ class ModTest(unittest.TestCase):
     def tearDown(self):
         """Just in case yn00 creates some junk files, do a clean-up."""
         del_files = [self.out_file, "2YN.dN", "2YN.dS", "2YN.t", "rst",
-            "rst1", "rub"]
+                     "rst1", "rub"]
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
@@ -44,15 +44,15 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            yn00.Yn00, alignment=list())
+                          yn00.Yn00, alignment=list())
         self.yn00.alignment = list()
         self.yn00.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.yn00.run)
+                          self.yn00.run)
 
     def testAlignmentExists(self):
         self.assertRaises((EnvironmentError, IOError), yn00.Yn00,
-            alignment="nonexistent")
+                          alignment="nonexistent")
         self.yn00.alignment = "nonexistent"
         self.yn00.out_file = self.out_file
         self.assertRaises(IOError, self.yn00.run)
@@ -62,23 +62,23 @@ class ModTest(unittest.TestCase):
         self.yn00.out_file = self.out_file
         self.yn00.working_dir = list()
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.yn00.run)
+                          self.yn00.run)
 
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
                           self.yn00.set_options, xxxx=1)
         self.assertRaises((AttributeError, KeyError),
-            self.yn00.get_option, "xxxx")
+                          self.yn00.get_option, "xxxx")
 
     def testAlignmentSpecified(self):
         self.yn00.out_file = self.out_file
         self.assertRaises((AttributeError, ValueError),
-            self.yn00.run)
+                          self.yn00.run)
 
     def testOutputFileSpecified(self):
         self.yn00.alignment = self.align_file
         self.assertRaises((AttributeError, ValueError),
-            self.yn00.run)
+                          self.yn00.run)
 
     # def testPamlErrorsCaught(self):
     #     self.yn00.alignment = self.align_file
@@ -90,40 +90,40 @@ class ModTest(unittest.TestCase):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.yn00.run, ctl_file=list())
+                          self.yn00.run, ctl_file=list())
 
     def testCtlFileExistsOnRun(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
         self.assertRaises(IOError,
-            self.yn00.run, ctl_file="nonexistent")
+                          self.yn00.run, ctl_file="nonexistent")
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            self.yn00.read_ctl_file, list())
+                          self.yn00.read_ctl_file, list())
         self.assertRaises((AttributeError, KeyError),
-            self.yn00.read_ctl_file, self.bad_ctl_file1)
+                          self.yn00.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError,
-            self.yn00.read_ctl_file, self.bad_ctl_file2)
+                          self.yn00.read_ctl_file, self.bad_ctl_file2)
         target_options = {"verbose": 1,
-                        "icode": 0,
-                        "weighting": 0,
-                        "commonf3x4": 0,
-                        "ndata": 1}
+                          "icode": 0,
+                          "weighting": 0,
+                          "commonf3x4": 0,
+                          "ndata": 1}
         self.yn00.read_ctl_file(self.ctl_file)
         self.assertEqual(self.yn00._options, target_options)
 
     def testCtlFileExistsOnRead(self):
         self.assertRaises(IOError,
-            self.yn00.read_ctl_file, ctl_file="nonexistent")
+                          self.yn00.read_ctl_file, ctl_file="nonexistent")
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-            yn00.read, list())
+                          yn00.read, list())
 
     def testResultsExist(self):
         self.assertRaises((EnvironmentError, IOError),
-            yn00.read, "nonexistent")
+                          yn00.read, "nonexistent")
 
     def testResultsParsable(self):
         self.assertRaises(ValueError, yn00.read, self.results_file)

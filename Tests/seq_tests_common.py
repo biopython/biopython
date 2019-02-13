@@ -32,13 +32,13 @@ def compare_reference(old_r, new_r):
     of the BioSQL table structure.
     """
     assert old_r.title == new_r.title, \
-           "%s vs %s" % (old_r.title, new_r.title)
+        "%s vs %s" % (old_r.title, new_r.title)
     assert old_r.authors == new_r.authors, \
-           "%s vs %s" % (old_r.authors, new_r.authors)
+        "%s vs %s" % (old_r.authors, new_r.authors)
     assert old_r.journal == new_r.journal, \
-           "%s vs %s" % (old_r.journal, new_r.journal)
+        "%s vs %s" % (old_r.journal, new_r.journal)
     assert old_r.medline_id == new_r.medline_id, \
-           "%s vs %s" % (old_r.medline_id, new_r.medline_id)
+        "%s vs %s" % (old_r.medline_id, new_r.medline_id)
 
     if old_r.pubmed_id and new_r.pubmed_id:
         assert old_r.pubmed_id == new_r.pubmed_id
@@ -51,7 +51,7 @@ def compare_reference(old_r, new_r):
     # Looking at the tables, I *think* the current schema does not
     # allow us to store a reference comment.  Must confirm this.
     assert old_r.comment == new_r.comment or new_r.comment == "", \
-                          "%r vs %r" % (old_r.comment, new_r.comment)
+        "%r vs %r" % (old_r.comment, new_r.comment)
 
     # TODO - assert old_r.consrtm == new_r.consrtm
     # Looking at the tables, I *think* the current schema does not
@@ -66,7 +66,7 @@ def compare_reference(old_r, new_r):
         assert isinstance(old_r.location[0], FeatureLocation)
         assert isinstance(new_r.location[0], FeatureLocation)
         assert old_r.location[0].start == new_r.location[0].start and \
-               old_r.location[0].end == new_r.location[0].end
+            old_r.location[0].end == new_r.location[0].end
 
     return True
 
@@ -98,15 +98,15 @@ def compare_feature(old_f, new_f):
 
     # We dont store fuzzy locations:
     assert old_f.location.start == new_f.location.start \
-    or (isinstance(old_f.location.start, UnknownPosition) and
-        isinstance(new_f.location.start, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.start,
-                             new_f.location.start)
+        or (isinstance(old_f.location.start, UnknownPosition) and
+            isinstance(new_f.location.start, UnknownPosition)), \
+        "%s -> %s" % (old_f.location.start,
+                      new_f.location.start)
     assert old_f.location.end == new_f.location.end \
-    or (isinstance(old_f.location.end, UnknownPosition) and
-        isinstance(new_f.location.end, UnknownPosition)), \
-               "%s -> %s" % (old_f.location.end,
-                             new_f.location.end)
+        or (isinstance(old_f.location.end, UnknownPosition) and
+            isinstance(new_f.location.end, UnknownPosition)), \
+        "%s -> %s" % (old_f.location.end,
+                      new_f.location.end)
 
     assert isinstance(old_f.location, CompoundLocation) == \
         isinstance(new_f.location, CompoundLocation)
@@ -150,7 +150,7 @@ def compare_feature(old_f, new_f):
 def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects."""
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
-    assert str(old) == str(new)
+    assert str(old) == str(new), "%s vs %s" % (old, new)
 
     if isinstance(old, UnknownSeq):
         assert isinstance(new, UnknownSeq)
@@ -183,9 +183,9 @@ def compare_sequence(old, new):
         for j in indices:
             expected = s[i:j]
             assert expected == str(old[i:j]), \
-                   "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
+                "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
             assert expected == str(new[i:j]), \
-                   "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
+                "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
             # Slicing with step of 1 should make no difference.
             # Slicing with step 3 might be useful for codons.
             for step in [1, 3]:
@@ -230,8 +230,8 @@ def compare_record(old, new):
     assert old.name == new.name
     assert old.description == new.description
     assert old.dbxrefs == new.dbxrefs, \
-           "dbxrefs mismatch\nOld: %s\nNew: %s" \
-           % (old.dbxrefs, new.dbxrefs)
+        "dbxrefs mismatch\nOld: %s\nNew: %s" \
+        % (old.dbxrefs, new.dbxrefs)
     # Features:
     if not compare_features(old.features, new.features):
         return False
@@ -246,7 +246,7 @@ def compare_record(old, new):
                                     'data_file_division', 'ncbi_taxid',
                                     'gi'])
     assert not new_keys, "Unexpected new annotation keys: %s" \
-           % ", ".join(new_keys)
+        % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
     missing_keys = missing_keys.difference(['ncbi_taxid',  # Can't store chimeras
                                             'structured_comment'])

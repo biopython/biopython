@@ -903,14 +903,14 @@ class CircularDrawer(AbstractDrawer):
         return greytrack_bgs, greytrack_labels
 
     def canvas_angle(self, base):
-        """Given base-pair position, return (angle, cosine, sin)."""
+        """Given base-pair position, return (angle, cosine, sin) (PRIVATE)."""
         angle = self.sweep * 2 * pi * (base - self.start) / self.length
         return (angle, cos(angle), sin(angle))
 
     def _draw_sigil_box(self, bottom, center, top,
                         startangle, endangle, strand,
                         **kwargs):
-        """Draw BOX sigil."""
+        """Draw BOX sigil (PRIVATE)."""
         if strand == 1:
             inner_radius = center
             outer_radius = top
@@ -924,7 +924,7 @@ class CircularDrawer(AbstractDrawer):
 
     def _draw_arc(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None, colour=None, **kwargs):
-        """Return closed path describing an arc box.
+        """Return closed path describing an arc box (PRIVATE).
 
         Arguments:
          - inner_radius  Float distance of inside of arc from drawing center
@@ -977,7 +977,7 @@ class CircularDrawer(AbstractDrawer):
 
     def _draw_arc_line(self, path, start_radius, end_radius, start_angle, end_angle,
                        move=False):
-        """Add a list of points to a path object.
+        """Add a list of points to a path object (PRIVATE).
 
         Assumes angles given are in degrees!
 
@@ -1065,7 +1065,7 @@ class CircularDrawer(AbstractDrawer):
                                    startangle, endangle, strand,
                                    color, border=None, corner=0.5,
                                    **kwargs):
-        """Draw OCTO sigil, box with corners cut off."""
+        """Draw OCTO sigil, box with corners cut off (PRIVATE)."""
         if strand == 1:
             inner_radius = center
             outer_radius = top
@@ -1124,7 +1124,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_sigil_arrow(self, bottom, center, top,
                           startangle, endangle, strand,
                           **kwargs):
-        """Draw ARROW sigil."""
+        """Draw ARROW sigil (PRIVATE)."""
         if strand == 1:
             inner_radius = center
             outer_radius = top
@@ -1143,7 +1143,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_sigil_big_arrow(self, bottom, center, top,
                               startangle, endangle, strand,
                               **kwargs):
-        """Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        """Draw BIGARROW sigil, like ARROW but straddles the axis (PRIVATE)."""
         if strand == -1:
             orientation = "left"
         else:
@@ -1155,7 +1155,7 @@ class CircularDrawer(AbstractDrawer):
                         color, border=None,
                         shaft_height_ratio=0.4, head_length_ratio=0.5,
                         orientation='right', colour=None, **kwargs):
-        """Draw an arrow along an arc."""
+        """Draw an arrow along an arc (PRIVATE)."""
         # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
@@ -1189,9 +1189,12 @@ class CircularDrawer(AbstractDrawer):
             headangle = max(min(headangle, endangle), startangle)
         else:
             headangle = max(min(headangle, startangle), endangle)
-        assert startangle <= headangle <= endangle \
-            or endangle <= headangle <= startangle, \
-            (startangle, headangle, endangle, angle)
+        if not (startangle <= headangle <= endangle
+                or endangle <= headangle <= startangle):
+            raise RuntimeError("Problem drawing arrow, invalid positions. "
+                               "Start angle: %s, Head angle: %s, "
+                               "End angle: %s, Angle: %s"
+                               % (startangle, headangle, endangle, angle))
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
@@ -1283,7 +1286,7 @@ class CircularDrawer(AbstractDrawer):
                           startangle, endangle, strand,
                           color, border=None,
                           **kwargs):
-        """Draw JAGGY sigil.
+        """Draw JAGGY sigil (PRIVATE).
 
         Although we may in future expose the head/tail jaggy lengths, for now
         both the left and right edges are drawn jagged.
@@ -1325,8 +1328,12 @@ class CircularDrawer(AbstractDrawer):
             headangle = endangle
             tailangle = min(startangle + min(height * tail_length_ratio / (center * teeth), angle), endangle)
 
-        assert startangle <= tailangle <= headangle <= endangle, \
-            (startangle, tailangle, headangle, endangle, angle)
+        if not startangle <= tailangle <= headangle <= endangle:
+            raise RuntimeError("Problem drawing jaggy sigil, invalid "
+                               "positions. Start angle: %s, "
+                               "Tail angle: %s, Head angle: %s, End angle %s, "
+                               "Angle: %s" % (startangle, tailangle, headangle,
+                                              endangle, angle))
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)

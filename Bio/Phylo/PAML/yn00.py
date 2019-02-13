@@ -3,6 +3,12 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of yn00.
+
+Yang and Nielsen 2000,  estimating synonymous and nonsynonymous substitution
+rates in pairwise comparison of protein-coding DNA sequences.
+"""
+
 import os.path
 from ._paml import Paml
 from . import _parse_yn00
@@ -95,12 +101,15 @@ class Yn00(Paml):
                 self._options[option] = None
 
     def run(self, ctl_file=None, verbose=False, command="yn00", parse=True):
+        """Run yn00 using the current configuration.
+
+        If parse is True then read and return the result, otherwise
+        return None.
+        """
         Paml.run(self, ctl_file, verbose, command)
         if parse:
-            results = read(self.out_file)
-        else:
-            results = None
-        return results
+            return read(self.out_file)
+        return None
 
 
 def read(results_file):
@@ -113,8 +122,7 @@ def read(results_file):
     if not lines:
         raise ValueError("Empty results file.  Did YN00 exit successfully?  "
                          "Run 'Yn00.run()' with 'verbose=True'.")
-    for line_num in range(len(lines)):
-        line = lines[line_num]
+    for line_num, line in enumerate(lines):
         if "(A) Nei-Gojobori (1986) method" in line:
             ng86_start = line_num + 1
         elif "(B) Yang & Nielsen (2000) method" in line:
@@ -126,6 +134,6 @@ def read(results_file):
                                              sequences)
             results = _parse_yn00.parse_others(lines[line_num + 1:], results,
                                                sequences)
-    if len(results) == 0:
+    if not results:
         raise ValueError("Invalid results file.")
     return results

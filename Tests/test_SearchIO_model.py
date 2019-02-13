@@ -100,7 +100,7 @@ class QueryResultCases(unittest.TestCase):
     def test_repr(self):
         """Test QueryResult.__repr__"""
         self.assertEqual("QueryResult(id='query1', 3 hits)",
-                repr(self.qresult))
+                         repr(self.qresult))
 
     def test_iter(self):
         """Test QueryResult.__iter__"""
@@ -126,21 +126,21 @@ class QueryResultCases(unittest.TestCase):
         # items should return tuples of hit key, hit object pair
         items = [x for x in self.qresult.items]
         self.assertEqual([('hit1', hit11), ('hit2', hit21),
-                ('hit3', hit31)], items)
+                         ('hit3', hit31)], items)
 
     def test_hsps(self):
         """Test QueryResult.hsps"""
         # hsps should return all hsps contained in qresult
         hsps = self.qresult.hsps
         self.assertEqual([hsp111, hsp112, hsp113, hsp114, hsp211, hsp311,
-                hsp312, ], hsps)
+                         hsp312, ], hsps)
 
     def test_fragments(self):
         """Test QueryResult.fragments"""
         # fragments should return all fragments contained in qresult
         frags = self.qresult.fragments
         self.assertEqual([frag111, frag112, frag113, frag113b, frag114,
-            frag114b, frag211, frag311, frag312], frags)
+                         frag114b, frag211, frag311, frag312], frags)
 
     def test_contains(self):
         """Test QueryResult.__contains__"""
@@ -234,7 +234,7 @@ class QueryResultCases(unittest.TestCase):
         # item assignment should fail if the key is not string
         self.assertRaises(TypeError, self.qresult.__setitem__, 0, hit41)
         self.assertRaises(TypeError, self.qresult.__setitem__, slice(0, 2),
-                [hit41, hit31])
+                          [hit41, hit31])
 
     def test_setitem_wrong_type(self):
         """Test QueryResult.__setitem__, wrong type"""
@@ -421,7 +421,7 @@ class QueryResultCases(unittest.TestCase):
         self.qresult.absorb(hit41)
         self.assertEqual([hit11, hit21, hit31, hit41], list(self.qresult.hits))
         self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'],
-                list(self.qresult.hit_keys))
+                         list(self.qresult.hit_keys))
 
     def test_absorb_hit_exists(self):
         """Test QueryResult.absorb, hit with the same ID exists"""
@@ -443,7 +443,7 @@ class QueryResultCases(unittest.TestCase):
         self.qresult.append(hit41)
         self.assertEqual([hit11, hit21, hit31, hit41], list(self.qresult.hits))
         self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'],
-                list(self.qresult.hit_keys))
+                         list(self.qresult.hit_keys))
 
     def test_append_custom_hit_key_function_ok(self):
         """Test QueryResult.append, with custom hit key function"""
@@ -452,7 +452,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(['hit1', 'hit2', 'hit3'], list(self.qresult.hit_keys))
         self.qresult.append(hit41)
         self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4_custom'],
-                list(self.qresult.hit_keys))
+                         list(self.qresult.hit_keys))
 
     def test_append_id_exists(self):
         """Test QueryResult.append, when ID exists"""
@@ -785,7 +785,7 @@ class HitCases(unittest.TestCase):
         """Test Hit.__repr__"""
         # test for cases with 1 or other alignment numbers
         self.assertEqual("Hit(id='hit1', query_id='query1', 3 hsps)",
-                repr(self.hit))
+                         repr(self.hit))
 
     def test_hsps(self):
         """Test Hit.hsps"""
@@ -797,7 +797,7 @@ class HitCases(unittest.TestCase):
         # fragments should return the list of fragments in each hsps
         # as a flat list
         self.assertEqual([frag111, frag112, frag113, frag113b],
-                self.hit.fragments)
+                         self.hit.fragments)
 
     def test_iter(self):
         """Test Hit.__iter__"""
@@ -1109,12 +1109,12 @@ class HSPSingleFragmentCases(unittest.TestCase):
         read_onlies = ('range', 'span', 'strand', 'frame', 'start', 'end')
         for seq_type in ('query', 'hit'):
             self.assertRaises(AttributeError, setattr,
-                    self.hsp, seq_type, 'A')
+                              self.hsp, seq_type, 'A')
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                        self.hsp, '%s_%s' % (seq_type, attr), 5)
+                                  self.hsp, '%s_%s' % (seq_type, attr), 5)
         self.assertRaises(AttributeError, setattr,
-                self.hsp, 'aln', None)
+                          self.hsp, 'aln', None)
 
 
 class HSPMultipleFragmentCases(unittest.TestCase):
@@ -1188,9 +1188,9 @@ class HSPMultipleFragmentCases(unittest.TestCase):
     def test_seqs(self):
         """Test HSP sequence properties"""
         self.assertEqual(['ATCAGT', 'GGG'], [str(x.seq) for x in
-            self.hsp.hit_all])
+                         self.hsp.hit_all])
         self.assertEqual(['AT-ACT', 'CCC'], [str(x.seq) for x in
-            self.hsp.query_all])
+                         self.hsp.query_all])
 
     def test_id_desc_set(self):
         """Test HSP query and hit id and description setters"""
@@ -1256,13 +1256,13 @@ class HSPMultipleFragmentCases(unittest.TestCase):
         for seq_type in ('query', 'hit'):
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                        self.hsp, '%s_%s' % (seq_type, attr), 5)
+                                  self.hsp, '%s_%s' % (seq_type, attr), 5)
         self.assertRaises(AttributeError, setattr,
-                self.hsp, 'aln_all', None)
+                          self.hsp, 'aln_all', None)
         self.assertRaises(AttributeError, setattr,
-                self.hsp, 'hit_all', None)
+                          self.hsp, 'hit_all', None)
         self.assertRaises(AttributeError, setattr,
-                self.hsp, 'query_all', None)
+                          self.hsp, 'query_all', None)
 
 
 class HSPFragmentWithoutSeqCases(unittest.TestCase):
@@ -1300,10 +1300,10 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         """Test HSPFragment.__repr__, no alignments"""
         # test for minimum repr
         self.assertEqual("HSPFragment(hit_id='hit_id', query_id='query_id')",
-                repr(self.fragment))
+                         repr(self.fragment))
         self.fragment.aln_span = 5
         self.assertEqual("HSPFragment(hit_id='hit_id', query_id='query_id', "
-                "5 columns)", repr(self.fragment))
+                         "5 columns)", repr(self.fragment))
 
     def test_getitem(self):
         """Test HSPFragment.__getitem__, no alignments"""
@@ -1333,7 +1333,7 @@ class HSPFragmentCases(unittest.TestCase):
 
     def setUp(self):
         self.fragment = HSPFragment('hit_id', 'query_id', 'ATGCTAGCTACA',
-                'ATG--AGCTAGG')
+                                    'ATG--AGCTAGG')
 
     def test_pickle(self):
         """Test pickling and unpickling of HSPFragment"""
@@ -1358,7 +1358,7 @@ class HSPFragmentCases(unittest.TestCase):
         wrong_query = Seq('ATGC')
         wrong_hit = Seq('ATGC')
         self.assertRaises(TypeError, HSPFragment, 'hit_id', 'query_id',
-                wrong_hit, wrong_query)
+                          wrong_hit, wrong_query)
 
     def test_seqmodel(self):
         """Test HSPFragment sequence attribute types and default values"""
@@ -1411,7 +1411,7 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment.__repr__"""
         # test for minimum repr
         self.assertEqual("HSPFragment(hit_id='hit_id', query_id='query_id', "
-                "12 columns)", repr(self.fragment))
+                         "12 columns)", repr(self.fragment))
 
     def test_getitem(self):
         """Test HSPFragment.__getitem__"""
@@ -1565,7 +1565,7 @@ class HSPFragmentCases(unittest.TestCase):
         for seq_type in ('query', 'hit'):
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr,
-                        self.fragment, '%s_%s' % (seq_type, attr), 5)
+                                  self.fragment, '%s_%s' % (seq_type, attr), 5)
 
 
 if __name__ == "__main__":

@@ -2,9 +2,10 @@
 # Modifications Copyright 2004/2005 James Casbon. All rights Reserved.
 # Modifications Copyright 2010 Jeffrey Finkelstein. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # Changes made by James Casbon:
 # - New Astral class

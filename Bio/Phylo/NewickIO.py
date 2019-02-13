@@ -26,7 +26,7 @@ tokens = [
     (r"\(", 'open parens'),
     (r"\)", 'close parens'),
     (r"[^\s\(\)\[\]\'\:\;\,]+", 'unquoted node label'),
-    (r"\:[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
+    (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
     (r"\,", 'comma'),
     (r"\[(\\.|[^\]])*\]", 'comment'),
     (r"\'(\\.|[^\'])*\'", 'quoted node label'),
@@ -302,7 +302,7 @@ class Writer(object):
     def _info_factory(self, plain, confidence_as_branch_length,
                       branch_length_only, max_confidence, format_confidence,
                       format_branch_length):
-        """Return a function that creates a nicely formatted node tag."""
+        """Return a function that creates a nicely formatted node tag (PRIVATE)."""
         if plain:
             # Plain tree only. That's easy.
             def make_info_string(clade, terminal=False):

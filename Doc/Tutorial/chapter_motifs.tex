@@ -14,7 +14,7 @@ Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
-interested in \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
+interested in \href{http://fraenkel-nsf.csbi.mit.edu/TAMO/}{TAMO}, another python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
 motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
@@ -175,7 +175,7 @@ The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
 \subsection{Creating a sequence logo}
-If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+If we have internet access, we can create a \href{https://weblogo.berkeley.edu}{weblogo}:
 \begin{verbatim}
 >>> m.weblogo("mymotif.png")
 \end{verbatim}
@@ -709,6 +709,12 @@ To parse a TRANSFAC file, use
 ...     record = motifs.parse(handle, "TRANSFAC")
 ...
 \end{verbatim}
+If any discrepancies between the file contents and the TRANSFAC file format are detected, a \verb+ValueError+ is raised. Note that you may encounter files that do not follow the TRANSFAC format strictly. For example, the number of spaces between columns may be different, or a tab may be used instead of spaces. Use \verb+strict=False+ to enable parsing such files without raising a \verb+ValueError+:
+\begin{verbatim}
+>>> record = motifs.parse(handle, "TRANSFAC", strict=False)
+\end{verbatim}
+When parsing a non-compliant file, we recommend to check the record returned by \verb+motif.parse+ to ensure that it is consistent with the file contents.
+
 The overall version number, if available, is stored as \verb+record.version+:
 %cont-doctest
 \begin{verbatim}
@@ -1493,9 +1499,9 @@ Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
 
 \begin{itemize}
-\item \href{http://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
 \item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs}
 \end{itemize}
 

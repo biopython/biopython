@@ -1470,6 +1470,30 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[9]), "CTCAATCGTA")
         handle.close()
 
+    def test_minimal_meme_parser(self):
+        """Parse motifs/minimal_test.meme file."""
+        handle = open("motifs/minimal_test.meme")
+        record = motifs.parse(handle, 'minimal')
+        self.assertEqual(record.version, '4')
+        self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(len(record.sequences), 0)
+        self.assertEqual(record.command, '')
+        self.assertEqual(len(record), 2)
+        motif = record[0]
+        self.assertEqual(motif.name, "KRP")
+        self.assertEqual(record["KRP"], motif)
+        self.assertEqual(motif.num_occurrences, 17)
+        self.assertEqual(motif.length, 19)
+        self.assertEqual(str(motif.consensus), 'TGTGATCGAGGTCACACTT')
+        self.assertAlmostEqual(motif.background['A'], 0.30269730269730266)
+        self.assertAlmostEqual(motif.background['C'], 0.1828171828171828)
+        self.assertAlmostEqual(motif.background['G'], 0.20879120879120877)
+        self.assertAlmostEqual(motif.background['T'], 0.30569430569430567)
+        self.assertAlmostEqual(motif.evalue, 4.1e-09)
+        self.assertEqual(motif.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(motif.instances, None)
+        handle.close()
+
     def test_meme_parser_rna(self):
         """Test if Bio.motifs can parse MEME output files using RNA."""
         handle = open("motifs/meme.rna.oops.txt")
@@ -1740,7 +1764,7 @@ class TestMAST(unittest.TestCase):
 
 
 class TestTransfac(unittest.TestCase):
-    """Transface format tests."""
+    """Transfac format tests."""
 
     def test_transfac_parser(self):
         """Parse motifs/transfac.dat file."""
@@ -1844,6 +1868,52 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif.counts['T', 8], 5)
         self.assertEqual(motif.counts['T', 9], 3)
         self.assertEqual(str(motif.counts.degenerate_consensus), "RSCAGAGGTY")
+        handle.close()
+
+    def test_permissive_transfac_parser(self):
+        """Parse the TRANSFAC-like file motifs/MA0056.1.transfac."""
+        # The test file MA0056.1.transfac was provided by the JASPAR database
+        # in a TRANSFAC-like format
+        # Khan, A. et al. JASPAR 2018: update of the open-access database of
+        # transcription factor binding profiles and its web framework.
+        # Nucleic Acids Res. 2018; 46:D260-D266,
+        path = "motifs/MA0056.1.transfac"
+        handle = open(path)
+        self.assertRaises(ValueError, motifs.parse, handle, 'TRANSFAC')
+        handle.close()
+        handle = open(path)
+        records = motifs.parse(handle, 'TRANSFAC', strict=False)
+        motif = records[0]
+        self.assertEqual(sorted(motif.keys()), ['AC', 'DE', 'ID'])
+        self.assertEqual(motif['AC'], 'MA0056.1')
+        self.assertEqual(motif['DE'], 'MA0056.1 MZF1 ; From JASPAR 2018')
+        self.assertEqual(motif['ID'], 'MZF1')
+        self.assertEqual(motif.counts.length, 6)
+        self.assertEqual(len(motif.counts), 4)
+        self.assertEqual(motif.counts['A', 0],  3.0)
+        self.assertEqual(motif.counts['A', 1],  0.0)
+        self.assertEqual(motif.counts['A', 2],  2.0)
+        self.assertEqual(motif.counts['A', 3],  0.0)
+        self.assertEqual(motif.counts['A', 4],  0.0)
+        self.assertEqual(motif.counts['A', 5], 18.0)
+        self.assertEqual(motif.counts['C', 0],  5.0)
+        self.assertEqual(motif.counts['C', 1],  0.0)
+        self.assertEqual(motif.counts['C', 2],  0.0)
+        self.assertEqual(motif.counts['C', 3],  0.0)
+        self.assertEqual(motif.counts['C', 4],  0.0)
+        self.assertEqual(motif.counts['C', 5],  0.0)
+        self.assertEqual(motif.counts['G', 0],  4.0)
+        self.assertEqual(motif.counts['G', 1], 19.0)
+        self.assertEqual(motif.counts['G', 2], 18.0)
+        self.assertEqual(motif.counts['G', 3], 19.0)
+        self.assertEqual(motif.counts['G', 4], 20.0)
+        self.assertEqual(motif.counts['G', 5],  2.0)
+        self.assertEqual(motif.counts['T', 0],  8.0)
+        self.assertEqual(motif.counts['T', 1],  1.0)
+        self.assertEqual(motif.counts['T', 2],  0.0)
+        self.assertEqual(motif.counts['T', 3],  1.0)
+        self.assertEqual(motif.counts['T', 4],  0.0)
+        self.assertEqual(motif.counts['T', 5],  0.0)
         handle.close()
 
 

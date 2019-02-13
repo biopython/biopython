@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Abstract base classes for the SearchIO object model."""
 
 
@@ -42,10 +42,10 @@ class _BaseHSP(_BaseSearchObject):
         lines = []
         # set query id line
         qid_line = trim_str('      Query: %s %s' %
-                (self.query_id, self.query_description), 80, '...')
+                            (self.query_id, self.query_description), 80, '...')
         # set hit id line
         hid_line = trim_str('        Hit: %s %s' %
-                (self.hit_id, self.hit_description), 80, '...')
+                            (self.hit_id, self.hit_description), 80, '...')
         lines.append(qid_line)
         lines.append(hid_line)
 
@@ -63,8 +63,8 @@ class _BaseHSP(_BaseSearchObject):
             qstrand = self.query_strand_all[0]
             hstrand = self.hit_strand_all[0]
         lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end,
-                qstrand))
+                     qstrand))
         lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end,
-                hstrand))
+                     hstrand))
 
         return '\n'.join(lines)

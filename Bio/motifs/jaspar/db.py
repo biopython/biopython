@@ -111,7 +111,7 @@ class JASPAR5(object):
 
     def __str__(self):
         """Return a string represention of the JASPAR5 DB connection."""
-        return "%s\@%s:%s" % (self.user, self.host, self.name)
+        return r"%s\@%s:%s" % (self.user, self.host, self.name)
 
     def fetch_motif_by_id(self, id):
         """Fetch a single JASPAR motif from the DB by it's JASPAR matrix ID.
@@ -334,7 +334,7 @@ class JASPAR5(object):
         return int_id
 
     def _fetch_motif_by_internal_id(self, int_id):
-        # fetch basic motif information
+        """Fetch basic motif information (PRIVATE)."""
         cur = self.dbh.cursor()
         cur.execute("""select BASE_ID, VERSION, COLLECTION, NAME from MATRIX
                        where id = %s""", (int_id,))

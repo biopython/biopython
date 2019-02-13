@@ -1,8 +1,9 @@
 # Copyright 2004 by Harry Zuzan. All rights reserved.
 # Copyright 2016 by Adam Kurkiewicz. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Reading information from Affymetrix CEL files version 3 and 4."""
 
@@ -189,8 +190,8 @@ def read_v4(f):
     record.version = preHeadersMap["version"]
     if record.version != 4:
         raise ParserError("You are trying to parse CEL file version 4. This"
-                         " file violates the structure expected from CEL file"
-                         " version 4")
+                          " file violates the structure expected from CEL file"
+                          " version 4")
     record.GridCornerUL = headersMap["GridCornerUL"]
     record.GridCornerUR = headersMap["GridCornerUR"]
     record.GridCornerLR = headersMap["GridCornerLR"]

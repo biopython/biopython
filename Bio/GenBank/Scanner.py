@@ -102,7 +102,7 @@ class InsdcScanner(object):
             else:
                 # Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-                        print("Skipping header line before record:\n" + line)
+                    print("Skipping header line before record:\n" + line)
         self.line = line
         return line
 
@@ -113,8 +113,8 @@ class InsdcScanner(object):
 
         Assumes you have just read in the ID/LOCUS line.
         """
-        assert self.line[:self.HEADER_WIDTH] == self.RECORD_START, \
-            "Not at start of record"
+        if self.line[:self.HEADER_WIDTH] != self.RECORD_START:
+            raise ValueError("Not at start of record")
 
         header_lines = []
         while True:
@@ -353,8 +353,8 @@ class InsdcScanner(object):
                     raise ValueError("Premature end of file")
                 self.line = self.line.rstrip()
 
-        assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
-            "Not at start of sequence"
+        if self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
+            raise ValueError("Not at start of sequence")
         while True:
             line = self.handle.readline()
             if not line:
@@ -596,8 +596,8 @@ class EmblScanner(InsdcScanner):
 
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
-        assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
-            "Eh? '%s'" % self.line
+        if self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
+            raise ValueError("Footer format unexpected: '%s'" % self.line)
 
         # Note that the SQ line can be split into several lines...
         misc_lines = []
@@ -608,8 +608,10 @@ class EmblScanner(InsdcScanner):
                 raise ValueError("Premature end of file")
             self.line = self.line.rstrip()
 
-        assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH \
-            or self.line.strip() == '//', "Unexpected content after SQ or CO line: %r" % self.line
+        if not (self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH
+                or self.line.strip() == '//'):
+            raise ValueError("Unexpected content after SQ or CO "
+                             "line: %r" % self.line)
 
         seq_lines = []
         line = self.line
@@ -621,8 +623,9 @@ class EmblScanner(InsdcScanner):
                 raise ValueError("Blank line in sequence data")
             if line == '//':
                 break
-            assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
-                repr(self.line)
+            if self.line[:self.HEADER_WIDTH] != (" " * self.HEADER_WIDTH):
+                raise ValueError("Problem with characters in header line, "
+                                 " or incorrect header width: " + self.line)
             # Remove tailing number now, remove spaces later
             linersplit = line.rsplit(None, 1)
             if len(linersplit) == 2 and linersplit[1].isdigit():
@@ -880,7 +883,7 @@ class EmblScanner(InsdcScanner):
                     warnings.warn("Malformed DR line in EMBL file.", BiopythonParserWarning)
                 else:
                     consumer.dblink("%s:%s" % (parts[0].strip(),
-                                           parts[1].strip()))
+                                               parts[1].strip()))
             elif line_type == 'RA':
                 # Remove trailing ; at end of authors list
                 consumer.authors(data.rstrip(";"))
@@ -1114,8 +1117,8 @@ class GenBankScanner(InsdcScanner):
 
     def parse_footer(self):
         """Return a tuple containing a list of any misc strings, and the sequence."""
-        assert self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS, \
-            "Eh? '%s'" % self.line
+        if self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS:
+            raise ValueError("Footer format unexpected:  '%s'" % self.line)
 
         misc_lines = []
         while self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS \
@@ -1127,8 +1130,8 @@ class GenBankScanner(InsdcScanner):
                 raise ValueError("Premature end of file")
             self.line = self.line
 
-        assert self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS, \
-            "Eh? '%s'" % self.line
+        if self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
+            raise ValueError("Eh? '%s'" % self.line)
 
         # Now just consume the sequence lines until reach the // marker
         # or a CONTIG line
@@ -1174,12 +1177,23 @@ class GenBankScanner(InsdcScanner):
         the column based layout.
 
         We also try to cope with GenBank like files with partial LOCUS lines.
+
+        As of release 229.0, the columns are no longer strictly in a given
+        position. See GenBank format release notes:
+
+            "Historically, the LOCUS line has had a fixed length and its
+            elements have been presented at specific column positions...
+            But with the anticipated increases in the lengths of accession
+            numbers, and the advent of sequences that are gigabases long,
+            maintaining the column positions will not always be possible and
+            the overall length of the LOCUS line could exceed 79 characters."
+
         """
         #####################################
         # LOCUS line                        #
         #####################################
-        assert line[0:self.GENBANK_INDENT] == 'LOCUS       ', \
-            'LOCUS line does not start correctly:\n' + line
+        if line[0:self.GENBANK_INDENT] != 'LOCUS       ':
+            raise ValueError('LOCUS line does not start correctly:\n' + line)
 
         # Have to break up the locus line, and handle the different bits of it.
         # There are at least two different versions of the locus line...
@@ -1205,28 +1219,35 @@ class GenBankScanner(InsdcScanner):
             #
             # assert line[29:33] in [' bp ', ' aa ',' rc '] , \
             #       'LOCUS line does not contain size units at expected position:\n' + line
-            assert line[41:42] == ' ', \
-                'LOCUS line does not contain space at position 42:\n' + line
-            assert line[42:51].strip() in ['', 'linear', 'circular'], \
-                'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
-            assert line[51:52] == ' ', \
-                'LOCUS line does not contain space at position 52:\n' + line
-            # assert line[55:62] == '       ', \
-            #      'LOCUS line does not contain spaces from position 56 to 62:\n' + line
+            if line[41:42] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 42:\n' + line)
+            if line[42:51].strip() not in ['', 'linear', 'circular']:
+                raise ValueError('LOCUS line does not contain valid entry '
+                                 '(linear, circular, ...):\n' + line)
+            if line[51:52] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 52:\n' + line)
+            # if line[55:62] != '       ':
+            #      raise ValueError('LOCUS line does not contain spaces from position 56 to 62:\n' + line)
             if line[62:73].strip():
-                assert line[64:65] == '-', \
-                    'LOCUS line does not contain - at position 65 in date:\n' + line
-                assert line[68:69] == '-', \
-                    'LOCUS line does not contain - at position 69 in date:\n' + line
+                if line[64:65] != '-':
+                    raise ValueError('LOCUS line does not contain - at '
+                                     'position 65 in date:\n' + line)
+                if line[68:69] != '-':
+                    raise ValueError('LOCUS line does not contain - at '
+                                     'position 69 in date:\n' + line)
 
             name_and_length_str = line[self.GENBANK_INDENT:29]
             while '  ' in name_and_length_str:
                 name_and_length_str = name_and_length_str.replace('  ', ' ')
             name_and_length = name_and_length_str.split(' ')
-            assert len(name_and_length) <= 2, \
-                'Cannot parse the name and length in the LOCUS line:\n' + line
-            assert len(name_and_length) != 1, \
-                'Name and length collide in the LOCUS line:\n' + line
+            if len(name_and_length) > 2:
+                raise ValueError('Cannot parse the name and length in '
+                                 'the LOCUS line:\n' + line)
+            if len(name_and_length) == 1:
+                raise ValueError('Name and length collide in the LOCUS '
+                                 'line:\n' + line)
             # Should be possible to split them based on position, if
             # a clear definition of the standard exists THAT AGREES with
             # existing files.
@@ -1287,36 +1308,48 @@ class GenBankScanner(InsdcScanner):
                 padding = " " * padding_len
                 line += padding
 
-            assert line[40:44] in [' bp ', ' aa ', ' rc '], \
-                'LOCUS line does not contain size units at expected position:\n' + line
-            assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
-                'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
-            assert line[47:54].strip() == "" \
-                or 'DNA' in line[47:54].strip().upper() \
-                or 'RNA' in line[47:54].strip().upper(), \
-                   'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
-            assert line[54:55] == ' ', \
-                'LOCUS line does not contain space at position 55:\n' + line
-            assert line[55:63].strip() in ['', 'linear', 'circular'], \
-                'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
-            assert line[63:64] == ' ', \
-                'LOCUS line does not contain space at position 64:\n' + line
-            assert line[67:68] == ' ', \
-                'LOCUS line does not contain space at position 68:\n' + line
+            if line[40:44] not in [' bp ', ' aa ', ' rc ']:
+                raise ValueError('LOCUS line does not contain size units at '
+                                 'expected position:\n' + line)
+            if line[44:47] not in ['   ', 'ss-', 'ds-', 'ms-']:
+                raise ValueError('LOCUS line does not have valid strand '
+                                 'type (Single stranded, ...):\n' + line)
+
+            if not (line[47:54].strip() == ""
+                    or 'DNA' in line[47:54].strip().upper()
+                    or 'RNA' in line[47:54].strip().upper()):
+                raise ValueError('LOCUS line does not contain valid '
+                                 'sequence type (DNA, RNA, ...):\n' + line)
+            if line[54:55] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 55:\n' + line)
+            if line[55:63].strip() not in ['', 'linear', 'circular']:
+                raise ValueError('LOCUS line does not contain valid '
+                                 'entry (linear, circular, ...):\n' + line)
+            if line[63:64] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 64:\n' + line)
+            if line[67:68] != ' ':
+                raise ValueError('LOCUS line does not contain space at '
+                                 'position 68:\n' + line)
             if line[68:79].strip():
-                assert line[70:71] == '-', \
-                    'LOCUS line does not contain - at position 71 in date:\n' + line
-                assert line[74:75] == '-', \
-                    'LOCUS line does not contain - at position 75 in date:\n' + line
+                if line[70:71] != '-':
+                    raise ValueError('LOCUS line does not contain - at '
+                                     'position 71 in date:\n' + line)
+                if line[74:75] != '-':
+                    raise ValueError('LOCUS line does not contain - at '
+                                     'position 75 in date:\n' + line)
 
             name_and_length_str = line[self.GENBANK_INDENT:40]
             while '  ' in name_and_length_str:
                 name_and_length_str = name_and_length_str.replace('  ', ' ')
             name_and_length = name_and_length_str.split(' ')
-            assert len(name_and_length) <= 2, \
-                'Cannot parse the name and length in the LOCUS line:\n' + line
-            assert len(name_and_length) != 1, \
-                'Name and length collide in the LOCUS line:\n' + line
+            if len(name_and_length) > 2:
+                raise ValueError('Cannot parse the name and length in '
+                                 'the LOCUS line:\n' + line)
+            if len(name_and_length) == 1:
+                raise ValueError('Name and length collide in the LOCUS '
+                                 'line:\n' + line)
             # Should be possible to split them based on position, if
             # a clear definition of the stand exists THAT AGREES with
             # existing files.
@@ -1365,18 +1398,31 @@ class GenBankScanner(InsdcScanner):
                 and line.split()[5] in ('linear', 'circular'):
             # Cope with invalidly spaced GenBank LOCUS lines like
             # LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
+            # This will also cope with extra long accession numbers and
+            # sequence lengths
             splitline = line.split()
             consumer.locus(splitline[1])
-            consumer.size(splitline[2])
+            # Provide descriptive error message if the sequence is too long
+            # for python to handle
+            import sys
+            if int(splitline[2]) > sys.maxsize:
+                raise ValueError("Tried to load a sequence with a length %s, "
+                                 "your installation of python can only load "
+                                 "sesquences of length %s" % (splitline[2],
+                                                              sys.maxsize))
+            else:
+                consumer.size(splitline[2])
+
             consumer.residue_type(splitline[4])
             consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
-            warnings.warn("Attempting to parse malformed locus line:\n%r\n"
-                          "Found locus %r size %r residue_type %r\n"
-                          "Some fields may be wrong."
-                          % (line, splitline[1], splitline[2], splitline[4]),
-                          BiopythonParserWarning)
+            if len(line) < 80:
+                warnings.warn("Attempting to parse malformed locus line:\n%r\n"
+                              "Found locus %r size %r residue_type %r\n"
+                              "Some fields may be wrong."
+                              % (line, splitline[1], splitline[2], splitline[4]),
+                              BiopythonParserWarning)
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
             # Cope with EnsEMBL genbank files which use space separation rather
             # than the expected column based layout. e.g.

@@ -45,11 +45,11 @@ class EasyController(object):
     def test_hw_global(self, test_type="deficiency", enum_test=True,
                        dememorization=10000, batches=20, iterations=5000):
         if test_type == "deficiency":
-            pop_res, loc_res, all = self._controller.test_global_hz_deficiency(self._fname,
-                enum_test, dememorization, batches, iterations)
+            pop_res, loc_res, all = self._controller.test_global_hz_deficiency(
+                self._fname, enum_test, dememorization, batches, iterations)
         else:
-            pop_res, loc_res, all = self._controller.test_global_hz_excess(self._fname,
-                enum_test, dememorization, batches, iterations)
+            pop_res, loc_res, all = self._controller.test_global_hz_excess(
+                self._fname, enum_test, dememorization, batches, iterations)
         return list(pop_res), list(loc_res), all
 
     def test_ld_all_pair(self, locus1, locus2, dememorization=10000,

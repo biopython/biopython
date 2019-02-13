@@ -1,10 +1,10 @@
 # Adapted from Bio.AlignIO.FastaIO copyright 2008-2011 by Peter Cock.
 # Copyright 2012 by Wibowo Arindrarto.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 r"""Bio.SearchIO support for Bill Pearson's FASTA tools.
 
 This module adds support for parsing FASTA outputs. FASTA is a suite of
@@ -194,8 +194,10 @@ def _set_hsp_seqs(hsp, parsed, program):
             start = start + start_adj
             stop = stop + start_adj - stop_adj
             parsed[seq_type]['seq'] = pseq['seq'][start:stop]
-    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), "%r %r" \
-            % (len(parsed['query']['seq']), len(parsed['hit']['seq']))
+    if len(parsed['query']['seq']) != len(parsed['hit']['seq']):
+        raise ValueError("Length mismatch: %r %r"
+                         % (len(parsed['query']['seq']),
+                            len(parsed['hit']['seq'])))
     if 'similarity' in hsp.aln_annotation:
         # only using 'start' since FASTA seems to have trimmed the 'excess'
         # end part
@@ -256,9 +258,9 @@ def _get_aln_slice_coords(parsed_hsp):
         start = disp_start - start
         stop = disp_start - stop + 1
     stop += seq_stripped.count('-')
-    assert 0 <= start and start < stop and stop <= len(seq_stripped), \
-           "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-           % (seq, start, stop, parsed_hsp)
+    if not (0 <= start and start < stop and stop <= len(seq_stripped)):
+        raise ValueError("Problem with sequence start/stop,"
+                         "\n%s[%i:%i]\n%s" % (seq, start, stop, parsed_hsp))
     return start, stop
 
 
@@ -271,6 +273,7 @@ class FastaM10Parser(object):
         self._preamble = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over FastaM10Parser object yields query results."""
         for qresult in self._parse_qresult():
             # re-set desc, for hsp query description
             qresult.description = qresult.description
@@ -307,6 +310,7 @@ class FastaM10Parser(object):
         return hit_rows
 
     def _parse_qresult(self):
+        """Parse query result (PRIVATE)."""
         # initial qresult value
         qresult = None
         hit_rows = []
@@ -383,6 +387,7 @@ class FastaM10Parser(object):
             self.line = self.handle.readline()
 
     def _parse_hit(self, query_id):
+        """Parse hit on query identifier (PRIVATE)."""
         while True:
             self.line = self.handle.readline()
             if self.line.startswith('>>'):
@@ -453,8 +458,8 @@ class FastaM10Parser(object):
             elif self.line.startswith('>'):
                 if state == _STATE_NONE:
                     # make sure it's the correct query
-                    assert query_id.startswith(self.line[1:].split(' ')[0]), \
-                            "%r vs %r" % (query_id, self.line)
+                    if not query_id.startswith(self.line[1:].split(' ')[0]):
+                        raise ValueError("%r vs %r" % (query_id, self.line))
                     state = _STATE_QUERY_BLOCK
                     parsed_hsp['query']['seq'] = ''
                 elif state == _STATE_QUERY_BLOCK:
@@ -523,6 +528,7 @@ class FastaM10Indexer(SearchIndexer):
         self._handle = UndoHandle(self._handle)
 
     def __iter__(self):
+        """Iterate over FastaM10Indexer; yields query results' keys, start offsets, offset lengths."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

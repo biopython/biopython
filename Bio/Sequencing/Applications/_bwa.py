@@ -58,7 +58,7 @@ class BwaIndexCommandline(AbstractCommandline):
             _Argument(["infile"], "Input file name", filename=True, is_required=True),
             _Switch(["-c", "c"],
                     "Build color-space index. The input fasta should be in nucleotide space.")
-            ]
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -148,7 +148,7 @@ class BwaAlignCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             _Option(["-q", "q"],
-                    """Parameter for read trimming [0].
+                    r"""Parameter for read trimming [0].
 
                     BWA trims a read down to argmax_x{\sum_{i=x+1}^l(INT-q_i)} if q_l<INT
                     where l is the original read length.""",
@@ -170,7 +170,7 @@ class BwaAlignCommandline(AbstractCommandline):
                     "When -b is specified, only use the first read in a read pair in mapping (skip single-end reads and the second reads)."),
             _Switch(["-b2", "b2"],
                     "When -b is specified, only use the second read in a read pair in mapping.")
-            ]
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -219,7 +219,7 @@ class BwaSamseCommandline(AbstractCommandline):
                     "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            ]
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -296,7 +296,7 @@ class BwaSampeCommandline(AbstractCommandline):
             _Option(["-r", "r"], "Specify the read group in a format like '@RG\tID:foo\tSM:bar'. [null]",
                     checker_function=lambda x: isinstance(x, basestring),
                     equate=False),
-            ]
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -380,7 +380,118 @@ class BwaBwaswCommandline(AbstractCommandline):
                     "Minimum number of seeds supporting the resultant alignment to skip reverse alignment. [5]",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
-            ]
+        ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
+
+
+class BwaMemCommandline(AbstractCommandline):
+    """Command line wrapper for Burrows Wheeler Aligner (BWA) mem.
+
+    Run a BWA-MEM alignment, with single- or paired-end reads, equivalent to::
+
+        $ bwa mem [...] <in.db.fasta> <in1.fq> <in2.fq> > <out.sam>
+
+    See http://bio-bwa.sourceforge.net/bwa.shtml for details.
+
+    Examples
+    --------
+    >>> from Bio.Sequencing.Applications import BwaMemCommandline
+    >>> reference_genome = "/path/to/reference_genome.fasta"
+    >>> read_file = "/path/to/read_1.fq"
+    >>> output_sam_file = "/path/to/output.sam"
+    >>> align_cmd = BwaMemCommandline(reference=reference_genome, read_file1=read_file)
+    >>> print(align_cmd)
+    bwa mem /path/to/reference_genome.fasta /path/to/read_1.fq
+
+    You would typically run the command line using align_cmd(stdout=output_sam_file)
+    or via the Python subprocess module, as described in the Biopython tutorial.
+
+    """
+
+    def __init__(self, cmd="bwa", **kwargs):
+        """Initialize the class."""
+        self.program_name = cmd
+        self.parameters = [
+            _StaticArgument("mem"),
+            _Argument(["reference"], "Reference file name",
+                      filename=True, is_required=True),
+            _Argument(["read_file1"], "Read 1 file name",
+                      filename=True, is_required=True),
+            _Argument(["read_file2"], "Read 2 file name",
+                      filename=True, is_required=False),
+            _Option(["-t", "t"], "Number of threads [1]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-k", "k"],
+                    "Minimum seed length. Matches shorter than INT will be missed. The alignment speed is usually insensitive to this value unless it significantly deviates 20. [19]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-w", "w"],
+                    "Band width. Essentially, gaps longer than INT will not be found. Note that the maximum gap length is also affected by the scoring matrix and the hit length, not solely determined by this option. [100]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-d", "d"],
+                    "Off-diagonal X-dropoff (Z-dropoff). Stop extension when the difference between the best and the current extension score is above |i-j|*A+INT, where i and j are the current positions of the query and reference, respectively, and A is the matching score. Z-dropoff is similar to BLAST\'s X-dropoff except that it doesn\'t penalize gaps in one of the sequences in the alignment. Z-dropoff not only avoids unnecessary extension, but also reduces poor alignments inside a long good alignment. [100]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-r", "r"],
+                    "Trigger re-seeding for a MEM longer than minSeedLen*FLOAT. This is a key heuristic parameter for tuning the performance. Larger value yields fewer seeds, which leads to faster alignment speed but lower accuracy. [1.5]",
+                    checker_function=lambda x: isinstance(x, (int, float)),
+                    equate=False),
+            _Option(["-c", "c"],
+                    "Discard a MEM if it has more than INT occurence in the genome. This is an insensitive parameter. [10000]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-A", "A"],
+                    "Matching score. [1]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-B", "B"],
+                    "Mismatch penalty. The sequence error rate is approximately: {.75 * exp[-log(4) * B/A]}. [4]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-O", "O"],
+                    "Gap open penalty. [6]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-E", "E"],
+                    "Gap extension penalty. A gap of length k costs O + k*E (i.e. -O is for opening a zero-length gap). [1]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-L", "L"],
+                    "Clipping penalty. When performing SW extension, BWA-MEM keeps track of the best score reaching the end of query. If this score is larger than the best SW score minus the clipping penalty, clipping will not be applied. Note that in this case, the SAM AS tag reports the best SW score; clipping penalty is not deducted. [5]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-U", "U"],
+                    "Penalty for an unpaired read pair. BWA-MEM scores an unpaired read pair as scoreRead1+scoreRead2-INT and scores a paired as scoreRead1+scoreRead2-insertPenalty. It compares these two scores to determine whether we should force pairing. [9] ",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-R", "R"],
+                    "Complete read group header line. \'\\t\' can be used in STR and will be converted to a TAB in the output SAM. The read group ID will be attached to every read in the output. An example is \'@RG\tID:foo\tSM:bar\'. [null]",
+                    checker_function=lambda x: isinstance(x, basestring),
+                    equate=False),
+            _Option(["-T", "T"],
+                    "Don\'t output alignment with score lower than INT. This option only affects output. [30]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            _Option(["-v", "v"],
+                    "Control the verbose level of the output. This option has not been fully supported throughout BWA. Ideally, a value 0 for disabling all the output to stderr; 1 for outputting errors only; 2 for warnings and errors; 3 for all normal messages; 4 or higher for debugging. When this option takes value 4, the output is not SAM. [3]",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+
+            _Switch(["-P", "P"],
+                    "In the paired-end mode, perform SW to rescue missing hits only but do not try to find hits that fit a proper pair."),
+            _Switch(["-p", "p"],
+                    "Assume the first input query file is interleaved paired-end FASTA/Q. See the command description for details."),
+            _Switch(["-a", "a"],
+                    "Output all found alignments for single-end or unpaired paired-end reads. These alignments will be flagged as secondary alignments."),
+            _Switch(["-C", "C"],
+                    "Append FASTA/Q comment to SAM output. This option can be used to transfer read meta information (e.g. barcode) to the SAM output. Note that the FASTA/Q comment (the string after a space in the header line) must conform the SAM spec (e.g. BC:Z:CGTAC). Malformated comments lead to incorrect SAM output."),
+            _Switch(["-H", "H"],
+                    "Use hard clipping \'H\' in the SAM output. This option may dramatically reduce the redundancy of output when mapping long contig or BAC sequences."),
+            _Switch(["-M", "M"],
+                    "Mark shorter split hits as secondary (for Picard compatibility).")
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 

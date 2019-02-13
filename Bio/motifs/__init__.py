@@ -19,16 +19,18 @@ from Bio._py3k import range
 
 
 def create(instances, alphabet=None):
+    """Create a Motif object."""
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
 
 
-def parse(handle, format):
+def parse(handle, format, strict=True):
     """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
      - AlignAce:      AlignAce output file format
      - MEME:          MEME output file motif
+     - MINIMAL:       MINIMAL MEME output file motif
      - MAST:          MAST output file motif
      - TRANSFAC:      TRANSFAC database file format
      - pfm:           JASPAR-style position-frequency matrix
@@ -62,6 +64,9 @@ def parse(handle, format):
     GCCGGCGGCAGCTAAAAGGG
     GAGGCCGGGGAT
     CGACTCGTGCTTAGAAGG
+
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
     if format == "alignace":
@@ -72,13 +77,17 @@ def parse(handle, format):
         from Bio.motifs import meme
         record = meme.read(handle)
         return record
+    elif format == "minimal":
+        from Bio.motifs import minimal
+        record = minimal.read(handle)
+        return record
     elif format == "mast":
         from Bio.motifs import mast
         record = mast.read(handle)
         return record
     elif format == "transfac":
         from Bio.motifs import transfac
-        record = transfac.read(handle)
+        record = transfac.read(handle, strict)
         return record
     elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
@@ -88,7 +97,7 @@ def parse(handle, format):
         raise ValueError("Unknown format %s" % format)
 
 
-def read(handle, format):
+def read(handle, format, strict=True):
     """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
@@ -132,9 +141,12 @@ def read(handle, format):
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
+
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
-    motifs = parse(handle, format)
+    motifs = parse(handle, format, strict)
     if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
@@ -144,7 +156,7 @@ def read(handle, format):
 
 
 class Instances(list):
-    """A class representing instances of sequence motifs."""
+    """Class containing a list of sequences that made the motifs."""
 
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
@@ -180,12 +192,14 @@ class Instances(list):
         self.alphabet = alphabet
 
     def __str__(self):
+        """Return a string containing the sequences of the motif."""
         text = ""
         for instance in self:
             text += str(instance) + "\n"
         return text
 
     def count(self):
+        """Count nucleotides in a position."""
         counts = {}
         for letter in self.alphabet.letters:
             counts[letter] = [0] * self.length
@@ -207,6 +221,7 @@ class Instances(list):
                     break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
+        """Compute reverse complement of sequences."""
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
@@ -225,7 +240,8 @@ class Motif(object):
         self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
-                "Specify either instances or counts, don't specify both")
+                            "Specify either instances or counts, "
+                            "don't specify both")
         elif counts is not None:
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
@@ -320,10 +336,12 @@ class Motif(object):
 
     @property
     def pwm(self):
+        """Compute position weight matrices."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
+        """Compute position specific scoring matrices."""
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):

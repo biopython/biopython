@@ -145,7 +145,7 @@ assert not _re_simple_compound.match("join(complement(149815..150200),complement
 assert not _re_complex_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 assert not _re_simple_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
 
-_solo_bond = re.compile("bond\(%s\)" % _solo_location)
+_solo_bond = re.compile(r"bond\(%s\)" % _solo_location)
 assert _solo_bond.match("bond(196)")
 assert _solo_bond.search("bond(196)")
 assert _solo_bond.search("join(bond(284),bond(305),bond(309),bond(305))")
@@ -434,6 +434,9 @@ class LocationParserError(Exception):
     pass
 
 
+_cleaner = FeatureValueCleaner()
+
+
 class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
 
@@ -444,7 +447,7 @@ class FeatureParser(object):
     """
 
     def __init__(self, debug_level=0, use_fuzziness=1,
-                 feature_cleaner=FeatureValueCleaner()):
+                 feature_cleaner=_cleaner):
         """Initialize a GenBank parser and Feature consumer.
 
         Arguments:
@@ -1051,13 +1054,31 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.location = SeqFeature.FeatureLocation(int(s) - 1,
                                                                   int(e),
                                                                   strand)
-            except ValueError as e:
+            except ValueError:
                 # Could be non-integers, more likely bad origin wrapping
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Ignoring invalid location: %r" % location_line,
-                              BiopythonParserWarning)
-                cur_feature.location = None
+                if int(s) > int(e) and "circular" in self._seq_type.lower():
+                    warnings.warn("Attempting to fix invalid location %r as "
+                                  "it looks like incorrect origin wrapping. "
+                                  "Please fix input file, this could have "
+                                  "unintended behavior." % location_line,
+                                  BiopythonParserWarning)
+
+                    f1 = SeqFeature.FeatureLocation(int(s) - 1,
+                                                    self._expected_size,
+                                                    strand)
+                    f2 = SeqFeature.FeatureLocation(0, int(e), strand)
+
+                    if strand == -1:
+                        # For complementary features spanning the origin
+                        cur_feature.location = f2 + f1
+                    else:
+                        cur_feature.location = f1 + f2
+                else:
+                    warnings.warn("Ignoring invalid location: %r" %
+                                  location_line, BiopythonParserWarning)
+                    cur_feature.location = None
             return
 
         if ",)" in location_line:
@@ -1176,7 +1197,19 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # otherwise just skip this key
             return
 
-        value = value.replace('"', '')
+        # Remove enclosing quotation marks
+        value = re.sub('^"|"$', '', value)
+
+        # Handle NCBI escaping
+        # Warn if escaping is not according to standard
+        if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
+                          '(two double - quotes), but here it was not: %r' % value, BiopythonParserWarning)
+        # Undo escaping, repeated double quotes -> one double quote
+        value = value.replace('""', '"')
+
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)
 
@@ -1241,8 +1274,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # Try and append the version number to the accession for the full id
         if not self.data.id:
-            assert 'accessions' not in self.data.annotations, \
-                   self.data.annotations['accessions']
+            if 'accessions' in self.data.annotations:
+                raise ValueError("Problem adding version number to accession: "
+                                 + str(self.data.annotations['accessions']))
             self.data.id = self.data.name  # Good fall back?
         elif self.data.id.count('.') == 0:
             try:

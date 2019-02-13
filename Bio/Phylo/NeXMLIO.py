@@ -52,6 +52,7 @@ except AttributeError:
         ElementTree._namespace_map = ET_py._namespace_map
 
     def register_namespace(prefix, uri):
+        """Set NameSpace map."""
         ElementTree._namespace_map[uri] = prefix
 
 for prefix, uri in NAMESPACES.items():

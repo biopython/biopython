@@ -283,6 +283,7 @@ class RestrictionType(type):
     def __div__(cls, other):
         """Override '/' operator to use as search method.
 
+        >>> from Bio.Restriction import EcoRI
         >>> EcoRI/Seq('GAATTC')
         [2]
         Returns RE.search(other).
@@ -292,6 +293,7 @@ class RestrictionType(type):
     def __rdiv__(cls, other):
         """Override division with reversed operands to use as search method.
 
+        >>> from Bio.Restriction import EcoRI
         >>> Seq('GAATTC')/EcoRI
         [2]
         Returns RE.search(other).
@@ -315,6 +317,7 @@ class RestrictionType(type):
     def __floordiv__(cls, other):
         """Override '//' operator to use as catalyse method.
 
+        >>> from Bio.Restriction import EcoRI
         >>> EcoRI//Seq('GAATTC')
         (Seq('G', Alphabet()), Seq('AATTC', Alphabet()))
         Returns RE.catalyse(other).
@@ -324,6 +327,7 @@ class RestrictionType(type):
     def __rfloordiv__(cls, other):
         """As __floordiv__, with reversed operands.
 
+        >>> from Bio.Restriction import EcoRI
         >>> Seq('GAATTC')//EcoRI
         (Seq('G', Alphabet()), Seq('AATTC', Alphabet()))
         Returns RE.catalyse(other).
@@ -374,6 +378,7 @@ class RestrictionType(type):
         All the other-> True
 
         WARNING - This is not the inverse of the __eq__ method
+        >>> from Bio.Restriction import SacI, SstI
         >>> SacI != SstI  # true isoschizomers
         False
         >>> SacI == SstI
@@ -391,6 +396,7 @@ class RestrictionType(type):
 
         neoschizomer : same recognition site, different restriction. -> True
         all the others :                                             -> False
+        >>> from Bio.Restriction import SmaI, XmaI
         >>> SmaI >> XmaI
         True
         """
@@ -405,6 +411,7 @@ class RestrictionType(type):
         """Override '%' operator to test for compatible overhangs.
 
         True if a and b have compatible overhang.
+        >>> from Bio.Restriction import XhoI, SalI
         >>> XhoI % SalI
         True
         """
@@ -419,6 +426,7 @@ class RestrictionType(type):
         Override '>='. a is greater or equal than b if the a site is longer
         than b site. If their site have the same length sort by alphabetical
         order of their names.
+        >>> from Bio.Restriction import EcoRI, EcoRV
         >>> EcoRI.size
         6
         >>> EcoRV.size
@@ -538,6 +546,7 @@ class AbstractCut(RestrictionType):
         else False.
 
         Equischizomer: same site, same position of restriction.
+        >>> from Bio.Restriction import SacI, SstI, SmaI, XmaI
         >>> SacI.is_equischizomer(SstI)
         True
         >>> SmaI.is_equischizomer(XmaI)
@@ -562,6 +571,7 @@ class AbstractCut(RestrictionType):
         True if other has the same recognition site, else False.
 
         Isoschizomer: same site.
+        >>> from Bio.Restriction import SacI, SstI, SmaI, XmaI
         >>> SacI.is_isoschizomer(SstI)
         True
         >>> SmaI.is_isoschizomer(XmaI)
@@ -846,7 +856,7 @@ class TwoCuts(AbstractCut):
 
     @classmethod
     def _rev_modify(cls, location):
-        """Return a generator that moves the cutting position by 1.
+        """Return a generator that moves the cutting position by 1 (PRIVATE).
 
         for internal use only.
 
@@ -1563,6 +1573,7 @@ class Defined(AbstractCut):
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
 
+        >>> from Bio.Restriction import EcoRI, KpnI, EcoRV, SnaI
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -1736,6 +1747,7 @@ class Ambiguous(AbstractCut):
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
 
+        >>> from Bio.Restriction import EcoRI, KpnI, EcoRV, SnaI
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -1903,6 +1915,7 @@ class NotDefined(AbstractCut):
         represented as '^' and the cut on the (-) strand as '_'.
         ie:
 
+        >>> from Bio.Restriction import EcoRI, KpnI, EcoRV, SnaI
         >>> EcoRI.elucidate()   # 5' overhang
         'G^AATT_C'
         >>> KpnI.elucidate()    # 3' overhang
@@ -2254,17 +2267,21 @@ class RestrictionBatch(set):
         raise TypeError("Expected Seq or MutableSeq instance, got %s instead"
                         % type(dna))
 
+
 ###############################################################################
 #                                                                             #
 #                       Restriction Analysis                                  #
 #                                                                             #
 ###############################################################################
 
+_empty_DNA = DNA('')
+_restrictionbatch = RestrictionBatch()
+
 
 class Analysis(RestrictionBatch, PrintFormat):
     """Provide methods for enhanced analysis and pretty printing."""
 
-    def __init__(self, restrictionbatch=RestrictionBatch(), sequence=DNA(''),
+    def __init__(self, restrictionbatch=_restrictionbatch, sequence=_empty_DNA,
                  linear=True):
         """Initialize an Analysis with RestrictionBatch and sequence.
 
@@ -2289,7 +2306,7 @@ class Analysis(RestrictionBatch, PrintFormat):
                (repr(self.rb), repr(self.sequence), self.linear)
 
     def _sub_set(self, wanted):
-        """Filter result for keys which are in wanted.
+        """Filter result for keys which are in wanted (PRIVATE).
 
         A._sub_set(other_set) -> dict.
 
@@ -2302,7 +2319,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         return dict((k, v) for k, v in self.mapping.items() if k in wanted)
 
     def _boundaries(self, start, end):
-        """Set boundaries to correct values.
+        """Set boundaries to correct values (PRIVATE).
 
         Format the boundaries for use with the methods that limit the
         search to only part of the sequence given to analyse.
@@ -2323,14 +2340,14 @@ class Analysis(RestrictionBatch, PrintFormat):
             return start, end, self._test_normal
 
     def _test_normal(self, start, end, site):
-        """Test if site is between start and end.
+        """Test if site is between start and end (PRIVATE).
 
         Internal use only
         """
         return start <= site < end
 
     def _test_reverse(self, start, end, site):
-        """Test if site is between end and start (for circular sequences).
+        """Test if site is between end and start, for circular sequences (PRIVATE).
 
         Internal use only.
         """

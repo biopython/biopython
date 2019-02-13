@@ -1,8 +1,9 @@
-# Copyright 2006-2017 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-#
+# Copyright 2006-2018 by Peter Cock.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 # Nice link:
 # http://www.ebi.ac.uk/help/formats_frame.html
 
@@ -272,6 +273,11 @@ names are also used in Bio.AlignIO and include the following:
     - abi     - Applied Biosystem's sequencing trace format
     - abi-trim - Same as "abi" but with quality trimming with Mott's algorithm
     - ace     - Reads the contig sequences from an ACE assembly file.
+    - cif-atom - Uses Bio.PDB.MMCIFParser to determine the (partial) protein
+      sequence as it appears in the structure based on the atomic coordinates.
+    - cif-seqres - Reads a macromolecular Crystallographic Information File
+      (mmCIF) file to determine the complete protein sequence as defined by the
+      _pdbx_poly_seq_scheme records.
     - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
     - fasta   - The generic sequence file format where each record starts with
       an identifer line starting with a ">" character, followed by
@@ -326,6 +332,9 @@ making up each alignment as SeqRecords.
 """
 
 from __future__ import print_function
+
+import sys
+
 from Bio._py3k import basestring
 
 # TODO
@@ -390,6 +399,11 @@ from . import TabIO
 from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
 
+if sys.version_info < (3, 6):
+    from collections import OrderedDict as _dict
+else:
+    # Default dict is sorted in Python 3.6 onwards
+    _dict = dict
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
@@ -412,6 +426,8 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "swiss": SwissIO.SwissIterator,
                      "pdb-atom": PdbIO.PdbAtomIterator,
                      "pdb-seqres": PdbIO.PdbSeqresIterator,
+                     "cif-seqres": PdbIO.CifSeqresIterator,
+                     "cif-atom": PdbIO.CifAtomIterator,
                      "phd": PhdIO.PhdIterator,
                      "ace": AceIO.AceIterator,
                      "tab": TabIO.TabIterator,
@@ -520,9 +536,10 @@ def write(sequences, handle, format):
             # and write that using Bio.AlignIO
             alignment = MultipleSeqAlignment(sequences)
             alignment_count = AlignIO.write([alignment], fp, format)
-            assert alignment_count == 1, \
-                "Internal error - the underlying writer " \
-                " should have returned 1, not %r" % alignment_count
+            if alignment_count != 1:
+                raise RuntimeError("Internal error - the underlying writer "
+                                   "should have returned 1, not %r"
+                                   % alignment_count)
             count = len(alignment)
             del alignment_count, alignment
         elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
@@ -531,9 +548,10 @@ def write(sequences, handle, format):
         else:
             raise ValueError("Unknown format '%s'" % format)
 
-        assert isinstance(count, int), "Internal error - the underlying %s " \
-            "writer should have returned the record count, not %r" \
-            % (format, count)
+        if not isinstance(count, int):
+            raise RuntimeError("Internal error - the underlying %s writer "
+                               "should have returned the record count, not %r"
+                               % (format, count))
 
     return count
 
@@ -730,14 +748,22 @@ def to_dict(sequences, key_function=None):
 
     If there are duplicate keys, an error is raised.
 
+    Since Python 3.7, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. For
+    CPython, this was already implemented in 3.6.
+
+    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+    than 3.6 (and for other Python older than 3.7) so that you can always
+    assume the record order is preserved.
+
     Example usage, defaulting to using the record.id as key:
 
     >>> from Bio import SeqIO
     >>> filename = "GenBank/cor6_6.gb"
     >>> format = "genbank"
     >>> id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
-    >>> print(sorted(id_dict))
-    ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
+    >>> print(list(id_dict))
+    ['X55053.1', 'X62281.1', 'M81224.1', 'AJ237582.1', 'L31939.1', 'AF297471.1']
     >>> print(id_dict["L31939.1"].description)
     Brassica rapa (clone bif72) kin mRNA, complete cds
 
@@ -762,11 +788,16 @@ def to_dict(sequences, key_function=None):
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
+
+    Since Python 3.6, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. As of
+    Biopython 1.72, on older versions of Python we explicitly use an
+    OrderedDict so that you can always assume the record order is preserved.
     """
     if key_function is None:
         key_function = lambda rec: rec.id
 
-    d = dict()
+    d = _dict()
     for record in sequences:
         key = key_function(record)
         if key in d:
@@ -789,14 +820,17 @@ def index(filename, format, alphabet=None, key_function=None):
        dictionary.
 
     This indexing function will return a dictionary like object, giving the
-    SeqRecord objects as values:
+    SeqRecord objects as values.
+
+    As of Biopython 1.69, this will preserve the ordering of the records in
+    file when iterating over the entries.
 
     >>> from Bio import SeqIO
     >>> records = SeqIO.index("Quality/example.fastq", "fastq")
     >>> len(records)
     3
-    >>> sorted(records)
-    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> list(records)  # make a list of the keys
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
     >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
@@ -819,8 +853,8 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records.close()
 
     Note that this pseudo dictionary will not support all the methods of a
-    true Python dictionary, for example values() is not defined since this
-    would require loading all of the records into memory at once.
+    true Python dictionary, for example values() is not defined as in Python 2
+    since this would require loading all of the records into memory at once.
 
     When you call the index function, it will scan through the file, noting
     the location of each record. When you access a particular record via the
@@ -839,8 +873,8 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.to_dict(SeqIO.parse("Quality/example.fastq", "fastq"))
     >>> len(records)
     3
-    >>> sorted(records)
-    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> list(records)  # make a list of the keys
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']
     >>> print(records["EAS54_6_R1_2_1_540_792"].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA
@@ -858,8 +892,8 @@ def index(filename, format, alphabet=None, key_function=None):
     ...                       key_function=make_tuple)
     >>> len(records)
     3
-    >>> sorted(records)
-    [(413, 324), (443, 348), (540, 792)]
+    >>> list(records)  # make a list of the keys
+    [(413, 324), (540, 792), (443, 348)]
     >>> print(records[(540, 792)].format("fasta"))
     >EAS54_6_R1_2_1_540_792
     TTGGCAGGCCAAGGCCGATGGATCA

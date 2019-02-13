@@ -31,12 +31,12 @@ to call the online version of BLAST.  This has three non-optional arguments:
 \begin{itemize}
 \item The first argument is the blast program to use for the search, as a
 lower case string. The options and descriptions of the programs are
-available at \url{http://www.ncbi.nlm.nih.gov/BLAST/blast_program.shtml}.
+available at \url{https://blast.ncbi.nlm.nih.gov/Blast.cgi}.
 Currently \verb|qblast| only works with blastn, blastp, blastx, tblast
 and tblastx.
 \item The second argument specifies the databases to search against. Again,
-the options for this are available on the NCBI web pages at
-\url{http://www.ncbi.nlm.nih.gov/BLAST/blast_databases.shtml}.
+the options for this are available on the NCBI Guide to BLAST 
+\url{ftp://ftp.ncbi.nlm.nih.gov/pub/factsheets/HowTo_BLASTGuide.pdf}.
 \item The third argument is a string containing your query sequence.  This
 can either be the sequence itself, the sequence in fasta format,
 or an identifier like a GI number.
@@ -184,7 +184,7 @@ and there are also other tools which can produce imitation BLAST output files, s
 \subsection{Standalone NCBI BLAST+}
 
 The ``new''
-\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+\href{https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
 {NCBI BLAST+} suite was released in 2009. This replaces the old NCBI ``legacy'' BLAST
 package (see below).
 
@@ -249,7 +249,7 @@ To try to avoid confusion, we do not cover calling these old tools from Biopytho
 in this tutorial.
 
 You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
-(WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
+(WU-BLAST), and its successor, \href{https://blast.advbiocomp.com}{Advanced Biocomputing
 BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
 the command line tools \verb|wu-blastall| and \verb|ab-blastall|, which mimicked
 \verb|blastall| from the NCBI ``legacy'' BLAST suite.
@@ -474,164 +474,6 @@ The PSIBlast record object is similar, but has support for the rounds that are u
 \end{figure}
 \end{latexonly}
 
-\section{Deprecated BLAST parsers}
-\label{sec:parsing-blast-deprecated}
-
-Older versions of Biopython had parsers for BLAST output in plain text or HTML
-format. Over the years, we discovered that it is very hard to maintain these
-parsers in working order. Basically, any small change to the BLAST output in
-newly released BLAST versions tends to cause the plain text and HTML parsers
-to break. We therefore recommend parsing BLAST output in XML format, as
-described in section~\ref{sec:parsing-blast}.
-
-Depending on which BLAST versions or programs you're using, our plain text BLAST parser may or may not work. Use it at your own risk!
-
-\subsection{Parsing plain-text BLAST output}
-
-The plain text BLAST parser is located in \verb|Bio.Blast.NCBIStandalone|.
-
-As with the XML parser, we need to have a handle object that we can pass to the parser. The handle must implement the \verb|readline()| method and do this properly. The common ways to get such a handle are to either use the provided \verb|blastall| or \verb|blastpgp| functions to run the local blast, or to run a local blast via the command line, and then do something like the following:
-
-\begin{verbatim}
->>> result_handle = open("my_file_of_blast_output.txt")
-\end{verbatim}
-
-Well, now that we've got a handle (which we'll call \verb|result_handle|),
-we are ready to parse it. This can be done with the following code:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIStandalone
->>> blast_parser = NCBIStandalone.BlastParser()
->>> blast_record = blast_parser.parse(result_handle)
-\end{verbatim}
-
-This will parse the BLAST report into a Blast Record class (either a Blast or a PSIBlast record, depending on what you are parsing) so that you can extract the information from it. In our case, let's just print out a quick summary of all of the alignments greater than some threshold value.
-
-\begin{verbatim}
->>> E_VALUE_THRESH = 0.04
->>> for alignment in blast_record.alignments:
-...     for hsp in alignment.hsps:
-...         if hsp.expect < E_VALUE_THRESH:
-...             print("****Alignment****")
-...             print("sequence:", alignment.title)
-...             print("length:", alignment.length)
-...             print("e value:", hsp.expect)
-...             print(hsp.query[0:75] + "...")
-...             print(hsp.match[0:75] + "...")
-...             print(hsp.sbjct[0:75] + "...")
-\end{verbatim}
-
-If you also read the section~\ref{sec:parsing-blast} on parsing BLAST XML output, you'll notice that the above code is identical to what is found in that section. Once you parse something into a record class you can deal with it independent of the format of the original BLAST info you were parsing. Pretty snazzy!
-
-Sure, parsing one record is great, but I've got a BLAST file with tons of records -- how can I parse them all? Well, fear not, the answer lies in the very next section.
-
-\subsection{Parsing a plain-text BLAST file full of BLAST runs}
-
-We can do this using the blast iterator. To set up an iterator, we first set up a parser, to parse our blast reports in Blast Record objects:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIStandalone
->>> blast_parser = NCBIStandalone.BlastParser()
-\end{verbatim}
-
-Then we will assume we have a handle to a bunch of blast records, which we'll call \verb|result_handle|. Getting a handle is described in full detail above in the blast parsing sections.
-
-Now that we've got a parser and a handle, we are ready to set up the iterator with the following command:
-
-\begin{verbatim}
->>> blast_iterator = NCBIStandalone.Iterator(result_handle, blast_parser)
-\end{verbatim}
-
-The second option, the parser, is optional. If we don't supply a parser, then the iterator will just return the raw BLAST reports one at a time.
-
-Now that we've got an iterator, we start retrieving blast records (generated by our parser) using \verb|next()|:
-
-\begin{verbatim}
->>> blast_record = next(blast_iterator)
-\end{verbatim}
-
-Each call to next will return a new record that we can deal with. Now we can iterate through these records and generate our old favorite, a nice little blast report:
-
-\begin{verbatim}
->>> for blast_record in blast_iterator:
-...     E_VALUE_THRESH = 0.04
-...     for alignment in blast_record.alignments:
-...         for hsp in alignment.hsps:
-...             if hsp.expect < E_VALUE_THRESH:
-...                 print("****Alignment****")
-...                 print("sequence:", alignment.title)
-...                 print("length:", alignment.length)
-...                 print("e value:", hsp.expect)
-...                 if len(hsp.query) > 75:
-...                     dots = "..."
-...                 else:
-...                     dots = ""
-...                 print(hsp.query[0:75] + dots)
-...                 print(hsp.match[0:75] + dots)
-...                 print(hsp.sbjct[0:75] + dots)
-\end{verbatim}
-
-%Notice that \verb|next(b_iterator)| will return \verb|None| when it runs out of records to parse, so it is easy to iterate through the entire file with a while loop that checks for the existence of a record.
-
-The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
-
-%TODO - Remove this or update it for BLAST XML parser
-\subsection{Finding a bad record somewhere in a huge plain-text BLAST file}
-
-One really ugly problem that happens to me is that I'll be parsing a huge blast file for a while, and the parser will bomb out with a ValueError. This is a serious problem, since you can't tell if the ValueError is due to a parser problem, or a problem with the BLAST. To make it even worse, you have no idea where the parse failed, so you can't just ignore the error, since this could be ignoring an important data point.
-
-We used to have to make a little script to get around this problem, but the \verb|Bio.Blast| module now includes a \verb|BlastErrorParser| which really helps make this easier. The \verb|BlastErrorParser| works very similar to the regular \verb|BlastParser|, but it adds an extra layer of work by catching ValueErrors that are generated by the parser, and attempting to diagnose the errors.
-
-Let's take a look at using this parser -- first we define the file we are going to parse and the file to write the problem reports to:
-
-\begin{verbatim}
->>> import os
->>> blast_file = os.path.join(os.getcwd(), "blast_out", "big_blast.out")
->>> error_file = os.path.join(os.getcwd(), "blast_out", "big_blast.problems")
-\end{verbatim}
-
-Now we want to get a \verb|BlastErrorParser|:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIStandalone
->>> error_handle = open(error_file, "w")
->>> blast_error_parser = NCBIStandalone.BlastErrorParser(error_handle)
-\end{verbatim}
-
-Notice that the parser take an optional argument of a handle. If a handle is passed, then the parser will write any blast records which generate a ValueError to this handle. Otherwise, these records will not be recorded.
-
-Now we can use the \verb|BlastErrorParser| just like a regular blast parser. Specifically, we might want to make an iterator that goes through our blast records one at a time and parses them with the error parser:
-
-\begin{verbatim}
->>> result_handle = open(blast_file)
->>> iterator = NCBIStandalone.Iterator(result_handle, blast_error_parser)
-\end{verbatim}
-
-We can read these records one a time, but now we can catch and deal with errors that are due to problems with Blast (and not with the parser itself):
-
-\begin{verbatim}
->>> try:
-...     next_record = next(iterator)
-... except NCBIStandalone.LowQualityBlastError as info:
-...     print("LowQualityBlastError detected in id %s" % info[1])
-\end{verbatim}
-
-The \verb|next()| functionality is normally called indirectly via a \verb|for|-loop.
-Right now the \verb|BlastErrorParser| can generate the following errors:
-
-\begin{itemize}
-  \item \verb|ValueError| -- This is the same error generated by the regular BlastParser, and is due to the parser not being able to parse a specific file. This is normally either due to a bug in the parser, or some kind of discrepancy between the version of BLAST you are using and the versions the parser is able to handle.
-
-  \item \verb|LowQualityBlastError| -- When BLASTing a sequence that is of really bad quality (for example, a short sequence that is basically a stretch of one nucleotide), it seems that Blast ends up masking out the entire sequence and ending up with nothing to parse. In this case it will produce a truncated report that causes the parser to generate a ValueError. \verb|LowQualityBlastError| is reported in these cases. This error returns an info item with the following information:
-  \begin{itemize}
-    \item \verb|item[0]| -- The error message
-    \item \verb|item[1]| -- The id of the input record that caused the error. This is really useful if you want to record all of the records that are causing problems.
-  \end{itemize}
-\end{itemize}
-
-As mentioned, with each error generated, the BlastErrorParser will write the offending record to the specified \verb|error_handle|. You can then go ahead and look and these and deal with them as you see fit. Either you will be able to debug the parser with a single blast report, or will find out problems in your blast runs. Either way, it will definitely be a useful experience!
-
-Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal with large Blast files.
 
 \section{Dealing with PSI-BLAST}
 
@@ -645,8 +487,6 @@ PSI-BLAST search via the internet.
 Note that the \verb|Bio.Blast.NCBIXML| parser can read the XML output from
 current versions of PSI-BLAST, but information like which sequences in each
 iteration is new or reused isn't present in the XML file.
-If you care about this information you may have more joy with the plain text
-output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \section{Dealing with RPS-BLAST}
 

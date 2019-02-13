@@ -1,10 +1,10 @@
 # Copyright 2004-2008 by Sebastian Bassi.
 # Copyright 2013-2018 by Markus Piotrowski.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Calculate the melting temperature of nucleotide sequences.
 
 This module contains three different methods to calculate the melting

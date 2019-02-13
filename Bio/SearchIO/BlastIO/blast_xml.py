@@ -233,6 +233,7 @@ class BlastXmlParser(object):
         self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
+        """Iterate over BlastXmlParser object yields query results."""
         for qresult in self._parse_qresult():
             yield qresult
 
@@ -277,7 +278,7 @@ class BlastXmlParser(object):
         # we only want the version number, sans the program name or date
         if meta.get('version') is not None:
             meta['version'] = re.search(_RE_VERSION,
-                    meta['version']).group(0)
+                                        meta['version']).group(0)
 
         return meta, fallback
 
@@ -328,15 +329,16 @@ class BlastXmlParser(object):
 
                 hit_list, key_list = [], []
                 for hit in self._parse_hit(qresult_elem.find('Iteration_hits'),
-                        query_id):
+                                           query_id):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
                         if hit.id in key_list:
                             warnings.warn("Renaming hit ID %r to a BLAST-generated ID "
-                                    "%r since the ID was already matched "
-                                    "by your query %r. Your BLAST database may contain "
-                                    "duplicate entries." %
-                                    (hit.id, hit.blast_id, query_id), BiopythonParserWarning)
+                                          "%r since the ID was already matched "
+                                          "by your query %r. Your BLAST database "
+                                          "may contain duplicate entries." %
+                                          (hit.id, hit.blast_id, query_id),
+                                          BiopythonParserWarning)
                             # fallback to Blast-generated IDs, if the ID is already present
                             # and restore the desc, too
                             hit.description = '%s %s' % (hit.id, hit.description)
@@ -425,7 +427,7 @@ class BlastXmlParser(object):
 
             hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
-                        query_id, hit_id)]
+                                    query_id, hit_id)]
 
             hit = Hit(hsps)
             hit.description = hit_desc
@@ -558,6 +560,7 @@ class BlastXmlIndexer(SearchIndexer):
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
 
     def __iter__(self):
+        """Iterate over BlastXmlIndexer yields qstart_id, start_offset, block's length."""
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
         blast_id_mark = _as_bytes('Query_')
@@ -565,8 +568,9 @@ class BlastXmlIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(0)
         re_desc = re.compile(_as_bytes(r'<Iteration_query-ID>(.*?)'
-                '</Iteration_query-ID>\s+?<Iteration_query-def>'
-                '(.*?)</Iteration_query-def>'))
+                                       r'</Iteration_query-ID>\s+?'
+                                       '<Iteration_query-def>'
+                                       '(.*?)</Iteration_query-def>'))
         re_desc_end = re.compile(_as_bytes(r'</Iteration_query-def>'))
         counter = 0
 
@@ -611,8 +615,10 @@ class BlastXmlIndexer(SearchIndexer):
             counter += 1
 
     def _parse(self, handle):
-        # overwrites SearchIndexer._parse, since we need to set the meta and
-        # fallback dictionaries to the parser
+        """Overwrite SearchIndexer parse (PRIVATE).
+
+        As we need to set the meta and fallback dictionaries to the parser.
+        """
         generator = self._parser(handle, **self._kwargs)
         generator._meta = self._meta
         generator._fallback = self._fallback
@@ -639,6 +645,7 @@ class _BlastXmlGenerator(XMLGenerator):
     """Event-based XML Generator."""
 
     def __init__(self, out, encoding='utf-8', indent=" ", increment=2):
+        """Initialize the class."""
         XMLGenerator.__init__(self, out, encoding)
         # the indentation character
         self._indent = indent
@@ -659,8 +666,8 @@ class _BlastXmlGenerator(XMLGenerator):
     def startDocument(self):
         """Start the XML document."""
         self.write(u'<?xml version="1.0"?>\n'
-                '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
-                '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
+                   '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
+                   '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
 
     def startElement(self, name, attrs=None, children=False):
         """Start an XML element.
@@ -726,6 +733,7 @@ class _BlastXmlGenerator(XMLGenerator):
         self.endElement(name)
 
     def characters(self, content):
+        """Replace quotes and apostrophe."""
         content = escape(unicode(content))
         for a, b in ((u'"', u'&quot;'), (u"'", u'&apos;')):
             content = content.replace(a, b)
@@ -783,8 +791,9 @@ class BlastXmlWriter(object):
                 content = str(getattr(obj, attr))
             except AttributeError:
                 # ensure attrs that is not present is optional
-                assert elem in _DTD_OPT, "Element %r (attribute %r) not " \
-                    "found" % (elem, attr)
+                if elem not in _DTD_OPT:
+                    raise ValueError("Element %r (attribute %r) not "
+                                     "found" % (elem, attr))
             else:
                 # custom element-attribute mapping, for fallback values
                 if elem in opt_dict:
@@ -805,18 +814,19 @@ class BlastXmlWriter(object):
             try:
                 content = str(getattr(qresult, attr))
             except AttributeError:
-                assert elem in _DTD_OPT, "Element %s (attribute %s) not " \
-                    "found" % (elem, attr)
+                if elem not in _DTD_OPT:
+                    raise ValueError("Element %s (attribute %s) not "
+                                     "found" % (elem, attr))
             else:
                 if elem == 'BlastOutput_version':
                     content = '%s %s' % (qresult.program.upper(),
-                            qresult.version)
+                                         qresult.version)
                 elif qresult.blast_id:
                     if elem == 'BlastOutput_query-ID':
                         content = qresult.blast_id
                     elif elem == 'BlastOutput_query-def':
                         content = ' '.join([qresult.id,
-                            qresult.description]).strip()
+                                            qresult.description]).strip()
                 xml.simpleElement(elem, content)
 
     def _write_param(self, qresult):
@@ -909,8 +919,9 @@ class BlastXmlWriter(object):
                 # make sure any elements that is not present is optional
                 # in the DTD
                 except AttributeError:
-                    assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
-                            % (elem, attr)
+                    if elem not in _DTD_OPT:
+                        raise ValueError("Element %s (attribute %s) not found"
+                                         % (elem, attr))
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1
@@ -921,7 +932,7 @@ class BlastXmlWriter(object):
         """Adjust output to mimic native BLAST+ XML as much as possible (PRIVATE)."""
         # adjust coordinates
         if attr in ('query_start', 'query_end', 'hit_start', 'hit_end',
-                'pattern_start', 'pattern_end'):
+                    'pattern_start', 'pattern_end'):
             content = getattr(hsp, attr) + 1
             if '_start' in attr:
                 content = getattr(hsp, attr) + 1

@@ -118,6 +118,56 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TACQG", str(s))
 
+        s_atoms = list(structure.get_atoms())
+        f_atoms = list(f_structure.get_atoms())
+
+        for atoms in [s_atoms, f_atoms]:
+            self.assertEqual(len(atoms), 644)
+            atom_names = ['N', 'CA', 'C', 'O', 'CB']
+            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_occupancy() for a in atoms[:5]], [1., 1., 1., 1., 1.])
+            self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
+            coord = numpy.array([19.594, 32.367, 28.012], dtype=numpy.float32)
+            numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
+
+            self.assertEqual(atoms[0].get_bfactor(), 18.03)
+            for atom in atoms:
+                self.assertIsNone(atom.get_anisou())
+
+    def test_with_anisotrop(self):
+        parser = MMCIFParser()
+        fast_parser = FastMMCIFParser()
+
+        structure = parser.get_structure("example", "PDB/4CUP.cif")
+        f_structure = fast_parser.get_structure("example", "PDB/4CUP.cif")
+
+        self.assertEqual(len(structure), 1)
+        self.assertEqual(len(f_structure), 1)
+
+        s_atoms = list(structure.get_atoms())
+        f_atoms = list(f_structure.get_atoms())
+
+        self.assertEqual(len(s_atoms), len(f_atoms))
+
+        for atoms in [s_atoms, f_atoms]:
+            atom_names = ['N', 'CA', 'C', 'O', 'CB']
+            self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
+            self.assertSequenceEqual([a.get_occupancy() for a in atoms[:5]], [1., 1., 1., 1., 1.])
+            self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
+            coord = numpy.array([50.346, 19.287, 17.288], dtype=numpy.float32)
+            numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
+            self.assertEqual(atoms[0].get_bfactor(), 32.02)
+
+            ansiou = numpy.array([0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=numpy.float32)
+            numpy.testing.assert_array_equal(atoms[0].get_anisou(), ansiou)
+            ansiou = numpy.array([1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=numpy.float32)
+            atom_937 = list(f_structure[0]['A'])[114]['CB']
+            numpy.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
+
     def testModels(self):
         """Test file with multiple models"""
 
@@ -276,12 +326,12 @@ class CIFtoPDB(unittest.TestCase):
         self.assertEqual(len(pdb_struct), len(cif_struct))
 
         pdb_atom_names = [a.name for a in pdb_struct.get_atoms()]
-        cif_atom_names = [a.name for a in pdb_struct.get_atoms()]
+        cif_atom_names = [a.name for a in cif_struct.get_atoms()]
         self.assertEqual(len(pdb_atom_names), len(cif_atom_names))
         self.assertSequenceEqual(pdb_atom_names, cif_atom_names)
 
         pdb_atom_elems = [a.element for a in pdb_struct.get_atoms()]
-        cif_atom_elems = [a.element for a in pdb_struct.get_atoms()]
+        cif_atom_elems = [a.element for a in cif_struct.get_atoms()]
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
 
 

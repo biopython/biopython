@@ -3,7 +3,7 @@
 
 \section{Parsing Swiss-Prot files}
 
-Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
+Swiss-Prot (\url{https://web.expasy.org/docs/swiss-prot_guideline.html}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
 
 \subsection{Parsing Swiss-Prot records}
 
@@ -332,14 +332,12 @@ We can now iterate over the records one at a time. For example, we can make a li
 
 \section{Accessing the ExPASy server}
 
-Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
+Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{https://www.expasy.org}. Four kinds of queries are available from ExPASy:
 \begin{description}
 \item[get\_prodoc\_entry]To download a Prosite documentation record in HTML format
 \item[get\_prosite\_entry]To download a Prosite record in HTML format
 \item[get\_prosite\_raw]To download a Prosite or Prosite documentation record in raw format
 \item[get\_sprot\_raw]To download a Swiss-Prot record in raw format
-\item[sprot\_search\_ful]To search for a Swiss-Prot record
-\item[sprot\_search\_de]To search for a Swiss-Prot record
 \end{description}
 To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
 
@@ -381,32 +379,10 @@ If the accession number you provided to \verb|ExPASy.get_sprot_raw| does not exi
 
 Now, you may remark that I knew the records' accession numbers
 beforehand. Indeed, \verb|get_sprot_raw()| needs either the entry name
-or an accession number. When you don't have them handy, you can use
-one of the \verb|sprot_search_de()| or \verb|sprot_search_ful()|
-functions.
-
-\verb|sprot_search_de()| searches in the ID, DE, GN, OS and OG lines;
-\verb|sprot_search_ful()| searches in (nearly) all the fields. They
-are detailed on
-\url{http://www.expasy.org/cgi-bin/sprot-search-de} and
-\url{http://www.expasy.org/cgi-bin/sprot-search-ful}
-respectively. Note that they don't search in TrEMBL by default
-(argument \verb|trembl|). Note also that they return HTML pages;
-however, accession numbers are quite easily extractable:
-
-\begin{verbatim}
->>> from Bio import ExPASy
->>> import re
-
->>> handle = ExPASy.sprot_search_de("Orchid Chalcone Synthase")
->>> # or:
->>> # handle = ExPASy.sprot_search_ful("Orchid and {Chalcone Synthase}")
->>> html_results = handle.read()
->>> if "Number of sequences found" in html_results:
-...     ids = re.findall(r'HREF="/uniprot/(\w+)"', html_results)
-... else:
-...     ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
-\end{verbatim}
+or an accession number. When you don't have them handy, right now you
+could use \url{https://www.uniprot.org/} but we do not have a Python
+wrapper for searching this from a script. Perhaps you could contribute
+here?
 
 \subsection{Retrieving Prosite and Prosite documentation records}
 
@@ -467,7 +443,7 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \section{Scanning the Prosite database}
 
-\href{http://www.expasy.org/tools/scanprosite/}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{http://www.expasy.org/tools/scanprosite/scanprosite-doc.html}{ScanProsite documentation} as well as the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite}.
+\href{https://prosite.expasy.org/prosite.html}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{https://prosite.expasy.org/prosite_doc.html}{ScanProsite documentation} as well as the \href{https://prosite.expasy.org/scanprosite/scanprosite_doc.html#rest}{documentation for programmatic access of ScanProsite}.
 
 You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
 
@@ -516,7 +492,7 @@ A \verb+Bio.ExPASy.ScanProsite.Record+ object is derived from a list, with each 
 {'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
 \end{verbatim}
 
-Other ScanProsite parameters can be passed as keyword arguments; see the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite} for more information. As an example, passing \verb+lowscore=1+ to include matches with low level scores lets use find one additional hit:
+Other ScanProsite parameters can be passed as keyword arguments; see the \href{https://prosite.expasy.org/scanprosite/scanprosite_doc.html#rest}{documentation for programmatic access of ScanProsite} for more information. As an example, passing \verb+lowscore=1+ to include matches with low level scores lets use find one additional hit:
 
 \begin{verbatim}
 >>> handle = ScanProsite.scan(seq=sequence, lowscore=1)

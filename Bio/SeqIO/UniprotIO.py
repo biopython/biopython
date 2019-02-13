@@ -39,7 +39,7 @@ NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
-def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
+def UniprotIterator(handle, alphabet=Alphabet.generic_protein, return_raw_comments=False):
     """Iterate over UniProt XML as SeqRecord objects.
 
     parses an XML entry at a time from any UniProt XML file
@@ -50,6 +50,10 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
+    # check if file is empty
+    if handle.readline() == '':
+        raise ValueError("Empty file.")
+
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
         raise ValueError("Wrong alphabet %r" % alphabet)
     if isinstance(alphabet, Alphabet.Gapped):
@@ -65,7 +69,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
             handle = StringIO(handle)
         else:
             raise TypeError("Requires an XML-containing handle"
-                            " (or XML as a string, but that's deprectaed)")
+                            " (or XML as a string, but that's deprecated)")
 
     if ElementTree is None:
         from Bio import MissingExternalDependencyError
@@ -87,7 +91,7 @@ class Parser(object):
     alphabet=Alphabet.ProteinAlphabet()    can be modified if needed, default is protein alphabet.
     """
 
-    def __init__(self, elem, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
+    def __init__(self, elem, alphabet=Alphabet.generic_protein, return_raw_comments=False):
         """Initialize the class."""
         self.entry = elem
         self.alphabet = alphabet

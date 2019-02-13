@@ -3,9 +3,10 @@
 # Revisions copyright 2009 by David Winter.
 # Revisions copyright 2009-2010 by Leighton Pritchard.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code to interact with and run various EMBOSS programs.
 
 These classes follow the AbstractCommandline interfaces for running

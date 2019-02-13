@@ -8,6 +8,7 @@ import unittest
 from os import path
 import warnings
 from datetime import datetime
+import sys
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
@@ -84,11 +85,44 @@ class GenBankTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
             try:
-                SeqIO.read(path.join("GenBank", "bad_origin_wrap.gb"), "genbank")
+                SeqIO.read(path.join("GenBank", "bad_origin_wrap_linear.gb"), "genbank")
             except BiopythonParserWarning as e:
                 self.assertEqual(str(e), "Ignoring invalid location: '6801..100'")
             else:
                 self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
+    def test_implicit_orign_wrap_fix(self):
+        """Attempt to fix implied origin wrapping."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            try:
+                SeqIO.read(path.join("GenBank", "bad_origin_wrap.gb"), "genbank")
+            except BiopythonParserWarning as e:
+                self.assertEqual(str(e), "Attempting to fix invalid location "
+                                         "'6801..100' ""as it looks like "
+                                         "incorrect origin wrapping. Please "
+                                         "fix input file, this could have "
+                                         "unintended behavior.")
+            else:
+                self.assertTrue(False, "Expected specified BiopythonParserWarning here.")
+
+    def test_implicit_orign_wrap_extract_and_translate(self):
+        """Test that features wrapped around origin give expected data."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            with open(path.join("GenBank", "bad_origin_wrap_CDS.gb")) as handle:
+                seq_record = SeqIO.read(handle, "genbank")
+                seq_features = seq_record.features
+                self.assertEqual(str(seq_features[1].extract(seq_record).seq.lower()),
+                                 "atgccctataaaacccagggctgccttggaaaaggcgcaacccc"
+                                 "aaccccctcgagccgcggcatataa")
+                self.assertEqual(str(seq_features[2].extract(seq_record).seq.lower()),
+                                 "atgccgcggctcgagggggttggggttgcgccttttccaaggca"
+                                 "gccctgggttttatag")
+                self.assertEqual(str(seq_features[1].extract(seq_record).seq.translate()),
+                                 "MPYKTQGCLGKGATPTPSSRGI*")
+                self.assertEqual(str(seq_features[2].extract(seq_record).seq.translate()),
+                                 "MPRLEGVGVAPFPRQPWVL*")
 
     def test_genbank_bad_loc_wrap_parsing(self):
         """Bad location wrapping."""
@@ -215,21 +249,63 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(list(f.qualifiers),
                          ['organism', 'mol_type', 'strain', 'db_xref', 'dev_stage'])
 
+    def test_qualifier_escaping_read(self):
+        """Check qualifier escaping is preserved when parsing."""
+
+        # Make sure parsing improperly escaped qualifiers raises a warning
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read("GenBank/qualifier_escaping_read.gb", "gb")
+            self.assertEqual(len(caught), 4)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(str(caught[0].message), 'The NCBI states double-quote characters like " should be escaped'
+                                                     ' as "" (two double - quotes), but here it was not: '
+                                                     '%r' % 'One missing ""quotation mark" here')
+        # Check records parsed as expected
+        f1 = record.features[0]
+        f2 = record.features[1]
+        f3 = record.features[2]
+        f4 = record.features[3]
+        f5 = record.features[4]
+        self.assertEqual(f1.qualifiers['note'][0], '"This" is "already" "escaped"')
+        self.assertEqual(f2.qualifiers['note'][0], 'One missing "quotation mark" here')
+        self.assertEqual(f3.qualifiers['note'][0], 'End not properly "escaped"')
+        self.assertEqual(f4.qualifiers['note'][0], '"Start" not properly escaped')
+        self.assertEqual(f5.qualifiers['note'][0], 'Middle not "properly" escaped')
+
+    def test_qualifier_escaping_write(self):
+        """Check qualifier escaping is preserved when writing."""
+
+        # Write some properly escaped qualifiers and test
+        genbank_out = "GenBank/qualifier_escaping_write.gb"
+        record = SeqIO.read(genbank_out, "gb")
+        f1 = record.features[0]
+        f2 = record.features[1]
+        f1.qualifiers['note'][0] = '"Should" now "be" escaped in "file"'
+        f2.qualifiers['note'][0] = '"Should also be escaped in file"'
+        SeqIO.write(record, genbank_out, "gb")
+        # Read newly escaped qualifiers and test
+        record = SeqIO.read(genbank_out, "gb")
+        f1 = record.features[0]
+        f2 = record.features[1]
+        self.assertEqual(f1.qualifiers['note'][0], '"Should" now "be" escaped in "file"')
+        self.assertEqual(f2.qualifiers['note'][0], '"Should also be escaped in file"')
+
     def test_long_names(self):
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
         self.assertEqual(len(original), 1326)
+        # Acceptability of LOCUS line with length > 80 invalidates some of these tests
         for name, seq_len, ok in [
                 ("short", 1, True),
                 ("max_length_of_16", 1000, True),
                 ("overly_long_at_17", 1000, True),
                 ("excessively_long_at_22", 99999, True),
-                ("excessively_long_at_22", 100000, False),
+                ("excessively_long_at_22", 100000, True),
                 ("pushing_the_limits_at_24", 999, True),
-                ("pushing_the_limits_at_24", 1000, False),
-                ("longest_possible_len_of_26", 10, False),  # 2 digits
-                ("longest_possible_len_of_26", 9, True),  # 1 digit
-                ]:
+                ("pushing_the_limits_at_24", 1000, True),
+                ("old_max_name_length_was_26", 10, True),  # 2 digits
+                ("old_max_name_length_was_26", 9, True)]:  # 1 digit
             # Make the length match the desired target
             record = original[:]
             # TODO - Implement Seq * int
@@ -252,8 +328,10 @@ KEYWORDS    """ in gb, gb)
             line = handle.readline()
             self.assertIn(" %s " % name, line)
             self.assertIn(" %i bp " % seq_len, line)
-            name_and_length = line[12:40]
-            self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
+            # Splitting based on whitespace rather than position due to
+            # updated GenBank specification
+            name_and_length = line.split()[1:3]
+            self.assertEqual(name_and_length, [name, str(seq_len)], line)
             handle.seek(0)
             with warnings.catch_warnings():
                 # e.g. BiopythonParserWarning: GenBank LOCUS line
@@ -357,6 +435,78 @@ KEYWORDS    """ in gb, gb)
             gb = SeqIO.read(handle, "gb")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
+    def test_longer_locus_line(self):
+        """Check that we can read and write files with longer locus lines"""
+        # Create example file from existing file
+        with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+            data = inhandle.readlines()
+            data[0] = "LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI 15-OCT-2018\n"
+
+        # Create memory file from modified genbank file
+        in_tmp = StringIO()
+        in_tmp.writelines(data)
+        in_tmp.seek(0)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            in_tmp.seek(0)
+            record = SeqIO.read(in_tmp, 'genbank')
+
+            # Create temporary output memory file
+            out_tmp = StringIO()
+            SeqIO.write(record, out_tmp, 'genbank')
+
+            # Check that the written file can be read back in
+            out_tmp.seek(0)
+            record_in = SeqIO.read(out_tmp, 'genbank')
+            self.assertEqual(record_in.id, "DS830848.1")
+            self.assertEqual(record_in.name, "AZZZAA021234567891234")
+            self.assertEqual(len(record_in.seq), 2147483647)
+
+    if sys.maxsize > 2147483647:
+        def test_extremely_long_sequence(self):
+            """Tests if extremely long sequences can be read.
+
+            This is only run if sys.maxsize > 2147483647.
+            """
+            # Create example file from existing file
+            with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+                data = inhandle.readlines()
+                data[0] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
+
+            # Create memory file from modified genbank file
+            in_tmp = StringIO()
+            in_tmp.writelines(data)
+            in_tmp.seek(0)
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                in_tmp.seek(0)
+                record = SeqIO.read(in_tmp, 'genbank')
+
+                # Create temporary output memory file
+                out_tmp = StringIO()
+                SeqIO.write(record, out_tmp, 'genbank')
+
+                # Check that the written file can be read back in
+                out_tmp.seek(0)
+                record_in = SeqIO.read(out_tmp, 'genbank')
+                self.assertEqual(record_in.id, "DS830848.1")
+                self.assertEqual(record_in.name, "AZZZAA02123456789")
+                self.assertEqual(len(record_in.seq), 10000000000)
+
+            def read_longer_than_maxsize():
+                with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+                    data2 = inhandle.readlines()
+                    data2[0] = "LOCUS       AZZZAA02123456789 " + str(sys.maxsize + 1) + " bp    DNA     linear   PRI 15-OCT-2018\n"
+
+                long_in_tmp = StringIO()
+                long_in_tmp.writelines(data2)
+                long_in_tmp.seek(0)
+                record = SeqIO.read(long_in_tmp, 'genbank')
+
+            self.assertRaises(ValueError, read_longer_than_maxsize)
+
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
@@ -378,6 +528,9 @@ class LineOneTests(unittest.TestCase):
              "linear", None, "INV", None),
             ("LOCUS       pEH010                  5743 bp    DNA     circular",
              "circular", "DNA", None, [BiopythonParserWarning]),
+            # This is a test of the format > 80 chars long
+            ("LOCUS       AZZZAA02123456789 1000000000 bp    DNA     linear   PRI 15-OCT-2018",
+             "linear", "DNA", "PRI", None)
         ]
         for (line, topo, mol_type, div, warning_list) in tests:
             with warnings.catch_warnings(record=True) as caught:

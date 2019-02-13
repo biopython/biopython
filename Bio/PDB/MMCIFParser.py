@@ -99,12 +99,12 @@ class MMCIFParser(object):
             # Invalid model number (malformed file)
             raise PDBConstructionException("Invalid model number")
         try:
-            aniso_u11 = mmcif_dict["_atom_site.aniso_U[1][1]"]
-            aniso_u12 = mmcif_dict["_atom_site.aniso_U[1][2]"]
-            aniso_u13 = mmcif_dict["_atom_site.aniso_U[1][3]"]
-            aniso_u22 = mmcif_dict["_atom_site.aniso_U[2][2]"]
-            aniso_u23 = mmcif_dict["_atom_site.aniso_U[2][3]"]
-            aniso_u33 = mmcif_dict["_atom_site.aniso_U[3][3]"]
+            aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
+            aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
+            aniso_u13 = mmcif_dict["_atom_site_anisotrop.U[1][3]"]
+            aniso_u22 = mmcif_dict["_atom_site_anisotrop.U[2][2]"]
+            aniso_u23 = mmcif_dict["_atom_site_anisotrop.U[2][3]"]
+            aniso_u33 = mmcif_dict["_atom_site_anisotrop.U[3][3]"]
             aniso_flag = 1
         except KeyError:
             # no anisotropic B factors
@@ -195,10 +195,10 @@ class MMCIFParser(object):
             coord = numpy.array((x, y, z), 'f')
             element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                name, element=element)
-            if aniso_flag == 1:
+                                        name, element=element)
+            if aniso_flag == 1 and i < len(aniso_u11):
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                    aniso_u22[i], aniso_u23[i], aniso_u33[i])
+                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
                 mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
@@ -337,12 +337,12 @@ class FastMMCIFParser(object):
             raise PDBConstructionException("Invalid model number")
 
         try:
-            aniso_u11 = mmcif_dict["_atom_site.aniso_U[1][1]"]
-            aniso_u12 = mmcif_dict["_atom_site.aniso_U[1][2]"]
-            aniso_u13 = mmcif_dict["_atom_site.aniso_U[1][3]"]
-            aniso_u22 = mmcif_dict["_atom_site.aniso_U[2][2]"]
-            aniso_u23 = mmcif_dict["_atom_site.aniso_U[2][3]"]
-            aniso_u33 = mmcif_dict["_atom_site.aniso_U[3][3]"]
+            aniso_u11 = mmcif_dict["_atom_site_anisotrop.U[1][1]"]
+            aniso_u12 = mmcif_dict["_atom_site_anisotrop.U[1][2]"]
+            aniso_u13 = mmcif_dict["_atom_site_anisotrop.U[1][3]"]
+            aniso_u22 = mmcif_dict["_atom_site_anisotrop.U[2][2]"]
+            aniso_u23 = mmcif_dict["_atom_site_anisotrop.U[2][3]"]
+            aniso_u33 = mmcif_dict["_atom_site_anisotrop.U[3][3]"]
             aniso_flag = 1
         except KeyError:
             # no anisotropic B factors
@@ -436,10 +436,10 @@ class FastMMCIFParser(object):
             coord = numpy.array((x, y, z), 'f')
             element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                name, element=element)
-            if aniso_flag == 1:
+                                        name, element=element)
+            if aniso_flag == 1 and i < len(aniso_u11):
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
-                    aniso_u22[i], aniso_u23[i], aniso_u33[i])
+                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
                 mapped_anisou = [float(_) for _ in u]
                 anisou_array = numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)

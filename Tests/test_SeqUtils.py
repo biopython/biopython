@@ -38,12 +38,12 @@ class SeqUtilsTests(unittest.TestCase):
         # Example of crc64 collision from Sebastian Bassi using the
         # immunoglobulin lambda light chain variable region from Homo sapiens
         # Both sequences share the same CRC64 checksum: 44CAAD88706CC153
-        self.str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                        + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                        + "YCSSYAGSSTLVFGGGTKLTVL"
-        self.str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                        + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                        + "YCCSYAGSSTWVFGGGTKLTVL"
+        self.str_light_chain_one = ("QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
+                                    "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
+                                    "QAEDEADYYCSSYAGSSTLVFGGGTKLTVL")
+        self.str_light_chain_two = ("QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQ"
+                                    "HPGKAPKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGL"
+                                    "QAEDEADYYCCSYAGSSTWVFGGGTKLTVL")
 
     def test_codon_usage_ecoli(self):
         """Test Codon Adaptation Index (CAI) using default E. coli data."""
@@ -73,7 +73,7 @@ class SeqUtilsTests(unittest.TestCase):
                 b = feature.qualifiers["translation"][0] + "*"
                 self.assertEqual(a, b, "%r vs %r" % (a, b))
                 records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
-                                        description=feature.qualifiers["product"][0]))
+                                         description=feature.qualifiers["product"][0]))
 
         with open(dna_fasta_filename, "w") as handle:
             SeqIO.write(records, handle, "fasta")

@@ -35,6 +35,8 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import (ambiguous_dna_complement,
                                 ambiguous_rna_complement)
+from Bio.Data.IUPACData import ambiguous_dna_letters as _ambiguous_dna_letters
+from Bio.Data.IUPACData import ambiguous_rna_letters as _ambiguous_rna_letters
 from Bio.Data import CodonTable
 
 
@@ -178,7 +180,6 @@ class Seq(object):
         During this transition period, please just do explicit comparisons:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> seq1 = Seq("ACGT")
         >>> seq2 = Seq("ACGT")
         >>> id(seq1) == id(seq2)
@@ -220,7 +221,10 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -230,7 +234,36 @@ class Seq(object):
                 warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
                               self.alphabet, other.alphabet),
                               BiopythonWarning)
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+        if isinstance(other, (str, Seq, MutableSeq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -395,18 +428,6 @@ class Seq(object):
         if not isinstance(other, int):
             raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
-
-    def tostring(self):  # Seq API requirement
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring().
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return str(self)
 
     def tomutable(self):  # Needed?  Or use a function?
         """Return the full sequence as a MutableSeq object.
@@ -1076,7 +1097,7 @@ class Seq(object):
         >>> coding_dna.translate(table=1, cds=True)
         Traceback (most recent call last):
             ...
-        TranslationError: First codon 'GTG' is not a start codon
+        Bio.Data.CodonTable.TranslationError: First codon 'GTG' is not a start codon
 
         If the sequence has no in-frame stop codon, then the to_stop argument
         has no effect:
@@ -1946,6 +1967,10 @@ class MutableSeq(object):
             self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
+        elif isinstance(data, Seq):
+            raise TypeError("The sequence data given to a MutableSeq object "
+                            "should be a string or an array "
+                            "(not a Seq object etc)")
         else:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
@@ -1962,13 +1987,13 @@ class MutableSeq(object):
             # there is a stop codon at the end of a sequence.
             # Note total length is 54+3+3=60
             return "{0}('{1}...{2}'{3!s})".format(self.__class__.__name__,
-                                                    str(self[:54]),
-                                                    str(self[-3:]),
-                                                    a)
+                                                  str(self[:54]),
+                                                  str(self[-3:]),
+                                                  a)
         else:
             return "{0}('{1}'{2!s})".format(self.__class__.__name__,
-                                              str(self),
-                                              a)
+                                            str(self),
+                                            a)
 
     def __str__(self):
         """Return the full sequence as a python string.
@@ -2038,7 +2063,10 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data < other.data
-        return str(self) < str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) < str(other)
+        raise TypeError("'<' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -2050,7 +2078,40 @@ class MutableSeq(object):
                               BiopythonWarning)
             if isinstance(other, MutableSeq):
                 return self.data <= other.data
-        return str(self) <= str(other)
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) <= str(other)
+        raise TypeError("'<=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __gt__(self, other):
+        """Implement the greater-than operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data > other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) > str(other)
+        raise TypeError("'>' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
+
+    def __ge__(self, other):
+        """Implement the greater-than or equal operand."""
+        if hasattr(other, "alphabet"):
+            if not Alphabet._check_type_compatible([self.alphabet,
+                                                    other.alphabet]):
+                warnings.warn("Incompatible alphabets {0!r} and {1!r}".format(
+                              self.alphabet, other.alphabet),
+                              BiopythonWarning)
+            if isinstance(other, MutableSeq):
+                return self.data >= other.data
+        if isinstance(other, (str, Seq, UnknownSeq)):
+            return str(self) >= str(other)
+        raise TypeError("'>=' not supported between instances of '{}' and '{}'"
+                        .format(type(self).__name__, type(other).__name__))
 
     def __len__(self):
         """Return the length of the sequence, use len(my_seq)."""
@@ -2484,31 +2545,6 @@ class MutableSeq(object):
             for c in other:
                 self.data.append(c)
 
-    def tostring(self):
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of my_seq.tostring()
-        as this method is officially deprecated.
-
-        Because str(my_seq) will give you the full sequence as a python string,
-        there is often no need to make an explicit conversion.  For example,
-
-        >>> my_seq = Seq("ATCGTG")
-        >>> my_name = "seq_1"
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq))
-        ID={seq_1}, sequence={ATCGTG}
-
-        On Biopython 1.44 or older you would have to have done this:
-
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
-        ID={seq_1}, sequence={ATCGTG}
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return "".join(self.data)
-
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.
 
@@ -2631,7 +2667,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     >>> _translate_str("TA?", table)
     Traceback (most recent call last):
        ...
-    TranslationError: Codon 'TA?' is invalid
+    Bio.Data.CodonTable.TranslationError: Codon 'TA?' is invalid
 
     In a change to older versions of Biopython, partial codons are now
     always regarded as an error (previously only checked if cds=True)
@@ -2647,11 +2683,11 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     >>> _translate_str("AAACCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    TranslationError: First codon 'AAA' is not a start codon
+    Bio.Data.CodonTable.TranslationError: First codon 'AAA' is not a start codon
     >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    TranslationError: Extra in frame stop codon found.
+    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon found.
     """
     sequence = sequence.upper()
     amino_acids = []
@@ -2661,8 +2697,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         valid_letters = set(table.nucleotide_alphabet.letters.upper())
     else:
         # Assume the worst case, ambiguous DNA or RNA:
-        valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
-                            IUPAC.ambiguous_rna.letters.upper())
+        valid_letters = set(_ambiguous_dna_letters.upper() +
+                            _ambiguous_rna_letters.upper())
     n = len(sequence)
 
     # Check for tables with 'ambiguous' (dual-coding) stop codons:

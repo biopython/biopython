@@ -98,14 +98,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             Note that Tab characters count as only one character in the
             species names. Their inclusion can cause trouble.
             """
-            name = record.id.strip()
-            # Either remove the banned characters, or map them to something
-            # else like an underscore "_" or pipe "|" character...
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:id_width]
+            name = sanitize_name(record.id, id_width)
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
                                  "possibly due to truncation"
@@ -329,14 +322,9 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         # Apply this test *after* cleaning the identifiers
         names = []
         for record in alignment:
-            name = record.id.strip()
             # Either remove the banned characters, or map them to something
             # else like an underscore "_" or pipe "|" character...
-            for char in "[](),":
-                name = name.replace(char, "")
-            for char in ":;":
-                name = name.replace(char, "|")
-            name = name[:id_width]
+            name = sanitize_name(record.id, id_width)
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
                                  "possibly due to truncation"
@@ -441,3 +429,19 @@ class SequentialPhylipIterator(PhylipIterator):
                              id=i, name=i, description=i)
                    for (i, s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
+
+
+def sanitize_name(name, width=None):
+    """Sanitise sequence identifier for output.
+
+    Removes the banned characters "[]()" and replaces the characters ":;"
+    with "|". The name is truncated to "width" characters if specified.
+    """
+    name = name.strip()
+    for char in "[](),":
+        name = name.replace(char, "")
+    for char in ":;":
+        name = name.replace(char, "|")
+    if width is not None:
+        name = name[:width]
+    return name

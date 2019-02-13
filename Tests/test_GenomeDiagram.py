@@ -47,6 +47,9 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
+from reportlab import rl_config
+rl_config.invariant = True
+
 
 def fill_and_border(base_color, alpha=0.5):
     try:
@@ -765,9 +768,7 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
 
         # Also check the write_to_string (bytes string) method matches,
-        # (Note the possible confusion over new lines on Windows)
-        assert open(output_filename, "rb").read().replace(b"\r\n", b"\n") \
-               == gdd.write_to_string('PDF').replace(b"\r\n", b"\n")
+        assert open(output_filename, "rb").read() == gdd.write_to_string('PDF')
 
         output_filename = os.path.join('Graphics', 'GD_region_linear.svg')
         gdd.write(output_filename, 'SVG')

@@ -257,7 +257,7 @@ class SeqMat(dict):
         return result
 
     def print_full_mat(self, f=None, format="%4d", topformat="%4s",
-                alphabet=None, factor=1, non_sym=None):
+                       alphabet=None, factor=1, non_sym=None):
         """Print the full matrix to the file handle f or stdout."""
         f = f or sys.stdout
         # create a temporary dictionary, which holds the full matrix for
@@ -293,7 +293,7 @@ class SeqMat(dict):
             f.write(outline)
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
-                alphabet=None, factor=1):
+                  alphabet=None, factor=1):
         """Print a nice half-matrix.
 
         f=sys.stdout to see on the screen.
@@ -446,7 +446,7 @@ def _build_exp_freq_mat(exp_freq_table):
     exp_freq_table: should be a FreqTable instance
     """
     exp_freq_mat = ExpectedFrequencyMatrix(alphabet=exp_freq_table.alphabet,
-                                          build_later=1)
+                                           build_later=1)
     for i in exp_freq_mat:
         if i[0] == i[1]:
             exp_freq_mat[i] = exp_freq_table[i[0]] ** 2
@@ -544,7 +544,7 @@ def read_text_matrix(data_file):
         # print(j)
         row = alphabet[j]
         # row = rec[0]
-        if re.compile('[A-z\*]').match(rec[0]):
+        if re.compile(r'[A-z\*]').match(rec[0]):
             first_col = 1
         else:
             first_col = 0

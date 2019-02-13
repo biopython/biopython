@@ -1,7 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Biopython interface for sequence search program outputs.
 
@@ -198,10 +199,18 @@ from __future__ import print_function
 from Bio._py3k import basestring
 
 import sys
+from collections import OrderedDict
 
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
+
+
+if sys.version_info < (3, 6):
+    from collections import OrderedDict as _dict
+else:
+    # Default dict is sorted in Python 3.6 onwards
+    _dict = dict
 
 
 __all__ = ('read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert')
@@ -377,8 +386,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> search_dict = SearchIO.to_dict(qresults)
-    >>> sorted(search_dict)
-    ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
+    >>> list(search_dict)
+    ['gi|195230749:301-1383', 'gi|325053704:108-1166', ..., 'gi|53729353:216-1313']
     >>> search_dict['gi|156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -391,8 +400,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> key_func = lambda qresult: qresult.id.split('|')[1]
     >>> search_dict = SearchIO.to_dict(qresults, key_func)
-    >>> sorted(search_dict)
-    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
+    >>> list(search_dict)
+    ['195230749:301-1383', '325053704:108-1166', ..., '53729353:216-1313']
     >>> search_dict['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -403,8 +412,15 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     unsuitable for dealing with files containing many queries. In that case, it
     is recommended that you use either `index` or `index_db`.
 
+    Since Python 3.7, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. For
+    CPython, this was already implemented in 3.6.
+
+    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+    than 3.6 (and for other Python older than 3.7) so that you can always
+    assume the record order is preserved.
     """
-    qdict = {}
+    qdict = _dict()
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
@@ -484,7 +500,7 @@ def index(filename, format=None, key_function=None, **kwargs):
 
 
 def index_db(index_filename, filenames=None, format=None,
-        key_function=None, **kwargs):
+             key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -614,7 +630,7 @@ def write(qresults, handle, format=None, **kwargs):
 
 
 def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-        out_kwargs=None):
+            out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.

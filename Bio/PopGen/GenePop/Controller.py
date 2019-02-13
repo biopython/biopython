@@ -109,9 +109,9 @@ def _hw_func(stream, is_locus, has_fisher=False):
     if is_locus:
         hook = "Locus "
     else:
-        hook = " Pop : "
+        hook = "Pop : "
     while line != "":
-        if line.startswith(hook):
+        if line.lstrip().startswith(hook):
             stream.readline()
             stream.readline()
             stream.readline()
@@ -249,7 +249,7 @@ class GenePopController(object):
     def _test_pop_hz_both(self, fname, type, ext, enum_test=True,
                           dememorization=10000, batches=20,
                           iterations=5000):
-        """Use Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Hardy-Weinberg test for heterozygote deficiency/excess (PRIVATE).
 
         Returns a population iterator containing a dictionary where
         dictionary[locus]=(P-val, SE, Fis-WC, Fis-RH, steps).
@@ -268,7 +268,7 @@ class GenePopController(object):
     def _test_global_hz_both(self, fname, type, ext, enum_test=True,
                              dememorization=10000, batches=20,
                              iterations=5000):
-        """Use Global Hardy-Weinberg test for heterozygote deficiency/excess.
+        """Use Global Hardy-Weinberg test for heterozygote deficiency/excess (PRIVATE).
 
         Returns a triple with:
          - A list per population containing (pop_name, P-val, SE, switches).
@@ -494,7 +494,7 @@ class GenePopController(object):
             m = re.search("Mean sample size: ([.0-9]+)", line)
             if m is not None:
                 mean_sample_size = _gp_float(m.group(1))
-            m = re.search("Mean frequency of private alleles p\(1\)= ([.0-9]+)", line)
+            m = re.search(r"Mean frequency of private alleles p\(1\)= ([.0-9]+)", line)
             if m is not None:
                 mean_priv_alleles = _gp_float(m.group(1))
             m = re.search("N=10: ([.0-9]+)", line)
@@ -839,7 +839,7 @@ class GenePopController(object):
             f.readline()
             match = re.match(" b=(.+)", f.readline().rstrip())
             bb = _gp_float(match.group(1))
-            match = re.match(".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
+            match = re.match(r".*\[(.+)  ;  (.+)\]", f.readline().rstrip())
             bblow = _gp_float(match.group(1))
             bbhigh = _gp_float(match.group(2))
         os.remove(fname + ".MIG")

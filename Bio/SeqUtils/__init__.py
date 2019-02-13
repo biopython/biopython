@@ -1,14 +1,12 @@
 #!/usr/bin/env python
-# Created: Wed May 29 08:07:18 2002
-# thomas@cbs.dtu.dk, Cecilia.Alsmark@ebc.uu.se
-# Copyright 2001 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
+# Copyright 2002 by Thomas Sicheritz-Ponten and Cecilia Alsmark.
 # Revisions copyright 2014 by Markus Piotrowski.
 # Revisions copyright 2014-2016 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Miscellaneous functions for dealing with sequences."""
 
 from __future__ import print_function

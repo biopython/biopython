@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Display the SeqFeatures produced by the parser.
 
 This produces a ton of output so it is possible to hand check what is

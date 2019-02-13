@@ -569,10 +569,12 @@ class ParseTest(unittest.TestCase):
             len_special = len(special)
             # Placed N, CA, C, O first?
             self.assertEqual(new[:len_special], special,
-                            "Sorted residue did not place N, CA, C, O first: %s" % new)
+                             "Sorted residue did not place N, CA, C, "
+                             "O first: %s" % new)
             # Placed everyone else alphabetically?
             self.assertEqual(new[len_special:], sorted(new[len_special:]),
-                            "After N, CA, C, O order Should be alphabetical: %s" % new)
+                             "After N, CA, C, O order Should be "
+                             "alphabetical: %s" % new)
         # DisorderedResidue
         residues = [r.id[1] for r in sorted(struct[1]['A'])][79:81]
         self.assertEqual(residues, [80, 81])
@@ -672,7 +674,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(new[0:special_len], special,
                              "Sorted residue did not place N, CA, C, O first: %s" % new)
             self.assertEqual(new[special_len:], sorted(new[special_len:]),
-                                 "After N, CA, C, O should be alphabet: %s" % new)
+                             "After N, CA, C, O should be alphabet: %s" % new)
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
@@ -872,8 +874,11 @@ class WriteTest(unittest.TestCase):
         """Write a full structure using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
+        # Ensure that set_structure doesn't alter parent
+        parent = struct1.parent
         # Write full model to temp file
         io.set_structure(struct1)
+        self.assertIs(parent, struct1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -890,8 +895,11 @@ class WriteTest(unittest.TestCase):
         io = PDBIO()
         struct1 = self.structure
         residue1 = list(struct1.get_residues())[0]
+        # Ensure that set_structure doesn't alter parent
+        parent = residue1.parent
         # Write full model to temp file
         io.set_structure(residue1)
+        self.assertIs(parent, residue1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -910,8 +918,11 @@ class WriteTest(unittest.TestCase):
         atm = Atom.Atom('CA', [0.1, 0.1, 0.1], 1.0, 1.0, ' ', 'CA', 1, 'C')
         res.add(atm)
 
+        # Ensure that set_structure doesn't alter parent
+        parent = res.parent
         # Write full model to temp file
         io.set_structure(res)
+        self.assertIs(parent, res.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -937,8 +948,11 @@ class WriteTest(unittest.TestCase):
 
         io = PDBIO()
         struct1 = self.structure
+        # Ensure that set_structure doesn't alter parent
+        parent = struct1.parent
         # Write to temp file
         io.set_structure(struct1)
+        self.assertIs(parent, struct1.parent)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
@@ -1263,6 +1277,13 @@ class ChangingIdTests(unittest.TestCase):
         self.assertEqual(chain.id, "R")
         model = next(iter(self.struc))
         self.assertIn("R", model)
+
+    def test_change_id_to_self(self):
+        """Changing the id to itself does nothing (does not raise)."""
+        chain = next(iter(self.struc.get_chains()))
+        chain_id = chain.id
+        chain.id = chain_id
+        self.assertEqual(chain.id, chain_id)
 
     def test_change_residue_id(self):
         """Change the id of a residue."""

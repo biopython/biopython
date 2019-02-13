@@ -162,7 +162,7 @@ def __read(handle):
             cols = value.split("; ")
             if len(cols) != 2:
                 raise ValueError("I don't understand identification line\n%s"
-                         % line)
+                                 % line)
             record.name = cols[0]
             record.type = cols[1].rstrip('.')    # don't want '.'
         elif keyword == 'AC':

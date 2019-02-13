@@ -80,12 +80,12 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.6 from http://www.python.org
+We currently recommend using Python 3.7 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 2.7, 3.4, 3.5, 3.6 -- see http://www.python.org
+- Python 2.7, 3.4, 3.5, 3.6, 3.7 -- see http://www.python.org
 
   Python 3 is the primary development platform for Biopython. We will drop
   support for Python 2.7 no later than 2020, in line with the end-of-life or
@@ -292,9 +292,9 @@ Distribution Structure
 - ``LICENSE.rst`` -- What you can do with the code.
 - ``CONTRIB.rst`` -- An (incomplete) list of people who helped Biopython in
   one way or another.
-- ``DEPRECATED.rst`` -- Contains information about modules in Biopython that are
-  removed or no longer recommended for use, and how to update code that uses
-  those modules.
+- ``DEPRECATED.rst`` -- Contains information about modules in Biopython that
+  were removed or no longer recommended for use, and how to update code that
+  uses those modules.
 - ``MANIFEST.in`` -- Configures which files to include in releases.
 - ``setup.py``    -- Installation file.
 - ``Bio/``        -- The main code base code.

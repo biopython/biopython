@@ -3,6 +3,11 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of baseml.
+
+Maximum likelihood analysis of nucleotide sequences.
+"""
+
 import os
 import os.path
 from ._paml import Paml
@@ -17,7 +22,7 @@ class Baseml(Paml):
     """An interface to BASEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
-                out_file=None):
+                 out_file=None):
         """Initialize the Baseml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -86,7 +91,7 @@ class Baseml(Paml):
                     if option[0] == "model" and option[1] in [9, 10]:
                         if self._options["model_options"] is not None:
                             ctl_handle.write("model = %s  %s" % (option[1],
-                                            self._options["model_options"]))
+                                             self._options["model_options"]))
                             continue
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
@@ -155,13 +160,14 @@ class Baseml(Paml):
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
             parse=True):
-        """Run baseml using the current configuration and then parse the results.
+        """Run baseml using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that BASEML
-        requires relative paths.
+        Check that the tree attribute is specified and exists, and then
+        run baseml. If parse is True then read and return the result,
+        otherwise return none.
+
+        The arguments may be passed as either absolute or relative paths,
+        despite the fact that BASEML requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
@@ -169,10 +175,8 @@ class Baseml(Paml):
             raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
-            results = read(self.out_file)
-        else:
-            results = None
-        return results
+            return read(self.out_file)
+        return None
 
 
 def read(results_file):

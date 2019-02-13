@@ -11,6 +11,7 @@ import sys
 import tempfile
 import unittest
 
+from Bio import bgzf
 from Bio import File
 from Bio._py3k import StringIO
 
@@ -67,6 +68,23 @@ class UndoHandleTests(unittest.TestCase):
             h.close()
 
 
+class RandomAccess(unittest.TestCase):
+
+    def test_plain(self):
+        with File._open_for_random_access("Quality/example.fastq") as handle:
+            self.assertTrue("r" in handle.mode)
+            self.assertTrue("b" in handle.mode)
+
+    def test_bgzf(self):
+        with File._open_for_random_access("Quality/example.fastq.bgz") as handle:
+            self.assertIsInstance(handle, bgzf.BgzfReader)
+
+    def test_gzip(self):
+        self.assertRaises(ValueError,
+                          File._open_for_random_access,
+                          "Quality/example.fastq.gz")
+
+
 class AsHandleTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -85,12 +103,13 @@ class AsHandleTestCase(unittest.TestCase):
         with open(p, 'wb') as fp:
             with File.as_handle(fp) as handle:
                 self.assertEqual(fp, handle, "as_handle should "
-                        "return argument when given a file-like object")
+                                 "return argument when given a "
+                                 "file-like object")
                 self.assertFalse(handle.closed)
 
             self.assertFalse(handle.closed,
-                    "Exiting as_handle given a file-like object should not "
-                    "close the file")
+                             "Exiting as_handle given a file-like object "
+                             "should not close the file")
 
     def test_string_path(self):
         "Test as_handle with a string path argument"

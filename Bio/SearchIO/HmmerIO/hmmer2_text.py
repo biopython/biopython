@@ -1,8 +1,8 @@
-# Copyright 2012 by Kai Blin.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2012 by Kai Blin.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for HMMER 2 text output."""
 
 import re
@@ -42,6 +42,7 @@ class Hmmer2TextParser(object):
         self._meta = self.parse_preamble()
 
     def __iter__(self):
+        """Iterate over Hmmer2TextParser, yields query results."""
         for qresult in self.parse_qresult():
             qresult.program = self._meta.get('program')
             qresult.target = self._meta.get('target')
@@ -181,8 +182,8 @@ class Hmmer2TextParser(object):
                self.line.startswith('--------'):
                 continue
 
-            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl, \
-            score, evalue = self.line.split()
+            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
+                score, evalue = self.line.split()
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
@@ -319,6 +320,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
+        """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()

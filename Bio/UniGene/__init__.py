@@ -1,15 +1,10 @@
-# Copyright 2006 by Sean Davis.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2006 by Sean Davis, National Cancer Institute, NIH.
+# All rights reserved.
 #
-# $Id: __init__.py,v 1.12 2009-04-24 12:03:45 mdehoon Exp $
-# Sean Davis <sdavis2 at mail dot nih dot gov>
-# National Cancer Institute
-# National Institutes of Health
-# Bethesda, MD, USA
-#
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Parse Unigene flat file format files such as the Hs.data file.
 
 Here is an overview of the flat file format that this parser deals with:
@@ -252,7 +247,7 @@ class Record(object):
 
     def __repr__(self):
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
-                          self.ID, self.symbol, self.title)
+                                   self.ID, self.symbol, self.title)
 
 
 def parse(handle):

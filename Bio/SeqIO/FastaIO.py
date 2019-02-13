@@ -41,37 +41,28 @@ def SimpleFastaParser(handle):
 
     """
     # Skip any text before the first record (e.g. blank lines, comments)
-    while True:
-        line = handle.readline()
-        if line == "":
-            return  # Premature end of file, or just empty?
-        if line[0] == ">":
+    # This matches the previous implementation where .readline() was used
+    for line in handle:
+        if line[0] == '>':
+            title = line[1:].rstrip()
             break
+    else:   # no break encountered
+        return  # Premature end of file, or just empty?
 
-    while True:
-        if line[0] != ">":
-            raise ValueError(
-                "Records in Fasta files should start with '>' character")
-        title = line[1:].rstrip()
-        lines = []
-        line = handle.readline()
-        while True:
-            if not line:
-                break
-            if line[0] == ">":
-                break
-            lines.append(line.rstrip())
-            line = handle.readline()
+    # Main logic
+    # Note, remove trailing whitespace, and any internal spaces
+    # (and any embedded \r which are possible in mangled files
+    # when not opened in universal read lines mode)
+    lines = []
+    for line in handle:
+        if line[0] == '>':
+            yield title, ''.join(lines).replace(" ", "").replace("\r", "")
+            lines = []
+            title = line[1:].rstrip()
+            continue
+        lines.append(line.rstrip())
 
-        # Remove trailing whitespace, and any internal spaces
-        # (and any embedded \r which are possible in mangled files
-        # when not opened in universal read lines mode)
-        yield title, "".join(lines).replace(" ", "").replace("\r", "")
-
-        if not line:
-            return  # StopIteration
-
-    assert False, "Should not reach this line"
+    yield title, ''.join(lines).replace(" ", "").replace("\r", "")
 
 
 def FastaTwoLineParser(handle):
@@ -107,32 +98,29 @@ def FastaTwoLineParser(handle):
     ValueError: Expected FASTA record starting with '>' character. Perhaps this file is using FASTA line wrapping? Got: 'MTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI'
 
     """
-    line = handle.readline()
-    # If this is an empty file, while loop is skipped.
-    while line:
-        if line[0] != ">":
-            if line.strip():
+    idx = -1  # for empty file
+    for idx, line in enumerate(handle):
+        if idx % 2 == 0:  # title line
+            if line[0] != '>':
                 raise ValueError("Expected FASTA record starting with '>' character. "
                                  "Perhaps this file is using FASTA line wrapping? "
-                                 "Got: %r" % line)
-            else:
-                raise ValueError("Expected FASTA record starting with '>' character. "
-                                 "If using two-lines-per-record, there should be no "
-                                 "blank lines between records, or at the end of file.")
-        title = line[1:].rstrip()
-        line = handle.readline()
-        if not line:
-            raise ValueError("Premature end of FASTA file (or this is not strict "
-                             "two-line-per-record FASTA format), expected one line "
-                             "of sequence following: '>%s'" % title)
-        elif line[0] == ">":
-            raise ValueError("Two '>' FASTA lines in a row. Missing sequence line "
-                             "if this is strict two-line-per-record FASTA format. "
-                             "Have '>%s' and '%s'" % (title, line))
-        yield title, line.strip()
-        line = handle.readline()
+                                 "Got: '{}'".format(line))
+            title = line[1:].rstrip()
+        else:  # sequence line
+            if line[0] == '>':
+                raise ValueError("Two '>' FASTA lines in a row. Missing sequence line "
+                                 "if this is strict two-line-per-record FASTA format. "
+                                 "Have '>{}' and '{}'".format(title, line))
+            yield title, line.strip()
 
-    assert not line, "Should be at end of file, but line=%r" % line
+    if idx == -1:
+        pass  # empty file
+    elif idx % 2 == 0:  # on a title line
+        raise ValueError("Missing sequence line at end of file "
+                         "if this is strict two-line-per-record FASTA format. "
+                         "Have title line '{}'".format(line))
+    else:
+        assert line[0] != '>', "line[0] == '>' ; this should be impossible!"
 
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):

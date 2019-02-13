@@ -338,7 +338,7 @@ class SeqFeature(object):
         return self.location.extract(parent_sequence)
 
     def translate(self, parent_sequence, table="Standard", start_offset=None,
-                  stop_symbol="*", to_stop=False, cds=False, gap=None):
+                  stop_symbol="*", to_stop=False, cds=None, gap=None):
         """Get a translation of the feature's sequence.
 
         This method is intended for CDS or other features that code proteins
@@ -347,7 +347,10 @@ class SeqFeature(object):
         qualifiers, if they are present. If they are not present the
         value of the arguments "table" and "start_offset" are used.
 
-        The arguments stop_symbol, to_stop, cds and gap have the same meaning
+        The "cds" parameter is set to "True" if the feature is of type
+        "CDS" but can be overridden by giving an explicit argument.
+
+        The arguments stop_symbol, to_stop and gap have the same meaning
         as Seq.translate, refer to that documentation for further information.
 
         Arguments:
@@ -372,21 +375,26 @@ class SeqFeature(object):
         >>> seq = Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
         >>> f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         >>> f.qualifiers['transl_table'] = [11]
-        >>> f.translate(seq)
+
+        Note that features of type CDS are subject to the usual
+        checks at translation. But you can override this behaviour
+        by giving explicit arguments:
+
+        >>> f.translate(seq, cds=False)
         Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))
 
         Now use the start_offset argument to change the frame. Note
-        this uses python 0-based numbering
+        this uses python 0-based numbering.
 
-        >>> f.translate(seq, start_offset=1)
+        >>> f.translate(seq, start_offset=1, cds=False)
         Seq('VTLTDNVSD', ExtendedIUPACProtein())
 
         Alternatively use the codon_start qualifier to do the same
         thing. Note: this uses 1-based numbering, which is found
-        in files from NCBI
+        in files from NCBI.
 
         >>> f.qualifiers['codon_start'] = [2]
-        >>> f.translate(seq)
+        >>> f.translate(seq, cds=False)
         Seq('VTLTDNVSD', ExtendedIUPACProtein())
         """
         # see if this feature should be translated in a different
@@ -406,8 +414,11 @@ class SeqFeature(object):
         feat_seq = self.extract(parent_sequence)[start_offset:]
         codon_table = self.qualifiers.get("transl_table", [table])[0]
 
+        if cds is None:
+            cds = (self.type == "CDS")
+
         return feat_seq.translate(table=codon_table, stop_symbol=stop_symbol,
-                to_stop=to_stop, cds=cds, gap=gap)
+                                  to_stop=to_stop, cds=cds, gap=gap)
 
     # Python 3:
     def __bool__(self):
@@ -1604,7 +1615,7 @@ class WithinPosition(int, AbstractPosition):
     - left - The start (left) position of the boundary
     - right - The end (right) position of the boundary
 
-    This allows dealing with a position like ((1.4)..100). This
+    This allows dealing with a location like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
     and 4. Since this is a start coordinate, it should acts like
     it is at position 1 (or in Python counting, 0).
@@ -1683,9 +1694,9 @@ class WithinPosition(int, AbstractPosition):
 
     def __new__(cls, position, left, right):
         """Create a WithinPosition object."""
-        assert position == left or position == right, \
-            "WithinPosition: %r should match left %r or right %r" \
-            % (position, left, right)
+        if not (position == left or position == right):
+            raise RuntimeError("WithinPosition: %r should match left %r or "
+                               "right %r" % (position, left, right))
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
@@ -2033,8 +2044,9 @@ class OneOfPosition(int, AbstractPosition):
 
         position is an integer specifying the default behaviour.
         """
-        assert position in choices, \
-            "OneOfPosition: %r should match one of %r" % (position, choices)
+        if position not in choices:
+            raise ValueError("OneOfPosition: %r should match one "
+                             "of %r" % (position, choices))
         obj = int.__new__(cls, position)
         obj.position_choices = choices
         return obj

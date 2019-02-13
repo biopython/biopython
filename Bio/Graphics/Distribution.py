@@ -89,7 +89,7 @@ class DistributionPage(object):
 
     def _draw_distributions(self, cur_drawing, start_x_pos, x_pos_change,
                             start_y_pos, y_pos_change, num_y_drawings):
-        """Draw all of the distributions on the page.
+        """Draw all of the distributions on the page (PRIVATE).
 
         Arguments:
          - cur_drawing - The drawing we are working with.

@@ -4,7 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# get set abstraction for graph representation
+"""get/set abstraction for multi-graph representation."""
 
 from functools import reduce
 

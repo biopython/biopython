@@ -133,7 +133,8 @@ _SUPPORTED_FIELDS = set(list(_COLUMN_QRESULT) + list(_COLUMN_HIT) +
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
 _DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch',
-        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
+                   'gapopen', 'qstart', 'qend', 'sstart', 'send',
+                   'evalue', 'bitscore']
 # one field from each of the following sets must exist in order for the
 # parser to work
 _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
@@ -211,6 +212,7 @@ class BlastTabParser(object):
         self.line = self.handle.readline().strip()
 
     def __iter__(self):
+        """Iterate over BlastTabParser, yields query results."""
         # stop iteration if file has no lines
         if not self.line:
             return
@@ -321,8 +323,9 @@ class BlastTabParser(object):
         """Return a dictionary of parsed row values (PRIVATE)."""
         fields = self.fields
         columns = self.line.strip().split('\t')
-        assert len(fields) == len(columns), "Expected %i columns, found: " \
-            "%i" % (len(fields), len(columns))
+        if len(fields) != len(columns):
+            raise ValueError("Expected %i columns, found: "
+                             "%i" % (len(fields), len(columns)))
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
@@ -427,21 +430,21 @@ class BlastTabParser(object):
                     for seq_type in ('query', 'hit'):
                         if attr == seq_type + '_start':
                             value = min(value,
-                                    prev['frag'][seq_type + '_end']) - 1
+                                        prev['frag'][seq_type + '_end']) - 1
                         elif attr == seq_type + '_end':
                             value = max(value,
-                                    prev['frag'][seq_type + '_start'])
+                                        prev['frag'][seq_type + '_start'])
                     setattr(frag, attr, value)
                 # strand and frame setattr require the full parsed values
                 # to be set first
                 for seq_type in ('hit', 'query'):
                     # try to set hit and query frame
                     frame = self._get_frag_frame(frag, seq_type,
-                            prev['frag'])
+                                                 prev['frag'])
                     setattr(frag, '%s_frame' % seq_type, frame)
                     # try to set hit and query strand
                     strand = self._get_frag_strand(frag, seq_type,
-                            prev['frag'])
+                                                   prev['frag'])
                     setattr(frag, '%s_strand' % seq_type, strand)
 
                 hsp = HSP([frag])
@@ -535,7 +538,8 @@ class BlastTabIndexer(SearchIndexer):
                 self._key_idx = fields.index('qaccver')
             else:
                 raise ValueError("Custom fields is missing an ID column. "
-                        "One of these must be present: 'qseqid', 'qacc', or 'qaccver'.")
+                                 "One of these must be present: 'qseqid', "
+                                 "'qacc', or 'qaccver'.")
 
     def __iter__(self):
         """Iterate over the file handle; yields key, start offset, and length."""
@@ -764,7 +768,7 @@ class BlastTabWriter(object):
         strand = getattr(hsp, '%s_strand' % seq_type, None)
         if strand is None:
             raise ValueError("Required attribute %r not found." %
-                    ('%s_strand' % (seq_type)))
+                             ('%s_strand' % (seq_type)))
         # switch start <--> end coordinates if strand is -1
         if strand < 0:
             if field.endswith('start'):
@@ -826,7 +830,7 @@ class BlastTabWriter(object):
 
         # list into ';'-delimited string
         elif field in ('sallseqid', 'sallacc', 'staxids', 'sscinames',
-                'scomnames', 'sblastnames', 'sskingdoms'):
+                       'scomnames', 'sblastnames', 'sskingdoms'):
             value = ';'.join(value)
 
         # everything else

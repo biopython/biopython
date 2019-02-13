@@ -1,7 +1,8 @@
 # Copyright 2007 by Tiago Antao.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Code to work with GenePop.
 
@@ -37,10 +38,10 @@ def get_indiv(line):
     try:
         allele_list = [(int_no_zero(marker[0:marker_len]),
                        int_no_zero(marker[marker_len:]))
-                   for marker in markers]
+                       for marker in markers]
     except ValueError:  # Haploid
         allele_list = [(int_no_zero(marker[0:marker_len]),)
-                   for marker in markers]
+                       for marker in markers]
     return indiv_name, allele_list, marker_len
 
 

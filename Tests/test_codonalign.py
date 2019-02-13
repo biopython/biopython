@@ -115,9 +115,9 @@ class Test_build(unittest.TestCase):
     def setUp(self):
         # Test set 1
         seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',
-                alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
+                         alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
         seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
-                alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
+                         alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
         pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein), id='pro1')
         pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein), id='pro2')
         aln1 = MultipleSeqAlignment([pro1, pro2])

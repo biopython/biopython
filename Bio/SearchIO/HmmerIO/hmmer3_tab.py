@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for HMMER table output format."""
 
 from itertools import chain
@@ -25,6 +25,7 @@ class Hmmer3TabParser(object):
         self.line = self.handle.readline()
 
     def __iter__(self):
+        """Iterate over Hmmer3TabParser, yields query results."""
         header_mark = '#'
         # read through the header if it exists
         while self.line.startswith(header_mark):
@@ -301,13 +302,15 @@ class Hmmer3TabWriter(object):
         taccw = max(10, len(qresult[0].accession))
 
         for hit in qresult:
-            rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f %5.1f " \
-            "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw,
-            hit.accession, qnamew, qresult.id, qaccw, qresult.accession, hit.evalue,
-            hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
-            hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num,
-            hit.overlap_num, hit.env_num, hit.domain_obs_num,
-            hit.domain_reported_num, hit.domain_included_num, hit.description)
+            rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f" \
+                    " %5.1f %5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % \
+                    (tnamew, hit.id, taccw, hit.accession, qnamew, qresult.id,
+                     qaccw, qresult.accession, hit.evalue, hit.bitscore,
+                     hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
+                     hit.hsps[0].bias, hit.domain_exp_num, hit.region_num,
+                     hit.cluster_num, hit.overlap_num, hit.env_num,
+                     hit.domain_obs_num, hit.domain_reported_num,
+                     hit.domain_included_num, hit.description)
 
         return rows
 

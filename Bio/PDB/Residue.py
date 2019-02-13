@@ -31,6 +31,7 @@ class Residue(Entity):
         Entity.__init__(self, id)
 
     def __repr__(self):
+        """Return the residue full id."""
         resname = self.get_resname()
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
@@ -70,6 +71,7 @@ class Residue(Entity):
         return self.disordered
 
     def get_resname(self):
+        """Return the residue name."""
         return self.resname
 
     def get_unpacked_list(self):
@@ -84,16 +86,19 @@ class Residue(Entity):
         return undisordered_atom_list
 
     def get_segid(self):
+        """Return the segment identifier."""
         return self.segid
 
     def get_atoms(self):
+        """Return atoms."""
         for a in self:
             yield a
 
     def get_atom(self):
+        """Return atom."""
         warnings.warn("`get_atom` has been deprecated and we intend to remove it"
                       " in a future release of Biopython. Please use `get_atoms` instead.",
-                     BiopythonDeprecationWarning)
+                      BiopythonDeprecationWarning)
         for a in self:
             yield a
 
@@ -110,12 +115,14 @@ class DisorderedResidue(DisorderedEntityWrapper):
         DisorderedEntityWrapper.__init__(self, id)
 
     def __repr__(self):
+        """Return disordered residue full identifier."""
         resname = self.get_resname()
         hetflag, resseq, icode = self.get_id()
         full_id = (resname, hetflag, resseq, icode)
         return "<DisorderedResidue %s het=%s resseq=%i icode=%s>" % full_id
 
     def add(self, atom):
+        """Add atom to residue."""
         residue = self.disordered_get()
         if not atom.is_disordered() == 2:
             # Atoms in disordered residues should have non-blank

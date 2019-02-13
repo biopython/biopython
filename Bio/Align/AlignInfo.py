@@ -278,7 +278,7 @@ class SummaryInfo(object):
 
     def _pair_replacement(self, seq1, seq2, weight1, weight2,
                           start_dict, ignore_chars):
-        """Compare two sequences and generate info on the replacements seen.
+        """Compare two sequences and generate info on the replacements seen (PRIVATE).
 
         Arguments:
          - seq1, seq2 - The two sequences to compare.
@@ -549,7 +549,7 @@ class SummaryInfo(object):
 
     def _get_letter_freqs(self, residue_num, all_records, letters, to_ignore,
                           pseudo_count=0, e_freq_table=None, random_expected=None):
-        """Determine the frequency of specific letters in the alignment.
+        """Determine the frequency of specific letters in the alignment (PRIVATE).
 
         Arguments:
          - residue_num - The number of the column we are getting frequencies
@@ -632,7 +632,7 @@ class SummaryInfo(object):
 
     def _get_column_info_content(self, obs_freq, e_freq_table, log_base,
                                  random_expected):
-        """Calculate the information content for a column.
+        """Calculate the information content for a column (PRIVATE).
 
         Arguments:
          - obs_freq - The frequencies observed for each letter in the column.

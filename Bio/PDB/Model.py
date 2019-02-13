@@ -33,18 +33,22 @@ class Model(Entity):
         Entity.__init__(self, id)
 
     def __repr__(self):
+        """Return model identifier."""
         return "<Model id=%s>" % self.get_id()
 
     def get_chains(self):
+        """Return chains."""
         for c in self:
             yield c
 
     def get_residues(self):
+        """Return residues."""
         for c in self.get_chains():
             for r in c:
                 yield r
 
     def get_atoms(self):
+        """Return atoms."""
         for r in self.get_residues():
             for a in r:
                 yield a

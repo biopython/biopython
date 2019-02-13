@@ -10,17 +10,22 @@ import unittest
 from string import ascii_lowercase
 from io import BytesIO
 
-try:
-    from Bio import trie
-    from Bio import triefind
-except ImportError:
-    import os
-    from Bio import MissingPythonDependencyError
-    if os.name == "java":
-        message = "Not available on Jython, Bio.trie requires compiled C code."
-    else:
-        message = "Could not import Bio.trie, check C code was compiled."
-    raise MissingPythonDependencyError(message)
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    warnings.simplefilter('ignore', RuntimeWarning)  # for the trie module
+    try:
+        from Bio import trie
+        from Bio import triefind
+    except ImportError:
+        import os
+        from Bio import MissingPythonDependencyError
+        if os.name == "java":
+            message = "Not available on Jython, Bio.trie requires compiled C code."
+        else:
+            message = "Could not import Bio.trie, check C code was compiled."
+        raise MissingPythonDependencyError(message)
 
 
 class TestTrie(unittest.TestCase):

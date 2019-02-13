@@ -1,7 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Common SearchIO utility functions."""
 
 from Bio._py3k import basestring
@@ -27,10 +28,10 @@ def get_processor(format, mapping):
             raise TypeError("Need a string for the file format (lower case)")
         elif format != format.lower():
             raise ValueError("Format string %r should be lower case" %
-                    format)
+                             format)
         else:
             raise ValueError("Unknown format %r. Supported formats are "
-                    "%r" % (format, "', '".join(mapping)))
+                             "%r" % (format, "', '".join(mapping)))
 
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
@@ -47,7 +48,7 @@ def singleitem(attr=None, doc=''):
     def getter(self):
         if len(self._items) > 1:
             raise ValueError("More than one HSPFragment objects "
-                    "found in HSP")
+                             "found in HSP")
         if attr is None:
             return self._items[0]
         return getattr(self._items[0], attr)

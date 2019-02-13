@@ -197,8 +197,8 @@ class TestClustalIO(unittest.TestCase):
 
     def test_write_read(self):
         """Checking write/read."""
-        alignments = list(ClustalIterator(StringIO(aln_example1))) \
-                   + list(ClustalIterator(StringIO(aln_example2))) * 2
+        alignments = (list(ClustalIterator(StringIO(aln_example1)))
+                      + list(ClustalIterator(StringIO(aln_example2))) * 2)
         handle = StringIO()
         self.assertEqual(3, ClustalWriter(handle).write_file(alignments))
         handle.seek(0)

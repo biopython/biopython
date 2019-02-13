@@ -105,9 +105,9 @@ class SffRandomAccess(SeqFileRandomAccess):
                     max_offset = max(max_offset, offset)
                     yield name, offset, 0
                     count += 1
-                assert count == number_of_reads, \
-                    "Indexed %i records, expected %i" \
-                    % (count, number_of_reads)
+                if count != number_of_reads:
+                    raise ValueError("Indexed %i records, expected %i"
+                                     % (count, number_of_reads))
                 # If that worked, call _check_eof ...
             except ValueError as err:
                 import warnings
@@ -134,8 +134,9 @@ class SffRandomAccess(SeqFileRandomAccess):
         for name, offset in SeqIO.SffIO._sff_do_slow_index(handle):
             yield name, offset, 0
             count += 1
-        assert count == number_of_reads, \
-            "Indexed %i records, expected %i" % (count, number_of_reads)
+        if count != number_of_reads:
+            raise ValueError("Indexed %i records, expected %i"
+                             % (count, number_of_reads))
         SeqIO.SffIO._check_eof(handle, index_offset, index_length)
 
     def get(self, offset):

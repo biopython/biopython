@@ -1,15 +1,13 @@
 [flake8]
-# Would like to enable this in future...
-# doctests = True
+doctests = True
 ignore =
     # =======================
     # flake: E###, F###, W###
     # =======================
-    # pycodestyle v2.3.1 default ignore is E121,E123,E126,E226,E24,E704,W503
-    # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-    #
+    # pycodestyle v2.4.0 default ignore is E121,E123,E126,E226,E24,E704,W503,W504
+    # flake8 v3.6.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     # These are ignored by default:
-    E122,E123,E126,W503,
+    E122,E123,E126,W503,W504,
     # These are not ignored by default:
     # E127	continuation line over-indented for visual indent
     # E128	continuation line under-indented for visual indent
@@ -18,17 +16,16 @@ ignore =
     # F401	module imported but unused
     # F841	local variable name is assigned to but never used
     # TODO: Fix some of these?
-    E127,E128,E501,E731,F401,F841,
+    E501,E731,F401,F841,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
-    # D100	Missing docstring in public module
     # D101	Missing docstring in public class
     # D102	Missing docstring in public method
     # D103	Missing docstring in public function
     # D105	Missing docstring in magic method
     # TODO: Fix some of these?
-    D100,D101,D102,D103,D105,
+    D101,D102,D103,D105,
     # ====================================
     # pydocstyle: D2## - Whitespace Issues
     # ====================================
@@ -36,9 +33,20 @@ ignore =
     # D211	No blank lines allowed before class docstring
     # We ignore D203 deliberately in favour of passing D211,
     D203,
+    # ====================
+    # flake8-bugbear: B###
+    # ====================
+    # B007	Loop control variable not used within the loop body.
+    #           If this is intended, start the name with an underscore.
+    B007,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
     # C812	missing trailing comma
     # C815	missing trailing comma in Python 3.5+
-    C812,C815
+    C812,C815,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,

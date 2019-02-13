@@ -18,10 +18,20 @@ import os
 import tempfile
 from io import BytesIO
 
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
+try:
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install reportlab if you want to use KGML_vis.")
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install pillow if you want to use KGML_vis.")
 
 from Bio._py3k import urlopen as _urlopen
 

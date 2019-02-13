@@ -40,6 +40,13 @@ matrix:
       before_install: echo "Going to run basic checks"
     - stage: test
       python: 2.7
+      env: TOXENV=api
+      addons:
+        apt:
+          packages:
+      before_install: echo "Going to build API docs"
+    - stage: test
+      python: 2.7
       env: TOXENV=py27-cover
     - stage: test
       python: 3.4
@@ -72,6 +79,8 @@ addons:
     - probcons
     - samtools
     - wise
+    - t-coffee
+    - ncbi-blast+
 
 # We setup $HOME/bin and add it to the $PATH for extra binaries we're using.
 #
@@ -99,6 +108,9 @@ before_install:
   - curl -L -O https://anaconda.org/bioconda/genepop/4.5.1/download/linux-64/genepop-4.5.1-0.tar.bz2
   # This will create ./bin/Genepop and a harmless ./info/ folder.
   - tar -jxvf genepop-4.5.1-0.tar.bz2
+  # Setup environment for t-coffee
+  - mkdir -p $HOME/tcoffee_temp
+  - export HOME_4_TCOFFEE=$HOME/tcoffee_temp
   # There are TravisCI provided versions of PyPy and PyPy3, but currently too old.
   # We therefore deactivate that, and download and unzip portable PyPy binaries.
   - |
@@ -140,7 +152,7 @@ install:
   - tox -c .travis-tox.ini -e $TOXENV --notest
 
 script:
-  - travis_wait tox -c .travis-tox.ini -e $TOXENV
+  - travis_wait 30 tox -c .travis-tox.ini -e $TOXENV
 
 notifications:
   email: false

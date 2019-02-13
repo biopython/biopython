@@ -82,7 +82,12 @@ def osx_clang_fix():
         from subprocess import getoutput
     else:
         from commands import getoutput
-    cc = getoutput("cc -v")
+    from distutils.ccompiler import new_compiler
+    from distutils.sysconfig import customize_compiler
+    # The compiler test should be made on the actual compiler that'll be used
+    compiler = new_compiler()
+    customize_compiler(compiler)
+    cc = getoutput("{} -v".format(compiler.compiler[0]))
     if "gcc" in cc or "clang" not in cc:
         return
     for flag in ["CFLAGS", "CPPFLAGS"]:
@@ -284,11 +289,6 @@ PACKAGES = [
     'Bio.Entrez',
     'Bio.ExPASy',
     'Bio.FSSP',
-    'Bio.GA',
-    'Bio.GA.Crossover',
-    'Bio.GA.Mutation',
-    'Bio.GA.Repair',
-    'Bio.GA.Selection',
     'Bio.GenBank',
     'Bio.Geo',
     'Bio.Graphics',
@@ -305,9 +305,6 @@ PACKAGES = [
     'Bio.motifs',
     'Bio.motifs.applications',
     'Bio.motifs.jaspar',
-    'Bio.NeuralNetwork',
-    'Bio.NeuralNetwork.BackPropagation',
-    'Bio.NeuralNetwork.Gene',
     'Bio.Nexus',
     'Bio.NMR',
     'Bio.Pathway',
@@ -318,6 +315,7 @@ PACKAGES = [
     'Bio.Restriction',
     'Bio.SCOP',
     'Bio.SearchIO',
+    'Bio.SearchIO._legacy',
     'Bio.SearchIO._model',
     'Bio.SearchIO.BlastIO',
     'Bio.SearchIO.HmmerIO',
@@ -454,11 +452,6 @@ setup(name='biopython',
       },
       packages=PACKAGES,
       ext_modules=EXTENSIONS,
-      package_data={
-          'Bio.Entrez': ['DTDs/*.dtd',
-                         'DTDs/*.ent',
-                         'DTDs/*.mod',
-                         'XSDs/*.xsd'],
-      },
+      include_package_data=True,  # done via MANIFEST.in under setuptools
       install_requires=REQUIRES,
       )

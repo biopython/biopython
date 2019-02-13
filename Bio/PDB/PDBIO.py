@@ -42,11 +42,15 @@ class Select(object):
         return 1
 
 
+_select = Select()
+
+
 class PDBIO(object):
     """Write a Structure object (or a subset of a Structure object) as a PDB file.
 
     Examples
     --------
+    >>> from Bio.PDB import PDBParser
     >>> p=PDBParser()
     >>> s=p.get_structure("1fat", "1fat.pdb")
     >>> io=PDBIO()
@@ -123,12 +127,12 @@ class PDBIO(object):
             sb.init_seg(' ')
             # Build parts as necessary
             if pdb_object.level == "M":
-                sb.structure.add(pdb_object)
+                sb.structure.add(pdb_object.copy())
                 self.structure = sb.structure
             else:
                 sb.init_model(0)
                 if pdb_object.level == "C":
-                    sb.structure[0].add(pdb_object)
+                    sb.structure[0].add(pdb_object.copy())
                 else:
                     sb.init_chain('A')
                     if pdb_object.level == "R":
@@ -137,7 +141,7 @@ class PDBIO(object):
                             sb.structure[0]['A'].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]['A'].add(pdb_object)
+                        sb.structure[0]['A'].add(pdb_object.copy())
                     else:
                         # Atom
                         sb.init_residue('DUM', ' ', 1, ' ')
@@ -146,13 +150,13 @@ class PDBIO(object):
                             sb.structure[0]['A'].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]['A'].child_list[0].add(pdb_object)
+                        sb.structure[0]['A'].child_list[0].add(pdb_object.copy())
 
             # Return structure
             structure = sb.structure
         self.structure = structure
 
-    def save(self, file, select=Select(), write_end=True, preserve_atom_numbering=False):
+    def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
 
         :param file: output file

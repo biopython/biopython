@@ -104,10 +104,10 @@ def _igamc(a, x):
         qkm2 = qkm1
         qkm1 = qk
         if abs(pk) > BIG:
-                pkm2 *= BIGINV
-                pkm1 *= BIGINV
-                qkm2 *= BIGINV
-                qkm1 *= BIGINV
+            pkm2 *= BIGINV
+            pkm1 *= BIGINV
+            qkm2 *= BIGINV
+            qkm1 *= BIGINV
         if t <= MACHEP:
             return ans * ax
 

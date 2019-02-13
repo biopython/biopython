@@ -3,16 +3,18 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Methods for parsing baseml results files."""
+
 import re
 
 
-line_floats_re = re.compile("-*\d+\.\d+")
+line_floats_re = re.compile(r"-*\d+\.\d+")
 
 
 def parse_basics(lines, results):
     """Parse the basics that should be present in most baseml results files."""
-    version_re = re.compile("BASEML \(in paml version (\d+\.\d+[a-z]*).*")
-    np_re = re.compile("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)")
+    version_re = re.compile(r"BASEML \(in paml version (\d+\.\d+[a-z]*).*")
+    np_re = re.compile(r"lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)")
     num_params = -1
     for line in lines:
         # Find all floating point numbers in this line
@@ -43,7 +45,7 @@ def parse_basics(lines, results):
             results["tree length"] = line_floats[0]
         # Find the estimated tree, only taking the tree if it has
         # branch lengths
-        elif re.match("\(+", line) is not None:
+        elif re.match(r"\(+", line) is not None:
             if ":" in line:
                 results["tree"] = line.strip()
     return (results, num_params)
@@ -102,7 +104,7 @@ def parse_kappas(lines, parameters):
         if "Parameters (kappa)" in line:
             kappa_found = True
         elif kappa_found and line_floats:
-            branch_res = re.match("\s(\d+\.\.\d+)", line)
+            branch_res = re.match(r"\s(\d+\.\.\d+)", line)
             if branch_res is None:
                 if len(line_floats) == 1:
                     parameters["kappa"] = line_floats[0]
@@ -116,7 +118,7 @@ def parse_kappas(lines, parameters):
                 if line_floats:
                     parameters["branches"][branch] = \
                         {"t": line_floats[0], "kappa": line_floats[1],
-                        "TS": line_floats[2], "TV": line_floats[3]}
+                         "TS": line_floats[2], "TV": line_floats[3]}
         # Find kappa under REV
         # Example match:
         # kappa under REV: 999.00000 145.76453  0.00001  0.00001  0.00001
@@ -182,7 +184,7 @@ def parse_rates(lines, parameters):
 
 def parse_freqs(lines, parameters):
     """Parse the basepair frequencies."""
-    root_re = re.compile("Note: node (\d+) is root.")
+    root_re = re.compile(r"Note: node (\d+) is root.")
     branch_freqs_found = False
     base_freqs_found = False
     for line in lines:
@@ -235,7 +237,7 @@ def parse_freqs(lines, parameters):
             branch_freqs_found = True
         elif branch_freqs_found:
             if line_floats:
-                node_res = re.match("Node \#(\d+)", line)
+                node_res = re.match(r"Node \#(\d+)", line)
                 node_num = int(node_res.group(1))
                 node = {"root": False}
                 node["frequency parameters"] = line_floats[:4]

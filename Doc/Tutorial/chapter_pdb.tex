@@ -44,7 +44,20 @@ Example:
 >>> resolution = structure.header["resolution"]
 >>> keywords = structure.header["keywords"]
 \end{verbatim}
-The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, \verb+release_date+, \verb+structure_method+, \verb+resolution+, \verb+structure_reference+ (which maps to a list of references), \verb+journal_reference+, \verb+author+, and \verb+compound+ (which maps to a dictionary with various information about the crystallized compound).
+The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
+\verb+release_date+, \verb+structure_method+, \verb+resolution+, 
+\verb+structure_reference+ (which maps to a list of references), 
+\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
+\verb+has_missing_residues+, and \verb+missing_residues+.
+
+\verb+has_missing_residues+ maps to a bool that is True if at least
+one non-empty \verb+REMARK 465+ header line was found. In this case
+you should assume that the molecule used in the experiment has some 
+residues for which no ATOM coordinates could be determined. 
+\verb+missing_residues+ maps to a list of dictionaries with information
+about the missing residues. \emph{The list of missing residues will be
+empty or incomplete if the PDB header does not follow the template from
+the PDB specification.}
 
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:
@@ -927,7 +940,7 @@ Example:
 \subsection{Determining the secondary structure}
 
 For this functionality, you need to install DSSP (and obtain a license
-for it --- free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
+for it --- free for academic use, see \url{https://swift.cmbi.umcn.nl/gv/dssp/}).
 Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
 to their secondary structure (and accessible surface area). The DSSP
 codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
@@ -976,7 +989,7 @@ The \texttt{DSSP} class can also be used to calculate the accessible surface are
 Residue depth is the average distance of a residue's atoms from the
 solvent accessible surface. It's a fairly new and very powerful parameterization
 of solvent accessibility. For this functionality, you need to install
-Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
+Michel Sanner's MSMS program (\url{https://www.scripps.edu/sanner/html/msms_home.html}).
 Then use the \texttt{ResidueDepth} class. This class behaves as a
 dictionary which maps \texttt{Residue} objects to corresponding (residue
 depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
@@ -1214,14 +1227,14 @@ and there will probably be specific PyMol modules in Bio.PDB soon/some
 day). Python based/aware molecular graphics solutions include:
 
 \begin{itemize}
-\item PyMol: \url{http://pymol.sourceforge.net/}
-\item Chimera: \url{http://www.cgl.ucsf.edu/chimera/}
+\item PyMol: \url{https://pymol.org/}
+\item Chimera: \url{https://www.cgl.ucsf.edu/chimera/}
 \item PMV: \url{http://www.scripps.edu/~sanner/python/}
-\item Coot: \url{http://www.ysbl.york.ac.uk/~emsley/coot/}
-\item CCP4mg: \url{http://www.ysbl.york.ac.uk/~lizp/molgraphics.html}
+\item Coot: \url{https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/}
+\item CCP4mg: \url{http://www.ccp4.ac.uk/MG/}
 \item mmLib: \url{http://pymmlib.sourceforge.net/}
-\item VMD: \url{http://www.ks.uiuc.edu/Research/vmd/}
-\item MMTK: \url{http://starship.python.net/crew/hinsen/MMTK/}
+\item VMD: \url{https://www.ks.uiuc.edu/Research/vmd/}
+\item MMTK: \url{http://dirac.cnrs-orleans.fr/MMTK/}
 \end{itemize}
 
 \subsection{Who's using Bio.PDB?}

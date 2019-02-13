@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for Exonerate vulgar output format."""
 
 import re
@@ -91,8 +91,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # if it's the last comp
         if idx == len(vcomps) - 1 or \
                 (label in 'MCGS' and vcomps[idx + 1][0] not in 'MCGS'):
-                qends.append(qpos)
-                hends.append(hpos)
+            qends.append(qpos)
+            hends.append(hpos)
 
     # adjust coordinates
     for seq_type in ('query_', 'hit_'):
@@ -119,6 +119,7 @@ class ExonerateVulgarParser(_BaseExonerateParser):
     _ALN_MARK = 'vulgar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for vulgar format, return query results, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']

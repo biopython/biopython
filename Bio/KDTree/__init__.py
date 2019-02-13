@@ -3,7 +3,7 @@
 # as part of this package.
 #
 
-"""KD tree data structure for searching N-dimensional vectors (OBSOLETE).
+"""KD tree data structure for searching N-dimensional vectors (DEPRECATED).
 
 The KD tree data structure can be used for all kinds of searches that
 involve N-dimensional vectors. For example, neighbor searches (find all points
@@ -12,7 +12,14 @@ that are within a certain radius of each other. See "Computational Geometry:
 Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf).
 
-This module is OBSOLETE; its replacement is Bio.PDB.kdtrees.
+This module is DEPRECATED; its replacement is Bio.PDB.kdtrees.
 """
 
 from .KDTree import KDTree
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.warn("Bio.KDTree has been deprecated, and we intend to remove it"
+              " in a future release of Biopython. Please use Bio.PDB.kdtrees"
+              " instead, which is functionally very similar.",
+              BiopythonDeprecationWarning)

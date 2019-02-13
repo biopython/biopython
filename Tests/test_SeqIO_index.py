@@ -1,4 +1,4 @@
-# Copyright 2009-2016 by Peter Cock.  All rights reserved.
+# Copyright 2009-2017 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -556,19 +556,21 @@ class IndexDictTests(unittest.TestCase):
             else:
                 handle = StringIO(_bytes_to_string(raw))
             if format == "sff":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._proxy._flows_per_read,
-                            rec_dict._proxy._flow_chars,
-                            rec_dict._proxy._key_sequence,
-                            rec_dict._proxy._alphabet,
-                            trim=False)
+                rec2 = SeqIO.SffIO._sff_read_seq_record(
+                    handle,
+                    rec_dict._proxy._flows_per_read,
+                    rec_dict._proxy._flow_chars,
+                    rec_dict._proxy._key_sequence,
+                    rec_dict._proxy._alphabet,
+                    trim=False)
             elif format == "sff-trim":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._proxy._flows_per_read,
-                            rec_dict._proxy._flow_chars,
-                            rec_dict._proxy._key_sequence,
-                            rec_dict._proxy._alphabet,
-                            trim=True)
+                rec2 = SeqIO.SffIO._sff_read_seq_record(
+                    handle,
+                    rec_dict._proxy._flows_per_read,
+                    rec_dict._proxy._flow_chars,
+                    rec_dict._proxy._key_sequence,
+                    rec_dict._proxy._alphabet,
+                    trim=True)
             elif format == "uniprot-xml":
                 self.assertTrue(raw.startswith(b"<entry "))
                 self.assertTrue(raw.endswith(b"</entry>"))
@@ -606,6 +608,39 @@ class IndexDictTests(unittest.TestCase):
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)
         handle.close()
+
+
+class IndexOrderingSingleFile(unittest.TestCase):
+    f = "GenBank/NC_000932.faa"
+    ids = [r.id for r in SeqIO.parse(f, "fasta")]
+
+    def test_order_to_dict(self):
+        """Check to_dict preserves order in indexed file."""
+        d = SeqIO.to_dict(SeqIO.parse(self.f, "fasta"))
+        self.assertEqual(self.ids, list(d))
+
+    def test_order_index(self):
+        """Check index preserves order in indexed file."""
+        d = SeqIO.index(self.f, "fasta")
+        self.assertEqual(self.ids, list(d))
+
+    if sqlite3:
+        def test_order_index_db(self):
+            """Check index_db preserves ordering indexed file."""
+            d = SeqIO.index_db(":memory:", [self.f], "fasta")
+            self.assertEqual(self.ids, list(d))
+
+
+if sqlite3:
+    class IndexOrderingManyFiles(unittest.TestCase):
+        def test_order_index_db(self):
+            """Check index_db preserves order in multiple indexed files."""
+            files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
+            ids = []
+            for f in files:
+                ids.extend(r.id for r in SeqIO.parse(f, "fasta"))
+            d = SeqIO.index_db(":memory:", files, "fasta")
+            self.assertEqual(ids, list(d))
 
 
 tests = [
@@ -680,7 +715,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_simple"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 
@@ -689,7 +724,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_keyf"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 
@@ -698,7 +733,7 @@ for filename1, format, alphabet in tests:
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
         setattr(IndexDictTests, "test_%s_%s_get_raw"
-                    % (format, filename2.replace("/", "_").replace(".", "_")),
+                % (format, filename2.replace("/", "_").replace(".", "_")),
                 funct(filename2, format, alphabet, comp))
         del funct
 

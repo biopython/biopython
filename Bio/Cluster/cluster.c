@@ -2732,8 +2732,8 @@ number of clusters is larger than the number of elements being clustered,
     if (npass>1)
     { free(tclusterid);
       free(mapping);
-      return;
     }
+    return;
   }
 
   if (method=='m')
@@ -3859,6 +3859,7 @@ If a memory error occurs, treecluster returns NULL.
     { distmatrix[i] = malloc(i*sizeof(double));
       if (distmatrix[i]==NULL) /* Not enough memory available */
       { while (--i > 0) free(distmatrix[i]);
+        free(distmatrix);
         return NULL;
       }
     }

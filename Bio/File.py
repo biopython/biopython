@@ -1,5 +1,5 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# Copyright 2009-2015 by Peter Cock. All rights reserved.
+# Copyright 2009-2018 by Peter Cock. All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -22,6 +22,7 @@ import os
 import sys
 import contextlib
 import itertools
+import platform
 
 from Bio._py3k import basestring
 
@@ -29,6 +30,17 @@ try:
     from collections import UserDict as _dict_base
 except ImportError:
     from UserDict import DictMixin as _dict_base
+
+# Ordered dict is a language feature from Python 3.7 onwards.
+# CPython 3.6 also already has ordered dicts.
+# PyPy has always had ordered dicts.
+if (sys.version_info >= (3, 7)
+        or platform.python_implementation() == "PyPy"
+        or (sys.version_info == (3, 6)
+            and platform.python_implementation() == "CPython")):
+    _dict = dict
+else:
+    from collections import OrderedDict as _dict
 
 try:
     from sqlite3 import dbapi2 as _sqlite
@@ -109,15 +121,26 @@ def _open_for_random_access(filename):
 
     This functionality is used by the Bio.SeqIO and Bio.SearchIO index
     and index_db functions.
+
+    If the file is gzipped but not BGZF, a specific ValueError is raised.
     """
     handle = open(filename, "rb")
-    from . import bgzf
-    try:
-        return bgzf.BgzfReader(mode="rb", fileobj=handle)
-    except ValueError as e:
-        assert "BGZF" in str(e)
-        # Not a BGZF file after all, rewind to start:
-        handle.seek(0)
+    magic = handle.read(2)
+    handle.seek(0)
+
+    if magic == b"\x1f\x8b":
+        # This is a gzipped file, but is it BGZF?
+        from . import bgzf
+        try:
+            # If it is BGZF, we support that
+            return bgzf.BgzfReader(mode="rb", fileobj=handle)
+        except ValueError as e:
+            assert "BGZF" in str(e)
+            # Not a BGZF file after all,
+            handle.close()
+            raise ValueError("Gzipped files are not suitable for indexing, "
+                             "please use BGZF (blocked gzip format) instead.")
+
     return handle
 
 
@@ -304,7 +327,7 @@ class _IndexedSeqFileDict(_dict_base):
                 (key_function(k), o, l) for (k, o, l) in random_access_proxy)
         else:
             offset_iter = random_access_proxy
-        offsets = {}
+        offsets = _dict()
         for key, offset, length in offset_iter:
             # Note - we don't store the length because I want to minimise the
             # memory requirements. With the SQLite backend the length is kept
@@ -734,7 +757,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def __iter__(self):
         """Iterate over the keys."""
-        for row in self._con.execute("SELECT key FROM offset_data;"):
+        for row in self._con.execute("SELECT key FROM offset_data ORDER BY file_number, offset;"):
             yield str(row[0])
 
     if hasattr(dict, "iteritems"):

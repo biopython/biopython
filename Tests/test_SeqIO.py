@@ -22,6 +22,8 @@ from io import BytesIO
 from Bio import BiopythonWarning, BiopythonParserWarning
 from Bio import SeqIO
 from Bio import AlignIO
+from Bio.AlignIO import PhylipIO
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from Bio import Alphabet
@@ -252,6 +254,16 @@ test_files = [
     ("abi", False, 'Abi/310.ab1', 1),
     ("abi", False, 'Abi/3100.ab1', 1),
     ("abi", False, 'Abi/3730.ab1', 1),
+    # Following examples also used in test_SeqIO_PdbIO.py
+    ("pdb-atom", False, "PDB/1A8O.pdb", 1),
+    ("pdb-atom", False, "PDB/2BEG.pdb", 5),
+    ("pdb-atom", False, "PDB/1LCD.pdb", 1),
+    ("pdb-seqres", False, "PDB/1A8O.pdb", 1),
+    ("pdb-seqres", False, "PDB/2BEG.pdb", 5),
+    ("cif-atom", False, "PDB/1A8O.cif", 1),
+    ("cif-atom", False, "PDB/2BEG.cif", 5),
+    ("cif-seqres", False, "PDB/1A8O.cif", 1),
+    ("cif-seqres", False, "PDB/2BEG.cif", 5),
 ]
 
 
@@ -274,6 +286,9 @@ class ForwardOnlyHandle(object):
 
     def readline(self):
         return self._handle.readline()
+
+    def readlines(self):
+        return self._handle.readlines()
 
     def close(self):
         return self._handle.close()
@@ -435,15 +450,25 @@ def check_simple_write_read(records, indent=" "):
             # Beware of different quirks and limitations in the
             # valid character sets and the identifier lengths!
             if format in ["phylip", "phylip-sequential"]:
-                assert r1.id.replace("[", "").replace("]", "")[:10] == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
+                assert PhylipIO.sanitize_name(r1.id, 10) == r2.id, \
+                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format == "phylip-relaxed":
-                assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
+                assert PhylipIO.sanitize_name(r1.id) == r2.id, \
                     "'%s' vs '%s'" % (r1.id, r2.id)
             elif format == "clustal":
                 assert r1.id.replace(" ", "_")[:30] == r2.id, \
                     "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format in ["stockholm", "maf"]:
+            elif format == "stockholm":
+                r1_id = r1.id.replace(" ", "_")
+                if "start" in r1.annotations and "end" in r1.annotations:
+                    suffix = "/%d-%d" % (r1.annotations["start"],
+                                         r1.annotations["end"])
+                    if not r1_id.endswith(suffix):
+                        r1_id += suffix
+
+                assert r1_id == r2.id, \
+                    "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format == "maf":
                 assert r1.id.replace(" ", "_") == r2.id, \
                     "'%s' vs '%s'" % (r1.id, r2.id)
             elif format in ["fasta", "fasta-2line"]:
@@ -467,7 +492,7 @@ def check_simple_write_read(records, indent=" "):
 # Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:
     if t_format in SeqIO._BinaryFormats or \
-       t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom"):
+       t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom", "cif-atom"):
         # Not allowed empty SFF files.
         continue
     handle = StringIO()
@@ -486,7 +511,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     with warnings.catch_warnings():
         # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
         # location
+        # e.g. First line is not a 'HEADER'; can't determine PDB ID
         warnings.simplefilter("ignore", BiopythonParserWarning)
+
+        # e.g. WARNING: Chain C is discontinuous at line 2645
+        warnings.simplefilter("ignore", PDBConstructionWarning)
 
         # Try as an iterator using handle
         h = open(t_filename, mode)

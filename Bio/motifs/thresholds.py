@@ -56,6 +56,7 @@ class ScoreDistribution(object):
         return max(0, min(self.n_points - 1, i + j))
 
     def modify(self, scores, mo_probs, bg_probs):
+        """Modify motifs and background density."""
         mo_new = [0.0] * self.n_points
         bg_new = [0.0] * self.n_points
         for k, v in scores.items():

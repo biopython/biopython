@@ -7,10 +7,16 @@
 # written by Ziheng Yang and included in the PAML software package:
 # http://abacus.gene.ucl.ac.uk/software/paml.html
 
+"""Methods to calculate p-values from a Chi-squared cumulative distribution function.
+
+for likelihood ratio tests.
+"""
+
 from math import log, exp
 
 
 def cdf_chi2(df, stat):
+    """Compute p-value, from distribution function and test statistics."""
     if df < 1:
         raise ValueError("df must be at least 1")
     if stat < 0:

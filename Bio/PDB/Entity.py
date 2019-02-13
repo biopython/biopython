@@ -154,6 +154,7 @@ class Entity(object):
 
     @property
     def id(self):
+        """Return identifier."""
         return self._id
 
     @id.setter
@@ -165,6 +166,8 @@ class Entity(object):
 
         @raises: ValueError
         """
+        if value == self._id:
+            return
         if self.parent:
             if value in self.parent.child_dict:
                 raise ValueError(
@@ -280,15 +283,20 @@ class Entity(object):
 
         Examples
         --------
-        >>> rotation = rotmat(pi, Vector(1, 0, 0))
-        >>> translation = array((0, 0, 1), 'f')
-        >>> entity.transform(rotation, translation)
+        This is an incomplete but illustrative example::
+
+            from numpy import pi, array
+            from Bio.PDB.vectors import Vector, rotmat
+            rotation = rotmat(pi, Vector(1, 0, 0))
+            translation = array((0, 0, 1), 'f')
+            entity.transform(rotation, translation)
 
         """
         for o in self.get_list():
             o.transform(rot, tran)
 
     def copy(self):
+        """Copy entity recursively."""
         shallow = copy(self)
 
         shallow.child_list = []
@@ -363,15 +371,19 @@ class DisorderedEntityWrapper(object):
     # Sorting
     # Directly compare the selected child
     def __gt__(self, other):
+        """Return if child is greater than other."""
         return self.selected_child > other
 
     def __ge__(self, other):
+        """Return if child is greater or equal than other."""
         return self.selected_child >= other
 
     def __lt__(self, other):
+        """Return if child is less than other."""
         return self.selected_child < other
 
     def __le__(self, other):
+        """Return if child is less or equal than other."""
         return self.selected_child <= other
 
     # Public methods

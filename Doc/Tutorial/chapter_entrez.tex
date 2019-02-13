@@ -1,9 +1,9 @@
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
 
-Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
+Entrez (\url{https://www.ncbi.nlm.nih.gov/Web/Search/entrezfs.html}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
 
-The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{http://www.ncbi.nlm.nih.gov/entrez/utils/}.
+The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{https://www.ncbi.nlm.nih.gov/books/NBK25501/}.
 Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
 
 The output returned by the Entrez Programming Utilities is typically in XML format. To parse such output, you have several options:
@@ -24,15 +24,22 @@ The Entrez Programming Utilities can also generate output in other formats, such
 \section{Entrez Guidelines}
 \label{sec:entrez-guidelines}
 Before using Biopython to access the NCBI's online resources (via \verb|Bio.Entrez| or some of the other modules), please read the
-\href{http://www.ncbi.nlm.nih.gov/books/NBK25497/#chapter2.Usage_Guidelines_and_Requiremen}{NCBI's Entrez User Requirements}.
+\href{https://www.ncbi.nlm.nih.gov/books/NBK25497/}{NCBI's Entrez User Requirements}.
 If the NCBI finds you are abusing their systems, they can and will ban your access!
 
 To paraphrase:
 
 \begin{itemize}
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
-\item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
-\item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
+\item Use the \url{https://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
+\item If you are using a API key, you can make at most 10 queries per second, otherwise at most 3 queries per second.
+This is automatically enforced by Biopython.
+Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
+%DO NOT run this as a doctest, will set an invalid API key!
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.api_key = "MyAPIkey"
+\end{verbatim}
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
 %doctest
 \begin{verbatim}
@@ -48,13 +55,6 @@ To paraphrase:
 \end{verbatim}
 The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
-\item After May 1, 2018, NCBI will limit access to the E-utilities unless one have an API key (more info at \url{https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/}).
-Without a valid key, a maximum of 3 queries per second is allowed. With a valid key, this limit can be increased to 10 queries per second. The \verb|Bio.Entrez| module handles the limit automatically when the key is specified in any E-utility. Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module level variable:
-%DO NOT run this as a doctest, will set an invalid API key!
-\begin{verbatim}
->>> from Bio import Entrez
->>> Entrez.api_key = "MyAPIkey"
-\end{verbatim}
 \end{itemize}
 
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
@@ -76,7 +76,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 >>> print(result)
 <?xml version="1.0"?>
 <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN"
- "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+ "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
 <eInfoResult>
 <DbList>
         <DbName>pubmed</DbName>
@@ -246,7 +246,7 @@ ESearch has many useful options --- see the \href{https://www.ncbi.nlm.nih.gov/b
 
 \section{EPost: Uploading a list of identifiers}
 EPost uploads a list of UIs for use in subsequent search strategies; see the
-\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/epost\_help.html}{EPost help page} for more information. It is available from Biopython through
+\href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost}{EPost help page} for more information. It is available from Biopython through
 the \verb+Bio.Entrez.epost()+ function.
 
 To give an example of when this is useful, suppose you have a long list of IDs
@@ -269,7 +269,7 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 >>> print(Entrez.epost("pubmed", id=",".join(id_list)).read())
 <?xml version="1.0"?>
 <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
- "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
+ "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
 <ePostResult>
 	<QueryKey>1</QueryKey>
 	<WebEnv>NCID_01_206841095_130.14.22.101_9001_1242061629</WebEnv>
@@ -289,7 +289,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 \noindent Section~\ref{sec:entrez-webenv} shows how to use the history feature.
 
 \section{ESummary: Retrieving summaries from primary IDs}
-ESummary retrieves document summaries from a list of primary IDs (see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary\_help.html}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
+ESummary retrieves document summaries from a list of primary IDs (see the  \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
 %doctest . internet
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -307,9 +307,9 @@ Title: IEEE transactions on computational imaging.
 \label{sec:efetch}
 
 EFetch is what you use when you want to retrieve a full record from Entrez.
-This covers several possible databases, as described on the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{EFetch Help page}.
+This covers several possible databases, as described on the main \href{https://www.ncbi.nlm.nih.gov/books/NBK3837/}{EFetch Help page}.
 
-For most of their databases, the NCBI support several different file formats. Requesting a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the pages linked to on \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage} (e.g. \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchlit_help.html}{literature}, \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchseq_help.html}{sequences} and \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchtax_help.html}{taxonomy}).
+For most of their databases, the NCBI support several different file formats. Requesting a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the pages linked to on \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{NCBI efetch webpage}.
 
 One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record EU490707 using \verb+Bio.Entrez.efetch+:
 
@@ -403,7 +403,7 @@ return type, however the NCBI now insist on using the official return types of
 Also note that until Feb 2012, the Entrez EFetch API would default to returning
 plain text files, but now defaults to XML.
 
-Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
+Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 
@@ -549,8 +549,8 @@ We can use a loop to print out all PubMed IDs:
 Now that was nice, but personally I am often more interested to find out if a paper has been cited.
 Well, ELink can do that too -- at least for journals in Pubmed Central (see Section~\ref{sec:elink-citations}).
 
-For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
-There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
+For help on ELink, see the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink}{ELink help page}.
+There is an entire sub-page just for the \href{https://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
 \section{EGQuery: Global Query - counts for search terms}
 EGQuery provides counts for a search term in each of the Entrez databases (i.e. a global query). This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
@@ -570,7 +570,7 @@ pmc 62
 journals 0
 ...
 \end{verbatim}
-See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery\_help.html}{EGQuery help page} for more information.
+See the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery}{EGQuery help page} for more information.
 
 \section{ESpell: Obtaining spelling suggestions}
 ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.espell()+ to obtain the correct spelling of Biopython:
@@ -586,7 +586,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 >>> record["CorrectedQuery"]
 'biopython'
 \end{verbatim}
-See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
+See the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell}{ESpell help page} for more information.
 The main use of this is for GUI tools to provide automatic suggestions for search terms.
 
 \section{Parsing huge Entrez XML files}
@@ -636,6 +636,25 @@ This will print:
 ...
 \end{verbatim}
 
+\section{HTML escape characters}
+
+Pubmed records may contain HTML tags to indicate e.g. subscripts, superscripts, or italic text, as well as mathematical symbols via MathML. By default, the \verb+Bio.Entrez+ parser treats all text as plain text without markup; for example, the fragment ``$P < 0.05$'' in the abstract of a Pubmed record, which is encoded as
+\begin{verbatim}
+<i>P</i> &lt; 0.05
+\end{verbatim}
+in the XML returned by Entrez, is converted to the Python string
+\begin{verbatim}
+'<i>P</i> < 0.05'
+\end{verbatim}
+by the \verb+Bio.Entrez+ parser. While this is more human-readable, it is not valid HTML due to the less-than sign, and makes further processing of the text e.g. by an HTML parser impractical. To ensure that all strings returned by the parser are valid HTML, call \verb+Entrez.read+ or \verb+Entrez.parse+ with the \verb+escape+ argument set to \verb+True+:
+\begin{verbatim}
+>>> record = Entrez.read(handle, escape=True)
+\end{verbatim}
+The parser will then replace all characters disallowed in HTML by their HTML-escaped equivalent; in the example above, the parser will generate
+\begin{verbatim}
+'<i>P</i> &lt; 0.05'
+\end{verbatim}
+which is a valid HTML fragment. By default, \verb+escape+ is \verb+False+.
 
 \section{Handling errors}
 
@@ -662,7 +681,7 @@ When your file is in the XML format but is corrupted (for example, by ending pre
 Here is an example of an XML file that ends prematurely:
 \begin{verbatim}
 <?xml version="1.0"?>
-<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
 <eInfoResult>
 <DbList>
         <DbName>pubmed</DbName>
@@ -690,7 +709,7 @@ The third type of error occurs if the XML file contains tags that do not have a 
 
 \begin{verbatim}
 <?xml version="1.0"?>
-<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
 <eInfoResult>
         <DbInfo>
         <DbName>pubmed</DbName>
@@ -743,7 +762,7 @@ Of course, the information contained in the XML tags that are not in the DTD are
 
 The \verb|Bio.Entrez.read()| function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability (or download size).
 
-To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage}.
+To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{NCBI efetch webpage}.
 
 One obvious case is you may prefer to download sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
 
@@ -867,7 +886,7 @@ as illustrated in Section~\ref{sec:entrez-webenv}.
 
 \subsection{Parsing GEO records}
 
-GEO (\href{http://www.ncbi.nlm.nih.gov/geo/}{Gene Expression Omnibus})
+GEO (\href{https://www.ncbi.nlm.nih.gov/geo/}{Gene Expression Omnibus})
 is a data repository of high-throughput gene expression and hybridization
 array data. The \verb|Bio.Geo| module can be used to parse GEO-formatted
 data.
@@ -1009,7 +1028,7 @@ import os
 os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 \end{verbatim}
 
-\noindent See the \href{http://www.python.org/doc/lib/module-urllib.html}
+\noindent See the \href{https://docs.python.org/2/library/urllib.html}
 {urllib documentation} for more details.
 
 \section{Examples}
@@ -1018,7 +1037,7 @@ os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 \subsection{PubMed and Medline}
 \label{subsec:pub_med}
 
-If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in Python scripts.
+If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{https://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in Python scripts.
 
 In this example, we will query PubMed for all articles having to do with orchids (see section~\ref{sec:orchids} for our motivation). We first check how many of such articles there are:
 
@@ -1198,7 +1217,7 @@ You could use this to quickly set up searches -- but for heavy usage, see Sectio
 \subsection{Searching, downloading, and parsing GenBank records}
 \label{sec:entrez-search-fetch-genbank}
 
-The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
+The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{https://www.ncbi.nlm.nih.gov/}.
 
 In this example we'll show how to query the NCBI databases,to retrieve the records from the query, and then parse them using \verb+Bio.SeqIO+  - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}.
 For simplicity, this example \emph{does not} take advantage of the WebEnv history feature -- see Section~\ref{sec:entrez-webenv} for this.

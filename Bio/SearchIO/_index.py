@@ -27,7 +27,9 @@ class SearchIndexer(_IndexedSeqFileProxy):
         self._kwargs = kwargs
 
     def _parse(self, handle):
+        """Pass handle and arguments to the next iterable (PRIVATE)."""
         return next(iter(self._parser(handle, **self._kwargs)))
 
     def get(self, offset):
+        """Get offset and convert it from bytes to string."""
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))

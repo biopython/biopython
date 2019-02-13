@@ -34,32 +34,32 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
 
     Arguments:
      - pro_align  - a protein MultipleSeqAlignment object
-     - nucl_align - an object returned by SeqIO.parse or SeqIO.index
+     - nucl_seqs - an object returned by SeqIO.parse or SeqIO.index
        or a collection of SeqRecord.
      - alphabet   - alphabet for the returned codon alignment
      - corr_dict  - a dict that maps protein id to nucleotide id
      - complete_protein - whether the sequence begins with a start
        codon
-     - frameshift - whether to apply frameshift detection
 
-    Return a CodonAlignment object
+    Return a CodonAlignment object.
 
-    >>> from Bio.Alphabet import IUPAC
+    The example below answers this Biostars question: https://www.biostars.org/p/89741/
+
+    >>> from Bio.Alphabet import generic_dna, generic_protein
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Align import MultipleSeqAlignment
-    >>> seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')
-    >>> seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',
-    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')
-    >>> pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')
-    >>> pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')
+    >>> from Bio.codonalign import build
+    >>> seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=generic_dna), id='pro1')
+    >>> seq2 = SeqRecord(Seq('ATGCGT', alphabet=generic_dna), id='pro2')
+    >>> pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')
+    >>> pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print(codon_aln)
-    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)
-    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1
-    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2
+    CodonAlphabet(Standard) CodonAlignment with 2 rows and 9 columns (3 codons)
+    ATGTCTCGT pro1
+    ATG---CGT pro2
 
     """
     # TODO
@@ -232,7 +232,7 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
 
 def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
-    """Check if the nucleotide can be translated into the protein.
+    """Check if the nucleotide can be translated into the protein (PRIVATE).
 
     Expects two SeqRecord objects.
     """
@@ -423,7 +423,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
 
 def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                          shift_id_pos):
-    """Find a regular expression matching a potentially shifted anchor.
+    """Find a regular expression matching a potentially shifted anchor (PRIVATE).
 
     Arguments:
      - sh_anc    - shifted anchor sequence
@@ -604,7 +604,7 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     m_groupdict[shift_start.index(i)].isupper():
                 shift_index = shift_start.index(i)
                 shift_val = 6 - (shift_pos[shift_index][1] -
-                            shift_pos[shift_index][0])
+                                 shift_pos[shift_index][0])
                 rf_table.append(i)
                 rf_table.append(i + 3 - shift_val)
                 i = shift_pos[shift_index][1]

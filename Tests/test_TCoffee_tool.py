@@ -21,7 +21,8 @@ else:
     from Bio._py3k import getoutput
     output = getoutput("t_coffee -version")
     if "not found" not in output \
-    and ("t_coffee" in output.lower() or "t-coffee" in output.lower()):
+       and ("t_coffee" in output.lower()
+            or "t-coffee" in output.lower()):
         t_coffee_exe = "t_coffee"
 
 if not t_coffee_exe:
@@ -68,7 +69,7 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.outfile = self.outfile3
         cmdline.output = "pir_aln"
         self.assertEqual(str(cmdline), t_coffee_exe + " -output pir_aln "
-                    "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
+                         "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
         stdout, stderr = cmdline()
         # Can get warnings in stderr output
         self.assertNotIn("error", stderr.lower(), stderr)

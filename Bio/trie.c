@@ -497,7 +497,7 @@ _iterate_helper(const Trie* trie,
 				 const void *value,
 				 void *data),
 		void *data,
-		char *current_key, const int max_key)
+		char *current_key, const unsigned int max_key)
 {
     int i;
     if(trie->value)

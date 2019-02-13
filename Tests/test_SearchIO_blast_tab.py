@@ -34,7 +34,7 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(10, len(qresults[0].hits))
         # there is one hit with an alternative ID
         self.assertEqual(qresults[0]['gi|148227873|ref|NM_001095167.1|'],
-                qresults[0]['gi|55250552|gb|BC086280.1|'])
+                         qresults[0]['gi|55250552|gb|BC086280.1|'])
 
         # check some of the HSPs
         self.assertEqual(0.0, qresults[0][0][0].evalue)
@@ -53,7 +53,7 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(243, sum([len(x) for x in qresults[0]]))
         # there is one hit with an alternative ID
         self.assertEqual(qresults[0]['gi|31126987|gb|AY255526.2|'],
-                qresults[0]['gi|31342050|ref|NM_181083.2|'])
+                         qresults[0]['gi|31342050|ref|NM_181083.2|'])
 
         # only checking the new fields in 2.2.28+
         hit = qresults[0][0]
@@ -65,8 +65,8 @@ class BlastTabCases(unittest.TestCase):
         self.assertEqual(['N/A'], hit.super_kingdoms)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA', hit.title)
         self.assertEqual(['Saccharomyces cerevisiae S288c Mon2p (MON2), mRNA',
-            'Synthetic construct Saccharomyces cerevisiae clone '
-            'FLH203015.01X MON2, complete sequence'], hit.title_all)
+                         'Synthetic construct Saccharomyces cerevisiae clone '
+                          'FLH203015.01X MON2, complete sequence'], hit.title_all)
         self.assertEqual('N/A', hit.strand)
         self.assertEqual(100.0, hit.query_coverage)
 

@@ -437,16 +437,17 @@ def _load_bgzf_block(handle, text_mode=False):
     data = d.decompress(handle.read(deflate_size)) + d.flush()
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
-    assert expected_size == len(data), \
-        "Decompressed to %i, not %i" % (len(data), expected_size)
+    if expected_size != len(data):
+        raise RuntimeError("Decompressed to %i, "
+                           "not %i" % (len(data), expected_size))
     # Should cope with a mix of Python platforms...
     crc = zlib.crc32(data)
     if crc < 0:
         crc = struct.pack("<i", crc)
     else:
         crc = struct.pack("<I", crc)
-    assert expected_crc == crc, \
-        "CRC is %s, not %s" % (crc, expected_crc)
+    if expected_crc != crc:
+        raise RuntimeError("CRC is %s, not %s" % (crc, expected_crc))
     if text_mode:
         return block_size, _as_string(data)
     else:
@@ -632,59 +633,55 @@ class BgzfReader(object):
         """Read method for the BGZF module."""
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
-        elif size == 0:
-            if self._text:
-                return ""
+
+        result = "" if self._text else b""
+        while size and self._buffer:
+            if self._within_block_offset + size <= len(self._buffer):
+                # This may leave us right at the end of a block
+                # (lazy loading, don't load the next block unless we have too)
+                data = self._buffer[self._within_block_offset:self._within_block_offset + size]
+                self._within_block_offset += size
+                assert data  # Must be at least 1 byte
+                result += data
+                break
             else:
-                return b""
-        elif self._within_block_offset + size <= len(self._buffer):
-            # This may leave us right at the end of a block
-            # (lazy loading, don't load the next block unless we have too)
-            data = self._buffer[self._within_block_offset:self._within_block_offset + size]
-            self._within_block_offset += size
-            assert data  # Must be at least 1 byte
-            return data
-        else:
-            data = self._buffer[self._within_block_offset:]
-            size -= len(data)
-            self._load_block()  # will reset offsets
-            # TODO - Test with corner case of an empty block followed by
-            # a non-empty block
-            if not self._buffer:
-                return data  # EOF
-            elif size:
-                # TODO - Avoid recursion
-                return data + self.read(size)
-            else:
-                # Only needed the end of the last block
-                return data
+                data = self._buffer[self._within_block_offset:]
+                size -= len(data)
+                self._load_block()  # will reset offsets
+                # TODO - Test with corner case of an empty block followed by
+                # a non-empty block
+                result += data
+
+        return result
 
     def readline(self):
         """Read a single line for the BGZF file."""
-        i = self._buffer.find(self._newline, self._within_block_offset)
-        # Three cases to consider,
-        if i == -1:
-            # No newline, need to read in more data
-            data = self._buffer[self._within_block_offset:]
-            self._load_block()  # will reset offsets
-            if not self._buffer:
-                return data  # EOF
+        result = "" if self._text else b""
+        while self._buffer:
+            i = self._buffer.find(self._newline, self._within_block_offset)
+            # Three cases to consider,
+            if i == -1:
+                # No newline, need to read in more data
+                data = self._buffer[self._within_block_offset:]
+                self._load_block()  # will reset offsets
+                result += data
+            elif i + 1 == len(self._buffer):
+                # Found new line, but right at end of block (SPECIAL)
+                data = self._buffer[self._within_block_offset:]
+                # Must now load the next block to ensure tell() works
+                self._load_block()  # will reset offsets
+                assert data
+                result += data
+                break
             else:
-                # TODO - Avoid recursion
-                return data + self.readline()
-        elif i + 1 == len(self._buffer):
-            # Found new line, but right at end of block (SPECIAL)
-            data = self._buffer[self._within_block_offset:]
-            # Must now load the next block to ensure tell() works
-            self._load_block()  # will reset offsets
-            assert data
-            return data
-        else:
-            # Found new line, not at end of block (easy case, no IO)
-            data = self._buffer[self._within_block_offset:i + 1]
-            self._within_block_offset = i + 1
-            # assert data.endswith(self._newline)
-            return data
+                # Found new line, not at end of block (easy case, no IO)
+                data = self._buffer[self._within_block_offset:i + 1]
+                self._within_block_offset = i + 1
+                # assert data.endswith(self._newline)
+                result += data
+                break
+
+        return result
 
     def __next__(self):
         """Return the next line."""
@@ -764,8 +761,9 @@ class BgzfWriter(object):
                              0)
         compressed = c.compress(block) + c.flush()
         del c
-        assert len(compressed) < 65536, \
-            "TODO - Didn't compress enough, try less data in this block"
+        if len(compressed) > 65536:
+            raise RuntimeError("TODO - Didn't compress enough, "
+                               "try less data in this block")
         crc = zlib.crc32(block)
         # Should cope with a mix of Python platforms...
         if crc < 0:

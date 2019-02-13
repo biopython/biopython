@@ -16,14 +16,17 @@ from Bio.Data import IUPACData
 
 
 class Atom(object):
+    """Define Atom class.
+
+    The Atom object stores atom name (both with and without spaces),
+    coordinates, B factor, occupancy, alternative location specifier
+    and (optionally) anisotropic B factor and standard deviations of
+    B factor and positions.
+    """
+
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
                  element=None):
-        """Create Atom object.
-
-        The Atom object stores atom name (both with and without spaces),
-        coordinates, B factor, occupancy, alternative location specifier
-        and (optionally) anisotropic B factor and standard deviations of
-        B factor and positions.
+        """Initialize Atom object.
 
         :param name: atom name (eg. "CA"). Note that spaces are normally stripped.
         :type name: string
@@ -90,7 +93,7 @@ class Atom(object):
             return NotImplemented
 
     def __gt__(self, other):
-        """Test greater then."""
+        """Test greater than."""
         if isinstance(other, Atom):
             if self.parent != other.parent:
                 return self.parent > other.parent
@@ -155,6 +158,7 @@ class Atom(object):
 
     # Hash method to allow uniqueness (set)
     def __hash__(self):
+        """Return atom full identifier."""
         return hash(self.get_full_id())
 
     def _assign_element(self, element):
@@ -187,6 +191,7 @@ class Atom(object):
         return element
 
     def _assign_atom_mass(self):
+        """Return atom weight (PRIVATE)."""
         # Needed for Bio/Struct/Geometry.py C.O.M. function
         if self.element:
             return IUPACData.atom_weights[self.element.capitalize()]
@@ -207,7 +212,9 @@ class Atom(object):
 
         Examples
         --------
-        >>> distance = atom1 - atom2
+        This is an incomplete but illustrative example::
+
+            distance = atom1 - atom2
 
         """
         diff = self.coord - other.coord
@@ -216,18 +223,23 @@ class Atom(object):
     # set methods
 
     def set_serial_number(self, n):
+        """Set serial number."""
         self.serial_number = n
 
     def set_bfactor(self, bfactor):
+        """Set isotroptic B factor."""
         self.bfactor = bfactor
 
     def set_coord(self, coord):
+        """Set coordinates."""
         self.coord = coord
 
     def set_altloc(self, altloc):
+        """Set alternative location specifier."""
         self.altloc = altloc
 
     def set_occupancy(self, occupancy):
+        """Set occupancy."""
         self.occupancy = occupancy
 
     def set_sigatm(self, sigatm_array):
@@ -302,6 +314,7 @@ class Atom(object):
         return self.parent
 
     def get_serial_number(self):
+        """Return the serial number."""
         return self.serial_number
 
     def get_name(self):
@@ -341,6 +354,7 @@ class Atom(object):
         return self.altloc
 
     def get_level(self):
+        """Return level."""
         return self.level
 
     def transform(self, rot, tran):
@@ -354,9 +368,13 @@ class Atom(object):
 
         Examples
         --------
-        >>> rotation=rotmat(pi, Vector(1, 0, 0))
-        >>> translation=array((0, 0, 1), 'f')
-        >>> atom.transform(rotation, translation)
+        This is an incomplete but illustrative example::
+
+            from numpy import pi, array
+            from Bio.PDB.vectors import Vector, rotmat
+            rotation = rotmat(pi, Vector(1, 0, 0))
+            translation = array((0, 0, 1), 'f')
+            atom.transform(rotation, translation)
 
         """
         self.coord = numpy.dot(self.coord, rot) + tran
@@ -408,10 +426,12 @@ class DisorderedAtom(DisorderedEntityWrapper):
     # Special methods
     # Override parent class __iter__ method
     def __iter__(self):
+        """Iterate through disordered atoms."""
         for i in self.disordered_get_list():
             yield i
 
     def __repr__(self):
+        """Return disordered atom identifier."""
         return "<Disordered Atom %s>" % self.get_id()
 
     def disordered_add(self, atom):

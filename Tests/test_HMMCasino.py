@@ -25,7 +25,7 @@ if os.name == 'java':
     # This is a slight miss-use of MissingExternalDependencyError,
     # but it will do in the short term to skip this unit test on Jython
     raise MissingExternalDependencyError("This test can cause a fatal error "
-        "on Jython with some versions of Java")
+                                         "on Jython with some versions of Java")
 
 # standard modules
 import random

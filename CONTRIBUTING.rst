@@ -47,6 +47,10 @@ plugins which can be installed as follows::
 
     $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings
 
+Unless you are using Python 2.7, please also install the bugbear plugin:
+
+    $ pip install flake8-bugbear
+
 You can then run ``flake8`` directly as follows::
 
     $ flake8 Bio/

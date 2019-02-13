@@ -6,7 +6,7 @@
 """Main entry point for sequencing related command line application wrappers."""
 from ._Novoalign import NovoalignCommandline
 from ._bwa import BwaIndexCommandline, BwaAlignCommandline, BwaSamseCommandline
-from ._bwa import BwaSampeCommandline, BwaBwaswCommandline
+from ._bwa import BwaSampeCommandline, BwaBwaswCommandline, BwaMemCommandline
 from ._samtools import SamtoolsViewCommandline, SamtoolsCalmdCommandline
 from ._samtools import SamtoolsCatCommandline, SamtoolsFaidxCommandline
 from ._samtools import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
@@ -23,6 +23,7 @@ __all__ = ("BwaIndexCommandline",
            "BwaSamseCommandline",
            "BwaSampeCommandline",
            "BwaBwaswCommandline",
+           "BwaMemCommandline",
            "SamtoolsViewCommandline",
            "SamtoolsCalmdCommandline",
            "SamtoolsCatCommandline",

@@ -9,6 +9,8 @@ from __future__ import print_function
 
 
 class AbstractPropertyMap(object):
+    """Define base class, map holder of residue properties."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         self.property_dict = property_dict
@@ -16,6 +18,7 @@ class AbstractPropertyMap(object):
         self.property_list = property_list
 
     def _translate_id(self, entity_id):
+        """Return entity identifier (PRIVATE)."""
         return entity_id
 
     def __contains__(self, id):
@@ -29,9 +32,10 @@ class AbstractPropertyMap(object):
 
         Examples
         --------
-        >>> if (chain_id, res_id) in apmap:
-        ...     res, prop = apmap[(chain_id, res_id)]
-        ...
+        This is an incomplete but illustrative example::
+
+            if (chain_id, res_id) in apmap:
+                res, prop = apmap[(chain_id, res_id)]
 
         """
         translated_id = self._translate_id(id)
@@ -60,34 +64,6 @@ class AbstractPropertyMap(object):
         """
         return len(self.property_dict)
 
-    def has_key(self, id):
-        """Check if the mapping has a property for this residue.
-
-        :param chain_id: chain id
-        :type chain_id: char
-
-        :param res_id: residue id
-        :type res_id: char
-
-        (Obsolete; use "id in mapping" instead.)
-
-        Examples
-        --------
-        >>> if apmap.has_key((chain_id, res_id)):
-        ...     res, prop = apmap[(chain_id, res_id)]
-
-        Is equivalent to:
-
-        >>> if (chain_id, res_id) in apmap:
-        ...     res, prop = apmap[(chain_id, res_id)]
-        ...
-
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This function is deprecated; use 'id in mapping' instead", BiopythonDeprecationWarning)
-        return id in self
-
     def keys(self):
         """Return the list of residues.
 
@@ -115,12 +91,15 @@ class AbstractPropertyMap(object):
 
 
 class AbstractResiduePropertyMap(AbstractPropertyMap):
+    """Define class for residue properties map."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                                     property_list)
 
     def _translate_id(self, ent_id):
+        """Return entity identifier on residue (PRIVATE)."""
         chain_id, res_id = ent_id
         if isinstance(res_id, int):
             ent_id = (chain_id, (' ', res_id, ' '))
@@ -128,12 +107,15 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
 
 class AbstractAtomPropertyMap(AbstractPropertyMap):
+    """Define class for atom properties map."""
+
     def __init__(self, property_dict, property_keys, property_list):
         """Initialize the class."""
         AbstractPropertyMap.__init__(self, property_dict, property_keys,
-                property_list)
+                                     property_list)
 
     def _translate_id(self, ent_id):
+        """Return entity identifier on atoms (PRIVATE)."""
         if len(ent_id) == 4:
             chain_id, res_id, atom_name, icode = ent_id
         else:
