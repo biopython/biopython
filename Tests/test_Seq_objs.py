@@ -830,7 +830,8 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(filename, 'fasta')))
+        with self.assertRaises(NotImplementedError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_join_UnknownSeq(self):
         """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
@@ -872,7 +873,8 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(filename, 'fasta')))
+        with self.assertRaises(NotImplementedError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_join_MutableSeq(self):
         """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
@@ -913,7 +915,8 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
-        self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(filename, 'fasta')))
+        with self.assertRaises(NotImplementedError):
+            spacer.join(SeqIO.parse(filename, 'fasta'))
 
     def test_MutableSeq_init_typeerror(self):
         """Check MutableSeq __init__ gives TypeError exceptions."""
