@@ -833,7 +833,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(filename, 'fasta')))
 
     def test_join_UnknownSeq(self):
-        """Checks if Seq join correctly concatenates sequence with the spacer."""
+        """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
         spacer1 = UnknownSeq(0, character="-", alphabet=generic_dna)
@@ -854,7 +854,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
 
     def test_join_UnknownSeq_with_file(self):
-        """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
+        """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
         filename = 'Fasta/f003'
         seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
         seqlist_as_strings = [str(_) for _ in seqlist]
@@ -875,7 +875,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(NotImplemented, spacer.join(SeqIO.parse(filename, 'fasta')))
 
     def test_join_MutableSeq(self):
-        """Checks if Seq join correctly concatenates sequence with the spacer."""
+        """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
         spacer1 = MutableSeq('', generic_dna)
@@ -895,7 +895,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(seq_concatenated.alphabet, spacer.alphabet)
 
     def test_join_MutableSeq_with_file(self):
-        """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
+        """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
         filename = 'Fasta/f003'
         seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
         seqlist_as_strings = [str(_) for _ in seqlist]
