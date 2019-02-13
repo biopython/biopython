@@ -199,28 +199,3 @@ class FeatureSet(object):
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
-
-################################################################################
-# RUN AS SCRIPT
-################################################################################
-
-
-if __name__ == '__main__':
-    from Bio import SeqIO
-
-    genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
-
-    # Test code
-    gdfs = FeatureSet(0, 'Nanoarchaeum equitans CDS')
-    for feature in genbank_entry.features:
-        if feature.type == 'CDS':
-            gdfs.add_feature(feature)
-
-    # print len(gdfs)
-    # print gdfs.get_ids()
-    # gdfs.del_feature(560)
-    # print gdfs.get_ids()
-    # print gdfs.get_features()
-    # for feature in gdfs.get_features():
-    #    print feature.id, feature.start, feature.end
-    # print gdfs[500]
