@@ -107,7 +107,10 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         try:
             __import__(DBDRIVER)
         except ImportError:
-            message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
+            if DBDRIVER in ["MySQLdb"]:
+                message = "Install MySQLdb or mysqlclient if you want to use %s with BioSQL " % (DBTYPE)
+            else:
+                message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
             raise MissingExternalDependencyError(message)
 
     try:
