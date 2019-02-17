@@ -45,6 +45,7 @@
 -- (there is no concept of versions of database). There is a concept of
 -- versions of entries. Versions of databases deserve their own table and
 -- join to bioentry table for tracking with versions of entries 
+SET sql_mode='ANSI_QUOTES';
 
 CREATE TABLE biodatabase (
   	biodatabase_id 	INT(10) UNSIGNED NOT NULL auto_increment,
@@ -142,7 +143,7 @@ CREATE TABLE term_synonym (
 CREATE TABLE term_dbxref (
        	term_id	          INT(10) UNSIGNED NOT NULL,
        	dbxref_id         INT(10) UNSIGNED NOT NULL,
-	rank		  SMALLINT,
+	"rank"		  SMALLINT,
 	PRIMARY KEY (term_id, dbxref_id)
 ) ENGINE=INNODB;
 
@@ -274,7 +275,7 @@ CREATE TABLE bioentry_relationship (
         object_bioentry_id 	 INT(10) UNSIGNED NOT NULL,
    	subject_bioentry_id 	 INT(10) UNSIGNED NOT NULL,
    	term_id 		 INT(10) UNSIGNED NOT NULL,
-   	rank 			 INT(5),
+   	"rank" 			 INT(5),
    	PRIMARY KEY (bioentry_relationship_id),
 	UNIQUE (object_bioentry_id,subject_bioentry_id,term_id)
 ) ENGINE=INNODB;
@@ -349,9 +350,9 @@ CREATE INDEX dbxref_db  ON dbxref(dbname);
 CREATE TABLE dbxref_qualifier_value (
        	dbxref_id 		INT(10) UNSIGNED NOT NULL,
        	term_id 		INT(10) UNSIGNED NOT NULL,
-  	rank  		   	SMALLINT NOT NULL DEFAULT 0,
+  	"rank"  		   	SMALLINT NOT NULL DEFAULT 0,
        	value			TEXT,
-	PRIMARY KEY (dbxref_id,term_id,rank)
+	PRIMARY KEY (dbxref_id,term_id,"rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX dbxrefqual_dbx ON dbxref_qualifier_value(dbxref_id);
@@ -366,7 +367,7 @@ CREATE INDEX dbxrefqual_trm ON dbxref_qualifier_value(term_id);
 CREATE TABLE bioentry_dbxref ( 
        	bioentry_id        INT(10) UNSIGNED NOT NULL,
        	dbxref_id          INT(10) UNSIGNED NOT NULL,
-  	rank  		   SMALLINT,
+  	"rank"  		   SMALLINT,
 	PRIMARY KEY (bioentry_id,dbxref_id)
 ) ENGINE=INNODB;
 
@@ -396,8 +397,8 @@ CREATE TABLE bioentry_reference (
   	reference_id 	INT(10) UNSIGNED NOT NULL,
   	start_pos	INT(10),
   	end_pos	  	INT(10),
-  	rank  		SMALLINT NOT NULL DEFAULT 0,
-  	PRIMARY KEY(bioentry_id,reference_id,rank)
+  	"rank"  		SMALLINT NOT NULL DEFAULT 0,
+  	PRIMARY KEY(bioentry_id,reference_id,"rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX bioentryref_ref ON bioentry_reference(reference_id);
@@ -410,9 +411,9 @@ CREATE TABLE comment (
   	comment_id  	INT(10) UNSIGNED NOT NULL auto_increment,
   	bioentry_id    	INT(10) UNSIGNED NOT NULL,
   	comment_text   	TEXT NOT NULL,
-  	rank   		SMALLINT NOT NULL DEFAULT 0,
+  	"rank"   		SMALLINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (comment_id),
-  	UNIQUE(bioentry_id, rank)
+  	UNIQUE(bioentry_id, "rank")
 ) ENGINE=INNODB;
 
 
@@ -421,8 +422,8 @@ CREATE TABLE bioentry_qualifier_value (
 	bioentry_id   		INT(10) UNSIGNED NOT NULL,
    	term_id  		INT(10) UNSIGNED NOT NULL,
    	value         		TEXT,
-	rank			INT(5) NOT NULL DEFAULT 0,
-	UNIQUE (bioentry_id,term_id,rank)
+	"rank"			INT(5) NOT NULL DEFAULT 0,
+	UNIQUE (bioentry_id,term_id,"rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX bioentryqual_trm ON bioentry_qualifier_value(term_id);
@@ -438,9 +439,9 @@ CREATE TABLE seqfeature (
    	type_term_id		INT(10) UNSIGNED NOT NULL,
    	source_term_id  	INT(10) UNSIGNED NOT NULL,
 	display_name		VARCHAR(64),
-   	rank 			SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+   	"rank" 			SMALLINT UNSIGNED NOT NULL DEFAULT 0,
 	PRIMARY KEY (seqfeature_id),
-	UNIQUE (bioentry_id,type_term_id,source_term_id,rank)
+	UNIQUE (bioentry_id,type_term_id,source_term_id,"rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX seqfeature_trm  ON seqfeature(type_term_id);
@@ -458,7 +459,7 @@ CREATE TABLE seqfeature_relationship (
    	object_seqfeature_id	INT(10) UNSIGNED NOT NULL,
    	subject_seqfeature_id 	INT(10) UNSIGNED NOT NULL,
    	term_id 	        INT(10) UNSIGNED NOT NULL,
-   	rank 			INT(5),
+   	"rank" 			INT(5),
    	PRIMARY KEY (seqfeature_relationship_id),
 	UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id)
 ) ENGINE=INNODB;
@@ -489,9 +490,9 @@ CREATE INDEX seqfeaturepath_child ON seqfeature_path(subject_seqfeature_id);
 CREATE TABLE seqfeature_qualifier_value (
 	seqfeature_id 		INT(10) UNSIGNED NOT NULL,
    	term_id 		INT(10) UNSIGNED NOT NULL,
-   	rank 			SMALLINT NOT NULL DEFAULT 0,
+   	"rank" 			SMALLINT NOT NULL DEFAULT 0,
    	value  			TEXT NOT NULL,
-   	PRIMARY KEY (seqfeature_id,term_id,rank)
+   	PRIMARY KEY (seqfeature_id,term_id,"rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX seqfeaturequal_trm ON seqfeature_qualifier_value(term_id);
@@ -504,7 +505,7 @@ CREATE INDEX seqfeaturequal_trm ON seqfeature_qualifier_value(term_id);
 CREATE TABLE seqfeature_dbxref ( 
        	seqfeature_id      INT(10) UNSIGNED NOT NULL,
        	dbxref_id          INT(10) UNSIGNED NOT NULL,
-  	rank  		   SMALLINT,
+  	"rank"  		   SMALLINT,
 	PRIMARY KEY (seqfeature_id,dbxref_id)
 ) ENGINE=INNODB;
 
@@ -533,9 +534,9 @@ CREATE TABLE location (
    	start_pos              	INT(10),
    	end_pos                	INT(10),
    	strand             	TINYINT NOT NULL DEFAULT 0,
-   	rank          		SMALLINT NOT NULL DEFAULT 0,
+   	"rank"          		SMALLINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (location_id),
-   	UNIQUE (seqfeature_id, rank)
+   	UNIQUE (seqfeature_id, "rank")
 ) ENGINE=INNODB;
 
 CREATE INDEX seqfeatureloc_start ON location(start_pos, end_pos);
@@ -778,5 +779,3 @@ ALTER TABLE location_qualifier_value ADD CONSTRAINT FKfeatloc_locqual
 	ON DELETE CASCADE;
 ALTER TABLE location_qualifier_value ADD CONSTRAINT FKterm_locqual
 	FOREIGN KEY (term_id) REFERENCES term(term_id);
-
-
