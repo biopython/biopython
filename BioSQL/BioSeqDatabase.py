@@ -107,6 +107,10 @@ def open_database(driver="MySQLdb", **kwargs):
     else:
         server = DBServer(conn, module)
 
+    # Sets MySQL to allow double quotes, rather than only backticks
+    if driver in ['MySQLdb', 'mysql.connector']:
+        server.adaptor.execute("SET sql_mode='ANSI_QUOTES';")
+
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
     # Test for RULES in PostgreSQL schema, see also Bug 2833.
     if driver in ["psycopg2", "pgdb"]:
