@@ -11,7 +11,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.74
 ===============================================
 
-This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7.
+This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7. However,
+it will be the last release to support Python 3.4 which is now at end-of-life.
 It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 
 As in recent releases, more of our code is now explicitly available under

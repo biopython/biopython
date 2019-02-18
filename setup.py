@@ -140,6 +140,8 @@ elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 4):
     sys.stderr.write("Biopython requires Python 3.4 or later (or Python 2.7). "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
+if sys.version_info[:2] == (3, 4):
+    print("WARNING: Biopython support for Python 3.4 is now deprecated.")
 
 if is_jython():
     sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
