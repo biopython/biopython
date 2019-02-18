@@ -671,9 +671,9 @@ class DatabaseLoader(object):
             date = date[0]
         annotation_tags_id = self._get_ontology_id("Annotation Tags")
         date_id = self._get_term_id("date_changed", annotation_tags_id)
-        sql = "INSERT INTO bioentry_qualifier_value" \
-              " (bioentry_id, term_id, value, \"rank\")" \
-              " VALUES (%s, %s, %s, 1)"
+        sql = 'INSERT INTO bioentry_qualifier_value' \
+              ' (bioentry_id, term_id, value, "rank")' \
+              ' VALUES (%s, %s, %s, 1)'
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
@@ -731,8 +731,8 @@ class DatabaseLoader(object):
             comment = comment.replace('\n', ' ')
             # TODO - Store each line as a separate entry?  This would preserve
             # the newlines, but we should check BioPerl etc to be consistent.
-            sql = "INSERT INTO comment (bioentry_id, comment_text, \"rank\")" \
-                  " VALUES (%s, %s, %s)"
+            sql = 'INSERT INTO comment (bioentry_id, comment_text, "rank")' \
+                  ' VALUES (%s, %s, %s)'
             self.adaptor.execute(sql, (bioentry_id, comment, index + 1))
 
     def _load_annotations(self, record, bioentry_id):
@@ -750,9 +750,9 @@ class DatabaseLoader(object):
         mono_sql = "INSERT INTO bioentry_qualifier_value" \
                    "(bioentry_id, term_id, value)" \
                    " VALUES (%s, %s, %s)"
-        many_sql = "INSERT INTO bioentry_qualifier_value" \
-                   "(bioentry_id, term_id, value, \"rank\")" \
-                   " VALUES (%s, %s, %s, %s)"
+        many_sql = 'INSERT INTO bioentry_qualifier_value'\
+                   '(bioentry_id, term_id, value, "rank")' \
+                   ' VALUES (%s, %s, %s, %s)'
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
         for key, value in record.annotations.items():
             if key in ["references", "comment", "ncbi_taxid", "date"]:
@@ -839,8 +839,8 @@ class DatabaseLoader(object):
             start = None
             end = None
 
-        sql = "INSERT INTO bioentry_reference (bioentry_id, reference_id," \
-              " start_pos, end_pos, \"rank\") VALUES (%s, %s, %s, %s, %s)"
+        sql = 'INSERT INTO bioentry_reference (bioentry_id, reference_id,' \
+              ' start_pos, end_pos, "rank") VALUES (%s, %s, %s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, reference_id,
                                    start, end, rank + 1))
 
@@ -881,8 +881,8 @@ class DatabaseLoader(object):
         source_term_id = self._get_term_id(source,
                                            ontology_id=source_cat_id)
 
-        sql = "INSERT INTO seqfeature (bioentry_id, type_term_id, " \
-              "source_term_id, \"rank\") VALUES (%s, %s, %s, %s)"
+        sql = 'INSERT INTO seqfeature (bioentry_id, type_term_id, ' \
+              'source_term_id, "rank") VALUES (%s, %s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, seqfeature_key_id,
                                    source_term_id, feature_rank + 1))
         seqfeature_id = self.adaptor.last_id('seqfeature')
@@ -971,9 +971,9 @@ class DatabaseLoader(object):
         else:
             dbxref_id = None
 
-        sql = "INSERT INTO location (seqfeature_id, dbxref_id, term_id," \
-              "start_pos, end_pos, strand, \"rank\") " \
-              "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        sql = 'INSERT INTO location (seqfeature_id, dbxref_id, term_id,' \
+              'start_pos, end_pos, strand, "rank") ' \
+              'VALUES (%s, %s, %s, %s, %s, %s, %s)'
         self.adaptor.execute(sql, (seqfeature_id, dbxref_id, loc_term_id,
                                    start, end, strand, rank))
 
@@ -1022,9 +1022,9 @@ class DatabaseLoader(object):
                     entries = [entries]
                 for qual_value_rank in range(len(entries)):
                     qualifier_value = entries[qual_value_rank]
-                    sql = "INSERT INTO seqfeature_qualifier_value "\
-                          " (seqfeature_id, term_id, \"rank\", value) VALUES"\
-                          " (%s, %s, %s, %s)"
+                    sql = 'INSERT INTO seqfeature_qualifier_value '\
+                          ' (seqfeature_id, term_id, "rank", value) VALUES'\
+                          ' (%s, %s, %s, %s)'
                     self.adaptor.execute(sql, (seqfeature_id,
                                                qualifier_key_id,
                                                qual_value_rank + 1,
@@ -1121,7 +1121,7 @@ class DatabaseLoader(object):
         dbxref_id
         """
         sql = 'INSERT INTO seqfeature_dbxref ' \
-              '(seqfeature_id, dbxref_id, \"rank\") VALUES' \
+              '(seqfeature_id, dbxref_id, "rank") VALUES' \
               '(%s, %s, %s)'
         self.adaptor.execute(sql, (seqfeature_id, dbxref_id, rank))
         return (seqfeature_id, dbxref_id)
@@ -1176,7 +1176,7 @@ class DatabaseLoader(object):
         Returns the seqfeature_id and dbxref_id (PRIVATE).
         """
         sql = 'INSERT INTO bioentry_dbxref ' \
-              '(bioentry_id,dbxref_id,\"rank\") VALUES ' \
+              '(bioentry_id,dbxref_id,"rank") VALUES ' \
               '(%s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, dbxref_id, rank))
         return (bioentry_id, dbxref_id)
