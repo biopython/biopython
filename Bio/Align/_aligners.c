@@ -15,11 +15,12 @@
 #define HORIZONTAL 0x1
 #define VERTICAL 0x2
 #define DIAGONAL 0x4
-#define ENDPOINT 0x8
+#define STARTPOINT 0x8
+#define ENDPOINT 0x10
 #define M_MATRIX 0x1
 #define Ix_MATRIX 0x2
 #define Iy_MATRIX 0x4
-#define DONE 0x8
+#define DONE 0x3
 #define NONE 0x7
 
 #define OVERFLOW_ERROR -1
@@ -42,8 +43,8 @@ typedef enum {NeedlemanWunschSmithWaterman,
 typedef enum {Global, Local} Mode;
 
 typedef struct {
-    unsigned char trace : 4;
-    unsigned char path : 4;
+    unsigned char trace : 5;
+    unsigned char path : 3;
 } Trace;
 
 typedef struct {
@@ -265,7 +266,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
             if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
             if (trace & VERTICAL) SAFE_ADD(counts[j], count);
             temp = counts[j];
-            if (count == 0) count = 1;
+            if (count == 0 && (trace & STARTPOINT)) count = 1;
             counts[j] = count;
         }
     }
@@ -886,7 +887,7 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
         trace = M[i][j].trace;
     } else {
         /* Find a suitable end point for a path.
-         * Only allow start points ending at the M matrix. */
+         * Only allow end points ending at the M matrix. */
         while (1) {
             if (j < nB) j++;
             else if (i < nA) {
@@ -913,12 +914,18 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
         if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
         else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
         else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
-        else break;
+        else if (trace & STARTPOINT) {
+            self->iA = i;
+            self->iB = j;
+            return _create_path(M, i, j);
+        }
+        else {
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected trace in PathGenerator_next_smithwaterman");
+            return NULL;
+        }
         trace = M[i][j].trace;
     }
-    self->iA = i;
-    self->iB = j;
-    return _create_path(M, i, j);
 }
 
 static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
@@ -4072,7 +4079,7 @@ static PyGetSetDef Aligner_getset[] = {
     else if (temp > score - epsilon) trace |= VERTICAL; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
+        trace = STARTPOINT; \
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4094,7 +4101,6 @@ static PyGetSetDef Aligner_getset[] = {
     trace = DIAGONAL; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4296,14 +4302,19 @@ PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     paths->M = M;
     if (!M) goto exit;
-    if (mode == Global) trace = VERTICAL;
+    switch (mode) {
+        case Global: trace = VERTICAL; break;
+        case Local: trace = STARTPOINT; break;
+    }
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
         M[i][0].trace = trace;
     }
-    M[0][0].trace = 0;
-    if (mode == Global) trace = HORIZONTAL;
+    if (mode == Global) {
+        M[0][0].trace = 0;
+        trace = HORIZONTAL;
+    }
     for (i = 1; i <= nB; i++) M[0][i].trace = trace;
     M[0][0].path = 0;
     return paths;
@@ -4698,6 +4709,38 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     kB = CHARINDEX(sB[nB-1]);
     SELECT_TRACE_SMITH_WATERMAN_D;
     PyMem_Free(scores);
+
+    /* As we don't allow zero-score extensions to alignments,
+     * we need to remove all traces towards an ENDPOINT.
+     * In addition, some points then won't have any path to a STARTPOINT.
+     * Here, use path as a temporary variable to indicate if the point
+     * is reachable from a STARTPOINT. If it is unreachable, remove all
+     * traces from it, and don't allow it to be an ENDPOINT. It may still
+     * be a valid STARTPOINT. */
+    for (j = 0; j <= nB; j++) M[0][j].path = 1;
+    for (i = 1; i <= nA; i++) {
+        M[i][0].path = 1;
+        for (j = 1; j <= nB; j++) {
+            trace = M[i][j].trace;
+            /* Remove traces to unreachable points. */
+            if (!M[i-1][j-1].path) trace &= ~DIAGONAL;
+            if (!M[i][j-1].path) trace &= ~HORIZONTAL;
+            if (!M[i-1][j].path) trace &= ~VERTICAL;
+            if (trace & (STARTPOINT | HORIZONTAL | VERTICAL | DIAGONAL)) {
+                /* The point is reachable. */
+                if (trace & ENDPOINT) M[i][j].path = 0; /* no extensions after ENDPOINT */
+                else M[i][j].path = 1;
+            }
+            else {
+                /* The point is not reachable. Then it is not a STARTPOINT,
+                 * all traces from it can be removed, and it cannot act as
+                 * an ENDPOINT. */
+                M[i][j].path = 0;
+                trace = 0;
+            }
+            M[i][j].trace = trace;
+        }
+    }
 
     if (maximum == 0) M[0][0].path = NONE;
     else M[0][0].path = 0;
