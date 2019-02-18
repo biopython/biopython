@@ -38,6 +38,10 @@ Python 3.3
 No longer supported as of Release 1.70, having triggered a warning with
 release 1.67 onwards.
 
+Python 3.4
+==========
+Deprecated as of release 1.74.
+
 Jython
 ======
 Biopython is mostly working under Jython 2.7.0, but support for Jython
