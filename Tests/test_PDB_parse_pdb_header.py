@@ -28,6 +28,7 @@ class ParseReal(unittest.TestCase):
         header = parse_pdb_header("PDB/2XHE.pdb")
         self.assertTrue(header["has_missing_residues"])
         self.assertEqual(len(header["missing_residues"]), 142)
+        self.assertEqual(header['idcode'], '2XHE')
         self.assertIn({"model": None, "res_name": "GLN", "chain": "B", "ssseq": 267, "insertion": None},
                       header["missing_residues"])
         header = parse_pdb_header("PDB/1A8O.pdb")
