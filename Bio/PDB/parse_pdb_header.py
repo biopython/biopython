@@ -220,9 +220,9 @@ def _parse_pdb_header_list(header):
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['deposition_date'] = _format_date(_nice_case(rr.group()))
-            rr = re.search(r"\s+\w\w\w\w\s*\Z", tail)
+            rr = re.search(r"\s+([1-9][0-9A-Z]{3})\s*\Z", tail)
             if rr is not None:
-                dict['idcode'] = rr.group(0)
+                dict['idcode'] = rr.group(1)
             head = _chop_end_misc(tail).lower()
             dict['head'] = head
         elif key == "COMPND":
