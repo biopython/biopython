@@ -205,6 +205,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
+- Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>

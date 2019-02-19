@@ -26,6 +26,8 @@ no longer give a warning when parsing these. We now allow writing such files
 
 Support for the mysqlclient package, a fork of MySQLdb, has been added.
 
+We now capture the IDcode field from PDB Header records. 
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
