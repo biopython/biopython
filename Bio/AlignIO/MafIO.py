@@ -751,16 +751,25 @@ class MafIndex(object):
             # this is reference sequence
             ref_seq = subseq[self._target_seqname]
 
-            # find the positions where to split
-            index = 0
-            for offset in offsets:
-                count_bases = 0
-                for element in ref_seq:
-                    if element == 'A' or element == 'C' or element == 'G' or element == 'T':
-                        count_bases += 1
-                    index += 1
-                    if count_bases == offset:
-                        positions.append(index)
+            # initialize variables for looping over the reference sequence
+            splice_index = offset_index = count_bases = 0
+
+            # since offsets are expressed in terms of bases, loop over the reference sequence
+            # in order to find the actual splicing positions
+            for element in ref_seq:
+                if element == 'A' or element == 'C' or element == 'G' or element == 'T':
+                    count_bases += 1
+                splice_index += 1
+                if count_bases == offsets[offset_index]:
+                    positions.append(splice_index)
+                    # all offsets have been found
+                    if offset_index == len(offsets):
+                        break
+                    # some offsets are missing
+                    else:
+                        # find next offset
+                        offset_index += 1
+                        count_bases = 0
 
             for seqid, seq in subseq.items():
                 temp_seq = ""
