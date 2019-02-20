@@ -18,12 +18,21 @@ def read(handle):
     Examples
     --------
     >>> from Bio.motifs import meme
-    >>> with open("meme.output.txt") as f:
+    >>> with open("motifs/meme.out") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-
+    Motif 1 SEQ10; + 8.71e-07
+    Motif 1 SEQ9; + 8.71e-07
+    Motif 1 SEQ8; + 8.71e-07
+    Motif 1 SEQ7; + 8.71e-07
+    Motif 1 SEQ6; + 8.71e-07
+    Motif 1 SEQ5; + 8.71e-07
+    Motif 1 SEQ4; + 8.71e-07
+    Motif 1 SEQ3; + 8.71e-07
+    Motif 1 SEQ2; + 8.71e-07
+    Motif 1 SEQ1; + 8.71e-07
     """
     record = Record()
     __read_version(record, handle)
@@ -102,7 +111,7 @@ class Record(list):
     by its name:
 
     >>> from Bio import motifs
-    >>> with open("meme.output.txt") as f:
+    >>> with open("motifs/meme.out") as f:
     ...     record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
     >>> print(motif.name)

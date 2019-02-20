@@ -185,6 +185,7 @@ DOCTEST_MODULES = [
     "Bio.motifs.applications._xxmotif",
     "Bio.motifs.jaspar",
     "Bio.motifs.matrix",
+    "Bio.motifs.meme",
     "Bio.motifs.thresholds",
     "Bio.motifs.transfac",
     "Bio.Nexus",
