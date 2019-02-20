@@ -1286,9 +1286,7 @@ class Seq(object):
 
         Accepts all Seq objects and Strings as objects to be concatenated with the spacer
 
-        >>> spacer = Seq('NNNNN')
-        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
-        >>> concatenated = spacer.join(seqlist)
+        >>> concatenated = Seq('NNNNN').join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')
 
@@ -1323,6 +1321,7 @@ class Seq(object):
                 temp_data += str(self) + str(c)
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
+
         if a is None:  # arguments are all alphabet-less strings
             a = self.alphabet
         if self._data == "":
@@ -1875,9 +1874,7 @@ class UnknownSeq(Seq):
         Accepts Seq/UnknownSeq objects and Strings as objects to be concatenated with
         the spacer
 
-        >>> spacer = UnknownSeq(5)
-        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
-        >>> concatenated = spacer.join(seqlist)
+        >>> concatenated = UnknownSeq(5).join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
         Seq('AAA?????TTT?????PPP')
 
@@ -2566,9 +2563,7 @@ class MutableSeq(object):
 
         Accepts all Seq objects and Strings as objects to be concatenated with the spacer
 
-        >>> spacer = MutableSeq('NNNNN')
-        >>> seqlist = [Seq("AAA"), Seq("TTT"), Seq("PPP")]
-        >>> concatenated = spacer.join(seqlist)
+        >>> concatenated = MutableSeq('NNNNN').join([Seq("AAA"), Seq("TTT"), Seq("PPP")])
         >>> concatenated
         Seq('AAANNNNNTTTNNNNNPPP')
 
