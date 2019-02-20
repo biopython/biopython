@@ -33,6 +33,7 @@ def read(handle):
     Motif 1 SEQ3; + 8.71e-07
     Motif 1 SEQ2; + 8.71e-07
     Motif 1 SEQ1; + 8.71e-07
+
     """
     record = Record()
     __read_version(record, handle)
