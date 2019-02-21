@@ -26,6 +26,7 @@ class ParseReal(unittest.TestCase):
     def test_parse_pdb_with_remark_465(self):
         """Tests that parse_pdb_header now can identify some REMARK 465 entries."""
         header = parse_pdb_header("PDB/2XHE.pdb")
+        self.assertEqual(header['idcode'], '2XHE')
         self.assertTrue(header["has_missing_residues"])
         self.assertEqual(len(header["missing_residues"]), 142)
         self.assertIn({"model": None, "res_name": "GLN", "chain": "B", "ssseq": 267, "insertion": None},
