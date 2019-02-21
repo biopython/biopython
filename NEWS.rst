@@ -24,6 +24,10 @@ the fields may not always follow the historical column based positions. We
 no longer give a warning when parsing these. We now allow writing such files
 (although with a warning as support for reading them is not yet widespread).
 
+Support for the mysqlclient package, a fork of MySQLdb, has been added.
+
+We now capture the IDcode field from PDB Header records.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
