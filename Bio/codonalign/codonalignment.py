@@ -13,7 +13,8 @@ from __future__ import division, print_function
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
+from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet, \
+                                            compare_codon_alphabet
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.codonalign.chisq import chisqprob
 
@@ -98,6 +99,107 @@ class CodonAlignment(MultipleSeqAlignment):
                 return MultipleSeqAlignment((rec[col_index] for rec in
                                              self._records[row_index]),
                                             generic_nucleotide)
+
+    def __add__(self, other):
+        """Combine two codonalignments with the same number of rows by adding them.
+
+        The method also allows to combine a CodonAlignment object with a 
+        MultipleSeqAlignment object. The following rules apply:
+        
+            * CodonAlignment + CodonAlignment -> CodonAlignment
+            * CodonAlignment + MultipleSeqAlignment -> MultipleSeqAlignment
+
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> a1 = SeqRecord(Seq("AAAAC", generic_dna), id="Alpha")
+        >>> b1 = SeqRecord(Seq("AAA-C", generic_dna), id="Beta")
+        >>> c1 = SeqRecord(Seq("AAAAG", generic_dna), id="Gamma")
+        >>> a2 = SeqRecord(Seq("GT", generic_dna), id="Alpha")
+        >>> b2 = SeqRecord(Seq("GT", generic_dna), id="Beta")
+        >>> c2 = SeqRecord(Seq("GT", generic_dna), id="Gamma")
+        >>> left = MultipleSeqAlignment([a1, b1, c1],
+        ...                             annotations={"tool": "demo", "name": "start"},
+        ...                             column_annotations={"stats": "CCCXC"})
+        >>> right = MultipleSeqAlignment([a2, b2, c2],
+        ...                             annotations={"tool": "demo", "name": "end"},
+        ...                             column_annotations={"stats": "CC"})
+
+        Now, let's look at these two alignments:
+
+        >>> print(left)
+        DNAAlphabet() alignment with 3 rows and 5 columns
+        AAAAC Alpha
+        AAA-C Beta
+        AAAAG Gamma
+        >>> print(right)
+        DNAAlphabet() alignment with 3 rows and 2 columns
+        GT Alpha
+        GT Beta
+        GT Gamma
+
+        And add them:
+
+        >>> combined = left + right
+        >>> print(combined)
+        DNAAlphabet() alignment with 3 rows and 7 columns
+        AAAACGT Alpha
+        AAA-CGT Beta
+        AAAAGGT Gamma
+
+        For this to work, both alignments must have the same number of records (here
+        they both have 3 rows):
+
+        >>> len(left)
+        3
+        >>> len(right)
+        3
+        >>> len(combined)
+        3
+
+        The individual rows are SeqRecord objects, and these can be added together. Refer
+        to the SeqRecord documentation for details of how the annotation is handled. This
+        example is a special case in that both original alignments shared the same names,
+        meaning when the rows are added they also get the same name.
+
+        Any common annotations are preserved, but differing annotation is lost. This is
+        the same behaviour used in the SeqRecord annotations and is designed to prevent
+        accidental propagation of inappropriate values:
+
+        >>> combined.annotations
+        {'tool': 'demo'}
+
+        Similarly any common per-column-annotations are combined:
+
+        >>> combined.column_annotations
+        {'stats': 'CCCXCCC'}
+
+        """
+        if isinstance(other, CodonAlignment):
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            if compare_codon_alphabet(self._alphabet, other._alphabet):
+                alpha = self._alphabet
+                merged = (left + right for left, right in zip(self, other))
+                return CodonAlignment(merged, alphabet=alpha)
+            else:
+                raise TypeError("Only CodonAlignment with the same CodonAlphabet can be "
+                                "combined.")
+        elif isinstance(other, MultipleSeqAlignment):
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            return self.toMultipleSeqAlignment() + other
+        else:
+            raise TypeError("Only CodonAlignment or MultipleSeqAlignment object can be "
+                            "added with a CodonAlignment object. "
+                            "{} detected.".format(object(other)))
+
 
     def get_aln_length(self):
         return self.get_alignment_length() // 3
