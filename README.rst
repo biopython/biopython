@@ -4,10 +4,10 @@
 .. image:: https://img.shields.io/conda/vn/conda-forge/biopython.svg
    :alt: Biopython on the Conda package conda-forge channel
    :target: https://anaconda.org/conda-forge/biopython
-.. image:: https://img.shields.io/travis/biopython/biopython/master.svg
+.. image:: https://img.shields.io/travis/biopython/biopython/master.svg?logo=travis
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/biopython/biopython/branches
-.. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg
+.. image:: https://img.shields.io/appveyor/ci/biopython/biopython/master.svg?logo=appveyor
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/biopython/biopython/history
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
