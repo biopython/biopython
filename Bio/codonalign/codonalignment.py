@@ -13,7 +13,8 @@ from __future__ import division, print_function
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet
+from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet, \
+                                            compare_codon_alphabet
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.codonalign.chisq import chisqprob
 
@@ -98,6 +99,40 @@ class CodonAlignment(MultipleSeqAlignment):
                 return MultipleSeqAlignment((rec[col_index] for rec in
                                              self._records[row_index]),
                                             generic_nucleotide)
+
+    def __add__(self, other):
+        """Combine two codonalignments with the same number of rows by adding them.
+
+        The method also allows to combine a CodonAlignment object with a 
+        MultipleSeqAlignment object. The following rules apply:
+        
+            * CodonAlignment + CodonAlignment -> CodonAlignment
+            * CodonAlignment + MultipleSeqAlignment -> MultipleSeqAlignment
+        """
+        if isinstance(other, CodonAlignment):
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            if compare_codon_alphabet(self._alphabet, other._alphabet):
+                alpha = self._alphabet
+                merged = (left + right for left, right in zip(self, other))
+                return CodonAlignment(merged, alphabet=alpha)
+            else:
+                raise TypeError("Only CodonAlignment with the same CodonAlphabet can be "
+                                "combined.")
+        elif isinstance(other, MultipleSeqAlignment):
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            if len(self) != len(other):
+                raise ValueError("When adding two alignments they must have the same length"
+                                 " (i.e. same number or rows)")
+            return self.toMultipleSeqAlignment() + other
+        else:
+            raise TypeError("Only CodonAlignment or MultipleSeqAlignment object can be "
+                            "added with a CodonAlignment object. "
+                            "{} detected.".format(object(other)))
+
 
     def get_aln_length(self):
         return self.get_alignment_length() // 3
