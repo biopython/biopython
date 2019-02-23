@@ -396,7 +396,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
-            if (count == 0) count = 1;
+            if (count == 0 && (trace & STARTPOINT)) count = 1;
             M_temp = M_counts[j];
             M_counts[j] = count;
             if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
@@ -1158,7 +1158,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
             case Ix_MATRIX: trace = gaps[i][j].Ix; break;
             case Iy_MATRIX: trace = gaps[i][j].Iy; break;
         }
-        if (trace == 0) {
+        if (trace == STARTPOINT) {
             self->iA = i;
             self->iB = j;
             return _create_path(M, i, j);
@@ -1181,6 +1181,11 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
         if (trace & M_MATRIX) m = M_MATRIX;
         else if (trace & Ix_MATRIX) m = Ix_MATRIX;
         else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+        else {
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected trace in PathGenerator_next_gotoh_local");
+            return NULL;
+        }
         M[i][j].path = path;
     }
     return NULL;
@@ -4167,7 +4172,7 @@ static PyGetSetDef Aligner_getset[] = {
     score += self->substitution_matrix[kA][kB]; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
+        trace = STARTPOINT; \
     } \
     else if (score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4328,6 +4333,7 @@ static PathGenerator*
 PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
 {
     int i;
+    unsigned char trace;
     Trace** M;
     TraceGapsGotoh** gaps;
     PathGenerator* paths;
@@ -4345,13 +4351,18 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     paths->mode = mode;
     paths->length = 0;
 
+    switch (mode) {
+        case Global: trace = 0; break;
+        case Local: trace = STARTPOINT; break;
+    }
+
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     paths->M = M;
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
-        M[i][0].trace = 0;
+        M[i][0].trace = trace;
     }
     gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
     if (!gaps) goto exit;
@@ -4382,7 +4393,7 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
             gaps[i][0].Iy = 0;
         }
         for (i = 1; i <= nB; i++) {
-            M[0][i].trace = 0;
+            M[0][i].trace = trace;
             gaps[0][i].Ix = 0;
             gaps[0][i].Iy = 0;
         }
@@ -5294,8 +5305,72 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     PyMem_Free(Ix_scores);
     PyMem_Free(Iy_scores);
 
+    /* As we don't allow zero-score extensions to alignments,
+     * we need to remove all traces towards an ENDPOINT.
+     * In addition, some points then won't have any path to a STARTPOINT.
+     * Here, use path as a temporary variable to indicate if the point
+     * is reachable from a STARTPOINT. If it is unreachable, remove all
+     * traces from it, and don't allow it to be an ENDPOINT. It may still
+     * be a valid STARTPOINT. */
+    for (j = 0; j <= nB; j++) M[0][j].path = M_MATRIX;
+    for (i = 1; i <= nA; i++) {
+        M[i][0].path = M_MATRIX;
+        for (j = 1; j <= nB; j++) {
+            /* Remove traces to unreachable points. */
+            trace = M[i][j].trace;
+            if (!(M[i-1][j-1].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i-1][j-1].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i-1][j-1].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (STARTPOINT | M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                if (trace & ENDPOINT) M[i][j].path = 0; /* no extensions after ENDPOINT */
+                else M[i][j].path |= M_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then it is not a STARTPOINT,
+                 * all traces from it can be removed, and it cannot act as
+                 * an ENDPOINT. */
+                M[i][j].path &= ~M_MATRIX;
+                trace = 0;
+            }
+            M[i][j].trace = trace;
+            trace = gaps[i][j].Ix;
+            if (!(M[i-1][j].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i-1][j].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i-1][j].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                M[i][j].path |= Ix_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then
+                 * all traces from it can be removed. */
+                M[i][j].path &= ~Ix_MATRIX;
+                trace = 0;
+            }
+            gaps[i][j].Ix = trace;
+            trace = gaps[i][j].Iy;
+            if (!(M[i][j-1].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i][j-1].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i][j-1].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                M[i][j].path |= Iy_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then
+                 * all traces from it can be removed. */
+                M[i][j].path &= ~Iy_MATRIX;
+                trace = 0;
+            }
+            gaps[i][j].Iy = trace;
+        }
+    }
+
     /* traceback */
     if (maximum == 0) M[0][0].path = DONE;
+    else M[0][0].path = 0;
+
     return Py_BuildValue("fN", maximum, paths);
 exit:
     Py_DECREF(paths);
