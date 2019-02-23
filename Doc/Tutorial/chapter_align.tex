@@ -1615,6 +1615,8 @@ AGAACTC
 <BLANKLINE>
 \end{verbatim}
 
+Note that there is some ambiguity in the definition of the best local alignments if segments with a score 0 can be added to the alignment. We follow the suggestion by Waterman \& Eggert \cite{waterman1987} and disallow such extensions.
+
 \subsection{The pairwise aligner object}
 \label{sec:pairwise-aligner}
 
