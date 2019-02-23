@@ -5144,7 +5144,7 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_temp = M_scores[j];
         M_scores[j] = score + self->substitution_matrix[kA][kB];
         SELECT_TRACE_GOTOH_GLOBAL_GAP(Ix,
-                                      M_scores[j] + gap_open_B,
+                                      M_temp + gap_open_B,
                                       Ix_scores[j] + gap_extend_B,
                                       Iy_scores[j] + gap_open_B);
         Ix_temp = Ix_scores[j];
