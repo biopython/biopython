@@ -15,11 +15,12 @@
 #define HORIZONTAL 0x1
 #define VERTICAL 0x2
 #define DIAGONAL 0x4
-#define ENDPOINT 0x8
+#define STARTPOINT 0x8
+#define ENDPOINT 0x10
 #define M_MATRIX 0x1
 #define Ix_MATRIX 0x2
 #define Iy_MATRIX 0x4
-#define DONE 0x8
+#define DONE 0x3
 #define NONE 0x7
 
 #define OVERFLOW_ERROR -1
@@ -42,8 +43,8 @@ typedef enum {NeedlemanWunschSmithWaterman,
 typedef enum {Global, Local} Mode;
 
 typedef struct {
-    unsigned char trace : 4;
-    unsigned char path : 4;
+    unsigned char trace : 5;
+    unsigned char path : 3;
 } Trace;
 
 typedef struct {
@@ -265,7 +266,7 @@ PathGenerator_smithwaterman_length(PathGenerator* self)
             if (trace & HORIZONTAL) SAFE_ADD(counts[j-1], count);
             if (trace & VERTICAL) SAFE_ADD(counts[j], count);
             temp = counts[j];
-            if (count == 0) count = 1;
+            if (count == 0 && (trace & STARTPOINT)) count = 1;
             counts[j] = count;
         }
     }
@@ -395,7 +396,7 @@ PathGenerator_gotoh_local_length(PathGenerator* self)
             if (trace & M_MATRIX) SAFE_ADD(M_temp, count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_temp, count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_temp, count);
-            if (count == 0) count = 1;
+            if (count == 0 && (trace & STARTPOINT)) count = 1;
             M_temp = M_counts[j];
             M_counts[j] = count;
             if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
@@ -572,7 +573,7 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
             if (trace & M_MATRIX) SAFE_ADD(M_count[i-1][j-1], count);
             if (trace & Ix_MATRIX) SAFE_ADD(Ix_count[i-1][j-1], count);
             if (trace & Iy_MATRIX) SAFE_ADD(Iy_count[i-1][j-1], count);
-            if (count == 0) count = 1;
+            if (count == 0 && (trace & STARTPOINT)) count = 1;
             M_count[i][j] = count;
             if (M[i][j].trace & ENDPOINT) SAFE_ADD(count, total);
             count = 0;
@@ -594,7 +595,6 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                     p++;
                 }
             }
-            if (count == 0) count = 1;
             Ix_count[i][j] = count;
             count = 0;
             p = gaps[i][j].MIy;
@@ -615,7 +615,6 @@ PathGenerator_waterman_smith_beyer_local_length(PathGenerator* self)
                     p++;
                 }
             }
-            if (count == 0) count = 1;
             Iy_count[i][j] = count;
         }
     }
@@ -886,7 +885,7 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
         trace = M[i][j].trace;
     } else {
         /* Find a suitable end point for a path.
-         * Only allow start points ending at the M matrix. */
+         * Only allow end points ending at the M matrix. */
         while (1) {
             if (j < nB) j++;
             else if (i < nA) {
@@ -913,12 +912,18 @@ static PyObject* PathGenerator_next_smithwaterman(PathGenerator* self)
         if (trace & HORIZONTAL) M[i][--j].path = HORIZONTAL;
         else if (trace & VERTICAL) M[--i][j].path = VERTICAL;
         else if (trace & DIAGONAL) M[--i][--j].path = DIAGONAL;
-        else break;
+        else if (trace & STARTPOINT) {
+            self->iA = i;
+            self->iB = j;
+            return _create_path(M, i, j);
+        }
+        else {
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected trace in PathGenerator_next_smithwaterman");
+            return NULL;
+        }
         trace = M[i][j].trace;
     }
-    self->iA = i;
-    self->iB = j;
-    return _create_path(M, i, j);
 }
 
 static PyObject* PathGenerator_next_gotoh_global(PathGenerator* self)
@@ -1151,7 +1156,7 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
             case Ix_MATRIX: trace = gaps[i][j].Ix; break;
             case Iy_MATRIX: trace = gaps[i][j].Iy; break;
         }
-        if (trace == 0) {
+        if (trace == STARTPOINT) {
             self->iA = i;
             self->iB = j;
             return _create_path(M, i, j);
@@ -1174,6 +1179,11 @@ static PyObject* PathGenerator_next_gotoh_local(PathGenerator* self)
         if (trace & M_MATRIX) m = M_MATRIX;
         else if (trace & Ix_MATRIX) m = Ix_MATRIX;
         else if (trace & Iy_MATRIX) m = Iy_MATRIX;
+        else {
+            PyErr_SetString(PyExc_RuntimeError,
+                "Unexpected trace in PathGenerator_next_gotoh_local");
+            return NULL;
+        }
         M[i][j].path = path;
     }
     return NULL;
@@ -1585,10 +1595,15 @@ PathGenerator_next_waterman_smith_beyer_local(PathGenerator* self)
                 if (trace & M_MATRIX) m = M_MATRIX;
                 else if (trace & Ix_MATRIX) m = Ix_MATRIX;
                 else if (trace & Iy_MATRIX) m = Iy_MATRIX;
-                else {
+                else if (trace == STARTPOINT) {
                     self->iA = i;
                     self->iB = j;
                     return _create_path(M, i, j);
+                }
+                else {
+                    PyErr_SetString(PyExc_RuntimeError,
+                        "Unexpected trace in PathGenerator_next_waterman_smith_beyer_local");
+                    return NULL;
                 }
                 M[iA][iB].path = DIAGONAL;
                 break;
@@ -4072,7 +4087,7 @@ static PyGetSetDef Aligner_getset[] = {
     else if (temp > score - epsilon) trace |= VERTICAL; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
+        trace = STARTPOINT; \
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4094,7 +4109,6 @@ static PyGetSetDef Aligner_getset[] = {
     trace = DIAGONAL; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
     } \
     else if (trace & DIAGONAL && score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4161,7 +4175,7 @@ static PyGetSetDef Aligner_getset[] = {
     score += self->substitution_matrix[kA][kB]; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
+        trace = STARTPOINT; \
     } \
     else if (score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4253,7 +4267,7 @@ static PyGetSetDef Aligner_getset[] = {
     score += score4; \
     if (score < epsilon) { \
         score = 0; \
-        trace = 0; \
+        trace = STARTPOINT; \
     } \
     else if (score > maximum - epsilon) { \
         if (score > maximum + epsilon) { \
@@ -4296,14 +4310,19 @@ PathGenerator_create_NWSW(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     paths->M = M;
     if (!M) goto exit;
-    if (mode == Global) trace = VERTICAL;
+    switch (mode) {
+        case Global: trace = VERTICAL; break;
+        case Local: trace = STARTPOINT; break;
+    }
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
         M[i][0].trace = trace;
     }
-    M[0][0].trace = 0;
-    if (mode == Global) trace = HORIZONTAL;
+    if (mode == Global) {
+        M[0][0].trace = 0;
+        trace = HORIZONTAL;
+    }
     for (i = 1; i <= nB; i++) M[0][i].trace = trace;
     M[0][0].path = 0;
     return paths;
@@ -4317,6 +4336,7 @@ static PathGenerator*
 PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
 {
     int i;
+    unsigned char trace;
     Trace** M;
     TraceGapsGotoh** gaps;
     PathGenerator* paths;
@@ -4334,13 +4354,18 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
     paths->mode = mode;
     paths->length = 0;
 
+    switch (mode) {
+        case Global: trace = 0; break;
+        case Local: trace = STARTPOINT; break;
+    }
+
     M = PyMem_Malloc((nA+1)*sizeof(Trace*));
     if (!M) goto exit;
     paths->M = M;
     for (i = 0; i <= nA; i++) {
         M[i] = PyMem_Malloc((nB+1)*sizeof(Trace));
         if (!M[i]) goto exit;
-        M[i][0].trace = 0;
+        M[i][0].trace = trace;
     }
     gaps = PyMem_Malloc((nA+1)*sizeof(TraceGapsGotoh*));
     if (!gaps) goto exit;
@@ -4371,7 +4396,7 @@ PathGenerator_create_Gotoh(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
             gaps[i][0].Iy = 0;
         }
         for (i = 1; i <= nB; i++) {
-            M[0][i].trace = 0;
+            M[0][i].trace = trace;
             gaps[0][i].Ix = 0;
             gaps[0][i].Iy = 0;
         }
@@ -4427,32 +4452,42 @@ PathGenerator_create_WSB(Py_ssize_t nA, Py_ssize_t nB, Mode mode)
             gaps[i][j].MIy = NULL;
             gaps[i][j].IxIy = NULL;
         }
-        M[i][0].trace = 0;
         M[i][0].path = 0;
-        if (mode == Global) {
-            trace = PyMem_Malloc(2*sizeof(int));
-            if (!trace) goto exit;
-            gaps[i][0].MIx = trace;
-            trace[0] = i;
-            trace[1] = 0;
-            trace = PyMem_Malloc(sizeof(int));
-            if (!trace) goto exit;
-            gaps[i][0].IyIx = trace;
-            trace[0] = 0;
+        switch (mode) {
+            case Global:
+                M[i][0].trace = 0;
+                trace = PyMem_Malloc(2*sizeof(int));
+                if (!trace) goto exit;
+                gaps[i][0].MIx = trace;
+                trace[0] = i;
+                trace[1] = 0;
+                trace = PyMem_Malloc(sizeof(int));
+                if (!trace) goto exit;
+                gaps[i][0].IyIx = trace;
+                trace[0] = 0;
+                break;
+            case Local:
+                M[i][0].trace = STARTPOINT;
+                break;
         }
     }
     for (i = 1; i <= nB; i++) {
-        M[0][i].trace = 0;
-        if (mode == Global) {
-            trace = PyMem_Malloc(2*sizeof(int));
-            if (!trace) goto exit;
-            gaps[0][i].MIy = trace;
-            trace[0] = i;
-            trace[1] = 0;
-            trace = PyMem_Malloc(sizeof(int));
-            if (!trace) goto exit;
-            gaps[0][i].IxIy = trace;
-            trace[0] = 0;
+        switch (mode) {
+            case Global:
+                M[0][i].trace = 0;
+                trace = PyMem_Malloc(2*sizeof(int));
+                if (!trace) goto exit;
+                gaps[0][i].MIy = trace;
+                trace[0] = i;
+                trace[1] = 0;
+                trace = PyMem_Malloc(sizeof(int));
+                if (!trace) goto exit;
+                gaps[0][i].IxIy = trace;
+                trace[0] = 0;
+                break;
+            case Local:
+                M[0][i].trace = STARTPOINT;
+                break;
         }
     }
     M[0][0].path = 0;
@@ -4698,6 +4733,38 @@ Aligner_smithwaterman_align(Aligner* self, const char* sA, Py_ssize_t nA,
     kB = CHARINDEX(sB[nB-1]);
     SELECT_TRACE_SMITH_WATERMAN_D;
     PyMem_Free(scores);
+
+    /* As we don't allow zero-score extensions to alignments,
+     * we need to remove all traces towards an ENDPOINT.
+     * In addition, some points then won't have any path to a STARTPOINT.
+     * Here, use path as a temporary variable to indicate if the point
+     * is reachable from a STARTPOINT. If it is unreachable, remove all
+     * traces from it, and don't allow it to be an ENDPOINT. It may still
+     * be a valid STARTPOINT. */
+    for (j = 0; j <= nB; j++) M[0][j].path = 1;
+    for (i = 1; i <= nA; i++) {
+        M[i][0].path = 1;
+        for (j = 1; j <= nB; j++) {
+            trace = M[i][j].trace;
+            /* Remove traces to unreachable points. */
+            if (!M[i-1][j-1].path) trace &= ~DIAGONAL;
+            if (!M[i][j-1].path) trace &= ~HORIZONTAL;
+            if (!M[i-1][j].path) trace &= ~VERTICAL;
+            if (trace & (STARTPOINT | HORIZONTAL | VERTICAL | DIAGONAL)) {
+                /* The point is reachable. */
+                if (trace & ENDPOINT) M[i][j].path = 0; /* no extensions after ENDPOINT */
+                else M[i][j].path = 1;
+            }
+            else {
+                /* The point is not reachable. Then it is not a STARTPOINT,
+                 * all traces from it can be removed, and it cannot act as
+                 * an ENDPOINT. */
+                M[i][j].path = 0;
+                trace = 0;
+            }
+            M[i][j].trace = trace;
+        }
+    }
 
     if (maximum == 0) M[0][0].path = NONE;
     else M[0][0].path = 0;
@@ -5090,7 +5157,7 @@ Aligner_gotoh_global_align(Aligner* self, const char* sA, Py_ssize_t nA,
         M_temp = M_scores[j];
         M_scores[j] = score + self->substitution_matrix[kA][kB];
         SELECT_TRACE_GOTOH_GLOBAL_GAP(Ix,
-                                      M_scores[j] + gap_open_B,
+                                      M_temp + gap_open_B,
                                       Ix_scores[j] + gap_extend_B,
                                       Iy_scores[j] + gap_open_B);
         Ix_temp = Ix_scores[j];
@@ -5251,8 +5318,72 @@ Aligner_gotoh_local_align(Aligner* self, const char* sA, Py_ssize_t nA,
     PyMem_Free(Ix_scores);
     PyMem_Free(Iy_scores);
 
+    /* As we don't allow zero-score extensions to alignments,
+     * we need to remove all traces towards an ENDPOINT.
+     * In addition, some points then won't have any path to a STARTPOINT.
+     * Here, use path as a temporary variable to indicate if the point
+     * is reachable from a STARTPOINT. If it is unreachable, remove all
+     * traces from it, and don't allow it to be an ENDPOINT. It may still
+     * be a valid STARTPOINT. */
+    for (j = 0; j <= nB; j++) M[0][j].path = M_MATRIX;
+    for (i = 1; i <= nA; i++) {
+        M[i][0].path = M_MATRIX;
+        for (j = 1; j <= nB; j++) {
+            /* Remove traces to unreachable points. */
+            trace = M[i][j].trace;
+            if (!(M[i-1][j-1].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i-1][j-1].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i-1][j-1].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (STARTPOINT | M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                if (trace & ENDPOINT) M[i][j].path = 0; /* no extensions after ENDPOINT */
+                else M[i][j].path |= M_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then it is not a STARTPOINT,
+                 * all traces from it can be removed, and it cannot act as
+                 * an ENDPOINT. */
+                M[i][j].path &= ~M_MATRIX;
+                trace = 0;
+            }
+            M[i][j].trace = trace;
+            trace = gaps[i][j].Ix;
+            if (!(M[i-1][j].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i-1][j].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i-1][j].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                M[i][j].path |= Ix_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then
+                 * all traces from it can be removed. */
+                M[i][j].path &= ~Ix_MATRIX;
+                trace = 0;
+            }
+            gaps[i][j].Ix = trace;
+            trace = gaps[i][j].Iy;
+            if (!(M[i][j-1].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i][j-1].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i][j-1].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                M[i][j].path |= Iy_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then
+                 * all traces from it can be removed. */
+                M[i][j].path &= ~Iy_MATRIX;
+                trace = 0;
+            }
+            gaps[i][j].Iy = trace;
+        }
+    }
+
     /* traceback */
     if (maximum == 0) M[0][0].path = DONE;
+    else M[0][0].path = 0;
+
     return Py_BuildValue("fN", maximum, paths);
 exit:
     Py_DECREF(paths);
@@ -5862,8 +5993,79 @@ Aligner_waterman_smith_beyer_local_align(Aligner* self,
     for (i = 0; i <= nA; i++) PyMem_Free(Iy_scores[i]);
     PyMem_Free(Iy_scores);
 
+    /* As we don't allow zero-score extensions to alignments,
+     * we need to remove all traces towards an ENDPOINT.
+     * In addition, some points then won't have any path to a STARTPOINT.
+     * Here, use path as a temporary variable to indicate if the point
+     * is reachable from a STARTPOINT. If it is unreachable, remove all
+     * traces from it, and don't allow it to be an ENDPOINT. It may still
+     * be a valid STARTPOINT. */
+    for (j = 0; j <= nB; j++) M[0][j].path = M_MATRIX;
+    for (i = 1; i <= nA; i++) {
+        M[i][0].path = M_MATRIX;
+        for (j = 1; j <= nB; j++) {
+            /* Remove traces to unreachable points. */
+            trace = M[i][j].trace;
+            if (!(M[i-1][j-1].path & M_MATRIX)) trace &= ~M_MATRIX;
+            if (!(M[i-1][j-1].path & Ix_MATRIX)) trace &= ~Ix_MATRIX;
+            if (!(M[i-1][j-1].path & Iy_MATRIX)) trace &= ~Iy_MATRIX;
+            if (trace & (STARTPOINT | M_MATRIX | Ix_MATRIX | Iy_MATRIX)) {
+                /* The point is reachable. */
+                if (trace & ENDPOINT) M[i][j].path = 0; /* no extensions after ENDPOINT */
+                else M[i][j].path |= M_MATRIX;
+            }
+            else {
+                /* The point is not reachable. Then it is not a STARTPOINT,
+                 * all traces from it can be removed, and it cannot act as
+                 * an ENDPOINT. */
+                M[i][j].path &= ~M_MATRIX;
+                trace = 0;
+            }
+            M[i][j].trace = trace;
+            if (i == nA || j == nB) continue;
+            gapM = gaps[i][j].MIx;
+            gapXY = gaps[i][j].IyIx;
+            nm = 0;
+            ng = 0;
+            for (im = 0; (gap = gapM[im]); im++)
+                if (M[i-gap][j].path & M_MATRIX) gapM[nm++] = gap;
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
+            if (!gapM) goto exit;
+            gapM[nm] = 0;
+            gaps[i][j].MIx = gapM;
+            for (im = 0; (gap = gapXY[im]); im++)
+                if (M[i-gap][j].path & Iy_MATRIX) gapXY[ng++] = gap;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            gapXY[ng] = 0;
+            gaps[i][j].IyIx = gapXY;
+            if (nm==0 && ng==0) M[i][j].path &= ~Ix_MATRIX; /* not reachable */
+            else M[i][j].path |= Ix_MATRIX; /* reachable */
+            gapM = gaps[i][j].MIy;
+            gapXY = gaps[i][j].IxIy;
+            nm = 0;
+            ng = 0;
+            for (im = 0; (gap = gapM[im]); im++)
+                if (M[i][j-gap].path & M_MATRIX) gapM[nm++] = gap;
+            gapM = PyMem_Realloc(gapM, (nm+1)*sizeof(int));
+            if (!gapM) goto exit;
+            gapM[nm] = 0;
+            gaps[i][j].MIy = gapM;
+            for (im = 0; (gap = gapXY[im]); im++)
+                if (M[i][j-gap].path & Ix_MATRIX) gapXY[ng++] = gap;
+            gapXY = PyMem_Realloc(gapXY, (ng+1)*sizeof(int));
+            if (!gapXY) goto exit;
+            gapXY[ng] = 0;
+            gaps[i][j].IxIy = gapXY;
+            if (nm==0 && ng==0) M[i][j].path &= ~Iy_MATRIX; /* not reachable */
+            else M[i][j].path |= Iy_MATRIX; /* reachable */
+        }
+    }
+
     /* traceback */
     if (maximum == 0) M[0][0].path = DONE;
+    else M[0][0].path = 0;
+
     return Py_BuildValue("fN", maximum, paths);
 
 exit:

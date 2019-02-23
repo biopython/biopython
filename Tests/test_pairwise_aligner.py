@@ -265,19 +265,12 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AxBx", "zABz")
-        self.assertEqual(len(alignments), 2)
+        self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 .AxBx
 .|-|.
-zA-Bz
-""")
-        alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
-.AxBx
-.|-|X
 zA-Bz
 """)
 
@@ -308,19 +301,12 @@ Pairwise sequence aligner with parameters
         score = aligner.score("AxBx", "zABz")
         self.assertAlmostEqual(score, 1.9)
         alignments = aligner.align("AxBx", "zABz")
-        self.assertEqual(len(alignments), 2)
+        self.assertEqual(len(alignments), 1)
         alignment = alignments[0]
         self.assertAlmostEqual(alignment.score, 1.9)
         self.assertEqual(str(alignment), """\
 .AxBx
 .|-|.
-zA-Bz
-""")
-        alignment = alignments[1]
-        self.assertAlmostEqual(alignment.score, 1.9)
-        self.assertEqual(str(alignment), """\
-.AxBx
-.|-|X
 zA-Bz
 """)
 
