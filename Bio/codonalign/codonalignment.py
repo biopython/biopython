@@ -124,9 +124,6 @@ class CodonAlignment(MultipleSeqAlignment):
             if len(self) != len(other):
                 raise ValueError("When adding two alignments they must have the same length"
                                  " (i.e. same number or rows)")
-            if len(self) != len(other):
-                raise ValueError("When adding two alignments they must have the same length"
-                                 " (i.e. same number or rows)")
             return self.toMultipleSeqAlignment() + other
         else:
             raise TypeError("Only CodonAlignment or MultipleSeqAlignment object can be "
