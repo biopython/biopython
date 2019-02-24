@@ -103,9 +103,9 @@ class CodonAlignment(MultipleSeqAlignment):
     def __add__(self, other):
         """Combine two codonalignments with the same number of rows by adding them.
 
-        The method also allows to combine a CodonAlignment object with a 
+        The method also allows to combine a CodonAlignment object with a
         MultipleSeqAlignment object. The following rules apply:
-        
+
             * CodonAlignment + CodonAlignment -> CodonAlignment
             * CodonAlignment + MultipleSeqAlignment -> MultipleSeqAlignment
         """
@@ -115,7 +115,8 @@ class CodonAlignment(MultipleSeqAlignment):
                                  " (i.e. same number or rows)")
             if compare_codon_alphabet(self._alphabet, other._alphabet):
                 alpha = self._alphabet
-                merged = (left + right for left, right in zip(self, other))
+                # merged = (left + right for left, right in zip(self, other))
+                merged = (SeqRecord(seq=CodonSeq(str(left.seq) + str(right.seq), alphabet=left.seq.alphabet)) for left, right in zip(self, other))
                 return CodonAlignment(merged, alphabet=alpha)
             else:
                 raise TypeError("Only CodonAlignment with the same CodonAlphabet can be "
@@ -129,7 +130,6 @@ class CodonAlignment(MultipleSeqAlignment):
             raise TypeError("Only CodonAlignment or MultipleSeqAlignment object can be "
                             "added with a CodonAlignment object. "
                             "{} detected.".format(object(other)))
-
 
     def get_aln_length(self):
         return self.get_alignment_length() // 3
