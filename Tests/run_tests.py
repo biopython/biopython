@@ -299,6 +299,7 @@ DOCTEST_MODULES = [
     "Bio.Sequencing",
     "Bio.Sequencing.Phd",
     "Bio.SeqUtils",
+    "Bio.SeqUtils.NucUtils",
     "Bio.SeqUtils.CheckSum",
     "Bio.SeqUtils.CodonUsageIndices",
     "Bio.SeqUtils.CodonUsage",

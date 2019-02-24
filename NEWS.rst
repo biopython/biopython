@@ -78,6 +78,7 @@ which also speeds up parsing FASTA files using ``Bio.SeqIO.parse()``.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aleksandra Jarmolinska (first contribution)
 - Alona Levy-Jurgenson (first contribution)
 - Ariel Aptekmann
 - Brandon Invergo

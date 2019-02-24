@@ -19,6 +19,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>
 - Alan Medlar <https://github.com/ajm>
+- Aleksandra Jarmolinska <https://github.com/dzarmola>
 - Alessio Papini <first dot last at unifi dot it>
 - Allis Tauri <https://github.com/allista>
 - Alona Levy-Jurgenson <https://github.com/alonalj>
