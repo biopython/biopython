@@ -323,7 +323,7 @@ def select_item_consumer(name, attrs):
         consumer = ListConsumer(name, attrs)
     elif itemtype == "Integer":
         consumer = IntegerConsumer(name, attrs)
-    elif itemtype in ("String", "Unknown", "Date"):
+    elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
         consumer = StringConsumer(name, attrs)
     else:
         raise ValueError("Unknown item type %s" % name)
