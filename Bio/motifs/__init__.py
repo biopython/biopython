@@ -108,7 +108,7 @@ def read(handle, format, strict=True):
     >>> with open("motifs/SRF.pfm") as handle:
     ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
-    Seq('GCCCATATATGG', IUPACUnambiguousDNA())
+    Seq('GCCCATATATGG')
 
     Or a single-motif MEME file,
 
@@ -116,7 +116,7 @@ def read(handle, format, strict=True):
     >>> with open("motifs/meme.out") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+    Seq('CTCAATCGTA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
@@ -137,7 +137,7 @@ def read(handle, format, strict=True):
     ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
-    Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+    Seq('TCTACGATTGAG')
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
@@ -245,12 +245,13 @@ class Motif(object):
         elif counts is not None:
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
+            alphabet = alphabet.letters
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
         elif instances is not None:
             self.instances = instances
-            alphabet = self.instances.alphabet
+            alphabet = self.instances.alphabet.letters
             counts = self.instances.count()
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -298,11 +299,11 @@ class Motif(object):
     def __set_pseudocounts(self, value):
         self._pseudocounts = {}
         if isinstance(value, dict):
-            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet)
         else:
             if value is None:
                 value = 0.0
-            self._pseudocounts = dict.fromkeys(self.alphabet.letters, value)
+            self._pseudocounts = dict.fromkeys(self.alphabet, value)
 
     pseudocounts = property(__get_pseudocounts, __set_pseudocounts)
     del __get_pseudocounts
@@ -313,11 +314,11 @@ class Motif(object):
 
     def __set_background(self, value):
         if isinstance(value, dict):
-            self._background = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._background = dict((letter, value[letter]) for letter in self.alphabet)
         elif value is None:
-            self._background = dict.fromkeys(self.alphabet.letters, 1.0)
+            self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
-            if sorted(self.alphabet.letters) != ["A", "C", "G", "T"]:
+            if sorted(self.alphabet) != ["A", "C", "G", "T"]:
                 # TODO - Should this be a ValueError?
                 raise Exception("Setting the background to a single value only "
                                 "works for DNA motifs (in which case the value "
@@ -327,7 +328,7 @@ class Motif(object):
             self._background['G'] = value / 2.0
             self._background['T'] = (1.0 - value) / 2.0
         total = sum(self._background.values())
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             self._background[letter] /= total
 
     background = property(__get_background, __set_background)

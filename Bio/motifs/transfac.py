@@ -249,7 +249,7 @@ XX
                     if length == 0:
                         continue
                     sequence = motif.degenerate_consensus
-                    letters = sorted(motif.alphabet.letters)
+                    letters = sorted(motif.alphabet)
                     line = "      ".join(["P0"] + letters)
 
                     lines.append(line)

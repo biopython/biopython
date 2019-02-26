@@ -87,9 +87,9 @@ def __read_database_and_motifs(record, handle):
     words = line.strip().split()
     record.database = words[1]
     if words[2] == '(nucleotide)':
-        record.alphabet = IUPAC.unambiguous_dna
+        record.alphabet = "GATC"
     elif words[2] == '(peptide)':
-        record.alphabet = IUPAC.protein
+        record.alphabet = "ACDEFGHIKLMNPQRSTVWY"
     for line in handle:
         if 'MOTIF WIDTH' in line:
             break
