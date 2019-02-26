@@ -115,10 +115,8 @@ in the sorted letters in the alphabet of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.alphabet
-IUPACUnambiguousDNA()
->>> m.alphabet.letters
 'GATC'
->>> sorted(m.alphabet.letters)
+>>> sorted(m.alphabet)
 ['A', 'C', 'G', 'T']
 >>> m.counts["A",:]
 (3, 7, 0, 2, 1)
@@ -131,14 +129,14 @@ corresponding columns of the \verb+.counts+ matrix is obtained:
 %cont-doctest
 \begin{verbatim}
 >>> m.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
+Seq('TACGC')
 \end{verbatim}
 as well as an anticonsensus sequence, corresponding to the smallest values in
 the columns of the \verb+.counts+ matrix:
 %cont-doctest
 \begin{verbatim}
 >>> m.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
+Seq('GGGTG')
 \end{verbatim}
 You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
@@ -146,7 +144,7 @@ high counts:
 %cont-doctest
 \begin{verbatim}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
+Seq('WACVC')
 \end{verbatim}
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
@@ -157,9 +155,9 @@ We can also get the reverse complement of a motif:
 \begin{verbatim}
 >>> r = m.reverse_complement()
 >>> r.consensus
-Seq('GCGTA', IUPACUnambiguousDNA())
+Seq('GCGTA')
 >>> r.degenerate_consensus
-Seq('GBGTW', IUPACAmbiguousDNA())
+Seq('GBGTW')
 >>> print(r)
 TTGTA
 GCGTA
@@ -243,7 +241,7 @@ The instances from which this motif was created is stored in the \verb+.instance
 %cont-doctest
 \begin{verbatim}
 >>> print(arnt.instances[:3])
-[Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
+[Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
 >>> for instance in arnt.instances:
 ...     print(instance)
 ...
