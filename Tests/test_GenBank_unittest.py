@@ -697,23 +697,18 @@ class GenBankScannerTests(unittest.TestCase):
     def gb_to_l_cds_f(self, filename, tags2id=None):
         """Gb file to Seq list parse CDS features."""
 
-        handle = open(filename, 'r')
-        if tags2id:
-            l_cds_f = list(self.gb_s.parse_cds_features(handle, tags2id=tags2id))
-        else:
-            l_cds_f = list(self.gb_s.parse_cds_features(handle))
-        handle.close()
+        with open(filename) as handle:
+            if tags2id:
+                l_cds_f = list(self.gb_s.parse_cds_features(handle, tags2id=tags2id))
+            else:
+                l_cds_f = list(self.gb_s.parse_cds_features(handle))
         return l_cds_f
 
     def gb_to_l_r(self, filename, do_features=False):
         """Gb file to Seq list parse records."""
 
-        handle = open(filename, 'r')
-        if do_features:
-            l_gb_r = list(self.gb_s.parse_records(handle, do_features=True))
-        else:
-            l_gb_r = list(self.gb_s.parse_records(handle, do_features=False))
-        handle.close()
+        with open(filename) as handle:
+            l_gb_r = list(self.gb_s.parse_records(handle, do_features=do_features))
         return l_gb_r
 
     def test_genbank_cds_interaction(self):
@@ -798,12 +793,11 @@ class GenBankScannerTests(unittest.TestCase):
     def test_embl_cds_interaction(self):
         """Test EMBL CDS interaction, parse CDS features on embl files."""
 
-        # Test parse CDS features on embl_file
-        handle_embl7046 = open("EMBL/AE017046.embl", "r")
         embl_s = Scanner.EmblScanner()
-        l_cds_f = list(embl_s.parse_cds_features(handle_embl7046))
-        handle_embl7046.close()
 
+        # Test parse CDS features on embl_file
+        with open("EMBL/AE017046.embl") as handle_embl7046:
+            l_cds_f = list(embl_s.parse_cds_features(handle_embl7046))
         # number of records, should be 10
         self.assertEqual(len(l_cds_f), 10)
         # Seq ID
@@ -813,12 +807,11 @@ class GenBankScannerTests(unittest.TestCase):
     def test_embl_record_interaction(self):
         """Test EMBL Record interaction on embl files."""
 
-        #  Test parse records on embl_file
-        handle_embl7046 = open("EMBL/AE017046.embl", "r")
         embl_s = Scanner.EmblScanner()
-        l_embl_r = list(embl_s.parse_records(handle_embl7046, do_features=True))
-        handle_embl7046.close()
 
+        #  Test parse records on embl_file
+        with open("EMBL/AE017046.embl") as handle_embl7046:
+            l_embl_r = list(embl_s.parse_records(handle_embl7046, do_features=True))
         # number of records, should be 1
         self.assertEqual(len(l_embl_r), 1)
         self.assertEqual(l_embl_r[0].id, 'AE017046.1')
