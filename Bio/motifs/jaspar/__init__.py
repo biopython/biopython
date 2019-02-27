@@ -6,7 +6,6 @@
 """JASPAR2014 module."""
 
 from Bio.Seq import Seq
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
 import math
 
@@ -23,7 +22,7 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet=dna, instances=None,
+    def __init__(self, matrix_id, name, alphabet='GATC', instances=None,
                  counts=None, collection=None, tf_class=None, tf_family=None,
                  species=None, tax_group=None, acc=None, data_type=None,
                  medline=None, pazar_id=None, comment=None):
@@ -191,7 +190,7 @@ def write(motifs, format):
 
 def _read_pfm(handle):
     """Read the motif from a JASPAR .pfm file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'GATC'
     counts = {}
 
     letters = "ACGT"
@@ -212,7 +211,7 @@ def _read_pfm(handle):
 
 def _read_sites(handle):
     """Read the motif from JASPAR .sites file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'GATC'
     instances = []
 
     for line in handle:
@@ -261,7 +260,7 @@ def _read_jaspar(handle):
                 2	19	11	50	29	47	22	81	1	6
 
     """
-    alphabet = dna
+    alphabet = 'GATC'
     counts = {}
 
     record = Record()
