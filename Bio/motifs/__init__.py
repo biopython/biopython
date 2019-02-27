@@ -187,7 +187,7 @@ class Instances(list):
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
-                instance = Seq(sequence, alphabet=alphabet)
+                instance = Seq(sequence)
             self.append(instance)
         self.alphabet = alphabet
 
