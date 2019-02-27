@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-from Bio.Alphabet import IUPAC
 from Bio.motifs import meme
 
 
