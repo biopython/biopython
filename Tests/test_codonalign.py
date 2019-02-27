@@ -84,11 +84,17 @@ class TestAddition(unittest.TestCase):
 
     def test_addition_MultipleSeqAlignment(self):
         """Check addition of CodonAlignment and MultipleSeqAlignment"""
-        new_aln = self.codon_aln + self.multi_aln
+        new_aln1 = self.codon_aln + self.multi_aln
 
-        self.assertTrue(isinstance(new_aln, MultipleSeqAlignment))
+        self.assertTrue(isinstance(new_aln1, MultipleSeqAlignment))
         for x in range(len(self.codon_aln)):
-            self.assertEqual(str(new_aln[x].seq), str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq))
+            self.assertEqual(str(new_aln1[x].seq), str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq))
+
+        new_aln2 = self.multi_aln + self.codon_aln
+
+        self.assertTrue(isinstance(new_aln2, MultipleSeqAlignment))
+        for x in range(len(self.codon_aln)):
+            self.assertEqual(str(new_aln2[x].seq), str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq))
 
     def test_addition_CodonAlignment(self):
         """Check addition of CodonAlignment and CodonAlignment"""
