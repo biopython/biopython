@@ -161,6 +161,11 @@ class Instances(list):
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
         from Bio.Seq import Seq
+        try:
+            # Received an old-style alphabet
+            alphabet = alphabet.letters
+        except AttributeError:
+            pass
         if instances is None:
             instances = []
         self.length = None
@@ -175,19 +180,19 @@ class Instances(list):
             except AttributeError:
                 # The instance is a plain string
                 continue
+            try:
+                # Received an old-style alphabet
+                a = a.letters
+            except AttributeError:
+                pass
+            if a is None:
+                # If we didn't get a meaningful alphabet from the instances,
+                # assume it is DNA.
+                a = 'GATC'
             if alphabet is None:
                 alphabet = a
             elif alphabet != a:
                 raise ValueError("Alphabets are inconsistent")
-        try:
-            # Received an old-style alphabet
-            alphabet = alphabet.letters
-        except AttributeError:
-            pass
-        if alphabet is None:
-            # If we didn't get a meaningful alphabet from the instances,
-            # assume it is DNA.
-            alphabet = 'GATC'
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
