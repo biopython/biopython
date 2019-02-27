@@ -246,10 +246,12 @@ class Motif(object):
                             "Specify either instances or counts, "
                             "don't specify both")
         elif counts is not None:
+            try:
+                alphabet = alphabet.letters
+            except AttributeError:
+                pass
             if alphabet is None:
                 alphabet = 'GATC'
-            else:
-                alphabet = alphabet.letters
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length

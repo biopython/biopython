@@ -1475,7 +1475,7 @@ class TestMEME(unittest.TestCase):
         handle = open("motifs/minimal_test.meme")
         record = motifs.parse(handle, 'minimal')
         self.assertEqual(record.version, '4')
-        self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(record.alphabet, 'GATC')
         self.assertEqual(len(record.sequences), 0)
         self.assertEqual(record.command, '')
         self.assertEqual(len(record), 2)
