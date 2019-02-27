@@ -47,16 +47,17 @@ def get_codon_alphabet(codon_table, gap_char="-"):
 
 default_codon_alphabet = get_codon_alphabet(default_codon_table)
 
+
 def compare_codon_alphabet(codon_alphabet_1, codon_alphabet_2):
     """Compare two codon alphabet.
-    
+
     Return True is they have the same letter and gap_char,
     Otherwise return False.
     """
     for codon_alphabet in [codon_alphabet_1, codon_alphabet_2]:
         if not isinstance(codon_alphabet, CodonAlphabet):
             raise TypeError("Only CodonAlphabet object accepted."
-                        "{} is provided.".format(object(codon_alphabet)))
+                            "{} is provided.".format(object(codon_alphabet)))
     if set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters) and \
             codon_alphabet_1.gap_char == codon_alphabet_2.gap_char:
         return True
