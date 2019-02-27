@@ -1,5 +1,6 @@
 # Copyright 2013 by Kai Blin.
 # Revisions copyright 2015-2016 by Peter Cock.
+# Revisions copyright 2019 by Sergio Valqui.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -686,6 +687,138 @@ class OutputTests(unittest.TestCase):
         out_handle.seek(0)
         out_lines = out_handle.readlines()
         self.assertEqual(out_lines[0], invalid_line)
+
+
+class GenBankScannerTests(unittest.TestCase):
+    """GenBank Scanner tests, test parsing gbk and embl files."""
+
+    gb_s = Scanner.GenBankScanner()
+
+    def gb_to_l_cds_f(self, filename, tags2id=None):
+        """Gb file to Seq list parse CDS features."""
+
+        with open(filename) as handle:
+            if tags2id:
+                l_cds_f = list(self.gb_s.parse_cds_features(handle, tags2id=tags2id))
+            else:
+                l_cds_f = list(self.gb_s.parse_cds_features(handle))
+        return l_cds_f
+
+    def gb_to_l_r(self, filename, do_features=False):
+        """Gb file to Seq list parse records."""
+
+        with open(filename) as handle:
+            l_gb_r = list(self.gb_s.parse_records(handle, do_features=do_features))
+        return l_gb_r
+
+    def test_genbank_cds_interaction(self):
+        """Test CDS interaction, parse CDS features on gb(k) files."""
+
+        # Test parse CDS features on NC_000932.gb
+        l_cds_f = self.gb_to_l_cds_f("GenBank/NC_000932.gb")
+        # number of records, should be 85
+        self.assertEqual(len(l_cds_f), 85)
+        # Seq ID
+        self.assertEqual(l_cds_f[0].id, 'NP_051037.1')
+        self.assertEqual(l_cds_f[84].id, 'NP_051123.1')
+
+        # Test parse CDS features on NC_005816.gb, Tag to ID
+        l_cds_f = self.gb_to_l_cds_f("GenBank/NC_005816.gb",
+                                     tags2id=('gene', 'locus_tag', 'product'))
+        # number of records, should be 10
+        self.assertEqual(len(l_cds_f), 10)
+        # Seq ID
+        self.assertEqual(l_cds_f[0].id, '<unknown id>')
+        self.assertEqual(l_cds_f[0].name, 'YP_pPCP01')
+
+        # Test parse CDS features on NC_000932.gb and NC_005816.gb combined
+        l_cds_f1 = self.gb_to_l_cds_f("GenBank/NC_000932.gb",
+                                      tags2id=('gene', 'locus_tag', 'product'))
+        l_cds_f2 = self.gb_to_l_cds_f("GenBank/NC_005816.gb",
+                                      tags2id=('gene', 'locus_tag', 'product'))
+        l_cds_combined = l_cds_f1 + l_cds_f2
+        # number of records combined, should be 95
+        self.assertEqual(len(l_cds_combined), 95)
+        # Seq ID
+        self.assertEqual(l_cds_combined[0].id, 'rps12')
+        self.assertEqual(l_cds_combined[0].description, 'ribosomal protein S12')
+        self.assertEqual(l_cds_combined[94].id, '<unknown id>')
+        self.assertEqual(l_cds_combined[94].description, 'hypothetical protein')
+
+    def test_genbank_interaction(self):
+        """Test GenBank records interaction on gbk files."""
+
+        # Test parse records, on NC_005816, do_features False
+        l_r = self.gb_to_l_r("GenBank/NC_005816.gb", do_features=False)
+        # number of records, should be 1
+        self.assertEqual(len(l_r), 1)
+        self.assertEqual(l_r[0].id, 'NC_005816.1')
+        self.assertEqual(l_r[0].name, 'NC_005816')
+        self.assertEqual(l_r[0].description, 'Yersinia pestis biovar '
+                                             'Microtus str. 91001 plasmid '
+                                             'pPCP1, complete sequence')
+        self.assertEqual(len(l_r[0].features), 0)
+
+        # Test parse records on NC_005816, do_features True
+        l_r = self.gb_to_l_r("GenBank/NC_005816.gb", do_features=True)
+        # number of records, should be 1
+        self.assertEqual(len(l_r), 1)
+        self.assertEqual(l_r[0].id, 'NC_005816.1')
+        self.assertEqual(l_r[0].name, 'NC_005816')
+        self.assertEqual(l_r[0].description, 'Yersinia pestis biovar '
+                                             'Microtus str. 91001 plasmid '
+                                             'pPCP1, complete sequence')
+        self.assertEqual(len(l_r[0].features), 41)
+
+        # Test parse records on "GenBank/NC_000932.gb", do_features False
+        l_r = self.gb_to_l_r("GenBank/NC_000932.gb", do_features=False)
+        # number of records, should be 1
+        self.assertEqual(len(l_r), 1)
+        self.assertEqual(l_r[0].id, 'NC_000932.1')
+        self.assertEqual(l_r[0].name, 'NC_000932')
+        self.assertEqual(l_r[0].description, 'Arabidopsis thaliana chloroplast, '
+                                             'complete genome')
+        self.assertEqual(len(l_r[0].features), 0)
+
+        # Test parse records on NC_000932, do_features True
+        l_r = self.gb_to_l_r("GenBank/NC_000932.gb", do_features=True)
+        # number of records, should be 1
+        self.assertEqual(len(l_r), 1)
+        self.assertEqual(l_r[0].id, 'NC_000932.1')
+        self.assertEqual(l_r[0].name, 'NC_000932')
+        self.assertEqual(l_r[0].description, 'Arabidopsis thaliana chloroplast, '
+                                             'complete genome')
+        self.assertEqual(len(l_r[0].features), 259)
+
+    def test_embl_cds_interaction(self):
+        """Test EMBL CDS interaction, parse CDS features on embl files."""
+
+        embl_s = Scanner.EmblScanner()
+
+        # Test parse CDS features on embl_file
+        with open("EMBL/AE017046.embl") as handle_embl7046:
+            l_cds_f = list(embl_s.parse_cds_features(handle_embl7046))
+        # number of records, should be 10
+        self.assertEqual(len(l_cds_f), 10)
+        # Seq ID
+        self.assertEqual(l_cds_f[0].id, 'AAS58758.1')
+        self.assertEqual(l_cds_f[0].description, 'putative transposase')
+
+    def test_embl_record_interaction(self):
+        """Test EMBL Record interaction on embl files."""
+
+        embl_s = Scanner.EmblScanner()
+
+        #  Test parse records on embl_file
+        with open("EMBL/AE017046.embl") as handle_embl7046:
+            l_embl_r = list(embl_s.parse_records(handle_embl7046, do_features=True))
+        # number of records, should be 1
+        self.assertEqual(len(l_embl_r), 1)
+        self.assertEqual(l_embl_r[0].id, 'AE017046.1')
+        self.assertEqual(l_embl_r[0].description, 'Yersinia pestis biovar Microtus '
+                                                  'str. 91001 plasmid pPCP1, complete '
+                                                  'sequence.')
+        self.assertEqual(len(l_embl_r[0].features), 29)
 
 
 if __name__ == "__main__":
