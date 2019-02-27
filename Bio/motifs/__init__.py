@@ -244,8 +244,9 @@ class Motif(object):
                             "don't specify both")
         elif counts is not None:
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
-            alphabet = alphabet.letters
+                alphabet = 'GATC'
+            else:
+                alphabet = alphabet.letters
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -260,7 +261,7 @@ class Motif(object):
             self.instances = None
             self.length = None
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
+                alphabet = 'GATC'
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
