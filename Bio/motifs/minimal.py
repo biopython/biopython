@@ -136,7 +136,7 @@ def _read_alphabet(record, handle):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip().replace('ALPHABET= ', '')
     if line == 'ACGT':
-        al = 'GATC'
+        al = 'ACGT'
     else:
         al = 'ACDEFGHIKLMNPQRSTVWY'
     record.alphabet = al

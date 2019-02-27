@@ -115,7 +115,7 @@ in the sorted letters in the alphabet of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.alphabet
-'GATC'
+'ACGT'
 >>> sorted(m.alphabet)
 ['A', 'C', 'G', 'T']
 >>> m.counts["A",:]
@@ -589,7 +589,7 @@ The header information is stored in attributes:
 >>> record.command
 'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s'
 >>> record.alphabet
-IUPACUnambiguousDNA()
+'ACGT'
 >>> record.sequences
 ['CHO1', 'CHO2', 'FAS1', 'FAS2', 'ACC1', 'INO1', 'OPI3']
 \end{verbatim}
@@ -632,7 +632,7 @@ in which the motif was found, providing some information on each instance:
 >>> len(motif.instances)
 7
 >>> motif.instances[0]
-Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
+Instance('TTCACATGCCGC', 'ACGT')
 >>> motif.instances[0].motif_name
 'Motif 1'
 >>> motif.instances[0].sequence_name
@@ -728,7 +728,7 @@ store any additional information about the motif:
 \begin{verbatim}
 >>> motif = record[0]
 >>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
-Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
+Seq('SRACAGGTGKYG')
 >>> motif["ID"] # Using motif as a dictionary
 'motif1'
 \end{verbatim}
@@ -965,11 +965,11 @@ consensus, anticonsensus, and degenerate consensus sequences:
 %cont-doctest
 \begin{verbatim}
 >>> pwm.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
+Seq('TACGC')
 >>> pwm.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
+Seq('GGGTG')
 >>> pwm.degenerate_consensus
-Seq('WACNC', IUPACAmbiguousDNA())
+Seq('WACNC')
 \end{verbatim}
 Note that due to the pseudocounts, the degenerate consensus sequence
 calculated from the position-weight matrix is slightly different
@@ -978,7 +978,7 @@ in the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
+Seq('WACVC')
 \end{verbatim}
 The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
 %cont-doctest
@@ -1391,7 +1391,7 @@ which is similar to our test motif \verb|m|:
 ...    m_reb1 = motifs.read(handle, "pfm")
 ...
 >>> m_reb1.consensus
-Seq('GTTACCCGG', IUPACUnambiguousDNA())
+Seq('GTTACCCGG')
 >>> print(m_reb1.counts)
         0      1      2      3      4      5      6      7      8
 A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
@@ -1478,7 +1478,7 @@ functionality, by adding additional information about the instances.
 %cont-doctest
 \begin{verbatim}
 >>> motifsM[0].consensus
-Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+Seq('CTCAATCGTA')
 >>> motifsM[0].instances[0].sequence_name
 'SEQ10;'
 >>> motifsM[0].instances[0].start

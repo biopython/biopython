@@ -48,7 +48,7 @@ def read(handle):
             number = int(words[1])
             instances = []
         elif line[:3] == "MAP":
-            alphabet = "GATC"
+            alphabet = "ACGT"
             instances = Instances(instances, alphabet)
             motif = Motif(alphabet, instances)
             motif.score = float(line.split()[-1])

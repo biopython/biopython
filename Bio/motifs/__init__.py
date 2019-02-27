@@ -49,21 +49,21 @@ def parse(handle, format, strict=True):
     ...         print(m.consensus)
     ...
     TCTACGATTGAG
-    CTGCAGCTAGCTACGAGTGAG
-    GTGCTCTAAGCATAGTAGGCG
+    CTGCACCTAGCTACGAGTGAG
+    GTGCCCTAAGCATACTAGGCG
     GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
-    CCACGCTAAGAGAGGTGCCGGAG
-    GCGCGTCGCTGAGCA
+    CCACGCTAAGAGAAGTGCCGGAG
+    GCACGTCCCTGAGCA
     GTCCATCGCAAAGCGTGGGGC
-    GGGATCAGAGGGCCG
-    TGGAGGCGGGG
-    GACCAGAGCTTCGCATGGGGG
-    GGCGTGCGTG
-    GCTGGTTGCTGTTCATTAGG
-    GCCGGCGGCAGCTAAAAGGG
-    GAGGCCGGGGAT
-    CGACTCGTGCTTAGAAGG
+    GAGATCAGAGGGCCG
+    TGGACGCGGGG
+    GACCAGAGCCTCGCATGGGGG
+    AGCGCGCGTG
+    GCCGGTTGCTGTTCATTAGG
+    ACCGACGGCAGCTAAAAGGG
+    GACGCCGGGGAT
+    CGACTCGCGCTTACAAGG
 
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
@@ -188,7 +188,7 @@ class Instances(list):
             if a is None:
                 # If we didn't get a meaningful alphabet from the instances,
                 # assume it is DNA.
-                a = 'GATC'
+                a = 'ACGT'
             if alphabet is None:
                 alphabet = a
             elif alphabet != a:
@@ -256,7 +256,7 @@ class Motif(object):
             except AttributeError:
                 pass
             if alphabet is None:
-                alphabet = 'GATC'
+                alphabet = 'ACGT'
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -271,7 +271,7 @@ class Motif(object):
             self.instances = None
             self.length = None
             if alphabet is None:
-                alphabet = 'GATC'
+                alphabet = 'ACGT'
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None

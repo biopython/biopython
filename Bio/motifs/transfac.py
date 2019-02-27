@@ -188,7 +188,7 @@ def read(handle, strict=True):
             references.append(reference)
         elif key == '//':
             if counts is not None:
-                motif = Motif(alphabet='GATC', counts=counts)
+                motif = Motif(alphabet='ACGT', counts=counts)
                 motif.update(annotations)
                 motif.references = references
                 record.append(motif)

@@ -428,7 +428,7 @@ class JASPAR5(object):
         counts = {}
         cur = self.dbh.cursor()
 
-        for base in 'GATC':
+        for base in 'ACGT':
             base_counts = []
 
             cur.execute("""select val from MATRIX_DATA where ID = %s
@@ -440,7 +440,7 @@ class JASPAR5(object):
 
             counts[base] = [float(x) for x in base_counts]
 
-        return matrix.GenericPositionMatrix('GATC', counts)
+        return matrix.GenericPositionMatrix('ACGT', counts)
 
     def _fetch_internal_id_list(
         self, collection=JASPAR_DFLT_COLLECTION, tf_name=None, tf_class=None,
