@@ -14,12 +14,7 @@ parser (which is now deprecated).
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio.Blast import NCBIStandalone
+from Bio.SearchIO._legacy import NCBIStandalone
 
 
 __all__ = ('BlastTextParser', )
@@ -35,6 +30,7 @@ class BlastTextParser(object):
         self.blast_iter = NCBIStandalone.Iterator(handle, blast_parser)
 
     def __iter__(self):
+        """Iterate over BlastTextParser, yields query results."""
         for rec in self.blast_iter:
             # set attributes to SearchIO's
             # get id and desc

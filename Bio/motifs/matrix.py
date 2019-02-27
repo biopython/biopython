@@ -67,6 +67,7 @@ except ImportError:
 
 
 class GenericPositionMatrix(dict):
+    """Base class for the support of position matrix operations."""
 
     def __init__(self, alphabet, values):
         """Initialize the class."""
@@ -81,6 +82,7 @@ class GenericPositionMatrix(dict):
         self._letters = sorted(self.alphabet.letters)
 
     def __str__(self):
+        """Return a string containing nucleotides and counts of the alphabet in the Matrix."""
         words = ["%6d" % i for i in range(self.length)]
         line = "   " + " ".join(words)
         lines = [line]
@@ -92,6 +94,7 @@ class GenericPositionMatrix(dict):
         return text
 
     def __getitem__(self, key):
+        """Return the 0osition matrix of index key."""
         if isinstance(key, tuple):
             if len(key) == 2:
                 key1, key2 = key
@@ -196,6 +199,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def anticonsensus(self):
+        """Return the anticonsensus sequence."""
         sequence = ""
         for i in range(self.length):
             try:
@@ -214,6 +218,7 @@ class GenericPositionMatrix(dict):
 
     @property
     def degenerate_consensus(self):
+        """Return the degenerate consensus sequence."""
         # Following the rules adapted from
         # D. R. Cavener: "Comparison of the consensus sequence flanking
         # translational start sites in Drosophila and vertebrates."
@@ -277,6 +282,7 @@ class GenericPositionMatrix(dict):
         return gc_total / total
 
     def reverse_complement(self):
+        """Compute reverse complement."""
         values = {}
         if isinstance(self.alphabet, Alphabet.RNAAlphabet):
             values["A"] = self["U"][::-1]
@@ -291,6 +297,7 @@ class GenericPositionMatrix(dict):
 
 
 class FrequencyPositionMatrix(GenericPositionMatrix):
+    """Class for the support of frequency calculations on the Position Matrix."""
 
     def normalize(self, pseudocounts=None):
         """Create and return a position-weight matrix by normalizing the counts matrix.
@@ -322,6 +329,7 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
 
 
 class PositionWeightMatrix(GenericPositionMatrix):
+    """Class for the support of weight calculations on the Position Matrix."""
 
     def __init__(self, alphabet, counts):
         """Initialize the class."""
@@ -378,6 +386,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
 
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
+    """Class for the support of Position Specific Scoring Matrix calculations."""
 
     def calculate(self, sequence):
         """Return the PWM score for a given sequence for all positions.
@@ -457,6 +466,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     @property
     def gc_content(self):
+        """Compute the GC-ratio."""
         raise Exception("Cannot compute the %GC composition of a PSSM")
 
     def mean(self, background=None):
@@ -529,6 +539,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return 1 - max_p, max_o
 
     def dist_pearson_at(self, other, offset):
+        """Return the similarity score based on pearson correlation at the given offset."""
         letters = self._letters
         sx = 0.0   # \sum x
         sy = 0.0   # \sum y

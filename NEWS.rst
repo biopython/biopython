@@ -3,13 +3,13 @@ News for the Biopython Project
 
 This file contains release notes and general news about the Biopython project.
 See also the DEPRECATED file which tracks the removal of obsolete modules or
-functions, and online http://biopython.org/wiki/News and
-http://news.open-bio.org/news/category/obf-projects/biopython/
+functions, and online https://biopython.org/wiki/News and
+https://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released) Biopython 1.73
-==============================================
+(In progress, not yet released): Biopython 1.74
+===============================================
 
 This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7.
 It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
@@ -18,6 +18,43 @@ As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
+
+The NCBI now allows longer accessions in the GenBank file LOCUS line, meaning
+the fields may not always follow the historical column based positions. We
+no longer give a warning when parsing these. We now allow writing such files
+(although with a warning as support for reading them is not yet widespread).
+
+Support for the mysqlclient package, a fork of MySQLdb, has been added.
+
+We now capture the IDcode field from PDB Header records.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Bernhard Thiel
+- Chris Rands
+- Lenna Peterson
+- Nick Negretti
+- Peter Cock
+- Ralf Stephan
+- Sergio Valqui
+
+18 December 2018: Biopython 1.73
+================================
+
+This release of Biopython supports Python 2.7, 3.4, 3.5, 3.6 and 3.7.
+It has also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
+The dictionary-like indexing in SeqIO and SearchIO will now explicitly preserve
+record order to match a behaviour change in the Python standard dict object.
+This means looping over the index will load the records in the on-disk order,
+which will be much faster (previously it would be effectively at random, based
+on the key hash sorting).
 
 The "grant" matrix in Bio.SubsMat.MatrixInfo has been replaced as our original
 values taken from Gerhard Vogt's old webpages at EMBL Heidelberg were
@@ -42,20 +79,25 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Alona Levy-Jurgenson (first contribution)
+- Ariel Aptekmann
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
 - Darcy Mason (first contribution)
-- Juraj Szász (first contribution)
+- Devang Thakkar (first contribution)
+- Ivan Antonov (first contribution)
 - Jeremy LaBarage (first contribution)
+- Juraj Szász (first contribution)
 - Kai Blin
 - Konstantin Vdovkin (first contribution)
+- Manuel Nuno Melo (first contribution)
 - Maximilian Greil
 - Nick Negretti (first contribution)
 - Peter Cock
 - Rona Costello (first contribution)
 - Spencer Bliven
 - Wibowo 'Bow' Arindrarto
+- Yi Hsiao (first contribution)
 
 
 21 June 2018: Biopython 1.72
@@ -2347,7 +2389,7 @@ Aug17-18, 2000: Bioinformatics Open Source Conference 2000
 ==========================================================
 
 We had a very good Birds-of-a-Feather meeting:
-http://www.biopython.org/pipermail/biopython/2000-August/000360.html
+http://mailman.open-bio.org/pipermail/biopython/2000-August/000360.html
 
 
 Aug 2, 2000: Biopython 0.90d02 is released.
@@ -2377,12 +2419,12 @@ August 1999: Biopython project founded.
 Call for Participation sent out to relevant mailing lists, news
 groups.
 
-The Biopython Project (http://www.biopython.org/) is a new open
+The Biopython Project (https://www.biopython.org/) is a new open
 collaborative effort to develop freely available Python libraries and
 applications that address the needs of current and future work in
 bioinformatics, including sequence analysis, structural biology,
 pathways, expression data, etc.  When available, the source code will
-be released as open source (http://www.biopython.org/License.shtml)
+be released as open source (https://github.com/biopython/biopython/blob/9c4785fc9eaf8a3bc436c6c0b16e7a05019cade1/LICENSE)
 under terms similar to Python.
 
 This is a Call for Participation for interested people to join the

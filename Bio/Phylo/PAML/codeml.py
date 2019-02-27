@@ -3,6 +3,11 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of CODEML.
+
+Maximum likelihood analysis using codon substitution models.
+"""
+
 from __future__ import print_function
 
 import os.path
@@ -201,6 +206,6 @@ def read(results_file):
                                           multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
-    if len(results) == 0:
+    if not results:
         raise ValueError("Invalid results file")
     return results

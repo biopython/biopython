@@ -281,27 +281,32 @@ class HSP(_BaseHSP):
             self._items.append(fragment)
 
     def __repr__(self):
+        """Return string representation of HSP object."""
         return "%s(hit_id=%r, query_id=%r, %r fragments)" % \
-                (self.__class__.__name__, self.hit_id, self.query_id, len(self))
+               (self.__class__.__name__, self.hit_id, self.query_id, len(self))
 
     def __iter__(self):
+        """Iterate over HSP items."""
         return iter(self._items)
 
     def __contains__(self, fragment):
+        """Return True if HSPFragment is on HSP items."""
         return fragment in self._items
 
     def __len__(self):
+        """Return number of HSPs items."""
         return len(self._items)
 
     # Python 3:
     def __bool__(self):
+        """Return True if it has HSPs."""
         return bool(self._items)
 
     # Python 2:
     __nonzero__ = __bool__
 
     def __str__(self):
-
+        """Return a human readable summary of the HSP object."""
         lines = []
         # set hsp info line
         statline = []
@@ -343,6 +348,7 @@ class HSP(_BaseHSP):
             return self._str_hsp_header() + '\n' + '\n'.join(lines)
 
     def __getitem__(self, idx):
+        """Return object of index idx."""
         # if key is slice, return a new HSP instance
         if isinstance(idx, slice):
             obj = self.__class__(self._items[idx])
@@ -351,6 +357,7 @@ class HSP(_BaseHSP):
         return self._items[idx]
 
     def __setitem__(self, idx, fragments):
+        """Set an item of index idx with the given fragments."""
         # handle case if hsps is a list of hsp
         if isinstance(fragments, (list, tuple)):
             for fragment in fragments:
@@ -361,6 +368,7 @@ class HSP(_BaseHSP):
         self._items[idx] = fragments
 
     def __delitem__(self, idx):
+        """Delete item of index idx."""
         # note that this may result in an empty HSP object, which should be
         # invalid
         del self._items[idx]
@@ -729,6 +737,7 @@ class HSPFragment(_BaseHSP):
                 setattr(self, seq_type, None)
 
     def __repr__(self):
+        """Return HSPFragment info; hit id, query id, number of columns."""
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
         try:
             info += ", %i columns" % len(self)
@@ -737,12 +746,15 @@ class HSPFragment(_BaseHSP):
         return "%s(%s)" % (self.__class__.__name__, info)
 
     def __len__(self):
+        """Return alignment span."""
         return self.aln_span
 
     def __str__(self):
+        """Return string of HSP header and alignments."""
         return self._str_hsp_header() + '\n' + self._str_aln()
 
     def __getitem__(self, idx):
+        """Return object of index idx."""
         if self.aln is not None:
             obj = self.__class__(
                     hit_id=self.hit_id, query_id=self.query_id,
@@ -1010,9 +1022,11 @@ class HSPFragment(_BaseHSP):
                          doc="Hit sequence reading frame, defaults to None.")
 
     def _query_frame_get(self):
+        """Get query sequence reading frame (PRIVATE)."""
         return self._query_frame
 
     def _query_frame_set(self, value):
+        """Set query sequence reading frame (PRIVATE)."""
         self._query_frame = self._prep_frame(value)
 
     query_frame = property(fget=_query_frame_get, fset=_query_frame_set,
@@ -1039,9 +1053,11 @@ class HSPFragment(_BaseHSP):
         return coord
 
     def _hit_start_get(self):
+        """Get the sequence hit start coordinate (PRIVATE)."""
         return self._hit_start
 
     def _hit_start_set(self, value):
+        """Set the sequence hit start coordinate (PRIVATE)."""
         self._hit_start = self._prep_coord(value, 'hit_end', le)
 
     hit_start = property(fget=_hit_start_get, fset=_hit_start_set,
@@ -1049,9 +1065,11 @@ class HSPFragment(_BaseHSP):
                              "None.")
 
     def _query_start_get(self):
+        """Get the query sequence start coordinate (PRIVATE)."""
         return self._query_start
 
     def _query_start_set(self, value):
+        """Set the query sequence start coordinate (PRIVATE)."""
         self._query_start = self._prep_coord(value, 'query_end', le)
 
     query_start = property(fget=_query_start_get, fset=_query_start_set,
@@ -1059,18 +1077,22 @@ class HSPFragment(_BaseHSP):
                                "None.")
 
     def _hit_end_get(self):
+        """Get the hit sequence end coordinate (PRIVATE)."""
         return self._hit_end
 
     def _hit_end_set(self, value):
+        """Set the hit sequence end coordinate (PRIVATE)."""
         self._hit_end = self._prep_coord(value, 'hit_start', ge)
 
     hit_end = property(fget=_hit_end_get, fset=_hit_end_set,
-                       doc="Hit sequence start coordinate, defaults to None.")
+                       doc="Hit sequence end coordinate, defaults to None.")
 
     def _query_end_get(self):
+        """Get the query sequence end coordinate (PRIVATE)."""
         return self._query_end
 
     def _query_end_set(self, value):
+        """Set the query sequence end coordinate (PRIVATE)."""
         self._query_end = self._prep_coord(value, 'query_start', ge)
 
     query_end = property(fget=_query_end_get, fset=_query_end_set,
@@ -1078,6 +1100,7 @@ class HSPFragment(_BaseHSP):
 
     # coordinate-dependent properties #
     def _hit_span_get(self):
+        """Return the number of residues covered by the hit sequence (PRIVATE)."""
         try:
             return self.hit_end - self.hit_start
         except TypeError:  # triggered if any of the coordinates are None
@@ -1088,6 +1111,7 @@ class HSPFragment(_BaseHSP):
                             "sequence.")
 
     def _query_span_get(self):
+        """Return the number or residues covered by the query (PRIVATE)."""
         try:
             return self.query_end - self.query_start
         except TypeError:  # triggered if any of the coordinates are None
@@ -1098,12 +1122,14 @@ class HSPFragment(_BaseHSP):
                               "sequence.")
 
     def _hit_range_get(self):
+        """Return the start and end of a hit (PRIVATE)."""
         return (self.hit_start, self.hit_end)
 
     hit_range = property(fget=_hit_range_get,
                          doc="Tuple of hit start and end coordinates.")
 
     def _query_range_get(self):
+        """Return the start and end of a query (PRIVATE)."""
         return (self.query_start, self.query_end)
 
     query_range = property(fget=_query_range_get,

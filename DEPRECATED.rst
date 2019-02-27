@@ -103,8 +103,9 @@ id(seq1) == id(seq2), as required.
 
 Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
 ========================================================
-Deprecated as of Release 1.64. You should now use str(Bio.Seq.Seq) or
-str(Bio.Seq.MutableSeq) instead of the tostring() methods.
+Deprecated in release 1.64, and removed in release 1.73.
+You should now use str(Bio.Seq.Seq) or str(Bio.Seq.MutableSeq) instead of
+the tostring() methods.
 
 Iterator .next() methods
 ========================
@@ -259,6 +260,9 @@ which was declared obsolete in Release 1.54, and deprecated in Release 1.63.
 For some time now, both the NCBI and Biopython have encouraged people to
 parse the XML output instead, however Bio.SearchIO will initially attempt
 to support plain text BLAST output.
+
+The module was removed in Release 1.72 from the public API. It lives now
+in maintenance mode in Bio.SearchIO._legacy to preserve existing functionality.
 
 Bio.Blast.Applications
 ======================
@@ -740,19 +744,20 @@ Bio.ParserSupport
 =================
 ``Bio.ParserSupport`` was declared obsolete in Release 1.59, and deprecated in
 Release 1.63. The Martel specific ``EventGenerator`` was removed in Release
-1.67.
+1.67, and the entire module was removed in Release 1.72.
 
 ``Bio.ParserSupport.SGMLStrippingConsumer`` was deprecated in Release 1.59, and
 removed in Release 1.61.
 
 Bio.KDTree
 ==========
-This module was declared obsolete in Release 1.72. As of Release 1.72, KDTree
-data structures and the functionality previously available in Bio.KDTree are
-provided in a new module ``Bio.PDB.kdtrees``.
+This module was declared obsolete in Release 1.72, and deprecated in Release
+1.74. As of Release 1.72, KDTree data structures and the functionality
+previously available in ``Bio.KDTree`` are provided in a new module
+``Bio.PDB.kdtrees``.
 
 Bio.trie, Bio.triefind
 ======================
-These modules were declared obsolete in Release 1.72. We encourage users to
-switch to alternative libraries implementing a trie data structure, for example
-pygtrie.
+These modules were declared obsolete in Release 1.72, and deprecated in
+Release 1.73. We encourage users to switch to alternative libraries
+implementing a trie data structure, for example pygtrie.

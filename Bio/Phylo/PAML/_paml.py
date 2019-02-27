@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
+
 from __future__ import print_function
 
 import os
@@ -34,9 +36,11 @@ class Paml(object):
         self._options = {}  # will be set in subclasses
 
     def write_ctl_file(self):
+        """Write control file."""
         pass
 
     def read_ctl_file(self):
+        """Read control file."""
         pass
 
     def print_options(self):

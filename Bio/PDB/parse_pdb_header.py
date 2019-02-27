@@ -132,11 +132,58 @@ def parse_pdb_header(infile):
     return _parse_pdb_header_list(header)
 
 
+def _parse_remark_465(line):
+    """Parse missing residue remarks.
+
+    Returns a dictionary describing the missing residue.
+    The specification for REMARK 465 at
+    http://www.wwpdb.org/documentation/file-format-content/format33/remarks2.html#REMARK%20465
+    only gives templates, but does not say they have to be followed.
+    So we assume that not all pdb-files with a REMARK 465 can be understood.
+
+    Returns a dictionary with the following keys:
+    "model", "res_name", "chain", "ssseq", "insertion"
+    """
+    if line:
+        # Note that line has been stripped.
+        assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
+    pattern = re.compile(r"""
+                (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
+                 [A-Z]{1,3})                  # Or only residue name with
+                                              # 1 (RNA) to 3 letters
+                \s ([A-Za-z0-9])              # A single character chain
+                \s+(\d+[A-Za-z]?)$            # Residue number: A digit followed
+                                              # by an optional insertion code
+                                              # (Hetero-flags make no sense in
+                                              # context with missing res)
+                """, re.VERBOSE)
+    match = pattern.match(line)
+    if match is None:
+        return None
+    residue = {}
+    if " " in match.group(1):
+        model, residue["res_name"] = match.group(1).split(" ")
+        residue["model"] = int(model)
+    else:
+        residue["model"] = None
+        residue["res_name"] = match.group(1)
+    residue["chain"] = match.group(2)
+    try:
+        residue["ssseq"] = int(match.group(3))
+    except ValueError:
+        residue["insertion"] = match.group(3)[-1]
+        residue["ssseq"] = int(match.group(3)[:-1])
+    else:
+        residue["insertion"] = None
+    return residue
+
+
 def _parse_pdb_header_list(header):
     # database fields
     dict = {
         'name': "",
         'head': '',
+        'idcode': '',
         'deposition_date': "1909-01-08",
         'release_date': "1909-01-08",
         'structure_method': "unknown",
@@ -144,7 +191,9 @@ def _parse_pdb_header_list(header):
         'structure_reference': "unknown",
         'journal_reference': "unknown",
         'author': "",
-        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}}}
+        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}},
+        'has_missing_residues': False,
+        'missing_residues': []}
 
     dict['structure_reference'] = _get_references(header)
     dict['journal_reference'] = _get_journal(header)
@@ -171,6 +220,9 @@ def _parse_pdb_header_list(header):
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
                 dict['deposition_date'] = _format_date(_nice_case(rr.group()))
+            rr = re.search(r"\s+([1-9][0-9A-Z]{3})\s*\Z", tail)
+            if rr is not None:
+                dict['idcode'] = rr.group(1)
             head = _chop_end_misc(tail).lower()
             dict['head'] = head
         elif key == "COMPND":
@@ -250,6 +302,12 @@ def _parse_pdb_header_list(header):
                 except ValueError:
                     # print('nonstandard resolution %r' % r)
                     dict['resolution'] = None
+            elif hh.startswith("REMARK 465"):
+                if tail:
+                    dict['has_missing_residues'] = True
+                    missing_res_info = _parse_remark_465(tail)
+                    if missing_res_info:
+                        dict['missing_residues'].append(missing_res_info)
         else:
             # print(key)
             pass

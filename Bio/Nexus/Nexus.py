@@ -936,7 +936,7 @@ class Nexus(object):
 
                     if state is None:
                         return
-                    elif state is ',':
+                    elif state == ',':
                         break
 
     def _statelabels(self, options):

@@ -2,9 +2,10 @@
 # Revisions copyright 2009-2010 by Peter Cock.
 # Revisions copyright 2010 by Phillip Garland.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Definitions for interacting with BLAST related applications.
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):

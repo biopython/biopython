@@ -8,6 +8,7 @@ import unittest
 from os import path
 import warnings
 from datetime import datetime
+import sys
 
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
@@ -294,17 +295,17 @@ KEYWORDS    """ in gb, gb)
         """Various GenBank names which push the column based LOCUS line."""
         original = SeqIO.read("GenBank/iro.gb", "gb")
         self.assertEqual(len(original), 1326)
+        # Acceptability of LOCUS line with length > 80 invalidates some of these tests
         for name, seq_len, ok in [
                 ("short", 1, True),
                 ("max_length_of_16", 1000, True),
                 ("overly_long_at_17", 1000, True),
                 ("excessively_long_at_22", 99999, True),
-                ("excessively_long_at_22", 100000, False),
+                ("excessively_long_at_22", 100000, True),
                 ("pushing_the_limits_at_24", 999, True),
-                ("pushing_the_limits_at_24", 1000, False),
-                ("longest_possible_len_of_26", 10, False),  # 2 digits
-                ("longest_possible_len_of_26", 9, True),  # 1 digit
-                ]:
+                ("pushing_the_limits_at_24", 1000, True),
+                ("old_max_name_length_was_26", 10, True),  # 2 digits
+                ("old_max_name_length_was_26", 9, True)]:  # 1 digit
             # Make the length match the desired target
             record = original[:]
             # TODO - Implement Seq * int
@@ -327,8 +328,10 @@ KEYWORDS    """ in gb, gb)
             line = handle.readline()
             self.assertIn(" %s " % name, line)
             self.assertIn(" %i bp " % seq_len, line)
-            name_and_length = line[12:40]
-            self.assertEqual(name_and_length.split(), [name, str(seq_len)], line)
+            # Splitting based on whitespace rather than position due to
+            # updated GenBank specification
+            name_and_length = line.split()[1:3]
+            self.assertEqual(name_and_length, [name, str(seq_len)], line)
             handle.seek(0)
             with warnings.catch_warnings():
                 # e.g. BiopythonParserWarning: GenBank LOCUS line
@@ -432,6 +435,78 @@ KEYWORDS    """ in gb, gb)
             gb = SeqIO.read(handle, "gb")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
+    def test_longer_locus_line(self):
+        """Check that we can read and write files with longer locus lines"""
+        # Create example file from existing file
+        with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+            data = inhandle.readlines()
+            data[0] = "LOCUS       AZZZAA021234567891234 2147483647 bp    DNA     linear   PRI 15-OCT-2018\n"
+
+        # Create memory file from modified genbank file
+        in_tmp = StringIO()
+        in_tmp.writelines(data)
+        in_tmp.seek(0)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            in_tmp.seek(0)
+            record = SeqIO.read(in_tmp, 'genbank')
+
+            # Create temporary output memory file
+            out_tmp = StringIO()
+            SeqIO.write(record, out_tmp, 'genbank')
+
+            # Check that the written file can be read back in
+            out_tmp.seek(0)
+            record_in = SeqIO.read(out_tmp, 'genbank')
+            self.assertEqual(record_in.id, "DS830848.1")
+            self.assertEqual(record_in.name, "AZZZAA021234567891234")
+            self.assertEqual(len(record_in.seq), 2147483647)
+
+    if sys.maxsize > 2147483647:
+        def test_extremely_long_sequence(self):
+            """Tests if extremely long sequences can be read.
+
+            This is only run if sys.maxsize > 2147483647.
+            """
+            # Create example file from existing file
+            with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+                data = inhandle.readlines()
+                data[0] = "LOCUS       AZZZAA02123456789 10000000000 bp    DNA     linear   PRI 15-OCT-2018\n"
+
+            # Create memory file from modified genbank file
+            in_tmp = StringIO()
+            in_tmp.writelines(data)
+            in_tmp.seek(0)
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                in_tmp.seek(0)
+                record = SeqIO.read(in_tmp, 'genbank')
+
+                # Create temporary output memory file
+                out_tmp = StringIO()
+                SeqIO.write(record, out_tmp, 'genbank')
+
+                # Check that the written file can be read back in
+                out_tmp.seek(0)
+                record_in = SeqIO.read(out_tmp, 'genbank')
+                self.assertEqual(record_in.id, "DS830848.1")
+                self.assertEqual(record_in.name, "AZZZAA02123456789")
+                self.assertEqual(len(record_in.seq), 10000000000)
+
+            def read_longer_than_maxsize():
+                with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
+                    data2 = inhandle.readlines()
+                    data2[0] = "LOCUS       AZZZAA02123456789 " + str(sys.maxsize + 1) + " bp    DNA     linear   PRI 15-OCT-2018\n"
+
+                long_in_tmp = StringIO()
+                long_in_tmp.writelines(data2)
+                long_in_tmp.seek(0)
+                record = SeqIO.read(long_in_tmp, 'genbank')
+
+            self.assertRaises(ValueError, read_longer_than_maxsize)
+
 
 class LineOneTests(unittest.TestCase):
     """Check GenBank/EMBL topology / molecule_type parsing."""
@@ -453,6 +528,9 @@ class LineOneTests(unittest.TestCase):
              "linear", None, "INV", None),
             ("LOCUS       pEH010                  5743 bp    DNA     circular",
              "circular", "DNA", None, [BiopythonParserWarning]),
+            # This is a test of the format > 80 chars long
+            ("LOCUS       AZZZAA02123456789 1000000000 bp    DNA     linear   PRI 15-OCT-2018",
+             "linear", "DNA", "PRI", None)
         ]
         for (line, topo, mol_type, div, warning_list) in tests:
             with warnings.catch_warnings(record=True) as caught:

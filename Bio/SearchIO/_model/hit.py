@@ -147,26 +147,32 @@ class Hit(_BaseSearchObject):
             self.append(hsp)
 
     def __repr__(self):
+        """Return string representation of Hit object."""
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id,
                                                      len(self))
 
     def __iter__(self):
+        """Iterate over hsps."""
         return iter(self.hsps)
 
     def __len__(self):
+        """Return number of hsps."""
         return len(self.hsps)
 
     # Python 3:
     def __bool__(self):
+        """Return True if there are hsps."""
         return bool(self.hsps)
 
     # Python 2:
     __nonzero__ = __bool__
 
     def __contains__(self, hsp):
+        """Return True if hsp in items."""
         return hsp in self._items
 
     def __str__(self):
+        """Return a human readable summary of the Hit object."""
         lines = []
 
         # set query id line
@@ -230,6 +236,7 @@ class Hit(_BaseSearchObject):
         return '\n'.join(lines)
 
     def __getitem__(self, idx):
+        """Return the HSP object at the given index."""
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
             obj = self.__class__(self.hsps[idx])
@@ -238,6 +245,7 @@ class Hit(_BaseSearchObject):
         return self._items[idx]
 
     def __setitem__(self, idx, hsps):
+        """Assign hsps to index idx."""
         # handle case if hsps is a list of hsp
         if isinstance(hsps, (list, tuple)):
             for hsp in hsps:
@@ -248,6 +256,7 @@ class Hit(_BaseSearchObject):
         self._items[idx] = hsps
 
     def __delitem__(self, idx):
+        """Delete item of index idx."""
         del self._items[idx]
 
     # hsp properties #

@@ -81,7 +81,8 @@ please open an issue on GitHub or mention it on the mailing list.
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
 - David Weisman <david.weisman at domain acm.org>
-- David Winter <david dot winter at gmail dot com>
+- David Winter <https://github.com/dwinter>
+- Devang Thakkar <https://github.com/devangthakkar>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
 - Edward Liaw <https://github.com/edliaw>
@@ -110,7 +111,8 @@ please open an issue on GitHub or mention it on the mailing list.
 - Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
 - Hye-Shik Chang <perky at domain fallin.lv>
-- Iddo Friedberg <idoerg at domain burnham.org>
+- Iddo Friedberg <https://github.com/idoerg>
+- Ivan Antonov <https://github.com/vanya-antonov>
 - Jacek Śmietański <https://github.com/dadoskawina>
 - Jack Twilley <https://github.com/mathuin>
 - James Casbon <https://github.com/jamescasbon>
@@ -162,6 +164,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Lucas Sinclair <https://github.com/xapple>
+- Manuel Nuno Melo <https://github.com/mnmelo>
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
@@ -198,9 +201,11 @@ please open an issue on GitHub or mention it on the mailing list.
 - Peter Slickers <piet at domain clondiag.com>
 - Philip Bergstrom <https://github.com/phber>
 - Phillip Garland <pgarland at gmail>
+- Ralf Stephan <https://github.com/rwst>
 - Rasmus Fonseca <https://github.com/RasmusFonseca>
 - rht <https://github.com/rht>
 - Richard Neher <https://github.com/rneher>
+- Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
@@ -220,6 +225,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Stefans Mezulis <https://github.com/StefansM/>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
+- Stuart Nelis <https://github.com/biostu24>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
@@ -243,6 +249,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
+- Yi Hsiao <https://github.com/hsiaoyi0504>
 - Yu Huang <krocea at domain yahoo.com.cn>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zachary Sailer <https://github.com/Zsailer>

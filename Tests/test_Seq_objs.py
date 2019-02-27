@@ -583,64 +583,64 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(comp.alphabet, example1.alphabet)
 
     def test_the_transcription(self):
-            """Check obj.transcribe() method."""
-            mapping = ""
-            for example1 in self._examples:
-                if isinstance(example1, MutableSeq):
+        """Check obj.transcribe() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            try:
+                tran = example1.transcribe()
+            except ValueError as e:
+                if str(e) == "Proteins cannot be transcribed!":
                     continue
-                try:
-                    tran = example1.transcribe()
-                except ValueError as e:
-                    if str(e) == "Proteins cannot be transcribed!":
-                        continue
-                    if str(e) == "RNA cannot be transcribed!":
-                        continue
-                    raise e
-                str1 = str(example1)
-                if len(str1) % 3 != 0:
-                    # TODO - Check for or silence the expected warning?
+                if str(e) == "RNA cannot be transcribed!":
                     continue
-                self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
-                self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
+                raise e
+            str1 = str(example1)
+            if len(str1) % 3 != 0:
+                # TODO - Check for or silence the expected warning?
+                continue
+            self.assertEqual(str1.replace("T", "U").replace("t", "u"), str(tran))
+            self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
     def test_the_back_transcription(self):
-            """Check obj.back_transcribe() method."""
-            mapping = ""
-            for example1 in self._examples:
-                if isinstance(example1, MutableSeq):
+        """Check obj.back_transcribe() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            try:
+                tran = example1.back_transcribe()
+            except ValueError as e:
+                if str(e) == "Proteins cannot be back transcribed!":
                     continue
-                try:
-                    tran = example1.back_transcribe()
-                except ValueError as e:
-                    if str(e) == "Proteins cannot be back transcribed!":
-                        continue
-                    if str(e) == "DNA cannot be back transcribed!":
-                        continue
-                    raise e
-                str1 = str(example1)
-                self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
-                self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
+                if str(e) == "DNA cannot be back transcribed!":
+                    continue
+                raise e
+            str1 = str(example1)
+            self.assertEqual(str1.replace("U", "T").replace("u", "t"), str(tran))
+            self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
 
     def test_the_translate(self):
-            """Check obj.translate() method."""
-            mapping = ""
-            for example1 in self._examples:
-                if isinstance(example1, MutableSeq):
+        """Check obj.translate() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq):
+                continue
+            if len(example1) % 3 != 0:
+                # TODO - Check for or silence the expected warning?
+                continue
+            try:
+                tran = example1.translate()
+            except ValueError as e:
+                if str(e) == "Proteins cannot be translated!":
                     continue
-                if len(example1) % 3 != 0:
-                    # TODO - Check for or silence the expected warning?
-                    continue
-                try:
-                    tran = example1.translate()
-                except ValueError as e:
-                    if str(e) == "Proteins cannot be translated!":
-                        continue
-                    raise e
-                # This is based on the limited example not having stop codons:
-                if tran.alphabet not in [extended_protein, protein, generic_protein]:
-                    print(tran.alphabet)
-                    self.fail()
-                # TODO - check the actual translation, and all the optional args
+                raise e
+            # This is based on the limited example not having stop codons:
+            if tran.alphabet not in [extended_protein, protein, generic_protein]:
+                print(tran.alphabet)
+                self.fail()
+            # TODO - check the actual translation, and all the optional args
 
     def test_the_translation_of_stops(self):
         """Check obj.translate() method with stop codons."""
@@ -736,6 +736,11 @@ class StringMethodTests(unittest.TestCase):
         # Only expect it to take strings and unicode - not Seq objects!
         self.assertRaises(TypeError, Seq, (1066))
         self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
+
+    def test_MutableSeq_init_typeerror(self):
+        """Check MutableSeq __init__ gives TypeError exceptions."""
+        self.assertRaises(TypeError, MutableSeq, (Seq("A")))
+        self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
 
     # TODO - Addition...
 

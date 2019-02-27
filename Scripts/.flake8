@@ -25,4 +25,9 @@ ignore =
     # ====================================
     # D412	No blank lines allowed between a section header and its content
     # We ignore D412 deliberately:
-    D412
+    D412,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,

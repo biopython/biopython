@@ -179,7 +179,6 @@ class Seq(object):
         During this transition period, please just do explicit comparisons:
 
         >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
         >>> seq1 = Seq("ACGT")
         >>> seq2 = Seq("ACGT")
         >>> id(seq1) == id(seq2)
@@ -428,18 +427,6 @@ class Seq(object):
         if not isinstance(other, int):
             raise TypeError("can't multiply {} by non-int type".format(self.__class__.__name__))
         return self.__class__(str(self) * other, self.alphabet)
-
-    def tostring(self):  # Seq API requirement
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of
-        my_seq.tostring().
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return str(self)
 
     def tomutable(self):  # Needed?  Or use a function?
         """Return the full sequence as a MutableSeq object.
@@ -1871,6 +1858,10 @@ class MutableSeq(object):
             self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
+        elif isinstance(data, Seq):
+            raise TypeError("The sequence data given to a MutableSeq object "
+                            "should be a string or an array "
+                            "(not a Seq object etc)")
         else:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
@@ -2444,31 +2435,6 @@ class MutableSeq(object):
         else:
             for c in other:
                 self.data.append(c)
-
-    def tostring(self):
-        """Return the full sequence as a python string (DEPRECATED).
-
-        You are now encouraged to use str(my_seq) instead of my_seq.tostring()
-        as this method is officially deprecated.
-
-        Because str(my_seq) will give you the full sequence as a python string,
-        there is often no need to make an explicit conversion.  For example,
-
-        >>> my_seq = Seq("ATCGTG")
-        >>> my_name = "seq_1"
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq))
-        ID={seq_1}, sequence={ATCGTG}
-
-        On Biopython 1.44 or older you would have to have done this:
-
-        >>> print("ID={%s}, sequence={%s}" % (my_name, my_seq.tostring()))
-        ID={seq_1}, sequence={ATCGTG}
-        """
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("This method is obsolete; please use str(my_seq) "
-                      "instead of my_seq.tostring().",
-                      BiopythonDeprecationWarning)
-        return "".join(self.data)
 
     def toseq(self):
         """Return the full sequence as a new immutable Seq object.

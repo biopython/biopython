@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes to support Comparative Data Analysis Ontology (CDAO)."""
+
 import xml.etree.ElementTree as ET
 
 

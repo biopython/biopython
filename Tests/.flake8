@@ -67,4 +67,9 @@ ignore =
     # flake8-commas (in case installed locally)
     # =========================================
     # C812	missing trailing comma
-    C812
+    C812,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,

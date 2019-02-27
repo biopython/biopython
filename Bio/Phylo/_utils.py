@@ -105,6 +105,13 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             up the desired value without checking if the intermediate attributes
             are available:
 
+                >>> from Bio import Phylo, AlignIO
+                >>> from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+                >>> constructor = DistanceTreeConstructor()
+                >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+                >>> calculator = DistanceCalculator('identity')
+                >>> dm = calculator.get_distance(aln)
+                >>> tree = constructor.upgma(dm)
                 >>> Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
 
         prog : string
@@ -305,6 +312,13 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
 
     Example using the pyplot options 'axhspan' and 'axvline':
 
+    >>> from Bio import Phylo, AlignIO
+    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+    >>> constructor = DistanceTreeConstructor()
+    >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
+    >>> calculator = DistanceCalculator('identity')
+    >>> dm = calculator.get_distance(aln)
+    >>> tree = constructor.upgma(dm)
     >>> Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
     ...     axvline={'x':'0', 'ymin':'0', 'ymax':'1'})
 
@@ -367,7 +381,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
                     # phyloXML supports multiple confidences
                     return '/'.join(conf2str(cnf.value)
                                     for cnf in clade.confidences)
-                if clade.confidence:
+                if clade.confidence is not None:
                     return conf2str(clade.confidence)
                 return None
         else:

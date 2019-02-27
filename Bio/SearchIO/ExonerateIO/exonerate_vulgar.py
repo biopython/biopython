@@ -91,8 +91,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # if it's the last comp
         if idx == len(vcomps) - 1 or \
                 (label in 'MCGS' and vcomps[idx + 1][0] not in 'MCGS'):
-                qends.append(qpos)
-                hends.append(hpos)
+            qends.append(qpos)
+            hends.append(hpos)
 
     # adjust coordinates
     for seq_type in ('query_', 'hit_'):
@@ -119,6 +119,7 @@ class ExonerateVulgarParser(_BaseExonerateParser):
     _ALN_MARK = 'vulgar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for vulgar format, return query results, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']

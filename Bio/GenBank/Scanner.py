@@ -102,7 +102,7 @@ class InsdcScanner(object):
             else:
                 # Ignore any header before the first ID/LOCUS line.
                 if self.debug > 1:
-                        print("Skipping header line before record:\n" + line)
+                    print("Skipping header line before record:\n" + line)
         self.line = line
         return line
 
@@ -1177,6 +1177,17 @@ class GenBankScanner(InsdcScanner):
         the column based layout.
 
         We also try to cope with GenBank like files with partial LOCUS lines.
+
+        As of release 229.0, the columns are no longer strictly in a given
+        position. See GenBank format release notes:
+
+            "Historically, the LOCUS line has had a fixed length and its
+            elements have been presented at specific column positions...
+            But with the anticipated increases in the lengths of accession
+            numbers, and the advent of sequences that are gigabases long,
+            maintaining the column positions will not always be possible and
+            the overall length of the LOCUS line could exceed 79 characters."
+
         """
         #####################################
         # LOCUS line                        #
@@ -1387,18 +1398,31 @@ class GenBankScanner(InsdcScanner):
                 and line.split()[5] in ('linear', 'circular'):
             # Cope with invalidly spaced GenBank LOCUS lines like
             # LOCUS       AB070938          6497 bp    DNA     linear   BCT 11-OCT-2001
+            # This will also cope with extra long accession numbers and
+            # sequence lengths
             splitline = line.split()
             consumer.locus(splitline[1])
-            consumer.size(splitline[2])
+            # Provide descriptive error message if the sequence is too long
+            # for python to handle
+            import sys
+            if int(splitline[2]) > sys.maxsize:
+                raise ValueError("Tried to load a sequence with a length %s, "
+                                 "your installation of python can only load "
+                                 "sesquences of length %s" % (splitline[2],
+                                                              sys.maxsize))
+            else:
+                consumer.size(splitline[2])
+
             consumer.residue_type(splitline[4])
             consumer.topology(splitline[5])
             consumer.data_file_division(splitline[6])
             consumer.date(splitline[7])
-            warnings.warn("Attempting to parse malformed locus line:\n%r\n"
-                          "Found locus %r size %r residue_type %r\n"
-                          "Some fields may be wrong."
-                          % (line, splitline[1], splitline[2], splitline[4]),
-                          BiopythonParserWarning)
+            if len(line) < 80:
+                warnings.warn("Attempting to parse malformed locus line:\n%r\n"
+                              "Found locus %r size %r residue_type %r\n"
+                              "Some fields may be wrong."
+                              % (line, splitline[1], splitline[2], splitline[4]),
+                              BiopythonParserWarning)
         elif len(line.split()) == 7 and line.split()[3] in ["aa", "bp"]:
             # Cope with EnsEMBL genbank files which use space separation rather
             # than the expected column based layout. e.g.

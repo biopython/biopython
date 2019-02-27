@@ -1,6 +1,5 @@
 [flake8]
-# Would like to enable this in future...
-# doctests = True
+doctests = True
 ignore =
     # =======================
     # flake: E###, F###, W###
@@ -21,13 +20,12 @@ ignore =
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
-    # D100	Missing docstring in public module
     # D101	Missing docstring in public class
     # D102	Missing docstring in public method
     # D103	Missing docstring in public function
     # D105	Missing docstring in magic method
     # TODO: Fix some of these?
-    D100,D101,D102,D103,D105,
+    D101,D102,D103,D105,
     # ====================================
     # pydocstyle: D2## - Whitespace Issues
     # ====================================
@@ -46,4 +44,9 @@ ignore =
     # ================================================
     # C812	missing trailing comma
     # C815	missing trailing comma in Python 3.5+
-    C812,C815
+    C812,C815,
+    # ========================================
+    # flake8-black (in case installed locally)
+    # ========================================
+    # BLK100 Black would make changes.
+    BLK100,

@@ -68,7 +68,7 @@ def _read_fragments(size, length, dir="."):
         # ID of fragment=rank in spec file
         fid = 0
         for l in fp.readlines():
-                    # skip comment and blank lines
+            # skip comment and blank lines
             if l[0] == "*" or l[0] == "\n":
                 continue
             sl = l.split()
@@ -158,7 +158,9 @@ class Fragment(object):
 
         Examples
         --------
-        >>> rmsd = fragment1 - fragment2
+        This is an incomplete but illustrative example::
+
+            rmsd = fragment1 - fragment2
 
         """
         sup = SVDSuperimposer()
@@ -294,16 +296,6 @@ class FragmentMapper(object):
                 else:
                     raise PDBException(why)
         return fd
-
-    def has_key(self, res):
-        """Is this residue present? (DEPRECATED).
-
-        :type res: L{Residue}
-        """
-        import warnings
-        from Bio import BiopythonDeprecationWarning
-        warnings.warn("has_key is deprecated; use 'res in object' instead", BiopythonDeprecationWarning)
-        return res in self
 
     def __contains__(self, res):
         """Check if the given residue is in any of the mapped fragments.

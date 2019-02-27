@@ -14,9 +14,10 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC, Gapped
+from Bio.Alphabet import IUPAC, Gapped, generic_dna, generic_protein
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
+
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', BiopythonExperimentalWarning)
@@ -66,6 +67,52 @@ class TestCodonAlignment(unittest.TestCase):
         codonAlign = codonalign.CodonAlignment(self.seqrec)
         self.assertEqual(codonAlign.get_aln_length(), 6)
         self.assertTrue(isinstance(codonAlign.toMultipleSeqAlignment(), MultipleSeqAlignment))
+
+
+class TestAddition(unittest.TestCase):
+    def setUp(self):
+        self.seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=generic_dna), id='pro1')
+        self.seq2 = SeqRecord(Seq('ATGCGT', alphabet=generic_dna), id='pro2')
+        self.pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')
+        self.pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')
+        self.aln = MultipleSeqAlignment([self.pro1, self.pro2])
+        self.codon_aln = codonalign.build(self.aln, [self.seq1, self.seq2])
+
+        tail1 = SeqRecord(Seq('AAA', alphabet=generic_dna), id='pro1')
+        tail2 = SeqRecord(Seq('AAA', alphabet=generic_dna), id='pro2')
+        self.multi_aln = MultipleSeqAlignment([tail1, tail2])
+
+    def test_addition_MultipleSeqAlignment(self):
+        """Check addition of CodonAlignment and MultipleSeqAlignment"""
+        new_aln = self.codon_aln + self.multi_aln
+
+        self.assertTrue(isinstance(new_aln, MultipleSeqAlignment))
+        for x in range(len(self.codon_aln)):
+            self.assertEqual(str(new_aln[x].seq), str(self.codon_aln[x].seq) + str(self.multi_aln[x].seq))
+
+    def test_addition_CodonAlignment(self):
+        """Check addition of CodonAlignment and CodonAlignment"""
+        new_aln = self.codon_aln + self.codon_aln
+
+        self.assertTrue(isinstance(new_aln, codonalign.CodonAlignment))
+        for x in range(len(self.codon_aln)):
+            self.assertEqual(str(new_aln[x].seq), str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq))
+
+    def test_ValueError(self):
+        """Check that ValueError is thrown for Alignments of different lengths"""
+        # original len(self.aln) = 2 , len(aln) = 3
+        aln = MultipleSeqAlignment([self.pro1, self.pro2, SeqRecord(Seq('M--', alphabet=generic_protein), id='pro3')])
+        triple_codon = codonalign.build(aln, [self.seq1, self.seq2, SeqRecord(Seq('ATG', alphabet=generic_dna), id='pro3')])
+        with self.assertRaises(ValueError):
+            triple_codon + self.multi_aln
+        with self.assertRaises(ValueError):
+            triple_codon + self.codon_aln
+
+    def test_TypeError(self):
+        """Check that TypeError is thrown for non CodonAlignment/MultipleSequenceAlignment objects"""
+        for obj in [0, "string", ["str1", "str2"], Seq("ATGTCTCGT")]:
+            with self.assertRaises(TypeError):
+                self.codon_aln + obj
 
 
 class TestBuildAndIO(unittest.TestCase):

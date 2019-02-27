@@ -45,10 +45,15 @@ mmcif_order = {
 }
 
 
+_select = Select()
+
+
 class MMCIFIO(object):
     """Write a Structure object or a mmCIF dictionary as a mmCIF file.
 
-    Example:
+    Examples
+    --------
+        >>> from Bio.PDB import MMCIFParser
         >>> p=MMCIFParser()
         >>> s=p.get_structure("1fat", "1fat.cif")
         >>> io=MMCIFIO()
@@ -105,7 +110,7 @@ class MMCIFIO(object):
         """Set the mmCIF dictionary to be written out."""
         self.dic = dic
 
-    def save(self, filepath, select=Select(), preserve_atom_numbering=False):
+    def save(self, filepath, select=_select, preserve_atom_numbering=False):
         """Save the structure to a file.
 
         :param filepath: output file
