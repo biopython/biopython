@@ -160,7 +160,6 @@ class Instances(list):
 
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
-        from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
         if instances is None:
             instances = []
@@ -180,10 +179,15 @@ class Instances(list):
                 alphabet = a
             elif alphabet != a:
                 raise ValueError("Alphabets are inconsistent")
-        if alphabet is None or alphabet.letters is None:
+        try:
+            # Received an old-style alphabet
+            alphabet = alphabet.letters
+        except AttributeError:
+            pass
+        if alphabet is None:
             # If we didn't get a meaningful alphabet from the instances,
             # assume it is DNA.
-            alphabet = IUPAC.unambiguous_dna
+            alphabet = 'GATC'
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
@@ -201,7 +205,7 @@ class Instances(list):
     def count(self):
         """Count nucleotides in a position."""
         counts = {}
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             counts[letter] = [0] * self.length
         for instance in self:
             for position, letter in enumerate(instance):
@@ -236,7 +240,6 @@ class Motif(object):
     def __init__(self, alphabet=None, instances=None, counts=None):
         """Initialize the class."""
         from . import matrix
-        from Bio.Alphabet import IUPAC
         self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
@@ -252,7 +255,7 @@ class Motif(object):
             self.length = self.counts.length
         elif instances is not None:
             self.instances = instances
-            alphabet = self.instances.alphabet.letters
+            alphabet = self.instances.alphabet
             counts = self.instances.count()
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -459,13 +462,12 @@ class Motif(object):
 
         """
         from Bio._py3k import urlopen, urlencode, Request
-        from Bio import Alphabet
 
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+        if self.alphabet == 'ACDEFGHIKLMNPQRSTVWY':
             alpha = "alphabet_protein"
-        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+        elif self.alphabet == 'ACGU':
             alpha = "alphabet_rna"
-        elif isinstance(self.alphabet, Alphabet.DNAAlphabet):
+        elif self.alphabet == 'ACGT':
             alpha = "alphabet_dna"
         else:
             alpha = "auto"
