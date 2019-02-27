@@ -188,9 +188,9 @@ def __read_alphabet(record, handle):
     line = line.strip()
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
-        al = 'GATC'
+        al = 'ACGT'
     elif line == 'ACGU':
-        al = 'GAUC'
+        al = 'ACGU'
     else:
         al = 'ACDEFGHIKLMNPQRSTVWY'
     record.alphabet = al
