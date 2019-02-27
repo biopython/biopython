@@ -7,7 +7,6 @@
 
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 class Motif(motifs.Motif, dict):
@@ -189,7 +188,7 @@ def read(handle, strict=True):
             references.append(reference)
         elif key == '//':
             if counts is not None:
-                motif = Motif(alphabet=IUPAC.unambiguous_dna, counts=counts)
+                motif = Motif(alphabet='GATC', counts=counts)
                 motif.update(annotations)
                 motif.references = references
                 record.append(motif)
