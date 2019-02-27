@@ -14,8 +14,6 @@ import platform
 from Bio._py3k import range
 
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
-from Bio import Alphabet
 
 
 # Make sure that we use C-accelerated PWM calculations if running under CPython.
