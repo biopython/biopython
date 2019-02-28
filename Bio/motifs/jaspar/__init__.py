@@ -223,7 +223,7 @@ def _read_sites(handle):
         for c in line.strip():
             if c == c.upper():
                 instance += c
-        instance = Seq(instance, alphabet)
+        instance = Seq(instance)
         instances.append(instance)
 
     instances = motifs.Instances(instances, alphabet)

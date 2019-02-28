@@ -136,8 +136,10 @@ the columns of the \verb+.counts+ matrix:
 %cont-doctest
 \begin{verbatim}
 >>> m.anticonsensus
-Seq('GGGTG')
+Seq('CCATG')
 \end{verbatim}
+Note that there is some ambiguity in the definition of the consensus and anticonsensus sequence if in some columns multiple nucleotides have the maximum or minimum count.
+
 You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
 high counts:
@@ -967,7 +969,7 @@ consensus, anticonsensus, and degenerate consensus sequences:
 >>> pwm.consensus
 Seq('TACGC')
 >>> pwm.anticonsensus
-Seq('GGGTG')
+Seq('CCGTG')
 >>> pwm.degenerate_consensus
 Seq('WACNC')
 \end{verbatim}
@@ -1070,7 +1072,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{verbatim}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA")
 >>> len(test_seq)
 26
 \end{verbatim}
