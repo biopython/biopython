@@ -111,13 +111,11 @@ You can also directly access columns of the counts matrix
 {'A': 2, 'C': 2, 'T': 0, 'G': 3}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
-in the sorted letters in the alphabet of the motif:
+in the alphabet of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.alphabet
 'ACGT'
->>> sorted(m.alphabet)
-['A', 'C', 'G', 'T']
 >>> m.counts["A",:]
 (3, 7, 0, 2, 1)
 >>> m.counts[0,:]
@@ -497,7 +495,7 @@ To convert the absolute score of an instance back to a relative score, one can u
 For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
 %TODO - Check missing ... lines, make into a doctest?
 \begin{verbatim}
->>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA")
 >>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt)
 >>> pssm = arnt.pssm
 >>> max_score = pssm.max
