@@ -118,6 +118,84 @@ class SummaryInfo(object):
 
         return Seq(consensus, consensus_alpha)
 
+    def simple_consensus(self, threshold=.7, ambiguous="X",
+                       consensus_alpha=None, require_multiple=0):
+        """Output a fast consensus sequence of the alignment (counting all).
+
+        This go through the sequences residue by residue and count up the number
+        of each type of residue (ie. A or G or T or C for DNA) for each position
+        in the alignment, and then divide it by the total number of sequences.
+        If the percentage of the most common residue type for a certain position
+        is equal or greater then the passed threshold, then it adds that residue
+        type, otherwise an ambiguous character will be added.
+
+        Note: The difference with 'dumb_consensus' is that 'simple_consensus'
+        always count all sequences to calculate the percent (position global
+        percent), while 'dumb_consensus' only counts sequences that have no gap
+        on each position (position gapless percent). On the other hand,
+        'gap_consensus' is similar to 'simple_consensus' but treats gaps as if
+        they were residues, so a position will display a gap if it have the
+        highest percent.
+
+        Arguments:
+            - threshold - The threshold value that is required to add a particular
+              atom.
+            - ambiguous - The ambiguous character to be added when the threshold is
+              not reached.
+            - consensus_alpha - The alphabet to return for the consensus sequence.
+              If this is None, then we will try to guess the alphabet.
+            - require_multiple - If set as 1, this will require that more than
+              1 sequence be part of an alignment to put it in the consensus (ie.
+              not just 1 sequence and gaps).
+        """
+        # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
+        consensus = ''
+
+        # find the length of the consensus we are creating
+        con_len = self.alignment.get_alignment_length()
+
+        # go through each seq item
+        for n in range(con_len):
+            # keep track of the counts of the different atoms we get
+            atom_dict = {}
+            num_atoms = 0
+
+            for record in self.alignment:
+                # make sure we haven't run past the end of any sequences
+                # if they are of different lengths
+                if n < len(record.seq):
+                    num_atoms += 1
+
+                    if record.seq[n] != '-' and record.seq[n] != '.':
+                        if record.seq[n] not in atom_dict:
+                            atom_dict[record.seq[n]] = 1
+                        else:
+                            atom_dict[record.seq[n]] += 1
+
+            max_atoms = []
+            max_size = 0
+
+            for atom in atom_dict:
+                if atom_dict[atom] > max_size:
+                    max_atoms = [atom]
+                    max_size = atom_dict[atom]
+                elif atom_dict[atom] == max_size:
+                    max_atoms.append(atom)
+
+            if require_multiple and num_atoms == 1:
+                consensus += ambiguous
+            elif (len(max_atoms) == 1) and ((float(max_size) / float(num_atoms))
+                                            >= threshold):
+                consensus += max_atoms[0]
+            else:
+                consensus += ambiguous
+
+        # we need to guess a consensus alphabet if one isn't specified
+        if consensus_alpha is None:
+            consensus_alpha = self._guess_consensus_alphabet(ambiguous)
+
+        return Seq(consensus, consensus_alpha)
+
     def gap_consensus(self, threshold=.7, ambiguous="X",
                       consensus_alpha=None, require_multiple=0):
         """Output a fast consensus sequence of the alignment, allowing gaps.
@@ -147,12 +225,12 @@ class SummaryInfo(object):
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
+                    num_atoms += 1
+
                     if record.seq[n] not in atom_dict:
                         atom_dict[record.seq[n]] = 1
                     else:
                         atom_dict[record.seq[n]] += 1
-
-                    num_atoms += 1
 
             max_atoms = []
             max_size = 0

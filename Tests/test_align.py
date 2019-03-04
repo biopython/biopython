@@ -90,9 +90,14 @@ print('length: %i' % alignment.get_alignment_length())
 
 print('Calculating summary information...')
 align_info = AlignInfo.SummaryInfo(alignment)
-consensus = align_info.dumb_consensus()
-assert isinstance(consensus, Seq)
-print('consensus: %r' % consensus)
+dumb_consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
+simple_consensus = align_info.simple_consensus(ambiguous="N", threshold=0.6)
+assert isinstance(simple_consensus, Seq)
+assert isinstance(dumb_consensus, Seq)
+print('dumb_consensus: %r' % dumb_consensus)
+print('simple_consensus: %r' % simple_consensus)
+print('full dumb_consensus 60%%: %s' % dumb_consensus)
+print('full simple_consensus 60%%: %s' % simple_consensus)
 
 
 print('Replacement dictionary')
@@ -102,6 +107,7 @@ for key in ks:
 
 print('position specific score matrix.')
 print('with a supplied consensus sequence...')
+consensus = align_info.dumb_consensus()
 print(align_info.pos_specific_score_matrix(consensus, ['N']))
 
 print('defaulting to a consensus sequence...')
