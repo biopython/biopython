@@ -300,7 +300,6 @@ def _nib_file_header(handle):
         raise ValueError('unexpected signature in Nib header')
     number = handle.read(4)
     length = int.from_bytes(number, byteorder)
-    print(length)
     return length
 
 
@@ -822,121 +821,20 @@ def NibIterator(handle, alphabet=None):
     """
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
-    try:
-        if 0 != handle.tell():
-            raise ValueError("Not at start of file, offset %i" % handle.tell())
-    except AttributeError:
-        # Probably a network handle or something like that
-        handle = _AddTellHandle(handle)
-    header_length, index_offset, index_length, number_of_reads, \
-    number_of_flows_per_read, flow_chars, key_sequence \
-        = _nib_file_header(handle)
-    # Now on to the reads...
-    # the read header format (fixed part):
-    # read_header_length     H
-    # name_length            H
-    # seq_len                I
-    # clip_qual_left         H
-    # clip_qual_right        H
-    # clip_adapter_left      H
-    # clip_adapter_right     H
-    # [rest of read header depends on the name length etc]
-    read_header_fmt = '>2HI4H'
-    read_header_size = struct.calcsize(read_header_fmt)
-    read_flow_fmt = ">%iH" % number_of_flows_per_read
-    read_flow_size = struct.calcsize(read_flow_fmt)
-    assert 1 == struct.calcsize(">B")
-    assert 1 == struct.calcsize(">s")
-    assert 1 == struct.calcsize(">c")
-    assert read_header_size % 8 == 0  # Important for padding calc later!
-    # The spec allows for the index block to be before or even in the middle
-    # of the reads. We can check that if we keep track of our position
-    # in the file...
-    for read in range(number_of_reads):
-        if index_offset and handle.tell() == index_offset:
-            offset = index_offset + index_length
-            if offset % 8:
-                offset += 8 - (offset % 8)
-            assert offset % 8 == 0
-            handle.seek(offset)
-            # Now that we've done this, we don't need to do it again. Clear
-            # the index_offset so we can skip extra handle.tell() calls:
-            index_offset = 0
-        yield _sff_read_seq_record(handle,
-                                   number_of_flows_per_read,
-                                   flow_chars,
-                                   key_sequence,
-                                   alphabet,
-                                   trim)
-    _check_eof(handle, index_offset, index_length)
-
-
-def _check_eof(handle, index_offset, index_length):
-    """Check final padding is OK (8 byte alignment) and file ends (PRIVATE).
-
-    Will attempt to spot apparent SFF file concatenation and give an error.
-
-    Will not attempt to seek, only moves the handle forward.
-    """
-    offset = handle.tell()
-    extra = b""
-    padding = 0
-
-    if index_offset and offset <= index_offset:
-        # Index block then end of file...
-        if offset < index_offset:
-            raise ValueError("Gap of %i bytes after final record end %i, "
-                             "before %i where index starts?"
-                             % (index_offset - offset, offset, index_offset))
-        # Doing read to jump the index rather than a seek
-        # in case this is a network handle or similar
-        handle.read(index_offset + index_length - offset)
-        offset = index_offset + index_length
-        if offset != handle.tell():
-            raise ValueError("Wanted %i, got %i, index is %i to %i"
-                             % (offset, handle.tell(), index_offset,
-                                index_offset + index_length))
-
-    if offset % 8:
-        padding = 8 - (offset % 8)
-        extra = handle.read(padding)
-
-    if padding >= 4 and extra[-4:] == _sff:
-        # Seen this in one user supplied file, should have been
-        # four bytes of null padding but was actually .sff and
-        # the start of a new concatenated SFF file!
-        raise ValueError("Your SFF file is invalid, post index %i byte "
-                         "null padding region ended '.sff' which could "
-                         "be the start of a concatenated SFF file? "
-                         "See offset %i" % (padding, offset))
-    if padding and not extra:
-        # TODO - Is this error harmless enough to just ignore?
-        import warnings
-        from Bio import BiopythonParserWarning
-        warnings.warn("Your SFF file is technically invalid as it is missing "
-                      "a terminal %i byte null padding region." % padding,
-                      BiopythonParserWarning)
-        return
-    if extra.count(_null) != padding:
-        import warnings
-        from Bio import BiopythonParserWarning
-        warnings.warn("Your SFF file is invalid, post index %i byte "
-                      "null padding region contained data: %r"
-                      % (padding, extra), BiopythonParserWarning)
-
-    offset = handle.tell()
-    if offset % 8 != 0:
-        raise ValueError("Wanted offset %i %% 8 = %i to be zero"
-                         % (offset, offset % 8))
-    # Should now be at the end of the file...
-    extra = handle.read(4)
-    if extra == _sff:
-        raise ValueError("Additional data at end of SFF file, "
-                         "perhaps multiple SFF files concatenated? "
-                         "See offset %i" % offset)
-    elif extra:
-        raise ValueError("Additional data at end of SFF file, "
-                         "see offset %i" % offset)
+    length = _nib_file_header(handle)
+    indices = handle.read().hex()
+    if length % 2 == 0:
+        if len(indices) != length:
+            raise ValueError('Unexpected file size')
+    elif length % 2 == 1:
+        if len(indices) != length + 1:
+            raise ValueError('Unexpected file size')
+        indices = indices[:length]
+    table = str.maketrans('01234','TCAGN')
+    nucleotides = indices.translate(table)
+    sequence = Seq(nucleotides)
+    record = SeqRecord(sequence)
+    yield record
 
 
 # This is a generator function!
