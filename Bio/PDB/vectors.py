@@ -218,12 +218,12 @@ def calc_dihedral(v1, v2, v3, v4):
     a2 = v3 - v2
     a3 = v4 - v3
 
-    u1 = np.cross(a1, a2)
+    u1 = numpy.cross(a1, a2)
     u1 = u1 / (u1 * u1).sum(-1)**0.5
-    u2 = np.cross(a2, a3)
+    u2 = numpy.cross(a2, a3)
     u2 = u2 / (u2 * u2).sum(-1)**0.5
-    porm = np.sign((u1 * a3).sum(-1))
-    rad = np.arccos((u1*u2).sum(-1) / ((u1**2).sum(-1) * (u2**2).sum(-1))**0.5)
+    porm = numpy.sign((u1 * a3).sum(-1))
+    rad = numpy.arccos((u1*u2).sum(-1) / ((u1**2).sum(-1) * (u2**2).sum(-1))**0.5)
     if not porm == 0:
         rad = rad * porm
 
