@@ -389,6 +389,7 @@ from . import AceIO
 from . import FastaIO
 from . import IgIO  # IntelliGenetics or MASE format
 from . import InsdcIO  # EMBL and GenBank
+from . import NibIO
 from . import PdbIO
 from . import PhdIO
 from . import PirIO
@@ -438,6 +439,7 @@ _FormatToIterator = {"fasta": FastaIO.FastaIterator,
                      "fastq-illumina": QualityIO.FastqIlluminaIterator,
                      "qual": QualityIO.QualPhredIterator,
                      "sff": SffIO.SffIterator,
+                     "nib": NibIO.NibIterator,
                      # Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
