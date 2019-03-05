@@ -287,6 +287,7 @@ PACKAGES = [
     'Bio.Compass',
     'Bio.Crystal',
     'Bio.Data',
+    'Bio.EBI',
     'Bio.Emboss',
     'Bio.Entrez',
     'Bio.ExPASy',
