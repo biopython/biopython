@@ -277,32 +277,6 @@ def _check_mode(handle):
         raise ValueError("Nib files must be opened in binary mode on Windows")
 
 
-def _nib_file_header(handle):
-    """Read in an Nib file header (PRIVATE).
-
-    Assumes the handle is at the start of the file, will read the signature
-    and sequence length, and leave the handle pointing at the sequence data.
-    Returns the sequence length.
-
-    >>> with open("Nib/test.nib", "rb") as handle:
-    ...     length = _nib_file_header(handle)
-    ...
-    >>> print(length)
-    840
-
-    """
-    signature = handle.read(4).hex()
-    if signature == '3a3de96b':
-        byteorder = 'little' # little-endian
-    elif signature == '6be93d3a':
-        byteorder = 'big' # big-endian
-    else:
-        raise ValueError('unexpected signature in Nib header')
-    number = handle.read(4)
-    length = int.from_bytes(number, byteorder)
-    return length
-
-
 def _sff_do_slow_index(handle):
     """Generate an index by scanning though all the reads in an Nib file (PRIVATE).
 
@@ -821,7 +795,15 @@ def NibIterator(handle, alphabet=None):
     """
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
-    length = _nib_file_header(handle)
+    signature = handle.read(4).hex()
+    if signature == '3a3de96b':
+        byteorder = 'little' # little-endian
+    elif signature == '6be93d3a':
+        byteorder = 'big' # big-endian
+    else:
+        raise ValueError('unexpected signature in Nib header')
+    number = handle.read(4)
+    length = int.from_bytes(number, byteorder)
     indices = handle.read().hex()
     if length % 2 == 0:
         if len(indices) != length:
