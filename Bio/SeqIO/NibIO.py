@@ -17,23 +17,23 @@ as follows:
 
 """
 
-"""
-A nib file contains only one sequence record.
-You are expected to use this module via the Bio.SeqIO functions under
-the format name "nib":
-
-    >>> from Bio import SeqIO
-    >>> record = SeqIO.read("Nib/test_bigendian.nib", "nib")
-    >>> print("%i %s..." % (len(record), record.seq[:20]))
-    37 ACGTAAACCGTACCCGTANA...
-
-Notice that the sequence is given in upper case; unknown nucleotides are
-written as N.
-
-For detailed information on the file format, please see the UCSC description at:
-https://genome.ucsc.edu/FAQ/FAQformat.html
-
-"""
+# """
+# A nib file contains only one sequence record.
+# You are expected to use this module via the Bio.SeqIO functions under
+# the format name "nib":
+# 
+    # >>> from Bio import SeqIO
+    # >>> record = SeqIO.read("Nib/test_bigendian.nib", "nib")
+    # >>> print("%i %s..." % (len(record), record.seq[:20]))
+    # 37 ACGTAAACCGTACCCGTANA...
+# 
+# Notice that the sequence is given in upper case; unknown nucleotides are
+# written as N.
+# 
+# For detailed information on the file format, please see the UCSC description at:
+# https://genome.ucsc.edu/FAQ/FAQformat.html
+# 
+# """
 
 from __future__ import print_function
 
