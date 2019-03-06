@@ -14,11 +14,10 @@ as follows:
     2 - A
     3 - G
     4 - N (unknown)
-as well. You are expected to use this module via the Bio.SeqIO functions under
-the format name "nib".
 
-A nib file contains only one sequence record. To read this record via
-Bio.SeqIO, use
+A nib file contains only one sequence record.
+You are expected to use this module via the Bio.SeqIO functions under
+the format name "nib":
 
     >>> from Bio import SeqIO
     >>> record = SeqIO.read("Nib/test_bigendian.nib", "nib")
@@ -42,20 +41,20 @@ import struct
 import sys
 
 try:
-    hex2bytes = bytes.fromhex # python3
+    hex2bytes = bytes.fromhex  # python3
 except AttributeError:
-    hex2bytes = lambda s: s.decode('hex') # python2
+    hex2bytes = lambda s: s.decode('hex')  # python2
 
 try:
     b''.hex # python3
 except AttributeError:
     import binascii
-    bytes2hex = binascii.hexlify # python2
+    bytes2hex = binascii.hexlify  # python2
 else:
-    bytes2hex = lambda b: b.hex() # python3
+    bytes2hex = lambda b: b.hex()  # python3
 
 try:
-    int.from_bytes # python3
+    int.from_bytes  # python3
 except AttributeError:
     def byte2int(b, byteorder):
         if byteorder == 'little':
@@ -63,18 +62,19 @@ except AttributeError:
         elif byteorder == 'big':
             return struct.unpack(">i", b)[0]
 else:
-    byte2int = lambda b, byteorder: int.from_bytes(b, byteorder) # python3
+    byte2int = lambda b, byteorder: int.from_bytes(b, byteorder)  # python3
 
 
 try:
-    maketrans = str.maketrans # pythone
+    maketrans = str.maketrans  # python3
 except AttributeError:
     import string
     maketrans = string.maketrans
 
+
 # This is a generator function!
 def NibIterator(handle, alphabet=None):
-    """Iterate over a nib file and yield a SeqRecord
+    """Iterate over a nib file and yield a SeqRecord.
 
         - handle - input file in the nib file format as defibed by UCSC.
           This must be opened in binary mode!
@@ -106,9 +106,9 @@ def NibIterator(handle, alphabet=None):
     word = handle.read(4)
     signature = bytes2hex(word)
     if signature == '3a3de96b':
-        byteorder = 'little' # little-endian
+        byteorder = 'little'  # little-endian
     elif signature == '6be93d3a':
-        byteorder = 'big' # big-endian
+        byteorder = 'big'  # big-endian
     else:
         raise ValueError('unexpected signature in Nib header')
     number = handle.read(4)
@@ -124,7 +124,7 @@ def NibIterator(handle, alphabet=None):
         indices = indices[:length]
     if set(indices) != set('01234'):
         raise ValueError('Unexpected sequence data found in file')
-    table = maketrans('01234','TCAGN')
+    table = maketrans('01234', 'TCAGN')
     nucleotides = indices.translate(table)
     sequence = Seq(nucleotides)
     record = SeqRecord(sequence)
@@ -142,9 +142,9 @@ class NibWriter(SequenceWriter):
         """
         self.handle = handle
         byteorder = sys.byteorder
-        if byteorder == 'little': # little-endian
+        if byteorder == 'little':  # little-endian
             signature = '3a3de96b'
-        elif byteorder == 'big': # big-endian
+        elif byteorder == 'big':  # big-endian
             signature = '6be93d3a'
         else:
             raise RuntimeError('unexpected system byte order %s' % byteorder)
