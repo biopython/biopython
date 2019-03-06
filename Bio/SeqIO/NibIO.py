@@ -9,15 +9,14 @@
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
 The two nibbles in a byte each store one nucleotide, represented numerically
 as follows:
-    0 - T
-    1 - C
-    2 - A
-    3 - G
-    4 - N (unknown)
-
 """
-
-# """
+#   0 - T
+#   1 - C
+#   2 - A
+#   3 - G
+#   4 - N (unknown)
+#
+#
 # A nib file contains only one sequence record.
 # You are expected to use this module via the Bio.SeqIO functions under
 # the format name "nib":
