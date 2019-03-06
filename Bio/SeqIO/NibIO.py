@@ -4,6 +4,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+#
+#
+#
+#
+#
+
 """Bio.SeqIO support for the UCSC nib file format.
 
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
@@ -46,7 +52,7 @@ except AttributeError:
     hex2bytes = lambda s: s.decode('hex')  # python2
 
 try:
-    b''.hex # python3
+    b''.hex  # python3
 except AttributeError:
     import binascii
     bytes2hex = binascii.hexlify  # python2
