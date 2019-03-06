@@ -9,8 +9,10 @@
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
 The two nibbles in a byte each store one nucleotide, represented numerically
 as follows:
+
+    0 - T
+
 """
-#   0 - T
 #   1 - C
 #   2 - A
 #   3 - G
