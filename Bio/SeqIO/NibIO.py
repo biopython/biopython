@@ -846,81 +846,44 @@ def _NibTrimIterator(handle, alphabet=Alphabet.generic_dna):
 class NibWriter(SequenceWriter):
     """Nib file writer."""
 
-    def __init__(self, handle, index=True, xml=None):
+    def __init__(self, handle):
         """Initialize an Nib writer object.
 
         Arguments:
-         - handle - Output handle, ideally in binary write mode.
-         - index - Boolean argument, should we try and write an index?
-         - xml - Optional string argument, xml manifest to be recorded
-           in the index block (see function ReadRocheXmlManifest for
-           reading this data).
-
+         - handle - Output handle, in binary write mode.
         """
-        _check_mode(handle)
         self.handle = handle
-        self._xml = xml
-        if index:
-            self._index = []
+        byteorder = sys.byteorder
+        if byteorder == 'little': # little-endian
+            signature = '3a3de96b'
+        elif byteorder == 'big': # big-endian
+            signature = '6be93d3a'
         else:
-            self._index = None
+            raise RuntimeError('unexpected system byte order %s' % byteorder)
+        handle.write(bytes.fromhex(signature))
 
     def write_file(self, records):
         """Use this to write an entire file containing the given records."""
-        try:
-            self._number_of_reads = len(records)
-        except TypeError:
-            self._number_of_reads = 0  # dummy value
-            if not hasattr(self.handle, "seek") \
-                    or not hasattr(self.handle, "tell"):
-                raise ValueError("A handle with a seek/tell methods is "
-                                 "required in order to record the total "
-                                 "record count in the file header (once it "
-                                 "is known at the end).")
-        if self._index is not None and \
-                not (hasattr(self.handle, "seek") and hasattr(self.handle, "tell")):
-            import warnings
-            warnings.warn("A handle with a seek/tell methods is required in "
-                          "order to record an Nib index.")
-            self._index = None
-        self._index_start = 0
-        self._index_length = 0
-        if not hasattr(records, "next"):
-            records = iter(records)
-        # Get the first record in order to find the flow information
-        # we will need for the header.
-        try:
-            record = next(records)
-        except StopIteration:
-            record = None
-        if record is None:
-            # No records -> empty Nib file (or an error)?
-            # We can't write a header without the flow information.
-            # return 0
-            raise ValueError("Must have at least one sequence")
-        try:
-            self._key_sequence = _as_bytes(record.annotations["flow_key"])
-            self._flow_chars = _as_bytes(record.annotations["flow_chars"])
-            self._number_of_flows_per_read = len(self._flow_chars)
-        except KeyError:
-            raise ValueError("Missing Nib flow information")
-        self.write_header()
-        self.write_record(record)
-        count = 1
+        count = 0
         for record in records:
-            self.write_record(record)
             count += 1
-        if self._number_of_reads == 0:
-            # Must go back and record the record count...
-            offset = self.handle.tell()
-            self.handle.seek(0)
-            self._number_of_reads = count
-            self.write_header()
-            self.handle.seek(offset)  # not essential?
-        else:
-            assert count == self._number_of_reads
-        if self._index is not None:
-            self._write_index()
+        if count == 0:
+            raise ValueError("Must have one sequence")
+        if count > 1:
+            raise ValueError('More than one sequence found')
+        handle = self.handle
+        sequence = record.seq
+        nucleotides = str(sequence)
+        length = len(sequence)
+        handle.write(struct.pack('i', length))
+        table = str.maketrans('TCAGNtcagn', '0123401234')
+        padding = length % 2
+        suffix = padding * 'T'
+        nucleotides += suffix
+        indices = nucleotides.translate(table)
+        if set(indices) != set('01234'):
+            raise ValueError('Sequence should contain A,C,G,T,N,a,c,g,t,n only')
+        handle.write(bytes.fromhex(indices))
         return count
 
     def _write_index(self):
