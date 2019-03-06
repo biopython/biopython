@@ -241,8 +241,36 @@ from Bio.SeqRecord import SeqRecord
 import struct
 import sys
 
-from Bio._py3k import _bytes_to_string, _as_bytes
+try:
+    hex2bytes = bytes.fromhex # python3
+except AttributeError:
+    hex2bytes = lambda s: s.decode('hex') # python2
 
+try:
+    b''.hex # python3
+except AttributeError:
+    import binascii
+    bytes2hex = binascii.hexlify # python2
+else:
+    bytes2hex = lambda b: b.hex() # python3
+
+try:
+    int.from_bytes # python3
+except AttributeError:
+    def byte2int(b, byteorder):
+        if byteorder == 'little':
+            return struct.unpack("<i", b)[0]
+        elif byteorder == 'big':
+            return struct.unpack(">i", b)[0]
+else:
+    byte2int = lambda b, byteorder: int.from_bytes(b, byteorder) # python3
+
+
+try:
+    maketrans = str.maketrans # pythone
+except AttributeError:
+    import string
+    maketrans = string.maketrans
 
 # This is a generator function!
 def NibIterator(handle, alphabet=None):
@@ -274,7 +302,8 @@ def NibIterator(handle, alphabet=None):
     """
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
-    signature = handle.read(4).hex()
+    word = handle.read(4)
+    signature = bytes2hex(word)
     if signature == '3a3de96b':
         byteorder = 'little' # little-endian
     elif signature == '6be93d3a':
@@ -282,8 +311,9 @@ def NibIterator(handle, alphabet=None):
     else:
         raise ValueError('unexpected signature in Nib header')
     number = handle.read(4)
-    length = int.from_bytes(number, byteorder)
-    indices = handle.read().hex()
+    length = byte2int(number, byteorder)
+    data = handle.read()
+    indices = bytes2hex(data)
     if length % 2 == 0:
         if len(indices) != length:
             raise ValueError('Unexpected file size')
@@ -293,7 +323,7 @@ def NibIterator(handle, alphabet=None):
         indices = indices[:length]
     if set(indices) != set('01234'):
         raise ValueError('Unexpected sequence data found in file')
-    table = str.maketrans('01234','TCAGN')
+    table = maketrans('01234','TCAGN')
     nucleotides = indices.translate(table)
     sequence = Seq(nucleotides)
     record = SeqRecord(sequence)
@@ -317,7 +347,7 @@ class NibWriter(SequenceWriter):
             signature = '6be93d3a'
         else:
             raise RuntimeError('unexpected system byte order %s' % byteorder)
-        handle.write(bytes.fromhex(signature))
+        handle.write(hex2bytes(signature))
 
     def write_file(self, records):
         """Use this to write an entire file containing the given record."""
@@ -333,14 +363,14 @@ class NibWriter(SequenceWriter):
         nucleotides = str(sequence)
         length = len(sequence)
         handle.write(struct.pack('i', length))
-        table = str.maketrans('TCAGNtcagn', '0123401234')
+        table = maketrans('TCAGNtcagn', '0123401234')
         padding = length % 2
         suffix = padding * 'T'
         nucleotides += suffix
         indices = nucleotides.translate(table)
         if set(indices) != set('01234'):
             raise ValueError('Sequence should contain A,C,G,T,N,a,c,g,t,n only')
-        handle.write(bytes.fromhex(indices))
+        handle.write(hex2bytes(indices))
         return count
 
 
