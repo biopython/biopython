@@ -2,7 +2,8 @@
 # Based on code contributed and copyright 2016 by Peter Cock.
 #
 # This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included as part of this package.
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Bio.SeqIO support for the UCSC nib file format.
 
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
@@ -14,6 +15,9 @@ as follows:
     3 - G
     4 - N (unknown)
 
+"""
+
+"""
 A nib file contains only one sequence record.
 You are expected to use this module via the Bio.SeqIO functions under
 the format name "nib":
