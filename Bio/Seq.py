@@ -145,8 +145,17 @@ class Seq(object):
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
-        which need to be backwards compatible with old Biopython, you
-        should continue to use my_seq.tostring() rather than str(my_seq).
+        which need to be backwards compatible with really old Biopython,
+        you should continue to use my_seq.tostring() as follows::
+
+            try:
+                # The old way, removed in Biopython 1.73
+                as_string = seq_obj.tostring()
+            except AttributeError:
+                # The new way, needs Biopython 1.45 or later.
+                # Don't use this on Biopython 1.44 or older as truncates
+                as_string = str(seq_obj)
+
         """
         return self._data
 
