@@ -445,6 +445,8 @@ def check_simple_write_read(records, indent=" "):
             elif format == "qual":
                 assert isinstance(r2.seq, UnknownSeq)
                 assert len(r2) == len(r1)
+            elif format == "nib":
+                assert str(r1.seq).upper() == str(r2.seq)
             else:
                 assert str(r1.seq) == str(r2.seq)
             # Beware of different quirks and limitations in the
@@ -473,6 +475,8 @@ def check_simple_write_read(records, indent=" "):
                     "'%s' vs '%s'" % (r1.id, r2.id)
             elif format in ["fasta", "fasta-2line"]:
                 assert r1.id.split()[0] == r2.id
+            elif format == 'nib':
+                assert r2.id == '<unknown id>'
             else:
                 assert r1.id == r2.id, \
                     "'%s' vs '%s'" % (r1.id, r2.id)
