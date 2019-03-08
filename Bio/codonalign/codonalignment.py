@@ -13,8 +13,9 @@ from __future__ import division, print_function
 from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 
-from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alphabet, \
-                                            compare_codon_alphabet
+from Bio.codonalign.codonalphabet import (
+    default_codon_table, default_codon_alphabet, compare_codon_alphabet
+)
 from Bio.codonalign.codonseq import _get_codon_list, CodonSeq, cal_dn_ds
 from Bio.codonalign.chisq import chisqprob
 

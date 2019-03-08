@@ -58,11 +58,8 @@ def compare_codon_alphabet(codon_alphabet_1, codon_alphabet_2):
         if not isinstance(codon_alphabet, CodonAlphabet):
             raise TypeError("Only CodonAlphabet object accepted."
                             "{} is provided.".format(object(codon_alphabet)))
-    if set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters) and \
-            codon_alphabet_1.gap_char == codon_alphabet_2.gap_char:
-        return True
-    else:
-        return False
+    return (set(codon_alphabet_1.letters) == set(codon_alphabet_2.letters) and
+            codon_alphabet_1.gap_char == codon_alphabet_2.gap_char)
 
 
 if __name__ == "__main__":
