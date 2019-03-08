@@ -48,10 +48,12 @@ except AttributeError:
 try:
     b''.hex  # python3
 except AttributeError:
+    # python2, python3.4
     import binascii
-    bytes2hex = binascii.hexlify  # python2
+    bytes2hex = lambda b: binascii.hexlify(b).decode('ascii')
+    # the 'decode' is needed for python3.4 only
 else:
-    bytes2hex = lambda b: b.hex()  # python3
+    bytes2hex = lambda b: b.hex()  # python3 later than python2.4
 
 try:
     int.from_bytes  # python3
