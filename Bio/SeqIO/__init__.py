@@ -300,6 +300,9 @@ names are also used in Bio.AlignIO and include the following:
       MASE alignment format.
     - imgt    - An EMBL like format from IMGT where the feature tables are more
       indented to allow for longer feature types.
+    - nib     - UCSC's nib file format for nucleotide sequences, which uses one
+                nibble (4 bits) to represent each nucleotide, and stores two
+                nucleotides in one byte.
     - pdb-seqres -  Reads a Protein Data Bank (PDB) file to determine the
       complete protein sequence as it appears in the header (no dependencies).
     - pdb-atom - Uses Bio.PDB to determine the (partial) protein sequence as
@@ -415,37 +418,37 @@ else:
 #
 # Most alignment file formats will be handled via Bio.AlignIO
 
-_FormatToIterator = {"fasta": FastaIO.FastaIterator,
+_FormatToIterator = {"abi": AbiIO.AbiIterator,
+                     "abi-trim": AbiIO._AbiTrimIterator,
+                     "ace": AceIO.AceIterator,
+                     "fasta": FastaIO.FastaIterator,
                      "fasta-2line": FastaIO.FastaTwoLineIterator,
+                     "ig": IgIO.IgIterator,
+                     "embl": InsdcIO.EmblIterator,
+                     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
                      "gb": InsdcIO.GenBankIterator,
                      "genbank": InsdcIO.GenBankIterator,
                      "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
-                     "embl": InsdcIO.EmblIterator,
-                     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
                      "imgt": InsdcIO.ImgtIterator,
-                     "ig": IgIO.IgIterator,
-                     "swiss": SwissIO.SwissIterator,
-                     "pdb-atom": PdbIO.PdbAtomIterator,
-                     "pdb-seqres": PdbIO.PdbSeqresIterator,
+                     "nib": NibIO.NibIterator,
                      "cif-seqres": PdbIO.CifSeqresIterator,
                      "cif-atom": PdbIO.CifAtomIterator,
+                     "pdb-atom": PdbIO.PdbAtomIterator,
+                     "pdb-seqres": PdbIO.PdbSeqresIterator,
                      "phd": PhdIO.PhdIterator,
-                     "ace": AceIO.AceIterator,
-                     "tab": TabIO.TabIterator,
                      "pir": PirIO.PirIterator,
                      "fastq": QualityIO.FastqPhredIterator,
                      "fastq-sanger": QualityIO.FastqPhredIterator,
                      "fastq-solexa": QualityIO.FastqSolexaIterator,
                      "fastq-illumina": QualityIO.FastqIlluminaIterator,
                      "qual": QualityIO.QualPhredIterator,
+                     "seqxml": SeqXmlIO.SeqXmlIterator,
                      "sff": SffIO.SffIterator,
-                     "nib": NibIO.NibIterator,
                      # Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
+                     "swiss": SwissIO.SwissIterator,
+                     "tab": TabIO.TabIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
-                     "seqxml": SeqXmlIO.SeqXmlIterator,
-                     "abi": AbiIO.AbiIterator,
-                     "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
 _FormatToString = {
@@ -467,17 +470,17 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "genbank": InsdcIO.GenBankWriter,
                    "embl": InsdcIO.EmblWriter,
                    "imgt": InsdcIO.ImgtWriter,
-                   "tab": TabIO.TabWriter,
+                   "nib": NibIO.NibWriter,
+                   "phd": PhdIO.PhdWriter,
+                   "pir": PirIO.PirWriter,
                    "fastq": QualityIO.FastqPhredWriter,
                    "fastq-sanger": QualityIO.FastqPhredWriter,
                    "fastq-solexa": QualityIO.FastqSolexaWriter,
                    "fastq-illumina": QualityIO.FastqIlluminaWriter,
-                   "phd": PhdIO.PhdWriter,
                    "qual": QualityIO.QualPhredWriter,
-                   "sff": SffIO.SffWriter,
-                   "nib": NibIO.NibWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
-                   "pir": PirIO.PirWriter,
+                   "sff": SffIO.SffWriter,
+                   "tab": TabIO.TabWriter,
                    }
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "seqxml", "nib"]
