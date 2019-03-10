@@ -841,9 +841,9 @@ in memory as separate objects - editing one will not update the other!
 There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
 and multiple sequence alignments. These calculations are relatively slow, and you generally
 wouldn't want to write such an algorithm in Python. For pairwise alignments Biopython contains
-the \verb|Bio.pairwise2| module (see Section~\ref{sec:pairwise2}), which is supplemented by
-functions written in C for speed enhancements. In addition, you can use Biopython to invoke a
-command line tool on your behalf. Normally you would:
+the \verb|Bio.pairwise2| module , which is supplemented by functions written in C for speed
+enhancements and the new \verb|PairwiseAligner| (see Section~\ref{sec:pairwise}). In addition,
+you can use Biopython to invoke a command line tool on your behalf. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
       which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:Bio.SeqIO}).
@@ -1398,13 +1398,36 @@ and \texttt{water}. One useful trick is that the second file can contain
 multiple sequences (say five), and then EMBOSS will do five pairwise
 alignments.
 
-\subsection{Biopython's pairwise2}
+
+\section{Pairwise sequence alignment}
+\label{sec:pairwise}
+
+Pairwise sequence alignment is the process of aligning two sequences to each
+other by optimizing the similarity score between them. Biopython includes two
+built-in pairwise aligners: the 'old' \verb|Bio.pairwise2| module and the new
+\verb|PairwiseAligner| class within the \verb|Bio.Align| module (since Biopython
+version 1.72). Both can perform global and local alignments and offer numerous
+options to change the alignment parameters. Although \verb|pairwise2| has gained
+some speed and memory enhancements recently, the new \verb|PairwiseAligner| is
+much faster; so if you need to make many alignments with larger sequences, the
+latter would be the tool to choose. \verb|pairwise2|, on the contrary, is also
+able to align lists, which can be useful if your sequences do not consist of
+single characters only. 
+
+Given that the parameters and sequences are the same, both aligners will return
+the same alignments and alignment score (if the number of alignments is too high
+they may return different subsets of all valid alignments).
+
+\subsection{pairwise2}
 \label{sec:pairwise2}
-Biopython has its own module to make local and global pairwise alignments,
-\verb|Bio.pairwise2|. This module contains essentially the same algorithms as
+
+\verb|Bio.pairwise2| contains essentially the same algorithms as
 \texttt{water} (local) and \texttt{needle} (global) from the
 \href{http://emboss.sourceforge.net/}{EMBOSS} suite (see above) and should
-return the same results.
+return the same results. The \verb|pairwise2| module has undergone some
+optimization regarding speed and memory consumption recently (Biopython versions \textgreater 1.67) so that for short sequences (global alignments: \textasciitilde 2000 residues, local alignments \textasciitilde 600 residues) it's faster (or equally fast)
+to use \verb|pairwise2| than calling EMBOSS' \texttt{water} or \texttt{needle}
+via the command line tools.
 
 Suppose you want to do a global pairwise alignment between the same two
 hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
@@ -1456,7 +1479,7 @@ function \verb|format_alignment| for a nicer printout:
 \begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignment[0]))
 MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
-|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |   |  
+|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
 MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
   Score=72
 \end{verbatim}
@@ -1483,8 +1506,8 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 \begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignments[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
-|| |.|..|..|.|.||||  ...|.|.|||.|.....|.....   ||.
-MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH
+|| |.|..|..|.|.|||| ......|............|.......||.
+MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
   Score=292.5
 \end{verbatim}
 
@@ -1503,6 +1526,27 @@ where again XX stands for a two letter code for the match and gap functions:
 3 PADKTNV
   |..|..|
 1 PEEKSAV
+  Score=16
+<BLANKLINE>
+\end{verbatim}
+
+Note that local alignments must, as defined by Smith \& Waterman, have a 
+positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
+alignments if no score \textgreater 0 has been obtained. Also, \verb|pairwise2|
+will not report alignments which are the result of the addition of zero-scoring
+extensions on either site. In the next example, the pairs serin/aspartate (S/D)
+and lysin/asparagin (K/N) both have a match score of 0. As you see, the aligned
+part has not been extended:
+
+%doctest
+\begin{verbatim}
+>>> from Bio import pairwise2
+>>> from Bio.SubsMat.MatrixInfo import blosum62
+>>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
+>>> print(pairwise2.format_alignment(*alignments[0]))
+4 PADKTNV
+  |..|..|
+3 PEEKSAV
   Score=16
 <BLANKLINE>
 \end{verbatim}
@@ -1527,6 +1571,8 @@ One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
 \texttt{score\_only}. When set to \texttt{True} it will only return the score
 of the best alignment(s), but in a significantly shorter time. It will also
 allow the alignment of longer sequences before a memory error is raised.
+Another useful keyword argument is \texttt{one\_alignment\_only=True} which
+will also result in some speed gain.
 
 Unfortunately, \verb|Bio.pairwise2| does not work with Biopython's multiple
 sequence alignment objects (yet).
@@ -1539,17 +1585,13 @@ are hard (if at all) to realize with other alignment tools. For more details
 see the modules documentation in
 \href{http://biopython.org/DIST/docs/api/Bio.pairwise2-module.html}{Biopython's API}.
 
-\section{Pairwise sequence alignment}
-\label{sec:pairwise}
-
-Pairwise sequence alignment is the process of aligning two sequences to each
-other by optimizing the similarity score between them.
-Biopython includes a built-in pairwise aligner that implements the
-Needleman-Wunsch, Smith-Waterman, Gotoh (three-state), and Waterman-Smith-Beyer
-global and local pairwise alignment algorithms.
+\subsection{PairwiseAligner}
+\label{sec:pairwisealigner}
+The new \verb|Bio.Align.PairwiseAligner| implements the Needleman-Wunsch, Smith-Waterman,
+Gotoh (three-state), and Waterman-Smith-Beyer global and local pairwise alignment algorithms.
 We refer to Durbin {\it et al.} \cite{durbin1998} for in-depth information on sequence alignment algorithms.
 
-\subsection{Basic usage}
+\subsubsection{Basic usage}
 \label{sec:pairwise-basic}
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
@@ -1617,7 +1659,7 @@ AGAACTC
 
 Note that there is some ambiguity in the definition of the best local alignments if segments with a score 0 can be added to the alignment. We follow the suggestion by Waterman \& Eggert \cite{waterman1987} and disallow such extensions.
 
-\subsection{The pairwise aligner object}
+\subsubsection{The pairwise aligner object}
 \label{sec:pairwise-aligner}
 
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
@@ -1665,7 +1707,7 @@ A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used 
 \end{verbatim}
 Two scores will be considered equal to each other for the purpose of the alignment if the absolute difference between them is less than $\epsilon$.
 
-\subsection{Match and mismatch scores}
+\subsubsection{Match and mismatch scores}
 \label{sec:pairwise-matchscores}
 
 The match and mismatch scores are stored as attributes of an \verb+PairwiseAligner+
@@ -1713,7 +1755,7 @@ In all cases, the character \verb+X+ is used to denote unknown characters,
 which will always get a zero score in alignments, irrespective of the match or
 mismatch score.
  
-\subsection{Affine gap scores}
+\subsubsection{Affine gap scores}
 \label{sec:pairwise-affine-gapscores}
 
 Affine gap scores are defined by a score to open a gap, and a score to extend
@@ -1814,7 +1856,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \end{tabular}
 \end{table}
 
-\subsection{General gap scores}
+\subsubsection{General gap scores}
 \label{sec:pairwise-general-gapscores}
 
 For even more fine-grained control over the gap scores, you can specify a gap scoring function. For example, the gap scoring function below disallows a gap after two nucleotides in the query sequence:
@@ -1852,7 +1894,7 @@ AATT-
 <BLANKLINE>
 \end{verbatim}
 
-\subsection{Iterating over alignments}
+\subsubsection{Iterating over alignments}
 
 The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable iterable objects (similar to \verb+range+). While they appear similarto a \verb+tuple+ or \verb+list+ of \verb+PairwiseAlignment+ objects, they are different in the sense that each \verb+PairwiseAlignment+ object is created dynamically when it is needed. This approach was chosen because the number of alignments can be extremely large, in particular for poor alignments (see Section~\ref{sec:pairwise-examples} for an example).
 
@@ -1940,7 +1982,7 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 \end{verbatim}
 \end{itemize}
 
-\subsection{Alignment objects}
+\subsubsection{Alignment objects}
 The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
 %doctest
 \begin{verbatim}
@@ -1988,7 +2030,7 @@ You can also represent the alignment as a string in PSL (Pattern Space Layout, a
 '3\t0\t0\t0\t0\t0\t1\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t2\t2,1,\t0,2,\t0,4,\n'
 \end{verbatim}
 
-\subsection{Example}
+\subsubsection{Example}
 \label{sec:pairwise-examples}
 
 Suppose you want to do a global pairwise alignment between the same two
