@@ -1,5 +1,5 @@
 /* Copyright 2002 by Jeffrey Chang.
- * Copyright 2016 by Markus Piotrowski.
+ * Copyright 2016, 2019 by Markus Piotrowski.
  * All rights reserved.
  * This code is part of the Biopython distribution and governed by its
  * license. Please see the LICENSE file that should have been included
@@ -117,6 +117,8 @@ static PyObject *cpairwise2__make_score_matrix_fast(PyObject *self,
     double first_A_gap, first_B_gap;
     double match, mismatch;
     double score;
+    double best_score = 0;
+    double local_max_score = 0;
     int use_match_mismatch_scores;
     int lenA, lenB;
     double *score_matrix = NULL;
@@ -258,7 +260,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(PyObject *self,
                                  penalize_extend_when_opening);
         for(col=1; col<=lenB; col++) {
             double match_score, nogap_score;
-            double row_open, row_extend, col_open, col_extend, best_score;
+            double row_open, row_extend, col_open, col_extend;
             int best_score_rint, row_score_rint, col_score_rint;
             unsigned char row_trace_score, col_trace_score, trace_score;
 
@@ -297,6 +299,9 @@ static PyObject *cpairwise2__make_score_matrix_fast(PyObject *self,
             if(nogap_score > best_score)
                 best_score = nogap_score;
 
+            if (best_score > local_max_score)
+                local_max_score = best_score;
+
             if(!align_globally && best_score < 0)
                 score_matrix[row*(lenB+1)+col] = 0;
             else
@@ -329,56 +334,57 @@ static PyObject *cpairwise2__make_score_matrix_fast(PyObject *self,
         }
     }
 
+    if (!align_globally)
+        best_score = local_max_score;
+
     /* Save the score and traceback matrices into real python objects. */
-    if(!(py_score_matrix = PyList_New(lenA+1)))
-        goto _cleanup_make_score_matrix_fast;
-    if(!score_only){
-        if(!(py_trace_matrix = PyList_New(lenA+1)))
-            goto _cleanup_make_score_matrix_fast;
-    }
-    else
-        py_trace_matrix = PyList_New(1);
+	if(!score_only) {
+		if(!(py_score_matrix = PyList_New(lenA+1)))
+			goto _cleanup_make_score_matrix_fast;
+		if(!(py_trace_matrix = PyList_New(lenA+1)))
+			goto _cleanup_make_score_matrix_fast;
 
-    for(row=0; row<=lenA; row++) {
-        PyObject *py_score_row, *py_trace_row;
-        if(!(py_score_row = PyList_New(lenB+1)))
-            goto _cleanup_make_score_matrix_fast;
-        PyList_SET_ITEM(py_score_matrix, row, py_score_row);
-        if(!score_only){
-            if(!(py_trace_row = PyList_New(lenB+1)))
-                goto _cleanup_make_score_matrix_fast;
-            PyList_SET_ITEM(py_trace_matrix, row, py_trace_row);
-        }
+		for(row=0; row<=lenA; row++) {
+			PyObject *py_score_row, *py_trace_row;
+			if(!(py_score_row = PyList_New(lenB+1)))
+				goto _cleanup_make_score_matrix_fast;
+			PyList_SET_ITEM(py_score_matrix, row, py_score_row);
+			if(!(py_trace_row = PyList_New(lenB+1)))
+				goto _cleanup_make_score_matrix_fast;
+			PyList_SET_ITEM(py_trace_matrix, row, py_trace_row);
 
-        for(col=0; col<=lenB; col++) {
-            PyObject *py_score, *py_trace;
-            int offset = row*(lenB+1) + col;
+			for(col=0; col<=lenB; col++) {
+				PyObject *py_score, *py_trace;
+				int offset = row*(lenB+1) + col;
 
-            /* Set py_score_matrix[row][col] to the score. */
-            if(!(py_score = PyFloat_FromDouble(score_matrix[offset])))
-                goto _cleanup_make_score_matrix_fast;
-            PyList_SET_ITEM(py_score_row, col, py_score);
+				/* Set py_score_matrix[row][col] to the score. */
+				if(!(py_score = PyFloat_FromDouble(score_matrix[offset])))
+					goto _cleanup_make_score_matrix_fast;
+				PyList_SET_ITEM(py_score_row, col, py_score);
 
-            if(score_only)
-                continue;
-            /* Set py_trace_matrix[row][col] to a list of indexes.  On
-               the edges of the matrix (row or column is 0), the
-               matrix should be [None]. */
-            if(!row || !col) {
-                if(!(py_trace = Py_BuildValue("B", 1)))
-                    goto _cleanup_make_score_matrix_fast;
-                Py_INCREF(Py_None);
-                PyList_SET_ITEM(py_trace_row, col, Py_None);
-            }
-            else {
-                if(!(py_trace = Py_BuildValue("B", trace_matrix[offset])))
-                    goto _cleanup_make_score_matrix_fast;
-                PyList_SET_ITEM(py_trace_row, col, py_trace);
+				/* Set py_trace_matrix[row][col] to a list of indexes.  On
+				   the edges of the matrix (row or column is 0), the
+				   matrix should be [None]. */
+				if(!row || !col) {
+					if(!(py_trace = Py_BuildValue("B", 1)))
+						goto _cleanup_make_score_matrix_fast;
+					Py_INCREF(Py_None);
+					PyList_SET_ITEM(py_trace_row, col, Py_None);
+				}
+				else {
+					if(!(py_trace = Py_BuildValue("B", trace_matrix[offset])))
+						goto _cleanup_make_score_matrix_fast;
+					PyList_SET_ITEM(py_trace_row, col, py_trace);
 
-            }
-        }
-    }
-    py_retval = Py_BuildValue("(OO)", py_score_matrix, py_trace_matrix);
+				}
+			}
+		}
+	}
+	else {
+		py_score_matrix = PyList_New(1);
+		py_trace_matrix = PyList_New(1);
+	}
+    py_retval = Py_BuildValue("(OOd)", py_score_matrix, py_trace_matrix, best_score);
 
  _cleanup_make_score_matrix_fast:
     if(score_matrix)
@@ -456,6 +462,7 @@ PyInit_cpairwise2(void)
 #else
 
 void
+/* for Windows: _declspec(dllexport) initcpairwise2(void) */
 initcpairwise2(void)
 #endif
 

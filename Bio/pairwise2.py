@@ -1,5 +1,5 @@
 # Copyright 2002 by Jeffrey Chang.
-# Copyright 2016 by Markus Piotrowski.
+# Copyright 2016, 2019 by Markus Piotrowski.
 # All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
@@ -11,7 +11,10 @@
 This provides functions to get global and local alignments between two
 sequences. A global alignment finds the best concordance between all
 characters in two sequences. A local alignment finds just the
-subsequences that align the best.
+subsequences that align the best. Local alignments must have a positive
+score to be reported and they will not be extended for 'zero counting'
+matches. This means a local alignment will always start and end with
+a positive counting match.
 
 When doing alignments, you can specify the match score and gap
 penalties.  The match score indicates the compatibility between an
@@ -466,29 +469,19 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         matrices = _make_score_matrix_generic(
             sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             penalize_end_gaps, align_globally, score_only)
-    score_matrix, trace_matrix = matrices
+    score_matrix, trace_matrix, best_score = matrices
 
     # print("SCORE %s" % print_matrix(score_matrix))
     # print("TRACEBACK %s" % print_matrix(trace_matrix))
-
-    # Look for the proper starting point. Get a list of all possible
-    # starting points.
-    starts = _find_start(score_matrix, align_globally)
-    # Find the highest score.
-    best_score = max([_[0] for _ in starts])
 
     # If they only want the score, then return it.
     if score_only:
         return best_score
 
-    tolerance = 0  # XXX do anything with this?
-    # Now find all the positions within some tolerance of the best
-    # score.
-    starts = [(score, pos) for score, pos in starts
-              if rint(abs(score - best_score)) <= rint(tolerance)]
+    starts = _find_start(score_matrix, best_score, align_globally)
 
     # Recover the alignments and return them.
-    alignments = _recover_alignments(sequenceA, sequenceB, starts,
+    alignments = _recover_alignments(sequenceA, sequenceB, starts, best_score,
                                      score_matrix, trace_matrix,
                                      align_globally, gap_char,
                                      one_alignment_only, gap_A_fn, gap_B_fn)
@@ -498,10 +491,10 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
                                                        trace_matrix)
         starts = [(z, (y, x)) for z, (x, y) in starts]
         alignments = _recover_alignments(sequenceB, sequenceA, starts,
-                                         score_matrix, trace_matrix,
-                                         align_globally, gap_char,
-                                         one_alignment_only, gap_B_fn,
-                                         gap_A_fn, reverse=True)
+                                         best_score, score_matrix,
+                                         trace_matrix, align_globally,
+                                         gap_char, one_alignment_only,
+                                         gap_B_fn, gap_A_fn, reverse=True)
     return alignments
 
 
@@ -515,6 +508,7 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
     you define your own gap functions. You can force the usage of this method
     with ``force_generic=True``.
     """
+    local_max_score = 0
     # Create the score and traceback matrices. These should be in the
     # shape:
     # sequenceA (down) x sequenceB (across)
@@ -579,6 +573,7 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
 
             best_score = max(nogap_score, row_open, row_extend, col_open,
                              col_extend)
+            local_max_score = max(local_max_score, best_score)
             if not align_globally and best_score < 0:
                 score_matrix[row][col] = 0
             else:
@@ -600,7 +595,10 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
                     trace_score += 16
                 trace_matrix[row][col] = trace_score
 
-    return score_matrix, trace_matrix
+    if not align_globally:
+        best_score = local_max_score
+
+    return score_matrix, trace_matrix, best_score
 
 
 def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
@@ -621,6 +619,7 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
                                       penalize_extend_when_opening)
     first_B_gap = calc_affine_penalty(1, open_B, extend_B,
                                       penalize_extend_when_opening)
+    local_max_score = 0
 
     # Create the score and traceback matrices. These should be in the
     # shape:
@@ -692,6 +691,7 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
             col_score[col] = max(col_open, col_extend)
 
             best_score = max(nogap_score, col_score[col], row_score)
+            local_max_score = max(local_max_score, best_score)
             if not align_globally and best_score < 0:
                 score_matrix[row][col] = 0
             else:
@@ -729,10 +729,13 @@ def _make_score_matrix_fast(sequenceA, sequenceB, match_fn, open_A, extend_A,
                     trace_score += col_trace_score
                 trace_matrix[row][col] = trace_score
 
-    return score_matrix, trace_matrix
+    if not align_globally:
+        best_score = local_max_score
+
+    return score_matrix, trace_matrix, best_score
 
 
-def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
+def _recover_alignments(sequenceA, sequenceB, starts, best_score, score_matrix,
                         trace_matrix, align_globally, gap_char,
                         one_alignment_only, gap_A_fn, gap_B_fn, reverse=False):
     """Do the backtracing and return a list of alignments (PRIVATE).
@@ -761,6 +764,9 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
         if align_globally:
             end = None
         else:
+            # If this start is a zero-extension: don't start here!
+            if (score, (row - 1, col - 1)) in starts:
+                continue
             # Local alignments should start with a positive score!
             if score <= 0:
                 continue
@@ -845,7 +851,8 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                     x = _find_gap_open(sequenceA, sequenceB, ali_seqA,
                                        ali_seqB, end, row, col, col_gap,
                                        gap_char, score_matrix, trace_matrix,
-                                       in_process, gap_A_fn, col, row, 'col')
+                                       in_process, gap_A_fn, col, row, 'col',
+                                       best_score, align_globally)
                     ali_seqA, ali_seqB, row, col, in_process, dead_end = x
             elif trace == 16:  # = col extend = extend gap in seqB
                 trace -= 16
@@ -853,16 +860,22 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
                 x = _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB,
                                    end, row, col, col_gap, gap_char,
                                    score_matrix, trace_matrix, in_process,
-                                   gap_B_fn, row, col, 'row')
+                                   gap_B_fn, row, col, 'row', best_score,
+                                   align_globally)
                 ali_seqA, ali_seqB, row, col, in_process, dead_end = x
 
             if trace:  # There is another path to follow...
                 cache += (trace,)
                 in_process.append(cache)
             trace = trace_matrix[row][col]
-            if not align_globally and score_matrix[row][col] <= 0:
-                begin = max(row, col)
-                trace = 0
+            if not align_globally:
+                if score_matrix[row][col] == best_score:
+                    # We have gone through a 'zero-score' extension, discard it
+                    dead_end = True
+                elif score_matrix[row][col] <= 0:
+                    # We have reached the end of the backtrace
+                    begin = max(row, col)
+                    trace = 0
         if not dead_end:
             if not reverse:
                 tracebacks.append((ali_seqA[::-1], ali_seqB[::-1], score,
@@ -875,7 +888,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, score_matrix,
     return _clean_alignments(tracebacks)
 
 
-def _find_start(score_matrix, align_globally):
+def _find_start(score_matrix, best_score, align_globally):
     """Return a list of starting points (score, (row, col)) (PRIVATE).
 
     Indicating every possible place to start the tracebacks.
@@ -884,13 +897,18 @@ def _find_start(score_matrix, align_globally):
     # In this implementation of the global algorithm, the start will always be
     # the bottom right corner of the matrix.
     if align_globally:
-        starts = [(score_matrix[-1][-1], (nrows - 1, ncols - 1))]
+        starts = [(best_score, (nrows - 1, ncols - 1))]
     else:
+        # For local alignments, there may be many different start points.
         starts = []
+        tolerance = 0  # XXX do anything with this?
+        # Now find all the positions within some tolerance of the best
+        # score.
         for row in range(nrows):
             for col in range(ncols):
                 score = score_matrix[row][col]
-                starts.append((score, (row, col)))
+                if rint(abs(score - best_score)) <= rint(tolerance):
+                    starts.append((score, (row, col)))
     return starts
 
 
@@ -957,7 +975,8 @@ def _finish_backtrace(sequenceA, sequenceB, ali_seqA, ali_seqB, row, col,
 
 def _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB, end, row, col,
                    col_gap, gap_char, score_matrix, trace_matrix, in_process,
-                   gap_fn, target, index, direction):
+                   gap_fn, target, index, direction, best_score,
+                   align_globally):
     """Find the starting point(s) of the extended gap (PRIVATE)."""
     dead_end = False
     target_score = score_matrix[row][col]
@@ -971,6 +990,10 @@ def _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB, end, row, col,
             ali_seqA += sequenceA[row:row + 1]
             ali_seqB += gap_char
         actual_score = score_matrix[row][col] + gap_fn(index, n + 1)
+        if not align_globally and score_matrix[row][col] == best_score:
+            # We have run through a 'zero-score' extension and discard it
+            dead_end = True
+            break
         if rint(actual_score) == rint(target_score) and n > 0:
             if not trace_matrix[row][col]:
                 break
