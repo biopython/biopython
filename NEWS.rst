@@ -39,6 +39,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Ralf Stephan
 - Sergio Valqui
+- Antony Lee
 
 18 December 2018: Biopython 1.73
 ================================
