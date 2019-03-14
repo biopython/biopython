@@ -21,3 +21,7 @@ Tests/SubsMat/acc_rep_mat.pik binary
 
 # MMTF is a binary file format,
 Tests/PDB/4CUP.mmtf binary
+
+# UCSC Nib files are binary:
+Tests/Nib/test_bigendian.nib binary
+Tests/Nib/test_littleendian.nib binary

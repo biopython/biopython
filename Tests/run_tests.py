@@ -282,6 +282,7 @@ DOCTEST_MODULES = [
     "Bio.SeqIO._index",
     "Bio.SeqIO.InsdcIO",
     "Bio.SeqIO.Interfaces",
+    "Bio.SeqIO.NibIO",
     "Bio.SeqIO.PhdIO",
     "Bio.SeqIO.PirIO",
     "Bio.SeqIO.QualityIO",
