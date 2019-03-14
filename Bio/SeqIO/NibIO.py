@@ -45,14 +45,16 @@ try:
 except AttributeError:
     hex2bytes = lambda s: s.decode('hex')  # python2
 
-try:
-    b''.hex  # python3
-except AttributeError:
-    # python2, python3.4
+if sys.version_info < (3, ):
+    # python2
+    import binascii
+    bytes2hex = binascii.hexlify
+elif sys.version_info < (3, 5):
+    # python3.4
     import binascii
     bytes2hex = lambda b: binascii.hexlify(b).decode('ascii')
-    # the 'decode' is needed for python3.4 only
 else:
+    # python3.5 and later
     bytes2hex = lambda b: b.hex()  # python3 later than python2.4
 
 try:
