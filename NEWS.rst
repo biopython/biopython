@@ -29,6 +29,8 @@ Support for the mysqlclient package, a fork of MySQLdb, has been added.
 
 We now capture the IDcode field from PDB Header records.
 
+The MEME motifs output parser is updated for compatbility with the output of MEME version 5.0.4.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -40,6 +42,7 @@ possible, especially the following contributors:
 - Ralf Stephan
 - Sergio Valqui
 - Antony Lee
+- Jean-Christophe Lachance
 
 18 December 2018: Biopython 1.73
 ================================
