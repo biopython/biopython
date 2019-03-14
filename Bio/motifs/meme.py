@@ -14,26 +14,14 @@ from Bio import motifs
 
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
-
     Examples
     --------
     >>> from Bio.motifs import meme
-    >>> with open("motifs/meme.out") as f:
+    >>> with open("meme.output.txt") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
-    Motif 1 SEQ10; + 8.71e-07
-    Motif 1 SEQ9; + 8.71e-07
-    Motif 1 SEQ8; + 8.71e-07
-    Motif 1 SEQ7; + 8.71e-07
-    Motif 1 SEQ6; + 8.71e-07
-    Motif 1 SEQ5; + 8.71e-07
-    Motif 1 SEQ4; + 8.71e-07
-    Motif 1 SEQ3; + 8.71e-07
-    Motif 1 SEQ2; + 8.71e-07
-    Motif 1 SEQ1; + 8.71e-07
-
     """
     record = Record()
     __read_version(record, handle)
@@ -73,7 +61,6 @@ def read(handle):
 
 class Motif(motifs.Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
-
     This subclass defines functions and data specific to MEME motifs.
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
@@ -103,16 +90,13 @@ class Instance(Seq.Seq):
 
 class Record(list):
     """A class for holding the results of a MEME run.
-
     A meme.Record is an object that holds the results from running
     MEME. It implements no methods of its own.
-
     The meme.Record class inherits from list, so you can access individual
     motifs in the record by their index. Alternatively, you can find a motif
     by its name:
-
     >>> from Bio import motifs
-    >>> with open("motifs/meme.out") as f:
+    >>> with open("meme.output.txt") as f:
     ...     record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
     >>> print(motif.name)
@@ -126,12 +110,12 @@ class Record(list):
         """Initialize."""
         self.version = ""
         self.datafile = ""
+        self.control_seq = ""
         self.command = ""
         self.alphabet = None
         self.sequences = []
 
     def __getitem__(self, key):
-        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
                 if motif.name == key:
@@ -144,6 +128,7 @@ class Record(list):
 
 
 def __read_version(record, handle):
+    #This function still works
     for line in handle:
         if line.startswith('MEME version'):
             break
@@ -172,13 +157,23 @@ def __read_datafile(record, handle):
         line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
-    if not line.startswith('DATAFILE'):
-        raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
+    if not line.startswith('PRIMARY SEQUENCES'):
+        raise ValueError("Line does not start with 'PRIMARY SEQUENCES':\n%s" % line)
     line = line.strip()
-    line = line.replace('DATAFILE= ', '')
+    line = line.replace('PRIMARY SEQUENCES= ', '')
     record.datafile = line
+    
+    try:
+        line = next(handle)
+    except StopIteration:
+        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
+    if not line.startswith('CONTROL SEQUENCES'):
+        raise ValueError("Line does not start with 'CONTROL SEQUENCES':\n%s" % line)
+    line = line.strip()
+    line = line.replace('CONTROL SEQUENCES= ', '')
+    record.control_seq = line
 
-
+    
 def __read_alphabet(record, handle):
     try:
         line = next(handle)
