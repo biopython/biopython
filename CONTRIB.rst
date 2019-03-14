@@ -119,6 +119,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - James Jeffryes <https://github.com/JamesJeffryes>
 - Jared Andrews <https://github.com/j-andrews7>
 - Jason A. Hackney <jhackney at domain stanford.edu>
+- Jean-Christophe Lachance <https://github.com/jclachance>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
 - Jeffrey Finkelstein <https://github.com/jfinkels/>
