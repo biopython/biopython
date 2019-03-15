@@ -8,16 +8,6 @@ ignore =
     # pycodestyle v2.4.0 default ignore is E121,E123,E126,E226,E24,E704,W503,W504
     # flake8 v3.6.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     W504,
-    # =====================================
-    # pydocstyle: D### - Missing Docstrings
-    # =====================================
-    # D100	Missing docstring in public module
-    # D101	Missing docstring in public class
-    # D102	Missing docstring in public method
-    # D103	Missing docstring in public function
-    # D104	Missing docstring in public package
-    # D105	Missing docstring in magic method
-    D101,D102,D103,D105,
     # ====================
     # flake8-bugbear: B###
     # ====================
