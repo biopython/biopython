@@ -1298,35 +1298,21 @@ class Seq(object):
         if isinstance(other, basestring):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-        temp_data = ""
-        # if the spacer is empty it will initially default none
-        if self._data == "":
-            a = None
-        else:
-            a = self.alphabet
+        a = self.alphabet
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
-                if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
-                    a = c.alphabet
-                else:
+                if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
                             "Incompatible alphabets {0!r} and {1!r}".format(
                                 a, c.alphabet))
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
-                temp_data += str(self) + str(c)
-            elif isinstance(c, basestring):
-                temp_data += str(self) + str(c)
-            else:
+            elif not isinstance(c, basestring):
                 raise ValueError("Input must be an iterable of Seqs or Strings")
-
-        if a is None:  # arguments are all alphabet-less strings
-            a = self.alphabet
-        if self._data == "":
-            return self.__class__(temp_data, a)
-        return self.__class__(temp_data[len(self._data):], a)  # remove the last addition of the spacer
+        temp_data = str(self).join([str(z) for z in other])
+        return self.__class__(temp_data, a)
 
 
 class UnknownSeq(Seq):
@@ -1890,20 +1876,13 @@ class UnknownSeq(Seq):
         if isinstance(other, basestring):
             raise ValueError("Input must be an iterable")
         from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
-        temp_data = ""
-        # if the spacer is empty it will initially default none
-        if self._length == 0:
-            a = None
-        else:
-            a = self.alphabet
+        a = self.alphabet
         type_is_unknown = True
         for c in other:
             if isinstance(c, SeqRecord):
                 raise TypeError("Iterable cannot contain SeqRecords")
             elif hasattr(c, "alphabet"):
-                if a is None:  # if spacer is empty alphabet defaults to type of the first sequence
-                    a = c.alphabet
-                else:
+                if a != c.alphabet:
                     if not Alphabet._check_type_compatible([a, c.alphabet]):
                         raise TypeError(
                             "Incompatible alphabets {0!r} and {1!r}".format(
@@ -1911,20 +1890,14 @@ class UnknownSeq(Seq):
                     a = Alphabet._consensus_alphabet([a, c.alphabet])
                 if not isinstance(c, UnknownSeq):
                     type_is_unknown = False
-                temp_data += str(self) + str(c)
             elif isinstance(c, basestring):
-                temp_data += str(self) + c
                 type_is_unknown = False
             else:
                 raise ValueError("Input must be an iterable of Seqs or Strings")
-        if a is None:  # arguments are all alphabet-less strings
-            a = self.alphabet
+        temp_data = str(self).join([str(z) for z in other])
         if temp_data.count(self._character) == len(temp_data) and type_is_unknown is True:
             return self.__class__(len(temp_data), a, self._character)
-        if self._length == 0:
-            return Seq(temp_data, a)
-
-        return Seq(temp_data[self._length:], a)  # remove the last addition of the spacer, object will be a Seq
+        return Seq(temp_data, a)
 
 
 class MutableSeq(object):
