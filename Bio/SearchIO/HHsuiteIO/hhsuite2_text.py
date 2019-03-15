@@ -13,7 +13,6 @@ from Bio.Alphabet import generic_protein
 
 __all__ = ('Hhsuite2TextParser')
 
-
 # precompile regex patterns for faster processing
 # regex for query name capture
 _RE_QUERY = re.compile(r'^Query\s+(.+)\s?$')
@@ -37,6 +36,7 @@ _PROGRAM = 'HHSUITE'
 # This determines the maximum numnber of hits that would be allowed in
 # the initial hit table.
 MAX_READ_UNTIL = 5000
+
 
 class Hhsuite2TextParser(object):
     """Parser for the HMMER 3.0 text output."""
@@ -99,15 +99,16 @@ class Hhsuite2TextParser(object):
         match = re.search(_RE_HIT_BLOCK_DESC, self.line)
         if not match:
             raise RuntimeError("Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line))
-        hit_data = { 'hit_id' : match.group(1),
-                     'description' : match.group(2).lstrip(' ;'),
-                     'query_start' : None,
-                     'query_end' : None,
-                     'query_seq' : '',
-                     'hit_start' : None,
-                     'hit_end' : None,
-                     'hit_seq' : '',
-                      }
+        hit_data = {
+            'hit_id' : match.group(1),
+            'description' : match.group(2).lstrip(' ;'),
+            'query_start' : None,
+            'query_end' : None,
+            'query_seq' : '',
+            'hit_start' : None,
+            'hit_end' : None,
+            'hit_seq' : ''
+        }
         self.line = self.handle.readline()
         # E-value could be in decimal or scientific notation, so split the string rather then use regexp
         # Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
@@ -200,6 +201,7 @@ class Hhsuite2TextParser(object):
             hit.evalue = block['evalue']
             hit.score = block['score']
             hit_list.append(hit)
+
         qresult = QueryResult(hit_list, query_id)
         qresult.program = _PROGRAM
         qresult.seq_len = self.seq_len
