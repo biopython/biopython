@@ -10,10 +10,12 @@ from __future__ import print_function
 from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
+from packaging import version
 
 
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
+
     Examples
     --------
     >>> from Bio.motifs import meme
@@ -22,10 +24,21 @@ def read(handle):
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
+
     """
+    legacy_version = '5.0.0'
     record = Record()
     __read_version(record, handle)
-    __read_datafile(record, handle)
+    assert isinstance(version.parse(legacy_version),version.Version), 'Legacy version cannot be recognized'
+    assert isinstance(version.parse(record.version),version.Version), 'MEME motif version number cannot be recognized'
+    if version.parse(record.version) > version.parse(legacy_version):
+        __read_datafile(record, handle)
+    elif version.parse(record.version) == version.parse(legacy_version):
+        __read_datafile(record, handle)
+    elif version.parse(record.version) < version.parse(legacy_version):
+        __read_legacy_datafile(record, handle)
+    else:
+        raise ValueError('Version provided in the MEME ouput cannot be compared to legacy version')
     __read_alphabet(record, handle)
     __read_sequences(record, handle)
     __read_command(record, handle)
@@ -61,6 +74,7 @@ def read(handle):
 
 class Motif(motifs.Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
+
     This subclass defines functions and data specific to MEME motifs.
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
@@ -90,6 +104,7 @@ class Instance(Seq.Seq):
 
 class Record(list):
     """A class for holding the results of a MEME run.
+
     A meme.Record is an object that holds the results from running
     MEME. It implements no methods of its own.
     The meme.Record class inherits from list, so you can access individual
@@ -128,7 +143,6 @@ class Record(list):
 
 
 def __read_version(record, handle):
-    #This function still works
     for line in handle:
         if line.startswith('MEME version'):
             break
@@ -137,6 +151,31 @@ def __read_version(record, handle):
     line = line.strip()
     ls = line.split()
     record.version = ls[2]
+
+
+def __read_legacy_datafile(record, handle):
+    for line in handle:
+        if line.startswith('TRAINING SET'):
+            break
+    else:
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
+    try:
+        line = next(handle)
+    except StopIteration:
+        raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
+    if not line.startswith('****'):
+        raise ValueError("Line does not start with '****':\n%s" % line)
+    try:
+        line = next(handle)
+    except StopIteration:
+        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
+    if not line.startswith('DATAFILE'):
+        raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
+    line = line.strip()
+    line = line.replace('DATAFILE= ', '')
+    record.datafile = line
 
 
 def __read_datafile(record, handle):
@@ -162,7 +201,6 @@ def __read_datafile(record, handle):
     line = line.strip()
     line = line.replace('PRIMARY SEQUENCES= ', '')
     record.datafile = line
-    
     try:
         line = next(handle)
     except StopIteration:
@@ -173,7 +211,7 @@ def __read_datafile(record, handle):
     line = line.replace('CONTROL SEQUENCES= ', '')
     record.control_seq = line
 
-    
+
 def __read_alphabet(record, handle):
     try:
         line = next(handle)
