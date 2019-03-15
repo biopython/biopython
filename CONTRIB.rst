@@ -122,6 +122,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
 - Jeffrey Finkelstein <https://github.com/jfinkels/>
+- Jens Thomas <https://github.com/linucks/>
 - Jeremy LaBarge <https://github.com/biojerm/biopython>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
