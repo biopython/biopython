@@ -20,12 +20,15 @@ either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
 more details.
 
+Our core sequence objects (``Seq``, ``UnknownSeq``, and ``MutableSeq``) now
+have a string-like ``.join()`` method.
+
 The NCBI now allows longer accessions in the GenBank file LOCUS line, meaning
 the fields may not always follow the historical column based positions. We
 no longer give a warning when parsing these. We now allow writing such files
 (although with a warning as support for reading them is not yet widespread).
 
-Support for the mysqlclient package, a fork of MySQLdb, has been added.
+Support for the ``mysqlclient`` package, a fork of MySQLdb, has been added.
 
 We now capture the IDcode field from PDB Header records.
 
