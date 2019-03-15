@@ -37,6 +37,7 @@ possible, especially the following contributors:
 
 - Bernhard Thiel
 - Brandon Invergo
+- Catherine Lesuisse
 - Chris Rands
 - Lenna Peterson
 - Nick Negretti
