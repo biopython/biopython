@@ -1,4 +1,4 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2019 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -20,6 +20,7 @@ class ModTest(unittest.TestCase):
     working_dir = os.path.join("PAML", "yn00_test")
 
     align_file = os.path.join(align_dir, "alignment.phylip")
+    dotname_align_file = os.path.join(align_dir, "alignment_dottednames.phylip")
     out_file = os.path.join(results_dir, "test.out")
     results_file = os.path.join(results_dir, "bad_results.out")
     bad_ctl_file1 = os.path.join(ctl_dir, "bad1.ctl")
@@ -138,6 +139,17 @@ class ModTest(unittest.TestCase):
 
     def testParseLongNames(self):
         pattern = os.path.join(self.results_dir, "yn00", 'yn00_long-*')
+        for results_file in glob.glob(pattern):
+            results = yn00.read(results_file)
+            # Expect seven taxa...
+            self.assertEqual(len(results), 7)
+            # ...each of which is compared to the other six.
+            self.assertEqual(set([len(v) for v in results.values()]), set([6]))
+            # ...each of which has five measures.
+            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+
+    def testParseDottedNames(self):
+        pattern = os.path.join(self.results_dir, "yn00", 'yn00_dotted-*')
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...

@@ -1,4 +1,4 @@
-# Copyright (C) 2012, 2013, 2016 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2012, 2013, 2016, 2019 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,7 +11,8 @@ import sys
 from Bio._py3k import range
 
 
-VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7", "4_8", "4_9a"]
+VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7", "4_8", "4_9a",
+            "4_9i"]
 
 
 def codeml(vers=None, verbose=False):
@@ -111,7 +112,7 @@ def yn00(vers=None, verbose=False):
         versions = [vers]
     else:
         versions = VERSIONS
-    tests = ["yn00", "yn00_long"]
+    tests = ["yn00", "yn00_long", "yn00_dotted"]
     for test in tests:
         print(test[0])
         yn = yn00.Yn00()
