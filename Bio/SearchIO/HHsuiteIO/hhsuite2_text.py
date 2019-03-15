@@ -150,24 +150,24 @@ class Hhsuite2TextParser(object):
             It's not possible to distinguish a sequence line from a Consensus line with
             a regexp, so need to check the ID column.
             """
-            return match[1].strip() != 'Consensus'
+            return match.group(1).strip() != 'Consensus'
 
         while True:
             if not self.line.strip():  # blank lines indicate the end of a hit block
                 return
             match = re.match(_RE_MATCH_BLOCK_QUERY_SEQ, self.line)
             if match and match_is_valid(match):
-                hit_match_data['query_seq'] += match[3].strip()
+                hit_match_data['query_seq'] += match.group(3).strip()
                 if hit_match_data['query_start'] is None:
-                    hit_match_data['query_start'] = int(match[2])
-                hit_match_data['query_end'] = int(match[4])
+                    hit_match_data['query_start'] = int(match.group(2))
+                hit_match_data['query_end'] = int(match.group(4))
             else:
                 match = re.match(_RE_MATCH_BLOCK_HIT_SEQ, self.line)
                 if match and match_is_valid(match):
-                    hit_match_data['hit_seq'] += match[3].strip()
+                    hit_match_data['hit_seq'] += match.group(3).strip()
                     if hit_match_data['hit_start'] is None:
-                        hit_match_data['hit_start'] = int(match[2])
-                    hit_match_data['hit_end'] = int(match[4])
+                        hit_match_data['hit_start'] = int(match.group(2))
+                    hit_match_data['hit_end'] = int(match.group(4))
             self.line = self.handle.readline()
 
     def _create_qresult(self, hit_blocks):
@@ -210,7 +210,7 @@ class Hhsuite2TextParser(object):
         return [qresult]
 
     def _unique_hit_id(self, hit_id, existing_ids, separator='_'):
-        """Return a unique hit id. (PRIVATE).
+        """Return a unique hit id (PRIVATE).
 
         Always append a numeric id to each hit as there may be multiple with the same id.
         """
