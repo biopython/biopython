@@ -132,15 +132,16 @@ class Hhsuite2TextParser(object):
     def _parse_hit_match_block(self, hit_match_data):
         """Parse a single block of hit sequence data (PRIVATE).
 
-        Parses block ala:
-        Q ss_pred             ceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCccc
-        Q 4P79:A|PDBID|C  160 YELGPALYLGWSASLLSILGGICVFSTAAASSKEEPAT  197 (198)
-        Q Consensus       160 ~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~  197 (198)
-                              .++|||||++|++.++.+++++++++..+..++++..+
-        T Consensus       327 ~~~GwS~~l~~~s~~l~lia~~l~~~~~~~~~~~~~~~  364 (364)
-        T 5B2G_A          327 REMGASLYVGWAASGLLLLGGGLLCCSGPSSGENLYFQ  364 (364)
-        T ss_dssp             EEECTHHHHHHHHHHHHHHHHHHHHCC-----------
-        T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
+        Parses block such as ::
+
+            Q ss_pred             ceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCccc
+            Q 4P79:A|PDBID|C  160 YELGPALYLGWSASLLSILGGICVFSTAAASSKEEPAT  197 (198)
+            Q Consensus       160 ~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~  197 (198)
+                                  .++|||||++|++.++.+++++++++..+..++++..+
+            T Consensus       327 ~~~GwS~~l~~~s~~l~lia~~l~~~~~~~~~~~~~~~  364 (364)
+            T 5B2G_A          327 REMGASLYVGWAASGLLLLGGGLLCCSGPSSGENLYFQ  364 (364)
+            T ss_dssp             EEECTHHHHHHHHHHHHHHHHHHHHCC-----------
+            T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
 
         """
         def match_is_valid(match):
