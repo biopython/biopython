@@ -1,0 +1,288 @@
+Query         sp|Q9BSU1|CP070_HUMAN UPF0183 protein C16orf70 OS=Homo sapiens OX=9606 GN=C16orf70 PE=1 SV=1
+Match_columns 422
+No_of_seqs    149 out of 573
+Neff          6.62119
+Searched_HMMs 16712
+Date          Wed Feb 13 09:26:07 2019
+Command       /home/shah/hh-suite/build/bin/hhsearch -i /home/shah/seq/q9bsu1/hhblits/q9bsu1_uniclust_w_ss.a3m -d /home/shah/db/pfamA_30/pfam -o /home/shah/seq/q9bsu1/hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr -p 20 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 2 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 PF03676.13 ; UPF0183 ; Unchara 100.0  2E-106  1E-110  822.8  46.8  393   11-407     1-395 (395)
+  2 PF04355.12 ; SmpA_OmlA ; SmpA   71.6    0.97 5.8E-05   31.5   1.2   20  239-258    12-31  (73)
+  3 PF11399.7 ; DUF3192 ; Protein   53.5     4.1 0.00025   31.0   1.6   20  239-258    34-53  (104)
+  4 PF14172.5 ; DUF4309 ; Domain o  52.4     7.5 0.00045   31.1   3.2   60  239-315    18-78  (135)
+  5 PF11006.7 ; DUF2845 ; Protein   48.8     5.3 0.00032   29.7   1.5   30  229-258     1-30  (93)
+  6 PF14504.5 ; CAP_assoc_N ; CAP-  41.1     9.7 0.00058   29.6   2.0   19  241-259     1-19  (140)
+  7 PF14504.5 ; CAP_assoc_N ; CAP-  41.1      17   0.001   28.1   3.5   58  239-309    62-128 (140)
+  8 PF14454.5 ; Prok_Ub ; Prokaryo  36.6      21  0.0013   24.9   3.0   30   88-117     5-34  (62)
+  9 PF14172.5 ; DUF4309 ; Domain o  36.0 1.3E+02  0.0079   23.2  11.3  112    9-174    11-135 (135)
+ 10 PF06185.11 ; YecM ; YecM prote  33.2      69  0.0041   26.7   6.3   59   13-73    102-167 (175)
+ 11 PF12978.6 ; DUF3862 ; Domain o  30.7      18  0.0011   28.8   2.0   20  239-258    95-114 (159)
+ 12 PF14504.5 ; CAP_assoc_N ; CAP-  29.7      83  0.0049   23.7   6.0   65   13-83     61-130 (140)
+ 13 PF09870.8 ; DUF2097 ; Uncharac  28.5 1.2E+02   0.007   22.7   6.2   60   23-82      5-69  (92)
+ 14 PF07467.10 ; BLIP ; Beta-lacta  26.3      22  0.0013   29.0   1.7   20  239-258    40-59  (184)
+ 15 PF12978.6 ; DUF3862 ; Domain o  25.9      32  0.0019   27.1   2.7   20  239-258    12-40  (159)
+ 16 PF10049.8 ; DUF2283 ; Protein   20.9      78  0.0047   19.8   3.4   23   62-85     26-48  (48)
+
+No 1
+>PF03676.13 ; UPF0183 ; Uncharacterised protein family (UPF0183)
+Probab=100.00  E-value=2e-106  Score=822.75  Aligned_cols=393  Identities=88%  Similarity=1.401  Sum_probs=0.0  Template_Neff=6.600
+
+Q ss_pred             ccCCCCceEEcCCcHHHHHHHHHHccCccccEEEEECCCCCcCCCeEEEecCCCeEEEeccccCceeEEEEecCCCCEEE
+Q sp|Q9BSU1|CP07   11 SLGNEQWEFTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLK   90 (422)
+Q Consensus        11 ~LG~~~~~f~LG~sL~~vi~~Lr~~~~~~~~Vel~Ys~~~Pl~~dIvi~L~~~GirL~Fd~~~QrL~lIEV~d~s~v~L~   90 (422)
+                      +||+    |+||||||+||++||++.+.+++|+|+|++++|++.||+|+|+++||||+||+.+|||++|||+|+++++|+
+T Consensus         1 ~lG~----f~LG~sL~~vl~~Lr~~~~~~~~v~i~Ys~~~P~~~~Ivi~Lp~~GirL~Fd~~~QrL~lIEv~d~~~~~L~   76 (395)
+T Q1LV04_DANRE/1    1 EQWE----FALGMPLAQAISILQKHCRIIKNVQVLYSEQMPLSHDLILNLTQDGIKLLFDACNQRLKVIEVYDLTKVKLK   76 (395)
+T ss_pred             CCcc----EEeCCcHHHHHHHHHhcccccccEEEEECCCCccCCcEEEEeCCCcEEEEEcCCCcEEEEEEEEcCCccEEE
+
+
+Q ss_pred             ECCEEecCCCCCCcHhHHHhhcCCCCCCCccCccceEEeeeCeEEEEeeCcccCCCCccCCCcccccccCCCCCCCeEEE
+Q sp|Q9BSU1|CP07   91 YCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLNFRGLSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKR  170 (422)
+Q Consensus        91 Y~g~~~~~~~~~pT~~~I~~~FGPTyPG~yd~~~~~Y~LsYpGisF~Fpi~~~~~~~~~~~~~~~~l~~~~~~~~~~~~~  170 (422)
+                      |++..|+++...|||++||++|||||||+||++++.|+|+||||+|.||++......+..+.+.++++++++++++.+++
+T Consensus        77 Y~~~~~~~~~~~~tf~~Iy~~FGPTyPG~~d~~~~~y~LsYpGlsF~Fp~~~~~~~~~~~~~~~~~l~~~~~~~~~~~~~  156 (395)
+T Q1LV04_DANRE/1   77 YCGVHFNSQAIAPTIEQIDQSFGATHPGVYNAAEQLFHLNFRGLSFSFQLDSWSEAPKYEPNFAHGLASLQIPHGATVKR  156 (395)
+T ss_pred             ECCEEecCCCCCCCHHHHHHHhcCCCCCccccccCEEEEeeCCEEEEeeCCccccCCccCCCcccccccccCCCCCeeEE
+
+
+Q ss_pred             EEEEeCCChHhcCCCCCCcchhcCcceeEEEEEeeCCCCCceEEEEEEecCCCCccccccceeEEEEEEEeCCchHHHHH
+Q sp|Q9BSU1|CP07  171 MYIYSGNSLQDTKAPMMPLSCFLGNVYAESVDVLRDGTGPAGLRLRLLAAGCGPGLLADAKMRVFERSVYFGDSCQDVLS  250 (422)
+Q Consensus       171 m~If~G~s~~~~~~~~~p~~~~~~~~~~~~v~v~~~~~~~~gl~~~~~~~~~~~~~~~~~~~~~~~~~I~fG~T~QDVl~  250 (422)
+                      |+||+|++|.++..|.+|.+|++++++.++|++.+..+...|++|++...+.+++...+...+...++|.||+|+|||++
+T Consensus       157 ~~If~G~~~~~~~~p~~p~~~~~~~~~~~~v~v~~~~~~~~g~~l~f~~~~~~~~~~~~~~~~~~~~~I~~G~TtQDVl~  236 (395)
+T Q1LV04_DANRE/1  157 MYIYSGNNLQETKAPAMPLACFLGNVYAECVEVLRDGAGPLGLKLRLLTAGCGPGVLADTKVRAVERSIYFGDSCQDVLS  236 (395)
+T ss_pred             EEEeeCCCccccCCCCCCchhcCCceeeEEEEEEeCCCCCcceEEEEEeCCCCCCcccccccccceEEEEecCCHHHHHH
+
+
+Q ss_pred             hhcCCcEEEEcCcccCccCCCCCCcCCCCcccccchhHHHhccceeecCCCCeEEEEEecCCCCCCchhhcccCCcEEee
+Q sp|Q9BSU1|CP07  251 MLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTNYPGHYNFNIYHRCEFKIP  330 (422)
+Q Consensus       251 ~LG~P~~vf~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lGlDiLfd~~th~v~KiILHtN~PGh~~F~~Y~RC~f~i~  330 (422)
+                      +||+|+++|||+||||+||+...++.......+||||||+||||||||+.||+|+|||||||+|||++||+|+||+|+|.
+T Consensus       237 ~LG~P~~vf~K~ddrm~IH~~~~~~~~~~~~~~yF~NYF~lGlDiLfd~~th~v~KiILHtN~Pg~~~F~~Y~RC~w~i~  316 (395)
+T Q1LV04_DANRE/1  237 ALGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYYILGVDILFDSTTHLVKKFVLHTNFPGHYNFNIYHRCDFKIP  316 (395)
+T ss_pred             HhCCCceEEEcCcccccccCCCCCCCCCccccccchhhHHhceeeeeeCCCceeEEEEEecCCCCccccCccccCcEEEE
+
+
+Q ss_pred             ccccccCCCCCcc--cccCCCCHHHHHHHhCCCCCCCeEeeCCCCCCCCCCCCceEEeccCCEEEEEecCCCEEEEEEe
+Q sp|Q9BSU1|CP07  331 LAIKKENADGQTE--TCTTYSKWDNIQELLGHPVEKPVVLHRSSSPNNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY  407 (422)
+Q Consensus       331 ~~~~~~~~~~~~~--~it~~~k~~~i~~~l~~~~~~pvvlnR~~s~~~~npfg~T~lyG~~~~ifEVm~n~~IasVTlf  407 (422)
+                      .............  .++++++|++|++.|....++||||||+++.+..|+||+|+||||+|||||||+||+|||||||
+T Consensus       317 ~~~~~~~~~~~~~~~~i~~~~~~~~i~~~l~~~~~~p~vLnR~~~~~~~~~~g~t~lyG~~g~IfEV~~ng~IasVTlf  395 (395)
+T Q1LV04_DANRE/1  317 LIIKKDGADAHSEDCILTTYSKWDQIQELLGHPMEKPVVLHRSSSANNTNPFGSTFCFGLQRMIFEVMQNNHIASVTLY  395 (395)
+T ss_pred             ecCCcCCCccCcccceecCCCcHHHHHHHhcCCCCCCEEEecCCCCCCCCCCccEEEEeeCCEEEEEecCCcEEEEEeC
+
+
+No 2
+>PF04355.12 ; SmpA_OmlA ; SmpA / OmlA family
+Probab=71.64  E-value=0.97  Score=31.45  Aligned_cols=20  Identities=30%  Similarity=0.363  Sum_probs=0.0  Template_Neff=9.700
+
+Q ss_pred             EEeCCchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~fG~T~QDVl~~LG~P~~v  258 (422)
+                      |..|.|-+||+..||+|...
+T Consensus        12 i~~G~Tk~eV~~~lG~P~~~   31 (73)
+T A6W2D6_MARMS/3   12 LQIGMSESQVTYLLGNPMLR   31 (73)
+T ss_pred             CCCCCCHHHHHHHHCCCCcc
+
+
+No 3
+>PF11399.7 ; DUF3192 ; Protein of unknown function (DUF3192)
+Probab=53.47  E-value=4.1  Score=30.99  Aligned_cols=20  Identities=15%  Similarity=0.388  Sum_probs=0.0  Template_Neff=8.100
+
+Q ss_pred             EEeCCchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~fG~T~QDVl~~LG~P~~v  258 (422)
+                      |..|.|.++|++.||.|...
+T Consensus        34 l~~GMTk~qV~~iLG~P~~~   53 (104)
+T A3QGB8_SHELP/1   34 LSLGMTRDQVMTLMGTADFN   53 (104)
+T ss_pred             CCCCCCHHHHHHHhCCCcee
+
+
+No 4
+>PF14172.5 ; DUF4309 ; Domain of unknown function (DUF4309)
+Probab=52.40  E-value=7.5  Score=31.10  Aligned_cols=60  Identities=12%  Similarity=0.062  Sum_probs=0.0  Template_Neff=7.600
+
+Q ss_pred             EEeCCc-hHHHHHhhcCCcEEEEcCcccCccCCCCCCcCCCCcccccchhHHHhccceeecCCCCeEEEEEecCCCCC
+Q sp|Q9BSU1|CP07  239 VYFGDS-CQDVLSMLGSPHKVFYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVLHTNYPG  315 (422)
+Q Consensus       239 I~fG~T-~QDVl~~LG~P~~vf~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lGlDiLfd~~th~v~KiILHtN~PG  315 (422)
+                      +.+|.| .+||...+|.|++.++-++..                 +++++|...|+.+-+|.....+.=-....++-+
+T Consensus        18 ~~ig~s~~~eV~~~~G~P~~~~~~~~~~-----------------g~y~~y~~~~~~fg~~~~~~i~~ir~~~~~l~~   78 (135)
+T R4K5N0_CLOPA/8   18 FPAKDTNIDSVESKWGKADNSEWVASAK-----------------GLYSTYSKHNIVFGSNKGGQIFEVRSLDKQLGN   78 (135)
+T ss_pred             CCCCCCcHHHHHHHhCCCCceehhhhcC-----------------CeeEEEeCCeEEEEECCCCcEEEEEEeCccccc
+
+
+No 5
+>PF11006.7 ; DUF2845 ; Protein of unknown function (DUF2845)
+Probab=48.79  E-value=5.3  Score=29.67  Aligned_cols=30  Identities=27%  Similarity=0.282  Sum_probs=0.0  Template_Neff=8.000
+
+Q ss_pred             ccceeEEEEEEEeCCchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  229 DAKMRVFERSVYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       229 ~~~~~~~~~~I~fG~T~QDVl~~LG~P~~v  258 (422)
+                      ...++.....|..|+|..+|+..+|.|...
+T Consensus         1 a~s~RCg~~lV~~Gds~~~Vl~~cGeP~~~   30 (93)
+T H8MKT6_CORCM/2    1 ASALRCDNKIVSEGASQVDALAKCGQPVTK   30 (93)
+T ss_pred             CCCcccCCcccCCCCCHHHHHHHhCCCeee
+
+
+No 6
+>PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=41.13  E-value=9.7  Score=29.55  Aligned_cols=19  Identities=26%  Similarity=0.562  Sum_probs=0.0  Template_Neff=9.700
+
+Q ss_pred             eCCchHHHHHhhcCCcEEE
+Q sp|Q9BSU1|CP07  241 FGDSCQDVLSMLGSPHKVF  259 (422)
+Q Consensus       241 fG~T~QDVl~~LG~P~~vf  259 (422)
+                      +|+|.++|.+.||.|.++.
+T Consensus         1 iG~~~~~v~~~lG~P~~~~   19 (140)
+T U5LAW6_9BACI/1    1 IGKNASDLQVLLGDPERKD   19 (140)
+T ss_pred             CCCCHHHHHHHHCCCceeC
+
+
+No 7
+>PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=41.12  E-value=17  Score=28.06  Aligned_cols=58  Identities=7%  Similarity=0.077  Sum_probs=0.0  Template_Neff=9.700
+
+Q ss_pred             EEeCCchHHHHHhhcCCcEE---------EEcCcccCccCCCCCCcCCCCcccccchhHHHhccceeecCCCCeEEEEEe
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV---------FYKSEDKMKIHSPSPHKQVPSKCNDYFFNYFTLGVDILFDANTHKVKKFVL  309 (422)
+Q Consensus       239 I~fG~T~QDVl~~LG~P~~v---------f~K~ddrm~IH~~~~~~~~~~~~~dyF~NYF~lGlDiLfd~~th~v~KiIL  309 (422)
+                      |..|+|.++|++.+|.|..+         .|+.++             ......-++.+=...+-+.||..+++|.-|.+
+T Consensus        62 i~iG~s~~~v~~~~G~p~~~~~~~~~~~~~~~~~~-------------~~~~~~~~~~~~~~~~~~~~d~~~g~v~~i~~  128 (140)
+T U5LAW6_9BACI/1   62 FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSE-------------DDLNTRPLIKAGNIYAQLYIDRFTGELSSIRY  128 (140)
+T ss_pred             ccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECc-------------chhceeeeEEECCEEEEEEEeCCCCEEEEEEE
+
+
+No 8
+>PF14454.5 ; Prok_Ub ; Prokaryotic Ubiquitin
+Probab=36.58  E-value=21  Score=24.91  Aligned_cols=30  Identities=23%  Similarity=0.342  Sum_probs=0.0  Template_Neff=4.700
+
+Q ss_pred             EEEECCEEecCCCCCCcHhHHHhhcCCCCC
+Q sp|Q9BSU1|CP07   88 KLKYCGVHFNSQAIAPTIEQIDQSFGATHP  117 (422)
+Q Consensus        88 ~L~Y~g~~~~~~~~~pT~~~I~~~FGPTyP  117 (422)
+                      .++|++..+..|+...+..+|.+.+.++||
+T Consensus         5 ~F~~~g~~L~DP~P~~spe~V~~~ya~~yP   34 (62)
+T H8H183_DEIGI/2    5 VFKFDGKVLDDPNPKSTPEQVKTFYAPTYP   34 (62)
+T ss_pred             EEEECCEEccCCCCCCCHHHHHHHHHhhCH
+
+
+No 9
+>PF14172.5 ; DUF4309 ; Domain of unknown function (DUF4309)
+Probab=35.95  E-value=1.3e+02  Score=23.17  Aligned_cols=112  Identities=12%  Similarity=0.155  Sum_probs=0.0  Template_Neff=7.600
+
+Q ss_pred             ccccCCCCceEEcCCc-HHHHHHHHHHccCccccEEEEECCCCCcCCC-------eEEEecCCCeEEEeccccCceeEEE
+Q sp|Q9BSU1|CP07    9 ERSLGNEQWEFTLGMP-LAQAVAILQKHCRIIKNVQVLYSEQSPLSHD-------LILNLTQDGIKLMFDAFNQRLKVIE   80 (422)
+Q Consensus         9 g~~LG~~~~~f~LG~s-L~~vi~~Lr~~~~~~~~Vel~Ys~~~Pl~~d-------Ivi~L~~~GirL~Fd~~~QrL~lIE   80 (422)
+                      |.-.|.   +|.+|++ +.+|.+.+                ..|-...       ......+.++.+-|+...|   +.|
+T Consensus        11 G~~~~~---~~~ig~s~~~eV~~~~----------------G~P~~~~~~~~~~g~y~~y~~~~~~fg~~~~~~---i~~   68 (135)
+T R4K5N0_CLOPA/8   11 GKVFNS---DFPAKDTNIDSVESKW----------------GKADNSEWVASAKGLYSTYSKHNIVFGSNKGGQ---IFE   68 (135)
+T ss_pred             CCCCCC---CCCCCCCcHHHHHHHh----------------CCCCceehhhhcCCeeEEEeCCeEEEEECCCCc---EEE
+
+
+Q ss_pred             EecCCCCEEEECCEEecCCCCCCcHhHHHhhcCCCCCCCccCccceEEeeeC-e----EEEEeeCcccCCCCccCCCccc
+Q sp|Q9BSU1|CP07   81 VCDLTKVKLKYCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLNFR-G----LSFSFQLDSWTEAPKYEPNFAH  155 (422)
+Q Consensus        81 V~d~s~v~L~Y~g~~~~~~~~~pT~~~I~~~FGPTyPG~yd~~~~~Y~LsYp-G----isF~Fpi~~~~~~~~~~~~~~~  155 (422)
+                      |..+            ...-...|+..|.+.+|-  |.+-....+.|.+-|. |    |-|.|+.+...           
+T Consensus        69 ir~~------------~~~l~~lt~~~ikk~LG~--P~~~~~~~g~~~~~Y~~g~~y~L~f~~~~~~~~-----------  123 (135)
+T R4K5N0_CLOPA/8   69 VRSL------------DKQLGNIYLSMVKDKLGT--PQHDVKVNGEEIIGYKMGNDFKILFVFPEPTNQ-----------  123 (135)
+T ss_pred             EEEe------------CccccccCHHHHHHhhCC--CceEEEECCEEEEEEEcCCCEEEEEEeCCCCCC-----------
+
+
+Q ss_pred             ccccCCCCCCCeEEEEEEE
+Q sp|Q9BSU1|CP07  156 GLASLQIPHGATVKRMYIY  174 (422)
+Q Consensus       156 ~l~~~~~~~~~~~~~m~If  174 (422)
+                             ..++.+.+|.||
+T Consensus       124 -------~~~~~v~hi~l~  135 (135)
+T R4K5N0_CLOPA/8  124 -------HANPIMSHYSVL  135 (135)
+T ss_pred             -------CCCCceeEEEeC
+
+
+No 10
+>PF06185.11 ; YecM ; YecM protein
+Probab=33.21  E-value=69  Score=26.69  Aligned_cols=59  Identities=17%  Similarity=0.109  Sum_probs=0.0  Template_Neff=5.600
+
+Q ss_pred             CCCCceEEcCCcHHHHHHHHHHccCccc--cEEEEECC-----CCCcCCCeEEEecCCCeEEEecccc
+Q sp|Q9BSU1|CP07   13 GNEQWEFTLGMPLAQAVAILQKHCRIIK--NVQVLYSE-----QSPLSHDLILNLTQDGIKLMFDAFN   73 (422)
+Q Consensus        13 G~~~~~f~LG~sL~~vi~~Lr~~~~~~~--~Vel~Ys~-----~~Pl~~dIvi~L~~~GirL~Fd~~~   73 (422)
+                      |.+++||++.....+.++.+.+....++  .+++++|.     +....-.|.+.+  +|+.+-|.|.+
+T Consensus       102 GwEHiE~Vvp~~~~~~~~~~~~~~~~~~~~~i~~k~s~pk~~~erl~NPtva~~~--~~~~iKfHp~s  167 (175)
+T Q7N560_PHOLL/9  102 GWEHVELVLPVAPEILSTAAKALLPQPLPAGFSVKESQPKGEQERLPNPTLAITD--GEITVKFHPFT  167 (175)
+T ss_pred             CeeEEEEEecCChHHHHHHHHHHCCCCCCCCcEEEEecCCCcccCCCCceEEEEc--CCEEEEEccCC
+
+
+No 11
+>PF12978.6 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)
+Probab=30.70  E-value=18  Score=28.76  Aligned_cols=20  Identities=30%  Similarity=0.610  Sum_probs=0.0  Template_Neff=9.300
+
+Q ss_pred             EEeCCchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~fG~T~QDVl~~LG~P~~v  258 (422)
+                      |..|.|.+||++.||.|...
+T Consensus        95 i~~Gmt~~eV~~~lG~P~~~  114 (159)
+T Q8DTX1_STRMU/4   95 LKIGESYKKVVEKLGEPDVL  114 (159)
+T ss_pred             cCCCCCHHHHHHHHCCCCee
+
+
+No 12
+>PF14504.5 ; CAP_assoc_N ; CAP-associated N-terminal
+Probab=29.70  E-value=83  Score=23.66  Aligned_cols=65  Identities=22%  Similarity=0.238  Sum_probs=0.0  Template_Neff=9.700
+
+Q ss_pred             CCCCceEEcCCcHHHHHHHHHHccCc-----cccEEEEECCCCCcCCCeEEEecCCCeEEEeccccCceeEEEEec
+Q sp|Q9BSU1|CP07   13 GNEQWEFTLGMPLAQAVAILQKHCRI-----IKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCD   83 (422)
+Q Consensus        13 G~~~~~f~LG~sL~~vi~~Lr~~~~~-----~~~Vel~Ys~~~Pl~~dIvi~L~~~GirL~Fd~~~QrL~lIEV~d   83 (422)
+                      |     +.+||+..++++.+-.....     -.......++.+-...++.-. .+..+.|.||..+.++.-|.+.+
+T Consensus        61 g-----i~iG~s~~~v~~~~G~p~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-~~~~~~~~~d~~~g~v~~i~~~~  130 (140)
+T U5LAW6_9BACI/1   61 P-----FHIGQPVSEIYSSVFIDTNINFQYKGSSYRFELSEDDLNTRPLIKA-GNIYAQLYIDRFTGELSSIRYMD  130 (140)
+T ss_pred             C-----ccCCCcHHHHHHhhCCCceEEEEEcCeEEEEEECcchhceeeeEEE-CCEEEEEEEeCCCCEEEEEEEec
+
+
+No 13
+>PF09870.8 ; DUF2097 ; Uncharacterized protein conserved in archaea (DUF2097)
+Probab=28.54  E-value=1.2e+02  Score=22.65  Aligned_cols=60  Identities=18%  Similarity=0.331  Sum_probs=0.0  Template_Neff=4.100
+
+Q ss_pred             CcHHHHHHHHHHccCccccEEEEECCCCCcCCCeEEEe----cCCCeEEEeccccCcee-EEEEe
+Q sp|Q9BSU1|CP07   23 MPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNL----TQDGIKLMFDAFNQRLK-VIEVC   82 (422)
+Q Consensus        23 ~sL~~vi~~Lr~~~~~~~~Vel~Ys~~~Pl~~dIvi~L----~~~GirL~Fd~~~QrL~-lIEV~   82 (422)
+                      |+--+++++++.+-.....++|.|+--.--..=+.+.-    ...++++.+.-..+.+. +||+.
+T Consensus         5 m~~eE~ieYi~~nV~~gD~lEisy~Rv~vpGeVi~i~~~~~~~~~~~~~~l~l~ge~~~~~vevD   69 (92)
+T A5UN43_METS3/2    5 LTPDKAVEYLKDNVKIHDNLEISYNRIFGSGEVLNMDFSEYFGKPGFKMLLSLDGDSINPTIEID   69 (92)
+T ss_pred             CCHHHHHHHHHHhCCcCCeEEEEeceeeeeeeEEEEecccccCCCcEEEEEEECCCcccceEEEe
+
+
+No 14
+>PF07467.10 ; BLIP ; Beta-lactamase inhibitor (BLIP)
+Probab=26.31  E-value=22  Score=28.97  Aligned_cols=20  Identities=20%  Similarity=0.378  Sum_probs=0.0  Template_Neff=9.400
+
+Q ss_pred             EEeCCchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFGDSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~fG~T~QDVl~~LG~P~~v  258 (422)
+                      |.+|+|.+||.+.||.|...
+T Consensus        40 i~~G~t~~eV~~~lG~p~~~   59 (184)
+T Q9KJ90_STREX/2   40 IQFGMTFDEVWEIGGGEAAC   59 (184)
+T ss_pred             cCCCCCHHHHHHHhCCCCee
+
+
+No 15
+>PF12978.6 ; DUF3862 ; Domain of Unknown Function with PDB structure (DUF3862)
+Probab=25.89  E-value=32  Score=27.15  Aligned_cols=20  Identities=20%  Similarity=0.380  Sum_probs=0.0  Template_Neff=9.300
+
+Q ss_pred             EEeC---------CchHHHHHhhcCCcEE
+Q sp|Q9BSU1|CP07  239 VYFG---------DSCQDVLSMLGSPHKV  258 (422)
+Q Consensus       239 I~fG---------~T~QDVl~~LG~P~~v  258 (422)
+                      |.+|         +|.+||.+.||.|.+.
+T Consensus        12 i~~g~~~~~~~~g~t~~~V~~~~G~p~~~   40 (159)
+T Q8DTX1_STRMU/4   12 IKVTTDQNHFSGGTSIEQLKQWFGDPNKS   40 (159)
+T ss_pred             eeecCcccCCCCCCCHHHHHHHHCCCceE
+
+
+No 16
+>PF10049.8 ; DUF2283 ; Protein of unknown function (DUF2283)
+Probab=20.88  E-value=78  Score=19.81  Aligned_cols=23  Identities=26%  Similarity=0.368  Sum_probs=0.0  Template_Neff=7.400
+
+Q ss_pred             CCCeEEEeccccCceeEEEEecCC
+Q sp|Q9BSU1|CP07   62 QDGIKLMFDAFNQRLKVIEVCDLT   85 (422)
+Q Consensus        62 ~~GirL~Fd~~~QrL~lIEV~d~s   85 (422)
+                      ++++-|.||. ..++.-|||.+.+
+T Consensus        26 ~~~i~ld~d~-~g~ivgiEil~~s   48 (48)
+T Q21BS2_RHOPB/5   26 APNVIFDYDA-EGRIVGIELLDAR   48 (48)
+T ss_pred             cCCEEEEECC-CCCEEEEEEEecC
+
+
