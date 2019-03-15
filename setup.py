@@ -320,6 +320,7 @@ PACKAGES = [
     'Bio.SearchIO._legacy',
     'Bio.SearchIO._model',
     'Bio.SearchIO.BlastIO',
+    'Bio.SearchIO.HHsuiteIO',
     'Bio.SearchIO.HmmerIO',
     'Bio.SearchIO.ExonerateIO',
     'Bio.SearchIO.InterproscanIO',
