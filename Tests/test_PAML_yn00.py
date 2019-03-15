@@ -161,8 +161,8 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results["Homo.sapie"]), 4)
             self.assertEqual(len(results["Homo.sapie"]["Pan.troglo"]), 5)
 
-    def testParseLongDottedNames(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00_longdotted-*')
+    def testParseDottedNumNames(self):
+        pattern = os.path.join(self.results_dir, "yn00", 'yn00_dottednum-*')
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...
