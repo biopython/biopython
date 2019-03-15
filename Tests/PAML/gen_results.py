@@ -56,7 +56,7 @@ def codeml(vers=None, verbose=False):
             out_file = '.'.join(['-'.join([test[0], version]), "out"])
             cml.out_file = os.path.join("Results", "codeml", test[0], out_file)
             bin = ''.join(["codeml", version])
-            cml.run(command=bin, verbose=verbose)
+            cml.run(command=bin, verbose=verbose, parse=False)
 
 
 def baseml(vers=None, verbose=False):
@@ -89,7 +89,7 @@ def baseml(vers=None, verbose=False):
                     bml.out_file = (os.path.join("Results", "baseml", test[0],
                                     out_file))
                     bin = "baseml{0}".format(version)
-                    bml.run(command=bin, verbose=verbose)
+                    bml.run(command=bin, verbose=verbose, parse=False)
             else:
                 if (version in ["4_3", "4_4", "4_4c", "4_5"] and
                         test[0] == "alpha1rho1"):
@@ -103,7 +103,7 @@ def baseml(vers=None, verbose=False):
                 bml.out_file = (os.path.join("Results", "baseml", test[0],
                                 out_file))
                 bin = "baseml{0}".format(version)
-                bml.run(command=bin, verbose=verbose)
+                bml.run(command=bin, verbose=verbose, parse=False)
 
 
 def yn00(vers=None, verbose=False):
@@ -114,7 +114,7 @@ def yn00(vers=None, verbose=False):
         versions = VERSIONS
     tests = ["yn00", "yn00_long", "yn00_dotted", "yn00_longdotted"]
     for test in tests:
-        print(test[0])
+        print(test)
         yn = yn00.Yn00()
         for version in versions:
             print("\t{0}".format(version.replace('_', '.')))
@@ -124,7 +124,7 @@ def yn00(vers=None, verbose=False):
             out_file = "{0}-{1}.out".format(test, version)
             yn.out_file = os.path.join("Results", 'yn00', out_file)
             bin = "yn00{0}".format(version)
-            yn.run(command=bin, verbose=verbose)
+            yn.run(command=bin, verbose=verbose, parse=False)
 
 
 def print_usage():
