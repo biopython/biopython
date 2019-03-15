@@ -50,7 +50,7 @@ class Hhsuite2TextParser(object):
         self.seq_len = None
 
     def __iter__(self):
-        """Iterate over query results - there will only ever be one though."""
+        """Iterate over query results - there will only ever be one."""
         for qresult in self._parse_qresult():
             yield qresult
 
@@ -148,7 +148,7 @@ class Hhsuite2TextParser(object):
             """Return True if match is not a Consensus column.
 
             It's not possible to distinguish a sequence line from a Consensus line with
-            a regexp, so need to check the ID column
+            a regexp, so need to check the ID column.
             """
             return match[1].strip() != 'Consensus'
 
@@ -210,9 +210,9 @@ class Hhsuite2TextParser(object):
         return [qresult]
 
     def _unique_hit_id(self, hit_id, existing_ids, separator='_'):
-        """Return a unique hit id.(PRIVATE).
+        """Return a unique hit id. (PRIVATE).
 
-        Always append a numeric id to each hit as there may be multiple with the same id
+        Always append a numeric id to each hit as there may be multiple with the same id.
         """
         i = 1
         new_id = "{}{}{}".format(hit_id, separator, i)
