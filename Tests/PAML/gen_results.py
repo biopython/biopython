@@ -112,7 +112,7 @@ def yn00(vers=None, verbose=False):
         versions = [vers]
     else:
         versions = VERSIONS
-    tests = ["yn00", "yn00_long", "yn00_dotted"]
+    tests = ["yn00", "yn00_long", "yn00_dotted", "yn00_longdotted"]
     for test in tests:
         print(test[0])
         yn = yn00.Yn00()
