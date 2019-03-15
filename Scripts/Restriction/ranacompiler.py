@@ -405,7 +405,7 @@ class DictionaryBuilder(object):
             bases = cls.bases
             clsbases = tuple([eval(x) for x in bases])
             typestuff = ''
-            for n, t in tdct.items():
+            for t in tdct.values():
                 #
                 #   if the bases are the same. it is the right type.
                 #   create the enzyme and remember the type
@@ -665,10 +665,10 @@ class DictionaryBuilder(object):
             last[0], last[-1] = last[-1], last[0]
 
         for number in last:
-            files = [(name, name + '.%s' % number) for name in embossnames]
+            files = [(name + '.%s' % number) for name in embossnames]
             strmess = '\nLast EMBOSS files found are :\n'
             try:
-                for name, file in files:
+                for file in files:
                     if os.path.isfile(os.path.join(base, file)):
                         strmess += '\t%s.\n' % file
                     else:
