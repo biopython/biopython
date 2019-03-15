@@ -1,7 +1,7 @@
 * YN00 control file to test performance when the taxon names are
 * particularly long and contain dots
 
-      seqfile = Alignments/longdotted.fasta * sequence data file name
+      seqfile = Alignments/dottednum.fasta * sequence data file name
       outfile = temp.out           * main result file
       verbose = 1  * 1: detailed output (list sequences), 0: concise output
 
