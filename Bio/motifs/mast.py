@@ -22,7 +22,7 @@ class Record(list):
     by its name:
 
     >>> from Bio import motifs
-    >>> with open("mast.output.txt") as f:
+    >>> with open("motifs/mast.dna.oops.txt") as f:
     ...     record = motifs.parse(f, 'MAST')
     >>> motif = record[0]
     >>> print(motif.name)
