@@ -226,6 +226,7 @@ _ITERATOR_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
         'fasta-m10': ('FastaIO', 'FastaM10Parser'),
+        'hhsuite2-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
         'hmmer2-text': ('HmmerIO', 'Hmmer2TextParser'),
         'hmmer3-text': ('HmmerIO', 'Hmmer3TextParser'),
         'hmmer3-tab': ('HmmerIO', 'Hmmer3TabParser'),
