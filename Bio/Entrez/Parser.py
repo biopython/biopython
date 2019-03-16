@@ -56,16 +56,18 @@ from Bio._py3k import unicode
 
 
 class NoneElement:
+
     def __eq__(self, other):
-        if other == None:
-            return True
-        else:
+        if other != None:
             return False
+        else:
+            return True
+
     def __repr__(self):
         try:
             attributes = self.attributes
         except AttributeError:
-            return None
+            return 
         return "NoneElement(attributes=%s)" % repr(attributes)
 
 
