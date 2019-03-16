@@ -55,6 +55,32 @@ from Bio._py3k import unicode
 # strings, lists, and dictionaries, respectively.
 
 
+class NoneElement:
+
+    def __eq__(self, other):
+        if other is None:
+            return True
+        elif other.__eq__(None):
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        if other is None:
+            return False
+        elif other.__eq__(None):
+            return False
+        else:
+            return True
+
+    def __repr__(self):
+        try:
+            attributes = self.attributes
+        except AttributeError:
+            return "NoneElement"
+        return "NoneElement(attributes=%s)" % repr(attributes)
+
+
 class IntegerElement(int):
     def __repr__(self):
         text = int.__repr__(self)
@@ -249,8 +275,11 @@ class IntegerConsumer(Consumer):
 
     @property
     def value(self):
-        value = int("".join(self.data))
-        value = IntegerElement(value)
+        if self.data:
+            value = int("".join(self.data))
+            value = IntegerElement(value)
+        else:
+            value = NoneElement()
         value.tag = self.tag
         value.attributes = self.attributes
         return value
