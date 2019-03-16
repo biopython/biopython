@@ -42,8 +42,8 @@ class VectorTests(unittest.TestCase):
     def test_division(self):
         """Confirm division works."""
         from Bio.PDB.Vector import Vector
-        v = Vector(2, 2, 2) / 2
-        self.assertEqual(repr(v), "<Vector 1.00, 1.00, 1.00>")
+        v = Vector(1, 1, 1) / 2
+        self.assertEqual(repr(v), "<Vector 0.50, 0.50, 0.50>")
 
 
 if __name__ == "__main__":
