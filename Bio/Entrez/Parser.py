@@ -55,6 +55,20 @@ from Bio._py3k import unicode
 # strings, lists, and dictionaries, respectively.
 
 
+class NoneElement:
+    def __eq__(self, other):
+        if other == None:
+            return True
+        else:
+            return False
+    def __repr__(self):
+        try:
+            attributes = self.attributes
+        except AttributeError:
+            return None
+        return "NoneElement(attributes=%s)" % repr(attributes)
+
+
 class IntegerElement(int):
     def __repr__(self):
         text = int.__repr__(self)
@@ -249,12 +263,11 @@ class IntegerConsumer(Consumer):
 
     @property
     def value(self):
-        if not self.data:
-            # We're losing the tag and attributes here. Perhaps this should be
-            # a NoneElement? Returning None for now.
-            return None
-        value = int("".join(self.data))
-        value = IntegerElement(value)
+        if self.data:
+            value = int("".join(self.data))
+            value = IntegerElement(value)
+        else:
+            value = NoneElement()
         value.tag = self.tag
         value.attributes = self.attributes
         return value
