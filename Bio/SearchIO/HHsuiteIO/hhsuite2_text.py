@@ -70,15 +70,12 @@ class Hhsuite2TextParser(object):
 
     def _parse_qresult(self):
         """Parse HHSUITE output file (PRIVATE)."""
-        query_sequence = None
         hit_block_data = []
         self._parse_preamble()
         self._read_until(lambda line: re.search(_RE_HIT_BLOCK_START, line), stop_on_blank=False)
         while not self.done:
             hit_dict = self._parse_hit_block()
             hit_block_data.append(hit_dict)
-            if not query_sequence and hit_dict['aligned_cols'] == self.seq_len:
-                query_sequence = hit_dict['query_seq']
         return self._create_qresult(hit_block_data)
 
     def _parse_preamble(self):
@@ -110,14 +107,15 @@ class Hhsuite2TextParser(object):
             'hit_seq': ''
         }
         self.line = self.handle.readline()
-        # E-value could be in decimal or scientific notation, so split the string rather then use regexp
+        # E-value could be in decimal or scientific notation, so split the string rather then use regexp - this
+        # also means we should be tolerant of additional fields being added/removed
         # Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
-        scores = [f.split('=')[1] for f in self.line.strip().split()]
-        if not len(scores) >= 7:
-            raise RuntimeError("Unexpected number of fields in HIT_BLOCK_SCORES line'{}'".format(self.line))
-        hit_data['evalue'] = float(scores[1])
-        hit_data['score'] = float(scores[2])
-        hit_data['aligned_cols'] = float(scores[3])
+        scores = {}
+        for score_pair in self.line.strip().split():
+            key, value = score_pair.split('=')
+            scores[key] = value
+        hit_data['evalue'] = float(scores['E-value'])
+        hit_data['score'] = float(scores['Score'])
         while True:
             self.line = read_forward(self.handle)
             if not self.line.strip() or self.line.startswith(_END_OF_FILE_MARKER):
