@@ -249,6 +249,10 @@ class IntegerConsumer(Consumer):
 
     @property
     def value(self):
+        if not self.data:
+            # We're losing the tag and attributes here. Perhaps this should be
+            # a NoneElement? Returning None for now.
+            return None
         value = int("".join(self.data))
         value = IntegerElement(value)
         value.tag = self.tag
