@@ -57,7 +57,7 @@ from Bio._py3k import unicode
 
 class NoneElement:
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         if other is None:
             return True
         elif other.__eq__(None):
@@ -77,7 +77,7 @@ class NoneElement:
         try:
             attributes = self.attributes
         except AttributeError:
-            return 
+            return "NoneElement"
         return "NoneElement(attributes=%s)" % repr(attributes)
 
 
