@@ -57,8 +57,18 @@ from Bio._py3k import unicode
 
 class NoneElement:
 
-    def __eq__(self, other):
-        if other != None:
+    def __eq__(self,other):
+        if other is None:
+            return True
+        elif other.__eq__(None):
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        if other is None:
+            return False
+        elif other.__eq__(None):
             return False
         else:
             return True
