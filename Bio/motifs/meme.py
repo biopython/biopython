@@ -25,11 +25,9 @@ def read(handle):
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
 
     """
-    legacy_version = '5.0.0'
     record = Record()
     __read_version(record, handle)
     __read_datafile(record, handle)
-    print(record.datafile)
     __read_alphabet(record, handle)
     __read_sequences(record, handle)
     __read_command(record, handle)
@@ -151,14 +149,14 @@ def __read_datafile(record, handle):
     else:
         raise ValueError(
             "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
-            "minimal MEME files (MEME databases) which are not supported yet")     
+            "minimal MEME files (MEME databases) which are not supported yet")
     try:
         line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
-# Verify whether DATAFILE OR PRIMARY SEQUENCES is in the MEME output file
+
     for line in handle:
         if line.startswith('DATAFILE'):
             line = line.strip()
@@ -169,14 +167,13 @@ def __read_datafile(record, handle):
             line = line.strip()
             line = line.replace('PRIMARY SEQUENCES= ', '')
             next_line = next(handle)
-            next_line = next_line.strip()            
+            next_line = next_line.strip()
             next_line = next_line.replace('CONTROL SEQUENCES= ', '')
             record.datafile = line
             record.control_seq = next_line
             break
         else:
             raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE' or 'PRIMARY SEQUENCES'")
-            
 
 
 def __read_alphabet(record, handle):
