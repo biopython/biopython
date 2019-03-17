@@ -117,7 +117,7 @@ using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 
 \subsection{Coloring branches within a tree}
 
-The functions \verb|draw| and \verb|draw_graphviz| support the display of different
+The function \verb|draw| supports the display of different
 colors and branch widths in a tree.
 As of Biopython 1.59, the \verb|color| and \verb|width| attributes are available on the
 basic Clade object and there's nothing extra required to use them.
@@ -370,128 +370,6 @@ customize the output.
 \end{latexonly}
 
 
-\verb|draw_graphviz| draws an unrooted cladogram, but requires that you have Graphviz,
-PyDot or PyGraphviz, NetworkX, and matplotlib (or pylab) installed. Using the same example as
-above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree (see
-Fig.~\ref{fig:phylo-dot}):
-
-\begin{verbatim}
->>> tree = Phylo.read("example.xml", "phyloxml")
->>> Phylo.draw_graphviz(tree, prog="dot")
->>> import pylab
->>> pylab.show()                    # Displays the tree in an interactive viewer
->>> pylab.savefig("phylo-dot.png")  # Creates a PNG file of the same graphic
-\end{verbatim}
-
-\begin{htmlonly}
-\imgsrc[width=400, height=312]{images/phylo-dot.png}
-\label{fig:phylo-dot}
-\end{htmlonly}
-
-\begin{latexonly}
-\begin{figure}[tbp]
-\centering
-\includegraphics[width=0.5\textwidth]{images/phylo-dot.png}
-\caption{A simple rooted tree drawn with {\tt draw\_graphviz}, using {\tt dot} for node
-layout.}
-\label{fig:phylo-dot}
-\end{figure}
-\end{latexonly}
-
-(Tip: If you execute IPython with the \verb|-pylab| option, calling \verb|draw_graphviz| causes
-the matplotlib viewer to launch automatically without manually calling \verb|show()|.)
-
-This exports the tree object to a NetworkX graph, uses Graphviz to lay out the nodes, and
-displays it using matplotlib.
-There are a number of keyword arguments that can modify the resulting diagram, including
-most of those accepted by the NetworkX functions \verb|networkx.draw| and
-\verb|networkx.draw_graphviz|.
-
-The display is also affected by the \verb|rooted| attribute of the given tree object.
-Rooted trees are shown with a ``head'' on each branch indicating direction (see
-Fig.~\ref{fig:phylo-rooted}):
-
-\begin{verbatim}
->>> tree = Phylo.read("simple.dnd", "newick")
->>> tree.rooted = True
->>> Phylo.draw_graphviz(tree)
-\end{verbatim}
-
-\begin{htmlonly}
-\imgsrc[width=432, height=368]{images/phylo-rooted.png}
-\label{fig:phylo-rooted}
-\end{htmlonly}
-
-The ``prog'' argument specifies the Graphviz engine used for layout. The default,
-\verb|twopi|, behaves well for any size tree, reliably avoiding crossed branches. The
-\verb|neato| program may draw more attractive moderately-sized trees, but sometimes will
-cross branches (see Fig.~\ref{fig:phylo-color}). The \verb|dot| program may be useful
-with small trees, but tends to do surprising things with the layout of larger trees.
-
-\begin{latexonly}
-\begin{figure}[ptb]
-\centering
-\includegraphics[width=0.45\textwidth]{images/phylo-rooted.png}
-\caption{A rooted tree drawn with {\tt draw\_graphviz}.
-Since we rooted the tree, we can see the root must be along the branch with two
-directional ``heads''.
-}
-\label{fig:phylo-rooted}
-\end{figure}
-\begin{figure}[ptb]
-\centering
-\includegraphics[width=0.5\textwidth]{images/phylo-color.png}
-\caption{A colorized tree drawn with {\tt draw\_graphviz}, using {\tt neato} for node layout.}
-\label{fig:phylo-color}
-\end{figure}
-\end{latexonly}
-
-\begin{verbatim}
->>> Phylo.draw_graphviz(tree, prog="neato")
-\end{verbatim}
-
-\begin{htmlonly}
-\imgsrc[width=499, height=348]{images/phylo-color.png}
-\label{fig:phylo-color}
-\end{htmlonly}
-
-This viewing mode is particularly handy for exploring larger trees, because the matplotlib
-viewer can zoom in on a selected region, thinning out a cluttered graphic.
-\begin{latexonly}
-%Can't reference unless inside a figure
-(See Figs.~\ref{fig:phylo-apaf}, \ref{fig:phylo-apaf-zoom}).
-\end{latexonly}
-
-\begin{verbatim}
->>> tree = Phylo.read("apaf.xml", "phyloxml")
->>> Phylo.draw_graphviz(tree, prog="neato", node_size=0)
-\end{verbatim}
-
-\begin{htmlonly}
-\imgsrc[width=519, height=400]{images/phylo-apaf.png}
-\label{fig:phylo-apaf}
-\imgsrc[width=506, height=400]{images/phylo-apaf-zoom.png}
-\label{fig:phylo-apaf-zoom}
-\end{htmlonly}
-
-\begin{latexonly}
-  \begin{figure}[tbp]
-    \centering
-    \includegraphics[width=0.65\textwidth]{images/phylo-apaf.png} \\
-    \caption{A larger tree, using {\tt neato} for layout.}
-    \label{fig:phylo-apaf}
-  \end{figure}
-  \begin{figure}[btp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{images/phylo-apaf-zoom.png}
-    \caption{A zoomed-in portion of the same tree as Fig.~\ref{fig:phylo-apaf}.}
-    \label{fig:phylo-apaf-zoom}
-  \end{figure}
-\end{latexonly}
-
-Note that branch lengths are not displayed accurately, because Graphviz ignores them when
-creating the node layouts. The branch lengths are retained when exporting a tree as a NetworkX
-graph object (\verb|to_networkx|), however.
 
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions and examples of the more advanced functionality in \verb|draw_ascii|,
