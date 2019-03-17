@@ -10,7 +10,6 @@ from __future__ import print_function
 from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
-from packaging import version
 
 
 def read(handle):
@@ -29,16 +28,8 @@ def read(handle):
     legacy_version = '5.0.0'
     record = Record()
     __read_version(record, handle)
-    assert isinstance(version.parse(legacy_version),version.Version), 'Legacy version cannot be recognized'
-    assert isinstance(version.parse(record.version),version.Version), 'MEME motif version number cannot be recognized'
-    if version.parse(record.version) > version.parse(legacy_version):
-        __read_datafile(record, handle)
-    elif version.parse(record.version) == version.parse(legacy_version):
-        __read_datafile(record, handle)
-    elif version.parse(record.version) < version.parse(legacy_version):
-        __read_legacy_datafile(record, handle)
-    else:
-        raise ValueError('Version provided in the MEME ouput cannot be compared to legacy version')
+    __read_datafile(record, handle)
+    print(record.datafile)
     __read_alphabet(record, handle)
     __read_sequences(record, handle)
     __read_command(record, handle)
@@ -153,31 +144,6 @@ def __read_version(record, handle):
     record.version = ls[2]
 
 
-def __read_legacy_datafile(record, handle):
-    for line in handle:
-        if line.startswith('TRAINING SET'):
-            break
-    else:
-        raise ValueError(
-            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
-            "minimal MEME files (MEME databases) which are not supported yet.")
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
-    if not line.startswith('****'):
-        raise ValueError("Line does not start with '****':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
-    if not line.startswith('DATAFILE'):
-        raise ValueError("Line does not start with 'DATAFILE':\n%s" % line)
-    line = line.strip()
-    line = line.replace('DATAFILE= ', '')
-    record.datafile = line
-
-
 def __read_datafile(record, handle):
     for line in handle:
         if line.startswith('TRAINING SET'):
@@ -185,31 +151,32 @@ def __read_datafile(record, handle):
     else:
         raise ValueError(
             "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
-            "minimal MEME files (MEME databases) which are not supported yet.")
+            "minimal MEME files (MEME databases) which are not supported yet")     
     try:
         line = next(handle)
     except StopIteration:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '****'")
     if not line.startswith('****'):
         raise ValueError("Line does not start with '****':\n%s" % line)
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
-    if not line.startswith('PRIMARY SEQUENCES'):
-        raise ValueError("Line does not start with 'PRIMARY SEQUENCES':\n%s" % line)
-    line = line.strip()
-    line = line.replace('PRIMARY SEQUENCES= ', '')
-    record.datafile = line
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE'")
-    if not line.startswith('CONTROL SEQUENCES'):
-        raise ValueError("Line does not start with 'CONTROL SEQUENCES':\n%s" % line)
-    line = line.strip()
-    line = line.replace('CONTROL SEQUENCES= ', '')
-    record.control_seq = line
+# Verify whether DATAFILE OR PRIMARY SEQUENCES is in the MEME output file
+    for line in handle:
+        if line.startswith('DATAFILE'):
+            line = line.strip()
+            line = line.replace('DATAFILE= ', '')
+            record.datafile = line
+            break
+        elif line.startswith('PRIMARY SEQUENCES'):
+            line = line.strip()
+            line = line.replace('PRIMARY SEQUENCES= ', '')
+            next_line = next(handle)
+            next_line = next_line.strip()            
+            next_line = next_line.replace('CONTROL SEQUENCES= ', '')
+            record.datafile = line
+            record.control_seq = next_line
+            break
+        else:
+            raise ValueError("Unexpected end of stream: Expected to find line starting with 'DATAFILE' or 'PRIMARY SEQUENCES'")
+            
 
 
 def __read_alphabet(record, handle):
