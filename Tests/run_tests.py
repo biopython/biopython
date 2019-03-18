@@ -38,6 +38,8 @@ import doctest
 import distutils.util
 import gc
 from io import BytesIO
+from pkgutil import iter_modules
+from setuptools import find_packages
 
 
 # Note, we want to be able to call run_tests.py BEFORE
@@ -77,259 +79,55 @@ def is_pypy():
 # The default verbosity (not verbose)
 VERBOSITY = 0
 
-# This is the list of modules containing docstring tests.
-# If you develop docstring tests for other modules, please add
-# those modules here. Please sort names alphabetically.
-DOCTEST_MODULES = [
-    "Bio",
-    "Bio._utils",
-    "Bio.Affy",
-    "Bio.Align",
-    "Bio.Align._aligners",
-    "Bio.Align.AlignInfo",
-    "Bio.Align.Applications._Clustalw",
-    "Bio.Align.Applications._ClustalOmega",
-    "Bio.Align.Applications._Dialign",
-    "Bio.Align.Applications._MSAProbs",
-    "Bio.Align.Applications._Mafft",
-    "Bio.Align.Applications._Muscle",
-    "Bio.Align.Applications._Probcons",
-    "Bio.Align.Applications._Prank",
-    "Bio.Align.Applications._TCoffee",
-    "Bio.AlignIO",
-    "Bio.AlignIO.ClustalIO",
-    "Bio.AlignIO.EmbossIO",
-    "Bio.AlignIO.FastaIO",
-    "Bio.AlignIO.Interfaces",
-    "Bio.AlignIO.MafIO",
-    "Bio.AlignIO.NexusIO",
-    "Bio.AlignIO.PhylipIO",
-    "Bio.AlignIO.StockholmIO",
-    "Bio.Alphabet",
-    "Bio.Alphabet.IUPAC",
-    "Bio.Alphabet.Reduced",
-    "Bio.Application",
-    "Bio.bgzf",
-    "Bio.Blast",
-    "Bio.Blast.Applications",
-    "Bio.Blast.NCBIWWW",
-    "Bio.Blast.NCBIXML",
-    "Bio.Blast.ParseBlastTable",
-    "Bio.Blast.Record",
-    "Bio.CAPS",
-    "Bio.Cluster",
-    "Bio.codonalign",
-    "Bio.codonalign.chisq",
-    "Bio.codonalign.codonalignment",
-    "Bio.codonalign.codonalphabet",
-    "Bio.codonalign.codonseq",
-    "Bio.Compass",
-    "Bio.Crystal",
-    "Bio.Data",
-    "Bio.Data.IUPACData",
-    "Bio.Data.SCOPData",
-    "Bio.Emboss",
-    "Bio.Emboss.Applications",
-    "Bio.Emboss.Primer3",
-    "Bio.Emboss.PrimerSearch",
-    "Bio.Entrez.Parser",
-    "Bio.ExPASy.Enzyme",
-    "Bio.ExPASy.Prodoc",
-    "Bio.ExPASy.Prosite",
-    "Bio.ExPASy.ScanProsite",
-    "Bio.FSSP",
-    "Bio.FSSP.fssp_rec",
-    "Bio.FSSP.FSSPTools",
-    "Bio.GenBank",
-    "Bio.GenBank.Record",
-    "Bio.GenBank.Scanner",
-    "Bio.GenBank.utils",
-    "Bio.Geo",
-    "Bio.Geo.Record",
-    "Bio.Graphics",
-    "Bio.Graphics.BasicChromosome",
-    "Bio.Graphics.ColorSpiral",
-    "Bio.Graphics.Comparative",
-    "Bio.Graphics.DisplayRepresentation",
-    "Bio.Graphics.Distribution",
-    "Bio.Graphics.GenomeDiagram._AbstractDrawer",
-    "Bio.Graphics.GenomeDiagram._CircularDrawer",
-    "Bio.Graphics.GenomeDiagram._Colors",
-    "Bio.Graphics.GenomeDiagram._CrossLink",
-    "Bio.Graphics.GenomeDiagram._Diagram",
-    "Bio.Graphics.GenomeDiagram._Feature",
-    "Bio.Graphics.GenomeDiagram._FeatureSet",
-    "Bio.Graphics.GenomeDiagram._Graph",
-    "Bio.Graphics.GenomeDiagram._GraphSet",
-    "Bio.Graphics.GenomeDiagram._LinearDrawer",
-    "Bio.Graphics.GenomeDiagram._Track",
-    "Bio.Graphics.KGML_vis",
-    "Bio.HMM",
-    "Bio.HMM.DynamicProgramming",
-    "Bio.HMM.MarkovModel",
-    "Bio.HMM.Trainer",
-    "Bio.HMM.Utilities",
-    "Bio.Index",
-    "Bio.KEGG",
-    "Bio.KEGG.Compound",
-    "Bio.KEGG.Enzyme",
-    "Bio.KEGG.Gene",
-    "Bio.KEGG.KGML",
-    "Bio.KEGG.KGML.KGML_parser",
-    "Bio.KEGG.KGML.KGML_pathway",
-    "Bio.KEGG.Map",
-    "Bio.KEGG.REST",
-    "Bio.motifs",
-    "Bio.motifs.alignace",
-    "Bio.motifs.applications",
-    "Bio.motifs.applications._xxmotif",
-    "Bio.motifs.jaspar",
-    "Bio.motifs.jaspar.db",
-    "Bio.motifs.mast",
-    "Bio.motifs.matrix",
-    "Bio.motifs.meme",
-    "Bio.motifs.minimal",
-    "Bio.motifs.thresholds",
-    "Bio.motifs.transfac",
-    "Bio.Nexus",
-    "Bio.Nexus.Nexus",
-    "Bio.Nexus.Nodes",
-    "Bio.Nexus.StandardData",
-    "Bio.Nexus.Trees",
-    "Bio.NMR",
-    "Bio.NMR.NOEtools",
-    "Bio.NMR.xpktools",
-    "Bio.pairwise2",
-    "Bio.Pathway",
-    "Bio.Pathway.Rep.Graph",
-    "Bio.Pathway.Rep",
-    "Bio.Pathway.Rep.MultiGraph",
-    "Bio.pairwise2",
-    "Bio.Phylo",
-    "Bio.Phylo.Applications",
-    "Bio.Phylo.Applications._Phyml",
-    "Bio.Phylo.Applications._Raxml",
-    "Bio.Phylo.BaseTree",
-    "Bio.Phylo.CDAOIO",
-    "Bio.Phylo._cdao_owl",
-    "Bio.Phylo.CDAO",
-    "Bio.Phylo.Consensus",
-    "Bio.Phylo.NewickIO",
-    "Bio.Phylo.Newick",
-    "Bio.Phylo.NeXMLIO",
-    "Bio.Phylo.NeXML",
-    "Bio.Phylo.NexusIO",
-    "Bio.Phylo.PAML.baseml",
-    "Bio.Phylo.PAML.chi2",
-    "Bio.Phylo.PAML.codeml",
-    "Bio.Phylo.PAML",
-    "Bio.Phylo.PAML._paml",
-    "Bio.Phylo.PAML._parse_baseml",
-    "Bio.Phylo.PAML._parse_codeml",
-    "Bio.Phylo.PAML._parse_yn00",
-    "Bio.Phylo.PAML.yn00",
-    "Bio.Phylo.PhyloXMLIO",
-    "Bio.Phylo.PhyloXML",
-    "Bio.PopGen.GenePop.Controller",
-    "Bio.PopGen.GenePop.EasyController",
-    "Bio.PopGen.GenePop.FileParser",
-    "Bio.PopGen.GenePop",
-    "Bio.PopGen.GenePop.LargeFileParser",
-    "Bio.PopGen",
-    "Bio._py3k",
-    "Bio.Restriction.RanaConfig",
-    "Bio.SCOP.Cla",
-    "Bio.SCOP.Des",
-    "Bio.SCOP.Dom",
-    "Bio.SCOP.Hie",
-    "Bio.SCOP",
-    "Bio.SCOP.Raf",
-    "Bio.SCOP.Residues",
-    "Bio.SearchIO",
-    "Bio.SearchIO.BlastIO.blast_tab",
-    "Bio.SearchIO.BlastIO.blast_text",
-    "Bio.SearchIO.BlastIO.blast_xml",
-    "Bio.SearchIO.BlastIO",
-    "Bio.SearchIO.BlatIO",
-    "Bio.SearchIO.ExonerateIO.exonerate_cigar",
-    "Bio.SearchIO.ExonerateIO.exonerate_text",
-    "Bio.SearchIO.ExonerateIO.exonerate_vulgar",
-    "Bio.SearchIO.ExonerateIO",
-    "Bio.SearchIO.FastaIO",
-    "Bio.SearchIO.HmmerIO._base",
-    "Bio.SearchIO.HmmerIO.hmmer2_text",
-    "Bio.SearchIO.HmmerIO.hmmer3_domtab",
-    "Bio.SearchIO.HmmerIO.hmmer3_tab",
-    "Bio.SearchIO.HmmerIO.hmmer3_text",
-    "Bio.SearchIO.HmmerIO",
-    "Bio.SearchIO._index",
-    "Bio.SearchIO.InterproscanIO",
-    "Bio.SearchIO.InterproscanIO.interproscan_xml",
-    "Bio.SearchIO._legacy",
-    "Bio.SearchIO._legacy.NCBIStandalone",
-    "Bio.SearchIO._legacy.ParserSupport",
-    "Bio.SearchIO._model._base",
-    "Bio.SearchIO._model.hit",
-    "Bio.SearchIO._model.hsp",
-    "Bio.SearchIO._model",
-    "Bio.SearchIO._model.query",
-    "Bio.SearchIO._utils",
-    "Bio.Seq",
-    "Bio.SeqFeature",
-    "Bio.SeqIO",
-    "Bio.SeqIO.AbiIO",
-    "Bio.SeqIO.AceIO",
-    "Bio.SeqIO._convert",
-    "Bio.SeqIO.FastaIO",
-    "Bio.SeqIO.IgIO",
-    "Bio.SeqIO._index",
-    "Bio.SeqIO.InsdcIO",
-    "Bio.SeqIO.Interfaces",
-    "Bio.SeqIO.NibIO",
-    "Bio.SeqIO.PhdIO",
-    "Bio.SeqIO.PirIO",
-    "Bio.SeqIO.QualityIO",
-    "Bio.SeqIO.SeqXmlIO",
-    "Bio.SeqIO.SffIO",
-    "Bio.SeqIO.SwissIO",
-    "Bio.SeqIO.TabIO",
-    "Bio.SeqIO.UniprotIO",
-    "Bio.SeqRecord",
-    "Bio.Sequencing.Ace",
-    "Bio.Sequencing.Applications._bwa",
-    "Bio.Sequencing.Applications",
-    "Bio.Sequencing.Applications._Novoalign",
-    "Bio.Sequencing.Applications._samtools",
-    "Bio.Sequencing",
-    "Bio.Sequencing.Phd",
-    "Bio.SeqUtils",
-    "Bio.SeqUtils.CheckSum",
-    "Bio.SeqUtils.CodonUsageIndices",
-    "Bio.SeqUtils.CodonUsage",
-    "Bio.SeqUtils.IsoelectricPoint",
-    "Bio.SeqUtils.lcc",
-    "Bio.SeqUtils.MeltingTemp",
-    "Bio.SeqUtils.ProtParamData",
-    "Bio.SeqUtils.ProtParam",
-    "BioSQL",
-    "BioSQL.BioSeq",
-    "BioSQL.DBUtils",
-    "BioSQL.Loader",
-    "Bio.Statistics",
-    "Bio.SubsMat.MatrixInfo",
-    "Bio.SwissProt",
-    "Bio.triefind",
-    "Bio.UniGene",
-    "Bio.UniProt",
-    "Bio.UniProt.GOA",
-    "Bio._utils",
-    "Bio.Wise",
-    "Bio.Wise.dnal",
-    "Bio.Wise.psw",
+# Following modules have historic failures. If you fix one of these
+# please remove here!
+EXCLUDE_DOCTEST_MODULES = [
+    'Bio.AlignIO.MauveIO',
+    'Bio.Cluster',
+    'Bio.Data.CodonTable',
+    'Bio.ExPASy',
+    'Bio.ExPASy.cellosaurus',
+    'Bio.File',
+    'Bio.Medline',
+    'Bio.motifs.jaspar.db',
+    'Bio.motifs.mast',
+    'Bio.motifs.meme',
+    'Bio.motifs.minimal',
+    'Bio.PDB',
+    'Bio.PDB.AbstractPropertyMap',
+    'Bio.PDB.Atom',
+    'Bio.PDB.DSSP',
+    'Bio.PDB.Entity',
+    'Bio.PDB.FragmentMapper',
+    'Bio.PDB.mmcifio',
+    'Bio.PDB.PDBIO',
+    'Bio.PDB.ResidueDepth',
+    'Bio.PDB.vectors',
+    'Bio.phenotype',
+    'Bio.phenotype.parse',
+    'Bio.phenotype.phen_micro',
+    'Bio.Phylo.Applications._Fasttree',
+    'Bio.Phylo._io',
+    'Bio.Phylo.TreeConstruction',
+    'Bio.Phylo._utils',
+    'Bio.Restriction',
+    'Bio.Restriction.PrintFormat',
+    'Bio.Restriction.Restriction',
+    'Bio.SearchIO.ExonerateIO._base',
+    'Bio.SubsMat',
+    'Bio.SubsMat.FreqTable',
+    'BioSQL.BioSeqDatabase',
 ]
+
+# Exclude modules with online activity
+EXCLUDE_DOCTEST_MODULES.extend([
+    'Bio.Entrez',
+    'Bio.TogoWS',
+    ])
+
 # Silently ignore any doctests for modules requiring numpy!
-if numpy:
-    DOCTEST_MODULES.extend([
+if numpy is None:
+    EXCLUDE_DOCTEST_MODULES.extend([
         "Bio.Affy.CelFile",
         "Bio.KDTree",
         "Bio.KDTree.KDTree",
@@ -374,13 +172,29 @@ try:
     del sqlite3
 except ImportError:
     # Missing on Jython or Python 2.4
-    DOCTEST_MODULES.remove("Bio.SeqIO")
-    DOCTEST_MODULES.remove("Bio.SearchIO")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.SeqIO")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.SearchIO")
 
 # Skip Bio.Seq doctest under Python 2, see http://bugs.python.org/issue7490
 # Can't easily write exceptions with consistent class name in python 2 and 3
 if sys.version_info[0] == 2:
-    DOCTEST_MODULES.remove("Bio.Seq")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.Seq")
+
+
+def find_modules(path):
+    modules = set()
+    for pkg in find_packages(path):
+        modules.add(pkg)
+        pkgpath = path + '/' + pkg.replace('.', '/')
+        if sys.version_info < (3, 6):
+            for _, name, ispkg in iter_modules([pkgpath]):
+                if not ispkg:
+                    modules.add(pkg + '.' + name)
+        else:
+            for info in iter_modules([pkgpath]):
+                if not info.ispkg:
+                    modules.add(pkg + '.' + info.name)
+    return modules
 
 
 # Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
@@ -413,7 +227,7 @@ def _have_bug17666():
 
 
 if _have_bug17666():
-    DOCTEST_MODULES.remove("Bio.bgzf")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.bgzf")
 
 SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
@@ -637,7 +451,9 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.append("doctest")
         if "doctest" in self.tests:
             self.tests.remove("doctest")
-            self.tests.extend(DOCTEST_MODULES)
+            modules = find_modules(self.testdir + '/..')
+            modules.difference_update(set(EXCLUDE_DOCTEST_MODULES))
+            self.tests.extend(sorted(list(modules)))
         stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
                                          verbosity=verbosity)
