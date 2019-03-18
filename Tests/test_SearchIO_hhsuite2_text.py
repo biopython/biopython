@@ -33,14 +33,14 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 32
+        num_hits = 16
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('2UVO:A|PDBID|CHAIN|SEQUENCE', qresult.id)
         self.assertEqual(171, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('2uvo_A_1', hit.id)
+        self.assertEqual('2uvo_A', hit.id)
         self.assertEqual('Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding,'
                          ' GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum}'
                          ' PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A'
@@ -51,11 +51,12 @@ class HhsuiteCases(unittest.TestCase):
 #         self.assertEqual(0.5, hit.bias)
 #         self.assertEqual(1.5, hit.domain_exp_num)
 #         self.assertEqual(1, hit.domain_obs_num)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit.hsps[0]
 #         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
+        self.assertEqual(99.95, hsp.prob)
         self.assertEqual(210.31, hsp.score)
 #         self.assertEqual(0.5, hsp.bias)
 #         self.assertEqual(5e-40, hsp.evalue_cond)
@@ -82,18 +83,24 @@ class HhsuiteCases(unittest.TestCase):
 #                          hsp.aln_annotation['PP'])
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('1wga_2', hit.id)
-        self.assertEqual('lectin (agglutinin); NMR {}', hit.description)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('4z8i_A', hit.id)
+        self.assertEqual('BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, '
+                         'AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}', hit.description)
         self.assertTrue(hit.is_included)
-        self.assertEqual(2.6, hit.evalue)
-        self.assertEqual(25.90, hit.score)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(0.11, hit.evalue)
+        self.assertEqual(36.29, hit.score)
+        self.assertEqual(2, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = 32
+        self.assertEqual(num_hsps, len(qresult.hsps))
+
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(2.6, hsp.evalue)
         self.assertEqual(25.90, hsp.score)
+        self.assertEqual(40.43, hsp.prob)
         self.assertEqual(11, hsp.hit_start)
         self.assertEqual(116, hsp.hit_end)
         self.assertEqual(54, hsp.query_start)
@@ -132,14 +139,14 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 10
+        num_hits = 10
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('Only X amino acids', qresult.id)
         self.assertEqual(39, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('1klr_A_1', hit.id)
+        self.assertEqual('1klr_A', hit.id)
         self.assertEqual('Zinc finger Y-chromosomal protein; transcription; NMR {Synthetic} SCOP: g.37.1.1 PDB: '
                          '5znf_A 1kls_A 1xrz_A* 7znf_A', hit.description)
         self.assertTrue(hit.is_included)
@@ -151,6 +158,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hsp.is_included)
         self.assertEqual(3.4E+04, hsp.evalue)
         self.assertEqual(-0.01, hsp.score)
+        self.assertEqual(0.04, hsp.prob)
         self.assertEqual(24, hsp.hit_start)
         self.assertEqual(24, hsp.hit_end)
         self.assertEqual(39, hsp.query_start)
@@ -159,8 +167,8 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual('X', str(hsp.query.seq))
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('1zfd_A_1', hit.id)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('1zfd_A', hit.id)
         self.assertEqual('SWI5; DNA binding motif, zinc finger DNA binding domain; NMR {Saccharomyces cerevisiae}'
                          ' SCOP: g.37.1.1', hit.description)
         self.assertTrue(hit.is_included)
@@ -168,10 +176,15 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(0.03, hit.score)
         self.assertEqual(1, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = num_hits
+        self.assertEqual(num_hsps, len(qresult.hsps))
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+
         self.assertTrue(hsp.is_included)
         self.assertEqual(3.6e+04, hsp.evalue)
         self.assertEqual(0.03, hsp.score)
+        self.assertEqual(0.03, hsp.prob)
         self.assertEqual(1, hsp.hit_start)
         self.assertEqual(1, hsp.hit_end)
         self.assertEqual(4, hsp.query_start)
@@ -188,14 +201,14 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 29
+        num_hits = 29
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('4Y9H:A|PDBID|CHAIN|SEQUENCE', qresult.id)
         self.assertEqual(226, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('5ZIM_A_1', hit.id)
+        self.assertEqual('5ZIM_A', hit.id)
         self.assertEqual('Bacteriorhodopsin; proton pump, membrane protein, PROTON; HET: L2P, RET; 1.25A {Halobacterium'
                          ' salinarum}; Related PDB entries: 1R84_A 1KG8_A 1KME_B 1KGB_A 1KG9_A 1KME_A 4X31_A 5ZIL_A 1E0P_A '
                          '4X32_A 5ZIN_A 1S53_B 1S51_B 1S53_A 1S54_A 1F50_A 1S54_B 1S51_A 1F4Z_A 5J7A_A 1S52_B 1S52_A 4Y9H_A '
@@ -209,6 +222,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hsp.is_included)
         self.assertEqual(2.1e-48, hsp.evalue)
         self.assertEqual(320.44, hsp.score)
+        self.assertEqual(100.00, hsp.prob)
         self.assertEqual(2, hsp.hit_start)
         self.assertEqual(227, hsp.hit_end)
         self.assertEqual(1, hsp.query_start)
@@ -221,8 +235,8 @@ class HhsuiteCases(unittest.TestCase):
                          'EVASTFKVLRNVTVVLWSAYPVVWLIGSEGAGIVPLNIETLLFMVLDVSAKVGFGLILLRSRAIFG', str(hsp.query.seq))
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('5ABB_Z_1', hit.id)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('5ABB_Z', hit.id)
         self.assertEqual('PROTEIN TRANSLOCASE SUBUNIT SECY, PROTEIN; TRANSLATION, RIBOSOME, MEMBRANE PROTEIN, '
                          'TRANSLOCON; 8.0A {ESCHERICHIA COLI}', hit.description)
         self.assertTrue(hit.is_included)
@@ -230,10 +244,15 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(51.24, hit.score)
         self.assertEqual(1, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = num_hits
+        self.assertEqual(num_hsps, len(qresult.hsps))
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+
         self.assertTrue(hsp.is_included)
         self.assertEqual(3.3e-05, hsp.evalue)
         self.assertEqual(51.24, hsp.score)
+        self.assertEqual(96.55, hsp.prob)
         self.assertEqual(15, hsp.hit_start)
         self.assertEqual(65, hsp.hit_end)
         self.assertEqual(8, hsp.query_start)
@@ -250,15 +269,15 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 16
+        num_hits = 12
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('sp|Q9BSU1|CP070_HUMAN UPF0183 protein C16orf70 OS=Homo sapiens OX=9606 GN=C16orf70'
                          ' PE=1 SV=1', qresult.id)
         self.assertEqual(422, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('PF03676.13_1', hit.id)
+        self.assertEqual('PF03676.13', hit.id)
         self.assertEqual('UPF0183 ; Uncharacterised protein family (UPF0183)', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(2e-106, hit.evalue)
@@ -269,6 +288,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hsp.is_included)
         self.assertEqual(2e-106, hsp.evalue)
         self.assertEqual(822.75, hsp.score)
+        self.assertEqual(100.00, hsp.prob)
         self.assertEqual(1, hsp.hit_start)
         self.assertEqual(395, hsp.hit_end)
         self.assertEqual(11, hsp.query_start)
@@ -287,18 +307,23 @@ class HhsuiteCases(unittest.TestCase):
                          str(hsp.hit.seq))
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('PF10049.8_1', hit.id)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('PF10049.8', hit.id)
         self.assertEqual('DUF2283 ; Protein of unknown function (DUF2283)', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(78, hit.evalue)
         self.assertEqual(19.81, hit.score)
         self.assertEqual(1, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = 16
+        self.assertEqual(num_hsps, len(qresult.hsps))
+
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(78, hsp.evalue)
         self.assertEqual(19.81, hsp.score)
+        self.assertEqual(20.88, hsp.prob)
         self.assertEqual(26, hsp.hit_start)
         self.assertEqual(48, hsp.hit_end)
         self.assertEqual(62, hsp.query_start)
@@ -315,14 +340,14 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 8
+        num_hits = 8
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('4P79:A|PDBID|CHAIN|SEQUENCE', qresult.id)
         self.assertEqual(198, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('4P79_A_1', hit.id)
+        self.assertEqual('4P79_A', hit.id)
         self.assertEqual('cell adhesion protein; cell adhesion, tight junction, membrane; HET: OLC'
                          ', MSE; 2.4A {Mus musculus}', hit.description)
         self.assertTrue(hit.is_included)
@@ -334,6 +359,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hsp.is_included)
         self.assertEqual(6.8e-32, hsp.evalue)
         self.assertEqual(194.63, hsp.score)
+        self.assertEqual(99.94, hsp.prob)
         self.assertEqual(1, hsp.hit_start)
         self.assertEqual(198, hsp.hit_end)
         self.assertEqual(1, hsp.query_start)
@@ -346,8 +372,8 @@ class HhsuiteCases(unittest.TestCase):
                          'ELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR', str(hsp.hit.seq))
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('5YQ7_F_1', hit.id)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('5YQ7_F', hit.id)
         self.assertEqual('Beta subunit of light-harvesting 1; Photosynthetic core complex, PHOTOSYNTHESIS; '
                          'HET: MQE, BCL, HEM, KGD, BPH;{Roseiflexus castenholzii}; Related PDB entries: 5YQ7_V'
                          ' 5YQ7_3 5YQ7_T 5YQ7_J 5YQ7_9 5YQ7_N 5YQ7_A 5YQ7_P 5YQ7_H 5YQ7_D 5YQ7_5 5YQ7_7 5YQ7_1 '
@@ -357,10 +383,15 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(20.51, hit.score)
         self.assertEqual(1, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = num_hits
+        self.assertEqual(num_hsps, len(qresult.hsps))
+
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(6.7, hsp.evalue)
         self.assertEqual(20.51, hsp.score)
+        self.assertEqual(52.07, hsp.prob)
         self.assertEqual(9, hsp.hit_start)
         self.assertEqual(42, hsp.hit_end)
         self.assertEqual(6, hsp.query_start)
@@ -377,16 +408,16 @@ class HhsuiteCases(unittest.TestCase):
         # test first and only qresult
         qresult = next(qresults)
 
-        nhits = 34
+        num_hits = 22
         self.assertEqual('HHSUITE', qresult.program)
         self.assertEqual('sp|Q9BSU1|CP070_HUMAN UPF0183 protein C16orf70 OS=Homo sapiens OX=9606 GN=C16orf70'
                          ' PE=1 SV=1',
                          qresult.id)
         self.assertEqual(422, qresult.seq_len)
-        self.assertEqual(nhits, len(qresult))
+        self.assertEqual(num_hits, len(qresult))
 
         hit = qresult[0]
-        self.assertEqual('PF03676.14_1', hit.id)
+        self.assertEqual('PF03676.14', hit.id)
         self.assertEqual('UPF0183 ; Uncharacterised protein family (UPF0183)', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(9.9e-102, hit.evalue)
@@ -397,6 +428,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hsp.is_included)
         self.assertEqual(9.9e-102, hsp.evalue)
         self.assertEqual(792.76, hsp.score)
+        self.assertEqual(100.00, hsp.prob)
         self.assertEqual(1, hsp.hit_start)
         self.assertEqual(394, hsp.hit_end)
         self.assertEqual(22, hsp.query_start)
@@ -415,18 +447,24 @@ class HhsuiteCases(unittest.TestCase):
                          'VTLY', str(hsp.query.seq))
 
         # Check last hit
-        hit = qresult[nhits - 1]
-        self.assertEqual('PF07467.11_4', hit.id)
-        self.assertEqual('BLIP ; Beta-lactamase inhibitor (BLIP)', hit.description)
+        hit = qresult[num_hits - 1]
+        self.assertEqual('4IL7_A', hit.id)
+        self.assertEqual('Putative uncharacterized protein; partial jelly roll fold, hypothetical; 1.4A '
+                         '{Sulfolobus turreted icosahedral virus}', hit.description)
         self.assertTrue(hit.is_included)
-        self.assertEqual(3.9e+02, hit.evalue)
-        self.assertEqual(22.84, hit.score)
+        self.assertEqual(6.8e+02, hit.evalue)
+        self.assertEqual(22.72, hit.score)
         self.assertEqual(1, len(hit))
 
-        hsp = hit.hsps[0]
+        # Check we can get the original last HSP from the file.
+        num_hsps = 34
+        self.assertEqual(num_hsps, len(qresult.hsps))
+
+        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(3.9e+02, hsp.evalue)
         self.assertEqual(22.84, hsp.score)
+        self.assertEqual(21.56, hsp.prob)
         self.assertEqual(8, hsp.hit_start)
         self.assertEqual(96, hsp.hit_end)
         self.assertEqual(19, hsp.query_start)

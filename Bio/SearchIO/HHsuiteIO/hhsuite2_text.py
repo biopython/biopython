@@ -6,6 +6,8 @@
 """Bio.SearchIO parser for HHSUITE version 2 plain text output format."""
 
 import re
+from collections import OrderedDict
+import warnings
 
 from Bio._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -99,23 +101,18 @@ class Hhsuite2TextParser(object):
         hit_data = {
             'hit_id': match.group(1),
             'description': match.group(2).lstrip(' ;'),
+            'evalue': None,
+            'hit_start': None,
+            'hit_end': None,
+            'hit_seq': '',
+            'prob': None,
             'query_start': None,
             'query_end': None,
             'query_seq': '',
-            'hit_start': None,
-            'hit_end': None,
-            'hit_seq': ''
+            'score': None
         }
         self.line = self.handle.readline()
-        # E-value could be in decimal or scientific notation, so split the string rather then use regexp - this
-        # also means we should be tolerant of additional fields being added/removed
-        # Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
-        scores = {}
-        for score_pair in self.line.strip().split():
-            key, value = score_pair.split('=')
-            scores[key] = value
-        hit_data['evalue'] = float(scores['E-value'])
-        hit_data['score'] = float(scores['Score'])
+        self._process_score_line(self.line, hit_data)
         while True:
             self.line = read_forward(self.handle)
             if not self.line.strip() or self.line.startswith(_END_OF_FILE_MARKER):
@@ -126,6 +123,28 @@ class Hhsuite2TextParser(object):
                 return hit_data
             else:
                 self._parse_hit_match_block(hit_data)
+
+    @staticmethod
+    def _process_score_line(line, hit_data):
+        """Parse the scores from the line and populate hit_data dict.
+
+        Lines are of the form:
+        Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
+
+        E-value could be in decimal or scientific notation, so split the string rather then use regexp - this
+        also means we should be tolerant of additional fields being added/removed
+        """
+        score_map = {'E-value': 'evalue',
+                     'Score': 'score',
+                     'Probab': 'prob'}
+        for score_pair in line.strip().split():
+            key, value = score_pair.split('=')
+            if key in score_map:
+                try:
+                    hit_data[score_map[key]] = float(value)
+                except KeyError:
+                    # We trigger warnings here as it's not a big enough problem to crash, but indicates something unexpected.
+                    warnings.warn("HHsuite parser: unable to extract {} from line: {}".format(key, line))
 
     def _parse_hit_match_block(self, hit_match_data):
         """Parse a single block of hit sequence data (PRIVATE).
@@ -171,13 +190,10 @@ class Hhsuite2TextParser(object):
     def _create_qresult(self, hit_blocks):
         """Create the Biopython data structures from the parsed data (PRIVATE)."""
         query_id = self.query_id
-        hit_list = []
-        hit_ids = set()
+        hit_dict = OrderedDict()
 
-        count = 0
         for block in hit_blocks:
-            count += 1
-            hit_id = self._unique_hit_id(block['hit_id'], hit_ids)
+            hit_id = block['hit_id']
 
             frag = HSPFragment(hit_id, query_id)
             frag.alphabet = generic_protein
@@ -191,35 +207,24 @@ class Hhsuite2TextParser(object):
             hsp = HSP([frag])
             hsp.hit_id = hit_id
             hsp.query_id = query_id
-            hsp.is_included = True  # Should everything should be included?
+            hsp.hit_description = block['description']
+            is_included = True  # Should everything should be included?
+            hsp.is_included = is_included
             hsp.evalue = block['evalue']
             hsp.score = block['score']
+            hsp.prob = block['prob']
 
-            hit = Hit([hsp], hit_id)
-            hit.description = block['description']
-            hit.is_included = True  # Should everything should be included?
-            hit.evalue = block['evalue']
-            hit.score = block['score']
-            hit_list.append(hit)
+            if hit_id not in hit_dict:
+                hit = Hit([hsp], hit_id)
+                hit.description = block['description']
+                hit.is_included = is_included
+                hit.evalue = block['evalue']
+                hit.score = block['score']
+                hit_dict[hit_id] = hit
+            else:
+                hit_dict[hit_id].append(hsp)
 
-        qresult = QueryResult(hit_list, query_id)
+        qresult = QueryResult(hit_dict.values(), query_id)
         qresult.program = _PROGRAM
         qresult.seq_len = self.seq_len
         return [qresult]
-
-    def _unique_hit_id(self, hit_id, existing_ids, separator='_'):
-        """Return a unique hit id (PRIVATE).
-
-        Always append a numeric id to each hit as there may be multiple with the same id.
-        """
-        i = 1
-        new_id = "{}{}{}".format(hit_id, separator, i)
-        while True:
-            if new_id not in existing_ids:
-                existing_ids.add(new_id)
-                return new_id
-            fields = new_id.split(separator)
-            hit_id = separator.join(fields[0:-1])
-            idx = int(fields[-1])
-            new_id = "{}{}{}".format(hit_id, separator, idx + i)
-            i += 1
