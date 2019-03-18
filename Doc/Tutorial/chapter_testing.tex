@@ -435,32 +435,37 @@ docstrings.  The \href{https://docs.python.org/3/library/doctest.html}{doctest
 framework} (included with Python) allows the developer to embed working
 examples in the docstrings, and have these examples automatically tested.
 
-Currently only a small part of Biopython includes doctests. The
-\verb|run_tests.py| script takes care of running the doctests.
-For this purpose, at the top of the \verb|run_tests.py| script is a
-manually compiled list of modules to test, which
-allows us to skip modules with optional external dependencies which may
+Currently only part of Biopython includes doctests. The \verb|run_tests.py|
+script takes care of running the doctests. For this purpose, at the top of
+the \verb|run_tests.py| script is a manually compiled list of modules to
+skip, important where optional external dependencies which may
 not be installed (e.g. the Reportlab and NumPy libraries).  So, if you've
 added some doctests to the docstrings in a Biopython module, in order to
-have them included in the Biopython test suite, you must update
+have them excluded in the Biopython test suite, you must update
 \verb|run_tests.py| to include your module. Currently, the relevant part
 of \verb|run_tests.py| looks as follows:
 
 \begin{verbatim}
-# This is the list of modules containing docstring tests.
-# If you develop docstring tests for other modules, please add
-# those modules here.
-DOCTEST_MODULES = ["Bio.Seq",
-                   "Bio.SeqRecord",
-                   "Bio.SeqIO",
-                   "...",
-                  ]
-#Silently ignore any doctests for modules requiring numpy!
-try:
-    import numpy
-    DOCTEST_MODULES.extend(["Bio.Statistics.lowess"])
-except ImportError:
-    pass
+EXCLUDE_DOCTEST_MODULES = [
+DOCTEST_MODULES = [
+    'Bio.AlignIO.MauveIO',
+    ...
+]
+
+# Exclude modules with online activity
+EXCLUDE_DOCTEST_MODULES.extend([
+    'Bio.Entrez',
+    'Bio.TogoWS',
+    ...
+    ])
+
+# Silently ignore any doctests for modules requiring numpy!
+if numpy is None:
+    EXCLUDE_DOCTEST_MODULES.extend([
+        "Bio.Affy.CelFile",
+        "Bio.KDTree",
+        ...
+    ])
 \end{verbatim}
 
 Note that we regard doctests primarily as documentation, so you should
