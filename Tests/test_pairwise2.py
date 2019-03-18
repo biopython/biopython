@@ -126,17 +126,17 @@ class TestPairwiseLocal(unittest.TestCase):
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
--AxBx
- | |
-zA-Bz
+1 AxB
+  | |
+2 A-B
   Score=1.9
 """)
         seq1, seq2, score, begin, end = aligns[1]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
--AxBx
- | |.
-zA-Bz
+1 AxBx
+  | |.
+2 A-Bz
   Score=1.9
 """)
 
@@ -146,16 +146,16 @@ zA-Bz
                                                 -0.5, -3, -1))
         alignment = pairwise2.format_alignment(*aligns[0])
         self.assertEqual(alignment, """\
---xxxABCDxxx
-       ||
-zzzABzzCDz--
+6 CD
+  ||
+8 CD
   Score=2
 """)
         alignment = pairwise2.format_alignment(*aligns[1])
         self.assertEqual(alignment, """\
-xxxABCDxxx
-   ||
-zzzABzzCDz
+4 AB
+  ||
+4 AB
   Score=2
 """)
 
@@ -168,7 +168,7 @@ zzzABzzCDz
                                              blosum62, -4, -4)
         for a in alignments:
             self.assertEqual(pairwise2.format_alignment(*a),
-                             "VKAHGKKV\n .||\nFQAHCAGV\n  Score=13\n")
+                             "2 KAH\n  .||\n2 QAH\n  Score=13\n")
 
 
 class TestScoreOnly(unittest.TestCase):
@@ -402,9 +402,9 @@ GTCT
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-GAT--
-| |
-G-TCT
+1 GAT
+  | |
+1 G-T
   Score=1.8
 """)  # noqa: W291
 
@@ -419,27 +419,27 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-['G', '-', 'A', 'A', 'T']
-| ..|
-['G', 'T', 'C', 'C', 'T']
+G - A A T 
+|   . . | 
+G T C C T 
   Score=1.9
-""")
+""")  # noqa: W291
         seq1, seq2, score, begin, end = aligns[1]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-['G', 'A', '-', 'A', 'T']
-|. .|
-['G', 'T', 'C', 'C', 'T']
+G A - A T 
+| .   . | 
+G T C C T 
   Score=1.9
-""")
+""")  # noqa: W291
         seq1, seq2, score, begin, end = aligns[2]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-['G', 'A', 'A', '-', 'T']
-|.. |
-['G', 'T', 'C', 'C', 'T']
+G A A - T 
+| . .   | 
+G T C C T 
   Score=1.9
-""")
+""")  # noqa: W291
 
 
 class TestPairwiseMatchDictionary(unittest.TestCase):
@@ -466,9 +466,9 @@ AT-T
         seq1, seq2, score, begin, end = aligns[1]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-ATAT
-||.
-ATT-
+1 ATA
+  ||.
+1 ATT
   Score=3
 """)
 
@@ -478,9 +478,9 @@ ATT-
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-ATAT
-||.
-ATT-
+1 ATA
+  ||.
+1 ATT
   Score=3
 """)
 
@@ -490,9 +490,9 @@ ATT-
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-ATT-
-||.
-ATAT
+1 ATT
+  ||.
+1 ATA
   Score=3
 """)
 
@@ -505,9 +505,9 @@ class TestPairwiseOneCharacter(unittest.TestCase):
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-abcde
+3 c
   |
---c--
+1 c
   Score=1
 """)
 
@@ -518,17 +518,17 @@ abcde
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-abcce
-   |
----c-
+4 c
+  |
+1 c
   Score=1
 """)
         seq1, seq2, score, begin, end = aligns[1]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-abcce
+3 c
   |
---c--
+1 c
   Score=1
 """)
 

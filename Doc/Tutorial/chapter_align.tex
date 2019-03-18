@@ -1456,7 +1456,7 @@ function \verb|format_alignment| for a nicer printout:
 \begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignment[0]))
 MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
-|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||...|||
+|| |     |     | |  | ||||        |  |  |||  |  |      |    |   |   |  
 MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
   Score=72
 \end{verbatim}
@@ -1483,8 +1483,8 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 \begin{verbatim}
 >>> print(pairwise2.format_alignment(*alignments[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
-||||||||||||||||||||||||||||||||||||||||||||...|||
-MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
+|| |.|..|..|.|.||||  ...|.|.|||.|.....|.....   ||.
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH
   Score=292.5
 \end{verbatim}
 
@@ -1500,9 +1500,9 @@ where again XX stands for a two letter code for the match and gap functions:
 >>> from Bio.SubsMat.MatrixInfo import blosum62
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
 >>> print(pairwise2.format_alignment(*alignments[0]))
-LSPADKTNVKAA
+3 PADKTNV
   |..|..|
---PEEKSAV---
+1 PEEKSAV
   Score=16
 <BLANKLINE>
 \end{verbatim}
@@ -1516,9 +1516,9 @@ of 2/0.5 using \verb|localms|):
 \begin{verbatim}
 >>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
 >>> print(pairwise2.format_alignment(*alignments[0]))
-AGAACT
- | ||
--G-AC-
+2 GAAC
+  | ||
+1 G-AC
   Score=13
 <BLANKLINE>
 \end{verbatim}
