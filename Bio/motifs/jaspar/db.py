@@ -14,7 +14,7 @@ appropriate::
         JASPAR_DB_NAME = "JASPAR2018"
         JASPAR_DB_USER = "guest"
         JASPAR_DB_PASS = "guest"
-        DFLT_COLLECTION = 'CORE'
+
         jdb = JASPAR5(
             host=JASPAR_DB_HOST,
             name=JASPAR_DB_NAME,
@@ -41,6 +41,7 @@ appropriate::
     C: 210.00 2683.00 2683.00  21.00   0.00   0.00   9.00  21.00 712.00 401.00
     G: 640.00 297.00   7.00 2683.00 2683.00   0.00  31.00 1580.00 124.00 1083.00
     T: 241.00  22.00   0.00   0.00  12.00   0.00 909.00  12.00 1970.00 396.00
+        
         motifs = jdb.fetch_motifs(
             collection = 'CORE',
             tax_group = ['vertebrates', 'insects'],
