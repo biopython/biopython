@@ -7,58 +7,50 @@
 This modules requires MySQLdb to be installed.
 
 Example, substitute the your database credentials as
-appropriate:
+appropriate::
 
-    >>> from Bio.motifs.jaspar.db import JASPAR5
-    >>>
-    >>> JASPAR_DB_HOST = "hostname.example.org"
-    >>> JASPAR_DB_NAME = "JASPAR_2013"
-    >>> JASPAR_DB_USER = "guest"
-    >>> JASPAR_DB_PASS = "guest"
-    >>>
-    >>> DFLT_COLLECTION = 'CORE'
-    >>> jdb = JASPAR5(
-    ...     host=JASPAR_DB_HOST,
-    ...     name=JASPAR_DB_NAME,
-    ...     user=JASPAR_DB_USER,
-    ...     password=JASPAR_DB_PASS
-    ... )
-    >>>
-    >>>
-    >>> ets1 = jdb.fetch_motif_by_id('MA0098')
-    >>> print(ets1)
+        from Bio.motifs.jaspar.db import JASPAR5
+        JASPAR_DB_HOST = "hostname.example.org"
+        JASPAR_DB_NAME = "JASPAR2018"
+        JASPAR_DB_USER = "guest"
+        JASPAR_DB_PASS = "guest"
+
+        jdb = JASPAR5(
+            host=JASPAR_DB_HOST,
+            name=JASPAR_DB_NAME,
+            user=JASPAR_DB_USER,
+            password=JASPAR_DB_PASS
+        )
+        ets1 = jdb.fetch_motif_by_id('MA0098')
+        print(ets1)
     TF name ETS1
-    Matrix ID   MA0098.1
+    Matrix ID   MA0098.3
     Collection  CORE
-    TF class    Winged Helix-Turn-Helix
-    TF family   Ets
+    TF class    Tryptophan cluster factors
+    TF family   Ets-related factors
     Species 9606
     Taxonomic group vertebrates
-    Accession   ['CAG47050']
-    Data type used  SELEX
-    Medline 1542566
+    Accession   ['P14921']
+    Data type used  HT-SELEX
+    Medline 20517297
     PAZAR ID    TF0000070
-    Comments    -
+    Comments    Data is from Taipale HTSELEX DBD (2013)
     Matrix:
-            0      1      2      3      4      5
-    A:   4.00  17.00   0.00   0.00   0.00   5.00
-    C:  16.00   0.00   1.00  39.00  39.00   3.00
-    G:   4.00   0.00   0.00   1.00   0.00  17.00
-    T:  16.00  23.00  39.00   0.00   1.00  15.00
+            0      1      2      3      4      5      6      7      8      9
+    A: 2683.00 180.00 425.00   0.00   0.00 2683.00 2683.00 1102.00  89.00 803.00
+    C: 210.00 2683.00 2683.00  21.00   0.00   0.00   9.00  21.00 712.00 401.00
+    G: 640.00 297.00   7.00 2683.00 2683.00   0.00  31.00 1580.00 124.00 1083.00
+    T: 241.00  22.00   0.00   0.00  12.00   0.00 909.00  12.00 1970.00 396.00
 
-
-    >>>
-    >>> motifs = jdb.fetch_motifs(
-    ...     collection = 'CORE',
-    ...     tax_group = ['vertebrates', 'insects'],
-    ...     tf_class = 'Winged Helix-Turn-Helix',
-    ...     tf_family = ['Forkhead', 'Ets'],
-    ...     min_ic = 12
-    ... )
-    >>>
-    >>> for motif in motifs:
-    ...     pass # do something with the motif
-
+        motifs = jdb.fetch_motifs(
+            collection = 'CORE',
+            tax_group = ['vertebrates', 'insects'],
+            tf_class = 'Homeo domain factors',
+            tf_family = ['TALE-type homeo domain factors', 'POU domain factors'],
+            min_ic = 12
+        )
+        for motif in motifs:
+            pass # do something with the motif
 """
 
 from __future__ import print_function
