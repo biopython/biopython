@@ -126,7 +126,7 @@ class Hhsuite2TextParser(object):
 
     @staticmethod
     def _process_score_line(line, hit_data):
-        """Parse the scores from the line and populate hit_data dict.
+        """Parse the scores from the line and populate hit_data dict (PRIVATE).
 
         Lines are of the form:
         Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
@@ -162,7 +162,7 @@ class Hhsuite2TextParser(object):
 
         """
         def match_is_valid(match):
-            """Return True if match is not a Consensus column.
+            """Return True if match is not a Consensus column (PRIVATE).
 
             It's not possible to distinguish a sequence line from a Consensus line with
             a regexp, so need to check the ID column.
