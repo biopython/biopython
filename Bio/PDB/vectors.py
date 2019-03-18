@@ -276,10 +276,13 @@ class Vector(object):
         """Return Vector.Vector (dot product)."""
         return sum(self._ar * other._ar)
 
-    def __div__(self, x):
+    def __truediv__(self, x):
         """Return Vector(coords/a)."""
         a = self._ar / numpy.array(x)
         return Vector(a)
+
+    # For Python 2:
+    __div__ = __truediv__
 
     def __pow__(self, other):
         """Return VectorxVector (cross product) or Vectorxscalar."""

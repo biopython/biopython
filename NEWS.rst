@@ -37,6 +37,7 @@ possible, especially the following contributors:
 
 - Bernhard Thiel
 - Brandon Invergo
+- Catherine Lesuisse
 - Chris Rands
 - Lenna Peterson
 - Nick Negretti
@@ -186,7 +187,10 @@ The SeqRecord object now has a translate method, following the approach used
 for its existing reverse_complement method etc.
 
 The output of function ``format_alignment`` in ``Bio.pairwise2`` for displaying
-a pairwise sequence alignment as text now indicates gaps and mis-matches.
+a pairwise sequence alignment as text now indicates gaps and mis-matches. For
+local alignments, if they do not consist of the whole sequences, only the
+aligned section of the sequences are shown, together with the start positions
+of the sequences. Alignments of list will now also be prettily printed.
 
 Bio.SeqIO now supports reading and writing two-line-per-record FASTA files
 under the format name "fasta-2line", useful if you wish to work without

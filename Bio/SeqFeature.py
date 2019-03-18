@@ -675,7 +675,7 @@ class FeatureLocation(object):
     -1
 
     i.e. Rather than thinking of the 'start' and 'end' biologically in a
-    strand aware manor, think of them as the 'left most' or 'minimum'
+    strand aware manner, think of them as the 'left most' or 'minimum'
     boundary, and the 'right most' or 'maximum' boundary of the region
     being described. This is particularly important with compound
     locations describing non-continuous regions.

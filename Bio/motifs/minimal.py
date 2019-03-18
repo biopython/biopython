@@ -20,12 +20,13 @@ def read(handle):
     Example:
 
     >>> from Bio.motifs import minimal
-    >>> with open("meme.output.txt") as f:
+    >>> with open("motifs/meme.out") as f:
     ...     record = minimal.read(f)
     ...
     >>> for motif in record:
     ...     print(motif.name, motif.evalue)
     ...
+    1 1.1e-22
 
     You can access individual motifs in the record by their index or find a motif
     by its name:
@@ -33,15 +34,15 @@ def read(handle):
     Example:
 
     >>> from Bio import motifs
-    >>> with open("test_minimal.meme") as f:
+    >>> with open("motifs/minimal_test.meme") as f:
     ...     record = motifs.parse(f, 'minimal')
     ...
     >>> motif = record[0]
     >>> print(motif.name)
-    LEXA
-    >>> motif = record['LEXA']
+    KRP
+    >>> motif = record['IFXA']
     >>> print(motif.name)
-    LEXA
+    IFXA
 
     This function wont retrieve instances, as there are none in minimal meme format.
     """

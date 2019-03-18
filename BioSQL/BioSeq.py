@@ -249,10 +249,10 @@ def _retrieve_dbxrefs(adaptor, primary_id):
     """Retrieve the database cross references for the sequence (PRIVATE)."""
     _dbxrefs = []
     dbxrefs = adaptor.execute_and_fetchall(
-        "SELECT dbname, accession, version"
-        " FROM bioentry_dbxref join dbxref using (dbxref_id)"
-        " WHERE bioentry_id = %s"
-        " ORDER BY rank", (primary_id,))
+        'SELECT dbname, accession, version'
+        ' FROM bioentry_dbxref join dbxref using (dbxref_id)'
+        ' WHERE bioentry_id = %s'
+        ' ORDER BY "rank"', (primary_id,))
     for dbname, accession, version in dbxrefs:
         if version and version != "0":
             v = "%s.%s" % (accession, version)
@@ -263,37 +263,37 @@ def _retrieve_dbxrefs(adaptor, primary_id):
 
 
 def _retrieve_features(adaptor, primary_id):
-    sql = "SELECT seqfeature_id, type.name, rank" \
-          " FROM seqfeature join term type on (type_term_id = type.term_id)" \
-          " WHERE bioentry_id = %s" \
-          " ORDER BY rank"
+    sql = 'SELECT seqfeature_id, type.name, "rank"' \
+          ' FROM seqfeature join term type on (type_term_id = type.term_id)' \
+          ' WHERE bioentry_id = %s' \
+          ' ORDER BY "rank"'
     results = adaptor.execute_and_fetchall(sql, (primary_id,))
     seq_feature_list = []
     for seqfeature_id, seqfeature_type, seqfeature_rank in results:
         # Get qualifiers [except for db_xref which is stored separately]
         qvs = adaptor.execute_and_fetchall(
-            "SELECT name, value"
-            " FROM seqfeature_qualifier_value  join term using (term_id)"
-            " WHERE seqfeature_id = %s"
-            " ORDER BY rank", (seqfeature_id,))
+            'SELECT name, value'
+            ' FROM seqfeature_qualifier_value  join term using (term_id)'
+            ' WHERE seqfeature_id = %s'
+            ' ORDER BY "rank"', (seqfeature_id,))
         qualifiers = {}
         for qv_name, qv_value in qvs:
             qualifiers.setdefault(qv_name, []).append(qv_value)
         # Get db_xrefs [special case of qualifiers]
         qvs = adaptor.execute_and_fetchall(
-            "SELECT dbxref.dbname, dbxref.accession"
-            " FROM dbxref join seqfeature_dbxref using (dbxref_id)"
-            " WHERE seqfeature_dbxref.seqfeature_id = %s"
-            " ORDER BY rank", (seqfeature_id,))
+            'SELECT dbxref.dbname, dbxref.accession'
+            ' FROM dbxref join seqfeature_dbxref using (dbxref_id)'
+            ' WHERE seqfeature_dbxref.seqfeature_id = %s'
+            ' ORDER BY "rank"', (seqfeature_id,))
         for qv_name, qv_value in qvs:
             value = "%s:%s" % (qv_name, qv_value)
             qualifiers.setdefault("db_xref", []).append(value)
         # Get locations
         results = adaptor.execute_and_fetchall(
-            "SELECT location_id, start_pos, end_pos, strand"
-            " FROM location"
-            " WHERE seqfeature_id = %s"
-            " ORDER BY rank", (seqfeature_id,))
+            'SELECT location_id, start_pos, end_pos, strand'
+            ' FROM location'
+            ' WHERE seqfeature_id = %s'
+            ' ORDER BY "rank"', (seqfeature_id,))
         locations = []
         # convert to Python standard form
         # Convert strand = 0 to strand = None
@@ -420,10 +420,10 @@ def _make_unicode_into_string(text):
 
 def _retrieve_qualifier_value(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
-        "SELECT name, value"
-        " FROM bioentry_qualifier_value JOIN term USING (term_id)"
-        " WHERE bioentry_id = %s"
-        " ORDER BY rank", (primary_id,))
+        'SELECT name, value'
+        ' FROM bioentry_qualifier_value JOIN term USING (term_id)'
+        ' WHERE bioentry_id = %s'
+        ' ORDER BY "rank"', (primary_id,))
     qualifiers = {}
     for name, value in qvs:
         if name == "keyword":
@@ -441,14 +441,14 @@ def _retrieve_reference(adaptor, primary_id):
     # XXX dbxref_qualifier_value
 
     refs = adaptor.execute_and_fetchall(
-        "SELECT start_pos, end_pos, "
-        " location, title, authors,"
-        " dbname, accession"
-        " FROM bioentry_reference"
-        " JOIN reference USING (reference_id)"
-        " LEFT JOIN dbxref USING (dbxref_id)"
-        " WHERE bioentry_id = %s"
-        " ORDER BY rank", (primary_id,))
+        'SELECT start_pos, end_pos, '
+        ' location, title, authors,'
+        ' dbname, accession'
+        ' FROM bioentry_reference'
+        ' JOIN reference USING (reference_id)'
+        ' LEFT JOIN dbxref USING (dbxref_id)'
+        ' WHERE bioentry_id = %s'
+        ' ORDER BY "rank"', (primary_id,))
     references = []
     for start, end, location, title, authors, dbname, accession in refs:
         reference = SeqFeature.Reference()
@@ -524,9 +524,9 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
 
 def _retrieve_comment(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
-        "SELECT comment_text FROM comment"
-        " WHERE bioentry_id=%s"
-        " ORDER BY rank", (primary_id,))
+        'SELECT comment_text FROM comment'
+        ' WHERE bioentry_id=%s'
+        ' ORDER BY "rank"', (primary_id,))
     comments = [comm[0] for comm in qvs]
     # Don't want to add an empty list...
     if comments:

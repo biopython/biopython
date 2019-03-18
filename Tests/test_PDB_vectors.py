@@ -36,6 +36,16 @@ class LegacyImportTests(unittest.TestCase):
             del vector_to_axis, Vector
 
 
+class VectorTests(unittest.TestCase):
+    """Tests for the Vector class."""
+
+    def test_division(self):
+        """Confirm division works."""
+        from Bio.PDB.Vector import Vector
+        v = Vector(1, 1, 1) / 2
+        self.assertEqual(repr(v), "<Vector 0.50, 0.50, 0.50>")
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
