@@ -184,6 +184,7 @@ DOCTEST_MODULES = [
     "Bio.motifs.applications",
     "Bio.motifs.applications._xxmotif",
     "Bio.motifs.jaspar",
+    "Bio.motifs.jaspar.db",
     "Bio.motifs.matrix",
     "Bio.motifs.meme",
     "Bio.motifs.thresholds",
