@@ -35,7 +35,8 @@ We now capture the IDcode field from PDB Header records.
 The pretty-print output of ``format_alignment`` in ``Bio.pairwise2`` has
 changed: For local alignments, if they do not consist of the whole sequences,
 only the aligned section of the sequences are shown, together with the start
-positions of the sequences. Alignments of list will now also be prettily printed.
+positions of the sequences. Alignments of list will now also be prettily
+printed.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
