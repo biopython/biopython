@@ -653,9 +653,7 @@ class DatabaseLoader(object):
                                    description,
                                    version))
         # now retrieve the id for the bioentry
-        bioentry_id = self.adaptor.last_id('bioentry')
-
-        return bioentry_id
+        return self.adaptor.last_id('bioentry')
 
     def _load_bioentry_date(self, record, bioentry_id):
         """Add the effective date of the entry into the database (PRIVATE).
@@ -885,9 +883,7 @@ class DatabaseLoader(object):
               'source_term_id, "rank") VALUES (%s, %s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, seqfeature_key_id,
                                    source_term_id, feature_rank + 1))
-        seqfeature_id = self.adaptor.last_id('seqfeature')
-
-        return seqfeature_id
+        return self.adaptor.last_id('seqfeature')
 
     def _load_seqfeature_locations(self, feature, seqfeature_id):
         """Load all of the locations for a SeqFeature into tables (PRIVATE).

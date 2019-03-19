@@ -173,10 +173,9 @@ def search_count(db, query):
     if not data:
         raise ValueError("TogoWS returned no data from URL %s" % url)
     try:
-        count = int(data.strip())
+        return int(data.strip())
     except ValueError:
         raise ValueError("Expected an integer from URL %s, got: %r" % (url, data))
-    return count
 
 
 def search_iter(db, query, limit=None, batch=100):
