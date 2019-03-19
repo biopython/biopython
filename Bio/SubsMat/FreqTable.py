@@ -84,8 +84,7 @@ def read_count(f):
     for line in f:
         key, value = line.strip().split()
         count[key] = int(value)
-    freq_table = FreqTable(count, COUNT)
-    return freq_table
+    return FreqTable(count, COUNT)
 
 
 def read_freq(f):

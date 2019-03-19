@@ -63,9 +63,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     cmdline.extend((">", output_filename))
     if quiet:
         cmdline.extend(("2>", "/dev/null"))
-    cmdline_str = ' '.join(cmdline)
-
-    return cmdline_str
+    return ' '.join(cmdline)
 
 
 def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):

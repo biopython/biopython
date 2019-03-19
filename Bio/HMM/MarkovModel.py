@@ -21,9 +21,7 @@ def _gen_random_array(n):
     """Return an array of n random numbers summing to 1.0 (PRIVATE)."""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
-    normalizedRandArray = [x / total for x in randArray]
-
-    return normalizedRandArray
+    return [x / total for x in randArray]
 
 
 def _calculate_emissions(emission_probs):
