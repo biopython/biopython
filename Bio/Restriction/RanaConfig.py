@@ -72,7 +72,7 @@ ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
 #   connect as anonymous user (rebase_name) and providing your e-mail address
 #   as password.
 #
-#   However, a password is not required (any more?) for connecting tho REBASE,
+#   However, a password is not required (any more?) for connecting to REBASE,
 #   so we don't send our e-mail
 #
 Rebase_name = 'anonymous'

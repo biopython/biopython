@@ -15,41 +15,48 @@ format: list, column or map.
 The easiest way to use it is:
 
     >>> from Bio.Restriction.PrintFormat import PrintFormat
-    >>> from Bio.Restriction.Restriction import AllEnzymes
-    >>> from Bio import Entrez
-    >>> from Bio import SeqIO
-    >>> handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="SYNPBR322")
-    >>> pBR322 = SeqIO.read(handle, "fasta")
-    >>> handle.close()
-    >>> dct = AllEnzymes.search(pBR322.seq)
-    >>> new = PrintFormat()
-    >>> new.print_that(dct, 'My pBR322 analysis:\n', 'No site:\n')
-    My pBR322 analysis:
-    AasI       :  2169, 2582.
-    AatII      :  4289.
-    ...
-    ZraI       :  4287.
-    ZrmI       :  3847.
+    >>> from Bio.Restriction.Restriction import RestrictionBatch
+    >>> from Bio.Seq import Seq
+    >>> pBs_mcs = Seq('GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC')
+    >>> restriction_batch = RestrictionBatch(['EcoRI', 'BamHI', 'ApaI'])
+    >>> result = restriction_batch.search(pBs_mcs)
+    >>> my_map = PrintFormat()
+    >>> my_map.print_that(result, 'My pBluescript mcs analysis:\n',
+    ...               'No site:\n')
+    My pBluescript mcs analysis:
+    ApaI       :  12.
+    EcoRI      :  50.
     No site:
-    AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
-    ...
-    Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
-    Zsp2I
-    >>> new.sequence = pBR322.seq
-    >>> new.print_as("map")
-    >>> new.print_that(dct)
-    ...
+    BamHI     
+    <BLANKLINE>
+    >>> my_map.sequence = pBs_mcs
+    >>> my_map.print_as("map")
+    >>> my_map.print_that(result)
+               12 ApaI
+               |                                                
+               |                                     50 EcoRI
+               |                                     |          
+    GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC
+    ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+    CCATGGCCCGGGGGGGAGCTCCAGCTGCCATAGCTATTCGAACTATAGCTTAAG
+    1                                                   54
+    <BLANKLINE>
+    <BLANKLINE>
+       Enzymes which do not cut the sequence.
+    <BLANKLINE>
+    BamHI     
+    <BLANKLINE>
+    >>>
 
 Some of the methods of PrintFormat are meant to be overridden by derived
 class.
-"""
+"""  # noqa: W291
 
 from __future__ import print_function
 
 import re
 
 from Bio._py3k import range
-
 from Bio.Restriction import RanaConfig as RanaConf
 
 
@@ -199,7 +206,8 @@ class PrintFormat(object):
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
-        return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
+        return self._make_number_only(ls, title) \
+            + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
         """Summarise non-cutting enzymes (PRIVATE).
@@ -370,8 +378,9 @@ class PrintFormat(object):
                 map = Join((map, linetot))
             mapunit = '\n'.join((sequence[counter: base], a * 60,
                                  revsequence[counter: base],
-                                 Join((str.ljust(str(counter + 1), 15), ' ' * 30,
-                                       str.rjust(str(base), 15), '\n\n'))
+                                 Join((str.ljust(str(counter + 1), 15),
+                                       ' ' * 30, str.rjust(str(base), 15),
+                                       '\n\n'))
                                  ))
             map = Join((map, mapunit))
         line = ' ' * 60
@@ -437,6 +446,6 @@ class PrintFormat(object):
                 stringsite = indentation.join(output)
             else:
                 stringsite = output
-            into = Join((into,
-                         str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
+            into = Join((into, str(name).ljust(self.NameWidth), ' :  ',
+                         stringsite, '\n'))
         return into
