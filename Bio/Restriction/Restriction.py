@@ -13,9 +13,9 @@
 Notes about the diverses class of the restriction enzyme implementation::
 
             RestrictionType is the type of all restriction enzymes.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             AbstractCut implements some methods that are common to all enzymes.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             NoCut, OneCut,TwoCuts   represent the number of double strand cuts
                                     produced by the enzyme.
                                     they correspond to the 4th field of the
@@ -23,21 +23,21 @@ Notes about the diverses class of the restriction enzyme implementation::
                     0->NoCut    : the enzyme is not characterised.
                     2->OneCut   : the enzyme produce one double strand cut.
                     4->TwoCuts  : two double strand cuts.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             Meth_Dep, Meth_Undep    represent the methylation susceptibility to
                                     the enzyme.
                                     Not implemented yet.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             Palindromic,            if the site is palindromic or not.
             NotPalindromic          allow some optimisations of the code.
                                     No need to check the reverse strand
                                     with palindromic sites.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             Unknown, Blunt,         represent the overhang.
             Ov5, Ov3                Unknown is here for symmetry reasons and
                                     correspond to enzymes that are not
                                     characterised in rebase.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             Defined, Ambiguous,     represent the sequence of the overhang.
             NotDefined
                                     NotDefined is for enzymes not characterised
@@ -66,7 +66,7 @@ Notes about the diverses class of the restriction enzyme implementation::
                              YTTAA^R
                    Accordingly, blunt enzymes are always Defined even
                    when they cut outside their restriction site.
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
             Not_available,          as found in rebase file emboss_r.NNN files.
             Commercially_available
                                     allow the selection of the enzymes
@@ -78,7 +78,7 @@ Notes about the diverses class of the restriction enzyme implementation::
 
                                     the list of suppliers is extracted from
                                     emboss_s.NNN
-        ----------------------------------------------------------------------------
+        -----------------------------------------------------------------------
 
 """
 
@@ -115,7 +115,7 @@ def _check_bases(seq_string):
 
     Returns the string WITH A LEADING SPACE (!). This is for backwards
     compatibility, and may in part be explained by the fact that
-    Bio.Restriction doesn't use zero based counting.
+    ``Bio.Restriction`` doesn't use zero based counting.
     """
     # Remove white space and make upper case:
     seq_string = "".join(seq_string.split()).upper()
@@ -154,9 +154,9 @@ class FormattedSeq(object):
     def __init__(self, seq, linear=True):
         """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
 
-        seq is either a Bio.Seq, Bio.MutableSeq or a FormattedSeq.
-        if seq is a FormattedSeq, linear will have no effect on the
-        shape of the sequence.
+        ``seq`` is either a ``Bio.Seq``, ``Bio.MutableSeq`` or a
+        ``FormattedSeq``. if ``seq`` is a ``FormattedSeq``, linear will have
+        no effect on the shape of the sequence.
         """
         if isinstance(seq, (Seq, MutableSeq)):
             stringy = str(seq)
@@ -286,6 +286,7 @@ class RestrictionType(type):
         >>> from Bio.Restriction import EcoRI
         >>> EcoRI/Seq('GAATTC')
         [2]
+
         Returns RE.search(other).
         """
         return cls.search(other)
@@ -296,6 +297,7 @@ class RestrictionType(type):
         >>> from Bio.Restriction import EcoRI
         >>> Seq('GAATTC')/EcoRI
         [2]
+
         Returns RE.search(other).
         """
         return cls.search(other)
@@ -319,7 +321,8 @@ class RestrictionType(type):
 
         >>> from Bio.Restriction import EcoRI
         >>> EcoRI//Seq('GAATTC')
-        (Seq('G', Alphabet()), Seq('AATTC', Alphabet()))
+        (Seq('G'), Seq('AATTC'))
+
         Returns RE.catalyse(other).
         """
         return cls.catalyse(other)
@@ -329,7 +332,8 @@ class RestrictionType(type):
 
         >>> from Bio.Restriction import EcoRI
         >>> Seq('GAATTC')//EcoRI
-        (Seq('G', Alphabet()), Seq('AATTC', Alphabet()))
+        (Seq('G'), Seq('AATTC'))
+
         Returns RE.catalyse(other).
         """
         return cls.catalyse(other)
