@@ -1860,6 +1860,256 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
+    def test_xml_2900_blastp_001_v1(self):
+        self._test_xml_2900_blastp_001('xml_2900_blastp_001.xml')
+
+    def test_xml_2900_blastp_001_v2(self):
+        self._test_xml_2900_blastp_001('xml_2900_blastp_001_v2.xml')
+
+    def _test_xml_2900_blastp_001(self, filename):
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile, "rb")
+        records = NCBIXML.parse(handle)
+        record = next(records)
+
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.query, "twin argininte translocase protein A [Escherichia coli K12]")
+        self.assertEqual(record.query_letters, 103)
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.num_sequences_in_database, 194611632)
+        self.assertEqual(record.database_sequences, 194611632)
+        self.assertEqual(record.database_length, 2104817704)
+
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        hsp = record.alignments[0].hsps[0]
+        self.assertEqual(hsp.align_length, 103)
+        self.assertEqual(hsp.identities, 103)
+        self.assertEqual(hsp.positives, 103)
+        self.assertEqual(hsp.query,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 532.0)
+        self.assertEqual(hsp.expect, 1.71849e-68)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 103)
+
+        self.assertEqual(len(record.alignments[1].hsps), 1)
+        hsp = record.alignments[1].hsps[0]
+        self.assertEqual(hsp.align_length, 103)
+        self.assertEqual(hsp.identities, 102)
+        self.assertEqual(hsp.positives, 102)
+        self.assertEqual(hsp.query,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKIEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAK EDAKRHDKEQV")
+        self.assertEqual(hsp.score, 526.0)
+        self.assertEqual(hsp.expect, 1.44614e-67)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 103)
+
+        self.assertEqual(len(record.alignments[2].hsps), 1)
+        hsp = record.alignments[2].hsps[0]
+        self.assertEqual(hsp.align_length, 103)
+        self.assertEqual(hsp.identities, 102)
+        self.assertEqual(hsp.positives, 102)
+        self.assertEqual(hsp.query,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MRPCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MR CLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 525.0)
+        self.assertEqual(hsp.expect, 1.80126e-67)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 103)
+
+        self.assertEqual(len(record.alignments[3].hsps), 1)
+        hsp = record.alignments[3].hsps[0]
+        self.assertEqual(hsp.align_length, 103)
+        self.assertEqual(hsp.identities, 102)
+        self.assertEqual(hsp.positives, 102)
+        self.assertEqual(hsp.query,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MRLCLIIIYHRXTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MRLCLIIIYHR TCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 525.0)
+        self.assertEqual(hsp.expect, 2.10054e-67)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 103)
+
+        self.assertEqual(len(record.alignments[4].hsps), 1)
+        hsp = record.alignments[4].hsps[0]
+        self.assertEqual(hsp.align_length, 103)
+        self.assertEqual(hsp.identities, 101)
+        self.assertEqual(hsp.positives, 102)
+        self.assertEqual(hsp.query,
+                         "MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MRPCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQANTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MR CLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQA+TNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 522.0)
+        self.assertEqual(hsp.expect, 5.11164e-67)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 103)
+
+        self.assertEqual(len(record.alignments[5].hsps), 1)
+        hsp = record.alignments[5].hsps[0]
+        self.assertEqual(hsp.align_length, 89)
+        self.assertEqual(hsp.identities, 89)
+        self.assertEqual(hsp.positives, 89)
+        self.assertEqual(hsp.query,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 449.0)
+        self.assertEqual(hsp.expect, 5.99855e-56)
+        self.assertEqual(hsp.query_start, 15)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 89)
+
+        self.assertEqual(len(record.alignments[6].hsps), 1)
+        hsp = record.alignments[6].hsps[0]
+        self.assertEqual(hsp.align_length, 89)
+        self.assertEqual(hsp.identities, 89)
+        self.assertEqual(hsp.positives, 89)
+        self.assertEqual(hsp.query,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 448.0)
+        self.assertEqual(hsp.expect, 8.86198e-56)
+        self.assertEqual(hsp.query_start, 15)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 89)
+
+        self.assertEqual(len(record.alignments[7].hsps), 1)
+        hsp = record.alignments[7].hsps[0]
+        self.assertEqual(hsp.align_length, 89)
+        self.assertEqual(hsp.identities, 89)
+        self.assertEqual(hsp.positives, 89)
+        self.assertEqual(hsp.query,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 447.0)
+        self.assertEqual(hsp.expect, 1.55019e-55)
+        self.assertEqual(hsp.query_start, 15)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 4)
+        self.assertEqual(hsp.sbjct_end, 92)
+
+        self.assertEqual(len(record.alignments[8].hsps), 1)
+        hsp = record.alignments[8].hsps[0]
+        self.assertEqual(hsp.align_length, 89)
+        self.assertEqual(hsp.identities, 88)
+        self.assertEqual(hsp.positives, 89)
+        self.assertEqual(hsp.query,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDSDFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQD+DFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 445.0)
+        self.assertEqual(hsp.expect, 2.25306e-55)
+        self.assertEqual(hsp.query_start, 15)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 89)
+
+        self.assertEqual(len(record.alignments[9].hsps), 1)
+        hsp = record.alignments[9].hsps[0]
+        self.assertEqual(hsp.align_length, 89)
+        self.assertEqual(hsp.identities, 88)
+        self.assertEqual(hsp.positives, 89)
+        self.assertEqual(hsp.query,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.sbjct,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTISDKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.match,
+                         "MGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTI+DKQADTNQEQAKTEDAKRHDKEQV")
+        self.assertEqual(hsp.score, 445.0)
+        self.assertEqual(hsp.expect, 2.25306e-55)
+        self.assertEqual(hsp.query_start, 15)
+        self.assertEqual(hsp.query_end, 103)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 89)
+
+        self.assertEqual(len(record.descriptions), 10)
+        """
+        description = record.descriptions[0]
+        self.assertEqual(len(description.title), 4706)
+        self.assertEqual(description.title[:300],
+                         'gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit '
+                         'TatA [Shigella] >gi|24115132|ref|NP_709642.1| twin-arginine translocation protein TatA '
+                         '[Shigella flexneri 2a str. 301] >gi|82778983|ref|YP_405332.1| twin-arginine translocation '
+                         'protein TatA [Shigella dysenteri')
+        description = record.descriptions[1]
+        self.assertEqual(len(description.title), 106)
+        self.assertEqual(description.title,
+                         "gi|91074959|gb|ABE09840.1| sec-independent twin-arginine translocase subunit tatA [Escherichia coli UTI89]")
+        description = record.descriptions[2]
+        self.assertEqual(len(description.title), 979)
+        self.assertEqual(description.title[:300],
+                         'gi|73857826|gb|AAZ90533.1| conserved hypothetical protein [Shigella sonnei Ss046] >gi|331067587|gb|EGI38991.1| Sec-independent protein translocase protein TatA [Escherichia coli TA280] >gi|412965214|emb|CCK49144.1| sec-independent protein translocase protein tata/e homolog 2 [Escherichia coli chi712')
+        description = record.descriptions[3]
+        self.assertEqual(len(description.title), 260)
+        self.assertEqual(description.title,
+                         "gi|25302684|pir||D86071 hypothetical protein tatA [imported] - Escherichia coli (strain O157:H7, substrain EDL933) >gi|12518713|gb|AAG59032.1|AE005614_12 twin arginine translocation protein; sec-independent protein export [Escherichia coli O157:H7 str. EDL933]")
+        description = record.descriptions[4]
+        self.assertEqual(len(description.title), 100)
+        self.assertEqual(description.title,
+                         "gi|331072495|gb|EGI43827.1| Sec-independent protein translocase protein TatA [Escherichia coli H591]")
+        description = record.descriptions[5]
+        self.assertEqual(len(description.title), 120)
+        self.assertEqual(description.title,
+                         "gi|808042844|pdb|2MN7|A Chain A, Solution structure of monomeric TatA of twin-arginine translocation system from E. coli")
+        description = record.descriptions[6]
+        self.assertEqual(len(description.title), 774516)
+        self.assertEqual(description.title[:300],
+                         'gi|481023661|ref|WP_001295260.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Proteobacteria] >gi|15834020|ref|NP_312793.1| TatABCE protein translocation system subunit TatA [Escherichia coli O157:H7 str. Sakai] >gi|90111653|ref|NP_418280.4| twin arginine protein translocation sys')
+        description = record.descriptions[7]
+        self.assertEqual(len(description.title), 238)
+        self.assertEqual(description.title,
+                         "gi|808042842|pdb|2MN6|B Chain B, Solution structure of dimeric TatA of twin-arginine translocation system from E. coli >gi|808042843|pdb|2MN6|A Chain A, Solution structure of dimeric TatA of twin-arginine translocation system from E. coli")
+        description = record.descriptions[8]
+        self.assertEqual(len(description.title), 2111)
+        self.assertEqual(description.title[:300],
+                         'gi|491167042|ref|WP_005025412.1| MULTISPECIES: twin-arginine translocase subunit TatA [Enterobacteriaceae] >gi|320176770|gb|EFW51804.1| Twin-arginine translocation protein TatA [Shigella dysenteriae CDC 74-1112] >gi|391297993|gb|EIQ56018.1| twin arginine-targeting translocase, TatA/E family protein ')
+        description = record.descriptions[9]
+        self.assertEqual(len(description.title), 384)
+        self.assertEqual(description.title[:300],
+                         'gi|332996954|gb|EGK16572.1| sec-independent translocase protein tatA [Shigella flexneri VA-6] >gi|391245379|gb|EIQ04650.1| twin arginine-targeting translocase, TatA/E family protein [Shigella flexneri K-1770] >gi|1411457050|emb|SRN34259.1| twin arginine translocase protein A [Shigella flexneri] >gi|')
+        """
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
