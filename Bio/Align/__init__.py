@@ -1333,6 +1333,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     """
 
     def align(self, seqA, seqB):
+        """Return the alignments of two sequences using PairwiseAligner."""
         seqA = str(seqA)
         seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
@@ -1340,6 +1341,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         return alignments
 
     def score(self, seqA, seqB):
+        """Return the alignments score of two sequences using PairwiseAligner."""
         seqA = str(seqA)
         seqB = str(seqB)
         return _aligners.PairwiseAligner.score(self, seqA, seqB)
