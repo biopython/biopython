@@ -676,6 +676,7 @@ class SummaryInfo(object):
         return total_info
 
     def get_column(self, col):
+        """Return column of alignment."""
         # TODO - Deprecate this and implement slicing?
         return self.alignment[:, col]
 
