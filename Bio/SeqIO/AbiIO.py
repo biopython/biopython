@@ -18,9 +18,11 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 
 import datetime
 import struct
+import warnings
 
 from os.path import basename
 
+from Bio import BiopythonParserWarning
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
@@ -480,8 +482,12 @@ def _abi_parse_header(header, handle):
             data_offset = tag_offset + 20
         handle.seek(data_offset)
         data = handle.read(data_size)
-        yield tag_name, tag_number, \
-            _parse_tag_data(elem_code, elem_num, data)
+        try:
+            yield tag_name, tag_number, \
+                _parse_tag_data(elem_code, elem_num, data)
+        except UnicodeDecodeError:
+            warnings.warn("Ignoring tag %s %i due to unicode problem"
+                          % (tag_name, tag_number), BiopythonParserWarning)
 
 
 def _abi_trim(seq_record):
