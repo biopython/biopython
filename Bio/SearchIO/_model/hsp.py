@@ -211,7 +211,7 @@ class HSP(_BaseHSP):
     +------------+---------------------------------------------------+
 
     In addition to the objects listed above, HSP objects also provide the
-    following properties:
+    following properties and/or attributes:
 
     +--------------------+------------------------------------------------------+
     | Property           | Value                                                |
@@ -230,6 +230,9 @@ class HSP(_BaseHSP):
     |                    | between fragments                                    |
     +--------------------+------------------------------------------------------+
     | hit_inter_spans    | list of lengths of the regions between hit fragments |
+    +--------------------+------------------------------------------------------+
+    | parse_index        | 0-based index for storing the order by which the HSP |
+    |                    | appears in the output file (default: -1).            |
     +--------------------+------------------------------------------------------+
     | query_id           | ID of the query sequence                             |
     +--------------------+------------------------------------------------------+
@@ -250,11 +253,14 @@ class HSP(_BaseHSP):
     # from this one
     _NON_STICKY_ATTRS = ('_items', )
 
-    def __init__(self, fragments=()):
+    def __init__(self, fragments=(), parse_index=-1):
         """Initialize an HSP object.
 
         :param fragments: fragments contained in the HSP object
         :type fragments: iterable yielding HSPFragment
+        :param parse_index: optional index / ordering of the HSP fragment in
+            the original input file.
+        :type parse_index: integer
 
         HSP objects must be initialized with a list containing at least one
         HSPFragment object. If multiple HSPFragment objects are used for
@@ -275,6 +281,7 @@ class HSP(_BaseHSP):
                 raise ValueError("HSP object can not contain fragments with "
                                  "more than one %s." % attr)
 
+        self.parse_index = parse_index
         self._items = []
         for fragment in fragments:
             self._validate_fragment(fragment)
