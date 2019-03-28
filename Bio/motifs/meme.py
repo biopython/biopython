@@ -85,6 +85,8 @@ class Motif(motifs.Motif):
         self.evalue = 0.0
         self.num_occurrences = 0
         self.name = None
+        self.id = None
+        self.alt_id = None
 
 
 class Instance(Seq.Seq):

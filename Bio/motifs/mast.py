@@ -91,19 +91,23 @@ def __read_database_and_motifs(record, handle):
     elif words[2] == '(peptide)':
         record.alphabet = IUPAC.protein
     for line in handle:
-        if 'MOTIF WIDTH' in line:
+        if 'WIDTH BEST POSSIBLE MATCH' in line:
             break
     line = next(handle)
     if '----' not in line:
         raise ValueError("Line does not contain '----':\n%s" % line)
+    has_motif_ids = (len(line.strip().split()) == 5)
     for line in handle:
         if not line.strip():
             break
         words = line.strip().split()
         motif = meme.Motif(record.alphabet)
         motif.name = words[0]
-        motif.length = int(words[1])
-        # words[2] contains the best possible match
+        if has_motif_ids:
+            motif.id = words[1]
+            motif.alt_id = words[2]
+        motif.length = int(words[-2])
+        # words[-1] contains the best possible match
         record.append(motif)
 
 
