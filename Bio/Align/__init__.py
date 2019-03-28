@@ -1141,6 +1141,22 @@ class PairwiseAlignment(object):
         line = "\t".join(words) + "\n"
         return line
 
+    @property
+    def aligned(self):
+        """Return the indices of subsequences aligned to each other."""
+        segments1 = []
+        segments2 = []
+        i1, i2 = self.path[0]
+        for node in self.path[1:]:
+            j1, j2 = node
+            if j1 > i1 and j2 > i2:
+                segment1 = (i1, j1)
+                segment2 = (i2, j2)
+                segments1.append(segment1)
+                segments2.append(segment2)
+            i1, i2 = j1, j2
+        return tuple(segments1), tuple(segments2)
+
 
 class PairwiseAlignments(object):
     """Implements an iterator over pairwise alignments returned by the aligner.
