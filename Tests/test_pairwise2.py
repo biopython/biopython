@@ -123,6 +123,9 @@ class TestPairwiseLocal(unittest.TestCase):
 
     def test_localxs(self):
         aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
+        # From Biopython 1.74 on this should only give one alignment, since
+        # we disallow leading and trailing 'zero-extensions'
+        self.assertEqual(len(aligns), 1)
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
@@ -131,12 +134,28 @@ class TestPairwiseLocal(unittest.TestCase):
 2 A-B
   Score=1.9
 """)
-        seq1, seq2, score, begin, end = aligns[1]
+
+    def test_localds_zero_score_segments_symmetric(self):
+        """Test if alignment is independent on direction of sequence."""
+        aligns1 = pairwise2.align.localds('CWHISLKM', 'CWHGISGLKM', blosum62,
+                                          -11, -1)
+        aligns2 = pairwise2.align.localds('MKLSIHWC', 'MKLGSIGHWC', blosum62,
+                                          -11, -1)
+        self.assertEqual(len(aligns1), len(aligns2))
+
+    def test_localxs_generic(self):
+        """Test the generic method with local alignments."""
+        aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0,
+                                                force_generic=True))
+        # From Biopython 1.74 on this should only give one alignment, since
+        # we disallow leading and trailing 'zero-extensions'
+        self.assertEqual(len(aligns), 1)
+        seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score, begin, end)
         self.assertEqual(alignment, """\
-1 AxBx
-  | |.
-2 A-Bz
+1 AxB
+  | |
+2 A-B
   Score=1.9
 """)
 
