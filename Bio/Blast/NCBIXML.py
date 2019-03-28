@@ -155,6 +155,8 @@ class BlastParser(_XMLparser):
         self._parser.setFeature(xml.sax.handler.feature_external_pes, 0)
         self._parser.setFeature(xml.sax.handler.feature_external_ges, 0)
 
+        self._xml_version = 1
+
         self.reset()
 
     def reset(self):
@@ -228,6 +230,7 @@ class BlastParser(_XMLparser):
 
     def _setup_blast_v2(self):
         self._method_name_level = 2
+        self._xml_version = 2
         self._method_map = {
             'start_report/Report': self._start_blast_record,
             'end_report/Report': self._end_blast_record,
@@ -248,6 +251,14 @@ class BlastParser(_XMLparser):
             'end_Parameters/filter': self._set_parameters_filter,
             'start_hits/Hit': self._start_hit,
             'end_hits/Hit': self._end_hit,
+            'start_description/HitDescr': self._start_hit_descr_item,
+            'end_description/HitDescr': self._end_hit_descr_item,
+            'end_HitDescr/id': self._end_description_id,
+            'end_HitDescr/accession': self._end_description_accession,
+            'end_HitDescr/title': self._end_description_title,
+            'end_HitDescr/taxid': self._end_description_taxid,
+            'end_HitDescr/sciname': self._end_description_sciname,
+            'end_Hit/len': self.set_hit_len,
             'start_hsps/Hsp': self._start_hsp,
             'end_Hsp/score': self._set_hsp_score,
             'end_Hsp/bit_score': self._set_hsp_bit_score,
@@ -489,10 +500,11 @@ class BlastParser(_XMLparser):
     def _start_hit(self):
         """Start filling records (PRIVATE)."""
         self._blast.alignments.append(Record.Alignment())
-        self._blast.descriptions.append(Record.Description())
+        self._descr = Record.Description() if self._xml_version == 1 else Record.DescriptionExt()
+        self._blast.descriptions.append(self._descr)
         self._blast.multiple_alignment = []
         self._hit = self._blast.alignments[-1]
-        self._descr = self._blast.descriptions[-1]
+
         self._descr.num_alignments = 0
 
     def _end_hit(self):
@@ -644,6 +656,42 @@ class BlastParser(_XMLparser):
     def _set_statistics_entropy(self):
         """Karlin-Altschul parameter H (PRIVATE)."""
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
+
+    def _start_hit_descr_item(self):
+        """XML v2. Start hit description item"""
+        self._hit_descr_item = Record.DescriptionExtItem()
+
+    def _end_hit_descr_item(self):
+        """XML v2. Start hit description item"""
+        self._descr.append_item(self._hit_descr_item)
+        if not self._hit.title:
+            self._hit.title = str(self._hit_descr_item)
+        self._hit_descr_item = None
+
+    def _end_description_id(self):
+        """XML v2. The identifier of the database sequence(PRIVATE)."""
+        self._hit_descr_item.id = self._value
+        if not self._hit.hit_id:
+            self._hit.hit_id = self._value
+
+    def _end_description_accession(self):
+        """XML v2. The accession value of the database sequence (PRIVATE)."""
+        self._hit_descr_item.accession = self._value
+        if not getattr(self._hit, 'accession', None):
+            self._hit.accession = self._value
+
+    def _end_description_title(self):
+        """XML v2. The hit description title (PRIVATE)."""
+        self._hit_descr_item.title = self._value
+
+    def _end_description_taxid(self):
+        try:
+            self._hit_descr_item.taxid = int(self._value)
+        except ValueError:
+            pass
+
+    def _end_description_sciname(self):
+        self._hit_descr_item.sciname = self._value
 
 
 def read(handle, debug=0):
