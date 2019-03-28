@@ -6,6 +6,9 @@
 # package.
 
 """Code to interact with the primersearch program from EMBOSS."""
+import re
+
+from Bio.Seq import Seq
 
 
 class InputRecord(object):
@@ -47,35 +50,67 @@ class OutputRecord(object):
 class Amplifier(object):
     """Represent a single amplification from a primer."""
 
-    def __init__(self):
+    def __init__(self, primer_name):
         """Initialize the class."""
+        self.primer_name = primer_name
         self.hit_info = ""
         self.length = 0
+        self.forward_seq = None
+        self.forward_pos = 0
+        self.forward_mismatches = 0
+        self.reverse_seq = None
+        self.reverse_pos = 0
+        self.reverse_mismatches = 0
+
+
+def parse(handle):
+    current_aplifier = None
+    current_primer_name = None
+    re_match_info = re.compile('\s+([GATC]+) hits (forward|reverse) strand at \[?(\d+)\]? with (\d+) mismatches')
+
+    for line in handle:
+        if not line.strip():
+            continue
+
+        elif line.startswith("Primer name"):
+            current_primer_name = line.split()[-1]
+        elif line.startswith("Amplimer"):
+            if current_aplifier is not None:
+                current_aplifier.hit_info = current_aplifier.hit_info.rstrip()
+                yield current_aplifier
+            current_aplifier = Amplifier(current_primer_name)
+        elif line.startswith("\tSequence: "):
+            current_aplifier.hit_info = line.replace("\tSequence: ", "")
+        elif line.startswith("\tAmplimer length: "):
+            length = line.split()[-2]
+            current_aplifier.length = int(length)
+        else:
+            match = re_match_info.match(line)
+            if match:
+                if match.group(2) == 'forward':
+                    current_aplifier.forward_seq = Seq(match.group(1))
+                    current_aplifier.forward_pos = int(match.group(3))
+                    current_aplifier.forward_mismatches = int(match.group((4)))
+                else:
+                    current_aplifier.reverse_seq = Seq(match.group(1))
+                    current_aplifier.reverse_pos = int(match.group(3))
+                    current_aplifier.reverse_mismatches = int(match.group(4))
+
+            current_aplifier.hit_info += line
+
+    if current_aplifier is not None:
+        current_aplifier.hit_info = current_aplifier.hit_info.rstrip()
+        yield current_aplifier
 
 
 def read(handle):
     """Get output from primersearch into a PrimerSearchOutputRecord."""
     record = OutputRecord()
 
-    for line in handle:
-        if not line.strip():
-            continue
-        elif line.startswith("Primer name"):
-            name = line.split()[-1]
-            record.amplifiers[name] = []
-        elif line.startswith("Amplimer"):
-            amplifier = Amplifier()
-            record.amplifiers[name].append(amplifier)
-        elif line.startswith("\tSequence: "):
-            amplifier.hit_info = line.replace("\tSequence: ", "")
-        elif line.startswith("\tAmplimer length: "):
-            length = line.split()[-2]
-            amplifier.length = int(length)
+    for amplifier in parse(handle):
+        if amplifier.primer_name in record.amplifiers:
+            record.amplifiers[amplifier.primer_name].append(amplifier)
         else:
-            amplifier.hit_info += line
-
-    for name in record.amplifiers:
-        for amplifier in record.amplifiers[name]:
-            amplifier.hit_info = amplifier.hit_info.rstrip()
+            record.amplifiers[amplifier.primer_name] = [amplifier]
 
     return record
