@@ -481,19 +481,30 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
     The distance matrix is returned as a list of 1D arrays containing the
     distance matrix calculated from the data. The number of columns in eac
     row is equal to the row number. Hence, the first row has zero length.
-    An example of the return value is:
+    For example:
 
-        matrix = [[],
-                  array([1.]),
-                  array([7., 3.]),
-                  array([4., 2., 6.])]
+    >>> from numpy import array
+    >>> from Bio.Cluster import distancematrix
+    >>> data = array([[0, 1,  2,  3],
+    ...               [4, 5,  6,  7],
+    ...               [8, 9, 10, 11],
+    ...               [1, 2,  3,  4]])
+    >>> distances = distancematrix(data, dist='e')
+    >>> distances
+    [array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]
+
+    which can be rewritten as
+       distances = [array([], dtype=float64),
+                    array([ 16.]),
+                    array([ 64.,  16.]),
+                    array([  1.,   9.,  49.])]
 
     This corresponds to the distance matrix:
 
-        [0., 1., 7., 4.]
-        [1., 0., 3., 2.]
-        [7., 3., 0., 6.]
-        [4., 2., 6., 0.]
+        [ 0., 16., 64.,  1.]
+        [16.,  0., 16.,  9.]
+        [64., 16.,  0., 49.]
+        [ 1.,  9., 49.,  0.]
     """
     data = __check_data(data)
     shape = data.shape
