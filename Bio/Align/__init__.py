@@ -1143,7 +1143,58 @@ class PairwiseAlignment(object):
 
     @property
     def aligned(self):
-        """Return the indices of subsequences aligned to each other."""
+        """Return the indices of subsequences aligned to each other.
+
+        This property returns the start and end indices of subsequences
+        in the target and query sequence that were aligned to each other.
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> alignments = aligner.align("GAACT", "GAT")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACT
+        ||--|
+        GA--T
+        <BLANKLINE>
+        >>> alignment.aligned
+        (((0, 2), (4, 5)), ((0, 2), (2, 3)))
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACT
+        |-|-|
+        G-A-T
+        <BLANKLINE>
+        >>> alignment.aligned
+        (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+
+        Note that different alignments may have the same subsequences
+        aligned to each other. In particular, this may occur if alignments
+        differ from each other in terms of their gap placement only:
+
+        >>> aligner.mismatch = -10
+        >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
+        >>> len(alignments)
+        2
+        >>> print(alignments[0])
+        AAAC-AAA
+        |||--|||
+        AAA-GAAA
+        <BLANKLINE>
+        >>> alignments[0].aligned
+        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        >>> print(alignments[1])
+        AAA-CAAA
+        |||--|||
+        AAAG-AAA
+        <BLANKLINE>
+        >>> alignments[1].aligned
+        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+
+        The property can be used to identify alignments that are identical
+        to each other in terms of their aligned sequences.
+        """
         segments1 = []
         segments2 = []
         i1, i2 = self.path[0]
