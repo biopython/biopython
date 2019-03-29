@@ -171,6 +171,8 @@ class ThreeLetterProtein(Alphabet):
 
 
 class AlphabetEncoder(object):
+    """A class to construct a new, extended alphabet from an existing one."""
+
     def __init__(self, alphabet, new_letters):
         """Initialize the class."""
         self.alphabet = alphabet
@@ -209,6 +211,8 @@ class AlphabetEncoder(object):
 
 
 class Gapped(AlphabetEncoder):
+    """Alphabets which contain a gap character."""
+
     def __init__(self, alphabet, gap_char="-"):
         """Initialize the class."""
         AlphabetEncoder.__init__(self, alphabet, gap_char)
@@ -234,6 +238,8 @@ class Gapped(AlphabetEncoder):
 
 
 class HasStopCodon(AlphabetEncoder):
+    """Alphabets which contain a stop symbol."""
+
     def __init__(self, alphabet, stop_symbol="*"):
         """Initialize the class."""
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
