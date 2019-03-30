@@ -1147,6 +1147,12 @@ class PairwiseAlignment(object):
 
         This property returns the start and end indices of subsequences
         in the target and query sequence that were aligned to each other.
+        If the alignment between target (t) and query (q) consists of N
+        chunks, you get two tuples of length N:
+
+            (((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+             ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+
         For example,
 
         >>> from Bio import Align

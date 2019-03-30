@@ -536,7 +536,7 @@ AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip-rel
 \end{verbatim}
 
 This time the output looks like this, using a longer indentation to
-allow all the identifers to be given in full::
+allow all the identifers to be given in full:
 
 \begin{verbatim}
  7 52
@@ -1554,7 +1554,7 @@ part has not been extended:
 Instead of supplying a complete match/mismatch matrix, the match code
 \texttt{m} allows for easy defining general match/mismatch values. The next
 example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
-of 2/0.5 using \verb|localms|):
+of 2/0.5 using \verb|localms|:
 
 %cont-doctest
 \begin{verbatim}
@@ -2030,11 +2030,24 @@ You can also represent the alignment as a string in PSL (Pattern Space Layout, a
 '3\t0\t0\t0\t0\t0\t1\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t2\t2,1,\t0,2,\t0,4,\n'
 \end{verbatim}
 
-Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other:
+Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
+Generally, if the alignment between target (t) and query (q) consists of N
+chunks, you get two tuples of length N:
+
+\begin{verbatim}
+(((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+ ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+\end{verbatim}
+
+In the current example, `alignment.aligned` returns two tuples of length 2:
 %cont-doctest
 \begin{verbatim}
 >>> alignment.aligned
 (((0, 2), (4, 5)), ((0, 2), (2, 3)))
+\end{verbatim}
+while for the alternative alignment, two tuples of length 3 are returned:
+%cont-doctest
+\begin{verbatim}
 >>> alignment = alignments[1]
 >>> print(alignment)
 GAACT
