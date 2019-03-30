@@ -3,69 +3,18 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+#
+# This test file prevents loading of the cpairwise2.pyd C extension of
+# pairwise2 to allow for testing the fallback Python implementation of
+# the _make_score_matrix_fast method.
 import unittest
-import warnings
+import sys
 
-from Bio import pairwise2
 from Bio.SubsMat.MatrixInfo import blosum62
-from Bio import BiopythonWarning
 
+sys.modules['Bio.cpairwise2'] = None
 
-class TestPairwiseErrorConditions(unittest.TestCase):
-    """Test several error conditions."""
-
-    def test_function_name(self):
-        """Test for wrong function names."""
-        # Function name pattern must be globalXX or localXX
-        self.assertRaises(AttributeError, lambda: pairwise2.align.globalxxx)
-        self.assertRaises(AttributeError, lambda: pairwise2.align.localxxx)
-        self.assertRaises(AttributeError, lambda: pairwise2.align.glocalxx)
-        # First X must be from (x, m, d, c), second from (x, s, d, c)
-        self.assertRaises(AttributeError, lambda: pairwise2.align.globalax)
-        self.assertRaises(AttributeError, lambda: pairwise2.align.globalxa)
-
-    def test_function_parameters(self):
-        """Test for number of parameters."""
-        # globalxx takes two parameters
-        self.assertRaises(TypeError, pairwise2.align.globalxx, 'A')
-        # matrix_only is no keyword argument
-        self.assertRaises(TypeError, pairwise2.align.globalxx, 'A', 'C',
-                          {'matrix_only': True})
-        # Both sequences must be either strings or lists
-        self.assertRaises(TypeError, pairwise2.align.globalxx, 'A', ['C'])
-        # If both sequences are lists, gap_char must also be set as list
-        self.assertRaises(TypeError, pairwise2.align.globalxx, ['A'], ['C'])
-
-        # If one or both sequences are empty, there is no alignment
-        alignment = pairwise2.align.globalxx('A', '')
-        self.assertEqual(alignment, [])
-
-        # Gap scores must be negativ
-        self.assertRaises(ValueError, pairwise2.align.globalxs, 'A', 'C',
-                          5, -1)
-        self.assertRaises(ValueError, pairwise2.align.globalxs, 'A', 'C',
-                          -5, 1)
-        # Gap open penalty must be higher than gap extension penalty
-        self.assertRaises(ValueError, pairwise2.align.globalxs, 'A', 'C',
-                          -1, -5)
-
-    def test_param_names(self):
-        """Test for unknown parameter in parameter names."""
-        a = pairwise2.align.alignment_function('globalxx')
-        a.param_names = ['Hello']
-        self.assertRaises(ValueError, a.decode, 'Bye')
-
-    def test_warnings(self):
-        """Test for warnings."""
-        with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter('always')
-            # Trigger a warning.
-            pairwise2.align.localxx('GA', 'CGA', penalize_end_gaps=True)
-            # Verify some things
-            self.assertEqual(len(w), 1)
-            self.assertEqual(w[-1].category, BiopythonWarning)
-            self.assertIn('should not', str(w[-1].message))
+from Bio import pairwise2  # noqa: E402
 
 
 class TestPairwiseGlobal(unittest.TestCase):
@@ -658,53 +607,6 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 --AAB----------BBAAAACCCCAAAABBBAA--
   Score=-10
 """)  # noqa: W291
-
-
-class TestOtherFunctions(unittest.TestCase):
-    """Test remaining non-tested private methods."""
-
-    def test_clean_alignments(self):
-        """``_clean_alignments`` removes redundant and wrong alignments."""
-        alns = [
-            ('ACCGT', 'AC-G-', 3.0, 0, 4),
-            ('ACCGT', 'AC-G-', 3.0, 1, 1),
-            ('ACCGT', 'A-CG-', 3.0, 0, 4),
-            ('ACCGT', 'AC-G-', 3.0, 0, 4),
-            ('ACCGT', 'A-CG-', 3.0, 0, 4),
-        ]
-        expected = [
-            ('ACCGT', 'AC-G-', 3.0, 0, 4),
-            ('ACCGT', 'A-CG-', 3.0, 0, 4),
-        ]
-        result = pairwise2._clean_alignments(alns)
-        self.assertEqual(expected, result)
-
-    def test_print_matrix(self):
-        """``print_matrix`` prints nested lists as nice matrices."""
-        import sys
-
-        try:  # Python 2
-            from StringIO import StringIO
-        except ImportError:  # Python 3
-            from io import StringIO
-        out = StringIO()
-        sys.stdout = out
-        pairwise2.print_matrix([[0.0, -1.0, -1.5, -2.0], [-1.0, 4.0, 3.0, 2.5],
-                                [-1.5, 3.0, 8.0, 7.0], [-2.0, 2.5, 7.0, 6.0],
-                                [-2.5, 2.0, 6.5, 11.0],
-                                [-3.0, 1.5, 6.0, 10.0]])
-        self.assertEqual(out.getvalue(),
-                         ' 0.0  -1.0  -1.5  -2.0 \n'
-                         '-1.0   4.0   3.0   2.5 \n'
-                         '-1.5   3.0   8.0   7.0 \n'
-                         '-2.0   2.5   7.0   6.0 \n'
-                         '-2.5   2.0   6.5  11.0 \n'
-                         '-3.0   1.5   6.0  10.0 \n')
-        sys.stdout = sys.__stdout__
-
-    def test_recover_alignments(self):
-        """One possible start position in local alignment is not a match."""
-        self.assertEqual(len(pairwise2.align.localxx('AC', 'GA')), 1)
 
 
 if __name__ == '__main__':
