@@ -14,7 +14,7 @@ from Bio.SubsMat.MatrixInfo import blosum62
 
 sys.modules['Bio.cpairwise2'] = None
 
-from Bio import pairwise2
+from Bio import pairwise2  # noqa: E402
 
 
 class TestPairwiseGlobal(unittest.TestCase):
