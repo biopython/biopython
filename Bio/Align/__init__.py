@@ -1141,6 +1141,79 @@ class PairwiseAlignment(object):
         line = "\t".join(words) + "\n"
         return line
 
+    @property
+    def aligned(self):
+        """Return the indices of subsequences aligned to each other.
+
+        This property returns the start and end indices of subsequences
+        in the target and query sequence that were aligned to each other.
+        If the alignment between target (t) and query (q) consists of N
+        chunks, you get two tuples of length N:
+
+            (((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
+             ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
+
+        For example,
+
+        >>> from Bio import Align
+        >>> aligner = Align.PairwiseAligner()
+        >>> alignments = aligner.align("GAACT", "GAT")
+        >>> alignment = alignments[0]
+        >>> print(alignment)
+        GAACT
+        ||--|
+        GA--T
+        <BLANKLINE>
+        >>> alignment.aligned
+        (((0, 2), (4, 5)), ((0, 2), (2, 3)))
+        >>> alignment = alignments[1]
+        >>> print(alignment)
+        GAACT
+        |-|-|
+        G-A-T
+        <BLANKLINE>
+        >>> alignment.aligned
+        (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
+
+        Note that different alignments may have the same subsequences
+        aligned to each other. In particular, this may occur if alignments
+        differ from each other in terms of their gap placement only:
+
+        >>> aligner.mismatch = -10
+        >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
+        >>> len(alignments)
+        2
+        >>> print(alignments[0])
+        AAAC-AAA
+        |||--|||
+        AAA-GAAA
+        <BLANKLINE>
+        >>> alignments[0].aligned
+        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+        >>> print(alignments[1])
+        AAA-CAAA
+        |||--|||
+        AAAG-AAA
+        <BLANKLINE>
+        >>> alignments[1].aligned
+        (((0, 3), (4, 7)), ((0, 3), (4, 7)))
+
+        The property can be used to identify alignments that are identical
+        to each other in terms of their aligned sequences.
+        """
+        segments1 = []
+        segments2 = []
+        i1, i2 = self.path[0]
+        for node in self.path[1:]:
+            j1, j2 = node
+            if j1 > i1 and j2 > i2:
+                segment1 = (i1, j1)
+                segment2 = (i2, j2)
+                segments1.append(segment1)
+                segments2.append(segment2)
+            i1, i2 = j1, j2
+        return tuple(segments1), tuple(segments2)
+
 
 class PairwiseAlignments(object):
     """Implements an iterator over pairwise alignments returned by the aligner.
