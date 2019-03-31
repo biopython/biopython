@@ -188,6 +188,7 @@ Support for parsing and indexing:
 Support for parsing:
 
  - blast-text       - BLAST+ plain text output.
+ - hhsuite2-text    - HHSUITE plain text output.
 
 Each of these formats have different keyword arguments available for use with
 the main SearchIO functions. More details and examples are available in each
