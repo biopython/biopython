@@ -48,29 +48,17 @@ class HhsuiteCases(unittest.TestCase):
         self.assertTrue(hit.is_included)
         self.assertEqual(3.7e-34, hit.evalue)
         self.assertEqual(210.31, hit.score)
-#         self.assertEqual(0.5, hit.bias)
-#         self.assertEqual(1.5, hit.domain_exp_num)
-#         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
         hsp = hit.hsps[0]
-#         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(99.95, hsp.prob)
         self.assertEqual(210.31, hsp.score)
-#         self.assertEqual(0.5, hsp.bias)
-#         self.assertEqual(5e-40, hsp.evalue_cond)
         self.assertEqual(3.7e-34, hsp.evalue)
-        self.assertEqual(1, hsp.hit_start)
+        self.assertEqual(0, hsp.hit_start)
         self.assertEqual(171, hsp.hit_end)
-#         self.assertEqual('.]', hsp.hit_endtype)
-        self.assertEqual(1, hsp.query_start)
+        self.assertEqual(0, hsp.query_start)
         self.assertEqual(171, hsp.query_end)
-#         self.assertEqual('..', hsp.query_endtype)
-#         self.assertEqual(130, hsp.env_start)
-#         self.assertEqual(205, hsp.env_end)
-#         self.assertEqual('..', hsp.env_endtype)
-#         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYC'
                          'GAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCS'
                          'KWGSCGIGPGYCGAGCQSGGCDG',
@@ -79,8 +67,6 @@ class HhsuiteCases(unittest.TestCase):
                          'GAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCS'
                          'KWGSCGIGPGYCGAGCQSGGCDG',
                          str(hsp.query.seq))
-#         self.assertEqual('67899******************************************************************96',
-#                          hsp.aln_annotation['PP'])
 
         # Check last hit
         hit = qresult[num_hits - 1]
@@ -101,9 +87,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(2.6, hsp.evalue)
         self.assertEqual(25.90, hsp.score)
         self.assertEqual(40.43, hsp.prob)
-        self.assertEqual(11, hsp.hit_start)
+        self.assertEqual(10, hsp.hit_start)
         self.assertEqual(116, hsp.hit_end)
-        self.assertEqual(54, hsp.query_start)
+        self.assertEqual(53, hsp.query_start)
         self.assertEqual(163, hsp.query_end)
         self.assertEqual('XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCX'
                          'XX--XXXCXXXXCCXXXXXCXXXXXXCXXX',
@@ -159,9 +145,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(3.4E+04, hsp.evalue)
         self.assertEqual(-0.01, hsp.score)
         self.assertEqual(0.04, hsp.prob)
-        self.assertEqual(24, hsp.hit_start)
+        self.assertEqual(23, hsp.hit_start)
         self.assertEqual(24, hsp.hit_end)
-        self.assertEqual(39, hsp.query_start)
+        self.assertEqual(38, hsp.query_start)
         self.assertEqual(39, hsp.query_end)
         self.assertEqual('T', str(hsp.hit.seq))
         self.assertEqual('X', str(hsp.query.seq))
@@ -185,9 +171,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(3.6e+04, hsp.evalue)
         self.assertEqual(0.03, hsp.score)
         self.assertEqual(0.03, hsp.prob)
-        self.assertEqual(1, hsp.hit_start)
+        self.assertEqual(0, hsp.hit_start)
         self.assertEqual(1, hsp.hit_end)
-        self.assertEqual(4, hsp.query_start)
+        self.assertEqual(3, hsp.query_start)
         self.assertEqual(4, hsp.query_end)
         self.assertEqual('D', str(hsp.hit.seq))
         self.assertEqual('X', str(hsp.query.seq))
@@ -223,9 +209,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(2.1e-48, hsp.evalue)
         self.assertEqual(320.44, hsp.score)
         self.assertEqual(100.00, hsp.prob)
-        self.assertEqual(2, hsp.hit_start)
+        self.assertEqual(1, hsp.hit_start)
         self.assertEqual(227, hsp.hit_end)
-        self.assertEqual(1, hsp.query_start)
+        self.assertEqual(0, hsp.query_start)
         self.assertEqual(226, hsp.query_end)
         self.assertEqual('GRPEWIWLALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGYGLTMVPFGGEQNPIYWARYAD'
                          'WLFTTPLLLLDLALLVDADQGTILALVGADGIMIGTGLVGALTKVYSYRFVWWAISTAAMLYILYVLFFGFTSKAESMRP'
@@ -253,9 +239,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(3.3e-05, hsp.evalue)
         self.assertEqual(51.24, hsp.score)
         self.assertEqual(96.55, hsp.prob)
-        self.assertEqual(15, hsp.hit_start)
+        self.assertEqual(14, hsp.hit_start)
         self.assertEqual(65, hsp.hit_end)
-        self.assertEqual(8, hsp.query_start)
+        self.assertEqual(7, hsp.query_start)
         self.assertEqual(59, hsp.query_end)
         self.assertEqual('FWLVTAALLASTVFFFVERDRVS-AKWKTSLTVSGLVTGIAFWHYMYMRGVW', str(hsp.hit.seq))
         self.assertEqual('LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY', str(hsp.query.seq))
@@ -289,9 +275,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(2e-106, hsp.evalue)
         self.assertEqual(822.75, hsp.score)
         self.assertEqual(100.00, hsp.prob)
-        self.assertEqual(1, hsp.hit_start)
+        self.assertEqual(0, hsp.hit_start)
         self.assertEqual(395, hsp.hit_end)
-        self.assertEqual(11, hsp.query_start)
+        self.assertEqual(10, hsp.query_start)
         self.assertEqual(407, hsp.query_end)
         self.assertEqual('SLGNEQWEFTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLK'
                          'YCGVHFNSQAIAPTIEQIDQSFGATHPGVYNSAEQLFHLNFRGLSFSFQLDSWTEAPKYEPNFAHGLASLQIPHGATVKR'
@@ -324,9 +310,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(78, hsp.evalue)
         self.assertEqual(19.81, hsp.score)
         self.assertEqual(20.88, hsp.prob)
-        self.assertEqual(26, hsp.hit_start)
+        self.assertEqual(25, hsp.hit_start)
         self.assertEqual(48, hsp.hit_end)
-        self.assertEqual(62, hsp.query_start)
+        self.assertEqual(61, hsp.query_start)
         self.assertEqual(85, hsp.query_end)
         self.assertEqual('APNVIFDYDA-EGRIVGIELLDAR', str(hsp.hit.seq))
         self.assertEqual('QDGIKLMFDAFNQRLKVIEVCDLT', str(hsp.query.seq))
@@ -360,9 +346,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(6.8e-32, hsp.evalue)
         self.assertEqual(194.63, hsp.score)
         self.assertEqual(99.94, hsp.prob)
-        self.assertEqual(1, hsp.hit_start)
+        self.assertEqual(0, hsp.hit_start)
         self.assertEqual(198, hsp.hit_end)
-        self.assertEqual(1, hsp.query_start)
+        self.assertEqual(0, hsp.query_start)
         self.assertEqual(198, hsp.query_end)
         self.assertEqual('GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ'
                          'GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKY'
@@ -392,9 +378,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(6.7, hsp.evalue)
         self.assertEqual(20.51, hsp.score)
         self.assertEqual(52.07, hsp.prob)
-        self.assertEqual(9, hsp.hit_start)
+        self.assertEqual(8, hsp.hit_start)
         self.assertEqual(42, hsp.hit_end)
-        self.assertEqual(6, hsp.query_start)
+        self.assertEqual(5, hsp.query_start)
         self.assertEqual(37, hsp.query_end)
         self.assertEqual('RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP', str(hsp.hit.seq))
         self.assertEqual('SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST', str(hsp.query.seq))
@@ -429,9 +415,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(9.9e-102, hsp.evalue)
         self.assertEqual(792.76, hsp.score)
         self.assertEqual(100.00, hsp.prob)
-        self.assertEqual(1, hsp.hit_start)
+        self.assertEqual(0, hsp.hit_start)
         self.assertEqual(394, hsp.hit_end)
-        self.assertEqual(22, hsp.query_start)
+        self.assertEqual(21, hsp.query_start)
         self.assertEqual(407, hsp.query_end)
         self.assertEqual('GMHFSQSVAIIQSQVGTIRGVQVLYSDQNPLSVDLVINMPQDGMRLIFDPVAQRLKIIEIYNMKLVKLRYSGMCFNSPEI'
                          'TPSIEQVEHCFGATHPGLYDSQRHLFALNFRGLSFYFPVDS-----KFEPGYAHGLGSLQFPNGGSPVVSRTTIYYGSQH'
@@ -465,9 +451,9 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual(3.9e+02, hsp.evalue)
         self.assertEqual(22.84, hsp.score)
         self.assertEqual(21.56, hsp.prob)
-        self.assertEqual(8, hsp.hit_start)
+        self.assertEqual(7, hsp.hit_start)
         self.assertEqual(96, hsp.hit_end)
-        self.assertEqual(19, hsp.query_start)
+        self.assertEqual(18, hsp.query_start)
         self.assertEqual(114, hsp.query_end)
         self.assertEqual('FTLGMPLAQAVAILQKHCRIIKNVQVLYSEQSPLSHDLILNLTQDGIKLMFDAFNQRLKVIEVCDLTKVKLKYCGVH-FN'
                          'SQAIAPTIEQIDQSFGA', str(hsp.query.seq))
