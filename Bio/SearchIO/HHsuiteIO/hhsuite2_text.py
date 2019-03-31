@@ -197,9 +197,9 @@ class Hhsuite2TextParser(object):
 
             frag = HSPFragment(hit_id, query_id)
             frag.alphabet = generic_protein
-            frag.query_start = block['query_start']
+            frag.query_start = block['query_start'] - 1
             frag.query_end = block['query_end']
-            frag.hit_start = block['hit_start']
+            frag.hit_start = block['hit_start'] - 1
             frag.hit_end = block['hit_end']
             frag.hit = block['hit_seq']
             frag.query = block['query_seq']
