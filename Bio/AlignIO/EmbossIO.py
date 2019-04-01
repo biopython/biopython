@@ -30,6 +30,7 @@ class EmbossWriter(SequentialAlignmentWriter):
     """
 
     def write_header(self):
+        """Write header for the file."""
         handle = self.handle
         handle.write("########################################\n")
         handle.write("# Program: Biopython\n")
@@ -40,6 +41,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle.write("########################################\n")
 
     def write_footer(self):
+        """Write footer for the file."""
         handle = self.handle
         handle.write("#---------------------------------------\n")
         handle.write("#---------------------------------------\n")
