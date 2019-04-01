@@ -41,6 +41,7 @@ class BlastTableRec(object):
         self.entries = []
 
     def add_entry(self, entry):
+        """Add entry to Blast Table."""
         self.entries.append(entry)
 
 

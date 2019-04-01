@@ -100,6 +100,7 @@ class CodonAlignment(MultipleSeqAlignment):
                                             generic_nucleotide)
 
     def get_aln_length(self):
+        """Get aligment length."""
         return self.get_alignment_length() // 3
 
     def toMultipleSeqAlignment(self):
