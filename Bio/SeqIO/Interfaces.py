@@ -175,12 +175,18 @@ class SequentialSequenceWriter(SequenceWriter):
         self._footer_written = False
 
     def write_header(self):
+        """Set _header_written to True
+
+        To control the header is written only once."""
         assert not self._header_written, "You have aleady called write_header()"
         assert not self._record_written, "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
 
     def write_footer(self):
+        """Set _footer_written to True
+
+        To control the footer is written only once."""
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"
