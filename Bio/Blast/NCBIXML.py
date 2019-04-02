@@ -260,6 +260,7 @@ class BlastParser(_XMLparser):
             'end_HitDescr/sciname': self._end_description_sciname,
             'end_Hit/len': self.set_hit_len,
             'start_hsps/Hsp': self._start_hsp,
+            'end_hsps/Hsp': self._end_hsp,
             'end_Hsp/score': self._set_hsp_score,
             'end_Hsp/bit_score': self._set_hsp_bit_score,
             'end_Hsp/evalue': self._set_hsp_e_value,
@@ -269,6 +270,8 @@ class BlastParser(_XMLparser):
             'end_Hsp/hit-to': self._set_hsp_hit_to,
             'end_Hsp/query-frame': self._set_hsp_query_frame,
             'end_Hsp/hit-frame': self._set_hsp_hit_frame,
+            'end_Hsp/query-strand': self._set_hsp_query_strand,
+            'end_Hsp/hit-strand': self._set_hsp_hit_strand,
             'end_Hsp/identity': self._set_hsp_identity,
             'end_Hsp/positive': self._set_hsp_positive,
             'end_Hsp/gaps': self._set_hsp_gaps,
@@ -537,11 +540,16 @@ class BlastParser(_XMLparser):
     def _start_hsp(self):
         # Note that self._start_Hit() should have been called
         # to setup things like self._blast.multiple_alignment
-        self._hit.hsps.append(Record.HSP())
-        self._hsp = self._hit.hsps[-1]
+        self._hsp = Record.HSP()
+        self._hsp.positives = None
+        self._hit.hsps.append(self._hsp)
         self._descr.num_alignments += 1
         self._blast.multiple_alignment.append(Record.MultipleAlignment())
         self._mult_al = self._blast.multiple_alignment[-1]
+
+    def _end_hsp(self):
+        if self._hsp.frame and len(self._hsp.frame) == 1:
+            self._hsp.frame += (0,)
 
     # Hsp_num is useless
     def _set_hsp_score(self):
@@ -588,15 +596,36 @@ class BlastParser(_XMLparser):
 
     def _set_hsp_query_frame(self):
         """Frame of the query if applicable (PRIVATE)."""
-        self._hsp.frame = (int(self._value),)
+        v = int(self._value)
+        self._hsp.frame = (v,)
+        if self._header.application == 'BLASTN':
+            self._hsp.strand = ('Plus' if v > 0 else 'Minus',)
 
     def _set_hsp_hit_frame(self):
         """Frame of the database sequence if applicable (PRIVATE)."""
-        self._hsp.frame += (int(self._value),)
+        v = int(self._value)
+        self._hsp.frame += (v,)
+        if self._header.application == 'BLASTN':
+            self._hsp.strand += ('Plus' if v > 0 else 'Minus',)
+
+    def _set_hsp_query_strand(self):
+        """Frame of the query if applicable (PRIVATE)."""
+        self._hsp.strand = (self._value,)
+        if self._header.application == 'BLASTN':
+            self._hsp.frame = (1 if self._value == 'Plus' else -1,)
+
+    def _set_hsp_hit_strand(self):
+        """Frame of the database sequence if applicable (PRIVATE)."""
+        self._hsp.strand += (self._value,)
+        if self._header.application == 'BLASTN':
+            self._hsp.frame += (1 if self._value == 'Plus' else -1,)
 
     def _set_hsp_identity(self):
         """Record the number of identities in the alignment (PRIVATE)."""
-        self._hsp.identities = int(self._value)
+        v = int(self._value)
+        self._hsp.identities = v
+        if self._hsp.positives is None:
+            self._hsp.positives = v
 
     def _set_hsp_positive(self):
         """Record the number of positive (conservative) substitutions in the alignment (PRIVATE)."""

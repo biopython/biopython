@@ -1922,7 +1922,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description_item.taxid, 620)
         self.assertEqual(description_item.sciname, 'Shigella')
 
-
     def _test_xml_2900_blastp_001(self, filename):
         datafile = os.path.join("Blast", filename)
         handle = open(datafile, "rb")
@@ -2207,6 +2206,690 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
         return record
+
+    def test_xml_2900_blastn_001_v1(self):
+        self._test_xml_2900_blastn_001('xml_2900_blastn_001.xml')
+
+    def test_xml_2900_blastn_001_v2(self):
+        self._test_xml_2900_blastn_001('xml_2900_blastn_001_v2.xml')
+
+    def _test_xml_2900_blastn_001(self, filename):
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile, "rb")
+        records = NCBIXML.parse(handle)
+        record = next(records)
+
+        self.assertEqual(record.application, "BLASTN")
+        self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
+        self.assertEqual(record.query_letters, 285)
+        self.assertEqual(record.database, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna")
+        self.assertEqual(record.num_sequences_in_database, 107382)
+        self.assertEqual(record.database_sequences, 107382)
+        self.assertEqual(record.database_length, 3164670549)
+
+        alignment = record.alignments[0]
+        self.assertEqual(alignment.hit_id, "gi|372099107|ref|NC_000069.6|")
+        self.assertEqual(alignment.accession, "NC_000069")
+        self.assertEqual(alignment.length, 160039680)
+        self.assertEqual(alignment.title,
+                         "gi|372099107|ref|NC_000069.6| Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 34)
+        self.assertEqual(hsp.identities, 30)
+        self.assertEqual(hsp.positives, 30)
+        self.assertEqual(hsp.query, "GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG")
+        self.assertEqual(hsp.sbjct, "GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG")
+        self.assertEqual(hsp.match, "|||||||||||||| || |||||| || ||||||")
+        self.assertEqual(hsp.score, 44.0)
+        self.assertEqual(hsp.expect, 0.375311)
+        self.assertEqual(hsp.query_start, 134)
+        self.assertEqual(hsp.query_end, 166)
+        self.assertEqual(hsp.sbjct_start, 101449177)
+        self.assertEqual(hsp.sbjct_end, 101449144)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+
+        alignment = record.alignments[1]
+        self.assertEqual(alignment.hit_id, "gi|372099103|ref|NC_000073.6|")
+        self.assertEqual(alignment.accession, "NC_000073")
+        self.assertEqual(alignment.length, 145441459)
+        self.assertEqual(alignment.title,
+                         "gi|372099103|ref|NC_000073.6| Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 29)
+        self.assertEqual(hsp.identities, 26)
+        self.assertEqual(hsp.positives, 26)
+        self.assertEqual(hsp.query, "GAAAGGAAATNAAAATGGAAAGTTCTTGT")
+        self.assertEqual(hsp.sbjct, "GAAAGGAAAAAAAAATGGAAAGTTCTGGT")
+        self.assertEqual(hsp.match, "|||||||||  ||||||||||||||| ||")
+        self.assertEqual(hsp.score, 44.0)
+        self.assertEqual(hsp.expect, 0.375311)
+        self.assertEqual(hsp.query_start, 205)
+        self.assertEqual(hsp.query_end, 233)
+        self.assertEqual(hsp.sbjct_start, 131772185)
+        self.assertEqual(hsp.sbjct_end, 131772157)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+
+        alignment = record.alignments[2]
+        self.assertEqual(alignment.hit_id, "gi|372099106|ref|NC_000070.6|")
+        self.assertEqual(alignment.accession, "NC_000070")
+        self.assertEqual(alignment.length, 156508116)
+        self.assertEqual(alignment.title,
+                         "gi|372099106|ref|NC_000070.6| Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 2)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 24)
+        self.assertEqual(hsp.identities, 23)
+        self.assertEqual(hsp.positives, 23)
+        self.assertEqual(hsp.query, "CCAACACAGGCCAGCGACTTCTGG")
+        self.assertEqual(hsp.sbjct, "CCAACACAGGCCAGCGGCTTCTGG")
+        self.assertEqual(hsp.match, "|||||||||||||||| |||||||")
+        self.assertEqual(hsp.score, 43.0)
+        self.assertEqual(hsp.expect, 1.30996)
+        self.assertEqual(hsp.query_start, 62)
+        self.assertEqual(hsp.query_end, 85)
+        self.assertEqual(hsp.sbjct_start, 9607562)
+        self.assertEqual(hsp.sbjct_end, 9607539)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        hsp = alignment.hsps[1]
+        self.assertEqual(hsp.align_length, 32)
+        self.assertEqual(hsp.identities, 28)
+        self.assertEqual(hsp.positives, 28)
+        self.assertEqual(hsp.query, "GCCTGACATGG-GTAGCTGCTCAATAAATGCT")
+        self.assertEqual(hsp.sbjct, "GCCTGGCATGAAGTAACTGCTCAATAAATGCT")
+        self.assertEqual(hsp.match, "||||| ||||  ||| ||||||||||||||||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 242)
+        self.assertEqual(hsp.query_end, 272)
+        self.assertEqual(hsp.sbjct_start, 142902532)
+        self.assertEqual(hsp.sbjct_end, 142902563)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+
+        alignment = record.alignments[3]
+        self.assertEqual(alignment.hit_id, "gi|372099108|ref|NC_000068.7|")
+        self.assertEqual(alignment.accession, "NC_000068")
+        self.assertEqual(alignment.length, 182113224)
+        self.assertEqual(alignment.title,
+                         "gi|372099108|ref|NC_000068.7| Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 2)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 31)
+        self.assertEqual(hsp.identities, 27)
+        self.assertEqual(hsp.positives, 27)
+        self.assertEqual(hsp.query, "AAGGCCTGACATGGGTAGCTGCTCAATAAAT")
+        self.assertEqual(hsp.sbjct, "AAGTCCTGGCATGAGTAGTTGCTCAATAAAT")
+        self.assertEqual(hsp.match, "||| |||| |||| |||| ||||||||||||")
+        self.assertEqual(hsp.score, 42.0)
+        self.assertEqual(hsp.expect, 1.30996)
+        self.assertEqual(hsp.query_start, 239)
+        self.assertEqual(hsp.query_end, 269)
+        self.assertEqual(hsp.sbjct_start, 3799647)
+        self.assertEqual(hsp.sbjct_end, 3799677)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        hsp = alignment.hsps[1]
+        self.assertEqual(hsp.align_length, 25)
+        self.assertEqual(hsp.identities, 23)
+        self.assertEqual(hsp.positives, 23)
+        self.assertEqual(hsp.query, "AAATNAAAATGGAAAGTTCTTGTAG")
+        self.assertEqual(hsp.sbjct, "AAATGAAAATGGAAAGTTCTTATAG")
+        self.assertEqual(hsp.match, "|||| |||||||||||||||| |||")
+        self.assertEqual(hsp.score, 41.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 211)
+        self.assertEqual(hsp.query_end, 235)
+        self.assertEqual(hsp.sbjct_start, 70278960)
+        self.assertEqual(hsp.sbjct_end, 70278984)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+
+        alignment = record.alignments[4]
+        self.assertEqual(alignment.hit_id, "gi|372099097|ref|NC_000079.6|")
+        self.assertEqual(alignment.accession, "NC_000079")
+        self.assertEqual(alignment.length, 120421639)
+        self.assertEqual(alignment.title,
+                         "gi|372099097|ref|NC_000079.6| Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 2)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 28)
+        self.assertEqual(hsp.identities, 25)
+        self.assertEqual(hsp.positives, 25)
+        self.assertEqual(hsp.query, "AAGGAAATNAAAATGGAAAGTTCTTGTA")
+        self.assertEqual(hsp.sbjct, "AAGGACATCAAAATGGAAAGTTCTTCTA")
+        self.assertEqual(hsp.match, "||||| || |||||||||||||||| ||")
+        self.assertEqual(hsp.score, 42.0)
+        self.assertEqual(hsp.expect, 1.30996)
+        self.assertEqual(hsp.query_start, 207)
+        self.assertEqual(hsp.query_end, 234)
+        self.assertEqual(hsp.sbjct_start, 26806584)
+        self.assertEqual(hsp.sbjct_end, 26806557)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        hsp = alignment.hsps[1]
+        self.assertEqual(hsp.align_length, 40)
+        self.assertEqual(hsp.identities, 32)
+        self.assertEqual(hsp.positives, 32)
+        self.assertEqual(hsp.query, "AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA")
+        self.assertEqual(hsp.sbjct, "AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA")
+        self.assertEqual(hsp.match, "||||||||||||||||| || |  || ||| | ||| |||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 234)
+        self.assertEqual(hsp.query_end, 273)
+        self.assertEqual(hsp.sbjct_start, 56840340)
+        self.assertEqual(hsp.sbjct_end, 56840301)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+
+        alignment = record.alignments[5]
+        self.assertEqual(alignment.hit_id, "gi|372099098|ref|NC_000078.6|")
+        self.assertEqual(alignment.accession, "NC_000078")
+        self.assertEqual(alignment.length, 120129022)
+        self.assertEqual(alignment.title,
+                         "gi|372099098|ref|NC_000078.6| Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 2)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 23)
+        self.assertEqual(hsp.identities, 22)
+        self.assertEqual(hsp.positives, 22)
+        self.assertEqual(hsp.query, "CATCCATTCACACCCAACACAGG")
+        self.assertEqual(hsp.sbjct, "CATCCATTCACACCCAGCACAGG")
+        self.assertEqual(hsp.match, "|||||||||||||||| ||||||")
+        self.assertEqual(hsp.score, 41.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 49)
+        self.assertEqual(hsp.query_end, 71)
+        self.assertEqual(hsp.sbjct_start, 113030663)
+        self.assertEqual(hsp.sbjct_end, 113030685)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        hsp = alignment.hsps[1]
+        self.assertEqual(hsp.align_length, 32)
+        self.assertEqual(hsp.identities, 28)
+        self.assertEqual(hsp.positives, 28)
+        self.assertEqual(hsp.query, "TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC")
+        self.assertEqual(hsp.sbjct, "TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC")
+        self.assertEqual(hsp.match, "|||||| | ||||||||||||||| |||| ||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 231)
+        self.assertEqual(hsp.query_end, 262)
+        self.assertEqual(hsp.sbjct_start, 108990272)
+        self.assertEqual(hsp.sbjct_end, 108990242)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+
+        alignment = record.alignments[6]
+        self.assertEqual(alignment.hit_id, "gi|372099109|ref|NC_000067.6|")
+        self.assertEqual(alignment.accession, "NC_000067")
+        self.assertEqual(alignment.length, 195471971)
+        self.assertEqual(alignment.title,
+                         "gi|372099109|ref|NC_000067.6| Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 43)
+        self.assertEqual(hsp.identities, 35)
+        self.assertEqual(hsp.positives, 35)
+        self.assertEqual(hsp.query, "GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC")
+        self.assertEqual(hsp.sbjct, "GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC")
+        self.assertEqual(hsp.match, "||||||||||| ||||||||| | | | |||||  ||| ||||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 87)
+        self.assertEqual(hsp.query_end, 129)
+        self.assertEqual(hsp.sbjct_start, 65190108)
+        self.assertEqual(hsp.sbjct_end, 65190148)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+
+        alignment = record.alignments[7]
+        self.assertEqual(alignment.hit_id, "gi|372099101|ref|NC_000075.6|")
+        self.assertEqual(alignment.accession, "NC_000075")
+        self.assertEqual(alignment.length, 124595110)
+        self.assertEqual(alignment.title,
+                         "gi|372099101|ref|NC_000075.6| Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 47)
+        self.assertEqual(hsp.identities, 36)
+        self.assertEqual(hsp.positives, 36)
+        self.assertEqual(hsp.query, "CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT")
+        self.assertEqual(hsp.sbjct, "CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT")
+        self.assertEqual(hsp.match, "||| |||||||| |  |  ||||||||||||| ||| | | || |||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 238)
+        self.assertEqual(hsp.query_end, 284)
+        self.assertEqual(hsp.sbjct_start, 58227241)
+        self.assertEqual(hsp.sbjct_end, 58227195)
+        self.assertEqual(hsp.frame, (1, -1))
+        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+
+        alignment = record.alignments[8]
+        self.assertEqual(alignment.hit_id, "gi|372099100|ref|NC_000076.6|")
+        self.assertEqual(alignment.accession, "NC_000076")
+        self.assertEqual(alignment.length, 130694993)
+        self.assertEqual(alignment.title,
+                         "gi|372099100|ref|NC_000076.6| Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 20)
+        self.assertEqual(hsp.identities, 20)
+        self.assertEqual(hsp.positives, 20)
+        self.assertEqual(hsp.query, "AGCTGCTCAATAAATGCTAG")
+        self.assertEqual(hsp.sbjct, "AGCTGCTCAATAAATGCTAG")
+        self.assertEqual(hsp.match, "||||||||||||||||||||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 255)
+        self.assertEqual(hsp.query_end, 274)
+        self.assertEqual(hsp.sbjct_start, 119337186)
+        self.assertEqual(hsp.sbjct_end, 119337205)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+
+        alignment = record.alignments[9]
+        self.assertEqual(alignment.hit_id, "gi|372099094|ref|NC_000082.6|")
+        self.assertEqual(alignment.accession, "NC_000082")
+        self.assertEqual(alignment.length, 98207768)
+        self.assertEqual(alignment.title,
+                         "gi|372099094|ref|NC_000082.6| Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 56)
+        self.assertEqual(hsp.identities, 43)
+        self.assertEqual(hsp.positives, 43)
+        self.assertEqual(hsp.query, "GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT")
+        self.assertEqual(hsp.sbjct, "GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT")
+        self.assertEqual(hsp.match, "||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||")
+        self.assertEqual(hsp.score, 40.0)
+        self.assertEqual(hsp.expect, 4.57222)
+        self.assertEqual(hsp.query_start, 175)
+        self.assertEqual(hsp.query_end, 228)
+        self.assertEqual(hsp.sbjct_start, 18854780)
+        self.assertEqual(hsp.sbjct_end, 18854835)
+        self.assertEqual(hsp.frame, (1, 1))
+        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(len(record.descriptions), 10)
+        description = record.descriptions[0]
+        self.assertEqual(description.score, 44.0)
+        self.assertEqual(description.e, 0.375311)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[1]
+        self.assertEqual(description.score, 44.0)
+        self.assertEqual(description.e, 0.375311)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[2]
+        self.assertEqual(description.score, 43.0)
+        self.assertEqual(description.e, 1.30996)
+        self.assertEqual(description.num_alignments, 2)
+        description = record.descriptions[3]
+        self.assertEqual(description.score, 42.0)
+        self.assertEqual(description.e, 1.30996)
+        self.assertEqual(description.num_alignments, 2)
+        description = record.descriptions[4]
+        self.assertEqual(description.score, 42.0)
+        self.assertEqual(description.e, 1.30996)
+        self.assertEqual(description.num_alignments, 2)
+        description = record.descriptions[5]
+        self.assertEqual(description.score, 41.0)
+        self.assertEqual(description.e, 4.57222)
+        self.assertEqual(description.num_alignments, 2)
+        description = record.descriptions[6]
+        self.assertEqual(description.score, 40.0)
+        self.assertEqual(description.e, 4.57222)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[7]
+        self.assertEqual(description.score, 40.0)
+        self.assertEqual(description.e, 4.57222)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[8]
+        self.assertEqual(description.score, 40.0)
+        self.assertEqual(description.e, 4.57222)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[9]
+        self.assertEqual(description.score, 40.0)
+        self.assertEqual(description.e, 4.57222)
+        self.assertEqual(description.num_alignments, 1)
+
+        self.assertRaises(StopIteration, next, records)
+        handle.close()
+
+
+    def test_xml_2900_blastx_001_v1(self):
+        self._test_xml_2900_blastx_001('xml_2900_blastx_001.xml')
+
+    def test_xml_2900_blastx_001_v2(self):
+        self._test_xml_2900_blastx_001('xml_2900_blastx_001_v2.xml')
+
+    def _test_xml_2900_blastx_001(self, filename):
+        datafile = os.path.join("Blast", filename)
+        handle = open(datafile, "rb")
+        records = NCBIXML.parse(handle)
+        record = next(records)
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(record.query,
+                         "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence")
+        self.assertEqual(record.query_letters, 365)
+        self.assertEqual(record.database, "nr")
+
+        alignment = record.alignments[0]
+        self.assertEqual(alignment.hit_id, "gi|1530504495|emb|VDM03167.1|")
+        self.assertEqual(alignment.accession, "VDM03167")
+        self.assertEqual(alignment.length, 132)
+        self.assertEqual(alignment.title,
+                         "gi|1530504495|emb|VDM03167.1| unnamed protein product, partial [Schistocephalus solidus]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 81)
+        self.assertEqual(hsp.positives, 83)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 408.0)
+        self.assertEqual(hsp.expect, 8.11609e-49)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[1]
+        self.assertEqual(alignment.hit_id, "gi|510859078|gb|EPB74633.1|")
+        self.assertEqual(alignment.accession, "EPB74633")
+        self.assertEqual(alignment.length, 119)
+        self.assertEqual(alignment.title,
+                         "gi|510859078|gb|EPB74633.1| hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 115)
+        self.assertEqual(hsp.identities, 81)
+        self.assertEqual(hsp.positives, 85)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP")
+        self.assertEqual(hsp.sbjct,
+                         "MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP")
+        self.assertEqual(hsp.match,
+                         "M D++V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE H I KP")
+        self.assertEqual(hsp.score, 405.0)
+        self.assertEqual(hsp.expect, 1.40046e-48)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 364)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 115)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[2]
+        self.assertEqual(alignment.hit_id, "gi|684409690|ref|XP_009175831.1|")
+        self.assertEqual(alignment.accession, "XP_009175831")
+        self.assertEqual(alignment.length, 246)
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 81)
+        self.assertEqual(hsp.positives, 83)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 413.0)
+        self.assertEqual(hsp.expect, 4.40404e-48)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[3]
+        self.assertEqual(alignment.hit_id, "gi|449710331|gb|EMD49430.1|")
+        self.assertEqual(alignment.accession, "EMD49430")
+        self.assertEqual(alignment.length, 124)
+        self.assertEqual(alignment.title,
+                         "gi|449710331|gb|EMD49430.1| actin, putative, partial [Entamoeba histolytica KU27]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 78)
+        self.assertEqual(hsp.positives, 81)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQSKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 401.0)
+        self.assertEqual(hsp.expect, 9.0486e-48)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[4]
+        self.assertEqual(alignment.hit_id, "gi|257215766|emb|CAX83035.1|")
+        self.assertEqual(alignment.accession, "CAX83035")
+        self.assertEqual(alignment.length, 252)
+        self.assertEqual(alignment.title, "gi|257215766|emb|CAX83035.1| Actin-2, partial [Schistosoma japonicum]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 81)
+        self.assertEqual(hsp.positives, 83)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 411.0)
+        self.assertEqual(hsp.expect, 1.00219e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[5]
+        self.assertEqual(alignment.hit_id, "gi|1535393712|emb|VDP83060.1|")
+        self.assertEqual(alignment.accession, "VDP83060")
+        self.assertEqual(alignment.length, 209)
+        self.assertEqual(alignment.title,
+                         "gi|1535393712|emb|VDP83060.1| unnamed protein product, partial [Echinostoma caproni]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 80)
+        self.assertEqual(hsp.positives, 83)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "MAD+EVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 407.0)
+        self.assertEqual(hsp.expect, 1.16397e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[6]
+        self.assertEqual(alignment.hit_id, "gi|312773|emb|CAA50205.1|")
+        self.assertEqual(alignment.accession, "CAA50205")
+        self.assertEqual(alignment.length, 137)
+        self.assertEqual(alignment.title, "gi|312773|emb|CAA50205.1| actin, partial [Entamoeba histolytica]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 78)
+        self.assertEqual(hsp.positives, 81)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQSKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 401.0)
+        self.assertEqual(hsp.expect, 1.25869e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[7]
+        self.assertEqual(alignment.hit_id, "gi|1530341495|emb|VDN44756.1|")
+        self.assertEqual(alignment.accession, "VDN44756")
+        self.assertEqual(alignment.length, 145)
+        self.assertEqual(alignment.title,
+                         "gi|1530341495|emb|VDN44756.1| unnamed protein product, partial [Dibothriocephalus latus]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 78)
+        self.assertEqual(hsp.positives, 82)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "M DE+VQALV+DNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 400.0)
+        self.assertEqual(hsp.expect, 1.78336e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[8]
+        self.assertEqual(alignment.hit_id, "gi|1524877828|ref|XP_027046469.1|")
+        self.assertEqual(alignment.accession, "XP_027046469")
+        self.assertEqual(alignment.length, 122)
+        self.assertEqual(alignment.title, "gi|1524877828|ref|XP_027046469.1| actin-1, partial [Pocillopora damicornis]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 78)
+        self.assertEqual(hsp.positives, 82)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE")
+        self.assertEqual(hsp.match,
+                         "MADEEV ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELR+APEEHP+LLTE")
+        self.assertEqual(hsp.score, 398.0)
+        self.assertEqual(hsp.expect, 1.93331e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+
+        alignment = record.alignments[9]
+        self.assertEqual(alignment.hit_id, "gi|1524877860|ref|XP_027046487.1|")
+        self.assertEqual(alignment.accession, "XP_027046487")
+        self.assertEqual(alignment.length, 134)
+        self.assertEqual(alignment.title, "gi|1524877860|ref|XP_027046487.1| actin-1-like [Pocillopora damicornis]")
+        self.assertEqual(len(alignment.hsps), 1)
+        hsp = alignment.hsps[0]
+        self.assertEqual(hsp.align_length, 108)
+        self.assertEqual(hsp.identities, 79)
+        self.assertEqual(hsp.positives, 82)
+        self.assertEqual(hsp.query,
+                         "MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.sbjct,
+                         "MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.match,
+                         "MADE+V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
+        self.assertEqual(hsp.score, 399.0)
+        self.assertEqual(hsp.expect, 2.36088e-47)
+        self.assertEqual(hsp.query_start, 20)
+        self.assertEqual(hsp.query_end, 343)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 108)
+        self.assertEqual(hsp.frame, (2, 0))
+
+        self.assertEqual(len(record.descriptions), 10)
+        description = record.descriptions[0]
+        self.assertEqual(description.title,
+                         "gi|1530504495|emb|VDM03167.1| unnamed protein product, partial [Schistocephalus solidus]")
+        self.assertEqual(description.score, 408.0)
+        self.assertEqual(description.e, 8.11609e-49)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[1]
+        self.assertEqual(description.title,
+                         "gi|510859078|gb|EPB74633.1| hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]")
+        self.assertEqual(description.score, 405.0)
+        self.assertEqual(description.e, 1.40046e-48)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[2]
+        self.assertEqual(description.score, 413.0)
+        self.assertEqual(description.e, 4.40404e-48)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[3]
+        self.assertEqual(description.title,
+                         "gi|449710331|gb|EMD49430.1| actin, putative, partial [Entamoeba histolytica KU27]")
+        self.assertEqual(description.score, 401.0)
+        self.assertEqual(description.e, 9.0486e-48)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[4]
+        self.assertEqual(description.title, "gi|257215766|emb|CAX83035.1| Actin-2, partial [Schistosoma japonicum]")
+        self.assertEqual(description.score, 411.0)
+        self.assertEqual(description.e, 1.00219e-47)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[5]
+        self.assertEqual(description.title,
+                         "gi|1535393712|emb|VDP83060.1| unnamed protein product, partial [Echinostoma caproni]")
+        self.assertEqual(description.score, 407.0)
+        self.assertEqual(description.e, 1.16397e-47)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[6]
+        self.assertEqual(description.title, "gi|312773|emb|CAA50205.1| actin, partial [Entamoeba histolytica]")
+        self.assertEqual(description.score, 401.0)
+        self.assertEqual(description.e, 1.25869e-47)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[7]
+        self.assertEqual(description.title,
+                         "gi|1530341495|emb|VDN44756.1| unnamed protein product, partial [Dibothriocephalus latus]")
+        self.assertEqual(description.score, 400.0)
+        self.assertEqual(description.e, 1.78336e-47)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[8]
+        self.assertEqual(description.title,
+                         "gi|1524877828|ref|XP_027046469.1| actin-1, partial [Pocillopora damicornis]")
+        self.assertEqual(description.score, 398.0)
+        self.assertEqual(description.e, 1.93331e-47)
+        self.assertEqual(description.num_alignments, 1)
+        description = record.descriptions[9]
+        self.assertEqual(description.title, "gi|1524877860|ref|XP_027046487.1| actin-1-like [Pocillopora damicornis]")
+        self.assertEqual(description.score, 399.0)
+        self.assertEqual(description.e, 2.36088e-47)
+        self.assertEqual(description.num_alignments, 1)
 
 
 if __name__ == "__main__":

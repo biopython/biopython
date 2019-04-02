@@ -1,0 +1,458 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>blastn</program>
+      <version>BLASTN 2.9.0+</version>
+      <reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</reference>
+      <search-target>
+        <Target>
+          <db>GPIPE/10090/current/all_top_level GPIPE/10090/current/rna</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <expect>10</expect>
+          <sc-match>2</sc-match>
+          <sc-mismatch>-3</sc-mismatch>
+          <gap-open>5</gap-open>
+          <gap-extend>2</gap-extend>
+          <filter>R -d repeatmasker/repeat_9989;m;F;</filter>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <search>
+            <Search>
+              <query-id>G26684.1</query-id>
+              <query-title>human STS STS_D11570, sequence tagged site</query-title>
+              <query-len>285</query-len>
+              <hits>
+                <Hit>
+                  <num>1</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099107|ref|NC_000069.6|</id>
+                      <accession>NC_000069</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>160039680</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>40.9604</bit-score>
+                      <score>44</score>
+                      <evalue>0.375311</evalue>
+                      <identity>30</identity>
+                      <query-from>134</query-from>
+                      <query-to>166</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>101449177</hit-from>
+                      <hit-to>101449144</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>34</align-len>
+                      <gaps>1</gaps>
+                      <qseq>GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG</qseq>
+                      <hseq>GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG</hseq>
+                      <midline>|||||||||||||| || |||||| || ||||||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>2</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099103|ref|NC_000073.6|</id>
+                      <accession>NC_000073</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>145441459</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>40.9604</bit-score>
+                      <score>44</score>
+                      <evalue>0.375311</evalue>
+                      <identity>26</identity>
+                      <query-from>205</query-from>
+                      <query-to>233</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>131772185</hit-from>
+                      <hit-to>131772157</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>29</align-len>
+                      <gaps>0</gaps>
+                      <qseq>GAAAGGAAATNAAAATGGAAAGTTCTTGT</qseq>
+                      <hseq>GAAAGGAAAAAAAAATGGAAAGTTCTGGT</hseq>
+                      <midline>|||||||||  ||||||||||||||| ||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>3</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099106|ref|NC_000070.6|</id>
+                      <accession>NC_000070</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>156508116</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>40.0587</bit-score>
+                      <score>43</score>
+                      <evalue>1.30996</evalue>
+                      <identity>23</identity>
+                      <query-from>62</query-from>
+                      <query-to>85</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>9607562</hit-from>
+                      <hit-to>9607539</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>24</align-len>
+                      <gaps>0</gaps>
+                      <qseq>CCAACACAGGCCAGCGACTTCTGG</qseq>
+                      <hseq>CCAACACAGGCCAGCGGCTTCTGG</hseq>
+                      <midline>|||||||||||||||| |||||||</midline>
+                    </Hsp>
+                    <Hsp>
+                      <num>2</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>28</identity>
+                      <query-from>242</query-from>
+                      <query-to>272</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>142902532</hit-from>
+                      <hit-to>142902563</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>32</align-len>
+                      <gaps>1</gaps>
+                      <qseq>GCCTGACATGG-GTAGCTGCTCAATAAATGCT</qseq>
+                      <hseq>GCCTGGCATGAAGTAACTGCTCAATAAATGCT</hseq>
+                      <midline>||||| ||||  ||| ||||||||||||||||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>4</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099108|ref|NC_000068.7|</id>
+                      <accession>NC_000068</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>182113224</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>39.157</bit-score>
+                      <score>42</score>
+                      <evalue>1.30996</evalue>
+                      <identity>27</identity>
+                      <query-from>239</query-from>
+                      <query-to>269</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>3799647</hit-from>
+                      <hit-to>3799677</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>31</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AAGGCCTGACATGGGTAGCTGCTCAATAAAT</qseq>
+                      <hseq>AAGTCCTGGCATGAGTAGTTGCTCAATAAAT</hseq>
+                      <midline>||| |||| |||| |||| ||||||||||||</midline>
+                    </Hsp>
+                    <Hsp>
+                      <num>2</num>
+                      <bit-score>38.2554</bit-score>
+                      <score>41</score>
+                      <evalue>4.57222</evalue>
+                      <identity>23</identity>
+                      <query-from>211</query-from>
+                      <query-to>235</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>70278960</hit-from>
+                      <hit-to>70278984</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>25</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AAATNAAAATGGAAAGTTCTTGTAG</qseq>
+                      <hseq>AAATGAAAATGGAAAGTTCTTATAG</hseq>
+                      <midline>|||| |||||||||||||||| |||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>5</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099097|ref|NC_000079.6|</id>
+                      <accession>NC_000079</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>120421639</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>39.157</bit-score>
+                      <score>42</score>
+                      <evalue>1.30996</evalue>
+                      <identity>25</identity>
+                      <query-from>207</query-from>
+                      <query-to>234</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>26806584</hit-from>
+                      <hit-to>26806557</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>28</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AAGGAAATNAAAATGGAAAGTTCTTGTA</qseq>
+                      <hseq>AAGGACATCAAAATGGAAAGTTCTTCTA</hseq>
+                      <midline>||||| || |||||||||||||||| ||</midline>
+                    </Hsp>
+                    <Hsp>
+                      <num>2</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>32</identity>
+                      <query-from>234</query-from>
+                      <query-to>273</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>56840340</hit-from>
+                      <hit-to>56840301</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>40</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA</qseq>
+                      <hseq>AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA</hseq>
+                      <midline>||||||||||||||||| || |  || ||| | ||| |||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>6</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099098|ref|NC_000078.6|</id>
+                      <accession>NC_000078</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>120129022</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>38.2554</bit-score>
+                      <score>41</score>
+                      <evalue>4.57222</evalue>
+                      <identity>22</identity>
+                      <query-from>49</query-from>
+                      <query-to>71</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>113030663</hit-from>
+                      <hit-to>113030685</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>23</align-len>
+                      <gaps>0</gaps>
+                      <qseq>CATCCATTCACACCCAACACAGG</qseq>
+                      <hseq>CATCCATTCACACCCAGCACAGG</hseq>
+                      <midline>|||||||||||||||| ||||||</midline>
+                    </Hsp>
+                    <Hsp>
+                      <num>2</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>28</identity>
+                      <query-from>231</query-from>
+                      <query-to>262</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>108990272</hit-from>
+                      <hit-to>108990242</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>32</align-len>
+                      <gaps>1</gaps>
+                      <qseq>TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC</qseq>
+                      <hseq>TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC</hseq>
+                      <midline>|||||| | ||||||||||||||| |||| ||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>7</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099109|ref|NC_000067.6|</id>
+                      <accession>NC_000067</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>195471971</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>35</identity>
+                      <query-from>87</query-from>
+                      <query-to>129</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>65190108</hit-from>
+                      <hit-to>65190148</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>43</align-len>
+                      <gaps>2</gaps>
+                      <qseq>GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC</qseq>
+                      <hseq>GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC</hseq>
+                      <midline>||||||||||| ||||||||| | | | |||||  ||| ||||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>8</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099101|ref|NC_000075.6|</id>
+                      <accession>NC_000075</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>124595110</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>36</identity>
+                      <query-from>238</query-from>
+                      <query-to>284</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>58227241</hit-from>
+                      <hit-to>58227195</hit-to>
+                      <hit-strand>Minus</hit-strand>
+                      <align-len>47</align-len>
+                      <gaps>0</gaps>
+                      <qseq>CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT</qseq>
+                      <hseq>CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT</hseq>
+                      <midline>||| |||||||| |  |  ||||||||||||| ||| | | || |||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>9</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099100|ref|NC_000076.6|</id>
+                      <accession>NC_000076</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>130694993</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>20</identity>
+                      <query-from>255</query-from>
+                      <query-to>274</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>119337186</hit-from>
+                      <hit-to>119337205</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>20</align-len>
+                      <gaps>0</gaps>
+                      <qseq>AGCTGCTCAATAAATGCTAG</qseq>
+                      <hseq>AGCTGCTCAATAAATGCTAG</hseq>
+                      <midline>||||||||||||||||||||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>10</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|372099094|ref|NC_000082.6|</id>
+                      <accession>NC_000082</accession>
+                      <title>Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J</title>
+                      <taxid>10090</taxid>
+                      <sciname>Mus musculus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>98207768</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>37.3537</bit-score>
+                      <score>40</score>
+                      <evalue>4.57222</evalue>
+                      <identity>43</identity>
+                      <query-from>175</query-from>
+                      <query-to>228</query-to>
+                      <query-strand>Plus</query-strand>
+                      <hit-from>18854780</hit-from>
+                      <hit-to>18854835</hit-to>
+                      <hit-strand>Plus</hit-strand>
+                      <align-len>56</align-len>
+                      <gaps>2</gaps>
+                      <qseq>GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT</qseq>
+                      <hseq>GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT</hseq>
+                      <midline>||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+              </hits>
+              <stat>
+                <Statistics>
+                  <db-num>107382</db-num>
+                  <db-len>3164670549</db-len>
+                  <hsp-len>31</hsp-len>
+                  <eff-space>802980793578</eff-space>
+                  <kappa>0.41</kappa>
+                  <lambda>0.625</lambda>
+                  <entropy>0.78</entropy>
+                </Statistics>
+              </stat>
+            </Search>
+          </search>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>
+
