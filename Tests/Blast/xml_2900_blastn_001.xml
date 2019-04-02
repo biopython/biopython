@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastn</BlastOutput_program>
+  <BlastOutput_version>BLASTN 2.9.0+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>GPIPE/10090/current/all_top_level GPIPE/10090/current/rna</BlastOutput_db>
+  <BlastOutput_query-ID>G26684.1</BlastOutput_query-ID>
+  <BlastOutput_query-def>human STS STS_D11570, sequence tagged site</BlastOutput_query-def>
+  <BlastOutput_query-len>285</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_sc-match>2</Parameters_sc-match>
+      <Parameters_sc-mismatch>-3</Parameters_sc-mismatch>
+      <Parameters_gap-open>5</Parameters_gap-open>
+      <Parameters_gap-extend>2</Parameters_gap-extend>
+      <Parameters_filter>R -d repeatmasker/repeat_9989;m;F;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>G26684.1</Iteration_query-ID>
+  <Iteration_query-def>human STS STS_D11570, sequence tagged site</Iteration_query-def>
+  <Iteration_query-len>285</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|372099107|ref|NC_000069.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 3, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000069</Hit_accession>
+  <Hit_len>160039680</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>40.9604</Hsp_bit-score>
+      <Hsp_score>44</Hsp_score>
+      <Hsp_evalue>0.375311</Hsp_evalue>
+      <Hsp_query-from>134</Hsp_query-from>
+      <Hsp_query-to>166</Hsp_query-to>
+      <Hsp_hit-from>101449177</Hsp_hit-from>
+      <Hsp_hit-to>101449144</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>30</Hsp_identity>
+      <Hsp_positive>30</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>34</Hsp_align-len>
+      <Hsp_qseq>GAATCCTAGAGGCTTGATTGGCCCAGG-CTGCTG</Hsp_qseq>
+      <Hsp_hseq>GAATCCTAGAGGCTGGACTGGCCCTGGCCTGCTG</Hsp_hseq>
+      <Hsp_midline>|||||||||||||| || |||||| || ||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|372099103|ref|NC_000073.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 7, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000073</Hit_accession>
+  <Hit_len>145441459</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>40.9604</Hsp_bit-score>
+      <Hsp_score>44</Hsp_score>
+      <Hsp_evalue>0.375311</Hsp_evalue>
+      <Hsp_query-from>205</Hsp_query-from>
+      <Hsp_query-to>233</Hsp_query-to>
+      <Hsp_hit-from>131772185</Hsp_hit-from>
+      <Hsp_hit-to>131772157</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>26</Hsp_identity>
+      <Hsp_positive>26</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>29</Hsp_align-len>
+      <Hsp_qseq>GAAAGGAAATNAAAATGGAAAGTTCTTGT</Hsp_qseq>
+      <Hsp_hseq>GAAAGGAAAAAAAAATGGAAAGTTCTGGT</Hsp_hseq>
+      <Hsp_midline>|||||||||  ||||||||||||||| ||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|372099106|ref|NC_000070.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 4, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000070</Hit_accession>
+  <Hit_len>156508116</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>40.0587</Hsp_bit-score>
+      <Hsp_score>43</Hsp_score>
+      <Hsp_evalue>1.30996</Hsp_evalue>
+      <Hsp_query-from>62</Hsp_query-from>
+      <Hsp_query-to>85</Hsp_query-to>
+      <Hsp_hit-from>9607562</Hsp_hit-from>
+      <Hsp_hit-to>9607539</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>23</Hsp_identity>
+      <Hsp_positive>23</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>24</Hsp_align-len>
+      <Hsp_qseq>CCAACACAGGCCAGCGACTTCTGG</Hsp_qseq>
+      <Hsp_hseq>CCAACACAGGCCAGCGGCTTCTGG</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||| |||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>242</Hsp_query-from>
+      <Hsp_query-to>272</Hsp_query-to>
+      <Hsp_hit-from>142902532</Hsp_hit-from>
+      <Hsp_hit-to>142902563</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>28</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>GCCTGACATGG-GTAGCTGCTCAATAAATGCT</Hsp_qseq>
+      <Hsp_hseq>GCCTGGCATGAAGTAACTGCTCAATAAATGCT</Hsp_hseq>
+      <Hsp_midline>||||| ||||  ||| ||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|372099108|ref|NC_000068.7|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 2, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000068</Hit_accession>
+  <Hit_len>182113224</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>39.157</Hsp_bit-score>
+      <Hsp_score>42</Hsp_score>
+      <Hsp_evalue>1.30996</Hsp_evalue>
+      <Hsp_query-from>239</Hsp_query-from>
+      <Hsp_query-to>269</Hsp_query-to>
+      <Hsp_hit-from>3799647</Hsp_hit-from>
+      <Hsp_hit-to>3799677</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>27</Hsp_identity>
+      <Hsp_positive>27</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>31</Hsp_align-len>
+      <Hsp_qseq>AAGGCCTGACATGGGTAGCTGCTCAATAAAT</Hsp_qseq>
+      <Hsp_hseq>AAGTCCTGGCATGAGTAGTTGCTCAATAAAT</Hsp_hseq>
+      <Hsp_midline>||| |||| |||| |||| ||||||||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>38.2554</Hsp_bit-score>
+      <Hsp_score>41</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>211</Hsp_query-from>
+      <Hsp_query-to>235</Hsp_query-to>
+      <Hsp_hit-from>70278960</Hsp_hit-from>
+      <Hsp_hit-to>70278984</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>23</Hsp_identity>
+      <Hsp_positive>23</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>25</Hsp_align-len>
+      <Hsp_qseq>AAATNAAAATGGAAAGTTCTTGTAG</Hsp_qseq>
+      <Hsp_hseq>AAATGAAAATGGAAAGTTCTTATAG</Hsp_hseq>
+      <Hsp_midline>|||| |||||||||||||||| |||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|372099097|ref|NC_000079.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 13, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000079</Hit_accession>
+  <Hit_len>120421639</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>39.157</Hsp_bit-score>
+      <Hsp_score>42</Hsp_score>
+      <Hsp_evalue>1.30996</Hsp_evalue>
+      <Hsp_query-from>207</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>26806584</Hsp_hit-from>
+      <Hsp_hit-to>26806557</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>25</Hsp_identity>
+      <Hsp_positive>25</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>28</Hsp_align-len>
+      <Hsp_qseq>AAGGAAATNAAAATGGAAAGTTCTTGTA</Hsp_qseq>
+      <Hsp_hseq>AAGGACATCAAAATGGAAAGTTCTTCTA</Hsp_hseq>
+      <Hsp_midline>||||| || |||||||||||||||| ||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>234</Hsp_query-from>
+      <Hsp_query-to>273</Hsp_query-to>
+      <Hsp_hit-from>56840340</Hsp_hit-from>
+      <Hsp_hit-to>56840301</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>32</Hsp_identity>
+      <Hsp_positive>32</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>40</Hsp_align-len>
+      <Hsp_qseq>AGCGCAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTA</Hsp_qseq>
+      <Hsp_hseq>AGCGCAAGGCCTGACATAGGAAAATGTTCAGTGAATACTA</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||| || |  || ||| | ||| |||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|372099098|ref|NC_000078.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 12, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000078</Hit_accession>
+  <Hit_len>120129022</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>38.2554</Hsp_bit-score>
+      <Hsp_score>41</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>49</Hsp_query-from>
+      <Hsp_query-to>71</Hsp_query-to>
+      <Hsp_hit-from>113030663</Hsp_hit-from>
+      <Hsp_hit-to>113030685</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>22</Hsp_identity>
+      <Hsp_positive>22</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>23</Hsp_align-len>
+      <Hsp_qseq>CATCCATTCACACCCAACACAGG</Hsp_qseq>
+      <Hsp_hseq>CATCCATTCACACCCAGCACAGG</Hsp_hseq>
+      <Hsp_midline>|||||||||||||||| ||||||</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>231</Hsp_query-from>
+      <Hsp_query-to>262</Hsp_query-to>
+      <Hsp_hit-from>108990272</Hsp_hit-from>
+      <Hsp_hit-to>108990242</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>28</Hsp_positive>
+      <Hsp_gaps>1</Hsp_gaps>
+      <Hsp_align-len>32</Hsp_align-len>
+      <Hsp_qseq>TGTAGCGCAAGGCCTGACATGGGTAGCTGCTC</Hsp_qseq>
+      <Hsp_hseq>TGTAGCTCTAGGCCTGACATGGGT-GCTGGTC</Hsp_hseq>
+      <Hsp_midline>|||||| | ||||||||||||||| |||| ||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|372099109|ref|NC_000067.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 1, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000067</Hit_accession>
+  <Hit_len>195471971</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>87</Hsp_query-from>
+      <Hsp_query-to>129</Hsp_query-to>
+      <Hsp_hit-from>65190108</Hsp_hit-from>
+      <Hsp_hit-to>65190148</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>35</Hsp_identity>
+      <Hsp_positive>35</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>43</Hsp_align-len>
+      <Hsp_qseq>GCTCAGCCACAGACATGGTTTGTNACTNTTGAGCTTCTGTTCC</Hsp_qseq>
+      <Hsp_hseq>GCTCAGCCACATACATGGTTT-TAAGTGTTGAGGCTCT-TTCC</Hsp_hseq>
+      <Hsp_midline>||||||||||| ||||||||| | | | |||||  ||| ||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|372099101|ref|NC_000075.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 9, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000075</Hit_accession>
+  <Hit_len>124595110</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>238</Hsp_query-from>
+      <Hsp_query-to>284</Hsp_query-to>
+      <Hsp_hit-from>58227241</Hsp_hit-from>
+      <Hsp_hit-to>58227195</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>-1</Hsp_hit-frame>
+      <Hsp_identity>36</Hsp_identity>
+      <Hsp_positive>36</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>47</Hsp_align-len>
+      <Hsp_qseq>CAAGGCCTGACATGGGTAGCTGCTCAATAAATGCTAGTNTGTTATTT</Hsp_qseq>
+      <Hsp_hseq>CAAAGCCTGACAGGTATGACTGCTCAATAAATACTATTTTTTTTTTT</Hsp_hseq>
+      <Hsp_midline>||| |||||||| |  |  ||||||||||||| ||| | | || |||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|372099100|ref|NC_000076.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 10, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000076</Hit_accession>
+  <Hit_len>130694993</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>255</Hsp_query-from>
+      <Hsp_query-to>274</Hsp_query-to>
+      <Hsp_hit-from>119337186</Hsp_hit-from>
+      <Hsp_hit-to>119337205</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>20</Hsp_identity>
+      <Hsp_positive>20</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>20</Hsp_align-len>
+      <Hsp_qseq>AGCTGCTCAATAAATGCTAG</Hsp_qseq>
+      <Hsp_hseq>AGCTGCTCAATAAATGCTAG</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gi|372099094|ref|NC_000082.6|</Hit_id>
+  <Hit_def>Mus musculus strain C57BL/6J chromosome 16, GRCm38.p4 C57BL/6J</Hit_def>
+  <Hit_accession>NC_000082</Hit_accession>
+  <Hit_len>98207768</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>37.3537</Hsp_bit-score>
+      <Hsp_score>40</Hsp_score>
+      <Hsp_evalue>4.57222</Hsp_evalue>
+      <Hsp_query-from>175</Hsp_query-from>
+      <Hsp_query-to>228</Hsp_query-to>
+      <Hsp_hit-from>18854780</Hsp_hit-from>
+      <Hsp_hit-to>18854835</Hsp_hit-to>
+      <Hsp_query-frame>1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>43</Hsp_identity>
+      <Hsp_positive>43</Hsp_positive>
+      <Hsp_gaps>2</Hsp_gaps>
+      <Hsp_align-len>56</Hsp_align-len>
+      <Hsp_qseq>GGAGGCAAAGAATCCCTACCTCCT-AGGGGTGA-AAGGAAATNAAAATGGAAAGTT</Hsp_qseq>
+      <Hsp_hseq>GGAGGCAAAGAATCCCTACATTGTGACAGCTGATAAAGAAGGTAAAATGGAAAATT</Hsp_hseq>
+      <Hsp_midline>||||||||||||||||||| |  | |  | ||| || |||   |||||||||| ||</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>107382</Statistics_db-num>
+      <Statistics_db-len>3164670549</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>0</Statistics_eff-space>
+      <Statistics_kappa>0.41</Statistics_kappa>
+      <Statistics_lambda>0.625</Statistics_lambda>
+      <Statistics_entropy>0.78</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>
