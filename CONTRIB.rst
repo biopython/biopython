@@ -244,6 +244,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Uri Laserson <https://github.com/laserson>
 - Uwe Schmitt <https://github.com/uweschmitt>
 - Veronika Berman <https://github.com/NikiB>
+- Victor Lin <https://github.com/victorlin>
 - Walter Gillett <https://github.com/wgillett>
 - Wayne Decatur <https://github.com/fomightez>
 - Wibowo Arindrarto <https://github.com/bow>
