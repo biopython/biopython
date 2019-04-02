@@ -1179,7 +1179,7 @@ class PairwiseAlignment(object):
         aligned to each other. In particular, this may occur if alignments
         differ from each other in terms of their gap placement only:
 
-        >>> aligner.mismatch = -10
+        >>> aligner.mismatch_score = -10
         >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
         >>> len(alignments)
         2
@@ -1345,8 +1345,8 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     1 point is deducted for each non-identical character.
 
     >>> aligner.mode = 'global'
-    >>> aligner.match = 2
-    >>> aligner.mismatch = -1
+    >>> aligner.match_score = 2
+    >>> aligner.mismatch_score = -1
     >>> for alignment in aligner.align("ACCGT", "ACG"):
     ...     print("Score = %.1f:" % alignment.score)
     ...     print(alignment)
@@ -1404,6 +1404,13 @@ class PairwiseAligner(_aligners.PairwiseAligner):
     <BLANKLINE>
 
     """
+
+    def __setattr__(self, key, value):
+        if key not in dir(_aligners.PairwiseAligner):
+            # To prevent confusion, don't allow users to create new attributes
+            message = "'PairwiseAligner' object has no attribute '%s'" % key
+            raise AttributeError(message)
+        _aligners.PairwiseAligner.__setattr__(self, key, value)
 
     def align(self, seqA, seqB):
         """Return the alignments of two sequences using PairwiseAligner."""

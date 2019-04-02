@@ -35,69 +35,69 @@ class TestAlignerProperties(unittest.TestCase):
 
     def test_aligner_property_match_mismatch(self):
         aligner = Align.PairwiseAligner()
-        aligner.match = 3.0
-        self.assertAlmostEqual(aligner.match, 3.0)
-        aligner.mismatch = -2.0
-        self.assertAlmostEqual(aligner.mismatch, -2.0)
+        aligner.match_score = 3.0
+        self.assertAlmostEqual(aligner.match_score, 3.0)
+        aligner.mismatch_score = -2.0
+        self.assertAlmostEqual(aligner.mismatch_score, -2.0)
         with self.assertRaises(ValueError):
-            aligner.match = 'not a number'
+            aligner.match_score = 'not a number'
         with self.assertRaises(ValueError):
-            aligner.mismatch = 'not a number'
+            aligner.mismatch_score = 'not a number'
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 3.000000
-  mismatch score: -2.000000
-  target open gap score: 0.000000
-  target extend gap score: 0.000000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 3.000000
+  mismatch_score: -2.000000
+  target_open_gap_score: 0.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: 0.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
 
     def test_aligner_property_gapscores(self):
         aligner = Align.PairwiseAligner()
         open_score, extend_score = (-5, -1)
-        aligner.target_gap_open = open_score
-        aligner.target_gap_extend = extend_score
-        self.assertAlmostEqual(aligner.target_gap_open, open_score)
-        self.assertAlmostEqual(aligner.target_gap_extend, extend_score)
+        aligner.target_open_gap_score = open_score
+        aligner.target_extend_gap_score = extend_score
+        self.assertAlmostEqual(aligner.target_open_gap_score, open_score)
+        self.assertAlmostEqual(aligner.target_extend_gap_score, extend_score)
         open_score, extend_score = (-6, -7)
         aligner.query_open_gap_score = open_score
         aligner.query_extend_gap_score = extend_score
         self.assertAlmostEqual(aligner.query_open_gap_score, open_score)
         self.assertAlmostEqual(aligner.query_extend_gap_score, extend_score)
         open_score, extend_score = (-3, -9)
-        aligner.target_end_open = open_score
-        aligner.target_end_extend = extend_score
-        self.assertAlmostEqual(aligner.target_end_open, open_score)
-        self.assertAlmostEqual(aligner.target_end_extend, extend_score)
+        aligner.target_end_open_gap_score = open_score
+        aligner.target_end_extend_gap_score = extend_score
+        self.assertAlmostEqual(aligner.target_end_open_gap_score, open_score)
+        self.assertAlmostEqual(aligner.target_end_extend_gap_score, extend_score)
         open_score, extend_score = (-1, -2)
         aligner.query_end_open_gap_score = open_score
         aligner.query_end_extend_gap_score = extend_score
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: 0.000000
-  target extend gap score: 0.000000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: -6.000000
-  query extend gap score: -7.000000
-  query left open gap score: -1.000000
-  query left extend gap score: -2.000000
-  query right open gap score: -1.000000
-  query right extend gap score: -2.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -5.000000
+  target_extend_gap_score: -1.000000
+  target_left_open_gap_score: -3.000000
+  target_left_extend_gap_score: -9.000000
+  target_right_open_gap_score: -3.000000
+  target_right_extend_gap_score: -9.000000
+  query_open_gap_score: -6.000000
+  query_extend_gap_score: -7.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: -2.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: -2.000000
   mode: global
 """)
         self.assertAlmostEqual(aligner.query_end_open_gap_score, open_score)
@@ -136,20 +136,20 @@ Pairwise sequence aligner with parameters
         self.assertAlmostEqual(aligner.query_right_extend_gap_score, score)
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -3.000000
-  target extend gap score: -3.000000
-  target left open gap score: -4.000000
-  target left extend gap score: -4.000000
-  target right open gap score: -4.000000
-  target right extend gap score: -4.000000
-  query open gap score: -2.000000
-  query extend gap score: -2.000000
-  query left open gap score: -5.000000
-  query left extend gap score: -5.000000
-  query right open gap score: -5.000000
-  query right extend gap score: -5.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -3.000000
+  target_extend_gap_score: -3.000000
+  target_left_open_gap_score: -4.000000
+  target_left_extend_gap_score: -4.000000
+  target_right_open_gap_score: -4.000000
+  target_right_extend_gap_score: -4.000000
+  query_open_gap_score: -2.000000
+  query_extend_gap_score: -2.000000
+  query_left_open_gap_score: -5.000000
+  query_left_extend_gap_score: -5.000000
+  query_right_open_gap_score: -5.000000
+  query_right_extend_gap_score: -5.000000
   mode: global
 """)
         with self.assertRaises(ValueError):
@@ -171,20 +171,20 @@ class TestPairwiseGlobal(unittest.TestCase):
         aligner.mode = 'global'
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: 0.000000
-  target extend gap score: 0.000000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: 0.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: 0.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         self.assertEqual(aligner.algorithm, "Needleman-Wunsch")
@@ -212,27 +212,27 @@ G-A-T
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 0
-        aligner.mismatch = -1
+        aligner.match_score = 0
+        aligner.mismatch_score = -1
         aligner.open_gap_score = -5
         aligner.extend_gap_score = -1
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 0.000000
-  mismatch score: -1.000000
-  target open gap score: -5.000000
-  target extend gap score: -1.000000
-  target left open gap score: -5.000000
-  target left extend gap score: -1.000000
-  target right open gap score: -5.000000
-  target right extend gap score: -1.000000
-  query open gap score: -5.000000
-  query extend gap score: -1.000000
-  query left open gap score: -5.000000
-  query left extend gap score: -1.000000
-  query right open gap score: -5.000000
-  query right extend gap score: -1.000000
+  match_score: 0.000000
+  mismatch_score: -1.000000
+  target_open_gap_score: -5.000000
+  target_extend_gap_score: -1.000000
+  target_left_open_gap_score: -5.000000
+  target_left_extend_gap_score: -1.000000
+  target_right_open_gap_score: -5.000000
+  target_right_extend_gap_score: -1.000000
+  query_open_gap_score: -5.000000
+  query_extend_gap_score: -1.000000
+  query_left_open_gap_score: -5.000000
+  query_left_extend_gap_score: -1.000000
+  query_right_open_gap_score: -5.000000
+  query_right_extend_gap_score: -1.000000
   mode: global
 """)
         score = aligner.score("CC", "ACCT")
@@ -248,20 +248,20 @@ class TestPairwiseLocal(unittest.TestCase):
         self.assertEqual(aligner.algorithm, 'Smith-Waterman')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.100000
-  target extend gap score: -0.100000
-  target left open gap score: -0.100000
-  target left extend gap score: -0.100000
-  target right open gap score: -0.100000
-  target right extend gap score: -0.100000
-  query open gap score: -0.100000
-  query extend gap score: -0.100000
-  query left open gap score: -0.100000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.100000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: -0.100000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: -0.100000
   mode: local
 """)
         score = aligner.score("AxBx", "zABz")
@@ -285,20 +285,20 @@ zA-Bz
         self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.100000
-  target extend gap score: 0.000000
-  target left open gap score: -0.100000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.100000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: 0.000000
-  query left open gap score: -0.100000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.100000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         score = aligner.score("AxBx", "zABz")
@@ -320,27 +320,27 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
     def test_match_score_open_penalty1(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 2
-        aligner.mismatch = -1
+        aligner.match_score = 2
+        aligner.mismatch_score = -1
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 2.000000
-  mismatch score: -1.000000
-  target open gap score: -0.100000
-  target extend gap score: 0.000000
-  target left open gap score: -0.100000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.100000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: 0.000000
-  query left open gap score: -0.100000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.100000
-  query right extend gap score: 0.000000
+  match_score: 2.000000
+  mismatch_score: -1.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         seq1 = "AA"
@@ -369,27 +369,27 @@ A-
     def test_match_score_open_penalty2(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 1.5
-        aligner.mismatch = 0.0
+        aligner.match_score = 1.5
+        aligner.mismatch_score = 0.0
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.500000
-  mismatch score: 0.000000
-  target open gap score: -0.100000
-  target extend gap score: 0.000000
-  target left open gap score: -0.100000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.100000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: 0.000000
-  query left open gap score: -0.100000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.100000
-  query right extend gap score: 0.000000
+  match_score: 1.500000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         seq1 = "GAA"
@@ -423,20 +423,20 @@ GA-
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: 0.000000
-  target extend gap score: 0.000000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: 0.000000
-  query left open gap score: -0.100000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.100000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: 0.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         seq1 = "GAACT"
@@ -457,26 +457,26 @@ GA--T
     def test_match_score_open_penalty4(self):
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.mismatch = -2.0
+        aligner.mismatch_score = -2.0
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -2.000000
-  target open gap score: -0.100000
-  target extend gap score: 0.000000
-  target left open gap score: -0.100000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.100000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: 0.000000
-  query left open gap score: -0.100000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.100000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: -2.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         seq1 = "GCT"
@@ -513,20 +513,20 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.200000
-  target extend gap score: -0.500000
-  target left open gap score: -0.200000
-  target left extend gap score: -0.500000
-  target right open gap score: -0.200000
-  target right extend gap score: -0.500000
-  query open gap score: -0.200000
-  query extend gap score: -0.500000
-  query left open gap score: -0.200000
-  query left extend gap score: -0.500000
-  query right open gap score: -0.200000
-  query right extend gap score: -0.500000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.200000
+  target_extend_gap_score: -0.500000
+  target_left_open_gap_score: -0.200000
+  target_left_extend_gap_score: -0.500000
+  target_right_open_gap_score: -0.200000
+  target_right_extend_gap_score: -0.500000
+  query_open_gap_score: -0.200000
+  query_extend_gap_score: -0.500000
+  query_left_open_gap_score: -0.200000
+  query_left_extend_gap_score: -0.500000
+  query_right_open_gap_score: -0.200000
+  query_right_extend_gap_score: -0.500000
   mode: global
 """)
         seq1 = "GACT"
@@ -552,20 +552,20 @@ G--T
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.200000
-  target extend gap score: -1.500000
-  target left open gap score: -0.200000
-  target left extend gap score: -1.500000
-  target right open gap score: -0.200000
-  target right extend gap score: -1.500000
-  query open gap score: -0.200000
-  query extend gap score: -1.500000
-  query left open gap score: -0.200000
-  query left extend gap score: -1.500000
-  query right open gap score: -0.200000
-  query right extend gap score: -1.500000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.200000
+  target_extend_gap_score: -1.500000
+  target_left_open_gap_score: -0.200000
+  target_left_extend_gap_score: -1.500000
+  target_right_open_gap_score: -0.200000
+  target_right_extend_gap_score: -1.500000
+  query_open_gap_score: -0.200000
+  query_extend_gap_score: -1.500000
+  query_left_open_gap_score: -0.200000
+  query_left_extend_gap_score: -1.500000
+  query_right_open_gap_score: -0.200000
+  query_right_extend_gap_score: -1.500000
   mode: global
 """)
         seq1 = "GACT"
@@ -602,20 +602,20 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -1.700000
-  target extend gap score: -1.500000
-  target left open gap score: -1.700000
-  target left extend gap score: -1.500000
-  target right open gap score: -1.700000
-  target right extend gap score: -1.500000
-  query open gap score: -1.700000
-  query extend gap score: -1.500000
-  query left open gap score: -1.700000
-  query left extend gap score: -1.500000
-  query right open gap score: -1.700000
-  query right extend gap score: -1.500000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -1.700000
+  target_extend_gap_score: -1.500000
+  target_left_open_gap_score: -1.700000
+  target_left_extend_gap_score: -1.500000
+  target_right_open_gap_score: -1.700000
+  target_right_extend_gap_score: -1.500000
+  query_open_gap_score: -1.700000
+  query_extend_gap_score: -1.500000
+  query_left_open_gap_score: -1.700000
+  query_left_extend_gap_score: -1.500000
+  query_right_open_gap_score: -1.700000
+  query_right_extend_gap_score: -1.500000
   mode: global
 """)
         seq1 = "GACT"
@@ -646,20 +646,20 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
         aligner.query_end_gap_score = end_score
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.200000
-  target extend gap score: -0.800000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: -0.200000
-  query extend gap score: -0.800000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.200000
+  target_extend_gap_score: -0.800000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.200000
+  query_extend_gap_score: -0.800000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """)
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
@@ -715,20 +715,20 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: 0.000000
-  target left open gap score: -0.300000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.300000
-  target right extend gap score: 0.000000
-  query open gap score: -0.800000
-  query extend gap score: 0.000000
-  query left open gap score: -0.800000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.800000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.800000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.800000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.800000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         score = aligner.score(seq1, seq2)
@@ -762,20 +762,20 @@ GTCT
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: 0.000000
-  target left open gap score: -0.300000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.300000
-  target right extend gap score: 0.000000
-  query open gap score: -0.200000
-  query extend gap score: 0.000000
-  query left open gap score: -0.200000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.200000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.200000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.200000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.200000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         seq1 = "GAT"
@@ -812,20 +812,20 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.100000
-  target extend gap score: 0.000000
-  target left open gap score: -0.100000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.100000
-  target right extend gap score: 0.000000
-  query open gap score: -0.100000
-  query extend gap score: -0.100000
-  query left open gap score: -0.100000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.100000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.100000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.100000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.100000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.100000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.100000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.100000
+  query_right_extend_gap_score: -0.100000
   mode: local
 """)
         score = aligner.score(seq1, seq2)
@@ -904,19 +904,19 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match/mismatch score: <substitution matrix>
-  target open gap score: -0.500000
-  target extend gap score: 0.000000
-  target left open gap score: -0.500000
-  target left extend gap score: 0.000000
-  target right open gap score: -0.500000
-  target right extend gap score: 0.000000
-  query open gap score: -0.500000
-  query extend gap score: 0.000000
-  query left open gap score: -0.500000
-  query left extend gap score: 0.000000
-  query right open gap score: -0.500000
-  query right extend gap score: 0.000000
+  match/mismatch_score: <substitution matrix>
+  target_open_gap_score: -0.500000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -0.500000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -0.500000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -0.500000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -0.500000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -0.500000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         score = aligner.score(seq1, seq2)
@@ -950,19 +950,19 @@ AT-T
         aligner.extend_gap_score = 0.0
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match/mismatch score: <substitution matrix>
-  target open gap score: -1.000000
-  target extend gap score: 0.000000
-  target left open gap score: -1.000000
-  target left extend gap score: 0.000000
-  target right open gap score: -1.000000
-  target right extend gap score: 0.000000
-  query open gap score: -1.000000
-  query extend gap score: 0.000000
-  query left open gap score: -1.000000
-  query left extend gap score: 0.000000
-  query right open gap score: -1.000000
-  query right extend gap score: 0.000000
+  match/mismatch_score: <substitution matrix>
+  target_open_gap_score: -1.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -1.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         score = aligner.score(seq1, seq2)
@@ -988,19 +988,19 @@ ATT.
         aligner.extend_gap_score = 0.0
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match/mismatch score: <substitution matrix>
-  target open gap score: -1.000000
-  target extend gap score: 0.000000
-  target left open gap score: -1.000000
-  target left extend gap score: 0.000000
-  target right open gap score: -1.000000
-  target right extend gap score: 0.000000
-  query open gap score: -1.000000
-  query extend gap score: 0.000000
-  query left open gap score: -1.000000
-  query left extend gap score: 0.000000
-  query right open gap score: -1.000000
-  query right extend gap score: 0.000000
+  match/mismatch_score: <substitution matrix>
+  target_open_gap_score: -1.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: -1.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: -1.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: -1.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: -1.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: -1.000000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """)
         score = aligner.score(seq1, seq2)
@@ -1027,20 +1027,20 @@ class TestPairwiseOneCharacter(unittest.TestCase):
         self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: -0.100000
-  target left open gap score: -0.300000
-  target left extend gap score: -0.100000
-  target right open gap score: -0.300000
-  target right extend gap score: -0.100000
-  query open gap score: -0.300000
-  query extend gap score: -0.100000
-  query left open gap score: -0.300000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.300000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: -0.100000
+  query_open_gap_score: -0.300000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
   mode: local
 """)
         score = aligner.score("abcde", "c")
@@ -1064,20 +1064,20 @@ abcde
         self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: -0.100000
-  target left open gap score: -0.300000
-  target left extend gap score: -0.100000
-  target right open gap score: -0.300000
-  target right extend gap score: -0.100000
-  query open gap score: -0.300000
-  query extend gap score: -0.100000
-  query left open gap score: -0.300000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.300000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: -0.100000
+  query_open_gap_score: -0.300000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
   mode: local
 """)
         score = aligner.score("abcce", "c")
@@ -1109,20 +1109,20 @@ abcce
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: -0.100000
-  target left open gap score: -0.300000
-  target left extend gap score: -0.100000
-  target right open gap score: -0.300000
-  target right extend gap score: -0.100000
-  query open gap score: -0.300000
-  query extend gap score: -0.100000
-  query left open gap score: -0.300000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.300000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: -0.100000
+  query_open_gap_score: -0.300000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
   mode: global
 """)
         seq1 = "abcde"
@@ -1148,20 +1148,20 @@ abcde
         self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: -0.300000
-  target extend gap score: -0.100000
-  target left open gap score: -0.300000
-  target left extend gap score: -0.100000
-  target right open gap score: -0.300000
-  target right extend gap score: -0.100000
-  query open gap score: -0.300000
-  query extend gap score: -0.100000
-  query left open gap score: -0.300000
-  query left extend gap score: -0.100000
-  query right open gap score: -0.300000
-  query right extend gap score: -0.100000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: -0.300000
+  target_extend_gap_score: -0.100000
+  target_left_open_gap_score: -0.300000
+  target_left_extend_gap_score: -0.100000
+  target_right_open_gap_score: -0.300000
+  target_right_extend_gap_score: -0.100000
+  query_open_gap_score: -0.300000
+  query_extend_gap_score: -0.100000
+  query_left_open_gap_score: -0.300000
+  query_left_extend_gap_score: -0.100000
+  query_right_open_gap_score: -0.300000
+  query_right_extend_gap_score: -0.100000
   mode: global
 """)
         score = aligner.score("abcde", "c")
@@ -1185,16 +1185,16 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 1
-        aligner.mismatch = -1
+        aligner.match_score = 1
+        aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -1.000000
-  target gap function: %s
-  query gap function: %s
+  match_score: 1.000000
+  mismatch_score: -1.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: global
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
@@ -1227,16 +1227,16 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 1
-        aligner.mismatch = -1
+        aligner.match_score = 1
+        aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -1.000000
-  target gap function: %s
-  query gap function: %s
+  match_score: 1.000000
+  mismatch_score: -1.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: global
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
@@ -1275,22 +1275,22 @@ AAB------------BBAAAACCCCAAAABBBAA--
             return -10
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
-        aligner.match = 1
-        aligner.mismatch = -10
+        aligner.match_score = 1
+        aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -10.000000
-  target gap function: %s
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: -10.000000
+  target_gap_function: %s
+  query_open_gap_score: 0.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: global
 """ % gap_score)
         score = aligner.score(seq1, seq2)
@@ -1308,10 +1308,10 @@ TTG--GAA
         aligner.query_gap_score = gap_score
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -10.000000
-  target gap function: %s
-  query gap function: %s
+  match_score: 1.000000
+  mismatch_score: -10.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: global
 """ % (gap_score, gap_score))
         score = aligner.score(seq1, seq2)
@@ -1361,18 +1361,18 @@ TTG--GAA
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
-        aligner.match = 1
-        aligner.mismatch = -1
+        aligner.match_score = 1
+        aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -1.000000
-  target gap function: %s
-  query gap function: %s
+  match_score: 1.000000
+  mismatch_score: -1.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: local
 """ % (nogaps, specificgaps))
         score = aligner.score(seq1, seq2)
@@ -1411,16 +1411,16 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
-        aligner.match = 1
-        aligner.mismatch = -1
+        aligner.match_score = 1
+        aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
         aligner.query_gap_score = specificgaps
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -1.000000
-  target gap function: %s
-  query gap function: %s
+  match_score: 1.000000
+  mismatch_score: -1.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: local
 """ % (nogaps, specificgaps))
         self.assertEqual(aligner.algorithm,
@@ -1459,22 +1459,22 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             return -10
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
-        aligner.match = 1
-        aligner.mismatch = -10
+        aligner.match_score = 1
+        aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
         self.assertEqual(aligner.algorithm,
                          "Waterman-Smith-Beyer local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -10.000000
-  target gap function: %s
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: -10.000000
+  target_gap_function: %s
+  query_open_gap_score: 0.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: local
 """ % gap_score)
         score = aligner.score(seq1, seq2)
@@ -1497,20 +1497,15 @@ TTCCAA
 TTGGAA
 """)
         self.assertEqual(alignment.aligned, (((4, 6),), ((4, 6),)))
-        aligner.query_gap = gap_score
+        aligner.query_gap_score = gap_score
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: -10.000000
-  target gap function: %s
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: -10.000000
+  target_gap_function: %s
+  query_gap_function: %s
   mode: local
-""" % gap_score)
+""" % (gap_score, gap_score))
         alignments = aligner.align(seq1, seq2)
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 2.0)
