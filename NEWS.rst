@@ -80,6 +80,7 @@ possible, especially the following contributors:
 - Ralf Stephan
 - Rob Miller
 - Sergio Valqui
+- Victor Lin
 - Wibowo 'Bow' Arindrarto
 
 
