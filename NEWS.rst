@@ -38,6 +38,11 @@ only the aligned section of the sequences are shown, together with the start
 positions of the sequences (in 1-based notation). Alignments of lists will now
 also be prettily printed.
 
+``Bio.SearchIO`` HSP objects has a new attribute called ``output_index``. This
+attribute is meant for capturing the order by which the HSP were output in the
+parsed file and is set with a default value of -1 for all HSP objects. It is
+also used for sorting the output of ``QueryResult.hsps``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -52,6 +57,7 @@ possible, especially the following contributors:
 - Ralf Stephan
 - Sergio Valqui
 - Antony Lee
+- Wibowo 'Bow' Arindrarto
 
 18 December 2018: Biopython 1.73
 ================================

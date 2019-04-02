@@ -455,7 +455,9 @@ class QueryResult(_BaseSearchObject):
     @property
     def hsps(self):
         """Access the HSP objects contained in the QueryResult."""
-        return [hsp for hsp in chain(*self.hits)]
+        return sorted(
+            [hsp for hsp in chain(*self.hits)],
+            key=lambda hsp: hsp.output_index)
 
     @property
     def fragments(self):
