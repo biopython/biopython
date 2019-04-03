@@ -2562,7 +2562,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
-
     def test_xml_2900_blastx_001_v1(self):
         self._test_xml_2900_blastx_001('xml_2900_blastx_001.xml')
 
@@ -2632,7 +2631,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_end, 115)
         self.assertEqual(hsp.frame, (2, 0))
 
-
         alignment = record.alignments[2]
         self.assertEqual(alignment.hit_id, "gi|684409690|ref|XP_009175831.1|")
         self.assertEqual(alignment.accession, "XP_009175831")
@@ -2655,7 +2653,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
-
 
         alignment = record.alignments[3]
         self.assertEqual(alignment.hit_id, "gi|449710331|gb|EMD49430.1|")
@@ -2682,7 +2679,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
 
-
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|257215766|emb|CAX83035.1|")
         self.assertEqual(alignment.accession, "CAX83035")
@@ -2706,7 +2702,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
-
 
         alignment = record.alignments[5]
         self.assertEqual(alignment.hit_id, "gi|1535393712|emb|VDP83060.1|")
@@ -2733,7 +2728,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
 
-
         alignment = record.alignments[6]
         self.assertEqual(alignment.hit_id, "gi|312773|emb|CAA50205.1|")
         self.assertEqual(alignment.accession, "CAA50205")
@@ -2757,7 +2751,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
-
 
         alignment = record.alignments[7]
         self.assertEqual(alignment.hit_id, "gi|1530341495|emb|VDN44756.1|")
@@ -2784,7 +2777,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
 
-
         alignment = record.alignments[8]
         self.assertEqual(alignment.hit_id, "gi|1524877828|ref|XP_027046469.1|")
         self.assertEqual(alignment.accession, "XP_027046469")
@@ -2808,7 +2800,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 1)
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
-
 
         alignment = record.alignments[9]
         self.assertEqual(alignment.hit_id, "gi|1524877860|ref|XP_027046487.1|")

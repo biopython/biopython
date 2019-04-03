@@ -690,11 +690,11 @@ class BlastParser(_XMLparser):
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
 
     def _start_hit_descr_item(self):
-        """XML v2. Start hit description item"""
+        """XML v2. Start hit description item."""
         self._hit_descr_item = Record.DescriptionExtItem()
 
     def _end_hit_descr_item(self):
-        """XML v2. Start hit description item"""
+        """XML v2. Start hit description item."""
         self._descr.append_item(self._hit_descr_item)
         if not self._hit.title:
             self._hit.title = str(self._hit_descr_item)
