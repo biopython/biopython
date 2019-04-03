@@ -83,12 +83,14 @@ class Description(object):
 
 
 class DescriptionExt(Description):
-    """ Extended description record for BLASTXML version 2
+    """Extended description record for BLASTXML version 2.
 
     Members:
     items           List of DescriptionExtItem
     """
+
     def __init__(self):
+        """Initialize the class."""
         super(DescriptionExt, self).__init__()
 
         self.items = []
@@ -100,13 +102,15 @@ class DescriptionExt(Description):
 
 
 class DescriptionExtItem(object):
-    """Stores information about one record in hit description for BLASTXML version 2
+    """Stores information about one record in hit description for BLASTXML version 2.
 
     Members:
     id              Database identifier
     title           Title of the hit.
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.id = None
         self.title = None
         self.accession = None
