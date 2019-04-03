@@ -604,7 +604,10 @@ class BlastParser(_XMLparser):
     def _set_hsp_hit_frame(self):
         """Frame of the database sequence if applicable (PRIVATE)."""
         v = int(self._value)
-        self._hsp.frame += (v,)
+        if len(self._hsp.frame) == 0:
+            self._hsp.frame = (0, v)
+        else:
+            self._hsp.frame += (v,)
         if self._header.application == 'BLASTN':
             self._hsp.strand += ('Plus' if v > 0 else 'Minus',)
 
