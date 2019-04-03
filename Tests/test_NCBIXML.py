@@ -2605,7 +2605,6 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_end, 108)
         self.assertEqual(hsp.frame, (2, 0))
 
-
         alignment = record.alignments[1]
         self.assertEqual(alignment.hit_id, "gi|510859078|gb|EPB74633.1|")
         self.assertEqual(alignment.accession, "EPB74633")
