@@ -175,12 +175,28 @@ class SequentialSequenceWriter(SequenceWriter):
         self._footer_written = False
 
     def write_header(self):
+        """Write the file header.
+
+        If your file format defines a header, you should implement this method
+        in order to write the header before any of the records.
+
+        The default implementation checks the private attribute ._header_written
+        to ensure the header is only written once.
+        """
         assert not self._header_written, "You have aleady called write_header()"
         assert not self._record_written, "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
 
     def write_footer(self):
+        """Write the file footer.
+
+        If your file format defines a footer, you should implement this method
+        in order to write the footer after all the records.
+
+        The default implementation checks the private attribute ._footer_written
+        to ensure the footer is only written once.
+        """
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"

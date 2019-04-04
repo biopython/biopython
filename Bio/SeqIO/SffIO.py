@@ -1175,6 +1175,7 @@ class SffWriter(SequenceWriter):
         handle.seek(offset)  # not essential?
 
     def write_header(self):
+        """Write the SFF file header."""
         # Do header...
         key_length = len(self._key_sequence)
         # file header (part one)

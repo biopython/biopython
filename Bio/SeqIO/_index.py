@@ -39,6 +39,8 @@ from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 
 class SeqFileRandomAccess(_IndexedSeqFileProxy):
+    """Base class for defining random access to sequence files."""
+
     def __init__(self, filename, format, alphabet):
         """Initialize the class."""
         self._handle = _open_for_random_access(filename)
@@ -140,6 +142,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         SeqIO.SffIO._check_eof(handle, index_offset, index_length)
 
     def get(self, offset):
+        """Return the SeqRecord starting at the given offset."""
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_seq_record(handle,
@@ -156,7 +159,10 @@ class SffRandomAccess(SeqFileRandomAccess):
 
 
 class SffTrimedRandomAccess(SffRandomAccess):
+    """Random access to an SFF file with defined trimming applied to each sequence."""
+
     def get(self, offset):
+        """Return the SeqRecord starting at the given offset."""
         handle = self._handle
         handle.seek(offset)
         return SeqIO.SffIO._sff_read_seq_record(handle,
@@ -172,6 +178,8 @@ class SffTrimedRandomAccess(SffRandomAccess):
 ###################
 
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
+    """Random access to a simple sequential sequence file."""
+
     def __init__(self, filename, format, alphabet):
         """Initialize the class."""
         SeqFileRandomAccess.__init__(self, filename, format, alphabet)
@@ -461,6 +469,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         return b"".join(data)
 
     def get(self, offset):
+        """Return the SeqRecord starting at the given offset."""
         # TODO - Can we handle this directly in the parser?
         # This is a hack - use get_raw for <entry>...</entry> and wrap it with
         # the apparently required XML header and footer.
