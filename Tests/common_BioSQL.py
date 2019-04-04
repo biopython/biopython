@@ -758,6 +758,7 @@ class DupLoadTest(unittest.TestCase):
             # Note we don't do a specific exception handler because the
             # exception class will depend on which DB back end is in use.
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "UniqueViolation",
                                                        "AttributeError",
                                                        "OperationalError"],
                             err.__class__.__name__)
@@ -775,6 +776,7 @@ class DupLoadTest(unittest.TestCase):
         except Exception as err:
             # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "UniqueViolation",
                                                        "AttributeError"],
                             err.__class__.__name__)
             return
@@ -791,6 +793,7 @@ class DupLoadTest(unittest.TestCase):
         except Exception as err:
             # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "UniqueViolation",
                                                        "AttributeError"],
                             err.__class__.__name__)
             return
@@ -1005,6 +1008,7 @@ class InDepthLoadTest(unittest.TestCase):
         except Exception as err:
             # Good!
             self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "UniqueViolation",
                                                        "AttributeError"],
                             err.__class__.__name__)
             return
