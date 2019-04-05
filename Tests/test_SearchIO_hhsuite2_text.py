@@ -52,6 +52,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(99.95, hsp.prob)
         self.assertEqual(210.31, hsp.score)
         self.assertEqual(3.7e-34, hsp.evalue)
@@ -84,6 +85,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(2.6, hsp.evalue)
         self.assertEqual(25.90, hsp.score)
         self.assertEqual(40.43, hsp.prob)
@@ -142,6 +144,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(3.4E+04, hsp.evalue)
         self.assertEqual(-0.01, hsp.score)
         self.assertEqual(0.04, hsp.prob)
@@ -168,6 +171,7 @@ class HhsuiteCases(unittest.TestCase):
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
 
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(3.6e+04, hsp.evalue)
         self.assertEqual(0.03, hsp.score)
         self.assertEqual(0.03, hsp.prob)
@@ -206,6 +210,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(2.1e-48, hsp.evalue)
         self.assertEqual(320.44, hsp.score)
         self.assertEqual(100.00, hsp.prob)
@@ -236,6 +241,7 @@ class HhsuiteCases(unittest.TestCase):
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
 
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(3.3e-05, hsp.evalue)
         self.assertEqual(51.24, hsp.score)
         self.assertEqual(96.55, hsp.prob)
@@ -272,6 +278,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(2e-106, hsp.evalue)
         self.assertEqual(822.75, hsp.score)
         self.assertEqual(100.00, hsp.prob)
@@ -307,6 +314,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(78, hsp.evalue)
         self.assertEqual(19.81, hsp.score)
         self.assertEqual(20.88, hsp.prob)
@@ -343,6 +351,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(6.8e-32, hsp.evalue)
         self.assertEqual(194.63, hsp.score)
         self.assertEqual(99.94, hsp.prob)
@@ -375,6 +384,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(6.7, hsp.evalue)
         self.assertEqual(20.51, hsp.score)
         self.assertEqual(52.07, hsp.prob)
@@ -412,6 +422,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = hit.hsps[0]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(0, hsp.output_index)
         self.assertEqual(9.9e-102, hsp.evalue)
         self.assertEqual(792.76, hsp.score)
         self.assertEqual(100.00, hsp.prob)
@@ -448,6 +459,7 @@ class HhsuiteCases(unittest.TestCase):
 
         hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
         self.assertTrue(hsp.is_included)
+        self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(3.9e+02, hsp.evalue)
         self.assertEqual(22.84, hsp.score)
         self.assertEqual(21.56, hsp.prob)

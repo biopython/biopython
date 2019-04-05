@@ -3,7 +3,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Bio.SearchIO parser for HHSUITE version 2 plain text output format."""
+"""Bio.SearchIO parser for HHSUITE version 2 and 3 plain text output format."""
 
 import re
 from collections import OrderedDict
@@ -41,7 +41,7 @@ MAX_READ_UNTIL = 5000
 
 
 class Hhsuite2TextParser(object):
-    """Parser for the HMMER 3.0 text output."""
+    """Parser for the HHSUITE version 2 and 3 text output."""
 
     def __init__(self, handle):
         """Initialize the class."""
@@ -192,7 +192,7 @@ class Hhsuite2TextParser(object):
         query_id = self.query_id
         hit_dict = OrderedDict()
 
-        for block in hit_blocks:
+        for output_index, block in enumerate(hit_blocks):
             hit_id = block['hit_id']
 
             frag = HSPFragment(hit_id, query_id)
@@ -206,6 +206,7 @@ class Hhsuite2TextParser(object):
 
             hsp = HSP([frag])
             hsp.hit_id = hit_id
+            hsp.output_index = output_index
             hsp.query_id = query_id
             hsp.hit_description = block['description']
             is_included = True  # Should everything should be included?
