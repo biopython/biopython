@@ -83,7 +83,7 @@ class HhsuiteCases(unittest.TestCase):
         num_hsps = 32
         self.assertEqual(num_hsps, len(qresult.hsps))
 
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(2.6, hsp.evalue)
@@ -168,7 +168,7 @@ class HhsuiteCases(unittest.TestCase):
         # Check we can get the original last HSP from the file.
         num_hsps = num_hits
         self.assertEqual(num_hsps, len(qresult.hsps))
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
 
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
@@ -238,7 +238,7 @@ class HhsuiteCases(unittest.TestCase):
         # Check we can get the original last HSP from the file.
         num_hsps = num_hits
         self.assertEqual(num_hsps, len(qresult.hsps))
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
 
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
@@ -312,7 +312,7 @@ class HhsuiteCases(unittest.TestCase):
         num_hsps = 16
         self.assertEqual(num_hsps, len(qresult.hsps))
 
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(78, hsp.evalue)
@@ -382,7 +382,7 @@ class HhsuiteCases(unittest.TestCase):
         num_hsps = num_hits
         self.assertEqual(num_hsps, len(qresult.hsps))
 
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(6.7, hsp.evalue)
@@ -457,7 +457,7 @@ class HhsuiteCases(unittest.TestCase):
         num_hsps = 34
         self.assertEqual(num_hsps, len(qresult.hsps))
 
-        hsp = sorted(qresult.hsps, key=lambda hsp: hsp.prob, reverse=True)[-1]
+        hsp = qresult.hsps[-1]
         self.assertTrue(hsp.is_included)
         self.assertEqual(num_hsps - 1, hsp.output_index)
         self.assertEqual(3.9e+02, hsp.evalue)
