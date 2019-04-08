@@ -161,6 +161,13 @@ Pairwise sequence aligner with parameters
         with self.assertRaises(TypeError):
             aligner.query_end_gap_score = 'wrong'
 
+    def test_aligner_nonexisting_property(self):
+        aligner = Align.PairwiseAligner()
+        with self.assertRaises(AttributeError):
+            aligner.no_such_property
+        with self.assertRaises(AttributeError):
+            aligner.no_such_property = 1
+
 
 class TestPairwiseGlobal(unittest.TestCase):
 
