@@ -37,7 +37,7 @@ class AlignmentColumnFullException(Exception):
 
 
 class Alignment(list):
-    """Define a container for all alignment Columns, output from running pws."""
+    """Define a container for all alignment Columns, output from running psw."""
 
     def append(self, column_unit):
         """Add an alignment Column to Alignment."""
