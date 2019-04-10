@@ -31,11 +31,16 @@ _OPTION_SCORES = "-m"
 
 
 class AlignmentColumnFullException(Exception):
+    """Manage exception in the alignment output."""
+
     pass
 
 
 class Alignment(list):
+    """Define a container for all alignment Columns, output from running pws."""
+
     def append(self, column_unit):
+        """Add an alignment Column to Alignment."""
         try:
             self[-1].append(column_unit)
         except AlignmentColumnFullException:
@@ -45,6 +50,8 @@ class Alignment(list):
 
 
 class AlignmentColumn(list):
+    """Define a container for the units that made the Column."""
+
     def _set_kind(self, column_unit):
         if self.kind == "SEQUENCE":
             self.kind = column_unit.kind
@@ -59,6 +66,7 @@ class AlignmentColumn(list):
         return "%s(%s, %s)" % (self.kind, self[0], self[1])
 
     def append(self, column_unit):
+        """Add a unit to the Column."""
         if self[1] is not None:
             raise AlignmentColumnFullException
 
@@ -69,6 +77,8 @@ class AlignmentColumn(list):
 
 
 class ColumnUnit(object):
+    """Define a container for the details of each sequence alignment."""
+
     def __init__(self, unit, column, kind):
         """Initialize the class."""
         self.unit = unit
@@ -133,7 +143,7 @@ def align(pair,
           gap_start=None,
           gap_extension=None,
           *args, **keywds):
-
+    """Align a pair of DNA files using Wise2 psw."""
     cmdline = _CMDLINE_PSW[:]
     if scores:
         cmdline.extend((_OPTION_SCORES, scores))
@@ -146,6 +156,7 @@ def align(pair,
 
 
 def main():
+    """Command line implementation."""
     print(align(sys.argv[1:3]))
 
 
