@@ -38,6 +38,10 @@ only the aligned section of the sequences are shown, together with the start
 positions of the sequences (in 1-based notation). Alignments of lists will now
 also be prettily printed.
 
+``Bio.SearchIO`` now supports parsing the text output of the HHsuite protein
+sequence search tool. The format name is ``hhsuite2-text`` and
+``hhsuite3-text``, for versions 2 and 3 of HHsuite, respectively.
+
 ``Bio.SearchIO`` HSP objects has a new attribute called ``output_index``. This
 attribute is meant for capturing the order by which the HSP were output in the
 parsed file and is set with a default value of -1 for all HSP objects. It is
@@ -50,6 +54,7 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Jens Thomas (first contribution)
 - Lenna Peterson
 - Markus Piotrowski
 - Nick Negretti
