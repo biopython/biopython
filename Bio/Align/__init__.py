@@ -22,9 +22,12 @@ from Bio import Alphabet
 try:
     from Bio.Align import _aligners
 except ImportError as e:
-    new_exc = ImportError("{}: you should not import directly from the "
-                          "biopython source directory; please exit the source "
-                          "tree and re-launch your code from there".format(e))
+    new_exc = ImportError("{}: you are possibly missing a compiled "
+                          "'_aligners.c' file (_aligners.pyd or _aligners.so);"
+                          " have you installed from source? Are you trying to "
+                          "import from within the Biopython source directory? "
+                          "Try running your code from outside the source tree".
+                          format(e))
     new_exc.__cause__ = None
     raise new_exc
 
