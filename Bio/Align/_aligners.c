@@ -1824,79 +1824,79 @@ Aligner_str(Aligner* self)
     n = sprintf(text, "Pairwise sequence aligner with parameters\n");
     p += n;
     if (self->letters) {
-        n = sprintf(p, "  match/mismatch score: <substitution matrix>\n");
+        n = sprintf(p, "  match/mismatch_score: <substitution matrix>\n");
         p += n;
     } else {
-        n = sprintf(p, "  match score: %f\n", self->match);
+        n = sprintf(p, "  match_score: %f\n", self->match);
         p += n;
-        n = sprintf(p, "  mismatch score: %f\n", self->mismatch);
+        n = sprintf(p, "  mismatch_score: %f\n", self->mismatch);
         p += n;
     }
     if (self->target_gap_function) {
 #if PY_MAJOR_VERSION >= 3
-        n = sprintf(p, "  target gap function: %%R\n");
+        n = sprintf(p, "  target_gap_function: %%R\n");
         p += n;
 #else
         char* s;
         PyObject* representation = PyObject_Repr(self->target_gap_function);
         if (!representation) return PyErr_NoMemory();
         s = PyString_AsString(representation);
-        n = sprintf(p, "  target gap function: %s\n", s);
+        n = sprintf(p, "  target_gap_function: %s\n", s);
         p += n;
         Py_DECREF(representation);
 #endif
     }
     else {
-        n = sprintf(p, "  target open gap score: %f\n",
+        n = sprintf(p, "  target_open_gap_score: %f\n",
                        self->target_open_gap_score);
         p += n;
-        n = sprintf(p, "  target extend gap score: %f\n",
+        n = sprintf(p, "  target_extend_gap_score: %f\n",
                        self->target_extend_gap_score);
         p += n;
-        n = sprintf(p, "  target left open gap score: %f\n",
+        n = sprintf(p, "  target_left_open_gap_score: %f\n",
                        self->target_left_open_gap_score);
         p += n;
-        n = sprintf(p, "  target left extend gap score: %f\n",
+        n = sprintf(p, "  target_left_extend_gap_score: %f\n",
                        self->target_left_extend_gap_score);
         p += n;
-        n = sprintf(p, "  target right open gap score: %f\n",
+        n = sprintf(p, "  target_right_open_gap_score: %f\n",
                        self->target_right_open_gap_score);
         p += n;
-        n = sprintf(p, "  target right extend gap score: %f\n",
+        n = sprintf(p, "  target_right_extend_gap_score: %f\n",
                        self->target_right_extend_gap_score);
         p += n;
     }
     if (self->query_gap_function) {
 #if PY_MAJOR_VERSION >= 3
-        n = sprintf(p, "  query gap function: %%R\n");
+        n = sprintf(p, "  query_gap_function: %%R\n");
         p += n;
 #else
         char* s;
         PyObject* representation = PyObject_Repr(self->query_gap_function);
         if (!representation) return PyErr_NoMemory();
         s = PyString_AsString(representation);
-        n = sprintf(p, "  query gap function: %s\n", s);
+        n = sprintf(p, "  query_gap_function: %s\n", s);
         p += n;
         Py_DECREF(representation);
 #endif
     }
     else {
-        n = sprintf(p, "  query open gap score: %f\n",
+        n = sprintf(p, "  query_open_gap_score: %f\n",
                        self->query_open_gap_score);
         p += n;
-        n = sprintf(p, "  query extend gap score: %f\n",
+        n = sprintf(p, "  query_extend_gap_score: %f\n",
                        self->query_extend_gap_score);
         p += n;
-        n = sprintf(p, "  query left open gap score: %f\n",
+        n = sprintf(p, "  query_left_open_gap_score: %f\n",
                        self->query_left_open_gap_score);
         p += n;
-        n = sprintf(p, "  query left extend gap score: %f\n",
+        n = sprintf(p, "  query_left_extend_gap_score: %f\n",
                        self->query_left_extend_gap_score);
         p += n;
-        n = sprintf(p, "  query right open gap score: %f\n",
+        n = sprintf(p, "  query_right_open_gap_score: %f\n",
                        self->query_right_open_gap_score);
         p += n;
-        n = sprintf(p, "  query right extend gap score: %f\n",
+        n = sprintf(p, "  query_right_extend_gap_score: %f\n",
                        self->query_right_extend_gap_score);
         p += n;
     }
@@ -1970,10 +1970,10 @@ Aligner_set_mode(Aligner* self, PyObject* value, void* closure)
     return -1;
 }
 
-static char Aligner_match__doc__[] = "match score";
+static char Aligner_match_score__doc__[] = "match score";
 
 static PyObject*
-Aligner_get_match(Aligner* self, void* closure)
+Aligner_get_match_score(Aligner* self, void* closure)
 {   if (self->letters) {
         PyErr_SetString(PyExc_ValueError, "using a substitution matrix");
         return NULL;
@@ -1982,7 +1982,7 @@ Aligner_get_match(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_match(Aligner* self, PyObject* value, void* closure)
+Aligner_set_match_score(Aligner* self, PyObject* value, void* closure)
 {   int i;
     const int n = 26;
     const double match = PyFloat_AsDouble(value);
@@ -2001,10 +2001,10 @@ Aligner_set_match(Aligner* self, PyObject* value, void* closure)
     return 0;
 }
 
-static char Aligner_mismatch__doc__[] = "mismatch score";
+static char Aligner_mismatch_score__doc__[] = "mismatch score";
 
 static PyObject*
-Aligner_get_mismatch(Aligner* self, void* closure)
+Aligner_get_mismatch_score(Aligner* self, void* closure)
 {   if (self->letters) {
         PyErr_SetString(PyExc_ValueError, "using a substitution matrix");
         return NULL;
@@ -2013,7 +2013,7 @@ Aligner_get_mismatch(Aligner* self, void* closure)
 }
 
 static int
-Aligner_set_mismatch(Aligner* self, PyObject* value, void* closure)
+Aligner_set_mismatch_score(Aligner* self, PyObject* value, void* closure)
 {   int i, j;
     const int n = 26;
     const double mismatch = PyFloat_AsDouble(value);
@@ -3811,14 +3811,22 @@ static PyGetSetDef Aligner_getset[] = {
         (getter)Aligner_get_mode,
         (setter)Aligner_set_mode,
         Aligner_mode__doc__, NULL},
-    {"match",
-        (getter)Aligner_get_match,
-        (setter)Aligner_set_match,
-        Aligner_match__doc__, NULL},
-    {"mismatch",
-        (getter)Aligner_get_mismatch,
-        (setter)Aligner_set_mismatch,
-        Aligner_mismatch__doc__, NULL},
+    {"match_score",
+        (getter)Aligner_get_match_score,
+        (setter)Aligner_set_match_score,
+        Aligner_match_score__doc__, NULL},
+    {"mismatch_score",
+        (getter)Aligner_get_mismatch_score,
+        (setter)Aligner_set_mismatch_score,
+        Aligner_mismatch_score__doc__, NULL},
+    {"match", /* synonym for match_score */
+        (getter)Aligner_get_match_score,
+        (setter)Aligner_set_match_score,
+        Aligner_match_score__doc__, NULL},
+    {"mismatch", /* synonym for mismatch_score */
+        (getter)Aligner_get_mismatch_score,
+        (setter)Aligner_set_mismatch_score,
+        Aligner_mismatch_score__doc__, NULL},
     {"substitution_matrix",
         (getter)Aligner_get_substitution_matrix,
         (setter)Aligner_set_substitution_matrix,

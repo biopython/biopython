@@ -1668,20 +1668,20 @@ for the pairwise alignments. To see an overview of the values for all parameters
 \begin{verbatim}
 >>> print(aligner)
 Pairwise sequence aligner with parameters
-  match score: 1.000000
-  mismatch score: 0.000000
-  target open gap score: 0.000000
-  target extend gap score: 0.000000
-  target left open gap score: 0.000000
-  target left extend gap score: 0.000000
-  target right open gap score: 0.000000
-  target right extend gap score: 0.000000
-  query open gap score: 0.000000
-  query extend gap score: 0.000000
-  query left open gap score: 0.000000
-  query left extend gap score: 0.000000
-  query right open gap score: 0.000000
-  query right extend gap score: 0.000000
+  match_score: 1.000000
+  mismatch_score: 0.000000
+  target_open_gap_score: 0.000000
+  target_extend_gap_score: 0.000000
+  target_left_open_gap_score: 0.000000
+  target_left_extend_gap_score: 0.000000
+  target_right_open_gap_score: 0.000000
+  target_right_extend_gap_score: 0.000000
+  query_open_gap_score: 0.000000
+  query_extend_gap_score: 0.000000
+  query_left_open_gap_score: 0.000000
+  query_left_extend_gap_score: 0.000000
+  query_right_open_gap_score: 0.000000
+  query_right_extend_gap_score: 0.000000
   mode: local
 <BLANKLINE>
 \end{verbatim}
@@ -1716,14 +1716,14 @@ object:
 \begin{verbatim}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
->>> aligner.match
+>>> aligner.match_score
 1.0
->>> aligner.mismatch
+>>> aligner.mismatch_score
 0.0
 >>> score = aligner.score("AAA","AAC")
 >>> print(score)
 2.0
->>> aligner.match = 2.0
+>>> aligner.match_score = 2.0
 >>> score = aligner.score("AAA","AAC")
 >>> print(score)
 4.0
@@ -1736,9 +1736,9 @@ Alternatively, you can specify a substitution matrix as follows:
 >>> aligner.substitution_matrix = matrix
 \end{verbatim}
 
-The attributes \verb+aligner.match+ and \verb+aligner.mismatch+ are ignored
-if \verb+aligner.substitution_matrix+ is specified. Likewise, after specifying
-\verb+aligner.match+ or \verb+aligner.mismatch+,
+The attributes \verb+aligner.match_score+ and \verb+aligner.mismatch_score+ are
+ignored if \verb+aligner.substitution_matrix+ is specified. Likewise, after
+specifying \verb+aligner.match_score+ or \verb+aligner.mismatch_score+,
 \verb+aligner.substitution_matrix+  will be ignored.
 
 Note that \verb+aligner.substitution_matrix+ will return a copy of the
@@ -1792,22 +1792,22 @@ These attributes allow for different gap scores for internal gaps and on either 
 A & - &  query left open gap score \\
 C & - &  query left extend gap score \\
 C & - &  query left extend gap score \\
-G & G &  match \\
-G & T &  mismatch \\
+G & G &  match score \\
+G & T &  mismatch score \\
 G & - &  query internal open gap score \\
 A & - &  query internal extend gap score \\
 A & - &  query internal extend gap score \\
-T & T &  match \\
-A & A &  match \\
+T & T &  match score \\
+A & A &  match score \\
 G & - &  query internal open gap score \\
-C & C &  match \\
+C & C &  match score \\
 - & C &  target internal open gap score \\
 - & C &  target internal extend gap score \\
-C & C &  match \\
-T & G &  mismatch \\
-C & C &  match \\
+C & C &  match score \\
+T & G &  mismatch score \\
+C & C &  match score \\
 - & C &  target internal open gap score \\
-A & A &  match \\
+A & A &  match score \\
 - & T &  target right open gap score \\
 - & A &  target right extend gap score \\
 - & A &  target right extend gap score
@@ -2060,7 +2060,7 @@ G-A-T
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
 %cont-doctest
 \begin{verbatim}
->>> aligner.mismatch = -10
+>>> aligner.mismatch_score = -10
 >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
 >>> len(alignments)
 2
