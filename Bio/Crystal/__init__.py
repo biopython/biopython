@@ -7,7 +7,7 @@
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
-The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
+The NDB web interface is located at http://ndbserver.rutgers.edu
 """
 
 import copy
@@ -24,7 +24,7 @@ class CrystalError(Exception):
 
 
 def wrap_line(line):
-    """Add end of line."""
+    """Add end of line at character eighty, to match PDB record standard."""
     output = ''
     for i in range(0, len(line), 80):
         output += '%s\n' % line[i: i + 80]
@@ -43,7 +43,7 @@ class Hetero(object):
     """Class to support the PDB hetero codes.
 
     Supports only the 3 alphanumeric code.
-    The annotation is available from http://alpha2.bmc.uu.se/hicup/
+    The annotation is available from http://xray.bmc.uu.se/hicup/
     """
 
     def __init__(self, data):
