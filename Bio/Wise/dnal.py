@@ -105,6 +105,7 @@ class Statistics(object):
             self.coords = [(0, 0), (0, 0)]
 
     def identity_fraction(self):
+        """Calculate the fraction of matches."""
         return self.matches / (self.matches + self.mismatches)
 
     header = "identity_fraction\tmatches\tmismatches\tgaps\textensions"
@@ -116,6 +117,7 @@ class Statistics(object):
 
 
 def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION, **keywds):
+    """Align a pair of DNA files using dnal and calculate the statistics of the alignment."""
     cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
     temp_file = Wise.align(cmdline, pair, **keywds)
     try:
@@ -129,6 +131,7 @@ def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_STA
 
 
 def main():
+    """Command line implementation."""
     import sys
     stats = align(sys.argv[1:3])
     print("\n".join("%s: %s" % (attr, getattr(stats, attr))
