@@ -191,6 +191,7 @@ class SeqMap(object):
             self.res.append(r)
 
     def index(self, resid, chainid="_"):
+        """Return the index of the SeqMap for the given resid and chainid."""
         for i in range(0, len(self.res)):
             if self.res[i].resid == resid and self.res[i].chainid == chainid:
                 return i
