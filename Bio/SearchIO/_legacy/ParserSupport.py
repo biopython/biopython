@@ -31,12 +31,15 @@ class AbstractParser(object):
     """Base class for other parsers."""
 
     def parse(self, handle):
+        """Provision for parsing a file handle."""
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
+        """Make string a handle, so it can be taken by parse."""
         return self.parse(StringIO(string))
 
     def parse_file(self, filename):
+        """Parse a file, open the file as handle so it can be taken by parse."""
         with open(filename) as h:
             retval = self.parse(h)
         return retval
@@ -93,9 +96,11 @@ class TaggingConsumer(AbstractConsumer):
         self._maxwidth = maxwidth
 
     def unhandled_section(self):
+        """Tag an unhandled section."""
         self._print_name('unhandled_section')
 
     def unhandled(self, data):
+        """Tag unhandled data."""
         self._print_name('unhandled', data)
 
     def _print_name(self, name, data=None):
