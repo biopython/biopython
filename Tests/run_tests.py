@@ -83,7 +83,6 @@ VERBOSITY = 0
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
     'Bio.AlignIO.MauveIO',
-    'Bio.Cluster',
     'Bio.Data.CodonTable',
     'Bio.ExPASy',
     'Bio.ExPASy.cellosaurus',
