@@ -40,9 +40,9 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda
-# Pinning pillow==5.4 as version 6 breaks on current latest reportlab
+# Pinning pillow==5.4.1 as version 6 breaks on current latest reportlab
 # https://bitbucket.org/rptlab/reportlab/issues/176/incompatibility-with-pillow-600
-  - conda install setuptools numpy mysql-connector-python psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4
+  - conda install setuptools numpy mysql-connector-python psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
   - if "PY_MAJOR_VER"=="2" conda install unittest2
   - python setup.py build
 
