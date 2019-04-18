@@ -42,12 +42,6 @@ ignore =
     D200,D202,D204,
     # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ================================
-    # pydocstyle: D3## - Quotes Issues
-    # ================================
-    # D300  Use """triple double quotes"""
-    # TODO: Fix this:
-    D300,
     # ===========================================
     # pydocstyle: D4## - Docstring Content Issues
     # ===========================================
