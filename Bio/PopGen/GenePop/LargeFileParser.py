@@ -18,6 +18,7 @@ Functions:
 
 
 def get_indiv(line):
+    """Get individual's data from line."""
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
     markers = [marker for marker in markers if marker != '']
@@ -98,6 +99,7 @@ class Record(object):
         self.stack = []
 
     def data_generator(self):
+        """Extract population data."""
         for handle in [self.stack, self.handle]:
             for line in handle:
                 line = line.rstrip()

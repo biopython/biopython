@@ -207,6 +207,8 @@ class _GenePopCommandline(AbstractCommandline):
 
 
 class GenePopController(object):
+    """Define a class to interface with the GenePop program."""
+
     def __init__(self, genepop_dir=None):
         """Initialize the controller.
 
@@ -413,6 +415,7 @@ class GenePopController(object):
     # 2.1
     def test_ld(self, fname, dememorization=10000,
                 batches=20, iterations=5000):
+        """Test for linkage disequilibrium on each pair of loci in each population."""
         opts = self._get_opts(dememorization, batches, iterations)
         self._run_genepop([".DIS"], [2, 1], fname, opts)
 
@@ -463,30 +466,49 @@ class GenePopController(object):
 
     # 2.2
     def create_contingency_tables(self, fname):
+        """Provision for creating Genotypic contingency tables."""
         raise NotImplementedError
 
     # 3.1 PR/GE files
     def test_genic_diff_all(self, fname, dememorization=10000,
                             batches=20, iterations=5000):
+        """Provision for Genic differentiation for all populations."""
         raise NotImplementedError
 
     # 3.2 PR2/GE2 files
     def test_genic_diff_pair(self, fname, dememorization=10000,
                              batches=20, iterations=5000):
+        """Provision for Genic differentiation for all population pairs."""
         raise NotImplementedError
 
     # 3.3 G files
     def test_genotypic_diff_all(self, fname, dememorization=10000,
                                 batches=20, iterations=5000):
+        """Provision for Genotypic differentiation for all populations."""
         raise NotImplementedError
 
     # 3.4 2G2 files
     def test_genotypic_diff_pair(self, fname, dememorization=10000,
                                  batches=20, iterations=5000):
+        """Provision for Genotypic differentiation for all population pairs."""
         raise NotImplementedError
 
     # 4
     def estimate_nm(self, fname):
+        """Estimate the Number of Migrants.
+
+        Parameters:
+         - fname - file name
+
+        Returns
+         - Mean sample size
+         - Mean frequency of private alleles
+         - Number of migrants for Ne=10
+         - Number of migrants for Ne=25
+         - Number of migrants for Ne=50
+         - Number of migrants after correcting for expected size
+
+        """
         self._run_genepop(["PRI"], [4], fname)
         with open(fname + ".PRI") as f:
             lines = f.readlines()  # Small file, it is ok
@@ -698,10 +720,12 @@ class GenePopController(object):
 
     # 5.2
     def calc_diversities_fis_with_identity(self, fname):
+        """Compute identity-base Gene diversities and Fis."""
         return self._calc_diversities_fis(fname, ".DIV")
 
     # 5.3
     def calc_diversities_fis_with_size(self, fname):
+        """Provision to Computer Allele size-based Gene diversities and Fis."""
         raise NotImplementedError
 
     # 6.1 Less genotype frequencies
@@ -782,6 +806,7 @@ class GenePopController(object):
 
     # 6.2
     def calc_fst_pair(self, fname):
+        """Estimate spatial structure from Allele identity for all population pairs."""
         self._run_genepop([".ST2", ".MIG"], [6, 2], fname)
         with open(fname + ".ST2") as f:
             line = f.readline()
@@ -809,10 +834,12 @@ class GenePopController(object):
 
     # 6.3
     def calc_rho_all(self, fname):
+        """Provision for estimating spatial structure from Allele size for all populations."""
         raise NotImplementedError
 
     # 6.4
     def calc_rho_pair(self, fname):
+        """Provision for estimating spatial structure from Allele size for all population pairs."""
         raise NotImplementedError
 
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
