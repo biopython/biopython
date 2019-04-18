@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for the Bio.phenotype module's fitting functionality."""
 
 try:
     import numpy
@@ -35,9 +36,10 @@ JSON_PLATE = 'phenotype/Plate.json'
 
 
 class TestPhenoMicro(unittest.TestCase):
+    """Tests for phenotype module."""
 
     def test_WellRecord(self):
-        '''Test basic functionalities of WellRecord objects'''
+        """Test basic functionalities of WellRecord objects."""
         with open(JSON_PLATE) as handle:
             p = json.load(handle)
 

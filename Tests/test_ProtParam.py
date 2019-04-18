@@ -5,6 +5,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.SeqUtils.ProtParam and related code."""
 
 import unittest
 from Bio.Seq import Seq
@@ -14,59 +15,62 @@ from Bio.SeqUtils import molecular_weight
 
 
 class ProtParamTest(unittest.TestCase):
+    """Tests for ProtParam."""
+
     def setUp(self):
+        """Initialise objects."""
         self.seq_text = "MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text)
 
     def test_count_amino_acids(self):
-        "Test getting amino acid counts"
+        """Calculating amino acid counts."""
         count_dict = self.analysis.count_amino_acids()
         for i in sorted(count_dict):
             self.assertEqual(count_dict[i], self.seq_text.count(i))
 
     def test_get_amino_acids_percent(self):
-        "Test getting amino acid percentage"
+        """Calculating amino acid percentages."""
         percent_dict = self.analysis.get_amino_acids_percent()
         seq_len = len(self.seq_text)
         for i in sorted(percent_dict):
             self.assertAlmostEqual(percent_dict[i], self.seq_text.count(i) / float(seq_len))
 
     def test_get_molecular_weight(self):
-        "Test calculating protein molecular weight"
+        """Calculating protein molecular weight."""
         self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
                                17103.16)
 
     def test_get_monoisotopic_molecular_weight(self):
-        "Test calculating the monoisotopic molecular weight"
+        """Calculating monoisotopic molecular weight."""
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
         self.assertAlmostEqual(round(self.analysis.molecular_weight(), 2),
                                17092.61)
 
     def test_get_molecular_weight_identical(self):
-        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
+        """Calculating the protein molecular weight agrees with calculation from Bio.SeqUtils."""
         mw_1 = self.analysis.molecular_weight()
         mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein))
         self.assertAlmostEqual(mw_1, mw_2)
 
     def test_get_monoisotopic_molecular_weight_identical(self):
-        "Test calculating the protein molecular weight agrees with calculation from Bio.SeqUtils"
+        """Calculating the protein molecular weight agrees with calculation from Bio.SeqUtils."""
         self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
         mw_1 = self.analysis.molecular_weight()
         mw_2 = molecular_weight(Seq(self.seq_text, IUPAC.protein), monoisotopic=True)
         self.assertAlmostEqual(mw_1, mw_2)
 
     def test_aromaticity(self):
-        "Test calculating protein aromaticity"
+        """Calculating protein aromaticity."""
         # Old test used a number rounded to two digits, so use the same
         self.assertEqual(round(self.analysis.aromaticity(), 2), 0.10)
 
     def test_instability_index(self):
-        "Test calculating protein instability index"
+        """Calculating protein instability index."""
         # Old test used a number rounded to two digits, so use the same
         self.assertEqual(round(self.analysis.instability_index(), 2), 41.98)
 
     def test_flexibility(self):
-        "Test calculating protein flexibility"
+        """Calculating protein flexibility."""
         flexibility = self.analysis.flexibility()
         expected_flexibility = [
             0.9825119047619049, 1.0166904761904763, 0.9947857142857144,
@@ -122,12 +126,12 @@ class ProtParamTest(unittest.TestCase):
             self.assertAlmostEqual(f, e)
 
     def test_isoelectric_point(self):
-        "Test calculating the isoelectric point"
+        """Calculating the isoelectric point."""
         # Old test used a number rounded to two digits, so use the same
         self.assertAlmostEqual(round(self.analysis.isoelectric_point(), 2), 7.72)
 
     def test_secondary_structure_fraction(self):
-        "Test calculating secondary structure fractions"
+        """Calculating secondary structure fractions."""
         helix, turn, sheet = self.analysis.secondary_structure_fraction()
         # Old test used numbers rounded to two digits, so use the same
         self.assertAlmostEqual(round(helix, 2), 0.28)
@@ -135,7 +139,7 @@ class ProtParamTest(unittest.TestCase):
         self.assertAlmostEqual(round(sheet, 2), 0.25)
 
     def test_protein_scale(self):
-        "Test calculating the Kite Doolittle scale"
+        """Calculating the Kite Doolittle scale."""
         expected = [-0.0783, +0.0358, +0.1258, +0.6950, +0.8775, +0.8350, +0.2925, +0.3383,
                     -0.1733, -0.4142, -0.5292, -0.6108, -0.8308, -0.8100, -0.8208, -1.0283,
                     -1.6300, -1.8233, -2.4267, -2.2292, -1.7817, -1.4742, -0.7467, -0.1608,
@@ -159,11 +163,11 @@ class ProtParamTest(unittest.TestCase):
             self.assertAlmostEqual(i, e, places=4)
 
     def test_gravy(self):
-        "Test calculating gravy"
+        """Calculating gravy."""
         self.assertAlmostEqual(self.analysis.gravy(), -0.5974, places=4)
 
     def test_molar_extinction_coefficient(self):
-        "Test molar extinction coefficient"
+        """Molar extinction coefficient."""
         self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[0], 17420, places=5)
         self.assertAlmostEqual(self.analysis.molar_extinction_coefficient()[1], 17545, places=5)
 

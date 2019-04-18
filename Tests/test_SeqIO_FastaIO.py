@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.SeqIO.FastaIO module."""
 
 from __future__ import print_function
 
@@ -16,7 +17,7 @@ from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
 
 
 def title_to_ids(title):
-    """Function to convert a title into the id, name, and description.
+    """Convert a FASTA title line into the id, name, and description.
 
     This is just a quick-n-dirty implementation, and is definetely not meant
     to handle every FASTA title line case.
@@ -44,6 +45,7 @@ def title_to_ids(title):
 
 
 def read_single_with_titles(filename, alphabet):
+    """Parser wrapper to confirm single entry FASTA file."""
     global title_to_ids
     with open(filename) as handle:
         iterator = FastaIterator(handle, alphabet, title_to_ids)
@@ -73,9 +75,11 @@ class Wrapping(unittest.TestCase):
     """Tests for two-line-per-record FASTA variant."""
 
     def test_fails(self):
+        """Test case which should fail."""
         self.assertRaises(ValueError, SeqIO.read, "Fasta/aster.pro", "fasta-2line")
 
     def test_passes(self):
+        """Test case which should pass."""
         expected = SeqIO.read("Fasta/aster.pro", "fasta")
 
         record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta")
@@ -92,10 +96,13 @@ class Wrapping(unittest.TestCase):
 
 
 class TitleFunctions(unittest.TestCase):
-    """Cunning unit test where methods are added at run time."""
+    """Test using title functions.
+
+    This is a dynamic class where methods are added at run time.
+    """
 
     def simple_check(self, filename, alphabet):
-        """Basic test for parsing single record FASTA files."""
+        """Test parsing single record FASTA files."""
         title, seq = read_title_and_seq(filename)  # crude parser
         # First check using Bio.SeqIO.FastaIO directly with title function,
         record = read_single_with_titles(filename, alphabet)
@@ -116,7 +123,7 @@ class TitleFunctions(unittest.TestCase):
         # print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
-        """Basic test for parsing multi-record FASTA files."""
+        """Test parsing multi-record FASTA files."""
         with open(filename) as handle:
             re_titled = list(FastaIterator(handle, alphabet, title_to_ids))
         default = list(SeqIO.parse(filename, "fasta", alphabet))
@@ -168,7 +175,7 @@ class TestSimpleFastaParsers(unittest.TestCase):
                          [("", ""), ("1", ""), ("2", "")]]
 
     def test_regular_SimpleFastaParser(self):
-        """"Test regular SimpleFastaParser cases."""
+        """Test regular SimpleFastaParser cases."""
         for inp, out in zip(self.ins_two_line, self.outs_two_line):
             handle1 = StringIO(inp)
             handle2 = StringIO(inp + '\n')
@@ -227,7 +234,8 @@ for filename in single_nucleic_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.simple_check(fn, generic_nucleotide)
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
 
@@ -238,7 +246,8 @@ for filename in multi_dna_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.multi_check(fn, generic_dna)
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
 
@@ -249,7 +258,8 @@ for filename in single_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.simple_check(fn, generic_nucleotide)
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
         f.__doc__ = "Checking protein file %s" % fn
         return f
 
@@ -260,7 +270,8 @@ for filename in multi_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.multi_check(fn, generic_dna)
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
 
