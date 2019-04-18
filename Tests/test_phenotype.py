@@ -3,9 +3,11 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for the Bio.phenotype module."""
 
 try:
     import numpy
+    del numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(
@@ -36,9 +38,10 @@ CSV_PLATES = 'phenotype/Plates.csv'
 
 
 class TestPhenoMicro(unittest.TestCase):
+    """Tests for phenotype support."""
 
     def test_phenotype_IO_errors(self):
-        '''Test bad arguments to phenotype IO methods'''
+        """Test bad arguments to phenotype IO methods."""
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-csv')
         self.assertRaises(ValueError, phenotype.read, CSV_PLATES, 'pm-json')
         self.assertRaises(
@@ -51,7 +54,7 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(KeyError, phenotype.read, JSON_BAD, 'pm-json')
 
     def test_phenotype_IO(self):
-        '''Test basic functionalities of phenotype IO methods'''
+        """Test basic functionalities of phenotype IO methods."""
         p1 = phenotype.read(SMALL_JSON_PLATE, 'pm-json')
         p2 = next(phenotype.parse(SMALL_CSV_PLATES, 'pm-csv'))
 
@@ -83,14 +86,14 @@ class TestPhenoMicro(unittest.TestCase):
         handle.close()
 
     def test_PlateRecord_errors(self):
-        '''Test bad arguments with PlateRecord objects'''
+        """Test bad arguments with PlateRecord objects."""
         self.assertRaises(ValueError,
                           phenotype.phen_micro.PlateRecord, 'test', [1, 2, 3])
         self.assertRaises(TypeError,
                           phenotype.phen_micro.PlateRecord, 'test', 1)
 
     def test_PlateRecord(self):
-        '''Test basic functionalities of PlateRecord objects'''
+        """Test basic functionalities of PlateRecord objects."""
         with open(SMALL_JSON_PLATE) as handle:
             j = json.load(handle)
 
@@ -189,7 +192,7 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertRaises(ValueError, w.fit, "logistic")  # should be a list/tuple!
 
     def test_WellRecord(self):
-        '''Test basic functionalities of WellRecord objects'''
+        """Test basic functionalities of WellRecord objects."""
         with open(JSON_PLATE) as handle:
             p = json.load(handle)
 

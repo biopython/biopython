@@ -18,15 +18,15 @@ FMT = 'hhsuite2-text'
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
 class HhsuiteCases(unittest.TestCase):
+    """Test hhsuite2 output."""
 
     def test_2uvo(self):
-        "Test parsing 2uvo"
-
+        """Parsing 2uvo."""
         txt_file = get_file('2uvo_hhblits.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -101,8 +101,7 @@ class HhsuiteCases(unittest.TestCase):
                          str(hsp.query.seq))
 
     def test_2uvo_onlyheader(self):
-        "Test parsing 4uvo with only header present"
-
+        """Parsing 4uvo with only header present."""
         txt_file = get_file('2uvo_hhblits_onlyheader.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -110,8 +109,7 @@ class HhsuiteCases(unittest.TestCase):
             next(qresults)
 
     def test_2uvo_emptytable(self):
-        "Test parsing 4uvo with empty results table"
-
+        """Parsing 4uvo with empty results table."""
         txt_file = get_file('2uvo_hhblits_emptytable.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -119,8 +117,7 @@ class HhsuiteCases(unittest.TestCase):
             next(qresults)
 
     def test_allx(self):
-        "Test parsing allx.hhr"
-
+        """Parsing allx.hhr file."""
         txt_file = get_file('allx.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -183,8 +180,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual('X', str(hsp.query.seq))
 
     def test_4y9h_nossm(self):
-        "Test parsing 4y9h_hhsearch_server_NOssm.hhr"
-
+        """Parsing 4y9h_hhsearch_server_NOssm.hhr file."""
         txt_file = get_file('4y9h_hhsearch_server_NOssm.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -253,8 +249,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual('LALGTALMGLGTLYFLVKGMGVSDPDAKKFYAITTLVPAIAFTMYLSMLLGY', str(hsp.query.seq))
 
     def test_q9bsu1(self):
-        "Test parsing hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr"
-
+        """Parsing hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr file."""
         txt_file = get_file('hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -326,8 +321,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual('QDGIKLMFDAFNQRLKVIEVCDLT', str(hsp.query.seq))
 
     def test_4p79(self):
-        "Test parsing 4p79_hhsearch_server_NOssm.hhr"
-
+        """Parsing 4p79_hhsearch_server_NOssm.hhr file."""
         txt_file = get_file('4p79_hhsearch_server_NOssm.hhr')
         qresults = parse(txt_file, FMT)
 
@@ -396,8 +390,7 @@ class HhsuiteCases(unittest.TestCase):
         self.assertEqual('SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST', str(hsp.query.seq))
 
     def test_9590198(self):
-        "Test parsing hhpred_9590198.hhr"
-
+        """Parsing hhpred_9590198.hhr file."""
         txt_file = get_file('hhpred_9590198.hhr')
         qresults = parse(txt_file, FMT)
 

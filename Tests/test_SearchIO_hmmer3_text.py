@@ -18,15 +18,15 @@ FMT = 'hmmer3-text'
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
 class HmmscanCases(unittest.TestCase):
+    """Testing hmmscan output."""
 
     def test_31b1_hmmscan_001(self):
-        "Test parsing hmmscan 3.1b1 (text_31b1_hmmscan_001)"
-
+        """Parsing hmmscan 3.1b1 (text_31b1_hmmscan_001)."""
         txt_file = get_file('text_31b1_hmmscan_001.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -130,8 +130,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(5, counter)
 
     def test_30_hmmscan_001(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_001)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_001)."""
         txt_file = get_file('text_30_hmmscan_001.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -633,8 +632,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(5, counter)
 
     def test_30_hmmscan_002(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_002)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_002)."""
         txt_file = get_file('text_30_hmmscan_002.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -655,8 +653,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_003(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_003)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_003)."""
         txt_file = get_file('text_30_hmmscan_003.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -715,8 +712,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_004)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_004)."""
         txt_file = get_file('text_30_hmmscan_004.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -807,8 +803,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_005(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_005)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_005)."""
         txt_file = get_file('text_30_hmmscan_005.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -956,8 +951,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_006(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_006)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_006)."""
         txt_file = get_file('text_30_hmmscan_006.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1180,8 +1174,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_007(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_007)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_007)."""
         txt_file = get_file('text_30_hmmscan_007.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1366,8 +1359,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_008(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_008)"
-
+        """Parsing hmmscan 3.0 (text_30_hmmscan_008)."""
         txt_file = get_file('text_30_hmmscan_008.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1515,7 +1507,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_009(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_009)"
+        """Parsing hmmscan 3.0 (text_30_hmmscan_009)."""
         hmmer_file = get_file('text_30_hmmscan_009.out')
         qresults = parse(hmmer_file, FMT)
         counter = 0
@@ -1528,7 +1520,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual('Esterase', qresult.hits[3].id)
 
     def test_30_hmmscan_010(self):
-        "Test parsing hmmscan 3.0 (text_30_hmmscan_010)"
+        """Parsing hmmscan 3.0 (text_30_hmmscan_010)."""
         hmmer_file = get_file('text_30_hmmscan_010.out')
         qresults = list(parse(hmmer_file, FMT))
 
@@ -1548,10 +1540,10 @@ class HmmscanCases(unittest.TestCase):
 
 
 class HmmersearchCases(unittest.TestCase):
+    """Test hmmsearch output."""
 
     def test_31b2_hmmsearch_001(self):
-        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_001)"""
-
+        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_001)."""
         txt_file = get_file('text_31b2_hmmsearch_001.out')
         qresults = list(parse(txt_file, FMT))
 
@@ -1565,8 +1557,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(len(qresults[0].hits), 10)
 
     def test_31b2_hmmsearch_002(self):
-        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_002)"""
-
+        """Test parsing hmmsearch 3.1b2 (text_31b2_hmmsearch_002)."""
         txt_file = get_file('text_31b2_hmmsearch_002.out')
         qresults = list(parse(txt_file, FMT))
 
@@ -1581,8 +1572,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertListEqual([len(x.hits) for x in qresults], [10, 10])
 
     def test_31b2_hmmscan_001(self):
-        """Test parsing hmmscan 3.1b2 (text_31b2_hmmscan_001)"""
-
+        """Test parsing hmmscan 3.1b2 (text_31b2_hmmscan_001)."""
         txt_file = get_file('text_31b2_hmmscan_001.out')
         qresults = list(parse(txt_file, FMT))
 
@@ -1603,8 +1593,7 @@ class HmmersearchCases(unittest.TestCase):
             self.assertEqual("", hit.description)
 
     def test_31b1_hmmsearch_001(self):
-        """Test parsing hmmsearch 3.1b1 (text_31b1_hmmsearch_001)"""
-
+        """Test parsing hmmsearch 3.1b1 (text_31b1_hmmsearch_001)."""
         txt_file = get_file('text_31b1_hmmsearch_001.out')
         qresults = list(parse(txt_file, FMT))
 
@@ -1664,8 +1653,7 @@ class HmmersearchCases(unittest.TestCase):
                          hsp.aln_annotation['PP'])
 
     def test_30_hmmsearch_001(self):
-        "Test parsing hmmersearch 3.0 (text_30_hmmsearch_001)"
-
+        """Parsing hmmersearch 3.0 (text_30_hmmsearch_001)."""
         txt_file = get_file('text_30_hmmsearch_001.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1685,8 +1673,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmsearch_002(self):
-        "Test parsing hmmersearch 3.0 (text_30_hmmsearch_002)"
-
+        """Parsing hmmersearch 3.0 (text_30_hmmsearch_002)."""
         txt_file = get_file('text_30_hmmsearch_002.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1836,8 +1823,7 @@ class HmmersearchCases(unittest.TestCase):
         # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_003(self):
-        "Test parsing hmmersearch 3.0 (text_30_hmmsearch_003)"
-
+        """Parsing hmmersearch 3.0 (text_30_hmmsearch_003)."""
         txt_file = get_file('text_30_hmmsearch_003.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -1955,8 +1941,7 @@ class HmmersearchCases(unittest.TestCase):
         # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_004(self):
-        "Test parsing hmmersearch 3.0 (text_30_hmmsearch_004)"
-
+        """Parsing hmmersearch 3.0 (text_30_hmmsearch_004)."""
         txt_file = get_file('text_30_hmmsearch_004.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -2106,8 +2091,7 @@ class HmmersearchCases(unittest.TestCase):
         # self.assertEqual(1, counter)
 
     def test_30_hmmsearch_005(self):
-        "Test parsing hmmersearch 3.0 (text_30_hmmsearch_005)"
-
+        """Parsing hmmersearch 3.0 (text_30_hmmsearch_005)."""
         txt_file = get_file('text_30_hmmsearch_005.out')
         qresults = parse(txt_file, FMT)
         counter = 0
@@ -2270,10 +2254,10 @@ class HmmersearchCases(unittest.TestCase):
 
 
 class PhmmerCases(unittest.TestCase):
+    """Testing phmmer output."""
 
     def test_31b2_phmmer_001(self):
-        "Test parsing phmmer 3.1b2 (text_31b2_phmmer_001)"
-
+        """Parsing phmmer 3.1b2 (text_31b2_phmmer_001)."""
         txt_file = get_file('text_31b2_phmmer_001.out')
         qresults = list(parse(txt_file, FMT))
 

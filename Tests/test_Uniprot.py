@@ -5,6 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Test for the Uniprot parser on Uniprot XML files."""
+
 import os
 import unittest
 
@@ -23,9 +24,10 @@ from seq_tests_common import compare_reference, compare_record
 
 
 class TestUniprot(unittest.TestCase):
+    """Tests Uniprot XML parser."""
 
     def test_uni001(self):
-        "Parsing Uniprot file uni001"
+        """Parsing Uniprot file uni001."""
         filename = 'uni001'
         # test the record parser
 
@@ -78,7 +80,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations['proteinExistence'], ['Predicted'])
 
     def test_uni003(self):
-        "Parsing Uniprot file uni003"
+        """Parsing Uniprot file uni003."""
         filename = 'uni003'
         # test the record parser
 
@@ -269,7 +271,7 @@ class TestUniprot(unittest.TestCase):
                           'and 600 ng/g in Blatella germanica.'])
 
     def test_sp016(self):
-        "Parsing SwissProt file sp016"
+        """Parsing SwissProt file sp016."""
         filename = 'sp016'
         # test the record parser
 
@@ -289,7 +291,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations['entry_version'], 93)
 
     def test_sp002(self):
-        "Parsing SwissProt file sp002"
+        """Parsing SwissProt file sp002."""
         filename = 'sp002'
         # test the record parser
 
@@ -307,6 +309,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations['entry_version'], 36)
 
     def compare_txt_xml(self, old, new):
+        """Compare text and XML based parser output."""
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
@@ -392,7 +395,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(new.name, 'F2CXE6_HORVD')
 
     def test_P84001(self):
-        """Parse mass spec structured comment with unknown loc"""
+        """Parse mass spec structured comment with unknown loc."""
         xml = list(SeqIO.parse("SwissProt/P84001.xml", "uniprot-xml"))[0]
         self.assertEqual(xml.id, 'P84001')
         self.assertEqual(len(xml.annotations['comment_massspectrometry']), 1)

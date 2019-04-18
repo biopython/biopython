@@ -2,6 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.File module."""
 
 from __future__ import print_function
 
@@ -22,8 +23,10 @@ file"""
 
 
 class UndoHandleTests(unittest.TestCase):
+    """Tests for the UndoHandle."""
 
     def test_one(self):
+        """First test."""
         h = File.UndoHandle(StringIO(data))
         self.assertEqual(h.readline(), "This\n")
         self.assertEqual(h.peekline(), "is\n")
@@ -48,12 +51,13 @@ class UndoHandleTests(unittest.TestCase):
         self.assertEqual(h.readline(), "")
 
     def test_read(self):
-        """Test read method"""
+        """Test read method."""
         h = File.UndoHandle(StringIO("some text"))
         h.saveline("more text")
         self.assertEqual(h.read(), 'more textsome text')
 
     def test_undohandle_read_block(self):
+        """Test reading in blocks."""
         for block in [1, 2, 10]:
             s = StringIO(data)
             h = File.UndoHandle(s)
@@ -69,36 +73,43 @@ class UndoHandleTests(unittest.TestCase):
 
 
 class RandomAccess(unittest.TestCase):
+    """Random access tests."""
 
     def test_plain(self):
+        """Test plain text file."""
         with File._open_for_random_access("Quality/example.fastq") as handle:
             self.assertTrue("r" in handle.mode)
             self.assertTrue("b" in handle.mode)
 
     def test_bgzf(self):
+        """Test BGZF compressed file."""
         with File._open_for_random_access("Quality/example.fastq.bgz") as handle:
             self.assertIsInstance(handle, bgzf.BgzfReader)
 
     def test_gzip(self):
+        """Test gzip compressed file."""
         self.assertRaises(ValueError,
                           File._open_for_random_access,
                           "Quality/example.fastq.gz")
 
 
 class AsHandleTestCase(unittest.TestCase):
+    """Tests for as_handle function."""
 
     def setUp(self):
+        """Initialise temporary directory."""
         # Create a directory to work in
         self.temp_dir = tempfile.mkdtemp(prefix='biopython-test')
 
     def tearDown(self):
+        """Remove temporary directory."""
         shutil.rmtree(self.temp_dir)
 
     def _path(self, *args):
         return os.path.join(self.temp_dir, *args)
 
     def test_handle(self):
-        "Test as_handle with a file-like object argument"
+        """Test as_handle with a file-like object argument."""
         p = self._path('test_file.fasta')
         with open(p, 'wb') as fp:
             with File.as_handle(fp) as handle:
@@ -112,7 +123,7 @@ class AsHandleTestCase(unittest.TestCase):
                              "should not close the file")
 
     def test_string_path(self):
-        "Test as_handle with a string path argument"
+        """Test as_handle with a string path argument."""
         p = self._path('test_file.fasta')
         mode = 'wb'
         with File.as_handle(p, mode=mode) as handle:
@@ -126,7 +137,7 @@ class AsHandleTestCase(unittest.TestCase):
         'Passing Path objects to File.as_handle requires Python >= 3.6',
     )
     def test_path_object(self):
-        "Test as_handle with a pathlib.Path object"
+        """Test as_handle with a pathlib.Path object."""
         from pathlib import Path
         p = Path(self._path('test_file.fasta'))
         mode = 'wb'
@@ -141,7 +152,7 @@ class AsHandleTestCase(unittest.TestCase):
         'Passing path-like objects to File.as_handle requires Python >= 3.6',
     )
     def test_custom_path_like_object(self):
-        "Test as_handle with a custom path-like object"
+        """Test as_handle with a custom path-like object."""
         class CustomPathLike:
             def __init__(self, path):
                 self.path = path
@@ -158,6 +169,7 @@ class AsHandleTestCase(unittest.TestCase):
         self.assertTrue(handle.closed)
 
     def test_stringio(self):
+        """Testing passing StringIO handles."""
         s = StringIO()
         with File.as_handle(s) as handle:
             self.assertIs(s, handle)
