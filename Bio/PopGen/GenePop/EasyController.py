@@ -74,7 +74,7 @@ class EasyController(object):
         return self._controller.estimate_nm(self._fname)
 
     def get_heterozygosity_info(self, pop_pos, locus_name):
-        """Return the heterozygosity info for certain locus on a population.
+        """Return the heterozygosity info for a certain locus on a population.
 
         Returns (Expected homozygotes, observed homozygotes,
         Expected heterozygotes, observed heterozygotes)
@@ -85,7 +85,7 @@ class EasyController(object):
         return pops[pop_pos][1][locus_name][1]
 
     def get_genotype_count(self, pop_pos, locus_name):
-        """Return the genotype counts for certain locus on a population."""
+        """Return the genotype counts for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
@@ -109,14 +109,14 @@ class EasyController(object):
         return pops[pop_pos][1][locus_name][2:]
 
     def get_alleles(self, pop_pos, locus_name):
-        """Return the alleles for a locus on a population."""
+        """Return the alleles for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         pop_iter = list(pop_iter)
         return list(pop_iter[pop_pos][1][locus_name][2].keys())
 
     def get_alleles_all_pops(self, locus_name):
-        """Return the alleles for all populations for the given locus."""
+        """Return the alleles for a certain population and locus."""
         geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
         pop_iter, loc_iter = geno_freqs
         for locus_info in loc_iter:
