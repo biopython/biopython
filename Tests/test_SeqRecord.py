@@ -306,6 +306,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
 
 class SeqRecordMethodsMore(unittest.TestCase):
     """Test SeqRecord methods cont."""
+
     # This class does not have a setUp defining self.record
 
     def test_reverse_complement_seq(self):

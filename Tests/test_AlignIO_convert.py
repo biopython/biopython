@@ -42,6 +42,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
 
 class ConvertTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def simple_check(self, filename, in_format, out_format, alphabet):
         check_convert(filename, in_format, out_format, alphabet)
 

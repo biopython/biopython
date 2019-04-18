@@ -114,6 +114,7 @@ real_test()
 
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
+
     def test_simple_scatter_plot(self):
         """Test creation of a simple PNG scatter plot."""
         # Dummy method to show up via run_tests.py

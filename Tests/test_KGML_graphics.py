@@ -53,6 +53,7 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 # test_KGML_graphics_online.py
 class PathwayData(object):
     """Convenience structure for testing pathway data."""
+
     def __init__(self, name, element_counts, show_pathway_image=False):
         """Initialize."""
         self.infilename = os.path.join("KEGG", "ko%s.xml" % name)
@@ -69,6 +70,7 @@ class KGMLPathwayTest(unittest.TestCase):
     Import the ko01100 metabolic map from a local .xml KGML file,
     and write valid KGML output for each.
     """
+
     def setUp(self):
         # Does our output directory exist?  If not, create it
         if not os.path.isdir('KEGG'):
