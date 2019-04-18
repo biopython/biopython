@@ -50,6 +50,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
     Import metabolic maps from a local .xml KGML file, and from
     the KEGG site, and write valid KGML output for each
     """
+
     def setUp(self):
         # Does our output directory exist?  If not, create it
         if not os.path.isdir('KEGG'):

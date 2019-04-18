@@ -1683,6 +1683,7 @@ class NACCESSTests(unittest.TestCase):
 
     See also test_NACCESS_tool.py for run time testing with the tool.
     """
+
     def test_NACCESS_rsa_file(self):
         """Test parsing of pregenerated rsa NACCESS file"""
         with open("PDB/1A8O.rsa") as rsa:
@@ -1698,6 +1699,7 @@ class NACCESSTests(unittest.TestCase):
 
 class ResidueDepthTests(unittest.TestCase):
     """Tests for ResidueDepth module, except for running MSMS itself."""
+
     def test_pdb_to_xyzr(self):
         """Test generation of xyzr (atomic radii) file"""
         with warnings.catch_warnings():

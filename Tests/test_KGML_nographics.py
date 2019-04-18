@@ -19,6 +19,7 @@ from Bio.KEGG.KGML.KGML_parser import read
 
 class PathwayData(object):
     """Convenience structure for testing pathway data."""
+
     def __init__(self, infilename, outfilename, element_counts,
                  pathway_image, show_pathway_image=False):
         """Initialize."""

@@ -64,6 +64,7 @@ if not bwa_exe:
 
 class BwaTestCase(unittest.TestCase):
     """Class for implementing BWA test cases"""
+
     def setUp(self):
         self.reference_file = "BWA/human_g1k_v37_truncated.fasta"
         self.reference_extensions = ['amb', 'ann', 'bwt', 'pac', 'sa']

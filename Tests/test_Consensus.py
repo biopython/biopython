@@ -24,6 +24,7 @@ temp_dir = tempfile.mkdtemp()
 
 class BitStringTest(unittest.TestCase):
     """Test for _BitString class"""
+
     def test_bitstring(self):
         bitstr1 = _BitString('0011')
         bitstr2 = _BitString('0101')
