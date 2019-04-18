@@ -61,6 +61,7 @@ possible, especially the following contributors:
 - Catherine Lesuisse
 - Chris Rands
 - Jens Thomas (first contribution)
+- Konstantin Vdovkin
 - Lenna Peterson
 - Markus Piotrowski
 - Micky Yun Chan (first contribution)
