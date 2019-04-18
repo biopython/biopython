@@ -3,8 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests Bio.SeqFeature.
-"""
+"""Tests Bio.SeqFeature."""
+
 import unittest
 from os import path
 from Bio import Seq, SeqIO
@@ -106,10 +106,10 @@ class TestFeatureLocation(unittest.TestCase):
 
 
 class TestCompoundLocation(unittest.TestCase):
-    """Tests for the SeqFeature.CompoundLocation class"""
+    """Tests for the SeqFeature.CompoundLocation class."""
 
     def test_eq_identical(self):
-        """Test two identical locations are equal"""
+        """Test two identical locations are equal."""
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
         loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
@@ -119,8 +119,7 @@ class TestCompoundLocation(unittest.TestCase):
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
-        """Test two different locations are not equal"""
-
+        """Test two different locations are not equal."""
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
         loc2 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1) + FeatureLocation(50, 60, 1)
         self.assertNotEqual(loc1, loc2)
@@ -143,7 +142,6 @@ class TestSeqFeature(unittest.TestCase):
 
     def test_translation_checks_cds(self):
         """Test that a CDS feature is subject to respective checks."""
-
         seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
         f.qualifiers['transl_table'] = [11]

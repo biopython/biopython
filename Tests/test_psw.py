@@ -93,8 +93,7 @@ def run_tests(argv):
 
 
 def testing_suite():
-    """Generate the suite of tests.
-    """
+    """Generate the suite of tests."""
     unittest_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()

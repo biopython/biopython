@@ -4,8 +4,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the CDAO and CDAOIO modules.
-"""
+"""Unit tests for the CDAO and CDAOIO modules."""
 
 import os
 import tempfile

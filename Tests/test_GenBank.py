@@ -6,8 +6,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Test the GenBank parser and make sure everything is working smoothly.
-"""
+"""Test the GenBank parser and make sure everything is working smoothly."""
+
 # standard library
 from __future__ import print_function
 
@@ -155,6 +155,7 @@ def do_comparison(good_record, test_record):
 
 
 def t_write_format():
+    """Test writing to the difference formats."""
     record_parser = GenBank.RecordParser(debug_level=0)
 
     for next_file in write_format_files:
@@ -185,8 +186,7 @@ t_write_format()
 
 
 def t_cleaning_features():
-    """Test the ability to clean up feature values.
-    """
+    """Test the ability to clean up feature values."""
     gb_parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, gb_parser)
@@ -207,6 +207,7 @@ t_cleaning_features()
 
 
 def t_ensembl_locus():
+    """Test the ENSEMBL locus line."""
     line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
     s = GenBank.Scanner.GenBankScanner()
     c = GenBank._FeatureConsumer(True)

@@ -39,8 +39,7 @@ class ProbconsApplication(unittest.TestCase):
             os.remove(self.annotation_outfile)
 
     def test_Probcons_alignment_fasta(self):
-        """Round-trip through app and read fasta alignment from stdout
-        """
+        """Round-trip through app and read fasta alignment from stdout."""
         cmdline = ProbconsCommandline(probcons_exe, input=self.infile1)
         self.assertEqual(str(cmdline), probcons_exe + " Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -54,8 +53,7 @@ class ProbconsApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_alignment_clustalw(self):
-        """Round-trip through app and read clustalw alignment from stdout
-        """
+        """Round-trip through app and read clustalw alignment from stdout."""
         cmdline = ProbconsCommandline(probcons_exe)
         cmdline.set_parameter("input", "Fasta/fa01")
         cmdline.clustalw = True
@@ -71,8 +69,7 @@ class ProbconsApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_complex_commandline(self):
-        """Round-trip through app with complex command line and output file
-        """
+        """Round-trip through app with complex command line and output file."""
         cmdline = ProbconsCommandline(probcons_exe, pre=1)
         cmdline.set_parameter("input", "Fasta/fa01")
         cmdline.consistency = 4

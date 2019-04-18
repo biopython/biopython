@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Testing online code in Bio.SCOP
-"""
+"""Testing online code in Bio.SCOP module."""
 
 import unittest
 
@@ -16,8 +15,9 @@ from Bio import SCOP
 
 class ScopSearch(unittest.TestCase):
     """SCOP search tests."""
+
     def test_search(self):
-        """Bio.SCOP.search(...)"""
+        """Test search."""
         handle = SCOP.search("1JOY")
 
 

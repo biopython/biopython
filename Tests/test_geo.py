@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Tests the basic functionality of the GEO parsers.
-"""
+"""Tests the basic functionality of the GEO parsers."""
 
 from __future__ import print_function
 
