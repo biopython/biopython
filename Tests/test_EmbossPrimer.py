@@ -6,8 +6,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for Primer-based programs in the Emboss suite.
-"""
+"""Tests for Primer-based programs in the Emboss suite."""
+
 # standard library
 import os
 import unittest
@@ -28,8 +28,7 @@ class Primer3ParseTest(unittest.TestCase):
             ]
 
     def test_simple_parse(self):
-        """Make sure that we can use all single target primer3 files.
-        """
+        """Make sure that we can use all single target primer3 files."""
         for file in self.test_files:
             # First using read...
             h = open(file, "r")
@@ -41,8 +40,7 @@ class Primer3ParseTest(unittest.TestCase):
             h.close()
 
     def test_indepth_regular_parse(self):
-        """Make sure we get the data from normal primer3 files okay.
-        """
+        """Make sure we get the data from normal primer3 files okay."""
         regular_file = self.test_files[0]
         h = open(regular_file, "r")
         primer_info = Primer3.read(h)
@@ -193,16 +191,14 @@ class PrimersearchParseTest(unittest.TestCase):
         self.test_files = [os.path.join("Emboss", "bac_find.psearch")]
 
     def test_simple_parse(self):
-        """Make sure that we can parse all primersearch files.
-        """
+        """Make sure that we can parse all primersearch files."""
         for file in self.test_files:
             h = open(file, "r")
             PrimerSearch.read(h)
             h.close()
 
     def test_in_depth_normal_parse(self):
-        """Make sure the output from a simple primersearch file is correct.
-        """
+        """Make sure the output from a simple primersearch file is correct."""
         file = self.test_files[0]
         h = open(file, "r")
         amp_info = PrimerSearch.read(h)
@@ -224,14 +220,13 @@ class PrimersearchParseTest(unittest.TestCase):
 
 
 class PrimerSearchInputTest(unittest.TestCase):
-    """Test creating input files for primersearch.
-    """
+    """Test creating input files for primersearch."""
+
     def setUp(self):
         pass
 
     def test_primer_representation(self):
-        """Make sure we can output primer information correctly.
-        """
+        """Make sure we can output primer information correctly."""
         p_info = PrimerSearch.InputRecord()
         p_info.add_primer_set("Test", "GATC", "CATG")
         p_info.add_primer_set("Test2", "AATA", "TTAT")

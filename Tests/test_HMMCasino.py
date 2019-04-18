@@ -56,8 +56,7 @@ class DiceTypeAlphabet(Alphabet.Alphabet):
 
 # -- useful functions
 def _loaded_dice_roll(chance_num, cur_state):
-    """Generate a loaded dice roll based on the state and a random number
-    """
+    """Generate a loaded dice roll based on the state and a random number."""
     if cur_state == 'F':
         if chance_num <= (float(1) / float(6)):
             return '1'
@@ -164,8 +163,7 @@ rolls, states = generate_rolls(3000)
 
 # -- now train the model
 def stop_training(log_likelihood_change, num_iterations):
-    """Tell the training model when to stop.
-    """
+    """Tell the training model when to stop."""
     if VERBOSE:
         print("ll change: %f" % log_likelihood_change)
     if log_likelihood_change < 0.01:

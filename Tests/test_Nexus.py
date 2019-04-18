@@ -24,30 +24,30 @@ from Bio import SeqIO
 
 
 class OldSelfTests(unittest.TestCase):
-    """Test cases originally in Nexus.py via __main__"""
+    """Test cases originally in Nexus.py via __main__."""
 
     def test_trees_and_taxa_block(self):
-        """Basic tree file with TREES and TAXA block"""
+        """Basic tree file with TREES and TAXA block."""
         nexus1 = Nexus.Nexus()
         nexus1.read('Nexus/bats.nex')
 
     def test_data_and_codons_block(self):
-        """Simple sequence data file with DATA and CODONS block"""
+        """Simple sequence data file with DATA and CODONS block."""
         nexus2 = Nexus.Nexus()
         nexus2.read('Nexus/codonposset.nex')
 
     def test_data_sets_trees_unknown_block(self):
-        """Sequence data file with DATA, SETS, TREES and an unknown block"""
+        """Sequence data file with DATA, SETS, TREES and an unknown block."""
         nexus3 = Nexus.Nexus()
         nexus3.read('Nexus/test_Nexus_input.nex')
 
     def test_taxa_and_characters_block(self):
-        """Taxa and characters multi-state block"""
+        """Taxa and characters multi-state block."""
         nexus4 = Nexus.Nexus()
         nexus4.read('Nexus/vSysLab_Ganaspidium_multistate.nex')
 
     def test_taxa_and_characters_with_many_codings_one_without_state(self):
-        """Taxa and chr blocks, over 9 codings, 1 character without states"""
+        """Taxa and chr blocks, over 9 codings, 1 character without states."""
         nexus5 = Nexus.Nexus()
         nexus5.read('Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
 
@@ -87,7 +87,7 @@ class NexusTest1(unittest.TestCase):
         self.assertEqual(4, SeqIO.write(records, out_file, "nexus"))
 
     def test_NexusTest1(self):
-        """Test Nexus module"""
+        """Test Nexus module."""
         # check data of main nexus file
         n = Nexus.Nexus(self.handle)
         self.assertEqual(os.path.normpath(n.filename),
@@ -450,8 +450,7 @@ Root:  16
         self.assertEqual(t3.is_compatible(t2, threshold=0.3), [])
 
     def test_TreeTest2(self):
-        """Handle text labels on internal nodes.
-        """
+        """Handle text labels on internal nodes."""
         ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
                "TT1:25.000000)Taxaceae:90.000000;"
         tree = Trees.Tree(ts1b)
@@ -590,8 +589,7 @@ Root:  16
         return nodedata
 
     def test_NexusComments(self):
-        """Test the ability to parse nexus comments at internal and leaf nodes
-        """
+        """Test the ability to parse nexus comments at internal and leaf nodes."""
         # A tree with simple comments throughout the tree.
         ts1b = "((12:0.13,19[&comment1]:0.13)[&comment2]:0.1,(20:0.171,11:0.171):0.13)[&comment3];"
         tree = Trees.Tree(ts1b)
@@ -617,6 +615,7 @@ Root:  16
 
 class TestSelf(unittest.TestCase):
     def test_repeated_names_no_taxa(self):
+        # TODO - remove these prints, check output explicitly
         print("Repeated names without a TAXA block")
         handle = StringIO("""#NEXUS
         [TITLE: NoName]
@@ -638,7 +637,7 @@ class TestSelf(unittest.TestCase):
         print("Done")
 
     def test_repeated_names_with_taxa(self):
-
+        # TODO - remove these prints, check output explicitly
         print("Repeated names with a TAXA block")
         handle = StringIO("""#NEXUS
         [TITLE: NoName]
