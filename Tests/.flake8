@@ -42,9 +42,7 @@ ignore =
     # ===========================================
     # pydocstyle: D4## - Docstring Content Issues
     # ===========================================
-    # D401	First line should be in imperative mood
     # D412	No blank lines allowed between a section header and its content
-    D401,
     # We ignore D412 deliberately:
     D412,
     # ====================
