@@ -91,7 +91,6 @@ def generate_rolls(num_rolls):
     """Generate a bunch of rolls corresponding to the casino probabilities.
 
     Returns:
-
     - The generate roll sequence
     - The state sequence that generated the roll.
 
