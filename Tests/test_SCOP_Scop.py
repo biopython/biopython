@@ -144,7 +144,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(px2, None)
 
     def test_get_descendents(self):
-        """Test getDescendents method"""
+        """Test getDescendents method."""
         scop = Scop(dir_path="SCOP", version="test")
         fold = scop.getNodeBySunid(46457)
 

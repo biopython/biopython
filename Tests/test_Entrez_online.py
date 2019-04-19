@@ -69,7 +69,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(len(rec['DbList']) > 5)
 
     def test_read_from_url(self):
-        """Test Entrez.read from URL"""
+        """Test Entrez.read from URL."""
         handle = Entrez.einfo()
         self.assertTrue(handle.url.startswith(URL_HEAD + "einfo.fcgi?"), handle.url)
         self.assertIn(URL_TOOL, handle.url)
@@ -83,7 +83,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(len(rec['DbList']) > 5)
 
     def test_parse_from_url(self):
-        """Test Entrez.parse from URL"""
+        """Test Entrez.parse from URL."""
         handle = Entrez.efetch(db='protein', id='15718680,157427902,119703751',
                                retmode='xml')
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
@@ -98,7 +98,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(all(len(rec).keys > 5) for rec in recs)
 
     def test_webenv_search(self):
-        """Test Entrez.search from link webenv history"""
+        """Test Entrez.search from link webenv history."""
         handle = Entrez.elink(db='nucleotide', dbfrom='protein',
                               id='22347800,48526535', webenv=None, query_key=None,
                               cmd='neighbor_history')
@@ -126,7 +126,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(2, len(search_record['IdList']))
 
     def test_seqio_from_url(self):
-        """Test Entrez into SeqIO.read from URL"""
+        """Test Entrez into SeqIO.read from URL."""
         handle = Entrez.efetch(db='nucleotide', id='186972394', rettype='gb',
                                retmode='text')
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
@@ -141,7 +141,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(1302, len(record))
 
     def test_medline_from_url(self):
-        """Test Entrez into Medline.read from URL"""
+        """Test Entrez into Medline.read from URL."""
         handle = Entrez.efetch(db="pubmed", id='19304878', rettype="medline",
                                retmode="text")
         self.assertTrue(handle.url.startswith(URL_HEAD + "efetch.fcgi?"), handle.url)
@@ -156,7 +156,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual('10.1093/bioinformatics/btp163 [doi]', record['LID'])
 
     def test_efetch_biosystems_xml(self):
-        """Test Entrez parser with XML from biosystems"""
+        """Test Entrez parser with XML from biosystems."""
         handle = Entrez.efetch(id="1134002", db="biosystems", retmode="xml")
         records = list(Entrez.parse(handle))
         handle.close()
@@ -164,7 +164,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(records[0]['System_sysid']['Sys-id']['Sys-id_bsid'], '1134002')
 
     def test_efetch_taxonomy_xml(self):
-        """Test Entrez using a integer id - like a taxon id"""
+        """Test Entrez using a integer id - like a taxon id."""
         handle = Entrez.efetch(db="taxonomy", id=3702, retmode="XML")
         taxon_record = Entrez.read(handle)
         self.assertTrue(1, len(taxon_record))
@@ -173,7 +173,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_elink(self):
-        """Test Entrez.elink with multiple ids, both comma separated and as list"""
+        """Test Entrez.elink with multiple ids, both comma separated and as list."""
         # Commas: Link from protein to gene
         handle = Entrez.elink(db="gene", dbfrom="protein",
                               id="15718680,157427902,119703751")
@@ -197,7 +197,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_epost(self):
-        """Test Entrez.epost with multiple ids, both comma separated and as list"""
+        """Test Entrez.epost with multiple ids, both comma separated and as list."""
         handle = Entrez.epost("nuccore", id="186972394,160418")
         self.assertEqual(URL_HEAD + "epost.fcgi", handle.url)
         handle.close()
@@ -206,7 +206,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_egquery(self):
-        """Test Entrez.egquery which searches in all Entrez databases for a single text query"""
+        """Test Entrez.egquery which searches in all Entrez databases for a single text query."""
         handle = Entrez.egquery(term="biopython")
         record = Entrez.read(handle)
         handle.close()
@@ -219,7 +219,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertTrue(done)
 
     def test_espell(self):
-        """Test misspellings with Entrez.espell"""
+        """Test misspellings with Entrez.espell."""
         handle = Entrez.espell(term="biopythooon")
         record = Entrez.read(handle)
         handle.close()
@@ -228,7 +228,7 @@ class EntrezOnlineCase(unittest.TestCase):
         self.assertEqual(record["CorrectedQuery"], "biopython")
 
     def test_ecitmatch(self):
-        """Test Entrez.ecitmatch to search for a citation"""
+        """Test Entrez.ecitmatch to search for a citation."""
         citation = {
             "journal_title": "proc natl acad sci u s a",
             "year": "1991", "volume": "88", "first_page": "3248",
@@ -242,7 +242,7 @@ class EntrezOnlineCase(unittest.TestCase):
         handle.close()
 
     def test_efetch_gds_utf8(self):
-        """Test correct handling of encodings in Entrez.efetch"""
+        """Test correct handling of encodings in Entrez.efetch."""
         # See issue #1402
         try:
             oldloc = locale.setlocale(locale.LC_ALL)

@@ -41,7 +41,7 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(records[2]["ID"], "4.1.1.14")
 
     def test_lipoprotein(self):
-        """Parsing ENZYME record for lipoprotein lipase (3.1.1.34)"""
+        """Parsing ENZYME record for lipoprotein lipase (3.1.1.34)."""
         filename = os.path.join('Enzymes', 'lipoprotein.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
@@ -71,7 +71,7 @@ class TestEnzyme(unittest.TestCase):
                         "Did not expect:\n%s" % record)
 
     def test_proline(self):
-        """Parsing ENZYME record for proline racemase (5.1.1.4)"""
+        """Parsing ENZYME record for proline racemase (5.1.1.4)."""
         filename = os.path.join('Enzymes', 'proline.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
@@ -93,7 +93,7 @@ class TestEnzyme(unittest.TestCase):
                         "Did not expect:\n%s" % record)
 
     def test_valine(self):
-        """Parsing ENZYME record for valine decarboxylase (4.1.1.14)"""
+        """Parsing ENZYME record for valine decarboxylase (4.1.1.14)."""
         filename = os.path.join('Enzymes', 'valine.txt')
         handle = open(filename)
         record = Enzyme.read(handle)
@@ -108,7 +108,7 @@ class TestEnzyme(unittest.TestCase):
                         "Did not expect:\n%s" % record)
 
     def test_lactate(self):
-        """Parsing ENZYME record for lactate racemase (5.1.2.1)"""
+        """Parsing ENZYME record for lactate racemase (5.1.2.1)."""
         filename = os.path.join('Enzymes', 'lactate.txt')
         handle = open(filename)
         record = Enzyme.read(handle)

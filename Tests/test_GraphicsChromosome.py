@@ -259,11 +259,11 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
     """Test sub-annotations on a segment."""
 
     def test_simple_tRNA_tuples(self):
-        """Test sub-annotations (as tuples) on a genome segment, tRNA for Arabidopsis"""
+        """Test sub-annotations (as tuples) on a genome segment, tRNA for Arabidopsis."""
         self.check_simple_tRNA("Graphics/tRNA_chrom.pdf", False)
 
     def test_simple_tRNA_seqfeatures(self):
-        """Test sub-annotations (as SeqFeatures) on a genome segment, tRNA for Arabidopsis"""
+        """Test sub-annotations (as SeqFeatures) on a genome segment, tRNA for Arabidopsis."""
         self.check_simple_tRNA("Graphics/tRNA_chrom_sf.pdf", True)
 
     def check_simple_tRNA(self, filename, use_seqfeatures=False):

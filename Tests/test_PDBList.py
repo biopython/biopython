@@ -76,7 +76,7 @@ class TestPDBListGetStructure(unittest.TestCase):
         self.check(structure, os.path.join(structure[1:3], "%s-pdb-bundle.tar" % structure), "bundle")
 
     def test_retrieve_pdb_file_obsolete_pdb(self):
-        """Tests retrieving the obsolete molecule in pdb format"""
+        """Tests retrieving the obsolete molecule in pdb format."""
         structure = "347d"
         self.check(structure, os.path.join("obsolete", structure[1:3], "pdb%s.ent" % structure), "pdb", obsolete=True)
 

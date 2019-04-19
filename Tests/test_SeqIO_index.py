@@ -594,16 +594,16 @@ class IndexDictTests(unittest.TestCase):
 
     if sqlite3:
         def test_duplicates_index_db(self):
-            """Index file with duplicate identifiers with Bio.SeqIO.index_db()"""
+            """Index file with duplicate identifiers with Bio.SeqIO.index_db()."""
             self.assertRaises(ValueError, SeqIO.index_db, ":memory:",
                               ["Fasta/dups.fasta"], "fasta")
 
     def test_duplicates_index(self):
-        """Index file with duplicate identifiers with Bio.SeqIO.index()"""
+        """Index file with duplicate identifiers with Bio.SeqIO.index()."""
         self.assertRaises(ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta")
 
     def test_duplicates_to_dict(self):
-        """Index file with duplicate identifiers with Bio.SeqIO.to_dict()"""
+        """Index file with duplicate identifiers with Bio.SeqIO.to_dict()."""
         handle = open("Fasta/dups.fasta", _universal_read_mode)
         iterator = SeqIO.parse(handle, "fasta")
         self.assertRaises(ValueError, SeqIO.to_dict, iterator)

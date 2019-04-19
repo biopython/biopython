@@ -13,7 +13,7 @@ from Bio import BiopythonParserWarning
 
 class EMBLTests(unittest.TestCase):
     def test_embl_content_after_co(self):
-        """Test a ValueError is thrown by content after a CO line"""
+        """Test a ValueError is thrown by content after a CO line."""
         def parse_content_after_co():
             rec = SeqIO.read(path.join('EMBL', 'xx_after_co.embl'), 'embl')
 
@@ -27,7 +27,7 @@ class EMBLTests(unittest.TestCase):
             self.assertTrue(False, "Error message without explanation raised by content after CO line")
 
     def test_embl_0_line(self):
-        """Test SQ line with 0 length sequence"""
+        """Test SQ line with 0 length sequence."""
         # Biopython 1.67 and older would parse this file with a warning:
         # 'Expected sequence length 1740, found 1744 (TIR43YW1_CE).' and
         # the coordinates 1740 added to the sequence as four extra letters.
@@ -53,7 +53,7 @@ class EMBLTests(unittest.TestCase):
             self.assertEqual(rec.seq[-10:], "AKYKELGYQG")
 
     def test_embl_wrong_dr_line(self):
-        """Test files with wrong DR lines"""
+        """Test files with wrong DR lines."""
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", BiopythonParserWarning)
             record = SeqIO.read('EMBL/RepBase23.02.embl', 'embl')

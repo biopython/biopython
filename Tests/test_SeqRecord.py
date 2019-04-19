@@ -22,7 +22,7 @@ class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
 
     def test_annotations(self):
-        """Pass in annotations to SeqRecords"""
+        """Pass in annotations to SeqRecords."""
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
@@ -32,7 +32,7 @@ class SeqRecordCreation(unittest.TestCase):
         self.assertEqual(rec.annotations["test"], ["a test"])
 
     def test_letter_annotations(self):
-        """Pass in letter annotations to SeqRecords"""
+        """Pass in letter annotations to SeqRecords."""
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
@@ -163,7 +163,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             c = self.record['a'].seq
 
     def test_slice_variants(self):
-        """Simple slices using different start/end values"""
+        """Simple slices using different start/end values."""
         for start in list(range(-30, 30)) + [None]:
             for end in list(range(-30, 30)) + [None]:
                 if start is None and end is None:
@@ -176,7 +176,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
                 self.assertEqual("X" * len(seq_str), rec.letter_annotations["fake"])
 
     def test_slice_simple(self):
-        """Simple slice"""
+        """Simple slice."""
         rec = self.record
         self.assertEqual(len(rec), 26)
         left = rec[:10]
@@ -199,7 +199,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
 
     def test_slice_zero(self):
-        """Zero slice"""
+        """Zero slice."""
         rec = self.record
         self.assertEqual(len(rec), 26)
         self.assertEqual(len(rec[2:-2]), 22)
@@ -207,7 +207,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(len(rec[5:2][2:-2]), 0)
 
     def test_add_simple(self):
-        """Simple addition"""
+        """Simple addition."""
         rec = self.record + self.record
         self.assertEqual(len(rec), 52)
         self.assertEqual(rec.id, "TestID")
@@ -219,7 +219,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(len(rec.features), 2 * len(self.record.features))
 
     def test_add_seq(self):
-        """Simple addition of Seq or string"""
+        """Simple addition of Seq or string."""
         for other in [Seq("BIO"), "BIO"]:
             rec = self.record + other  # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26 + 3)
@@ -259,7 +259,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual(rec.features[i].location.nofuzzy_end, len(rec))
 
     def test_add_seq_left(self):
-        """Simple left addition of Seq or string"""
+        """Simple left addition of Seq or string."""
         for other in [Seq("BIO"), "BIO"]:
             rec = other + self.record  # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26 + 3)
@@ -276,7 +276,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertEqual(rec.features[0].location.nofuzzy_end, 26 + 3)
 
     def test_slice_add_simple(self):
-        """Simple slice and add"""
+        """Simple slice and add."""
         for cut in range(27):
             rec = self.record[:cut] + self.record[cut:]
             self.assertEqual(str(rec.seq), str(self.record.seq))
@@ -290,7 +290,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
             self.assertTrue(len(rec.features) <= len(self.record.features))
 
     def test_slice_add_shift(self):
-        """Simple slice and add to shift"""
+        """Simple slice and add to shift."""
         for cut in range(27):
             rec = self.record[cut:] + self.record[:cut]
             self.assertEqual(str(rec.seq), str(self.record.seq[cut:] + self.record.seq[:cut]))

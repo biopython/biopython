@@ -27,7 +27,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 
 
 class CompareStructures(unittest.TestCase):
-    """Tests for comparing the same structure parsed by PDB and MMCIF parsers"""
+    """Tests for comparing the same structure parsed by PDB and MMCIF parsers."""
 
     def setUp(self):
 
@@ -46,7 +46,7 @@ class CompareStructures(unittest.TestCase):
         self.cifo = cifparser.get_structure('pdb', cif_file)
 
     def test_compare_models(self):
-        """Compared parsed models"""
+        """Compared parsed models."""
 
         cif_models = [(m.id, len(m.child_list)) for m in self.cifo.get_models()]
         pdb_models = [(m.id, len(m.child_list)) for m in self.pdbo.get_models()]
@@ -56,7 +56,7 @@ class CompareStructures(unittest.TestCase):
         self.assertEqual([i[1] for i in cif_models], [i[1] for i in pdb_models])
 
     def test_compare_chains(self):
-        """Compare parsed chains"""
+        """Compare parsed chains."""
 
         cif_chains = [(c.id, len(c.child_list)) for c in self.cifo.get_chains()]
         pdb_chains = [(c.id, len(c.child_list)) for c in self.pdbo.get_chains()]

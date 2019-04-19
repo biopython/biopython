@@ -16,7 +16,7 @@ class Hmmer2TextRawCases(CheckRaw):
     fmt = 'hmmer2-text'
 
     def test_hmmer2text_22_single_hmmsearch(self):
-        """Test hmmer2-text raw string retrieval, single query, hmmsearch"""
+        """Test hmmer2-text raw string retrieval, single query, hmmsearch."""
         filename = os.path.join('Hmmer', 'text_22_hmmsearch_001.out')
         raw = """hmmsearch - search a sequence database with a profile HMM
 HMMER 2.2g (August 2001)
@@ -199,7 +199,7 @@ tophits_s report:
         self.check_raw(filename, 'Peptidase_C1', raw)
 
     def test_hmmer2text_22_single_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, single query, hmmpfam"""
+        """Test hmmer2-text raw string retrieval, single query, hmmpfam."""
         filename = os.path.join('Hmmer', 'text_22_hmmpfam_001.out')
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.2g (August 2001)
@@ -255,7 +255,7 @@ Methylase_M: domain 1 of 1, from 280 to 481: score -105.2, E = 0.0022
         self.check_raw(filename, 'gi|1522636|gb|AAC37060.1|', raw)
 
     def test_hmmer2text_22_multiple_first_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
         filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
@@ -287,7 +287,7 @@ Alignments of top-scoring domains:
         self.check_raw(filename, 'random_s00', raw)  # noqa : E101
 
     def test_hmmer2text_22_multiple_middle_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
         filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
@@ -356,7 +356,7 @@ Rotavirus_VP3: domain 1 of 1, from 134 to 147: score -1.2, E = 7.9
         self.check_raw(filename, 'gi|4885477|ref|NP_005359.1|', raw)
 
     def test_hmmer2text_22_multiple_last_hmmpfam(self):
-        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam"""
+        """Test hmmer2-text raw string retrieval, multiple queries, hmmpfam."""
         filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
         raw = """hmmpfam - search one or more sequences against HMM database
 HMMER 2.4i (December 2006)
@@ -482,27 +482,27 @@ class Hmmer2TextIndexCases(CheckIndex):
     fmt = 'hmmer2-text'
 
     def test_hmmertext_text_21_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.1"""
+        """Test hmmer2-text indexing, HMMER 2.1."""
         filename = os.path.join('Hmmer', 'text_21_hmmpfam_001.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_22_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.2"""
+        """Test hmmer2-text indexing, HMMER 2.2."""
         filename = os.path.join('Hmmer', 'text_22_hmmpfam_001.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_23_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.3"""
+        """Test hmmer2-text indexing, HMMER 2.3."""
         filename = os.path.join('Hmmer', 'text_23_hmmpfam_001.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_24_hmmpfam_001(self):
-        """Test hmmer2-text indexing, HMMER 2.4"""
+        """Test hmmer2-text indexing, HMMER 2.4."""
         filename = os.path.join('Hmmer', 'text_24_hmmpfam_001.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_22_hmmsearch_001(self):
-        """Test hmmer2-text indexing, HMMER 2.2"""
+        """Test hmmer2-text indexing, HMMER 2.2."""
         filename = os.path.join('Hmmer', 'text_22_hmmsearch_001.out')
         self.check_index(filename, self.fmt)
 

@@ -11,7 +11,7 @@ from Bio.ExPASy import cellosaurus
 
 class TestCellosaurus(unittest.TestCase):
     def test_read(self):
-        """Test read function"""
+        """Test read function."""
         handle = open("Cellosaurus/cell_lines_1.txt")
         record = cellosaurus.read(handle)
         self.assertEquals(record["ID"], '#15310-LN')
@@ -37,7 +37,7 @@ class TestCellosaurus(unittest.TestCase):
         handle.close()
 
     def test_parse(self):
-        """Test parsing function"""
+        """Test parsing function."""
         handle = open("Cellosaurus/cell_lines_2.txt")
         records = cellosaurus.parse(handle)
         record = next(records)
@@ -120,7 +120,7 @@ class TestCellosaurus(unittest.TestCase):
         handle.close()
 
     def test__str__(self):
-        """Test string function"""
+        """Test string function."""
         handle = open("Cellosaurus/cell_lines_3.txt")
         record = cellosaurus.read(handle)
         input = "ID: ZZ-R 127 AC: CVCL_5418 AS:  SY: ZZ-R DR: [('CCLV', 'CCLV-RIE 0127')] " \

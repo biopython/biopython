@@ -19,7 +19,7 @@ class DomTests(unittest.TestCase):
         self.filename = './SCOP/testDom.txt'
 
     def testParse(self):
-        """Test if all records in a DOM file are being read"""
+        """Test if all records in a DOM file are being read."""
         f = open(self.filename)
         try:
             count = 0
@@ -30,7 +30,7 @@ class DomTests(unittest.TestCase):
             f.close()
 
     def testStr(self):
-        """Test if we can convert each record to a string correctly"""
+        """Test if we can convert each record to a string correctly."""
         f = open(self.filename)
         try:
             for line in f:
@@ -41,12 +41,12 @@ class DomTests(unittest.TestCase):
             f.close()
 
     def testError(self):
-        """Test if a corrupt record raises the appropriate exception"""
+        """Test if a corrupt record raises the appropriate exception."""
         corruptDom = "49xxx268\tsp\tb.1.2.1\t-\n"
         self.assertRaises(ValueError, Dom.Record, corruptDom)
 
     def testRecord(self):
-        """Test one record in detail"""
+        """Test one record in detail."""
         recLine = 'd7hbib_\t7hbi\tb:\t1.001.001.001.001.001'
 
         rec = Dom.Record(recLine)

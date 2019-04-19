@@ -143,7 +143,7 @@ class Primer3ParseTest(unittest.TestCase):
                          "TATCGCAACCACTGAGCAAG")
 
     def test_mutli_record_full(self):
-        """Test parsing multiple primer sets (NirK full)"""
+        """Test parsing multiple primer sets (NirK full)."""
         h = open(os.path.join("Emboss", "NirK_full.primer3"))
         targets = list(Primer3.parse(h))
         h.close()

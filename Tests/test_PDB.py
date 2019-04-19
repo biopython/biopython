@@ -102,7 +102,7 @@ class A_ExceptionTest(unittest.TestCase):
                           parser.get_structure, "example", StringIO(data))
 
     def test_4_occupancy(self):
-        """Parse file with missing occupancy"""
+        """Parse file with missing occupancy."""
         permissive = PDBParser(PERMISSIVE=True)
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always", PDBConstructionWarning)
@@ -546,7 +546,7 @@ class ParseTest(unittest.TestCase):
 
     # Tests for sorting methods
     def test_comparison_entities(self):
-        """Test comparing and sorting the several SMCRA objects"""
+        """Test comparing and sorting the several SMCRA objects."""
 
         struct = self.structure
         # Test deepcopy of a structure with disordered atoms
@@ -891,7 +891,7 @@ class WriteTest(unittest.TestCase):
             os.remove(filename)
 
     def test_pdbio_write_residue(self):
-        """Write a single residue using PDBIO"""
+        """Write a single residue using PDBIO."""
         io = PDBIO()
         struct1 = self.structure
         residue1 = list(struct1.get_residues())[0]
@@ -1685,13 +1685,13 @@ class NACCESSTests(unittest.TestCase):
     """
 
     def test_NACCESS_rsa_file(self):
-        """Test parsing of pregenerated rsa NACCESS file"""
+        """Test parsing of pregenerated rsa NACCESS file."""
         with open("PDB/1A8O.rsa") as rsa:
             naccess = process_rsa_data(rsa)
         self.assertEqual(len(naccess), 66)
 
     def test_NACCESS_asa_file(self):
-        """Test parsing of pregenerated asa NACCESS file"""
+        """Test parsing of pregenerated asa NACCESS file."""
         with open("PDB/1A8O.asa") as asa:
             naccess = process_asa_data(asa)
         self.assertEqual(len(naccess), 524)
@@ -1701,7 +1701,7 @@ class ResidueDepthTests(unittest.TestCase):
     """Tests for ResidueDepth module, except for running MSMS itself."""
 
     def test_pdb_to_xyzr(self):
-        """Test generation of xyzr (atomic radii) file"""
+        """Test generation of xyzr (atomic radii) file."""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             p = PDBParser(PERMISSIVE=1)
