@@ -21,7 +21,7 @@ class WriteCases(unittest.TestCase):
 
     def parse_write_and_compare(self, source_file, source_format, out_file,
                                 out_format, **kwargs):
-        """Compares parsed QueryResults after they have been written to a file."""
+        """Compare parsed QueryResults after they have been written to a file."""
         source_qresults = list(SearchIO.parse(source_file, source_format,
                                **kwargs))
         SearchIO.write(source_qresults, out_file, out_format, **kwargs)
@@ -31,7 +31,7 @@ class WriteCases(unittest.TestCase):
 
     def read_write_and_compare(self, source_file, source_format, out_file,
                                out_format, **kwargs):
-        """Compares read QueryResults after it has been written to a file."""
+        """Compare read QueryResults after it has been written to a file."""
         source_qresult = SearchIO.read(source_file, source_format, **kwargs)
         SearchIO.write(source_qresult, out_file, out_format, **kwargs)
         out_qresult = SearchIO.read(out_file, out_format, **kwargs)

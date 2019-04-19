@@ -85,7 +85,7 @@ def str_summary(text, max_len=40):
 
 
 def alignment_summary(alignment, index="  ", vertical_threshold=5):
-    """Returns a concise summary of an Alignment object as a string."""
+    """Return a concise summary of an Alignment object as a string."""
     answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
@@ -215,7 +215,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
 # Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():
-    """Writing post-truncation duplicated IDs should fail for PHYLIP."""
+    """Check writing post-truncation duplicated IDs fails for PHYLIP."""
     handle = StringIO()
     sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
                  SeqRecord(Seq('AAAA'), id='longsequencename2'),

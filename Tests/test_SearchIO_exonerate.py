@@ -16,7 +16,7 @@ TEST_DIR = 'Exonerate'
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
@@ -27,7 +27,7 @@ class ExonerateSpcCases(unittest.TestCase):
     stype = ('hit_', 'query_')
 
     def check_vulgar_text(self, vulgar, text):
-        """Compares coordinate parsing for vulgar and text formats."""
+        """Compare coordinate parsing for vulgar and text formats."""
         vfile = get_file(vulgar)
         tfile = get_file(text)
 

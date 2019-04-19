@@ -93,7 +93,7 @@ class ClustalWTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Shared test procedure used by all tests."""
         self.assertTrue(str(eval(repr(cline))) == str(cline))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
                                       lambda rec: rec.id.replace(":", "_"))
@@ -130,7 +130,7 @@ class ClustalWTestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(tree_file))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 

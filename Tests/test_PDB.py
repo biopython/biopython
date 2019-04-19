@@ -1547,12 +1547,12 @@ class CopyTests(unittest.TestCase):
 
 
 def eprint(*args, **kwargs):
-    """Helper function that prints to stderr."""
+    """Print to stderr."""
     print(*args, file=sys.stderr, **kwargs)
 
 
 def will_it_float(s):
-    """Helper function that converts the input into a float if it is a number.
+    """Convert the input into a float if it is a number.
 
     If the input is a string, the output does not change.
     """

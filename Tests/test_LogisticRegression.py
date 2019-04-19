@@ -58,7 +58,7 @@ ys = [1,
 
 
 def show_progress(iteration, loglikelihood):
-    """Callback function to be used for training the model."""
+    """No action callback function, used when training the model."""
     pass
 
 

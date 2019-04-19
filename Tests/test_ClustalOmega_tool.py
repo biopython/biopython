@@ -46,8 +46,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared test procedure used by all tests."""
         # Overwrite existing files.
         cline.force = True
 
@@ -78,7 +77,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
             self.assertTrue(os.path.isfile(cline.guidetree_out))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 #################################################################

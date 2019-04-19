@@ -326,7 +326,7 @@ def compare_record(record_one, record_two):
 
 
 def record_summary(record, indent=" "):
-    """Returns a concise summary of a SeqRecord object as a string."""
+    """Return a concise summary of a SeqRecord object as a string."""
     if record.id == record.name:
         answer = "%sID and Name='%s',\n%sSeq='" % (indent, record.id, indent)
     else:
@@ -351,7 +351,7 @@ def col_summary(col_text):
 
 
 def alignment_summary(alignment, index=" "):
-    """Returns a concise summary of an Alignment object as a string."""
+    """Return a concise summary of an Alignment object as a string."""
     answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)

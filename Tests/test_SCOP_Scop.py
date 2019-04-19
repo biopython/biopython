@@ -19,7 +19,7 @@ from Bio.SCOP import Scop, cmp_sccs, parse_domain
 class ScopTests(unittest.TestCase):
 
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
-        """Compares the two specified Cla lines for equality.
+        """Compare the two specified Cla lines for equality.
 
         The order of the key-value pairs in the sixth field of the lines does
         not matter. For more information, see
