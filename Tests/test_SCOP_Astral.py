@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Astral"""
+"""Unit test for Astral."""
 
 import unittest
 

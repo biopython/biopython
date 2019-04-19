@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Residues"""
+"""Unit test for Residues."""
 
 import unittest
 from Bio.SCOP.Residues import Residues

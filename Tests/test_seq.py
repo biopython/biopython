@@ -949,7 +949,7 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual(str("??????"), str(self.s))
 
     def test_complement_of_protein(self):
-        """Test reverse complement shouldn't work on a protein!"""
+        """Check reverse complement fails on a protein."""
         seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
         with self.assertRaises(ValueError):
             seq.complement()
@@ -1037,7 +1037,7 @@ class TestComplement(unittest.TestCase):
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
 
     def test_complement_on_proteins(self):
-        """Test complement shouldn't work on a protein!"""
+        """Check complement fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.complement(s)
@@ -1079,7 +1079,7 @@ class TestReverseComplement(unittest.TestCase):
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
     def test_reverse_complement_on_proteins(self):
-        """Test reverse complement shouldn't work on a protein!"""
+        """Check reverse complement fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.reverse_complement(s)
@@ -1145,13 +1145,13 @@ class TestTranscription(unittest.TestCase):
                                  repr(nucleotide_seq.transcribe()))
 
     def test_transcription_of_rna(self):
-        """Test transcription shouldn't work on RNA!"""
+        """Check transcription fails on RNA."""
         seq = Seq.Seq("AUGAAACUG", IUPAC.ambiguous_rna)
         with self.assertRaises(ValueError):
             seq.transcribe()
 
     def test_transcription_of_proteins(self):
-        """Test transcription shouldn't work on a protein!"""
+        """Check transcription fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.transcribe(s)
@@ -1181,7 +1181,7 @@ class TestTranscription(unittest.TestCase):
                                  repr(expected))
 
     def test_back_transcription_of_proteins(self):
-        """Test back-transcription shouldn't work on a protein!"""
+        """Check back-transcription fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.back_transcribe(s)
@@ -1191,7 +1191,7 @@ class TestTranscription(unittest.TestCase):
                     s.back_transcribe()
 
     def test_back_transcription_of_dna(self):
-        """Test back-transcription shouldn't work on DNA!"""
+        """Check back-transcription fails on DNA."""
         seq = Seq.Seq("ATGAAACTG", IUPAC.ambiguous_dna)
         with self.assertRaises(ValueError):
             seq.back_transcribe()
@@ -1386,7 +1386,7 @@ class TestTranslating(unittest.TestCase):
                                                        to_stop=True))
 
     def test_translation_on_proteins(self):
-        """Test translation shouldn't work on a protein!"""
+        """Check translation fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.translate(s)
