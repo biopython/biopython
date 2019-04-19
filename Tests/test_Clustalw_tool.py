@@ -98,7 +98,7 @@ class ClustalWTestCase(unittest.TestCase):
         """Shared test procedure used by all tests."""
         self.assertTrue(str(eval(repr(cline))) == str(cline))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
-                                      lambda rec: rec.id.replace(":", "_"))
+                                      lambda rec: rec.id.replace(":", "_"))  # noqa: E731
 
         # Determine name of tree file
         if cline.newtree:

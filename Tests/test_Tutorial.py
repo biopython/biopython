@@ -222,7 +222,7 @@ for latex in files:
 
         def funct(n, d, f):
             global tutorial_base
-            method = lambda x: None
+            method = lambda x: None  # noqa: E731
             if f:
                 p = os.path.join(tutorial_base, f)
                 method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \

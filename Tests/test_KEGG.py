@@ -141,7 +141,7 @@ class MapTests(unittest.TestCase):
         self.assertEqual(len(rxs), 56)
         # sort the reaction output by the string names, so that the
         # output will be consistent between python versions
-        rxs.sort(key=lambda x: str(x))
+        rxs.sort(key=lambda x: str(x))  # noqa: E731
         self.assertEqual(str(rxs[0]),
                          "(R)-N-Methylcoclaurine + (S)-Coclaurine + NADPH + O2 "
                          "<=> 2'-Norberbamunine + 2 H2O + NADP")

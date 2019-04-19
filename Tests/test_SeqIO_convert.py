@@ -188,7 +188,7 @@ for filename, format, alphabet in tests:
             continue
 
         def funct(fn, fmt1, fmt2, alpha):
-            f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)
+            f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)  # noqa: E731
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 
@@ -233,7 +233,7 @@ for filename, format, alphabet in tests:
             continue
 
         def funct(fn, fmt1, fmt2, alpha):
-            f = lambda x: x.failure_check(fn, fmt1, fmt2, alpha)
+            f = lambda x: x.failure_check(fn, fmt1, fmt2, alpha)  # noqa: E731
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 

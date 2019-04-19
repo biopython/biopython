@@ -189,7 +189,7 @@ class SimpleAlignTest(unittest.TestCase):
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file, clw=True)
         self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
@@ -219,7 +219,7 @@ class SimpleAlignTest(unittest.TestCase):
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command...
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("in", input_file)
@@ -276,7 +276,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  shell=(sys.platform != "win32"))
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -311,7 +311,7 @@ class SimpleAlignTest(unittest.TestCase):
         # Alignment will now run...
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -328,7 +328,7 @@ class SimpleAlignTest(unittest.TestCase):
         output_clwstrict = "temp_f002.clw"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
                                     clw=True, htmlout=output_html,

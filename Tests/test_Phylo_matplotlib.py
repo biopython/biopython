@@ -49,7 +49,7 @@ class UtilTests(unittest.TestCase):
         Phylo.draw(apaf, do_show=False)
         # Fancier options
         Phylo.draw(apaf, do_show=False, branch_labels={apaf.root: 'Root'})
-        Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)
+        Phylo.draw(apaf, do_show=False, branch_labels=lambda c: c.branch_length)  # noqa: E731
 
     def test_draw_with_label_colors_dict(self):
         """Layout tree with label colors as dict.
@@ -81,8 +81,8 @@ class UtilTests(unittest.TestCase):
         dollo = Phylo.read(EX_DOLLO, 'phyloxml')
         apaf = Phylo.read(EX_APAF, 'phyloxml')
 
-        label_colors_dollo = lambda label: 'r' if label == 'f_50' else 'k'
-        label_colors_apaf = lambda label: 'r'
+        label_colors_dollo = lambda label: 'r' if label == 'f_50' else 'k'  # noqa: E731
+        label_colors_apaf = lambda label: 'r'  # noqa: E731
 
         Phylo.draw(dollo, label_colors=label_colors_dollo, do_show=False)
         Phylo.draw(apaf, label_colors=label_colors_apaf, do_show=False)

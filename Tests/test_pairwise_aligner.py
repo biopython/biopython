@@ -1189,9 +1189,9 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y
+        nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
         aligner.match_score = 1
@@ -1231,9 +1231,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y
+        nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = 'global'
         aligner.match_score = 1
@@ -1365,9 +1365,9 @@ TTG--GAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 11, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y
+        nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
         aligner.match_score = 1
@@ -1415,9 +1415,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         seq2 = "AABBBAAAACCCCAAAABBBAA"
         breaks = [0, 3, len(seq2)]
         # Very expensive to open a gap in seq1:
-        nogaps = lambda x, y: -2000 - y
+        nogaps = lambda x, y: -2000 - y  # noqa: E731
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
-        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
         aligner.mode = 'local'
         aligner.match_score = 1

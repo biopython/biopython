@@ -213,9 +213,9 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(len(w), 384)
         self.assertEqual(max(w), (95.75, 217.0))
         self.assertEqual(min(w), (0.0, 37.0))
-        self.assertEqual(max(w, key=lambda x: x[1]),
+        self.assertEqual(max(w, key=lambda x: x[1]),  # noqa: E731
                          (16.75, 313.0))
-        self.assertEqual(min(w, key=lambda x: x[1]),
+        self.assertEqual(min(w, key=lambda x: x[1]),  # noqa: E731
                          (0.25, 29.0))
         self.assertEqual(len(w[:]), 96)
         self.assertEqual(w[1], 29.)
@@ -260,9 +260,9 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(len(w2), 384)
         self.assertEqual(max(w2), (95.75, 327.0))
         self.assertEqual(min(w2), (0.0, 63.0))
-        self.assertEqual(max(w2, key=lambda x: x[1]),
+        self.assertEqual(max(w2, key=lambda x: x[1]),  # noqa: E731
                          (18.25, 357.0))
-        self.assertEqual(min(w2, key=lambda x: x[1]),
+        self.assertEqual(min(w2, key=lambda x: x[1]),  # noqa: E731
                          (0.25, 55.0))
         self.assertEqual(w2[1], 71.)
         self.assertEqual(w2[12], 316.)
@@ -284,9 +284,9 @@ class TestPhenoMicro(unittest.TestCase):
         self.assertEqual(len(w2), 384)
         self.assertEqual(max(w2), (95.75, 107.0))
         self.assertEqual(min(w2), (0.0, 11.0))
-        self.assertEqual(max(w2, key=lambda x: x[1]),
+        self.assertEqual(max(w2, key=lambda x: x[1]),  # noqa: E731
                          (15.75, 274.0))
-        self.assertEqual(min(w2, key=lambda x: x[1]),
+        self.assertEqual(min(w2, key=lambda x: x[1]),  # noqa: E731
                          (3.25, -20.0))
         self.assertEqual(w2[1], -13.)
         self.assertEqual(w2[12], 228.)
