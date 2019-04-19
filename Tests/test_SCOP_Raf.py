@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-
-"""Unit test for Raf"""
+"""Unit test for Raf."""
 
 import unittest
 
@@ -20,7 +19,7 @@ class RafTests(unittest.TestCase):
     rafLine3 = "101mB 0.01 38 010301 111011    0  153   90 mm  91 vv  92 ll  939ss  94 ee  95 gg"
 
     def testParse(self):
-        """Can we parse a RAF record?"""
+        """Parse a RAF record."""
         r = Raf.SeqMap(self.rafLine)
 
         self.assertEqual(r.pdbid, "101m")

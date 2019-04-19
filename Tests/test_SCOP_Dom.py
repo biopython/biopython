@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""Unit test for Dom
+"""Unit test for Dom.
 
 This test requires the mini DOM file 'testDom.txt'
 """

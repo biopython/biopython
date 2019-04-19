@@ -5,8 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""Unit test for Cla"""
+"""Unit test for Cla."""
 
 import unittest
 
