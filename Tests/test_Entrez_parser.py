@@ -4237,7 +4237,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(article['MedlineCitation']['Article']['GrantList'].attributes, {'CompleteYN': 'Y'})
 
     def test_pubmed_html_mathml_tags(self):
-        """Test parsing XML returned by EFetch, PubMed database, with both HTML and MathML tags"""
+        """Test parsing XML returned by EFetch, PubMed database, with both HTML and MathML tags."""
         # In PubMed display PMID 30108519 in xml retrieval mode, containing
         # both HTML and MathML tags in the abstract text.
         # To create the XML file, use

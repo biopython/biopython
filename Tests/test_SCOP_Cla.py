@@ -19,7 +19,7 @@ class ClaTests(unittest.TestCase):
         self.filename = './SCOP/dir.cla.scop.txt_test'
 
     def testParse(self):
-        """Test if all records in a CLA file are being read"""
+        """Test if all records in a CLA file are being read."""
         f = open(self.filename)
         try:
             count = 0
@@ -31,7 +31,7 @@ class ClaTests(unittest.TestCase):
             f.close()
 
     def testStr(self):
-        """Test if we can convert each record to a string correctly"""
+        """Test if we can convert each record to a string correctly."""
         f = open(self.filename)
         try:
             for line in f:
@@ -56,12 +56,12 @@ class ClaTests(unittest.TestCase):
             f.close()
 
     def testError(self):
-        """Test if a corrupt record raises the appropriate exception"""
+        """Test if a corrupt record raises the appropriate exception."""
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
         self.assertRaises(ValueError, Cla.Record, corruptRec)
 
     def testRecord(self):
-        """Test one record in detail"""
+        """Test one record in detail."""
         recLine = 'd1dan.1\t1dan\tT:,U:91-106\tb.1.2.1\t21953\tcl=48724,cf=48725,sf=49265,fa=49266,dm=49267,sp=49268,px=21953'
 
         record = Cla.Record(recLine)
@@ -79,7 +79,7 @@ class ClaTests(unittest.TestCase):
                                             'px': 21953})
 
     def testIndex(self):
-        """Test CLA file indexing"""
+        """Test CLA file indexing."""
         index = Cla.Index(self.filename)
 
         self.assertEqual(len(index), 14)

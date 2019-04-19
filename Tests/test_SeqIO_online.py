@@ -39,7 +39,7 @@ class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
 
     def test_get_sprot_raw(self):
-        """Bio.ExPASy.get_sprot_raw("O23729")"""
+        """Bio.ExPASy.get_sprot_raw("O23729")."""
         identifier = "O23729"
         # This is to catch an error page from our proxy:
         handle = UndoHandle(ExPASy.get_sprot_raw(identifier))

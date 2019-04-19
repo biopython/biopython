@@ -68,7 +68,7 @@ class ExonerateTextCases(unittest.TestCase):
     fmt = 'exonerate-text'
 
     def test_exn_22_m_affine_local(self):
-        """Test parsing exonerate output (exn_22_m_affine_local.exn)"""
+        """Test parsing exonerate output (exn_22_m_affine_local.exn)."""
 
         exn_file = get_file('exn_22_m_affine_local.exn')
         qresult = read(exn_file, self.fmt)
@@ -173,7 +173,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GTTGAAGAAGCCAAACGGAAGAAAGACGAGGA-GAGAAAG', str(hsp.hit_all[0].seq)[-40:])
 
     def test_exn_22_m_cdna2genome(self):
-        """Test parsing exonerate output (exn_22_m_cdna2genome.exn)"""
+        """Test parsing exonerate output (exn_22_m_cdna2genome.exn)."""
 
         exn_file = get_file('exn_22_m_cdna2genome.exn')
         qresult = read(exn_file, self.fmt)
@@ -281,7 +281,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TTCTATAGAAGTACAGTTATTCAAACAAAAAAAAAAAAAA', str(hsp.hit_all[-1].seq)[-40:])
 
     def test_exn_22_m_coding2coding(self):
-        """Test parsing exonerate output (exn_22_m_coding2coding.exn)"""
+        """Test parsing exonerate output (exn_22_m_coding2coding.exn)."""
 
         exn_file = get_file('exn_22_m_coding2coding.exn')
         qresult = read(exn_file, self.fmt)
@@ -381,7 +381,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CAATGCAGAAGACGTTCAATTAGCTTTGAATAAGCATATG', str(hsp.hit_all[0].seq)[-40:])
 
     def test_exn_22_m_coding2genome(self):
-        """Test parsing exonerate output (exn_22_m_coding2genome.exn)"""
+        """Test parsing exonerate output (exn_22_m_coding2genome.exn)."""
 
         exn_file = get_file('exn_22_m_coding2genome.exn')
         qresult = read(exn_file, self.fmt)
@@ -481,7 +481,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CAATGCAGAAGACGTTCAATTAGCTTTGAATAAGCATATG', str(hsp.hit_all[0].seq)[-40:])
 
     def test_exn_22_m_dna2protein(self):
-        """Test parsing exonerate output (exn_22_m_dna2protein.exn)"""
+        """Test parsing exonerate output (exn_22_m_dna2protein.exn)."""
 
         exn_file = get_file('exn_22_m_dna2protein.exn')
         qresult = read(exn_file, self.fmt)
@@ -519,7 +519,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('NQSVPKRPAGSVQNPVYHNQPLNPAPSRDPH', str(hsp[0].hit.seq)[:40])
 
     def test_exn_22_m_est2genome(self):
-        """Test parsing exonerate output (exn_22_m_est2genome.exn)"""
+        """Test parsing exonerate output (exn_22_m_est2genome.exn)."""
 
         exn_file = get_file('exn_22_m_est2genome.exn')
         qresult = read(exn_file, self.fmt)
@@ -632,7 +632,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hit_all[-1].seq)[-40:])
 
     def test_exn_22_m_genome2genome(self):
-        """Test parsing exonerate output (exn_22_m_genome2genome.exn)"""
+        """Test parsing exonerate output (exn_22_m_genome2genome.exn)."""
 
         exn_file = get_file('exn_22_m_genome2genome.exn')
         qresult = read(exn_file, self.fmt)
@@ -771,7 +771,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('AAAAGATTTTCT--ACGACTTGCAGTTGGAAAGAGA', str(hsp.hit_all[-1].seq))
 
     def test_exn_22_m_ungapped(self):
-        """Test parsing exonerate output (exn_22_m_ungapped.exn)"""
+        """Test parsing exonerate output (exn_22_m_ungapped.exn)."""
 
         exn_file = get_file('exn_22_m_ungapped.exn')
         qresult = read(exn_file, self.fmt)
@@ -871,7 +871,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GTTTATGTTCCGAGCTAATGGCAAAGGCAAAATGTTCAGA', str(hsp.hit_all[0].seq)[-40:])
 
     def test_exn_22_m_ungapped_trans(self):
-        """Test parsing exonerate output (exn_22_m_ungapped_trans.exn)"""
+        """Test parsing exonerate output (exn_22_m_ungapped_trans.exn)."""
 
         exn_file = get_file('exn_22_m_ungapped_trans.exn')
         qresult = read(exn_file, self.fmt)
@@ -966,7 +966,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT', str(hsp.hit_all[0].seq)[-40:])
 
     def test_exn_22_m_ner(self):
-        """Test parsing exonerate output (exn_22_m_ner.exn)"""
+        """Test parsing exonerate output (exn_22_m_ner.exn)."""
 
         exn_file = get_file('exn_22_m_ner.exn')
         qresult = read(exn_file, self.fmt)
@@ -1064,7 +1064,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TGATAGGACAGCTCCTGTAG', str(hsp.hit_all[-1].seq))
 
     def test_exn_22_q_multiple(self):
-        """Test parsing exonerate output (exn_22_q_multiple.exn)"""
+        """Test parsing exonerate output (exn_22_q_multiple.exn)."""
 
         exn_file = get_file('exn_22_q_multiple.exn')
         qresults = list(parse(exn_file, self.fmt))
@@ -1266,7 +1266,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hit_all[-1].seq)[-40:])
 
     def test_exn_22_m_coding2coding_fshifts(self):
-        """Test parsing exonerate output (exn_22_m_coding2coding_fshifts.exn)"""
+        """Test parsing exonerate output (exn_22_m_coding2coding_fshifts.exn)."""
 
         exn_file = get_file('exn_22_m_coding2coding_fshifts.exn')
         qresult = read(exn_file, self.fmt)
@@ -1346,7 +1346,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].hit.seq)[:40])
 
     def test_exn_22_m_protein2dna_fshifts(self):
-        """Test parsing exonerate output (exn_22_m_protein2dna_fshifts.exn)"""
+        """Test parsing exonerate output (exn_22_m_protein2dna_fshifts.exn)."""
 
         exn_file = get_file('exn_22_m_protein2dna_fshifts.exn')
         qresult = read(exn_file, self.fmt)
@@ -1419,7 +1419,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].hit.seq)[-40:])
 
     def test_exn_22_m_protein2genome(self):
-        """Test parsing exonerate output (exn_22_m_protein2genome.exn)"""
+        """Test parsing exonerate output (exn_22_m_protein2genome.exn)."""
 
         exn_file = get_file('exn_22_m_protein2genome.exn')
         qresult = read(exn_file, self.fmt)
@@ -1489,7 +1489,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(2, len(hsp.aln_annotation_all))
 
     def test_exn_22_q_none(self):
-        """Test parsing exonerate output (exn_22_q_none.exn)"""
+        """Test parsing exonerate output (exn_22_q_none.exn)."""
         exn_file = get_file('exn_22_q_none.exn')
         qresults = parse(exn_file, 'exonerate-text')
         self.assertRaises(StopIteration, next, qresults)
@@ -1500,7 +1500,7 @@ class ExonerateVulgarCases(unittest.TestCase):
     fmt = 'exonerate-vulgar'
 
     def test_exn_22_o_vulgar(self):
-        """Test parsing exonerate output (exn_22_o_vulgar.exn)"""
+        """Test parsing exonerate output (exn_22_o_vulgar.exn)."""
 
         exn_file = get_file('exn_22_o_vulgar.exn')
         qresult = read(exn_file, self.fmt)
@@ -1589,7 +1589,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         self.assertEqual(' M 31 31 G 3 0 M 4 4 G 2 0 M 19 19 G 0 3 M 9 9 G 0 1 M 6 6 G 1 0 M 5 5 5 2 2 I 0 154244 I 57 0 I 0 47 3 2 2 M 25 25 G 5 0 M 4 4 G 1 0 M 3 3 G 3 0 M 4 4 G 1 0 M 9 9 G 0 1 M 14 14 5 2 2 I 0 101116 I 31 0 3 2 2 M 23 23 G 0 1 M 15 15 G 1 0 M 9 9 G 1 0 M 2 2 G 1 0 M 14 14 C 18 18 S 2 2 5 0 2 I 0 177442 3 0 2 S 1 1 C 12 12 M 2 2 G 0 1 M 22 22 5 2 2 I 0 136697 I 7 0 I 0 6 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 3 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 2 I 2 0 I 0 2 I 17 0 3 2 2 M 12 12 G 2 0 M 22 22', hsp.vulgar_comp)
 
     def test_exn_22_o_vulgar_fshifts(self):
-        """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)"""
+        """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)."""
 
         exn_file = get_file('exn_22_o_vulgar_fshifts.exn')
         qresult = read(exn_file, self.fmt)
@@ -1645,7 +1645,7 @@ class ExonerateCigarCases(unittest.TestCase):
     fmt = 'exonerate-cigar'
 
     def test_exn_22_o_vulgar_cigar(self):
-        """Test parsing exonerate output (exn_22_o_vulgar_cigar.exn)"""
+        """Test parsing exonerate output (exn_22_o_vulgar_cigar.exn)."""
 
         exn_file = get_file('exn_22_o_vulgar_cigar.exn')
         qresult = read(exn_file, self.fmt)

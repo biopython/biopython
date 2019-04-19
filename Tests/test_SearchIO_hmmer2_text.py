@@ -15,7 +15,7 @@ class HmmpfamTests(unittest.TestCase):
     fmt = 'hmmer2-text'
 
     def test_hmmpfam_21(self):
-        """Test parsing hmmpfam 2.1 file (text_21_hmmpfam_001.out)"""
+        """Test parsing hmmpfam 2.1 file (text_21_hmmpfam_001.out)."""
         results = parse(path.join("Hmmer", "text_21_hmmpfam_001.out"), self.fmt)
         res = next(results)
         self.assertEqual('roa1_drome', res.id)
@@ -68,7 +68,7 @@ class HmmpfamTests(unittest.TestCase):
                          str(hsp.query.seq))
 
     def test_hmmpfam_22(self):
-        """Test parsing hmmpfam 2.2 file (text_22_hmmpfam_001.out)"""
+        """Test parsing hmmpfam 2.2 file (text_22_hmmpfam_001.out)."""
         results = parse(path.join("Hmmer", "text_22_hmmpfam_001.out"), self.fmt)
         res = next(results)
         self.assertEqual('gi|1522636|gb|AAC37060.1|', res.id)
@@ -105,7 +105,7 @@ class HmmpfamTests(unittest.TestCase):
                          str(hsp.query.seq))
 
     def test_hmmpfam_23(self):
-        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)"""
+        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_001.out)."""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_001.out"), self.fmt)
         res = next(results)
         self.assertEqual('gi|90819130|dbj|BAE92499.1|', res.id)
@@ -153,7 +153,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertAlmostEqual(9e-255, hsp.evalue)
 
     def test_hmmpfam_23_no_match(self):
-        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_002.out)"""
+        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_002.out)."""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_002.out"), self.fmt)
         res = next(results)
 
@@ -166,7 +166,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(0, len(res.hits))
 
     def test_hmmpfam_23_missing_consensus(self):
-        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_003.out)"""
+        """Test parsing hmmpfam 2.3 file (text_23_hmmpfam_003.out)."""
         results = parse(path.join("Hmmer", "text_23_hmmpfam_003.out"), self.fmt)
         res = next(results)
 
@@ -216,7 +216,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('PKSI-FK', res[1].id)
 
     def test_hmmpfam_24(self):
-        """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""
+        """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)."""
         results = list(parse(path.join("Hmmer", "text_24_hmmpfam_001.out"), self.fmt))
         self.assertEqual(5, len(results))
 
@@ -316,7 +316,7 @@ class HmmsearchTests(unittest.TestCase):
     fmt = 'hmmer2-text'
 
     def test_hmmsearch_20(self):
-        """Test parsing hmmsearch 2.0 file (text_20_hmmsearch_001.out)"""
+        """Test parsing hmmsearch 2.0 file (text_20_hmmsearch_001.out)."""
         res = read(path.join("Hmmer", "text_20_hmmsearch_001.out"), self.fmt)
 
         # first query
@@ -394,7 +394,7 @@ class HmmsearchTests(unittest.TestCase):
         self.assertEqual('..', hsp.hit_endtype)
 
     def test_hmmsearch_22(self):
-        """Test parsing hmmsearch 2.2 file (text_22_hmmsearch_001.out)"""
+        """Test parsing hmmsearch 2.2 file (text_22_hmmsearch_001.out)."""
         res = read(path.join("Hmmer", "text_22_hmmsearch_001.out"), self.fmt)
 
         # first query

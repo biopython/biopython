@@ -173,7 +173,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
-        """Parse GenBank/EMBL paired records with PR project entry: GenBank"""
+        """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
@@ -186,7 +186,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
-        """Parse GenBank/EMBL paired records with PR project entry: EMBL"""
+        """Parse GenBank/EMBL paired records with PR project entry: EMBL."""
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)
@@ -232,7 +232,7 @@ KEYWORDS    """ in gb, gb)
                          'COMPLETENESS: full length.')
 
     def test_locus_line_topogoly(self):
-        """Test if chromosome topology is conserved"""
+        """Test if chromosome topology is conserved."""
         record = SeqIO.read('GenBank/DS830848.gb', 'genbank')
         self.assertEqual(record.annotations['topology'], 'linear')
         out_handle = StringIO()
@@ -343,7 +343,7 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(seq_len, len(new))
 
     def test_genbank_date_default(self):
-        """Check if default date is handled correctly"""
+        """Check if default date is handled correctly."""
 
         sequence_object = Seq("ATGC", generic_dna)
         # check if default value is inserted correctly
@@ -358,7 +358,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
-        """Check if user provided date is inserted correctly"""
+        """Check if user provided date is inserted correctly."""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -373,7 +373,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
-        """Check if date lists are handled correctly"""
+        """Check if date lists are handled correctly."""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -399,7 +399,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
-        """Check if datetime objects are handled correctly"""
+        """Check if datetime objects are handled correctly."""
 
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
@@ -414,7 +414,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "02-FEB-2000")
 
     def test_genbank_date_invalid(self):
-        """Check if invalid dates are treated as default"""
+        """Check if invalid dates are treated as default."""
 
         invalid_dates = ("invalid date",
                          "29-2-1981",
@@ -437,7 +437,7 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):
-        """Check that we can read and write files with longer locus lines"""
+        """Check that we can read and write files with longer locus lines."""
         # Create example file from existing file
         with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
             data = inhandle.readlines()

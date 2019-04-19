@@ -65,7 +65,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
             ]
 
     def test_render_KGML_import_map(self):
-        """Basic rendering of KGML: use imported imagemap
+        """Basic rendering of KGML: use imported imagemap.
 
         Uses the URL indicated in the .xml file.
 

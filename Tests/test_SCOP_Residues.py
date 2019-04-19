@@ -36,7 +36,7 @@ class ResiduesTests(unittest.TestCase):
             self.assertEqual(str(r), loc[0])
 
     def testAstralParse(self):
-        """Test if we can parse residue subsets enclosed in brackets"""
+        """Test if we can parse residue subsets enclosed in brackets."""
         for loc in self.res:
             r = Residues("(" + loc[0] + ")")
             self.assertEqual(r.fragments, loc[1])
