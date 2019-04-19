@@ -44,7 +44,7 @@ class MSAProbsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Shared testing procedure used by all tests."""
 
         # Mark output files for later cleanup.
         self.add_file_to_clean(cline.outfile)
@@ -54,7 +54,7 @@ class MSAProbsTestCase(unittest.TestCase):
         output, error = cline()
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 #################################################################

@@ -49,7 +49,7 @@ CUR_DIR = os.getcwd()
 
 
 def add_prefix(key):
-    """Dummy key_function for testing index code."""
+    """Sample key_function for testing index code."""
     return "id_" + key
 
 

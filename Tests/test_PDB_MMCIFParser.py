@@ -264,7 +264,7 @@ class ParseReal(unittest.TestCase):
         self._run_point_mutation_tests(FastMMCIFParser(QUIET=True))
 
     def _run_point_mutation_tests(self, parser):
-        """Common test code for testing point mutations."""
+        """Shared test code for testing point mutations."""
         structure = parser.get_structure("example", "PDB/3JQH.cif")
 
         # Residue 1 and 15 should be disordered.

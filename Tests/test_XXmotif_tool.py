@@ -48,7 +48,7 @@ class XXmotifTestCase(unittest.TestCase):
             shutil.rmtree(self.out_dir)
 
     def standard_test_procedure(self, cline):
-        """Standard test procedure used by all tests."""
+        """Shared test procedure used by all tests."""
         output, error = cline()
 
         self.assertTrue(os.path.isdir(self.out_dir))

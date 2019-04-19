@@ -132,13 +132,13 @@ class SamtoolsTestCase(unittest.TestCase):
             % (cmdline, stderr_sam))
 
     def create_fasta_index(self):
-        """Creates index for reference fasta sequence."""
+        """Create index for reference fasta sequence."""
         cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
 
     def create_bam_index(self, input_bam):
-        """Creates index of an input bam file."""
+        """Create index of an input bam file."""
         cmdline = SamtoolsIndexCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", input_bam)
         stdout, stderr = cmdline()

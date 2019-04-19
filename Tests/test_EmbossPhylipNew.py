@@ -71,7 +71,11 @@ def clean_up():
 
 
 def parse_trees(filename):
-    """Helper function until we have Bio.Phylo on trunk."""
+    """Parse trees.
+
+    Helper function until we have Bio.Phylo on trunk.
+    """
+    # TODO - Can this be removed now?
     data = open("test_file", "r").read()
     for tree_str in data.split(";\n"):
         if tree_str:

@@ -59,7 +59,7 @@ if len(exes) < len(exes_wanted):
 
 
 def get_emboss_version():
-    """Returns a tuple of three ints, e.g. (6,1,0)."""
+    """Return a tuple of three ints, e.g. (6,1,0)."""
     # Windows and Unix versions of EMBOSS seem to differ in
     # which lines go to stdout and stderr - so merge them.
     child = subprocess.Popen(_escape_filename(exes["embossversion"]),
