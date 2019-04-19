@@ -47,8 +47,10 @@ tc.end_section()    # '***** end_section\n'
 
 print("Running tests on is_blank_line")
 
-is_blank_line = lambda *args, **keywds: \
-                pb(ParserSupport.is_blank_line(*args, **keywds))
+
+def is_blank_line(*args, **keywds):
+    return pb(ParserSupport.is_blank_line(*args, **keywds))
+
 
 print(is_blank_line('\n'))                              # 1
 print(is_blank_line('\r\n'))                            # 1
@@ -177,6 +179,15 @@ else:
 
 print("Running tests on attempt_read_and_call")
 
+
+def arac(*args, **keywds):
+    return pb(ParserSupport.attempt_read_and_call(*args, **keywds))
+
+
+def m(line):
+    lines.append(line)
+
+
 data = """>gi|132871|sp|P19947|RL30_BACSU 50S RIBOSOMAL PROTEIN L30 (BL27)
 MAKLEITLKRSVIGRPEDQRVTVRTLGLKKTNQTVVHEDNAAIRGMINKVSHLVSVKEQ
 >gi|132679|sp|P19946|RL15_BACSU 50S RIBOSOMAL PROTEIN L15
@@ -185,15 +196,7 @@ RKEYAVVNLDKLNGFAEGTEVTPELLLETGVISKLNAGVKILGNGKLEKKLTVKANKFSASAKEAVEAAG
 GTAEVI"""
 
 h = File.UndoHandle(StringIO(data))
-
-arac = lambda *args, **keywds: \
-       pb(ParserSupport.attempt_read_and_call(*args, **keywds))
 lines = []
-
-
-def m(line):
-    lines.append(line)
-
 
 print(arac(h, m, contains="RIBOSOMAL PROTEIN"))   # 1
 print(arac(h, m, start="foobar"))                 # 0
