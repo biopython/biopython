@@ -39,12 +39,6 @@ ignore =
     D202,
     # We ignore D203 deliberately in favour of passing D211,
     D203,
-    # ===========================================
-    # pydocstyle: D4## - Docstring Content Issues
-    # ===========================================
-    # D412	No blank lines allowed between a section header and its content
-    # We ignore D412 deliberately:
-    D412,
     # ====================
     # flake8-bugbear: B###
     # ====================
