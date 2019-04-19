@@ -1618,7 +1618,7 @@ class DsspTests(unittest.TestCase):
                     xtra_list_ref = list(map(will_it_float, xtra_list_ref))
                     # The xtra attribute is a dict.
                     # To compare with the pre-comouted values first sort according to keys:
-                    xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])
+                    xtra_itemts = sorted(res.xtra.items(), key=lambda s: s[0])  # noqa: E731
                     # Then extract the list of xtra values for the residue
                     # and convert to floats where possible:
                     xtra_list = [t[1] for t in xtra_itemts]

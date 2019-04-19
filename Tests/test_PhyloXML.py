@@ -698,7 +698,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual('duplications' in evts, False)
         # Attribute access: __get/set/delitem__
         self.assertEqual(evts['speciations'], 1)
-        self.assertRaises(KeyError, lambda k: evts[k], 'duplications')
+        self.assertRaises(KeyError, lambda k: evts[k], 'duplications')  # noqa: E731
         evts['duplications'] = 3
         self.assertEqual(evts.duplications, 3)
         self.assertEqual(len(evts), 2)

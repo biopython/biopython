@@ -196,7 +196,7 @@ tests = [("diff_ids", 2),
          ("trunc_at_qual", 4)]
 for base_name, good_count in tests:
     def funct(name, c):
-        f = lambda x: x.check_all_fail("Quality/error_%s.fastq" % name, c)
+        f = lambda x: x.check_all_fail("Quality/error_%s.fastq" % name, c)  # noqa: E731
         f.__doc__ = "Reject FASTQ with %s" % name.replace("_", " ")
         return f
     setattr(TestFastqErrors, "test_%s" % (base_name),
@@ -214,7 +214,7 @@ tests = [("del", 3, 5),
          ("null", 0, 5)]
 for base_name, good_count, full_count in tests:
     def funct(name, c1, c2):
-        f = lambda x: x.check_qual_char("Quality/error_qual_%s.fastq" % name, c1, c2)
+        f = lambda x: x.check_qual_char("Quality/error_qual_%s.fastq" % name, c1, c2)  # noqa: E731
         f.__doc__ = "Reject FASTQ with %s in quality" % name.replace("_", " ")
         return f
     setattr(TestFastqErrors, "test_qual_%s" % (base_name),
@@ -316,7 +316,7 @@ for base_name, variant in tests:
     assert variant in ["sanger", "solexa", "illumina"]
 
     def funct(bn, var):
-        f = lambda x: x.simple_check(bn, var)
+        f = lambda x: x.simple_check(bn, var)  # noqa: E731
         f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
         return f
 

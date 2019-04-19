@@ -435,7 +435,7 @@ class MixinTests(unittest.TestCase):
         tree = Phylo.read(EX_APAF, 'phyloxml')
         d1 = tree.depths()
         internal_node_ct = len(tree.get_nonterminals())
-        tree.collapse_all(lambda c: c.branch_length < 0.1)
+        tree.collapse_all(lambda c: c.branch_length < 0.1)  # noqa: E731
         d2 = tree.depths()
         # Should have collapsed 7 internal nodes
         self.assertEqual(len(tree.get_nonterminals()), internal_node_ct - 7)

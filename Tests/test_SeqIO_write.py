@@ -164,7 +164,7 @@ for (records, descr, errs) in test_records:
     for format in test_write_read_alignment_formats:
         # Assume no errors expected...
         def funct(records, format, descr):
-            f = lambda x: x.check(records, format)
+            f = lambda x: x.check(records, format)  # noqa: E731
             f.__doc__ = "%s for %s" % (format, descr)
             return f
         setattr(WriterTests,
@@ -174,7 +174,7 @@ for (records, descr, errs) in test_records:
         for err_formats, err_type, err_msg in errs:
             if format in err_formats:
                 def funct_e(records, format, descr, err_type, err_msg):
-                    f = lambda x: x.check_write_fails(
+                    f = lambda x: x.check_write_fails(  # noqa: E731
                         records,
                         format,
                         err_type,

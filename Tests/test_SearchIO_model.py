@@ -447,7 +447,7 @@ class QueryResultCases(unittest.TestCase):
 
     def test_append_custom_hit_key_function_ok(self):
         """Test QueryResult.append, with custom hit key function."""
-        self.qresult._hit_key_function = lambda hit: hit.id + '_custom'
+        self.qresult._hit_key_function = lambda hit: hit.id + '_custom'  # noqa: E731
         # append should assign hit keys according to _hit_key_function
         self.assertEqual(['hit1', 'hit2', 'hit3'], list(self.qresult.hit_keys))
         self.qresult.append(hit41)
@@ -483,7 +483,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         # filter func: min hit length == 2
         # this would filter out hit21, since it only has 1 HSP
-        filter_func = lambda hit: len(hit) >= 2
+        filter_func = lambda hit: len(hit) >= 2  # noqa: E731
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual([hit11, hit31], list(filtered.hits))
         # make sure all remaining hits return True for the filter function
@@ -505,7 +505,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.hit_filter, all hits filtered out."""
         # when the filter filters out all hits, hit_filter should return an
         # empty QueryResult object
-        filter_func = lambda hit: len(hit) > 50
+        filter_func = lambda hit: len(hit) > 50  # noqa: E731
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual(0, len(filtered))
         self.assertTrue(isinstance(filtered, QueryResult))
@@ -552,7 +552,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         # filter func: no '-' in hsp query sequence
         # this would filter out hsp113 and hsp211, effectively removing hit21
-        filter_func = lambda hsp: '-' not in str(hsp.fragments[0].query)
+        filter_func = lambda hsp: '-' not in str(hsp.fragments[0].query)  # noqa: E731
         filtered = self.qresult.hsp_filter(filter_func)
         self.assertIn('hit1', filtered)
         self.assertNotIn('hit2', filtered)
@@ -578,7 +578,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.hsp_filter, all hits filtered out."""
         # when the filter filters out all hits, hsp_filter should return an
         # empty QueryResult object
-        filter_func = lambda hsp: len(hsp) > 50
+        filter_func = lambda hsp: len(hsp) > 50  # noqa: E731
         filtered = self.qresult.hsp_filter(filter_func)
         self.assertEqual(0, len(filtered))
         self.assertTrue(isinstance(filtered, QueryResult))
@@ -728,7 +728,7 @@ class QueryResultCases(unittest.TestCase):
     def test_sort_key_ok(self):
         """Test QueryResult.sort, with custom key."""
         # if custom key is given, sort using it
-        key = lambda hit: len(hit)
+        key = lambda hit: len(hit)  # noqa: E731
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.qresult.sort(key=key)
         self.assertEqual([hit21, hit31, hit11], list(self.qresult.hits))
@@ -736,7 +736,7 @@ class QueryResultCases(unittest.TestCase):
     def test_sort_key_not_in_place_ok(self):
         """Test QueryResult.sort, with custom key, not in place."""
         # if custom key is given, sort using it
-        key = lambda hit: len(hit)
+        key = lambda hit: len(hit)  # noqa: E731
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         sorted_qresult = self.qresult.sort(key=key, in_place=False)
         self.assertEqual([hit21, hit31, hit11], list(sorted_qresult.hits))
@@ -950,7 +950,7 @@ class HitCases(unittest.TestCase):
         # filter should return a new QueryResult object (shallow copy),
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
         # filter func: min hsp length == 4
-        filter_func = lambda hsp: len(hsp[0]) >= 4
+        filter_func = lambda hsp: len(hsp[0]) >= 4  # noqa: E731
         filtered = self.hit.filter(filter_func)
         self.assertEqual([hsp111, hsp113], filtered.hsps)
         # make sure all remaining hits return True for the filter function
@@ -971,7 +971,7 @@ class HitCases(unittest.TestCase):
     def test_filter_no_filtered(self):
         """Test Hit.hit_filter, all hits filtered out."""
         # when the filter filters out all hits, it should return None
-        filter_func = lambda hsp: len(hsp[0]) > 50
+        filter_func = lambda hsp: len(hsp[0]) > 50  # noqa: E731
         filtered = self.hit.filter(filter_func)
         self.assertTrue(filtered is None)
 
@@ -1035,7 +1035,7 @@ class HitCases(unittest.TestCase):
         """Test Hit.sort."""
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
         # sort by hsp length
-        key = lambda batch_hsp: len(batch_hsp[0])
+        key = lambda batch_hsp: len(batch_hsp[0])  # noqa: E731
         self.hit.sort(key=key)
         self.assertEqual([hsp112, hsp113, hsp111], self.hit.hsps)
 
@@ -1043,7 +1043,7 @@ class HitCases(unittest.TestCase):
         """Test Hit.sort, not in place."""
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
         # sort by hsp length
-        key = lambda hsp: len(hsp[0])
+        key = lambda hsp: len(hsp[0])  # noqa: E731
         sorted_hit = self.hit.sort(key=key, in_place=False)
         self.assertEqual([hsp112, hsp113, hsp111], sorted_hit.hsps)
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)

@@ -86,7 +86,7 @@ for database, formats, entry, length, checksum in [
         ]:
 
     def funct(d, f, e, l, c):
-        method = lambda x: x.simple(d, f, e, l, c)
+        method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
         method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 
