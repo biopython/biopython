@@ -289,6 +289,13 @@ vector_converter(PyObject* object, void* pointer)
     return 1;
 }
 
+static int
+vector_none_converter(PyObject* object, void* pointer)
+{
+    if (object == Py_None) return 1;
+    return vector_converter(object, pointer);
+}
+
 /* -- clusterid ------------------------------------------------------------- */
 
 static int check_clusterid(Py_buffer clusterid) {
@@ -1605,7 +1612,7 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
                                      &PyTreeType, &tree,
                                      data_converter, &data,
                                      mask_converter, &mask,
-                                     vector_converter, &weight,
+                                     vector_none_converter, &weight,
                                      &transpose,
                                      method_treecluster_converter, &method,
                                      distance_converter, &dist,
@@ -1635,6 +1642,10 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
 
         if (!mask.values) {
             PyErr_SetString(PyExc_RuntimeError, "mask is None");
+            goto exit;
+        }
+        if (!weight.buf) {
+            PyErr_SetString(PyExc_RuntimeError, "weight is None");
             goto exit;
         }
         nrows = data.nrows;
@@ -1692,7 +1703,7 @@ py_treecluster(PyObject* self, PyObject* args, PyObject* keywords)
 exit:
     free_data(&data);
     free_mask(&mask);
-    PyBuffer_Release(&weight);
+    if (weight.buf) PyBuffer_Release(&weight);
     free_distancematrix(&distances);
     if (tree == NULL || tree->n == 0) return NULL;
     Py_INCREF(Py_None);

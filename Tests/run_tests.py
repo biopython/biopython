@@ -83,7 +83,6 @@ VERBOSITY = 0
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
     'Bio.AlignIO.MauveIO',
-    'Bio.Cluster',
     'Bio.Data.CodonTable',
     'Bio.ExPASy',
     'Bio.ExPASy.cellosaurus',
@@ -126,6 +125,7 @@ EXCLUDE_DOCTEST_MODULES.extend([
 if numpy is None:
     EXCLUDE_DOCTEST_MODULES.extend([
         "Bio.Affy.CelFile",
+        "Bio.Cluster",
         "Bio.KDTree",
         "Bio.KDTree.KDTree",
         "Bio.kNN",

@@ -294,13 +294,22 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     treecluster returns a Tree object describing the hierarchical clustering
     result. See the description of the Tree class for more information.
     """
+    if data is None and distancematrix is None:
+        raise ValueError('use either data or distancematrix')
+    if data is not None and distancematrix is not None:
+        raise ValueError('use either data or distancematrix; do not use both')
     if data is not None:
         data = __check_data(data)
         shape = data.shape
         ndata = shape[0] if transpose else shape[1]
         mask = __check_mask(mask, shape)
         weight = __check_weight(weight, ndata)
-    distancematrix = __check_distancematrix(distancematrix)
+    if distancematrix is not None:
+        distancematrix = __check_distancematrix(distancematrix)
+        if mask is not None:
+            raise ValueError('mask is ignored if distancematrix is used')
+        if weight is not None:
+            raise ValueError('weight is ignored if distancematrix is used')
     tree = Tree()
     _cluster.treecluster(tree, data, mask, weight, transpose, method, dist,
                          distancematrix)
