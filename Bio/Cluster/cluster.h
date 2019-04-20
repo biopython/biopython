@@ -34,10 +34,6 @@
 #define	max(x, y)	((x) > (y) ? (x) : (y))
 #endif
 
-#ifdef WINDOWS
-#  include <windows.h>
-#endif
-
 #define CLUSTERVERSION "1.58"
 
 /* Chapter 2 */
