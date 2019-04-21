@@ -139,7 +139,7 @@ def compare_feature(old_f, new_f):
                         % (repr(old_f.qualifiers[key]),
                            repr(new_f.qualifiers[key]))
             else:
-                assert False, "Problem with feature's '%s' qualifier" % key
+                raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
             # Should both be lists of strings...
             assert old_f.qualifiers[key] == new_f.qualifiers[key], \
