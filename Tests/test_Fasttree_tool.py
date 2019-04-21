@@ -80,6 +80,7 @@ cline = FastTreeCommandline(fasttree_exe, input=input_file)
 
 try:
     stdout, stderr = cline()
+    raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 except ApplicationError as err:
     print("Failed (good)")
     # Python 2.3 on Windows gave (0, 'Error')
