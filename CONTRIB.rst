@@ -169,6 +169,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
+- Marek Schwarz <https://github.com/SchwarzMarek>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>

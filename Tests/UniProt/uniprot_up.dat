@@ -1,0 +1,64 @@
+ID   13SB_FAGES              Reviewed;         194 AA.
+AC   P83004;
+DT   11-APR-2003, integrated into UniProtKB/Swiss-Prot.
+DT   01-OCT-2001, sequence version 1.
+DT   23-MAY-2018, entry version 54.
+DE   RecName: Full=13S globulin basic chain;
+OS   Fagopyrum esculentum (Common buckwheat) (Polygonum fagopyrum).
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; Gunneridae;
+OC   Pentapetalae; Caryophyllales; Polygonaceae; Polygonoideae; Fagopyreae;
+OC   Fagopyrum.
+OX   NCBI_TaxID=3617 {ECO:0000305};
+RN   [1]
+RP   PROTEIN SEQUENCE, FUNCTION, AND TISSUE SPECIFICITY.
+RC   STRAIN=cv. BDS-1354; TISSUE=Endosperm;
+RX   PubMed=12657290; DOI=10.1016/S0031-9422(02)00755-0;
+RA   Bharali S., Chrungoo N.K.;
+RT   "Amino acid sequence of the 26 kDa subunit of legumin-type seed
+RT   storage protein of common buckwheat (Fagopyrum esculentum Moench):
+RT   molecular characterization and phylogenetic analysis.";
+RL   Phytochemistry 63:1-5(2003).
+RN   [2]
+RP   PROTEIN SEQUENCE OF 1-17.
+RX   PubMed=9214774; DOI=10.1016/S0031-9422(97)00051-4;
+RA   Rout M.K., Chrungoo N.K., Rao K.S.;
+RT   "Amino acid sequence of the basic subunit of 13S globulin of
+RT   buckwheat.";
+RL   Phytochemistry 45:865-867(1997).
+CC   -!- FUNCTION: Seed storage protein with a relatively high level of Lys
+CC       and Met. {ECO:0000269|PubMed:12657290}.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
+CC       basic chain derived from a single precursor and linked by a
+CC       disulfide bond. {ECO:0000250}.
+CC   -!- TISSUE SPECIFICITY: Cotyledons and endosperm protein bodies.
+CC       {ECO:0000269|PubMed:12657290}.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
+CC       family. {ECO:0000305}.
+DR   ProteinModelPortal; P83004; -.
+DR   SMR; P83004; -.
+DR   Allergome; 698; Fag e 1.
+DR   PRIDE; P83004; -.
+DR   GO; GO:0045735; F:nutrient reservoir activity; IEA:UniProtKB-KW.
+DR   Gene3D; 2.60.120.10; -; 1.
+DR   InterPro; IPR006044; 11S_seedstore_pln.
+DR   InterPro; IPR006045; Cupin_1.
+DR   InterPro; IPR014710; RmlC-like_jellyroll.
+DR   InterPro; IPR011051; RmlC_Cupin_sf.
+DR   Pfam; PF00190; Cupin_1; 1.
+DR   PRINTS; PR00439; 11SGLOBULIN.
+DR   SMART; SM00835; Cupin_1; 1.
+DR   SUPFAM; SSF51182; SSF51182; 1.
+PE   1: Evidence at protein level;
+KW   Direct protein sequencing; Disulfide bond; Seed storage protein;
+KW   Storage protein.
+FT   CHAIN         1    194       13S globulin basic chain.
+FT                                /FTId=PRO_0000152877.
+FT   DISULFID      7      ?       Interchain (between basic and acidic
+FT                                chains). {ECO:0000255}.
+SQ   SEQUENCE   194 AA;  21847 MW;  65A6FC49AFC1E9D0 CRC64;
+     GIDENVCTMK LRENIKSPQE ADFYNPKAGR ITTANSQKLP ALRSLQMSAE RGFLYSNGIY
+     APHWNINAHS ALYVTRGNAK VQVVGDEGNK VFDDEVKQGQ LIIVPQYFAV IKKAGNQGFE
+     YVAFKTNDNA MINPLVGRLS AFRAIPEEVL RSSFQISSEE AEELKYGRQE ALLLSEQSQQ
+     GKREVADEKE RERF
+//

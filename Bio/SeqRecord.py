@@ -10,6 +10,8 @@
 
 
 from Bio._py3k import basestring
+from Bio.SeqFeature import FeatureLocation, SeqFeature, CompoundLocation, ExactPosition, BeforePosition, AfterPosition,\
+    BetweenPosition, WithinPosition, UncertainPosition
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -1273,6 +1275,185 @@ class SeqRecord(object):
             # Does not make sense to copy these as length now wrong
             raise TypeError("Unexpected letter_annotations argument %r" % letter_annotations)
         return answer
+
+    def slice_with_features(self, sl, keep=False):
+        """
+        Return SeqRecord slice with features not fully within the slice.
+
+        This function is able to slice the SeqRecord with SeqFeatures in such way that features crossing boundary of the
+          slice are preserved.
+
+        Examples:
+        Consider model:  (--- sequence, === feature, ! slice boundary)
+        g -------==============----------
+        g    !........!
+        The requested slice cross feature boundary. Normal slice would drop such feature.
+        This function will return:
+        g --========
+
+        Behavior with different cases of slices
+          feature     100..200:
+          slice(50, 250)  ->  feature 50..150
+          slice(150, 250) ->  feature <0..50                    [ExactPosition -> BeforePosition]
+          slice(50, 150)  ->  feature 50..>100                  [ExactPosition -> AfterPosition]
+
+          feature     <100..200
+          slice(50, 200)  ->  feature <50..150
+          slice(150, 250) ->  feature <0..50
+          slice(50, 150)  ->  feature <50..>100
+
+          feature     (100.110)..200
+          slice(50, 250)  ->  feature  (50.60)..150
+          slice(150, 250) ->  feature  <0..150                   [WithinPosition -> BeforePosition]
+          slice(50, 150)  ->  feature  (50.60)..>100             [ExactPosition -> AfterPosition]
+          slice(105, 250) ->  Feature dropped
+          slice(105, 250) keep=True -> feature (0.5)..50
+
+        CompoundLocation (join, order operators) -> behaves as with simple features with 3 exceptions:
+          CompoundLocation is preserved only when 2 or more constituting features are within the slice.
+          CompoundLocation is converted to FeatureLocation if only one feature is within the slice.
+          CompoundLocation is dropped if slice is to inter-constituting-feature locus.
+
+        Accepted position objects are ExactPosition, BeforePosition, AfterPosition, BetweenPosition and WithinPosition.
+        If one of location object is uncertain (that is Between position or WithinPosition), and slice requested is to
+        this position, the whole Feature object is dropped, unless "keep" is set to True.
+
+        When one position of SeqFeature is UnknownPosition or OneOfPosition -> slicing throws NotImplementedError.
+
+        Note that even normal slicing to feature with UnknownPosition currently throws TypeError.
+
+        :raises TypeError: When position object is not one of accepted types.
+
+        """
+        ns = self[sl.start:sl.stop]
+
+        seq_len = len(ns)
+        for feat in self.features:
+            fl = _slice_feature(
+                f_loc=feat.location,
+                sl=sl,
+                keep_all_features=keep,
+                sequence_len=seq_len
+            )
+            if fl is not None:
+                nf = SeqFeature(
+                    fl,
+                    type=feat.type,
+                    id=feat.id,
+                    qualifiers=feat.qualifiers,
+                    ref=feat.ref,
+                    ref_db=feat.ref_db
+                )
+                ns.features.append(nf)
+
+        return ns
+
+
+def _move_position(pos, move, keep_all, slice_len):
+    """Move position respecting position type. (PRIVATE to slice_with_features)."""
+    tt = type(pos)
+    if isinstance(pos, (ExactPosition, BeforePosition, AfterPosition, UncertainPosition)):
+        if int(pos) + move < 0:
+            return BeforePosition(0)
+        elif int(pos) + move > slice_len:
+            return AfterPosition(slice_len)
+        else:
+            return tt(pos + move)
+    elif isinstance(pos, (BetweenPosition, WithinPosition)):
+        # This would need update if BetweenPosition or WithinPosition gets obsolete or changed
+        #  attributes accessed because they are not exposed in any other way
+        diff_left = pos._left + move
+        diff_right = pos._right + move
+
+        if diff_left < 0 and diff_right <= 0:
+            return BeforePosition(0)
+        elif diff_left < 0 < diff_right:
+            # ----....=========------
+            #      |-----|
+            # ----....=========------
+            #   |---|
+            if keep_all:
+                return tt(0, 0, diff_right)
+            else:
+                return None
+        elif diff_left < slice_len < diff_right:
+            # ----=========....------
+            #          |-----|
+            # ----=========....------
+            #               |---|
+            if keep_all:
+                return tt(slice_len, diff_left, slice_len)
+            else:
+                return None
+        elif diff_left > 0 and diff_right > 0:
+            # the pos is fully within slice
+            return tt(pos.position + move, diff_left, diff_right)
+        else:
+            # This should not be reached
+            raise ValueError
+    else:
+        # raise for not known Position classes
+        raise NotImplementedError('slicing for position {} not implemented'.format(type(pos)))
+
+
+def _slice_feature(f_loc, sl, keep_all_features, sequence_len):
+    """
+    Slice feature object (PRIVATE to slice_with_features).
+
+    The boundary checking (whether the slicing would be applied) uses feature 'start' and 'end' position
+     if they are not equal to min("all feature positions") and max("all feature positions") it is possible
+     that feature will not be detected.
+    """
+    if f_loc.nofuzzy_start is None or f_loc.nofuzzy_end is None:
+        # Ensure that UnknownPosition is checked before trying to compare with int
+        raise NotImplementedError('slicing for position {} is not implemented'.format(type(f_loc)))
+    if f_loc.start.position < sl.start < f_loc.end.position or f_loc.start.position < sl.stop < f_loc.end.position:
+        if isinstance(f_loc, CompoundLocation):
+            of = []
+            for ff in f_loc.parts:
+                # this must be without location boundaries checking
+                #  - only location objects adjacent to slice boundaries can cross it
+
+                # However we need to check whether the location object is not fully outside the slice
+                #  (and discard those which are outside)
+                if sl.start > ff.end.position or sl.stop < ff.start.position:
+                    continue
+
+                mps = _move_position(ff.start, - sl.start, keep_all_features, sequence_len)
+                mpe = _move_position(ff.end, - sl.start, keep_all_features, sequence_len)
+                if mps is not None and mpe is not None:
+                    # only features with complete positioning can be included.
+                    fl = FeatureLocation(mps, mpe, ff.strand)
+
+                # Feature locations outside of slice gets discarded (ie not included).
+                if fl is not None:
+                    of.append(fl)
+
+            if len(of) == 0:
+                # slice to CompoundLocation -> however no feature from compound location in slice
+                # ----======------======------=======-------======-----
+                #           |----|
+                return None
+            elif len(of) == 1:
+                # slice to CompoundLocation -> only one feature present -> CompoundLocation to FeatureLocation
+                # ----======------======------=======-------======-----
+                #            |-------------|
+                return of[0]
+            else:
+                return CompoundLocation(of, operator=f_loc.operator)
+        else:
+
+            mps = _move_position(f_loc.start, - sl.start, keep_all_features, sequence_len)
+            mpe = _move_position(f_loc.end, - sl.start, keep_all_features, sequence_len)
+
+            if mps is not None and mpe is not None:
+
+                fl = FeatureLocation(mps, mpe, f_loc.strand)
+                return fl
+            else:
+                return None
+    else:
+        return None
 
 
 if __name__ == "__main__":
