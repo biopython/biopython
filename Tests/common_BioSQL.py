@@ -323,7 +323,8 @@ class MultiReadTest(unittest.TestCase):
         del server["biosql-test"]
         del server["biosql-test2"]
         self.assertEqual(0, len(server))
-        self.assertRaises(KeyError, server["non-existant-name"])
+        with self.assertRaises(KeyError):
+            del server["non-existant-name"]
 
     def test_get_db_items(self):
         """Check list, keys, length etc."""
@@ -347,14 +348,16 @@ class MultiReadTest(unittest.TestCase):
         for k in keys:
             del db[k]
         self.assertEqual(0, len(db))
-        self.assertRaises(KeyError, db["non-existant-name"])
+        with self.assertRaises(KeyError):
+            del db["non-existant-name"]
 
     def test_cross_retrieval_of_items(self):
         """Test that valid ids can't be retrieved between namespaces."""
         db = self.db
         db2 = self.db2
         for db2_id in db2.keys():
-            self.assertRaises(KeyError, db[db2_id])
+            with self.assertRaises(KeyError):
+                rec = db[db2_id]
 
 
 class ReadTest(unittest.TestCase):
@@ -389,7 +392,8 @@ class ReadTest(unittest.TestCase):
         # Check we can delete the namespace...
         del server["biosql-test"]
         self.assertEqual(0, len(server))
-        self.assertRaises(KeyError, server["non-existant-name"])
+        with self.assertRaises(KeyError):
+            del server["non-existant-name"]
 
     def test_get_db_items(self):
         """Check list, keys, length etc."""
@@ -407,7 +411,8 @@ class ReadTest(unittest.TestCase):
         for k in keys:
             del db[k]
         self.assertEqual(0, len(db))
-        self.assertRaises(KeyError, db["non-existant-name"])
+        with self.assertRaises(KeyError):
+            del db["non-existant-name"]
 
     def test_lookup_items(self):
         """Test retrieval of items using various ids."""
@@ -676,7 +681,8 @@ class DeleteTest(unittest.TestCase):
         # Check we can delete the namespace...
         del server["biosql-test"]
         self.assertEqual(0, len(server))
-        self.assertRaises(KeyError, server["non-existant-name"])
+        with self.assertRaises(KeyError):
+            del server["non-existant-name"]
 
     def test_del_db_items(self):
         """Check all associated data is deleted from an item."""
