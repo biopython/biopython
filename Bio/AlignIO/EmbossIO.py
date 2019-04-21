@@ -57,8 +57,6 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle.write("#\n")
         handle.write("#=======================================\n")
         handle.write("\n")
-        # ...
-        assert False
 
 
 class EmbossIterator(AlignmentIterator):
@@ -204,7 +202,7 @@ class EmbossIterator(AlignmentIterator):
                 pass
             else:
                 print(line)
-                assert False
+                raise ValueError("Unrecognised EMBOSS pairwise alignment record format.")
 
             line = handle.readline()
             if line.rstrip() == "#---------------------------------------" \
