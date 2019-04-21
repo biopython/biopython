@@ -42,6 +42,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ben Fulton <https://github.com/benfulton>
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
+- Benjamin Rowell <https://github.com/benjaminr>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
 - Bernhard C. Thiel <https://github.com/Bernhard10>
 - Bertrand Caron <https://github.com/bertrand-caron>
