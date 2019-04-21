@@ -18,6 +18,7 @@ http://www6.appliedbiosystems.com/support/software_community/ABIF_File_Format.pd
 
 import datetime
 import struct
+import sys
 import warnings
 
 from os.path import basename
@@ -341,7 +342,13 @@ def _get_string_tag(opt_bytes_value, default=None):
     """
     if opt_bytes_value is None:
         return default
-    return _bytes_to_string(opt_bytes_value)
+    try:
+        return _bytes_to_string(opt_bytes_value)
+    except UnicodeDecodeError:
+        # If we are in this 'except' block, a `.decode` call must have been
+        # attempted, and so we must be on Python 3, which means opt_bytes_value
+        # is a byte string.
+        return opt_bytes_value.decode(encoding=sys.getdefaultencoding())
 
 
 def AbiIterator(handle, alphabet=None, trim=False):
@@ -494,12 +501,7 @@ def _abi_parse_header(header, handle):
             data_offset = tag_offset + 20
         handle.seek(data_offset)
         data = handle.read(data_size)
-        try:
-            yield tag_name, tag_number, \
-                _parse_tag_data(elem_code, elem_num, data)
-        except UnicodeDecodeError:
-            warnings.warn("Ignoring tag %s %i due to unicode problem"
-                          % (tag_name, tag_number), BiopythonParserWarning)
+        yield tag_name, tag_number, _parse_tag_data(elem_code, elem_num, data)
 
 
 def _abi_trim(seq_record):
