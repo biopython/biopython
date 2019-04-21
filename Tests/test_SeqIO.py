@@ -633,7 +633,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         else:
             try:
                 record = SeqIO.read(t_filename, t_format)
-                assert False, "Bio.SeqIO.read(...) should have failed"
+                raise ValueError("Bio.SeqIO.read(...) should have failed")
             except ValueError:
                 # Expected to fail
                 pass
@@ -687,8 +687,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             try:
                 print(next(SeqIO.parse(h, t_format, given_alpha)))
                 h.close()
-                assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
-                    % (repr(given_alpha), t_filename)
+                raise ValueError("Forcing wrong alphabet, %s, should fail (%s)" \
+                    % (repr(given_alpha), t_filename))
             except ValueError:
                 # Good - should fail
                 pass
