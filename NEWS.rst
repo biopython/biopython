@@ -47,6 +47,14 @@ attribute is meant for capturing the order by which the HSP were output in the
 parsed file and is set with a default value of -1 for all HSP objects. It is
 also used for sorting the output of ``QueryResult.hsps``.
 
+``Bio.SeqIO.AbiIO`` has been updated to preserve bytes value when parsing. The
+goal of this change is make the parser more robust by being able to extract
+string-values that are not utf-8-encoded. This affects all tag values, except
+for ID and description values, where they need to be extracted as strings
+to conform to the ``SeqRecord`` interface. In this case, the parser will
+attempt to decode using ``utf-8`` and fall back to the system encoding if that
+fails. This change affects Python 3 only.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
