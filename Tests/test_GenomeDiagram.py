@@ -705,8 +705,10 @@ class DiagramTest(unittest.TestCase):
         filename = os.path.join("Graphics", "error.txt")
         # We (now) allow valid formats in any case.
         for output in ["XXX", "xxx", None, 123, 5.9]:
-            self.assertRaises(ValueError, gdd.write(filename, output))
-            self.assertRaises(ValueError, gdd.write_to_string(output))
+            with self.assertRaises(ValueError):
+                gdd.write(filename, output)
+            with self.assertRaises(ValueError):
+                gdd.write_to_string(output)
 
     def test_partial_diagram(self):
         """Construct and draw SVG and PDF for just part of a SeqRecord."""
