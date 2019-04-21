@@ -681,11 +681,9 @@ class TestSelf(unittest.TestCase):
         self.assertTrue(data.endswith("end;\n"), data)
 
         handle = StringIO()
-        try:
-            NexusWriter(handle).write_file([a, a])
-            assert False, "Should have rejected more than one alignment!"
-        except ValueError:
-            pass
+        self.assertRaises(ValueError, 
+                         "Rejected more than one alignment!",
+                         NexusWriter(handle).write_file([a, a]))
 
 
 if __name__ == "__main__":
