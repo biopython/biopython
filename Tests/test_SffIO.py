@@ -561,9 +561,8 @@ if False:
     try:
         print(ReadRocheXmlManifest(
               open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
-        assert False, "Should fail!"
     except ValueError:
-        pass
+        raise ValueError("Should fail.")
     k = list(_sff_do_slow_index(
              open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     print("Done")
