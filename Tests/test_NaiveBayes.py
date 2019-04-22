@@ -6,6 +6,9 @@
 import copy
 import unittest
 
+from Bio import NaiveBayes
+
+
 try:
     import numpy
 except ImportError:
@@ -22,8 +25,6 @@ except TypeError:
         "Please update NumPy if you want to use Bio.NaiveBayes "
         "(under this version numpy.float64 is unhashable).")
 del numpy
-
-from Bio import NaiveBayes
 
 
 class CarTest(unittest.TestCase):
