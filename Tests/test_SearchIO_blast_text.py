@@ -43,7 +43,6 @@ class BlastnCases(BaseBlastCases):
 
     def test_text_2226_blastn_001(self):
         """Test parsing blastn output (text_2226_blastn_001.txt)."""
-
         blast_file = get_file('text_2226_blastn_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -61,7 +60,6 @@ class BlastnCases(BaseBlastCases):
 
     def test_text_2226_blastn_002(self):
         """Test parsing blastn output (text_2226_blastn_002.txt)."""
-
         blast_file = get_file('text_2226_blastn_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -137,7 +135,6 @@ class BlastnCases(BaseBlastCases):
 
     def test_text_2226_blastn_003(self):
         """Test parsing blastn output (text_2226_blastn_003.txt)."""
-
         blast_file = get_file('text_2226_blastn_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -236,7 +233,6 @@ class BlastnCases(BaseBlastCases):
 
     def test_text_2226_blastn_004(self):
         """Test parsing blastn output (text_2226_blastn_004.txt)."""
-
         blast_file = get_file('text_2226_blastn_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -416,7 +412,6 @@ class BlastpCases(BaseBlastCases):
 
     def test_text_2226_blastp_001(self):
         """Test parsing blastp output (text_2226_blastp_001.txt)."""
-
         blast_file = get_file('text_2226_blastp_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -434,7 +429,6 @@ class BlastpCases(BaseBlastCases):
 
     def test_text_2226_blastp_002(self):
         """Test parsing blastp output (text_2226_blastp_002.txt)."""
-
         blast_file = get_file('text_2226_blastp_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -510,7 +504,6 @@ class BlastpCases(BaseBlastCases):
 
     def test_text_2226_blastp_003(self):
         """Test parsing blastp output (text_2226_blastp_003.txt)."""
-
         blast_file = get_file('text_2226_blastp_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -632,7 +625,6 @@ class BlastpCases(BaseBlastCases):
 
     def test_text_2226_blastp_004(self):
         """Test parsing blastp output (text_2226_blastp_004.txt)."""
-
         blast_file = get_file('text_2226_blastp_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -835,7 +827,6 @@ class BlastxCases(BaseBlastCases):
 
     def test_text_2226_blastx_001(self):
         """Test parsing blastx output (text_2226_blastx_001.txt)."""
-
         blast_file = get_file('text_2226_blastx_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -853,7 +844,6 @@ class BlastxCases(BaseBlastCases):
 
     def test_text_2226_blastx_002(self):
         """Test parsing blastx output (text_2226_blastx_002.txt)."""
-
         blast_file = get_file('text_2226_blastx_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -929,7 +919,6 @@ class BlastxCases(BaseBlastCases):
 
     def test_text_2226_blastx_003(self):
         """Test parsing blastx output (text_2226_blastx_003.txt)."""
-
         blast_file = get_file('text_2226_blastx_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1051,7 +1040,6 @@ class BlastxCases(BaseBlastCases):
 
     def test_text_2226_blastx_004(self):
         """Test parsing blastx output (text_2226_blastx_004.txt)."""
-
         blast_file = get_file('text_2226_blastx_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(2, len(qresults))
@@ -1186,7 +1174,6 @@ class TblastnCases(BaseBlastCases):
 
     def test_text_2226_tblastn_001(self):
         """Test parsing tblastn output (text_2226_tblastn_001.txt)."""
-
         blast_file = get_file('text_2226_tblastn_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1204,7 +1191,6 @@ class TblastnCases(BaseBlastCases):
 
     def test_text_2226_tblastn_002(self):
         """Test parsing tblastn output (text_2226_tblastn_002.txt)."""
-
         blast_file = get_file('text_2226_tblastn_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1280,7 +1266,6 @@ class TblastnCases(BaseBlastCases):
 
     def test_text_2226_tblastn_003(self):
         """Test parsing tblastn output (text_2226_tblastn_003.txt)."""
-
         blast_file = get_file('text_2226_tblastn_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1402,7 +1387,6 @@ class TblastnCases(BaseBlastCases):
 
     def test_text_2226_tblastn_004(self):
         """Test parsing tblastn output (text_2226_tblastn_004.txt)."""
-
         blast_file = get_file('text_2226_tblastn_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -1605,7 +1589,6 @@ class TblastxCases(BaseBlastCases):
 
     def test_text_2226_tblastx_001(self):
         """Test parsing tblastx output (text_2226_tblastx_001.txt)."""
-
         blast_file = get_file('text_2226_tblastx_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1623,7 +1606,6 @@ class TblastxCases(BaseBlastCases):
 
     def test_text_2226_tblastx_002(self):
         """Test parsing tblastx output (text_2226_tblastx_002.txt)."""
-
         blast_file = get_file('text_2226_tblastx_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1699,7 +1681,6 @@ class TblastxCases(BaseBlastCases):
 
     def test_text_2226_tblastx_003(self):
         """Test parsing tblastx output (text_2226_tblastx_003.txt)."""
-
         blast_file = get_file('text_2226_tblastx_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1821,7 +1802,6 @@ class TblastxCases(BaseBlastCases):
 
     def test_text_2226_tblastx_004(self):
         """Test parsing tblastx output (text_2226_tblastx_004.txt)."""
-
         blast_file = get_file('text_2226_tblastx_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(2, len(qresults))
@@ -1950,7 +1930,6 @@ class TblastxCases(BaseBlastCases):
 
     def test_text_2230_blastp_001(self):
         """Test parsing blastp output (text_2230_blastp_001.txt)."""
-
         blast_file = get_file('text_2230_blastp_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))

@@ -35,7 +35,6 @@ def SeqresTestGenerator(extension, parser):
         parser:
             The name of the SeqIO parser to use (e.g. ``pdb-atom``).
     """
-
     class SeqresTests(unittest.TestCase):
         """Use "parser" to parse sequence records from a structure file.
 
@@ -95,7 +94,6 @@ def AtomTestGenerator(extension, parser):
 
     See SeqresTestGenerator for more information.
     """
-
     class AtomTests(unittest.TestCase):
         def test_atom_parse(self):
             """Parse a multi-chain structure by ATOM entries.

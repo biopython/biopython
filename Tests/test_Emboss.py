@@ -859,7 +859,6 @@ class TranslationTests(unittest.TestCase):
 
     def test_simple(self):
         """Run transeq vs Bio.Seq for simple translations (including alt tables)."""
-
         examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
                     # Unamibguous TA? codons:
                     Seq("TAATACTATTAG", generic_dna),

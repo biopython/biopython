@@ -47,7 +47,6 @@ class CompareStructures(unittest.TestCase):
 
     def test_compare_models(self):
         """Compared parsed models."""
-
         cif_models = [(m.id, len(m.child_list)) for m in self.cifo.get_models()]
         pdb_models = [(m.id, len(m.child_list)) for m in self.pdbo.get_models()]
 
@@ -57,7 +56,6 @@ class CompareStructures(unittest.TestCase):
 
     def test_compare_chains(self):
         """Compare parsed chains."""
-
         cif_chains = [(c.id, len(c.child_list)) for c in self.cifo.get_chains()]
         pdb_chains = [(c.id, len(c.child_list)) for c in self.pdbo.get_chains()]
 

@@ -155,7 +155,6 @@ class TestSeq(unittest.TestCase):
 
     def test_concatenation_error(self):
         """DNA Seq objects cannot be concatenated with Protein Seq objects."""
-
         with self.assertRaises(TypeError):
             self.s + Seq.Seq("T", IUPAC.protein)
 

@@ -25,7 +25,6 @@ class Fasta34Cases(unittest.TestCase):
 
     def test_output002(self):
         """Test parsing fasta34 output (output002.m10)."""
-
         m10_file = get_file('output002.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -225,7 +224,6 @@ class Fasta34Cases(unittest.TestCase):
 
     def test_output003(self):
         """Test parsing fasta34 output (output003.m10)."""
-
         m10_file = get_file('output003.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(5, len(qresults))
@@ -370,7 +368,6 @@ class Fasta35Cases(unittest.TestCase):
 
     def test_output001(self):
         """Test parsing fasta35 output (output001.m10)."""
-
         m10_file = get_file('output001.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -518,7 +515,6 @@ class Fasta35Cases(unittest.TestCase):
 
     def test_output004(self):
         """Test parsing fasta35 output (output004.m10)."""
-
         m10_file = get_file('output004.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -587,7 +583,6 @@ class Fasta35Cases(unittest.TestCase):
 
     def test_output005(self):
         """Test parsing ssearch35 output (output005.m10)."""
-
         m10_file = get_file('output005.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -655,7 +650,6 @@ class Fasta35Cases(unittest.TestCase):
 
     def test_output006(self):
         """Test parsing fasta35 output (output006.m10)."""
-
         m10_file = get_file('output006.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -707,7 +701,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output007(self):
         """Test parsing fasta36 output (output007.m10)."""
-
         m10_file = get_file('output007.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -985,7 +978,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output008(self):
         """Test parsing tfastx36 output (output008.m10)."""
-
         m10_file = get_file('output008.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(4, len(qresults))
@@ -1320,7 +1312,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output009(self):
         """Test parsing fasta36 output (output009.m10)."""
-
         m10_file = get_file('output009.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -1526,7 +1517,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output010(self):
         """Test parsing fasta36 output (output010.m10)."""
-
         m10_file = get_file('output010.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1550,7 +1540,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output011(self):
         """Test parsing fasta36 output (output011.m10)."""
-
         m10_file = get_file('output011.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1694,7 +1683,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output012(self):
         """Test parsing fasta36 output (output012.m10)."""
-
         m10_file = get_file('output012.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1946,7 +1934,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output013(self):
         """Test parsing fasta36 output (output013.m10)."""
-
         m10_file = get_file('output013.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -2115,7 +2102,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output014(self):
         """Test parsing fasta36 output (output014.m10)."""
-
         m10_file = get_file('output014.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -2139,7 +2125,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output015(self):
         """Test parsing fasta36 output (output015.m10)."""
-
         m10_file = get_file('output015.m10')
         qresults = list(parse(m10_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -2213,7 +2198,6 @@ class Fasta36Cases(unittest.TestCase):
 
     def test_output016(self):
         """Test parsing fasta36 output (output016.m10)."""
-
         m10_file = get_file('output016.m10')
         # only check 8, 10 is too many
         qresults = list(parse(m10_file, FMT))[:8]

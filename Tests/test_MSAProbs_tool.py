@@ -45,7 +45,6 @@ class MSAProbsTestCase(unittest.TestCase):
 
     def standard_test_procedure(self, cline):
         """Shared testing procedure used by all tests."""
-
         # Mark output files for later cleanup.
         self.add_file_to_clean(cline.outfile)
 

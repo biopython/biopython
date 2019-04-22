@@ -38,7 +38,6 @@ class ParseReal(unittest.TestCase):
 
     def test_parsers(self):
         """Extract polypeptides from 1A80."""
-
         parser = MMCIFParser()
         fast_parser = FastMMCIFParser()
 
@@ -170,7 +169,6 @@ class ParseReal(unittest.TestCase):
 
     def testModels(self):
         """Test file with multiple models."""
-
         parser = MMCIFParser(QUIET=1)
         f_parser = FastMMCIFParser(QUIET=1)
         with warnings.catch_warnings():
@@ -310,7 +308,6 @@ class CIFtoPDB(unittest.TestCase):
 
     def test_conversion(self):
         """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
-
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 

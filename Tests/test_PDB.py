@@ -547,7 +547,6 @@ class ParseTest(unittest.TestCase):
     # Tests for sorting methods
     def test_comparison_entities(self):
         """Test comparing and sorting the several SMCRA objects."""
-
         struct = self.structure
         # Test deepcopy of a structure with disordered atoms
         struct2 = deepcopy(struct)

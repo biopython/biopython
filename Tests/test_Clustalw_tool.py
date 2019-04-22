@@ -235,7 +235,6 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
 
     def test_large_input_file(self):
         """Test a large input file."""
-
         # Create a large input file by converting another example file
         # (See Bug 2804, this will produce so much output on stdout that
         # subprocess could suffer a deadlock and hang).  Using all the
