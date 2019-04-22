@@ -539,7 +539,7 @@ class ParseTest(unittest.TestCase):
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename, 'rU') as handle:
                 record_set = set(l[0:6] for l in handle)
-            record_set -= set(('ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n',  'TER   ', 'END\n', 'END   '))
+            record_set -= set(('ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'TER   ', 'END\n', 'END   '))
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
