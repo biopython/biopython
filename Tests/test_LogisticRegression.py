@@ -6,6 +6,8 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
+"""Tests for LogisticRegression module."""
+
 try:
     import numpy
     from numpy import linalg  # missing in PyPy's micronumpy

@@ -3,6 +3,8 @@
 # as part of this package.
 
 # coding=utf-8
+"""Tests for NaiveBayes module."""
+
 import copy
 import unittest
 

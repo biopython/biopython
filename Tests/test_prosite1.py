@@ -5,6 +5,8 @@
 #
 # NOTE - This file has been split in two as a workaround for Jython JVM limits.
 
+"""Tests for prosite1 module."""
+
 import os
 import unittest
 

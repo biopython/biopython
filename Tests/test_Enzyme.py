@@ -4,6 +4,8 @@
 # as part of this package.
 
 
+"""Tests for Enzyme module."""
+
 import os
 import unittest
 

@@ -48,6 +48,8 @@
 
 
 # This future import will apply to all the doctests too:
+"""Tests for Tutorial module."""
+
 from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 
