@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for FSSP module."""
+
 from Bio import FSSP
 from Bio.FSSP import FSSPTools
 import sys

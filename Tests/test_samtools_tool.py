@@ -7,6 +7,8 @@
 
 # Last Checked with samtools [0.1.18 (r982:295)]
 
+"""Tests for samtools tool."""
+
 from Bio import MissingExternalDependencyError
 import sys
 import os

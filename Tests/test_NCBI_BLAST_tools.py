@@ -6,6 +6,8 @@
 # This unit test attempts to locate the blastall executable and the nr
 # database.
 
+"""Tests for NCBI BLAST tools module."""
+
 from __future__ import print_function
 
 import os

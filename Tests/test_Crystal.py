@@ -4,6 +4,8 @@
 # as part of this package.
 
 # python unittest framework
+"""Tests for Crystal module."""
+
 import unittest
 import copy
 

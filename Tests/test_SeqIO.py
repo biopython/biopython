@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for SeqIO module."""
+
 from __future__ import print_function
 from Bio._py3k import basestring
 

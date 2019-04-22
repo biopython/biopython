@@ -1,3 +1,5 @@
+"""Tests for SeqIO NibIO module."""
+
 import unittest
 
 from io import BytesIO

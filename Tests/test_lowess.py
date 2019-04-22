@@ -2,6 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for lowess module."""
+
 try:
     from numpy import array, median
 except ImportError:

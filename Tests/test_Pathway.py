@@ -5,6 +5,8 @@
 # as part of this package.
 
 # python unittest framework
+"""Tests for Pathway module."""
+
 import unittest
 
 # modules to be tested
