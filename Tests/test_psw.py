@@ -8,11 +8,11 @@ import unittest
 import random
 import sys
 
+from Bio.Wise import psw
+
 if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
-import requires_wise
-
-from Bio.Wise import psw
+import requires_wise  # noqa: E402
 
 
 class TestPSW(unittest.TestCase):

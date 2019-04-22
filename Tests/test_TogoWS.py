@@ -12,9 +12,6 @@ import unittest
 from Bio._py3k import StringIO
 from Bio._py3k import HTTPError
 
-import requires_internet
-requires_internet.check()
-
 # We want to test these:
 from Bio import TogoWS
 
@@ -22,6 +19,9 @@ from Bio import TogoWS
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio import Medline
+
+import requires_internet
+requires_internet.check()
 
 #####################################################################
 

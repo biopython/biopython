@@ -12,9 +12,6 @@ from __future__ import with_statement
 import os
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # Biopython
 from Bio.Graphics.ColorSpiral import ColorSpiral
 
@@ -42,6 +39,9 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 
 # test_KGML_graphics module
 from test_KGML_graphics import PathwayData
+
+import requires_internet
+requires_internet.check()
 
 
 class KGMLPathwayOnlineTest(unittest.TestCase):

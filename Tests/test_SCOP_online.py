@@ -7,10 +7,10 @@
 
 import unittest
 
+from Bio import SCOP
+
 import requires_internet
 requires_internet.check()
-
-from Bio import SCOP
 
 
 class ScopSearch(unittest.TestCase):

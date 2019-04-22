@@ -8,16 +8,6 @@ import copy
 import sys
 import warnings
 
-# Remove unittest2 import after dropping support for Python 2
-if sys.version_info[0] < 3:
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
-else:
-    import unittest
-
 from Bio import BiopythonWarning
 from Bio import Alphabet
 from Bio import Seq
@@ -28,6 +18,15 @@ from Bio.Data.IUPACData import (ambiguous_dna_complement,
 from Bio.Data.CodonTable import TranslationError, standard_dna_table
 from Bio.Seq import MutableSeq
 
+# Remove unittest2 import after dropping support for Python 2
+if sys.version_info[0] < 3:
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
+else:
+    import unittest
 
 if sys.version_info[0] == 3:
     array_indicator = "u"

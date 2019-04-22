@@ -16,9 +16,6 @@ Goals:
 """
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # We want to test these:
 from Bio import Entrez
 from Bio import ExPASy
@@ -30,6 +27,9 @@ from Bio.SeqUtils.CheckSum import seguid
 
 from Bio.File import UndoHandle
 from Bio._py3k import _as_string
+
+import requires_internet
+requires_internet.check()
 
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython@biopython.org"

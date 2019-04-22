@@ -12,11 +12,11 @@ import shutil
 import tempfile
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # We want to test this module:
 from Bio.PDB.PDBList import PDBList
+
+import requires_internet
+requires_internet.check()
 
 
 class TestPBDListGetList(unittest.TestCase):
