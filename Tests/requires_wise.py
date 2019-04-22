@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Code to check if command line tool wise is installed."""
+
 import sys
 
 from Bio import MissingExternalDependencyError

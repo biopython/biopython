@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Common code for SearchIO tests."""
+
 from __future__ import print_function
 
 import os

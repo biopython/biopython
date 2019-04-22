@@ -2,6 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Common code for SeqRecord object tests."""
+
 from Bio._py3k import range
 from Bio._py3k import basestring
 
