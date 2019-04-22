@@ -558,12 +558,9 @@ if False:
                     open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     for old, new in zip(records, records2):
         assert str(old.seq) == str(new.seq)
-    try:
+    with unittest.TestCase.assertRaises(None, ValueError):
         print(ReadRocheXmlManifest(
               open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
-        assert False, "Should fail!"
-    except ValueError:
-        pass
     k = list(_sff_do_slow_index(
              open("Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
     print("Done")

@@ -224,7 +224,7 @@ def check_phylip_reject_duplicate():
     try:
         # This should raise a ValueError
         AlignIO.write(alignment, handle, 'phylip')
-        assert False, "Duplicate IDs after truncation are not allowed."
+        raise ValueError("Duplicate IDs after truncation are not allowed.")
     except ValueError as err:
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(err)
@@ -251,8 +251,8 @@ for t_format in list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
         AlignIO.write([list_of_records], handle, t_format)
-        assert False, "Writing non-alignment to %s format should fail!" \
-            % t_format
+        raise ValueError("Writing non-alignment to %s format should fail!"
+                         % t_format)
     except (TypeError, AttributeError, ValueError):
         pass
     handle.close()
@@ -329,7 +329,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         try:
             with open(t_filename) as handle:
                 alignment = AlignIO.read(handle, t_format)
-            assert False, "Bio.AlignIO.read(...) should have failed"
+            raise ValueError("Bio.AlignIO.read(...) should have failed")
         except ValueError:
             # Expected to fail
             pass
