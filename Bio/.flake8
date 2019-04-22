@@ -40,9 +40,7 @@ ignore =
     #     	it is not any safer than normal property access.
     # B010	Do not call setattr with a constant attribute value,
     #     	it is not any safer than normal property access.
-    # B011	Do not call assert False since python -O removes these calls.
-    #     	Instead callers should raise AssertionError().
-    B007,B009,B010,B011,
+    B007,B009,B010,
     # ================================================
     # flake8-commas: C#### (in case installed locally)
     # ================================================
