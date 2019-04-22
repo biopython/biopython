@@ -8,13 +8,9 @@ import unittest
 
 from Bio import NaiveBayes
 
-
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.NaiveBayes.")
+# Importing NaiveBayes will itself raise MissingPythonDependencyError
+# if NumPy is unavailable.
+import numpy
 try:
     hash(numpy.float64(123.456))
 except TypeError:
