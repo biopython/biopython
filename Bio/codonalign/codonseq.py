@@ -265,7 +265,7 @@ class CodonSeq(Seq):
 
     @classmethod
     def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
-        """Get condo sequence from sequence data."""
+        """Get codon sequence from sequence data."""
         if rf_table is None:
             return cls(seq._data, alphabet=alphabet)
         else:
