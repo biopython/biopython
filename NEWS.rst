@@ -59,6 +59,7 @@ possible, especially the following contributors:
 - Jens Thomas (first contribution)
 - Lenna Peterson
 - Markus Piotrowski
+- Micky Yun Chan (first contribution)
 - Nick Negretti
 - Peter Cock
 - Ralf Stephan
