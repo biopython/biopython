@@ -50,6 +50,7 @@ also used for sorting the output of ``QueryResult.hsps``.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Antony Lee
 - Bernhard Thiel
 - Brandon Invergo
 - Catherine Lesuisse
@@ -61,8 +62,8 @@ possible, especially the following contributors:
 - Peter Cock
 - Ralf Stephan
 - Sergio Valqui
-- Antony Lee
 - Wibowo 'Bow' Arindrarto
+
 
 18 December 2018: Biopython 1.73
 ================================
