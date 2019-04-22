@@ -10,14 +10,13 @@ ignore =
     # These are ignored by default:
     E122,E123,E126,E241,W503,W504,
     # These are not ignored by default:
-    # E402	module level import not at top of file
     # E501	line too long (XX > 79 characters)
     # E731	do not assign a lambda expression, use a def
     # F401	module imported but unused
     # F405	name may be undefined, or defined from star imports: module
     # F841	local variable name is assigned to but never used
     # TODO: Fix some of these?
-    E402,E501,E731,F401,F405,F841,
+    E501,E731,F401,F405,F841,
     # =====================================
     # pydocstyle: D1## - Missing Docstrings
     # =====================================
