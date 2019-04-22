@@ -57,6 +57,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle.write("#\n")
         handle.write("#=======================================\n")
         handle.write("\n")
+        raise NotImplementedError("The subclass should implement the write_alignment method.")
 
 
 class EmbossIterator(AlignmentIterator):
@@ -201,8 +202,7 @@ class EmbossIterator(AlignmentIterator):
                 # Just a spacer?
                 pass
             else:
-                print(line)
-                raise ValueError("Unrecognised EMBOSS pairwise alignment record format.")
+                raise ValueError("Unrecognised EMBOSS pairwise line: %r\n" % line)
 
             line = handle.readline()
             if line.rstrip() == "#---------------------------------------" \
