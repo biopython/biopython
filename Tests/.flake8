@@ -8,7 +8,7 @@ ignore =
     # flake8 v3.6.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
     #
     # These are ignored by default:
-    E122,E123,E126,E241,W503,W504,
+    E122,E123,E126,W503,W504,
     # These are not ignored by default:
     # E402	module level import not at top of file
     # E501	line too long (XX > 79 characters)
