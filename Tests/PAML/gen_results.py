@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Generate output for PAML tests."""
+
 from __future__ import print_function
 
 import os.path
