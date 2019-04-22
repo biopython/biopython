@@ -7,7 +7,11 @@
 
 import unittest
 
-from common_BioSQL import *  # noqa
+# Really do want "import *" to get all the test clases:
+from common_BioSQL import *  # noqa: F403
+
+# Import these explicitly to avoid flake8 F405 below:
+from common_BioSQL import load_biosql_ini, check_config
 
 DBDRIVER = 'MySQLdb'
 DBTYPE = 'mysql'
