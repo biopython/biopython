@@ -50,7 +50,7 @@ special_table = CodonTable(forward_table={
 Chilodonella_uncinata_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',
+    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',  # noqa: E241
     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
     'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
