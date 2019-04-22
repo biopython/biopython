@@ -4,7 +4,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Script to help diagnose problems with BLAST parser."""
 
 # To do:
@@ -46,7 +45,10 @@ OPTIONS:
 
 
 class DebuggingConsumer(object):
+    """A Debugging Consumer..."""
+
     def __init__(self, decorated=None):
+        """Initialize the DebuggingConsumer."""
         self.linenum = 0
         if decorated is None:
             decorated = ParserSupport.AbstractConsumer()
@@ -61,6 +63,7 @@ class DebuggingConsumer(object):
         self.linenum += 1
 
     def __getattr__(self, attr):
+        """Override __getattr__."""
         self._prev_attr = attr
         if attr.startswith('start_') or attr.startswith('end_'):
             return self._decorated_section
@@ -69,20 +72,24 @@ class DebuggingConsumer(object):
 
 
 def chomp(line):
+    """Remove line-breaks from line."""
     return re.sub(r"[\r\n]*$", "", line)
 
 
 def choose_parser(outfile):
+    """Select corret parser automatically."""
     data = open(outfile).read()
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
-        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
+        raise NotImplementedError("Biopython no longer has an HTML BLAST "
+                                  "parser.")
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
 
 
 def test_blast_output(outfile):
+    """Try to find BLAST parser error from output file."""
     # Try to auto-detect the format
     if 1:
         print("No parser specified.  I'll try to choose one for you based")
@@ -91,11 +98,12 @@ def test_blast_output(outfile):
 
         parser_class = choose_parser(outfile)
         print("It looks like you have given output that should be parsed")
-        print("with %s.%s.  If I'm wrong, you can select the correct parser" %
-              (parser_class.__module__, parser_class.__name__))
+        print("with %s.%s.  If I'm wrong, you can select the correct parser"
+              % (parser_class.__module__, parser_class.__name__))
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
-        raise NotImplementedError("Biopython no longer has an HTML BLAST parser.")
+        raise NotImplementedError("Biopython no longer has an HTML "
+                                  "BLAST parser.")
     print("")
 
     scanner_class = parser_class()._scanner.__class__
@@ -103,7 +111,7 @@ def test_blast_output(outfile):
 
     # parser_class()._scanner.feed(
     #    open(outfile), ParserSupport.TaggingConsumer())
-    print("I'm going to run the data through the parser to see what happens...")
+    print("I'm going to run the data through the parser to see what happens..")
     parser = parser_class()
     try:
         parser.parse_file(outfile)
@@ -252,7 +260,8 @@ if __name__ == '__main__':
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
         OUTPUT = 1
-        # sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
+        # sys.stderr.write("Exactly one of -p, -n, or -o should be "
+        #                  "specified.\n")
         # sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
         sys.stderr.write("-p and -n not implemented yet\n")

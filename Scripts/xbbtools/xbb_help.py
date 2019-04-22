@@ -20,7 +20,10 @@ except ImportError:  # Python 3
 
 
 class xbbtools_help(tk.Toplevel):
+    """Help window."""
+
     def __init__(self, *args):
+        """Make toplevel help window."""
         tk.Toplevel.__init__(self)
         self.tid = scrolledtext.ScrolledText(self)
         self.tid.pack(fill=tk.BOTH, expand=1)
@@ -28,6 +31,7 @@ class xbbtools_help(tk.Toplevel):
         self.Show()
 
     def Styles(self):
+        """Define text styles."""
         for c in ['red', 'blue', 'magenta', 'yellow', 'green', 'red4',
                   'green4', 'blue4']:
             self.tid.tag_configure(c, foreground=c)
@@ -40,6 +44,7 @@ class xbbtools_help(tk.Toplevel):
         self.tid.tag_config('highlight', background='gray')
 
     def Show(self):
+        """Display help text."""
         t = self.tid
         t.insert(tk.END, "XBBtools Help\n", 'title')
         t.insert(tk.END, """

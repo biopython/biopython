@@ -16,6 +16,7 @@ from Bio import Entrez
 
 
 def print_usage():
+    """Print a help message."""
     print("""query_pubmed.py [-h] [-c] [-d delay] query
 
 This script sends a query to PubMed (via the NCBI Entrez webservice*)

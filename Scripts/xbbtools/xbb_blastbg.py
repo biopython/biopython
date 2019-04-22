@@ -30,11 +30,15 @@ from Bio.Blast.Applications import (NcbiblastnCommandline,
 
 
 class BlastDisplayer(object):
+    """A class for running and displaying a BLAST search."""
+
     def __init__(self, command_data, text_id=None):
+        """Take command data and notpad id."""
         self.command_data = command_data
         self.tid = text_id
 
     def RunCommand(self):
+        """Run the BLAST search."""
         self.fh_in, self.infile = tempfile.mkstemp()
         self.fh_out, self.outfile = tempfile.mkstemp()
 
@@ -86,6 +90,7 @@ class BlastDisplayer(object):
         self.UpdateResults()
 
     def UpdateResults(self):
+        """Write BLAST result data into notepad."""
         # open the oufile and displays new appended text
         self.tid.insert('end', 'BLAST is running...')
         while True:
@@ -105,6 +110,7 @@ class BlastDisplayer(object):
         self.Exit()
 
     def Exit(self):
+        """Clean up on exit."""
         if os.path.exists(self.outfile):
             os.close(self.fh_out)
             os.remove(self.outfile)
@@ -116,13 +122,16 @@ class BlastDisplayer(object):
 
 
 class BlastWorker(threading.Thread):
+    """Allows multiple BLAST searches by threading."""
 
     def __init__(self, blast_command):
+        """Initialize the worker."""
         self.com = blast_command
         threading.Thread.__init__(self)
         self.finished = 0
 
     def run(self):
+        """Start worker."""
         try:
             self.com()
         except Exception as e:

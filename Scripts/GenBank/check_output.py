@@ -4,7 +4,6 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
 """Check for the ability to read and write identical GenBank records.
 
 This script takes as input a single file to be tested for reading records.
@@ -33,7 +32,7 @@ from Bio import GenBank
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
-    Ths compares the two GenBank record, and will raise an AssertionError
+    This compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
     good_handle = StringIO(good_record)
@@ -60,6 +59,7 @@ def do_comparison(good_record, test_record):
 
 
 def write_format(file):
+    """Write a GenBank record from a Genbank file and compare them."""
     record_parser = GenBank.RecordParser(debug_level=2)
 
     print("Testing GenBank writing for %s..." % os.path.basename(file))

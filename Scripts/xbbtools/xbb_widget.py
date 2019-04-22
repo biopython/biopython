@@ -26,17 +26,21 @@ except ImportError:  # Python 3
     import tkinter.ttk as ttk
     from tkinter import filedialog
 
+from Bio.Data import CodonTable
+from Bio.SeqIO.FastaIO import SimpleFastaParser
+
 from xbb_utils import NotePad
 from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
-from Bio.Data import CodonTable
-from Bio.SeqIO.FastaIO import SimpleFastaParser
 
 
 class xbb_widget(object):
+    """Main XBBtools window."""
+
     def __init__(self, parent=None):
+        """Set up main window."""
         self.is_a_master = (parent is None)
         self.parent = parent
 
@@ -68,6 +72,7 @@ class xbb_widget(object):
         self.blastit = 'xbb_blast.py'
 
     def init_variables(self):
+        """Set up some standard values."""
         self.seqwidth = 60
         self.translation_tables = {}
         for i, table in CodonTable.unambiguous_dna_by_id.items():
@@ -75,6 +80,7 @@ class xbb_widget(object):
         self.translator = xbb_translations()
 
     def create_menu(self, parent):
+        """Create the main menu bar."""
         self.menubar = tk.Menu(self.main_frame)
 
         # File menu
@@ -159,10 +165,12 @@ class xbb_widget(object):
         self.parent.config(menu=self.menubar)
 
     def set_codon_table(self):
+        """Set codon table to selection in Translations menu."""
         self.current_codon_table_id = \
             self.translation_tables[self.current_codon_table.get()]
 
     def exit(self, *args):
+        """Close the program."""
         # depending on if this widget is the first created or a child widget
         if self.is_a_master:
             sys.exit()
@@ -170,6 +178,7 @@ class xbb_widget(object):
             self.main_frame.destroy()
 
     def create_seqinfo(self, parent):
+        """Set up top sequence information fields."""
         # all the sequence information in the top labels
         self.seq_info1 = ttk.Frame(parent, relief='ridge',
                                    borderwidth=5, height=30)
@@ -197,6 +206,7 @@ class xbb_widget(object):
             d[nt].pack(side='left', fill='both', expand=1)
 
     def create_buttons(self, parent):
+        """Set up buttons."""
         self.button_frame = ttk.Frame(parent)
         self.button_frame.pack(fill='y', side='left')
         self.buttons = {}
@@ -221,10 +231,12 @@ class xbb_widget(object):
         frame.pack(side='bottom')
 
     def create_seqfield(self, parent):
+        """Set up the main text field."""
         self.sequence_id = tk.Text(parent, wrap='char', width=self.seqwidth)
         self.sequence_id.pack(fill='both', expand=1, side='right')
 
     def create_bindings(self):
+        """Bind events to commands."""
         self.sequence_id.bind('<Motion>', self.position)
         self.sequence_id.bind('<Leave>', lambda x, s=self:
                               s.position_ids['id'].configure(text=''))
@@ -233,24 +245,32 @@ class xbb_widget(object):
         self.sequence_id.bind('<Double-Button-1>', self.select_all)
 
     def zero(self, event):
+        """Remove selection."""
         for i in ['from_id', 'to_id', 'length_id']:
             self.position_ids[i].configure(text='')
 
     def get_length(self):
+        """Return lenght of sequence."""
         self.sequence_length = len(self.sequence_id.get(1.0, 'end'))
         return self.sequence_length
 
     def select_all(self, event):
+        """Select the whole sequence."""
         self.select(1, self.get_length())
         self.count_selection(None)
 
     def select(self, a, b):
+        """Select subsequence from a to b."""
         w = self.sequence_id
         w.selection_own()
         w.tag_add('sel', '1.%d' % (a - 1), '1.%d' % b)
         self.count_selection(None)
 
     def get_selection_or_sequence(self):
+        """Return selected sequence or whole sequence, if nothing selected.
+
+        Whitespaces, digits etc. are removed.
+        """
         seq = self.get_selection()
         if not len(seq):
             seq = self.sequence_id.get(1.0, 'end')
@@ -259,6 +279,7 @@ class xbb_widget(object):
         return str(seq)
 
     def get_selection(self):
+        """Return selected sequence or empty text (if nothing selected)."""
         w = self.sequence_id
         try:
             return w.selection_get()
@@ -266,6 +287,8 @@ class xbb_widget(object):
             return ''
 
     def get_self_selection(self):
+        """Return selected sequence or empty text (if no selection)."""
+        # Identical to ``get_selection`` from above. Reason for two methods?
         w = self.sequence_id
         try:
             return w.selection_get()
@@ -273,6 +296,7 @@ class xbb_widget(object):
             return ''
 
     def count_selection(self, event):
+        """Calculate some data from selected sequence and display it."""
         w = self.sequence_id
         w.selection_own()
         try:
@@ -294,6 +318,7 @@ class xbb_widget(object):
             pass
 
     def position(self, event):
+        """Get position of cursor and display it."""
         x = event.x
         y = event.y
         pos = self.sequence_id.index('@%d,%d' % (x, y)).split('.')
@@ -301,6 +326,7 @@ class xbb_widget(object):
         self.position_ids['id'].configure(text=str(pos))
 
     def open(self, file=None):
+        """Open a file."""
         if not file:
             file = filedialog.askopenfilename()
         if not file:
@@ -309,6 +335,7 @@ class xbb_widget(object):
             self.insert_sequence(next(SimpleFastaParser(handle)))
 
     def insert_sequence(self, name_sequence):
+        """Load new sequence in sequence window."""
         (name, sequence) = name_sequence
         self.sequence_id.delete(0.0, 'end')
         self.sequence_id.insert('end', sequence.upper())
@@ -316,6 +343,7 @@ class xbb_widget(object):
         self.update_label(name)
 
     def fix_sequence(self):
+        """Do basic formatting of sequence in sequence window."""
         seq = str(self.sequence_id.get(1.0, 'end'))
         seq = seq.upper()
         seq = re.sub('[^A-Z]', '', seq)
@@ -323,6 +351,7 @@ class xbb_widget(object):
         self.sequence_id.insert('end', seq)
 
     def update_label(self, header):
+        """Update name label."""
         name = header.split(' ')[0]
         name = name.split(',')[0]
         self.position_ids['label'].configure(text=name)
@@ -337,6 +366,7 @@ class xbb_widget(object):
         tid.insert('end', seq)
 
     def gcframe(self, direction='both'):
+        """Run pretty print multiple frame translations."""
         seq = self.get_selection_or_sequence()
         if not seq:
             return
@@ -347,6 +377,7 @@ class xbb_widget(object):
                                            direction))
 
     def translate(self):
+        """Run pretty print single frame translation."""
         seq = self.get_selection_or_sequence()
         frame = self.frame_int.get()
         if not seq:
@@ -358,6 +389,7 @@ class xbb_widget(object):
                                               self.current_codon_table_id))
 
     def extract(self):
+        """Make single frame translation and display aa sequence as fasta."""
         seq = self.get_selection_or_sequence()
         frame = self.frame_int.get()
         if not seq:
@@ -369,6 +401,7 @@ class xbb_widget(object):
         tid.insert('end', '>frame%d\n%s' % (frame, aa_seq))
 
     def statistics(self):
+        """Calculate statistics of sequence and display in new window."""
         seq = self.get_selection_or_sequence()
         if not seq:
             return
@@ -391,10 +424,12 @@ class xbb_widget(object):
                    (len(seq), aa['A'], aa['C'], aa['G'], aa['T'], aa['N'], GC))
 
     def blast(self):
+        """Set-up and start BLASTing."""
         seq = self.get_selection_or_sequence()
         self.blaster = BlastIt(seq, self.parent)
 
     def reverse(self):
+        """Display reversed sequence in sequence window."""
         w = self.sequence_id
         w.selection_own()
         try:
@@ -414,6 +449,7 @@ class xbb_widget(object):
         w.tag_remove('sel', stop, 'end')
 
     def complement(self):
+        """Display complement of sequence in sequence window."""
         w = self.sequence_id
         w.selection_own()
         try:
@@ -433,6 +469,7 @@ class xbb_widget(object):
         w.tag_remove('sel', stop, 'end')
 
     def antiparallel(self):
+        """Display reverse-complemented sequence in sequence window."""
         w = self.sequence_id
         w.selection_own()
         try:
@@ -451,10 +488,16 @@ class xbb_widget(object):
         w.tag_remove('sel', stop, 'end')
 
     def search(self):
+        """Set-up and start search process."""
         seq = self.get_selection_or_sequence()
         XDNAsearch(seq, master=self.sequence_id, highlight=1)
 
     def goto(self, *args):
+        """Place cursor at chosen position.
+
+        You can also select and mark a range by typing e.g. 50:55
+        into the Goto entry field.
+        """
         pos = self.goto_entry.get()
         try:
             pos = int(pos) - 1
@@ -476,6 +519,7 @@ class xbb_widget(object):
         self.sequence_id.mark_set('insert', '1.%d' % pos)
 
     def mark(self, start, stop):
+        """Mark and put a tag on choosen subsequence from start to stop."""
         self.sequence_id.focus()
         self.sequence_id.mark_set('insert', '1.%d' % start)
         self.sequence_id.tag_add('sel', '1.%d' % start, '1.%d' % stop)

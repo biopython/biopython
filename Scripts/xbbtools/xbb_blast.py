@@ -34,12 +34,14 @@ import xbb_blastbg
 
 
 class BlastIt(object):
+    """Local BLAST integration for xbbtools."""
 
     nin, pin = [], []
     blast_ok = False
     blast_path = ''
 
     def __init__(self, seq, parent=None):
+        """Set up new top-level window for BLAST search."""
         self.seq = seq
         self.parent = parent
         self.toplevel = tk.Toplevel(parent)
@@ -132,6 +134,7 @@ class BlastIt(object):
         return database_path
 
     def Choices(self):
+        """Set up window to select BLAST program and database."""
         self.blast_string = tk.StringVar()
         self.blast_string.set('blastn')
         self.cf = ttk.Frame(self.toplevel)
@@ -165,6 +168,7 @@ class BlastIt(object):
         self.Validate()
 
     def Validate(self, *args):
+        """Check everything and enable/disable 'Run' button."""
         db = self.convert_dbname_to_dbpath(self.dbs.get())
         prog = self.blasts.get()
         if (prog in ['blastn', 'tblastx', 'tblastn']) == (db in self.nin):
@@ -188,6 +192,7 @@ class BlastIt(object):
         self.Run()
 
     def Run(self):
+        """Open new notepad and initialize running BLAST."""
         self.notepad = NotePad()
         tid = self.notepad.tid
 

@@ -30,11 +30,15 @@ import xbb_widget
 
 
 class DNAsearch(object):
+    """Class to search a DNA sequence."""
+
     def __init__(self):
+        """Set up the alphabet."""
         self.init_alphabet()
         self.sequence = ''
 
     def init_alphabet(self):
+        """Expand alphabet values for ambiguous codes."""
         self.alphabet = ambiguous_dna_values
         other = ''.join(self.alphabet)
         self.alphabet['N'] = self.alphabet['N'] + other
@@ -46,14 +50,17 @@ class DNAsearch(object):
             self.alphabet[key] = self.alphabet[key] + key
 
     def SetSeq(self, seq):
+        """Set sequence."""
         self.sequence = seq
 
     def SetPattern(self, pattern):
+        """Convert search pattern to regular expression."""
         self.pattern = pattern
         self.rx_pattern = self.IUPAC2regex(pattern)
         self.rx = re.compile(self.rx_pattern)
 
     def IUPAC2regex(self, s):
+        """Translate search text into pattern."""
         rx = ''
         for i in s:
             r = self.alphabet.get(i, i)
@@ -64,10 +71,13 @@ class DNAsearch(object):
         return rx
 
     def _Search(self, start=0):
+        """Search and return MatchObject (PRIVAT)."""
+        # Only called from SearchAll. Is it used?
         pos = self.rx.search(self.sequence, start)
         return pos
 
     def Search(self, start=0):
+        """Search for query sequence and return position."""
         pos = self.rx.search(self.sequence, start)
         if pos:
             return pos.start()
@@ -75,6 +85,8 @@ class DNAsearch(object):
             return -1
 
     def SearchAll(self):
+        """Search the whole sequence."""
+        # Doesn't seem to be used...
         pos = -1
         positions = []
         while True:
@@ -90,7 +102,10 @@ class DNAsearch(object):
 
 
 class XDNAsearch(tk.Toplevel, DNAsearch):
+    """Graphical tools to perform the DNA search."""
+
     def __init__(self, seq='', master=None, highlight=0):
+        """Initialize the search GUI."""
         DNAsearch.__init__(self)
         self.master = master
         self.highlight = highlight
@@ -100,6 +115,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         self.cur_pos = 0
 
     def init_graphics(self):
+        """Build the search window."""
         tk.Toplevel.__init__(self, self.master)
         self.frame = ttk.Frame(self)
         self.frame.pack(fill=tk.BOTH, expand=1)
@@ -125,6 +141,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         self.config_color(self.current_color)
 
     def config_color(self, color=None):
+        """Set color for found sequence tag."""
         if not self.highlight:
             return
         if not color:
@@ -139,13 +156,16 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
         self.colors.append(color)
 
     def change_color(self):
+        """Call back for color button."""
         self.config_color()
 
     def get_pattern(self):
+        """Retrieve query sequence."""
         pattern = self.search_entry.get()
         return pattern
 
     def do_search(self, other_strand=0):
+        """Start the search."""
         pattern = self.get_pattern()
         if other_strand:
             pattern = reverse_complement(pattern)
@@ -164,6 +184,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
                 w.see('1.%d' % start)
 
     def exit(self):
+        """Clean up on exit."""
         for c in self.colors:
             self.master.tag_remove('searched_%s' % c, 1.0, tk.END)
             self.master.tag_remove('searched_%sR' % c, 1.0, tk.END)
