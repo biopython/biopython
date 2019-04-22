@@ -138,7 +138,6 @@ def _do_db_cleanup():
 
     Relevant for MySQL and PostgreSQL.
     """
-
     if DBDRIVER in ["psycopg2", "pgdb"]:
         # first open a connection the database
         # notice that postgres doesn't have createdb privileges, so

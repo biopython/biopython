@@ -116,7 +116,6 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_view(self):
         """Test for samtools view."""
-
         cmdline = SamtoolsViewCommandline(samtools_exe)
         cmdline.set_parameter("input_file", self.bamfile1)
         stdout_bam, stderr_bam = cmdline()
