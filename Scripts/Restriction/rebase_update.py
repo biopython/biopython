@@ -85,7 +85,7 @@ class RebaseUpdate(FancyURLopener):
         return
 
     def localtime(self):
-        """Generate time 'stamp' of type ymm to add to Rebase file names."""
+        """Generate 'time stamp' of type ymm to add to Rebase file names."""
         t = time.gmtime()
         year = str(t.tm_year)[-1]
         month = str(t.tm_mon)
@@ -94,7 +94,7 @@ class RebaseUpdate(FancyURLopener):
         return year + month
 
     def update(self, *files):
-        """Update filenames to recent versions (indicated by 'time stamp'."""
+        """Update filenames to recent versions (indicated by 'time stamp')."""
         if not files:
             files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
         return [x.replace('###', self.localtime()) for x in files]

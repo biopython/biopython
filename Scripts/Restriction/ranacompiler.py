@@ -887,12 +887,12 @@ class DictionaryBuilder(object):
         return line
 
     def removestart(self, file):
-        """Remove the heading of the file."""
+        """Remove the header of the file."""
         return [l for l in itertools.dropwhile(lambda l:l.startswith('#'),
                                                file)]
 
     def getblock(self, file, index):
-        """Get a block from the emboss_r file."""
+        """Get a data block from the emboss_r file."""
         #
         #   emboss_r.txt, separation between blocks is //
         #
@@ -917,7 +917,7 @@ class DictionaryBuilder(object):
         return (block[0].strip(), bl3, block[5].strip())
 
     def information_mixer(self, file1, file2, file3):
-        """Combine extracted data from the the three emboss_x.xxx files."""
+        """Combine extracted data from the three emboss_x.xxx files."""
         #
         #   Mix all the information from the 3 files and produce a coherent
         #   restriction record.

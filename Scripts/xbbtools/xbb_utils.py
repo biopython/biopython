@@ -42,7 +42,7 @@ class NotePad(tk.Toplevel):
         self.yscroll.pack(side='right', fill='y')
 
     def text_id(self):
-        """Get text from notepad window."""
+        """Get reference to notepad window."""
         return self.tid
 
     def insert(self, start, txt):

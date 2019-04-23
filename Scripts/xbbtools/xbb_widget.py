@@ -178,7 +178,7 @@ class xbb_widget(object):
             self.main_frame.destroy()
 
     def create_seqinfo(self, parent):
-        """Set up top sequence information fields."""
+        """Set up two info lines at top of main window."""
         # all the sequence information in the top labels
         self.seq_info1 = ttk.Frame(parent, relief='ridge',
                                    borderwidth=5, height=30)
@@ -267,7 +267,7 @@ class xbb_widget(object):
         self.count_selection(None)
 
     def get_selection_or_sequence(self):
-        """Return selected sequence or whole sequence, if nothing selected.
+        """Return selected sequence or whole sequence (if nothing selected).
 
         Whitespaces, digits etc. are removed.
         """
