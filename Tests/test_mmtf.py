@@ -5,6 +5,8 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
+"""Tests for mmtf module."""
+
 import unittest
 import warnings
 from Bio.PDB.mmtf import MMTFParser
@@ -16,7 +18,7 @@ class ParseMMTF(unittest.TestCase):
     """Testing with real mmtf file(s)."""
 
     def check_atoms(self):
-        """Check all atoms in self.mmtf_atoms and self.mmcif_atoms are equivalent"""
+        """Check all atoms in self.mmtf_atoms and self.mmcif_atoms are equivalent."""
         self.assertEqual(len(self.mmcif_atoms), len(self.mmtf_atoms))
         for i, e in enumerate(self.mmcif_atoms):
             mmtf_atom = self.mmtf_atoms[i]
@@ -37,7 +39,7 @@ class ParseMMTF(unittest.TestCase):
             self.assertEqual(mmtf_atom - mmcif_atom, 0)
 
     def check_residues(self):
-        """Check all residues in self.mmcif_res and self.mmtf_res are equivalent"""
+        """Check all residues in self.mmcif_res and self.mmtf_res are equivalent."""
         self.assertEqual(len(self.mmcif_res), len(self.mmtf_res))
         for i, e in enumerate(self.mmcif_res):
             mmcif_r = self.mmcif_res[i]
@@ -74,7 +76,7 @@ class ParseMMTF(unittest.TestCase):
         self.assertEqual(len([x for x in mmcif_struct.get_models()]), len([x for x in mmtf_struct.get_models()]))
 
     def test_4CUP(self):
-        """Compare parsing 4CUP.mmtf and 4CUP.cif"""
+        """Compare parsing 4CUP.mmtf and 4CUP.cif."""
         self.check_mmtf_vs_cif("PDB/4CUP.mmtf", "PDB/4CUP.cif")
 
 # TODO:
@@ -92,13 +94,13 @@ class SimpleParseMMTF(unittest.TestCase):
     """Just parse some real mmtf files."""
 
     def test_4ZHL(self):
-        """Parse 4ZHL.mmtf"""
+        """Parse 4ZHL.mmtf."""
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
             structure = MMTFParser.get_structure("PDB/4ZHL.mmtf")
 
     def test_1A80(self):
-        """Parse 1A8O.mmtf"""
+        """Parse 1A8O.mmtf."""
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
             structure = MMTFParser.get_structure("PDB/1A8O.mmtf")

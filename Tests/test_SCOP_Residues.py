@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Residues"""
+"""Unit test for Residues."""
 
 import unittest
 from Bio.SCOP.Residues import Residues
@@ -36,7 +36,7 @@ class ResiduesTests(unittest.TestCase):
             self.assertEqual(str(r), loc[0])
 
     def testAstralParse(self):
-        """Test if we can parse residue subsets enclosed in brackets"""
+        """Test if we can parse residue subsets enclosed in brackets."""
         for loc in self.res:
             r = Residues("(" + loc[0] + ")")
             self.assertEqual(r.fragments, loc[1])

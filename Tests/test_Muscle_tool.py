@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Muscle tool."""
+
 from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 
@@ -85,7 +87,7 @@ class MuscleApplication(unittest.TestCase):
             os.remove(self.outfile4)
 
     def test_Muscle_simple(self):
-        """Simple round-trip through app just infile and outfile"""
+        """Simple round-trip through app just infile and outfile."""
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
@@ -97,7 +99,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertNotIn("ERROR", error)
 
     def test_Muscle_with_options(self):
-        """Round-trip through app with a switch and valued option"""
+        """Round-trip through app with a switch and valued option."""
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("input", self.infile1)  # "input" is alias for "in"
         cmdline.set_parameter("out", self.outfile2)
@@ -115,7 +117,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_simple(self):
-        """Simple round-trip through app doing a profile alignment"""
+        """Simple round-trip through app doing a profile alignment."""
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("out", self.outfile3)
         cmdline.set_parameter("profile", True)
@@ -131,7 +133,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_with_options(self):
-        """Profile alignment, and switch and valued options"""
+        """Profile alignment, and switch and valued options."""
         # Using some keyword arguments, note -stable isn't supported in v3.8
         cmdline = MuscleCommandline(muscle_exe, out=self.outfile4,
                                     in1=self.infile2, in2=self.infile3,
@@ -155,7 +157,7 @@ class MuscleApplication(unittest.TestCase):
 
 
 class SimpleAlignTest(unittest.TestCase):
-    """Simple MUSCLE tests"""
+    """Simple MUSCLE tests."""
 
     """
     #FASTA output seems broken on Muscle 3.6 (on the Mac).
@@ -183,7 +185,7 @@ class SimpleAlignTest(unittest.TestCase):
     """
 
     def test_simple_clustal(self):
-        """Simple muscle call using Clustal output with a MUSCLE header"""
+        """Simple muscle call using Clustal output with a MUSCLE header."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
@@ -213,7 +215,7 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
 
     def test_simple_clustal_strict(self):
-        """Simple muscle call using strict Clustal output"""
+        """Simple muscle call using strict Clustal output."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
@@ -246,7 +248,7 @@ class SimpleAlignTest(unittest.TestCase):
         del child
 
     def test_long(self):
-        """Simple muscle call using long file"""
+        """Simple muscle call using long file."""
         # Create a large input file by converting some of another example file
         temp_large_fasta_file = "temp_cw_prot.fasta"
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
@@ -289,7 +291,7 @@ class SimpleAlignTest(unittest.TestCase):
         os.remove(temp_large_fasta_file)
 
     def test_using_stdin(self):
-        """Simple alignment using stdin"""
+        """Simple alignment using stdin."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
@@ -320,7 +322,7 @@ class SimpleAlignTest(unittest.TestCase):
         del child
 
     def test_with_multiple_output_formats(self):
-        """Simple muscle call with multiple output formats"""
+        """Simple muscle call with multiple output formats."""
         input_file = "Fasta/f002"
         output_html = "temp_f002.html"
         output_clwstrict = "temp_f002.clw"

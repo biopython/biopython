@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""Unit test for Des"""
+"""Unit test for Des."""
 
 import unittest
 
@@ -17,7 +16,7 @@ class DesTests(unittest.TestCase):
         self.filename = './SCOP/dir.des.scop.txt_test'
 
     def testParse(self):
-        """Test if all records in a DES file are being read"""
+        """Test if all records in a DES file are being read."""
         f = open(self.filename)
         try:
             count = 0
@@ -29,7 +28,7 @@ class DesTests(unittest.TestCase):
             f.close()
 
     def testStr(self):
-        """Test if we can convert each record to a string correctly"""
+        """Test if we can convert each record to a string correctly."""
         f = open(self.filename)
         try:
             for line in f:
@@ -40,12 +39,12 @@ class DesTests(unittest.TestCase):
             f.close()
 
     def testError(self):
-        """Test if a corrupt record raises the appropriate exception"""
+        """Test if a corrupt record raises the appropriate exception."""
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
         self.assertRaises(ValueError, Des.Record, corruptRec)
 
     def testRecord(self):
-        """Test one record in detail"""
+        """Test one record in detail."""
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
         recFields = (49268, 'sp', 'b.1.2.1', '', 'Human (Homo sapiens)')
 

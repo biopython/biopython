@@ -3,16 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for psw module."""
+
 import doctest
 import unittest
 import random
 import sys
 
+from Bio.Wise import psw
+
 if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
-import requires_wise
-
-from Bio.Wise import psw
+import requires_wise  # noqa: E402
 
 
 class TestPSW(unittest.TestCase):
@@ -93,8 +95,7 @@ def run_tests(argv):
 
 
 def testing_suite():
-    """Generate the suite of tests.
-    """
+    """Generate the suite of tests."""
     unittest_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()

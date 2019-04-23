@@ -59,7 +59,7 @@ if len(exes) < len(exes_wanted):
 
 
 def get_emboss_version():
-    """Returns a tuple of three ints, e.g. (6,1,0)"""
+    """Return a tuple of three ints, e.g. (6,1,0)."""
     # Windows and Unix versions of EMBOSS seem to differ in
     # which lines go to stdout and stderr - so merge them.
     child = subprocess.Popen(_escape_filename(exes["embossversion"]),
@@ -253,7 +253,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
 
     def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=(),
                               alphabet=None):
-        """Can Bio.SeqIO write files seqret can read back?"""
+        """Check SeqIO writes files seqret can read back."""
         if alphabet:
             records = list(SeqIO.parse(in_filename, in_format, alphabet))
         else:
@@ -270,7 +270,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
 
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
                               skip_formats=()):
-        """Can Bio.SeqIO read seqret's conversion of the file?"""
+        """Check SeqIO can read read seqret's conversion output."""
         # TODO: Why can't we read EMBOSS's swiss output?
         self.assertTrue(os.path.isfile(filename))
         old_records = list(SeqIO.parse(filename, old_format))
@@ -364,7 +364,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
                                 skip_formats=()):
-        """Can AlignIO read seqret's conversion of the file?"""
+        """Check AlignIO can read seqret's conversion of the file."""
         self.assertTrue(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(filename, old_format))
         formats = ["clustal", "phylip", "ig"]
@@ -389,7 +389,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
 
     def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=(),
                                 alphabet=None):
-        """Can Bio.AlignIO write files seqret can read back?"""
+        """Check Bio.AlignIO can write files seqret can read."""
         if alphabet:
             old_aligns = list(AlignIO.parse(in_filename, in_format, alphabet))
         else:
@@ -859,7 +859,6 @@ class TranslationTests(unittest.TestCase):
 
     def test_simple(self):
         """Run transeq vs Bio.Seq for simple translations (including alt tables)."""
-
         examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
                     # Unamibguous TA? codons:
                     Seq("TAATACTATTAG", generic_dna),

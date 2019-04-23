@@ -9,6 +9,8 @@ import sys
 import os
 import unittest
 
+from Bio._py3k import getoutput
+
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
 from Bio import MissingExternalDependencyError
@@ -18,7 +20,6 @@ os.environ['LANG'] = 'C'
 
 phyml_exe = None
 exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
-from Bio._py3k import getoutput
 try:
     output = getoutput(exe_name + " --version")
     if "not found" not in output and ("20" in output or "PhyML" in output):

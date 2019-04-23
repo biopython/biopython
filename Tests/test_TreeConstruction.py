@@ -28,7 +28,7 @@ temp_dir = tempfile.mkdtemp()
 
 
 class DistanceMatrixTest(unittest.TestCase):
-    """Test for DistanceMatrix construction and manipulation"""
+    """Test for DistanceMatrix construction and manipulation."""
 
     def setUp(self):
         self.names = ['Alpha', 'Beta', 'Gamma', 'Delta']
@@ -121,7 +121,7 @@ class DistanceMatrixTest(unittest.TestCase):
 
 
 class DistanceCalculatorTest(unittest.TestCase):
-    """Test DistanceCalculator"""
+    """Test DistanceCalculator."""
 
     def test_known_matrices(self):
         aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
@@ -155,7 +155,7 @@ class DistanceCalculatorTest(unittest.TestCase):
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
-    """Test DistanceTreeConstructor"""
+    """Test DistanceTreeConstructor."""
 
     def setUp(self):
         self.aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
@@ -204,7 +204,7 @@ class DistanceTreeConstructorTest(unittest.TestCase):
 
 
 class ParsimonyScorerTest(unittest.TestCase):
-    """Test ParsimonyScorer"""
+    """Test ParsimonyScorer."""
 
     def test_get_score(self):
         aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
@@ -256,7 +256,7 @@ class ParsimonyScorerTest(unittest.TestCase):
 
 
 class NNITreeSearcherTest(unittest.TestCase):
-    """Test NNITreeSearcher"""
+    """Test NNITreeSearcher."""
 
     def test_get_neighbors(self):
         tree = Phylo.read('./TreeConstruction/upgma.tre', 'newick')
@@ -274,7 +274,7 @@ class NNITreeSearcherTest(unittest.TestCase):
 
 
 class ParsimonyTreeConstructorTest(unittest.TestCase):
-    """Test ParsimonyTreeConstructor"""
+    """Test ParsimonyTreeConstructor."""
 
     def test_build_tree(self):
         aln = AlignIO.read('TreeConstruction/msa.phy', 'phylip')

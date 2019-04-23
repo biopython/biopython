@@ -2,6 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for KeyWList."""
 
 import unittest
 import os.path
@@ -9,10 +10,10 @@ from Bio.SwissProt import KeyWList
 
 
 class KeyWListTest(unittest.TestCase):
+    """Tests for KeyWList."""
 
     def test_parse(self):
-        "Parsing keywlist.txt"
-
+        """Test parsing keywlist.txt works."""
         filename = os.path.join("SwissProt", "keywlist.txt")
         handle = open(filename)
         records = KeyWList.parse(handle)
@@ -49,8 +50,7 @@ class KeyWListTest(unittest.TestCase):
         handle.close()
 
     def test_parse2(self):
-        "Parsing keywlist2.txt (without header and footer)"
-
+        """Parsing keywlist2.txt (without header and footer)."""
         filename = os.path.join("SwissProt", "keywlist2.txt")
         handle = open(filename)
         records = KeyWList.parse(handle)

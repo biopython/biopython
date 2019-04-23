@@ -2,8 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for GenomeDiagram general functionality.
-"""
+"""Tests for GenomeDiagram general functionality."""
 
 from __future__ import print_function
 
@@ -52,6 +51,7 @@ rl_config.invariant = True
 
 
 def fill_and_border(base_color, alpha=0.5):
+    """Return fill and border colors given a base color."""
     try:
         c = base_color.clone()
         c.alpha = alpha
@@ -120,7 +120,7 @@ def apply_to_window(sequence, window_size, function, step=None):
 
 
 def calc_gc_content(sequence):
-    """Returns the % G+C content in a passed sequence.
+    """Return the % G+C content in a passed sequence.
 
     Arguments:
         - sequence  - a Bio.Seq.Seq object.
@@ -139,7 +139,7 @@ def calc_gc_content(sequence):
 
 
 def calc_at_content(sequence):
-    """Returns the % A+T content in a passed sequence.
+    """Return the % A+T content in a passed sequence.
 
     Arguments:
         - sequence  - a Bio.Seq.Seq object.
@@ -157,7 +157,7 @@ def calc_at_content(sequence):
 
 
 def calc_gc_skew(sequence):
-    """Returns the (G-C)/(G+C) GC skew in a passed sequence.
+    """Return the (G-C)/(G+C) GC skew in a passed sequence.
 
     Arguments:
         - sequence   - a Bio.Seq.Seq object.
@@ -173,7 +173,7 @@ def calc_gc_skew(sequence):
 
 
 def calc_at_skew(sequence):
-    """Returns the (A-T)/(A+T) AT skew in a passed sequence.
+    """Return the (A-T)/(A+T) AT skew in a passed sequence.
 
     Arguments:
         - sequence   - a Bio.Seq.Seq object.
@@ -189,7 +189,7 @@ def calc_at_skew(sequence):
 
 
 def calc_dinucleotide_counts(sequence):
-    """Returns the total count of di-nucleotides repeats (e.g. "AA", "CC").
+    """Return the total count of di-nucleotides repeats (e.g. "AA", "CC").
 
     This is purely for the sake of generating some non-random sequence
     based score for plotting, with no expected biological meaning.
@@ -208,15 +208,16 @@ def calc_dinucleotide_counts(sequence):
 
 
 # Tests
-class TrackTest(unittest.TestCase):
-    # TODO Bring code from Track.py, unsure about what test does
-    pass
+# class TrackTest(unittest.TestCase):
+#    # TODO Bring code from Track.py, unsure about what test does
+#    pass
 
 
 class ColorsTest(unittest.TestCase):
+    """Color tests."""
+
     def test_color_conversions(self):
-        """Test color translations.
-        """
+        """Test color translations."""
         translator = ColorTranslator()
 
         # Does the translate method correctly convert the passed argument?
@@ -231,6 +232,8 @@ class ColorsTest(unittest.TestCase):
 
 
 class GraphTest(unittest.TestCase):
+    """Graph tests."""
+
     def test_limits(self):
         """Check line graphs."""
         # TODO - Fix GD so that the same min/max is used for all three lines?
@@ -245,9 +248,9 @@ class GraphTest(unittest.TestCase):
                       x=0.01, xl=0.01, xr=0.01)
         gdt_data = gdd.new_track(1, greytrack=False)
         gds_data = gdt_data.new_set("graph")
-        for data_values, name, color in zip([data1, data2, data3],
-                                            ["sin", "cos", "2sin2"],
-                                            ["red", "green", "blue"]):
+        for data_values, _name, color in zip([data1, data2, data3],
+                                             ["sin", "cos", "2sin2"],
+                                             ["red", "green", "blue"]):
             data = list(zip(range(points), data_values))
             gds_data.new_graph(data, "", style="line",
                                color=color, altcolor=color,
@@ -278,13 +281,15 @@ class GraphTest(unittest.TestCase):
 
 class LabelTest(unittest.TestCase):
     """Check label positioning."""
+
     def setUp(self):
+        """Start a diagram."""
         self.gdd = Diagram('Test Diagram', circular=False,
                            y=0.01, yt=0.01, yb=0.01,
                            x=0.01, xl=0.01, xr=0.01)
 
     def finish(self, name, circular=True):
-        # And draw it...
+        """Draw it..."""
         tracks = len(self.gdd.tracks)
         # Work around the page orientation code being too clever
         # and flipping the h & w round:
@@ -323,6 +328,7 @@ class LabelTest(unittest.TestCase):
             self.gdd.write(os.path.join('Graphics', name + "_c.pdf"), "pdf")
 
     def add_track_with_sigils(self, **kwargs):
+        """Add track with sigils."""
         self.gdt_features = self.gdd.new_track(1, greytrack=False)
         self.gds_features = self.gdt_features.new_set()
         for i in range(18):
@@ -355,13 +361,15 @@ class SigilsTest(unittest.TestCase):
 
     These figures are intended to be used in the Tutorial...
     """
+
     def setUp(self):
+        """Initialise diagram."""
         self.gdd = Diagram('Test Diagram', circular=False,
                            y=0.01, yt=0.01, yb=0.01,
                            x=0.01, xl=0.01, xr=0.01)
 
     def add_track_with_sigils(self, track_caption="", **kwargs):
-        # Add a track of features,
+        """Add a track of features."""
         self.gdt_features = self.gdd.new_track(1,
                                                greytrack=(track_caption != ""),
                                                name=track_caption,
@@ -377,7 +385,7 @@ class SigilsTest(unittest.TestCase):
         self.gds_features.add_feature(feature, name="Reverse", **kwargs)
 
     def finish(self, name, circular=True):
-        # And draw it...
+        """Draw it..."""
         tracks = len(self.gdd.tracks)
         # Work around the page orientation code being too clever
         # and flipping the h & w round:
@@ -617,6 +625,7 @@ class SigilsTest(unittest.TestCase):
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
+
     def setUp(self):
         """Test setup, just loads a GenBank file as a SeqRecord."""
         handle = open(os.path.join("GenBank", "NC_005816.gb"), 'r')
@@ -629,6 +638,7 @@ class DiagramTest(unittest.TestCase):
                            greytrack_labels=0, height=0.5)
 
     def tearDown(self):
+        """Release the drawing objects."""
         del self.gdd
 
     def test_str(self):
@@ -642,11 +652,13 @@ class DiagramTest(unittest.TestCase):
         self.assertEqual(expected, str(self.gdd))
 
     def test_add_track(self):
+        """Add track."""
         track = Track(name="Annotated Features")
         self.gdd.add_track(track, 2)
         self.assertEqual(2, len(self.gdd.get_tracks()))
 
     def test_add_track_to_occupied_level(self):
+        """Add track to occupied level."""
         new_track = self.gdd.get_tracks()[0]
         self.gdd.add_track(new_track, 1)
         self.assertEqual(2, len(self.gdd.get_tracks()))
@@ -656,13 +668,16 @@ class DiagramTest(unittest.TestCase):
         self.assertRaises(ValueError, self.gdd.add_track, None, 1)
 
     def test_del_tracks(self):
+        """Delete track."""
         self.gdd.del_track(1)
         self.assertEqual(0, len(self.gdd.get_tracks()))
 
     def test_get_tracks(self):
+        """Get track."""
         self.assertEqual(1, len(self.gdd.get_tracks()))
 
     def test_move_track(self):
+        """Move a track."""
         self.gdd.move_track(1, 2)
         expected = "\n<<class 'Bio.Graphics.GenomeDiagram._Diagram.Diagram'>: Test Diagram>" \
                    "\n1 tracks" \
@@ -690,20 +705,10 @@ class DiagramTest(unittest.TestCase):
         filename = os.path.join("Graphics", "error.txt")
         # We (now) allow valid formats in any case.
         for output in ["XXX", "xxx", None, 123, 5.9]:
-            try:
+            with self.assertRaises(ValueError):
                 gdd.write(filename, output)
-                assert False, \
-                    "Should have rejected %s as an output format" % output
-            except ValueError:
-                # Good!
-                pass
-            try:
+            with self.assertRaises(ValueError):
                 gdd.write_to_string(output)
-                assert False, \
-                    "Should have rejected %s as an output format" % output
-            except ValueError:
-                # Good!
-                pass
 
     def test_partial_diagram(self):
         """Construct and draw SVG and PDF for just part of a SeqRecord."""

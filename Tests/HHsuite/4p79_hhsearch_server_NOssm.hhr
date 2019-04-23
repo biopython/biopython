@@ -1,0 +1,270 @@
+Query         4P79:A|PDBID|CHAIN|SEQUENCE
+Match_columns 198
+No_of_seqs    110 out of 1051
+Neff          10.453
+Searched_HMMs 46616
+Date          Thu Nov 29 16:33:45 2018
+Command       hhsearch -cpu 8 -i ../results/full.a3m -d /cluster/toolkit/production/databases/hh-suite/mmcif70/pdb70 -o ../results/4P79_1.hhr -oa3m ../results/4P79_1.a3m -p 50 -Z 250 -loc -z 1 -b 1 -B 250 -ssm 0 -sc 1 -seq 1 -dbstrlen 10000 -norealign -maxres 32000 -contxt /cluster/toolkit/production/bioprogs/tools/hh-suite-build/data/context_data.crf 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 4P79_A cell adhesion protein;   99.9 6.8E-32 1.5E-36  194.6   0.0  198    1-198     1-198 (198)
+  2 3X29_C Claudin-19, Heat-labile  99.9 1.8E-27 3.8E-32  169.8   0.0  183    4-186     1-185 (185)
+  3 5B2G_A Endolysin,Claudin-4 (E.  99.8 1.2E-25 2.5E-30  176.5   0.0  195    2-197   168-364 (364)
+  4 5KK2_G Glutamate receptor 2, V  99.8 1.1E-24 2.4E-29  168.3   0.0  190    1-198     1-212 (323)
+  5 5GJV_E Voltage-dependent L-typ  99.8 1.2E-24 2.6E-29  159.3   0.0  188    2-198     1-214 (222)
+  6 6C14_D Protocadherin-15, LHFPL  99.8 5.7E-24 1.2E-28  156.8   0.0  181    5-198    28-218 (228)
+  7 6DLZ_D Glutamate receptor 2,Vo  99.5 1.8E-18 3.9E-23  150.8   0.0  189    2-198   820-1030(1031)
+  8 5YQ7_F Beta subunit of light-h  52.1     6.7 0.00014   20.5   0.0   32    6-37      9-42  (42)
+
+No 1
+>4P79_A cell adhesion protein; cell adhesion, tight junction, membrane; HET: OLC, MSE; 2.4A {Mus musculus}
+Probab=99.94  E-value=6.8e-32  Score=194.63  Aligned_cols=198  Identities=100%  Similarity=1.536  Sum_probs=0.0  Template_Neff=10.300
+
+Q ss_pred             CcHHHHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCCccccceEEeccchhhhccCCCCeecccchhHhcCChhHH
+Q 4P79:A|PDBID|C    1 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ   80 (198)
+Q Consensus         1 ~~~m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~   80 (198)
+                      |.+|+++.++.+++++.++++++.++++.+|+|.+.+.+++..++...+.|||+.|..+.+++..|.+..+.+..+++.+
+T Consensus         1 ~~~m~~~~~~~~~~~l~~~a~~l~~va~~tp~W~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~   80 (198)
+T 4P79_A            1 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ   80 (198)
+T ss_dssp             -CHHHHHHHHHHHHHHHHHHHHHHHHHHTCSCSEEEC--------CEEEECSSEEEEECTTSCEEEEECCHHHHHHSSHH
+T ss_pred             CChHHHHHHHHHHHHHHHHHHHHHHHHHcCCcccccccCCCccccceEEeccchhhhhcCCCCcccccchHHhcCCHHHH
+
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCcCCCCCc
+Q 4P79:A|PDBID|C   81 GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKY  160 (198)
+Q Consensus        81 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  160 (198)
+                      .+|.++++++++.++++++.++..++..+..+++++++......+++.++++++.++++++|+..++.+++.+..++.+.
+T Consensus        81 ~~~~~~~~s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~la~~~~~i~~~~~~~~~~~~~~~~~~~~~~~  160 (198)
+T 4P79_A           81 GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLYAGTKY  160 (198)
+T ss_dssp             HHHHHHHHHHHHHHHHHHHHHHHSSSCCSSCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHTCSSCCSCCE
+T ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHHhccccCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhccCcCCCCCCc
+
+
+Q ss_pred             eecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCcccC
+Q 4P79:A|PDBID|C  161 ELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+Q Consensus       161 ~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~~  198 (198)
+                      ++||||+++|++.++.++++++++...++.+++++++|
+T Consensus       161 ~~g~s~~l~~~a~~l~~~~~i~~~~~~~~~~~~~~~~~  198 (198)
+T 4P79_A          161 ELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+T ss_dssp             EECHHHHHHHHHHHHHHHHHHHHHHHHHTC--------
+T ss_pred             ccchhHHHHHHHHHHHHHHHHHHHhchhccCCCCccCC
+
+
+No 2
+>3X29_C Claudin-19, Heat-labile enterotoxin B chain; TOXIN-CELL ADHESION COMPLEX, TIGHT JUNCTION; 3.7A {Mus musculus}; Related PDB entries: 3X29_A 
+Probab=99.88  E-value=1.8e-27  Score=169.81  Aligned_cols=183  Identities=38%  Similarity=0.775  Sum_probs=0.0  Template_Neff=10.300
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCC-ccccceEEeccchhhhccCCCCeecccchhHhcCChhHHHH
+Q 4P79:A|PDBID|C    4 FMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-VITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQGC   82 (198)
+Q Consensus         4 m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~-~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~~~   82 (198)
+                      |+++.+++++.+++++++++.++++.+|+|.+.+.+++ .......+.|||+.|...+.++.+|.++++.+..|++.+.+
+T Consensus         1 M~~~~~~~~~~~l~~~~~~l~i~a~~tp~W~~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~~~   80 (185)
+T 3X29_C            1 MANSGLQLLGYFLALGGWVGIIASTALPQWKQSSYAGDAIITAVGLYEGLWMSCASQSTGQVQCKLYDSLLALDGHIQSA   80 (185)
+T ss_dssp             ---CHHHHHHHHHHHHHHHHHHHHHHCSCSEEEEECSSSSSSCEEEEECSSEEEC----CCCCEEECCC-----CHHHHH
+T ss_pred             ChhHHHHHHHHHHHHHHHHHHHHHHhCchhhhcccCCCcccccceeeeeccchhhhcCCCcEEceechhHhcCCHHHHHH
+
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCcC-CCCCce
+Q 4P79:A|PDBID|C   83 RALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLY-AGTKYE  161 (198)
+Q Consensus        83 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~~~~~~~~~~~~~~~~~~-~~~~~~  161 (198)
+                      |.++++++++.++++++.+++.++.++.+.++++++.....++++.++++++.++++++|+..++++..++.+ ...+.+
+T Consensus        81 ~~~~~~s~~~~~~~~~~~i~~~~~~~~~~~~~~~~~~~~~~~~~l~~~a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  160 (185)
+T 3X29_C           81 RALMVVAVLLGFVAMVLSVVGMKATRVGDSNPTAKSRVAISGGALFLLAGLCTLTAVSWYATLVTQEFFNPSTPVNARYE  160 (185)
+T ss_dssp             HHHHHHHHHHHHHHHHHHHHHHCC----------HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHCTTSCTTEEEE
+T ss_pred             HHHHHHHHHHHHHHHHHHHHcchhhhcCCCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCCCCCCccc
+
+
+Q ss_pred             ecchHHHHHHHHHHHHHHHHHHHhh
+Q 4P79:A|PDBID|C  162 LGPALYLGWSASLLSILGGICVFST  186 (198)
+Q Consensus       162 ~g~sf~l~~~~~~l~~~~~~l~~~~  186 (198)
+                      +||||+++|++.++.++++++++++
+T Consensus       161 ~g~s~~l~~~~~~l~~~~~~l~~~~  185 (185)
+T 3X29_C          161 FGPALFVGWASAGLAMLGGSFLAAT  185 (185)
+T ss_dssp             ECTHHHHHHHHHHHHHHHHHHHHTC
+T ss_pred             ccHHHHHHHHHHHHHHHHHHHHhcC
+
+
+No 3
+>5B2G_A Endolysin,Claudin-4 (E.C.3.2.1.17), Heat-labile enterotoxin B; Membrane protein, Complex, Cell-free protein; HET: MSE; 3.5A {Enterobacteria phage T4}; Related PDB entries: 5B2G_E 5B2G_C 5B2G_G
+Probab=99.84  E-value=1.2e-25  Score=176.50  Aligned_cols=195  Identities=37%  Similarity=0.639  Sum_probs=0.0  Template_Neff=9.700
+
+Q ss_pred             cHHHHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCC-ccccceEEeccchhhhccCCCCeecccchhHhcCChhHH
+Q 4P79:A|PDBID|C    2 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-VITTNTIFENLWYSCATDSLGVSNCWDFPSMLALSGYVQ   80 (198)
+Q Consensus         2 ~~m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~-~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~   80 (198)
+                      .+|+++.++.++++++++++++.++++.+|+|.+.+..++ .......+.|||+.|.....+...|..+.+.+..+.+.+
+T Consensus       168 ~~m~~~~~~~~~~~l~~~a~il~~va~~tp~W~~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~~~~~~~~~~~  247 (364)
+T 5B2G_A          168 KGMASMGLQVMGIALAVLGWLAVMLCCALPMWRVTAFIGSNIVTSQTIWEGLWMNCVVQSTGQMQCKVYDSLLALPQDLQ  247 (364)
+T ss_dssp             ------CCHHHHHHHHHHHHHHHHHHHHSSCSEEEEECSTTCSSCEEEEECSSEEEEEESSSSCEEEECCSSCSCCHHHH
+T ss_pred             hhhHHHHHHHHHHHHHHHHHHHHHHHHhCchhhhhcccCCcccCceeEEEeccchheeecCCceEeeechhhhcCCHHHH
+
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCCCcC-CCCC
+Q 4P79:A|PDBID|C   81 GCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFNPLY-AGTK  159 (198)
+Q Consensus        81 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~~~~~~~~~~~~~~~~~~-~~~~  159 (198)
+                      ++++++++++++.++++++.+++.++.++.+. .+.+.......++++++++++.++++++|...+..+++.+.. .+.+
+T Consensus       248 ~~~~~~i~s~i~~~~a~i~~i~~~~~~~~~~~-~~~~~~~~~~~~~~~~la~l~~~~~v~~~~~~~~~~~~~~~~~~~~~  326 (364)
+T 5B2G_A          248 AARALVIISIIVAALGVLLSVVGGKCTNCLED-ESAKAKTMIVAGVVFLLAGLMVIVPVSWTAHNIIQDFYNPLVASGQK  326 (364)
+T ss_dssp             HHHHHHHHHHHHHHHHHHTTCCC--------C-CCCCTTHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHCTTSCSSEE
+T ss_pred             HHHHHHHHHHHHHHHHHHHHHHhhhcccCCCC-hhhHHHHHHHHHHHHHHHHHHhHHHHHHHHHHHHHHhcCcccCCCCC
+
+
+Q ss_pred             ceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCccc
+Q 4P79:A|PDBID|C  160 YELGPALYLGWSASLLSILGGICVFSTAAASSKEEPAT  197 (198)
+Q Consensus       160 ~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~  197 (198)
+                      .++|||||++|++.++.+++++++++..+..++++..+
+T Consensus       327 ~~~GwS~~l~~~s~~l~lia~~l~~~~~~~~~~~~~~~  364 (364)
+T 5B2G_A          327 REMGASLYVGWAASGLLLLGGGLLCCSGPSSGENLYFQ  364 (364)
+T ss_dssp             EEECTHHHHHHHHHHHHHHHHHHHHCC-----------
+T ss_pred             cccchHHHHHHHHHHHHHHHHHHHHhcCCCCCCccccC
+
+
+No 4
+>5KK2_G Glutamate receptor 2, Voltage-dependent calcium; Tetrameric, ionotropic, glutamate receptors, GluA2; 7.3A {Rattus norvegicus}; Related PDB entries: 5VOT_E 5VOT_H 5VOU_H 5KK2_H 5VOV_E 5VOT_F 5KK2_F 5VOT_G 5VOV_G 5VOU_E 5VOV_H 5VOU_G 5VOV_F 5VOU_F 5KK2_E
+Probab=99.82  E-value=1.1e-24  Score=168.32  Aligned_cols=190  Identities=15%  Similarity=0.164  Sum_probs=0.0  Template_Neff=8.600
+
+Q ss_pred             CcHHHHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCC-----------ccccceEEeccchhhhccCCCCeecccc
+Q 4P79:A|PDBID|C    1 GSEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGN-----------VITTNTIFENLWYSCATDSLGVSNCWDF   69 (198)
+Q Consensus         1 ~~~m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~-----------~~~~~~~~~GLw~~C~~~~~~~~~C~~~   69 (198)
+                      |..|.++.+.+++++++++++++.++++.+|+|.+.+....           .......+.|||+.|...+.++..|..+
+T Consensus         1 m~~~~r~~l~~l~~vl~~~a~vL~~ia~~tp~W~~~~~~~~~~~~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~   80 (323)
+T 5KK2_G            1 MGLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSENETSKKNEEVMTHSGLWRTCCLEGNFKGLCKQI   80 (323)
+T ss_dssp             -----CHHHHHHHHHHHHHHHHHHHHHHCCCCCBCCCC-----------------CCEECCSSEEEEC---CCCEEEECC
+T ss_pred             CchhhHHHHHHHHHHHHHHHHHHHHHHHhcCCceeeecccCCCCCcccccccccceeeeeccccchhccccccCCceeec
+
+
+Q ss_pred             hhHhcC-----------ChhHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHH
+Q 4P79:A|PDBID|C   70 PSMLAL-----------SGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVA  138 (198)
+Q Consensus        70 ~~~~~~-----------~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~  138 (198)
+                      ++....           ...+++.+.+.++++++.++++++.++..+.        +.+......+++++++++++.+++
+T Consensus        81 ~~f~~~~~~~~~~~~~~~~~~r~~~~f~ilsl~l~~l~~l~~~~~~~~--------~~~~~~~~~agil~~lAgl~~~i~  152 (323)
+T 5KK2_G           81 DHFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGLCIAASEFY--------KTRHNIILSAGIFFVSAGLSNIIG  152 (323)
+T ss_dssp             CC-CCCCCCSSHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHTTCC------------CHHHHHHHHHHHHHHHHHHHHH
+T ss_pred             cCCCCCccCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHc--------ccchHHHHHHHHHHHHHHHHHHHH
+
+
+Q ss_pred             HHHHHHHHHHhcCCCcCCCCCceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCcccC
+Q 4P79:A|PDBID|C  139 ISWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+Q Consensus       139 ~~~~~~~~~~~~~~~~~~~~~~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~~  198 (198)
+                      +++|...+..+.........++++|||||++|++.++.++++++.+..+...++++++++
+T Consensus       153 vily~~~~~~~~~~~~~~~~~~~~GwSf~~~~~s~~l~~la~vl~v~~~~~~~~~~~~~~  212 (323)
+T 5KK2_G          153 IIVYISANAGDPSKSDSKKNSYSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLRATA  212 (323)
+T ss_dssp             HHHHHHGGGC-----------CCCCHHHHHHHHHHHHHHHHHHHHHHHHCCCCCCCHHHH
+T ss_pred             HHHHHHHhcCCcccCccCCCcccccHHHHHHHHHHHHHHHHHHHHHHHHhhhhHHHHHHH
+
+
+No 5
+>5GJV_E Voltage-dependent L-type calcium channel subunit; complex, channel, membrane protein; HET: PC1, BMA, NAG; 3.6A {Oryctolagus cuniculus}; Related PDB entries: 3JBR_E 5GJW_E
+Probab=99.81  E-value=1.2e-24  Score=159.28  Aligned_cols=188  Identities=17%  Similarity=0.231  Sum_probs=0.0  Template_Neff=10.600
+
+Q ss_pred             cHHHHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCCc--cccceEEeccchhhhccCCC-------------Ceec
+Q 4P79:A|PDBID|C    2 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNV--ITTNTIFENLWYSCATDSLG-------------VSNC   66 (198)
+Q Consensus         2 ~~m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~~--~~~~~~~~GLw~~C~~~~~~-------------~~~C   66 (198)
+                      ++|+++.+..++++++++++++.++++.+|+|.+.+....+  ......+.|||+.|......             ..+|
+T Consensus         1 m~~~~~~~~~~~~~l~~~~~~l~~ia~~t~~W~~~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~~~c~~~~~~~~~~C   80 (222)
+T 5GJV_E            1 MSPTEAPKVRVTLFCILVGIVLAMTAVVSDHWAVLSPHMENHNTTCEAAHFGLWRICTKRIALGEDRSCGPITLPGEKNC   80 (222)
+T ss_dssp             CHHHHSHHHHHHHHHHHHHHHHHHHHHHCCCSEEEECC-------CCEEECCSSCEEEEC---------------CCEEE
+T ss_pred             CCccccHHHHHHHHHHHHHHHHHHHHHhCcchhhcCCCCCCCCcchheeecccHHHhchhhccCCCCCCccccCCCcccc
+
+
+Q ss_pred             ccchhHh-----------cCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHH
+Q 4P79:A|PDBID|C   67 WDFPSML-----------ALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACG  135 (198)
+Q Consensus        67 ~~~~~~~-----------~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~  135 (198)
+                      ..+.+..           ..+.+.+..+.++++++++.++++++.++..+.         .+......++++.++++++.
+T Consensus        81 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~a~~~~~~~~~~~~~~~~~---------~~~~~~~~~~~l~~ls~~~~  151 (222)
+T 5GJV_E           81 SYFRHFNPGESSEIFEFTTQKEYSISAAAISVFSLGFLIMGTICALMAFRK---------KRDYLLRPASMFYVFAGLCL  151 (222)
+T ss_dssp             ECC--------------------CCHHHHHHHHHHHHHHHHHHHHHHHTTT---------TCCTTHHHHHHHHHHHHHHH
+T ss_pred             eeeeccCCCCCCCCCCcccHHHHHHHHHHHHHHHHHHHHHHHHHHHHHccC---------CChhhHHHHHHHHHHHHHHH
+
+
+Q ss_pred             HHHHHHHHHHHHHhcCCCcCCCCCceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCcccC
+Q 4P79:A|PDBID|C  136 MVAISWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+Q Consensus       136 ~~~~~~~~~~~~~~~~~~~~~~~~~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~~  198 (198)
+                      ++++++|...++.+..+......+.++||||+++|++.++.++++++.++..++.++++++++
+T Consensus       152 ~~~~~~~~~~~~~~~~~~~~~~~~~~~g~s~~l~~~a~~l~~l~~~l~~~~~~~~~~~~~~~~  214 (222)
+T 5GJV_E          152 FVSLEVMRQSVKRMIDSEDTVWIEYYYSWSFACACAAFVLLFLGGISLLLFSLPRMPQNPWES  214 (222)
+T ss_dssp             HHHHHHHHHHHHHCC--------EEEECHHHHHHHHHHHHHHHHHHHHHHHHSCCCCSSTTSC
+T ss_pred             HHHHHHHHHHHHHhcCCCCCcceEeecchHHHHHHHHHHHHHHHHHHHHHHcccCCCCCcchh
+
+
+No 6
+>6C14_D Protocadherin-15, LHFPL tetraspan subfamily member; PCDH15, LHFPL5, protocadherin, tip link;{Mus musculus}; Related PDB entries: 6C14_B 
+Probab=99.79  E-value=5.7e-24  Score=156.78  Aligned_cols=181  Identities=14%  Similarity=0.065  Sum_probs=0.0  Template_Neff=9.000
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHhCcCCcccccCCCccccceEEeccchhhhccCC-CCeecccchhHhcC--ChhHHH
+Q 4P79:A|PDBID|C    5 MSVAVETFGFFMSALGLLMLGLTLSNSYWRVSTVHGNVITTNTIFENLWYSCATDSL-GVSNCWDFPSMLAL--SGYVQG   81 (198)
+Q Consensus         5 ~~~~l~~~~~~l~~~a~~l~~~a~~t~~W~~~~~~~~~~~~~~~~~GLw~~C~~~~~-~~~~C~~~~~~~~~--~~~~~~   81 (198)
+                      +.+.+.+++++++++++++.++|+.+|+|...+.++.    ...+.|||+.|..... ...+|.........  +.++++
+T Consensus        28 ~~~~~~~~~~~l~~~a~~l~~va~~tp~W~~~~~~~~----~~~~~GLw~~C~~~~~~~~~~C~~~~~~~~~~~~~~~~a  103 (228)
+T 6C14_D           28 NSRAVGVMWGTLTICFSVLVMALFIQPYWIGDSVSTP----QAGYFGLFSYCVGNVLSSELICKGGPLDFSSIPSRAFKT  103 (228)
+T ss_dssp             HHHHHHHHHHHHHHHHHHHHHHHHSCSCSEECCC-------CEECCCSSSCBEECTTCCCCCBCCSSCCSSSSSCHHHHH
+T ss_pred             HhHHHHHHHHHHHHHHHHHHHHHHHChHhhCCCCCCC----CCceeehhhhhccccCCcceeeecCCCCHhhCCCHHHHH
+
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhcCC-------Cc
+Q 4P79:A|PDBID|C   82 CRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAISWYAVNITTDFFN-------PL  154 (198)
+Q Consensus        82 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~~~~~~~~~~~~~~~-------~~  154 (198)
+                      +|.++++++++.++++++.++..++         ++.......++++++++++.++++++|+..++.+...       ..
+T Consensus       104 ~~~l~i~~~~l~~~~~i~~~~~~~~---------~~~~~~~~~~~~~~lagl~~lv~~ivf~~~~~~~~~~~~~~~~~~~  174 (228)
+T 6C14_D          104 AMFFVALAMFLIIGSIICFSLFFVC---------NTATVYKICAWMQLAAATGLMIGCLVYPDGWDSSEVRRMCGEQTGK  174 (228)
+T ss_dssp             HHHHHHHHHHHHHHHHHHHHTTTTS---------CHHHHHHHHHHHHHHHHHHHHHHHHHHHHHC---------------
+T ss_pred             HHHHHHHHHHHHHHHHHHHHHHHHc---------ccchHHHHHHHHHHHHHHHHHHHHHHcccCCCCHHHHHHhcCCCCC
+
+
+Q ss_pred             CCCCCceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCcccC
+Q 4P79:A|PDBID|C  155 YAGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+Q Consensus       155 ~~~~~~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~~  198 (198)
+                      +.+.+.++||||+++|++.++.+++++++++..+++++++++++
+T Consensus       175 ~~~~~~~~GwSf~la~~a~~l~~la~il~~~~~~~~~~~~~~~~  218 (228)
+T 6C14_D          175 YTLGHCTIRWAFMLAILSIGDALILSFLAFVLGYRQDKLLPDDY  218 (228)
+T ss_dssp             ---CCCEECHHHHHHHHHHHHHHHHHHHHHHC------------
+T ss_pred             CCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHhhhhcCchhh
+
+
+No 7
+>6DLZ_D Glutamate receptor 2,Voltage-dependent calcium channel; Ion channel, TRANSPORT PROTEIN; HET: GLU, CYZ; 3.9A {Rattus norvegicus}; Related PDB entries: 5VHY_B 5WEL_C 5WEL_D 5VHZ_E 5WEK_D 5WEN_C 5VHX_E 5VHY_C 5VHZ_F 5VHY_D 5VHZ_B 5WEN_D 5WEM_C 5WEL_B 5WEM_A 5VHX_C 5WEM_D 5WEK_C 5WEK_A 5VHY_A 5VHW_C 5VHX_A 5VHZ_C 5VHW_D 5VHY_E 5WEN_A 5VHX_B 5VHX_D 5VHW_B 5WEL_A 5VHW_A 5VHZ_D 5WEN_B 5WEK_B 5VHY_F 5VHZ_A 5WEM_B 5WEO_B 5KBT_D 5KBS_A 5KBU_B 5WEO_C 5KBU_A 5KBS_C 5KBU_D 5KBT_A 5KBS_B 5KBT_C 5KBT_B 5KBU_C 5WEO_D 5WEO_A 5KBS_D 6DM2_D 6DLZ_A 6DM0_A 6DM0_B 6DM1_D 6DM2_C 6DM0_C 6DM1_B 6DLZ_B 6DM2_B 6DM1_C 6DM2_A 6DLZ_C 6DM1_A 6DM0_D
+Probab=99.53  E-value=1.8e-18  Score=150.79  Aligned_cols=189  Identities=13%  Similarity=0.177  Sum_probs=0.0  Template_Neff=11.600
+
+Q ss_pred             cHHHHHHHHHHHHHHHHHHHHHHHHHHhCcCC-----------cccccCCCccccceEEeccchhhhccCCCCeecccch
+Q 4P79:A|PDBID|C    2 SEFMSVAVETFGFFMSALGLLMLGLTLSNSYW-----------RVSTVHGNVITTNTIFENLWYSCATDSLGVSNCWDFP   70 (198)
+Q Consensus         2 ~~m~~~~l~~~~~~l~~~a~~l~~~a~~t~~W-----------~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~   70 (198)
+                      +...+......+.+++.+++.+.+++..+|+|           ...+..+........+.|||+.|.....+..+|..+.
+T Consensus       820 ~~~~~~~~~~~~~~~~~~~~~l~~~~~~~~~W~~~~~~~~~~~~~~~~~~~~~~~~~~~~GLw~~C~~~~~~~~~C~~~~  899 (1031)
+T 6DLZ_D          820 GLFDRGVQMLLTTVGAFAAFSLMTIAVGTDYWLYSRGVCKTKSVSEDETSKKNEEVMTHSGLWRTCCLEGNFKGLCKQID  899 (1031)
+T ss_dssp             -CCSTTTHHHHHHHHHHHHHHHHHHHHSCSCSEEEECCSCCC-------------CEEEECSSBCCBCSSSSCSCCCBCC
+T ss_pred             CchHHHHHHHHHHHHHHHHHHHHHHHhccCcceeeccccccccCCcCccccccccccccccceeeeeecCcccCceeecc
+
+
+Q ss_pred             hHh-----------cCChhHHHHHHHHHHHHHHHHHHHHHHHHHHHhhcccCCChHHHHHHHHHHHHHHHHHHHHHHHHH
+Q 4P79:A|PDBID|C   71 SML-----------ALSGYVQGCRALMITAILLGFLGLFLGMVGLRATNVGNMDLSKKAKLLAIAGTLHILAGACGMVAI  139 (198)
+Q Consensus        71 ~~~-----------~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~l~~la~~~~~~~~  139 (198)
+                      ...           ....+++++++++++++++.++++++.+++.+.        +.+......+++++++++++.++++
+T Consensus       900 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--------~~~~~~~~~~~~~~~~~~~~~~~~~  971 (1031)
+T 6DLZ_D          900 HFPEDADYEADTAEYFLRAVRASSIFPILSVILLFMGGLCIAASEFY--------KTRHNIILSAGIFFVSAGLSNIIGI  971 (1031)
+T ss_dssp             CCCCSSTTTTCHHHHHHHHHHHSCHHHHHHHHHHHHHHHHHHTSSTT--------CSCCSHHHHHHHHHHHHHHHHHHHH
+T ss_pred             cCCCCcCCCCCcHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhc--------ccCCceehhhHHHHHHHHHHHHHHH
+
+
+Q ss_pred             HHHHHHHHHhcCCCcCCCCCceecchHHHHHHHHHHHHHHHHHHHhhhhhcCCCCcccC
+Q 4P79:A|PDBID|C  140 SWYAVNITTDFFNPLYAGTKYELGPALYLGWSASLLSILGGICVFSTAAASSKEEPATR  198 (198)
+Q Consensus       140 ~~~~~~~~~~~~~~~~~~~~~~~g~sf~l~~~~~~l~~~~~~l~~~~~~~~~~~~~~~~  198 (198)
+                      ++|+...+.+.........++++||||+++|+|.++.+++++++++....+++++++++
+T Consensus       972 ~~~~~~~~~~~~~~~~~~~~~~~g~s~~l~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 1030 (1031)
+T 6DLZ_D          972 IVYISANAGDPSKSDSKKNSYSYGWSFYFGALSFIIAEMVGVLAVHMFIDRHKQLTGGA 1030 (1031)
+T ss_dssp             HHHHHHHCC-------CCSCCEECHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHC--
+T ss_pred             HHHHHHhcCCcccCCCCcccceecHHHHHHHHHHHHHHHHHHHHHHHHHHHhHhhcCCC
+
+
+No 8
+>5YQ7_F Beta subunit of light-harvesting 1; Photosynthetic core complex, PHOTOSYNTHESIS; HET: MQE, BCL, HEM, KGD, BPH;{Roseiflexus castenholzii}; Related PDB entries: 5YQ7_V 5YQ7_3 5YQ7_T 5YQ7_J 5YQ7_9 5YQ7_N 5YQ7_A 5YQ7_P 5YQ7_H 5YQ7_D 5YQ7_5 5YQ7_7 5YQ7_1 5YQ7_R
+Probab=52.07  E-value=6.7  Score=20.51  Aligned_cols=32  Identities=19%  Similarity=0.239  Sum_probs=0.0  Template_Neff=3.200
+
+Q ss_pred             HHHHHHHHHHHHHHHHHHHHHHHhCc--CCcccc
+Q 4P79:A|PDBID|C    6 SVAVETFGFFMSALGLLMLGLTLSNS--YWRVST   37 (198)
+Q Consensus         6 ~~~l~~~~~~l~~~a~~l~~~a~~t~--~W~~~~   37 (198)
+                      ||.+...+.++..+|++...+-+.+|  +|.+..
+T Consensus         9 Rr~lval~~fl~vLallIHfiLLST~~~NWl~~~   42 (42)
+T 5YQ7_F            9 RTSVVVSTLLGLVMALLIHFVVLSSGAFNWLRAP   42 (42)
+T ss_dssp             HHHHHHHHHHHHHHHHHCCCCCTTSSSCCSCC--
+T ss_pred             HHHHHHHHHHHHHHHHHHHHHHHcccccccccCC
+
+

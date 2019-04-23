@@ -50,7 +50,7 @@ special_table = CodonTable(forward_table={
 Chilodonella_uncinata_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',
+    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',  # noqa: E241
     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
     'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
@@ -184,7 +184,6 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_count_overlap_GG(self):
         """Check our count_overlap method using GG."""
-
         # Testing with self._examples
         expected = [3, 3, 3, 3, 1, 1, 1, 1, 0, 0, 0, 0,  # Seq() Tests
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # UnknownSeq() Tests
@@ -265,7 +264,6 @@ class StringMethodTests(unittest.TestCase):
 
     def test_str_count_overlap_NN(self):
         """Check our count_overlap method using NN."""
-
         # Testing with self._examples
         expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  # Seq() Tests
                     0, 0, 0, 0, 0, 11, 11, 11, 0, 0, 0]  # UnknownSeq() Tests
@@ -777,21 +775,18 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
-
         spacer = Seq('NNNNN', generic_dna)
         self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_rna), Seq('NNNNN', generic_rna)])
         self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), Seq('NNNNN', generic_protein)])
 
     def test_join_UnknownSeq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
-
         spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
         self.assertRaises(TypeError, spacer.join, [UnknownSeq(5, character="-", alphabet=generic_rna), UnknownSeq(5, character="-", alphabet=generic_rna)])
         self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), UnknownSeq(5, character="-", alphabet=generic_protein)])
 
     def test_join_MutableSeq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
-
         spacer = MutableSeq('NNNNN', generic_dna)
         self.assertRaises(TypeError, spacer.join, [MutableSeq('NNNNN', generic_rna), MutableSeq('NNNNN', generic_rna)])
         self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), MutableSeq('NNNNN', generic_protein)])

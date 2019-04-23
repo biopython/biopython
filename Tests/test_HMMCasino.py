@@ -19,15 +19,8 @@ loaded dice is .05 and the probability of switching from loaded to fair is
 
 from __future__ import print_function
 
-import os
-if os.name == 'java':
-    from Bio import MissingExternalDependencyError
-    # This is a slight miss-use of MissingExternalDependencyError,
-    # but it will do in the short term to skip this unit test on Jython
-    raise MissingExternalDependencyError("This test can cause a fatal error "
-                                         "on Jython with some versions of Java")
-
 # standard modules
+import os
 import random
 
 # biopython
@@ -39,6 +32,15 @@ from Bio.Seq import Seq
 from Bio.HMM import MarkovModel
 from Bio.HMM import Trainer
 from Bio.HMM import Utilities
+
+
+if os.name == 'java':
+    from Bio import MissingExternalDependencyError
+    # This is a slight miss-use of MissingExternalDependencyError,
+    # but it will do in the short term to skip this unit test on Jython
+    raise MissingExternalDependencyError("This test can cause a fatal error "
+                                         "on Jython with some versions of Java")
+
 
 # whether we should print everything out. Set this to zero for
 # regression testing
@@ -56,8 +58,7 @@ class DiceTypeAlphabet(Alphabet.Alphabet):
 
 # -- useful functions
 def _loaded_dice_roll(chance_num, cur_state):
-    """Generate a loaded dice roll based on the state and a random number
-    """
+    """Generate a loaded dice roll based on the state and a random number."""
     if cur_state == 'F':
         if chance_num <= (float(1) / float(6)):
             return '1'
@@ -92,7 +93,6 @@ def generate_rolls(num_rolls):
     """Generate a bunch of rolls corresponding to the casino probabilities.
 
     Returns:
-
     - The generate roll sequence
     - The state sequence that generated the roll.
 
@@ -164,8 +164,7 @@ rolls, states = generate_rolls(3000)
 
 # -- now train the model
 def stop_training(log_likelihood_change, num_iterations):
-    """Tell the training model when to stop.
-    """
+    """Tell the training model when to stop."""
     if VERBOSE:
         print("ll change: %f" % log_likelihood_change)
     if log_likelihood_change < 0.01:

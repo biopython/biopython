@@ -38,26 +38,39 @@ only the aligned section of the sequences are shown, together with the start
 positions of the sequences (in 1-based notation). Alignments of lists will now
 also be prettily printed.
 
+``Bio.SearchIO`` now supports parsing the text output of the HHsuite protein
+sequence search tool. The format name is ``hhsuite2-text`` and
+``hhsuite3-text``, for versions 2 and 3 of HHsuite, respectively.
+
 ``Bio.SearchIO`` HSP objects has a new attribute called ``output_index``. This
 attribute is meant for capturing the order by which the HSP were output in the
 parsed file and is set with a default value of -1 for all HSP objects. It is
 also used for sorting the output of ``QueryResult.hsps``.
 
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite, and there has been further work to follow the
+Python PEP8, PEP257 and best practice standard coding style.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Antony Lee
+- Benjamin Rowell (first contribution)
 - Bernhard Thiel
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Jens Thomas (first contribution)
+- Konstantin Vdovkin
 - Lenna Peterson
 - Markus Piotrowski
+- Micky Yun Chan (first contribution)
 - Nick Negretti
 - Peter Cock
 - Ralf Stephan
 - Sergio Valqui
-- Antony Lee
 - Wibowo 'Bow' Arindrarto
+
 
 18 December 2018: Biopython 1.73
 ================================

@@ -4,7 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Testing online code for fetching sequences, and parsing them
+"""Testing online code for fetching sequences, and parsing them.
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
@@ -15,9 +15,6 @@ Goals:
 
 """
 import unittest
-
-import requires_internet
-requires_internet.check()
 
 # We want to test these:
 from Bio import Entrez
@@ -31,6 +28,9 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.File import UndoHandle
 from Bio._py3k import _as_string
 
+import requires_internet
+requires_internet.check()
+
 # This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython@biopython.org"
 
@@ -39,7 +39,7 @@ class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
 
     def test_get_sprot_raw(self):
-        """Bio.ExPASy.get_sprot_raw("O23729")"""
+        """Bio.ExPASy.get_sprot_raw("O23729")."""
         identifier = "O23729"
         # This is to catch an error page from our proxy:
         handle = UndoHandle(ExPASy.get_sprot_raw(identifier))

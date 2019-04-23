@@ -195,6 +195,7 @@ class CodonSeq(Seq):
         return "".join(amino_acids)
 
     def toSeq(self, alphabet=generic_dna):
+        """Convert DNA to seq object."""
         return Seq(self._data, generic_dna)
 
     def get_full_rf_table(self):
@@ -244,6 +245,7 @@ class CodonSeq(Seq):
                               rf_table=full_rf_table, ungap_seq=False)
 
     def ungap(self, gap=None):
+        """Return a copy of the sequence without the gap character(s)."""
         if hasattr(self.alphabet, "gap_char"):
             if not gap:
                 gap = self.alphabet.gap_char
@@ -263,6 +265,7 @@ class CodonSeq(Seq):
 
     @classmethod
     def from_seq(cls, seq, alphabet=default_codon_alphabet, rf_table=None):
+        """Get codon sequence from sequence data."""
         if rf_table is None:
             return cls(seq._data, alphabet=alphabet)
         else:

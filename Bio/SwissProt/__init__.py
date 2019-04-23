@@ -351,7 +351,7 @@ def _read_dt(record, line):
         elif 'LAST ANNOTATION UPDATE' in uprline:
             record.annotation_update = date, version
         else:
-            assert False, "Shouldn't reach this line!"
+            raise ValueError("Unrecognised DT (DaTe) line.")
     elif 'INTEGRATED INTO' in uprline \
     or 'SEQUENCE VERSION' in uprline \
     or 'ENTRY VERSION' in uprline:
@@ -393,7 +393,7 @@ def _read_dt(record, line):
         elif 'ENTRY VERSION' in uprline:
             record.annotation_update = date, version
         else:
-            assert False, "Shouldn't reach this line!"
+            raise ValueError("Unrecognised DT (DaTe) line.")
     else:
         raise ValueError("I don't understand the date line %s" % line)
 

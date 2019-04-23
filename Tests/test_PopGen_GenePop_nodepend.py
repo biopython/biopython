@@ -4,6 +4,8 @@
 # as part of this package.
 
 
+"""Tests for PopGen GenePop nodepend module."""
+
 import os
 import unittest
 from Bio.PopGen import GenePop

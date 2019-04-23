@@ -7,6 +7,8 @@
 # This test file prevents loading of the cpairwise2.pyd C extension of
 # pairwise2 to allow for testing the fallback Python implementation of
 # the _make_score_matrix_fast method.
+"""Tests for pairwise2 module (pure Python, no C)."""
+
 import unittest
 import sys
 

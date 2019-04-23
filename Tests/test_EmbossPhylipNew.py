@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for EmbossPhylipNew module."""
+
 import os
 import sys
 import unittest
@@ -52,13 +54,13 @@ if len(exes) < len(exes_wanted):
 
 # A few top level functions that are called repeatedly in the test cases
 def write_AlignIO_dna():
-    """Convert opuntia.aln to a phylip file"""
+    """Convert opuntia.aln to a phylip file."""
     assert 1 == AlignIO.convert("Clustalw/opuntia.aln", "clustal",
                                 "Phylip/opuntia.phy", "phylip")
 
 
 def write_AlignIO_protein():
-    """Convert hedgehog.aln to a phylip file"""
+    """Convert hedgehog.aln to a phylip file."""
     assert 1 == AlignIO.convert("Clustalw/hedgehog.aln", "clustal",
                                 "Phylip/hedgehog.phy", "phylip")
 
@@ -71,7 +73,11 @@ def clean_up():
 
 
 def parse_trees(filename):
-    """Helper function until we have Bio.Phylo on trunk."""
+    """Parse trees.
+
+    Helper function until we have Bio.Phylo on trunk.
+    """
+    # TODO - Can this be removed now?
     data = open("test_file", "r").read()
     for tree_str in data.split(";\n"):
         if tree_str:
@@ -203,7 +209,7 @@ class ParsimonyTests(unittest.TestCase):
     #    self.parsimony_tree("Phylip/interlaced.phy", "phylip", DNA=False)
 
     def test_parsimony_from_AlignIO_protein(self):
-        """Make a parsimony tree from protein alignment written with AlignIO"""
+        """Make a parsimony tree from protein alignment written with AlignIO."""
         write_AlignIO_protein()
         self.parsimony_tree("Phylip/interlaced.phy", "phylip", DNA=False)
 

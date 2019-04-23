@@ -5,6 +5,8 @@
 # Make sure the translation functions work.
 # Start simple - unambiguous DNA to unambiguous protein
 
+"""Tests for translate module."""
+
 from __future__ import print_function
 
 from Bio import Seq

@@ -2,21 +2,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for seq module."""
+
 from __future__ import print_function
 import array
 import copy
 import sys
 import warnings
-
-# Remove unittest2 import after dropping support for Python 2
-if sys.version_info[0] < 3:
-    try:
-        import unittest2 as unittest
-    except ImportError:
-        from Bio import MissingPythonDependencyError
-        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
-else:
-    import unittest
 
 from Bio import BiopythonWarning
 from Bio import Alphabet
@@ -28,6 +20,15 @@ from Bio.Data.IUPACData import (ambiguous_dna_complement,
 from Bio.Data.CodonTable import TranslationError, standard_dna_table
 from Bio.Seq import MutableSeq
 
+# Remove unittest2 import after dropping support for Python 2
+if sys.version_info[0] < 3:
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError("Under Python 2 this test needs the unittest2 library")
+else:
+    import unittest
 
 if sys.version_info[0] == 3:
     array_indicator = "u"
@@ -87,16 +88,16 @@ class TestSeq(unittest.TestCase):
         self.s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
 
     def test_as_string(self):
-        """Test converting Seq to string"""
+        """Test converting Seq to string."""
         self.assertEqual("TCAAAAGGATGCATCATG", str(self.s))
 
     def test_construction_using_a_seq_object(self):
-        """Test using a Seq object to initialize another Seq object"""
+        """Test using a Seq object to initialize another Seq object."""
         with self.assertRaises(TypeError):
             Seq.Seq(self.s)
 
     def test_repr(self):
-        """Test representation of Seq object"""
+        """Test representation of Seq object."""
         self.assertEqual("Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA())",
                          repr(self.s))
 
@@ -107,43 +108,43 @@ class TestSeq(unittest.TestCase):
         self.assertEqual(expected, repr(Seq.Seq(seq, IUPAC.ambiguous_dna)))
 
     def test_length(self):
-        """Test len method on Seq object"""
+        """Test len method on Seq object."""
         self.assertEqual(18, len(self.s))
 
     def test_first_nucleotide(self):
-        """Test getting first nucleotide of Seq"""
+        """Test getting first nucleotide of Seq."""
         self.assertEqual("T", self.s[0])
 
     def test_last_nucleotide(self):
-        """Test getting last nucleotide of Seq"""
+        """Test getting last nucleotide of Seq."""
         self.assertEqual("G", self.s[-1])
 
     def test_slicing(self):
-        """Test slicing of Seq"""
+        """Test slicing of Seq."""
         self.assertEqual("AA", str(self.s[3:5]))
 
     def test_reverse(self):
-        """Test reverse using -1 stride"""
+        """Test reverse using -1 stride."""
         self.assertEqual("GTACTACGTAGGAAAACT", self.s[::-1])
 
     def test_extract_third_nucleotide(self):
-        """Test extracting every third nucleotide (slicing with stride 3)"""
+        """Test extracting every third nucleotide (slicing with stride 3)."""
         self.assertEqual("TAGTAA", str(self.s[0::3]))
         self.assertEqual("CAGGTT", str(self.s[1::3]))
         self.assertEqual("AAACCG", str(self.s[2::3]))
 
     def test_alphabet_letters(self):
-        """Test nucleotides in DNA Seq"""
+        """Test nucleotides in DNA Seq."""
         self.assertEqual("GATC", self.s.alphabet.letters)
 
     def test_alphabet(self):
-        """Test alphabet of derived Seq object"""
+        """Test alphabet of derived Seq object."""
         t = Seq.Seq("T", IUPAC.unambiguous_dna)
         u = self.s + t
         self.assertEqual("IUPACUnambiguousDNA()", str(u.alphabet))
 
     def test_length_concatenated_unambiguous_seq(self):
-        """Test length of concatenated Seq object with unambiguous DNA"""
+        """Test length of concatenated Seq object with unambiguous DNA."""
         t = Seq.Seq("T", IUPAC.unambiguous_dna)
         u = self.s + t
         self.assertEqual(19, len(u))
@@ -155,7 +156,6 @@ class TestSeq(unittest.TestCase):
 
     def test_concatenation_error(self):
         """DNA Seq objects cannot be concatenated with Protein Seq objects."""
-
         with self.assertRaises(TypeError):
             self.s + Seq.Seq("T", IUPAC.protein)
 
@@ -232,77 +232,77 @@ class TestSeqStringMethods(unittest.TestCase):
             hash(self.s)
 
     def test_equal_comparison_of_incompatible_alphabets(self):
-        """Test __eq__ comparison method"""
+        """Test __eq__ comparison method."""
         with warnings.catch_warnings(record=True):
             Seq.Seq("TCAAAA", IUPAC.ambiguous_dna) == \
                               Seq.Seq("TCAAAA", IUPAC.ambiguous_rna)
 
     def test_not_equal_comparsion(self):
-        """Test __ne__ comparison method"""
+        """Test __ne__ comparison method."""
         self.assertNotEqual(Seq.Seq("TCAAA", IUPAC.ambiguous_dna),
                             Seq.Seq("TCAAAA", IUPAC.ambiguous_dna))
 
     def test_less_than_comparison(self):
-        """Test __lt__ comparison method"""
+        """Test __lt__ comparison method."""
         self.assertTrue(self.s[:-1] < self.s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
-        """Test incompatible alphabet __lt__ comparison method"""
+        """Test incompatible alphabet __lt__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq1 < seq2)
 
     def test_less_than_comparison_of_incompatible_types(self):
-        """Test incompatible types __lt__ comparison method"""
+        """Test incompatible types __lt__ comparison method."""
         with self.assertRaises(TypeError):
             self.s < 1
 
     def test_less_than_or_equal_comparison(self):
-        """Test __le__ comparison method"""
+        """Test __le__ comparison method."""
         self.assertTrue(self.s <= self.s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
-        """Test incompatible alphabet __le__ comparison method"""
+        """Test incompatible alphabet __le__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq1 <= seq2)
 
     def test_less_than_or_equal_comparison_of_incompatible_types(self):
-        """Test incompatible types __le__ comparison method"""
+        """Test incompatible types __le__ comparison method."""
         with self.assertRaises(TypeError):
             self.s <= 1
 
     def test_greater_than_comparison(self):
-        """Test __gt__ comparison method"""
+        """Test __gt__ comparison method."""
         self.assertTrue(self.s > self.s[:-1])
 
     def test_greater_than_comparison_of_incompatible_alphabets(self):
-        """Test incompatible alphabet __gt__ comparison method"""
+        """Test incompatible alphabet __gt__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq2 > seq1)
 
     def test_greater_than_comparison_of_incompatible_types(self):
-        """Test incompatible types __gt__ comparison method"""
+        """Test incompatible types __gt__ comparison method."""
         with self.assertRaises(TypeError):
             self.s > 1
 
     def test_greater_than_or_equal_comparison(self):
-        """Test __ge__ comparison method"""
+        """Test __ge__ comparison method."""
         self.assertTrue(self.s >= self.s)
 
     def test_greater_than_or_equal_comparison_of_incompatible_alphabets(self):
-        """Test incompatible alphabet __ge__ comparison method"""
+        """Test incompatible alphabet __ge__ comparison method."""
         seq1 = Seq.Seq("TCAAA", IUPAC.ambiguous_dna)
         seq2 = Seq.Seq("UCAAAA", IUPAC.ambiguous_rna)
         with self.assertWarns(BiopythonWarning):
             self.assertTrue(seq2 >= seq1)
 
     def test_greater_than_or_equal_comparison_of_incompatible_types(self):
-        """Test incompatible types __ge__ comparison method"""
+        """Test incompatible types __ge__ comparison method."""
         with self.assertRaises(TypeError):
             self.s >= 1
 
@@ -352,7 +352,7 @@ class TestSeqStringMethods(unittest.TestCase):
         self.assertEqual(7, len(self.test_chars))
 
     def test_exception_when_clashing_alphabets(self):
-        """Test by setting up clashing alphabet sequences"""
+        """Test by setting up clashing alphabet sequences."""
         b = Seq.Seq("-", Alphabet.generic_nucleotide)
         self.assertRaises(TypeError, self.protein[0].strip, b)
 
@@ -474,7 +474,7 @@ class TestSeqAddition(unittest.TestCase):
                 self.assertEqual(c, b)
 
     def test_exception_when_added_rna_has_more_than_one_gap_type(self):
-        """Test resulting sequence has gap types '-' and '.'"""
+        """Test resulting sequence has gap types '-' and '.'."""
         with self.assertRaises(ValueError):
             self.rna[3] + self.rna[4]
         with self.assertRaises(ValueError):
@@ -523,7 +523,7 @@ class TestSeqAddition(unittest.TestCase):
                 self.assertEqual(c, b)
 
     def test_exception_when_added_protein_has_more_than_one_gap_type(self):
-        """Test resulting protein has gap types '-' and '.'"""
+        """Test resulting protein has gap types '-' and '.'."""
         a = Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, "."))
         b = Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-"))
         with self.assertRaises(ValueError):
@@ -532,7 +532,7 @@ class TestSeqAddition(unittest.TestCase):
             a += b
 
     def test_exception_when_added_protein_has_several_stop_codon_types(self):
-        """Test resulting protein has stop codon types '*' and '@'"""
+        """Test resulting protein has stop codon types '*' and '@'."""
         a = Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(
             Alphabet.Gapped(IUPAC.extended_protein, "-"), "@"))
         b = Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(
@@ -566,12 +566,12 @@ class TestSeqAddition(unittest.TestCase):
 
 class TestSeqMultiplication(unittest.TestCase):
     def test_mul_method(self):
-        """Test mul method; relies on addition method"""
+        """Test mul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(seq * 3, seq + seq + seq)
 
     def test_mul_method_exceptions(self):
-        """Test mul method exceptions"""
+        """Test mul method exceptions."""
         for seq in test_seqs + protein_seqs:
             with self.assertRaises(TypeError):
                 seq * 3.0
@@ -579,12 +579,12 @@ class TestSeqMultiplication(unittest.TestCase):
                 seq * ''
 
     def test_rmul_method(self):
-        """Test rmul method; relies on addition method"""
+        """Test rmul method; relies on addition method."""
         for seq in test_seqs + protein_seqs:
             self.assertEqual(3 * seq, seq + seq + seq)
 
     def test_rmul_method_exceptions(self):
-        """Test rmul method exceptions"""
+        """Test rmul method exceptions."""
         for seq in test_seqs + protein_seqs:
             with self.assertRaises(TypeError):
                 3.0 * seq
@@ -592,14 +592,14 @@ class TestSeqMultiplication(unittest.TestCase):
                 '' * seq
 
     def test_imul_method(self):
-        """Test imul method; relies on addition and mull methods"""
+        """Test imul method; relies on addition and mull methods."""
         for seq in test_seqs + protein_seqs:
             original_seq = seq * 1  # make a copy
             seq *= 3
             self.assertEqual(seq, original_seq + original_seq + original_seq)
 
     def test_imul_method_exceptions(self):
-        """Test imul method exceptions"""
+        """Test imul method exceptions."""
         for seq in test_seqs + protein_seqs:
             with self.assertRaises(TypeError):
                 seq *= 3.0
@@ -613,7 +613,7 @@ class TestMutableSeq(unittest.TestCase):
         self.mutable_s = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
 
     def test_mutableseq_creation(self):
-        """Test creating MutableSeqs in multiple ways"""
+        """Test creating MutableSeqs in multiple ways."""
         mutable_s = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
         self.assertIsInstance(mutable_s, MutableSeq, "Creating MutableSeq")
 
@@ -639,7 +639,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(expected, repr(MutableSeq(seq, IUPAC.ambiguous_dna)))
 
     def test_equal_comparison(self):
-        """Test __eq__ comparison method"""
+        """Test __eq__ comparison method."""
         self.assertEqual(self.mutable_s, "TCAAAAGGATGCATCATG")
 
     def test_equal_comparison_of_incompatible_alphabets(self):
@@ -647,11 +647,11 @@ class TestMutableSeq(unittest.TestCase):
             self.mutable_s == MutableSeq('UCAAAAGGA', IUPAC.ambiguous_rna)
 
     def test_not_equal_comparison(self):
-        """Test __ne__ comparison method"""
+        """Test __ne__ comparison method."""
         self.assertNotEqual(self.mutable_s, "other thing")
 
     def test_less_than_comparison(self):
-        """Test __lt__ comparison method"""
+        """Test __lt__ comparison method."""
         self.assertTrue(self.mutable_s[:-1] < self.mutable_s)
 
     def test_less_than_comparison_of_incompatible_alphabets(self):
@@ -667,7 +667,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] < "TCAAAAGGATGCATCATG")
 
     def test_less_than_or_equal_comparison(self):
-        """Test __le__ comparison method"""
+        """Test __le__ comparison method."""
         self.assertTrue(self.mutable_s[:-1] <= self.mutable_s)
 
     def test_less_than_or_equal_comparison_of_incompatible_alphabets(self):
@@ -683,7 +683,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s[:-1] <= "TCAAAAGGATGCATCATG")
 
     def test_greater_than_comparison(self):
-        """Test __gt__ comparison method"""
+        """Test __gt__ comparison method."""
         self.assertTrue(self.mutable_s > self.mutable_s[:-1])
 
     def test_greater_than_comparison_of_incompatible_alphabets(self):
@@ -699,7 +699,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s > "TCAAAAGGATGCATCAT")
 
     def test_greater_than_or_equal_comparison(self):
-        """Test __ge__ comparison method"""
+        """Test __ge__ comparison method."""
         self.assertTrue(self.mutable_s >= self.mutable_s)
 
     def test_greater_than_or_equal_comparison_of_incompatible_alphabets(self):
@@ -715,7 +715,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertTrue(self.mutable_s >= "TCAAAAGGATGCATCATG")
 
     def test_add_method(self):
-        """Test adding wrong type to MutableSeq"""
+        """Test adding wrong type to MutableSeq."""
         with self.assertRaises(TypeError):
             self.mutable_s + 1234
 
@@ -814,13 +814,13 @@ class TestMutableSeq(unittest.TestCase):
         self.assertRaises(ValueError, self.mutable_s.index, "8888")
 
     def test_reverse(self):
-        """Test using reverse method"""
+        """Test using reverse method."""
         self.mutable_s.reverse()
         self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT", IUPAC.ambiguous_dna),
                          self.mutable_s)
 
     def test_reverse_with_stride(self):
-        """Test reverse using -1 stride"""
+        """Test reverse using -1 stride."""
         self.assertEqual(MutableSeq("GTACTACGTAGGAAAACT", IUPAC.ambiguous_dna),
                          self.mutable_s[::-1])
 
@@ -875,7 +875,7 @@ class TestMutableSeq(unittest.TestCase):
                          self.mutable_s)
 
     def test_extract_third_nucleotide(self):
-        """Test extracting every third nucleotide (slicing with stride 3)"""
+        """Test extracting every third nucleotide (slicing with stride 3)."""
         self.assertEqual(MutableSeq("TAGTAA", IUPAC.ambiguous_dna),
                          self.mutable_s[0::3])
         self.assertEqual(MutableSeq("CAGGTT", IUPAC.ambiguous_dna),
@@ -884,7 +884,7 @@ class TestMutableSeq(unittest.TestCase):
                          self.mutable_s[2::3])
 
     def test_set_wobble_codon_to_n(self):
-        """Test setting wobble codon to N (set slice with stride 3)"""
+        """Test setting wobble codon to N (set slice with stride 3)."""
         self.mutable_s[2::3] = "N" * len(self.mutable_s[2::3])
         self.assertEqual(MutableSeq("TCNAANGGNTGNATNATN", IUPAC.ambiguous_dna),
                          self.mutable_s)
@@ -949,7 +949,7 @@ class TestUnknownSeq(unittest.TestCase):
         self.assertEqual(str("??????"), str(self.s))
 
     def test_complement_of_protein(self):
-        """Test reverse complement shouldn't work on a protein!"""
+        """Check reverse complement fails on a protein."""
         seq = Seq.UnknownSeq(6, Alphabet.generic_protein)
         with self.assertRaises(ValueError):
             seq.complement()
@@ -997,7 +997,7 @@ class TestUnknownSeq(unittest.TestCase):
 
 class TestAmbiguousComplements(unittest.TestCase):
     def test_ambiguous_values(self):
-        """Test that other tests do not introduce characters to our values"""
+        """Test that other tests do not introduce characters to our values."""
         self.assertFalse("-" in ambiguous_dna_values)
         self.assertFalse("?" in ambiguous_dna_values)
 
@@ -1037,7 +1037,7 @@ class TestComplement(unittest.TestCase):
         self.assertEqual("TACTTTGAC", Seq.complement(seq))
 
     def test_complement_on_proteins(self):
-        """Test complement shouldn't work on a protein!"""
+        """Check complement fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.complement(s)
@@ -1079,7 +1079,7 @@ class TestReverseComplement(unittest.TestCase):
         self.assertEqual("CAGTTTCAT", Seq.reverse_complement(seq))
 
     def test_reverse_complement_on_proteins(self):
-        """Test reverse complement shouldn't work on a protein!"""
+        """Check reverse complement fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.reverse_complement(s)
@@ -1090,7 +1090,7 @@ class TestReverseComplement(unittest.TestCase):
 
 class TestDoubleReverseComplement(unittest.TestCase):
     def test_reverse_complements(self):
-        """Test double reverse complement preserves the sequence"""
+        """Test double reverse complement preserves the sequence."""
         sorted_amb_rna = sorted(ambiguous_rna_values)
         sorted_amb_dna = sorted(ambiguous_dna_values)
         for sequence in [Seq.Seq("".join(sorted_amb_rna)),
@@ -1145,13 +1145,13 @@ class TestTranscription(unittest.TestCase):
                                  repr(nucleotide_seq.transcribe()))
 
     def test_transcription_of_rna(self):
-        """Test transcription shouldn't work on RNA!"""
+        """Check transcription fails on RNA."""
         seq = Seq.Seq("AUGAAACUG", IUPAC.ambiguous_rna)
         with self.assertRaises(ValueError):
             seq.transcribe()
 
     def test_transcription_of_proteins(self):
-        """Test transcription shouldn't work on a protein!"""
+        """Check transcription fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.transcribe(s)
@@ -1181,7 +1181,7 @@ class TestTranscription(unittest.TestCase):
                                  repr(expected))
 
     def test_back_transcription_of_proteins(self):
-        """Test back-transcription shouldn't work on a protein!"""
+        """Check back-transcription fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.back_transcribe(s)
@@ -1191,7 +1191,7 @@ class TestTranscription(unittest.TestCase):
                     s.back_transcribe()
 
     def test_back_transcription_of_dna(self):
-        """Test back-transcription shouldn't work on DNA!"""
+        """Check back-transcription fails on DNA."""
         seq = Seq.Seq("ATGAAACTG", IUPAC.ambiguous_dna)
         with self.assertRaises(ValueError):
             seq.back_transcribe()
@@ -1287,7 +1287,7 @@ class TestTranslating(unittest.TestCase):
         self.assertRaises(TranslationError, seq.translate, gap="-")
 
     def test_gapped_seq_with_gap_char_given_and_inferred_from_alphabet2(self):
-        """Test using stop codon in sequence"""
+        """Test using stop codon in sequence."""
         seq = Seq.Seq("ATG---AAACTGTAG", Gapped(IUPAC.unambiguous_dna))
         self.assertEqual("M-KL*", seq.translate(gap="-"))
         self.assertRaises(ValueError, seq.translate, gap="~")
@@ -1351,7 +1351,7 @@ class TestTranslating(unittest.TestCase):
             repr(seq.translate(gap="-", stop_symbol="@").alphabet))
 
     def test_translation_wrong_type(self):
-        """Test translation table cannot be CodonTable"""
+        """Test translation table cannot be CodonTable."""
         seq = Seq.Seq("ATCGTA")
         with self.assertRaises(ValueError):
             seq.translate(table=ambiguous_dna_complement)
@@ -1386,7 +1386,7 @@ class TestTranslating(unittest.TestCase):
                                                        to_stop=True))
 
     def test_translation_on_proteins(self):
-        """Test translation shouldn't work on a protein!"""
+        """Check translation fails on a protein."""
         for s in protein_seqs:
             with self.assertRaises(ValueError):
                 Seq.translate(s)

@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for CAPS module."""
+
 import unittest
 
 from Bio import CAPS
@@ -14,7 +16,7 @@ from Bio.Align import MultipleSeqAlignment
 
 
 def createAlignment(sequences, alphabet):
-    """Create an Alignment object from a list of sequences"""
+    """Create an Alignment object from a list of sequences."""
     return MultipleSeqAlignment((SeqRecord(Seq(s, alphabet), id="sequence%i" % (i + 1))
                                  for (i, s) in enumerate(sequences)),
                                 alphabet)

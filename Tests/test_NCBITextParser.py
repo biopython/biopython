@@ -2,6 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Test for the plain text NCBI BLAST parser."""
 
 import os
 import unittest
@@ -17,15 +18,16 @@ warnings.filterwarnings('ignore', r'Parsing BLAST plain text output '
 
 
 class TestBlastRecord(unittest.TestCase):
+    """Test the BLAST Record object."""
 
     # - incredibly incomplete. Just testing what I'm adding -- Brad.
 
     def setUp(self):
+        """Initialise the parser."""
         self.parser = NCBIStandalone.BlastParser()
 
     def test_conversion(self):
-        "Test converting a Blast record multiple alignment"
-
+        """Converting a Blast record multiple alignment."""
         from Bio.Alphabet import IUPAC
 
         path = os.path.join("Blast", 'text_2010L_blastp_006.txt')
@@ -39,16 +41,17 @@ class TestBlastRecord(unittest.TestCase):
 
 
 class TestNCBITextParser(unittest.TestCase):
+    """Tests for the text BLAST parser."""
 
     reference = 'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, \nJinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \n"Gapped BLAST and PSI-BLAST: a new generation of protein database search\nprograms",  Nucleic Acids Res. 25:3389-3402.'
 
     def setUp(self):
+        """Initialise the parser."""
         self.parser = NCBIStandalone.BlastParser()
         self.pb_parser = NCBIStandalone.PSIBlastParser()
 
     def test_text_2010L_blastp_001(self):
-        "Test parsing BLASTP 2.0.10 output (text_2010L_blastp_001)"
-
+        """Parsing BLASTP 2.0.10 output (text_2010L_blastp_001)."""
         path = os.path.join('Blast', 'text_2010L_blastp_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -167,8 +170,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2010L_blastp_002(self):
-        "Test parsing BLASTP 2.0.10 output without hits (text_2010L_blastp_002)"
-
+        """Parsing BLASTP 2.0.10 output without hits (text_2010L_blastp_002)."""
         path = os.path.join('Blast', 'text_2010L_blastp_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -232,8 +234,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 22.7)
 
     def test_text_2010L_blastp_004(self):
-        "Test parsing BLASTP 2.0.10 output without descriptions (text_2010L_blastp_004)"
-
+        """Parsing BLASTP 2.0.10 output without descriptions (text_2010L_blastp_004)."""
         path = os.path.join('Blast', 'text_2010L_blastp_004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -392,8 +393,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2010L_blastp_005(self):
-        "Test parsing BLASTP 2.0.10 output without alignments (text_2010L_blastp_005)"
-
+        """Parsing BLASTP 2.0.10 output without alignments (text_2010L_blastp_005)."""
         path = os.path.join('Blast', 'text_2010L_blastp_005.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -475,8 +475,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2010L_blastp_006(self):
-        "Test parsing BLASTP 2.0.10 output (text_2010L_blastp_006)"
-
+        """Parsing BLASTP 2.0.10 output (text_2010L_blastp_006)."""
         path = os.path.join('Blast', 'text_2010L_blastp_006.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -585,8 +584,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
     def test_text_2010L_phiblast_001(self):
-        "Test parsing PHI-BLAST, BLASTP 2.0.10 output, one round (text_2010L_phiblast_001)"
-
+        """Parsing PHI-BLAST, BLASTP 2.0.10 output, one round (text_2010L_phiblast_001)."""
         path = os.path.join('Blast', 'text_2010L_phiblast_001.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -725,8 +723,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2010L_phiblast_002(self):
-        "Test parsing PHI-BLAST, BLASTP 2.0.10 output, three rounds (text_2010L_phiblast_002)"
-
+        """Parsing PHI-BLAST, BLASTP 2.0.10 output, three rounds (text_2010L_phiblast_002)."""
         path = os.path.join('Blast', 'text_2010L_phiblast_002.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -1923,8 +1920,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.9)
 
     def test_text_2010L_phiblast_003(self):
-        "Test parsing PHI-BLAST, BLASTP 2.0.10 output, two rounds (text_2010L_phiblast_003)"
-
+        """Parsing PHI-BLAST, BLASTP 2.0.10 output, two rounds (text_2010L_phiblast_003)."""
         path = os.path.join('Blast', 'text_2010L_phiblast_003.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -2958,8 +2954,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.8)
 
     def test_text_2010L_blastn_001(self):
-        "Test parsing BLASTN 2.0.10 output (text_2010L_blastn_001)"
-
+        """Parsing BLASTN 2.0.10 output (text_2010L_blastn_001)."""
         path = os.path.join('Blast', 'text_2010L_blastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3089,8 +3084,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2010L_blastn_002(self):
-        "Test parsing BLASTN 2.0.10 output without alignments (text_2010L_blastn_002)"
-
+        """Parsing BLASTN 2.0.10 output without alignments (text_2010L_blastn_002)."""
         path = os.path.join('Blast', 'text_2010L_blastn_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3205,8 +3199,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 32.2)
 
     def test_text_2010L_blastn_003(self):
-        "Test parsing BLASTN 2.0.10 output without descriptions (text_2010L_blastn_003)"
-
+        """Parsing BLASTN 2.0.10 output without descriptions (text_2010L_blastn_003)."""
         path = os.path.join('Blast', 'text_2010L_blastn_003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3399,8 +3392,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2010L_blastn_004(self):
-        "Test parsing BLASTN 2.0.10 output (text_2010L_blastn_004)"
-
+        """Parsing BLASTN 2.0.10 output (text_2010L_blastn_004)."""
         path = os.path.join('Blast', 'text_2010L_blastn_004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3476,8 +3468,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2010L_blastx_001(self):
-        "Test parsing BLASTX 2.0.10 output (text_2010L_blastx_001)"
-
+        """Parsing BLASTX 2.0.10 output (text_2010L_blastx_001)."""
         path = os.path.join('Blast', 'text_2010L_blastx_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3631,8 +3622,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2010L_blastx_002(self):
-        "Test parsing BLASTX 2.0.10 output without hits (text_2010L_blastx_002)"
-
+        """Parsing BLASTX 2.0.10 output without hits (text_2010L_blastx_002)."""
         path = os.path.join('Blast', 'text_2010L_blastx_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3697,8 +3687,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 27.8)
 
     def test_text_2010L_tblastn_001(self):
-        "Test parsing TBLASTN 2.0.10 output (text_2010L_tblastn_001)"
-
+        """Parsing TBLASTN 2.0.10 output (text_2010L_tblastn_001)."""
         path = os.path.join('Blast', 'text_2010L_tblastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3899,8 +3888,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 27.0)
 
     def test_text_2010L_tblastn_002(self):
-        "Test parsing TBLASTN 2.0.10 output without hits (text_2010L_tblastn_002)"
-
+        """Parsing TBLASTN 2.0.10 output without hits (text_2010L_tblastn_002)."""
         path = os.path.join('Blast', 'text_2010L_tblastn_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -3965,8 +3953,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2010L_tblastx_001(self):
-        "Test parsing TBLASTX 2.0.10 output (text_2010L_tblastx_001)"
-
+        """Parsing TBLASTX 2.0.10 output (text_2010L_tblastx_001)."""
         path = os.path.join('Blast', 'text_2010L_tblastx_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -4550,8 +4537,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 26.7)
 
     def test_text_2010L_blastp_003(self):
-        "Test parsing BLASTP 2.0.10 output (text_2010L_blastp_003)"
-
+        """Parsing BLASTP 2.0.10 output (text_2010L_blastp_003)."""
         path = os.path.join('Blast', 'text_2010L_blastp_003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -4905,8 +4891,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.3)
 
     def test_text_2010L_blastp_007(self):
-        "Test parsing BLASTP 2.0.10 output (text_2010L_blastp_007)"
-
+        """Parsing BLASTP 2.0.10 output (text_2010L_blastp_007)."""
         path = os.path.join('Blast', 'text_2010L_blastp_007.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -4970,8 +4955,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2011L_blastp_001(self):
-        "Test parsing BLASTP 2.0.11 output (text_2011L_blastp_001)"
-
+        """Parsing BLASTP 2.0.11 output (text_2011L_blastp_001)."""
         path = os.path.join('Blast', 'text_2011L_blastp_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -5071,8 +5055,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2011L_blastp_002(self):
-        "Test parsing BLASTP 2.0.11 output without hits (text_2011L_blastp_002)"
-
+        """Parsing BLASTP 2.0.11 output without hits (text_2011L_blastp_002)."""
         path = os.path.join('Blast', 'text_2011L_blastp_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -5136,8 +5119,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 22.7)
 
     def test_text_2011L_blastp_004(self):
-        "Test parsing BLASTP 2.0.11 output without descriptions (text_2011L_blastp_004)"
-
+        """Parsing BLASTP 2.0.11 output without descriptions (text_2011L_blastp_004)."""
         path = os.path.join('Blast', 'text_2011L_blastp_004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -5296,8 +5278,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2011L_blastp_005(self):
-        "Test parsing BLASTP 2.0.11 output without alignments (text_2011L_blastp_005)"
-
+        """Parsing BLASTP 2.0.11 output without alignments (text_2011L_blastp_005)."""
         path = os.path.join('Blast', 'text_2011L_blastp_005.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -5379,8 +5360,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2011L_blastp_006(self):
-        "Test parsing BLASTP 2.0.11 output (text_2011L_blastp_006)"
-
+        """Parsing BLASTP 2.0.11 output (text_2011L_blastp_006)."""
         path = os.path.join('Blast', 'text_2011L_blastp_006.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -5489,8 +5469,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
     def test_text_2011L_psiblast_001(self):
-        "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (text_2011L_psiblast_001)"
-
+        """Parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (text_2011L_psiblast_001)."""
         path = os.path.join('Blast', 'text_2011L_phiblast_001.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -5701,8 +5680,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2011L_psiblast_002(self):
-        "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (text_2011L_psiblast_002)"
-
+        """Parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (text_2011L_psiblast_002)."""
         path = os.path.join('Blast', 'text_2011L_phiblast_002.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -6774,8 +6752,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.8)
 
     def test_text_2011L_blastn_001(self):
-        "Test parsing BLASTN 2.0.11 output (text_2011L_blastn_001)"
-
+        """Parsing BLASTN 2.0.11 output (text_2011L_blastn_001)."""
         path = os.path.join('Blast', 'text_2011L_blastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -7247,8 +7224,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2011L_blastn_002(self):
-        "Test parsing BLASTN 2.0.11 output without alignments (text_2011L_blastn_002)"
-
+        """Parsing BLASTN 2.0.11 output without alignments (text_2011L_blastn_002)."""
         path = os.path.join('Blast', 'text_2011L_blastn_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -7363,8 +7339,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 32.2)
 
     def test_text_2011L_blastn_003(self):
-        "Test parsing BLASTN 2.0.11 output without descriptions (text_2011L_blastn_003)"
-
+        """Parsing BLASTN 2.0.11 output without descriptions (text_2011L_blastn_003)."""
         path = os.path.join('Blast', 'text_2011L_blastn_003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8097,8 +8072,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2011L_blastn_004(self):
-        "Test parsing BLASTN 2.0.11 output (text_2011L_blastn_004)"
-
+        """Parsing BLASTN 2.0.11 output (text_2011L_blastn_004)."""
         path = os.path.join('Blast', 'text_2011L_blastn_004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8174,8 +8148,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2011L_blastx_001(self):
-        "Test parsing BLASTX 2.0.11 output (text_2011L_blastx_001)"
-
+        """Parsing BLASTX 2.0.11 output (text_2011L_blastx_001)."""
         path = os.path.join('Blast', 'text_2011L_blastx_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8329,8 +8302,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.6)
 
     def test_text_2011L_blastx_002(self):
-        "Test parsing BLASTX 2.0.11 output without hits (text_2011L_blastx_002)"
-
+        """Parsing BLASTX 2.0.11 output without hits (text_2011L_blastx_002)."""
         path = os.path.join('Blast', 'text_2011L_blastx_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8395,8 +8367,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 27.8)
 
     def test_text_2011L_tblastn_001(self):
-        "Test parsing TBLASTN 2.0.11 output (text_2011L_tblastn_001)"
-
+        """Parsing TBLASTN 2.0.11 output (text_2011L_tblastn_001)."""
         path = os.path.join('Blast', 'text_2011L_tblastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8597,8 +8568,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 27.0)
 
     def test_text_2011L_tblastn_002(self):
-        "Test parsing TBLASTN 2.0.11 output without hits (text_2011L_tblastn_002)"
-
+        """Parsing TBLASTN 2.0.11 output without hits (text_2011L_tblastn_002)."""
         path = os.path.join('Blast', 'text_2011L_tblastn_002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -8663,8 +8633,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2011L_tblastx_001(self):
-        "Test parsing TBLASTX 2.0.11 output (text_2011L_tblastx_001)"
-
+        """Parsing TBLASTX 2.0.11 output (text_2011L_tblastx_001)."""
         path = os.path.join('Blast', 'text_2011L_tblastx_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -9248,8 +9217,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 26.7)
 
     def test_text_2011L_blastp_003(self):
-        "Test parsing BLASTP 2.0.11 output (text_2011L_blastp_003)"
-
+        """Parsing BLASTP 2.0.11 output (text_2011L_blastp_003)."""
         path = os.path.join('Blast', 'text_2011L_blastp_003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -9603,8 +9571,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.3)
 
     def test_text_2011L_blastp_007(self):
-        "Test parsing BLASTP 2.0.11 output (text_2011L_blastp_007)"
-
+        """Parsing BLASTP 2.0.11 output (text_2011L_blastp_007)."""
         path = os.path.join('Blast', 'text_2011L_blastp_007.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -9668,8 +9635,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 28.2)
 
     def test_text_2011L_psiblast_003(self):
-        "Test parsing BLASTP 2.0.11 output (text_2011L_psiblast_003)"
-
+        """Parsing BLASTP 2.0.11 output (text_2011L_psiblast_003)."""
         path = os.path.join('Blast', 'text_2011L_phiblast_003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -10054,8 +10020,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
     def test_text_2012L_psiblast_001(self):
-        "Test parsing BLASTP 2.0.12 output (text_2012L_psiblast_001)"
-
+        """Parsing BLASTP 2.0.12 output (text_2012L_psiblast_001)."""
         path = os.path.join('Blast', 'text_2012L_psiblast_001.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -12319,8 +12284,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 31.3)
 
     def test_text_2014L_blastn_001(self):
-        "Test parsing BLASTN 2.0.14 output (text_2014L_blastn_001)"
-
+        """Parsing BLASTN 2.0.14 output (text_2014L_blastn_001)."""
         path = os.path.join('Blast', 'text_2014L_blastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -12792,8 +12756,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
     def test_text_2014L_psiblast_001(self):
-        "Test parsing BLASTP 2.0.14 output (text_2014L_psiblast_001)"
-
+        """Parsing BLASTP 2.0.14 output (text_2014L_psiblast_001)."""
         path = os.path.join('Blast', 'text_2014L_psiblast_001.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -13104,8 +13067,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 27.0)
 
     def test_text_2201L_blastx_001(self):
-        "Test parsing BLASTX 2.2.1 output (text_2201L_blastx_001)"
-
+        """Parsing BLASTX 2.2.1 output (text_2201L_blastx_001)."""
         path = os.path.join('Blast', 'text_2201L_blastx_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -13202,8 +13164,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.gap_trigger[1], 18.0)
 
     def test_text_2216L_tblastn_001(self):
-        "Test parsing TBLASTN 2.2.16 output (text_2216L_tblastn_001)"
-
+        """Parsing TBLASTN 2.2.16 output (text_2216L_tblastn_001)."""
         path = os.path.join('Blast', 'text_2216L_tblastn_001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
@@ -13448,8 +13409,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 26.7)
 
     def test_text_2202L_blastp_001(self):
-        "Test parsing BLASTP 2.2.2 output with multiple records (text_2202L_blastp_001)"
-
+        """Parsing BLASTP 2.2.2 output with multiple records (text_2202L_blastp_001)."""
         path = os.path.join('Blast', 'text_2202L_blastp_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14042,8 +14002,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2202L_blastn_001(self):
-        "Test parsing BLASTN 2.2.2 output with error messages (text_2202L_blastn_001)"
-
+        """Parsing BLASTN 2.2.2 output with error messages (text_2202L_blastn_001)."""
         path = os.path.join('Blast', 'text_2202L_blastn_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14076,8 +14035,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2202L_blastn_002(self):
-        "Test parsing BLASTN 2.2.2 output with missing error messages (text_2202L_blastn_002)"
-
+        """Parsing BLASTN 2.2.2 output with missing error messages (text_2202L_blastn_002)."""
         path = os.path.join('Blast', 'text_2202L_blastn_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14110,8 +14068,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2208L_psiblast_001(self):
-        "Test parsing BLASTP 2.2.8 output (text_2208L_psiblast_001)"
-
+        """Parsing BLASTP 2.2.8 output (text_2208L_psiblast_001)."""
         path = os.path.join('Blast', 'text_2208L_psiblast_001.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
@@ -14190,8 +14147,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.blast_cutoff[1], 29.2)
 
     def test_text_2215L_blastx_001(self):
-        "Test parsing BLASTX 2.2.15 output with no hits (text_2215L_blastx_001)"
-
+        """Parsing BLASTX 2.2.15 output with no hits (text_2215L_blastx_001)."""
         path = os.path.join('Blast', 'text_2215L_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14211,8 +14167,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2220L_blastx_001(self):
-        "Test parsing BLASTX 2.2.20 output (text_2220L_blastx_001)"
-
+        """Parsing BLASTX 2.2.20 output (text_2220L_blastx_001)."""
         path = os.path.join('Blast', 'text_2220L_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14229,12 +14184,12 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 6)
         self.assertEqual(len(record.alignments), 5)
         descrs = [
-        ("sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...", 152, 8e-35),
-        ("sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...", 146, 6e-33),
-        ("gb|AAB03575.1| nucleoprotein", 146, 6e-33),
-        ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...", 83, 8e-14),
-        ("gb|AAW12704.1| nucleoprotein [High Plains virus]", 73, 8e-11),
-        ("gb|AAW12703.1| nucleoprotein [High Plains virus]", 73, 8e-11),
+            ("sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...", 152, 8e-35),
+            ("sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...", 146, 6e-33),
+            ("gb|AAB03575.1| nucleoprotein", 146, 6e-33),
+            ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...", 83, 8e-14),
+            ("gb|AAW12704.1| nucleoprotein [High Plains virus]", 73, 8e-11),
+            ("gb|AAW12703.1| nucleoprotein [High Plains virus]", 73, 8e-11),
         ]
         for (a, b) in zip(record.descriptions, descrs):
             self.assertEqual((a.title, a.score, a.e), b)
@@ -14249,8 +14204,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2220L_blastx_002(self):
-        "Test parsing BLASTX 2.2.20 output with multiple queries (text_2220L_blastx_002)"
-
+        """Parsing BLASTX 2.2.20 output with multiple queries (text_2220L_blastx_002)."""
         path = os.path.join('Blast', 'text_2220L_blastx_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14363,8 +14317,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2221L_blastp_001(self):
-        "Test parsing BLASTP 2.2.21 output with multiple queries (text_2221L_blastp_001)"
-
+        """Parsing BLASTP 2.2.21 output with multiple queries (text_2221L_blastp_001)."""
         path = os.path.join('Blast', 'text_2221L_blastp_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14412,8 +14365,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2222L_blastx_001(self):
-        "Test parsing BLASTX 2.2.22 output with multiple queries (text_2222L_blastx_001)"
-
+        """Parsing BLASTX 2.2.22 output with multiple queries (text_2222L_blastx_001)."""
         path = os.path.join('Blast', 'text_2222L_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14512,8 +14464,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2222_blastx_001(self):
-        "Test parsing BLASTX 2.2.22+ output with multiple queries (text_2222_blastx_001)"
-
+        """Parsing BLASTX 2.2.22+ output with multiple queries (text_2222_blastx_001)."""
         path = os.path.join('Blast', 'text_2222_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14614,8 +14565,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastn_001(self):
-        """Test parsing BLASTN 2.2.26+ output with no results."""
-
+        """Parsing BLASTN 2.2.26+ output with no results."""
         path = os.path.join('Blast', 'text_2226_blastn_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14635,8 +14585,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastn_002(self):
-        """Test parsing BLASTN 2.2.26+ output with single hsp results."""
-
+        """Parsing BLASTN 2.2.26+ output with single hsp results."""
         path = os.path.join('Blast', 'text_2226_blastn_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14658,8 +14607,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastn_003(self):
-        """Test parsing BLASTN 2.2.26+ output with multiple hsp results present."""
-
+        """Parsing BLASTN 2.2.26+ output with multiple hsp results present."""
         path = os.path.join('Blast', 'text_2226_blastn_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14684,8 +14632,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastp_001(self):
-        """Test parsing BLASTP 2.2.26+ with no results."""
-
+        """Parsing BLASTP 2.2.26+ with no results."""
         path = os.path.join('Blast', 'text_2226_blastp_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14705,8 +14652,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastp_002(self):
-        """Test parsing BLASTP 2.2.26+ with single hsp results."""
-
+        """Parsing BLASTP 2.2.26+ with single hsp results."""
         path = os.path.join('Blast', 'text_2226_blastp_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14728,8 +14674,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastp_003(self):
-        """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
-
+        """Parsing BLASTP 2.2.26+ with multiple hsp results present."""
         path = os.path.join('Blast', 'text_2226_blastp_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14754,8 +14699,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastx_001(self):
-        """Test parsing BLASTX 2.2.26+ with no results."""
-
+        """Parsing BLASTX 2.2.26+ with no results."""
         path = os.path.join('Blast', 'text_2226_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14773,8 +14717,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastx_002(self):
-        """Test parsing BLASTX 2.2.26+ with single hsp results."""
-
+        """Parsing BLASTX 2.2.26+ with single hsp results."""
         path = os.path.join('Blast', 'text_2226_blastx_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14796,8 +14739,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_blastx_003(self):
-        """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
-
+        """Parsing BLASTP 2.2.26+ with multiple hsp results present."""
         path = os.path.join('Blast', 'text_2226_blastx_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14822,8 +14764,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastn_001(self):
-        """Test parsing TBLASTN 2.2.26+ output with no results."""
-
+        """Parsing TBLASTN 2.2.26+ output with no results."""
         path = os.path.join('Blast', 'text_2226_tblastn_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14843,8 +14784,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastn_002(self):
-        """Test parsing TBLASTN 2.2.26+ output with single hsp results."""
-
+        """Parsing TBLASTN 2.2.26+ output with single hsp results."""
         path = os.path.join('Blast', 'text_2226_tblastn_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14866,8 +14806,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastn_003(self):
-        """Test parsing TBLASTN 2.2.26+ output with multiple hsp results present."""
-
+        """Parsing TBLASTN 2.2.26+ output with multiple hsp results present."""
         path = os.path.join('Blast', 'text_2226_tblastn_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14892,8 +14831,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastx_001(self):
-        """Test parsing TBLASTX 2.2.26+ output with no results."""
-
+        """Parsing TBLASTX 2.2.26+ output with no results."""
         path = os.path.join('Blast', 'text_2226_tblastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14913,8 +14851,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastx_002(self):
-        """Test parsing TBLASTX 2.2.26+ output with single hsp results."""
-
+        """Parsing TBLASTX 2.2.26+ output with single hsp results."""
         path = os.path.join('Blast', 'text_2226_tblastx_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14936,8 +14873,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2226_tblastx_003(self):
-        """Test parsing TBLASTX 2.2.26+ output with multiple hsp results present."""
-
+        """Parsing TBLASTX 2.2.26+ output with multiple hsp results present."""
         path = os.path.join('Blast', 'text_2226_tblastx_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
@@ -14962,7 +14898,7 @@ class TestNCBITextParser(unittest.TestCase):
         handle.close()
 
     def test_text_2230_blastp_001(self):
-        """Test parsing BLASTP 2.2.30+ output with line of dashes."""
+        """Parsing BLASTP 2.2.30+ output with line of dashes."""
         with open("Blast/text_2230_blastp_001.txt") as handle:
             records = NCBIStandalone.Iterator(handle, self.parser)
             record = next(records)

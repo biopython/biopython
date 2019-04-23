@@ -5,6 +5,8 @@
 # as part of this package.
 
 
+"""Tests for pairwise aligner module."""
+
 import unittest
 
 from Bio import Align

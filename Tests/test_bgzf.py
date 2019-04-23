@@ -85,7 +85,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text(self, old_file, new_file):
-        """Check text mode using explicit open/close"""
+        """Check text mode using explicit open/close."""
         h = open(old_file)  # text mode!
         old_line = h.readline()
         old = old_line + h.read()
@@ -101,7 +101,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text_with(self, old_file, new_file):
-        """Check text mode using context manager (with statement)"""
+        """Check text mode using context manager (with statement)."""
         with open(old_file) as h:  # text mode!
             old_line = h.readline()
             old = old_line + h.read()
@@ -179,7 +179,7 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(old, new)
 
     def check_random(self, filename):
-        """Check BGZF random access by reading blocks in forward & reverse order"""
+        """Check BGZF random access by reading blocks in forward & reverse order."""
         h = gzip.open(filename, "rb")
         old = h.read()
         h.close()
@@ -264,65 +264,65 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
     def test_random_bam_ex1(self):
-        """Check random access to SamBam/ex1.bam"""
+        """Check random access to SamBam/ex1.bam."""
         self.check_random("SamBam/ex1.bam")
 
     def test_random_bam_ex1_refresh(self):
-        """Check random access to SamBam/ex1_refresh.bam"""
+        """Check random access to SamBam/ex1_refresh.bam."""
         self.check_random("SamBam/ex1_refresh.bam")
 
     def test_random_bam_ex1_header(self):
-        """Check random access to SamBam/ex1_header.bam"""
+        """Check random access to SamBam/ex1_header.bam."""
         self.check_random("SamBam/ex1_header.bam")
 
     def test_random_wnts_xml(self):
-        """Check random access to Blast/wnts.xml.bgz"""
+        """Check random access to Blast/wnts.xml.bgz."""
         self.check_random("Blast/wnts.xml.bgz")
 
     def test_random_example_fastq(self):
-        """Check random access to Quality/example.fastq.bgz (Unix newlines)"""
+        """Check random access to Quality/example.fastq.bgz (Unix newlines)."""
         self.check_random("Quality/example.fastq.bgz")
 
     def test_random_example_dos_fastq(self):
-        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)"""
+        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)."""
         self.check_random("Quality/example_dos.fastq.bgz")
 
     def test_random_example_cor6(self):
-        """Check random access to GenBank/cor6_6.gb.bgz"""
+        """Check random access to GenBank/cor6_6.gb.bgz."""
         self.check_random("GenBank/cor6_6.gb.bgz")
 
     def test_text_wnts_xml(self):
-        """Check text mode access to Blast/wnts.xml.bgz"""
+        """Check text mode access to Blast/wnts.xml.bgz."""
         self.check_text("Blast/wnts.xml", "Blast/wnts.xml.bgz")
         self.check_text_with("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_text_example_fastq(self):
-        """Check text mode access to Quality/example.fastq.bgz"""
+        """Check text mode access to Quality/example.fastq.bgz."""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
         self.check_text_with("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_iter_wnts_xml(self):
-        """Check iteration over Blast/wnts.xml.bgz"""
+        """Check iteration over Blast/wnts.xml.bgz."""
         self.check_by_line("Blast/wnts.xml", "Blast/wnts.xml.bgz")
         self.check_by_char("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_iter_example_fastq(self):
-        """Check iteration over Quality/example.fastq.bgz"""
+        """Check iteration over Quality/example.fastq.bgz."""
         self.check_by_line("Quality/example.fastq", "Quality/example.fastq.bgz")
         self.check_by_char("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_iter_example_cor6(self):
-        """Check iteration over GenBank/cor6_6.gb.bgz"""
+        """Check iteration over GenBank/cor6_6.gb.bgz."""
         self.check_by_line("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
         self.check_by_char("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
 
     def test_iter_example_gb(self):
-        """Check iteration over GenBank/NC_000932.gb.bgz"""
+        """Check iteration over GenBank/NC_000932.gb.bgz."""
         self.check_by_line("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
         self.check_by_char("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
 
     def test_bam_ex1(self):
-        """Reproduce BGZF compression for BAM file"""
+        """Reproduce BGZF compression for BAM file."""
         temp_file = self.temp_file
 
         # Note this example is from an old version of samtools
@@ -334,35 +334,35 @@ class BgzfTests(unittest.TestCase):
         self.check_blocks("SamBam/ex1.bam", temp_file)
 
     def test_iter_bam_ex1(self):
-        """Check iteration over SamBam/ex1.bam"""
+        """Check iteration over SamBam/ex1.bam."""
         self.check_by_char("SamBam/ex1.bam", "SamBam/ex1.bam", True)
 
     def test_example_fastq(self):
-        """Reproduce BGZF compression for a FASTQ file"""
+        """Reproduce BGZF compression for a FASTQ file."""
         temp_file = self.temp_file
         self.rewrite("Quality/example.fastq.gz", temp_file)
         self.check_blocks("Quality/example.fastq.bgz", temp_file)
 
     def test_example_gb(self):
-        """Reproduce BGZF compression for NC_000932 GenBank file"""
+        """Reproduce BGZF compression for NC_000932 GenBank file."""
         temp_file = self.temp_file
         self.rewrite("GenBank/NC_000932.gb.bgz", temp_file)
         self.check_blocks("GenBank/NC_000932.gb.bgz", temp_file)
 
     def test_example_cor6(self):
-        """Reproduce BGZF compression for cor6_6.gb GenBank file"""
+        """Reproduce BGZF compression for cor6_6.gb GenBank file."""
         temp_file = self.temp_file
         self.rewrite("GenBank/cor6_6.gb.bgz", temp_file)
         self.check_blocks("GenBank/cor6_6.gb.bgz", temp_file)
 
     def test_example_wnts_xml(self):
-        """Reproduce BGZF compression for wnts.xml BLAST file"""
+        """Reproduce BGZF compression for wnts.xml BLAST file."""
         temp_file = self.temp_file
         self.rewrite("Blast/wnts.xml.bgz", temp_file)
         self.check_blocks("Blast/wnts.xml.bgz", temp_file)
 
     def test_write_tell(self):
-        """Check offset works during BGZF writing"""
+        """Check offset works during BGZF writing."""
         temp_file = self.temp_file
 
         h = bgzf.open(temp_file, "w")  # Text mode!

@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for GenBank module (using unittest framework)."""
+
 import unittest
 from os import path
 import warnings
@@ -173,7 +175,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
-        """Parse GenBank/EMBL paired records with PR project entry: GenBank"""
+        """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
         self.assertIn("BioProject:PRJNA16232", record.dbxrefs)
         gb = record.format("gb")
@@ -186,7 +188,7 @@ KEYWORDS    """ in gb, gb)
         self.assertIn("XX\nPR   Project:PRJNA16232;\nXX\n", embl)
 
     def test_dbline_embl_gb(self):
-        """Parse GenBank/EMBL paired records with PR project entry: EMBL"""
+        """Parse GenBank/EMBL paired records with PR project entry: EMBL."""
         record = SeqIO.read("EMBL/DS830848.embl", "embl")
         # TODO: Should we map this to BioProject:PRJNA16232
         self.assertIn("Project:PRJNA16232", record.dbxrefs)
@@ -232,7 +234,7 @@ KEYWORDS    """ in gb, gb)
                          'COMPLETENESS: full length.')
 
     def test_locus_line_topogoly(self):
-        """Test if chromosome topology is conserved"""
+        """Test if chromosome topology is conserved."""
         record = SeqIO.read('GenBank/DS830848.gb', 'genbank')
         self.assertEqual(record.annotations['topology'], 'linear')
         out_handle = StringIO()
@@ -252,7 +254,6 @@ KEYWORDS    """ in gb, gb)
 
     def test_qualifier_escaping_read(self):
         """Check qualifier escaping is preserved when parsing."""
-
         # Make sure parsing improperly escaped qualifiers raises a warning
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
@@ -276,7 +277,6 @@ KEYWORDS    """ in gb, gb)
 
     def test_qualifier_escaping_write(self):
         """Check qualifier escaping is preserved when writing."""
-
         # Write some properly escaped qualifiers and test
         genbank_out = "GenBank/qualifier_escaping_write.gb"
         record = SeqIO.read(genbank_out, "gb")
@@ -343,8 +343,7 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(seq_len, len(new))
 
     def test_genbank_date_default(self):
-        """Check if default date is handled correctly"""
-
+        """Check if default date is handled correctly."""
         sequence_object = Seq("ATGC", generic_dna)
         # check if default value is inserted correctly
         record = SeqRecord(sequence_object,
@@ -358,8 +357,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
-        """Check if user provided date is inserted correctly"""
-
+        """Check if user provided date is inserted correctly."""
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
@@ -373,8 +371,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
-        """Check if date lists are handled correctly"""
-
+        """Check if date lists are handled correctly."""
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
@@ -399,8 +396,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
-        """Check if datetime objects are handled correctly"""
-
+        """Check if datetime objects are handled correctly."""
         sequence_object = Seq("ATGC", generic_dna)
         record = SeqRecord(sequence_object,
                            id='123456789',
@@ -414,8 +410,7 @@ KEYWORDS    """ in gb, gb)
         self.assertEqual(gb.annotations["date"], "02-FEB-2000")
 
     def test_genbank_date_invalid(self):
-        """Check if invalid dates are treated as default"""
-
+        """Check if invalid dates are treated as default."""
         invalid_dates = ("invalid date",
                          "29-2-1981",
                          "35-1-2018",
@@ -437,7 +432,7 @@ KEYWORDS    """ in gb, gb)
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):
-        """Check that we can read and write files with longer locus lines"""
+        """Check that we can read and write files with longer locus lines."""
         # Create example file from existing file
         with open(path.join("GenBank", "DS830848.gb"), 'r') as inhandle:
             data = inhandle.readlines()
@@ -696,7 +691,6 @@ class GenBankScannerTests(unittest.TestCase):
 
     def gb_to_l_cds_f(self, filename, tags2id=None):
         """Gb file to Seq list parse CDS features."""
-
         with open(filename) as handle:
             if tags2id:
                 l_cds_f = list(self.gb_s.parse_cds_features(handle, tags2id=tags2id))
@@ -706,14 +700,12 @@ class GenBankScannerTests(unittest.TestCase):
 
     def gb_to_l_r(self, filename, do_features=False):
         """Gb file to Seq list parse records."""
-
         with open(filename) as handle:
             l_gb_r = list(self.gb_s.parse_records(handle, do_features=do_features))
         return l_gb_r
 
     def test_genbank_cds_interaction(self):
         """Test CDS interaction, parse CDS features on gb(k) files."""
-
         # Test parse CDS features on NC_000932.gb
         l_cds_f = self.gb_to_l_cds_f("GenBank/NC_000932.gb")
         # number of records, should be 85
@@ -747,7 +739,6 @@ class GenBankScannerTests(unittest.TestCase):
 
     def test_genbank_interaction(self):
         """Test GenBank records interaction on gbk files."""
-
         # Test parse records, on NC_005816, do_features False
         l_r = self.gb_to_l_r("GenBank/NC_005816.gb", do_features=False)
         # number of records, should be 1
@@ -792,7 +783,6 @@ class GenBankScannerTests(unittest.TestCase):
 
     def test_embl_cds_interaction(self):
         """Test EMBL CDS interaction, parse CDS features on embl files."""
-
         embl_s = Scanner.EmblScanner()
 
         # Test parse CDS features on embl_file
@@ -806,7 +796,6 @@ class GenBankScannerTests(unittest.TestCase):
 
     def test_embl_record_interaction(self):
         """Test EMBL Record interaction on embl files."""
-
         embl_s = Scanner.EmblScanner()
 
         #  Test parse records on embl_file

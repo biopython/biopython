@@ -5,15 +5,20 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import MissingExternalDependencyError
+"""Code to check if command line tool wise is installed."""
+
 import sys
+
+from Bio import MissingExternalDependencyError
+from Bio._py3k import getoutput
+
+
 if sys.platform == "win32":
     # Someone needs to find out if dnal works nicely on windows,
     # and if so where it is typically installed.
     raise MissingExternalDependencyError(
         "Don't know how to find the Wise2 tool dnal on Windows.")
 
-from Bio._py3k import getoutput
 not_found_types = ["command not found", "dnal: not found", "not recognized"]
 dnal_output = getoutput("dnal")
 

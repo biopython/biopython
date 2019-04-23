@@ -42,6 +42,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ben Fulton <https://github.com/benfulton>
 - Ben Morris <https://github.com/bendmorris>
 - Ben Woodcroft <https://github.com/wwood>
+- Benjamin Rowell <https://github.com/benjaminr>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
 - Bernhard C. Thiel <https://github.com/Bernhard10>
 - Bertrand Caron <https://github.com/bertrand-caron>
@@ -122,6 +123,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
 - Jeffrey Finkelstein <https://github.com/jfinkels/>
+- Jens Thomas <https://github.com/linucks/>
 - Jeremy LaBarge <https://github.com/biojerm/biopython>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
@@ -180,6 +182,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michal Kurowski <michal at domain genesilico.pl>
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <https://github.com/mdehoon>
+- Micky Yun Chan <https://github.com/michiboo>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>

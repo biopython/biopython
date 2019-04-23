@@ -15,7 +15,7 @@ from Bio.Pathway import System
 
 
 class EnzymeTests(unittest.TestCase):
-    """Tests for Bio.KEGG.Enzyme"""
+    """Tests for Bio.KEGG.Enzyme."""
 
     def test_sample(self):
         with open("KEGG/enzyme.sample") as handle:

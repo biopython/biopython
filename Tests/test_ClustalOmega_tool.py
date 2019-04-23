@@ -5,11 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import MissingExternalDependencyError
+"""Tests for ClustalOmega tool."""
 
 import sys
 import os
 import unittest
+
+from Bio._py3k import getoutput
+
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Applications import ClustalOmegaCommandline
@@ -21,7 +25,6 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
-from Bio._py3k import getoutput
 try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
@@ -46,8 +49,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared test procedure used by all tests."""
         # Overwrite existing files.
         cline.force = True
 
@@ -78,7 +80,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
             self.assertTrue(os.path.isfile(cline.guidetree_out))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 #################################################################

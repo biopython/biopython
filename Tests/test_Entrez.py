@@ -160,6 +160,7 @@ class CustomDirectoryTest(unittest.TestCase):
 
     Allow user to specify a custom directory for Entrez DTD/XSD files by setting Parser.DataHandler.directory.
     """
+
     def test_custom_directory(self):
         import tempfile
         import os

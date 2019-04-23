@@ -287,7 +287,6 @@ if sqlite3:
 
         def test_correct_retrieval_1(self):
             """Correct retrieval of Cnksr3 in mouse."""
-
             search = self.idx.search((3014742, 3018161), (3015028, 3018644))
             results = [x for x in search]
 

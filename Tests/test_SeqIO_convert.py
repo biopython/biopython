@@ -63,7 +63,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
                 warnings.simplefilter('ignore', BiopythonWarning)
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
-        assert False, "Parse or write should have failed!"
+        raise ValueError("Parse or write should have failed!")
     except ValueError as err:
         err1 = err
     # Now do the conversion...
@@ -73,7 +73,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
             if qual_truncate:
                 warnings.simplefilter('ignore', BiopythonWarning)
             SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-        assert False, "Convert should have failed!"
+        raise ValueError("Convert should have failed!")
     except ValueError as err2:
         assert str(err1) == str(err2), \
                "Different failures, parse/write:\n%s\nconvert:\n%s" \

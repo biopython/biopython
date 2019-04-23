@@ -1369,7 +1369,7 @@ def QualPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
         if not line:
             return  # StopIteration
-    assert False, "Should not reach this line"
+    raise ValueError("Unrecognised QUAL record format.")
 
 
 class FastqPhredWriter(SequentialSequenceWriter):

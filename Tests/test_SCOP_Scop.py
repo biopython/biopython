@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Scop"""
+"""Unit test for Scop."""
 
 from __future__ import print_function
 
@@ -19,7 +19,7 @@ from Bio.SCOP import Scop, cmp_sccs, parse_domain
 class ScopTests(unittest.TestCase):
 
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
-        """Compares the two specified Cla lines for equality.
+        """Compare the two specified Cla lines for equality.
 
         The order of the key-value pairs in the sixth field of the lines does
         not matter. For more information, see
@@ -144,7 +144,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(px2, None)
 
     def test_get_descendents(self):
-        """Test getDescendents method"""
+        """Test getDescendents method."""
         scop = Scop(dir_path="SCOP", version="test")
         fold = scop.getNodeBySunid(46457)
 

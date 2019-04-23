@@ -188,6 +188,7 @@ Support for parsing and indexing:
 Support for parsing:
 
  - blast-text       - BLAST+ plain text output.
+ - hhsuite2-text    - HHSUITE plain text output.
 
 Each of these formats have different keyword arguments available for use with
 the main SearchIO functions. More details and examples are available in each
@@ -226,6 +227,8 @@ _ITERATOR_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
         'fasta-m10': ('FastaIO', 'FastaM10Parser'),
+        'hhsuite2-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
+        'hhsuite3-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
         'hmmer2-text': ('HmmerIO', 'Hmmer2TextParser'),
         'hmmer3-text': ('HmmerIO', 'Hmmer3TextParser'),
         'hmmer3-tab': ('HmmerIO', 'Hmmer3TabParser'),

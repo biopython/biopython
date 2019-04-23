@@ -2,6 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for SeqIO SeqXML module."""
+
 import unittest
 import sys
 
@@ -60,17 +62,17 @@ class TestDetailedRead(unittest.TestCase):
             self.assertEqual(self.records["rna"][2].description, u"\u00E5\u00C5\u00FC\u00F6\u00D6\u00DF\u00F8\u00E4\u00A2\u00A3$\u20AC\u9999\u80A0")
 
     def test_full_characters_set_read(self):
-        """Read full characters set for each type"""
+        """Read full characters set for each type."""
         self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-")
         self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-")
         self.assertEqual(str(self.records["protein"][1].seq), "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
 
     def test_duplicated_property(self):
-        """Read property with multiple values"""
+        """Read property with multiple values."""
         self.assertEqual(self.records["protein"][2].annotations["test"], [u"1", u"2", u"3"])
 
     def test_duplicated_dbxref(self):
-        """Read multiple cross references to a single source"""
+        """Read multiple cross references to a single source."""
         self.assertEqual(self.records["protein"][2].dbxrefs, [u"someDB:G001", u"someDB:G002"])
 
     def test_read_minimal_required(self):

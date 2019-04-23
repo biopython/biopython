@@ -182,7 +182,7 @@ def PirIterator(handle):
 
         if not line:
             return  # StopIteration
-    assert False, "Should not reach this line"
+    raise ValueError("Unrecognised PIR record format.")
 
 
 class PirWriter(SequentialSequenceWriter):

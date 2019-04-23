@@ -6,6 +6,8 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
+"""Tests for kNN module."""
+
 import unittest
 
 try:

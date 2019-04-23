@@ -4,7 +4,7 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 
-"""Unit tests for PARTS of the parse_pdb_header module of Bio.PDB"""
+"""Unit tests for PARTS of the parse_pdb_header module of Bio.PDB."""
 
 
 import unittest

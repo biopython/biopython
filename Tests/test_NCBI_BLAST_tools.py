@@ -6,6 +6,8 @@
 # This unit test attempts to locate the blastall executable and the nr
 # database.
 
+"""Tests for NCBI BLAST tools module."""
+
 from __future__ import print_function
 
 import os
@@ -86,7 +88,7 @@ if len(set(exe_names).difference(optional)) < len(set(wanted).difference(optiona
 
 class Pairwise(unittest.TestCase):
     def test_blastp(self):
-        """Pairwise BLASTP search"""
+        """Pairwise BLASTP search."""
         global exe_names
         cline = Applications.NcbiblastpCommandline(
             exe_names["blastp"],
@@ -119,7 +121,7 @@ class Pairwise(unittest.TestCase):
             self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
 
     def test_blastn(self):
-        """Pairwise BLASTN search"""
+        """Pairwise BLASTN search."""
         global exe_names
         cline = Applications.NcbiblastnCommandline(
             exe_names["blastn"],
@@ -143,7 +145,7 @@ class Pairwise(unittest.TestCase):
         # TODO - Parse it?
 
     def test_tblastn(self):
-        """Pairwise TBLASTN search"""
+        """Pairwise TBLASTN search."""
         global exe_names
         cline = Applications.NcbitblastnCommandline(
             exe_names["tblastn"],
@@ -169,7 +171,7 @@ class Pairwise(unittest.TestCase):
 
 class BlastDB(unittest.TestCase):
     def test_requires_dbtype(self):
-        """Check that dbtype throws error if not set"""
+        """Check that dbtype throws error if not set."""
         global exe_names
         cline = Applications.NcbimakeblastdbCommandline(
             exe_names["makeblastdb"],
@@ -178,7 +180,7 @@ class BlastDB(unittest.TestCase):
             str(cline)
 
     def test_fasta_db_prot(self):
-        """Test makeblastdb wrapper with protein database"""
+        """Test makeblastdb wrapper with protein database."""
         global exe_names
         cline = Applications.NcbimakeblastdbCommandline(
             exe_names["makeblastdb"],
@@ -213,7 +215,7 @@ class BlastDB(unittest.TestCase):
         self.assertTrue(os.path.isfile("GenBank/NC_005816.faa.psq"))
 
     def test_fasta_db_nucl(self):
-        """Test makeblastdb wrapper with nucleotide database"""
+        """Test makeblastdb wrapper with nucleotide database."""
         global exe_names
         cline = Applications.NcbimakeblastdbCommandline(
             exe_names["makeblastdb"],
@@ -408,49 +410,49 @@ class CheckCompleteArgList(unittest.TestCase):
         str(cline)
 
     def test_blastx(self):
-        """Check all blastx arguments are supported"""
+        """Check all blastx arguments are supported."""
         self.check("blastx", Applications.NcbiblastxCommandline)
 
     def test_blastp(self):
-        """Check all blastp arguments are supported"""
+        """Check all blastp arguments are supported."""
         self.check("blastp", Applications.NcbiblastpCommandline)
 
     def test_blastn(self):
-        """Check all blastn arguments are supported"""
+        """Check all blastn arguments are supported."""
         self.check("blastn", Applications.NcbiblastnCommandline)
 
     def test_tblastx(self):
-        """Check all tblastx arguments are supported"""
+        """Check all tblastx arguments are supported."""
         self.check("tblastx", Applications.NcbitblastxCommandline)
 
     def test_tblastn(self):
-        """Check all tblastn arguments are supported"""
+        """Check all tblastn arguments are supported."""
         self.check("tblastn", Applications.NcbitblastnCommandline)
 
     def test_psiblast(self):
-        """Check all psiblast arguments are supported"""
+        """Check all psiblast arguments are supported."""
         self.check("psiblast", Applications.NcbipsiblastCommandline)
 
     def test_rpsblast(self):
-        """Check all rpsblast arguments are supported"""
+        """Check all rpsblast arguments are supported."""
         self.check("rpsblast", Applications.NcbirpsblastCommandline)
 
     def test_rpstblastn(self):
-        """Check all rpstblastn arguments are supported"""
+        """Check all rpstblastn arguments are supported."""
         self.check("rpstblastn", Applications.NcbirpstblastnCommandline)
 
     def test_makeblastdb(self):
-        """Check all makeblastdb arguments are supported"""
+        """Check all makeblastdb arguments are supported."""
         self.check("makeblastdb", Applications.NcbimakeblastdbCommandline)
 
     if "blast_formatter" in exe_names:
         def test_blast_formatter(self):
-            """Check all blast_formatter arguments are supported"""
+            """Check all blast_formatter arguments are supported."""
             self.check("blast_formatter", Applications.NcbiblastformatterCommandline)
 
     if "deltablast" in exe_names:
         def test_deltablast(self):
-            """Check all deltablast arguments are supported"""
+            """Check all deltablast arguments are supported."""
             self.check("deltablast", Applications.NcbideltablastCommandline)
 
 

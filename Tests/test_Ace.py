@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Ace module."""
+
 import unittest
 
 from Bio.Sequencing import Ace
@@ -998,6 +1000,7 @@ class AceTestTwo(unittest.TestCase):
     The sample input file seq.cap.ace was downloaded from:
     http://genome.cs.mtu.edu/cap/data/seq.cap.ace
     """
+
     def setUp(self):
         self.handle = open("Ace/seq.cap.ace")
 
@@ -1347,6 +1350,7 @@ class AceTestThree(unittest.TestCase):
     The sample input file was downloaded from:
     http://bozeman.mbt.washington.edu/consed/distributions/README.16.0.txt
     """
+
     def setUp(self):
         self.handle = open("Ace/consed_sample.ace")
 

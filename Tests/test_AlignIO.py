@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for AlignIO module."""
+
 from __future__ import print_function
 
 import os
@@ -85,7 +87,7 @@ def str_summary(text, max_len=40):
 
 
 def alignment_summary(alignment, index="  ", vertical_threshold=5):
-    """Returns a concise summary of an Alignment object as a string."""
+    """Return a concise summary of an Alignment object as a string."""
     answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
@@ -215,7 +217,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
 # Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():
-    """Writing post-truncation duplicated IDs should fail for PHYLIP."""
+    """Check writing post-truncation duplicated IDs fails for PHYLIP."""
     handle = StringIO()
     sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
                  SeqRecord(Seq('AAAA'), id='longsequencename2'),
@@ -224,7 +226,7 @@ def check_phylip_reject_duplicate():
     try:
         # This should raise a ValueError
         AlignIO.write(alignment, handle, 'phylip')
-        assert False, "Duplicate IDs after truncation are not allowed."
+        raise ValueError("Duplicate IDs after truncation are not allowed.")
     except ValueError as err:
         # Expected - check the error
         assert "Repeated name 'longsequen'" in str(err)
@@ -251,8 +253,8 @@ for t_format in list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
         AlignIO.write([list_of_records], handle, t_format)
-        assert False, "Writing non-alignment to %s format should fail!" \
-            % t_format
+        raise ValueError("Writing non-alignment to %s format should fail!"
+                         % t_format)
     except (TypeError, AttributeError, ValueError):
         pass
     handle.close()
@@ -329,7 +331,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         try:
             with open(t_filename) as handle:
                 alignment = AlignIO.read(handle, t_format)
-            assert False, "Bio.AlignIO.read(...) should have failed"
+            raise ValueError("Bio.AlignIO.read(...) should have failed")
         except ValueError:
             # Expected to fail
             pass

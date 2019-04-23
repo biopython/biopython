@@ -6,6 +6,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Fasttree tool."""
+
 from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
@@ -77,16 +79,18 @@ print("Empty file")
 input_file = "does_not_exist.fasta"
 assert not os.path.isfile(input_file)
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
+
 try:
     stdout, stderr = cline()
-    assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+    raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 except ApplicationError as err:
     print("Failed (good)")
     # Python 2.3 on Windows gave (0, 'Error')
     # Python 2.5 on Windows gives [Errno 0] Error
-    assert "Cannot open sequence file" in str(err) or \
-           "Cannot open input file" in str(err) or \
-           "Non-zero return code " in str(err), str(err)
+    if "Cannot open sequence file" not in str(err) or \
+            "Cannot open input file" not in str(err) or \
+            "Non-zero return code " not in str(err):
+        raise ValueError("Unknown ApplicationError raised: %s" % str(err))
 
 print("")
 print("Single sequence")
@@ -99,7 +103,7 @@ try:
     if "Unique: 1/1" in stderr:
         print("Failed (good)")
     else:
-        assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+        raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 except ApplicationError as err:
     print("Failed (good)")
     # assert str(err) == "No records found in handle", str(err)
@@ -111,7 +115,7 @@ assert os.path.isfile(input_file)
 cline = FastTreeCommandline(fasttree_exe, input=input_file)
 try:
     stdout, stderr = cline()
-    assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+    raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 except ApplicationError as err:
     print("Failed (good)")
     # Ideally we'd catch the return code and raise the specific
@@ -120,10 +124,11 @@ except ApplicationError as err:
     # Note:
     # Python 2.3 on Windows gave (0, 'Error')
     # Python 2.5 on Windows gives [Errno 0] Error
-    assert "invalid format" in str(err) \
-           or "not produced" in str(err) \
-           or "No sequences in file" in str(err) \
-           or "Non-zero return code " in str(err), str(err)
+    if "invalid format" not in str(err) \
+            or "not produced" not in str(err) \
+            or "No sequences in file" not in str(err) \
+            or "Non-zero return code " not in str(err):
+        raise ValueError("Unknown ApplicationError raised: %s" % str(err))
 
 #################################################################
 print("")

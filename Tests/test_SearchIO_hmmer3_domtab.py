@@ -17,17 +17,17 @@ TEST_DIR = 'Hmmer'
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
 class HmmscanCases(unittest.TestCase):
+    """Testing the hmmscan domtab output."""
 
     fmt = 'hmmscan3-domtab'
 
     def test_domtab_31b1_hmmscan_001(self):
-        "Test parsing hmmscan-domtab, hmmscan 3.1b1, multiple queries (domtab_31b1_hmmscan_001)"
-
+        """Parsing hmmscan-domtab, hmmscan 3.1b1, multiple queries (domtab_31b1_hmmscan_001)."""
         tab_file = get_file('domtab_31b1_hmmscan_001.out')
         qresults = list(parse(tab_file, self.fmt))
         self.assertEqual(4, len(qresults))
@@ -97,8 +97,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
 
     def test_domtab_30_hmmscan_001(self):
-        "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_001)"
-
+        """Parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_001)."""
         tab_file = get_file('domtab_30_hmmscan_001.out')
         qresults = parse(tab_file, self.fmt)
         counter = 0
@@ -441,16 +440,14 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(4, counter)
 
     def test_domtab_30_hmmscan_002(self):
-        "Test parsing hmmscan-domtab, hmmscan 3.0, single query, no hits (domtab_30_hmmscan_002)"
-
+        """Parsing hmmscan-domtab, hmmscan 3.0, single query, no hits (domtab_30_hmmscan_002)."""
         tab_file = get_file('domtab_30_hmmscan_002.out')
         qresults = parse(tab_file, self.fmt)
 
         self.assertRaises(StopIteration, next, qresults)
 
     def test_domtab_30_hmmscan_003(self):
-        "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_003)"
-
+        """Parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_003)."""
         tab_file = get_file('domtab_30_hmmscan_003.out')
         qresults = parse(tab_file, self.fmt)
         counter = 0
@@ -492,8 +489,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_domtab_30_hmmscan_004(self):
-        "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_004)"
-
+        """Parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_004)."""
         tab_file = get_file('domtab_30_hmmscan_004.out')
         qresults = parse(tab_file, self.fmt)
         counter = 0
@@ -561,12 +557,12 @@ class HmmscanCases(unittest.TestCase):
 
 
 class HmmersearchCases(unittest.TestCase):
+    """Test the hmmsearch domtab parser."""
 
     fmt = 'hmmsearch3-domtab'
 
     def test_domtab_31b1_hmmsearch_001(self):
-        "Test parsing hmmsearch-domtab, hmmsearch 3.1b1, single query (domtab_31b1_hmmsearch_001)"
-
+        """Parsing hmmsearch-domtab, hmmsearch 3.1b1, single query (domtab_31b1_hmmsearch_001)."""
         tab_file = get_file('domtab_31b1_hmmsearch_001.out')
         qresults = list(parse(tab_file, self.fmt))
 
@@ -603,8 +599,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(0.95, hsp.acc_avg)
 
     def test_domtab_30_hmmsearch_001(self):
-        "Test parsing hmmsearch-domtab, hmmsearch 3.0, multiple queries (domtab_30_hmmsearch_001)"
-
+        """Parsing hmmsearch-domtab, hmmsearch 3.0, multiple queries (domtab_30_hmmsearch_001)."""
         tab_file = get_file('domtab_30_hmmsearch_001.out')
         qresults = parse(tab_file, self.fmt)
 

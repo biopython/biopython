@@ -9,6 +9,12 @@
 import unittest
 import sys
 import os
+
+from io import BytesIO
+
+from Bio._py3k import StringIO
+from Bio import Entrez
+
 if os.name == 'java':
     try:
         from xml.parsers.expat import XML_PARAM_ENTITY_PARSING_ALWAYS
@@ -17,10 +23,6 @@ if os.name == 'java':
         from Bio import MissingPythonDependencyError
         raise MissingPythonDependencyError("The Bio.Entrez XML parser fails on "
                                            "Jython, see http://bugs.jython.org/issue1447")
-
-from io import BytesIO
-from Bio._py3k import StringIO
-from Bio import Entrez
 
 
 class GeneralTests(unittest.TestCase):
@@ -4237,7 +4239,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(article['MedlineCitation']['Article']['GrantList'].attributes, {'CompleteYN': 'Y'})
 
     def test_pubmed_html_mathml_tags(self):
-        """Test parsing XML returned by EFetch, PubMed database, with both HTML and MathML tags"""
+        """Test parsing XML returned by EFetch, PubMed database, with both HTML and MathML tags."""
         # In PubMed display PMID 30108519 in xml retrieval mode, containing
         # both HTML and MathML tags in the abstract text.
         # To create the XML file, use

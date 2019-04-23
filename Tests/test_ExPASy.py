@@ -7,9 +7,6 @@
 
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # We want to test these:
 from Bio import ExPASy
 
@@ -17,8 +14,11 @@ from Bio import ExPASy
 from Bio.ExPASy import Prodoc
 from Bio.ExPASy import Prosite
 
+import requires_internet
+requires_internet.check()
 
 # TODO - Use with statement when drop Python 2
+
 
 class ExPASyOnlineTests(unittest.TestCase):
     """Test ExPASy online resources."""

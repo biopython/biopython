@@ -3,15 +3,16 @@
 # as part of this package.
 
 # coding=utf-8
+"""Tests for NaiveBayes module."""
+
 import copy
 import unittest
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use Bio.NaiveBayes.")
+from Bio import NaiveBayes
+
+# Importing NaiveBayes will itself raise MissingPythonDependencyError
+# if NumPy is unavailable.
+import numpy
 try:
     hash(numpy.float64(123.456))
 except TypeError:
@@ -22,8 +23,6 @@ except TypeError:
         "Please update NumPy if you want to use Bio.NaiveBayes "
         "(under this version numpy.float64 is unhashable).")
 del numpy
-
-from Bio import NaiveBayes
 
 
 class CarTest(unittest.TestCase):

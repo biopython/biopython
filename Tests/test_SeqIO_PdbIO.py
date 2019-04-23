@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for SeqIO PdbIO module."""
+
 import unittest
 import warnings
 
@@ -35,7 +37,6 @@ def SeqresTestGenerator(extension, parser):
         parser:
             The name of the SeqIO parser to use (e.g. ``pdb-atom``).
     """
-
     class SeqresTests(unittest.TestCase):
         """Use "parser" to parse sequence records from a structure file.
 
@@ -80,11 +81,13 @@ def SeqresTestGenerator(extension, parser):
 
 class TestPdbSeqres(SeqresTestGenerator("pdb", "pdb-seqres")):
     """Test pdb-seqres SeqIO driver."""
+
     pass
 
 
 class TestCifSeqres(SeqresTestGenerator("cif", "cif-seqres")):
     """Test cif-seqres SeqIO driver."""
+
     pass
 
 
@@ -93,7 +96,6 @@ def AtomTestGenerator(extension, parser):
 
     See SeqresTestGenerator for more information.
     """
-
     class AtomTests(unittest.TestCase):
         def test_atom_parse(self):
             """Parse a multi-chain structure by ATOM entries.

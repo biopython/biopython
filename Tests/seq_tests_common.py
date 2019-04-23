@@ -2,6 +2,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Common code for SeqRecord object tests."""
+
 from Bio._py3k import range
 from Bio._py3k import basestring
 
@@ -139,7 +141,7 @@ def compare_feature(old_f, new_f):
                         % (repr(old_f.qualifiers[key]),
                            repr(new_f.qualifiers[key]))
             else:
-                assert False, "Problem with feature's '%s' qualifier" % key
+                raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
             # Should both be lists of strings...
             assert old_f.qualifiers[key] == new_f.qualifiers[key], \

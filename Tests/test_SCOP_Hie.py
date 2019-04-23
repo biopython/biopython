@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-"""Unit test for Hie"""
+"""Unit test for Hie."""
 
 import unittest
 
@@ -17,7 +16,7 @@ class HieTests(unittest.TestCase):
         self.filename = './SCOP/dir.hie.scop.txt_test'
 
     def testParse(self):
-        """Test if all records in a HIE file are being read"""
+        """Test if all records in a HIE file are being read."""
         f = open(self.filename)
         try:
             count = 0
@@ -28,7 +27,7 @@ class HieTests(unittest.TestCase):
             f.close()
 
     def testStr(self):
-        """Test if we can convert each record to a string correctly"""
+        """Test if we can convert each record to a string correctly."""
         f = open(self.filename)
         try:
             for line in f:
@@ -39,7 +38,7 @@ class HieTests(unittest.TestCase):
             f.close()
 
     def testError(self):
-        """Test if a corrupt record raises the appropriate exception"""
+        """Test if a corrupt record raises the appropriate exception."""
         corruptRec = "4926sdfhjhfgyjdfyg"
         self.assertRaises(ValueError, Hie.Record, corruptRec)
 

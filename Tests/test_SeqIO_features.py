@@ -328,7 +328,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertTrue(len(feature) <= feature.location.end - feature.location.start)
 
     def test_simple_rna(self):
-        """Feature on RNA (simple, default strand)"""
+        """Feature on RNA (simple, default strand)."""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
         f = SeqFeature(FeatureLocation(5, 10))
         self.assertEqual(f.strand, None)
@@ -336,43 +336,43 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
-        """Feature on DNA (simple, default strand)"""
+        """Feature on DNA (simple, default strand)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_single_letter_dna(self):
-        """Feature on DNA (single letter, default strand)"""
+        """Feature on DNA (single letter, default strand)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 6))
         self.check(s, f, "Y", "6")
 
     def test_zero_len_dna(self):
-        """Feature on DNA (between location, zero length, default strand)"""
+        """Feature on DNA (between location, zero length, default strand)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_zero_len_dna_end(self):
-        """Feature on DNA (between location at end, zero length, default strand)"""
+        """Feature on DNA (between location at end, zero length, default strand)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(15, 15))
         self.check(s, f, "", "15^1")
 
     def test_simple_dna_strand0(self):
-        """Feature on DNA (simple, strand 0)"""
+        """Feature on DNA (simple, strand 0)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 10), strand=0)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_none(self):
-        """Feature on DNA (simple, strand None)"""
+        """Feature on DNA (simple, strand None)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 10), strand=None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
-        """Feature on DNA (simple, strand +1)"""
+        """Feature on DNA (simple, strand +1)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 10), strand=1)
         self.assertEqual(f.strand, +1)
@@ -380,7 +380,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_minus(self):
-        """Feature on DNA (simple, strand -1)"""
+        """Feature on DNA (simple, strand -1)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5, 10), strand=-1)
         self.assertEqual(f.strand, -1)
@@ -388,7 +388,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "MKSWR", "complement(6..10)")
 
     def test_simple_dna_join(self):
-        """Feature on DNA (join, strand +1)"""
+        """Feature on DNA (join, strand +1)."""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=1)
@@ -396,7 +396,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "YWSMKVDN", "join(6..10,13..15)")
 
     def test_simple_dna_join_strand_minus(self):
-        """Feature on DNA (join, strand -1)"""
+        """Feature on DNA (join, strand -1)."""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
@@ -405,7 +405,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                    "complement(join(6..10,13..15))")
 
     def test_simple_dna_join_before(self):
-        """Feature on DNA (join, strand -1, before position)"""
+        """Feature on DNA (join, strand -1, before position)."""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
@@ -414,7 +414,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                    "complement(join(<6..10,13..15))")
 
     def test_simple_dna_join_after(self):
-        """Feature on DNA (join, strand -1, after position)"""
+        """Feature on DNA (join, strand -1, after position)."""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12, AfterPosition(15)), strand=-1)
@@ -423,7 +423,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                    "complement(join(6..10,13..>15))")
 
     def test_mixed_strand_dna_join(self):
-        """Feature on DNA (join, mixed strand)"""
+        """Feature on DNA (join, mixed strand)."""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
@@ -432,7 +432,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                    "join(6..10,complement(13..15))")
 
     def test_mixed_strand_dna_multi_join(self):
-        """Feature on DNA (multi-join, mixed strand)"""
+        """Feature on DNA (multi-join, mixed strand)."""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5, 10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12, 15), strand=-1)
@@ -442,13 +442,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
                    "join(6..10,complement(13..15),<1..5)")
 
     def test_protein_simple(self):
-        """Feature on protein (simple)"""
+        """Feature on protein (simple)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5, 10))
         self.check(s, f, "FGHIJ", "6..10")
 
     def test_protein_join(self):
-        """Feature on protein (join)"""
+        """Feature on protein (join)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(5, 10))
         f2 = SeqFeature(FeatureLocation(15, 20))
@@ -456,7 +456,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "FGHIJ" + "PQRST", "join(6..10,16..20)")
 
     def test_protein_join_fuzzy(self):
-        """Feature on protein (fuzzy join)"""
+        """Feature on protein (fuzzy join)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(BeforePosition(5), 10))
         f2 = SeqFeature(FeatureLocation(OneOfPosition(15, (ExactPosition(15),
@@ -466,7 +466,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "FGHIJ" + "PQRST", "join(<6..10,one-of(16,17)..>20)")
 
     def test_protein_multi_join(self):
-        """Feature on protein (multi-join)"""
+        """Feature on protein (multi-join)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(1, 2))
         f2 = SeqFeature(FeatureLocation(8, 9))
@@ -480,13 +480,13 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.check(s, f, "BIOPYTHON", "join(2,9,15..16,25,20,8,15,14)")
 
     def test_protein_between(self):
-        """Feature on protein (between location, zero length)"""
+        """Feature on protein (between location, zero length)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5, 5))
         self.check(s, f, "", "5^6")
 
     def test_protein_oneof(self):
-        """Feature on protein (one-of positions)"""
+        """Feature on protein (one-of positions)."""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         start = OneOfPosition(5, (ExactPosition(5), ExactPosition(7)))
         end = OneOfPosition(11, (ExactPosition(10), ExactPosition(11)))
@@ -1169,95 +1169,95 @@ class TestWriteRead(unittest.TestCase):
     """Test can write and read back files."""
 
     def test_NC_000932(self):
-        """Write and read back NC_000932.gb"""
+        """Write and read back NC_000932.gb."""
         write_read(os.path.join("GenBank", "NC_000932.gb"), "gb")
 
     def test_NC_005816(self):
-        """Write and read back NC_005816.gb"""
+        """Write and read back NC_005816.gb."""
         write_read(os.path.join("GenBank", "NC_005816.gb"), "gb")
 
     def test_gbvrl1_start(self):
-        """Write and read back gbvrl1_start.seq"""
+        """Write and read back gbvrl1_start.seq."""
         write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb")
 
     def test_NT_019265(self):
-        """Write and read back NT_019265.gb"""
+        """Write and read back NT_019265.gb."""
         write_read(os.path.join("GenBank", "NT_019265.gb"), "gb")
 
     def test_cor6(self):
-        """Write and read back cor6_6.gb"""
+        """Write and read back cor6_6.gb."""
         write_read(os.path.join("GenBank", "cor6_6.gb"), "gb")
 
     def test_arab1(self):
-        """Write and read back arab1.gb"""
+        """Write and read back arab1.gb."""
         write_read(os.path.join("GenBank", "arab1.gb"), "gb")
 
     def test_one_of(self):
-        """Write and read back of_one.gb"""
+        """Write and read back of_one.gb."""
         write_read(os.path.join("GenBank", "one_of.gb"), "gb")
 
     def test_pri1(self):
-        """Write and read back pri1.gb"""
+        """Write and read back pri1.gb."""
         write_read(os.path.join("GenBank", "pri1.gb"), "gb")
 
     def test_noref(self):
-        """Write and read back noref.gb"""
+        """Write and read back noref.gb."""
         write_read(os.path.join("GenBank", "noref.gb"), "gb")
 
     def test_origin_line(self):
-        """Write and read back origin_line.gb"""
+        """Write and read back origin_line.gb."""
         write_read(os.path.join("GenBank", "origin_line.gb"), "gb")
 
     def test_dbsource_wrap(self):
-        """Write and read back dbsource_wrap.gb"""
+        """Write and read back dbsource_wrap.gb."""
         write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_blank_seq(self):
-        """Write and read back blank_seq.gb"""
+        """Write and read back blank_seq.gb."""
         write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_extra_keywords(self):
-        """Write and read back extra_keywords.gb"""
+        """Write and read back extra_keywords.gb."""
         write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb")
 
     def test_protein_refseq(self):
-        """Write and read back protein_refseq.gb"""
+        """Write and read back protein_refseq.gb."""
         write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_protein_refseq2(self):
-        """Write and read back protein_refseq2.gb"""
+        """Write and read back protein_refseq2.gb."""
         write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", ["gb"])
         # Protein so can't convert this to EMBL format
 
     def test_AAA03323(self):
-        """Write and read back AAA03323.embl"""
+        """Write and read back AAA03323.embl."""
         write_read(os.path.join("EMBL", "AAA03323.embl"), "embl")
 
     def test_AE017046(self):
-        """Write and read back AE017046.embl"""
+        """Write and read back AE017046.embl."""
         write_read(os.path.join("EMBL", "AE017046.embl"), "embl")
 
     def test_DD231055_edited(self):
-        """Write and read back DD231055_edited.embl"""
+        """Write and read back DD231055_edited.embl."""
         write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl")
 
     def test_Human_contigs(self):
-        """Write and read back Human_contigs.embl"""
+        """Write and read back Human_contigs.embl."""
         write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl")
 
     def test_SC10H5(self):
-        """Write and read back SC10H5.embl"""
+        """Write and read back SC10H5.embl."""
         write_read(os.path.join("EMBL", "SC10H5.embl"), "embl")
 
     def test_TRBG361(self):
-        """Write and read back TRBG361.embl"""
+        """Write and read back TRBG361.embl."""
         write_read(os.path.join("EMBL", "TRBG361.embl"), "embl")
 
     def test_U87107(self):
-        """Write and read back U87107.embl"""
+        """Write and read back U87107.embl."""
         write_read(os.path.join("EMBL", "U87107.embl"), "embl")
 
 

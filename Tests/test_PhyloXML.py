@@ -3,8 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the PhyloXML and PhyloXMLIO modules.
-"""
+"""Unit tests for the PhyloXML and PhyloXMLIO modules."""
 
 import os
 import tempfile
@@ -164,6 +163,7 @@ class ParseTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for instantiation and attributes of each complex type."""
+
     # ENH: also test check_str() regexps wherever they're used
 
     def test_Phyloxml(self):
@@ -607,6 +607,7 @@ class WriterTests(unittest.TestCase):
 
 class MethodTests(unittest.TestCase):
     """Tests for methods on specific classes/objects."""
+
     def setUp(self):
         self.phyloxml = PhyloXMLIO.read(EX_PHYLO)
 

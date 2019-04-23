@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for motifs module."""
+
 import os
 import unittest
 import math
@@ -1890,30 +1892,30 @@ class TestTransfac(unittest.TestCase):
         self.assertEqual(motif['ID'], 'MZF1')
         self.assertEqual(motif.counts.length, 6)
         self.assertEqual(len(motif.counts), 4)
-        self.assertEqual(motif.counts['A', 0],  3.0)
-        self.assertEqual(motif.counts['A', 1],  0.0)
-        self.assertEqual(motif.counts['A', 2],  2.0)
-        self.assertEqual(motif.counts['A', 3],  0.0)
-        self.assertEqual(motif.counts['A', 4],  0.0)
+        self.assertEqual(motif.counts['A', 0], 3.0)
+        self.assertEqual(motif.counts['A', 1], 0.0)
+        self.assertEqual(motif.counts['A', 2], 2.0)
+        self.assertEqual(motif.counts['A', 3], 0.0)
+        self.assertEqual(motif.counts['A', 4], 0.0)
         self.assertEqual(motif.counts['A', 5], 18.0)
-        self.assertEqual(motif.counts['C', 0],  5.0)
-        self.assertEqual(motif.counts['C', 1],  0.0)
-        self.assertEqual(motif.counts['C', 2],  0.0)
-        self.assertEqual(motif.counts['C', 3],  0.0)
-        self.assertEqual(motif.counts['C', 4],  0.0)
-        self.assertEqual(motif.counts['C', 5],  0.0)
-        self.assertEqual(motif.counts['G', 0],  4.0)
+        self.assertEqual(motif.counts['C', 0], 5.0)
+        self.assertEqual(motif.counts['C', 1], 0.0)
+        self.assertEqual(motif.counts['C', 2], 0.0)
+        self.assertEqual(motif.counts['C', 3], 0.0)
+        self.assertEqual(motif.counts['C', 4], 0.0)
+        self.assertEqual(motif.counts['C', 5], 0.0)
+        self.assertEqual(motif.counts['G', 0], 4.0)
         self.assertEqual(motif.counts['G', 1], 19.0)
         self.assertEqual(motif.counts['G', 2], 18.0)
         self.assertEqual(motif.counts['G', 3], 19.0)
         self.assertEqual(motif.counts['G', 4], 20.0)
-        self.assertEqual(motif.counts['G', 5],  2.0)
-        self.assertEqual(motif.counts['T', 0],  8.0)
-        self.assertEqual(motif.counts['T', 1],  1.0)
-        self.assertEqual(motif.counts['T', 2],  0.0)
-        self.assertEqual(motif.counts['T', 3],  1.0)
-        self.assertEqual(motif.counts['T', 4],  0.0)
-        self.assertEqual(motif.counts['T', 5],  0.0)
+        self.assertEqual(motif.counts['G', 5], 2.0)
+        self.assertEqual(motif.counts['T', 0], 8.0)
+        self.assertEqual(motif.counts['T', 1], 1.0)
+        self.assertEqual(motif.counts['T', 2], 0.0)
+        self.assertEqual(motif.counts['T', 3], 1.0)
+        self.assertEqual(motif.counts['T', 4], 0.0)
+        self.assertEqual(motif.counts['T', 5], 0.0)
         handle.close()
 
 

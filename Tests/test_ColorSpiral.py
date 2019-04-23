@@ -29,8 +29,9 @@ from Bio.Graphics.ColorSpiral import ColorSpiral, get_colors, get_color_dict
 
 class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
+
     def setUp(self):
-        """Set up canvas for drawing"""
+        """Set up canvas for drawing."""
         output_filename = os.path.join("Graphics", "spiral_test.pdf")
         self.c = Canvas(output_filename, pagesize=A4)
         # co-ordinates of the centre of the canvas
@@ -69,8 +70,9 @@ class SpiralTest(unittest.TestCase):
 
 class SquareTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed in a square, with jitter."""
+
     def setUp(self):
-        """Set up canvas for drawing"""
+        """Set up canvas for drawing."""
         output_filename = os.path.join("Graphics", "square_test.pdf")
         self.c = Canvas(output_filename, pagesize=(500, 500))
 
@@ -95,6 +97,7 @@ class SquareTest(unittest.TestCase):
 
 class DictTest(unittest.TestCase):
     """Generate set of colours on the basis of an iterable."""
+
     def test_dict(self):
         """get_color_dict() for classes A-D, no jitter."""
         classes = ['A', 'B', 'C', 'D']

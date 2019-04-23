@@ -9,6 +9,8 @@
 # import statement succeeds.  If it is not, then the statement will
 # result in a MissingExternalDependencyError exception.
 
+"""Common code to check if the internet is available."""
+
 from Bio import MissingExternalDependencyError
 
 

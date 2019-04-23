@@ -3,17 +3,19 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Wise module."""
+
 import doctest
 import sys
 import unittest
 
-if 'requires_wise' in sys.modules:
-    del sys.modules['requires_wise']
-import requires_wise
-
 from Bio._py3k import StringIO
 
 from Bio import Wise
+
+if 'requires_wise' in sys.modules:
+    del sys.modules['requires_wise']
+import requires_wise  # noqa: E402
 
 
 class TestWiseDryRun(unittest.TestCase):

@@ -6,6 +6,8 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
+"""Tests for LogisticRegression module."""
+
 try:
     import numpy
     from numpy import linalg  # missing in PyPy's micronumpy
@@ -58,7 +60,7 @@ ys = [1,
 
 
 def show_progress(iteration, loglikelihood):
-    """Callback function to be used for training the model"""
+    """No action callback function, used when training the model."""
     pass
 
 

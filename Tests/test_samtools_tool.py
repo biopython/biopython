@@ -7,6 +7,8 @@
 
 # Last Checked with samtools [0.1.18 (r982:295)]
 
+"""Tests for samtools tool."""
+
 from Bio import MissingExternalDependencyError
 import sys
 import os
@@ -115,8 +117,7 @@ class SamtoolsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def test_view(self):
-        """Test for samtools view"""
-
+        """Test for samtools view."""
         cmdline = SamtoolsViewCommandline(samtools_exe)
         cmdline.set_parameter("input_file", self.bamfile1)
         stdout_bam, stderr_bam = cmdline()
@@ -132,13 +133,13 @@ class SamtoolsTestCase(unittest.TestCase):
             % (cmdline, stderr_sam))
 
     def create_fasta_index(self):
-        """Creates index for reference fasta sequence."""
+        """Create index for reference fasta sequence."""
         cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
 
     def create_bam_index(self, input_bam):
-        """Creates index of an input bam file"""
+        """Create index of an input bam file."""
         cmdline = SamtoolsIndexCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", input_bam)
         stdout, stderr = cmdline()
@@ -153,7 +154,7 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(self.referenceindexfile))
 
     def test_calmd(self):
-        """Test for samtools calmd"""
+        """Test for samtools calmd."""
         self.create_fasta_index()
         cmdline = SamtoolsCalmdCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)

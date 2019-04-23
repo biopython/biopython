@@ -38,7 +38,6 @@ class ParseReal(unittest.TestCase):
 
     def test_parsers(self):
         """Extract polypeptides from 1A80."""
-
         parser = MMCIFParser()
         fast_parser = FastMMCIFParser()
 
@@ -169,8 +168,7 @@ class ParseReal(unittest.TestCase):
             numpy.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
 
     def testModels(self):
-        """Test file with multiple models"""
-
+        """Test file with multiple models."""
         parser = MMCIFParser(QUIET=1)
         f_parser = FastMMCIFParser(QUIET=1)
         with warnings.catch_warnings():
@@ -222,7 +220,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 3)
 
     def test_insertions(self):
-        """Test file with residue insertion codes"""
+        """Test file with residue insertion codes."""
         parser = MMCIFParser(QUIET=1)
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', PDBConstructionWarning)
@@ -247,7 +245,7 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(refseq, str(s))
 
     def test_filehandle(self):
-        """Test if the parser can handle file handle as well as filename"""
+        """Test if the parser can handle file handle as well as filename."""
         parser = MMCIFParser()
         structure = parser.get_structure("example", "PDB/1A8O.cif")
         self.assertEqual(len(structure), 1)
@@ -264,7 +262,7 @@ class ParseReal(unittest.TestCase):
         self._run_point_mutation_tests(FastMMCIFParser(QUIET=True))
 
     def _run_point_mutation_tests(self, parser):
-        """Common test code for testing point mutations."""
+        """Shared test code for testing point mutations."""
         structure = parser.get_structure("example", "PDB/3JQH.cif")
 
         # Residue 1 and 15 should be disordered.
@@ -306,11 +304,10 @@ class ParseReal(unittest.TestCase):
 
 
 class CIFtoPDB(unittest.TestCase):
-    """Testing conversion between formats: CIF to PDB"""
+    """Testing conversion between formats: CIF to PDB."""
 
     def test_conversion(self):
-        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare"""
-
+        """Parse 1A8O.cif, write 1A8O.pdb, parse again and compare."""
         cif_parser = MMCIFParser(QUIET=1)
         cif_struct = cif_parser.get_structure("example", "PDB/1LCD.cif")
 

@@ -12,9 +12,6 @@ from __future__ import with_statement
 import os
 import unittest
 
-import requires_internet
-requires_internet.check()
-
 # Biopython
 from Bio.Graphics.ColorSpiral import ColorSpiral
 
@@ -43,6 +40,9 @@ from Bio.Graphics.KGML_vis import KGMLCanvas
 # test_KGML_graphics module
 from test_KGML_graphics import PathwayData
 
+import requires_internet
+requires_internet.check()
+
 
 class KGMLPathwayOnlineTest(unittest.TestCase):
     """Import XML file and write KGML - online tests.
@@ -50,6 +50,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
     Import metabolic maps from a local .xml KGML file, and from
     the KEGG site, and write valid KGML output for each
     """
+
     def setUp(self):
         # Does our output directory exist?  If not, create it
         if not os.path.isdir('KEGG'):
@@ -64,7 +65,7 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
             ]
 
     def test_render_KGML_import_map(self):
-        """Basic rendering of KGML: use imported imagemap
+        """Basic rendering of KGML: use imported imagemap.
 
         Uses the URL indicated in the .xml file.
 

@@ -33,20 +33,6 @@
 #include <limits.h>
 #include <string.h>
 #include "cluster.h"
-#ifdef WINDOWS
-#  include <windows.h>
-#endif
-
-/* ************************************************************************ */
-
-#ifdef WINDOWS
-/* Then we make a Windows DLL */
-int WINAPI
-clusterdll_init(HANDLE h, DWORD reason, void* foo)
-{
-  return 1;
-}
-#endif
 
 /* ************************************************************************ */
 

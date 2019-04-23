@@ -3,6 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for PAML codeml module."""
+
 import unittest
 import os
 import os.path
@@ -474,7 +476,7 @@ class ModTest(unittest.TestCase):
                                  ": wrong number of parameters parsed")
 
     def testParseSitesParamsForPairwise(self):
-        """Verify that pairwise site estimates are indeed parsed. Fixes #483"""
+        """Verify that pairwise site estimates are indeed parsed. Fixes #483."""
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]

@@ -82,6 +82,45 @@ class Description(object):
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
 
+class DescriptionExt(Description):
+    """Extended description record for BLASTXML version 2.
+
+    Members:
+    items           List of DescriptionExtItem
+    """
+
+    def __init__(self):
+        """Initialize the class."""
+        super(DescriptionExt, self).__init__()
+
+        self.items = []
+
+    def append_item(self, item):
+        if len(self.items) == 0:
+            self.title = str(item)
+        self.items.append(item)
+
+
+class DescriptionExtItem(object):
+    """Stores information about one record in hit description for BLASTXML version 2.
+
+    Members:
+    id              Database identifier
+    title           Title of the hit.
+    """
+
+    def __init__(self):
+        """Initialize the class."""
+        self.id = None
+        self.title = None
+        self.accession = None
+        self.taxid = None
+        self.sciname = None
+
+    def __str__(self):
+        return "%s %s" % (self.id, self.title)
+
+
 class Alignment(object):
     """Stores information about one hit in the alignments section.
 

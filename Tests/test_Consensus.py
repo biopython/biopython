@@ -23,7 +23,8 @@ temp_dir = tempfile.mkdtemp()
 
 
 class BitStringTest(unittest.TestCase):
-    """Test for _BitString class"""
+    """Test for _BitString class."""
+
     def test_bitstring(self):
         bitstr1 = _BitString('0011')
         bitstr2 = _BitString('0101')
@@ -49,7 +50,7 @@ class BitStringTest(unittest.TestCase):
 
 
 class ConsensusTest(unittest.TestCase):
-    """Test for consensus methods"""
+    """Test for consensus methods."""
 
     def setUp(self):
         self.trees = list(Phylo.parse('./TreeConstruction/trees.tre', 'newick'))
@@ -124,7 +125,7 @@ class ConsensusTest(unittest.TestCase):
 
 
 class BootstrapTest(unittest.TestCase):
-    """Test for bootstrap methods"""
+    """Test for bootstrap methods."""
 
     def setUp(self):
         self.msa = AlignIO.read('TreeConstruction/msa.phy', 'phylip')
