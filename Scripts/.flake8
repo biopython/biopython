@@ -7,7 +7,7 @@ ignore =
     # =======================
     # pycodestyle v2.4.0 default ignore is E121,E123,E126,E226,E24,E704,W503,W504
     # flake8 v3.3.0 default ignore is      E121,E123,E126,E226,E24,E704,W503,W504
-    W503,
+    W503,W504,
     # ====================
     # flake8-bugbear: B###
     # ====================
