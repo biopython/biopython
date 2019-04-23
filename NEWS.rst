@@ -47,6 +47,10 @@ attribute is meant for capturing the order by which the HSP were output in the
 parsed file and is set with a default value of -1 for all HSP objects. It is
 also used for sorting the output of ``QueryResult.hsps``.
 
+Additionally, a number of small bugs and typos have been fixed with further
+additions to the test suite, and there has been further work to follow the
+Python PEP8, PEP257 and best practice standard coding style.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
