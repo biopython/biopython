@@ -28,6 +28,7 @@ from Bio import SeqIO
 
 
 def get_accession_num(seq_record):
+    """Extract accession number from sequence id."""
     accession_atoms = seq_record.id.split('|')
     gb_name = accession_atoms[3]
     # strip the version info before returning
