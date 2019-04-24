@@ -8,6 +8,7 @@
 # Authors: Thomas Sicheritz-Ponten and Jan O. Andersson
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # Jan.O.Andersson@home.se
+# flake8: noqa
 
 """Find next open reading frame in sequence data."""
 

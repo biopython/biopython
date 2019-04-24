@@ -20,28 +20,37 @@ from Bio.SeqUtils import GC
 
 
 class xbb_translations(object):
+    """A class for doing translations."""
+
     def __init__(self):
+        """Initialize."""
         pass
 
     def frame1(self, seq, translation_table=1):
+        """Translate first reading frame."""
         return translate(seq, table=translation_table)
 
     def complement(self, seq):
+        """Return complementary DNA Seq object."""
         return Seq.complement(Seq(seq))
 
     def reverse(self, seq):
+        """Reverse the sequence."""
         return seq[::-1]
 
     def antiparallel(self, seq):
+        """Return reverse complementary sequence."""
         return reverse_complement(seq)
 
     def frame(self, seq, frame, translation_table=1):
+        """Translate DNA sequence in a choosen frame."""
         if frame < 0:
             seq = reverse_complement(seq)
         seq = seq[(abs(frame) - 1):]
         return translate(seq, table=translation_table)
 
     def header_nice(self, txt, seq):
+        """Print a short header for the translation window."""
         length = len(seq)
         if length > 20:
             short = '%s ... %s' % (seq[:10], seq[-10:])
@@ -60,6 +69,7 @@ class xbb_translations(object):
         return res
 
     def frame_nice(self, seq, frame, translation_table=1):
+        """Print a pretty print single frame translation."""
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
         protein_length = len(protein)
@@ -86,10 +96,11 @@ class xbb_translations(object):
         return res
 
     def gc(self, seq):
-        """Return a float between 0 and 100."""
+        """Calculate GC content in percent (0-100)."""
         return GC(seq)
 
     def gcframe(self, seq, translation_table=1, direction='both'):
+        """Print a pretty print tranlation in several frames."""
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
         anti = self.reverse(comp)

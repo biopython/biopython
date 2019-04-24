@@ -7,7 +7,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-
 """Update the Rebase EMBOSS files.
 
 The Rebase EMBOSS files are used by `ranacompiler.py` to build the updated
@@ -33,6 +32,7 @@ from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 
 
 class RebaseUpdate(FancyURLopener):
+    """A class to fetch the Rebase EMBOSS files."""
 
     def __init__(self, ftpproxy=''):
         """RebaseUpdate([ftpproxy]]) -> new RebaseUpdate instance.
@@ -50,6 +50,7 @@ class RebaseUpdate(FancyURLopener):
         FancyURLopener.__init__(self, proxy)
 
     def openRebase(self, name=ftp_Rebase):
+        """Connect to Rebase ftp server."""
         print('\n Please wait, trying to connect to Rebase\n')
         try:
             self.open(name)
@@ -58,6 +59,7 @@ class RebaseUpdate(FancyURLopener):
         return
 
     def getfiles(self, *files):
+        """Download Rebase files."""
         for file in self.update(*files):
             print('copying %s' % file)
             fn = os.path.basename(file)
@@ -83,6 +85,7 @@ class RebaseUpdate(FancyURLopener):
         return
 
     def localtime(self):
+        """Generate 'time stamp' of type ymm to add to Rebase file names."""
         t = time.gmtime()
         year = str(t.tm_year)[-1]
         month = str(t.tm_mon)
@@ -91,11 +94,13 @@ class RebaseUpdate(FancyURLopener):
         return year + month
 
     def update(self, *files):
+        """Update filenames to recent versions (indicated by 'time stamp')."""
         if not files:
             files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
         return [x.replace('###', self.localtime()) for x in files]
 
     def __del__(self):
+        """Close tmpcache on exiting."""
         if hasattr(self, 'tmpcache'):
             self.close()
         #
@@ -105,16 +110,20 @@ class RebaseUpdate(FancyURLopener):
 
 
 class FtpNameError(ValueError):
+    """Error class for missing user name (usually 'anonymous')."""
 
     def __init__(self, which_server):
+        """Print the error message."""
         print(" In order to connect to %s ftp server, you must provide a name.\
         \n Please edit Bio.Restriction.RanaConfig\n" % which_server)
         sys.exit()
 
 
 class ConnectionError(IOError):
+    """Error class for failing connections to Rebase ftp server."""
 
     def __init__(self, which_server):
+        """Print the error message."""
         print('\
         \n Unable to connect to the %s ftp server, make sure your computer\
         \n is connected to the internet and that you have correctly configured\

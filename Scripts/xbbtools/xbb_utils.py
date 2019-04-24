@@ -22,7 +22,10 @@ except ImportError:  # Python 3
 
 
 class NotePad(tk.Toplevel):
+    """Top level window for results (translations, BLAST searches...)."""
+
     def __init__(self, master=None):
+        """Set up notepad window."""
         tk.Toplevel.__init__(self, master)
         self.menubar = tk.Menu(self)
         self.filemenu = tk.Menu(self.menubar)
@@ -39,12 +42,15 @@ class NotePad(tk.Toplevel):
         self.yscroll.pack(side='right', fill='y')
 
     def text_id(self):
+        """Get reference to notepad window."""
         return self.tid
 
     def insert(self, start, txt):
+        """Add text to notepad window."""
         self.tid.insert(start, txt)
 
     def save(self):
+        """Save text from notepad to file."""
         file = filedialog.asksaveasfilename()
         if file:
             with open(file, 'w') as fid:

@@ -130,9 +130,10 @@ def LocalTime():
 
 
 class newenzyme(object):
-    """construct the attributes of the enzyme corresponding to 'name'."""
+    """Construct the attributes of the enzyme corresponding to 'name'."""
 
     def __init__(cls, name):
+        """Set up the enzyme's attributes."""
         cls.opt_temp = 37
         cls.inact_temp = 65
         cls.substrat = 'DNA'
@@ -355,6 +356,7 @@ Used REBASE emboss files version {} ({}).
 
 
 class DictionaryBuilder(object):
+    """Builds ``Restriction_Dictionary.py`` from Rebase files."""
 
     def __init__(self, ftp_proxy=''):
         """Initialize class.
@@ -685,6 +687,7 @@ class DictionaryBuilder(object):
                 continue
 
     def parseline(self, line):
+        """Parse a line from the Rebase emboss_e.xxx file."""
         line = [line[0]] + \
             [line[1].upper()] + [int(i) for i in line[2:9]] + \
             line[9:]
@@ -884,13 +887,12 @@ class DictionaryBuilder(object):
         return line
 
     def removestart(self, file):
-        #
-        #   remove the heading of the file.
-        #
+        """Remove the header of the file."""
         return [l for l in itertools.dropwhile(lambda l:l.startswith('#'),
                                                file)]
 
     def getblock(self, file, index):
+        """Get a data block from the emboss_r file."""
         #
         #   emboss_r.txt, separation between blocks is //
         #
@@ -901,6 +903,7 @@ class DictionaryBuilder(object):
         return block, index
 
     def get(self, block):
+        """Get name, methylation information and suppliers."""
         #
         #   take what we want from the block.
         #   Each block correspond to one enzyme.
@@ -914,6 +917,7 @@ class DictionaryBuilder(object):
         return (block[0].strip(), bl3, block[5].strip())
 
     def information_mixer(self, file1, file2, file3):
+        """Combine extracted data from the three emboss_x.xxx files."""
         #
         #   Mix all the information from the 3 files and produce a coherent
         #   restriction record.
@@ -995,6 +999,7 @@ class DictionaryBuilder(object):
 
 
 def standalone():
+    """Set up for running as main."""
     parser = optparse.OptionParser()
     add = parser.add_option
 
