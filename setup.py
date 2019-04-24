@@ -388,10 +388,10 @@ else:
     if not is_pypy():
         # Bio.trie has a problem under PyPy2 v5.6 and 5.7
         EXTENSIONS.extend([
-                Extension('Bio.trie',
-                          ['Bio/triemodule.c', 'Bio/trie.c'],
-                          include_dirs=["Bio"]),
-                ])
+            Extension('Bio.trie',
+                      ['Bio/triemodule.c', 'Bio/trie.c'],
+                      include_dirs=["Bio"]),
+            ])
 
 
 # We now define the Biopython version number in Bio/__init__.py
