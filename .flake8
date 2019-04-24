@@ -25,7 +25,9 @@ ignore =
     BLK100, # Black would make changes, only on local installations (so far)
 per-file-ignores =
     Bio/*:E122,E126,E731,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
+    /Bio/*:E122,E126,E731,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
     Tests/*:E122,E126,E731,F401,F841,D101,D102,D103,B009,B010,B011,C812
+    /Tests/*:E122,E126,E731,F401,F841,D101,D102,D103,B009,B010,B011,C812
 
 # This format is not allowed:
 # per-file-ignores =
