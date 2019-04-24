@@ -47,6 +47,8 @@ except ImportError:
 
 
 class DB_Index(object):
+    """A class to index a SwissProt/TrEMBL database file for fast retrieval."""
+
     def __init__(self, open=True):
         """Initialise.
 
@@ -56,6 +58,7 @@ class DB_Index(object):
             self.Open()
 
     def Create(self, infile, outfile):
+        """Build the database from file."""
         db = gdbm.open(outfile, 'n')
         with open(infile) as fid:
 
@@ -90,6 +93,7 @@ class DB_Index(object):
             db.close()
 
     def Open(self, indexfile=None):
+        """Open the indexed database file."""
         if not indexfile:
             indexfile = os.path.join(os.environ['PYPHY'], 'nr.dat.indexed')
 
@@ -98,9 +102,11 @@ class DB_Index(object):
         self.fid = open(self.datafile)
 
     def Close(self):
+        """Close the database."""
         self.db.close()
 
     def Get(self, id):
+        """Retrieve complete entry for given id."""
         try:
             values = self.db[id]
         except Exception:
@@ -111,6 +117,7 @@ class DB_Index(object):
         return txt
 
     def Get_Organism(self, id):
+        """Retrieve the organism species (OS)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -126,11 +133,13 @@ class DB_Index(object):
         return None
 
     def FixOS(self, os):
+        """Extract species from organism species field (OS)."""
         os = string.split(os, ',')[0]
         os = string.split(os, '(')[0]
         return string.strip(os)
 
     def Get_Taxonomy(self, id):
+        """Retrieve the organism classification (OC)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -145,6 +154,7 @@ class DB_Index(object):
         return OC
 
     def Get_Kingdom(self, id):
+        """Retrieve kingdom from OC field and return as single letter code."""
         res = self.Get_Taxonomy(id)
         # print("%s %s" % (id, res))
         if not res:
@@ -163,6 +173,7 @@ class DB_Index(object):
             return "U"
 
     def Get_Gene(self, id):
+        """Retreive the gene name (GN)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -178,6 +189,7 @@ class DB_Index(object):
         return GN
 
     def Get_OS_OC_GN(self, id):
+        """Retrieve organism species + classification and gene name."""
         entry = self.Get(id)
         if not entry:
             return None, None, None
@@ -200,6 +212,7 @@ class DB_Index(object):
         return OS, OC, GN
 
     def Get_OS_OC_OG(self, id):
+        """Retreive organism species + classification and organelle."""
         entry = self.Get(id)
         if not entry:
             return None, None, None
@@ -222,6 +235,7 @@ class DB_Index(object):
         return OS, OC, OG
 
     def Get_SQ(self, id, fasta=1):
+        """Retrieve sequence."""
         entry = self.Get(id)
         if not entry:
             return ""
@@ -241,6 +255,7 @@ class DB_Index(object):
         return SQ
 
     def Get_XX(self, id, xx):
+        """Retrieve the information with a given line code (e.g. ID, AC)."""
         entry = self.Get(id)
         if not entry:
             return ""
@@ -255,6 +270,7 @@ class DB_Index(object):
         return XX
 
     def Get_Keywords(self, id):
+        """Retrieve the keywords (KW)."""
         entry = self.Get(id)
         if not entry:
             return []
@@ -274,6 +290,7 @@ class DB_Index(object):
 
 
 def usage(exit=0):
+    """Print a short help message."""
     name = os.path.basename(sys.argv[0])
     print('Usage: %s <db> <gene ID>' % name)
     print('  or   %s --index <db.dat>' % name)
