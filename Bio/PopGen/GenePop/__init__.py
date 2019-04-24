@@ -23,7 +23,9 @@ from copy import deepcopy
 
 
 def get_indiv(line):
+    """Extract the details of the individual information on the line."""
     def int_no_zero(val):
+        """Return integer of val, or None if is zero."""
         v = int(val)
         if v == 0:
             return None
@@ -64,7 +66,8 @@ def read(handle):
             break
         record.loci_list.append(line)
     else:
-        raise ValueError('No population data found, file probably not GenePop related')
+        raise ValueError('No population data found, '
+                         'file probably not GenePop related')
     record.populations.append([])
     for line in handle:
         line = line.rstrip()

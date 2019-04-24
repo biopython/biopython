@@ -14,6 +14,8 @@ from Bio.PopGen import GenePop
 
 
 class EasyController(object):
+    """Define a class for an easier interface with the GenePop program."""
+
     def __init__(self, fname, genepop_dir=None):
         """Initialize the controller.
 
@@ -27,11 +29,14 @@ class EasyController(object):
         self.__allele_frequency = {}  # More caches like this needed!
 
     def get_basic_info(self):
+        """Obtain the population list and loci list from the file."""
         with open(self._fname) as f:
             rec = GenePop.read(f)
         return rec.pop_list, rec.loci_list
 
+    # 1.3
     def test_hw_pop(self, pop_pos, test_type="probability"):
+        """Perform Hardy-Weinberg test on the given position."""
         if test_type == "deficiency":
             hw_res = self._controller.test_pop_hz_deficiency(self._fname)
         elif test_type == "excess":
@@ -42,8 +47,10 @@ class EasyController(object):
             next(hw_res)
         return next(hw_res)
 
+    # 1.4
     def test_hw_global(self, test_type="deficiency", enum_test=True,
                        dememorization=10000, batches=20, iterations=5000):
+        """Perform Hardy-Weinberg global Heterozygote test."""
         if test_type == "deficiency":
             pop_res, loc_res, all = self._controller.test_global_hz_deficiency(
                 self._fname, enum_test, dememorization, batches, iterations)
@@ -52,8 +59,10 @@ class EasyController(object):
                 self._fname, enum_test, dememorization, batches, iterations)
         return list(pop_res), list(loc_res), all
 
+    # 2.1
     def test_ld_all_pair(self, locus1, locus2, dememorization=10000,
                          batches=20, iterations=5000):
+        """Test for linkage disequilibrium for each pair of loci in each population."""
         all_ld = self._controller.test_ld(self._fname, dememorization, batches, iterations)[1]
         for ld_case in all_ld:
             (l1, l2), result = ld_case
@@ -115,6 +124,7 @@ class EasyController(object):
                 return locus_info[1]
 
     def get_allele_frequency(self, pop_pos, locus_name):
+        """Calculate the allele frequency for a certain locus on a population."""
         if len(self.__allele_frequency) == 0:
             geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
             pop_iter, loc_iter = geno_freqs
@@ -150,12 +160,15 @@ class EasyController(object):
                 return fis, fst, fit, qintra, qinter
 
     def get_avg_fis(self):
+        """Calculate identity-base average Fis."""
         return self._controller.calc_diversities_fis_with_identity(self._fname)[1]
 
     def get_avg_fst_pair(self):
+        """Calculate Allele size-base average Fis for all population pairs."""
         return self._controller.calc_fst_pair(self._fname)[1]
 
     def get_avg_fst_pair_locus(self, locus):
+        """Calculate Allele size-base average Fis for all population pairs of the given locus."""
         if len(self.__fst_pair_locus) == 0:
             iter = self._controller.calc_fst_pair(self._fname)[0]
             for locus_info in iter:
@@ -163,6 +176,7 @@ class EasyController(object):
         return self.__fst_pair_locus[locus]
 
     def calc_ibd(self, is_diplo=True, stat="a", scale="Log", min_dist=0.00001):
+        """Calculate isolation by distance statistics for Diploid or Haploid."""
         if is_diplo:
             return self._controller.calc_ibd_diplo(self._fname, stat, scale, min_dist)
         else:
