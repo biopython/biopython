@@ -79,7 +79,27 @@ class CodonTable(object):
 
             >>> import Bio.Data.CodonTable
             >>> print(Bio.Data.CodonTable.standard_dna_table)
+            Table 1 Standard, SGC0
+            <BLANKLINE>
+              |  T      |  C      |  A      |  G      |
+            --+---------+---------+---------+---------+--
+            T | TTT F   | TCT S   | TAT Y   | TGT C   | T
+            T | TTC F   | TCC S   | TAC Y   | TGC C   | C
+            ...
+            G | GTA V   | GCA A   | GAA E   | GGA G   | A
+            G | GTG V   | GCG A   | GAG E   | GGG G   | G
+            --+---------+---------+---------+---------+--
             >>> print(Bio.Data.CodonTable.generic_by_id[1])
+            Table 1 Standard, SGC0
+            <BLANKLINE>
+              |  U      |  C      |  A      |  G      |
+            --+---------+---------+---------+---------+--
+            U | UUU F   | UCU S   | UAU Y   | UGU C   | U
+            U | UUC F   | UCC S   | UAC Y   | UGC C   | C
+            ...
+            G | GUA V   | GCA A   | GAA E   | GGA G   | A
+            G | GUG V   | GCG A   | GAG E   | GGG G   | G
+            --+---------+---------+---------+---------+--
         """
         if self.id:
             answer = "Table %i" % self.id

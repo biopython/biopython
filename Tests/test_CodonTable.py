@@ -760,6 +760,9 @@ G | GTG V   | GCG A   | GAG E   | GGG G   | G
 --+---------+---------+---------+---------+--"""
 
         self.assertEqual(output, expected_output)
+        # We need to set table.id to the correct value, otherwise
+        # following tests may fail!
+        table.id = 1
 
 
 if __name__ == "__main__":
