@@ -24,45 +24,107 @@ ignore =
     # =========================================
     BLK100, # Black would make changes, only on local installations (so far)
 per-file-ignores =
-    Bio/*:E122,E126,E731,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
+    Bio/*:E122
+          # continuation line missing indentation or outdented TODO (268 occurrences)
+          E126
+          # continuation line over-indented for hanging indent TODO  (53 occurrences)
+          E731
+          # do not assign a lambda expression, use a def TODO (28 occurrences)
+          F401
+          # module imported but unused TODO (108 occurrences)
+          F841
+          # local variable is assigned to but never used TODO (55 occurrences)
+          D101
+          # missing docstring in public class TODO (41 occurrences)
+          D102
+          # missing docstring in public method TODO (54 occurrences)
+          D103
+          # missing docstring in public function TODO (15 occurrences)
+          D105
+          # missing docstring magic method TODO (118 occurrences)
+          B009
+          # do not call getattr with a constant attribute value,
+          # it is not any safer than normal property access
+          B010
+          # do not call setattr with a constant attribute value,
+          # it is not any safer than normal property access
+          B011
+          # do not call assert False since python -O removes these calls;
+          # instead callers should raise AssertionError().
+          C812
+          # missing trailing comma
+          C815
+          # missing trailing comma in Python 3.5+
+    Tests/*:E122
+            # continuation line missing indentation or outdented TODO (48 occurrences)
+            E126
+            # continuation line over-indented for hanging indent TODO (41 occurrences)
+            E731
+            # do not assign a lambda expression, use a def,
+            # we want deliberately ignore this in tests (37 occurrences)
+            F401
+            # module imported but unused TODO (90 occurrences)
+            F841
+            # local variable is assigned to but never used TODO? (68 occurrences)
+            D101
+            # missing docstring in public class (220 occurrences)
+            D102
+            # missing docstring in public method (986 occurrences)
+            D103
+            # missing docstring in public functions TODO (50 occurrences)
+            B009
+            # do not call getattr with a constant attribute value,
+            # it is not any safer than normal property access
+            B010
+            # do not call setattr with a constant attribute value,
+            # it is not any safer than normal property access
+            B011
+            # do not call assert False since python -O removes these calls;
+            # instead callers should raise AssertionError()
+            C812
+            # missing trailing comma
+            
+    # Due to a bug in flake8(?), we need the following lines for running the
+    # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:E122,E126,E731,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
-    Tests/*:E122,E126,E731,F401,F841,D101,D102,D103,B009,B010,B011,C812
     /Tests/*:E122,E126,E731,F401,F841,D101,D102,D103,B009,B010,B011,C812
 
-# This format is not allowed:
-# per-file-ignores =
-#    /Bio/*:E122, # continuation line missing indentation or outdented TODO (271 occurrences)
-#           E126, # continuation line over-indented for hanging indent TODO  (53 occurrences)
-#           E731, # do not assign a lambda expression, use a def TODO (28 occurrences)
-#           F401, # module imported but unused TODO (90 occurrences)
-#           F841, # local variable is assigned to but never used TODO (55 occurrences)
-#           D101, # missing docstring in public class TODO (43 occurrences)
-#           D102, # missing docstring in public method TODO (81 occurrences)
-#           D103, # missing docstring in public function TODO (17 occurrences)
-#           D105, # missing docstring magic method TODO (116 occurrences)
-#           B009, # do not call getattr with a constant attribute value,
-#                 # it is not any safer than normal property access
-#           B010, # do not call setattr with a constant attribute value,
-#                 # it is not any safer than normal property access
-#           B011, # Do not call assert False since python -O removes these calls;
-#                 # instead callers should raise AssertionError().
-#           C812, # missing trailing comma
-#           C815  # missing trailing comma in Python 3.5+
-#    /Tests/*:E122, # continuation line missing indentation or outdented TODO (48 occurrences)
-#             E126, # continuation line over-indented for hanging indent TODO (41 occurrences)
-#             E731, # do not assign a lambda expression, use a def, we want deliberately ignore this in tests
-#             F401, # module imported but unused TODO (76 occurrences)
-#             F841, # local variable is assigned to but never used TODO? (68 occurrences)
-#             D101, # missing docstring in public class (220 occurrences)
-#             D102, # missing docstring in public method (976 occurrences)
-#             D103, # missing docstring in public functions TODO (50 occurrences)
-#             B009, # do not call getattr with a constant attribute value,
-#                   # it is not any safer than normal property access
-#             B010, # do not call setattr with a constant attribute value,
-#                   # it is not any safer than normal property access
-#             B011, # Do not call assert False since python -O removes these calls;
-#                   # instead callers should raise AssertionError()
-#             C812  # missing trailing comma
+#=============================
+# per-file-ignores error codes
+==============================
+#Bio/*:E122 continuation line missing indentation or outdented TODO (268 occurrences)
+#      E126 continuation line over-indented for hanging indent TODO  (53 occurrences)
+#      E731 do not assign a lambda expression, use a def TODO (28 occurrences)
+#      F401 module imported but unused TODO (108 occurrences)
+#      F841 local variable is assigned to but never used TODO (55 occurrences)
+#      D101 missing docstring in public class TODO (41 occurrences)
+#      D102 missing docstring in public method TODO (54 occurrences)
+#      D103 missing docstring in public function TODO (15 occurrences)
+#      D105 missing docstring magic method TODO (118 occurrences)
+#      B009 do not call getattr with a constant attribute value,
+#            it is not any safer than normal property access
+#      B010 do not call setattr with a constant attribute value,
+#            it is not any safer than normal property access
+#      B011 do not call assert False since python -O removes these calls;
+#            instead callers should raise AssertionError().
+#      C812 missing trailing comma
+#      C815  missing trailing comma in Python 3.5+
+#Tests/*:E122 continuation line missing indentation or outdented TODO (48 occurrences)
+#        E126 continuation line over-indented for hanging indent TODO (41 occurrences)
+#        E731 do not assign a lambda expression, use a def,
+#              we want deliberately ignore this in tests (37 occurrences)
+#        F401 module imported but unused TODO (90 occurrences)
+#        F841 local variable is assigned to but never used TODO? (68 occurrences)
+#        D101 missing docstring in public class (220 occurrences)
+#        D102 missing docstring in public method (986 occurrences)
+#        D103 missing docstring in public functions TODO (50 occurrences)
+#        B009 do not call getattr with a constant attribute value,
+#             it is not any safer than normal property access
+#        B010 do not call setattr with a constant attribute value,
+#             it is not any safer than normal property access
+#        B011 do not call assert False since python -O removes these calls;
+#             instead callers should raise AssertionError()
+#        C812 missing trailing comma
 
 # =================================================
 # flake: E###, F###, W###
