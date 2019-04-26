@@ -129,7 +129,7 @@ def _check_source_tree():
             # Could raise a warning here?
             return  # setup.py is present, but not biopython format
 
-    # Outside of source tree with biopython setup.py file
+    # biopython setup.py file present in parent directory
     warnings.warn("You may be importing Bio/ from inside the source tree."
                   " This is bad practise and might lead to downstream issues."
                   " In particular, you might encounter ImportErrors due to"
