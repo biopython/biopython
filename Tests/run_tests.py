@@ -21,6 +21,7 @@ Command line options::
                      The .py file extension is optional.
     doctest       -- run the docstring tests.
 
+<test_name> and doctest, if supplied, must come after the other options.
 By default, all tests are run.
 """
 
@@ -83,8 +84,6 @@ VERBOSITY = 0
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
     'Bio.AlignIO.MauveIO',
-    'Bio.ExPASy',
-    'Bio.ExPASy.cellosaurus',
     'Bio.File',
     'Bio.Medline',
     'Bio.motifs.jaspar.db',
@@ -112,13 +111,16 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.SubsMat',
     'Bio.SubsMat.FreqTable',
     'BioSQL.BioSeqDatabase',
+    'Bio.TogoWS',
 ]
 
 # Exclude modules with online activity
-EXCLUDE_DOCTEST_MODULES.extend([
+# They are not excluded by default, use --offline to exclude them
+ONLINE_DOCTEST_MODULES = [
     'Bio.Entrez',
+    'Bio.ExPASy',
     'Bio.TogoWS',
-    ])
+    ]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
@@ -270,6 +272,7 @@ def main(argv):
             return 0
         if opt == "--offline":
             print("Skipping any tests requiring internet access")
+            EXCLUDE_DOCTEST_MODULES.extend(ONLINE_DOCTEST_MODULES)
             # This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
