@@ -116,9 +116,26 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     pass
 
 
-_parent_dir = os.path.dirname(os.path.dirname(__file__))
-if os.path.exists(os.path.join(_parent_dir, "setup.py")):
+def _check_source_tree():
+    _setup_file = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                               "setup.py")
+
+    if not os.path.exists(_setup_file):
+        return  # No setup.py file- outside source tree
+
+    first_line = '"""setuptools based setup script for Biopython.'
+    with open(_setup_file) as in_f:
+        if not next(in_f).strip() == first_line:
+            # Could raise a warning here?
+            return  # setup.py is present, but not biopython format
+
+    # Outside of source tree with biopython setup.py file
     warnings.warn("You may be importing Bio/ from inside the source tree."
                   " This is bad practise and might lead to downstream issues."
-                  " Try running your code from outside the source tree.",
+                  " In particular, you might encounter ImportErrors due to"
+                  " missing compiled C extensions. We recommend that you"
+                  " try running your code from outside the source tree.",
                   BiopythonWarning)
+
+
+_check_source_tree()
