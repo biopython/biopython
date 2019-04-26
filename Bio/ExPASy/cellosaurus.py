@@ -18,9 +18,21 @@ Classes:
 
 Examples
 --------
->>> from Bio.ExPASy import cellosaurus
->>> handle = open("cellosaurus.txt")
->>> records = cellosaurus.parse(handle)
+You need to download the Cellosaurus database for this examples to
+run, e.g. from ftp://ftp.expasy.org/databases/cellosaurus/cellosaurus.txt
+
+    >> from Bio.ExPASy import cellosaurus
+    >> with open('cellosaurus.txt') as handle:
+    ...    records = cellosaurus.parse(handle)
+    ...    for record in records:
+    ...        if 'Homo sapiens' in record['OX'][0]:
+    ...            print(record['ID'])
+    ...
+    #15310-LN
+    #W7079
+    (L)PC6
+    00136
+    ...
 
 """
 
