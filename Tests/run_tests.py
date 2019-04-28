@@ -84,7 +84,6 @@ VERBOSITY = 0
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
     'Bio.AlignIO.MauveIO',
-    'Bio.File',
     'Bio.Medline',
     'Bio.motifs.jaspar.db',
     'Bio.motifs.mast',
