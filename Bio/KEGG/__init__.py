@@ -18,12 +18,23 @@ KEGG_ITEM_LENGTH = 12
 KEGG_LINE_LENGTH = 80
 KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH
 
-# wrap rule = [indent, connect, (splitstr, connect, splitafter, keep), ...]
-_default_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
+
+def _default_wrap(indent):
+    """Return default wrap rule for _wrap_kegg (PRIVATE).
+
+    A wrap rule is a list with the following elements:
+    [indent, connect, (splitstr, connect, splitafter, keep), ...]
+    """
+    return [indent, "", (" ", "", 1, 0)]
+
+
+def _struct_wrap(indent):
+    """Return wrap rule for KEGG STRUCTURE (PRIVATE)."""
+    return [indent, "", ("  ", "", 1, 1)]
 
 
 def _wrap_kegg(line, max_width=KEGG_DATA_LENGTH, wrap_rule=_default_wrap):
-    """Wrap the input line  for KEGG output (PRIVATE).
+    """Wrap the input line for KEGG output (PRIVATE).
 
     Arguments:
      - info - String holding the information we want wrapped

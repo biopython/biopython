@@ -20,6 +20,7 @@ from Bio.Pathway import Reaction
 
 
 def parse(handle):
+    """Parse a KEGG pathway map."""
     for line in handle:
         data, catalysts, reaction = line.split(":")
         catalysts = [(catalysts,)]
