@@ -13,6 +13,8 @@ from Bio._py3k import basestring
 
 
 class NexusError(Exception):
+    """Provision for the management of Nexus exceptions."""
+
     pass
 
 

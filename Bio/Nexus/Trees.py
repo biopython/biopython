@@ -8,7 +8,7 @@
 
 Provides a set of methods to read and write newick-format tree descriptions,
 get information about trees (monphyly of taxon sets, congruence between trees,
-common ancestors,...) and to manipulate trees (reroot trees, split terminal
+common ancestors,...) and to manipulate trees (re-root trees, split terminal
 nodes).
 """
 
@@ -26,6 +26,8 @@ NODECOMMENT_END = ']'
 
 
 class TreeError(Exception):
+    """Provision for the management of Tree exceptions."""
+
     pass
 
 
@@ -679,7 +681,7 @@ class Tree(Nodes.Chain):
             self.unrooted.append(newbranch)
 
     def root_with_outgroup(self, outgroup=None):
-
+        """Define a tree's root with a reference group outgroup."""
         def _connect_subtree(parent, child):
             """Attach subtree starting with node child to parent (PRIVATE)."""
             for i, branch in enumerate(self.unrooted):
