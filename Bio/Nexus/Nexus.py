@@ -48,7 +48,7 @@ DEFAULTNEXUS = '#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=d
 
 
 class NexusError(Exception):
-    """Provision for the management of exceptions."""
+    """Provision for the management of Nexus exceptions."""
 
     pass
 
