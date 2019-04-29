@@ -15,8 +15,7 @@ Classes:
 
 from __future__ import print_function
 
-from Bio.KEGG import _write_kegg
-from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
@@ -28,8 +27,8 @@ rxn_wrap = [0, "",
 name_wrap = [0, "",
              (" ", "$", 1, 1),
              ("-", "$", 1, 1)]
-id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
-struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
+id_wrap = _default_wrap
+struct_wrap = _struct_wrap
 
 
 class Record(object):
