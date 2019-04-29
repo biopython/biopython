@@ -200,7 +200,7 @@ class StepMatrix(object):
         self.data[x + y] += value
 
     def sum(self):
-        """Calculate the associations matrix."""
+        """Calculate the associations, makes matrix of associations."""
         return reduce(lambda x, y: x + y, self.data.values())
 
     def transformation(self):
