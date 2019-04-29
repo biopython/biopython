@@ -22,7 +22,7 @@ class ChainException(Exception):
 
 class NodeException(Exception):
     """Provision for the management of Node exceptions."""
-    
+
     pass
 
 
