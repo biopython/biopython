@@ -83,7 +83,6 @@ VERBOSITY = 0
 # Following modules have historic failures. If you fix one of these
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-    'Bio.Medline',
     'Bio.motifs.jaspar.db',
     'Bio.motifs.mast',
     'Bio.motifs.meme',

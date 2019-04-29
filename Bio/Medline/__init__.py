@@ -109,14 +109,18 @@ def parse(handle):
 
     Typical usage::
 
-        from Bio import Medline
-        with open("mymedlinefile") as handle:
-            records = Medline.parse(handle)
-            for record in records:
-                print(record['TI'])
+        >>> from Bio import Medline
+        >>> with open("Medline/pubmed_result2.txt") as handle:
+        ...     records = Medline.parse(handle)
+        ...     for record in records:
+        ...         print(record['TI'])
+        ...
+        A high level interface to SCOP and ASTRAL ...
+        GenomeDiagram: a python package for the visualization of ...
+        Open source clustering software.
+        PDB file parser and structure class implemented in Python.
 
     """
-    # TODO - Turn that into a working doctest
     # These keys point to string values
     textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
                 "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
@@ -162,11 +166,12 @@ def read(handle):
     Typical usage:
 
         >>> from Bio import Medline
-        >>> with open("mymedlinefile") as handle:
+        >>> with open("Medline/pubmed_result1.txt") as handle:
         ...     record = Medline.read(handle)
         ...     print(record['TI'])
+        ...
+        The Bio* toolkits--a brief overview.
 
     """
-    # TODO - Turn that into a working doctest
     records = parse(handle)
     return next(records)
