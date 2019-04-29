@@ -46,27 +46,34 @@ This is a multiple sequence alignment with multiple aligned sections, so you
 would probably load this using the Bio.AlignIO.parse() function:
 
     >>> from Bio import AlignIO
-    >>> align = AlignIO.parse("Mauve/simple.xmfa", "mauve")
+    >>> align = AlignIO.parse("Mauve/simple_short.xmfa", "mauve")
     >>> alignments = list(align)
     >>> for aln in alignments:
-    ...     print(align)
+    ...     print(aln)
+    ...
     SingleLetterAlphabet() alignment with 3 rows and 240 columns
-    --------------------------------------------...--- 1
-    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG 2
-    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT 3
-    SingleLetterAlphabet() alignment with 3 rows and 46 columns
-    ---------------------------------------------- 1
-    -----------------------GGGCGAACGTATAAACCATTCTG 2
-    TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT 3
+    --------------------------------------------...--- a.fa
+    TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG b.fa/5416-5968
+    TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT c.fa/9475-10076
+    SingleLetterAlphabet() alignment with 2 rows and 46 columns
+    -----------------------GGGCGAACGTATAAACCATTCTG b.fa/5968-6015
+    TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT c.fa/9428-9476
 
 Additional information is extracted from the XMFA file and available through
 the annotation attribute of each record::
 
     >>> for record in alignments[0]:
-    ...   print record.id, len(record), record.annotations
-    1 240 {'start': 0, 'end': 0, 'strand': 1}
-    2 240 {'start': 5417, 'end': 5968, 'strand': 1}
-    3 240 {'start': 9476, 'end': 10076, 'strand': -1}
+    ...     print(record.id, len(record))
+    ...     print("  start: %d, end: %d, strand: %d" %(
+    ...         record.annotations['start'], record.annotations['end'],
+    ...         record.annotations['strand']))
+    ...
+    a.fa 240
+      start: 0, end: 0, strand: 1
+    b.fa/5416-5968 240
+      start: 5416, end: 5968, strand: 1
+    c.fa/9475-10076 240
+      start: 9475, end: 10076, strand: -1
 
 """
 
