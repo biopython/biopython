@@ -14,6 +14,9 @@
 # - test - the actual functional tests which are slow
 
 dist: xenial
+services:
+  - mysql
+  - postgresql
 language: python
 cache: pip
 matrix:
@@ -21,6 +24,7 @@ matrix:
     - stage: basics
       python: 2.7
       env: TOXENV=style
+      services:
       addons:
         apt:
           packages:
@@ -28,12 +32,14 @@ matrix:
     - stage: basics
       python: 3.7
       env: TOXENV=style
+      services:
       addons:
         apt:
           packages:
       before_install: echo "Going to run basic checks"
     - stage: basics
       env: TOXENV=sdist,bdist_wheel
+      services:
       addons:
         apt:
           packages:
@@ -41,6 +47,7 @@ matrix:
     - stage: test
       python: 2.7
       env: TOXENV=api
+      services:
       addons:
         apt:
           packages:
