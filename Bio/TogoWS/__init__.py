@@ -192,7 +192,7 @@ def search_iter(db, query, limit=None, batch=100):
     >>> from Bio import TogoWS
     >>> for id in TogoWS.search_iter("pubmed", "diabetes+human", limit=10):
     ...     print("PubMed ID: %s" %id) # maybe fetch data with entry?
-    PubMed ID: 27374092
+    PubMed ID: ...
 
     Internally this first calls the Bio.TogoWS.search_count() and then
     uses Bio.TogoWS.search() to get the results in batches.
