@@ -191,8 +191,8 @@ def search_iter(db, query, limit=None, batch=100):
     You would use this function within a for loop, e.g.
     >>> from Bio import TogoWS
     >>> for id in TogoWS.search_iter("pubmed", "diabetes+human", limit=10):
-    ...     print(id) # maybe fetch data with entry?
-    27374092
+    ...     print("PubMed ID: %s" %id) # maybe fetch data with entry?
+    PubMed ID: 27374092
 
     Internally this first calls the Bio.TogoWS.search_count() and then
     uses Bio.TogoWS.search() to get the results in batches.
