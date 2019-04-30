@@ -111,7 +111,6 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.SubsMat',
     'Bio.SubsMat.FreqTable',
     'BioSQL.BioSeqDatabase',
-    'Bio.TogoWS',
 ]
 
 # Exclude modules with online activity
