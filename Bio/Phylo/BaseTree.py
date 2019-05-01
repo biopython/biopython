@@ -280,11 +280,12 @@ class TreeMixin(object):
         except KeyError:
             raise ValueError("Invalid order '%s'; must be one of: %s"
                              % (order, tuple(order_opts)))
+
         if follow_attrs:
             get_children = _sorted_attrs
             root = self
         else:
-            get_children = lambda elem: elem.clades
+            get_children = lambda elem: elem.clades  # noqa: E731
             root = self.root
         return filter(filter_func, order_func(root, get_children))
 
@@ -464,9 +465,9 @@ class TreeMixin(object):
 
         """
         if unit_branch_lengths:
-            depth_of = lambda c: 1
+            depth_of = lambda c: 1  # noqa: E731
         else:
-            depth_of = lambda c: c.branch_length or 0
+            depth_of = lambda c: c.branch_length or 0  # noqa: E731
         depths = {}
 
         def update_depths(node, curr_depth):
