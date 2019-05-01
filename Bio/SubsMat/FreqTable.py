@@ -8,17 +8,17 @@ Example files for a DNA alphabet:
 
 A count file (whitespace separated):
 
-A  50
-C  37
-G  23
-T  58
+- A  50
+- C  37
+- G  23
+- T  58
 
 The same info as a frequency file:
 
-A 0.2976
-C 0.2202
-G 0.1369
-T 0.3452
+- A 0.2976
+- C 0.2202
+- G 0.1369
+- T 0.3452
 
 Functions:
   read_count(f): read a count file from stream f. Then convert to
@@ -40,12 +40,11 @@ Attributes:
 Example of use:
     >>> import io
     >>> from Bio.SubsMat import FreqTable
-    >>> f_count = io.StringIO("A  50\nC  37\nG  23\nT  58")
+    >>> f_count = io.StringIO(u"A  50\nC  37\nG  23\nT  58")
     >>> ftab = FreqTable.read_count(f_count)
-    >>> nucleobases = list(ftab.keys())
-    >>> nucleobases.sort()
-    >>> for nb in nucleobases:
+    >>> for nb in sorted(ftab):
     ...     print("%s %0.4f" %(nb, ftab[nb]))
+    ...
     A 0.2976
     C 0.2202
     G 0.1369
