@@ -2,7 +2,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 # Copyright Iddo Friedberg idoerg@cc.huji.ac.il
-"""A class to handle frequency tables or letter count files.
+r"""A class to handle frequency tables or letter count files.
 
 Example files for a DNA alphabet:
 
@@ -38,10 +38,18 @@ Attributes:
   count: count dictionary. Empty if no counts are provided.
 
 Example of use:
-  >>> from SubsMat import FreqTable
-  >>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
-  >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
-  >>> ftab = FreqTable.read_count(open('myDNACountFile'))
+    >>> import io
+    >>> from Bio.SubsMat import FreqTable
+    >>> f_count = io.StringIO("A  50\nC  37\nG  23\nT  58")
+    >>> ftab = FreqTable.read_count(f_count)
+    >>> nucleobases = list(ftab.keys())
+    >>> nucleobases.sort()
+    >>> for nb in nucleobases:
+    ...     print("%s %0.4f" %(nb, ftab[nb]))
+    A 0.2976
+    C 0.2202
+    G 0.1369
+    T 0.3452
 
 """
 
