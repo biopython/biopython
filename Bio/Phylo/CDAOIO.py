@@ -9,7 +9,7 @@
 """I/O function wrappers for the RDF/CDAO file format.
 
 This is an RDF format that conforms to the Comparative Data Analysis Ontology (CDAO).
-See: http://www.evolutionaryontology.org/cdao
+See: http://evolutionaryontology.org/cdao
 
 This module requires the librdf Python bindings (http://www.librdf.org)
 
@@ -19,13 +19,15 @@ the CDAOIO.Writer can store triples in a triple store instead of serializing
 them to a file.
 """
 
+import os
+
 from Bio._py3k import StringIO
 
 from Bio import MissingPythonDependencyError
 
 from Bio.Phylo import CDAO
-from ._cdao_owl import cdao_elements, cdao_namespaces, resolve_uri
-import os
+from ._cdao_owl import cdao_namespaces, resolve_uri
+# import of cdao_elements from ._cdao_owl removed in Biopython 1.74
 
 
 class CDAOError(Exception):
@@ -329,8 +331,14 @@ class Writer(object):
         else:
             clade.ancestors = []
 
-        nUri = lambda s: rdflib.URIRef(s)
-        pUri = lambda s: rdflib.URIRef(qUri(s))
+        def nUri(s):
+            # nUri = lambda s: rdflib.URIRef(s)
+            return rdflib.URIRef(s)
+
+        def pUri(s):
+            # pUri = lambda s: rdflib.URIRef(qUri(s))
+            return rdflib.URIRef(qUri(s))
+
         tree_id = nUri('')
 
         statements = []
