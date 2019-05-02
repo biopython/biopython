@@ -41,9 +41,9 @@ def _make_triplets(seq, phase=0):
     >>> from Bio.SearchIO.ExonerateIO._base import _make_triplets
     >>> _make_triplets('GlyThrSerAlaPro')
     ('', ['Gly', 'Thr', 'Ser', 'Ala', 'Pro'], '')
-    >>> _make_triplets('yThSerAla', phase=1)
+    >>> _make_triplets('yThrSerAla', phase=1)
     ('y', ['Thr', 'Ser', 'Ala'], '')
-    >>> _make_triplets('yThSerAlaPr', phase=1)
+    >>> _make_triplets('yThrSerAlaPr', phase=1)
     ('y', ['Thr', 'Ser', 'Ala'], 'Pr')
 
     """
@@ -70,7 +70,7 @@ def _get_fragments_coord(frags):
     >>> _get_fragments_coord(['Thr', 'Ser', 'Ala'])
     [0, 3, 6]
     >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu'])
-    [0, 3, 12, ]
+    [0, 3, 12]
     >>> _get_fragments_coord(['Thr', 'SerAlaPro', 'GlyLeu', 'Cys'])
     [0, 3, 12, 18]
 
