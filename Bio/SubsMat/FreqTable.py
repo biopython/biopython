@@ -99,7 +99,7 @@ def read_count(f):
 
 
 def read_freq(f):
-    """Read a frequency data file f and load values to the Frequency Table"""
+    """Read a frequency data file f and load values to the Frequency Table."""
     freq_dict = {}
     for line in f:
         key, value = line.strip().split()
