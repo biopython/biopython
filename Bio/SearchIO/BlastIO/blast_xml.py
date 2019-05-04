@@ -214,8 +214,9 @@ def _extract_ids_and_descs(raw_id, raw_desc):
                      for x in re.split(_RE_ID_DESC_PAIRS_PATTERN, id_desc_line)]
     # make sure empty descriptions are added as empty strings
     # also, we return lists for compatibility reasons between Py2 and Py3
-    add_descs = lambda x: x if len(x) == 2 else x + [""]
-    for pair in (add_descs(p) for p in id_desc_pairs):
+    for pair in id_desc_pairs:
+        if len(pair) != 2:
+            pair.append("")
         ids.append(pair[0])
         descs.append(pair[1])
 
