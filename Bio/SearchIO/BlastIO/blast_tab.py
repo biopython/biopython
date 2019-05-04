@@ -158,47 +158,36 @@ def _compute_gapopen_num(hsp):
 
 def _augment_blast_hsp(hsp, attr):
     """Calculate the given HSP attribute, for writing (PRIVATE)."""
-    if attr == 'aln_span':
-        # aln_span is number of identical matches + mismatches + gaps
-        func = lambda hsp: hsp.ident_num + hsp.mismatch_num + hsp.gap_num
-    # ident and gap will require the num values to be computed first
-    elif attr.startswith('ident'):
-        func = lambda hsp: hsp.aln_span - hsp.mismatch_num - hsp.gap_num
-    elif attr.startswith('gap'):
-        func = lambda hsp: hsp.aln_span - hsp.ident_num - hsp.mismatch_num
-    elif attr == 'mismatch_num':
-        func = lambda hsp: hsp.aln_span - hsp.ident_num - hsp.gap_num
-    elif attr == 'gapopen_num':
-        if not hasattr(hsp, 'query') or not hasattr(hsp, 'hit'):
-            # mock function so that the except clause below is triggered
-            # as both the query and hit are required to compute gapopen
-            def mock(hsp):
-                raise AttributeError
-            func = mock
-        else:
-            func = _compute_gapopen_num
 
-    # set the num values
-    # requires the endswith check, since we only want to set 'num' or 'span'
-    # attributes here
     if not hasattr(hsp, attr) and not attr.endswith('_pct'):
-        value = func(hsp)
-        setattr(hsp, attr, value)
+
+        # aln_span is number of identical matches + mismatches + gaps
+        if attr == 'aln_span':
+            hsp.aln_span = hsp.ident_num + hsp.mismatch_num + hsp.gap_num
+
+        # ident and gap requires the num values to be computed first
+        elif attr.startswith('ident'):
+            setattr(hsp, attr, hsp.aln_span - hsp.mismatch_num - hsp.gap_num)
+        elif attr.startswith('gap'):
+            setattr(hsp, attr, hsp.aln_span - hsp.ident_num - hsp.mismatch_num)
+
+        elif attr == 'mismatch_num':
+            hsp.mistmatch_num = hsp.aln_span - hsp.ident_num - hsp.gap_num
+
+        elif attr == 'gapopen_num':
+            if not hasattr(hsp, 'query') or not hasattr(hsp, 'hit'):
+                raise AttributeError
+            hsp.gapopen_num = _compute_gapopen_num(hsp)
 
     # if the attr is a percent value, calculate it
     if attr == 'ident_pct':
-        func2 = lambda hsp: hsp.ident_num / float(hsp.aln_span) * 100
-    elif attr == 'pos_pct':
-        func = lambda hsp: hsp.pos_num / float(hsp.aln_span) * 100
-    elif attr == 'gap_pct':
-        func2 = lambda hsp: hsp.gap_num / float(hsp.aln_span) * 100
-    else:
-        func2 = None
+        hsp.ident_pct = hsp.ident_num / float(hsp.aln_span) * 100
 
-    # set the pct values
-    if func2 is not None:
-        value = func2(hsp)
-        setattr(hsp, attr, value)
+    elif attr == 'pos_pct':
+        hsp.pos_pct = hsp.pos_num / float(hsp.aln_span) * 100
+
+    elif attr == 'gap_pct':
+        hsp.gap_pct = hsp.gap_num / float(hsp.aln_span) * 100
 
 
 class BlastTabParser(object):
