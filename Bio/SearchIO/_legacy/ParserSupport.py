@@ -115,9 +115,9 @@ class TaggingConsumer(AbstractConsumer):
 
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
-            method = lambda a=attr, s=self: s._print_name(a)
+            method = lambda a=attr, s=self: s._print_name(a)  # noqa: E731
         else:
-            method = lambda x, a=attr, s=self: s._print_name(a, x)
+            method = lambda x, a=attr, s=self: s._print_name(a, x)  # noqa: E731
         return method
 
 
