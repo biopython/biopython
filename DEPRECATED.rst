@@ -47,6 +47,15 @@ Jython
 Biopython is mostly working under Jython 2.7.0, but support for Jython
 is deprecated as of Release 1.70.
 
+Bio.Alphabet
+============
+Declared obsolete in Biopython 1.74, please avoid using this module
+explicitly in your code.
+
+The design of Bio.Aphabet included a number of historic design choices
+which, with the benefit of hindsight, were regretable. While the details
+remain to be agreed, we intend to remove or replace Bio.Alphabet in 2020.
+
 Bio.ExPASy.sprot_search_ful and ExPASy.sprot_search_de
 ======================================================
 These two functions were labelled as broken in Release 1.70, and removed in
