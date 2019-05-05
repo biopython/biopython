@@ -2,46 +2,53 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 # Copyright Iddo Friedberg idoerg@cc.huji.ac.il
-"""A class to handle frequency tables or letter count files.
+r"""A class to handle frequency tables or letter count files.
 
 Example files for a DNA alphabet:
 
-A count file (whitespace separated):
+A count file (whitespace separated)::
 
-A  50
-C  37
-G  23
-T  58
+ A  50
+ C  37
+ G  23
+ T  58
 
-The same info as a frequency file:
+The same info as a frequency file::
 
-A 0.2976
-C 0.2202
-G 0.1369
-T 0.3452
+ A 0.2976
+ C 0.2202
+ G 0.1369
+ T 0.3452
 
 Functions:
-  read_count(f): read a count file from stream f. Then convert to
-  frequencies
-  read_freq(f): read a frequency data file from stream f. Of course, we then
-  don't have the counts, but it is usually the letter frquencies which are
-  interesting.
+  :read_count(f): read a count file from stream f. Then convert to
+                  frequencies.
+  :read_freq(f): read a frequency data file from stream f. Of course, we then
+                 don't have the counts, but it is usually the letter frequencies
+                 which are interesting.
 
 Methods:
   (all internal)
 
 Attributes:
-  alphabet: The IUPAC alphabet set (or any other) whose letters you are
-  using. Common sets are: IUPAC.protein (20-letter protein),
-  IUPAC.unambiguous_dna (4-letter DNA). See Bio/alphabet for more.
-  data: frequency dictionary.
-  count: count dictionary. Empty if no counts are provided.
+  :alphabet: The IUPAC alphabet set (or any other) whose letters you are using.
+             Common sets are: ``IUPAC.protein`` (20-letter protein), ``IUPAC.unambiguous_dna``
+             (4-letter DNA). See ``Bio.Alphabet`` for more.
+  :data: Frequency dictionary.
+  :count: Count dictionary. Empty if no counts are provided.
 
 Example of use:
-  >>> from SubsMat import FreqTable
-  >>> ftab = FreqTable.FreqTable(my_frequency_dictionary,FreqTable.FREQ)
-  >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
-  >>> ftab = FreqTable.read_count(open('myDNACountFile'))
+    >>> import io
+    >>> from Bio.SubsMat import FreqTable
+    >>> f_count = io.StringIO(u"A  50\nC  37\nG  23\nT  58")
+    >>> ftab = FreqTable.read_count(f_count)
+    >>> for nb in sorted(ftab):
+    ...     print("%s %0.4f" %(nb, ftab[nb]))
+    ...
+    A 0.2976
+    C 0.2202
+    G 0.1369
+    T 0.3452
 
 """
 
@@ -51,13 +58,16 @@ FREQ = 2
 
 
 class FreqTable(dict):
+    """Define class to handle frequency tables or letter count files."""
 
     def _freq_from_count(self):
+        """Calculate frequency from count values (PRIVATE)."""
         total = float(sum(self.count.values()))
         for i, v in self.count.items():
             self[i] = v / total
 
     def _alphabet_from_input(self):
+        """Order the alphabet (PRIVATE)."""
         s = ''
         for i in sorted(self):
             s += i
@@ -80,6 +90,7 @@ class FreqTable(dict):
 
 
 def read_count(f):
+    """Read a count file f and load values to the Frequency Table."""
     count = {}
     for line in f:
         key, value = line.strip().split()
@@ -88,6 +99,7 @@ def read_count(f):
 
 
 def read_freq(f):
+    """Read a frequency data file f and load values to the Frequency Table."""
     freq_dict = {}
     for line in f:
         key, value = line.strip().split()

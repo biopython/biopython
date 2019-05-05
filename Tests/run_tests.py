@@ -104,8 +104,6 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.Phylo._io',
     'Bio.Phylo.TreeConstruction',
     'Bio.Phylo._utils',
-    'Bio.SubsMat',
-    'Bio.SubsMat.FreqTable',
     'BioSQL.BioSeqDatabase',
     'Bio.TogoWS',
 ]
