@@ -6,10 +6,24 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Alphabets used in Seq objects etc to declare sequence type and letters.
+"""Alphabets used in Seq objects etc to declare sequence type and letters (OBSOLETE).
 
 This is used by sequences which contain a finite number of similar words.
+
+The design of Bio.Aphabet included a number of historic design choices
+which, with the benefit of hindsight, were regretable. While the details
+remain to be agreed, we intend to remove or replace Bio.Alphabet in 2020.
+Please avoid using this module explicitly in your code. See also:
+https://github.com/biopython/biopython/issues/2046
 """
+
+import warnings
+
+warnings.warn("We intend to remove or replace Bio.Alphabet in 2020, "
+              "ideally avoid using it explicitly in your code. Please "
+              "get in touch if you will be adversely affected by this. "
+              "https://github.com/biopython/biopython/issues/2046",
+              PendingDeprecationWarning)
 
 
 class Alphabet(object):
