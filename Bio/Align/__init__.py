@@ -19,17 +19,11 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import Alphabet
 
-try:
-    from Bio.Align import _aligners
-except ImportError as e:
-    new_exc = ImportError("{}: you are possibly missing a compiled "
-                          "'_aligners.c' file (_aligners.pyd or _aligners.so);"
-                          " have you installed from source? Are you trying to "
-                          "import from within the Biopython source directory? "
-                          "Try running your code from outside the source tree".
-                          format(e))
-    new_exc.__cause__ = None
-    raise new_exc
+from Bio.Align import _aligners
+# Import errors may occur here if a compiled aligners.c file
+# (_aligners.pyd or _aligners.so) is missing or if the user is
+# importing from within the Biopython source tree, see PR #2007:
+# https://github.com/biopython/biopython/pull/2007
 
 
 class MultipleSeqAlignment(object):
