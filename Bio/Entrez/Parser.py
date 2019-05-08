@@ -212,20 +212,22 @@ class ErrorConsumer(Consumer):
 
 class StringConsumer(Consumer):
 
-    consumable = set()
-
-    def __init__(self, name, attrs):
+    def __init__(self, name, attrs, consumable=set()):
         """Create a Consumer for plain text elements in the XML data."""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
+        self.consumable = consumable
+        self.consumable = []
 
     def startElementHandler(self, name, attrs, prefix=None):
         if prefix:
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        if key in self.consumable:
+        # if key in self.consumable: # FIXME
+        self.consumable.append(key)
+        if True:
             tag = "<%s" % name
             for key, value in attrs.items():
                 tag += ' %s="%s"' % (key, value)
@@ -239,7 +241,9 @@ class StringConsumer(Consumer):
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        if key in self.consumable:
+        # if key in self.consumable: # FIXME
+        if self.consumable:
+            assert key == self.consumable.pop()
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -287,15 +291,14 @@ class IntegerConsumer(Consumer):
 
 class ListConsumer(Consumer):
 
-    keys = None
-
-    def __init__(self, name, attrs):
+    def __init__(self, name, attrs, keys=None):
         """Create a Consumer for list elements in the XML data."""
         data = ListElement()
         data.tag = name
         if attrs:
             data.attributes = dict(attrs)
         self.data = data
+        self.keys = keys
 
     def store(self, key, value):
         if self.keys is not None and key not in self.keys:
@@ -684,8 +687,7 @@ class DataHandler(object):
                         except AttributeError:
                             continue
                         tags.extend(keys)
-                bases = (StringConsumer, )
-                self.classes[name] = type(str(name), bases, {'consumable': tags})
+                self.classes[name] = lambda name, attrs: StringConsumer(name, attrs, consumable=tags)
             else:
                 self.classes[name] = StringConsumer
             return
@@ -698,8 +700,7 @@ class DataHandler(object):
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
             keys = set([child[2] for child in children])
-            bases = (ListConsumer,)
-            self.classes[name] = type(str(name), bases, {'keys': keys})
+            self.classes[name] = lambda name, attrs: ListConsumer(name, attrs, keys=keys)
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -734,8 +735,7 @@ class DataHandler(object):
         count(model)
         if len(single) == 0 and len(multiple) == 1:
             keys = set(multiple)
-            bases = (ListConsumer, )
-            self.classes[name] = type(str(name), bases, {'keys': keys})
+            self.classes[name] = lambda name, attrs: ListConsumer(name, attrs, keys=keys)
         else:
             multiple = set(multiple)
             bases = (DictionaryConsumer,)
