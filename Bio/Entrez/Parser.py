@@ -293,21 +293,7 @@ class ListConsumer(Consumer):
 
     def __init__(self, name, attrs, keys=None):
         """Create a Consumer for list elements in the XML data."""
-        data = ListElement()
-        data.tag = name
-        if attrs:
-            data.attributes = dict(attrs)
-        self.data = data
         self.keys = keys
-
-    def store(self, key, value):
-        if self.keys is not None and key not in self.keys:
-            raise ValueError("Unexpected item '%s' in list" % key)
-        self.data.append(value)
-
-    @property
-    def value(self):
-        return self.data
 
 
 class DictionaryConsumer(Consumer):
@@ -557,9 +543,20 @@ class DataHandler(object):
                 raise ValidationError(name)
             else:
                 # this will not be stored in the record
-                consumer = Consumer(name, attrs)
+                cls = Consumer
+        if cls == select_item_consumer:
+            assert name == 'Item'
+            tag = str(attrs["Name"])  # convert from Unicode
+            # del attrs["Name"] # FIXME
         else:
-            consumer = cls(name, attrs)
+            tag = name
+        consumer = cls(name, attrs)
+        if isinstance(consumer, ListConsumer):
+            data = ListElement()
+            data.tag = tag
+            if attrs:
+                data.attributes = dict(attrs)
+            consumer.data = data
         consumer.parent = self.consumer
         if self.consumer is None:
             # This is relevant only for Entrez.parse, not for Entrez.read.
@@ -568,7 +565,10 @@ class DataHandler(object):
             # the record attribute, so that Entrez.parse can iterate over it.
             # The record attribute will be set again at the last end tag;
             # However, it doesn't hurt to set it twice.
-            value = consumer.value
+            if isinstance(consumer, ListConsumer):
+                value = consumer.data
+            else:
+                value = consumer.value
             if value is not None:
                 self.record = value
         self.consumer = consumer
@@ -592,12 +592,20 @@ class DataHandler(object):
             if consumed:
                 return
         self.consumer = consumer.parent
-        value = consumer.value
+        if isinstance(consumer, ListConsumer):
+            value = consumer.data
+        else:
+            value = consumer.value
         if self.consumer is None:
             self.record = value
         elif value is not None:
             name = value.tag
-            self.consumer.store(name, value)
+            if isinstance(self.consumer, ListConsumer):
+                if self.consumer.keys is not None and name not in self.consumer.keys:
+                    raise ValueError("Unexpected item '%s' in list" % name)
+                self.consumer.data.append(value)
+            else:
+                self.consumer.store(name, value)
 
     def characterDataHandlerRaw(self, content):
         self.consumer.consume(content)
@@ -666,17 +674,8 @@ class DataHandler(object):
         if model[0] in (expat.model.XML_CTYPE_MIXED,
                         expat.model.XML_CTYPE_EMPTY):
             if model[1] == expat.model.XML_CQUANT_REP:
-                tags = []
                 children = model[3]
-                for child in children:
-                    tag = child[2]
-                    tags.append(tag)
-                    if tag in self.classes:
-                        try:
-                            keys = self.classes[tag].keys
-                        except AttributeError:
-                            continue
-                        tags.extend(keys)
+                tags = [child[2] for child in children]
                 self.classes[name] = lambda name, attrs: StringConsumer(name, attrs, consumable=tags)
             else:
                 self.classes[name] = StringConsumer
