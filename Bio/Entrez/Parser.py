@@ -312,16 +312,15 @@ class ListConsumer(Consumer):
 
 class DictionaryConsumer(Consumer):
 
-    multiple = None
-
-    def __init__(self, name, attrs):
+    def __init__(self, name, attrs, multiple=[]):
         """Create a Consumer for dictionary elements in the XML data."""
         data = DictionaryElement()
         data.tag = name
         data.attributes = dict(attrs)
-        for key in self.multiple:
+        for key in multiple:
             data[key] = []
         self.data = data
+        self.multiple = multiple
 
     def store(self, key, value):
         if key in self.multiple:
@@ -341,14 +340,10 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        cls = type(name,
-                   (DictionaryConsumer,),
-                   {"multiple": set()})
+        cls = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=set()) # type(name, (DictionaryConsumer,), {"multiple": set()})
         consumer = cls(name, attrs)
     elif name in ("ArticleIds", "History"):
-        cls = type(name,
-                   (DictionaryConsumer,),
-                   {"multiple": set(["pubmed", "medline"])})
+        cls = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"])) # type(name, (DictionaryConsumer,), {"multiple": set(["pubmed", "medline"])})
         consumer = cls(name, attrs)
     elif itemtype == "List":
         # Keys are unknown in this case
@@ -629,11 +624,9 @@ class DataHandler(object):
                         key = grandchild.attrib['ref']
                         multiple.append(key)
             if is_dictionary:
-                bases = (DictionaryConsumer,)
+                # bases = (DictionaryConsumer,)
                 multiple = set(multiple)
-                self.classes[name] = type(str(name),
-                                          bases,
-                                          {"multiple": multiple})
+                self.classes[name] = lambda name, attrs: DictionaryConsumer(str(name), attrs, multiple=multiple) # type(str(name), bases, {"multiple": multiple})
                 is_dictionary = False
             else:
                 self.classes[name] = ListConsumer
@@ -739,9 +732,7 @@ class DataHandler(object):
         else:
             multiple = set(multiple)
             bases = (DictionaryConsumer,)
-            self.classes[name] = type(str(name),
-                                      bases,
-                                      {"multiple": multiple})
+            self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple) # type(str(name), bases, {"multiple": multiple})
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
