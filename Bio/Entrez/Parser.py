@@ -623,7 +623,7 @@ class DataHandler(object):
                         multiple.append(key)
             if is_dictionary:
                 multiple = set(multiple)
-                self.classes[name] = lambda name, attrs: DictionaryConsumer(str(name), attrs, multiple=multiple)
+                self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple)
                 is_dictionary = False
             else:
                 self.classes[name] = ListConsumer
