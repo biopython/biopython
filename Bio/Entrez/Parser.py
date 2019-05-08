@@ -340,11 +340,9 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        cls = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=set()) # type(name, (DictionaryConsumer,), {"multiple": set()})
-        consumer = cls(name, attrs)
+        consumer = DictionaryConsumer(name, attrs, multiple=set())
     elif name in ("ArticleIds", "History"):
-        cls = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"])) # type(name, (DictionaryConsumer,), {"multiple": set(["pubmed", "medline"])})
-        consumer = cls(name, attrs)
+        consumer = DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"]))
     elif itemtype == "List":
         # Keys are unknown in this case
         consumer = ListConsumer(name, attrs)
@@ -624,9 +622,8 @@ class DataHandler(object):
                         key = grandchild.attrib['ref']
                         multiple.append(key)
             if is_dictionary:
-                # bases = (DictionaryConsumer,)
                 multiple = set(multiple)
-                self.classes[name] = lambda name, attrs: DictionaryConsumer(str(name), attrs, multiple=multiple) # type(str(name), bases, {"multiple": multiple})
+                self.classes[name] = lambda name, attrs: DictionaryConsumer(str(name), attrs, multiple=multiple)
                 is_dictionary = False
             else:
                 self.classes[name] = ListConsumer
@@ -731,8 +728,7 @@ class DataHandler(object):
             self.classes[name] = lambda name, attrs: ListConsumer(name, attrs, keys=keys)
         else:
             multiple = set(multiple)
-            bases = (DictionaryConsumer,)
-            self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple) # type(str(name), bases, {"multiple": multiple})
+            self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
