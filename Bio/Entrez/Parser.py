@@ -112,6 +112,12 @@ class UnicodeElement(unicode):
 
 
 class ListElement(list):
+    def __init__(self, name, attrs, keys):
+        self.name = name
+        self.attributes = {}
+        for key in attrs:
+            self.attributes[key] = None
+        self.keys = keys
     def __repr__(self):
         text = list.__repr__(self)
         try:
@@ -289,13 +295,6 @@ class IntegerConsumer(Consumer):
         return value
 
 
-class ListConsumer(Consumer):
-
-    def __init__(self, name, attrs, keys=None):
-        """Create a Consumer for list elements in the XML data."""
-        self.keys = keys
-
-
 class DictionaryConsumer(Consumer):
 
     def __init__(self, name, attrs, multiple=[]):
@@ -331,7 +330,7 @@ def select_item_consumer(name, attrs):
         consumer = DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"]))
     elif itemtype == "List":
         # Keys are unknown in this case
-        consumer = ListConsumer(name, attrs)
+        consumer = ListElement(name, attrs, None)
     elif itemtype == "Integer":
         consumer = IntegerConsumer(name, attrs)
     elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
@@ -530,6 +529,7 @@ class DataHandler(object):
                     attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
+          if not isinstance(self.consumer, ListElement):
             if prefix:
                 consumed = self.consumer.startElementHandler(name, attrs, prefix)
             else:
@@ -551,12 +551,13 @@ class DataHandler(object):
         else:
             tag = name
         consumer = cls(name, attrs)
-        if isinstance(consumer, ListConsumer):
-            data = ListElement()
-            data.tag = tag
-            if attrs:
-                data.attributes = dict(attrs)
-            consumer.data = data
+        if isinstance(consumer, ListElement):
+            consumer.tag = tag
+            for key, value in attrs.items():
+                if self.validating:
+                    if key not in consumer.attributes:
+                        raise ValueError("Unexpected attribute '%s'" % key)
+                consumer.attributes[key] = value
         consumer.parent = self.consumer
         if self.consumer is None:
             # This is relevant only for Entrez.parse, not for Entrez.read.
@@ -565,8 +566,8 @@ class DataHandler(object):
             # the record attribute, so that Entrez.parse can iterate over it.
             # The record attribute will be set again at the last end tag;
             # However, it doesn't hurt to set it twice.
-            if isinstance(consumer, ListConsumer):
-                value = consumer.data
+            if isinstance(consumer, ListElement):
+                value = consumer
             else:
                 value = consumer.value
             if value is not None:
@@ -585,6 +586,7 @@ class DataHandler(object):
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
+          if not isinstance(consumer, ListElement):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -592,49 +594,76 @@ class DataHandler(object):
             if consumed:
                 return
         self.consumer = consumer.parent
-        if isinstance(consumer, ListConsumer):
-            value = consumer.data
+        if isinstance(consumer, ListElement):
+            value = consumer
         else:
             value = consumer.value
         if self.consumer is None:
             self.record = value
         elif value is not None:
             name = value.tag
-            if isinstance(self.consumer, ListConsumer):
+            if isinstance(self.consumer, ListElement):
                 if self.consumer.keys is not None and name not in self.consumer.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.data.append(value)
+                self.consumer.append(value)
             else:
                 self.consumer.store(name, value)
 
     def characterDataHandlerRaw(self, content):
+        if isinstance(self.consumer, ListElement):
+            return
         self.consumer.consume(content)
 
     def characterDataHandlerEscape(self, content):
+        if isinstance(self.consumer, ListElement):
+            return
         content = escape(content)
         self.consumer.consume(content)
 
     def parse_xsd(self, root):
-        name = ""
-        for child in root:
-            is_dictionary = False
+        prefix = "{http://www.w3.org/2001/XMLSchema}"
+        for element in root:
+            isSimpleContent = False
+            attribute_keys = []
+            keys = []
             multiple = []
-            for element in child.getiterator():
-                if "element" in element.tag:
-                    if "name" in element.attrib:
-                        name = element.attrib['name']
-                if "attribute" in element.tag:
-                    is_dictionary = True
-                if "sequence" in element.tag:
-                    for grandchild in element:
-                        key = grandchild.attrib['ref']
-                        multiple.append(key)
-            if is_dictionary:
-                multiple = set(multiple)
-                self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple)
-                is_dictionary = False
+            assert element.tag == prefix + "element"
+            name = element.attrib['name']
+            assert len(element) == 1
+            complexType = element[0]
+            assert complexType.tag == prefix + "complexType"
+            for component in complexType:
+                tag = component.tag
+                if tag == prefix + 'attribute':
+                    # we could distinguish by type; keeping string for now
+                    attribute_keys.append(component.attrib['name'])
+                elif tag == prefix + 'sequence':
+                    maxOccurs = component.attrib.get('maxOccurs', '1')
+                    for key in component:
+                        assert key.tag == prefix + "element"
+                        ref = key.attrib['ref']
+                        keys.append(ref)
+                        if maxOccurs != '1' or key.attrib.get('maxOccurs', '1') != '1':
+                            multiple.append(ref)
+                elif tag == prefix + 'simpleContent':
+                    assert len(component) == 1
+                    extension = component[0]
+                    assert extension.tag == prefix + 'extension'
+                    assert extension.attrib['base'] == 'xs:string'
+                    for attribute in extension:
+                        assert attribute.tag == prefix + "attribute"
+                        # we could distinguish by type; keeping string for now
+                        attribute_keys.append(attribute.attrib['name'])
+                    isSimpleContent = True
+            if len(keys) == 1 and keys == multiple:
+                assert not isSimpleContent
+                self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
+            elif len(keys) >= 1:
+                assert not isSimpleContent
+                self.classes[name] = lambda name, attrs, multiple=multiple: DictionaryConsumer(name, attrs, multiple)
             else:
-                self.classes[name] = ListConsumer
+                self.classes[name] = lambda name, attrs, consumable=[]: StringConsumer(name, attrs, consumable)
+
 
     def elementDecl(self, name, model):
         """Call a call-back function for each element declaration in a DTD.
@@ -676,7 +705,7 @@ class DataHandler(object):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 tags = [child[2] for child in children]
-                self.classes[name] = lambda name, attrs: StringConsumer(name, attrs, consumable=tags)
+                self.classes[name] = lambda name, attrs, consumable=tags: StringConsumer(name, attrs, consumable)
             else:
                 self.classes[name] = StringConsumer
             return
@@ -688,8 +717,8 @@ class DataHandler(object):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
-            keys = set([child[2] for child in children])
-            self.classes[name] = lambda name, attrs: ListConsumer(name, attrs, keys=keys)
+            keys = frozenset([child[2] for child in children])
+            self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -723,11 +752,9 @@ class DataHandler(object):
                     multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            keys = set(multiple)
-            self.classes[name] = lambda name, attrs: ListConsumer(name, attrs, keys=keys)
+            self.classes[name] = lambda name, attrs, keys=set(multiple): ListElement(name, attrs, keys)
         else:
-            multiple = set(multiple)
-            self.classes[name] = lambda name, attrs: DictionaryConsumer(name, attrs, multiple=multiple)
+            self.classes[name] = lambda name, attrs, multiple=multiple: DictionaryConsumer(name, attrs, multiple)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
