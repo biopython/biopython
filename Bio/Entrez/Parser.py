@@ -299,7 +299,11 @@ def select_item_consumer(name, attrs):
         consumer.tag = name
         consumer.attributes = dict(attrs)
     elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
-        consumer = StringConsumer(name, attrs)
+        consumer = StringElement()
+        consumer.data = []
+        consumer.tag = name
+        consumer.attributes = dict(attrs)
+        consumer.keys = None
     else:
         raise ValueError("Unknown item type %s" % name)
     return consumer
@@ -553,7 +557,17 @@ class DataHandler(object):
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
-          if not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement)):
+          if isinstance(consumer, StringElement):
+            if prefix:
+                key = "%s:%s" % (prefix, name)
+            else:
+                key = name
+            if consumer.keys:
+                # assert key == self.keys.pop() # FIXME
+                tag = "</%s>" % name
+                consumer.data.append(tag)
+                return
+          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement)):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -573,6 +587,16 @@ class DataHandler(object):
                 value = NoneElement()
             value.tag = consumer.tag
             value.attributes = consumer.attributes
+        elif isinstance(consumer, StringElement):
+            value = "".join(consumer.data)
+            # Convert Unicode strings to plain strings if possible
+            try:
+                value = StringElement(value)
+            except UnicodeEncodeError:
+                value = UnicodeElement(value)
+            value.tag = consumer.tag
+            if consumer.attributes:
+                value.attributes = consumer.attributes
         else:
             value = consumer.value
         if self.consumer is None:
@@ -597,6 +621,9 @@ class DataHandler(object):
         if isinstance(self.consumer, DictionaryElement):
             return
         if isinstance(self.consumer, IntegerElement):
+            self.consumer.data.append(content)
+            return
+        if isinstance(self.consumer, StringElement):
             self.consumer.data.append(content)
             return
         self.consumer.consume(content)
