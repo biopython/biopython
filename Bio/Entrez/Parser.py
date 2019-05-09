@@ -92,6 +92,11 @@ class IntegerElement(int):
 
 
 class StringElement(str):
+    def __init__(self, name, attrs, keys):
+        self.tag = name
+        self.attributes = dict(attrs)
+        self.data = []
+        self.keys = keys
     def __repr__(self):
         text = str.__repr__(self)
         try:
