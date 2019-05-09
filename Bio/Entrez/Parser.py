@@ -475,8 +475,7 @@ class DataHandler(object):
                 prefix = self.namespace_prefix[uri]
         consumer = self.consumer
         # First, check if the current consumer can use the tag
-        if consumer is not None:
-          if isinstance(consumer, StringElement):
+        if isinstance(consumer, StringElement):
             if prefix:
                 key = "%s:%s" % (prefix, name)
             else:
@@ -485,13 +484,6 @@ class DataHandler(object):
                 assert key == self.consumer.keys.pop()
                 tag = "</%s>" % name
                 consumer.data.append(tag)
-                return
-          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement) or isinstance(consumer, ErrorElement) or isinstance(consumer, SkipElement)):
-            if prefix:
-                consumed = consumer.endElementHandler(name, prefix)
-            else:
-                consumed = consumer.endElementHandler(name)
-            if consumed:
                 return
         self.consumer = consumer.parent
         if isinstance(consumer, ListElement):
