@@ -272,29 +272,6 @@ class StringConsumer(Consumer):
         return value
 
 
-class IntegerConsumer(Consumer):
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for integer elements in the XML data."""
-        self.tag = name
-        self.attributes = dict(attrs)
-        self.data = []
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        if self.data:
-            value = int("".join(self.data))
-            value = IntegerElement(value)
-        else:
-            value = NoneElement()
-        value.tag = self.tag
-        value.attributes = self.attributes
-        return value
-
-
 class DictionaryConsumer(Consumer):
 
     def __init__(self, name, attrs, multiple=[]):
@@ -332,7 +309,10 @@ def select_item_consumer(name, attrs):
         # Keys are unknown in this case
         consumer = ListElement(name, attrs, None)
     elif itemtype == "Integer":
-        consumer = IntegerConsumer(name, attrs)
+        consumer = IntegerElement()
+        consumer.data = []
+        consumer.tag = name
+        consumer.attributes = dict(attrs)
     elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
         consumer = StringConsumer(name, attrs)
     else:
@@ -586,7 +566,7 @@ class DataHandler(object):
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
-          if not isinstance(consumer, ListElement):
+          if not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement)):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -596,6 +576,14 @@ class DataHandler(object):
         self.consumer = consumer.parent
         if isinstance(consumer, ListElement):
             value = consumer
+        elif isinstance(consumer, IntegerElement):
+            if consumer.data:
+                value = int("".join(consumer.data))
+                value = IntegerElement(value)
+            else:
+                value = NoneElement()
+            value.tag = consumer.tag
+            value.attributes = consumer.attributes
         else:
             value = consumer.value
         if self.consumer is None:
@@ -611,6 +599,9 @@ class DataHandler(object):
 
     def characterDataHandlerRaw(self, content):
         if isinstance(self.consumer, ListElement):
+            return
+        if isinstance(self.consumer, IntegerElement):
+            self.consumer.data.append(content)
             return
         self.consumer.consume(content)
 
