@@ -224,62 +224,6 @@ class ErrorConsumer(Consumer):
             raise RuntimeError(value)
 
 
-class StringConsumer(Consumer):
-
-    def __init__(self, name, attrs, keys=set()):
-        """Create a Consumer for plain text elements in the XML data."""
-        self.tag = name
-        self.attributes = dict(attrs)
-        self.data = []
-        self.keys = keys
-        self.keys = []
-
-    def startElementHandler(self, name, attrs, prefix=None):
-        if prefix:
-            key = "%s:%s" % (prefix, name)
-        else:
-            key = name
-        # if key in self.keys: # FIXME
-        self.keys.append(key)
-        if True:
-            tag = "<%s" % name
-            for key, value in attrs.items():
-                tag += ' %s="%s"' % (key, value)
-            tag += ">"
-            self.data.append(tag)
-            return True
-        return False
-
-    def endElementHandler(self, name, prefix=None):
-        if prefix:
-            key = "%s:%s" % (prefix, name)
-        else:
-            key = name
-        # if key in self.keys: # FIXME
-        if self.keys:
-            assert key == self.keys.pop()
-            tag = "</%s>" % name
-            self.data.append(tag)
-            return True
-        return False
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        value = "".join(self.data)
-        # Convert Unicode strings to plain strings if possible
-        try:
-            value = StringElement(value)
-        except UnicodeEncodeError:
-            value = UnicodeElement(value)
-        value.tag = self.tag
-        if self.attributes:
-            value.attributes = self.attributes
-        return value
-
-
 def select_item_consumer(name, attrs):
     assert name == 'Item'
     name = str(attrs["Name"])  # convert from Unicode
@@ -498,7 +442,20 @@ class DataHandler(object):
                     attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
-          if not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement)):
+          if isinstance(self.consumer, StringElement):
+            if prefix:
+                key = "%s:%s" % (prefix, name)
+            else:
+                key = name
+            # if key in self.consumer.keys: # FIXME
+            self.consumer.keys.append(key)
+            tag = "<%s" % name
+            for key, value in attrs.items():
+                tag += ' %s="%s"' % (key, value)
+            tag += ">"
+            self.consumer.data.append(tag)
+            return
+          elif not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement)):
             if prefix:
                 consumed = self.consumer.startElementHandler(name, attrs, prefix)
             else:
@@ -563,7 +520,7 @@ class DataHandler(object):
             else:
                 key = name
             if consumer.keys:
-                # assert key == self.keys.pop() # FIXME
+                assert key == self.consumer.keys.pop()
                 tag = "</%s>" % name
                 consumer.data.append(tag)
                 return
@@ -731,7 +688,14 @@ class DataHandler(object):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 tags = [child[2] for child in children]
-                self.classes[name] = lambda name, attrs, keys=tags: StringConsumer(name, attrs, keys)
+                def make_string_element(name, attrs):
+                    e = StringElement()
+                    e.data = []
+                    e.tag = name
+                    e.attributes = dict(attrs)
+                    e.keys = [] # should be tags
+                    return e
+                self.classes[name] = make_string_element
             else:
                 def make_string_element(name, attrs):
                     e = StringElement()
