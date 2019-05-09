@@ -280,30 +280,6 @@ class StringConsumer(Consumer):
         return value
 
 
-class DictionaryConsumer(Consumer):
-
-    def __init__(self, name, attrs, keys, multiple=[]):
-        """Create a Consumer for dictionary elements in the XML data."""
-        data = DictionaryElement(name, attrs, keys, multiple)
-        data.tag = name
-        data.attributes = dict(attrs)
-        data.keys = keys
-        for key in multiple:
-            data[key] = []
-        self.data = data
-        self.multiple = multiple
-
-    def store(self, key, value):
-        if key in self.multiple:
-            self.data[key].append(value)
-        else:
-            self.data[key] = value
-
-    @property
-    def value(self):
-        return self.data
-
-
 def select_item_consumer(name, attrs):
     assert name == 'Item'
     name = str(attrs["Name"])  # convert from Unicode
@@ -557,6 +533,8 @@ class DataHandler(object):
             # However, it doesn't hurt to set it twice.
             if isinstance(consumer, ListElement):
                 value = consumer
+            elif isinstance(consumer, DictionaryElement):
+                value = consumer
             else:
                 value = consumer.value
             if value is not None:
@@ -626,6 +604,8 @@ class DataHandler(object):
     def characterDataHandlerEscape(self, content):
         if isinstance(self.consumer, ListElement):
             return
+        if isinstance(self.consumer, DictionaryElement):
+            return
         content = escape(content)
         self.consumer.consume(content)
 
@@ -669,7 +649,7 @@ class DataHandler(object):
                 self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
             elif len(keys) >= 1:
                 assert not isSimpleContent
-                self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryConsumer(name, attrs, keys, multiple)
+                self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
             else:
                 self.classes[name] = lambda name, attrs, consumable=[]: StringConsumer(name, attrs, consumable)
 
@@ -763,7 +743,7 @@ class DataHandler(object):
         if len(single) == 0 and len(multiple) == 1:
             self.classes[name] = lambda name, attrs, keys=set(multiple): ListElement(name, attrs, keys)
         else:
-            self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryConsumer(name, attrs, keys, multiple)
+            self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
