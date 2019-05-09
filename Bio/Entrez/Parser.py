@@ -183,33 +183,15 @@ class ValidationError(ValueError):
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
-class Consumer(object):
-
-    def __init__(self, name, attrs):
-        """Create a do-nothing Consumer object."""
-        return
-
-    def startElementHandler(self, name, attrs):
-        return False
-
-    def endElementHandler(self, name):
-        return False
-
-    def consume(self, content):
-        return
-
-    def store(self, key, value):
-        return
-
-    @property
-    def value(self):
-        return
-
-
 class ErrorElement:
     def __init__(self, name, attrs):
         """Handle ERROR messages in the XML data."""
         self.data = []
+
+
+class SkipElement:
+    def __init__(self, name, attrs):
+        """If validating is False, skip unknownin the XML data."""
 
 
 def select_item_consumer(name, attrs):
@@ -443,7 +425,7 @@ class DataHandler(object):
             tag += ">"
             self.consumer.data.append(tag)
             return
-          elif not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement)):
+          elif not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement) or isinstance(self.consumer, SkipElement)):
             if prefix:
                 consumed = self.consumer.startElementHandler(name, attrs, prefix)
             else:
@@ -457,7 +439,7 @@ class DataHandler(object):
                 raise ValidationError(name)
             else:
                 # this will not be stored in the record
-                cls = Consumer
+                cls = SkipElement
         if cls == select_item_consumer:
             assert name == 'Item'
             tag = str(attrs["Name"])  # convert from Unicode
@@ -512,7 +494,7 @@ class DataHandler(object):
                 tag = "</%s>" % name
                 consumer.data.append(tag)
                 return
-          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement) or isinstance(consumer, ErrorElement)):
+          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement) or isinstance(consumer, ErrorElement) or isinstance(consumer, SkipElement)):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -548,6 +530,8 @@ class DataHandler(object):
                 return None
             else:
                 raise RuntimeError(value)
+        elif isinstance(consumer, SkipElement):
+            value = None
         else:
             value = consumer.value
         if self.consumer is None:
@@ -563,6 +547,8 @@ class DataHandler(object):
                     self.consumer[name].append(value)
                 else:
                     self.consumer[name] = value
+            elif isinstance(self.consumer, SkipElement):
+                pass
             else:
                 self.consumer.store(name, value)
 
@@ -579,6 +565,8 @@ class DataHandler(object):
             return
         if isinstance(self.consumer, ErrorElement):
             self.consumer.data.append(content)
+            return
+        if isinstance(self.consumer, SkipElement):
             return
         self.consumer.consume(content)
 
