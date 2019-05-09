@@ -206,22 +206,10 @@ class Consumer(object):
         return
 
 
-class ErrorConsumer(Consumer):
-
+class ErrorElement:
     def __init__(self, name, attrs):
-        """Create a Consumer for ERROR messages in the XML data."""
+        """Handle ERROR messages in the XML data."""
         self.data = []
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        value = "".join(self.data)
-        if value == "":
-            return None
-        else:
-            raise RuntimeError(value)
 
 
 def select_item_consumer(name, attrs):
@@ -524,7 +512,7 @@ class DataHandler(object):
                 tag = "</%s>" % name
                 consumer.data.append(tag)
                 return
-          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement)):
+          elif not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement) or isinstance(consumer, ErrorElement)):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -554,6 +542,12 @@ class DataHandler(object):
             value.tag = consumer.tag
             if consumer.attributes:
                 value.attributes = consumer.attributes
+        elif isinstance(consumer, ErrorElement):
+            value = "".join(consumer.data)
+            if value == "":
+                return None
+            else:
+                raise RuntimeError(value)
         else:
             value = consumer.value
         if self.consumer is None:
@@ -581,6 +575,9 @@ class DataHandler(object):
             self.consumer.data.append(content)
             return
         if isinstance(self.consumer, StringElement):
+            self.consumer.data.append(content)
+            return
+        if isinstance(self.consumer, ErrorElement):
             self.consumer.data.append(content)
             return
         self.consumer.consume(content)
@@ -660,7 +657,7 @@ class DataHandler(object):
         or error.
         """
         if name.upper() == "ERROR":
-            self.classes[name] = ErrorConsumer
+            self.classes[name] = ErrorElement
             return
         if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
