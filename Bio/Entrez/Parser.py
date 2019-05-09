@@ -302,13 +302,17 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        # consumer = DictionaryConsumer(name, attrs, multiple=set())
         consumer = DictionaryElement()
         consumer.tag = name
         consumer.attributes = dict(attrs)
         consumer.multiple = set()
     elif name in ("ArticleIds", "History"):
-        consumer = DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"]))
+        consumer = DictionaryElement()
+        consumer.tag = name
+        consumer.attributes = dict(attrs)
+        consumer.multiple = set(["pubmed", "medline"])
+        for key in consumer.multiple:
+            consumer[key] = []
     elif itemtype == "List":
         # Keys are unknown in this case
         consumer = ListElement(name, attrs, None)
