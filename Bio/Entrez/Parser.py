@@ -678,7 +678,14 @@ class DataHandler(object):
                 assert not isSimpleContent
                 self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
             else:
-                self.classes[name] = lambda name, attrs, keys=[]: StringConsumer(name, attrs, keys)
+                def make_string_element(name, attrs):
+                    e = StringElement()
+                    e.data = []
+                    e.tag = name
+                    e.attributes = dict(attrs)
+                    e.keys = []
+                    return e
+                self.classes[name] = make_string_element
 
 
     def elementDecl(self, name, model):
