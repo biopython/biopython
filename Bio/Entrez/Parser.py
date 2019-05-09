@@ -418,7 +418,7 @@ class DataHandler(object):
             if not text:
                 sys.stdout.flush()
                 self.parser = None
-                if self.consumer:
+                if self.consumer is not None:
                     # We have reached the end of the XML file
                     # No more XML data, but there is still some unfinished
                     # business
@@ -634,6 +634,9 @@ class DataHandler(object):
         if isinstance(self.consumer, DictionaryElement):
             return
         content = escape(content)
+        if isinstance(self.consumer, StringElement):
+            self.consumer.data.append(content)
+            return
         self.consumer.consume(content)
 
     def parse_xsd(self, root):
@@ -730,7 +733,14 @@ class DataHandler(object):
                 tags = [child[2] for child in children]
                 self.classes[name] = lambda name, attrs, keys=tags: StringConsumer(name, attrs, keys)
             else:
-                self.classes[name] = StringConsumer
+                def make_string_element(name, attrs):
+                    e = StringElement()
+                    e.data = []
+                    e.tag = name
+                    e.attributes = dict(attrs)
+                    e.keys = []
+                    return e
+                self.classes[name] = make_string_element
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
