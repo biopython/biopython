@@ -226,21 +226,21 @@ class ErrorConsumer(Consumer):
 
 class StringConsumer(Consumer):
 
-    def __init__(self, name, attrs, consumable=set()):
+    def __init__(self, name, attrs, keys=set()):
         """Create a Consumer for plain text elements in the XML data."""
         self.tag = name
         self.attributes = dict(attrs)
         self.data = []
-        self.consumable = consumable
-        self.consumable = []
+        self.keys = keys
+        self.keys = []
 
     def startElementHandler(self, name, attrs, prefix=None):
         if prefix:
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        # if key in self.consumable: # FIXME
-        self.consumable.append(key)
+        # if key in self.keys: # FIXME
+        self.keys.append(key)
         if True:
             tag = "<%s" % name
             for key, value in attrs.items():
@@ -255,9 +255,9 @@ class StringConsumer(Consumer):
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        # if key in self.consumable: # FIXME
-        if self.consumable:
-            assert key == self.consumable.pop()
+        # if key in self.keys: # FIXME
+        if self.keys:
+            assert key == self.keys.pop()
             tag = "</%s>" % name
             self.data.append(tag)
             return True
@@ -651,7 +651,7 @@ class DataHandler(object):
                 assert not isSimpleContent
                 self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
             else:
-                self.classes[name] = lambda name, attrs, consumable=[]: StringConsumer(name, attrs, consumable)
+                self.classes[name] = lambda name, attrs, keys=[]: StringConsumer(name, attrs, keys)
 
 
     def elementDecl(self, name, model):
@@ -694,7 +694,7 @@ class DataHandler(object):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 tags = [child[2] for child in children]
-                self.classes[name] = lambda name, attrs, consumable=tags: StringConsumer(name, attrs, consumable)
+                self.classes[name] = lambda name, attrs, keys=tags: StringConsumer(name, attrs, keys)
             else:
                 self.classes[name] = StringConsumer
             return
