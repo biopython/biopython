@@ -129,6 +129,14 @@ class ListElement(list):
 
 class DictionaryElement(dict):
 
+    def __init__(self, name, attrs, keys, multiple=[]):
+        self.tag = name
+        self.attributes = dict(attrs)
+        self.keys = keys
+        self.multiple = multiple
+        for key in multiple:
+            self[key] = []
+
     def __repr__(self):
         text = dict.__repr__(self)
         try:
@@ -274,11 +282,12 @@ class StringConsumer(Consumer):
 
 class DictionaryConsumer(Consumer):
 
-    def __init__(self, name, attrs, multiple=[]):
+    def __init__(self, name, attrs, keys, multiple=[]):
         """Create a Consumer for dictionary elements in the XML data."""
-        data = DictionaryElement()
+        data = DictionaryElement(name, attrs, keys, multiple)
         data.tag = name
         data.attributes = dict(attrs)
+        data.keys = keys
         for key in multiple:
             data[key] = []
         self.data = data
@@ -302,17 +311,9 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        consumer = DictionaryElement()
-        consumer.tag = name
-        consumer.attributes = dict(attrs)
-        consumer.multiple = set()
+        consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
     elif name in ("ArticleIds", "History"):
-        consumer = DictionaryElement()
-        consumer.tag = name
-        consumer.attributes = dict(attrs)
-        consumer.multiple = set(["pubmed", "medline"])
-        for key in consumer.multiple:
-            consumer[key] = []
+        consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
     elif itemtype == "List":
         # Keys are unknown in this case
         consumer = ListElement(name, attrs, None)
@@ -668,7 +669,7 @@ class DataHandler(object):
                 self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
             elif len(keys) >= 1:
                 assert not isSimpleContent
-                self.classes[name] = lambda name, attrs, multiple=multiple: DictionaryConsumer(name, attrs, multiple)
+                self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryConsumer(name, attrs, keys, multiple)
             else:
                 self.classes[name] = lambda name, attrs, consumable=[]: StringConsumer(name, attrs, consumable)
 
@@ -762,7 +763,7 @@ class DataHandler(object):
         if len(single) == 0 and len(multiple) == 1:
             self.classes[name] = lambda name, attrs, keys=set(multiple): ListElement(name, attrs, keys)
         else:
-            self.classes[name] = lambda name, attrs, multiple=multiple: DictionaryConsumer(name, attrs, multiple)
+            self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryConsumer(name, attrs, keys, multiple)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
