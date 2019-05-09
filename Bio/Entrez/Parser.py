@@ -411,8 +411,7 @@ class DataHandler(object):
                 if self.namespace_level[prefix] == 1:
                     attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
-        if self.consumer is not None:
-          if isinstance(self.consumer, StringElement):
+        if isinstance(self.consumer, StringElement):
             if prefix:
                 key = "%s:%s" % (prefix, name)
             else:
@@ -425,13 +424,6 @@ class DataHandler(object):
             tag += ">"
             self.consumer.data.append(tag)
             return
-          elif not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement) or isinstance(self.consumer, SkipElement)):
-            if prefix:
-                consumed = self.consumer.startElementHandler(name, attrs, prefix)
-            else:
-                consumed = self.consumer.startElementHandler(name, attrs)
-            if consumed:
-                return
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
