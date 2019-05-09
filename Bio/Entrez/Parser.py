@@ -113,10 +113,10 @@ class UnicodeElement(unicode):
 
 class ListElement(list):
     def __init__(self, name, attrs, keys):
-        self.name = name
+        self.tag = name
         self.attributes = {}
-        for key in attrs:
-            self.attributes[key] = None
+        for key, value in attrs.items():
+            self.attributes[key] = value
         self.keys = keys
     def __repr__(self):
         text = list.__repr__(self)
@@ -439,13 +439,6 @@ class DataHandler(object):
         else:
             tag = name
         consumer = cls(name, attrs)
-        if isinstance(consumer, ListElement):
-            consumer.tag = tag
-            for key, value in attrs.items():
-                if self.validating:
-                    if key not in consumer.attributes:
-                        raise ValueError("Unexpected attribute '%s'" % key)
-                consumer.attributes[key] = value
         consumer.parent = self.consumer
         if self.consumer is None:
             # This is relevant only for Entrez.parse, not for Entrez.read.
