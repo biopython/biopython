@@ -302,7 +302,11 @@ def select_item_consumer(name, attrs):
     itemtype = str(attrs["Type"])  # convert from Unicode
     del attrs["Type"]
     if itemtype == "Structure":
-        consumer = DictionaryConsumer(name, attrs, multiple=set())
+        # consumer = DictionaryConsumer(name, attrs, multiple=set())
+        consumer = DictionaryElement()
+        consumer.tag = name
+        consumer.attributes = dict(attrs)
+        consumer.multiple = set()
     elif name in ("ArticleIds", "History"):
         consumer = DictionaryConsumer(name, attrs, multiple=set(["pubmed", "medline"]))
     elif itemtype == "List":
@@ -509,7 +513,7 @@ class DataHandler(object):
                     attrs = {'xmlns': uri}
         # First, check if the current consumer can use the tag
         if self.consumer is not None:
-          if not isinstance(self.consumer, ListElement):
+          if not (isinstance(self.consumer, ListElement) or isinstance(self.consumer, DictionaryElement)):
             if prefix:
                 consumed = self.consumer.startElementHandler(name, attrs, prefix)
             else:
@@ -566,7 +570,7 @@ class DataHandler(object):
         consumer = self.consumer
         # First, check if the current consumer can use the tag
         if consumer is not None:
-          if not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement)):
+          if not (isinstance(consumer, ListElement) or isinstance(consumer, IntegerElement) or isinstance(consumer, DictionaryElement)):
             if prefix:
                 consumed = consumer.endElementHandler(name, prefix)
             else:
@@ -575,6 +579,8 @@ class DataHandler(object):
                 return
         self.consumer = consumer.parent
         if isinstance(consumer, ListElement):
+            value = consumer
+        elif isinstance(consumer, DictionaryElement):
             value = consumer
         elif isinstance(consumer, IntegerElement):
             if consumer.data:
@@ -594,11 +600,18 @@ class DataHandler(object):
                 if self.consumer.keys is not None and name not in self.consumer.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
                 self.consumer.append(value)
+            elif isinstance(self.consumer, DictionaryElement):
+                if name in self.consumer.multiple:
+                    self.consumer[name].append(value)
+                else:
+                    self.consumer[name] = value
             else:
                 self.consumer.store(name, value)
 
     def characterDataHandlerRaw(self, content):
         if isinstance(self.consumer, ListElement):
+            return
+        if isinstance(self.consumer, DictionaryElement):
             return
         if isinstance(self.consumer, IntegerElement):
             self.consumer.data.append(content)
