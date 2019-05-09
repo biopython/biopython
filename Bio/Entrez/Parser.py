@@ -366,6 +366,8 @@ class DataHandler(object):
             # to find out their first and last invocation for each namespace.
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
+            assert uri == "http://www.w3.org/1998/Math/MathML"
+            assert prefix == "mml"
 
     def endNamespaceDeclHandler(self, prefix):
         if prefix != 'xsi':
@@ -447,14 +449,7 @@ class DataHandler(object):
             # the record attribute, so that Entrez.parse can iterate over it.
             # The record attribute will be set again at the last end tag;
             # However, it doesn't hurt to set it twice.
-            if isinstance(consumer, ListElement):
-                value = consumer
-            elif isinstance(consumer, DictionaryElement):
-                value = consumer
-            else:
-                value = consumer.value
-            if value is not None:
-                self.record = value
+            self.record = consumer
         self.consumer = consumer
 
     def endElementHandler(self, name):
