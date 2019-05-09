@@ -404,6 +404,7 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, name, attrs):
+        print("Starting startElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
@@ -430,16 +431,18 @@ class DataHandler(object):
             self.record = consumer
         self.consumer = consumer
         if isinstance(consumer, StringElement):
-            self.parser.StartElementHandler = self.startStringElementHandler
-            self.parser.EndElementHandler = self.endStringElementHandler
+            consumer.startElementHandler = self.startStringElementHandler
         else:
-            self.parser.StartElementHandler = self.startElementHandler
-            self.parser.EndElementHandler = self.endElementHandler
-        consumer.startElementHandler = self.parser.StartElementHandler
-        consumer.endElementHandler = self.parser.EndElementHandler
+            consumer.startElementHandler = self.startElementHandler
+        consumer.endElementHandler = self.endElementHandler
+        self.parser.StartElementHandler = consumer.startElementHandler
+        self.parser.EndElementHandler = self.endElementHandler
 
 
     def startStringElementHandler(self, name, attrs):
+        print("Starting startStringElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
+        self.consumer.endElementHandler = self.endStringElementHandler
+        self.parser.EndElementHandler = self.endStringElementHandler
         # check if the name is in a namespace
         prefix = None
         if self.namespace_prefix:
@@ -455,41 +458,29 @@ class DataHandler(object):
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        # if key in self.consumer.keys: # FIXME
-        self.consumer.keys.append(key)
         tag = "<%s" % name
         for key, value in attrs.items():
             tag += ' %s="%s"' % (key, value)
         tag += ">"
-        self.consumer.data.append(tag)
+        consumer = StringElement()
+        consumer.data = []
+        consumer.tag = name
+        consumer.attributes = dict(attrs)
+        consumer.keys = None
+        consumer.data.append(tag)
+        consumer.parent = self.consumer
+        self.consumer = consumer
+        consumer.startElementHandler = self.startStringElementHandler
+        consumer.endElementHandler = self.endStringElementHandler
 
     def endElementHandler(self, name):
-        prefix = None
-        if self.namespace_prefix:
-            try:
-                uri, name = name.split()
-            except ValueError:
-                pass
-            else:
-                prefix = self.namespace_prefix[uri]
+        print("Starting endElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
         consumer = self.consumer
-        # First, check if the current consumer can use the tag
-        if isinstance(consumer, StringElement):
-            if prefix:
-                key = "%s:%s" % (prefix, name)
-            else:
-                key = name
-            if consumer.keys:
-                assert key == self.consumer.keys.pop()
-                tag = "</%s>" % name
-                consumer.data.append(tag)
-                return
         self.consumer = consumer.parent
         if self.consumer is not None:
             self.parser.StartElementHandler = self.consumer.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
         del consumer.startElementHandler
-        del consumer.endElementHandler
         if isinstance(consumer, ListElement):
             value = consumer
         elif isinstance(consumer, DictionaryElement):
@@ -537,10 +528,13 @@ class DataHandler(object):
                     self.consumer[name] = value
             elif isinstance(self.consumer, SkipElement):
                 pass
+            elif isinstance(self.consumer, StringElement):
+                self.consumer.data.append(value)
             else:
                 self.consumer.store(name, value)
 
     def endStringElementHandler(self, name):
+        print("Starting endStringElementHandler for %s; tag is %s; string? %s" % (name, self.consumer.tag, isinstance(self.consumer, StringElement)))
         prefix = None
         if self.namespace_prefix:
             try:
@@ -556,11 +550,8 @@ class DataHandler(object):
                 key = "%s:%s" % (prefix, name)
             else:
                 key = name
-            if consumer.keys:
-                assert key == self.consumer.keys.pop()
-                tag = "</%s>" % name
-                consumer.data.append(tag)
-                return
+            tag = "</%s>" % name
+            consumer.data.append(tag)
         self.consumer = consumer.parent
         if self.consumer is not None:
             self.parser.StartElementHandler = self.consumer.startElementHandler
@@ -614,6 +605,8 @@ class DataHandler(object):
                     self.consumer[name] = value
             elif isinstance(self.consumer, SkipElement):
                 pass
+            elif isinstance(self.consumer, StringElement):
+                self.consumer.data.append(value)
             else:
                 self.consumer.store(name, value)
 
