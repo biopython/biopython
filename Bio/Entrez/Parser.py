@@ -368,6 +368,9 @@ class DataHandler(object):
             self.namespace_prefix[uri] = prefix
             assert uri == "http://www.w3.org/1998/Math/MathML"
             assert prefix == "mml"
+            # self.parser.StartElementHandler = self.startMathElementHandler
+            # self.parser.EndElementHandler = self.endMathElementHandler
+            # FIXME
 
     def endNamespaceDeclHandler(self, prefix):
         if prefix != 'xsi':
@@ -401,31 +404,6 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, name, attrs):
-        # check if the name is in a namespace
-        prefix = None
-        if self.namespace_prefix:
-            try:
-                uri, name = name.split()
-            except ValueError:
-                pass
-            else:
-                prefix = self.namespace_prefix[uri]
-                if self.namespace_level[prefix] == 1:
-                    attrs = {'xmlns': uri}
-        # First, check if the current consumer can use the tag
-        if isinstance(self.consumer, StringElement):
-            if prefix:
-                key = "%s:%s" % (prefix, name)
-            else:
-                key = name
-            # if key in self.consumer.keys: # FIXME
-            self.consumer.keys.append(key)
-            tag = "<%s" % name
-            for key, value in attrs.items():
-                tag += ' %s="%s"' % (key, value)
-            tag += ">"
-            self.consumer.data.append(tag)
-            return
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
@@ -451,6 +429,39 @@ class DataHandler(object):
             # However, it doesn't hurt to set it twice.
             self.record = consumer
         self.consumer = consumer
+        if isinstance(consumer, StringElement):
+            self.parser.StartElementHandler = self.startStringElementHandler
+            self.parser.EndElementHandler = self.endStringElementHandler
+        else:
+            self.parser.StartElementHandler = self.startElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
+        consumer.startElementHandler = self.parser.StartElementHandler
+        consumer.endElementHandler = self.parser.EndElementHandler
+
+
+    def startStringElementHandler(self, name, attrs):
+        # check if the name is in a namespace
+        prefix = None
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+                if self.namespace_level[prefix] == 1:
+                    attrs = {'xmlns': uri}
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        # if key in self.consumer.keys: # FIXME
+        self.consumer.keys.append(key)
+        tag = "<%s" % name
+        for key, value in attrs.items():
+            tag += ' %s="%s"' % (key, value)
+        tag += ">"
+        self.consumer.data.append(tag)
 
     def endElementHandler(self, name):
         prefix = None
@@ -474,6 +485,88 @@ class DataHandler(object):
                 consumer.data.append(tag)
                 return
         self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
+        if isinstance(consumer, ListElement):
+            value = consumer
+        elif isinstance(consumer, DictionaryElement):
+            value = consumer
+        elif isinstance(consumer, IntegerElement):
+            if consumer.data:
+                value = int("".join(consumer.data))
+                value = IntegerElement(value)
+            else:
+                value = NoneElement()
+            value.tag = consumer.tag
+            value.attributes = consumer.attributes
+        elif isinstance(consumer, StringElement):
+            value = "".join(consumer.data)
+            # Convert Unicode strings to plain strings if possible
+            try:
+                value = StringElement(value)
+            except UnicodeEncodeError:
+                value = UnicodeElement(value)
+            value.tag = consumer.tag
+            if consumer.attributes:
+                value.attributes = consumer.attributes
+        elif isinstance(consumer, ErrorElement):
+            value = "".join(consumer.data)
+            if value == "":
+                return None
+            else:
+                raise RuntimeError(value)
+        elif isinstance(consumer, SkipElement):
+            value = None
+        else:
+            value = consumer.value
+        if self.consumer is None:
+            self.record = value
+        elif value is not None:
+            name = value.tag
+            if isinstance(self.consumer, ListElement):
+                if self.consumer.keys is not None and name not in self.consumer.keys:
+                    raise ValueError("Unexpected item '%s' in list" % name)
+                self.consumer.append(value)
+            elif isinstance(self.consumer, DictionaryElement):
+                if name in self.consumer.multiple:
+                    self.consumer[name].append(value)
+                else:
+                    self.consumer[name] = value
+            elif isinstance(self.consumer, SkipElement):
+                pass
+            else:
+                self.consumer.store(name, value)
+
+    def endStringElementHandler(self, name):
+        prefix = None
+        if self.namespace_prefix:
+            try:
+                uri, name = name.split()
+            except ValueError:
+                pass
+            else:
+                prefix = self.namespace_prefix[uri]
+        consumer = self.consumer
+        # First, check if the current consumer can use the tag
+        if isinstance(consumer, StringElement):
+            if prefix:
+                key = "%s:%s" % (prefix, name)
+            else:
+                key = name
+            if consumer.keys:
+                assert key == self.consumer.keys.pop()
+                tag = "</%s>" % name
+                consumer.data.append(tag)
+                return
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
         if isinstance(consumer, ListElement):
             value = consumer
         elif isinstance(consumer, DictionaryElement):
