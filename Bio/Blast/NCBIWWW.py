@@ -16,11 +16,15 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 
 from __future__ import print_function
 
+import warnings
+
 from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
+
+from Bio import BiopythonWarning
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
@@ -35,7 +39,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            other_advanced=None, perc_ident=None, phi_pattern=None,
            query_file=None, query_believe_defline=None, query_from=None,
            query_to=None, searchsp_eff=None, service=None, threshold=None,
-           ungapped_alignment=None, word_size=None,
+           ungapped_alignment=None, word_size=None, short_query=None,
            alignments=500, alignment_view=None, descriptions=500,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
@@ -68,6 +72,8 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - entrez_query   Entrez query to limit Blast search
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+     - short_query    TRUE/FALSE whether to adjust the search parameters for a
+                      short query sequence. Turns off when sequence length > 30
      - service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
@@ -81,6 +87,23 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     if program not in programs:
         raise ValueError("Program specified is %s. Expected one of %s"
                          % (program, ", ".join(programs)))
+
+    # SHORT_QUERY_ADJUST throws an error when using blastn (wrong parameter
+    # assignment from NCBIs side).
+    # Thus we set the (known) parameters directly:
+    if short_query and program == 'blastn':
+        short_query = None
+        # We only use the 'short-query' parameters for short sequences:
+        if len(sequence) < 31:
+            expect = 1000
+            word_size = 7
+            nucl_reward = 1
+            filter = None
+            lcase_mask = None
+            warnings.warn('"short_query" for blastn is wronlgy implemented by '
+                          'NCBI. We bypass the problem by manually adjusting '
+                          'the search parameters. Thus, results may slightly '
+                          'differ from web page searches.', BiopythonWarning)
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -119,6 +142,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
+        ('SHORT_QUERY_ADJUST', short_query),
         ('TEMPLATE_TYPE', template_type),
         ('TEMPLATE_LENGTH', template_length),
         ('THRESHOLD', threshold),
