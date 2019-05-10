@@ -544,52 +544,10 @@ class DataHandler(object):
             self.parser.EndElementHandler = self.consumer.endElementHandler
         del consumer.startElementHandler
         del consumer.endElementHandler
-        prefix = None
         if self.namespace_prefix:
-            try:
-                uri, name = name.split()
-            except ValueError:
-                pass
-            else:
-                prefix = self.namespace_prefix[uri]
-        if prefix:
-            key = "%s:%s" % (prefix, name)
-        else:
-            key = name
+            uri, name = name.split()
         tag = "</%s>" % name
         consumer.data.append(tag)
-        if isinstance(consumer, ListElement):
-            value = consumer
-        elif isinstance(consumer, DictionaryElement):
-            value = consumer
-        elif isinstance(consumer, IntegerElement):
-            if consumer.data:
-                value = int("".join(consumer.data))
-                value = IntegerElement(value)
-            else:
-                value = NoneElement()
-            value.tag = consumer.tag
-            value.attributes = consumer.attributes
-        elif isinstance(consumer, StringElement):
-            value = "".join(consumer.data)
-            # Convert Unicode strings to plain strings if possible
-            try:
-                value = StringElement(value)
-            except UnicodeEncodeError:
-                value = UnicodeElement(value)
-            value.tag = consumer.tag
-            if consumer.attributes:
-                value.attributes = consumer.attributes
-        elif isinstance(consumer, ErrorElement):
-            value = "".join(consumer.data)
-            if value == "":
-                return None
-            else:
-                raise RuntimeError(value)
-        else:
-            value = consumer.value
-        if self.consumer is None:
-            self.record = value
 
     def endSkipElementHandler(self, name):
         self.skip -= 1
