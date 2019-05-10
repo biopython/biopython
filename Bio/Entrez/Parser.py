@@ -186,7 +186,7 @@ class ValidationError(ValueError):
 class ErrorElement:
     def __init__(self, name, attrs):
         """Handle ERROR messages in the XML data."""
-        self.data = []
+        pass
 
 
 def select_item_consumer(name, attrs):
@@ -204,12 +204,10 @@ def select_item_consumer(name, attrs):
         consumer = ListElement(name, attrs, None)
     elif itemtype == "Integer":
         consumer = IntegerElement()
-        consumer.data = []
         consumer.tag = name
         consumer.attributes = dict(attrs)
     elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
         consumer = StringElement()
-        consumer.data = []
         consumer.tag = name
         consumer.attributes = dict(attrs)
         consumer.keys = None
@@ -234,6 +232,7 @@ class DataHandler(object):
         self.classes = {}
         self.consumer = None
         self.level = 0
+        self.data = []
         self.validating = validate
         self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
@@ -468,7 +467,7 @@ class DataHandler(object):
         for key, value in attrs.items():
             tag += ' %s="%s"' % (key, value)
         tag += ">"
-        self.consumer.data.append(tag)
+        self.data.append(tag)
         self.parser.EndElementHandler = self.endRawElementHandler
         self.level += 1
 
@@ -488,15 +487,17 @@ class DataHandler(object):
         if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
             value = consumer
         elif isinstance(consumer, IntegerElement):
-            if consumer.data:
-                value = int("".join(consumer.data))
+            if self.data:
+                value = int("".join(self.data))
+                self.data = []
                 value = IntegerElement(value)
             else:
                 value = NoneElement()
             value.tag = consumer.tag # needed if name=='Item'
             value.attributes = consumer.attributes
         elif isinstance(consumer, StringElement):
-            value = "".join(consumer.data)
+            value = "".join(self.data)
+            self.data = []
             # Convert Unicode strings to plain strings if possible
             try:
                 value = StringElement(value)
@@ -518,8 +519,6 @@ class DataHandler(object):
                     self.consumer[name].append(value)
                 else:
                     self.consumer[name] = value
-            elif isinstance(self.consumer, StringElement):
-                self.consumer.data.append(value)
 
     def endRawElementHandler(self, name):
         consumer = self.consumer
@@ -530,7 +529,7 @@ class DataHandler(object):
         if self.namespace_prefix:
             uri, name = name.split()
         tag = "</%s>" % name
-        consumer.data.append(tag)
+        self.data.append(tag)
 
     def endSkipElementHandler(self, name):
         self.skip -= 1
@@ -551,18 +550,18 @@ class DataHandler(object):
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
-        if not consumer.data:
+        if not self.data:
             # no error found
             return
-        value = "".join(consumer.data)
+        value = "".join(self.data)
         raise RuntimeError(value)
 
     def characterDataHandlerRaw(self, content):
-        self.consumer.data.append(content)
+        self.data.append(content)
 
     def characterDataHandlerEscape(self, content):
         content = escape(content)
-        self.consumer.data.append(content)
+        self.data.append(content)
 
     def skipCharacterDataHandler(self, content):
         return
@@ -611,7 +610,6 @@ class DataHandler(object):
             else:
                 def make_string_element(name, attrs):
                     e = StringElement()
-                    e.data = []
                     e.tag = name
                     e.attributes = dict(attrs)
                     e.keys = []
@@ -661,7 +659,6 @@ class DataHandler(object):
                 tags = [child[2] for child in children]
                 def make_string_element(name, attrs):
                     e = StringElement()
-                    e.data = []
                     e.tag = name
                     e.attributes = dict(attrs)
                     e.keys = [] # should be tags
@@ -670,7 +667,6 @@ class DataHandler(object):
             else:
                 def make_string_element(name, attrs):
                     e = StringElement()
-                    e.data = []
                     e.tag = name
                     e.attributes = dict(attrs)
                     e.keys = []
