@@ -233,6 +233,7 @@ class DataHandler(object):
         self.dtd_urls = []
         self.classes = {}
         self.consumer = None
+        self.level = 0
         self.validating = validate
         self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
@@ -463,17 +464,9 @@ class DataHandler(object):
         for key, value in attrs.items():
             tag += ' %s="%s"' % (key, value)
         tag += ">"
-        consumer = StringElement()
-        consumer.data = self.consumer.data
-        consumer.tag = name
-        consumer.attributes = dict(attrs)
-        consumer.keys = None
-        consumer.data.append(tag)
-        consumer.parent = self.consumer
-        self.consumer = consumer
+        self.consumer.data.append(tag)
         self.parser.EndElementHandler = self.endRawElementHandler
-        consumer.startElementHandler = self.startRawElementHandler
-        consumer.endElementHandler = self.endRawElementHandler
+        self.level += 1
 
     def startSkipElementHandler(self, name, attrs):
         self.skip += 1
@@ -538,12 +531,10 @@ class DataHandler(object):
 
     def endRawElementHandler(self, name):
         consumer = self.consumer
-        self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-        del consumer.startElementHandler
-        del consumer.endElementHandler
+        self.level -= 1
+        if self.level == 0:
+            self.parser.StartElementHandler = consumer.startElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
         if self.namespace_prefix:
             uri, name = name.split()
         tag = "</%s>" % name
