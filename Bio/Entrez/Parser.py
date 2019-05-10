@@ -621,25 +621,13 @@ class DataHandler(object):
     def characterDataHandlerRaw(self, content):
         if isinstance(self.consumer, DictionaryElement):
             return
-        if isinstance(self.consumer, IntegerElement):
-            self.consumer.data.append(content)
-            return
-        if isinstance(self.consumer, StringElement):
-            self.consumer.data.append(content)
-            return
-        if isinstance(self.consumer, ErrorElement):
-            self.consumer.data.append(content)
-            return
-        self.consumer.consume(content)
+        self.consumer.data.append(content)
 
     def characterDataHandlerEscape(self, content):
         if isinstance(self.consumer, DictionaryElement):
             return
         content = escape(content)
-        if isinstance(self.consumer, StringElement):
-            self.consumer.data.append(content)
-            return
-        self.consumer.consume(content)
+        self.consumer.data.append(content)
 
     def skipCharacterDataHandler(self, content):
         return
