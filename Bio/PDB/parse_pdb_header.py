@@ -193,8 +193,7 @@ def _parse_pdb_header_list(header):
         "author": "",
         "compound": {"1": {"misc": ""}}, "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
-        "missing_residues": [],
-        "astral": {}}
+        "missing_residues": []}
 
     dict["structure_reference"] = _get_references(header)
     dict["journal_reference"] = _get_journal(header)
@@ -313,7 +312,10 @@ def _parse_pdb_header_list(header):
                 if tail:
                     remark_99_keyval = tail.replace("ASTRAL ", "").split(": ")
                     if type(remark_99_keyval)==list and len(remark_99_keyval)==2:
-                        dict["astral"][remark_99_keyval[0]] = remark_99_keyval[1]
+                        if "astral" not in dict:
+                            dict["astral"] = {remark_99_keyval[0]: remark_99_keyval[1]}
+                        else:
+                            dict["astral"][remark_99_keyval[0]] = remark_99_keyval[1]
         else:
             # print(key)
             pass
