@@ -435,6 +435,13 @@ class DataHandler(object):
             consumer.startElementHandler = self.startElementHandler
         consumer.endElementHandler = self.endElementHandler
         self.parser.EndElementHandler = self.endElementHandler # may not be needed
+        if isinstance(consumer, ListElement):
+            consumer.characterDataHandler = self.skipCharacterDataHandler
+        elif self.escaping:
+            consumer.characterDataHandler = self.characterDataHandlerEscape
+        else:
+            consumer.characterDataHandler = self.characterDataHandlerRaw
+        self.parser.CharacterDataHandler = consumer.characterDataHandler
 
     def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
@@ -477,8 +484,10 @@ class DataHandler(object):
         if self.consumer is not None:
             self.parser.StartElementHandler = self.consumer.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
         del consumer.startElementHandler
         del consumer.endElementHandler
+        del consumer.characterDataHandler
         if isinstance(consumer, ListElement):
             value = consumer
         elif isinstance(consumer, DictionaryElement):
@@ -610,8 +619,6 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.characterDataHandlerRaw
 
     def characterDataHandlerRaw(self, content):
-        if isinstance(self.consumer, ListElement):
-            return
         if isinstance(self.consumer, DictionaryElement):
             return
         if isinstance(self.consumer, IntegerElement):
@@ -626,8 +633,6 @@ class DataHandler(object):
         self.consumer.consume(content)
 
     def characterDataHandlerEscape(self, content):
-        if isinstance(self.consumer, ListElement):
-            return
         if isinstance(self.consumer, DictionaryElement):
             return
         content = escape(content)
