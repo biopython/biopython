@@ -432,10 +432,14 @@ class DataHandler(object):
         if isinstance(consumer, StringElement):
             self.parser.StartElementHandler = self.startRawElementHandler
             consumer.startElementHandler = self.startRawElementHandler
+            consumer.endElementHandler = self.endElementHandler
+        elif isinstance(consumer, ErrorElement):
+            consumer.startElementHandler = self.startElementHandler
+            consumer.endElementHandler = self.endErrorElementHandler
         else:
             consumer.startElementHandler = self.startElementHandler
-        consumer.endElementHandler = self.endElementHandler
-        self.parser.EndElementHandler = self.endElementHandler # may not be needed
+            consumer.endElementHandler = self.endElementHandler
+        self.parser.EndElementHandler = consumer.endElementHandler
         if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
             consumer.characterDataHandler = self.skipCharacterDataHandler
         elif self.escaping:
@@ -481,9 +485,7 @@ class DataHandler(object):
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
-        if isinstance(consumer, ListElement):
-            value = consumer
-        elif isinstance(consumer, DictionaryElement):
+        if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
             value = consumer
         elif isinstance(consumer, IntegerElement):
             if consumer.data:
@@ -503,14 +505,6 @@ class DataHandler(object):
             value.tag = consumer.tag
             if consumer.attributes:
                 value.attributes = consumer.attributes
-        elif isinstance(consumer, ErrorElement):
-            value = "".join(consumer.data)
-            if value == "":
-                return None
-            else:
-                raise RuntimeError(value)
-        else:
-            value = consumer.value
         if self.consumer is None:
             self.record = value
         elif value is not None:
@@ -526,8 +520,6 @@ class DataHandler(object):
                     self.consumer[name] = value
             elif isinstance(self.consumer, StringElement):
                 self.consumer.data.append(value)
-            else:
-                self.consumer.store(name, value)
 
     def endRawElementHandler(self, name):
         consumer = self.consumer
@@ -548,6 +540,22 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
         self.parser.EndElementHandler = self.endElementHandler
         self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+
+    def endErrorElementHandler(self, name):
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
+        del consumer.characterDataHandler
+        if not consumer.data:
+            # no error found
+            return
+        value = "".join(consumer.data)
+        raise RuntimeError(value)
 
     def characterDataHandlerRaw(self, content):
         self.consumer.data.append(content)
