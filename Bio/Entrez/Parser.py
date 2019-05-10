@@ -490,9 +490,7 @@ class DataHandler(object):
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
-        if isinstance(consumer, DictionaryElement):
-            value = consumer
-        elif isinstance(consumer, IntegerElement):
+        if isinstance(consumer, IntegerElement):
             if self.data:
                 value = int("".join(self.data))
                 self.data = []
