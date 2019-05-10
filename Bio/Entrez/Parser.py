@@ -464,7 +464,7 @@ class DataHandler(object):
             tag += ' %s="%s"' % (key, value)
         tag += ">"
         consumer = StringElement()
-        consumer.data = []
+        consumer.data = self.consumer.data
         consumer.tag = name
         consumer.attributes = dict(attrs)
         consumer.keys = None
@@ -590,21 +590,6 @@ class DataHandler(object):
             value = consumer.value
         if self.consumer is None:
             self.record = value
-        elif value is not None:
-            name = value.tag
-            if isinstance(self.consumer, ListElement):
-                if self.consumer.keys is not None and name not in self.consumer.keys:
-                    raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.append(value)
-            elif isinstance(self.consumer, DictionaryElement):
-                if name in self.consumer.multiple:
-                    self.consumer[name].append(value)
-                else:
-                    self.consumer[name] = value
-            elif isinstance(self.consumer, StringElement):
-                self.consumer.data.append(value)
-            else:
-                self.consumer.store(name, value)
 
     def endSkipElementHandler(self, name):
         self.skip -= 1
