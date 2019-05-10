@@ -189,11 +189,6 @@ class ErrorElement:
         self.data = []
 
 
-class SkipElement:
-    def __init__(self, name, attrs):
-        """If validating is False, skip unknownin the XML data."""
-
-
 def select_item_consumer(name, attrs):
     assert name == 'Item'
     name = str(attrs["Name"])  # convert from Unicode
@@ -411,7 +406,11 @@ class DataHandler(object):
                 raise ValidationError(name)
             else:
                 # this will not be stored in the record
-                cls = SkipElement
+                self.parser.StartElementHandler = self.startSkipElementHandler
+                self.parser.EndElementHandler = self.endSkipElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+                self.skip = 1
+                return
         if cls == select_item_consumer:
             assert name == 'Item'
             tag = str(attrs["Name"])  # convert from Unicode
@@ -469,6 +468,9 @@ class DataHandler(object):
         consumer.startElementHandler = self.startRawElementHandler
         consumer.endElementHandler = self.endRawElementHandler
 
+    def startSkipElementHandler(self, name, attrs):
+        self.skip += 1
+
     def endElementHandler(self, name):
         consumer = self.consumer
         self.consumer = consumer.parent
@@ -505,8 +507,6 @@ class DataHandler(object):
                 return None
             else:
                 raise RuntimeError(value)
-        elif isinstance(consumer, SkipElement):
-            value = None
         else:
             value = consumer.value
         if self.consumer is None:
@@ -522,8 +522,6 @@ class DataHandler(object):
                     self.consumer[name].append(value)
                 else:
                     self.consumer[name] = value
-            elif isinstance(self.consumer, SkipElement):
-                pass
             elif isinstance(self.consumer, StringElement):
                 self.consumer.data.append(value)
             else:
@@ -579,8 +577,6 @@ class DataHandler(object):
                 return None
             else:
                 raise RuntimeError(value)
-        elif isinstance(consumer, SkipElement):
-            value = None
         else:
             value = consumer.value
         if self.consumer is None:
@@ -596,12 +592,22 @@ class DataHandler(object):
                     self.consumer[name].append(value)
                 else:
                     self.consumer[name] = value
-            elif isinstance(self.consumer, SkipElement):
-                pass
             elif isinstance(self.consumer, StringElement):
                 self.consumer.data.append(value)
             else:
                 self.consumer.store(name, value)
+
+    def endSkipElementHandler(self, name):
+        self.skip -= 1
+        if self.skip > 0:
+            return
+        del self.skip
+        self.parser.StartElementHandler = self.startElementHandler
+        self.parser.EndElementHandler = self.endElementHandler
+        if self.escaping:
+            self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+        else:
+            self.parser.CharacterDataHandler = self.characterDataHandlerRaw
 
     def characterDataHandlerRaw(self, content):
         if isinstance(self.consumer, ListElement):
@@ -617,8 +623,6 @@ class DataHandler(object):
         if isinstance(self.consumer, ErrorElement):
             self.consumer.data.append(content)
             return
-        if isinstance(self.consumer, SkipElement):
-            return
         self.consumer.consume(content)
 
     def characterDataHandlerEscape(self, content):
@@ -631,6 +635,9 @@ class DataHandler(object):
             self.consumer.data.append(content)
             return
         self.consumer.consume(content)
+
+    def skipCharacterDataHandler(self, content):
+        return
 
     def parse_xsd(self, root):
         prefix = "{http://www.w3.org/2001/XMLSchema}"
