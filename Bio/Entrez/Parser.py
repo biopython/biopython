@@ -408,7 +408,7 @@ class DataHandler(object):
                 self.parser.StartElementHandler = self.startSkipElementHandler
                 self.parser.EndElementHandler = self.endSkipElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-                self.skip = 1
+                self.level = 1
                 return
         if cls == select_item_consumer:
             assert name == 'Item'
@@ -477,7 +477,7 @@ class DataHandler(object):
         self.level += 1
 
     def startSkipElementHandler(self, name, attrs):
-        self.skip += 1
+        self.level += 1
 
     def endStringElementHandler(self, name):
         consumer = self.consumer
@@ -525,13 +525,11 @@ class DataHandler(object):
         self.data.append(tag)
 
     def endSkipElementHandler(self, name):
-        self.skip -= 1
-        if self.skip > 0:
-            return
-        del self.skip
-        self.parser.StartElementHandler = self.consumer.startElementHandler
-        self.parser.EndElementHandler = self.consumer.endElementHandler
-        self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        self.level -= 1
+        if self.level == 0:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
 
     def endErrorElementHandler(self, name):
         consumer = self.consumer
