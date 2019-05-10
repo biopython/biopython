@@ -55,6 +55,15 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(header["idcode"], "3EFG")
         self.assertEqual(header["deposition_date"], "2008-09-08")
 
+    def test_parse_pdb_with_remark_99(self):
+        """Tests that parse_pdb_header can identify REMARK 99 ASTRAL entries."""
+        header = parse_pdb_header("PDB/d256ba_.ent")
+        self.assertIn("astral", header)
+        self.assertEqual(header["astral"]["SCOP-sccs"], "a.24.3.1")
+        self.assertEqual(header["astral"]["Source-PDB"], "256b")
+        self.assertEqual(header["astral"]["Region"], "a:")
+        self.assertEqual(header["astral"]["ASTRAL-SPACI"], "0.72")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
