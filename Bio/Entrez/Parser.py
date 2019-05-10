@@ -337,7 +337,6 @@ class DataHandler(object):
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
         self.parser.StartElementHandler = self.startElementHandler
-        self.parser.EndElementHandler = self.endElementHandler
         if self.escaping:
             self.parser.CharacterDataHandler = self.characterDataHandlerEscape
         else:
@@ -431,7 +430,10 @@ class DataHandler(object):
         if isinstance(consumer, StringElement):
             self.parser.StartElementHandler = self.startRawElementHandler
             consumer.startElementHandler = self.startRawElementHandler
-            consumer.endElementHandler = self.endElementHandler
+            consumer.endElementHandler = self.endStringElementHandler
+        elif isinstance(consumer, IntegerElement):
+            consumer.startElementHandler = self.startElementHandler
+            consumer.endElementHandler = self.endIntegerElementHandler
         elif isinstance(consumer, ErrorElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endErrorElementHandler
@@ -441,9 +443,6 @@ class DataHandler(object):
         elif isinstance(consumer, DictionaryElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endDictionaryElementHandler
-        else:
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endElementHandler
         self.parser.EndElementHandler = consumer.endElementHandler
         if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
             consumer.characterDataHandler = self.skipCharacterDataHandler
@@ -480,7 +479,7 @@ class DataHandler(object):
     def startSkipElementHandler(self, name, attrs):
         self.skip += 1
 
-    def endElementHandler(self, name):
+    def endStringElementHandler(self, name):
         consumer = self.consumer
         self.consumer = consumer.parent
         if self.consumer is not None:
@@ -490,29 +489,19 @@ class DataHandler(object):
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
-        if isinstance(consumer, IntegerElement):
-            if self.data:
-                value = int("".join(self.data))
-                self.data = []
-                value = IntegerElement(value)
-            else:
-                value = NoneElement()
-            value.tag = consumer.tag # needed if name=='Item'
+        value = "".join(self.data)
+        self.data = []
+        # Convert Unicode strings to plain strings if possible
+        try:
+            value = StringElement(value)
+        except UnicodeEncodeError:
+            value = UnicodeElement(value)
+        value.tag = consumer.tag
+        if consumer.attributes:
             value.attributes = consumer.attributes
-        elif isinstance(consumer, StringElement):
-            value = "".join(self.data)
-            self.data = []
-            # Convert Unicode strings to plain strings if possible
-            try:
-                value = StringElement(value)
-            except UnicodeEncodeError:
-                value = UnicodeElement(value)
-            value.tag = consumer.tag
-            if consumer.attributes:
-                value.attributes = consumer.attributes
         if self.consumer is None:
             self.record = value
-        elif value is not None:
+        else:
             name = value.tag
             if isinstance(self.consumer, ListElement):
                 if self.consumer.keys is not None and name not in self.consumer.keys:
@@ -540,8 +529,8 @@ class DataHandler(object):
         if self.skip > 0:
             return
         del self.skip
-        self.parser.StartElementHandler = self.startElementHandler
-        self.parser.EndElementHandler = self.endElementHandler
+        self.parser.StartElementHandler = self.consumer.startElementHandler
+        self.parser.EndElementHandler = self.consumer.endElementHandler
         self.parser.CharacterDataHandler = self.consumer.characterDataHandler
 
     def endErrorElementHandler(self, name):
@@ -608,6 +597,38 @@ class DataHandler(object):
                     self.consumer[name].append(consumer)
                 else:
                     self.consumer[name] = consumer
+
+    def endIntegerElementHandler(self, name):
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
+        del consumer.characterDataHandler
+        if self.data:
+            value = int("".join(self.data))
+            self.data = []
+            value = IntegerElement(value)
+        else:
+            value = NoneElement()
+        value.tag = consumer.tag # needed if name=='Item'
+        value.attributes = consumer.attributes
+        if self.consumer is None:
+            self.record = value
+        elif value is not None:
+            name = value.tag
+            if isinstance(self.consumer, ListElement):
+                if self.consumer.keys is not None and name not in self.consumer.keys:
+                    raise ValueError("Unexpected item '%s' in list" % name)
+                self.consumer.append(value)
+            elif isinstance(self.consumer, DictionaryElement):
+                if name in self.consumer.multiple:
+                    self.consumer[name].append(value)
+                else:
+                    self.consumer[name] = value
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
