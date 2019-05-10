@@ -435,6 +435,12 @@ class DataHandler(object):
         elif isinstance(consumer, ErrorElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endErrorElementHandler
+        elif isinstance(consumer, ListElement):
+            consumer.startElementHandler = self.startElementHandler
+            consumer.endElementHandler = self.endListElementHandler
+        elif isinstance(consumer, DictionaryElement):
+            consumer.startElementHandler = self.startElementHandler
+            consumer.endElementHandler = self.endDictionaryElementHandler
         else:
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endElementHandler
@@ -484,7 +490,7 @@ class DataHandler(object):
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
-        if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
+        if isinstance(consumer, DictionaryElement):
             value = consumer
         elif isinstance(consumer, IntegerElement):
             if self.data:
@@ -555,6 +561,55 @@ class DataHandler(object):
             return
         value = "".join(self.data)
         raise RuntimeError(value)
+
+    def endListElementHandler(self, name):
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
+        del consumer.characterDataHandler
+        value = consumer
+        if self.consumer is None:
+            self.record = value
+        else:
+            name = value.tag
+            if isinstance(self.consumer, ListElement):
+                if self.consumer.keys is not None and name not in self.consumer.keys:
+                    raise ValueError("Unexpected item '%s' in list" % name)
+                self.consumer.append(value)
+            elif isinstance(self.consumer, DictionaryElement):
+                if name in self.consumer.multiple:
+                    self.consumer[name].append(value)
+                else:
+                    self.consumer[name] = value
+
+    def endDictionaryElementHandler(self, name):
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
+        del consumer.characterDataHandler
+        if self.consumer is None:
+            self.record = consumer
+        else:
+            name = consumer.tag
+            if isinstance(self.consumer, ListElement):
+                if self.consumer.keys is not None and name not in self.consumer.keys:
+                    raise ValueError("Unexpected item '%s' in list" % name)
+                self.consumer.append(consumer)
+            elif isinstance(self.consumer, DictionaryElement):
+                if name in self.consumer.multiple:
+                    self.consumer[name].append(consumer)
+                else:
+                    self.consumer[name] = consumer
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
