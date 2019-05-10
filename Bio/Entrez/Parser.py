@@ -435,7 +435,7 @@ class DataHandler(object):
             consumer.startElementHandler = self.startElementHandler
         consumer.endElementHandler = self.endElementHandler
         self.parser.EndElementHandler = self.endElementHandler # may not be needed
-        if isinstance(consumer, ListElement):
+        if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
             consumer.characterDataHandler = self.skipCharacterDataHandler
         elif self.escaping:
             consumer.characterDataHandler = self.characterDataHandlerEscape
@@ -613,19 +613,12 @@ class DataHandler(object):
         del self.skip
         self.parser.StartElementHandler = self.startElementHandler
         self.parser.EndElementHandler = self.endElementHandler
-        if self.escaping:
-            self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-        else:
-            self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+        self.parser.CharacterDataHandler = self.consumer.characterDataHandler
 
     def characterDataHandlerRaw(self, content):
-        if isinstance(self.consumer, DictionaryElement):
-            return
         self.consumer.data.append(content)
 
     def characterDataHandlerEscape(self, content):
-        if isinstance(self.consumer, DictionaryElement):
-            return
         content = escape(content)
         self.consumer.data.append(content)
 
