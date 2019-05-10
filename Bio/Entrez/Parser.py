@@ -404,7 +404,6 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, name, attrs):
-        print("Starting startElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
         cls = self.classes.get(name)
         if cls is None:
             # Element not found in DTD
@@ -431,18 +430,15 @@ class DataHandler(object):
             self.record = consumer
         self.consumer = consumer
         if isinstance(consumer, StringElement):
-            consumer.startElementHandler = self.startStringElementHandler
+            self.parser.StartElementHandler = self.startRawElementHandler
+            consumer.startElementHandler = self.startRawElementHandler
         else:
             consumer.startElementHandler = self.startElementHandler
         consumer.endElementHandler = self.endElementHandler
-        self.parser.StartElementHandler = consumer.startElementHandler
-        self.parser.EndElementHandler = self.endElementHandler
+        self.parser.EndElementHandler = self.endElementHandler # may not be needed
 
 
-    def startStringElementHandler(self, name, attrs):
-        print("Starting startStringElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
-        self.consumer.endElementHandler = self.endStringElementHandler
-        self.parser.EndElementHandler = self.endStringElementHandler
+    def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
         prefix = None
         if self.namespace_prefix:
@@ -470,17 +466,18 @@ class DataHandler(object):
         consumer.data.append(tag)
         consumer.parent = self.consumer
         self.consumer = consumer
-        consumer.startElementHandler = self.startStringElementHandler
-        consumer.endElementHandler = self.endStringElementHandler
+        self.parser.EndElementHandler = self.endRawElementHandler # may not be needed
+        consumer.startElementHandler = self.startRawElementHandler
+        consumer.endElementHandler = self.endRawElementHandler
 
     def endElementHandler(self, name):
-        print("Starting endElementHandler for %s; string? %s" % (name, isinstance(self.consumer, StringElement)))
         consumer = self.consumer
         self.consumer = consumer.parent
         if self.consumer is not None:
             self.parser.StartElementHandler = self.consumer.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
         del consumer.startElementHandler
+        del consumer.endElementHandler
         if isinstance(consumer, ListElement):
             value = consumer
         elif isinstance(consumer, DictionaryElement):
@@ -533,8 +530,7 @@ class DataHandler(object):
             else:
                 self.consumer.store(name, value)
 
-    def endStringElementHandler(self, name):
-        print("Starting endStringElementHandler for %s; tag is %s; string? %s" % (name, self.consumer.tag, isinstance(self.consumer, StringElement)))
+    def endRawElementHandler(self, name):
         prefix = None
         if self.namespace_prefix:
             try:
