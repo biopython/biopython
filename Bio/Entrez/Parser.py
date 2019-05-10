@@ -437,7 +437,6 @@ class DataHandler(object):
         consumer.endElementHandler = self.endElementHandler
         self.parser.EndElementHandler = self.endElementHandler # may not be needed
 
-
     def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
         prefix = None
@@ -466,7 +465,7 @@ class DataHandler(object):
         consumer.data.append(tag)
         consumer.parent = self.consumer
         self.consumer = consumer
-        self.parser.EndElementHandler = self.endRawElementHandler # may not be needed
+        self.parser.EndElementHandler = self.endRawElementHandler
         consumer.startElementHandler = self.startRawElementHandler
         consumer.endElementHandler = self.endRawElementHandler
 
@@ -488,7 +487,7 @@ class DataHandler(object):
                 value = IntegerElement(value)
             else:
                 value = NoneElement()
-            value.tag = consumer.tag
+            value.tag = consumer.tag # needed if name=='Item'
             value.attributes = consumer.attributes
         elif isinstance(consumer, StringElement):
             value = "".join(consumer.data)
@@ -531,6 +530,13 @@ class DataHandler(object):
                 self.consumer.store(name, value)
 
     def endRawElementHandler(self, name):
+        consumer = self.consumer
+        self.consumer = consumer.parent
+        if self.consumer is not None:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+        del consumer.startElementHandler
+        del consumer.endElementHandler
         prefix = None
         if self.namespace_prefix:
             try:
@@ -539,21 +545,12 @@ class DataHandler(object):
                 pass
             else:
                 prefix = self.namespace_prefix[uri]
-        consumer = self.consumer
-        # First, check if the current consumer can use the tag
-        if isinstance(consumer, StringElement):
-            if prefix:
-                key = "%s:%s" % (prefix, name)
-            else:
-                key = name
-            tag = "</%s>" % name
-            consumer.data.append(tag)
-        self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-        del consumer.startElementHandler
-        del consumer.endElementHandler
+        if prefix:
+            key = "%s:%s" % (prefix, name)
+        else:
+            key = name
+        tag = "</%s>" % name
+        consumer.data.append(tag)
         if isinstance(consumer, ListElement):
             value = consumer
         elif isinstance(consumer, DictionaryElement):
