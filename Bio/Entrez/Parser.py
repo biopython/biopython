@@ -395,22 +395,21 @@ class DataHandler(object):
                 del attrs["Name"]
                 consumer = StringElement()
                 consumer.tag = name
-                consumer.attributes = dict(attrs)
+                assert self.attributes is None
+                self.attributes = dict(attrs)
                 consumer.keys = None
+                consumer.parent = self.consumer
+                self.parser.StartElementHandler = self.startRawElementHandler
+                self.parser.EndElementHandler = self.endStringElementHandler
+                if self.escaping:
+                    self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+                else:
+                    self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+                self.consumer = consumer
+                return
             else:
                 raise ValueError("Unknown item type %s" % name)
             consumer.parent = self.consumer
-            if isinstance(consumer, StringElement):
-                self.parser.StartElementHandler = self.startRawElementHandler
-                consumer.startElementHandler = self.startRawElementHandler
-                self.parser.EndElementHandler = self.endStringElementHandler
-                if self.escaping:
-                    consumer.characterDataHandler = self.characterDataHandlerEscape
-                else:
-                    consumer.characterDataHandler = self.characterDataHandlerRaw
-                self.parser.CharacterDataHandler = consumer.characterDataHandler
-                self.consumer = consumer
-                return
         elif name in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             if self.escaping:
@@ -444,13 +443,13 @@ class DataHandler(object):
         self.consumer = consumer
         if isinstance(consumer, StringElement):
             self.parser.StartElementHandler = self.startRawElementHandler
-            consumer.startElementHandler = self.startRawElementHandler
             self.parser.EndElementHandler = self.endStringElementHandler
             if self.escaping:
-                consumer.characterDataHandler = self.characterDataHandlerEscape
+                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
             else:
-                consumer.characterDataHandler = self.characterDataHandlerRaw
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+            assert self.attributes is None
+            self.attributes = dict(attrs)
         elif isinstance(consumer, ListElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endListElementHandler
@@ -498,8 +497,6 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
             self.parser.CharacterDataHandler = self.consumer.characterDataHandler
-        del consumer.startElementHandler
-        del consumer.characterDataHandler
         value = "".join(self.data)
         self.data = []
         # Convert Unicode strings to plain strings if possible
@@ -507,9 +504,13 @@ class DataHandler(object):
             value = StringElement(value)
         except UnicodeEncodeError:
             value = UnicodeElement(value)
-        value.tag = consumer.tag
-        if consumer.attributes:
-            value.attributes = consumer.attributes
+        if name in self.items:
+            value.tag = consumer.tag
+        else:
+            value.tag = name
+        attributes = self.attributes
+        self.attributes = None
+        value.attributes = attributes
         if self.consumer is None:
             self.record = value
         else:
