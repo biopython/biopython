@@ -190,30 +190,7 @@ class ErrorElement:
 
 
 def select_item_consumer(name, attrs):
-    assert name == 'Item'
-    name = str(attrs["Name"])  # convert from Unicode
-    del attrs["Name"]
-    itemtype = str(attrs["Type"])  # convert from Unicode
-    del attrs["Type"]
-    if itemtype == "Structure":
-        consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
-    elif name in ("ArticleIds", "History"):
-        consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
-    elif itemtype == "List":
-        # Keys are unknown in this case
-        consumer = ListElement(name, attrs, None)
-    elif itemtype == "Integer":
-        consumer = IntegerElement()
-        consumer.tag = name
-        consumer.attributes = dict(attrs)
-    elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
-        consumer = StringElement()
-        consumer.tag = name
-        consumer.attributes = dict(attrs)
-        consumer.keys = None
-    else:
-        raise ValueError("Unknown item type %s" % name)
-    return consumer
+    return
 
 
 class DataHandler(object):
@@ -412,12 +389,32 @@ class DataHandler(object):
                 return
         if cls == select_item_consumer:
             assert name == 'Item'
-            tag = str(attrs["Name"])  # convert from Unicode
-            # del attrs["Name"] # FIXME
+            name = str(attrs["Name"])  # convert from Unicode
+            del attrs["Name"]
+            itemtype = str(attrs["Type"])  # convert from Unicode
+            del attrs["Type"]
+            if itemtype == "Structure":
+                consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
+            elif name in ("ArticleIds", "History"):
+                consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
+            elif itemtype == "List":
+                # Keys are unknown in this case
+                consumer = ListElement(name, attrs, None)
+            elif itemtype == "Integer":
+                consumer = IntegerElement()
+                consumer.tag = name
+                consumer.attributes = dict(attrs)
+            elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
+                consumer = StringElement()
+                consumer.tag = name
+                consumer.attributes = dict(attrs)
+                consumer.keys = None
+            else:
+                raise ValueError("Unknown item type %s" % name)
+            consumer.parent = self.consumer
         else:
-            tag = name
-        consumer = cls(name, attrs)
-        consumer.parent = self.consumer
+            consumer = cls(name, attrs)
+            consumer.parent = self.consumer
         if self.consumer is None:
             # This is relevant only for Entrez.parse, not for Entrez.read.
             # If self.consumer is None, then this is the first start tag we
