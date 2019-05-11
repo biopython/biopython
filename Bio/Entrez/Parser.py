@@ -426,26 +426,39 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.startRawElementHandler
             consumer.startElementHandler = self.startRawElementHandler
             consumer.endElementHandler = self.endStringElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            if self.escaping:
+                consumer.characterDataHandler = self.characterDataHandlerEscape
+            else:
+                consumer.characterDataHandler = self.characterDataHandlerRaw
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         elif isinstance(consumer, IntegerElement):
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endIntegerElementHandler
+            self.parser.EndElementHandler = self.endIntegerElementHandler
+            if self.escaping:
+                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+            else:
+                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         elif isinstance(consumer, ErrorElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endErrorElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            if self.escaping:
+                consumer.characterDataHandler = self.characterDataHandlerEscape
+            else:
+                consumer.characterDataHandler = self.characterDataHandlerRaw
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         elif isinstance(consumer, ListElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endListElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            consumer.characterDataHandler = self.skipCharacterDataHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         elif isinstance(consumer, DictionaryElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endDictionaryElementHandler
-        self.parser.EndElementHandler = consumer.endElementHandler
-        if isinstance(consumer, ListElement) or isinstance(consumer, DictionaryElement):
+            self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
-        elif self.escaping:
-            consumer.characterDataHandler = self.characterDataHandlerEscape
-        else:
-            consumer.characterDataHandler = self.characterDataHandlerRaw
-        self.parser.CharacterDataHandler = consumer.characterDataHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
 
     def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
@@ -598,9 +611,6 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.consumer.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
             self.parser.CharacterDataHandler = self.consumer.characterDataHandler
-        del consumer.startElementHandler
-        del consumer.endElementHandler
-        del consumer.characterDataHandler
         if self.data:
             value = int("".join(self.data))
             self.data = []
