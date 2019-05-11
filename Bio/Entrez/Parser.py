@@ -378,9 +378,11 @@ class DataHandler(object):
             if itemtype == "Structure":
                 del attrs["Name"]
                 consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
+                consumer.parent = self.consumer
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
                 consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
+                consumer.parent = self.consumer
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
@@ -421,7 +423,6 @@ class DataHandler(object):
                 return
             else:
                 raise ValueError("Unknown item type %s" % name)
-            consumer.parent = self.consumer
         elif name in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             if self.escaping:
