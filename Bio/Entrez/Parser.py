@@ -440,6 +440,24 @@ class DataHandler(object):
             assert self.attributes is None
             self.attributes = dict(attrs)
             return
+        elif name in self.lists:
+            children = self.lists[name]
+            consumer = ListElement(name, attrs, children)
+            consumer.parent = self.consumer
+            if self.consumer is None:
+                # This is relevant only for Entrez.parse, not for Entrez.read.
+                # If self.consumer is None, then this is the first start tag we
+                # encounter, and it should refer to a list. Store this list in
+                # the record attribute, so that Entrez.parse can iterate over it.
+                # The record attribute will be set again at the last end tag;
+                # However, it doesn't hurt to set it twice.
+                self.record = consumer
+            self.consumer = consumer
+            consumer.startElementHandler = self.startElementHandler
+            consumer.endElementHandler = self.endListElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            consumer.characterDataHandler = self.skipCharacterDataHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         else:
             cls = self.classes.get(name)
             if cls is None:
@@ -455,22 +473,7 @@ class DataHandler(object):
                     return
             consumer = cls(name, attrs)
             consumer.parent = self.consumer
-        if self.consumer is None:
-            # This is relevant only for Entrez.parse, not for Entrez.read.
-            # If self.consumer is None, then this is the first start tag we
-            # encounter, and it should refer to a list. Store this list in
-            # the record attribute, so that Entrez.parse can iterate over it.
-            # The record attribute will be set again at the last end tag;
-            # However, it doesn't hurt to set it twice.
-            self.record = consumer
-        if isinstance(consumer, ListElement):
-            self.consumer = consumer
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endListElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            consumer.characterDataHandler = self.skipCharacterDataHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
-        elif isinstance(consumer, DictionaryElement):
+        if isinstance(consumer, DictionaryElement):
             self.consumer = consumer
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endDictionaryElementHandler
