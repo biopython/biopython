@@ -201,6 +201,7 @@ class DataHandler(object):
         self.level = 0
         self.data = []
         self.attributes = None
+        self.strings = set()
         self.items = set()
         self.errors = set()
         self.validating = validate
@@ -393,10 +394,8 @@ class DataHandler(object):
                 return
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
                 consumer = StringElement()
-                consumer.tag = name
                 assert self.attributes is None
                 self.attributes = dict(attrs)
-                consumer.keys = None
                 consumer.parent = self.consumer
                 self.parser.StartElementHandler = self.startRawElementHandler
                 self.parser.EndElementHandler = self.endStringElementHandler
@@ -415,6 +414,19 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.characterDataHandlerEscape
             else:
                 self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+            return
+        elif name in self.strings:
+            consumer = StringElement()
+            consumer.parent = self.consumer
+            self.consumer = consumer
+            self.parser.StartElementHandler = self.startRawElementHandler
+            self.parser.EndElementHandler = self.endStringElementHandler
+            if self.escaping:
+                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+            else:
+                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+            assert self.attributes is None
+            self.attributes = dict(attrs)
             return
         else:
             cls = self.classes.get(name)
@@ -439,23 +451,15 @@ class DataHandler(object):
             # The record attribute will be set again at the last end tag;
             # However, it doesn't hurt to set it twice.
             self.record = consumer
-        self.consumer = consumer
-        if isinstance(consumer, StringElement):
-            self.parser.StartElementHandler = self.startRawElementHandler
-            self.parser.EndElementHandler = self.endStringElementHandler
-            if self.escaping:
-                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-            else:
-                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
-            assert self.attributes is None
-            self.attributes = dict(attrs)
-        elif isinstance(consumer, ListElement):
+        if isinstance(consumer, ListElement):
+            self.consumer = consumer
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endListElementHandler
             self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
             self.parser.CharacterDataHandler = consumer.characterDataHandler
         elif isinstance(consumer, DictionaryElement):
+            self.consumer = consumer
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endDictionaryElementHandler
             self.parser.EndElementHandler = consumer.endElementHandler
@@ -695,6 +699,7 @@ class DataHandler(object):
                     e.keys = []
                     return e
                 self.classes[name] = make_string_element
+                self.strings.add(name)
 
 
     def elementDecl(self, name, model):
@@ -744,6 +749,7 @@ class DataHandler(object):
                     e.keys = [] # should be tags
                     return e
                 self.classes[name] = make_string_element
+                self.strings.add(name)
             else:
                 def make_string_element(name, attrs):
                     e = StringElement()
@@ -752,6 +758,7 @@ class DataHandler(object):
                     e.keys = []
                     return e
                 self.classes[name] = make_string_element
+                self.strings.add(name)
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
