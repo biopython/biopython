@@ -380,7 +380,6 @@ class DataHandler(object):
                 element = DictionaryElement(name, dict(attrs), children=None, multiple=set())
                 element.parent = self.element
                 self.element = element
-                element.startElementHandler = self.startElementHandler
                 element.endElementHandler = self.endDictionaryElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
                 element.characterDataHandler = self.skipCharacterDataHandler
@@ -390,7 +389,6 @@ class DataHandler(object):
                 element = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
                 element.parent = self.element
                 self.element = element
-                element.startElementHandler = self.startElementHandler
                 element.endElementHandler = self.endDictionaryElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
                 element.characterDataHandler = self.skipCharacterDataHandler
@@ -409,7 +407,6 @@ class DataHandler(object):
                     # However, it doesn't hurt to set it twice.
                     self.record = element
                 self.element = element
-                element.startElementHandler = self.startElementHandler
                 element.endElementHandler = self.endListElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
                 element.characterDataHandler = self.skipCharacterDataHandler
@@ -448,7 +445,6 @@ class DataHandler(object):
                 # However, it doesn't hurt to set it twice.
                 self.record = element
             self.element = element
-            element.startElementHandler = self.startElementHandler
             element.endElementHandler = self.endListElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             element.characterDataHandler = self.skipCharacterDataHandler
@@ -458,7 +454,6 @@ class DataHandler(object):
             element = DictionaryElement(name, attrs, children, multiple)
             element.parent = self.element
             self.element = element
-            element.startElementHandler = self.startElementHandler
             element.endElementHandler = self.endDictionaryElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             element.characterDataHandler = self.skipCharacterDataHandler
@@ -548,7 +543,7 @@ class DataHandler(object):
     def endSkipElementHandler(self, name):
         self.level -= 1
         if self.level == 0:
-            self.parser.StartElementHandler = self.element.startElementHandler
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.element.endElementHandler
 
     def endErrorElementHandler(self, name):
@@ -559,7 +554,7 @@ class DataHandler(object):
         # no error found:
         element = self.element
         if element is not None:
-            self.parser.StartElementHandler = element.startElementHandler
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             self.parser.CharacterDataHandler = element.characterDataHandler
 
@@ -567,11 +562,9 @@ class DataHandler(object):
         element = self.element
         self.element = element.parent
         if self.element is not None:
-            self.parser.StartElementHandler = self.element.startElementHandler
             self.parser.EndElementHandler = self.element.endElementHandler
             self.parser.CharacterDataHandler = self.element.characterDataHandler
         del element.children
-        del element.startElementHandler
         del element.endElementHandler
         del element.characterDataHandler
         value = element
@@ -593,10 +586,8 @@ class DataHandler(object):
         element = self.element
         self.element = element.parent
         if self.element is not None:
-            self.parser.StartElementHandler = self.element.startElementHandler
             self.parser.EndElementHandler = self.element.endElementHandler
             self.parser.CharacterDataHandler = self.element.characterDataHandler
-        del element.startElementHandler
         del element.endElementHandler
         del element.characterDataHandler
         if self.element is None:
@@ -631,7 +622,7 @@ class DataHandler(object):
         if element is None:
             self.record = value
         else:
-            self.parser.StartElementHandler = element.startElementHandler
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             self.parser.CharacterDataHandler = element.characterDataHandler
             if value is None:
