@@ -607,10 +607,6 @@ class DataHandler(object):
     def endIntegerElementHandler(self, name):
         consumer = self.consumer
         self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
         if self.data:
             value = int("".join(self.data))
             self.data = []
@@ -622,7 +618,12 @@ class DataHandler(object):
         self.attributes = None
         if self.consumer is None:
             self.record = value
-        elif value is not None:
+        else:
+            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.EndElementHandler = self.consumer.endElementHandler
+            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+            if value is None:
+                return
             name = value.tag
             if isinstance(self.consumer, ListElement):
                 if self.consumer.keys is not None and name not in self.consumer.keys:
