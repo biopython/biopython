@@ -506,7 +506,7 @@ class DataHandler(object):
         if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
-            self.parser.CharacterDataHandler = element.characterDataHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         value = "".join(self.data)
         self.data = []
         # Convert Unicode strings to plain strings if possible
@@ -550,19 +550,18 @@ class DataHandler(object):
         if self.level == 0:
             self.parser.StartElementHandler = self.element.startElementHandler
             self.parser.EndElementHandler = self.element.endElementHandler
-            self.parser.CharacterDataHandler = self.element.characterDataHandler
 
     def endErrorElementHandler(self, name):
+        if self.data:
+            # error found:
+            value = "".join(self.data)
+            raise RuntimeError(value)
+        # no error found:
         element = self.element
         if element is not None:
             self.parser.StartElementHandler = element.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             self.parser.CharacterDataHandler = element.characterDataHandler
-        if not self.data:
-            # no error found
-            return
-        value = "".join(self.data)
-        raise RuntimeError(value)
 
     def endListElementHandler(self, name):
         element = self.element
