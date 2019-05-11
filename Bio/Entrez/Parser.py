@@ -392,7 +392,6 @@ class DataHandler(object):
                 self.attributes = dict(attrs)
                 return
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
-                del attrs["Name"]
                 consumer = StringElement()
                 consumer.tag = name
                 assert self.attributes is None
@@ -504,12 +503,13 @@ class DataHandler(object):
             value = StringElement(value)
         except UnicodeEncodeError:
             value = UnicodeElement(value)
-        if name in self.items:
-            value.tag = consumer.tag
-        else:
-            value.tag = name
         attributes = self.attributes
         self.attributes = None
+        if name in self.items:
+            assert name == 'Item'
+            name = str(attributes["Name"])  # convert from Unicode
+            del attributes["Name"]
+        value.tag = name
         value.attributes = attributes
         if self.consumer is None:
             self.record = value
