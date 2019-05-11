@@ -206,7 +206,6 @@ class DataHandler(object):
         self.items = set()
         self.errors = set()
         self.validating = validate
-        self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -214,6 +213,10 @@ class DataHandler(object):
         self.namespace_level = Counter()
         self.namespace_prefix = {}
         self._directory = None
+        if escape:
+            self.characterDataHandler = self.characterDataHandlerEscape
+        else:
+            self.characterDataHandler = self.characterDataHandlerRaw
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
@@ -309,10 +312,7 @@ class DataHandler(object):
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
         self.parser.StartElementHandler = self.startElementHandler
-        if self.escaping:
-            self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-        else:
-            self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+        self.parser.CharacterDataHandler = self.characterDataHandler
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
         self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
@@ -385,7 +385,6 @@ class DataHandler(object):
                 self.parser.EndElementHandler = consumer.endElementHandler
                 consumer.characterDataHandler = self.skipCharacterDataHandler
                 self.parser.CharacterDataHandler = consumer.characterDataHandler
-                return
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
                 consumer = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
@@ -396,7 +395,6 @@ class DataHandler(object):
                 self.parser.EndElementHandler = consumer.endElementHandler
                 consumer.characterDataHandler = self.skipCharacterDataHandler
                 self.parser.CharacterDataHandler = consumer.characterDataHandler
-                return
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
@@ -416,44 +414,27 @@ class DataHandler(object):
                 self.parser.EndElementHandler = consumer.endElementHandler
                 consumer.characterDataHandler = self.skipCharacterDataHandler
                 self.parser.CharacterDataHandler = consumer.characterDataHandler
-                return
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
-                if self.escaping:
-                    self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-                else:
-                    self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+                self.parser.CharacterDataHandler = self.characterDataHandler
                 self.attributes = dict(attrs)
-                return
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
                 assert self.attributes is None
                 self.attributes = dict(attrs)
                 self.parser.StartElementHandler = self.startRawElementHandler
                 self.parser.EndElementHandler = self.endStringElementHandler
-                if self.escaping:
-                    self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-                else:
-                    self.parser.CharacterDataHandler = self.characterDataHandlerRaw
-                return
+                self.parser.CharacterDataHandler = self.characterDataHandler
             else:
                 raise ValueError("Unknown item type %s" % name)
         elif name in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
-            if self.escaping:
-                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-            else:
-                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
-            return
+            self.parser.CharacterDataHandler = self.characterDataHandler
         elif name in self.strings:
             self.parser.StartElementHandler = self.startRawElementHandler
             self.parser.EndElementHandler = self.endStringElementHandler
-            if self.escaping:
-                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-            else:
-                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+            self.parser.CharacterDataHandler = self.characterDataHandler
             assert self.attributes is None
             self.attributes = dict(attrs)
-            return
         elif name in self.lists:
             children = self.lists[name]
             consumer = ListElement(name, attrs, children)
@@ -472,7 +453,6 @@ class DataHandler(object):
             self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
             self.parser.CharacterDataHandler = consumer.characterDataHandler
-            return
         elif name in self.dictionaries:
             children, multiple = self.dictionaries[name]
             consumer = DictionaryElement(name, attrs, children, multiple)
@@ -483,7 +463,6 @@ class DataHandler(object):
             self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
             self.parser.CharacterDataHandler = consumer.characterDataHandler
-            return
         else:
             # Element not found in DTD
             if self.validating:
@@ -494,7 +473,6 @@ class DataHandler(object):
                 self.parser.EndElementHandler = self.endSkipElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
                 self.level = 1
-                return
 
     def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
