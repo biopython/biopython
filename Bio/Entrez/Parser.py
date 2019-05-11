@@ -685,13 +685,6 @@ class DataHandler(object):
                 assert not isSimpleContent
                 self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
             else:
-                def make_string_element(name, attrs):
-                    e = StringElement()
-                    e.tag = name
-                    e.attributes = dict(attrs)
-                    e.keys = []
-                    return e
-                self.classes[name] = make_string_element
                 self.strings.add(name)
 
 
@@ -735,22 +728,8 @@ class DataHandler(object):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 tags = [child[2] for child in children]
-                def make_string_element(name, attrs):
-                    e = StringElement()
-                    e.tag = name
-                    e.attributes = dict(attrs)
-                    e.keys = [] # should be tags
-                    return e
-                self.classes[name] = make_string_element
                 self.strings.add(name)
             else:
-                def make_string_element(name, attrs):
-                    e = StringElement()
-                    e.tag = name
-                    e.attributes = dict(attrs)
-                    e.keys = []
-                    return e
-                self.classes[name] = make_string_element
                 self.strings.add(name)
             return
         # List-type elements
