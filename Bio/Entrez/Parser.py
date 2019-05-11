@@ -112,12 +112,12 @@ class UnicodeElement(unicode):
 
 
 class ListElement(list):
-    def __init__(self, name, attrs, keys):
+    def __init__(self, name, attrs, children):
         self.tag = name
         self.attributes = {}
         for key, value in attrs.items():
             self.attributes[key] = value
-        self.keys = keys
+        self.children = children
     def __repr__(self):
         text = list.__repr__(self)
         try:
@@ -513,7 +513,7 @@ class DataHandler(object):
         else:
             name = value.tag
             if isinstance(consumer, ListElement):
-                if consumer.keys is not None and name not in consumer.keys:
+                if consumer.children is not None and name not in consumer.children:
                     raise ValueError("Unexpected item '%s' in list" % name)
                 consumer.append(value)
             elif isinstance(consumer, DictionaryElement):
@@ -590,7 +590,7 @@ class DataHandler(object):
         else:
             name = consumer.tag
             if isinstance(self.consumer, ListElement):
-                if self.consumer.keys is not None and name not in self.consumer.keys:
+                if self.consumer.children is not None and name not in self.consumer.children:
                     raise ValueError("Unexpected item '%s' in list" % name)
                 self.consumer.append(consumer)
             elif isinstance(self.consumer, DictionaryElement):
