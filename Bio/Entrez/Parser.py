@@ -129,10 +129,10 @@ class ListElement(list):
 
 class DictionaryElement(dict):
 
-    def __init__(self, name, attrs, keys, multiple=[]):
+    def __init__(self, name, attrs, children, multiple=[]):
         self.tag = name
         self.attributes = dict(attrs)
-        self.keys = keys
+        self.children = children
         self.multiple = multiple
         for key in multiple:
             self[key] = []
@@ -203,6 +203,7 @@ class DataHandler(object):
         self.attributes = None
         self.strings = set()
         self.lists = {}
+        self.dictionaries = {}
         self.items = set()
         self.errors = set()
         self.validating = validate
@@ -377,12 +378,26 @@ class DataHandler(object):
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
-                consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
+                consumer = DictionaryElement(name, dict(attrs), children=None, multiple=set())
                 consumer.parent = self.consumer
+                self.consumer = consumer
+                consumer.startElementHandler = self.startElementHandler
+                consumer.endElementHandler = self.endDictionaryElementHandler
+                self.parser.EndElementHandler = consumer.endElementHandler
+                consumer.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                return
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
+                consumer = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
                 consumer.parent = self.consumer
+                self.consumer = consumer
+                consumer.startElementHandler = self.startElementHandler
+                consumer.endElementHandler = self.endDictionaryElementHandler
+                self.parser.EndElementHandler = consumer.endElementHandler
+                consumer.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                return
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
@@ -458,28 +473,29 @@ class DataHandler(object):
             self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
             self.parser.CharacterDataHandler = consumer.characterDataHandler
-        else:
-            cls = self.classes.get(name)
-            if cls is None:
-                # Element not found in DTD
-                if self.validating:
-                    raise ValidationError(name)
-                else:
-                    # this will not be stored in the record
-                    self.parser.StartElementHandler = self.startSkipElementHandler
-                    self.parser.EndElementHandler = self.endSkipElementHandler
-                    self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-                    self.level = 1
-                    return
-            consumer = cls(name, attrs)
+            return
+        elif name in self.dictionaries:
+            children, multiple = self.dictionaries[name]
+            consumer = DictionaryElement(name, attrs, children, multiple)
             consumer.parent = self.consumer
-        if isinstance(consumer, DictionaryElement):
             self.consumer = consumer
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endDictionaryElementHandler
             self.parser.EndElementHandler = consumer.endElementHandler
             consumer.characterDataHandler = self.skipCharacterDataHandler
             self.parser.CharacterDataHandler = consumer.characterDataHandler
+            return
+        else:
+            # Element not found in DTD
+            if self.validating:
+                raise ValidationError(name)
+            else:
+                # this will not be stored in the record
+                self.parser.StartElementHandler = self.startSkipElementHandler
+                self.parser.EndElementHandler = self.endSkipElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+                self.level = 1
+                return
 
     def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
@@ -707,7 +723,9 @@ class DataHandler(object):
                 self.lists[name] = children
             elif len(keys) >= 1:
                 assert not isSimpleContent
+                children = frozenset(keys)
                 self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
+                self.dictionaries[name] = (children, multiple)
             else:
                 self.strings.add(name)
 
@@ -805,6 +823,8 @@ class DataHandler(object):
             self.lists[name] = children
         else:
             self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
+            children = frozenset(single+multiple)
+            self.dictionaries[name] = (children, multiple)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
