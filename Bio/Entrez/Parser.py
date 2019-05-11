@@ -382,8 +382,7 @@ class DataHandler(object):
                 self.element = element
                 element.endElementHandler = self.endDictionaryElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
-                element.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = element.characterDataHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
                 element = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
@@ -391,8 +390,7 @@ class DataHandler(object):
                 self.element = element
                 element.endElementHandler = self.endDictionaryElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
-                element.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = element.characterDataHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
@@ -409,8 +407,7 @@ class DataHandler(object):
                 self.element = element
                 element.endElementHandler = self.endListElementHandler
                 self.parser.EndElementHandler = element.endElementHandler
-                element.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = element.characterDataHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
@@ -447,8 +444,7 @@ class DataHandler(object):
             self.element = element
             element.endElementHandler = self.endListElementHandler
             self.parser.EndElementHandler = element.endElementHandler
-            element.characterDataHandler = self.skipCharacterDataHandler
-            self.parser.CharacterDataHandler = element.characterDataHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         elif name in self.dictionaries:
             children, multiple = self.dictionaries[name]
             element = DictionaryElement(name, attrs, children, multiple)
@@ -456,8 +452,7 @@ class DataHandler(object):
             self.element = element
             element.endElementHandler = self.endDictionaryElementHandler
             self.parser.EndElementHandler = element.endElementHandler
-            element.characterDataHandler = self.skipCharacterDataHandler
-            self.parser.CharacterDataHandler = element.characterDataHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         else:
             # Element not found in DTD
             if self.validating:
@@ -556,17 +551,15 @@ class DataHandler(object):
         if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
-            self.parser.CharacterDataHandler = element.characterDataHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
 
     def endListElementHandler(self, name):
         element = self.element
         self.element = element.parent
         if self.element is not None:
             self.parser.EndElementHandler = self.element.endElementHandler
-            self.parser.CharacterDataHandler = self.element.characterDataHandler
         del element.children
         del element.endElementHandler
-        del element.characterDataHandler
         value = element
         if self.element is None:
             self.record = value
@@ -587,9 +580,7 @@ class DataHandler(object):
         self.element = element.parent
         if self.element is not None:
             self.parser.EndElementHandler = self.element.endElementHandler
-            self.parser.CharacterDataHandler = self.element.characterDataHandler
         del element.endElementHandler
-        del element.characterDataHandler
         if self.element is None:
             self.record = element
         else:
@@ -624,7 +615,7 @@ class DataHandler(object):
         else:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = element.endElementHandler
-            self.parser.CharacterDataHandler = element.characterDataHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             if value is None:
                 return
             name = value.tag
