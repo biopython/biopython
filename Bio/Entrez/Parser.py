@@ -383,8 +383,24 @@ class DataHandler(object):
                 consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
             elif itemtype == "List":
                 del attrs["Name"]
-                # Keys are unknown in this case
+                # children are unknown in this case
                 consumer = ListElement(name, attrs, None)
+                consumer.parent = self.consumer
+                if self.consumer is None:
+                    # This is relevant only for Entrez.parse, not for Entrez.read.
+                    # If self.consumer is None, then this is the first start tag we
+                    # encounter, and it should refer to a list. Store this list in
+                    # the record attribute, so that Entrez.parse can iterate over it.
+                    # The record attribute will be set again at the last end tag;
+                    # However, it doesn't hurt to set it twice.
+                    self.record = consumer
+                self.consumer = consumer
+                consumer.startElementHandler = self.startElementHandler
+                consumer.endElementHandler = self.endListElementHandler
+                self.parser.EndElementHandler = consumer.endElementHandler
+                consumer.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                return
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
                 if self.escaping:
