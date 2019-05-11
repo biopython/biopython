@@ -196,7 +196,7 @@ class DataHandler(object):
     def __init__(self, validate, escape):
         """Create a DataHandler object."""
         self.dtd_urls = []
-        self.consumer = None
+        self.element = None
         self.level = 0
         self.data = []
         self.attributes = None
@@ -302,7 +302,7 @@ class DataHandler(object):
             if not text:
                 sys.stdout.flush()
                 self.parser = None
-                if self.consumer is not None:
+                if self.element is not None:
                     # We have reached the end of the XML file
                     # No more XML data, but there is still some unfinished
                     # business
@@ -377,43 +377,43 @@ class DataHandler(object):
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
-                consumer = DictionaryElement(name, dict(attrs), children=None, multiple=set())
-                consumer.parent = self.consumer
-                self.consumer = consumer
-                consumer.startElementHandler = self.startElementHandler
-                consumer.endElementHandler = self.endDictionaryElementHandler
-                self.parser.EndElementHandler = consumer.endElementHandler
-                consumer.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                element = DictionaryElement(name, dict(attrs), children=None, multiple=set())
+                element.parent = self.element
+                self.element = element
+                element.startElementHandler = self.startElementHandler
+                element.endElementHandler = self.endDictionaryElementHandler
+                self.parser.EndElementHandler = element.endElementHandler
+                element.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = element.characterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                consumer = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
-                consumer.parent = self.consumer
-                self.consumer = consumer
-                consumer.startElementHandler = self.startElementHandler
-                consumer.endElementHandler = self.endDictionaryElementHandler
-                self.parser.EndElementHandler = consumer.endElementHandler
-                consumer.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                element = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
+                element.parent = self.element
+                self.element = element
+                element.startElementHandler = self.startElementHandler
+                element.endElementHandler = self.endDictionaryElementHandler
+                self.parser.EndElementHandler = element.endElementHandler
+                element.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = element.characterDataHandler
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
-                consumer = ListElement(name, attrs, None)
-                consumer.parent = self.consumer
-                if self.consumer is None:
+                element = ListElement(name, attrs, None)
+                element.parent = self.element
+                if self.element is None:
                     # This is relevant only for Entrez.parse, not for Entrez.read.
-                    # If self.consumer is None, then this is the first start tag we
+                    # If self.element is None, then this is the first start tag we
                     # encounter, and it should refer to a list. Store this list in
                     # the record attribute, so that Entrez.parse can iterate over it.
                     # The record attribute will be set again at the last end tag;
                     # However, it doesn't hurt to set it twice.
-                    self.record = consumer
-                self.consumer = consumer
-                consumer.startElementHandler = self.startElementHandler
-                consumer.endElementHandler = self.endListElementHandler
-                self.parser.EndElementHandler = consumer.endElementHandler
-                consumer.characterDataHandler = self.skipCharacterDataHandler
-                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                    self.record = element
+                self.element = element
+                element.startElementHandler = self.startElementHandler
+                element.endElementHandler = self.endListElementHandler
+                self.parser.EndElementHandler = element.endElementHandler
+                element.characterDataHandler = self.skipCharacterDataHandler
+                self.parser.CharacterDataHandler = element.characterDataHandler
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
@@ -437,32 +437,32 @@ class DataHandler(object):
             self.attributes = dict(attrs)
         elif name in self.lists:
             children = self.lists[name]
-            consumer = ListElement(name, attrs, children)
-            consumer.parent = self.consumer
-            if self.consumer is None:
+            element = ListElement(name, attrs, children)
+            element.parent = self.element
+            if self.element is None:
                 # This is relevant only for Entrez.parse, not for Entrez.read.
-                # If self.consumer is None, then this is the first start tag we
+                # If self.element is None, then this is the first start tag we
                 # encounter, and it should refer to a list. Store this list in
                 # the record attribute, so that Entrez.parse can iterate over it.
                 # The record attribute will be set again at the last end tag;
                 # However, it doesn't hurt to set it twice.
-                self.record = consumer
-            self.consumer = consumer
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endListElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            consumer.characterDataHandler = self.skipCharacterDataHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+                self.record = element
+            self.element = element
+            element.startElementHandler = self.startElementHandler
+            element.endElementHandler = self.endListElementHandler
+            self.parser.EndElementHandler = element.endElementHandler
+            element.characterDataHandler = self.skipCharacterDataHandler
+            self.parser.CharacterDataHandler = element.characterDataHandler
         elif name in self.dictionaries:
             children, multiple = self.dictionaries[name]
-            consumer = DictionaryElement(name, attrs, children, multiple)
-            consumer.parent = self.consumer
-            self.consumer = consumer
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endDictionaryElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            consumer.characterDataHandler = self.skipCharacterDataHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+            element = DictionaryElement(name, attrs, children, multiple)
+            element.parent = self.element
+            self.element = element
+            element.startElementHandler = self.startElementHandler
+            element.endElementHandler = self.endDictionaryElementHandler
+            self.parser.EndElementHandler = element.endElementHandler
+            element.characterDataHandler = self.skipCharacterDataHandler
+            self.parser.CharacterDataHandler = element.characterDataHandler
         else:
             # Element not found in DTD
             if self.validating:
@@ -502,11 +502,11 @@ class DataHandler(object):
         self.level += 1
 
     def endStringElementHandler(self, name):
-        consumer = self.consumer
-        if consumer is not None:
+        element = self.element
+        if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+            self.parser.EndElementHandler = element.endElementHandler
+            self.parser.CharacterDataHandler = element.characterDataHandler
         value = "".join(self.data)
         self.data = []
         # Convert Unicode strings to plain strings if possible
@@ -522,19 +522,19 @@ class DataHandler(object):
             del attributes["Name"]
         value.tag = name
         value.attributes = attributes
-        if consumer is None:
+        if element is None:
             self.record = value
         else:
             name = value.tag
-            if isinstance(consumer, ListElement):
-                if consumer.children is not None and name not in consumer.children:
+            if isinstance(element, ListElement):
+                if element.children is not None and name not in element.children:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                consumer.append(value)
-            elif isinstance(consumer, DictionaryElement):
-                if name in consumer.multiple:
-                    consumer[name].append(value)
+                element.append(value)
+            elif isinstance(element, DictionaryElement):
+                if name in element.multiple:
+                    element[name].append(value)
                 else:
-                    consumer[name] = value
+                    element[name] = value
 
     def endRawElementHandler(self, name):
         self.level -= 1
@@ -548,16 +548,16 @@ class DataHandler(object):
     def endSkipElementHandler(self, name):
         self.level -= 1
         if self.level == 0:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+            self.parser.StartElementHandler = self.element.startElementHandler
+            self.parser.EndElementHandler = self.element.endElementHandler
+            self.parser.CharacterDataHandler = self.element.characterDataHandler
 
     def endErrorElementHandler(self, name):
-        consumer = self.consumer
-        if consumer is not None:
-            self.parser.StartElementHandler = consumer.startElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+        element = self.element
+        if element is not None:
+            self.parser.StartElementHandler = element.startElementHandler
+            self.parser.EndElementHandler = element.endElementHandler
+            self.parser.CharacterDataHandler = element.characterDataHandler
         if not self.data:
             # no error found
             return
@@ -565,54 +565,54 @@ class DataHandler(object):
         raise RuntimeError(value)
 
     def endListElementHandler(self, name):
-        consumer = self.consumer
-        self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
-        del consumer.children
-        del consumer.startElementHandler
-        del consumer.endElementHandler
-        del consumer.characterDataHandler
-        value = consumer
-        if self.consumer is None:
+        element = self.element
+        self.element = element.parent
+        if self.element is not None:
+            self.parser.StartElementHandler = self.element.startElementHandler
+            self.parser.EndElementHandler = self.element.endElementHandler
+            self.parser.CharacterDataHandler = self.element.characterDataHandler
+        del element.children
+        del element.startElementHandler
+        del element.endElementHandler
+        del element.characterDataHandler
+        value = element
+        if self.element is None:
             self.record = value
         else:
             name = value.tag
-            if isinstance(self.consumer, ListElement):
-                if self.consumer.keys is not None and name not in self.consumer.keys:
+            if isinstance(self.element, ListElement):
+                if self.element.keys is not None and name not in self.element.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.append(value)
-            elif isinstance(self.consumer, DictionaryElement):
-                if name in self.consumer.multiple:
-                    self.consumer[name].append(value)
+                self.element.append(value)
+            elif isinstance(self.element, DictionaryElement):
+                if name in self.element.multiple:
+                    self.element[name].append(value)
                 else:
-                    self.consumer[name] = value
+                    self.element[name] = value
 
     def endDictionaryElementHandler(self, name):
-        consumer = self.consumer
-        self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
-        del consumer.startElementHandler
-        del consumer.endElementHandler
-        del consumer.characterDataHandler
-        if self.consumer is None:
-            self.record = consumer
+        element = self.element
+        self.element = element.parent
+        if self.element is not None:
+            self.parser.StartElementHandler = self.element.startElementHandler
+            self.parser.EndElementHandler = self.element.endElementHandler
+            self.parser.CharacterDataHandler = self.element.characterDataHandler
+        del element.startElementHandler
+        del element.endElementHandler
+        del element.characterDataHandler
+        if self.element is None:
+            self.record = element
         else:
-            name = consumer.tag
-            if isinstance(self.consumer, ListElement):
-                if self.consumer.children is not None and name not in self.consumer.children:
+            name = element.tag
+            if isinstance(self.element, ListElement):
+                if self.element.children is not None and name not in self.element.children:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.append(consumer)
-            elif isinstance(self.consumer, DictionaryElement):
-                if name in self.consumer.multiple:
-                    self.consumer[name].append(consumer)
+                self.element.append(element)
+            elif isinstance(self.element, DictionaryElement):
+                if name in self.element.multiple:
+                    self.element[name].append(element)
                 else:
-                    self.consumer[name] = consumer
+                    self.element[name] = element
 
     def endIntegerElementHandler(self, name):
         attributes = self.attributes
@@ -628,25 +628,25 @@ class DataHandler(object):
             value = NoneElement()
         value.tag = name
         value.attributes = attributes
-        consumer = self.consumer
-        if consumer is None:
+        element = self.element
+        if element is None:
             self.record = value
         else:
-            self.parser.StartElementHandler = consumer.startElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
+            self.parser.StartElementHandler = element.startElementHandler
+            self.parser.EndElementHandler = element.endElementHandler
+            self.parser.CharacterDataHandler = element.characterDataHandler
             if value is None:
                 return
             name = value.tag
-            if isinstance(consumer, ListElement):
-                if consumer.keys is not None and name not in consumer.keys:
+            if isinstance(element, ListElement):
+                if element.keys is not None and name not in element.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                consumer.append(value)
-            elif isinstance(consumer, DictionaryElement):
-                if name in consumer.multiple:
-                    consumer[name].append(value)
+                element.append(value)
+            elif isinstance(element, DictionaryElement):
+                if name in element.multiple:
+                    element[name].append(value)
                 else:
-                    consumer[name] = value
+                    element[name] = value
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
