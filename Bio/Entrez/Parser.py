@@ -389,8 +389,6 @@ class DataHandler(object):
                 # Keys are unknown in this case
                 consumer = ListElement(name, attrs, None)
             elif itemtype == "Integer":
-                consumer = IntegerElement()
-                consumer.tag = name
                 self.parser.EndElementHandler = self.endIntegerElementHandler
                 if self.escaping:
                     self.parser.CharacterDataHandler = self.characterDataHandlerEscape
