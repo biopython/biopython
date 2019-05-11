@@ -400,6 +400,18 @@ class DataHandler(object):
             else:
                 raise ValueError("Unknown item type %s" % name)
             consumer.parent = self.consumer
+            if isinstance(consumer, StringElement):
+                self.parser.StartElementHandler = self.startRawElementHandler
+                consumer.startElementHandler = self.startRawElementHandler
+                consumer.endElementHandler = self.endStringElementHandler
+                self.parser.EndElementHandler = consumer.endElementHandler
+                if self.escaping:
+                    consumer.characterDataHandler = self.characterDataHandlerEscape
+                else:
+                    consumer.characterDataHandler = self.characterDataHandlerRaw
+                self.parser.CharacterDataHandler = consumer.characterDataHandler
+                self.consumer = consumer
+                return
         elif name in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             if self.escaping:
