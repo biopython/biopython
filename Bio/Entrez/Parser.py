@@ -189,10 +189,6 @@ class ErrorElement:
         pass
 
 
-def select_item_consumer(name, attrs):
-    return
-
-
 class DataHandler(object):
 
     from Bio import Entrez
@@ -210,6 +206,7 @@ class DataHandler(object):
         self.consumer = None
         self.level = 0
         self.data = []
+        self.items = set()
         self.validating = validate
         self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
@@ -375,19 +372,7 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, name, attrs):
-        cls = self.classes.get(name)
-        if cls is None:
-            # Element not found in DTD
-            if self.validating:
-                raise ValidationError(name)
-            else:
-                # this will not be stored in the record
-                self.parser.StartElementHandler = self.startSkipElementHandler
-                self.parser.EndElementHandler = self.endSkipElementHandler
-                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-                self.level = 1
-                return
-        if cls == select_item_consumer:
+        if name in self.items:
             assert name == 'Item'
             name = str(attrs["Name"])  # convert from Unicode
             del attrs["Name"]
@@ -413,6 +398,18 @@ class DataHandler(object):
                 raise ValueError("Unknown item type %s" % name)
             consumer.parent = self.consumer
         else:
+            cls = self.classes.get(name)
+            if cls is None:
+                # Element not found in DTD
+                if self.validating:
+                    raise ValidationError(name)
+                else:
+                    # this will not be stored in the record
+                    self.parser.StartElementHandler = self.startSkipElementHandler
+                    self.parser.EndElementHandler = self.endSkipElementHandler
+                    self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+                    self.level = 1
+                    return
             consumer = cls(name, attrs)
             consumer.parent = self.consumer
         if self.consumer is None:
@@ -711,7 +708,7 @@ class DataHandler(object):
                                         ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
-            self.classes[name] = select_item_consumer
+            self.items.add(name)
             return
         # First, remove ignorable parentheses around declarations
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
