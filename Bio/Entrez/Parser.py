@@ -403,8 +403,7 @@ class DataHandler(object):
             if isinstance(consumer, StringElement):
                 self.parser.StartElementHandler = self.startRawElementHandler
                 consumer.startElementHandler = self.startRawElementHandler
-                consumer.endElementHandler = self.endStringElementHandler
-                self.parser.EndElementHandler = consumer.endElementHandler
+                self.parser.EndElementHandler = self.endStringElementHandler
                 if self.escaping:
                     consumer.characterDataHandler = self.characterDataHandlerEscape
                 else:
@@ -446,8 +445,7 @@ class DataHandler(object):
         if isinstance(consumer, StringElement):
             self.parser.StartElementHandler = self.startRawElementHandler
             consumer.startElementHandler = self.startRawElementHandler
-            consumer.endElementHandler = self.endStringElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
+            self.parser.EndElementHandler = self.endStringElementHandler
             if self.escaping:
                 consumer.characterDataHandler = self.characterDataHandlerEscape
             else:
@@ -497,11 +495,10 @@ class DataHandler(object):
         consumer = self.consumer
         self.consumer = consumer.parent
         if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
             self.parser.CharacterDataHandler = self.consumer.characterDataHandler
         del consumer.startElementHandler
-        del consumer.endElementHandler
         del consumer.characterDataHandler
         value = "".join(self.data)
         self.data = []
