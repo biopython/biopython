@@ -183,12 +183,6 @@ class ValidationError(ValueError):
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
-class ErrorElement:
-    def __init__(self, name, attrs):
-        """Handle ERROR messages in the XML data."""
-        pass
-
-
 class DataHandler(object):
 
     from Bio import Entrez
@@ -208,6 +202,7 @@ class DataHandler(object):
         self.data = []
         self.attributes = None
         self.items = set()
+        self.errors = set()
         self.validating = validate
         self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
@@ -405,6 +400,13 @@ class DataHandler(object):
             else:
                 raise ValueError("Unknown item type %s" % name)
             consumer.parent = self.consumer
+        elif name in self.errors:
+            self.parser.EndElementHandler = self.endErrorElementHandler
+            if self.escaping:
+                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+            else:
+                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+            return
         else:
             cls = self.classes.get(name)
             if cls is None:
@@ -433,15 +435,6 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.startRawElementHandler
             consumer.startElementHandler = self.startRawElementHandler
             consumer.endElementHandler = self.endStringElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
-            if self.escaping:
-                consumer.characterDataHandler = self.characterDataHandlerEscape
-            else:
-                consumer.characterDataHandler = self.characterDataHandlerRaw
-            self.parser.CharacterDataHandler = consumer.characterDataHandler
-        elif isinstance(consumer, ErrorElement):
-            consumer.startElementHandler = self.startElementHandler
-            consumer.endElementHandler = self.endErrorElementHandler
             self.parser.EndElementHandler = consumer.endElementHandler
             if self.escaping:
                 consumer.characterDataHandler = self.characterDataHandlerEscape
@@ -542,14 +535,10 @@ class DataHandler(object):
 
     def endErrorElementHandler(self, name):
         consumer = self.consumer
-        self.consumer = consumer.parent
-        if self.consumer is not None:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
-        del consumer.startElementHandler
-        del consumer.endElementHandler
-        del consumer.characterDataHandler
+        if consumer is not None:
+            self.parser.StartElementHandler = consumer.startElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         if not self.data:
             # no error found
             return
@@ -712,7 +701,7 @@ class DataHandler(object):
         or error.
         """
         if name.upper() == "ERROR":
-            self.classes[name] = ErrorElement
+            self.errors.add(name)
             return
         if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
