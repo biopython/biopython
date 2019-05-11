@@ -202,6 +202,7 @@ class DataHandler(object):
         self.data = []
         self.attributes = None
         self.strings = set()
+        self.lists = {}
         self.items = set()
         self.errors = set()
         self.validating = validate
@@ -557,6 +558,7 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.consumer.startElementHandler
             self.parser.EndElementHandler = self.consumer.endElementHandler
             self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+        del consumer.children
         del consumer.startElementHandler
         del consumer.endElementHandler
         del consumer.characterDataHandler
@@ -680,7 +682,9 @@ class DataHandler(object):
                     isSimpleContent = True
             if len(keys) == 1 and keys == multiple:
                 assert not isSimpleContent
+                children = frozenset(keys)
                 self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
+                self.lists[name] = children
             elif len(keys) >= 1:
                 assert not isSimpleContent
                 self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
@@ -740,8 +744,9 @@ class DataHandler(object):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
-            keys = frozenset([child[2] for child in children])
-            self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
+            children = frozenset([child[2] for child in children])
+            self.classes[name] = lambda name, attrs, keys=children: ListElement(name, attrs, keys)
+            self.lists[name] = children
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -775,7 +780,9 @@ class DataHandler(object):
                     multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
+            children = frozenset(multiple)
             self.classes[name] = lambda name, attrs, keys=set(multiple): ListElement(name, attrs, keys)
+            self.lists[name] = children
         else:
             self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
 
