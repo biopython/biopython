@@ -376,21 +376,30 @@ class DataHandler(object):
         if name in self.items:
             assert name == 'Item'
             name = str(attrs["Name"])  # convert from Unicode
-            del attrs["Name"]
             itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
             if itemtype == "Structure":
+                del attrs["Name"]
                 consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set())
             elif name in ("ArticleIds", "History"):
+                del attrs["Name"]
                 consumer = DictionaryElement(name, dict(attrs), keys=None, multiple=set(["pubmed", "medline"]))
             elif itemtype == "List":
+                del attrs["Name"]
                 # Keys are unknown in this case
                 consumer = ListElement(name, attrs, None)
             elif itemtype == "Integer":
                 consumer = IntegerElement()
                 consumer.tag = name
+                self.parser.EndElementHandler = self.endIntegerElementHandler
+                if self.escaping:
+                    self.parser.CharacterDataHandler = self.characterDataHandlerEscape
+                else:
+                    self.parser.CharacterDataHandler = self.characterDataHandlerRaw
                 self.attributes = dict(attrs)
+                return
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
+                del attrs["Name"]
                 consumer = StringElement()
                 consumer.tag = name
                 consumer.attributes = dict(attrs)
@@ -432,12 +441,6 @@ class DataHandler(object):
             else:
                 consumer.characterDataHandler = self.characterDataHandlerRaw
             self.parser.CharacterDataHandler = consumer.characterDataHandler
-        elif isinstance(consumer, IntegerElement):
-            self.parser.EndElementHandler = self.endIntegerElementHandler
-            if self.escaping:
-                self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-            else:
-                self.parser.CharacterDataHandler = self.characterDataHandlerRaw
         elif isinstance(consumer, ErrorElement):
             consumer.startElementHandler = self.startElementHandler
             consumer.endElementHandler = self.endErrorElementHandler
@@ -605,35 +608,38 @@ class DataHandler(object):
                     self.consumer[name] = consumer
 
     def endIntegerElementHandler(self, name):
-        consumer = self.consumer
-        self.consumer = consumer.parent
+        attributes = self.attributes
+        self.attributes = None
+        assert name == 'Item'
+        name = str(attributes["Name"])  # convert from Unicode
+        del attributes["Name"]
         if self.data:
             value = int("".join(self.data))
             self.data = []
             value = IntegerElement(value)
         else:
             value = NoneElement()
-        value.tag = consumer.tag # needed if name=='Item'
-        value.attributes = self.attributes
-        self.attributes = None
-        if self.consumer is None:
+        value.tag = name
+        value.attributes = attributes
+        consumer = self.consumer
+        if consumer is None:
             self.record = value
         else:
-            self.parser.StartElementHandler = self.consumer.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+            self.parser.StartElementHandler = consumer.startElementHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
             if value is None:
                 return
             name = value.tag
-            if isinstance(self.consumer, ListElement):
-                if self.consumer.keys is not None and name not in self.consumer.keys:
+            if isinstance(consumer, ListElement):
+                if consumer.keys is not None and name not in consumer.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.append(value)
-            elif isinstance(self.consumer, DictionaryElement):
-                if name in self.consumer.multiple:
-                    self.consumer[name].append(value)
+                consumer.append(value)
+            elif isinstance(consumer, DictionaryElement):
+                if name in consumer.multiple:
+                    consumer[name].append(value)
                 else:
-                    self.consumer[name] = value
+                    consumer[name] = value
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
