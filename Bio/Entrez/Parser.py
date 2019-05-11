@@ -206,6 +206,7 @@ class DataHandler(object):
         self.consumer = None
         self.level = 0
         self.data = []
+        self.attributes = None
         self.items = set()
         self.validating = validate
         self.escaping = escape
@@ -388,7 +389,7 @@ class DataHandler(object):
             elif itemtype == "Integer":
                 consumer = IntegerElement()
                 consumer.tag = name
-                consumer.attributes = dict(attrs)
+                self.attributes = dict(attrs)
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
                 consumer = StringElement()
                 consumer.tag = name
@@ -607,7 +608,8 @@ class DataHandler(object):
         else:
             value = NoneElement()
         value.tag = consumer.tag # needed if name=='Item'
-        value.attributes = consumer.attributes
+        value.attributes = self.attributes
+        self.attributes = None
         if self.consumer is None:
             self.record = value
         elif value is not None:
