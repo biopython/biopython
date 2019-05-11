@@ -516,11 +516,9 @@ class DataHandler(object):
                     self.consumer[name] = value
 
     def endRawElementHandler(self, name):
-        consumer = self.consumer
         self.level -= 1
         if self.level == 0:
-            self.parser.StartElementHandler = consumer.startElementHandler
-            self.parser.EndElementHandler = consumer.endElementHandler
+            self.parser.EndElementHandler = self.endStringElementHandler
         if self.namespace_prefix:
             uri, name = name.split()
         tag = "</%s>" % name
