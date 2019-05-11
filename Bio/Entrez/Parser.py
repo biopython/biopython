@@ -393,17 +393,14 @@ class DataHandler(object):
                 self.attributes = dict(attrs)
                 return
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
-                consumer = StringElement()
                 assert self.attributes is None
                 self.attributes = dict(attrs)
-                consumer.parent = self.consumer
                 self.parser.StartElementHandler = self.startRawElementHandler
                 self.parser.EndElementHandler = self.endStringElementHandler
                 if self.escaping:
                     self.parser.CharacterDataHandler = self.characterDataHandlerEscape
                 else:
                     self.parser.CharacterDataHandler = self.characterDataHandlerRaw
-                self.consumer = consumer
                 return
             else:
                 raise ValueError("Unknown item type %s" % name)
@@ -416,9 +413,6 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.characterDataHandlerRaw
             return
         elif name in self.strings:
-            consumer = StringElement()
-            consumer.parent = self.consumer
-            self.consumer = consumer
             self.parser.StartElementHandler = self.startRawElementHandler
             self.parser.EndElementHandler = self.endStringElementHandler
             if self.escaping:
@@ -495,11 +489,10 @@ class DataHandler(object):
 
     def endStringElementHandler(self, name):
         consumer = self.consumer
-        self.consumer = consumer.parent
-        if self.consumer is not None:
+        if consumer is not None:
             self.parser.StartElementHandler = self.startElementHandler
-            self.parser.EndElementHandler = self.consumer.endElementHandler
-            self.parser.CharacterDataHandler = self.consumer.characterDataHandler
+            self.parser.EndElementHandler = consumer.endElementHandler
+            self.parser.CharacterDataHandler = consumer.characterDataHandler
         value = "".join(self.data)
         self.data = []
         # Convert Unicode strings to plain strings if possible
@@ -515,19 +508,19 @@ class DataHandler(object):
             del attributes["Name"]
         value.tag = name
         value.attributes = attributes
-        if self.consumer is None:
+        if consumer is None:
             self.record = value
         else:
             name = value.tag
-            if isinstance(self.consumer, ListElement):
-                if self.consumer.keys is not None and name not in self.consumer.keys:
+            if isinstance(consumer, ListElement):
+                if consumer.keys is not None and name not in consumer.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
-                self.consumer.append(value)
-            elif isinstance(self.consumer, DictionaryElement):
-                if name in self.consumer.multiple:
-                    self.consumer[name].append(value)
+                consumer.append(value)
+            elif isinstance(consumer, DictionaryElement):
+                if name in consumer.multiple:
+                    consumer[name].append(value)
                 else:
-                    self.consumer[name] = value
+                    consumer[name] = value
 
     def endRawElementHandler(self, name):
         self.level -= 1
