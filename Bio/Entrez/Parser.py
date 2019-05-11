@@ -196,7 +196,6 @@ class DataHandler(object):
     def __init__(self, validate, escape):
         """Create a DataHandler object."""
         self.dtd_urls = []
-        self.classes = {}
         self.consumer = None
         self.level = 0
         self.data = []
@@ -719,12 +718,10 @@ class DataHandler(object):
             if len(keys) == 1 and keys == multiple:
                 assert not isSimpleContent
                 children = frozenset(keys)
-                self.classes[name] = lambda name, attrs, keys=keys: ListElement(name, attrs, keys)
                 self.lists[name] = children
             elif len(keys) >= 1:
                 assert not isSimpleContent
                 children = frozenset(keys)
-                self.classes[name] = lambda name, attrs, keys=keys, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
                 self.dictionaries[name] = (children, multiple)
             else:
                 self.strings.add(name)
@@ -783,7 +780,6 @@ class DataHandler(object):
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
             children = frozenset([child[2] for child in children])
-            self.classes[name] = lambda name, attrs, keys=children: ListElement(name, attrs, keys)
             self.lists[name] = children
             return
         # This is the tricky case. Check which keys can occur multiple
@@ -819,10 +815,8 @@ class DataHandler(object):
         count(model)
         if len(single) == 0 and len(multiple) == 1:
             children = frozenset(multiple)
-            self.classes[name] = lambda name, attrs, keys=set(multiple): ListElement(name, attrs, keys)
             self.lists[name] = children
         else:
-            self.classes[name] = lambda name, attrs, keys=single+multiple, multiple=multiple: DictionaryElement(name, attrs, keys, multiple)
             children = frozenset(single+multiple)
             self.dictionaries[name] = (children, multiple)
 
