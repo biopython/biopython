@@ -36,7 +36,6 @@ contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
 import sys
-import re
 import os
 import warnings
 from collections import Counter
@@ -395,9 +394,6 @@ class DataHandler(object):
             self.namespace_prefix[uri] = prefix
             assert uri == "http://www.w3.org/1998/Math/MathML"
             assert prefix == "mml"
-            # self.parser.StartElementHandler = self.startMathElementHandler
-            # self.parser.EndElementHandler = self.endMathElementHandler
-            # FIXME
 
     def endNamespaceDeclHandler(self, prefix):
         if prefix != 'xsi':
@@ -594,9 +590,7 @@ class DataHandler(object):
             value = "".join(self.data)
             raise RuntimeError(value)
         # no error found:
-        element = self.element
-        if element is not None:
-            self.parser.StartElementHandler = self.startElementHandler
+        if self.element is not None:
             self.parser.EndElementHandler = self.endContainerElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
 
@@ -626,7 +620,6 @@ class DataHandler(object):
         if element is None:
             self.record = value
         else:
-            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endContainerElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             if value is None:
@@ -730,9 +723,7 @@ class DataHandler(object):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
                 tags = [child[2] for child in children]
-                self.strings.add(name)
-            else:
-                self.strings.add(name)
+            self.strings.add(name)
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
