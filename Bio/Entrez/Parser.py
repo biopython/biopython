@@ -158,6 +158,7 @@ class ListElement(list):
             self.key = key
         self.attributes = attributes
         self.children = children
+
     def __repr__(self):
         text = list.__repr__(self)
         try:
@@ -165,6 +166,11 @@ class ListElement(list):
         except AttributeError:
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
+
+    def store(self, key, value):
+        if self.children is not None and key not in self.children:
+            raise ValueError("Unexpected item '%s' in list" % key)
+        self.append(value)
 
 
 class DictionaryElement(dict):
@@ -560,9 +566,7 @@ class DataHandler(object):
             self.record = value
         else:
             if isinstance(element, ListElement):
-                if element.children is not None and key not in element.children:
-                    raise ValueError("Unexpected item '%s' in list" % key)
-                element.append(value)
+                element.store(key, value)
             elif isinstance(element, DictionaryElement):
                 if key in element.multiple:
                     element[key].append(value)
@@ -609,9 +613,7 @@ class DataHandler(object):
         else:
             key = element.key
             if isinstance(self.element, ListElement):
-                if self.element.keys is not None and key not in self.element.keys:
-                    raise ValueError("Unexpected item '%s' in list" % key)
-                self.element.append(element)
+                element.store(key, value)
             elif isinstance(self.element, DictionaryElement):
                 if key in self.element.multiple:
                     self.element[key].append(element)
@@ -629,9 +631,7 @@ class DataHandler(object):
         else:
             key = element.key
             if isinstance(self.element, ListElement):
-                if self.element.children is not None and key not in self.element.children:
-                    raise ValueError("Unexpected item '%s' in list" % key)
-                self.element.append(element)
+                self.element.store(key, element)
             elif isinstance(self.element, DictionaryElement):
                 if key in self.element.multiple:
                     self.element[key].append(element)
@@ -660,9 +660,7 @@ class DataHandler(object):
             if value is None:
                 return
             if isinstance(element, ListElement):
-                if element.keys is not None and key not in element.keys:
-                    raise ValueError("Unexpected item '%s' in list" % key)
-                element.append(value)
+                element.store(key, value)
             elif isinstance(element, DictionaryElement):
                 if key in element.multiple:
                     element[key].append(value)
