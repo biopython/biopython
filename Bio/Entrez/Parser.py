@@ -547,27 +547,27 @@ class DataHandler(object):
         self.attributes = None
         if tag in self.items:
             assert tag == 'Item'
-            name = str(attributes["Name"])  # convert from Unicode
+            key = str(attributes["Name"])  # convert from Unicode
             del attributes["Name"]
         else:
-            name = tag
+            key = tag
         # Convert Unicode strings to plain strings if possible
         try:
-            value = StringElement(value, tag, attributes, name)
+            value = StringElement(value, tag, attributes, key)
         except UnicodeEncodeError:
-            value = UnicodeElement(value, tag, attributes, name)
+            value = UnicodeElement(value, tag, attributes, key)
         if element is None:
             self.record = value
         else:
             if isinstance(element, ListElement):
-                if element.children is not None and name not in element.children:
-                    raise ValueError("Unexpected item '%s' in list" % name)
+                if element.children is not None and key not in element.children:
+                    raise ValueError("Unexpected item '%s' in list" % key)
                 element.append(value)
             elif isinstance(element, DictionaryElement):
-                if name in element.multiple:
-                    element[name].append(value)
+                if key in element.multiple:
+                    element[key].append(value)
                 else:
-                    element[name] = value
+                    element[key] = value
 
     def endRawElementHandler(self, name):
         self.level -= 1
@@ -601,22 +601,22 @@ class DataHandler(object):
         self.element = element.parent
         if self.element is not None:
             self.parser.EndElementHandler = self.element.endElementHandler
+        del element.parent
         del element.children
         del element.endElementHandler
-        value = element
         if self.element is None:
-            self.record = value
+            self.record = element
         else:
-            name = value.tag
+            key = element.key
             if isinstance(self.element, ListElement):
-                if self.element.keys is not None and name not in self.element.keys:
-                    raise ValueError("Unexpected item '%s' in list" % name)
-                self.element.append(value)
+                if self.element.keys is not None and key not in self.element.keys:
+                    raise ValueError("Unexpected item '%s' in list" % key)
+                self.element.append(element)
             elif isinstance(self.element, DictionaryElement):
-                if name in self.element.multiple:
-                    self.element[name].append(value)
+                if key in self.element.multiple:
+                    self.element[key].append(element)
                 else:
-                    self.element[name] = value
+                    self.element[key] = element
 
     def endDictionaryElementHandler(self, name):
         element = self.element
@@ -627,29 +627,29 @@ class DataHandler(object):
         if self.element is None:
             self.record = element
         else:
-            name = element.tag
+            key = element.key
             if isinstance(self.element, ListElement):
-                if self.element.children is not None and name not in self.element.children:
-                    raise ValueError("Unexpected item '%s' in list" % name)
+                if self.element.children is not None and key not in self.element.children:
+                    raise ValueError("Unexpected item '%s' in list" % key)
                 self.element.append(element)
             elif isinstance(self.element, DictionaryElement):
-                if name in self.element.multiple:
-                    self.element[name].append(element)
+                if key in self.element.multiple:
+                    self.element[key].append(element)
                 else:
-                    self.element[name] = element
+                    self.element[key] = element
 
     def endIntegerElementHandler(self, tag):
         attributes = self.attributes
         self.attributes = None
         assert tag == 'Item'
-        name = str(attributes["Name"])  # convert from Unicode
+        key = str(attributes["Name"])  # convert from Unicode
         del attributes["Name"]
         if self.data:
             value = int("".join(self.data))
             self.data = []
-            value = IntegerElement(value, tag, attributes, name)
+            value = IntegerElement(value, tag, attributes, key)
         else:
-            value = NoneElement(tag, attributes, name)
+            value = NoneElement(tag, attributes, key)
         element = self.element
         if element is None:
             self.record = value
@@ -660,14 +660,14 @@ class DataHandler(object):
             if value is None:
                 return
             if isinstance(element, ListElement):
-                if element.keys is not None and name not in element.keys:
-                    raise ValueError("Unexpected item '%s' in list" % name)
+                if element.keys is not None and key not in element.keys:
+                    raise ValueError("Unexpected item '%s' in list" % key)
                 element.append(value)
             elif isinstance(element, DictionaryElement):
-                if name in element.multiple:
-                    element[name].append(value)
+                if key in element.multiple:
+                    element[key].append(value)
                 else:
-                    element[name] = value
+                    element[key] = value
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
