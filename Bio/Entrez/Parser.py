@@ -355,19 +355,24 @@ class DataHandler(object):
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
 
-            while len(records) >= 1:  # Then the top record is finished
+            if not text:
+                break
+
+            while len(records) >= 2:
+                # Then the first record is finished, while the second record
+                # is still a work in progress.
                 record = records.pop(0)
                 yield record
 
-            if not text:
-                sys.stdout.flush()
-                self.parser = None
-                if self.element is not None:
-                    # We have reached the end of the XML file
-                    # No more XML data, but there is still some unfinished
-                    # business
-                    raise CorruptedXMLError("Premature end of XML stream")
-                return
+        # We have reached the end of the XML file
+        self.parser = None
+        if self.element is not None:
+            # No more XML data, but there is still some unfinished business
+            raise CorruptedXMLError("Premature end of XML stream")
+
+        # Send out the remaining records
+        for record in records:
+            yield record
 
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
@@ -435,14 +440,26 @@ class DataHandler(object):
             if itemtype == "Structure":
                 del attrs["Name"]
                 element = DictionaryElement(name, attrs, children=None, multiple=set())
-                element.parent = self.element
+                parent = self.element
+                element.parent = parent
+                # For consistency with lists below, store the element here
+                if parent is None:
+                    self.record = element
+                else:
+                    parent.store(element)
                 self.element = element
                 self.parser.EndElementHandler = self.endContainerElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
                 element = DictionaryElement(tag, attrs, children=None, multiple=set(["pubmed", "medline"]), key=name)
-                element.parent = self.element
+                parent = self.element
+                element.parent = parent
+                # For consistency with lists below, store the element here
+                if parent is None:
+                    self.record = element
+                else:
+                    parent.store(element)
                 self.element = element
                 self.parser.EndElementHandler = self.endContainerElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
@@ -450,15 +467,13 @@ class DataHandler(object):
                 del attrs["Name"]
                 # children are unknown in this case
                 element = ListElement(tag, attrs, None, name)
-                element.parent = self.element
+                parent = self.element
+                element.parent = parent
                 if self.element is None:
-                    # This is relevant only for Entrez.parse, not for Entrez.read.
-                    # If self.element is None, then this is the first start tag we
-                    # encounter, and it should refer to a list. Store this list in
-                    # the record attribute, so that Entrez.parse can iterate over it.
-                    # The record attribute will be set again at the last end tag;
-                    # However, it doesn't hurt to set it twice.
+                    # Set self.record here to let Entrez.parse iterate over it
                     self.record = element
+                else:
+                    parent.store(element)
                 self.element = element
                 self.parser.EndElementHandler = self.endContainerElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
@@ -483,25 +498,29 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.characterDataHandler
             assert self.attributes is None
             self.attributes = attrs
-        elif tag in self.lists:
-            children = self.lists[tag]
-            element = ListElement(tag, attrs, children)
-            element.parent = self.element
-            if self.element is None:
-                # This is relevant only for Entrez.parse, not for Entrez.read.
-                # If self.element is None, then this is the first start tag we
-                # encounter, and it should refer to a list. Store this list in
-                # the record attribute, so that Entrez.parse can iterate over it.
-                # The record attribute will be set again at the last end tag;
-                # However, it doesn't hurt to set it twice.
-                self.record = element
-            self.element = element
-            self.parser.EndElementHandler = self.endContainerElementHandler
-            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         elif tag in self.dictionaries:
             children, multiple = self.dictionaries[tag]
             element = DictionaryElement(tag, attrs, children, multiple)
-            element.parent = self.element
+            parent = self.element
+            element.parent = parent
+            # For consistency with lists below, store the element here
+            if parent is None:
+                self.record = element
+            else:
+                parent.store(element)
+            self.element = element
+            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        elif tag in self.lists:
+            children = self.lists[tag]
+            element = ListElement(tag, attrs, children)
+            parent = self.element
+            element.parent = parent
+            if parent is None:
+                # Set self.record here to let Entrez.parse iterate over it
+                self.record = element
+            else:
+                parent.store(element)
             self.element = element
             self.parser.EndElementHandler = self.endContainerElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
@@ -565,7 +584,7 @@ class DataHandler(object):
         except UnicodeEncodeError:
             value = UnicodeElement(value, tag, attributes, key)
         if element is None:
-            self.record = value
+            self.record = element
         else:
             element.store(value)
 
@@ -599,10 +618,6 @@ class DataHandler(object):
         self.element = element.parent
         del element.parent
         del element.children
-        if self.element is None:
-            self.record = element
-        else:
-            self.element.store(element)
 
     def endIntegerElementHandler(self, tag):
         attributes = self.attributes
