@@ -57,6 +57,14 @@ from Bio._py3k import unicode
 
 class NoneElement:
 
+    def __init__(self, tag, attributes, key=None):
+        self.tag = tag
+        if key is None:
+            self.key = key
+        else:
+            self.key = tag
+        self.attributes = attributes
+
     def __eq__(self, other):
         if other is None:
             return True
@@ -82,6 +90,16 @@ class NoneElement:
 
 
 class IntegerElement(int):
+    def __new__(cls, value, tag, attributes, key=None):
+        self = int.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = key
+        else:
+            self.key = tag
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = int.__repr__(self)
         try:
@@ -92,6 +110,16 @@ class IntegerElement(int):
 
 
 class StringElement(str):
+    def __new__(cls, value, tag, attributes, key=None):
+        self = str.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = key
+        else:
+            self.key = tag
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = str.__repr__(self)
         try:
@@ -102,6 +130,16 @@ class StringElement(str):
 
 
 class UnicodeElement(unicode):
+    def __new__(cls, value, tag, attributes, key=None):
+        self = unicode.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = key
+        else:
+            self.key = tag
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = unicode.__repr__(self)
         try:
@@ -112,11 +150,13 @@ class UnicodeElement(unicode):
 
 
 class ListElement(list):
-    def __init__(self, name, attrs, children):
-        self.tag = name
-        self.attributes = {}
-        for key, value in attrs.items():
-            self.attributes[key] = value
+    def __init__(self, tag, attributes, children, key=None):
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
         self.children = children
     def __repr__(self):
         text = list.__repr__(self)
@@ -129,8 +169,12 @@ class ListElement(list):
 
 class DictionaryElement(dict):
 
-    def __init__(self, name, attrs, children, multiple=[]):
-        self.tag = name
+    def __init__(self, tag, attrs, children, multiple=[], key=None):
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
         self.attributes = dict(attrs)
         self.children = children
         self.multiple = multiple
@@ -385,7 +429,7 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                element = DictionaryElement(name, dict(attrs), children=None, multiple=set(["pubmed", "medline"]))
+                element = DictionaryElement(name, attrs, children=None, multiple=set(["pubmed", "medline"]))
                 element.parent = self.element
                 self.element = element
                 element.endElementHandler = self.endDictionaryElementHandler
@@ -491,7 +535,7 @@ class DataHandler(object):
     def startSkipElementHandler(self, name, attrs):
         self.level += 1
 
-    def endStringElementHandler(self, name):
+    def endStringElementHandler(self, tag):
         element = self.element
         if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
@@ -499,23 +543,22 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         value = "".join(self.data)
         self.data = []
-        # Convert Unicode strings to plain strings if possible
-        try:
-            value = StringElement(value)
-        except UnicodeEncodeError:
-            value = UnicodeElement(value)
         attributes = self.attributes
         self.attributes = None
-        if name in self.items:
-            assert name == 'Item'
+        if tag in self.items:
+            assert tag == 'Item'
             name = str(attributes["Name"])  # convert from Unicode
             del attributes["Name"]
-        value.tag = name
-        value.attributes = attributes
+        else:
+            name = tag
+        # Convert Unicode strings to plain strings if possible
+        try:
+            value = StringElement(value, tag, attributes, name)
+        except UnicodeEncodeError:
+            value = UnicodeElement(value, tag, attributes, name)
         if element is None:
             self.record = value
         else:
-            name = value.tag
             if isinstance(element, ListElement):
                 if element.children is not None and name not in element.children:
                     raise ValueError("Unexpected item '%s' in list" % name)
@@ -595,20 +638,18 @@ class DataHandler(object):
                 else:
                     self.element[name] = element
 
-    def endIntegerElementHandler(self, name):
+    def endIntegerElementHandler(self, tag):
         attributes = self.attributes
         self.attributes = None
-        assert name == 'Item'
+        assert tag == 'Item'
         name = str(attributes["Name"])  # convert from Unicode
         del attributes["Name"]
         if self.data:
             value = int("".join(self.data))
             self.data = []
-            value = IntegerElement(value)
+            value = IntegerElement(value, tag, attributes, name)
         else:
-            value = NoneElement()
-        value.tag = name
-        value.attributes = attributes
+            value = NoneElement(tag, attributes, name)
         element = self.element
         if element is None:
             self.record = value
@@ -618,7 +659,6 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             if value is None:
                 return
-            name = value.tag
             if isinstance(element, ListElement):
                 if element.keys is not None and name not in element.keys:
                     raise ValueError("Unexpected item '%s' in list" % name)
