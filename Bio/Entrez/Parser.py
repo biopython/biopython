@@ -60,9 +60,9 @@ class NoneElement:
     def __init__(self, tag, attributes, key=None):
         self.tag = tag
         if key is None:
-            self.key = key
-        else:
             self.key = tag
+        else:
+            self.key = key
         self.attributes = attributes
 
     def __eq__(self, other):
@@ -94,9 +94,9 @@ class IntegerElement(int):
         self = int.__new__(cls, value)
         self.tag = tag
         if key is None:
-            self.key = key
-        else:
             self.key = tag
+        else:
+            self.key = key
         self.attributes = attributes
         return self
 
@@ -114,9 +114,9 @@ class StringElement(str):
         self = str.__new__(cls, value)
         self.tag = tag
         if key is None:
-            self.key = key
-        else:
             self.key = tag
+        else:
+            self.key = key
         self.attributes = attributes
         return self
 
@@ -134,9 +134,9 @@ class UnicodeElement(unicode):
         self = unicode.__new__(cls, value)
         self.tag = tag
         if key is None:
-            self.key = key
-        else:
             self.key = tag
+        else:
+            self.key = key
         self.attributes = attributes
         return self
 
@@ -167,7 +167,8 @@ class ListElement(list):
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
 
-    def store(self, key, value):
+    def store(self, value):
+        key = value.key
         if self.children is not None and key not in self.children:
             raise ValueError("Unexpected item '%s' in list" % key)
         self.append(value)
@@ -181,7 +182,7 @@ class DictionaryElement(dict):
             self.key = tag
         else:
             self.key = key
-        self.attributes = dict(attrs)
+        self.attributes = attrs
         self.children = children
         self.multiple = multiple
         for key in multiple:
@@ -194,6 +195,16 @@ class DictionaryElement(dict):
         except AttributeError:
             return text
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+
+    def store(self, value):
+        key = value.key
+        tag = value.tag
+        if self.children is not None and tag not in self.children:
+            raise ValueError("Unexpected item '%s' in dictionary" % key)
+        if key in self.multiple:
+            self[key].append(value)
+        else:
+            self[key] = value
 
 
 class NotXMLError(ValueError):
@@ -419,15 +430,15 @@ class DataHandler(object):
         # reset the element handler
         self.parser.StartElementHandler = self.startElementHandler
 
-    def startElementHandler(self, name, attrs):
-        if name in self.items:
-            assert name == 'Item'
+    def startElementHandler(self, tag, attrs):
+        if tag in self.items:
+            assert tag == 'Item'
             name = str(attrs["Name"])  # convert from Unicode
             itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
-                element = DictionaryElement(name, dict(attrs), children=None, multiple=set())
+                element = DictionaryElement(name, attrs, children=None, multiple=set())
                 element.parent = self.element
                 self.element = element
                 element.endElementHandler = self.endDictionaryElementHandler
@@ -435,7 +446,7 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                element = DictionaryElement(name, attrs, children=None, multiple=set(["pubmed", "medline"]))
+                element = DictionaryElement(tag, attrs, children=None, multiple=set(["pubmed", "medline"]), key=name)
                 element.parent = self.element
                 self.element = element
                 element.endElementHandler = self.endDictionaryElementHandler
@@ -444,7 +455,7 @@ class DataHandler(object):
             elif itemtype == "List":
                 del attrs["Name"]
                 # children are unknown in this case
-                element = ListElement(name, attrs, None)
+                element = ListElement(tag, attrs, None, name)
                 element.parent = self.element
                 if self.element is None:
                     # This is relevant only for Entrez.parse, not for Entrez.read.
@@ -461,27 +472,27 @@ class DataHandler(object):
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
-                self.attributes = dict(attrs)
+                self.attributes = attrs
             elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
                 assert self.attributes is None
-                self.attributes = dict(attrs)
+                self.attributes = attrs
                 self.parser.StartElementHandler = self.startRawElementHandler
                 self.parser.EndElementHandler = self.endStringElementHandler
                 self.parser.CharacterDataHandler = self.characterDataHandler
             else:
                 raise ValueError("Unknown item type %s" % name)
-        elif name in self.errors:
+        elif tag in self.errors:
             self.parser.EndElementHandler = self.endErrorElementHandler
             self.parser.CharacterDataHandler = self.characterDataHandler
-        elif name in self.strings:
+        elif tag in self.strings:
             self.parser.StartElementHandler = self.startRawElementHandler
             self.parser.EndElementHandler = self.endStringElementHandler
             self.parser.CharacterDataHandler = self.characterDataHandler
             assert self.attributes is None
-            self.attributes = dict(attrs)
-        elif name in self.lists:
-            children = self.lists[name]
-            element = ListElement(name, attrs, children)
+            self.attributes = attrs
+        elif tag in self.lists:
+            children = self.lists[tag]
+            element = ListElement(tag, attrs, children)
             element.parent = self.element
             if self.element is None:
                 # This is relevant only for Entrez.parse, not for Entrez.read.
@@ -495,9 +506,9 @@ class DataHandler(object):
             element.endElementHandler = self.endListElementHandler
             self.parser.EndElementHandler = element.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
-        elif name in self.dictionaries:
-            children, multiple = self.dictionaries[name]
-            element = DictionaryElement(name, attrs, children, multiple)
+        elif tag in self.dictionaries:
+            children, multiple = self.dictionaries[tag]
+            element = DictionaryElement(tag, attrs, children, multiple)
             element.parent = self.element
             self.element = element
             element.endElementHandler = self.endDictionaryElementHandler
@@ -506,7 +517,7 @@ class DataHandler(object):
         else:
             # Element not found in DTD
             if self.validating:
-                raise ValidationError(name)
+                raise ValidationError(tag)
             else:
                 # this will not be stored in the record
                 self.parser.StartElementHandler = self.startSkipElementHandler
@@ -565,13 +576,7 @@ class DataHandler(object):
         if element is None:
             self.record = value
         else:
-            if isinstance(element, ListElement):
-                element.store(key, value)
-            elif isinstance(element, DictionaryElement):
-                if key in element.multiple:
-                    element[key].append(value)
-                else:
-                    element[key] = value
+            element.store(value)
 
     def endRawElementHandler(self, name):
         self.level -= 1
@@ -611,14 +616,7 @@ class DataHandler(object):
         if self.element is None:
             self.record = element
         else:
-            key = element.key
-            if isinstance(self.element, ListElement):
-                element.store(key, value)
-            elif isinstance(self.element, DictionaryElement):
-                if key in self.element.multiple:
-                    self.element[key].append(element)
-                else:
-                    self.element[key] = element
+            self.element.store(element)
 
     def endDictionaryElementHandler(self, name):
         element = self.element
@@ -629,14 +627,7 @@ class DataHandler(object):
         if self.element is None:
             self.record = element
         else:
-            key = element.key
-            if isinstance(self.element, ListElement):
-                self.element.store(key, element)
-            elif isinstance(self.element, DictionaryElement):
-                if key in self.element.multiple:
-                    self.element[key].append(element)
-                else:
-                    self.element[key] = element
+            self.element.store(element)
 
     def endIntegerElementHandler(self, tag):
         attributes = self.attributes
@@ -659,13 +650,7 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             if value is None:
                 return
-            if isinstance(element, ListElement):
-                element.store(key, value)
-            elif isinstance(element, DictionaryElement):
-                if key in element.multiple:
-                    element[key].append(value)
-                else:
-                    element[key] = value
+            element.store(value)
 
     def characterDataHandlerRaw(self, content):
         self.data.append(content)
