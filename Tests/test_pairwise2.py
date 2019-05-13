@@ -19,8 +19,8 @@ pw2_C_msmf = pairwise2._make_score_matrix_fast
 pw2_C_rint = pairwise2.rint
 
 # Pure python implementation
-pw2_python_msmf = pairwise2.python_make_score_matrix_fast
-pw2_python_rint = pairwise2.python_rint
+pw2_python_msmf = pairwise2._python_make_score_matrix_fast
+pw2_python_rint = pairwise2._python_rint
 
 
 def switch_python_C(mode):

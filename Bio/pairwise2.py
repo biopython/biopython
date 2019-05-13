@@ -1161,10 +1161,10 @@ def format_alignment(align1, align2, score, begin, end):
 # then throw a warning and use the pure Python implementations.
 # The redefinition is deliberate, thus the no quality assurance
 # flag for when using flake8.
-# Before, we secure access from outside to the Python functions:
+# Before, we secure access to the pure Python functions (for testing purposes):
 
-python_make_score_matrix_fast = _make_score_matrix_fast
-python_rint = rint
+_python_make_score_matrix_fast = _make_score_matrix_fast
+_python_rint = rint
 
 try:
     from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
