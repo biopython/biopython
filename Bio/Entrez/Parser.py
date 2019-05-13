@@ -57,6 +57,7 @@ from Bio._py3k import unicode
 class NoneElement:
 
     def __init__(self, tag, attributes, key=None):
+        """Create a NoneElement."""
         self.tag = tag
         if key is None:
             self.key = tag
@@ -90,6 +91,7 @@ class NoneElement:
 
 class IntegerElement(int):
     def __new__(cls, value, tag, attributes, key=None):
+        """Create an IntegerElement."""
         self = int.__new__(cls, value)
         self.tag = tag
         if key is None:
@@ -110,6 +112,7 @@ class IntegerElement(int):
 
 class StringElement(str):
     def __new__(cls, value, tag, attributes, key=None):
+        """Create a StringElement."""
         self = str.__new__(cls, value)
         self.tag = tag
         if key is None:
@@ -148,6 +151,7 @@ class UnicodeElement(unicode):
 
 class ListElement(list):
     def __init__(self, tag, attributes, allowed_tags, key=None):
+        """Create a ListElement."""
         self.tag = tag
         if key is None:
             self.key = tag
@@ -173,6 +177,7 @@ class ListElement(list):
 class DictionaryElement(dict):
 
     def __init__(self, tag, attrs, allowed_tags, repeated_tags=None, key=None):
+        """Create a DictionaryElement."""
         self.tag = tag
         if key is None:
             self.key = tag
@@ -450,7 +455,7 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                allowed_tags = None # allowed tags are unknown
+                allowed_tags = None  # allowed tags are unknown
                 repeated_tags = frozenset(["pubmed", "medline"])
                 element = DictionaryElement(tag, attrs, allowed_tags=allowed_tags, repeated_tags=repeated_tags, key=name)
                 parent = self.element
@@ -465,7 +470,7 @@ class DataHandler(object):
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif itemtype == "List":
                 del attrs["Name"]
-                allowed_tags = None # allowed tags are unknown
+                allowed_tags = None  # allowed tags are unknown
                 element = ListElement(tag, attrs, allowed_tags, name)
                 parent = self.element
                 element.parent = parent
@@ -701,7 +706,6 @@ class DataHandler(object):
             else:
                 self.strings[name] = allowed_tags
 
-
     def elementDecl(self, name, model):
         """Call a call-back function for each element declaration in a DTD.
 
@@ -792,7 +796,7 @@ class DataHandler(object):
             allowed_tags = frozenset(multiple)
             self.lists[name] = allowed_tags
         else:
-            allowed_tags = frozenset(single+multiple)
+            allowed_tags = frozenset(single + multiple)
             repeated_tags = frozenset(multiple)
             self.dictionaries[name] = (allowed_tags, repeated_tags)
 
