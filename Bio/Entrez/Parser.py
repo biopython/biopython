@@ -122,7 +122,7 @@ class StringElement(str):
     def __repr__(self):
         text = str.__repr__(self)
         attributes = self.attributes
-        if not atttributes:
+        if not attributes:
             return text
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
@@ -553,7 +553,8 @@ class DataHandler(object):
             key = "%s:%s" % (prefix, name)
         else:
             key = name
-        # self.allowed_tags is ignored for now.
+        # self.allowed_tags is ignored for now. Anyway we know what to do
+        # with this tag.
         tag = "<%s" % name
         for key, value in attrs.items():
             tag += ' %s="%s"' % (key, value)
