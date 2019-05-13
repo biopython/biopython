@@ -268,12 +268,13 @@ class EntrezOnlineCase(unittest.TestCase):
 
     def test_fetch_xml_schemas(self):
         handle = Entrez.efetch("protein", id="783730874", rettype="ipg", retmode="xml")
-        records = list(Entrez.parse(handle, validate=False))
+        record = Entrez.read(handle, validate=False)
         handle.close()
-        self.assertEqual(len(records), 1)
-        self.assertIn("Product", records[0])
-        self.assertIn("Statistics", records[0])
-        self.assertIn("ProteinList", records[0])
+        self.assertEqual(len(record), 1)
+        self.assertIn('IPGReport', record)
+        self.assertIn("Product", record['IPGReport'])
+        self.assertIn("Statistics", record['IPGReport'])
+        self.assertIn("ProteinList", record['IPGReport'])
 
 
 if __name__ == "__main__":
