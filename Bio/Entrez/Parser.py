@@ -149,14 +149,14 @@ class UnicodeElement(unicode):
 
 
 class ListElement(list):
-    def __init__(self, tag, attributes, children, key=None):
+    def __init__(self, tag, attributes, allowed_tags, key=None):
         self.tag = tag
         if key is None:
             self.key = tag
         else:
             self.key = key
         self.attributes = attributes
-        self.children = children
+        self.allowed_tags = allowed_tags
 
     def __repr__(self):
         text = list.__repr__(self)
@@ -168,24 +168,25 @@ class ListElement(list):
 
     def store(self, value):
         key = value.key
-        if self.children is not None and key not in self.children:
+        if self.allowed_tags is not None and key not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in list" % key)
         self.append(value)
 
 
 class DictionaryElement(dict):
 
-    def __init__(self, tag, attrs, children, multiple=[], key=None):
+    def __init__(self, tag, attrs, allowed_tags, repeated_tags=None, key=None):
         self.tag = tag
         if key is None:
             self.key = tag
         else:
             self.key = key
         self.attributes = attrs
-        self.children = children
-        self.multiple = multiple
-        for key in multiple:
-            self[key] = []
+        self.allowed_tags = allowed_tags
+        self.repeated_tags = repeated_tags
+        if repeated_tags:
+            for key in repeated_tags:
+                self[key] = []
 
     def __repr__(self):
         text = dict.__repr__(self)
@@ -198,9 +199,9 @@ class DictionaryElement(dict):
     def store(self, value):
         key = value.key
         tag = value.tag
-        if self.children is not None and tag not in self.children:
+        if self.allowed_tags is not None and tag not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in dictionary" % key)
-        if key in self.multiple:
+        if self.repeated_tags and key in self.repeated_tags:
             self[key].append(value)
         else:
             self[key] = value
@@ -260,7 +261,8 @@ class DataHandler(object):
         self.level = 0
         self.data = []
         self.attributes = None
-        self.strings = set()
+        self.allowed_tags = None
+        self.strings = {}
         self.lists = {}
         self.dictionaries = {}
         self.items = set()
@@ -439,7 +441,7 @@ class DataHandler(object):
             del attrs["Type"]
             if itemtype == "Structure":
                 del attrs["Name"]
-                element = DictionaryElement(name, attrs, children=None, multiple=set())
+                element = DictionaryElement(name, attrs, allowed_tags=None, repeated_tags=None)
                 parent = self.element
                 element.parent = parent
                 # For consistency with lists below, store the element here
@@ -448,11 +450,13 @@ class DataHandler(object):
                 else:
                     parent.store(element)
                 self.element = element
-                self.parser.EndElementHandler = self.endContainerElementHandler
+                self.parser.EndElementHandler = self.endElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif name in ("ArticleIds", "History"):
                 del attrs["Name"]
-                element = DictionaryElement(tag, attrs, children=None, multiple=set(["pubmed", "medline"]), key=name)
+                allowed_tags = None # allowed tags are unknown
+                repeated_tags = frozenset(["pubmed", "medline"])
+                element = DictionaryElement(tag, attrs, allowed_tags=allowed_tags, repeated_tags=repeated_tags, key=name)
                 parent = self.element
                 element.parent = parent
                 # For consistency with lists below, store the element here
@@ -461,12 +465,12 @@ class DataHandler(object):
                 else:
                     parent.store(element)
                 self.element = element
-                self.parser.EndElementHandler = self.endContainerElementHandler
+                self.parser.EndElementHandler = self.endElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif itemtype == "List":
                 del attrs["Name"]
-                # children are unknown in this case
-                element = ListElement(tag, attrs, None, name)
+                allowed_tags = None # allowed tags are unknown
+                element = ListElement(tag, attrs, allowed_tags, name)
                 parent = self.element
                 element.parent = parent
                 if self.element is None:
@@ -475,7 +479,7 @@ class DataHandler(object):
                 else:
                     parent.store(element)
                 self.element = element
-                self.parser.EndElementHandler = self.endContainerElementHandler
+                self.parser.EndElementHandler = self.endElementHandler
                 self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             elif itemtype == "Integer":
                 self.parser.EndElementHandler = self.endIntegerElementHandler
@@ -496,11 +500,13 @@ class DataHandler(object):
             self.parser.StartElementHandler = self.startRawElementHandler
             self.parser.EndElementHandler = self.endStringElementHandler
             self.parser.CharacterDataHandler = self.characterDataHandler
+            assert self.allowed_tags is None
+            self.allowed_tags = self.strings[tag]
             assert self.attributes is None
             self.attributes = attrs
         elif tag in self.dictionaries:
-            children, multiple = self.dictionaries[tag]
-            element = DictionaryElement(tag, attrs, children, multiple)
+            allowed_tags, repeated_tags = self.dictionaries[tag]
+            element = DictionaryElement(tag, attrs, allowed_tags, repeated_tags)
             parent = self.element
             element.parent = parent
             # For consistency with lists below, store the element here
@@ -509,11 +515,11 @@ class DataHandler(object):
             else:
                 parent.store(element)
             self.element = element
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         elif tag in self.lists:
-            children = self.lists[tag]
-            element = ListElement(tag, attrs, children)
+            allowed_tags = self.lists[tag]
+            element = ListElement(tag, attrs, allowed_tags)
             parent = self.element
             element.parent = parent
             if parent is None:
@@ -522,7 +528,7 @@ class DataHandler(object):
             else:
                 parent.store(element)
             self.element = element
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         else:
             # Element not found in DTD
@@ -551,6 +557,7 @@ class DataHandler(object):
             key = "%s:%s" % (prefix, name)
         else:
             key = name
+        # self.allowed_tags is ignored for now.
         tag = "<%s" % name
         for key, value in attrs.items():
             tag += ' %s="%s"' % (key, value)
@@ -566,7 +573,7 @@ class DataHandler(object):
         element = self.element
         if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
         value = "".join(self.data)
         self.data = []
@@ -587,6 +594,7 @@ class DataHandler(object):
             self.record = element
         else:
             element.store(value)
+        self.allowed_tags = None
 
     def endRawElementHandler(self, name):
         self.level -= 1
@@ -601,7 +609,7 @@ class DataHandler(object):
         self.level -= 1
         if self.level == 0:
             self.parser.StartElementHandler = self.startElementHandler
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
 
     def endErrorElementHandler(self, name):
         if self.data:
@@ -610,14 +618,13 @@ class DataHandler(object):
             raise RuntimeError(value)
         # no error found:
         if self.element is not None:
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
 
-    def endContainerElementHandler(self, name):
+    def endElementHandler(self, name):
         element = self.element
         self.element = element.parent
         del element.parent
-        del element.children
 
     def endIntegerElementHandler(self, tag):
         attributes = self.attributes
@@ -635,7 +642,7 @@ class DataHandler(object):
         if element is None:
             self.record = value
         else:
-            self.parser.EndElementHandler = self.endContainerElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
             if value is None:
                 return
@@ -686,16 +693,16 @@ class DataHandler(object):
                         # we could distinguish by type; keeping string for now
                         attribute_keys.append(attribute.attrib['name'])
                     isSimpleContent = True
+            allowed_tags = frozenset(keys)
             if len(keys) == 1 and keys == multiple:
                 assert not isSimpleContent
-                children = frozenset(keys)
-                self.lists[name] = children
+                self.lists[name] = allowed_tags
             elif len(keys) >= 1:
                 assert not isSimpleContent
-                children = frozenset(keys)
-                self.dictionaries[name] = (children, multiple)
+                repeated_tags = frozenset(multiple)
+                self.dictionaries[name] = (allowed_tags, repeated_tags)
             else:
-                self.strings.add(name)
+                self.strings[name] = allowed_tags
 
 
     def elementDecl(self, name, model):
@@ -737,8 +744,10 @@ class DataHandler(object):
                         expat.model.XML_CTYPE_EMPTY):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
-                tags = [child[2] for child in children]
-            self.strings.add(name)
+                allowed_tags = frozenset([child[2] for child in children])
+            else:
+                allowed_tags = frozenset([])
+            self.strings[name] = allowed_tags
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
@@ -748,8 +757,8 @@ class DataHandler(object):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
-            children = frozenset([child[2] for child in children])
-            self.lists[name] = children
+            allowed_tags = frozenset([child[2] for child in children])
+            self.lists[name] = allowed_tags
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -783,11 +792,12 @@ class DataHandler(object):
                     multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            children = frozenset(multiple)
-            self.lists[name] = children
+            allowed_tags = frozenset(multiple)
+            self.lists[name] = allowed_tags
         else:
-            children = frozenset(single+multiple)
-            self.dictionaries[name] = (children, multiple)
+            allowed_tags = frozenset(single+multiple)
+            repeated_tags = frozenset(multiple)
+            self.dictionaries[name] = (allowed_tags, repeated_tags)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()

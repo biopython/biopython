@@ -4752,7 +4752,7 @@ Maximal Lactate Steady State (MLSS) and Lactate Threshold (LT) are physiological
         self.assertEqual(pubmed_article['MedlineCitation']['Article']['ELocationID'][0], "10.1117/1.JMI.5.2.026002")
         self.assertEqual(len(pubmed_article['MedlineCitation']['Article']['Abstract']), 1)
         self.assertEqual(len(pubmed_article['MedlineCitation']['Article']['Abstract']['AbstractText']), 1)
-        self.assertEqual(pubmed_article['MedlineCitation']['Article']['Abstract']['AbstractText'][0], """\
+        self.assertEqual(pubmed_article['MedlineCitation']['Article']['Abstract']['AbstractText'][0], u"""\
 We designed and generated pulmonary imaging biomarker pipelines to facilitate high-throughput research and point-of-care use in patients with chronic lung disease. Image processing modules and algorithm pipelines were embedded within a graphical user interface (based on the .NET framework) for pulmonary magnetic resonance imaging (MRI) and x-ray computed-tomography (CT) datasets. The software pipelines were generated using C++ and included: (1) inhaled <math xmlns="http://www.w3.org/1998/Math/MathML">
                         <mrow>
                             <mmultiscripts>
