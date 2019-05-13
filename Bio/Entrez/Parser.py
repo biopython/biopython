@@ -121,9 +121,8 @@ class StringElement(str):
 
     def __repr__(self):
         text = str.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not atttributes:
             return text
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
@@ -141,9 +140,8 @@ class UnicodeElement(unicode):
 
     def __repr__(self):
         text = unicode.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
 
@@ -160,9 +158,8 @@ class ListElement(list):
 
     def __repr__(self):
         text = list.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
 
@@ -190,9 +187,8 @@ class DictionaryElement(dict):
 
     def __repr__(self):
         text = dict.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
 
