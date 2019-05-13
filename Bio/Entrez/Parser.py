@@ -36,7 +36,6 @@ contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
 import sys
-import re
 import os
 import warnings
 from collections import Counter
@@ -56,6 +55,15 @@ from Bio._py3k import unicode
 
 
 class NoneElement:
+
+    def __init__(self, tag, attributes, key=None):
+        """Create a NoneElement."""
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
 
     def __eq__(self, other):
         if other is None:
@@ -82,6 +90,17 @@ class NoneElement:
 
 
 class IntegerElement(int):
+    def __new__(cls, value, tag, attributes, key=None):
+        """Create an IntegerElement."""
+        self = int.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = int.__repr__(self)
         try:
@@ -92,44 +111,101 @@ class IntegerElement(int):
 
 
 class StringElement(str):
+    def __new__(cls, value, tag, attributes, key=None):
+        """Create a StringElement."""
+        self = str.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = str.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
 
 class UnicodeElement(unicode):
+    def __new__(cls, value, tag, attributes, key=None):
+        self = unicode.__new__(cls, value)
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
+        return self
+
     def __repr__(self):
         text = unicode.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
 
 
 class ListElement(list):
+    def __init__(self, tag, attributes, allowed_tags, key=None):
+        """Create a ListElement."""
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attributes
+        self.allowed_tags = allowed_tags
+
     def __repr__(self):
         text = list.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
+
+    def store(self, value):
+        key = value.key
+        if self.allowed_tags is not None and key not in self.allowed_tags:
+            raise ValueError("Unexpected item '%s' in list" % key)
+        self.append(value)
 
 
 class DictionaryElement(dict):
 
+    def __init__(self, tag, attrs, allowed_tags, repeated_tags=None, key=None):
+        """Create a DictionaryElement."""
+        self.tag = tag
+        if key is None:
+            self.key = tag
+        else:
+            self.key = key
+        self.attributes = attrs
+        self.allowed_tags = allowed_tags
+        self.repeated_tags = repeated_tags
+        if repeated_tags:
+            for key in repeated_tags:
+                self[key] = []
+
     def __repr__(self):
         text = dict.__repr__(self)
-        try:
-            attributes = self.attributes
-        except AttributeError:
+        attributes = self.attributes
+        if not attributes:
             return text
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+
+    def store(self, value):
+        key = value.key
+        tag = value.tag
+        if self.allowed_tags is not None and tag not in self.allowed_tags:
+            raise ValueError("Unexpected item '%s' in dictionary" % key)
+        if self.repeated_tags and key in self.repeated_tags:
+            self[key].append(value)
+        else:
+            self[key] = value
 
 
 class NotXMLError(ValueError):
@@ -169,196 +245,6 @@ class ValidationError(ValueError):
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
-class Consumer(object):
-
-    def __init__(self, name, attrs):
-        """Create a do-nothing Consumer object."""
-        return
-
-    def startElementHandler(self, name, attrs):
-        return False
-
-    def endElementHandler(self, name):
-        return False
-
-    def consume(self, content):
-        return
-
-    def store(self, key, value):
-        return
-
-    @property
-    def value(self):
-        return
-
-
-class ErrorConsumer(Consumer):
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for ERROR messages in the XML data."""
-        self.data = []
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        value = "".join(self.data)
-        if value == "":
-            return None
-        else:
-            raise RuntimeError(value)
-
-
-class StringConsumer(Consumer):
-
-    consumable = set()
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for plain text elements in the XML data."""
-        self.tag = name
-        self.attributes = dict(attrs)
-        self.data = []
-
-    def startElementHandler(self, name, attrs, prefix=None):
-        if prefix:
-            key = "%s:%s" % (prefix, name)
-        else:
-            key = name
-        if key in self.consumable:
-            tag = "<%s" % name
-            for key, value in attrs.items():
-                tag += ' %s="%s"' % (key, value)
-            tag += ">"
-            self.data.append(tag)
-            return True
-        return False
-
-    def endElementHandler(self, name, prefix=None):
-        if prefix:
-            key = "%s:%s" % (prefix, name)
-        else:
-            key = name
-        if key in self.consumable:
-            tag = "</%s>" % name
-            self.data.append(tag)
-            return True
-        return False
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        value = "".join(self.data)
-        # Convert Unicode strings to plain strings if possible
-        try:
-            value = StringElement(value)
-        except UnicodeEncodeError:
-            value = UnicodeElement(value)
-        value.tag = self.tag
-        if self.attributes:
-            value.attributes = self.attributes
-        return value
-
-
-class IntegerConsumer(Consumer):
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for integer elements in the XML data."""
-        self.tag = name
-        self.attributes = dict(attrs)
-        self.data = []
-
-    def consume(self, content):
-        self.data.append(content)
-
-    @property
-    def value(self):
-        if self.data:
-            value = int("".join(self.data))
-            value = IntegerElement(value)
-        else:
-            value = NoneElement()
-        value.tag = self.tag
-        value.attributes = self.attributes
-        return value
-
-
-class ListConsumer(Consumer):
-
-    keys = None
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for list elements in the XML data."""
-        data = ListElement()
-        data.tag = name
-        if attrs:
-            data.attributes = dict(attrs)
-        self.data = data
-
-    def store(self, key, value):
-        if self.keys is not None and key not in self.keys:
-            raise ValueError("Unexpected item '%s' in list" % key)
-        self.data.append(value)
-
-    @property
-    def value(self):
-        return self.data
-
-
-class DictionaryConsumer(Consumer):
-
-    multiple = None
-
-    def __init__(self, name, attrs):
-        """Create a Consumer for dictionary elements in the XML data."""
-        data = DictionaryElement()
-        data.tag = name
-        data.attributes = dict(attrs)
-        for key in self.multiple:
-            data[key] = []
-        self.data = data
-
-    def store(self, key, value):
-        if key in self.multiple:
-            self.data[key].append(value)
-        else:
-            self.data[key] = value
-
-    @property
-    def value(self):
-        return self.data
-
-
-def select_item_consumer(name, attrs):
-    assert name == 'Item'
-    name = str(attrs["Name"])  # convert from Unicode
-    del attrs["Name"]
-    itemtype = str(attrs["Type"])  # convert from Unicode
-    del attrs["Type"]
-    if itemtype == "Structure":
-        cls = type(name,
-                   (DictionaryConsumer,),
-                   {"multiple": set()})
-        consumer = cls(name, attrs)
-    elif name in ("ArticleIds", "History"):
-        cls = type(name,
-                   (DictionaryConsumer,),
-                   {"multiple": set(["pubmed", "medline"])})
-        consumer = cls(name, attrs)
-    elif itemtype == "List":
-        # Keys are unknown in this case
-        consumer = ListConsumer(name, attrs)
-    elif itemtype == "Integer":
-        consumer = IntegerConsumer(name, attrs)
-    elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
-        consumer = StringConsumer(name, attrs)
-    else:
-        raise ValueError("Unknown item type %s" % name)
-    return consumer
-
-
 class DataHandler(object):
 
     from Bio import Entrez
@@ -372,10 +258,17 @@ class DataHandler(object):
     def __init__(self, validate, escape):
         """Create a DataHandler object."""
         self.dtd_urls = []
-        self.classes = {}
-        self.consumer = None
+        self.element = None
+        self.level = 0
+        self.data = []
+        self.attributes = None
+        self.allowed_tags = None
+        self.strings = {}
+        self.lists = {}
+        self.dictionaries = {}
+        self.items = set()
+        self.errors = set()
         self.validating = validate
-        self.escaping = escape
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -383,6 +276,10 @@ class DataHandler(object):
         self.namespace_level = Counter()
         self.namespace_prefix = {}
         self._directory = None
+        if escape:
+            self.characterDataHandler = self.characterDataHandlerEscape
+        else:
+            self.characterDataHandler = self.characterDataHandlerRaw
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results."""
@@ -461,28 +358,29 @@ class DataHandler(object):
             if not isinstance(records, list):
                 raise ValueError("The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse")
 
-            while len(records) >= 1:  # Then the top record is finished
+            if not text:
+                break
+
+            while len(records) >= 2:
+                # Then the first record is finished, while the second record
+                # is still a work in progress.
                 record = records.pop(0)
                 yield record
 
-            if not text:
-                sys.stdout.flush()
-                self.parser = None
-                if self.consumer:
-                    # We have reached the end of the XML file
-                    # No more XML data, but there is still some unfinished
-                    # business
-                    raise CorruptedXMLError("Premature end of XML stream")
-                return
+        # We have reached the end of the XML file
+        self.parser = None
+        if self.element is not None:
+            # No more XML data, but there is still some unfinished business
+            raise CorruptedXMLError("Premature end of XML stream")
+
+        # Send out the remaining records
+        for record in records:
+            yield record
 
     def xmlDeclHandler(self, version, encoding, standalone):
         # XML declaration found; set the handlers
         self.parser.StartElementHandler = self.startElementHandler
-        self.parser.EndElementHandler = self.endElementHandler
-        if self.escaping:
-            self.parser.CharacterDataHandler = self.characterDataHandlerEscape
-        else:
-            self.parser.CharacterDataHandler = self.characterDataHandlerRaw
+        self.parser.CharacterDataHandler = self.characterDataHandler
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
         self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
         self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
@@ -502,6 +400,8 @@ class DataHandler(object):
             # to find out their first and last invocation for each namespace.
             self.namespace_level[prefix] += 1
             self.namespace_prefix[uri] = prefix
+            assert uri == "http://www.w3.org/1998/Math/MathML"
+            assert prefix == "mml"
 
     def endNamespaceDeclHandler(self, prefix):
         if prefix != 'xsi':
@@ -534,7 +434,115 @@ class DataHandler(object):
         # reset the element handler
         self.parser.StartElementHandler = self.startElementHandler
 
-    def startElementHandler(self, name, attrs):
+    def startElementHandler(self, tag, attrs):
+        if tag in self.items:
+            assert tag == 'Item'
+            name = str(attrs["Name"])  # convert from Unicode
+            itemtype = str(attrs["Type"])  # convert from Unicode
+            del attrs["Type"]
+            if itemtype == "Structure":
+                del attrs["Name"]
+                element = DictionaryElement(name, attrs, allowed_tags=None, repeated_tags=None)
+                parent = self.element
+                element.parent = parent
+                # For consistency with lists below, store the element here
+                if parent is None:
+                    self.record = element
+                else:
+                    parent.store(element)
+                self.element = element
+                self.parser.EndElementHandler = self.endElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+            elif name in ("ArticleIds", "History"):
+                del attrs["Name"]
+                allowed_tags = None  # allowed tags are unknown
+                repeated_tags = frozenset(["pubmed", "medline"])
+                element = DictionaryElement(tag, attrs, allowed_tags=allowed_tags, repeated_tags=repeated_tags, key=name)
+                parent = self.element
+                element.parent = parent
+                # For consistency with lists below, store the element here
+                if parent is None:
+                    self.record = element
+                else:
+                    parent.store(element)
+                self.element = element
+                self.parser.EndElementHandler = self.endElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+            elif itemtype == "List":
+                del attrs["Name"]
+                allowed_tags = None  # allowed tags are unknown
+                element = ListElement(tag, attrs, allowed_tags, name)
+                parent = self.element
+                element.parent = parent
+                if self.element is None:
+                    # Set self.record here to let Entrez.parse iterate over it
+                    self.record = element
+                else:
+                    parent.store(element)
+                self.element = element
+                self.parser.EndElementHandler = self.endElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+            elif itemtype == "Integer":
+                self.parser.EndElementHandler = self.endIntegerElementHandler
+                self.parser.CharacterDataHandler = self.characterDataHandler
+                self.attributes = attrs
+            elif itemtype in ("String", "Unknown", "Date", "Enumerator"):
+                assert self.attributes is None
+                self.attributes = attrs
+                self.parser.StartElementHandler = self.startRawElementHandler
+                self.parser.EndElementHandler = self.endStringElementHandler
+                self.parser.CharacterDataHandler = self.characterDataHandler
+            else:
+                raise ValueError("Unknown item type %s" % name)
+        elif tag in self.errors:
+            self.parser.EndElementHandler = self.endErrorElementHandler
+            self.parser.CharacterDataHandler = self.characterDataHandler
+        elif tag in self.strings:
+            self.parser.StartElementHandler = self.startRawElementHandler
+            self.parser.EndElementHandler = self.endStringElementHandler
+            self.parser.CharacterDataHandler = self.characterDataHandler
+            assert self.allowed_tags is None
+            self.allowed_tags = self.strings[tag]
+            assert self.attributes is None
+            self.attributes = attrs
+        elif tag in self.dictionaries:
+            allowed_tags, repeated_tags = self.dictionaries[tag]
+            element = DictionaryElement(tag, attrs, allowed_tags, repeated_tags)
+            parent = self.element
+            element.parent = parent
+            # For consistency with lists below, store the element here
+            if parent is None:
+                self.record = element
+            else:
+                parent.store(element)
+            self.element = element
+            self.parser.EndElementHandler = self.endElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        elif tag in self.lists:
+            allowed_tags = self.lists[tag]
+            element = ListElement(tag, attrs, allowed_tags)
+            parent = self.element
+            element.parent = parent
+            if parent is None:
+                # Set self.record here to let Entrez.parse iterate over it
+                self.record = element
+            else:
+                parent.store(element)
+            self.element = element
+            self.parser.EndElementHandler = self.endElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        else:
+            # Element not found in DTD
+            if self.validating:
+                raise ValidationError(tag)
+            else:
+                # this will not be stored in the record
+                self.parser.StartElementHandler = self.startSkipElementHandler
+                self.parser.EndElementHandler = self.endSkipElementHandler
+                self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+                self.level = 1
+
+    def startRawElementHandler(self, name, attrs):
         # check if the name is in a namespace
         prefix = None
         if self.namespace_prefix:
@@ -546,94 +554,157 @@ class DataHandler(object):
                 prefix = self.namespace_prefix[uri]
                 if self.namespace_level[prefix] == 1:
                     attrs = {'xmlns': uri}
-        # First, check if the current consumer can use the tag
-        if self.consumer is not None:
-            if prefix:
-                consumed = self.consumer.startElementHandler(name, attrs, prefix)
-            else:
-                consumed = self.consumer.startElementHandler(name, attrs)
-            if consumed:
-                return
-        cls = self.classes.get(name)
-        if cls is None:
-            # Element not found in DTD
-            if self.validating:
-                raise ValidationError(name)
-            else:
-                # this will not be stored in the record
-                consumer = Consumer(name, attrs)
+        if prefix:
+            key = "%s:%s" % (prefix, name)
         else:
-            consumer = cls(name, attrs)
-        consumer.parent = self.consumer
-        if self.consumer is None:
-            # This is relevant only for Entrez.parse, not for Entrez.read.
-            # If self.consumer is None, then this is the first start tag we
-            # encounter, and it should refer to a list. Store this list in
-            # the record attribute, so that Entrez.parse can iterate over it.
-            # The record attribute will be set again at the last end tag;
-            # However, it doesn't hurt to set it twice.
-            value = consumer.value
-            if value is not None:
-                self.record = value
-        self.consumer = consumer
+            key = name
+        # self.allowed_tags is ignored for now. Anyway we know what to do
+        # with this tag.
+        tag = "<%s" % name
+        for key, value in attrs.items():
+            tag += ' %s="%s"' % (key, value)
+        tag += ">"
+        self.data.append(tag)
+        self.parser.EndElementHandler = self.endRawElementHandler
+        self.level += 1
+
+    def startSkipElementHandler(self, name, attrs):
+        self.level += 1
+
+    def endStringElementHandler(self, tag):
+        element = self.element
+        if element is not None:
+            self.parser.StartElementHandler = self.startElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        value = "".join(self.data)
+        self.data = []
+        attributes = self.attributes
+        self.attributes = None
+        if tag in self.items:
+            assert tag == 'Item'
+            key = str(attributes["Name"])  # convert from Unicode
+            del attributes["Name"]
+        else:
+            key = tag
+        # Convert Unicode strings to plain strings if possible
+        try:
+            value = StringElement(value, tag, attributes, key)
+        except UnicodeEncodeError:
+            value = UnicodeElement(value, tag, attributes, key)
+        if element is None:
+            self.record = element
+        else:
+            element.store(value)
+        self.allowed_tags = None
+
+    def endRawElementHandler(self, name):
+        self.level -= 1
+        if self.level == 0:
+            self.parser.EndElementHandler = self.endStringElementHandler
+        if self.namespace_prefix:
+            uri, name = name.split()
+        tag = "</%s>" % name
+        self.data.append(tag)
+
+    def endSkipElementHandler(self, name):
+        self.level -= 1
+        if self.level == 0:
+            self.parser.StartElementHandler = self.startElementHandler
+            self.parser.EndElementHandler = self.endElementHandler
+
+    def endErrorElementHandler(self, name):
+        if self.data:
+            # error found:
+            value = "".join(self.data)
+            raise RuntimeError(value)
+        # no error found:
+        if self.element is not None:
+            self.parser.EndElementHandler = self.endElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
 
     def endElementHandler(self, name):
-        prefix = None
-        if self.namespace_prefix:
-            try:
-                uri, name = name.split()
-            except ValueError:
-                pass
-            else:
-                prefix = self.namespace_prefix[uri]
-        consumer = self.consumer
-        # First, check if the current consumer can use the tag
-        if consumer is not None:
-            if prefix:
-                consumed = consumer.endElementHandler(name, prefix)
-            else:
-                consumed = consumer.endElementHandler(name)
-            if consumed:
-                return
-        self.consumer = consumer.parent
-        value = consumer.value
-        if self.consumer is None:
+        element = self.element
+        self.element = element.parent
+        del element.parent
+
+    def endIntegerElementHandler(self, tag):
+        attributes = self.attributes
+        self.attributes = None
+        assert tag == 'Item'
+        key = str(attributes["Name"])  # convert from Unicode
+        del attributes["Name"]
+        if self.data:
+            value = int("".join(self.data))
+            self.data = []
+            value = IntegerElement(value, tag, attributes, key)
+        else:
+            value = NoneElement(tag, attributes, key)
+        element = self.element
+        if element is None:
             self.record = value
-        elif value is not None:
-            name = value.tag
-            self.consumer.store(name, value)
+        else:
+            self.parser.EndElementHandler = self.endElementHandler
+            self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+            if value is None:
+                return
+            element.store(value)
 
     def characterDataHandlerRaw(self, content):
-        self.consumer.consume(content)
+        self.data.append(content)
 
     def characterDataHandlerEscape(self, content):
         content = escape(content)
-        self.consumer.consume(content)
+        self.data.append(content)
+
+    def skipCharacterDataHandler(self, content):
+        return
 
     def parse_xsd(self, root):
-        name = ""
-        for child in root:
-            is_dictionary = False
+        prefix = "{http://www.w3.org/2001/XMLSchema}"
+        for element in root:
+            isSimpleContent = False
+            attribute_keys = []
+            keys = []
             multiple = []
-            for element in child.getiterator():
-                if "element" in element.tag:
-                    if "name" in element.attrib:
-                        name = element.attrib['name']
-                if "attribute" in element.tag:
-                    is_dictionary = True
-                if "sequence" in element.tag:
-                    for grandchild in element:
-                        key = grandchild.attrib['ref']
-                        multiple.append(key)
-            if is_dictionary:
-                bases = (DictionaryConsumer,)
-                multiple = set(multiple)
-                self.classes[name] = type(str(name),
-                                          bases,
-                                          {"multiple": multiple})
-                is_dictionary = False
+            assert element.tag == prefix + "element"
+            name = element.attrib['name']
+            assert len(element) == 1
+            complexType = element[0]
+            assert complexType.tag == prefix + "complexType"
+            for component in complexType:
+                tag = component.tag
+                if tag == prefix + 'attribute':
+                    # we could distinguish by type; keeping string for now
+                    attribute_keys.append(component.attrib['name'])
+                elif tag == prefix + 'sequence':
+                    maxOccurs = component.attrib.get('maxOccurs', '1')
+                    for key in component:
+                        assert key.tag == prefix + "element"
+                        ref = key.attrib['ref']
+                        keys.append(ref)
+                        if maxOccurs != '1' or key.attrib.get('maxOccurs', '1') != '1':
+                            multiple.append(ref)
+                elif tag == prefix + 'simpleContent':
+                    assert len(component) == 1
+                    extension = component[0]
+                    assert extension.tag == prefix + 'extension'
+                    assert extension.attrib['base'] == 'xs:string'
+                    for attribute in extension:
+                        assert attribute.tag == prefix + "attribute"
+                        # we could distinguish by type; keeping string for now
+                        attribute_keys.append(attribute.attrib['name'])
+                    isSimpleContent = True
+            allowed_tags = frozenset(keys)
+            if len(keys) == 1 and keys == multiple:
+                assert not isSimpleContent
+                self.lists[name] = allowed_tags
+            elif len(keys) >= 1:
+                assert not isSimpleContent
+                repeated_tags = frozenset(multiple)
+                self.dictionaries[name] = (allowed_tags, repeated_tags)
             else:
-                self.classes[name] = ListConsumer
+                self.strings[name] = allowed_tags
 
     def elementDecl(self, name, model):
         """Call a call-back function for each element declaration in a DTD.
@@ -647,7 +718,7 @@ class DataHandler(object):
         or error.
         """
         if name.upper() == "ERROR":
-            self.classes[name] = ErrorConsumer
+            self.errors.add(name)
             return
         if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
@@ -660,7 +731,7 @@ class DataHandler(object):
                                         ):
             # Special case. As far as I can tell, this only occurs in the
             # eSummary DTD.
-            self.classes[name] = select_item_consumer
+            self.items.add(name)
             return
         # First, remove ignorable parentheses around declarations
         while (model[0] in (expat.model.XML_CTYPE_SEQ,
@@ -673,21 +744,11 @@ class DataHandler(object):
         if model[0] in (expat.model.XML_CTYPE_MIXED,
                         expat.model.XML_CTYPE_EMPTY):
             if model[1] == expat.model.XML_CQUANT_REP:
-                tags = []
                 children = model[3]
-                for child in children:
-                    tag = child[2]
-                    tags.append(tag)
-                    if tag in self.classes:
-                        try:
-                            keys = self.classes[tag].keys
-                        except AttributeError:
-                            continue
-                        tags.extend(keys)
-                bases = (StringConsumer, )
-                self.classes[name] = type(str(name), bases, {'consumable': tags})
+                allowed_tags = frozenset([child[2] for child in children])
             else:
-                self.classes[name] = StringConsumer
+                allowed_tags = frozenset([])
+            self.strings[name] = allowed_tags
             return
         # List-type elements
         if (model[0] in (expat.model.XML_CTYPE_CHOICE,
@@ -697,9 +758,8 @@ class DataHandler(object):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
-            keys = set([child[2] for child in children])
-            bases = (ListConsumer,)
-            self.classes[name] = type(str(name), bases, {'keys': keys})
+            allowed_tags = frozenset([child[2] for child in children])
+            self.lists[name] = allowed_tags
             return
         # This is the tricky case. Check which keys can occur multiple
         # times. If only one key is possible, and it can occur multiple
@@ -733,15 +793,12 @@ class DataHandler(object):
                     multiple.append(key)
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            keys = set(multiple)
-            bases = (ListConsumer, )
-            self.classes[name] = type(str(name), bases, {'keys': keys})
+            allowed_tags = frozenset(multiple)
+            self.lists[name] = allowed_tags
         else:
-            multiple = set(multiple)
-            bases = (DictionaryConsumer,)
-            self.classes[name] = type(str(name),
-                                      bases,
-                                      {"multiple": multiple})
+            allowed_tags = frozenset(single + multiple)
+            repeated_tags = frozenset(multiple)
+            self.dictionaries[name] = (allowed_tags, repeated_tags)
 
     def open_dtd_file(self, filename):
         self._initialize_directory()
