@@ -6,6 +6,8 @@
 
 
 class fff_rec(object):
+    """Define superclass for reading fixed-column type flat-file records."""
+
     def __init__(self, inrec=''):
         """Initialize the class."""
         self.data = inrec

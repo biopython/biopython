@@ -11,10 +11,13 @@ summary and alignment sections.
 See: Holm and Sander (1996) The FSSP database: fold classification based on
 structure-structure alignment of proteins.
 
-functions: read_fssp(file_handle): reads an fssp file into the records. Returns
-a tuple of two instances.
+Functions
+---------
+    :read_fssp(file_handle): reads an fssp file into the records. Returns
+                            a tuple of two instances.
 
-mult_align: returns a Biopython alignment object
+    :mult_align: returns a Biopython alignment object.
+
 """
 from __future__ import print_function
 
@@ -43,6 +46,8 @@ equiv_title = re.compile('## +EQUIVALENCES')
 
 
 class FSSPHeader(object):
+    """Store the FSSP file header's properties."""
+
     def __init__(self):
         """Initialize the class."""
         self.database = None
@@ -55,6 +60,7 @@ class FSSPHeader(object):
         self.nalign = 0
 
     def fill_header(self, inline):
+        """Fill in properties from line."""
         for i in header_records:
             if header_records[i].match(inline):
                 if i == 'database' or i == 'seqlength' or i == 'nalign':
@@ -69,6 +75,8 @@ class FSSPHeader(object):
 
 
 class PosAlign(object):
+    """Store the position alignments, AminoAcid plus Structure."""
+
     def __init__(self, inStr):
         """Initialize the class."""
         inStr = inStr.strip()
@@ -98,7 +106,7 @@ class PosAlign(object):
 
 
 class FSSPSumRec(object):
-    """Contains info from an FSSP summary record."""
+    """Store the summary records from SUMMARY Section of file."""
 
     def __init__(self, in_str):
         """Initialize the class."""
@@ -140,6 +148,8 @@ class FSSPSumRec(object):
 
 
 class FSSPAlignRec(object):
+    """Store the Alignment records from ALIGNMENTS section of file."""
+
     def __init__(self, in_fff_rec):
         """Initialize the class."""
         # print(in_fff_rec)
@@ -159,10 +169,15 @@ class FSSPAlignRec(object):
         self.PosAlignList = []
 
     def add_align_list(self, align_list):
+        """Add the given alignment list to the structure."""
         for i in align_list:
             self.PosAlignList.append(PosAlign(i))
 
     def pos_align_list2dict(self):
+        """Create a dictionary from the position alignment list.
+
+        The key is sequential starting on 1.
+        """
         j = 1
         for i in self.PosAlignList:
             self.pos_align_dict[j] = i
@@ -170,6 +185,20 @@ class FSSPAlignRec(object):
 
 
 class FSSPAlignDict(dict):
+    """Create a dict to access Alignment Records(FSSPAlignRec).
+
+    Key is the alignment record's chain_id, plus residue name,
+    plus PDB residue number
+
+    key = align_rec.chain_id + align_rec.res_name + str(align_rec.pdb_res_num
+
+    Also creates two indexes, one by PDB Residue Number, the other by absolute
+    residue number, so you can access the data by either.
+    pdb_res_dict: Key PDB residue number
+    abs_res_dict: Key absolute residue number
+
+    """
+
     def __init__(self):
         """Initialize the class."""
         # The following two dictionaries are pointers to records in self
@@ -180,33 +209,33 @@ class FSSPAlignDict(dict):
         self.data = {}
 
     def build_resnum_list(self):
+        """Create the keys by residue number."""
         for i in self:
             self.abs_res_dict[self[i].abs_res_num] = i
             self.pdb_res_dict[self[i].pdb_res_num] = i
 
-    # Given an absolute residue number & chain, returns the relevant fssp
-    # record
     def abs(self, num):
+        """Given an absolute residue number & chain, returns the relevant fssp record."""
         return self[self.abs_res_dict[num]]
 
-    # Given an PDB residue number & chain, returns the relevant fssp
-    # record
     def pdb(self, num):
+        """Given an PDB residue number & chain, returns the relevant fssp record."""
         return self[self.pdb_res_dict[num]]
 
-    # Returns a sequence string
     def sequence(self, num):
+        """Return a sequence string."""
         s = ''
         for i in sorted(self.abs_res_dict):
             s += self.abs(i).pos_align_dict[num].aa
         return s
 
     def fasta_mult_align(self):
+        """Create a FASTA multi alignment record."""
         mult_align_dict = {}
         for j in self.abs(1).pos_align_dict:
             mult_align_dict[j] = ''
         for fssp_record in self.values():
-            for j in fssp_rec.pos_align_dict:
+            for j in fssp_record.pos_align_dict:
                 mult_align_dict[j] += fssp_record.pos_align_dict[j].aa
         out_str = ''
         for i in sorted(mult_align_dict):
@@ -222,6 +251,11 @@ class FSSPAlignDict(dict):
 
 
 class FSSPSumDict(dict):
+    """Create a dict to access summary records (FSSPSumRec).
+
+    The key is NR, Record Number.
+    """
+
     pass
 
 
@@ -230,6 +264,14 @@ class FSSPSumDict(dict):
 # a list of FSSPSumRecs and a dictionary of alignment records.
 #
 def read_fssp(fssp_handle):
+    """Process a FSSP file and creates the classes containing its parts.
+
+    Returns:
+        :header: Contains the file header and its properties.
+        :sum_dict: Contains the summary section.
+        :align_dict: Contains the alignments.
+
+    """
     header = FSSPHeader()
     sum_dict = FSSPSumDict()
     align_dict = FSSPAlignDict()
