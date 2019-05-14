@@ -21,12 +21,16 @@ from Bio.SeqRecord import SeqRecord
 
 
 class FSSPAlign(MultipleSeqAlignment):
+    """Provision to do single Multi Sequence Alignment from FSSP files."""
+
     def _add_numbering_table(self, new_record):
         new_record.annotations['abs2pdb'] = {}
         new_record.annotations['pdb2abs'] = {}
 
 
 class FSSPMultAlign(dict):
+    """Provision to do multiple Multi Sequence Alignment from FSSP files."""
+
     def __init__(self):
         """Initialize the class."""
         self.abs_res = []
