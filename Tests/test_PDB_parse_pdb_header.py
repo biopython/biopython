@@ -8,10 +8,9 @@
 
 
 import unittest
-import warnings
 
 try:
-    import numpy
+    import numpy  # noqa F401
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -50,7 +49,7 @@ class ParseReal(unittest.TestCase):
                                 "chain": "2", "ssseq": 11, "insertion": None})
 
     def test_parse_header_line(self):
-        """Unit test for parsing and converting fields in HEADER record"""
+        """Unit test for parsing and converting fields in HEADER record."""
         header = parse_pdb_header("PDB/header.pdb")
         self.assertEqual(header['head'], 'structural genomics, unknown function')
         self.assertEqual(header['idcode'], '3EFG')
