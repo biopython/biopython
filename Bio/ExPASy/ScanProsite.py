@@ -83,7 +83,8 @@ class Parser(ExpatParser):
     def feed(self, data, isFinal=0):
         """Raise an Error if plain text is received in the data.
 
-        This is to show the Error messages returned by ScanProsite."""
+        This is to show the Error messages returned by ScanProsite.
+        """
         # Error messages returned by the ScanProsite server are formatted as
         # as plain text instead of an XML document. To catch such error
         # messages, we override the feed method of the Expat parser.
