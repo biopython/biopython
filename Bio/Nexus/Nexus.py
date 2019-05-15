@@ -48,6 +48,8 @@ DEFAULTNEXUS = '#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=d
 
 
 class NexusError(Exception):
+    """Provision for the management of Nexus exceptions."""
+
     pass
 
 
@@ -65,12 +67,14 @@ class CharBuffer(object):
             self.buffer = []
 
     def peek(self):
+        """Return the first character from the buffer."""
         if self.buffer:
             return self.buffer[0]
         else:
             return None
 
     def peek_nonwhitespace(self):
+        """Return the first character from the buffer, do not include spaces."""
         b = ''.join(self.buffer).strip()
         if b:
             return b[0]
@@ -168,7 +172,9 @@ class CharBuffer(object):
 class StepMatrix(object):
     """Calculate a stepmatrix for weighted parsimony.
 
-    See Wheeler (1990), Cladistics 6:269-275.
+    See :
+    COMBINATORIAL WEIGHTS IN PHYLOGENETIC ANALYSIS - A STATISTICAL PARSIMONY PROCEDURE
+    Wheeler (1990), Cladistics 6:269-275.
     """
 
     def __init__(self, symbols, gap):
@@ -182,19 +188,26 @@ class StepMatrix(object):
                 self.set(x, y, 0)
 
     def set(self, x, y, value):
+        """Set a given value in the matrix's position."""
         if x > y:
             x, y = y, x
         self.data[x + y] = value
 
     def add(self, x, y, value):
+        """Add the given value to existing, in matrix's position."""
         if x > y:
             x, y = y, x
         self.data[x + y] += value
 
     def sum(self):
+        """Calculate the associations, makes matrix of associations."""
         return reduce(lambda x, y: x + y, self.data.values())
 
     def transformation(self):
+        """Calculate the transformation matrix.
+
+        Normalizes the columns of the matrix of associations.
+        """
         total = self.sum()
         if total != 0:
             for k in self.data:
@@ -202,6 +215,11 @@ class StepMatrix(object):
         return self
 
     def weighting(self):
+        """Calculate the Phylogenetic weight matrix.
+
+        Constructed from the logarithmic transformation of the
+        transformation matrix.
+        """
         for k in self.data:
             if self.data[k] != 0:
                 self.data[k] = -math.log(self.data[k])
@@ -584,6 +602,7 @@ class Block(object):
 
 
 class Nexus(object):
+    """Create the Nexus class, main class for the management of Nexus files."""
 
     def __init__(self, input=None):
         """Initialize the class."""

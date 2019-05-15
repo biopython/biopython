@@ -15,10 +15,14 @@ Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 
 
 class ChainException(Exception):
+    """Provision for the management of Chain exceptions."""
+
     pass
 
 
 class NodeException(Exception):
+    """Provision for the management of Node exceptions."""
+
     pass
 
 
