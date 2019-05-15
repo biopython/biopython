@@ -76,6 +76,7 @@ possible, especially the following contributors:
 - Nick Negretti
 - Peter Cock
 - Ralf Stephan
+- Rob Miller
 - Sergio Valqui
 - Wibowo 'Bow' Arindrarto
 
