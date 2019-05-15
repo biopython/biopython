@@ -44,7 +44,7 @@ def parse(handle, format, strict=True):
     For example:
 
     >>> from Bio import motifs
-    >>> with open("Motif/alignace.out") as handle:
+    >>> with open("motifs/alignace.out") as handle:
     ...     for m in motifs.parse(handle, "AlignAce"):
     ...         print(m.consensus)
     ...
