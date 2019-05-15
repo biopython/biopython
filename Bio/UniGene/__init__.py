@@ -251,6 +251,7 @@ class Record(object):
 
 
 def parse(handle):
+    """Read and load a UniGene records, for files containing multiple records."""
     while True:
         record = _read(handle)
         if not record:
@@ -259,6 +260,7 @@ def parse(handle):
 
 
 def read(handle):
+    """Read and load a UniGene record, one record per file."""
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
