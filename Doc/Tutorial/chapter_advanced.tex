@@ -36,9 +36,9 @@ into \verb|SeqRecord| objects.
 \subsection{SubsMat}
 
 This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices. The \verb+SeqMat+ class derives from a dictionary:
-\begin{verbatim}
+\begin{minted}{python}
 class SeqMat(dict)
-\end{verbatim}
+\end{minted}
 The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
 
 \begin{enumerate}
@@ -54,9 +54,9 @@ The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| whe
   \begin{enumerate}
 
     \item
-\begin{verbatim}
+\begin{minted}{python}
 __init__(self,data=None,alphabet=None, mat_name='', build_later=0):
-\end{verbatim}
+\end{minted}
 
     \begin{enumerate}
 
@@ -70,18 +70,18 @@ __init__(self,data=None,alphabet=None, mat_name='', build_later=0):
     \end{enumerate}
 
     \item
-\begin{verbatim}
+\begin{minted}{python}
 entropy(self,obs_freq_mat)
-\end{verbatim}
+\end{minted}
 
     \begin{enumerate}
       \item \verb|obs_freq_mat|: an observed frequency matrix. Returns the matrix's entropy, based on the frequency in  \verb|obs_freq_mat|. The matrix instance should be LO or SUBS.
     \end{enumerate}
 
     \item
-\begin{verbatim}
+\begin{minted}{python}
 sum(self)
-\end{verbatim}
+\end{minted}
     Calculates the sum of values for each letter in the matrix's alphabet, and returns it as a dictionary of the form \verb|{i1: s1, i2: s2,...,in:sn}|, where:
     \begin{itemize}
       \item i: an alphabet letter;
@@ -90,9 +90,9 @@ sum(self)
     \end{itemize}
 
     \item
-\begin{verbatim}
+\begin{minted}{python}
 print_mat(self,f,format="%4d",bottomformat="%4s",alphabet=None)
-\end{verbatim}
+\end{minted}
 
     prints the matrix to file handle f. \verb|format| is the format field for the matrix values; \verb|bottomformat| is the format field for the bottom row, containing matrix letters. Example output for a 3-letter alphabet matrix:
 
@@ -145,9 +145,9 @@ At this point, if all you wish to do is generate a log-odds matrix, please go to
 \item Generating the observed frequency matrix (OFM)
 
 Use:
-\begin{verbatim}
+\begin{minted}{python}
 OFM = SubsMat._build_obs_freq_mat(ARM)
-\end{verbatim}
+\end{minted}
 
   The OFM is generated from the ARM, only instead of replacement counts, it contains replacement frequencies.
 
@@ -155,9 +155,9 @@ OFM = SubsMat._build_obs_freq_mat(ARM)
 
 Use:
 
-\begin{verbatim}
+\begin{minted}{python}
 EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
-\end{verbatim}
+\end{minted}
 
   \begin{enumerate}
     \item \verb|exp_freq_table|: should be a FreqTable instance. See section~\ref{sec:freq_table} for detailed information on FreqTable. Briefly, the expected frequency table has the frequencies of appearance for each member of the alphabet. It is
@@ -166,10 +166,10 @@ EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
 
 The expected frequency table can (and generally should) be generated from the observed frequency matrix. So in most cases you will generate \verb|exp_freq_table| using:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> exp_freq_table = SubsMat._exp_freq_table_from_obs_freq(OFM)
 >>> EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
-\end{verbatim}
+\end{minted}
 
 But you can supply your own \verb|exp_freq_table|, if you wish
 
@@ -177,18 +177,18 @@ But you can supply your own \verb|exp_freq_table|, if you wish
 
 Use:
 
-\begin{verbatim}
+\begin{minted}{python}
 SFM = SubsMat._build_subs_mat(OFM,EFM)
-\end{verbatim}
+\end{minted}
 
   Accepts an OFM, EFM. Provides the division product of the corresponding values.
 
 \item Generating a log-odds matrix (LOM)
 
    Use:
-\begin{verbatim}
+\begin{minted}{python}
 LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
-\end{verbatim}
+\end{minted}
 
    \begin{enumerate}
      \item Accepts an SFM.
@@ -205,10 +205,10 @@ LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
 
 As most people would want to generate a log-odds matrix, with minimum hassle, SubsMat provides one function which does it all:
 
-\begin{verbatim}
+\begin{minted}{python}
 make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
                       factor=10.0,round_digit=0):
-\end{verbatim}
+\end{minted}
 
 \begin{enumerate}
   \item \verb|acc_rep_mat|: user provided accepted replacements matrix
@@ -222,9 +222,9 @@ make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
 \subsection{FreqTable}
 \label{sec:freq_table}
 
-\begin{verbatim}
+\begin{minted}{python}
 FreqTable.FreqTable(UserDict.UserDict)
-\end{verbatim}
+\end{minted}
 
 \begin{enumerate}
 
@@ -265,9 +265,9 @@ C  0.5
 Conversely, the residue frequencies or counts can be passed as a dictionary.
 Example of a count dictionary (3-letter alphabet):
 
-\begin{verbatim}
+\begin{minted}{python}
 {'A': 35, 'B': 65, 'C': 100}
-\end{verbatim}
+\end{minted}
 
 Which means that an expected data count would give a 0.5 frequency
 for 'C', a 0.325 probability of 'B' and a 0.175 probability of 'A'
@@ -275,9 +275,9 @@ out of 200 total, sum of A, B and C)
 
  A frequency dictionary for the same data would be:
 
-\begin{verbatim}
+\begin{minted}{python}
 {'A': 0.175, 'B': 0.325, 'C': 0.5}
-\end{verbatim}
+\end{minted}
 
 Summing up to 1.
 
@@ -286,13 +286,13 @@ When passing a dictionary as an argument, you should indicate whether it is a co
 Read expected counts. readCount will already generate the frequencies
 Any one of the following may be done to geerate the frequency table (ftab):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from SubsMat import *
 >>> ftab = FreqTable.FreqTable(my_frequency_dictionary, FreqTable.FREQ)
 >>> ftab = FreqTable.FreqTable(my_count_dictionary, FreqTable.COUNT)
 >>> ftab = FreqTable.read_count(open("myCountFile"))
 >>> ftab = FreqTable.read_frequency(open("myFrequencyFile"))
-\end{verbatim}
+\end{minted}
 
 \end{enumerate}
 

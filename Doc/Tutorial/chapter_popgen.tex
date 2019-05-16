@@ -26,12 +26,12 @@ Utilities to manipulate the content of a record are also provided.
 Here is an example on how to read a GenePop file (you can find
 example GenePop data files in the Test/PopGen directory of Biopython):
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.PopGen import GenePop
 
 with open("example.gen") as handle:
     rec = GenePop.read(handle)
-\end{verbatim}
+\end{minted}
 
 This will read a file called example.gen and parse it. If you
 do print rec, the record will be output again, in GenePop format.
@@ -45,7 +45,7 @@ a list of individuals, each individual is a pair composed by individual
 name and a list of alleles (2 per marker), here is an example for
 rec.populations:
 
-\begin{verbatim}
+\begin{minted}{python}
 [
     [
         ('Ind1', [(1, 2),    (3, 3), (200, 201)],
@@ -55,7 +55,7 @@ rec.populations:
         ('Other1', [(1, 1),  (4, 3), (200, 200)],
     ]
 ]
-\end{verbatim}
+\end{minted}
 
 So we have two populations, the first with two individuals, the
 second with only one. The first individual of the first
@@ -66,7 +66,7 @@ might be missing (see as an example, Ind2 above).
 A few utility functions to manipulate GenePop records are made
 available, here is an example:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.PopGen import GenePop
 
 #Imagine that you have loaded rec, as per the code snippet above...
@@ -102,7 +102,7 @@ rec_pops =  rec.split_in_pops(pop_names)
 #  they are passed in array (pop_names).
 #  The value of each dictionary entry is the GenePop record.
 #  rec is not altered.
-\end{verbatim}
+\end{minted}
 
 GenePop does not support population names, a limitation which can be
 cumbersome at times. Functionality to enable population names is currently

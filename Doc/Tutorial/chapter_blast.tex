@@ -62,11 +62,11 @@ described in section~\ref{sec:parsing-blast} below.
 For more about the optional BLAST arguments, we refer you to the NCBI's own
 documentation, or that built into Biopython:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
 ...
-\end{verbatim}
+\end{minted}
 
 Note that the default settings on the NCBI BLAST website are not quite
 the same as the defaults on QBLAST. If you get different results, you'll
@@ -77,42 +77,42 @@ For example, if you have a nucleotide sequence you want to search against
 the nucleotide database (nt) using BLASTN, and you know the GI number of your
 query sequence, you can use:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
-\end{verbatim}
+\end{minted}
 
 Alternatively, if we have our query sequence already in a FASTA formatted
 file, we just need to open the file and read in this record as a string,
 and use that as the query argument:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> fasta_string = open("m_cold.fasta").read()
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
-\end{verbatim}
+\end{minted}
 
 We could also have read in the FASTA file as a \verb|SeqRecord| and then
 supplied just the sequence itself:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
-\end{verbatim}
+\end{minted}
 
 Supplying just the sequence means that BLAST will assign an identifier
 for your sequence automatically.  You might prefer to use the
 \verb|SeqRecord| object's format method to make a FASTA string
 (which will include the existing identifier):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("m_cold.fasta", format="fasta")
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
-\end{verbatim}
+\end{minted}
 
 This approach makes more sense if you have your sequence(s) in a
 non-FASTA file format which you can extract using \verb|Bio.SeqIO|
@@ -133,12 +133,12 @@ We need to be a bit careful since we can use \verb|result_handle.read()| to
 read the BLAST output only once -- calling \verb|result_handle.read()| again
 returns an empty string.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> with open("my_blast.xml", "w") as out_handle:
 ...     out_handle.write(result_handle.read())
 ...
 >>> result_handle.close()
-\end{verbatim}
+\end{minted}
 
 After doing this, the results are in the file \verb|my_blast.xml| and the
 original handle has had all its data extracted (so we closed it). However,
@@ -146,9 +146,9 @@ the \verb|parse| function of the BLAST parser (described
 in~\ref{sec:parsing-blast}) takes a file-handle-like object, so
 we can just open the saved file for input:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> result_handle = open("my_blast.xml")
-\end{verbatim}
+\end{minted}
 
 Now that we've got the BLAST results back into a handle again, we are ready
 to do something with them, so this leads us right into the parsing section
@@ -199,9 +199,9 @@ run a BLASTX (translation) search against the non-redundant (NR) protein databas
 Assuming you (or your systems administrator) has downloaded and installed the NR
 database, you might run:
 
-\begin{verbatim}
-blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
-\end{verbatim}
+\begin{minted}{bash}
+$ blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{minted}
 
 This should run BLASTX against the NR database, using an expectation cut-off value
 of $0.001$ and produce XML output to the specified file (which we can then parse).
@@ -212,7 +212,7 @@ From within Biopython we can use the NCBI BLASTX wrapper from the
 \verb|Bio.Blast.Applications| module to build the command line string,
 and run it:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast.Applications import NcbiblastxCommandline
 >>> help(NcbiblastxCommandline)
 ...
@@ -224,7 +224,7 @@ db='nr', evalue=0.001)
 >>> print(blastx_cline)
 blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
 >>> stdout, stderr = blastx_cline()
-\end{verbatim}
+\end{minted}
 
 In this example there shouldn't be any output from BLASTX to the terminal,
 so stdout and stderr should be empty. You may want to check the output file
@@ -302,34 +302,34 @@ If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
 BLAST results.  For example, using a GI number to do an online search:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIWWW
 >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
-\end{verbatim}
+\end{minted}
 
 If instead you ran BLAST some other way, and have the
 BLAST output (in XML format) in the file \verb|my_blast.xml|, all you
 need to do is to open the file for reading:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> result_handle = open("my_blast.xml")
-\end{verbatim}
+\end{minted}
 
 Now that we've got a handle, we are ready to parse the output. The
 code to parse it is really quite small.  If you expect a single
 BLAST result (i.e., you used a single query):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_record = NCBIXML.read(result_handle)
-\end{verbatim}
+\end{minted}
 
 \noindent or, if you have lots of results (i.e., multiple query sequences):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
-\end{verbatim}
+\end{minted}
 
 Just like \verb|Bio.SeqIO| and \verb|Bio.AlignIO|
 (see Chapters~\ref{chapter:Bio.SeqIO} and~\ref{chapter:Bio.AlignIO}),
@@ -345,7 +345,7 @@ iterator. In plain English, an iterator allows you to step through
 the BLAST output, retrieving BLAST records one by one for each BLAST
 search result:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = next(blast_records)
@@ -359,37 +359,37 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 StopIteration
 # No further records
-\end{verbatim}
+\end{minted}
 
 Or, you can use a \verb|for|-loop:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for blast_record in blast_records:
 ...     # Do something with blast_record
-\end{verbatim}
+\end{minted}
 
 Note though that you can step through the BLAST records only once.
 Usually, from each BLAST record you would save the information that
 you are interested in. If you want to save all returned BLAST records,
 you can convert the iterator into a list:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> blast_records = list(blast_records)
-\end{verbatim}
+\end{minted}
 Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems trying to
 save them all in a list.
 
 Usually, you'll be running one BLAST search at a time. Then, all you need
 to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = next(blast_records)
-\end{verbatim}
+\end{minted}
 \noindent or more elegantly:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Blast import NCBIXML
 >>> blast_record = NCBIXML.read(result_handle)
-\end{verbatim}
+\end{minted}
 
 I guess by now you're wondering what is in a BLAST record.
 
@@ -407,7 +407,7 @@ To continue with our example, let's just print out some summary info
 about all hits in our blast report greater than a particular
 threshold. The following code does this:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> E_VALUE_THRESH = 0.04
 
 >>> for alignment in blast_record.alignments:
@@ -420,7 +420,7 @@ threshold. The following code does this:
 ...             print(hsp.query[0:75] + "...")
 ...             print(hsp.match[0:75] + "...")
 ...             print(hsp.sbjct[0:75] + "...")
-\end{verbatim}
+\end{minted}
 
 This will print out summary reports like the following:
 
