@@ -35,8 +35,8 @@ def parse(handle, format, strict=True):
      - MINIMAL:          MINIMAL MEME output file motif
      - MAST:             MAST output file motif
      - TRANSFAC:         TRANSFAC database file format
-     - pfm_four_columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
-     - pfm_four_rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
+     - pfm-four-columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
+     - pfm-four-rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
      - pfm:              JASPAR-style position-frequency matrix
      - jaspar:           JASPAR-style multiple PFM format
      - sites:            JASPAR-style sites file
@@ -85,7 +85,7 @@ def parse(handle, format, strict=True):
     elif format == "clusterbuster":
         from Bio.motifs import clusterbuster
         return clusterbuster.read(handle)
-    elif format in ('pfm_four_columns', 'pfm_four_rows'):
+    elif format in ('pfm-four-columns', 'pfm-four-rows'):
         from Bio.motifs import pfm
         return pfm.read(handle, format)
     elif format == "xms":
