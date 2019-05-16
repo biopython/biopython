@@ -69,10 +69,17 @@ _LONG_SHORT_MAP = {
     '% hsp coverage': 'qcovhsp',
 }
 
+
 # function to create a list from semicolon-delimited string
 # used in BlastTabParser._parse_result_row
-_list_semicol = lambda x: x.split(';')
-_list_diamond = lambda x: x.split('<>')
+def _list_semicol(s):
+    return s.split(';')
+
+
+def _list_diamond(s):
+    return s.split('<>')
+
+
 # column to class attribute map
 _COLUMN_QRESULT = {
     'qseqid': ('id', str),
