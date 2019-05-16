@@ -27,9 +27,9 @@ tree file available, you can follow this demo using that instead.)
 
 Launch the Python interpreter of your choice:
 
-\begin{verbatim}
-% ipython -pylab
-\end{verbatim}
+\begin{minted}{bash}
+$ ipython -pylab
+\end{minted}
 
 For interactive work, launching the IPython interpreter with the \verb|-pylab| flag enables
 \textbf{matplotlib} integration, so graphics will pop up automatically. We'll use that during
@@ -38,15 +38,15 @@ this demo.
 Now, within Python, read the tree file, giving the file name and the name of the format.
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
-\end{verbatim}
+\end{minted}
 
 Printing the tree object as a string gives us a look at the entire object hierarchy.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(tree)
 Tree(rooted=False, weight=1.0)
     Clade()
@@ -61,7 +61,7 @@ Tree(rooted=False, weight=1.0)
             Clade(name='E')
             Clade(name='F')
             Clade(name='G')
-\end{verbatim}
+\end{minted}
 
 The \texttt{Tree} object contains global information about the tree, such as whether it's
 rooted or unrooted. It has one root clade, and under that, it's nested lists of clades all the
@@ -72,7 +72,7 @@ convenient visualization for interactive exploration, in case better graphical t
 available.
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
 >>> Phylo.draw_ascii(tree)
@@ -90,15 +90,15 @@ _|                                                 |________________________ D
                           |
                           |________________________ G
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphic
 using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.rooted = True
 >>> Phylo.draw(tree)
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \imgsrc[width=666, height=530]{images/phylo-simple-draw.png}
@@ -131,16 +131,16 @@ object called Phylogeny, from the Bio.Phylo.PhyloXML module.
 
 In Biopython 1.55 and later, this is a convenient tree method:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = tree.as_phyloxml()
-\end{verbatim}
+\end{minted}
 
 In Biopython 1.54, you can accomplish the same thing with one extra import:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Phylo.PhyloXML import Phylogeny
 >>> tree = Phylogeny.from_tree(tree)
-\end{verbatim}
+\end{minted}
 
 Note that the file formats Newick and Nexus don't support branch colors or widths, so
 if you use these attributes in Bio.Phylo, you will only be able to save the values in
@@ -152,21 +152,21 @@ First, we'll color the root clade gray.  We can do that by assigning the 24-bit 
 value as an RGB triple, an HTML-style hex string, or the name of one of the predefined
 colors.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.root.color = (128, 128, 128)
-\end{verbatim}
+\end{minted}
 
 Or:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.root.color = "#808080"
-\end{verbatim}
+\end{minted}
 
 Or:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.root.color = "gray"
-\end{verbatim}
+\end{minted}
 
 Colors for a clade are treated as cascading down through the entire clade, so when we colorize
 the root here, it turns the whole tree gray.  We can override that by assigning a different
@@ -176,24 +176,24 @@ Let's target the most recent common ancestor (MRCA) of the nodes named ``E'' and
 \verb|common_ancestor| method returns a reference to that clade in the original tree, so when
 we color that clade ``salmon'', the color will show up in the original tree.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> mrca = tree.common_ancestor({"name": "E"}, {"name": "F"})
 >>> mrca.color = "salmon"
-\end{verbatim}
+\end{minted}
 
 If we happened to know exactly where a certain clade is in the tree, in terms of nested list
 entries, we can jump directly to that position in the tree by indexing it.  Here, the index
 \verb|[0,1]| refers to the second child of the first child of the root.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree.clade[0, 1].color = "blue"
-\end{verbatim}
+\end{minted}
 
 Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> Phylo.draw(tree)
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \imgsrc[width=666, height=530]{images/phylo-color-draw.png}
@@ -219,7 +219,7 @@ would be written --- and the format \texttt{phyloxml}.  PhyloXML saves the color
 so you can open this phyloXML file in another tree viewer like Archaeopteryx, and the colors
 will show up there, too.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import sys
 >>> Phylo.write(tree, sys.stdout, "phyloxml")
 
@@ -239,7 +239,7 @@ will show up there, too.
           <phy:clade>
             <phy:name>A</phy:name>
             ...
-\end{verbatim}
+\end{minted}
 
 The rest of this chapter covers the core functionality of Bio.Phylo in greater detail. For more
 examples of using Bio.Phylo, see the cookbook page on Biopython.org:
@@ -256,11 +256,11 @@ well as the Comparative Data Analysis Ontology (CDAO).
 The \verb|read| function parses a single tree in the given file and returns it. Careful; it
 will raise an error if the file contains more than one tree, or no trees.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
 >>> print(tree)
-\end{verbatim}
+\end{minted}
 
 (Example files are available in the \texttt{Tests/Nexus/} and \texttt{Tests/PhyloXML/}
 directories of the Biopython distribution.)
@@ -268,18 +268,18 @@ directories of the Biopython distribution.)
 To handle multiple (or an unknown number of) trees, use the \verb|parse| function iterates
 through each of the trees in the given file:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
 >>> for tree in trees:
 ...     print(tree)
-\end{verbatim}
+\end{minted}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
 
 %the files tree1.nwk and other_trees.nwk are created and then deleted during the
 %run of test_Tutorial.py
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
 >>> tree1 = trees[0]
 >>> others = trees[1:]
@@ -287,27 +287,27 @@ Write a tree or iterable of trees back to file with the \verb|write| function:
 1
 >>> Phylo.write(others, "other_trees.nwk", "newick")
 12
-\end{verbatim}
+\end{minted}
 
 Convert files between any of the supported formats with the \verb|convert| function:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> Phylo.convert("tree1.nwk", "newick", "tree1.xml", "nexml")
 1
 >>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", "nexus")
 12
-\end{verbatim}
+\end{minted}
 
 To use strings as input or output instead of actual files, use \verb|StringIO| as you would
 with SeqIO and AlignIO:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> from StringIO import StringIO
 >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
 >>> tree = Phylo.read(handle, "newick")
-\end{verbatim}
+\end{minted}
 
 
 \section{View and export trees}
@@ -315,7 +315,7 @@ with SeqIO and AlignIO:
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
 %doctest ../Tests
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")
 >>> print(tree)
@@ -325,7 +325,7 @@ Phylogeny(description='phyloXML allows to use either a "branch_length" attribute
             Clade(branch_length=0.102, name='A')
             Clade(branch_length=0.23, name='B')
         Clade(branch_length=0.4, name='C')
-\end{verbatim}
+\end{minted}
 
 This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
 more likely, you'd want to see a drawing of the tree. There are three functions to do this.
@@ -335,7 +335,7 @@ rooted phylogram) to standard output, or an open file handle if given. Not all o
 available information about the tree is shown, but it provides a way to quickly view the
 tree without relying on any external dependencies.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = Phylo.read("example.xml", "phyloxml")
 >>> Phylo.draw_ascii(tree)
              __________________ A
@@ -344,16 +344,16 @@ _|          |___________________________________________ B
  |
  |___________________________________________________________________________ C
 
-\end{verbatim}
+\end{minted}
 
 The \verb|draw| function draws a more attractive image using the matplotlib
 library. See the API documentation for details on the arguments it accepts to
 customize the output.
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = Phylo.read("example.xml", "phyloxml")
 >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \imgsrc[width=701, height=465]{images/phylo-draw-example.png}
@@ -585,11 +585,11 @@ The rest of these methods are boolean checks:
 These methods modify the tree in-place. If you want to keep the original tree intact, make a
 complete copy of the tree first, using Python's \texttt{copy} module:
 
-\begin{verbatim}
+\begin{minted}{python}
 tree = Phylo.read('example.xml', 'phyloxml')
 import copy
 newtree = copy.deepcopy(tree)
-\end{verbatim}
+\end{minted}
 
 \begin{description}
   \item[\texttt{collapse}]
@@ -653,9 +653,8 @@ descriptions and examples of using the additional annotation features provided b
 
 % The object hierarchy still looks and behaves similarly:
 
-% \begin{verbatim}
+% \begin{minted}{pycon}
 % >>> print(tree)
-
 % Phylogeny(rooted=True, name="")
 %     Clade(branch_length=1.0)
 %         Clade(branch_length=1.0)
@@ -669,7 +668,7 @@ descriptions and examples of using the additional annotation features provided b
 %             Clade(branch_length=1.0, name="E")
 %             Clade(branch_length=1.0, name="F")
 %             Clade(branch_length=1.0, name="G")
-% \end{verbatim}
+% \end{minted}
 
 \section{Running external applications}
 \label{sec:PhyloApps}
@@ -684,21 +683,21 @@ Biopython 1.58 introduced a wrapper for PhyML
 \texttt{phylip-relaxed} format (that's Phylip format, but without the 10-character limit
 on taxon names) and a variety of options. A quick example:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> from Bio.Phylo.Applications import PhymlCommandline
 >>> cmd = PhymlCommandline(input="Tests/Phylip/random.phy")
 >>> out_log, err_log = cmd()
-\end{verbatim}
+\end{minted}
 
 This generates a tree file and a stats file with the names
 [\textit{input~filename}]\verb|_phyml_tree.txt| and
 [\textit{input~filename}]\verb|_phyml_stats.txt|. The tree file is in Newick format:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
 >>> Phylo.draw_ascii(tree)
-\end{verbatim}
+\end{minted}
 
 A similar wrapper for RAxML (\url{https://sco.h-its.org/exelixis/software.html})
 was added in Biopython 1.60, and FastTree
@@ -728,7 +727,7 @@ program is run via the \texttt{run()} method and the output file is automaticall
 to a results dictionary.
 
 Here is an example of typical usage of codeml:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Phylo.PAML import codeml
 >>> cml = codeml.Codeml()
 >>> cml.alignment = "Tests/PAML/alignment.phylip"
@@ -750,13 +749,13 @@ Here is an example of typical usage of codeml:
 >>> m0 = ns_sites.get(0)
 >>> m0_params = m0.get("parameters")
 >>> print(m0_params.get("omega"))
-\end{verbatim}
+\end{minted}
 
 Existing output files may be parsed as well using a module's \texttt{read()} function:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
 >>> print(results.get("lnL max"))
-\end{verbatim}
+\end{minted}
 
 Detailed documentation for this new module currently lives on the Biopython wiki:
 \url{http://biopython.org/wiki/PAML}

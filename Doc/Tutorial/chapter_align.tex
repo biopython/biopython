@@ -72,15 +72,15 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{https://pfam.xfam.org/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-\end{verbatim}
+\end{minted}
 
 \noindent This code will print out a summary of the alignment:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
@@ -90,12 +90,12 @@ AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> print("Alignment length %i" % alignment.get_alignment_length())
@@ -110,14 +110,14 @@ AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA - COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 You could also use the alignment object's \verb|format| method to show it in a particular file format  -- see Section~\ref{sec:alignment-format-method} for details.
 
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for record in alignment:
 ...     if record.dbxrefs:
 ...         print("%s %s" % (record.id, record.dbxrefs))
@@ -126,15 +126,15 @@ COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
 COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
 COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
-\end{verbatim}
+\end{minted}
 
 \noindent To have a look at all the sequence annotation, try this:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for record in alignment:
 ...     print(record)
 ...
-\end{verbatim}
+\end{minted}
 
 PFAM provide a nice web interface at \url{ http://pfam.xfam.org/family/PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
 
@@ -157,11 +157,11 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 
 \noindent Note the website should have an option about showing gaps as periods (dots) or dashes, we've shown dashes above.  Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the same code:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.faa", "fasta")
 print(alignment)
-\end{verbatim}
+\end{minted}
 
 All that has changed in this code is the filename and the format string.  You'll get the same output as before, the sequences and record identifiers are the same.
 However, as you should expect, if you check each \verb|SeqRecord| there is no annotation nor database cross-references because these are not included in the FASTA file format.
@@ -170,11 +170,11 @@ Note that rather than using the Sanger website, you could have used \verb|Bio.Al
 
 With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.AlignIO-module.html}{online}):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> help(AlignIO)
 ...
-\end{verbatim}
+\end{minted}
 
 \subsection{Multiple Alignments}
 
@@ -224,13 +224,13 @@ Epsilon   CAAACC
 If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 
 %TODO - Replace the print blank line with print()?
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignments = AlignIO.parse("resampled.phy", "phylip")
 for alignment in alignments:
     print(alignment)
     print("")
-\end{verbatim}
+\end{minted}
 
 \noindent This would give the following output, again abbreviated for display:
 
@@ -269,12 +269,12 @@ CAAACC Epsilon
 As with the function \verb|Bio.SeqIO.parse()|, using \verb|Bio.AlignIO.parse()| returns an iterator.
 If you want to keep all the alignments in memory at once, which will allow you to access them in any order, then turn the iterator into a list:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignments = list(AlignIO.parse("resampled.phy", "phylip"))
 last_align = alignments[-1]
 first_align = alignments[0]
-\end{verbatim}
+\end{minted}
 
 \subsection{Ambiguous Alignments}
 \label{sec:AlignIO-count-argument}
@@ -342,13 +342,13 @@ To interpret these FASTA examples as several separate alignments, we can use \ve
 For example, using the third example as the input data:
 
 %TODO - Replace the print blank line with print()?
-\begin{verbatim}
+\begin{minted}{python}
 for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
     print("Alignment length %i" % alignment.get_alignment_length())
     for record in alignment:
         print("%s - %s" % (record.seq, record.id))
     print("")
-\end{verbatim}
+\end{minted}
 
 \noindent giving:
 
@@ -379,7 +379,7 @@ We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()
 Here is an example, where we start by creating a few \verb|MultipleSeqAlignment| objects the hard way (by hand, rather than by loading them from a file).
 Note we create some \verb|SeqRecord| objects to construct the alignment from.
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Alphabet import generic_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -404,14 +404,14 @@ align3 = MultipleSeqAlignment([
          ])
 
 my_alignments = [align1, align2, align3]
-\end{verbatim}
+\end{minted}
 
 \noindent Now we have a list of \verb|Alignment| objects, we'll write them to a PHYLIP format file:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 AlignIO.write(my_alignments, "my_example.phy", "phylip")
-\end{verbatim}
+\end{minted}
 
 \noindent And if you open this file in your favourite text editor it should look like this:
 
@@ -448,30 +448,30 @@ in the same way as converting between sequence file formats with \verb|Bio.SeqIO
 
 For this example, we'll load the PFAM/Stockholm format file used earlier and save it as a Clustal W format file:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 count = AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.aln", "clustal")
 print("Converted %i alignments" % count)
-\end{verbatim}
+\end{minted}
 
 Or, using \verb|Bio.AlignIO.parse()| and \verb|Bio.AlignIO.write()|:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignments = AlignIO.parse("PF05371_seed.sth", "stockholm")
 count = AlignIO.write(alignments, "PF05371_seed.aln", "clustal")
 print("Converted %i alignments" % count)
-\end{verbatim}
+\end{minted}
 
 The \verb|Bio.AlignIO.write()| function expects to be given multiple alignment objects.  In the example above we gave it the alignment iterator returned by \verb|Bio.AlignIO.parse()|.
 
 In this case, we know there is only one alignment in the file so we could have used \verb|Bio.AlignIO.read()| instead, but notice we have to pass this alignment to \verb|Bio.AlignIO.write()| as a single element list:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 AlignIO.write([alignment], "PF05371_seed.aln", "clustal")
-\end{verbatim}
+\end{minted}
 
 Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln'' with the following content:
 
@@ -498,10 +498,10 @@ COATB_BPIF1/22-73                   RA
 
 Alternatively, you could make a PHYLIP format file which we'll name ``PF05371\_seed.phy'':
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip")
-\end{verbatim}
+\end{minted}
 
 This time the output looks like this:
 
@@ -530,10 +530,10 @@ In this example, as you can see the resulting names are still unique -
 but they are not very readable. As a result, a more relaxed variant of
 the original PHYLIP format is now quite widely used:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip-relaxed")
-\end{verbatim}
+\end{minted}
 
 This time the output looks like this, using a longer indentation to
 allow all the identifers to be given in full:
@@ -561,7 +561,7 @@ If you have to work with the original strict PHYLIP format, then you may need to
 compress the identifers somehow -- or assign your own names or numbering system.
 This following bit of code manipulates the record identifiers before saving the output:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 name_mapping = {}
@@ -571,12 +571,12 @@ for i, record in enumerate(alignment):
 print(name_mapping)
 
 AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
-\end{verbatim}
+\end{minted}
 
 \noindent This code used a Python dictionary to record a simple mapping from the new sequence system to the original identifier:
-\begin{verbatim}
+\begin{minted}{python}
 {0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
-\end{verbatim}
+\end{minted}
 
 \noindent Here is the new (strict) PHYLIP format output:
 \begin{verbatim}
@@ -608,11 +608,11 @@ The \verb|Bio.AlignIO| interface is based on handles, which means if you want to
 However, you will probably prefer to take advantage of the alignment object's \verb|format()| method.
 This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print(alignment.format("clustal"))
-\end{verbatim}
+\end{minted}
 
 As described in Section~\ref{sec:SeqRecord-format}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
@@ -620,7 +620,7 @@ Internally the \verb|format()| method is using the \verb|StringIO| string based 
 \verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an
 older version of Biopython:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import AlignIO
 from StringIO import StringIO
 
@@ -631,7 +631,7 @@ AlignIO.write(alignments, out_handle, "clustal")
 clustal_data = out_handle.getvalue()
 
 print(clustal_data)
-\end{verbatim}
+\end{minted}
 
 \section{Manipulating Alignments}
 \label{sec:manipulating-alignments}
@@ -646,7 +646,7 @@ of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecor
 make sense:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> print("Number of rows: %i" % len(alignment))
@@ -661,7 +661,7 @@ AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA - COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 You can also use the list-like \verb|append| and \verb|extend| methods to add
 more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
@@ -669,7 +669,7 @@ metaphor in mind, simple slicing of the alignment should also make sense -
 it selects some of the rows giving back another alignment object:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
@@ -685,49 +685,49 @@ AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 What if you wanted to select by column? Those of you who have used the NumPy
 matrix or array objects won't be surprised at this - you use a double index.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[2, 6])
 T
-\end{verbatim}
+\end{minted}
 
 \noindent Using two integer indices pulls out a single letter, short hand for this:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[2].seq[6])
 T
-\end{verbatim}
+\end{minted}
 
 You can pull out a single column as a string like this:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[:, 6])
 TTT---T
-\end{verbatim}
+\end{minted}
 
 You can also select a range of columns. For example, to pick out those same
 three rows we extracted earlier, but take just their first six columns:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[3:6, :6])
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
 AEGDDP COATB_BPM13/24-72
 AEGDDP COATB_BPZJ2/1-49
 AEGDDP Q9T0Q9_BPFD/1-49
-\end{verbatim}
+\end{minted}
 
 Leaving the first index as \verb|:| means take all the rows:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[:, :6])
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
 AEPNAA COATB_BPIKE/30-81
@@ -737,13 +737,13 @@ AEGDDP COATB_BPM13/24-72
 AEGDDP COATB_BPZJ2/1-49
 AEGDDP Q9T0Q9_BPFD/1-49
 FAADDA COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 This brings us to a neat way to remove a section. Notice columns
 7, 8 and 9 which are gaps in three of the seven sequences:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[:, 6:9])
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
 TNY COATB_BPIKE/30-81
@@ -753,12 +753,12 @@ TSY COATB_BPI22/32-83
 --- COATB_BPZJ2/1-49
 --- Q9T0Q9_BPFD/1-49
 TSQ COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 \noindent Again, you can slice to get everything after the ninth column:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment[:, 9:])
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
@@ -768,13 +768,13 @@ AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
 AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
 AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
 AKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 \noindent Now, the interesting thing is that addition of alignment objects works
 by column. This lets you do this as a way to remove a block of columns:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> edited = alignment[:, :6] + alignment[:, 9:]
 >>> print(edited)
 SingleLetterAlphabet() alignment with 7 rows and 49 columns
@@ -785,7 +785,7 @@ AEGDDPAKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
 AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
 AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
 FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
-\end{verbatim}
+\end{minted}
 
 Another common use of alignment addition would be to combine alignments for
 several different genes into a meta-alignment. Watch out though - the identifiers
@@ -794,7 +794,7 @@ need to match up (see Section~\ref{sec:SeqRecord-addition} for how adding
 alignment rows alphabetically by id:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> edited.sort()
 >>> print(edited)
 SingleLetterAlphabet() alignment with 7 rows and 49 columns
@@ -805,7 +805,7 @@ AEGDDPAKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
 AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
 AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
 AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
-\end{verbatim}
+\end{minted}
 
 \noindent Note that you can only add two alignments together if they
 have the same number of rows.
@@ -816,21 +816,21 @@ object into an array of letters -- and you can do this with NumPy:
 
 %This example fails under PyPy 2.0, https://bugs.pypy.org/issue1546
 %doctest examples lib:numpy
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import numpy as np
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
 >>> print("Array shape %i by %i" % align_array.shape)
 Array shape 7 by 52
-\end{verbatim}
+\end{minted}
 
 If you will be working heavily with the columns, you can tell NumPy to store
 the array by column (as in Fortran) rather then its default of by row (as in C):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> align_array = np.array([list(rec) for rec in alignment], np.character, order="F")
-\end{verbatim}
+\end{minted}
 
 Note that this leaves the original Biopython alignment object and the NumPy array
 in memory as separate objects - editing one will not update the other!
@@ -860,13 +860,13 @@ using the \texttt{subprocess} module).
 
 Most of these wrappers are defined in the \verb|Bio.Align.Applications| module:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import Bio.Align.Applications
 >>> dir(Bio.Align.Applications)
 ...
 ['ClustalwCommandline', 'DialignCommandline', 'MafftCommandline', 'MuscleCommandline',
 'PrankCommandline', 'ProbconsCommandline', 'TCoffeeCommandline' ...]
-\end{verbatim}
+\end{minted}
 
 \noindent (Ignore the entries starting with an underscore -- these have
 special meaning in Python.)
@@ -892,11 +892,11 @@ the ClustalW tool yourself by hand at the command line, to familiarise
 yourself the other options. You'll find the Biopython wrapper is very
 faithful to the actual command line API:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> help(ClustalwCommandline)
 ...
-\end{verbatim}
+\end{minted}
 
 For the most basic usage, all you need is to have a FASTA input file, such as
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/opuntia.fasta}{opuntia.fasta}
@@ -909,12 +909,12 @@ based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
 >>> print(cline)
 clustalw2 -infile=opuntia.fasta
-\end{verbatim}
+\end{minted}
 
 Notice here we have given the executable name as \texttt{clustalw2},
 indicating we have version two installed, which has a different filename to
@@ -931,17 +931,17 @@ ClustalW tools (how you do this will depend on your OS), or simply type in
 the full path of the tool. For example:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import os
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
 >>> clustalw_cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
-\end{verbatim}
+\end{minted}
 %Don't run it in the doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> stdout, stderr = clustalw_cline()
-\end{verbatim}
+\end{minted}
 
 \noindent Remember, in Python strings \verb|\n| and \verb|\t| are by default
 interpreted as a new line and a tab -- which is why we're put a letter
@@ -980,7 +980,7 @@ You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
 >>> print(align)
@@ -992,7 +992,7 @@ TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191
-\end{verbatim}
+\end{minted}
 
 In case you are interested (and this is an aside from the main thrust of this
 chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
@@ -1000,7 +1000,7 @@ Newick tree file, and \verb|Bio.Phylo| can parse these:
 
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("opuntia.dnd", "newick")
 >>> Phylo.draw_ascii(tree)
@@ -1018,7 +1018,7 @@ _|_________________ gi|6273287|gb|AF191661.1|AF191661
  |___|
      | gi|6273284|gb|AF191658.1|AF191658
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 \noindent Chapter \ref{sec:Phylo} covers Biopython's support for phylogenetic trees in more
 depth.
@@ -1030,11 +1030,11 @@ module. As before, we recommend you try using MUSCLE from the command line befor
 trying it from within Python, as the Biopython wrapper is very faithful to the
 actual command line API:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> help(MuscleCommandline)
 ...
-\end{verbatim}
+\end{minted}
 
 For the most basic usage, all you need is to have a FASTA input file, such as
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/opuntia.fasta}{opuntia.fasta}
@@ -1043,12 +1043,12 @@ code). You can then tell MUSCLE to read in this FASTA file, and write the
 alignment to an output file:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
 >>> print(cline)
 muscle -in opuntia.fasta -out opuntia.txt
-\end{verbatim}
+\end{minted}
 
 Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
 ``input'' and ``out'' as the keyword arguments or property names. This is
@@ -1060,23 +1060,23 @@ alignment using \texttt{format="fasta"}.
 You can also ask for ClustalW-like output:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
 >>> print(cline)
 muscle -in opuntia.fasta -out opuntia.aln -clw
-\end{verbatim}
+\end{minted}
 
 Or, strict ClustalW output where the original ClustalW header line is
 used for maximum compatibility:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
 >>> print(cline)
 muscle -in opuntia.fasta -out opuntia.aln -clwstrict
-\end{verbatim}
+\end{minted}
 
 \noindent The \verb|Bio.AlignIO| module should be able to read these alignments
 using \texttt{format="clustal"}.
@@ -1101,18 +1101,18 @@ MUSCLE will write the alignment to standard output (stdout). We can take
 advantage of this to avoid having a temporary output file! For example:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
 >>> print(muscle_cline)
 muscle -in opuntia.fasta
-\end{verbatim}
+\end{minted}
 
 If we run this via the wrapper, we get back the output as a string. In order
 to parse this we can use \verb|StringIO| to turn it into a handle.
 Remember that MUSCLE defaults to using FASTA as the output format:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
 >>> stdout, stderr = muscle_cline()
@@ -1128,14 +1128,14 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19
 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191660
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191659
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
-\end{verbatim}
+\end{minted}
 
 The above approach is fairly simple, but if you are dealing with very large output
 text the fact that all of stdout and stderr is loaded into memory as a string can
 be a potential drawback. Using the \verb|subprocess| module we can work directly
 with handles instead:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import subprocess
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
@@ -1155,7 +1155,7 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19
 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191660
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191659
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
-\end{verbatim}
+\end{minted}
 
 \subsection{MUSCLE using stdin and stdout}
 
@@ -1169,26 +1169,26 @@ For this demonstration I'm going to use a filtered version of the original FASTA
 file (using a generator expression), taking just six of the seven sequences:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
-\end{verbatim}
+\end{minted}
 
 Then we create the MUSCLE command line, leaving the input and output to their
 defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
 as for the output.
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(clwstrict=True)
 >>> print(muscle_cline)
 muscle -clwstrict
-\end{verbatim}
+\end{minted}
 
 Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import subprocess
 >>> import sys
 >>> child = subprocess.Popen(str(cline),
@@ -1197,23 +1197,23 @@ Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 ...                          stderr=subprocess.PIPE,
 ...                          universal_newlines=True,
 ...                          shell=(sys.platform!="win32"))
-\end{verbatim}
+\end{minted}
 
 That should start MUSCLE, but it will be sitting waiting for its FASTA input
 sequences, which we must supply via its stdin handle:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> SeqIO.write(records, child.stdin, "fasta")
 6
 >>> child.stdin.close()
-\end{verbatim}
+\end{minted}
 
 After writing the six sequences to the handle, MUSCLE will still be waiting
 to see if that is all the FASTA sequences or not -- so we must signal that
 this is all the input data by closing the handle. At that point MUSCLE should
 start to run, and we can ask for the output:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(child.stdout, "clustal")
 >>> print(align)
@@ -1224,7 +1224,7 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19
 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
-\end{verbatim}
+\end{minted}
 
 Wow! There we are with a new alignment of just the six records, without having created
 a temporary FASTA input file, or a temporary alignment output file. However, a word of
@@ -1245,7 +1245,7 @@ provided your data isn't very big, you can prepare the FASTA input in memory as
 a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
 >>> from StringIO import StringIO
@@ -1253,12 +1253,12 @@ a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 >>> SeqIO.write(records, handle, "fasta")
 6
 >>> data = handle.getvalue()
-\end{verbatim}
+\end{minted}
 
 \noindent You can then run the tool and parse the alignment as follows:
 
 %not a doctest as can't assume the MUSCLE binary is present
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> stdout, stderr = muscle_cline(stdin=data)
 >>> from Bio import AlignIO
 >>> align = AlignIO.read(StringIO(stdout), "clustal")
@@ -1270,7 +1270,7 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19
 TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
-\end{verbatim}
+\end{minted}
 
 You might find this easier, but it does require more memory (RAM) for the strings
 used for the input FASTA and output Clustal formatted data.
@@ -1307,13 +1307,13 @@ under the \verb|Doc/examples/| directory.
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
 ...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
 >>> print(needle_cline)
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
-\end{verbatim}
+\end{minted}
 
 Why not try running this by hand at the command prompt? You should see it does a
 pairwise comparison and records the output in the file \texttt{needle.txt} (in the
@@ -1326,12 +1326,12 @@ variable. You can either update your PATH setting, or simply tell Biopython
 the full path to the tool, for example:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
 ...                                  asequence="alpha.faa", bsequence="beta.faa",
 ...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
-\end{verbatim}
+\end{minted}
 
 \noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
 new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
@@ -1340,16 +1340,16 @@ At this point it might help to try running the EMBOSS tools yourself by hand at 
 command line, to familiarise yourself the other options and compare them to the
 Biopython help text:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> help(NeedleCommandline)
 ...
-\end{verbatim}
+\end{minted}
 
 Note that you can also specify (or change or look at) the settings like this:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
 >>> needle_cline.asequence="alpha.faa"
@@ -1361,29 +1361,29 @@ Note that you can also specify (or change or look at) the settings like this:
 needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 >>> print(needle_cline.outfile)
 needle.txt
-\end{verbatim}
+\end{minted}
 
 Next we want to use Python to run this command for us. As explained above,
 for full control, we recommend you use the built in Python \texttt{subprocess}
 module, but for simple usage the wrapper object usually suffices:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> stdout, stderr = needle_cline()
 >>> print(stdout + stderr)
 Needleman-Wunsch global alignment of two sequences
-\end{verbatim}
+\end{minted}
 
 Next we can load the output file with \verb|Bio.AlignIO| as
 discussed earlier in this chapter, as the \texttt{emboss} format:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("needle.txt", "emboss")
 >>> print(align)
 SingleLetterAlphabet() alignment with 2 rows and 149 columns
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
-\end{verbatim}
+\end{minted}
 
 In this example, we told EMBOSS to write the output to a file, but you
 \emph{can} tell it to write the output to stdout instead (useful if you
@@ -1434,13 +1434,13 @@ hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
 stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
 >>> seq2 = SeqIO.read("beta.faa", "fasta")
 >>> alignments = pairwise2.align.globalxx(seq1.seq, seq2.seq)
-\end{verbatim}
+\end{minted}
 
 As you see, we call the alignment function with \verb|align.globalxx|. The tricky
 part are the last two letters of the function name (here: \texttt{xx}), which are
@@ -1459,16 +1459,16 @@ different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1
 alignments). Have a look at one of these alignments:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(alignments)
 80
-\end{verbatim}
+\end{minted}
 %This has been abbreviated, can't use as doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignments[0])
 ('MV-LSPADKTNV---K-A--A-WGKVGAHAG...YR-', 'MVHL-----T--PEEKSAVTALWGKV----...Y-H',
 72.0, 0, 217)
-\end{verbatim}
+\end{minted}
 
 Each alignment is a tuple consisting of the two aligned sequences, the score, the
 start and the end positions of the alignment (in global alignments the start is
@@ -1476,13 +1476,13 @@ always 0 and the end the length of the alignment). \verb|Bio.pairwise2| has a
 function \verb|format_alignment| for a nicer printout:
 
 %This has been abbreviated, can't use as doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(pairwise2.format_alignment(*alignment[0]))
 MV-LSPADKTNV---K-A--A-WGKVGAHAG---EY-GA-EALE-RMFLSF----PTTK-TY--F...YR-
 || |     |     | |  | ||||        |  |  |||  |  |      |    |   |...|  
 MVHL-----T--PEEKSAVTALWGKV-----NVDE-VG-GEAL-GR--L--LVVYP---WT-QRF...Y-H
   Score=72
-\end{verbatim}
+\end{minted}
 
 Better alignments are usually obtained by penalizing gaps: higher costs
 for opening a gap and lower costs for extending an existing gap. For amino
@@ -1492,7 +1492,7 @@ obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
 and a gap extension penalty of 0.5 (using \verb|globalds|):
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
 >>> from Bio.SubsMat.MatrixInfo import blosum62
@@ -1501,15 +1501,15 @@ and a gap extension penalty of 0.5 (using \verb|globalds|):
 >>> alignments = pairwise2.align.globalds(seq1.seq, seq2.seq, blosum62, -10, -0.5)
 >>> len(alignments)
 2
-\end{verbatim}
+\end{minted}
 %This has been abbreviated, can't use as doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(pairwise2.format_alignment(*alignments[0]))
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR
 || |.|..|..|.|.|||| ......|............|.......||.
 MVHLTPEEKSAVTALWGKV-NVDEVGGEALGRLLVVYPWTQRFF...KYH
   Score=292.5
-\end{verbatim}
+\end{minted}
 
 This alignment has the same score that we obtained earlier with EMBOSS needle
 using the same sequences and the same parameters.
@@ -1518,7 +1518,7 @@ Local alignments are called similarly with the function \verb|align.localXX|,
 where again XX stands for a two letter code for the match and gap functions:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
@@ -1528,7 +1528,7 @@ where again XX stands for a two letter code for the match and gap functions:
 1 PEEKSAV
   Score=16
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 Note that local alignments must, as defined by Smith \& Waterman, have a 
 positive score (\textgreater 0). Thus, \verb|pairwise2| may return no
@@ -1539,7 +1539,7 @@ and lysin/asparagin (K/N) both have a match score of 0. As you see, the aligned
 part has not been extended:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
 >>> alignments = pairwise2.align.localds("LSSPADKTNVKKAA", "DDPEEKSAVNN", blosum62, -10, -1)
@@ -1549,7 +1549,7 @@ part has not been extended:
 3 PEEKSAV
   Score=16
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 Instead of supplying a complete match/mismatch matrix, the match code
 \texttt{m} allows for easy defining general match/mismatch values. The next
@@ -1557,7 +1557,7 @@ example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
 of 2/0.5 using \verb|localms|:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
 >>> print(pairwise2.format_alignment(*alignments[0]))
 2 GAAC
@@ -1565,7 +1565,7 @@ of 2/0.5 using \verb|localms|:
 1 G-AC
   Score=13
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 One useful keyword argument of the \verb|Bio.pairwise2.align| functions is
 \texttt{score\_only}. When set to \texttt{True} it will only return the score
@@ -1596,10 +1596,10 @@ We refer to Durbin {\it et al.} \cite{durbin1998} for in-depth information on se
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
-\end{verbatim}
+\end{minted}
 The \verb+PairwiseAligner+ object \verb+aligner+
 (see Section~\ref{sec:pairwise-aligner})
 stores the alignment parameters to be used for the pairwise alignments.
@@ -1607,17 +1607,17 @@ stores the alignment parameters to be used for the pairwise alignments.
 Use the \verb+aligner.score+ method to calculate the alignment score between
 two sequences:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> seq1 = "GAACT"
 >>> seq2 = "GAT"
 >>> score = aligner.score(seq1, seq2)
 >>> score
 3.0
-\end{verbatim}
+\end{minted}
 
 To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+PairwiseAlignment+ objects returned:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignments = aligner.align(seq1, seq2)
 >>> for alignment in alignments:
 ...     print(alignment)
@@ -1630,7 +1630,7 @@ GAACT
 |-|-|
 G-A-T
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 By default, a global pairwise alignment is performed, which finds the optimal
 alignment over the whole length of \verb+seq1+ and \verb+seq2+.
@@ -1640,7 +1640,7 @@ Local alignments can be generated by setting \verb+aligner.mode+ to
 \verb+"local"+:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.mode = 'local'
 >>> seq1 = "AGAACTC"
 >>> seq2 = "GAACT"
@@ -1655,7 +1655,7 @@ AGAACTC
 .|||||.
 .GAACT.
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 Note that there is some ambiguity in the definition of the best local alignments if segments with a score 0 can be added to the alignment. We follow the suggestion by Waterman \& Eggert \cite{waterman1987} and disallow such extensions.
 
@@ -1665,7 +1665,7 @@ Note that there is some ambiguity in the definition of the best local alignments
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
 for the pairwise alignments. To see an overview of the values for all parameters, use
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(aligner)
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -1684,7 +1684,7 @@ Pairwise sequence aligner with parameters
   query_right_extend_gap_score: 0.000000
   mode: local
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 See Sections~\ref{sec:pairwise-matchscores}, \ref{sec:pairwise-affine-gapscores}, and \ref{sec:pairwise-general-gapscores} below for the definition of these
 parameters. The attribute \verb+mode+ (described above in Section~\ref{sec:pairwise-basic}) can be set equal to \verb+"global"+ or \verb+"local"+ to specify global or local pairwise alignment, respectively.
 
@@ -1693,18 +1693,18 @@ Depending on the gap scoring parameters
 \ref{sec:pairwise-general-gapscores}) and mode, a \verb+PairwiseAligner+ object
 automatically chooses the appropriate algorithm to use for pairwise sequence alignment. To verify the selected algorithm, use
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.algorithm
 'Smith-Waterman'
-\end{verbatim}
+\end{minted}
 This attribute is read-only.
 
 A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used during alignment. The value of $\epsilon$ is stored in the attribute \verb+aligner.epsilon+, and by default is equal to $10^{-6}$:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.epsilon
 1e-06
-\end{verbatim}
+\end{minted}
 Two scores will be considered equal to each other for the purpose of the alignment if the absolute difference between them is less than $\epsilon$.
 
 \subsubsection{Match and mismatch scores}
@@ -1713,7 +1713,7 @@ Two scores will be considered equal to each other for the purpose of the alignme
 The match and mismatch scores are stored as attributes of an \verb+PairwiseAligner+
 object:
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> aligner.match_score
@@ -1727,14 +1727,14 @@ object:
 >>> score = aligner.score("AAA","AAC")
 >>> print(score)
 4.0
-\end{verbatim}
+\end{minted}
 
 Alternatively, you can specify a substitution matrix as follows:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> matrix = {('A','A'): 1.0, ('A','B'): -1.0, ('B','B'): 2.0}
 >>> aligner.substitution_matrix = matrix
-\end{verbatim}
+\end{minted}
 
 The attributes \verb+aligner.match_score+ and \verb+aligner.mismatch_score+ are
 ignored if \verb+aligner.substitution_matrix+ is specified. Likewise, after
@@ -1745,11 +1745,11 @@ Note that \verb+aligner.substitution_matrix+ will return a copy of the
 substitution matrix stored in the \verb+PairwiseAligner+ object. Therefore,
 modifying the substitution matrix directly has no effect:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.substitution_matrix[('A','A')] = 5.0 # does nothing
 >>> aligner.substitution_matrix[('A','A')]
 1.0
-\end{verbatim}
+\end{minted}
 
 In all cases, the character \verb+X+ is used to denote unknown characters,
 which will always get a zero score in alignments, irrespective of the match or
@@ -1862,7 +1862,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 For even more fine-grained control over the gap scores, you can specify a gap scoring function. For example, the gap scoring function below disallows a gap after two nucleotides in the query sequence:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> def my_gap_score_function(start, length):
@@ -1892,7 +1892,7 @@ AACTT
 ||X|-
 AATT-
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 \subsubsection{Iterating over alignments}
 
@@ -1902,16 +1902,16 @@ You can perform the following operations on \verb+alignments+:
 \begin{itemize}
 \item \verb+len(alignments)+ returns the number of alignments stored. This function returns quickly, even if the number of alignments is huge. If the number of alignments is extremely large (typically, larger than 9,223,372,036,854,775,807, which is the largest integer that can be stored as a \verb+long int+ on 64 bit machines), \verb+len(alignments)+ will raise an \verb+OverflowError+. A large number of alignments suggests that the alignment quality is low.
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> alignments = aligner.align("AAA", "AA")
 >>> len(alignments)
 3
-\end{verbatim}
+\end{minted}
 \item You can extract a specific alignment by index:
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> alignments = aligner.align("AAA", "AA")
@@ -1925,16 +1925,16 @@ AAA
 ||-
 AA-
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 \item You can iterate over alignments, for example as in
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for alignment in alignments:
 ...     print(alignment)
 ...
-\end{verbatim}
+\end{minted}
 Note that \verb+alignments+ can be reused, i.e. you can iterate over alignments multiple times:
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> alignments = aligner.align("AAA", "AA")
@@ -1968,86 +1968,86 @@ AAA
 -||
 -AA
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 You can also convert the \verb+alignments+ iterator into a \verb+list+ or \verb+tuple+:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignments = list(alignments)
-\end{verbatim}
+\end{minted}
 It is wise to check the number of alignments by calling \verb+len(alignments)+ before attempting to call \verb+list(alignments)+ to save all alignments as a list.
 \item The alignment score (which has the same value for each alignment in \verb+alignments+), is stored as an attribute. This allows you to check the alignment score before proceeding to extract individual alignments:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignments.score)
 2.0
-\end{verbatim}
+\end{minted}
 \end{itemize}
 
 \subsubsection{Alignment objects}
 The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
 >>> seq1 = "GAACT"
 >>> seq2 = "GAT"
 >>> alignments = aligner.align(seq1, seq2)
 >>> alignment = alignments[0]
-\end{verbatim}
-\begin{verbatim}
+\end{minted}
+\begin{minted}{pycon}
 >>> alignment
 <Bio.Align.PairwiseAlignment object at 0x10204d250>
-\end{verbatim}
+\end{minted}
 
 Each alignment stores the alignment score:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignment.score
 3.0
-\end{verbatim}
+\end{minted}
 as well as pointers to the sequences that were aligned:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignment.target
 'GAACT'
 >>> alignment.query
 'GAT'
-\end{verbatim}
+\end{minted}
 
 Print the \verb+PairwiseAlignment+ object to show the alignment explicitly:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment)
 GAACT
 ||--|
 GA--T
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 You can also represent the alignment as a string in PSL (Pattern Space Layout, as generated by BLAT \cite{kent2002}) format:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> format(alignment, 'psl')
 '3\t0\t0\t0\t0\t0\t1\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t2\t2,1,\t0,2,\t0,4,\n'
-\end{verbatim}
+\end{minted}
 
 Use the \verb+aligned+ property to find the start and end indices of subsequences in the target and query sequence that were aligned to each other.
 Generally, if the alignment between target (t) and query (q) consists of N
 chunks, you get two tuples of length N:
 
-\begin{verbatim}
+\begin{minted}{python}
 (((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),
  ((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))
-\end{verbatim}
+\end{minted}
 
 In the current example, `alignment.aligned` returns two tuples of length 2:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignment.aligned
 (((0, 2), (4, 5)), ((0, 2), (2, 3)))
-\end{verbatim}
+\end{minted}
 while for the alternative alignment, two tuples of length 3 are returned:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignment = alignments[1]
 >>> print(alignment)
 GAACT
@@ -2056,10 +2056,10 @@ G-A-T
 <BLANKLINE>
 >>> alignment.aligned
 (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
-\end{verbatim}
+\end{minted}
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.mismatch_score = -10
 >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
 >>> len(alignments)
@@ -2078,7 +2078,7 @@ AAAG-AAA
 <BLANKLINE>
 >>> alignments[1].aligned
 (((0, 3), (4, 7)), ((0, 3), (4, 7)))
-\end{verbatim}
+\end{minted}
 The \verb+aligned+ property can be used to identify alignments that are identical to each other in terms of their aligned sequences.
 
 \subsubsection{Example}
@@ -2089,7 +2089,7 @@ hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
 stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> from Bio import SeqIO
 >>> seq1 = SeqIO.read("alpha.faa", "fasta")
@@ -2098,39 +2098,39 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 >>> score = aligner.score(seq1.seq, seq2.seq)
 >>> print(score)
 72.0
-\end{verbatim}
+\end{minted}
 
 showing an alignment score of 72.0. To see the individual alignments, do
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignments = aligner.align(seq1.seq, seq2.seq)
-\end{verbatim}
+\end{minted}
 In this example, the total number of optimal alignments is huge (more than $4 \times 10^{37}$), and calling \verb+len(alignments)+ will raise an \verb+OverflowError+:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(alignments)
 ...
 OverflowError: number of optimal alignments is larger than 9223372036854775807
-\end{verbatim}
+\end{minted}
 Let's have a look at the first alignment:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> alignment = alignments[0]
-\end{verbatim}
+\end{minted}
 
 The alignment object stores the alignment score, as well as the alignment
 itself:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment.score)
 72.0
-\end{verbatim}
+\end{minted}
 %This has been abbreviated, can't use as doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignment)
 MV-LS-PAD--KTN--VK-AA-WGKV-----GAHAGEYGAEALE-RMFLSF----P-TTKTY--FPHF--...
 ||-|--|----|----|--|--||||-----|---||--|--|--|--|------|-|------|--|--...
 MVHL-TP--EEK--SAV-TA-LWGKVNVDEVG---GE--A--L-GR--L--LVVYPWT----QRF--FES...
-\end{verbatim}
+\end{minted}
 
 Better alignments are usually obtained by penalizing gaps: higher costs
 for opening a gap and lower costs for extending an existing gap. For amino
@@ -2140,7 +2140,7 @@ obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
 and a gap extension penalty of 0.5:
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import Align
 >>> from Bio import SeqIO
 >>> from Bio.SubsMat.MatrixInfo import blosum62
@@ -2158,21 +2158,21 @@ and a gap extension penalty of 0.5:
 2
 >>> print(alignments[0].score)
 292.5
-\end{verbatim}
+\end{minted}
 %This has been abbreviated, can't use as doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(alignments[0])
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-----HGSAQVKGHGKKV...
 ||-|X|XX|XX|X|X||||--XXX|X|X|||X|XXXXX|X|XXX|XX|-|||---- X|XXX||X|||||...
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKV...
-\end{verbatim}
+\end{minted}
 
 This alignment has the same score that we obtained earlier with EMBOSS needle
 using the same sequences and the same parameters.
 
 To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> aligner.mode = 'local'
 >>> aligner.open_gap_score = -10
 >>> aligner.extend_gap_score = -1
@@ -2187,4 +2187,4 @@ LSPADKTNVKAA
 <BLANKLINE>
 >>> print(alignment.score)
 16.0
-\end{verbatim}
+\end{minted}

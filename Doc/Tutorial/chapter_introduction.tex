@@ -166,28 +166,28 @@ and HTML formats
 
   For example, this will only work under Python 2:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print "Hello World!"
 Hello World!
-\end{verbatim}
+\end{minted}
 
   If you try that on Python 3 you'll get a \verb|SyntaxError|.
   Under Python 3 you must write:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print("Hello World!")
 Hello World!
-\end{verbatim}
+\end{minted}
 
   Surprisingly that will also work on Python 2 -- but only for simple
   examples printing one thing. In general you need to add this magic
   line to the start of your Python scripts to use the print function
   under Python 2.6 and 2.7:
 
-\begin{verbatim}
+\begin{minted}{python}
 from __future__ import print_function
-\end{verbatim}
+\end{minted}
 
   If you forget to add this magic import, under Python 2 you'll see
   extra brackets produced by trying to use the print function when
@@ -195,11 +195,11 @@ from __future__ import print_function
 
   \item \emph{How do I find out what version of Biopython I have installed?} \\
   Use this:
-  \begin{verbatim}
-  >>> import Bio
-  >>> print(Bio.__version__)
-  ...
-  \end{verbatim}
+\begin{minted}{pycon}
+>>> import Bio
+>>> print(Bio.__version__)
+...
+\end{minted}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
   Note that those are double underscores before and after version.
   If the second line fails, your version is \emph{very} out of date.

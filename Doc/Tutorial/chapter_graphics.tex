@@ -67,28 +67,28 @@ included with the Biopython unit tests under the GenBank folder, or online
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb}
 {\texttt{NC\_005816.gb}} from our website.
 
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
 record = SeqIO.read("NC_005816.gb", "genbank")
-\end{verbatim}
+\end{minted}
 
 We're using a top down approach, so after loading in our sequence we next
 create an empty diagram, then add an (empty) track, and to that add an
 (empty) feature set:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
 gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
-\end{verbatim}
+\end{minted}
 
 Now the fun part - we take each gene \verb|SeqFeature| object in our
 \verb|SeqRecord|, and use it to generate a feature on the diagram. We're
 going to color them blue, alternating between a dark blue and a light blue.
-\begin{verbatim}
+\begin{minted}{python}
 for feature in record.features:
     if feature.type != "gene":
         #Exclude this feature
@@ -98,27 +98,27 @@ for feature in record.features:
     else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, color=color, label=True)
-\end{verbatim}
+\end{minted}
 
 Now we come to actually making the output file.  This happens in two steps,
 first we call the \verb|draw| method, which creates all the shapes using
 ReportLab objects.  Then we call the \verb|write| method which renders these
 to the requested file format.  Note you can output in multiple file formats:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_diagram.draw(format="linear", orientation="landscape", pagesize='A4',
                 fragments=4, start=0, end=len(record))
 gd_diagram.write("plasmid_linear.pdf", "PDF")
 gd_diagram.write("plasmid_linear.eps", "EPS")
 gd_diagram.write("plasmid_linear.svg", "SVG")
-\end{verbatim}
+\end{minted}
 
 Also, provided you have the dependencies installed, you can also do bitmaps,
 for example:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_diagram.write("plasmid_linear.png", "PNG")
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 %The blank line below is important to start a new paragraph
@@ -139,11 +139,11 @@ many pieces the genome gets broken up into.
 
 If you want to do a circular figure, then try this:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
                 start=0, end=len(record), circle_core=0.7)
 gd_diagram.write("plasmid_circular.pdf", "PDF")
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 %The blank line below is important to start a new paragraph
@@ -166,7 +166,7 @@ Now let's produce exactly the same figures, but using the bottom up approach.
 This means we create the different objects directly (and this can be done in
 almost any order) and then combine them.
 
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
@@ -193,7 +193,7 @@ gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP
 #Now have to glue the bits together...
 gd_track_for_features.add_set(gd_feature_set)
 gd_diagram.add_track(gd_track_for_features, 1)
-\end{verbatim}
+\end{minted}
 
 You can now call the \verb|draw| and \verb|write| methods as before to produce
 a linear or circular diagram, using the code at the end of the top-down example
@@ -208,16 +208,16 @@ Sometimes you won't have \verb|SeqFeature| objects,
 but just the coordinates for a feature you want to draw.  You have to create
 minimal \verb|SeqFeature| object, but this is easy:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 my_seq_feature = SeqFeature(FeatureLocation(50,100),strand=+1)
-\end{verbatim}
+\end{minted}
 
 For strand, use \texttt{+1} for the forward strand, \texttt{-1} for the
 reverse strand, and \texttt{None} for both.  Here is a short self contained
 example:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.Graphics import GenomeDiagram
 from reportlab.lib.units import cm
@@ -237,7 +237,7 @@ gds_features.add_feature(feature, name="Reverse", label=True)
 gdd.draw(format='linear', pagesize=(15*cm,4*cm), fragments=1,
          start=0, end=400)
 gdd.write("GD_labels_default.pdf", "pdf")
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 The top part of the image in the next subsection shows the output
@@ -256,9 +256,9 @@ caption text for these features.  This is discussed in more detail next.
 Recall we used the following (where \texttt{feature} was a
 \verb|SeqFeature| object) to add a feature to the diagram:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_feature_set.add_feature(feature, color=color, label=True)
-\end{verbatim}
+\end{minted}
 
 In the example above the \verb|SeqFeature| annotation was used to pick a
 sensible caption for the features.  By default the following possible entries
@@ -266,16 +266,16 @@ under the \verb|SeqFeature| object's qualifiers dictionary are used:
 \texttt{gene}, \texttt{label}, \texttt{name}, \texttt{locus\_tag}, and
 \texttt{product}.  More simply, you can specify a name directly:
 
-\begin{verbatim}
+\begin{minted}{python}
 gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
-\end{verbatim}
+\end{minted}
 
 In addition to the caption text for each feature's label, you can also choose
 the font, position (this defaults to the start of the sigil, you can also
 choose the middle or at the end) and orientation (for linear diagrams only,
 where this defaults to rotated by $45$ degrees):
 
-\begin{verbatim}
+\begin{minted}{python}
 #Large font, parallel with the track
 gd_feature_set.add_feature(feature, label=True, color="green",
                            label_size=25, label_angle=0)
@@ -289,7 +289,7 @@ gd_feature_set.add_feature(feature, label=True, color="purple",
 gd_feature_set.add_feature(feature, label=True, color="blue",
                            label_position="middle",
                            label_size=6, label_angle=-90)
-\end{verbatim}
+\end{minted}
 
 \noindent Combining each of these three fragments with the complete example
 in the previous section should give something like
@@ -330,7 +330,7 @@ The examples above have all just used the default sigil for the feature, a
 plain box, which was all that was available in the last publicly released standalone version of GenomeDiagram. Arrow sigils were included when
 GenomeDiagram was added to Biopython 1.50:
 
-\begin{verbatim}
+\begin{minted}{python}
 # Default uses a BOX sigil
 gd_feature_set.add_feature(feature)
 
@@ -339,12 +339,12 @@ gd_feature_set.add_feature(feature, sigil="BOX")
 
 # Or opt for an arrow:
 gd_feature_set.add_feature(feature, sigil="ARROW")
-\end{verbatim}
+\end{minted}
 
 \noindent
 Biopython 1.61 added three more sigils,
 
-\begin{verbatim}
+\begin{minted}{python}
 # Box with corners cut off (making it an octagon)
 gd_feature_set.add_feature(feature, sigil="OCTO")
 
@@ -353,7 +353,7 @@ gd_feature_set.add_feature(feature, sigil="JAGGY")
 
 # Arrow which spans the axis with strand used only for direction
 gd_feature_set.add_feature(feature, sigil="BIGARROW")
-\end{verbatim}
+\end{minted}
 
 These are shown
 \begin{htmlonly}
@@ -388,7 +388,7 @@ There are two additional options to adjust the shapes of the arrows, firstly
 the thickness of the arrow shaft, given as a proportion of the height of the
 bounding box:
 
-\begin{verbatim}
+\begin{minted}{python}
 # Full height shafts, giving pointed boxes:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="brown",
                            arrowshaft_height=1.0)
@@ -398,7 +398,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="teal",
 # Or, very thin shafts:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
                            arrowshaft_height=0.1)
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \noindent The results are shown below:
@@ -420,7 +420,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
 Secondly, the length of the arrow head - given as a proportion of the height
 of the bounding box (defaulting to $0.5$, or $50\%$):
 
-\begin{verbatim}
+\begin{minted}{python}
 # Short arrow heads:
 gd_feature_set.add_feature(feature, sigil="ARROW", color="blue",
                            arrowhead_length=0.25)
@@ -430,7 +430,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="orange",
 # Or, very very long arrow heads (i.e. all head, no shaft, so triangles):
 gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
                            arrowhead_length=10000)
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \noindent The results are shown below:
@@ -452,10 +452,10 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 Biopython 1.61 adds a new \verb|BIGARROW| sigil which always stradles
 the axis, pointing left for the reverse strand or right otherwise:
 
-\begin{verbatim}
+\begin{minted}{python}
 # A large arrow straddling the axis:
 gd_feature_set.add_feature(feature, sigil="BIGARROW")
-\end{verbatim}
+\end{minted}
 
 \noindent All the shaft and arrow head options shown above for the
 \verb|ARROW| sigil can be used for the \verb|BIGARROW| sigil too.
@@ -470,7 +470,7 @@ we'll use arrows for the genes, and overlay them with strand-less features
 (as plain boxes) showing the position of some restriction digest sites.
 
 %NOTE - This *just* fits on one page in the PDF output :)
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
@@ -522,7 +522,7 @@ gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
 gd_diagram.write("plasmid_circular_nice.pdf", "PDF")
 gd_diagram.write("plasmid_circular_nice.eps", "EPS")
 gd_diagram.write("plasmid_circular_nice.svg", "SVG")
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \noindent And the output:
@@ -575,13 +575,13 @@ features preserved, see Section~\ref{sec:SeqRecord-slicing}), and must also
 reverse complement to match the orientation of the first two phage (again
 preserving the features, see Section~\ref{sec:SeqRecord-reverse-complement}):
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 
 A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
 C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
-\end{verbatim}
+\end{minted}
 
 The figure we are imitating used different colors for different gene functions.
 One way to do this is to edit the GenBank file to record color preferences for
@@ -592,7 +592,7 @@ however, we'll just hard code three lists of colors.
 Note that the annotation in the GenBank files doesn't exactly match that shown
 in Proux \textit{et al.}, they have drawn some unannotated genes.
 
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib.colors import red, grey, orange, green, brown, blue, lightblue, purple
 
 A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
@@ -602,13 +602,13 @@ B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [gr
          + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
 C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
          + [grey]*5
-\end{verbatim}
+\end{minted}
 
 Now to draw them -- this time we add three tracks to the diagram, and also notice they
 are given different start/end values to reflect their different lengths (this requires
 Biopython 1.59 or later).
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Graphics import GenomeDiagram
 
 name = "Proux Fig 6"
@@ -639,7 +639,7 @@ gd_diagram.draw(format="linear", pagesize='A4', fragments=1,
 gd_diagram.write(name + ".pdf", "PDF")
 gd_diagram.write(name + ".eps", "EPS")
 gd_diagram.write(name + ".svg", "SVG")
-\end{verbatim}
+\end{minted}
 
 \begin{htmlonly}
 \noindent The result:
@@ -684,7 +684,7 @@ My naming convention continues to refer to the three phage as A, B and C.
 Here are the links we want to show between A and B, given as a list of
 tuples (percentage similarity score, gene in A, gene in B).
 
-\begin{verbatim}
+\begin{minted}{python}
 # Tuc2009 (NC_002703) vs bIL285 (AF323668)
 A_vs_B = [
     (99, "Tuc2009_01", "int"),
@@ -713,11 +713,11 @@ A_vs_B = [
     (91, "Tuc2009_49", "orf55"),
     (95, "Tuc2009_52", "orf60"),
 ]
-\end{verbatim}
+\end{minted}
 
 Likewise for B and C:
 
-\begin{verbatim}
+\begin{minted}{python}
 # bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
 B_vs_C = [
     (42, "orf39", "lin2581"),
@@ -736,14 +736,14 @@ B_vs_C = [
     (30, "orf53", "lin2567"),
     (28, "orf54", "lin2566"),
 ]
-\end{verbatim}
+\end{minted}
 
 For the first and last phage these identifiers are locus tags, for the middle
 phage there are no locus tags so I've used gene names instead. The following
 little helper function lets us lookup a feature using either a locus tag or
 gene name:
 
-\begin{verbatim}
+\begin{minted}{python}
 def get_feature(features, id, tags=["locus_tag", "gene"]):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:
@@ -753,7 +753,7 @@ def get_feature(features, id, tags=["locus_tag", "gene"]):
                 if x == id:
                      return f
     raise KeyError(id)
-\end{verbatim}
+\end{minted}
 
 We can now turn those list of identifier pairs into SeqFeature pairs, and thus
 find their location co-ordinates. We can now add all that code and the following
@@ -763,7 +763,7 @@ line -- see the finished example script
 included in the \texttt{Doc/examples} folder of the Biopython source code)
 to add cross links to the figure:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Graphics.GenomeDiagram import CrossLink
 from reportlab.lib import colors
 # Note it might have been clearer to assign the track numbers explicitly...
@@ -779,7 +779,7 @@ for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [(A_rec, 3, B_rec, 2, A_vs_B),
                             (track_Y, feature_Y.location.start, feature_Y.location.end),
                             color, colors.lightgrey)
         gd_diagram.cross_track_links.append(link_xy)
-\end{verbatim}
+\end{minted}
 
 There are several important pieces to this code. First the \verb|GenomeDiagram| object
 has a \verb|cross_track_links| attribute which is just a list of \verb|CrossLink| objects.
@@ -881,30 +881,30 @@ center (colour and centre).  You will need to change to the American spellings,
 although for several years the Biopython version of GenomeDiagram supported both.
 
 For example, if you used to have:
-\begin{verbatim}
+\begin{minted}{python}
 from GenomeDiagram import GDFeatureSet, GDDiagram
 gdd = GDDiagram("An example")
 ...
-\end{verbatim}
+\end{minted}
 you could just switch the import statements like this:
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
 gdd = GDDiagram("An example")
 ...
-\end{verbatim}
+\end{minted}
 and hopefully that should be enough.  In the long term you might want to
 switch to the new names, but you would have to change more of your code:
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
 gdd = Diagram("An example")
 ...
-\end{verbatim}
+\end{minted}
 or:
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Graphics import GenomeDiagram
 gdd = GenomeDiagram.Diagram("An example")
 ...
-\end{verbatim}
+\end{minted}
 
 If you run into difficulties, please ask on the Biopython mailing list for
 advice. One catch is that we have not included the old module
@@ -945,7 +945,7 @@ could use the GenBank files for this (and the next example uses those for
 plotting features), but if all you want is the length it is faster to use the
 FASTA files for the whole chromosomes:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 entries = [("Chr I", "CHR_I/NC_003070.fna"),
            ("Chr II", "CHR_II/NC_003071.fna"),
@@ -955,12 +955,12 @@ entries = [("Chr I", "CHR_I/NC_003070.fna"),
 for (name, filename) in entries:
     record = SeqIO.read(filename,"fasta")
     print(name, len(record))
-\end{verbatim}
+\end{minted}
 
 \noindent This gave the lengths of the five chromosomes, which we'll now use in
 the following short demonstration of the \verb|BasicChromosome| module:
 
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib.units import cm
 from Bio.Graphics import BasicChromosome
 
@@ -1002,7 +1002,7 @@ for name, length in entries:
     chr_diagram.add(cur_chromosome)
 
 chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
-\end{verbatim}
+\end{minted}
 
 This should create a very simple PDF file, shown
 \begin{htmlonly}
@@ -1027,7 +1027,7 @@ files from the NCBI FTP site
 \url{ftp://ftp.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Arabidopsis_thaliana/},
 and preserve the subdirectory names or edit the paths below:
 
-\begin{verbatim}
+\begin{minted}{python}
 from reportlab.lib.units import cm
 from Bio import SeqIO
 from Bio.Graphics import BasicChromosome
@@ -1077,7 +1077,7 @@ for index, (name, filename) in enumerate(entries):
     chr_diagram.add(cur_chromosome)
 
 chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
-\end{verbatim}
+\end{minted}
 
 It might warn you about the labels being too close together - have a look
 at the forward strand (right hand side) of Chr I, but it should create a

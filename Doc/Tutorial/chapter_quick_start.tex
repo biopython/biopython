@@ -21,7 +21,7 @@ Disputably (of course!), the central object in bioinformatics is the sequence. T
 Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``\verb+>>>+'' represents the Python prompt followed by what you would type in:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
 >>> my_seq
@@ -30,21 +30,21 @@ Seq('AGTACACTGGT')
 AGTACACTGGT
 >>> my_seq.alphabet
 Alphabet()
-\end{verbatim}
+\end{minted}
 
 What we have here is a sequence object with a \emph{generic} alphabet - reflecting the fact we have \emph{not} specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:Bio.Seq}.
 
 In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> my_seq
 Seq('AGTACACTGGT')
 >>> my_seq.complement()
 Seq('TCATGTGACCA')
 >>> my_seq.reverse_complement()
 Seq('ACCAGTGTACT')
-\end{verbatim}
+\end{minted}
 
 The next most important class is the \verb|SeqRecord| or Sequence Record.  This holds a sequence (as a \verb|Seq| object) with additional annotation including an identifier, name and description.  The \verb|Bio.SeqIO| module for reading and writing sequence file formats works with \verb|SeqRecord| objects, which will be introduced below and covered in more detail by Chapter~\ref{chapter:Bio.SeqIO}.
 
@@ -96,13 +96,13 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 
 It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print(seq_record.id)
     print(repr(seq_record.seq))
     print(len(seq_record))
-\end{verbatim}
+\end{minted}
 
 \noindent You should get something like this on your screen:
 
@@ -122,13 +122,13 @@ Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| 
 
 Now let's load the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{\tt ls\_orchid.gbk} instead - notice that the code to do this is almost identical to the snippet used above for the FASTA file - the only difference is we change the filename and the format string:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print(seq_record.id)
     print(repr(seq_record.seq))
     print(len(seq_record))
-\end{verbatim}
+\end{minted}
 
 \noindent This should give:
 

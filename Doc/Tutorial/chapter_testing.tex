@@ -27,34 +27,45 @@ contain input files for the test suite.
 As part of building and installing Biopython you will typically
 run the full test suite at the command line from the Biopython
 source top level directory using the following:
-\begin{verbatim}
-python setup.py test
-\end{verbatim}
+
+\begin{minted}{bash}
+$ python setup.py test
+\end{minted}
+
 This is actually equivalent to going to the \verb|Tests|
 subdirectory and running:
-\begin{verbatim}
-python run_tests.py
-\end{verbatim}
+
+\begin{minted}{bash}
+$ python run_tests.py
+\end{minted}
 
 You'll often want to run just some of the tests, and this is done
 like this:
-\begin{verbatim}
-python run_tests.py test_SeqIO.py test_AlignIO.py
-\end{verbatim}
+
+\begin{minted}{bash}
+$python run_tests.py test_SeqIO.py test_AlignIO.py
+\end{minted}
+
 When giving the list of tests, the \verb|.py| extension is optional,
 so you can also just type:
-\begin{verbatim}
-python run_tests.py test_SeqIO test_AlignIO
-\end{verbatim}
+
+\begin{minted}{bash}
+$ python run_tests.py test_SeqIO test_AlignIO
+\end{minted}
+
 To run the docstring tests (see section \ref{section:doctest}), you can use
-\begin{verbatim}
-python run_tests.py doctest
-\end{verbatim}
+
+\begin{minted}{bash}
+$python run_tests.py doctest
+\end{minted}
+
 You can also skip any tests which have been setup with an explicit
 online component by adding \verb|--offline|, e.g.
-\begin{verbatim}
-python run_tests.py --offline
-\end{verbatim}
+
+\begin{minted}{bash}
+$python run_tests.py --offline
+\end{minted}
+
 By default, \verb|run_tests.py| runs all tests, including the docstring tests.
 
 If an individual test is failing, you can also try running it
@@ -82,15 +93,17 @@ of output on screen, but does not check the output matches the expected
 output.  If the test is failing with an exception error, it should be
 very easy to locate where exactly the script is failing.
 For an example of a print-and-compare test, try:
-\begin{verbatim}
-python test_SeqIO.py
-\end{verbatim}
+
+\begin{minted}{bash}
+$ python test_SeqIO.py
+\end{minted}
 
 The \verb|unittest|-based tests instead show you exactly which sub-section(s) of
 the test are failing. For example,
-\begin{verbatim}
-python test_Cluster.py
-\end{verbatim}
+
+\begin{minted}{bash}
+$python test_Cluster.py
+\end{minted}
 
 \subsection{Running the tests using Tox}
 
@@ -146,7 +159,8 @@ Each Biopython test can have three important files and directories involved with
 It's up to you to decide whether you want to write a print-and-compare test script or a \verb|unittest|-style test script. The important thing is that you cannot mix these two styles in a single test script. Particularly, don't use \verb|unittest| features in a print-and-compare test.
 
 Any script with a \verb|test_| prefix in the \verb|Tests| directory will be found and run by \verb|run_tests.py|. Below, we show an example test script \verb|test_Biospam.py| both for a print-and-compare test and for a \verb|unittest|-based test. If you put this script in the Biopython \verb|Tests| directory, then \verb|run_tests.py| will find it and execute the tests contained in it:
-\begin{verbatim}
+
+\begin{minted}{bash}
 $ python run_tests.py
 test_Ace ... ok
 test_AlignIO ... ok
@@ -155,12 +169,10 @@ test_BioSQL_SeqIO ... ok
 test_Biospam ... ok
 test_CAPS ... ok
 test_Clustalw ... ok
-\end{verbatim}
-\ldots
-\begin{verbatim}
+...
 ----------------------------------------------------------------------
 Ran 107 tests in 86.127 seconds
-\end{verbatim}
+\end{minted}
 
 \subsection{Writing a print-and-compare test}
 
@@ -238,7 +250,7 @@ As an example, the \verb|test_Biospam.py| test script to test the
 \verb|addition| and \verb|multiplication| functions in the \verb|Biospam|
 module  could look as follows:
 
-\begin{verbatim}
+\begin{minted}{python}
 from __future__ import print_function
 from Bio import Biospam
 
@@ -246,7 +258,7 @@ print("2 + 3 =", Biospam.addition(2, 3))
 print("9 - 1 =", Biospam.addition(9, -1))
 print("2 * 3 =", Biospam.multiplication(2, 3))
 print("9 * (- 1) =", Biospam.multiplication(9, -1))
-\end{verbatim}
+\end{minted}
 
 We generate the corresponding output with \verb|python run_tests.py -g test_Biospam.py|, and check the output file \verb|output/test_Biospam|:
 
@@ -281,7 +293,7 @@ find looking at the existing example within Biopython helpful too.
 Here's a minimal \verb|unittest|-style test script for \verb|Biospam|,
 which you can copy and paste to get started:
 
-\begin{verbatim}
+\begin{minted}{python}
 import unittest
 from Bio import Biospam
 
@@ -309,7 +321,7 @@ class BiospamTestDivision(unittest.TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-\end{verbatim}
+\end{minted}
 
 In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{https://docs.python.org/3/library/unittest.html}{online reference}).
 
@@ -330,16 +342,16 @@ These are the key points of \verb|unittest|-based tests:
     many tests as you want in a class.
 
   \item At the end of the test script, you can use
-\begin{verbatim}
+\begin{minted}{python}
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-\end{verbatim}
+\end{minted}
         to execute the tests when the script is run by itself (rather than
         imported from \verb|run_tests.py|).
         If you run this script, then you'll see something like the following:
 
-\begin{verbatim}
+\begin{minted}{bash}
 $ python test_BiospamMyModule.py
 test_addition1 (__main__.TestAddition) ... ok
 test_addition2 (__main__.TestAddition) ... ok
@@ -350,13 +362,13 @@ test_division2 (__main__.TestDivision) ... ok
 Ran 4 tests in 0.059s
 
 OK
-\end{verbatim}
+\end{minted}
 
   \item To indicate more clearly what each test is doing, you can add
         docstrings to each test.  These are shown when running the tests,
         which can be useful information if a test is failing.
 
-\begin{verbatim}
+\begin{minted}{python}
 import unittest
 from Bio import Biospam
 
@@ -388,11 +400,11 @@ class BiospamTestDivision(unittest.TestCase):
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
-\end{verbatim}
+\end{minted}
 
         Running the script will now show you:
 
-\begin{verbatim}
+\begin{minted}{bash}
 $ python test_BiospamMyModule.py
 An addition test ... ok
 A second addition test ... ok
@@ -403,7 +415,7 @@ A second division test ... ok
 Ran 4 tests in 0.001s
 
 OK
-\end{verbatim}
+\end{minted}
 \end{itemize}
 
 If your module contains docstring tests (see section \ref{section:doctest}),
@@ -411,14 +423,14 @@ you \emph{may} want to include those in the tests to be run. You can do so as
 follows by modifying the code under \verb|if __name__ == "__main__":|
 to look like this:
 
-\begin{verbatim}
+\begin{minted}{python}
 if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
     doctest_suite = doctest.DocTestSuite(Biospam)
     suite = unittest.TestSuite((unittest_suite, doctest_suite))
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
     runner.run(suite)
-\end{verbatim}
+\end{minted}
 
 This is only relevant if you want to run the docstring tests when you
 execute \verb|python test_Biospam.py| if it has some complex run-time
@@ -445,7 +457,7 @@ have them excluded in the Biopython test suite, you must update
 \verb|run_tests.py| to include your module. Currently, the relevant part
 of \verb|run_tests.py| looks as follows:
 
-\begin{verbatim}
+\begin{minted}{python}
 EXCLUDE_DOCTEST_MODULES = [
 DOCTEST_MODULES = [
     'Bio.AlignIO.MauveIO',
@@ -466,7 +478,7 @@ if numpy is None:
         "Bio.KDTree",
         ...
     ])
-\end{verbatim}
+\end{minted}
 
 Note that we regard doctests primarily as documentation, so you should
 stick to typical usage. Generally complicated examples dealing with error
@@ -478,9 +490,9 @@ the code will be run from the \verb|Tests| directory, see the
 \verb|Bio.SeqIO| doctests for an example of this.
 
 To run the docstring tests only, use
-\begin{verbatim}
+\begin{minted}{bash}
 $ python run_tests.py doctest
-\end{verbatim}
+\end{minted}
 
 Note that the doctest system is fragile and care is needed to ensure
 your output will match on all the different versions of Python that
@@ -493,30 +505,30 @@ This Tutorial you are reading has a lot of code snippets, which are
 often formatted like a doctest. We have our own system in file
 \verb|test_Tutorial.py| to allow tagging code snippets in the
 Tutorial source to be run as Python doctests. This works by adding
-special \verb|%doctest| comment lines before each verbatim block,
+special \verb|%doctest| comment lines before each Python block,
 e.g.
 
-\begin{lstlisting}
-%doctest
 \begin{verbatim}
+%doctest
+\begin{minted}{pycon}
 >>> from Bio.Alphabet import generic_dna
 >>> from Bio.Seq import Seq
 >>> len("ACGT")
 4
+\end{minted}
 \end{verbatim}
-\end{lstlisting}
 
 \noindent Often code examples are not self-contained, but
-continue from the previous verbatim block. Here we use the
+continue from the previous Python block. Here we use the
 magic comment \verb|%cont-doctest| as shown here:
 
-\begin{lstlisting}
+\begin{verbatim} 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> Seq("ACGT") == Seq("ACGT", generic_dna)
 True
+\end{minted}
 \end{verbatim}
-\end{lstlisting}
 
 The special \verb|%doctest| comment line can take a working directory
 (relative to the \verb|Doc/| folder) to use if you have any example
@@ -531,12 +543,12 @@ to indicate \verb|import XXX| must work, e.g.
 
 You can run the Tutorial doctests via:
 
-\begin{verbatim}
+\begin{minted}{bash}
 $ python test_Tutorial.py
-\end{verbatim}
+\end{minted}
 
 or:
 
-\begin{verbatim}
+\begin{minted}{bash}
 $ python run_tests.py test_Tutorial.py
-\end{verbatim}
+\end{minted}

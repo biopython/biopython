@@ -50,9 +50,9 @@ You must first make sure you have a C compiler on your Windows computer, and tha
 
 Once you are setup with a C compiler, making the installer just requires doing:
 
-\begin{verbatim}
-python setup.py bdist_wininst
-\end{verbatim}
+\begin{minted}{bash}
+$ python setup.py bdist_wininst
+\end{minted}
 
 Now you've got a Windows installer. Congrats!  At the moment we have no trouble shipping installers built on 32 bit windows.  If anyone would like to look into supporting 64 bit Windows that would be great.
 
@@ -60,9 +60,9 @@ Now you've got a Windows installer. Congrats!  At the moment we have no trouble 
 
 To make the RPM, you just need to do:
 
-\begin{verbatim}
-python setup.py bdist_rpm
-\end{verbatim}
+\begin{minted}{bash}
+$ python setup.py bdist_rpm
+\end{minted}
 
 This will create an RPM for your specific platform and a source RPM in the directory \verb|dist|. This RPM should be good and ready to go, so this is all you need to do! Nice and easy.
 

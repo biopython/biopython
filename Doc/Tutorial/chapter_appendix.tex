@@ -43,44 +43,44 @@ we handle to the file {\tt m\_cold.fasta} which you can download
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/m\_cold.fasta}{here}
 (or find included in the Biopython source code as {\tt Doc/examples/m\_cold.fasta}).
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> handle = open("m_cold.fasta", "r")
 >>> handle.readline()
 ">gi|8332116|gb|BE037100.1|BE037100 MP14H09 MP Mesembryanthemum ...\n"
-\end{verbatim}
+\end{minted}
 
 Handles are regularly used in Biopython for passing information to parsers.
 For example, since Biopython 1.54 the main functions in \verb|Bio.SeqIO|
 and \verb|Bio.AlignIO| have allowed you to use a filename instead of a
 handle:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 for record in SeqIO.parse("m_cold.fasta", "fasta"):
     print(record.id, len(record))
-\end{verbatim}
+\end{minted}
 
 On older versions of Biopython you had to use a handle, e.g.
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 handle = open("m_cold.fasta", "r")
 for record in SeqIO.parse(handle, "fasta"):
     print(record.id, len(record))
 handle.close()
-\end{verbatim}
+\end{minted}
 
 This pattern is still useful - for example suppose you have a gzip
 compressed FASTA file you want to parse:
 
-\begin{verbatim}
+\begin{minted}{python}
 import gzip
 from Bio import SeqIO
 handle = gzip.open("m_cold.fasta.gz", "rt")
 for record in SeqIO.parse(handle, "fasta"):
     print(record.id, len(record))
 handle.close()
-\end{verbatim}
+\end{minted}
 
 With our parsers for plain text files, under Python 3 it is
 essential to use gzip in text mode.
@@ -95,7 +95,7 @@ string into a handle. The following example shows how to do this using
 \verb|cStringIO| from the Python standard library:
 
 %doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> my_info = "A string\n with multiple lines."
 >>> print(my_info)
 A string
@@ -109,4 +109,4 @@ A string
 >>> second_line = my_info_handle.readline()
 >>> print(second_line)
  with multiple lines.
-\end{verbatim}
+\end{minted}
