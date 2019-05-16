@@ -73,6 +73,7 @@ def read(handle):
 
 
 class Parser(ExpatParser):
+    """Process the result from a ScanProsite search."""
 
     def __init__(self):
         """Initialize the class."""
@@ -80,6 +81,10 @@ class Parser(ExpatParser):
         self.firsttime = True
 
     def feed(self, data, isFinal=0):
+        """Raise an Error if plain text is received in the data.
+
+        This is to show the Error messages returned by ScanProsite.
+        """
         # Error messages returned by the ScanProsite server are formatted as
         # as plain text instead of an XML document. To catch such error
         # messages, we override the feed method of the Expat parser.
@@ -93,6 +98,8 @@ class Parser(ExpatParser):
 
 
 class ContentHandler(handler.ContentHandler):
+    """Process and fill in the records, results of the search."""
+
     integers = ("start", "stop")
     strings = ("sequence_ac",
                "sequence_id",
@@ -106,6 +113,7 @@ class ContentHandler(handler.ContentHandler):
         self.element = []
 
     def startElement(self, name, attrs):
+        """Define the beginning of a record and stores the search record."""
         self.element.append(name)
         self.content = ""
         if self.element == ["matchset"]:
@@ -117,6 +125,7 @@ class ContentHandler(handler.ContentHandler):
             self.record.append(match)
 
     def endElement(self, name):
+        """Define the end of the search record."""
         assert name == self.element.pop()
         name = str(name)
         if self.element == ["matchset", "match"]:
@@ -130,4 +139,5 @@ class ContentHandler(handler.ContentHandler):
                 match[name] = self.content
 
     def characters(self, content):
+        """Store the record content."""
         self.content += content
