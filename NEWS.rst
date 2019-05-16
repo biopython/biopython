@@ -68,6 +68,8 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Gert Hulselmans
+- Jared Andrews
 - Jens Thomas (first contribution)
 - Konstantin Vdovkin
 - Lenna Peterson
@@ -279,9 +281,7 @@ possible, especially the following contributors:
 - Erik Cederstrand (first contribution)
 - Fei Qi (first contribution)
 - Francesco Gastaldello
-- Gert Hulselmans
 - James Jeffryes (first contribution)
-- Jared Andrews
 - Jerven Bolleman (first contribution)
 - Joe Greener (first contribution)
 - Joerg Schaarschmidt (first contribution)
