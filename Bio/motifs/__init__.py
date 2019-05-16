@@ -75,40 +75,31 @@ def parse(handle, format, strict=True):
     format = format.lower()
     if format == "alignace":
         from Bio.motifs import alignace
-        record = alignace.read(handle)
-        return record
+        return alignace.read(handle)
     elif format == "meme":
         from Bio.motifs import meme
-        record = meme.read(handle)
-        return record
+        return meme.read(handle)
     elif format == "minimal":
         from Bio.motifs import minimal
-        record = minimal.read(handle)
-        return record
+        return minimal.read(handle)
     elif format == "clusterbuster":
         from Bio.motifs import clusterbuster
-        record = clusterbuster.read(handle)
-        return record
+        return clusterbuster.read(handle)
     elif format in ('pfm_four_columns', 'pfm_four_rows'):
         from Bio.motifs import pfm
-        record = pfm.read(handle, format)
-        return record
+        return pfm.read(handle, format)
     elif format == "xms":
         from Bio.motifs import xms
-        record = xms.read(handle)
-        return record
+        return xms.read(handle)
     elif format == "mast":
         from Bio.motifs import mast
-        record = mast.read(handle)
-        return record
+        return mast.read(handle)
     elif format == "transfac":
         from Bio.motifs import transfac
-        record = transfac.read(handle, strict)
-        return record
+        return transfac.read(handle, strict)
     elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
-        record = jaspar.read(handle, format)
-        return record
+        return jaspar.read(handle, format)
     else:
         raise ValueError("Unknown format %s" % format)
 
