@@ -48,6 +48,7 @@ class ComparativeTest(unittest.TestCase):
     def _make_random_points(self, num_two_d_lists):
         """Make a bunch of random points for testing plots."""
         plot_info = []
+        random.seed(num_two_d_lists)  # for reproducibility
         for two_d_list in range(num_two_d_lists):
             cur_list = []
             num_points = random.randrange(self.min_num_points,
