@@ -110,6 +110,7 @@ class TabWriter(SequentialSequenceWriter):
 
 
 def as_tab(record):
+    """Return record as tab separated (id(tab)seq) string."""
     title = _clean(record.id)
     seq = _get_seq_string(record)  # Catches sequence being None
     assert "\t" not in title
