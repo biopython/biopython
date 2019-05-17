@@ -33,6 +33,7 @@ class CodonAlphabet(Alphabet):
 
 
 def get_codon_alphabet(codon_table, gap_char="-"):
+    """Construct a CodonAlphabet from a given codon table."""
     letters = list(codon_table.forward_table.keys())
     letters.extend(codon_table.stop_codons)
     letters.extend(codon_table.start_codons)
