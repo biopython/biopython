@@ -53,21 +53,21 @@ def parse(handle, format, strict=True):
     ...         print(m.consensus)
     ...
     TCTACGATTGAG
-    CTGCAGCTAGCTACGAGTGAG
-    GTGCTCTAAGCATAGTAGGCG
+    CTGCACCTAGCTACGAGTGAG
+    GTGCCCTAAGCATACTAGGCG
     GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
-    CCACGCTAAGAGAGGTGCCGGAG
-    GCGCGTCGCTGAGCA
+    CCACGCTAAGAGAAGTGCCGGAG
+    GCACGTCCCTGAGCA
     GTCCATCGCAAAGCGTGGGGC
-    GGGATCAGAGGGCCG
-    TGGAGGCGGGG
-    GACCAGAGCTTCGCATGGGGG
-    GGCGTGCGTG
-    GCTGGTTGCTGTTCATTAGG
-    GCCGGCGGCAGCTAAAAGGG
-    GAGGCCGGGGAT
-    CGACTCGTGCTTAGAAGG
+    GAGATCAGAGGGCCG
+    TGGACGCGGGG
+    GACCAGAGCCTCGCATGGGGG
+    AGCGCGCGTG
+    GCCGGTTGCTGTTCATTAGG
+    ACCGACGGCAGCTAAAAGGG
+    GACGCCGGGGAT
+    CGACTCGCGCTTACAAGG
 
     If strict is True (default), the parser will raise a ValueError if the
     file contents does not strictly comply with the specified file format.
@@ -115,7 +115,7 @@ def read(handle, format, strict=True):
     >>> with open("motifs/SRF.pfm") as handle:
     ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
-    Seq('GCCCATATATGG', IUPACUnambiguousDNA())
+    Seq('GCCCATATATGG')
 
     Or a single-motif MEME file,
 
@@ -123,7 +123,7 @@ def read(handle, format, strict=True):
     >>> with open("motifs/meme.out") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+    Seq('CTCAATCGTA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
@@ -144,7 +144,7 @@ def read(handle, format, strict=True):
     ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
-    Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+    Seq('TCTACGATTGAG')
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
@@ -167,8 +167,12 @@ class Instances(list):
 
     def __init__(self, instances=None, alphabet=None):
         """Initialize the class."""
-        from Bio.Alphabet import IUPAC
         from Bio.Seq import Seq
+        try:
+            # Received an old-style alphabet
+            alphabet = alphabet.letters
+        except AttributeError:
+            pass
         if instances is None:
             instances = []
         self.length = None
@@ -183,18 +187,23 @@ class Instances(list):
             except AttributeError:
                 # The instance is a plain string
                 continue
+            try:
+                # Received an old-style alphabet
+                a = a.letters
+            except AttributeError:
+                pass
+            if a is None:
+                # If we didn't get a meaningful alphabet from the instances,
+                # assume it is DNA.
+                a = 'ACGT'
             if alphabet is None:
                 alphabet = a
             elif alphabet != a:
                 raise ValueError("Alphabets are inconsistent")
-        if alphabet is None or alphabet.letters is None:
-            # If we didn't get a meaningful alphabet from the instances,
-            # assume it is DNA.
-            alphabet = IUPAC.unambiguous_dna
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
-                instance = Seq(sequence, alphabet=alphabet)
+                instance = Seq(sequence)
             self.append(instance)
         self.alphabet = alphabet
 
@@ -208,7 +217,7 @@ class Instances(list):
     def count(self):
         """Count nucleotides in a position."""
         counts = {}
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             counts[letter] = [0] * self.length
         for instance in self:
             for position, letter in enumerate(instance):
@@ -243,15 +252,18 @@ class Motif(object):
     def __init__(self, alphabet=None, instances=None, counts=None):
         """Initialize the class."""
         from . import matrix
-        from Bio.Alphabet import IUPAC
         self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
                             "Specify either instances or counts, "
                             "don't specify both")
         elif counts is not None:
+            try:
+                alphabet = alphabet.letters
+            except AttributeError:
+                pass
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
+                alphabet = 'ACGT'
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -266,7 +278,7 @@ class Motif(object):
             self.instances = None
             self.length = None
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
+                alphabet = 'ACGT'
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
@@ -305,11 +317,11 @@ class Motif(object):
     def __set_pseudocounts(self, value):
         self._pseudocounts = {}
         if isinstance(value, dict):
-            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet)
         else:
             if value is None:
                 value = 0.0
-            self._pseudocounts = dict.fromkeys(self.alphabet.letters, value)
+            self._pseudocounts = dict.fromkeys(self.alphabet, value)
 
     pseudocounts = property(__get_pseudocounts, __set_pseudocounts)
     del __get_pseudocounts
@@ -320,11 +332,11 @@ class Motif(object):
 
     def __set_background(self, value):
         if isinstance(value, dict):
-            self._background = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._background = dict((letter, value[letter]) for letter in self.alphabet)
         elif value is None:
-            self._background = dict.fromkeys(self.alphabet.letters, 1.0)
+            self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
-            if sorted(self.alphabet.letters) != ["A", "C", "G", "T"]:
+            if sorted(self.alphabet) != ["A", "C", "G", "T"]:
                 # TODO - Should this be a ValueError?
                 raise Exception("Setting the background to a single value only "
                                 "works for DNA motifs (in which case the value "
@@ -334,7 +346,7 @@ class Motif(object):
             self._background['G'] = value / 2.0
             self._background['T'] = (1.0 - value) / 2.0
         total = sum(self._background.values())
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             self._background[letter] /= total
 
     background = property(__get_background, __set_background)
@@ -464,13 +476,12 @@ class Motif(object):
 
         """
         from Bio._py3k import urlopen, urlencode, Request
-        from Bio import Alphabet
 
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet):
+        if self.alphabet == 'ACDEFGHIKLMNPQRSTVWY':
             alpha = "alphabet_protein"
-        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
+        elif self.alphabet == 'ACGU':
             alpha = "alphabet_rna"
-        elif isinstance(self.alphabet, Alphabet.DNAAlphabet):
+        elif self.alphabet == 'ACGT':
             alpha = "alphabet_dna"
         else:
             alpha = "auto"

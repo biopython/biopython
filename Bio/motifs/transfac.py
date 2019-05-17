@@ -7,7 +7,6 @@
 
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 class Motif(motifs.Motif, dict):
@@ -189,7 +188,7 @@ def read(handle, strict=True):
             references.append(reference)
         elif key == '//':
             if counts is not None:
-                motif = Motif(alphabet=IUPAC.unambiguous_dna, counts=counts)
+                motif = Motif(alphabet='ACGT', counts=counts)
                 motif.update(annotations)
                 motif.references = references
                 record.append(motif)
@@ -249,7 +248,7 @@ XX
                     if length == 0:
                         continue
                     sequence = motif.degenerate_consensus
-                    letters = sorted(motif.alphabet.letters)
+                    letters = sorted(motif.alphabet)
                     line = "      ".join(["P0"] + letters)
 
                     lines.append(line)

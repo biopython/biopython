@@ -6,7 +6,6 @@
 """Parsing AlignACE output files."""
 
 from Bio.motifs import Motif, Instances
-from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 
@@ -49,7 +48,7 @@ def read(handle):
             number = int(words[1])
             instances = []
         elif line[:3] == "MAP":
-            alphabet = IUPAC.unambiguous_dna
+            alphabet = "ACGT"
             instances = Instances(instances, alphabet)
             motif = Motif(alphabet, instances)
             motif.score = float(line.split()[-1])
@@ -57,7 +56,7 @@ def read(handle):
             motif.mask = mask
             record.append(motif)
         elif len(line.split("\t")) == 4:
-            seq = Seq(line.split("\t")[0], IUPAC.unambiguous_dna)
+            seq = Seq(line.split("\t")[0])
             instances.append(seq)
         elif "*" in line:
             mask = line.strip("\r\n")

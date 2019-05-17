@@ -6,7 +6,6 @@
 """JASPAR2014 module."""
 
 from Bio.Seq import Seq
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
 import math
 
@@ -23,7 +22,7 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet=dna, instances=None,
+    def __init__(self, matrix_id, name, alphabet='ACGT', instances=None,
                  counts=None, collection=None, tf_class=None, tf_family=None,
                  species=None, tax_group=None, acc=None, data_type=None,
                  medline=None, pazar_id=None, comment=None):
@@ -191,11 +190,10 @@ def write(motifs, format):
 
 def _read_pfm(handle):
     """Read the motif from a JASPAR .pfm file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'ACGT'
     counts = {}
 
-    letters = "ACGT"
-    for letter, line in zip(letters, handle):
+    for letter, line in zip(alphabet, handle):
         words = line.split()
         # if there is a letter in the beginning, ignore it
         if words[0] == letter:
@@ -212,7 +210,7 @@ def _read_pfm(handle):
 
 def _read_sites(handle):
     """Read the motif from JASPAR .sites file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'ACGT'
     instances = []
 
     for line in handle:
@@ -225,7 +223,7 @@ def _read_sites(handle):
         for c in line.strip():
             if c == c.upper():
                 instance += c
-        instance = Seq(instance, alphabet)
+        instance = Seq(instance)
         instances.append(instance)
 
     instances = motifs.Instances(instances, alphabet)
@@ -261,7 +259,7 @@ def _read_jaspar(handle):
                 2	19	11	50	29	47	22	81	1	6
 
     """
-    alphabet = dna
+    alphabet = 'ACGT'
     counts = {}
 
     record = Record()

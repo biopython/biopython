@@ -11,8 +11,6 @@ import unittest
 
 # We want to test these:
 from Bio import motifs
-from Bio.Alphabet.IUPAC import extended_dna, unambiguous_rna
-from Bio.Alphabet.IUPAC import extended_protein
 
 # In order to check any sequences returned
 from Bio.Seq import Seq
@@ -36,19 +34,19 @@ class TestotifWeblogo(unittest.TestCase):
         m.weblogo(os.devnull)
 
     def test_dna(self):
-        """Test Bio.Motif.weblogo with a DNA sequence."""
+        """Test Bio.motifs.weblogo with a DNA sequence."""
         self.check(["TACAA", "TACGC", "TACAC", "TACCC",
-                    "AACCC", "AATGC", "AATGC"], extended_dna)
+                    "AACCC", "AATGC", "AATGC"], 'GATCBDSW')
 
     def test_rna(self):
-        """Test Bio.Motif.weblogo with an RNA sequence."""
+        """Test Bio.motifs.weblogo with an RNA sequence."""
         self.check(["UACAA", "UACGC", "UACAC", "UACCC",
-                    "AACCC", "AAUGC", "AAUGC"], unambiguous_rna)
+                    "AACCC", "AAUGC", "AAUGC"], 'GAUC')
 
     def test_protein(self):
-        """Test Bio.Motif.weblogo with a protein sequence."""
+        """Test Bio.motifs.weblogo with a protein sequence."""
         self.check(["ACDEG", "AYCRN", "HYLID", "AYHEL",
-                    "ACDEH", "AYYRN", "HYIID"], extended_protein)
+                    "ACDEH", "AYYRN", "HYIID"], 'ACDEFGHIKLMNPQRSTVWYBXZJUO')
 
 
 if __name__ == "__main__":

@@ -7,7 +7,6 @@
 """Parse XMS motif files."""
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 from xml.dom import minidom, Node
@@ -32,7 +31,7 @@ class XMSScanner:
             [nucleotide_counts[nucleotide].append(float(nucleotide_count))
              for nucleotide, nucleotide_count in zip(['A', 'C', 'G', 'T'], self.get_acgt(column))]
 
-        motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
         motif.name = motif_name
 
         self.record.append(motif)
