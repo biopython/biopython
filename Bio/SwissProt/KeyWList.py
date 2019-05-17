@@ -53,6 +53,11 @@ class Record(dict):
 
 
 def parse(handle):
+    """Parse the keyword list from file handle.
+
+    Returns a generator object which yields keyword entries as
+    Bio.SwissProt.KeyWList.Record() object.
+    """
     record = Record()
     # First, skip the header - look for start of a record
     for line in handle:
