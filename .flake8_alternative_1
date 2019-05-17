@@ -28,8 +28,6 @@ per-file-ignores =
           # continuation line missing indentation or outdented TODO (268 occurrences)
           E126
           # continuation line over-indented for hanging indent TODO  (53 occurrences)
-          E731
-          # do not assign a lambda expression, use a def TODO (28 occurrences)
           F401
           # module imported but unused TODO (108 occurrences)
           F841
@@ -86,7 +84,7 @@ per-file-ignores =
             
     # Due to a bug in flake8(?), we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:E122,E126,E731,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
+    /Bio/*:E122,E126,F401,F841,D101,D102,D103,D105,B009,B010,B011,C812,C815
     /Tests/*:E122,E126,E731,F401,F841,D101,D102,D103,B009,B010,B011,C812
 
 # =================================================
