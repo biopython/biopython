@@ -25,6 +25,10 @@ def _read_key_value(line):
 
 
 def parse(handle):
+    """Read Gene Expression Omnibus records from file handle.
+
+    Returns a generator object which yields Bio.Geo.Record() objects.
+    """
     record = None
     for line in handle:
         line = line.strip('\n').strip('\r')
