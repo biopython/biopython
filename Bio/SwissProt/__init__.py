@@ -132,6 +132,10 @@ class Reference(object):
 
 
 def parse(handle):
+    """Read multiple SwissProt records from file handle.
+
+    Returns a generator object which yields Bio.SwissProt.Record() objects.
+    """
     while True:
         record = _read(handle)
         if not record:
@@ -140,6 +144,10 @@ def parse(handle):
 
 
 def read(handle):
+    """Read one SwissProt record from file handle.
+
+    Returns a Record() object.
+    """
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
@@ -306,9 +314,9 @@ def _read_dt(record, line):
     value = line[5:]
     uprline = value.upper()
     cols = value.rstrip().split()
-    if 'CREATED' in uprline \
-    or 'LAST SEQUENCE UPDATE' in uprline \
-    or 'LAST ANNOTATION UPDATE' in uprline:
+    if ('CREATED' in uprline
+            or 'LAST SEQUENCE UPDATE' in uprline
+            or 'LAST ANNOTATION UPDATE' in uprline):
         # Old style DT line
         # =================
         # e.g.
@@ -352,9 +360,9 @@ def _read_dt(record, line):
             record.annotation_update = date, version
         else:
             raise ValueError("Unrecognised DT (DaTe) line.")
-    elif 'INTEGRATED INTO' in uprline \
-    or 'SEQUENCE VERSION' in uprline \
-    or 'ENTRY VERSION' in uprline:
+    elif ('INTEGRATED INTO' in uprline
+          or 'SEQUENCE VERSION' in uprline
+          or 'ENTRY VERSION' in uprline):
         # New style DT line
         # =================
         # As of UniProt Knowledgebase release 7.0 (including
