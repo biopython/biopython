@@ -83,6 +83,7 @@ Doc/*/*/*.out
 Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
+Doc/_minted-Tutorial/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
