@@ -8,21 +8,21 @@
 # e.g.
 #
 # %doctest
-# \begin{verbatim}
+# \begin{minted}{pycon}
 # >>> from Bio.Alphabet import generic_dna
 # >>> from Bio.Seq import Seq
 # >>> len("ACGT")
 # 4
-# \end{verbatim}
+# \end{minted}
 #
 # Code snippets can be extended using a similar syntax, which
 # will create a single combined doctest:
 #
 # %cont-doctest
-# \begin{verbatim}
+# \begin{minted}{pycon}
 # >>> Seq("ACGT") == Seq("ACGT", generic_dna)
 # True
-# \end{verbatim}
+# \end{minted}
 #
 # The %doctest line also supports a relative working directory,
 # and listing multiple Python dependencies as lib:XXX which will
@@ -116,8 +116,8 @@ for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
 
 def _extract(handle):
     line = handle.readline()
-    if line != "\\begin{verbatim}\n":
-        raise ValueError("Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{verbatim}'")
+    if line != "\\begin{minted}{pycon}\n":
+        raise ValueError("Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'")
     lines = []
     while True:
         line = handle.readline()
@@ -127,7 +127,7 @@ def _extract(handle):
                 raise ValueError("Didn't find end of test starting: %r", lines[0])
             else:
                 raise ValueError("Didn't find end of test!")
-        elif line.startswith("\\end{verbatim}"):
+        elif line.startswith("\\end{minted}"):
             break
         else:
             lines.append(line)
