@@ -732,16 +732,15 @@ def _escape_filename(filename):
 
     Note this will not add quotes if they are already included:
 
-    Note the function is more generic than the name suggests, since
-    it is used to add quotes around string arguments containing spaces
-    that are not filenames, e.g. see issue #2055 on github. In the future
-    this function might be renamed like 'def _quote_spaces(spaced_string):'
-    or similar, assuming it does not break compatability.
-
     >>> print((_escape_filename('example with spaces')))
     "example with spaces"
     >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
+    >>> print((_escape_filename(1)))
+    1
+
+    Note the function is more generic than the name suggests, since it
+    is used to add quotes around any string arguments containing spaces.
     """
     # Is adding the following helpful
     # if os.path.isfile(filename):
@@ -756,6 +755,9 @@ def _escape_filename(filename):
     #        return short
     #    except ImportError:
     #        pass
+    if not isinstance(filename, str):
+        # for example the NCBI BLAST+ -outfmt argument can be an integer
+        return filename
     if " " not in filename:
         return filename
     # We'll just quote it - works on Windows, Mac OS X etc
