@@ -60,7 +60,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             # Formatting options:
             _Option(["-outfmt", "outfmt"],
                     "Alignment view.  Typically an integer 0-14 but for some "
-                    "formats can be named columns like '6 qseqid sseqid'  "
+                    "formats can be named columns like '6 qseqid sseqid'.  "
                     "Use 5 for XML output (differs from classic BLAST which "
                     "used 7 for XML).",
                     filename=True,  # to ensure spaced inputs are quoted
