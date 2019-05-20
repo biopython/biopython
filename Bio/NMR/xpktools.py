@@ -178,7 +178,7 @@ class Peaklist(object):
 
     def write_header(self, outfn):
         """Write header lines from input file to handle `outfn`."""
-        with open(outfn, 'wb') as outfile:
+        with open(outfn, 'w') as outfile:
             outfile.write(self.firstline)
             outfile.write("\012")
             outfile.write(self.axislabels)

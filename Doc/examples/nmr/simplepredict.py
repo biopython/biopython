@@ -50,7 +50,6 @@ NOE coordinates as well as an nmrview peaklist out_example.xpk.
 """
 
 from __future__ import print_function
-import string
 
 # -- don't need to modify sys.path with the *tools in Biopython
 # -- just need Biopython installed somewhere in the PYTHONPATH
@@ -123,14 +122,14 @@ while (res <= MAXRES):
     if noe1 != "":
 
         # Here I'm using the XpkEntry class to gain access to
-        # specific fields in the that make the information
+        # specific fields in the file that make the information
         # more readable and suitable for creating data tables
         # This output will be printed to the screen.
         # The data table contains the assignment, coordinates and
         # intensity of the resonance.
 
-        print(string.split(entry1.fields["15N2.L"], ".")[0], "-->",
-              string.split(entry1.fields["N15.L"], ".")[0], "\t",
+        print(entry1.fields["15N2.L"].split(".")[0], "-->",
+              entry1.fields["N15.L"].split(".")[0], "\t",
               entry1.fields["H1.P"], entry1.fields["N15.P"],
               entry1.fields["15N2.P"], entry1.fields["int"])
 
