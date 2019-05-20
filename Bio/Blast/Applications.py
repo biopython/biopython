@@ -61,6 +61,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             _Option(["-outfmt", "outfmt"],
                     "Alignment view.  Integer 0-11.  Use 5 for XML output "
                     "(differs from classic BLAST which used 7 for XML).",
+                    filename=True,  # to ensure spaced inputs are quoted
                     equate=False),
             # TODO - Document and test the column options
             _Switch(["-show_gis", "show_gis"],

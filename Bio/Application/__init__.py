@@ -561,8 +561,9 @@ class _Option(_AbstractParameter):
        naming.
      - description -- a description of the option. This is used as
        the property docstring.
-     - filename -- True if this argument is a filename and should be
-       automatically quoted if it contains spaces.
+     - filename -- True if this argument is a filename (or other argument
+       that should be quoted) and should be automatically quoted if it
+       contains spaces.
      - checker_function -- a reference to a function that will determine
        if a given value is valid for this parameter. This function can either
        raise an error when given a bad value, or return a [0, 1] decision on
@@ -581,6 +582,7 @@ class _Option(_AbstractParameter):
         if not isinstance(description, basestring):
             raise TypeError("Should be a string: %r for %s"
                             % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -671,6 +673,7 @@ class _Argument(_AbstractParameter):
         if not isinstance(description, basestring):
             raise TypeError("Should be a string: %r for %s"
                             % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -728,6 +731,12 @@ def _escape_filename(filename):
     """Escape filenames with spaces by adding quotes (PRIVATE).
 
     Note this will not add quotes if they are already included:
+
+    Note the function is more generic than the name suggests, since
+    it is used to add quotes around string arguments containing spaces
+    that are not filenames, e.g. see issue #2055 on github. In the future
+    this function might be renamed like 'def _quote_spaces(spaced_string):'
+    or similar, assuming it does not break compatability.
 
     >>> print((_escape_filename('example with spaces')))
     "example with spaces"
