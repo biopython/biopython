@@ -1960,8 +1960,8 @@ class MotifTestPWM(unittest.TestCase):
         pssm = pwm.log_odds()
         result = pssm.calculate(self.s)
         self.assertEqual(6, len(result))
-        # The fast C-code in Bio/Motif/_pwm.c stores all results as 32-bit
-        # floats; the slower Python code in Bio/Motif/__init__.py uses 64-bit
+        # The fast C-code in Bio/motifs/_pwm.c stores all results as 32-bit
+        # floats; the slower Python code in Bio/motifs/__init__.py uses 64-bit
         # doubles. The C-code and Python code results will therefore not be
         # exactly equal. Test the first 5 decimal places only to avoid either
         # the C-code or the Python code to inadvertently fail this test.
