@@ -281,7 +281,7 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--tm", "tm"],
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
-                    filename=True,
+                    filename=True,  # to ensure spaced inputs are quoted
                     equate=False),
             # Use a user-defined AA scoring matrix. The format of matrixfile is
             # the same to that of BLAST. Ignored when nucleotide sequences are
@@ -289,7 +289,7 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--aamatrix", "aamatrix"],
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
-                    filename=True,
+                    filename=True,  # to ensure spaced inputs are quoted
                     equate=False),
             # Incorporate the AA/nuc composition information into the scoring
             # matrix. Default: off

@@ -561,8 +561,9 @@ class _Option(_AbstractParameter):
        naming.
      - description -- a description of the option. This is used as
        the property docstring.
-     - filename -- True if this argument is a filename and should be
-       automatically quoted if it contains spaces.
+     - filename -- True if this argument is a filename (or other argument
+       that should be quoted) and should be automatically quoted if it
+       contains spaces.
      - checker_function -- a reference to a function that will determine
        if a given value is valid for this parameter. This function can either
        raise an error when given a bad value, or return a [0, 1] decision on
@@ -581,6 +582,7 @@ class _Option(_AbstractParameter):
         if not isinstance(description, basestring):
             raise TypeError("Should be a string: %r for %s"
                             % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -671,6 +673,7 @@ class _Argument(_AbstractParameter):
         if not isinstance(description, basestring):
             raise TypeError("Should be a string: %r for %s"
                             % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -733,6 +736,11 @@ def _escape_filename(filename):
     "example with spaces"
     >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
+    >>> print((_escape_filename(1)))
+    1
+
+    Note the function is more generic than the name suggests, since it
+    is used to add quotes around any string arguments containing spaces.
     """
     # Is adding the following helpful
     # if os.path.isfile(filename):
@@ -747,6 +755,9 @@ def _escape_filename(filename):
     #        return short
     #    except ImportError:
     #        pass
+    if not isinstance(filename, str):
+        # for example the NCBI BLAST+ -outfmt argument can be an integer
+        return filename
     if " " not in filename:
         return filename
     # We'll just quote it - works on Windows, Mac OS X etc
