@@ -36,17 +36,17 @@ class TestotifWeblogo(unittest.TestCase):
         m.weblogo(os.devnull)
 
     def test_dna(self):
-        """Test Bio.Motif.weblogo with a DNA sequence."""
+        """Test Bio.motifs.weblogo with a DNA sequence."""
         self.check(["TACAA", "TACGC", "TACAC", "TACCC",
                     "AACCC", "AATGC", "AATGC"], extended_dna)
 
     def test_rna(self):
-        """Test Bio.Motif.weblogo with an RNA sequence."""
+        """Test Bio.motifs.weblogo with an RNA sequence."""
         self.check(["UACAA", "UACGC", "UACAC", "UACCC",
                     "AACCC", "AAUGC", "AAUGC"], unambiguous_rna)
 
     def test_protein(self):
-        """Test Bio.Motif.weblogo with a protein sequence."""
+        """Test Bio.motifs.weblogo with a protein sequence."""
         self.check(["ACDEG", "AYCRN", "HYLID", "AYHEL",
                     "ACDEH", "AYYRN", "HYIID"], extended_protein)
 
