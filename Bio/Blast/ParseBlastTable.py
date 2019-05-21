@@ -14,6 +14,8 @@ import sys
 
 
 class BlastTableEntry(object):
+    """Store the record details."""
+
     def __init__(self, in_rec):
         """Initialize the class."""
         bt_fields = in_rec.split()
@@ -30,6 +32,8 @@ class BlastTableEntry(object):
 
 
 class BlastTableRec(object):
+    """Store a Blast Table record, list of Blast Table Entries."""
+
     def __init__(self):
         """Initialize the class."""
         self.program = None
@@ -53,6 +57,11 @@ reader_keywords = {'BLASTP': 'version',
 
 
 class BlastTableReader(object):
+    """Parse the output of blastpgp.
+
+    Return a BlastTableRec() instance
+    """
+
     def __init__(self, handle):
         """Initialize the class."""
         self.handle = handle

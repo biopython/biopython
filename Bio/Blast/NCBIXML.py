@@ -534,6 +534,7 @@ class BlastParser(_XMLparser):
         self._descr.accession = self._value
 
     def set_hit_len(self):
+        """Record the length of the hit."""
         self._hit.length = int(self._value)
 
     # HSPs

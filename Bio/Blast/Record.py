@@ -96,6 +96,7 @@ class DescriptionExt(Description):
         self.items = []
 
     def append_item(self, item):
+        """Add a description extended record."""
         if len(self.items) == 0:
             self.title = str(item)
         self.items.append(item)
