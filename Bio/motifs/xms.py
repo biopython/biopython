@@ -25,6 +25,7 @@ class XMSScanner:
                 self.handle_motif(child)
 
     def handle_motif(self, node):
+        """Read the motif's name and column from the node and the motif record."""
         motif_name = self.get_text(node.getElementsByTagName("name"))
         nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
@@ -38,6 +39,7 @@ class XMSScanner:
         self.record.append(motif)
 
     def get_property_value(self, node, key_name):
+        """Extract the value of the motif's property named key_name from node."""
         for cur_property in node.getElementsByTagName('prop'):
             right_property = False
             cur_value = None
@@ -53,6 +55,7 @@ class XMSScanner:
         return None
 
     def get_acgt(self, node):
+        """Get and return the motif's weights of A, C, G, T."""
         a, c, g, t = 0.0, 0.0, 0.0, 0.0
         for weight in node.getElementsByTagName('weight'):
             if weight.getAttribute("symbol") == "adenine":
@@ -66,6 +69,7 @@ class XMSScanner:
         return a, c, g, t
 
     def get_text(self, nodelist):
+        """Return a string representation of the motif's properties listed on nodelist ."""
         retlist = []
         for node in nodelist:
             if node.nodeType == Node.TEXT_NODE:
