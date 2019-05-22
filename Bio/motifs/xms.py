@@ -24,7 +24,7 @@ class XMSScanner:
                 self.handle_motif(child)
 
     def handle_motif(self, node):
-        """Read the motif's name and column from the node and the motif record."""
+        """Read the motif's name and column from the node and add the motif record."""
         motif_name = self.get_text(node.getElementsByTagName("name"))
         nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
