@@ -53,14 +53,7 @@ Unless you are using Python 2.7, please also install the bugbear plugin:
 
 You can then run ``flake8`` directly as follows::
 
-    $ flake8 Bio/
-    $ flake8 BioSQL/
-    $ flake8 Tests/
-    $ flake8 Scripts/
-    $ flake8 Doc/examples/
-
-Each of these folders has its own flake8 settings file, but in the long term
-we would like all the code to follow the same strict settings.
+    $ flake8
 
 You can run the reStructuredText checks with the ``restructuredtext-lint``
 tool (also known as ``rst-lint``)::
@@ -68,9 +61,11 @@ tool (also known as ``rst-lint``)::
     $ pip install restructuredtext_lint
     $ rst-lint --level warning *.rst
 
-More simply, we currently suggest you install the git pre-commit hook described
-here which will check our basic coding conventions as you work:
-https://github.com/biopython/biopython/issues/493
+More simply, we currently suggest you install the flake8 git pre-commit hook
+which will check our basic coding conventions as you work::
+
+    $ flake8 --install-hook git
+    $ git config --bool flake8.strict true
 
 
 Testing
