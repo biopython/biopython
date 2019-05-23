@@ -14,7 +14,7 @@ import sys
 
 
 class BlastTableEntry(object):
-    """Store the record details."""
+    """Store the Blast Table Entry, the field values from the table."""
 
     def __init__(self, in_rec):
         """Initialize the class."""
