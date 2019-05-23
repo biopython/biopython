@@ -14,8 +14,6 @@ import platform
 from Bio._py3k import range
 
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
-from Bio import Alphabet
 
 
 # Make sure that we use C-accelerated PWM calculations if running under CPython.
@@ -72,21 +70,20 @@ class GenericPositionMatrix(dict):
     def __init__(self, alphabet, values):
         """Initialize the class."""
         self.length = None
-        for letter in alphabet.letters:
+        for letter in alphabet:
             if self.length is None:
                 self.length = len(values[letter])
             elif self.length != len(values[letter]):
                 raise Exception("data has inconsistent lengths")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
-        self._letters = sorted(self.alphabet.letters)
 
     def __str__(self):
         """Return a string containing nucleotides and counts of the alphabet in the Matrix."""
         words = ["%6d" % i for i in range(self.length)]
         line = "   " + " ".join(words)
         lines = [line]
-        for letter in self._letters:
+        for letter in self.alphabet:
             words = ["%6.2f" % value for value in self[letter]]
             line = "%c: " % letter + " ".join(words)
             lines.append(line)
@@ -94,20 +91,20 @@ class GenericPositionMatrix(dict):
         return text
 
     def __getitem__(self, key):
-        """Return the 0osition matrix of index key."""
+        """Return the position matrix of index key."""
         if isinstance(key, tuple):
             if len(key) == 2:
                 key1, key2 = key
                 if isinstance(key1, slice):
-                    start1, stop1, stride1 = key1.indices(len(self._letters))
+                    start1, stop1, stride1 = key1.indices(len(self.alphabet))
                     indices1 = range(start1, stop1, stride1)
-                    letters1 = [self._letters[i] for i in indices1]
+                    letters1 = [self.alphabet[i] for i in indices1]
                     dim1 = 2
                 elif isinstance(key1, int):
-                    letter1 = self._letters[key1]
+                    letter1 = self.alphabet[key1]
                     dim1 = 1
                 elif isinstance(key1, tuple):
-                    letters1 = [self._letters[i] for i in key1]
+                    letters1 = [self.alphabet[i] for i in key1]
                     dim1 = 2
                 elif isinstance(key1, str):
                     if len(key1) == 1:
@@ -141,7 +138,7 @@ class GenericPositionMatrix(dict):
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
                         d[letter1] = [values[_] for _ in indices2]
-                    if sorted(letters1) == self._letters:
+                    if sorted(letters1) == self.alphabet:
                         return self.__class__(self.alphabet, d)
                     else:
                         return d
@@ -150,15 +147,15 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError("keys should be 1- or 2-dimensional")
         if isinstance(key, slice):
-            start, stop, stride = key.indices(len(self._letters))
+            start, stop, stride = key.indices(len(self.alphabet))
             indices = range(start, stop, stride)
-            letters = [self._letters[i] for i in indices]
+            letters = [self.alphabet[i] for i in indices]
             dim = 2
         elif isinstance(key, int):
-            letter = self._letters[key]
+            letter = self.alphabet[key]
             dim = 1
         elif isinstance(key, tuple):
-            letters = [self._letters[i] for i in key]
+            letters = [self.alphabet[i] for i in key]
             dim = 2
         elif isinstance(key, str):
             if len(key) == 1:
@@ -189,13 +186,13 @@ class GenericPositionMatrix(dict):
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
                 maximum = - 1E400
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 count = self[letter][i]
                 if count > maximum:
                     maximum = count
                     sequence_letter = letter
             sequence += sequence_letter
-        return Seq(sequence, self.alphabet)
+        return Seq(sequence)
 
     @property
     def anticonsensus(self):
@@ -208,13 +205,13 @@ class GenericPositionMatrix(dict):
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
                 minimum = 1E400
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 count = self[letter][i]
                 if count < minimum:
                     minimum = count
                     sequence_letter = letter
             sequence += sequence_letter
-        return Seq(sequence, self.alphabet)
+        return Seq(sequence)
 
     @property
     def degenerate_consensus(self):
@@ -258,15 +255,7 @@ class GenericPositionMatrix(dict):
                 key = "ACGT"
             nucleotide = degenerate_nucleotide.get(key, key)
             sequence += nucleotide
-        if isinstance(self.alphabet, Alphabet.DNAAlphabet):
-            alpha = IUPAC.ambiguous_dna
-        elif isinstance(self.alphabet, Alphabet.RNAAlphabet):
-            alpha = IUPAC.ambiguous_rna
-        elif isinstance(self.alphabet, Alphabet.ProteinAlphabet):
-            alpha = IUPAC.protein
-        else:
-            raise Exception("Unknown alphabet")
-        return Seq(sequence, alphabet=alpha)
+        return Seq(sequence)
 
     @property
     def gc_content(self):
@@ -275,7 +264,7 @@ class GenericPositionMatrix(dict):
         gc_total = 0.0
         total = 0.0
         for i in range(self.length):
-            for letter in alphabet.letters:
+            for letter in alphabet:
                 if letter in 'CG':
                     gc_total += self[letter][i]
                 total += self[letter][i]
@@ -284,7 +273,7 @@ class GenericPositionMatrix(dict):
     def reverse_complement(self):
         """Compute reverse complement."""
         values = {}
-        if isinstance(self.alphabet, Alphabet.RNAAlphabet):
+        if self.alphabet == "ACGU":
             values["A"] = self["U"][::-1]
             values["U"] = self["A"][::-1]
         else:
@@ -313,16 +302,16 @@ class FrequencyPositionMatrix(GenericPositionMatrix):
         """
         counts = {}
         if pseudocounts is None:
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 counts[letter] = [0.0] * self.length
         elif isinstance(pseudocounts, dict):
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 counts[letter] = [float(pseudocounts[letter])] * self.length
         else:
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 counts[letter] = [float(pseudocounts)] * self.length
         for i in range(self.length):
-            for letter in self.alphabet.letters:
+            for letter in self.alphabet:
                 counts[letter][i] += self[letter][i]
         # Actual normalization is done in the PositionWeightMatrix initializer
         return PositionWeightMatrix(self.alphabet, counts)
@@ -335,10 +324,10 @@ class PositionWeightMatrix(GenericPositionMatrix):
         """Initialize the class."""
         GenericPositionMatrix.__init__(self, alphabet, counts)
         for i in range(self.length):
-            total = sum(float(self[letter][i]) for letter in alphabet.letters)
-            for letter in alphabet.letters:
+            total = sum(float(self[letter][i]) for letter in alphabet)
+            for letter in alphabet:
                 self[letter][i] /= total
-        for letter in alphabet.letters:
+        for letter in alphabet:
             self[letter] = tuple(self[letter])
 
     def log_odds(self, background=None):
@@ -352,15 +341,15 @@ class PositionWeightMatrix(GenericPositionMatrix):
         values = {}
         alphabet = self.alphabet
         if background is None:
-            background = dict.fromkeys(self._letters, 1.0)
+            background = dict.fromkeys(self.alphabet, 1.0)
         else:
             background = dict(background)
         total = sum(background.values())
-        for letter in alphabet.letters:
+        for letter in alphabet:
             background[letter] /= total
             values[letter] = []
         for i in range(self.length):
-            for letter in alphabet.letters:
+            for letter in alphabet:
                 b = background[letter]
                 if b > 0:
                     p = self[letter][i]
@@ -400,12 +389,9 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
-        if not isinstance(self.alphabet, IUPAC.IUPACUnambiguousDNA):
+        if sorted(self.alphabet) != ['A', 'C', 'G', 'T']:
             raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
                              % self.alphabet)
-        if not isinstance(sequence.alphabet, IUPAC.IUPACUnambiguousDNA):
-            raise ValueError("Sequence has wrong alphabet: %r - Use only with DNA sequences"
-                             % sequence.alphabet)
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
@@ -447,7 +433,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         returns the score computed for the consensus sequence.
         """
         score = 0.0
-        letters = self._letters
+        letters = self.alphabet
         for position in range(0, self.length):
             score += max(self[letter][position] for letter in letters)
         return score
@@ -459,7 +445,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         returns the score computed for the anticonsensus sequence.
         """
         score = 0.0
-        letters = self._letters
+        letters = self.alphabet
         for position in range(0, self.length):
             score += min(self[letter][position] for letter in letters)
         return score
@@ -472,15 +458,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
     def mean(self, background=None):
         """Return expected value of the score of a motif."""
         if background is None:
-            background = dict.fromkeys(self._letters, 1.0)
+            background = dict.fromkeys(self.alphabet, 1.0)
         else:
             background = dict(background)
         total = sum(background.values())
-        for letter in self._letters:
+        for letter in self.alphabet:
             background[letter] /= total
         sx = 0.0
         for i in range(self.length):
-            for letter in self._letters:
+            for letter in self.alphabet:
                 logodds = self[letter, i]
                 if math.isnan(logodds):
                     continue
@@ -494,17 +480,17 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
     def std(self, background=None):
         """Return standard deviation of the score of a motif."""
         if background is None:
-            background = dict.fromkeys(self._letters, 1.0)
+            background = dict.fromkeys(self.alphabet, 1.0)
         else:
             background = dict(background)
         total = sum(background.values())
-        for letter in self._letters:
+        for letter in self.alphabet:
             background[letter] /= total
         variance = 0.0
         for i in range(self.length):
             sx = 0.0
             sxx = 0.0
-            for letter in self._letters:
+            for letter in self.alphabet:
                 logodds = self[letter, i]
                 if math.isnan(logodds):
                     continue
@@ -540,7 +526,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def dist_pearson_at(self, other, offset):
         """Return the similarity score based on pearson correlation at the given offset."""
-        letters = self._letters
+        letters = self.alphabet
         sx = 0.0   # \sum x
         sy = 0.0   # \sum y
         sxx = 0.0  # \sum x^2
@@ -568,10 +554,10 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """Calculate the distribution of the scores at the given precision."""
         from .thresholds import ScoreDistribution
         if background is None:
-            background = dict.fromkeys(self._letters, 1.0)
+            background = dict.fromkeys(self.alphabet, 1.0)
         else:
             background = dict(background)
         total = sum(background.values())
-        for letter in self._letters:
+        for letter in self.alphabet:
             background[letter] /= total
         return ScoreDistribution(precision=precision, pssm=self, background=background)

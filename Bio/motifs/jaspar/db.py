@@ -65,7 +65,6 @@ except ImportError:
     raise MissingPythonDependencyError("Install MySQLdb if you want to use "
                                        "Bio.motifs.jaspar.db")
 
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 from Bio.motifs import jaspar, matrix
 
 
@@ -421,7 +420,7 @@ class JASPAR5(object):
         counts = {}
         cur = self.dbh.cursor()
 
-        for base in dna.letters:
+        for base in 'ACGT':
             base_counts = []
 
             cur.execute("""select val from MATRIX_DATA where ID = %s
@@ -433,7 +432,7 @@ class JASPAR5(object):
 
             counts[base] = [float(x) for x in base_counts]
 
-        return matrix.GenericPositionMatrix(dna, counts)
+        return matrix.GenericPositionMatrix('ACGT', counts)
 
     def _fetch_internal_id_list(
         self, collection=JASPAR_DFLT_COLLECTION, tf_name=None, tf_class=None,

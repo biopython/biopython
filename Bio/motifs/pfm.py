@@ -9,7 +9,6 @@
 import re
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 class Record(list):
@@ -179,7 +178,7 @@ def _read_pfm_four_columns(handle):
                 # Parse ">AbdA_Cell_FBgn0000014" and "> AHR_si" like lines and put the part after ">" as motif name.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -191,7 +190,7 @@ def _read_pfm_four_columns(handle):
                 # Parse "Gene   ENSG00000197372" like lines and put the gene name as motif name.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -203,7 +202,7 @@ def _read_pfm_four_columns(handle):
                 # Parse "Motif  M1734_0.90" like lines.
                 if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                     # Add the previous motif to the record.
-                    motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
                     motif_nbr_added = motif_nbr
@@ -217,7 +216,7 @@ def _read_pfm_four_columns(handle):
                     # If the previous line was not a "Gene  ENSG00000197372" like line, a new motif starts here.
                     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                         # Add the previous motif to the record.
-                        motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
                         motif.name = motif_name
                         record.append(motif)
                         motif_nbr_added = motif_nbr
@@ -252,7 +251,7 @@ def _read_pfm_four_columns(handle):
             # Empty lines can be separators between motifs.
             if motif_nbr != 0 and motif_nbr_added != motif_nbr:
                 # Add the previous motif to the record.
-                motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
                 motif.name = motif_name
                 record.append(motif)
                 motif_nbr_added = motif_nbr
@@ -263,7 +262,7 @@ def _read_pfm_four_columns(handle):
             # nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
     if motif_nbr != 0 and motif_nbr_added != motif_nbr:
-        motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
         motif.name = motif_name
         record.append(motif)
 
@@ -353,7 +352,7 @@ def _read_pfm_four_rows(handle):
             nucleotide_counts[nucleotide] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
             row_count += 1
             if row_count == 4:
-                motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
 
                 if motif_name:
                     motif.name = motif_name
@@ -368,7 +367,7 @@ def _read_pfm_four_rows(handle):
             nucleotide_counts[nucleotides[row_count]] = [float(current_nucleotide_count) for current_nucleotide_count in current_nucleotide_counts]
             row_count += 1
             if row_count == 4:
-                motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
 
                 if motif_name:
                     motif.name = motif_name

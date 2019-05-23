@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-from Bio.Alphabet import IUPAC
 from Bio.motifs import meme
 
 
@@ -87,9 +86,9 @@ def __read_database_and_motifs(record, handle):
     words = line.strip().split()
     record.database = words[1]
     if words[2] == '(nucleotide)':
-        record.alphabet = IUPAC.unambiguous_dna
+        record.alphabet = "ACGT"
     elif words[2] == '(peptide)':
-        record.alphabet = IUPAC.protein
+        record.alphabet = "ACDEFGHIKLMNPQRSTVWY"
     for line in handle:
         if 'WIDTH BEST POSSIBLE MATCH' in line:
             break

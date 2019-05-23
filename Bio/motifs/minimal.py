@@ -8,7 +8,6 @@
 """Module for the support of MEME minimal motif format."""
 
 from __future__ import print_function
-from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 import math
@@ -138,9 +137,9 @@ def _read_alphabet(record, handle):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
     line = line.strip().replace('ALPHABET= ', '')
     if line == 'ACGT':
-        al = IUPAC.unambiguous_dna
+        al = 'ACGT'
     else:
-        al = IUPAC.protein
+        al = 'ACDEFGHIKLMNPQRSTVWY'
     record.alphabet = al
 
 
