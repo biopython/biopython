@@ -620,7 +620,7 @@ class CircularDrawer(AbstractDrawer):
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
-        data = graph[self.start : self.end]
+        data = graph[self.start:self.end]
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
