@@ -240,12 +240,10 @@ class LinearDrawer(AbstractDrawer):
         )  # fragment length in bases
 
         # Key fragment base and top lines by fragment number
-        self.fragment_lines = (
-            {}
-        )  # Holds bottom and top line locations of fragments, keyed by fragment number
-        fragment_crop = (
-            1 - self.fragment_size
-        ) / 2  # No of pixels to crop the fragment
+        # Holds bottom and top line locations of fragments, keyed by fragment number
+        self.fragment_lines = {}
+        # Number of pixels to crop the fragment:
+        fragment_crop = (1 - self.fragment_size) / 2
         fragy = self.ylim  # Holder for current absolute fragment base
         for fragment in range(self.fragments):
             fragtop = fragy - fragment_crop * self.fragment_height  # top - crop

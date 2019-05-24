@@ -57,8 +57,8 @@ def page_sizes(size):
      - size - A string representing a standard page size, eg 'A4' or 'LETTER'
 
     """
-    sizes = {
-        "A0": pagesizes.A0,  # ReportLab pagesizes, keyed by ISO string
+    sizes = {  # ReportLab pagesizes, keyed by ISO string
+        "A0": pagesizes.A0,
         "A1": pagesizes.A1,
         "A2": pagesizes.A2,
         "A3": pagesizes.A3,
@@ -87,9 +87,10 @@ def _stroke_and_fill_colors(color, border):
     if not isinstance(color, colors.Color):
         raise ValueError("Invalid color %r" % color)
 
-    if color == colors.white and border is None:  # Force black border on
-        strokecolor = colors.black  # white boxes with
-    elif border is None:  # undefined border, else
+    if color == colors.white and border is None:
+        # Force black border on white boxes with undefined border
+        strokecolor = colors.black
+    elif border is None:
         strokecolor = color  # use fill color
     elif border:
         if not isinstance(border, colors.Color):
