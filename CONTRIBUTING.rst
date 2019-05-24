@@ -45,13 +45,13 @@ plugins which can be installed as follows::
 Unless you are using Python 2.7, please also install the bugbear plugin::
 
     $ pip install flake8-bugbear
-    
+
 We currently strongly suggest you then install the ``flake8`` git pre-commit
 hook which will check our basic coding conventions as you work::
 
     $ flake8 --install-hook git
     $ git config --bool flake8.strict true
-    
+
 For testing, you can also run ``flake8`` directly from the command line as
 follows::
 
