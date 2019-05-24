@@ -36,7 +36,7 @@ with the notable exception of existing module names which are not lower case.
 
 We use the continuous integration service TravisCI to enforce some of these
 checks, so if you are making a contribution it is best to check this locally.
- 
+
 We use the tool ``flake8`` for code style checks, together with various
 plugins which can be installed as follows::
 
