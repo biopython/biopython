@@ -295,7 +295,7 @@ Distribution Structure
 - ``LICENSE.rst`` -- What you can do with the code.
 - ``CONTRIB.rst`` -- An (incomplete) list of people who helped Biopython in
   one way or another.
-- ``CONTRIBUTING.rst`` -- An overview about how to contribute to Biopython. 
+- ``CONTRIBUTING.rst`` -- An overview about how to contribute to Biopython.
 - ``DEPRECATED.rst`` -- Contains information about modules in Biopython that
   were removed or no longer recommended for use, and how to update code that
   uses those modules.
