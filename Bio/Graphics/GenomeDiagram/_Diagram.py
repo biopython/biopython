@@ -134,9 +134,10 @@ class Diagram(object):
         set_all_tracks(self, attr, value)
         """
         for track in self.tracks.values():
-            if hasattr(track, attr):          # If the feature has the attribute
+            if hasattr(track, attr):
+                # If the feature has the attribute set it to the passed value
                 if getattr(track, attr) != value:
-                    setattr(track, attr, value)   # set it to the passed value
+                    setattr(track, attr, value)
 
     def draw(self, format=None, pagesize=None, orientation=None,
              x=None, y=None, xl=None, xr=None, yt=None, yb=None,
@@ -279,9 +280,10 @@ class Diagram(object):
             occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
             occupied_levels.reverse()           # ...reverse (highest first)...
             for val in occupied_levels:
-                if val >= track_level:        # Track value >= that to be added
-                    self.tracks[val + 1] = self.tracks[val]  # ..increment by 1
-            self.tracks[track_level] = newtrack   # And put the new track in
+                if val >= track_level:
+                    # Track value >= that to be added, increment by 1
+                    self.tracks[val + 1] = self.tracks[val]
+            self.tracks[track_level] = newtrack  # And put the new track in
         self.tracks[track_level].track_level = track_level
         return newtrack
 

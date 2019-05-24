@@ -57,24 +57,25 @@ def page_sizes(size):
      - size - A string representing a standard page size, eg 'A4' or 'LETTER'
 
     """
-    sizes = {'A0': pagesizes.A0,    # ReportLab pagesizes, keyed by ISO string
-             'A1': pagesizes.A1,
-             'A2': pagesizes.A2,
-             'A3': pagesizes.A3,
-             'A4': pagesizes.A4,
-             'A5': pagesizes.A5,
-             'A6': pagesizes.A6,
-             'B0': pagesizes.B0,
-             'B1': pagesizes.B1,
-             'B2': pagesizes.B2,
-             'B3': pagesizes.B3,
-             'B4': pagesizes.B4,
-             'B5': pagesizes.B5,
-             'B6': pagesizes.B6,
-             'ELEVENSEVENTEEN': pagesizes.ELEVENSEVENTEEN,
-             'LEGAL': pagesizes.LEGAL,
-             'LETTER': pagesizes.LETTER
-             }
+    sizes = {  # ReportLab pagesizes, keyed by ISO string
+        "A0": pagesizes.A0,
+        "A1": pagesizes.A1,
+        "A2": pagesizes.A2,
+        "A3": pagesizes.A3,
+        "A4": pagesizes.A4,
+        "A5": pagesizes.A5,
+        "A6": pagesizes.A6,
+        "B0": pagesizes.B0,
+        "B1": pagesizes.B1,
+        "B2": pagesizes.B2,
+        "B3": pagesizes.B3,
+        "B4": pagesizes.B4,
+        "B5": pagesizes.B5,
+        "B6": pagesizes.B6,
+        "ELEVENSEVENTEEN": pagesizes.ELEVENSEVENTEEN,
+        "LEGAL": pagesizes.LEGAL,
+        "LETTER": pagesizes.LETTER,
+    }
     try:
         return sizes[size]
     except KeyError:
@@ -86,10 +87,11 @@ def _stroke_and_fill_colors(color, border):
     if not isinstance(color, colors.Color):
         raise ValueError("Invalid color %r" % color)
 
-    if color == colors.white and border is None:   # Force black border on
-        strokecolor = colors.black                 # white boxes with
-    elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill color
+    if color == colors.white and border is None:
+        # Force black border on white boxes with undefined border
+        strokecolor = colors.black
+    elif border is None:
+        strokecolor = color  # use fill color
     elif border:
         if not isinstance(border, colors.Color):
             raise ValueError("Invalid border color %r" % border)
@@ -306,7 +308,7 @@ def angle2trig(theta):
     """
     c = cos(theta * pi / 180)
     s = sin(theta * pi / 180)
-    return(c, s, -s, c)         # Vector for rotating point around an origin
+    return(c, s, -s, c)  # Vector for rotating point around an origin
 
 
 def intermediate_points(start, end, graph_data):
@@ -315,8 +317,7 @@ def intermediate_points(start, end, graph_data):
     Returns a list of (start, end, value) tuples describing the passed
     graph data as 'bins' between position midpoints.
     """
-    # print start, end, len(graph_data)
-    newdata = []    # data in form (X0, X1, val)
+    newdata = []  # data in form (X0, X1, val)
     # add first block
     newdata.append((start,
                     graph_data[0][0] + (graph_data[1][0] - graph_data[0][0]) / 2.,
@@ -331,8 +332,6 @@ def intermediate_points(start, end, graph_data):
     # add last block
     newdata.append((xval + (nextxval - xval) / 2.,
                     end, graph_data[-1][1]))
-    # print newdata[-1]
-    # print newdata
     return newdata
 
 ################################################################################
