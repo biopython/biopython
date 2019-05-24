@@ -34,38 +34,39 @@ with the notable exception of existing module names which are not lower case.
  - http://www.python.org/dev/peps/pep-0008/
  - http://www.python.org/dev/peps/pep-0257/
 
-For docstrings (Python's in-code documentation) in addition to PEP257 we are
-using reStructuredText (RST) markup language which allows basic formatting
-like *italics* and **bold** once rendered into HTML webpages for our online
-API documentation.
-
 We use the continuous integration service TravisCI to enforce some of these
 checks, so if you are making a contribution it is best to check this locally.
-
+ 
 We use the tool ``flake8`` for code style checks, together with various
 plugins which can be installed as follows::
 
     $ pip install flake8 flake8-docstrings flake8-blind-except flake8-rst-docstrings
 
-Unless you are using Python 2.7, please also install the bugbear plugin:
+Unless you are using Python 2.7, please also install the bugbear plugin::
 
     $ pip install flake8-bugbear
+    
+We currently strongly suggest you then install the ``flake8`` git pre-commit
+hook which will check our basic coding conventions as you work::
 
-You can then run ``flake8`` directly as follows::
+    $ flake8 --install-hook git
+    $ git config --bool flake8.strict true
+    
+For testing, you can also run ``flake8`` directly from the command line as
+follows::
 
     $ flake8
+
+For docstrings (Python's in-code documentation) in addition to PEP257 we are
+using reStructuredText (RST) markup language which allows basic formatting
+like *italics* and **bold** once rendered into HTML webpages for our online
+API documentation.
 
 You can run the reStructuredText checks with the ``restructuredtext-lint``
 tool (also known as ``rst-lint``)::
 
     $ pip install restructuredtext_lint
     $ rst-lint --level warning *.rst
-
-More simply, we currently suggest you install the flake8 git pre-commit hook
-which will check our basic coding conventions as you work::
-
-    $ flake8 --install-hook git
-    $ git config --bool flake8.strict true
 
 
 Testing
