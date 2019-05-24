@@ -55,6 +55,7 @@ from Bio._py3k import unicode
 
 
 class NoneElement:
+    """NCBI Entrez XML element mapped to None."""
 
     def __init__(self, tag, attributes, key=None):
         """Create a NoneElement."""
@@ -66,6 +67,7 @@ class NoneElement:
         self.attributes = attributes
 
     def __eq__(self, other):
+        """Define equality with other None objects."""
         if other is None:
             return True
         elif other.__eq__(None):
@@ -74,6 +76,7 @@ class NoneElement:
             return False
 
     def __ne__(self, other):
+        """Define non-equality."""
         if other is None:
             return False
         elif other.__eq__(None):
@@ -82,6 +85,7 @@ class NoneElement:
             return True
 
     def __repr__(self):
+        """Return a string representation of the object."""
         try:
             attributes = self.attributes
         except AttributeError:
@@ -90,6 +94,8 @@ class NoneElement:
 
 
 class IntegerElement(int):
+    """NCBI Entrez XML element mapped to an integer."""
+
     def __new__(cls, value, tag, attributes, key=None):
         """Create an IntegerElement."""
         self = int.__new__(cls, value)
@@ -102,6 +108,7 @@ class IntegerElement(int):
         return self
 
     def __repr__(self):
+        """Return a string representation of the object."""
         text = int.__repr__(self)
         try:
             attributes = self.attributes
@@ -111,6 +118,8 @@ class IntegerElement(int):
 
 
 class StringElement(str):
+    """NCBI Entrez XML element mapped to a string."""
+
     def __new__(cls, value, tag, attributes, key=None):
         """Create a StringElement."""
         self = str.__new__(cls, value)
@@ -123,6 +132,7 @@ class StringElement(str):
         return self
 
     def __repr__(self):
+        """Return a string representation of the object."""
         text = str.__repr__(self)
         attributes = self.attributes
         if not attributes:
@@ -131,7 +141,10 @@ class StringElement(str):
 
 
 class UnicodeElement(unicode):
+    """NCBI Entrez XML element mapped to a unicode string."""
+
     def __new__(cls, value, tag, attributes, key=None):
+        """Create a UnicodeElement."""
         self = unicode.__new__(cls, value)
         self.tag = tag
         if key is None:
@@ -142,6 +155,7 @@ class UnicodeElement(unicode):
         return self
 
     def __repr__(self):
+        """Return a string representation of the object."""
         text = unicode.__repr__(self)
         attributes = self.attributes
         if not attributes:
@@ -150,6 +164,8 @@ class UnicodeElement(unicode):
 
 
 class ListElement(list):
+    """NCBI Entrez XML element mapped to a list."""
+
     def __init__(self, tag, attributes, allowed_tags, key=None):
         """Create a ListElement."""
         self.tag = tag
@@ -161,6 +177,7 @@ class ListElement(list):
         self.allowed_tags = allowed_tags
 
     def __repr__(self):
+        """Return a string representation of the object."""
         text = list.__repr__(self)
         attributes = self.attributes
         if not attributes:
@@ -168,6 +185,7 @@ class ListElement(list):
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
 
     def store(self, value):
+        """Append an element to the list, checking tags."""
         key = value.key
         if self.allowed_tags is not None and key not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in list" % key)
@@ -175,6 +193,7 @@ class ListElement(list):
 
 
 class DictionaryElement(dict):
+    """NCBI Entrez XML element mapped to a dictionaray."""
 
     def __init__(self, tag, attrs, allowed_tags, repeated_tags=None, key=None):
         """Create a DictionaryElement."""
@@ -191,6 +210,7 @@ class DictionaryElement(dict):
                 self[key] = []
 
     def __repr__(self):
+        """Return a string representation of the object."""
         text = dict.__repr__(self)
         attributes = self.attributes
         if not attributes:
@@ -198,6 +218,7 @@ class DictionaryElement(dict):
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
 
     def store(self, value):
+        """Add an entry to the dictionary, checking tags."""
         key = value.key
         tag = value.tag
         if self.allowed_tags is not None and tag not in self.allowed_tags:
@@ -209,20 +230,26 @@ class DictionaryElement(dict):
 
 
 class NotXMLError(ValueError):
+    """Failed to parse file as XML."""
+
     def __init__(self, message):
         """Initialize the class."""
         self.msg = message
 
     def __str__(self):
+        """Return a string summary of the exception."""
         return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.msg
 
 
 class CorruptedXMLError(ValueError):
+    """Corrupted XML."""
+
     def __init__(self, message):
         """Initialize the class."""
         self.msg = message
 
     def __str__(self):
+        """Return a string summary of the exception."""
         return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.msg
 
 
@@ -240,12 +267,14 @@ class ValidationError(ValueError):
         self.name = name
 
     def __str__(self):
+        """Return a string summary of the exception."""
         return ("Failed to find tag '%s' in the DTD. To skip all tags that "
                 "are not represented in the DTD, please call Bio.Entrez.read "
                 "or Bio.Entrez.parse with validate=False." % self.name)
 
 
 class DataHandler(object):
+    """Data handler for parsing NCBI XML from Entrez."""
 
     from Bio import Entrez
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
@@ -326,6 +355,7 @@ class DataHandler(object):
                 raise NotXMLError("XML declaration not found")
 
     def parse(self, handle):
+        """Parse the XML in the given file handle."""
         BLOCK = 1024
         while True:
             # Read in another block of the file...
@@ -378,7 +408,7 @@ class DataHandler(object):
             yield record
 
     def xmlDeclHandler(self, version, encoding, standalone):
-        # XML declaration found; set the handlers
+        """Set XML handlers when an XML declaration is found."""
         self.parser.StartElementHandler = self.startElementHandler
         self.parser.CharacterDataHandler = self.characterDataHandler
         self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
@@ -386,6 +416,7 @@ class DataHandler(object):
         self.parser.EndNamespaceDeclHandler = self.endNamespaceDeclHandler
 
     def startNamespaceDeclHandler(self, prefix, uri):
+        """Handle start of an XML namespace declaration."""
         if prefix == 'xsi':
             # This is an xml schema
             self.schema_namespace = uri
@@ -404,6 +435,7 @@ class DataHandler(object):
             assert prefix == "mml"
 
     def endNamespaceDeclHandler(self, prefix):
+        """Handle end of an XML namespace declaration."""
         if prefix != 'xsi':
             self.namespace_level[prefix] -= 1
             if self.namespace_level[prefix] == 0:
@@ -415,7 +447,7 @@ class DataHandler(object):
                 del self.namespace_prefix[key]
 
     def schemaHandler(self, name, attrs):
-        # process the XML schema before processing the element
+        """Process the XML schema (before processing the element)."""
         key = "%s noNamespaceSchemaLocation" % self.schema_namespace
         schema = attrs[key]
         handle = self.open_xsd_file(os.path.basename(schema))
@@ -435,6 +467,7 @@ class DataHandler(object):
         self.parser.StartElementHandler = self.startElementHandler
 
     def startElementHandler(self, tag, attrs):
+        """Handle start of an XML element."""
         if tag in self.items:
             assert tag == 'Item'
             name = str(attrs["Name"])  # convert from Unicode
@@ -543,6 +576,7 @@ class DataHandler(object):
                 self.level = 1
 
     def startRawElementHandler(self, name, attrs):
+        """Handle start of an XML raw element."""
         # check if the name is in a namespace
         prefix = None
         if self.namespace_prefix:
@@ -569,9 +603,11 @@ class DataHandler(object):
         self.level += 1
 
     def startSkipElementHandler(self, name, attrs):
+        """Handle start of an XML skip element."""
         self.level += 1
 
     def endStringElementHandler(self, tag):
+        """Handle end of an XML string element."""
         element = self.element
         if element is not None:
             self.parser.StartElementHandler = self.startElementHandler
@@ -599,6 +635,7 @@ class DataHandler(object):
         self.allowed_tags = None
 
     def endRawElementHandler(self, name):
+        """Handle start of an XML raw element."""
         self.level -= 1
         if self.level == 0:
             self.parser.EndElementHandler = self.endStringElementHandler
@@ -608,12 +645,14 @@ class DataHandler(object):
         self.data.append(tag)
 
     def endSkipElementHandler(self, name):
+        """Handle start of an XML skip element."""
         self.level -= 1
         if self.level == 0:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
 
     def endErrorElementHandler(self, name):
+        """Handle start of an XML error element."""
         if self.data:
             # error found:
             value = "".join(self.data)
@@ -624,11 +663,13 @@ class DataHandler(object):
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
 
     def endElementHandler(self, name):
+        """Handle end of an XML element."""
         element = self.element
         self.element = element.parent
         del element.parent
 
     def endIntegerElementHandler(self, tag):
+        """Handle end of an XML integer element."""
         attributes = self.attributes
         self.attributes = None
         assert tag == 'Item'
@@ -651,16 +692,20 @@ class DataHandler(object):
             element.store(value)
 
     def characterDataHandlerRaw(self, content):
+        """Handle character data as-is (raw)."""
         self.data.append(content)
 
     def characterDataHandlerEscape(self, content):
+        """Handle character data by encoding it."""
         content = escape(content)
         self.data.append(content)
 
     def skipCharacterDataHandler(self, content):
+        """Handle character data by skipping it."""
         return
 
     def parse_xsd(self, root):
+        """Parse an XSD file."""
         prefix = "{http://www.w3.org/2001/XMLSchema}"
         for element in root:
             isSimpleContent = False
@@ -801,6 +846,7 @@ class DataHandler(object):
             self.dictionaries[name] = (allowed_tags, repeated_tags)
 
     def open_dtd_file(self, filename):
+        """Open specified DTD file."""
         self._initialize_directory()
         path = os.path.join(self.local_dtd_dir, filename)
         try:
@@ -819,6 +865,7 @@ class DataHandler(object):
         return None
 
     def open_xsd_file(self, filename):
+        """Open specified XSD file."""
         self._initialize_directory()
         path = os.path.join(self.local_xsd_dir, filename)
         try:
@@ -837,6 +884,7 @@ class DataHandler(object):
         return None
 
     def save_dtd_file(self, filename, text):
+        """Save DTD file to cache."""
         self._initialize_directory()
         path = os.path.join(self.local_dtd_dir, filename)
         try:
@@ -848,6 +896,7 @@ class DataHandler(object):
             handle.close()
 
     def save_xsd_file(self, filename, text):
+        """Save XSD file to cache."""
         self._initialize_directory()
         path = os.path.join(self.local_xsd_dir, filename)
         try:
@@ -859,7 +908,7 @@ class DataHandler(object):
             handle.close()
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
-        """Handle external entiry reference in order to cache DTD locally.
+        """Handle external entity reference in order to cache DTD locally.
 
         The purpose of this function is to load the DTD locally, instead
         of downloading it from the URL specified in the XML. Using the local
@@ -947,6 +996,7 @@ class DataHandler(object):
 
     @property
     def directory(self):
+        """Directory for caching XSD and DTD files."""
         return self._directory
 
     @directory.setter
