@@ -25,5 +25,13 @@ from ._Colors import ColorTranslator
 from ._Feature import Feature
 from ._Graph import GraphData
 
-__all__ = ('Diagram', 'Track', 'FeatureSet', 'Feature', 'GraphSet',
-           'GraphData', 'CrossLink', 'ColorTranslator')
+__all__ = (
+    "Diagram",
+    "Track",
+    "FeatureSet",
+    "Feature",
+    "GraphSet",
+    "GraphData",
+    "CrossLink",
+    "ColorTranslator",
+)

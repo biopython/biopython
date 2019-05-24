@@ -47,14 +47,24 @@ class GraphSet(object):
          - name      String identifying the graph set sensibly
 
         """
-        self.id = id            # Unique identifier for the set
-        self._next_id = 0       # Holds unique ids for graphs
-        self._graphs = {}       # Holds graphs, keyed by unique id
-        self.name = name        # Holds description of graph
+        self.id = id  # Unique identifier for the set
+        self._next_id = 0  # Holds unique ids for graphs
+        self._graphs = {}  # Holds graphs, keyed by unique id
+        self.name = name  # Holds description of graph
 
-    def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
-                  altcolor=colors.darkseagreen, linewidth=1, center=None,
-                  colour=None, altcolour=None, centre=None):
+    def new_graph(
+        self,
+        data,
+        name=None,
+        style="bar",
+        color=colors.lightgreen,
+        altcolor=colors.darkseagreen,
+        linewidth=1,
+        center=None,
+        colour=None,
+        altcolour=None,
+        centre=None,
+    ):
         """Add a GraphData object to the diagram.
 
         Arguments:
@@ -83,11 +93,11 @@ class GraphSet(object):
         if centre is not None:
             center = centre
 
-        id = self._next_id                              # get id number
+        id = self._next_id  # get id number
         graph = GraphData(id, data, name, style, color, altcolor, center)
         graph.linewidth = linewidth
-        self._graphs[id] = graph                        # add graph data
-        self._next_id += 1                              # increment next id
+        self._graphs[id] = graph  # add graph data
+        self._next_id += 1  # increment next id
         return graph
 
     def del_graph(self, graph_id):
@@ -121,8 +131,13 @@ class GraphSet(object):
             data += list(graph.data.values())
         data.sort()
         datalen = len(data)
-        return(data[0], data[datalen / 4], data[datalen / 2],
-               data[3 * datalen / 4], data[-1])
+        return (
+            data[0],
+            data[datalen / 4],
+            data[datalen / 2],
+            data[3 * datalen / 4],
+            data[-1],
+        )
 
     def to_string(self, verbose=0):
         """Return a formatted string with information about the set.
