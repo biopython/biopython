@@ -1,0 +1,1612 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<mast version="5.0.1" release="Wed Aug 22 15:26:53 2018 -0700">
+	<command_line><arg>mast</arg><arg>-oc</arg><arg>results/mast23</arg><arg>-nostatus</arg><arg>meme/meme.Klf1-200.cd.oops.xml</arg><arg>common/Klf1-200.fa</arg></command_line>
+	<settings strand_handling="combine" max_correlation="0.60" remove_correlated="n" max_seq_evalue="10" adjust_hit="n" max_hit_pvalue="0.0001" max_weak_pvalue="0.0001"/>
+	<alphabet name="DNA" like="dna">
+		<letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+		<letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+		<letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+		<letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+		<letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+		<letter id="V" symbol="V" equals="ACG" name="Not T"/>
+		<letter id="H" symbol="H" equals="ACT" name="Not G"/>
+		<letter id="D" symbol="D" equals="AGT" name="Not C"/>
+		<letter id="B" symbol="B" equals="CGT" name="Not A"/>
+		<letter id="M" symbol="M" equals="AC" name="Amino"/>
+		<letter id="R" symbol="R" equals="AG" name="Purine"/>
+		<letter id="W" symbol="W" equals="AT" name="Weak"/>
+		<letter id="S" symbol="S" equals="CG" name="Strong"/>
+		<letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+		<letter id="K" symbol="K" equals="GT" name="Keto"/>
+	</alphabet>
+	<background source="--nrdb--" A="0.274262" C="0.22521" G="0.22521" T="0.274262"/>
+	<motif_dbs>
+		<motif_db source="meme/meme.Klf1-200.cd.oops.xml" last_mod_date="Wed Jan 24 18:37:12 2018">
+			<background A="0.256" C="0.244" G="0.244" T="0.256"/>
+		</motif_db>
+	</motif_dbs>
+	<motifs>
+		<motif db="0" id="RGMWGGGTGTGGCYNSNKNN" alt="MEME-1" length="20" nsites="200" evalue="1.8e-004">
+			<pos A="74" C="-94" G="2" T="-37"/>
+			<pos A="-53" C="-94" G="100" T="-30"/>
+			<pos A="31" C="51" G="-54" T="-61"/>
+			<pos A="60" C="-383" G="-186" T="104"/>
+			<pos A="-250" C="-406" G="186" T="-221"/>
+			<pos A="-333" C="-406" G="188" T="-197"/>
+			<pos A="-286" C="-331" G="192" T="-406"/>
+			<pos A="-115" C="-32" G="-331" T="138"/>
+			<pos A="-406" C="-331" G="192" T="-286"/>
+			<pos A="-221" C="-281" G="12" T="133"/>
+			<pos A="-55" C="-331" G="155" T="-159"/>
+			<pos A="-159" C="-122" G="121" T="-6"/>
+			<pos A="-143" C="121" G="-171" T="5"/>
+			<pos A="-92" C="80" G="-136" T="43"/>
+			<pos A="-39" C="-12" G="27" T="16"/>
+			<pos A="-47" C="22" G="62" T="-72"/>
+			<pos A="-1" C="-18" G="27" T="-12"/>
+			<pos A="-115" C="-32" G="80" T="5"/>
+			<pos A="-12" C="-18" G="27" T="-1"/>
+			<pos A="-39" C="-18" G="22" T="25"/>
+		</motif>
+		<motif db="0" id="TNVHHBCTBNYYBNHHYYYCTTVTCTCTGB" alt="MEME-2" length="30" nsites="200" evalue="1.3e+000">
+			<pos A="-114" C="-14" G="-66" T="99"/>
+			<pos A="-31" C="-45" G="16" T="42"/>
+			<pos A="-31" C="-7" G="69" T="-62"/>
+			<pos A="-5" C="79" G="-114" T="-22"/>
+			<pos A="3" C="1" G="-155" T="68"/>
+			<pos A="-158" C="42" G="16" T="30"/>
+			<pos A="-158" C="108" G="-45" T="-22"/>
+			<pos A="-31" C="-35" G="-155" T="102"/>
+			<pos A="-106" C="63" G="-1" T="1"/>
+			<pos A="-33" C="-1" G="-27" T="46"/>
+			<pos A="-81" C="67" G="-105" T="45"/>
+			<pos A="-81" C="51" G="-123" T="65"/>
+			<pos A="-95" C="33" G="-30" T="50"/>
+			<pos A="-56" C="27" G="-30" T="39"/>
+			<pos A="-1" C="-11" G="-63" T="50"/>
+			<pos A="33" C="13" G="-123" T="27"/>
+			<pos A="-68" C="86" G="-143" T="27"/>
+			<pos A="-128" C="98" G="-105" T="20"/>
+			<pos A="-128" C="27" G="-105" T="92"/>
+			<pos A="-81" C="114" G="-40" T="-95"/>
+			<pos A="-88" C="-56" G="-210" T="132"/>
+			<pos A="-138" C="-25" G="-82" T="112"/>
+			<pos A="58" C="-16" G="-16" T="-51"/>
+			<pos A="-252" C="-35" G="-69" T="126"/>
+			<pos A="-191" C="153" G="-72" T="-165"/>
+			<pos A="-198" C="-166" G="-274" T="168"/>
+			<pos A="-264" C="158" G="-101" T="-124"/>
+			<pos A="-88" C="-154" G="-250" T="152"/>
+			<pos A="-103" C="-45" G="126" T="-119"/>
+			<pos A="-75" C="1" G="42" T="10"/>
+		</motif>
+	</motifs>
+	<correlations>
+		<correlation idx_a="0" idx_b="1" value="0.21"/>
+	</correlations>
+	<sequence_dbs>
+		<sequence_db source="common/Klf1-200.fa" last_mod_date="Fri Jan 19 17:27:01 2018" seq_count="200" residue_count="100000"/>
+	</sequence_dbs>
+	<sequences>
+		<sequence db="0" name="chr3:104843905-104844405" comment="" length="500">
+			<score strand="both" combined_pvalue="7.07e-07" evalue="0.00014"/>
+			<seg start="76">
+				<data>
+TGACAACAATCAGAAGTTCTGGGTATCAAGCCGGGATGCACACGCAGGCCACACCCCTCGCCTTATGCACACACC
+				</data>
+				<hit pos="116" idx="0" rc="y" pvalue="9.3e-07" match="+++ ++++++++++++ ++ "/>
+			</seg>
+			<seg start="301">
+				<data>
+CTGAAGTGATCCTGTAGGGCAACAGGCATAGCTGTGTTTTCACCACAGAGACAAGGTGGCAAGAAAAGAAAACAC
+				</data>
+				<hit pos="345" idx="1" rc="y" pvalue="4.6e-08" match="+++++++ ++++ ++ ++++++++++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr12:114390660-114391160" comment="" length="500">
+			<score strand="both" combined_pvalue="2.39e-06" evalue="0.00048"/>
+			<seg start="1">
+				<data>
+GGGTCTCCCCTTCTCTGTGACCCTGGCCTCTGGATCCTGCTGTCTCTCCCGCCTTCTGTCTGTGCGCCTTGGGCG
+GGGTCCCTGCTGGATAGGAAGGAACGCGGGACTAGGGTGGCCCCTCCCAATGCTAAGTAGAAACAGACGCCCAAA
+				</data>
+				<hit pos="4" idx="1" rc="n" pvalue="5.2e-06" match="+  ++++++++++ +  ++++   ++++++"/>
+				<hit pos="34" idx="1" rc="n" pvalue="4.5e-07" match=" + +++++++++++ ++ ++++ + +++++"/>
+				<hit pos="67" idx="0" rc="n" pvalue="7.0e-05" match="   ++++ ++++++ + + +"/>
+			</seg>
+			<seg start="226">
+				<data>
+GCGTGACTAAGAGGTCCCCTTGCCCCTGCTGAGGAGAAGGGTGTGCCCAGGTTTAGTGCAGAGGTCAGAGGACTT
+TAACTGGGTTTACCTAACCTTAGATCCTCCAGACTTGTTCTCCTCCACTCTCAAGTCTGAAGGCCTCCTCCTCTC
+				</data>
+				<hit pos="260" idx="0" rc="n" pvalue="3.5e-07" match="+++++++++++ ++ +++++"/>
+				<hit pos="283" idx="1" rc="y" pvalue="2.0e-05" match="++++++ + ++++++    +++ +++   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr12:27135944-27136444" comment="" length="500">
+			<score strand="both" combined_pvalue="4.25e-06" evalue="0.00085"/>
+			<seg start="226">
+				<data>
+GAGGCTGAGAAAACCCAGATAAAGAGGAACTGGGCATAGGAACCACCATTCAGCCAGGCCCCACCCTGCTAGCTC
+				</data>
+				<hit pos="276" idx="0" rc="y" pvalue="2.6e-08" match="++ +++++++++++++++++"/>
+			</seg>
+			<seg start="376">
+				<data>
+CTTTACTGGTTTCTGCAGCTTCCATTTTTACCTCTGTGTCCTGGGACCTCTCTCTTCCTGTCCTGATCCCTGCCC
+				</data>
+				<hit pos="385" idx="1" rc="n" pvalue="6.4e-05" match="++ ++++ +++++++++++    +++ +++"/>
+				<hit pos="419" idx="1" rc="n" pvalue="1.1e-05" match=" + +++++++++++ + ++++ +++ ++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:59256089-59256589" comment="" length="500">
+			<score strand="both" combined_pvalue="3.47e-05" evalue="0.0069"/>
+			<seg start="226">
+				<data>
+NNNNNNNNNNNNNNNNNNNNGCTGGCCTTTCTTTCATTCTCATCAGCTCTATCAGAGTCCATGTGATAGAGGAGA
+GGACACACCCATATCACAGGTGGAGACACTGATACTGTCGACAGCCACAGCTGCTGTGTGGTAGTGTCTGCTCGG
+				</data>
+				<hit pos="248" idx="1" rc="n" pvalue="4.9e-06" match="++++++ ++++++ +++++ + + ++++ +"/>
+				<hit pos="295" idx="0" rc="y" pvalue="5.6e-07" match="+   ++++ +++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:135733850-135734350" comment="" length="500">
+			<score strand="both" combined_pvalue="3.87e-05" evalue="0.0077"/>
+			<seg start="151">
+				<data>
+GCACTGAGCCAGGAAGTCCCCTGGGCCTGGGCGGATGCTGGCCCCACCCTGATAAGGGCCAGCTGTGGAGCTGTG
+				</data>
+				<hit pos="184" idx="0" rc="y" pvalue="3.2e-06" match=" +  + ++++++++++++ +"/>
+			</seg>
+			<seg start="451">
+				<data>
+GGAAGGCCTGATTCTCTAACTCTTTCTCCCCCCCCCCTCTGTCTGTCAAA
+				</data>
+				<hit pos="467" idx="1" rc="n" pvalue="9.6e-07" match="+  +++ +++++++ +++++ + + +++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:137838164-137838664" comment="" length="500">
+			<score strand="both" combined_pvalue="4.56e-05" evalue="0.0091"/>
+			<seg start="151">
+				<data>
+TATGATGGGGCCACCAGGCACATACAGGGACCTTTACAAAAGCCTGAGGAGAGAAGATAGCAGCTGCATGGAGAG
+ATGGGTGTGGCTCTCTCTCCAGCTGGGAGCCCTGGAAGGGACAAGATAGAAGTCCTGTCCAGAAGCCAAGTCACG
+CCCTTCTGCATATTCACATTTTCCTCAGAATCTTCACAAATCTCCTAACTGGTCTCATCTAGTCATATTCTTGTC
+				</data>
+				<hit pos="193" idx="1" rc="y" pvalue="3.9e-05" match="++ +++   +++++++++ +++ +++   +"/>
+				<hit pos="224" idx="0" rc="n" pvalue="9.6e-08" match="++++++++++++++   + +"/>
+				<hit pos="288" idx="0" rc="y" pvalue="4.1e-06" match="++ +++++ +++ +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr17:47735006-47735506" comment="" length="500">
+			<score strand="both" combined_pvalue="5.95e-05" evalue="0.012"/>
+			<seg start="151">
+				<data>
+ATCTCCAGCAGAGGGCACCATCCACCCGGGCCCCCAACTATGATTGTACGCCCTTGCCTGCTTCTCTGGCCTTTT
+ATCTCTGGCTCCAGTCTGGAGAGGAGTGGGTGGGGTGAAGGACACTTGGCATGTAGATACCCTTCTCTTGACATC
+				</data>
+				<hit pos="204" idx="1" rc="n" pvalue="7.0e-08" match="++++++  ++++++  +++ ++++++++++"/>
+				<hit pos="249" idx="0" rc="n" pvalue="7.3e-05" match="+  ++++++++++   ++  "/>
+			</seg>
+			<seg start="301">
+				<data>
+TCTTGACAAGTGCTGTGTCTCGGACAGGGGTGGGGGACTTGGTGTCAGATGGAGGGTTGCTCTCACACCCTTGCC
+ACATCCTCTTGCCAGTTTCTGAGAACTAAAGACCTGATTCCTGGGCTGGGCTGTGGCCTAACCTCCCCAGACTTC
+				</data>
+				<hit pos="366" idx="0" rc="y" pvalue="7.6e-05" match="+++++  ++++++ +++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr6:72223026-72223526" comment="" length="500">
+			<score strand="both" combined_pvalue="6.80e-05" evalue="0.014"/>
+			<seg start="1">
+				<data>
+ACAAAGTTAGAGACCCAAAGAAGAAAGGTTTGGTCTCTTCTTCCATCAGAATCCACACACAAGGGAAATGGTTAG
+GAGTCGAACAACCACTAATCTAATCCTCATTACCTAATCTCTGTCACCTGCTCTTGGGAGGCCGGGGAGAAGGAC
+				</data>
+				<hit pos="53" idx="1" rc="y" pvalue="3.0e-05" match="+++ + + ++++++++ ++  + +++ + +"/>
+				<hit pos="90" idx="1" rc="n" pvalue="1.9e-05" match=" +  ++   ++++++++ +++ ++++++++"/>
+			</seg>
+			<seg start="226">
+				<data>
+GATCCCATGGAGCCAGCTCTTGTTTGGTCAGTCTTGTCTACCCATCTTCCTGCCCCTCCCCCACCACCACCCTGA
+TTACGGGGCATGCCCAGTTCACTTACCAGACCTCACAGCCGACCCCACCCACCACACCCATCCCAGACAGCACTC
+				</data>
+				<hit pos="282" idx="0" rc="y" pvalue="6.2e-05" match=" ++++++ + ++++++++ +"/>
+				<hit pos="344" idx="0" rc="y" pvalue="3.0e-07" match="+++ ++ +++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:3866266-3866766" comment="" length="500">
+			<score strand="both" combined_pvalue="6.97e-05" evalue="0.014"/>
+			<seg start="226">
+				<data>
+CCTTTCCAGTGTGATTATCAGGGCGGGTTTGTACCTAGCCGTTCAGCCACACCCTTCTGGGTTGGTCCTGTTTGG
+				</data>
+				<hit pos="242" idx="0" rc="n" pvalue="8.0e-05" match="+ +++++ +++ +++ +  +"/>
+				<hit pos="264" idx="0" rc="y" pvalue="4.9e-08" match="++ + +++++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:133343883-133344383" comment="" length="500">
+			<score strand="both" combined_pvalue="9.75e-05" evalue="0.02"/>
+			<seg start="151">
+				<data>
+CATTGCAGACTTGGGCCCAGAGGCTCCTGTGGGTGACTGGACATATCAGGCATGTTCCCATTATCTCTCATAAGC
+				</data>
+				<hit pos="191" idx="1" rc="n" pvalue="8.3e-05" match="    +++ + + + +++++ ++++++++  "/>
+			</seg>
+			<seg start="226">
+				<data>
+ACTGGGTAGTTGTAGGGTGTGGCCTGATTGATCATGGCAGCATACTTGGTGTTGTGGGCTAACCATGGGGATAAT
+				</data>
+				<hit pos="236" idx="0" rc="n" pvalue="1.1e-07" match=" + +++++++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:117187372-117187872" comment="" length="500">
+			<score strand="both" combined_pvalue="1.01e-04" evalue="0.02"/>
+			<seg start="226">
+				<data>
+CATGGCCTGTAGAGGGAGGAGGGGTGTGGCCTCAGAGAACCCACTGGAGAGATGGATCAAAGCTGGGCAGGGGTT
+				</data>
+				<hit pos="243" idx="0" rc="n" pvalue="4.1e-07" match="+++ ++++++++++++++ +"/>
+			</seg>
+			<seg start="301">
+				<data>
+GGAACCAGAAACACGGAAGAGGCAGAAGGGAGGGGAGATCACGCCCGGAAGCCAAAATGAGATGTGAAAGGGAAA
+				</data>
+				<hit pos="309" idx="1" rc="y" pvalue="3.2e-05" match="+ + +   ++++++ ++++++++++++  +"/>
+			</seg>
+			<seg start="376">
+				<data>
+GAGATCCCAGGATGGTCCCGCAAGGGCTGCCTCAGGCTGGGTGTGACTGGAGATGAGCCAGTGGGGAACCTCCCA
+				</data>
+				<hit pos="410" idx="0" rc="n" pvalue="2.8e-07" match="+++++++++++ ++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:76003199-76003699" comment="" length="500">
+			<score strand="both" combined_pvalue="1.11e-04" evalue="0.022"/>
+			<seg start="226">
+				<data>
+CCTCTTGGCACCAGGTTGACTCATCTTATCTCTCCTTAGCAGGTCTTCTCTTGCTTTCCCTCCCCTGCTCTCCTC
+TCATGGTCTGGTTTAGTCAGCTGGCCATGTTCAGCCTGGCTCTTCCTTCTCTCTTTTCTACACTAAGGAGTGGCC
+ACATCCTCCTCTGCTCATTTCATTTTTTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="231" idx="1" rc="n" pvalue="3.3e-07" match="+++++++ + ++   ++ ++++++++++ +"/>
+				<hit pos="276" idx="1" rc="n" pvalue="1.0e-05" match="++++++  ++++++ + ++++  ++++  +"/>
+				<hit pos="366" idx="0" rc="y" pvalue="3.0e-05" match="+   + +++++++ +++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:65202593-65203093" comment="" length="500">
+			<score strand="both" combined_pvalue="1.19e-04" evalue="0.024"/>
+			<seg start="1">
+				<data>
+GTTAAGGAGGGGCAACCTCTTAGAACAGGGACTGGAGGGAGGAGGAGGAGGCTTGGGCTGGACTGGAGCCATGTT
+				</data>
+				<hit pos="25" idx="1" rc="y" pvalue="4.6e-05" match="++++ ++   ++++++++++++ +++++  "/>
+			</seg>
+			<seg start="76">
+				<data>
+GCCCAGCCAAGGTTGCAAGTGCTTTCTGGTTTGTGTTTACTCTGGAAGGGGAGGGCACCTCCCCCCCCCCCCCCC
+				</data>
+				<hit pos="91" idx="1" rc="n" pvalue="9.6e-05" match="    ++++++++  +++ + ++  ++++++"/>
+			</seg>
+			<seg start="301">
+				<data>
+TTCAGCTTGGAGCCAGTCGGGTCCCTCCCAGCCTTCCCACTCCCTGCAGGGTGGGGCCCCATGGGTGGAGGCCCA
+GCAGGGTGGAGTGAGGTGGGTCTCCAGTGATAGGGAGGGCACCTAGTGAGCCAGGCAGATGAGAGGCCCCGTGGC
+				</data>
+				<hit pos="314" idx="0" rc="y" pvalue="3.1e-05" match="++ ++ ++ +++ +++++++"/>
+				<hit pos="345" idx="0" rc="n" pvalue="2.3e-07" match=" +++++++++++++ +++++"/>
+				<hit pos="375" idx="0" rc="n" pvalue="1.7e-05" match="++++++++++ ++  +++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr14:79702844-79703344" comment="" length="500">
+			<score strand="both" combined_pvalue="1.30e-04" evalue="0.026"/>
+			<seg start="226">
+				<data>
+TGTCTCTTTTCAGCACCACTTTGAAGTTAGCCACACCCTGCCTCCCTAGGGTGAAGAAGAACTAAGCAGTCAAGG
+				</data>
+				<hit pos="248" idx="0" rc="y" pvalue="5.6e-07" match=" ++   ++++++++++++++"/>
+			</seg>
+			<seg start="301">
+				<data>
+GTGGCACTGAGCCCCAGAGCAGATAAGCCAACAGCAGCAACCAATCTGGGAGGAGCAGCCNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="314" idx="1" rc="y" pvalue="2.1e-05" match="++++++   + +++  ++ +++++++ +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr12:112796794-112797294" comment="" length="500">
+			<score strand="both" combined_pvalue="1.31e-04" evalue="0.026"/>
+			<seg start="226">
+				<data>
+CTAAAGGGCCTGGGTGTGACTGGGTACATCTGGCAGGTTCCCATTATCTCCTATGGACACTGTGAAGTTGTAGGG
+TGTGGCCTGGTTGACAGTGGTGGCTCTCAGTTAGGGGCTGAGTGAGGGAAGAATTACGACTGGAAATGAGCAGTT
+				</data>
+				<hit pos="233" idx="0" rc="n" pvalue="6.9e-06" match="+ +++++++++ ++++++  "/>
+				<hit pos="294" idx="0" rc="n" pvalue="7.3e-08" match=" + +++++++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:112863645-112864145" comment="" length="500">
+			<score strand="both" combined_pvalue="1.61e-04" evalue="0.032"/>
+			<seg start="226">
+				<data>
+CCAGGTAGGGTGGAGCCCAGATGTGAGCTCCTCTAGCTGCTCACACTCTGACCACACCCAAATCTGCATATGGAA
+				</data>
+				<hit pos="229" idx="0" rc="n" pvalue="3.0e-05" match="++ +++++++ +++  + ++"/>
+				<hit pos="269" idx="0" rc="y" pvalue="3.5e-07" match="+++++ +++++++++++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:111007530-111008030" comment="" length="500">
+			<score strand="both" combined_pvalue="1.83e-04" evalue="0.037"/>
+			<seg start="151">
+				<data>
+TTTTATTTAAATAAGTAGAAGTAGAAAGAACTGGTGTTTTTCTTCTTCTGGGACTTGGGGTAGTGTCAGCTGGGT
+GGGGTCACAGACTGTGGTGACAGATAAGAGCCAGAGCTGCACAGAGCTGAGTCAAGGTTGAGGCCTCCGTGAGAT
+				</data>
+				<hit pos="218" idx="0" rc="n" pvalue="2.3e-07" match="++++++++++++++ +++  "/>
+			</seg>
+			<seg start="301">
+				<data>
+TGGGGGAAGCCAGTGTGTTTGGGCTCCTGCCTTCTTTGTCCCATCATTGCTCCTTCATGAGTAGATAAGAGGTAT
+				</data>
+				<hit pos="321" idx="1" rc="n" pvalue="7.4e-05" match=" ++++++++++++++++ ++  +++  +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:43307690-43308190" comment="" length="500">
+			<score strand="both" combined_pvalue="1.91e-04" evalue="0.038"/>
+			<seg start="151">
+				<data>
+AGGCTTTACAGGTAAAACAGCAAAGATACAAAGGCAAGAATGAAGCCATTCTATTCACGAGAACTCAAAAGGGAC
+				</data>
+				<hit pos="165" idx="1" rc="y" pvalue="8.0e-05" match="+ + ++  ++++ + +++++ +++++  ++"/>
+			</seg>
+			<seg start="226">
+				<data>
+TAAACCCACCAAACCATTGTGCCAGACACTATAGGAAGGAAGAAGGAGCCAAACCACCATGTTGGCTCATGTTCA
+				</data>
+				<hit pos="247" idx="1" rc="y" pvalue="7.8e-08" match="+++++ +  + +++++++++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr14:47973722-47974222" comment="" length="500">
+			<score strand="both" combined_pvalue="2.00e-04" evalue="0.04"/>
+			<seg start="1">
+				<data>
+CATAGTTTGACTCCAAACTGTGCCTGGGAGGGGCCTGGAATGAATGAACTGCTGGGGAGGGGACAGCGGCTTGCT
+				</data>
+				<hit pos="22" idx="0" rc="n" pvalue="2.3e-05" match="+ +++++ +++++++++  +"/>
+			</seg>
+			<seg start="151">
+				<data>
+GCCAGGTTACTGCCAGTACAGCCACAGGGGGGGGCATGGAAAAACACCCGTGCCTCTGAGCCATGCTGAGTCATC
+TGGGCGTAGGCACTGCTGGGTTTCATTCTTGCAACATAAAGAGCTAACAGAGTCCAGACAGAATCTAGCCTGGGT
+				</data>
+				<hit pos="223" idx="0" rc="n" pvalue="5.2e-05" match="+ +++++ ++ + + + + +"/>
+				<hit pos="263" idx="1" rc="y" pvalue="8.3e-07" match="+ ++++ +++ +++++  ++++++++ + +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:120025371-120025871" comment="" length="500">
+			<score strand="both" combined_pvalue="2.32e-04" evalue="0.046"/>
+			<seg start="76">
+				<data>
+GTGAAACCAGAGGGGCCCCTTTTGCTGTGTACATTTCAGAGATGGGGAGATAGAATGGGGCTGTGACAGGTGGAG
+				</data>
+				<hit pos="111" idx="1" rc="y" pvalue="2.3e-05" match=" +++++++  ++++++++++ + ++     "/>
+			</seg>
+			<seg start="151">
+				<data>
+CCTGAAGGATCTCAGAGGAGAAACCACAGATGCATATGTGGAGAAAGGAGCTGGGTGTGGTGGGCCGACCTGCTG
+				</data>
+				<hit pos="199" idx="0" rc="n" pvalue="9.3e-07" match="+++++++++++++ ++  + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:105490727-105491227" comment="" length="500">
+			<score strand="both" combined_pvalue="2.43e-04" evalue="0.049"/>
+			<seg start="76">
+				<data>
+CATGTCAACACAAATCGTTCTAAGAGGAGAGAAAAGAGGGCAGTTTGGAGGGGGGCTTGTGACATACATCCCTGC
+				</data>
+				<hit pos="101" idx="1" rc="y" pvalue="2.0e-05" match="+ +++++ +++++++ ++   +  +++   "/>
+			</seg>
+			<seg start="226">
+				<data>
+GTTCTAAGACCTGAACCACACCCACCACACCCACCCATGTGAAAGTTTAAAGATTATGTAATCCTAAAGCTAAAC
+				</data>
+				<hit pos="242" idx="0" rc="y" pvalue="1.1e-06" match="+++ ++ ++++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:37127175-37127675" comment="" length="500">
+			<score strand="both" combined_pvalue="2.90e-04" evalue="0.058"/>
+			<seg start="226">
+				<data>
+TCTGTAGTAGCAGAAAGAAATGGAACGTGGGAGGGGCACAGTGAGGACAGCTTGGGAGCCCAGATAAGGGTGGAG
+CCTGTGTCCTGAGCCAACTCTGGAAGCCATCTTGGAGGGCAGGGCTGGTGGCGGCAGGCTGGCCCTGGAGAAAAT
+				</data>
+				<hit pos="235" idx="1" rc="y" pvalue="1.2e-05" match="+++++ + ++  ++++ + ++++++++++ "/>
+				<hit pos="289" idx="0" rc="n" pvalue="2.4e-06" match="+ ++++++++ +++++ ++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:45951565-45952065" comment="" length="500">
+			<score strand="both" combined_pvalue="2.90e-04" evalue="0.058"/>
+			<seg start="226">
+				<data>
+TTTATCTGGACATTTACTAACCTTGGTGGGGACACGCCCCAGAGCCACACCCAGGTCTGGCAATCATCTGCATGC
+				</data>
+				<hit pos="262" idx="0" rc="y" pvalue="1.4e-07" match="++++  ++++++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:91033422-91033922" comment="" length="500">
+			<score strand="both" combined_pvalue="3.06e-04" evalue="0.061"/>
+			<seg start="451">
+				<data>
+AGAAGGTCCCCTAAACCCACTGGCCACACCCACTCCCTTTCTTTGTGCAG
+				</data>
+				<hit pos="466" idx="0" rc="y" pvalue="2.1e-07" match="+++ + +++++++++++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:154285745-154286245" comment="" length="500">
+			<score strand="both" combined_pvalue="3.21e-04" evalue="0.064"/>
+			<seg start="226">
+				<data>
+GTTGGGGTGGGGCTGGGTGGGACTGGGCACAGTGTTATCAATAGTGCCAGCCAGAGATCACAGGACAACTTGAAG
+GAGTATNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="236" idx="0" rc="n" pvalue="4.6e-06" match="+++++++++++ +++++   "/>
+				<hit pos="276" idx="1" rc="y" pvalue="6.7e-06" match="++++++++ + ++++ ++   ++ ++   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:100518008-100518508" comment="" length="500">
+			<score strand="both" combined_pvalue="3.56e-04" evalue="0.071"/>
+			<seg start="226">
+				<data>
+GGCAGAGAAAAGAGGTGTGAGATAAACAGGAGCGGAGTCGAGATTCTGCAGAAACAGCTCCGCCCAGTTCCGCCC
+				</data>
+				<hit pos="227" idx="1" rc="y" pvalue="7.5e-07" match="+++++++ +++++++  ++++ + +    +"/>
+				<hit pos="275" idx="0" rc="y" pvalue="4.7e-05" match="+ +  ++++ ++ +++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:36977019-36977519" comment="" length="500">
+			<score strand="both" combined_pvalue="3.71e-04" evalue="0.074"/>
+			<seg start="76">
+				<data>
+CCTTGAGAGGAGCAGCAGTGTGTGCCTGGATAAACAAACACTGCTGTTCTAGCACCAGGTCCTCCCAGGCACTAG
+				</data>
+				<hit pos="89" idx="0" rc="n" pvalue="2.9e-05" match="+++++ +++++ ++++++  "/>
+			</seg>
+			<seg start="226">
+				<data>
+ACTTAAATGCCTATCTTATGTTTTCAAAACCATTTCCTTTACAGATCCTCATTACTGAGCCTTTCAAGCCTTCTC
+TGCTATCTCCAATGCTTATCTCTGGGCTGGCACGCCTCTTGATAGGCTGCCATTGAGTCTGAGTGCAGTCCTGCA
+				</data>
+				<hit pos="296" idx="1" rc="n" pvalue="2.2e-06" match="++  ++  + ++++ + + +++++++++++"/>
+			</seg>
+			<seg start="376">
+				<data>
+GTGAGTCAGAATCTATCTCCACACCCACCTGGTGAAGACTGTTCCATCCTTCTCTATAGACAGTCTGCTCACAGG
+				</data>
+				<hit pos="386" idx="0" rc="y" pvalue="1.7e-05" match="+ ++    +++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:151917814-151918314" comment="" length="500">
+			<score strand="both" combined_pvalue="3.94e-04" evalue="0.079"/>
+			<seg start="151">
+				<data>
+GGAGGCGGAATGGTGAACAATGCTGGGTGCTGGGCTGGGGAAAGATAGGAGACTATGGTGAGCCCTGCCTTCTGG
+GTGTGGCTCCCTGCAGCAGCCAGATAGTCACAGATAACTTTCTTTTCCTCCAAAGCCAGCGACCCCAGTTCTGGG
+				</data>
+				<hit pos="220" idx="0" rc="n" pvalue="5.6e-07" match="  ++++++++++++ + ++ "/>
+			</seg>
+			<seg start="301">
+				<data>
+GCCCAAGCTGAATTCCAGACTTCCCTCACCCCTGGCCTCACTTCTCTGTATCCAAGCCTCCATGAATCAGGCTAG
+				</data>
+				<hit pos="320" idx="1" rc="n" pvalue="7.1e-05" match=" + +++   +++++  ++++   +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:110976195-110976695" comment="" length="500">
+			<score strand="both" combined_pvalue="4.09e-04" evalue="0.082"/>
+			<seg start="226">
+				<data>
+CAACTATGTCAGAAGCAAATGTGAGGAGCAACTGATCCTACCTCACCTTATATGCTCTGCCCTGGCTCCTGCCCT
+CTCTATCCTGTGTGAGCAGATTGGCCCTTACCAGGGTGTGGCTCTACGGAATCAGGCTTCGGTGATGACAAGCAT
+				</data>
+				<hit pos="288" idx="1" rc="n" pvalue="3.1e-05" match="+++++++++++++++++ ++ + + +  ++"/>
+				<hit pos="330" idx="0" rc="n" pvalue="1.3e-06" match="+ ++++++++++++  + ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:58719281-58719781" comment="" length="500">
+			<score strand="both" combined_pvalue="4.76e-04" evalue="0.095"/>
+			<seg start="151">
+				<data>
+TATCGTAATAGCTGATATAGAGGCTTTGGTAAAAGAAAACCGGGGCCTACAGTGCCTCGTATACAGATGGAAGAG
+GGGAAAGTGAGCAAACAAAGCCCAAACCACAAAACTGGGTGGAGGTGCCATCTTCCTGCTCCAAACACCTTCCCC
+				</data>
+				<hit pos="213" idx="1" rc="y" pvalue="3.1e-07" match="+++++   +++++++ ++++ +++++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:57590460-57590960" comment="" length="500">
+			<score strand="both" combined_pvalue="5.00e-04" evalue="0.1"/>
+			<seg start="1">
+				<data>
+GTTTTCCTTTCCCCACCATCAGAATAGAACTGCGCTGCCCAGACAGCACCCCTGCGTTCTGAAACAACTCCCACC
+CTGGGAAATGGCACAAAGGACATCCTACATCTATCCTGGCAGGAGATAGAAAGACCCTCTCACCCTTTGAGAGCC
+				</data>
+				<hit pos="57" idx="0" rc="y" pvalue="9.0e-05" match="  +++++++ ++ ++++ ++"/>
+			</seg>
+			<seg start="301">
+				<data>
+CTCCACACCCAAAGCCACTGTGGCCTCCATTCTGGACTGTAGTATCTGCCCAGGACCACACCCACCACGCCCCAT
+				</data>
+				<hit pos="348" idx="0" rc="y" pvalue="8.1e-07" match=" +++  +++++++++++ + "/>
+			</seg>
+			<seg start="376">
+				<data>
+GAGCAGAGCCAACTTTGTAAAGTTGAATGGGATTAAGATATCCTGTCTAGTCATGCCCCGACGAGAGCCCCCCCC
+CCCCGCCTTCCCTTCCCTCACAGCCCACTGGGTGCCAGGCCTTCGACGTC
+				</data>
+				<hit pos="443" idx="1" rc="n" pvalue="6.4e-05" match="   ++++ ++++ + +++++++  +++   "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr8:83025150-83025650" comment="" length="500">
+			<score strand="both" combined_pvalue="5.31e-04" evalue="0.11"/>
+			<seg start="151">
+				<data>
+CCATGCCATTGATCTTAAAAGGAAGCCAGTCCCCCACAGTGTTTCTCCACAGATTACTTAGGGGTAGGCAAGAGG
+GCGGGCCCAGTGGCAGACAGATCCCACTGCCTGCAAAATGATAGCCTATAAGCCAGTTGGGTGATGAGATAAGGG
+				</data>
+				<hit pos="220" idx="0" rc="n" pvalue="4.9e-05" match="+  ++++ +++ ++ + ++ "/>
+			</seg>
+			<seg start="301">
+				<data>
+GTGGGCCTGTAGTACATTCGCTTGAGCGATCTCTCTCCCTCCCTTCCTACCTCTCCCGCTTGTCTAATTTTATAG
+				</data>
+				<hit pos="327" idx="1" rc="n" pvalue="1.1e-06" match=" +  ++++++++++ +++++ ++ ++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:54345922-54346422" comment="" length="500">
+			<score strand="both" combined_pvalue="5.79e-04" evalue="0.12"/>
+			<seg start="226">
+				<data>
+CGATGTCAGCTTAGGAGACCATTAGTGGAGAGAGCTTGAGAGATGGTTCTCCCTTTGGCCAATGAGGGGAGAGAG
+CAGTCTGAAGCAAGGCATCCAGAAAGGAGTGTGTCTGCTACTACAGTGTTTATGCTGCTTCTTCTGCCACCGTAG
+				</data>
+				<hit pos="284" idx="1" rc="y" pvalue="3.5e-05" match="+++  ++   +++++++ ++ + +++++++"/>
+			</seg>
+			<seg start="451">
+				<data>
+CCAAGGAGCTAAGTTATGGTACAAGTCAGGGTGTGCCCCCTGGGAGGCTC
+				</data>
+				<hit pos="475" idx="0" rc="n" pvalue="1.7e-06" match="+ +++++++++ ++ + +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr12:82044358-82044858" comment="" length="500">
+			<score strand="both" combined_pvalue="6.20e-04" evalue="0.12"/>
+			<seg start="1">
+				<data>
+AGTATTTAATAAGTAAAAGATGGGCTTATAGGGTGAATCTGAGTCAGAAACAGAATCTCTCTCTCTCTCTCCCCC
+TCTCNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="51" idx="1" rc="n" pvalue="5.3e-05" match="  + ++++++++++ ++++     ++++  "/>
+			</seg>
+			<seg start="226">
+				<data>
+CTCCTAACACCTTCAGGGAGGGTGTAACCCGATTTCTGGGGAGAGGAAGGCAGCTAGCAGGTCTGTGATGGACAA
+TAAATGTTCTCTTAATCTGTGATCTCTGTAACTCTTTTCCTCTACTACATATATGTTATTTGTTTGAATGTCTTT
+				</data>
+				<hit pos="241" idx="0" rc="n" pvalue="2.0e-05" match="++ +++++++  ++ +++++"/>
+				<hit pos="300" idx="1" rc="n" pvalue="3.1e-06" match=" +  ++ ++++++++++++ + ++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:105013714-105014214" comment="" length="500">
+			<score strand="both" combined_pvalue="6.68e-04" evalue="0.13"/>
+			<seg start="76">
+				<data>
+ATTAGAGAATTCTGGTCCTTAGGAGACACACTTTTCTGCACCACAGACACTAACAGGAAAGCAGGAGGAACACTC
+				</data>
+				<hit pos="116" idx="1" rc="y" pvalue="2.4e-05" match="+++ +++ +  ++ + +++++++++++ ++"/>
+			</seg>
+			<seg start="301">
+				<data>
+GTGTCAGATGGGTGTGCCCCTTTCACCAGAGGCCCACACGGCCCCCCAGGGCACAGTGACACCACCCTTCCTGAA
+				</data>
+				<hit pos="306" idx="0" rc="n" pvalue="2.9e-06" match="+++++++++++ ++   +  "/>
+				<hit pos="352" idx="0" rc="y" pvalue="1.8e-05" match="+++ + +++ ++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:93585404-93585904" comment="" length="500">
+			<score strand="both" combined_pvalue="7.22e-04" evalue="0.14"/>
+			<seg start="76">
+				<data>
+AGAAGGGGTTGTCAGCATCTCTGTGGAGATGGCATGGAGCCAGAAGGTTTAGCATCAGGTGACCAACAGCAGCTT
+CTTTTATCTTCCATCCTCTCAGTCCTAAGGTTCTCAGCCCTGCTCACTACAGATTGCAGCAAGCCAGAGAGATGG
+GCGTATCCAGGGTGACCGTGAGGATGGCGGGGGAGATAGTGTCAGGCGCATAAGTTCTGGCCTATGGTGGGGATT
+				</data>
+				<hit pos="142" idx="1" rc="n" pvalue="3.9e-05" match="  ++++++++++++++++++    ++++  "/>
+				<hit pos="220" idx="0" rc="n" pvalue="2.0e-06" match="+++++++ ++  ++ +++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:19832207-19832707" comment="" length="500">
+			<score strand="both" combined_pvalue="7.99e-04" evalue="0.16"/>
+			<seg start="226">
+				<data>
+AAAAGCCCCAGGCCACACCCAAGATGTCTGACTATAGGTAACAGGTTCATTCTCCCTGGCCCTTGTCCCTAGAGG
+				</data>
+				<hit pos="230" idx="0" rc="y" pvalue="3.2e-07" match=" ++++++++++++++++   "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr8:97323995-97324495" comment="" length="500">
+			<score strand="both" combined_pvalue="1.03e-03" evalue="0.21"/>
+			<seg start="151">
+				<data>
+NNNNNGGGTCGAGGAGATCACCTAAGAGGAAGGAGCCCCACCCACCCCTGCTCCTATGGGAAGAAGGCAAGGTGG
+				</data>
+				<hit pos="178" idx="0" rc="y" pvalue="1.6e-06" match="  + + +++++++++++ ++"/>
+			</seg>
+			<seg start="226">
+				<data>
+AAGAACTGTCTTGGCGAGGAGATGGGGAGCAGAGAGAATGCATGGGACAGATGTCCATCTTCCCTAGGTAATCTG
+				</data>
+				<hit pos="238" idx="1" rc="y" pvalue="7.1e-05" match="+  +++   + ++++++ ++++++++  ++"/>
+			</seg>
+			<seg start="376">
+				<data>
+GCTGAGAGCTGGAAGGAGCCCAGGCGTGGCAGGAAGGGTGTGCAAGCAGCAGCAGGCAAAGCCAGGCAAAGCAGG
+				</data>
+				<hit pos="407" idx="0" rc="n" pvalue="4.9e-05" match="+++++++++++   ++++  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:126642277-126642777" comment="" length="500">
+			<score strand="both" combined_pvalue="1.16e-03" evalue="0.23"/>
+			<seg start="226">
+				<data>
+NGCGGTTTTAGACGATGCGTGCCCAGTGGGAAGAGACACACCCAGTTTCTGTTAAGTCAAACAGAAGCAAGCAGT
+				</data>
+				<hit pos="253" idx="0" rc="y" pvalue="5.5e-06" match="      ++ +++++++++ +"/>
+			</seg>
+			<seg start="301">
+				<data>
+GAGGCCCTCCTGCTGCTGCTGTACTTCCTAAGTGTGTAAAGAGAAGATAAGCAGTGCTTCTGAGGGAGAGACAGC
+CTATAGCAAGGAGCAGGGAAGCTGTGGGCTCTGCCAGCCTTGCGCACACAGTGGGACAGCTGGGCTGGAGAGGCC
+				</data>
+				<hit pos="365" idx="1" rc="y" pvalue="2.3e-05" match="+ +++++ +    ++++ +++++++++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:156887119-156887619" comment="" length="500">
+			<score strand="both" combined_pvalue="1.19e-03" evalue="0.24"/>
+			<seg start="151">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATGCTTTAGAGACAAGATTAAGACTAAGACAGCGACTGCAA
+				</data>
+				<hit pos="190" idx="1" rc="y" pvalue="6.9e-05" match="  +++++ ++++  ++++  ++  ++++ +"/>
+			</seg>
+			<seg start="226">
+				<data>
+AGCACCTGACATGCTAGAGACGCCCAACTGACTATCAACGCAATGAACATCCTGTTCACACTCAACCCCCATTCA
+GGTGACCACACCCAACAAGCTGGGCCAAGACGACTTTNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNGCAC
+				</data>
+				<hit pos="298" idx="0" rc="y" pvalue="2.0e-06" match=" ++ + +++++++++++ + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:81700367-81700867" comment="" length="500">
+			<score strand="both" combined_pvalue="1.25e-03" evalue="0.25"/>
+			<seg start="76">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNACACACCCATTCGCAGGAGACAGCAAGGTACAT
+				</data>
+				<hit pos="110" idx="0" rc="y" pvalue="3.1e-05" match=" + +     +++++++++ +"/>
+			</seg>
+			<seg start="226">
+				<data>
+TCTTTATTAGACCACACCCAGTTTGGCTCACAGGCTTGAAGAAATTACCTAGATAACTAGCTGAACACTGCAATC
+				</data>
+				<hit pos="229" idx="0" rc="y" pvalue="1.4e-06" match="  ++ +++++++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr6:121187425-121187925" comment="" length="500">
+			<score strand="both" combined_pvalue="1.27e-03" evalue="0.25"/>
+			<seg start="1">
+				<data>
+TCACATTGAAAATGGATCCCTGTAATTTACTTCTTGCATCTTCTTCTACTTGTCTGAGGATAGTTTCTCGTCAAA
+				</data>
+				<hit pos="30" idx="1" rc="n" pvalue="8.0e-05" match=" + +++   +++++++++ +++ +++  ++"/>
+			</seg>
+			<seg start="301">
+				<data>
+GCTGAGCAGTAGTGGGTTTCTAACATTACTTGCTTACATATACACTGGTCCAGTGCATGGTTGTTTGGGAAGATG
+CTAAGCCACACCCTGGCCTTAGAAACACCATGCCGCTGAGATGAATTGTCCCTAGGATGGCACCCAGGGAAATAA
+				</data>
+				<hit pos="373" idx="0" rc="y" pvalue="1.8e-06" match="+  + +++++++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:43977111-43977611" comment="" length="500">
+			<score strand="both" combined_pvalue="1.53e-03" evalue="0.31"/>
+			<seg start="1">
+				<data>
+GAGATCTCCAAGGCTCAGTGGGAAACAAGCAGGAGAAAGTATAAGCCCAGCCTCGGGGGCAGATGGGTCTGCCTG
+CTTCTCCTCTAGCTCCTCAGCAAAACTAAAAGTGGATCCCTGCCCTTCCCCCATCATGGGCAGCTGAGGGCCCTC
+				</data>
+				<hit pos="61" idx="0" rc="n" pvalue="6.2e-05" match="++++++++ ++ ++++ + +"/>
+			</seg>
+			<seg start="226">
+				<data>
+CCTGGCTGGGTGTGGTCGCCAGTGATAACTTGCCTCCTAAGGCTCTTGCCCTGCTCAGACTGAGAGGGGACTCCT
+				</data>
+				<hit pos="229" idx="0" rc="n" pvalue="3.0e-07" match="++++++++++++++++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:102236405-102236905" comment="" length="500">
+			<score strand="both" combined_pvalue="1.57e-03" evalue="0.31"/>
+			<seg start="1">
+				<data>
+AGAAGGCTTATGTGACCAGCCTCCTCTGTCCTGTCCCTGCCCTTCCTTGGAATCCCCTAGGTTTCCTGTCTCTGG
+				</data>
+				<hit pos="11" idx="1" rc="n" pvalue="8.3e-05" match="++  +++ +++++++++ ++ + ++ ++++"/>
+			</seg>
+			<seg start="151">
+				<data>
+CTGCCTATATTGATGAAAAAACCCGAGTTCTCCTAGAAAAGGGTCACACCCTAACAGGAGGGACAGCCCCTCCCT
+TCAGAACAGCTGCAGCCCCACTTGATCTGTCGTATCTGCTGAGCCAGATGTTTGAGGTCCTCAACCTGACAGCTG
+				</data>
+				<hit pos="186" idx="0" rc="y" pvalue="4.9e-05" match=" ++   ++ ++++++++  +"/>
+				<hit pos="209" idx="0" rc="y" pvalue="2.7e-05" match="+    +++++++ ++++++ "/>
+				<hit pos="235" idx="1" rc="n" pvalue="2.3e-05" match=" ++++++ ++ +++ ++++ +  + +++++"/>
+			</seg>
+			<seg start="301">
+				<data>
+ATGGCAGAGTCACAGAGCCCAAGCCTATGGGTGTGTTCCCTGCCCTGTGTATGTCTAGGGGAAAAAGCTTAACAC
+				</data>
+				<hit pos="325" idx="0" rc="n" pvalue="7.7e-06" match="  +++++++++ ++ + +  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr17:5112057-5112557" comment="" length="500">
+			<score strand="both" combined_pvalue="1.62e-03" evalue="0.32"/>
+			<seg start="226">
+				<data>
+TGACCCGTGATAAGAGCAAAACATGTGAGGGTGTGGCTCAGGGTTCCTGTCTGTGCTTAGTAGGGCCTTGCCTGC
+				</data>
+				<hit pos="250" idx="0" rc="n" pvalue="7.5e-07" match="+  +++++++++++  ++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:110604369-110604869" comment="" length="500">
+			<score strand="both" combined_pvalue="1.64e-03" evalue="0.33"/>
+			<seg start="226">
+				<data>
+TCTGAGACGCTGGGTGTGGCATTTGCTGGTGATCCTGCTCTTGGGAGATAGGGAAAGGAGGGTTACCTTGAGTTT
+				</data>
+				<hit pos="233" idx="0" rc="n" pvalue="1.0e-06" match=" ++++++++++++ +  + +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:169314208-169314708" comment="" length="500">
+			<score strand="both" combined_pvalue="1.76e-03" evalue="0.35"/>
+			<seg start="151">
+				<data>
+GGCCTCTGGGTCAGGGTGCACCAAGAAGGAAAGGCAGCTCAGTTCAGAATCCACACCCAGGCAGCCTCTGCCACA
+CCCTGGGTTGTTCCGAATGCAGAGGCAGCAGATAGCTTACAGGGCCAGGCCTGAGGAGCTGATAATTGGGAAAAG
+				</data>
+				<hit pos="193" idx="0" rc="y" pvalue="7.7e-06" match="  + +++ ++++++++++ +"/>
+				<hit pos="213" idx="0" rc="y" pvalue="6.1e-06" match="+ ++ + +++++++++++  "/>
+				<hit pos="244" idx="1" rc="y" pvalue="3.4e-05" match="++++++  +  ++++++   ++++++ ++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:57618594-57619094" comment="" length="500">
+			<score strand="both" combined_pvalue="1.80e-03" evalue="0.36"/>
+			<seg start="76">
+				<data>
+ATCCAACTGCTCTTCACCTGGGCTAGGTAACCCTCAGGACCCGATAGACAACCCATCTCCTTAGCCTTCCTGCTC
+TCTGGCATTCTATAACAGAGCCCCTGGTACAGCTGTCCTGAGCTCTGGAGCCCTCTGCAGCTACAAGGGAGAGGT
+				</data>
+				<hit pos="126" idx="1" rc="n" pvalue="4.1e-06" match="   +++++++++   ++++++  +++++++"/>
+			</seg>
+			<seg start="301">
+				<data>
+TCCACCTTTCTCCACCCCACCCTTCCCCAAGCTATGAGCCACACCCCCTTGTGTACAAGCTATGACTCAAGACTC
+				</data>
+				<hit pos="307" idx="0" rc="y" pvalue="5.2e-05" match="   + + +++++++++++++"/>
+				<hit pos="331" idx="0" rc="y" pvalue="5.6e-05" match=" +    ++++++++++   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:128184604-128185104" comment="" length="500">
+			<score strand="both" combined_pvalue="1.88e-03" evalue="0.38"/>
+			<seg start="1">
+				<data>
+GAGTTAAGGAAAAAGCTTTGTAGGAGGAGGGCAGACACCTGAGGAGAGGAGCTTGAGCCAGCACCTTCCTGACAG
+				</data>
+				<hit pos="31" idx="1" rc="y" pvalue="1.4e-05" match="+++++ +   +++++ ++++++  ++++++"/>
+			</seg>
+			<seg start="151">
+				<data>
+GGCTTTGGCGCTCCTTCCAAGAACAAGGCACAACCTAACAAAGGGAGTGGCCTCACTGTCCCGGTAGATTTAAGG
+				</data>
+				<hit pos="189" idx="0" rc="n" pvalue="1.6e-05" match="  +++++ +++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:109112541-109113041" comment="" length="500">
+			<score strand="both" combined_pvalue="2.02e-03" evalue="0.4"/>
+			<seg start="1">
+				<data>
+CCCATACAGCTCGGGGTCTGAGATCCCAGTCACACCCAATGGCCAGGCAGCTGGTAGTGGGTGAGGCTCCAGTCA
+				</data>
+				<hit pos="22" idx="0" rc="y" pvalue="6.2e-05" match=" + +++++ ++++++++   "/>
+				<hit pos="55" idx="0" rc="n" pvalue="3.1e-05" match="   ++++++ ++++ ++++ "/>
+			</seg>
+			<seg start="151">
+				<data>
+AATTAAGGGTTTGGGCTGTTTGTCTGTGCAAGTCCCTCTTTTCTCTGGGTGTTGGTCATGCCTGTGAAACTGGGA
+				</data>
+				<hit pos="169" idx="1" rc="n" pvalue="7.7e-06" match="++  ++  + +   ++++++++ +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr3:97461668-97462168" comment="" length="500">
+			<score strand="both" combined_pvalue="2.28e-03" evalue="0.46"/>
+			<seg start="1">
+				<data>
+CTGCCATCACGTGTCTAGTCAATTCTCTGTCCTACTTTTTATTTCATGCCTCCTGGGACAACTAAAAAGGTTGCT
+				</data>
+				<hit pos="19" idx="1" rc="n" pvalue="6.4e-05" match="+   ++++++ ++++++++ ++++ ++  +"/>
+			</seg>
+			<seg start="301">
+				<data>
+TCCCGACCCGGACCCCACCCTCGGCCCCGCCCCAAGCCGGAGCTGCGCACGCACCCACCACAGAGGCGGTGCTGG
+				</data>
+				<hit pos="305" idx="0" rc="y" pvalue="1.8e-05" match=" ++++ +++++++++++   "/>
+			</seg>
+			<seg start="376">
+				<data>
+TGGCTAGAGAGGCAGGCGACCCAGGCTGAGGAGGGGGCGGGGCTGGAGCGCAGGGGGCGGAACAAGAGGCTCGGT
+GGGCGGGGCCAGAGGCAGAGGCGGTACCTCGTCGCGGGCCTTGTAGCCAT
+				</data>
+				<hit pos="406" idx="0" rc="n" pvalue="6.2e-05" match="+   +++ ++++++++++ +"/>
+				<hit pos="447" idx="0" rc="n" pvalue="4.4e-06" match=" + ++++ ++++++ ++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:102674395-102674895" comment="" length="500">
+			<score strand="both" combined_pvalue="2.38e-03" evalue="0.48"/>
+			<seg start="301">
+				<data>
+CAGGAATTAATTTTATTAACACTGAGATGATCCAAATGTGAATTGAGTGTGGCAGCCTGGGATTTATGGCATTTC
+TGTCTGATCTTTTCTTCTTCTGTGTGGGTTCTTGTGAAATGTGTGTATATCCTTCCATATTTTTCTCTAAATCTC
+				</data>
+				<hit pos="373" idx="1" rc="n" pvalue="2.5e-06" match="++   ++++ ++++++++++++ + + +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr17:24289205-24289705" comment="" length="500">
+			<score strand="both" combined_pvalue="2.49e-03" evalue="0.5"/>
+			<seg start="226">
+				<data>
+CACTACAGTGACTCAGCTAACCTCAGGGAGTGGCTGTCCCCCAATCCACACCCATACCACAGGCACGTCTGATGC
+				</data>
+				<hit pos="263" idx="0" rc="y" pvalue="7.5e-07" match="+++++++ ++++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr17:28960252-28960752" comment="" length="500">
+			<score strand="both" combined_pvalue="2.67e-03" evalue="0.53"/>
+			<seg start="151">
+				<data>
+GTGCTACTCTGCTCTGGGCTGCTGTAGTCCTAAGAGTCTGCGCTCTTCAACGCACTGGCTCTGTGAGGTAGCTCT
+GGGTGTGGCTGACCCTAGGCCCTTATCCTGTCTTAGCTTCTGCTGCCATTGCCAGCTGGGTTGGAGAGGGCTTGA
+				</data>
+				<hit pos="222" idx="0" rc="n" pvalue="2.5e-06" match="  +++++++++++++    +"/>
+			</seg>
+			<seg start="301">
+				<data>
+GAGTGGTTATCAGAAGAGGTAAGACTGTGTGTGGCTCTTCAAGAGGCAGAGGACCTCCCTGATAATTGAGGTTTG
+				</data>
+				<hit pos="323" idx="0" rc="n" pvalue="9.0e-05" match="+ +++ ++++++++      "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr2:73323093-73323593" comment="" length="500">
+			<score strand="both" combined_pvalue="3.07e-03" evalue="0.61"/>
+			<seg start="1">
+				<data>
+CCTTTCACCCCTTGTTGTTTTTCAGTCCAGACACGTTGGAAAACTAAAGCCAGACCCAAGACAGAAAGGAAACCG
+GAAACTGATCCTAGTCCCCTCTCTCCATCGCTATTTGTTTAGGTATTTGGNNNNNNNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="50" idx="1" rc="y" pvalue="2.4e-06" match="+++++   ++++ ++++++++++ +++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:32150818-32151318" comment="" length="500">
+			<score strand="both" combined_pvalue="3.13e-03" evalue="0.63"/>
+			<seg start="151">
+				<data>
+CAAAGTAGCATACACCCATCTGGAACCTATCAGTGACCATAGTCAACAGCAGGTGTACACACCCAGGCCAAGGGT
+				</data>
+				<hit pos="152" idx="0" rc="y" pvalue="2.7e-05" match="+++  ++   ++++++++++"/>
+				<hit pos="199" idx="0" rc="y" pvalue="3.1e-05" match=" ++ + +  +++++++++ +"/>
+			</seg>
+			<seg start="301">
+				<data>
+AGAGGCCACTAGGACTGCTGAGTAATACTTGGGGGTACAGAGTCAGAAAGGAAAGGACAAATGGTACCACTGATT
+				</data>
+				<hit pos="337" idx="1" rc="y" pvalue="1.4e-05" match="++++++  +  ++++++++++++ +++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:103853792-103854292" comment="" length="500">
+			<score strand="both" combined_pvalue="3.29e-03" evalue="0.66"/>
+			<seg start="151">
+				<data>
+ACCATTGAAGAGCTACATATCAATATTTGTAGGCCACAGCTAGGTTGTAAGCCACAGTGATGCCAGAGCTATTAG
+AAAGTGGTTACAAAGAACTGCTCAGGAAAATCTGATGGCTTCAACTTAACTAAATGACAGTATGGGCGTGGCAAG
+AAAGGAGGTGGATGTAAGATAACGTTAGGAGAATTTATGACTCCAATTAGAGGAAGTCAGTCCACTAGTAGCATG
+				</data>
+				<hit pos="213" idx="1" rc="y" pvalue="1.8e-05" match="++++++ ++  ++++++ ++  + ++  ++"/>
+				<hit pos="285" idx="0" rc="n" pvalue="2.3e-05" match="+ +++++ +++++  ++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr16:49839621-49840121" comment="" length="500">
+			<score strand="both" combined_pvalue="3.53e-03" evalue="0.71"/>
+			<seg start="151">
+				<data>
+TCAGGGAATGCTGTAACCTTCCGAACTTAGCACAAAGGTGGCTTTTTTTCCACCCGGCTTTCTCTTCACTGGTTT
+				</data>
+				<hit pos="193" idx="1" rc="n" pvalue="5.9e-05" match="++  ++  + +++  ++++++  ++ ++++"/>
+			</seg>
+			<seg start="226">
+				<data>
+TATGAGCCGGTGCCAGCTGAGTCTAGATGGTAGAGTTTTACACTTGAATGAAACACACCCTGCCCTCGGTTCTGG
+				</data>
+				<hit pos="270" idx="0" rc="y" pvalue="7.7e-06" match="  +   ++ +++++++++++"/>
+			</seg>
+			<seg start="301">
+				<data>
+GAGCTCCACTCTGCTGCCTCCATCTGCTACCTCTGATAAATGCTCATATTTTAAATATGTTACAATCAGCATACG
+				</data>
+				<hit pos="307" idx="1" rc="n" pvalue="9.6e-05" match="    ++  + ++++ ++++  ++ +++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr6:135115628-135116128" comment="" length="500">
+			<score strand="both" combined_pvalue="3.67e-03" evalue="0.73"/>
+			<seg start="226">
+				<data>
+CAAGCATTCTCAAGACCCACCCAACTAAGCACAGAGGGCTCCCCATCCCTCCCTCCCTGAGCAATGAAGAGCCTG
+				</data>
+				<hit pos="232" idx="0" rc="y" pvalue="7.0e-07" match="  ++++++ ++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr3:88305500-88306000" comment="" length="500">
+			<score strand="both" combined_pvalue="3.83e-03" evalue="0.77"/>
+			<seg start="226">
+				<data>
+NNTGCAATGGGAGTGGCCTGAGGCTCCCTAACGGCTGGATTTCAAAAATGTCATTGTATTCCAGAGGTTTAGTAA
+				</data>
+				<hit pos="230" idx="0" rc="n" pvalue="3.4e-06" match="  +++++ +++++++++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr18:57137388-57137888" comment="" length="500">
+			<score strand="both" combined_pvalue="3.89e-03" evalue="0.78"/>
+			<seg start="226">
+				<data>
+AATGACTTAGAGTCAGCCCTTCCATTTATGGCCTCAGAGGGGCTAGACGTGTGGGTGTGAGAGGCAGTAGATTCA
+TTCTTTCCCCTTGGCTTTGTCTCTGAGAAAAGCAGAAGTAAAGAAATGGCTGTTGGTACAAAAGTGTTTCCTTCA
+				</data>
+				<hit pos="297" idx="1" rc="n" pvalue="1.6e-06" match="++  ++++++++++++  + ++ ++++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:97380648-97381148" comment="" length="500">
+			<score strand="both" combined_pvalue="4.16e-03" evalue="0.83"/>
+			<seg start="151">
+				<data>
+GAAAGTTTCCTAGAAGAGGGGCCCATAAACCGAATCTTTAAGAGAAAAGAGTTAAGGGAGAGGGCGGGAGGGGGT
+				</data>
+				<hit pos="189" idx="1" rc="y" pvalue="1.6e-06" match="  +++++ +++++ ++++++++++++    "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:91082416-91082916" comment="" length="500">
+			<score strand="both" combined_pvalue="4.40e-03" evalue="0.88"/>
+			<seg start="226">
+				<data>
+AGCCTTTCAGAGATAAAAGGCACCACACCCTCCCAGCAGAGACATCTGTAGCCATAGTCTCTTATCAGGCTTTAT
+				</data>
+				<hit pos="240" idx="0" rc="y" pvalue="7.7e-06" match="+++ +  ++++++++++ ++"/>
+			</seg>
+			<seg start="301">
+				<data>
+TTATAAGAACCCGGAGTAGAACAACAAAATAAACCCAGTTGTTTAACCTCACTAACTTCCTAGAAATTAAGAAAC
+ACCCTGGTTTTAAAAAACGATAAAGGAAACAAAAATCATTAATTACATAGAAAAGTAGTAAATTTACACCAATTG
+				</data>
+				<hit pos="364" idx="0" rc="y" pvalue="4.1e-05" match="++++ +++  ++++++++ +"/>
+			</seg>
+			<seg start="451">
+				<data>
+TGTGTTCTGAAGGTGATTTACAATCCTAAGCTCTGACTGTATCTTTAAAA
+				</data>
+				<hit pos="457" idx="1" rc="n" pvalue="7.7e-05" match=" ++ ++ ++ +++  + ++++ + +++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr14:61272713-61273213" comment="" length="500">
+			<score strand="both" combined_pvalue="4.55e-03" evalue="0.91"/>
+			<seg start="151">
+				<data>
+AATTAAGAGTCTGAAACAGTCCTCTGGAACTGCAGTGTACACAGGTTCTCACGCTCAGCTGCGGGACACTATCTG
+CCCCCCTCCTCATCTGTCTCCTGGAGATAAGTCCAAGCCTCTTAGCATCCTTCTGAGAACCCAGAGAGACTCAGG
+				</data>
+				<hit pos="217" idx="1" rc="n" pvalue="1.1e-05" match="    ++++++++++ +++++ + + +++ +"/>
+			</seg>
+			<seg start="301">
+				<data>
+TGACAGGCCTTCAACACAGCACACGGCCTGGCAGGGCTGATAAGGAGGAGCAGTGGGTGTGTCCTTCATCTTTCC
+				</data>
+				<hit pos="351" idx="0" rc="n" pvalue="5.4e-05" match="   ++++++++ +++   + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:33616214-33616714" comment="" length="500">
+			<score strand="both" combined_pvalue="4.65e-03" evalue="0.93"/>
+			<seg start="226">
+				<data>
+ATGAAGGCAGGCCTGGAGGGCCTTACCCCGCCACACCCTGAAACAAACTGACAGGATCTGCAAAATGGCCTTGTG
+				</data>
+				<hit pos="248" idx="0" rc="y" pvalue="3.6e-06" match="  ++++ +++++++++++  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr18:23982470-23982970" comment="" length="500">
+			<score strand="both" combined_pvalue="4.86e-03" evalue="0.97"/>
+			<seg start="226">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTAAAGCCACCACGCC
+CAGCTGACTAAGCATCTTAATCCTTGGACATAGATGTACTTTTTTAAAAAAAGAATATTTATGGTTGAAGTTATT
+				</data>
+				<hit pos="286" idx="0" rc="y" pvalue="6.5e-06" match=" ++ ++ +++++ +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:24715045-24715545" comment="" length="500">
+			<score strand="both" combined_pvalue="4.96e-03" evalue="0.99"/>
+			<seg start="151">
+				<data>
+GGGGGTATGGCAACAGGAGGAGTGTGTGAGGATTTATTCCCATTTTCTGACCCGTGTATTTCTAAGGAGAAGGCA
+CGCCCTGCTTATGCAGACTGCACCCCACTATCTGTCTGTTACCCTCTTCATAAGGCCAGCACCGAGCAGGTGGAG
+				</data>
+				<hit pos="215" idx="0" rc="y" pvalue="5.8e-06" match="+   ++++ +++ +++++++"/>
+			</seg>
+			<seg start="376">
+				<data>
+GTGGAGGAGACACACAGGGAGGGGCCACTGTGTTGTTAGGCAACAGAACCCAAAGTCCTGAATAACATGAGACAG
+				</data>
+				<hit pos="388" idx="0" rc="n" pvalue="2.7e-05" match="  +++++ ++++++ + +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:116195445-116195945" comment="" length="500">
+			<score strand="both" combined_pvalue="5.44e-03" evalue="1.1"/>
+			<seg start="376">
+				<data>
+ACAGTTGAGATGGGGGGCCCAAGATTTCCCATTCACACTTTTCCCTGACCTCTGAAAATAACGGGAAATGGGCTT
+				</data>
+				<hit pos="401" idx="1" rc="n" pvalue="5.9e-06" match="++ ++  ++ + +++++++++ + +++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:77795184-77795684" comment="" length="500">
+			<score strand="both" combined_pvalue="5.78e-03" evalue="1.2"/>
+			<seg start="226">
+				<data>
+TTGAAGTCAGCTGTAGGCAGGTAGCTGGGCGTTGTCAGGATTACGGACTGTTTGGGCTTTTGACTTCCTCTTTCG
+				</data>
+				<hit pos="248" idx="0" rc="n" pvalue="2.4e-05" match="+++++++ ++ +++ ++ ++"/>
+			</seg>
+			<seg start="301">
+				<data>
+GAGTAGTTCACAGGGACAGTGGTTAAGAGAGGGTAAGAACAGCTTGAAATATCTTGGGTTCCATCGGGACCCAAG
+				</data>
+				<hit pos="310" idx="1" rc="y" pvalue="6.9e-05" match="++++ ++ +  ++ ++++++++ + +  ++"/>
+			</seg>
+			<seg start="376">
+				<data>
+GCAGCAATGCTCGTGCTAAAATTAGGTGCTGAGAGTGGAAATGAAGTGGAAAGAGCAGTCATCCGATCTGCCACC
+				</data>
+				<hit pos="407" idx="1" rc="y" pvalue="3.4e-05" match="+ ++ +  ++ ++++++++++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr16:32508975-32509475" comment="" length="500">
+			<score strand="both" combined_pvalue="6.57e-03" evalue="1.3"/>
+			<seg start="151">
+				<data>
+GCCCACCCCTTCTCCGAGGGCCCTTTGTCCTTCCCTAGATCTCAGGCGAGGCTGGCAGGGCTTCAGTTGCTCTGC
+TCCCACTTTCTCCTCTGCCCCTTTTTGCAGAACCTACCTTTGCTTCTCAGACTTACCCCGCCCAGTCTTTGGCTG
+				</data>
+				<hit pos="214" idx="1" rc="n" pvalue="1.3e-05" match="  + ++++++ +++ + ++ +   ++++++"/>
+				<hit pos="273" idx="0" rc="y" pvalue="7.3e-05" match="++  +  +++++ +++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr18:80416880-80417380" comment="" length="500">
+			<score strand="both" combined_pvalue="7.26e-03" evalue="1.5"/>
+			<seg start="226">
+				<data>
+GAGGGCCTCTCACCCTTGGGAGACACACCCACCTTATCTCCTCTGAGTGCTCTGGCCTGNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="240" idx="0" rc="y" pvalue="1.8e-06" match="+   + ++ ++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:57252236-57252736" comment="" length="500">
+			<score strand="both" combined_pvalue="8.25e-03" evalue="1.6"/>
+			<seg start="151">
+				<data>
+CGAGAGGAAGGGCGTGGTCTTCAGCGATGCTAGATTTGTGGCTTCATGGAGTGGGCCTACTTTGCCAAGTAAAGA
+				</data>
+				<hit pos="156" idx="0" rc="n" pvalue="1.5e-05" match="+++++++ +++++++   + "/>
+			</seg>
+			<seg start="301">
+				<data>
+TCCTCTTGGGATTTAGCCATCTCATTTCCACTAAAGTCCCCTTTTTAGTTTTGTTTTCTTTGTTGTTGTTCTACT
+				</data>
+				<hit pos="334" idx="1" rc="n" pvalue="8.0e-05" match="  + +++ +++++  ++++ ++ +++ +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:34915767-34916267" comment="" length="500">
+			<score strand="both" combined_pvalue="8.43e-03" evalue="1.7"/>
+			<seg start="151">
+				<data>
+TGAAGAGGCCTCGGTGTTTGTTAATCCACTGTCATCCGGCGGGCCCTTCCTGTCTGTGGAGCTTTATCAGAGCAC
+				</data>
+				<hit pos="180" idx="1" rc="n" pvalue="3.9e-05" match="++ ++++ + +    +++++ + +++ +++"/>
+			</seg>
+			<seg start="226">
+				<data>
+ACACAGACATCTCAGTCCTGACTCCACCCTGATTGACAGCCCAGTCTCCCAAACTGCCTACTGATCTTCTCGCCT
+				</data>
+				<hit pos="239" idx="0" rc="y" pvalue="3.1e-05" match="+  ++ +++ ++++++++ +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:98389943-98390443" comment="" length="500">
+			<score strand="both" combined_pvalue="8.52e-03" evalue="1.7"/>
+			<seg start="226">
+				<data>
+TGCTCACCACAATTAATAGCCCTTCTTATCTTCAGCCCCACCCCACCAGGCCAGCTTGCCTTATATTCTTGCATG
+				</data>
+				<hit pos="253" idx="0" rc="y" pvalue="1.1e-05" match="+ ++ +++++++++++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr19:5845899-5846399" comment="" length="500">
+			<score strand="both" combined_pvalue="8.66e-03" evalue="1.7"/>
+			<seg start="76">
+				<data>
+GGCGCGTGACTTCTCGGGCGTTGCCGCCGCCTGCTCGCAGGGTGACGTCAGTGCGGGCAGCAGCAGGGTGGGGGT
+GGGGAAGAACTATCCCAGCAGCTTGGGTGGAATGCTTAATTGCGTCTAAGGTTAATTAAATTGCGGGAAAGGTGG
+				</data>
+				<hit pos="137" idx="0" rc="n" pvalue="1.6e-06" match="++++++++++++ +++++  "/>
+			</seg>
+			<seg start="301">
+				<data>
+GGTTGAAGAGCGCCCAGTACAGTTAAGTGATTTTAGAAAACATTTTTGCTTTTGGGTGTGGTATAGTGAGAAAAA
+				</data>
+				<hit pos="350" idx="0" rc="n" pvalue="2.4e-05" match="   ++++++++++ + +++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr3:151777796-151778296" comment="" length="500">
+			<score strand="both" combined_pvalue="1.11e-02" evalue="2.2"/>
+			<seg start="1">
+				<data>
+GGTAAAGACGCGAGATGACCACAGCCAACGGCAGAGAGGACTGAACAGAGCAGAGGAGAAACCGGTCCAGCCCAT
+				</data>
+				<hit pos="31" idx="1" rc="y" pvalue="2.5e-05" match="+++++++  +  +++ ++++ +  ++  ++"/>
+			</seg>
+			<seg start="76">
+				<data>
+GAGTTCTGCAAAGTCAAAGACTTCAGAAGCAAGGAGAGGGCAGTTGCACAGTCCCGCCCAGCCGGGTGACTCTGC
+				</data>
+				<hit pos="119" idx="0" rc="y" pvalue="6.7e-05" match="   + +++ +++ +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:76585120-76585620" comment="" length="500">
+			<score strand="both" combined_pvalue="1.12e-02" evalue="2.2"/>
+			<seg start="301">
+				<data>
+TTGTTGTCTTCTCCTCCTTTTAACCTAAGTTCTCCTCCCCCTCTTCCCTTTATTTCTGCAATTCCTCCTCCTGCT
+				</data>
+				<hit pos="330" idx="1" rc="n" pvalue="2.5e-06" match="++  ++  +++++++++++ ++++ +++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:104332488-104332988" comment="" length="500">
+			<score strand="both" combined_pvalue="1.12e-02" evalue="2.2"/>
+			<seg start="151">
+				<data>
+CAACATGGTCTTTCTATCATTCATCTTATCATTCTGCTGTCTGTCTGAAGCAAGTTGTCTTTGGCTTATCTGCTG
+CCACTCCCCTCCTGCTGCTGTGTTAGTTCCCACTCTTGTGACCATAAGCCTCATAAGTGCTCTTTTAACCACCAT
+				</data>
+				<hit pos="165" idx="1" rc="n" pvalue="6.6e-05" match="+  +++   ++++ ++ ++++  + +++++"/>
+				<hit pos="218" idx="0" rc="y" pvalue="2.6e-05" match="+ ++++ +++++ +++ +++"/>
+			</seg>
+			<seg start="451">
+				<data>
+TTTAAAAAATGTATGGCGTGGCCTCTTCCCACCAGCAACTGCAGTGTAGT
+				</data>
+				<hit pos="460" idx="0" rc="n" pvalue="9.4e-05" match=" + + ++ ++++++++ +  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:138127197-138127697" comment="" length="500">
+			<score strand="both" combined_pvalue="1.23e-02" evalue="2.5"/>
+			<seg start="226">
+				<data>
+GTCTGTCTTTTGCTACAGGGTGTGGTCTGCAAGAGCAACCAGAGGGTGCGCTTCCTCCTCCTGTCTCTACTCCAC
+				</data>
+				<hit pos="239" idx="0" rc="n" pvalue="4.6e-06" match="  ++++++++++++++   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:60988820-60989320" comment="" length="500">
+			<score strand="both" combined_pvalue="1.26e-02" evalue="2.5"/>
+			<seg start="76">
+				<data>
+TTGCACCGGCCTGAGCTCTGCCGCAAAGAGGCGGGGCGACGGAGGGGTGGGGCAGGGTAGGGCCTGCGTCTGCGA
+				</data>
+				<hit pos="116" idx="0" rc="n" pvalue="9.5e-06" match="+++ +++++++++ ++++ +"/>
+			</seg>
+			<seg start="151">
+				<data>
+GTTCTCTGAAAGGAGGGTTTCTAGGTTCTGTTTGTTGGTCCTTGGAGTTCCTAGTGTGGGCGTTTCTGCAGAGAC
+				</data>
+				<hit pos="204" idx="0" rc="n" pvalue="8.3e-05" match="+  ++++ ++  ++++++ +"/>
+			</seg>
+			<seg start="226">
+				<data>
+TGCCATCTTGGCGACTGTGTTGGGTACCGCAATGCCACAGCTGGAGATTGGGCGTGGCAAGAATACAGATCTTCC
+				</data>
+				<hit pos="271" idx="0" rc="n" pvalue="8.0e-05" match="+  ++++ +++++  ++ + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr8:19984030-19984530" comment="" length="500">
+			<score strand="both" combined_pvalue="1.29e-02" evalue="2.6"/>
+			<seg start="76">
+				<data>
+TTTTATTGAAAAAAAAAAAATCACCTCTTCCTTTGTACACACCCAGGCTCACAACACCCACTTTCTCCTCCTGAA
+				</data>
+				<hit pos="104" idx="0" rc="y" pvalue="3.3e-05" match=" +++  +  +++++++++ +"/>
+			</seg>
+			<seg start="151">
+				<data>
+AGGGTTTTGGTTTTTTCATGTCCTGATGGAGTGAGGCCCTGGAGCATCCCAGTCCTGAAATCCTTTCTGAACTCT
+TGTCTGTCCCCAGCAGGAGCTATCTGCCATAATCACTTTGAGCCCATGTCAAGACCTTGAACATAAAGTCTAGGA
+				</data>
+				<hit pos="205" idx="1" rc="n" pvalue="6.2e-05" match=" ++ +   ++++++ + +++++ +++ + +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:31712262-31712762" comment="" length="500">
+			<score strand="both" combined_pvalue="1.45e-02" evalue="2.9"/>
+			<seg start="76">
+				<data>
+GTCCCTGCGGTCAGGCCCTGCAAAGAACGCAGGTTTGTTTTCTCCGGAGCTGAGCCGGGTCCCTTATCTCAGGCA
+				</data>
+				<hit pos="119" idx="1" rc="n" pvalue="3.9e-05" match="  + +++++  ++   +++++++++++ ++"/>
+			</seg>
+			<seg start="151">
+				<data>
+CTCAGACCATCACGTGATCTGGCAAGCTGCACACAGGCTTTAGGGAAGTCTTTTTCTGACCTCCCCACCTCTGAC
+CTCAGTCTCTGGTTCCTGTTGCTTCGAGACTGCATGGTTACCTTTTTATCCCCACAGACCATGGAGCACCTGTTA
+				</data>
+				<hit pos="202" idx="1" rc="n" pvalue="1.2e-05" match="++  ++  ++++++ ++++++ + +++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:41338514-41339014" comment="" length="500">
+			<score strand="both" combined_pvalue="1.48e-02" evalue="3"/>
+			<seg start="151">
+				<data>
+CAGGCTACCTCTCATAAGCTGTTGGCATTGTCACATGGCCCTCTGTTCTTTGGCCACTCCTACTTTCATGTTAGN
+				</data>
+				<hit pos="174" idx="1" rc="n" pvalue="4.1e-05" match=" +  ++ ++ + +  ++++++  +++ +++"/>
+			</seg>
+			<seg start="226">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCCACATTTACTGCTGACCTTTTTCCTTA
+AGCTGTGTACGTGCCCTCCAGTTCACCCTCCAACTTGAAGAAAGACAGCGCGTGTTTGATCTTACCATCNNNNNN
+				</data>
+				<hit pos="279" idx="1" rc="n" pvalue="8.7e-06" match="++ ++++++ +++++++++ + + ++ +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:21362671-21363171" comment="" length="500">
+			<score strand="both" combined_pvalue="1.49e-02" evalue="3"/>
+			<seg start="76">
+				<data>
+CAGCTCTTCCATACCCACTGGGAAGAGTTCTGTTGGGTGTGCTGTTGGCTCTGGGAGAAGCGTGCGTGGAGGAGC
+				</data>
+				<hit pos="106" idx="0" rc="n" pvalue="4.7e-05" match=" + ++++++++ + + ++ +"/>
+			</seg>
+			<seg start="226">
+				<data>
+TCTATGTACAGGGTAGCAATTCCACCAACTCAGGAGGGTGTGTCAGACCTATCTTCCCTGTGCACTGTGACCTTC
+				</data>
+				<hit pos="257" idx="0" rc="n" pvalue="1.1e-05" match="++ ++++++++ + +   + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr18:58822702-58823202" comment="" length="500">
+			<score strand="both" combined_pvalue="1.52e-02" evalue="3"/>
+			<seg start="451">
+				<data>
+TCCAGACTATTGGTTTGATAGACAGAGGAGATTATGGGAAACTGCAGTTA
+				</data>
+				<hit pos="468" idx="1" rc="y" pvalue="2.1e-05" match="+ +++ + + +++++++ +++++ +++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:173447614-173448114" comment="" length="500">
+			<score strand="both" combined_pvalue="1.68e-02" evalue="3.4"/>
+			<seg start="301">
+				<data>
+TGGGGATGGGAATAGGTAAGGGTTTCTCAGTGTGTCTGATATTTAATTCCAAGAACCGGAATTAAAGGCATGAGC
+AGCCACTCCCACCCAGCACATAATTCTGTGACACACAGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCA
+				</data>
+				<hit pos="370" idx="0" rc="y" pvalue="3.9e-06" match="+   ++++++++ ++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr6:81915769-81916269" comment="" length="500">
+			<score strand="both" combined_pvalue="1.74e-02" evalue="3.5"/>
+			<seg start="151">
+				<data>
+CATGTCTACACCCTCAATGAAGGACTACAACTCCCAGAAGTCAGTGCGATGGGGTGTGGCCGGACGGTGGCTCCT
+				</data>
+				<hit pos="198" idx="0" rc="n" pvalue="8.1e-06" match="+   +++++++++++++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:169322898-169323398" comment="" length="500">
+			<score strand="both" combined_pvalue="1.93e-02" evalue="3.9"/>
+			<seg start="226">
+				<data>
+CAGTGTCTCTTACTCCCTTCCACCACCCTGCAGGTGCCCCACCCTGTGGTTCTGGGTCTCCCTGTAGCGACACAA
+				</data>
+				<hit pos="254" idx="0" rc="y" pvalue="2.1e-05" match="  + +  +++++++++++  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr12:70860461-70860961" comment="" length="500">
+			<score strand="both" combined_pvalue="1.94e-02" evalue="3.9"/>
+			<seg start="151">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNAGTCCAGCTGTGGCAAAAAGGACCAGACGCCCATTTAACACTCCTATCTCA
+CCAGGGCAGACACTAGGACTTGGCGCCTAGGACTCCACCCATTGTAACTGCAGCAAGCATCTGGAGTTACCTCTT
+				</data>
+				<hit pos="198" idx="1" rc="n" pvalue="4.9e-05" match="  + +++ + +++ ++ +++ ++++++  +"/>
+				<hit pos="250" idx="0" rc="y" pvalue="6.7e-05" match=" +++  +++ ++++++++  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr9:59598186-59598686" comment="" length="500">
+			<score strand="both" combined_pvalue="1.96e-02" evalue="3.9"/>
+			<seg start="151">
+				<data>
+ACTGCTTCCAAAAACTGAGACAAACCTAAGTAGGGAGGAGGCGTCTTACCTATTCCTCAGGCCTCACCAACCCAA
+				</data>
+				<hit pos="164" idx="1" rc="y" pvalue="4.6e-05" match="++ ++++ ++    +++ +++++++++ + "/>
+				<hit pos="204" idx="0" rc="y" pvalue="7.3e-05" match=" +++++++++ ++++ + ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr3:19550495-19550995" comment="" length="500">
+			<score strand="both" combined_pvalue="1.98e-02" evalue="4"/>
+			<seg start="451">
+				<data>
+ATTCAGAAAAAAGAGAAAAGAAAAGCAAAGCCTTGAATTCTGGGGCAGAC
+				</data>
+				<hit pos="453" idx="1" rc="y" pvalue="1.1e-05" match=" ++++ + ++++++++++++++  ++  + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:36132953-36133453" comment="" length="500">
+			<score strand="both" combined_pvalue="2.01e-02" evalue="4"/>
+			<seg start="151">
+				<data>
+ACTCCGCCTACCGGGACACTCCCAGGGAGTAGCCACTGGCCCTGAAGATAAGCCTCACCAAGGAATTCATTCAGA
+				</data>
+				<hit pos="158" idx="0" rc="y" pvalue="2.5e-05" match="+ +++ ++ +++ +++++  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:38970375-38970875" comment="" length="500">
+			<score strand="both" combined_pvalue="2.06e-02" evalue="4.1"/>
+			<seg start="1">
+				<data>
+GCCCCCTGACACTTGCTAAGGAGCCTGGCTTGTCTTCTGGCAAAGGCTTGTCTGGGCGTGGTAGAGATTGAGAAT
+				</data>
+				<hit pos="50" idx="0" rc="n" pvalue="4.9e-05" match="+ +++++ +++++ + + ++"/>
+			</seg>
+			<seg start="151">
+				<data>
+GTAGATAATTCTTTGAGTAGGTAATCAGGGGTAAGATGGGTGAGTCCAGTACTCATTCCCAGCTCCCTCCCNNNN
+				</data>
+				<hit pos="184" idx="0" rc="n" pvalue="1.6e-05" match="+++++++++ + ++ +   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:78243390-78243890" comment="" length="500">
+			<score strand="both" combined_pvalue="2.19e-02" evalue="4.4"/>
+			<seg start="226">
+				<data>
+GTACAGTGACTTTGGGTGTGACTTCGCCTTAGGCTGGCCATCTGTGTGTGGGGCGGTGCCTAACTCTGCTGGCTG
+				</data>
+				<hit pos="235" idx="0" rc="n" pvalue="3.1e-05" match="   ++++++++ +++++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:87847381-87847881" comment="" length="500">
+			<score strand="both" combined_pvalue="2.20e-02" evalue="4.4"/>
+			<seg start="76">
+				<data>
+TGGCTGCTCAGTCTTCGTGGCTGCTCTGTCCTCCTGTGGAGCTCTTCTCTCACTGTGCCATGGATCACACCCAGG
+GCCTCACAGGGGTAAGTGGCTGCTCTTCCACTGACGTCCACAAGGCTGCAACTCTCCTGGGAAACTTCATGACGA
+				</data>
+				<hit pos="100" idx="1" rc="n" pvalue="7.4e-05" match="+   +++++++ +  + +++++ ++++  +"/>
+				<hit pos="132" idx="0" rc="y" pvalue="5.2e-05" match=" ++   ++ +++++++++  "/>
+			</seg>
+			<seg start="376">
+				<data>
+GATTCTATGTCGAGGTCCACCCACCATCAGATATGTGTGAAGAAAAGAACCTAATCACAGAATTCATAGAGAGGG
+				</data>
+				<hit pos="382" idx="0" rc="y" pvalue="7.0e-05" match="+  ++ ++  +++++++ + "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:33631214-33631714" comment="" length="500">
+			<score strand="both" combined_pvalue="2.21e-02" evalue="4.4"/>
+			<seg start="301">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTCTGCTTTGCTGCTGGGCCACGCCCT
+GCGACCCACGGGTTGAAAGTCACTGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="359" idx="0" rc="y" pvalue="3.4e-06" match="+  +  ++++++ ++++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:135407873-135408373" comment="" length="500">
+			<score strand="both" combined_pvalue="2.25e-02" evalue="4.5"/>
+			<seg start="76">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNCAGGCAAGGGAAGAGGGATCCGAACCCAGCCAGCTTACTGCTTGCTGCT
+				</data>
+				<hit pos="117" idx="0" rc="y" pvalue="9.0e-05" match="  ++++++ ++++ ++++++"/>
+			</seg>
+			<seg start="151">
+				<data>
+CGGGCATGAGGACCTGGGCCACGCCTGTAAGCCCAGCAGAGACAGATCCCTGCCAGTTTGGCAGAATCTGATAGC
+TCTGGGTTCTATGGGCGGAACCCTCTGGAGACATGCTGTACTTTCAGATATGTTTGCTCCTAACGTAGCTAACGG
+				</data>
+				<hit pos="201" idx="1" rc="n" pvalue="4.4e-05" match="++ +++ ++  +  +++++  ++ ++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:101244829-101245329" comment="" length="500">
+			<score strand="both" combined_pvalue="2.27e-02" evalue="4.5"/>
+			<seg start="301">
+				<data>
+ATTTTGAGTTTTCAAAGAGGAGAGGTTCAGACATAGATTCAAAGTATGAAATAAAGCAGAGAAGTCCCTTAGCAC
+				</data>
+				<hit pos="312" idx="1" rc="y" pvalue="1.0e-05" match=" ++ +++  +++++++ +++ +  ++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr10:60612190-60612690" comment="" length="500">
+			<score strand="both" combined_pvalue="2.35e-02" evalue="4.7"/>
+			<seg start="151">
+				<data>
+GCAGGTGACAGCACAGTGACAGCAGTGACAGCCAACTTTGCCCCCTTGTGAATGCTGATACTCAAATGAGGGTGT
+GGTTAGCAATGGCATTCTTATCTCCACCTAGTGTGTCCGAGATGGGACATTTTACCTCCTCTGCATCCCGTGACA
+				</data>
+				<hit pos="216" idx="0" rc="n" pvalue="8.5e-06" match="+  +++++++++++ +   +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr19:56465963-56466463" comment="" length="500">
+			<score strand="both" combined_pvalue="2.40e-02" evalue="4.8"/>
+			<seg start="301">
+				<data>
+AGATAAGGCTGGGTGTGGGGAAGTCAGCCAGAGCGGAGGAAGCTGCATAGCAAGAAGCAGAGACTGGGGTGGGGC
+TAGGGCAGTGTCTCACTAAGCAGAGGTTGGGGTGGGGCCAGAGGCTGCCCTCTCCTTGCTCAGAGGGACTCAAAG
+				</data>
+				<hit pos="307" idx="0" rc="n" pvalue="3.6e-05" match="++++++++++++    ++  "/>
+				<hit pos="363" idx="0" rc="n" pvalue="3.3e-05" match="+   ++++++++++ +++  "/>
+				<hit pos="401" idx="0" rc="n" pvalue="1.9e-05" match="+   ++++++++++ ++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr4:41334759-41335259" comment="" length="500">
+			<score strand="both" combined_pvalue="2.43e-02" evalue="4.9"/>
+			<seg start="151">
+				<data>
+CTGGGTTGAGTCAGCTGTGACAGTACCTCCTTTGGGATGTGGCTGCTCATTTCTAGAAGGGCGTGCCGGTTTGTT
+				</data>
+				<hit pos="205" idx="0" rc="n" pvalue="3.4e-05" match="+++++++ +++ + +  +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr8:92969521-92970021" comment="" length="500">
+			<score strand="both" combined_pvalue="2.59e-02" evalue="5.2"/>
+			<seg start="451">
+				<data>
+CAATGGACTTAGCCATCCTCCACTGCTCTCTGTGAGAGACCAGGGCAGGT
+				</data>
+				<hit pos="454" idx="1" rc="n" pvalue="4.9e-06" match="+++ ++  +++ ++ +++ ++  +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr6:145703215-145703715" comment="" length="500">
+			<score strand="both" combined_pvalue="2.64e-02" evalue="5.3"/>
+			<seg start="151">
+				<data>
+TGTTGGAGATATAGCAGAGAAAATGCAGAGAGTACCTGTTGCTGTGGACTAGTGGGGGAGGTGGGTGGTCAAGGA
+				</data>
+				<hit pos="155" idx="1" rc="y" pvalue="5.5e-05" match="+ +++ +++  ++++++++ ++++++   +"/>
+			</seg>
+			<seg start="226">
+				<data>
+GGGAGTCTTTCTACATGTTTCTGAGTGTTTTAGCCTCTTCTCTTTGTAGGCAGTAGGTTGCCCGTGGGCTCTCTG
+				</data>
+				<hit pos="243" idx="1" rc="n" pvalue="1.8e-05" match="++ +++  + +++++ ++++++ +++ +++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:57679178-57679678" comment="" length="500">
+			<score strand="both" combined_pvalue="2.76e-02" evalue="5.5"/>
+			<seg start="151">
+				<data>
+GCTGCCAACTACTATTGACTACTGTTGTCGCCTTCTCCAGCTTCTATCTTTCAGCTCCAGCTGCATCTGCAAGAG
+TCACGCCCTTCTTAGAACTGCAGCTGTGTGTAGTGGGACTGTTCACTTTCTCAGTAAGAGTGAGGCACCTGTGAC
+				</data>
+				<hit pos="218" idx="0" rc="y" pvalue="1.9e-05" match="  +   ++ +++ +++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr19:45121628-45122128" comment="" length="500">
+			<score strand="both" combined_pvalue="2.78e-02" evalue="5.6"/>
+			<seg start="1">
+				<data>
+AGAAGAATCTTTCTGATGCGCCTGCTTGGATGCAGGCAGAGATCACGGGAAACTTTGGCCGTGCACATCCCTAGG
+				</data>
+				<hit pos="36" idx="1" rc="y" pvalue="2.6e-05" match="++++++++ + ++++++    +  ++  ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr15:79757891-79758391" comment="" length="500">
+			<score strand="both" combined_pvalue="2.80e-02" evalue="5.6"/>
+			<seg start="301">
+				<data>
+CTGGAAACCTATCTGGGCGGAGCACGACGGCCTGCTGGAGATAAACACGACCACGTGACCGTAGCCCCGCCCCCG
+				</data>
+				<hit pos="311" idx="0" rc="n" pvalue="4.5e-05" match="+ +++++ ++ ++  ++ ++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr1:134264178-134264678" comment="" length="500">
+			<score strand="both" combined_pvalue="2.83e-02" evalue="5.7"/>
+			<seg start="1">
+				<data>
+GCTCCCTCCTGGCTTCTGCTTCCCGCCCTCTGCTTTCTGTCCCCTAGCACTGCCCAGACAGACACCACCCAAGAG
+				</data>
+				<hit pos="24" idx="1" rc="n" pvalue="3.5e-05" match=" + ++++++++++++ ++++ ++ + ++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr13:81067500-81068000" comment="" length="500">
+			<score strand="both" combined_pvalue="3.19e-02" evalue="6.4"/>
+			<seg start="226">
+				<data>
+GTGGTAGAAACTGCACTAATATTTACATAAAGGGCGTGGTGGGGTGGGGTAGCAGCAAAGCCTGACTGAAGTGGG
+				</data>
+				<hit pos="253" idx="0" rc="n" pvalue="2.6e-05" match="  +++++ +++++ ++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr11:69714224-69714724" comment="" length="500">
+			<score strand="both" combined_pvalue="3.21e-02" evalue="6.4"/>
+			<seg start="76">
+				<data>
+CTGCACATAGCCCTGCCCGTTGGCCCTGCCCCCATCGCGGCGGGCGGTGGGCGCTGGGGGCTCCGGGTCAGACCG
+GACCTCCTCTGCCTCTTCTCCCTGGCGCTGAGGCAGGTGAAAGGTCGACTATCAGACTTCAGCCTGGGAGTTCCT
+				</data>
+				<hit pos="146" idx="1" rc="n" pvalue="5.5e-05" match="   + +  +++++++ ++++++ ++ ++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr2:103728071-103728571" comment="" length="500">
+			<score strand="both" combined_pvalue="3.52e-02" evalue="7"/>
+			<seg start="301">
+				<data>
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNCAACTCTACCAGCTGG
+GAGTGTTATCTTCCAGTAATTTGCCAAGAGGACAAACACACACAGCAAGAGAGACAGACGTCCGATGTGTGTTCT
+				</data>
+				<hit pos="370" idx="0" rc="n" pvalue="2.6e-05" match="+++++++ +++ + ++ +  "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr5:105994747-105995247" comment="" length="500">
+			<score strand="both" combined_pvalue="4.50e-02" evalue="9"/>
+			<seg start="76">
+				<data>
+TTAATACTCTGGAGGACAGGGGCTCTGGGCTTCTCTAGTTTCCTCTGCCTTGGAAGATTGTGGCCTTCCAGATGG
+				</data>
+				<hit pos="94" idx="1" rc="n" pvalue="8.0e-05" match=" ++ +++++  +++ +++  ++  ++++++"/>
+			</seg>
+			<seg start="226">
+				<data>
+ATAATGAGCACGAGGCACCAGTCAGCCTTGAAGGAAAACTTGTGTCTGTTGAGGGAGATAAGTCTTCAGGATAAG
+CAGCCGTGTCTTACACATCTGAATTGTACACTTGGTTTTTATATGTTGAGGTGGATAAGGTACCCTAAACATCAT
+				</data>
+				<hit pos="277" idx="1" rc="y" pvalue="4.7e-05" match="+  ++++++++   + ++++ ++++++++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr17:84209565-84210065" comment="" length="500">
+			<score strand="both" combined_pvalue="4.70e-02" evalue="9.4"/>
+			<seg start="1">
+				<data>
+CAAAGCCTCTCCTTCCGTGTCTCACCCCTGTAGTGTTTCCTTTCCGGCTTTCAGGAGAGTGGAAAAAAAGAGAAG
+AGAAAATGCAAAGAGTCACTTGAAGGTAGAAGGTGTTTAAATGAAGTCTGCTGCCTNNNNNNNNNNNNNNNNNNN
+				</data>
+				<hit pos="65" idx="1" rc="y" pvalue="1.6e-05" match="+ + +++ +++++++++ + ++++++ ++ "/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="chr7:16507689-16508189" comment="" length="500">
+			<score strand="both" combined_pvalue="4.78e-02" evalue="9.6"/>
+			<seg start="226">
+				<data>
+GTAACCTGAGAGCCCCTCGCCGTCCCTTCTCTATGCCATAATGGTTCAGTCCTCAGGGCGGTGGCTCGAGGCAGA
+				</data>
+				<hit pos="232" idx="1" rc="n" pvalue="7.4e-05" match="++  +++ ++++ +  ++++++ +++ +++"/>
+			</seg>
+		</sequence>
+	</sequences>
+	<runtime host="Timothys-iMac.rd.unr.edu" when="Fri Aug 24 16:48:56 2018" cycles="40946" seconds="0.041"/>
+</mast>
