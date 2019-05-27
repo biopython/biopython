@@ -303,5 +303,4 @@ XX
         block = "\n".join(lines) + "\n"
         blocks.append(block)
     # Finished all motifs; glue the blocks together
-    text = "".join(blocks)
-    return text
+    return "".join(blocks)

@@ -28,8 +28,7 @@ def read(fname):
 
     fname is a file name that contains a GenePop record.
     """
-    record = FileRecord(fname)
-    return record
+    return FileRecord(fname)
 
 
 class FileRecord(object):

@@ -113,8 +113,7 @@ class DB_Index(object):
             return None
         start, stop = [int(x) for x in values.split()]
         self.fid.seek(start)
-        txt = self.fid.read(stop - start)
-        return txt
+        return self.fid.read(stop - start)
 
     def Get_Organism(self, id):
         """Retrieve the organism species (OS)."""

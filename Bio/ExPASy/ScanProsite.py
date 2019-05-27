@@ -56,8 +56,7 @@ def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
             parameters[key] = value
     command = _urlencode(parameters)
     url = "%s/cgi-bin/prosite/PSScan.cgi?%s" % (mirror, command)
-    handle = _urlopen(url)
-    return handle
+    return _urlopen(url)
 
 
 def read(handle):
@@ -66,8 +65,7 @@ def read(handle):
     saxparser = Parser()
     saxparser.setContentHandler(content_handler)
     saxparser.parse(handle)
-    record = content_handler.record
-    return record
+    return content_handler.record
 
 # The classess below are considered private
 

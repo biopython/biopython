@@ -1212,8 +1212,7 @@ def _get_Q(pi, k, w, codon_lst, codon_table):
             nucl_substitutions += pi[codon_lst[i]] * (-Q[i, i])
         except KeyError:
             pass
-    Q = Q / nucl_substitutions
-    return Q
+    return Q / nucl_substitutions
 
 
 def _likelihood_func(t, k, w, pi, codon_cnt, codon_lst, codon_table):

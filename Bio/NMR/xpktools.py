@@ -204,8 +204,7 @@ def replace_entry(line, fieldn, newentry):
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
-    newline = line[:start] + str(newentry) + line[(start + leng):]
-    return newline
+    return line[:start] + str(newentry) + line[(start + leng):]
 
 
 def _find_start_entry(line, n):

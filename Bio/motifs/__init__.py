@@ -158,8 +158,7 @@ def read(handle, format, strict=True):
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
         raise ValueError("More than one motif found in handle")
-    motif = motifs[0]
-    return motif
+    return motifs[0]
 
 
 class Instances(list):

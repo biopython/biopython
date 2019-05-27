@@ -153,5 +153,4 @@ class GraphSet(object):
         """Return a formatted string with information about the feature set."""
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d graphs" % len(self._graphs))
-        outstr = "\n".join(outstr)
-        return outstr
+        return "\n".join(outstr)

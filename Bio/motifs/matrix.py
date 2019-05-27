@@ -87,8 +87,7 @@ class GenericPositionMatrix(dict):
             words = ["%6.2f" % value for value in self[letter]]
             line = "%c: " % letter + " ".join(words)
             lines.append(line)
-        text = "\n".join(lines) + "\n"
-        return text
+        return "\n".join(lines) + "\n"
 
     def __getitem__(self, key):
         """Return the position matrix of index key."""
@@ -370,8 +369,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
                     else:
                         logodds = float("nan")
                 values[letter].append(logodds)
-        pssm = PositionSpecificScoringMatrix(alphabet, values)
-        return pssm
+        return PositionSpecificScoringMatrix(alphabet, values)
 
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):

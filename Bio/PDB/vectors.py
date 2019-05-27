@@ -157,8 +157,7 @@ def refmat(p, q):
     b = pq.get_array()
     b.shape = (3, 1)
     i = numpy.identity(3)
-    ref = i - 2 * numpy.dot(b, numpy.transpose(b))
-    return ref
+    return i - 2 * numpy.dot(b, numpy.transpose(b))
 
 
 def rotmat(p, q):
@@ -183,8 +182,7 @@ def rotmat(p, q):
     <Vector 1.21, 1.82, 3.03>
 
     """
-    rot = numpy.dot(refmat(q, -p), refmat(p, -p))
-    return rot
+    return numpy.dot(refmat(q, -p), refmat(p, -p))
 
 
 def calc_angle(v1, v2, v3):

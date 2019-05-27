@@ -34,8 +34,7 @@ def logistic(x, A, u, d, v, y0):
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A / (1 + np.exp((((4 * u) / A) * (d - x)) + 2))) + y0
-    return y
+    return (A / (1 + np.exp((((4 * u) / A) * (d - x)) + 2))) + y0
 
 
 def gompertz(x, A, u, d, v, y0):
@@ -43,8 +42,7 @@ def gompertz(x, A, u, d, v, y0):
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A * np.exp(-np.exp((((u * np.e) / A) * (d - x)) + 1))) + y0
-    return y
+    return (A * np.exp(-np.exp((((u * np.e) / A) * (d - x)) + 1))) + y0
 
 
 def richards(x, A, u, d, v, y0):
@@ -52,9 +50,8 @@ def richards(x, A, u, d, v, y0):
 
     Proposed in Zwietering et al., 1990 (PMID: 16348228)
     """
-    y = (A * pow(1 + (v + (np.exp(1 + v) * np.exp((u / A) *
-                                                  (1 + v) * (1 + (1 / v)) * (d - x)))), -(1 / v))) + y0
-    return y
+    return (A * pow(1 + (v + (np.exp(1 + v) * np.exp((u / A) *
+                                                     (1 + v) * (1 + (1 / v)) * (d - x)))), -(1 / v))) + y0
 
 
 def guess_lag(x, y):

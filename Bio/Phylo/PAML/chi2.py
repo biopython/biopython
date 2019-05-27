@@ -23,8 +23,7 @@ def cdf_chi2(df, stat):
         raise ValueError("The test statistic must be positive")
     x = 0.5 * stat
     alpha = df / 2.0
-    prob = 1 - _incomplete_gamma(x, alpha)
-    return prob
+    return 1 - _incomplete_gamma(x, alpha)
 
 
 def _ln_gamma_function(alpha):
@@ -122,5 +121,4 @@ def _incomplete_gamma(x, alpha):
             continue
         for i in range(4):
             pn[i] /= overflow
-    gin = 1 - factor * gin
-    return gin
+    return 1 - factor * gin

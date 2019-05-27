@@ -612,8 +612,7 @@ class AbstractCut(RestrictionType):
         """
         if not batch:
             batch = AllEnzymes
-        r = sorted(x for x in batch if cls >> x)
-        return r
+        return sorted(x for x in batch if cls >> x)
 
     @classmethod
     def isoschizomers(cls, batch=None):
@@ -1196,8 +1195,7 @@ class Blunt(AbstractCut):
         """List all enzymes that produce compatible ends for the enzyme."""
         if not batch:
             batch = AllEnzymes
-        r = sorted(x for x in iter(AllEnzymes) if x.is_blunt())
-        return r
+        return sorted(x for x in iter(AllEnzymes) if x.is_blunt())
 
     @staticmethod
     def _mod1(other):
@@ -1324,9 +1322,8 @@ class Ov5(AbstractCut):
         """List all enzymes that produce compatible ends for the enzyme."""
         if not batch:
             batch = AllEnzymes
-        r = sorted(x for x in iter(AllEnzymes) if x.is_5overhang() and
-                   x % cls)
-        return r
+        return sorted(x for x in iter(AllEnzymes) if x.is_5overhang() and
+                      x % cls)
 
     @classmethod
     def _mod1(cls, other):
@@ -1456,9 +1453,8 @@ class Ov3(AbstractCut):
         """List all enzymes that produce compatible ends for the enzyme."""
         if not batch:
             batch = AllEnzymes
-        r = sorted(x for x in iter(AllEnzymes) if x.is_3overhang() and
-                   x % cls)
-        return r
+        return sorted(x for x in iter(AllEnzymes) if x.is_3overhang() and
+                      x % cls)
 
     @classmethod
     def _mod1(cls, other):
@@ -2114,8 +2110,7 @@ class RestrictionBatch(set):
         Return a sorted list of the suppliers which have been used to
         create the batch.
         """
-        suppl_list = sorted(suppliers_dict[x][0] for x in self.suppliers)
-        return suppl_list
+        return sorted(suppliers_dict[x][0] for x in self.suppliers)
 
     def __iadd__(self, other):
         """Override '+=' for use with sets.
@@ -2229,8 +2224,7 @@ class RestrictionBatch(set):
 
         Letter code for the suppliers.
         """
-        supply = {k: v[0] for k, v in suppliers_dict.items()}
-        return supply
+        return {k: v[0] for k, v in suppliers_dict.items()}
 
     @classmethod
     def show_codes(cls):

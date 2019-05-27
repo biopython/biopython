@@ -1690,8 +1690,7 @@ class Nexus(object):
                 # else:
                 #    print 'failed'
             constant = newconstant
-        cpos = [s[0] for s in constant]
-        return cpos
+        return [s[0] for s in constant]
 
     def cstatus(self, site, delete=(), narrow=True):
         """Summarize character.
@@ -1921,8 +1920,7 @@ try:
 except ImportError:
     def _get_command_lines(file_contents):
         lines = _kill_comments_and_break_lines(file_contents)
-        commandlines = _adjust_lines(lines)
-        return commandlines
+        return _adjust_lines(lines)
 else:
     def _get_command_lines(file_contents):
         decommented = cnexus.scanfile(file_contents)
@@ -1932,8 +1930,7 @@ else:
         # cnexus can't return lists, so in analogy we separate
         # commandlines with chr(7) (a character that shouldn't be part of a
         # nexus file under normal circumstances)
-        commandlines = _adjust_lines(decommented.split(chr(7)))
-        return commandlines
+        return _adjust_lines(decommented.split(chr(7)))
 
 
 if __name__ == "__main__":

@@ -369,5 +369,4 @@ class Diagram(object):
         outstr.append("%d tracks" % len(self.tracks))
         for level in self.get_levels():
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
-        outstr = '\n'.join(outstr)
-        return outstr
+        return "\n".join(outstr)

@@ -142,8 +142,7 @@ class KDTree(object):
         the indices of the point pairs, where N
         is the number of neighbor pairs.
         """
-        a = array([[neighbor.index1, neighbor.index2] for neighbor in self.neighbors])
-        return a
+        return array([[neighbor.index1, neighbor.index2] for neighbor in self.neighbors])
 
     def all_get_radii(self):
         """Return All Fixed Neighbor Search results.

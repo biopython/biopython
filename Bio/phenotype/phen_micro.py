@@ -382,9 +382,7 @@ class PlateRecord(object):
         for w in self:
             wells.append(w + plate[w.id])
 
-        newp = PlateRecord(self.id, wells=wells)
-
-        return newp
+        return PlateRecord(self.id, wells=wells)
 
     def __sub__(self, plate):
         """Subtract another PlateRecord object.
@@ -405,9 +403,7 @@ class PlateRecord(object):
         for w in self:
             wells.append(w - plate[w.id])
 
-        newp = PlateRecord(self.id, wells=wells)
-
-        return newp
+        return PlateRecord(self.id, wells=wells)
 
     def get_row(self, row):
         """Get all the wells of a given row.
@@ -470,9 +466,7 @@ class PlateRecord(object):
             else:
                 nwells.append(w)
 
-        newp = PlateRecord(self.id, wells=nwells)
-
-        return newp
+        return PlateRecord(self.id, wells=nwells)
 
     def __repr__(self):
         """Return a (truncated) representation of the plate for debugging."""
@@ -704,9 +698,7 @@ class WellRecord(object):
         for t in sorted(times):
             signals[t] = self[t] + well[t]
 
-        neww = WellRecord(self.id, signals=signals)
-
-        return neww
+        return WellRecord(self.id, signals=signals)
 
     def __sub__(self, well):
         """Subtract another WellRecord object.
@@ -723,9 +715,7 @@ class WellRecord(object):
         for t in sorted(times):
             signals[t] = self[t] - well[t]
 
-        neww = WellRecord(self.id, signals=signals)
-
-        return neww
+        return WellRecord(self.id, signals=signals)
 
     def __len__(self):
         """Return the number of time points sampled."""

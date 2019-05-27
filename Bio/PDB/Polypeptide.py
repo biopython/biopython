@@ -284,8 +284,7 @@ class Polypeptide(list):
         s = ""
         for res in self:
             s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
-        seq = Seq(s, generic_protein)
-        return seq
+        return Seq(s, generic_protein)
 
     def __repr__(self):
         """Return string representation of the polypeptide.
@@ -295,8 +294,7 @@ class Polypeptide(list):
         """
         start = self[0].get_id()[1]
         end = self[-1].get_id()[1]
-        s = "<Polypeptide start=%s end=%s>" % (start, end)
-        return s
+        return "<Polypeptide start=%s end=%s>" % (start, end)
 
 
 class _PPBuilder(object):

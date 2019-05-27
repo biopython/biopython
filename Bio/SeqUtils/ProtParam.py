@@ -134,10 +134,7 @@ class ProteinAnalysis(object):
         """
         aromatic_aas = 'YWF'
         aa_percentages = self.get_amino_acids_percent()
-
-        aromaticity = sum(aa_percentages[aa] for aa in aromatic_aas)
-
-        return aromaticity
+        return sum(aa_percentages[aa] for aa in aromatic_aas)
 
     def instability_index(self):
         """Calculate the instability index according to Guruprasad et al 1990.

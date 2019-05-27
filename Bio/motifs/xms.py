@@ -96,6 +96,4 @@ def read(handle):
     This format was defined by Thomas Down, and used in the NestedMICA and MotifExplorer programs.
     """
     xms_doc = minidom.parse(handle)
-    record = XMSScanner(xms_doc).record
-
-    return record
+    return XMSScanner(xms_doc).record

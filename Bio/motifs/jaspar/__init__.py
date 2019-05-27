@@ -95,8 +95,7 @@ class Motif(motifs.Motif):
             comment_str = "Comments\t{0}\n".format(self.comment)
             the_string = "".join([the_string, comment_str])
         matrix_str = "Matrix:\n{0}\n\n".format(self.counts)
-        the_string = "".join([the_string, matrix_str])
-        return the_string
+        return "".join([the_string, matrix_str])
 
     def __hash__(self):
         """Return the hash key corresponding to the JASPAR profile.
@@ -183,9 +182,7 @@ def write(motifs, format):
         raise ValueError("Unknown JASPAR format %s" % format)
 
     # Finished; glue the lines together
-    text = "".join(lines)
-
-    return text
+    return "".join(lines)
 
 
 def _read_pfm(handle):

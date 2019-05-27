@@ -298,8 +298,7 @@ class _Matrix(object):
         matrix_string = '\n'.join(
             [self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
              for i in range(0, len(self))])
-        matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
-        return matrix_string
+        return matrix_string + "\n\t" + "\t".join(self.names)
 
 
 class DistanceMatrix(_Matrix):

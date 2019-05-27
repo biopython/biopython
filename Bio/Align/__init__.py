@@ -1135,8 +1135,7 @@ class PairwiseAlignment(object):
                  qStarts,
                  tStarts,
                  ]
-        line = "\t".join(words) + "\n"
-        return line
+        return "\t".join(words) + "\n"
 
     @property
     def aligned(self):
@@ -1414,8 +1413,7 @@ class PairwiseAligner(_aligners.PairwiseAligner):
         seqA = str(seqA)
         seqB = str(seqB)
         score, paths = _aligners.PairwiseAligner.align(self, seqA, seqB)
-        alignments = PairwiseAlignments(seqA, seqB, score, paths)
-        return alignments
+        return PairwiseAlignments(seqA, seqB, score, paths)
 
     def score(self, seqA, seqB):
         """Return the alignments score of two sequences using PairwiseAligner."""

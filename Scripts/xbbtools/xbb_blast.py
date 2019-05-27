@@ -115,10 +115,8 @@ class BlastIt(object):
         return True
 
     def database_readable(self, db_paths):
-        """Return the name of the blast database without path and extension."""
-        db_names = [entry.split(os.sep)[-1].split('.')[0]
-                    for entry in db_paths]
-        return db_names
+        """Return list of blast database names without path and extension."""
+        return [entry.split(os.sep)[-1].split('.')[0] for entry in db_paths]
 
     def convert_dbname_to_dbpath(self, db_name):
         """Return the full path for a given blast database name."""

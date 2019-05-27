@@ -2552,8 +2552,7 @@ class MutableSeq(object):
         Throws error if other is not an iterable and if objects inside of the iterable
         are not Seq or String objects
         """
-        seq_joined = self.toseq().join(other)  # returns Seq object instead of MutableSeq
-        return seq_joined
+        return self.toseq().join(other)  # returns Seq object instead of MutableSeq
 
 
 # The transcribe, backward_transcribe, and translate functions are

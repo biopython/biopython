@@ -592,8 +592,7 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
 
     """
     trees = bootstrap_trees(msa, times, tree_constructor)
-    tree = consensus(list(trees))
-    return tree
+    return consensus(list(trees))
 
 
 def _clade_to_bitstr(clade, tree_term_names):

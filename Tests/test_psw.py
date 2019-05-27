@@ -108,9 +108,7 @@ def testing_suite():
 
     doctest_suite = doctest.DocTestSuite(psw)
 
-    big_suite = unittest.TestSuite((unittest_suite, doctest_suite))
-
-    return big_suite
+    return unittest.TestSuite((unittest_suite, doctest_suite))
 
 
 if __name__ == "__main__":

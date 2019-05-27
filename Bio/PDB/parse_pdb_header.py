@@ -40,8 +40,7 @@ def _get_journal(inl):
     for l in inl:
         if re.search(r"\AJRNL", l):
             journal += l[19:72].lower()
-    journal = re.sub(r"\s\s+", " ", journal)
-    return journal
+    return re.sub(r"\s\s+", " ", journal)
 
 
 def _get_references(inl):
@@ -82,8 +81,7 @@ def _format_date(pdb_date):
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
         month = '0' + month
-    date = date + month + '-' + pdb_date[:2]
-    return date
+    return date + month + '-' + pdb_date[:2]
 
 
 def _chop_end_codes(line):

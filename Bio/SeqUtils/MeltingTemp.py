@@ -444,8 +444,7 @@ def _check(seq, method):
                    'T', 'V', 'W', 'X', 'Y')
     if method == 'Tm_NN':
         baseset = ('A', 'C', 'G', 'T', 'I')
-    seq = ''.join([base for base in seq if base in baseset])
-    return seq
+    return ''.join([base for base in seq if base in baseset])
 
 
 def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):

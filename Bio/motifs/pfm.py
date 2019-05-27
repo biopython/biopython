@@ -391,6 +391,4 @@ def write(motifs):
             lines.append('{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n'.format(*ACGT_counts))
 
     # Finished; glue the lines together.
-    text = ''.join(lines)
-
-    return text
+    return ''.join(lines)

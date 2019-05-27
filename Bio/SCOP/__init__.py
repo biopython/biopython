@@ -151,8 +151,7 @@ def parse_domain(str):
 
 def _open_scop_file(scop_dir_path, version, filetype):
     filename = "dir.%s.scop.txt_%s" % (filetype, version)
-    handle = open(os.path.join(scop_dir_path, filename))
-    return handle
+    return open(os.path.join(scop_dir_path, filename))
 
 
 class Scop(object):
@@ -775,8 +774,7 @@ class Astral(object):
             file_handle.close()
 
         doms = [a for a in doms if a[0] == 'd']
-        doms = [self.scop.getDomainBySid(x) for x in doms]
-        return doms
+        return [self.scop.getDomainBySid(x) for x in doms]
 
     def getAstralDomainsFromSQL(self, column):
         """Load ASTRAL domains from the MySQL database.
@@ -787,9 +785,7 @@ class Astral(object):
         cur = self.db_handle.cursor()
         cur.execute("SELECT sid FROM astral WHERE " + column + "=1")
         data = cur.fetchall()
-        data = [self.scop.getDomainBySid(x[0]) for x in data]
-
-        return data
+        return [self.scop.getDomainBySid(x[0]) for x in data]
 
     def getSeqBySid(self, domain):
         """Get the seq record of a given domain from its sid."""

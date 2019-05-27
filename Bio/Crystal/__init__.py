@@ -113,16 +113,13 @@ class Chain(object):
     def __str__(self):
         output = ''
         for element in self.data:
-            output = output + '%s ' % element
-        output = output.strip()
-        output = wrap_line(output)
-        return output
+            output += '%s ' % element
+        return wrap_line(output.strip())
 
     def __eq__(self, other):
         if len(self.data) != len(other.data):
             return 0
-        ok = reduce(lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data))
-        return ok
+        return reduce(lambda x, y: x and y, map(lambda x, y: x == y, self.data, other.data))
 
     def __ne__(self, other):
         """Return true iff self is not equal to other."""

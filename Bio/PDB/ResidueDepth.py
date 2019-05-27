@@ -486,8 +486,7 @@ def get_surface(model, PDB_TO_XYZR=None, MSMS="msms"):
                            "command:\n%s" % make_surface)
 
     # read surface vertices from vertex file
-    surface = _read_vertex_array(surface_file)
-    return surface
+    return _read_vertex_array(surface_file)
 
 
 def min_dist(coord, surface):

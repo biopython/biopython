@@ -159,9 +159,7 @@ class Parser(object):
         if 'confidence' in result:
             kwargs['confidence'] = result['confidence']
 
-        clade = CDAO.Clade(**kwargs)
-
-        return clade
+        return CDAO.Clade(**kwargs)
 
     def get_node_info(self, graph, context=None):
         """Create a dictionary containing information about all nodes in the tree."""

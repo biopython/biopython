@@ -510,16 +510,14 @@ def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
         exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
     exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
     subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
-    lo_mat = _build_log_odds_mat(subs_mat, logbase, factor, round_digit, keep_nd)
-    return lo_mat
+    return _build_log_odds_mat(subs_mat, logbase, factor, round_digit, keep_nd)
 
 
 def observed_frequency_to_substitution_matrix(obs_freq_mat):
     """Convert observed frequency table into substitution matrix."""
     exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
     exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
-    subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
-    return subs_mat
+    return _build_subs_mat(obs_freq_mat, exp_freq_mat)
 
 
 def read_text_matrix(data_file):
@@ -558,8 +556,7 @@ def read_text_matrix(data_file):
     for i in matrix:
         if '*' in i:
             del(matrix[i])
-    ret_mat = SeqMat(matrix)
-    return ret_mat
+    return SeqMat(matrix)
 
 
 diagNO = 1
@@ -618,8 +615,7 @@ def two_mat_correlation(mat_1, mat_2):
         except KeyError:
             raise ValueError("%s is not a common key" % ab_pair)
     correlation_matrix = numpy.corrcoef(values, rowvar=0)
-    correlation = correlation_matrix[0, 1]
-    return correlation
+    return correlation_matrix[0, 1]
 
 
 def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
@@ -635,8 +631,7 @@ def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     mat_1.make_entropy()
     mat_2.make_entropy()
     # print(mat_1.entropy, mat_2.entropy)
-    dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
-    return dJS
+    return sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
 
 
 """

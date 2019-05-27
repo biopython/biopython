@@ -73,8 +73,7 @@ class DNAsearch(object):
     def _Search(self, start=0):
         """Search and return MatchObject (PRIVAT)."""
         # Only called from SearchAll. Is it used?
-        pos = self.rx.search(self.sequence, start)
-        return pos
+        return self.rx.search(self.sequence, start)
 
     def Search(self, start=0):
         """Search for query sequence and return position."""
@@ -161,8 +160,7 @@ class XDNAsearch(tk.Toplevel, DNAsearch):
 
     def get_pattern(self):
         """Retrieve query sequence."""
-        pattern = self.search_entry.get()
-        return pattern
+        return self.search_entry.get()
 
     def do_search(self, other_strand=0):
         """Start the search."""

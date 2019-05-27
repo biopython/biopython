@@ -243,8 +243,7 @@ class PrintFormat(object):
             if len(st) > self.linesize:
                 stringsite = Join((stringsite, st, '\n'))
                 st = ''
-        stringsite = Join((stringsite, st, '\n'))
-        return stringsite
+        return Join((stringsite, st, '\n'))
 
     def _make_list_only(self, ls, title, nc=(), s1=''):
         """Summarise list of positions per enzyme (PRIVATE).
@@ -410,8 +409,7 @@ class PrintFormat(object):
         mapunit = Join((mapunit, Join((str.ljust(str(base + 1), 15), ' ' * (
             length - base - 30), str.rjust(str(length), 15),
             '\n\n'))))
-        map = Join((map, mapunit))
-        return map
+        return Join((map, mapunit))
 
 # private method to do lists:
 
