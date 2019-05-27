@@ -436,8 +436,6 @@ class AbstractDrawer(object):
            margins to the page
          - xl        Float (0->1) describing the relative size of the left X
            margin to the page (overrides x)
-         - xl        Float (0->1) describing the relative size of the left X
-           margin to the page (overrides x)
          - xr        Float (0->1) describing the relative size of the right X
            margin to the page (overrides x)
          - yt        Float (0->1) describing the relative size of the top Y
