@@ -14,7 +14,7 @@ The following dictionaries used to be defined in one go, but that does
 not work on Jython due to JVM limitations. Therefore we break this up
 into steps, using temporary functions to avoid the JVM limits.
 
-Used REBASE emboss files version 901 (2019).
+Used REBASE emboss files version 905 (2019).
 
 """
 rest_dict = {}
@@ -143,6 +143,31 @@ def _temp():
 
 
 rest_dict['Aba6411II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CATTAG'),
+        'compsite': '(?=(?P<AbaB8342IV>CATTAG))|(?=(?P<AbaB8342IV_as>CTAATG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CATTAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['AbaB8342IV'] = _temp()
 
 
 def _temp():
@@ -668,6 +693,31 @@ def _temp():
 
 
 rest_dict['AcoI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'TAGCRAB'),
+        'compsite': '(?=(?P<AcoY31II>TAGC[AG]A[CGT]))|(?=(?P<AcoY31II_as>[ACG]T[CT]GCTA))',
+        'dna': None,
+        'freq': 2730.6666666666665,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'TAGCRAB',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['AcoY31II'] = _temp()
 
 
 def _temp():
@@ -1522,6 +1572,31 @@ rest_dict['AmaCSI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GATCNAC'),
+        'compsite': '(?=(?P<Aod1I>GATC.AC))|(?=(?P<Aod1I_as>GT.GATC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GATCNAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Aod1I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'TCCGGA'),
         'compsite': '(?=(?P<Aor13HI>TCCGGA))',
         'dna': None,
@@ -1972,8 +2047,33 @@ rest_dict['AsiSI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CGRAGGC'),
+        'compsite': '(?=(?P<Asp103I>CG[AG]AGGC))|(?=(?P<Asp103I_as>GCCT[CT]CG))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGRAGGC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Asp103I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'AGCABCC'),
-        'compsite': '(?=(?P<Asp114II>AGCA[CGT]CC))|(?=(?P<Asp114II_as>GG[ACG]TGCT))',
+        'compsite': '(?=(?P<Asp114pII>AGCA[CGT]CC))|(?=(?P<Asp114pII_as>GG[ACG]TGCT))',
         'dna': None,
         'freq': 5461.333333333333,
         'fst3': None,
@@ -1992,7 +2092,7 @@ def _temp():
     }
 
 
-rest_dict['Asp114II'] = _temp()
+rest_dict['Asp114pII'] = _temp()
 
 
 def _temp():
@@ -2172,6 +2272,31 @@ rest_dict['AspLEI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'AAGAACB'),
+        'compsite': '(?=(?P<AspNIH4III>AAGAAC[CGT]))|(?=(?P<AspNIH4III_as>[ACG]GTTCTT))',
+        'dna': None,
+        'freq': 5461.333333333333,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'AAGAACB',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['AspNIH4III'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'GGNCC'),
         'compsite': '(?=(?P<AspS9I>GG.CC))',
         'dna': None,
@@ -2193,6 +2318,31 @@ def _temp():
 
 
 rest_dict['AspS9I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GTCTCA'),
+        'compsite': '(?=(?P<AspSLV7III>GTCTCA))|(?=(?P<AspSLV7III_as>TGAGAC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTCTCA',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['AspSLV7III'] = _temp()
 
 
 def _temp():
@@ -2747,6 +2897,31 @@ rest_dict['BarI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GTTCAG'),
+        'compsite': '(?=(?P<Bau1417V>GTTCAG))|(?=(?P<Bau1417V_as>CTGAAC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTTCAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bau1417V'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'CACGAG'),
         'compsite': '(?=(?P<BauI>CACGAG))|(?=(?P<BauI_as>CTCGTG))',
         'dna': None,
@@ -2768,6 +2943,106 @@ def _temp():
 
 
 rest_dict['BauI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GGCGAG'),
+        'compsite': '(?=(?P<Bbr52II>GGCGAG))|(?=(?P<Bbr52II_as>CTCGCC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGCGAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bbr52II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GTRAAYG'),
+        'compsite': '(?=(?P<Bbr57III>GT[AG]AA[CT]G))|(?=(?P<Bbr57III_as>C[AG]TT[CT]AC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTRAAYG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bbr57III'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CGGGAG'),
+        'compsite': '(?=(?P<Bbr7017II>CGGGAG))|(?=(?P<Bbr7017II_as>CTCCCG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGGGAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bbr7017II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GGRCAG'),
+        'compsite': '(?=(?P<Bbr7017III>GG[AG]CAG))|(?=(?P<Bbr7017III_as>CTG[CT]CC))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGRCAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bbr7017III'] = _temp()
 
 
 def _temp():
@@ -2818,6 +3093,56 @@ def _temp():
 
 
 rest_dict['BbsI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GNAAYG'),
+        'compsite': '(?=(?P<BbuB31I>G.AA[CT]G))|(?=(?P<BbuB31I_as>C[AG]TT.C))',
+        'dna': None,
+        'freq': 512.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GNAAYG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['BbuB31I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CGRKA'),
+        'compsite': '(?=(?P<BbuB31II>CG[AG][GT]A))|(?=(?P<BbuB31II_as>T[AC][CT]CG))',
+        'dna': None,
+        'freq': 256.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGRKA',
+        'size': 5,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['BbuB31II'] = _temp()
 
 
 def _temp():
@@ -3497,6 +3822,31 @@ rest_dict['BfuI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GTRAAG'),
+        'compsite': '(?=(?P<Bga514I>GT[AG]AAG))|(?=(?P<Bga514I_as>CTT[CT]AC))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTRAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bga514I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (7, -7, None, None, 'GCCNNNNNGGC'),
         'compsite': '(?=(?P<BglI>GCC.....GGC))',
         'dna': None,
@@ -3593,6 +3943,31 @@ def _temp():
 
 
 rest_dict['BisI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'RTTAAATM'),
+        'compsite': '(?=(?P<BkrAM31DI>[AG]TTAAAT[AC]))|(?=(?P<BkrAM31DI_as>[GT]ATTTAA[CT]))',
+        'dna': None,
+        'freq': 16384.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'RTTAAATM',
+        'size': 8,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['BkrAM31DI'] = _temp()
 
 
 def _temp():
@@ -6097,8 +6472,8 @@ rest_dict['BspCNI'] = _temp()
 
 def _temp():
     return {
-        'charac': (9, 6, None, None, 'GACTC'),
-        'compsite': '(?=(?P<BspD6I>GACTC))|(?=(?P<BspD6I_as>GAGTC))',
+        'charac': (9, 6, None, None, 'GAGTC'),
+        'compsite': '(?=(?P<BspD6I>GAGTC))|(?=(?P<BspD6I_as>GACTC))',
         'dna': None,
         'freq': 1024.0,
         'fst3': 6,
@@ -6110,7 +6485,7 @@ def _temp():
         'results': None,
         'scd3': None,
         'scd5': None,
-        'site': 'GACTC',
+        'site': 'GAGTC',
         'size': 5,
         'substrat': 'DNA',
         'suppl': (),
@@ -8247,6 +8622,31 @@ rest_dict['BtuMI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GACNNNNNTGG'),
+        'compsite': '(?=(?P<Bve1B23I>GAC.....TGG))|(?=(?P<Bve1B23I_as>CCA.....GTC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GACNNNNNTGG',
+        'size': 11,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Bve1B23I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (10, 8, None, None, 'ACCTGC'),
         'compsite': '(?=(?P<BveI>ACCTGC))|(?=(?P<BveI_as>GCAGGT))',
         'dna': None,
@@ -8622,6 +9022,56 @@ rest_dict['CciNI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GGGTDA'),
+        'compsite': '(?=(?P<Cco14983V>GGGT[AGT]A))|(?=(?P<Cco14983V_as>T[ACT]ACCC))',
+        'dna': None,
+        'freq': 1365.3333333333333,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGGTDA',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Cco14983V'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCYGA'),
+        'compsite': '(?=(?P<Cco14983VI>GC[CT]GA))|(?=(?P<Cco14983VI_as>TC[AG]GC))',
+        'dna': None,
+        'freq': 512.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCYGA',
+        'size': 5,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Cco14983VI'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'CGACCAG'),
         'compsite': '(?=(?P<CcrNAIII>CGACCAG))|(?=(?P<CcrNAIII_as>CTGGTCG))',
         'dna': None,
@@ -8668,31 +9118,6 @@ def _temp():
 
 
 rest_dict['Cdi11397I'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GCMGAAG'),
-        'compsite': '(?=(?P<Cdi81III>GC[AC]GAAG))|(?=(?P<Cdi81III_as>CTTC[GT]GC))',
-        'dna': None,
-        'freq': 8192.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GCMGAAG',
-        'size': 7,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Cdi81III'] = _temp()
 
 
 def _temp():
@@ -8922,6 +9347,56 @@ rest_dict['CfrI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'AGCANCC'),
+        'compsite': '(?=(?P<CfrMH13II>AGCA.CC))|(?=(?P<CfrMH13II_as>GG.TGCT))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'AGCANCC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['CfrMH13II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CTAAAG'),
+        'compsite': '(?=(?P<CfrMH16VI>CTAAAG))|(?=(?P<CfrMH16VI_as>CTTTAG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CTAAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['CfrMH16VI'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'GARCAG'),
         'compsite': '(?=(?P<Cfupf3II>GA[AG]CAG))|(?=(?P<Cfupf3II_as>CTG[CT]TC))',
         'dna': None,
@@ -9018,6 +9493,56 @@ def _temp():
 
 
 rest_dict['ChaI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GKAAGC'),
+        'compsite': '(?=(?P<Cje265V>G[GT]AAGC))|(?=(?P<Cje265V_as>GCTT[AC]C))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GKAAGC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Cje265V'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GKAAYC'),
+        'compsite': '(?=(?P<Cje54107III>G[GT]AA[CT]C))|(?=(?P<Cje54107III_as>G[AG]TT[AC]C))',
+        'dna': None,
+        'freq': 1024.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GKAAYC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Cje54107III'] = _temp()
 
 
 def _temp():
@@ -9997,6 +10522,31 @@ rest_dict['DrdII'] = _temp()
 
 def _temp():
     return {
+        'charac': (26, 18, None, None, 'TACGAC'),
+        'compsite': '(?=(?P<DrdIV>TACGAC))|(?=(?P<DrdIV_as>GTCGTA))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': 18,
+        'fst5': 26,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': 2,
+        'ovhgseq': 'NN',
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'TACGAC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['DrdIV'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (6, -6, None, None, 'GACNNNNNGTC'),
         'compsite': '(?=(?P<DriI>GAC.....GTC))',
         'dna': None,
@@ -10068,6 +10618,31 @@ def _temp():
 
 
 rest_dict['DseDI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CACNCAC'),
+        'compsite': '(?=(?P<DvuIII>CAC.CAC))|(?=(?P<DvuIII_as>GTG.GTG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CACNCAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['DvuIII'] = _temp()
 
 
 def _temp():
@@ -10243,6 +10818,31 @@ def _temp():
 
 
 rest_dict['Ecl136II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CGGNAAG'),
+        'compsite': '(?=(?P<Ecl234I>CGG.AAG))|(?=(?P<Ecl234I_as>CTT.CCG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGGNAAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Ecl234I'] = _temp()
 
 
 def _temp():
@@ -10443,6 +11043,31 @@ def _temp():
 
 
 rest_dict['Eco32I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CRARCAG'),
+        'compsite': '(?=(?P<Eco43896II>C[AG]A[AG]CAG))|(?=(?P<Eco43896II_as>CTG[CT]T[CT]G))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CRARCAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Eco43896II'] = _temp()
 
 
 def _temp():
@@ -10797,6 +11422,31 @@ rest_dict['EcoHI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GGTAAG'),
+        'compsite': '(?=(?P<EcoHSI>GGTAAG))|(?=(?P<EcoHSI_as>CTTACC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGTAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['EcoHSI'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (3, -3, None, None, 'GAGCTC'),
         'compsite': '(?=(?P<EcoICRI>GAGCTC))',
         'dna': None,
@@ -10868,6 +11518,31 @@ def _temp():
 
 
 rest_dict['EcoNI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'ATGAAG'),
+        'compsite': '(?=(?P<EcoNIH6II>ATGAAG))|(?=(?P<EcoNIH6II_as>CTTCAT))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'ATGAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['EcoNIH6II'] = _temp()
 
 
 def _temp():
@@ -11263,7 +11938,7 @@ def _temp():
         'site': 'CGTCTC',
         'size': 6,
         'substrat': 'DNA',
-        'suppl': ('B',),
+        'suppl': ('B', 'N'),
     }
 
 
@@ -11293,31 +11968,6 @@ def _temp():
 
 
 rest_dict['EspI'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GCCGAC'),
-        'compsite': '(?=(?P<Exi27195I>GCCGAC))|(?=(?P<Exi27195I_as>GTCGGC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GCCGAC',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Exi27195I'] = _temp()
 
 
 def _temp():
@@ -11543,6 +12193,31 @@ def _temp():
 
 
 rest_dict['FblI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCVGAG'),
+        'compsite': '(?=(?P<Fco1691IV>GC[ACG]GAG))|(?=(?P<Fco1691IV_as>CTC[CGT]GC))',
+        'dna': None,
+        'freq': 1365.3333333333333,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCVGAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Fco1691IV'] = _temp()
 
 
 def _temp():
@@ -11843,6 +12518,31 @@ def _temp():
 
 
 rest_dict['FspI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GARGAAG'),
+        'compsite': '(?=(?P<FspPK15I>GA[AG]GAAG))|(?=(?P<FspPK15I_as>CTTC[CT]TC))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GARGAAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['FspPK15I'] = _temp()
 
 
 def _temp():
@@ -12193,6 +12893,56 @@ def _temp():
 
 
 rest_dict['HbaII'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CGANNNNNNTCC'),
+        'compsite': '(?=(?P<HdeNY26I>CGA......TCC))|(?=(?P<HdeNY26I_as>GGA......TCG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGANNNNNNTCC',
+        'size': 12,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['HdeNY26I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCANNNNNNTCC'),
+        'compsite': '(?=(?P<HdeZA17I>GCA......TCC))|(?=(?P<HdeZA17I_as>GGA......TGC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCANNNNNNTCC',
+        'size': 12,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['HdeZA17I'] = _temp()
 
 
 def _temp():
@@ -12588,7 +13338,7 @@ def _temp():
         'site': 'GANTC',
         'size': 5,
         'substrat': 'DNA',
-        'suppl': ('B', 'C', 'I', 'J', 'K', 'M', 'N', 'O', 'Q', 'R', 'S', 'V', 'X', 'Y'),
+        'suppl': ('B', 'C', 'I', 'J', 'K', 'M', 'N', 'O', 'Q', 'R', 'V', 'X', 'Y'),
     }
 
 
@@ -12768,6 +13518,31 @@ def _temp():
 
 
 rest_dict['Hpy188III'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CCTYNA'),
+        'compsite': '(?=(?P<Hpy300XI>CCT[CT].A))|(?=(?P<Hpy300XI_as>T.[AG]AGG))',
+        'dna': None,
+        'freq': 512.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CCTYNA',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Hpy300XI'] = _temp()
 
 
 def _temp():
@@ -13497,6 +14272,31 @@ rest_dict['Kor51II'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CRTGATT'),
+        'compsite': '(?=(?P<Kpn156V>C[AG]TGATT))|(?=(?P<Kpn156V_as>AATCA[CT]G))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CRTGATT',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Kpn156V'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'TCCGGA'),
         'compsite': '(?=(?P<Kpn2I>TCCGGA))',
         'dna': None,
@@ -13518,6 +14318,31 @@ def _temp():
 
 
 rest_dict['Kpn2I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GACATC'),
+        'compsite': '(?=(?P<Kpn327I>GACATC))|(?=(?P<Kpn327I_as>GATGTC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GACATC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Kpn327I'] = _temp()
 
 
 def _temp():
@@ -13547,6 +14372,31 @@ rest_dict['KpnI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CTRGAG'),
+        'compsite': '(?=(?P<KpnNH25III>CT[AG]GAG))|(?=(?P<KpnNH25III_as>CTC[CT]AG))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CTRGAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['KpnNH25III'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'GTTCNAC'),
         'compsite': '(?=(?P<KpnNIH30III>GTTC.AC))|(?=(?P<KpnNIH30III_as>GT.GAAC))',
         'dna': None,
@@ -13568,6 +14418,31 @@ def _temp():
 
 
 rest_dict['KpnNIH30III'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCYAAG'),
+        'compsite': '(?=(?P<KpnNIH50I>GC[CT]AAG))|(?=(?P<KpnNIH50I_as>CTT[AG]GC))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCYAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['KpnNIH50I'] = _temp()
 
 
 def _temp():
@@ -13747,6 +14622,31 @@ rest_dict['Lba2029III'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'ACAAAG'),
+        'compsite': '(?=(?P<Lde4408II>ACAAAG))|(?=(?P<Lde4408II_as>CTTTGT))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'ACAAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Lde4408II'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (8, 4, None, None, 'GCTCTTC'),
         'compsite': '(?=(?P<LguI>GCTCTTC))|(?=(?P<LguI_as>GAAGAGC))',
         'dna': None,
@@ -13768,6 +14668,31 @@ def _temp():
 
 
 rest_dict['LguI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CCGTKA'),
+        'compsite': '(?=(?P<LlaG50I>CCGT[GT]A))|(?=(?P<LlaG50I_as>T[AC]ACGG))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CCGTKA',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['LlaG50I'] = _temp()
 
 
 def _temp():
@@ -13847,6 +14772,31 @@ rest_dict['Lmo911II'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'AGGRAG'),
+        'compsite': '(?=(?P<Lpl1004II>AGG[AG]AG))|(?=(?P<Lpl1004II_as>CT[CT]CCT))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'AGGRAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Lpl1004II'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (3, -3, None, None, 'RGCGCY'),
         'compsite': '(?=(?P<LpnI>[AG]GCGC[CT]))',
         'dna': None,
@@ -13893,6 +14843,56 @@ def _temp():
 
 
 rest_dict['LpnPI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GTTCNAG'),
+        'compsite': '(?=(?P<Lra68I>GTTC.AG))|(?=(?P<Lra68I_as>CT.GAAC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTTCNAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Lra68I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'TGGAAT'),
+        'compsite': '(?=(?P<LsaDS4I>TGGAAT))|(?=(?P<LsaDS4I_as>ATTCCA))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'TGGAAT',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['LsaDS4I'] = _temp()
 
 
 def _temp():
@@ -14497,6 +15497,31 @@ rest_dict['MlsI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'AGCCCA'),
+        'compsite': '(?=(?P<Mlu211III>AGCCCA))|(?=(?P<Mlu211III_as>TGGGCT))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'AGCCCA',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Mlu211III'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (0, 0, None, None, 'AATT'),
         'compsite': '(?=(?P<MluCI>AATT))',
         'dna': None,
@@ -14972,6 +15997,31 @@ rest_dict['MspCI'] = _temp()
 
 def _temp():
     return {
+        'charac': (5, -5, None, None, 'GCCGGC'),
+        'compsite': '(?=(?P<MspGI>GCCGGC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': -5,
+        'fst5': 5,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': 4,
+        'ovhgseq': 'CCGG',
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCCGGC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['MspGI'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'CCGG'),
         'compsite': '(?=(?P<MspI>CCGG))',
         'dna': None,
@@ -15022,6 +16072,31 @@ rest_dict['MspI7II'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GCMGAAG'),
+        'compsite': '(?=(?P<MspI7IV>GC[AC]GAAG))|(?=(?P<MspI7IV_as>CTTC[GT]GC))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCMGAAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['MspI7IV'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (13, 13, None, None, 'CNNR'),
         'compsite': '(?=(?P<MspJI>C..[AG]))|(?=(?P<MspJI_as>[CT]..G))',
         'dna': None,
@@ -15068,6 +16143,31 @@ def _temp():
 
 
 rest_dict['MspR9I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CCGCGAC'),
+        'compsite': '(?=(?P<MspSC27II>CCGCGAC))|(?=(?P<MspSC27II_as>GTCGCGG))',
+        'dna': None,
+        'freq': 16384.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CCGCGAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['MspSC27II'] = _temp()
 
 
 def _temp():
@@ -15363,7 +16463,7 @@ def _temp():
         'site': 'GGCGCC',
         'size': 6,
         'substrat': 'DNA',
-        'suppl': ('J', 'M', 'N', 'Q', 'R', 'S', 'X'),
+        'suppl': ('J', 'M', 'N', 'Q', 'R', 'X'),
     }
 
 
@@ -15747,6 +16847,31 @@ rest_dict['Nli3877I'] = _temp()
 
 def _temp():
     return {
+        'charac': (27, 19, None, None, 'GCCGAC'),
+        'compsite': '(?=(?P<NmeA6CIII>GCCGAC))|(?=(?P<NmeA6CIII_as>GTCGGC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': 19,
+        'fst5': 27,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': 2,
+        'ovhgseq': 'NN',
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCCGAC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['NmeA6CIII'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (27, 19, None, None, 'GCCGAG'),
         'compsite': '(?=(?P<NmeAIII>GCCGAG))|(?=(?P<NmeAIII_as>CTCGGC))',
         'dna': None,
@@ -15913,7 +17038,7 @@ def _temp():
         'site': 'TGCGCA',
         'size': 6,
         'substrat': 'DNA',
-        'suppl': ('B', 'K'),
+        'suppl': ('B',),
     }
 
 
@@ -16018,6 +17143,56 @@ def _temp():
 
 
 rest_dict['NspV'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'ACGAG'),
+        'compsite': '(?=(?P<ObaBS10I>ACGAG))|(?=(?P<ObaBS10I_as>CTCGT))',
+        'dna': None,
+        'freq': 1024.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'ACGAG',
+        'size': 5,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['ObaBS10I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CAACNAC'),
+        'compsite': '(?=(?P<OgrI>CAAC.AC))|(?=(?P<OgrI_as>GT.GTTG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CAACNAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['OgrI'] = _temp()
 
 
 def _temp():
@@ -16347,6 +17522,31 @@ rest_dict['PauI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GTAAG'),
+        'compsite': '(?=(?P<Pba2294I>GTAAG))|(?=(?P<Pba2294I_as>CTTAC))',
+        'dna': None,
+        'freq': 1024.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GTAAG',
+        'size': 5,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Pba2294I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'GACGAG'),
         'compsite': '(?=(?P<PcaII>GACGAG))|(?=(?P<PcaII_as>CTCGTC))',
         'dna': None,
@@ -16443,6 +17643,31 @@ def _temp():
 
 
 rest_dict['PciSI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CCAAAG'),
+        'compsite': '(?=(?P<Pcr308II>CCAAAG))|(?=(?P<Pcr308II_as>CTTTGG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CCAAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Pcr308II'] = _temp()
 
 
 def _temp():
@@ -16772,6 +17997,31 @@ rest_dict['PflMI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'RGCCCAC'),
+        'compsite': '(?=(?P<PflPt14I>[AG]GCCCAC))|(?=(?P<PflPt14I_as>GTGGGC[CT]))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'RGCCCAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['PflPt14I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (1, -1, None, None, 'TCCNGGA'),
         'compsite': '(?=(?P<PfoI>TCC.GGA))',
         'dna': None,
@@ -16918,6 +18168,56 @@ def _temp():
 
 
 rest_dict['PinAI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CTRKCAG'),
+        'compsite': '(?=(?P<PinP23II>CT[AG][GT]CAG))|(?=(?P<PinP23II_as>CTG[AC][CT]AG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CTRKCAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['PinP23II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GAAGNAG'),
+        'compsite': '(?=(?P<PinP59III>GAAG.AG))|(?=(?P<PinP59III_as>CT.CTTC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GAAGNAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['PinP59III'] = _temp()
 
 
 def _temp():
@@ -17168,6 +18468,31 @@ def _temp():
 
 
 rest_dict['PpiI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CGCRGAC'),
+        'compsite': '(?=(?P<PpiP13II>CGC[AG]GAC))|(?=(?P<PpiP13II_as>GTC[CT]GCG))',
+        'dna': None,
+        'freq': 8192.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CGCRGAC',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['PpiP13II'] = _temp()
 
 
 def _temp():
@@ -17922,6 +19247,31 @@ rest_dict['Pst14472I'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CTAMRAG'),
+        'compsite': '(?=(?P<Pst145I>CTA[AC][AG]AG))|(?=(?P<Pst145I_as>CT[CT][GT]TAG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CTAMRAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Pst145I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'GATCGAG'),
         'compsite': '(?=(?P<Pst273I>GATCGAG))|(?=(?P<Pst273I_as>CTCGATC))',
         'dna': None,
@@ -18422,6 +19772,31 @@ rest_dict['RleAI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GGCYAC'),
+        'compsite': '(?=(?P<Rmu369III>GGC[CT]AC))|(?=(?P<Rmu369III_as>GT[AG]GCC))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGCYAC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Rmu369III'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (27, 18, None, None, 'CGRGGAC'),
         'compsite': '(?=(?P<RpaB5I>CG[AG]GGAC))|(?=(?P<RpaB5I_as>GTCC[CT]CG))',
         'dna': None,
@@ -18672,6 +20047,31 @@ rest_dict['Rsp008V'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CACACG'),
+        'compsite': '(?=(?P<Rsp531II>CACACG))|(?=(?P<Rsp531II_as>CGTGTG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CACACG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Rsp531II'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (None, None, None, None, 'CTTCGAG'),
         'compsite': '(?=(?P<RspPBTS2III>CTTCGAG))|(?=(?P<RspPBTS2III_as>CTCGAAG))',
         'dna': None,
@@ -18747,6 +20147,31 @@ rest_dict['RsrII'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'TGANNNNNNTGA'),
+        'compsite': '(?=(?P<Rtr1953I>TGA......TGA))|(?=(?P<Rtr1953I_as>TCA......TCA))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'TGANNNNNNTGA',
+        'size': 12,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Rtr1953I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (5, -5, None, None, 'GAGCTC'),
         'compsite': '(?=(?P<SacI>GAGCTC))',
         'dna': None,
@@ -18818,6 +20243,31 @@ def _temp():
 
 
 rest_dict['Saf8902III'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCAAAT'),
+        'compsite': '(?=(?P<Sag901I>GCAAAT))|(?=(?P<Sag901I_as>ATTTGC))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCAAAT',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Sag901I'] = _temp()
 
 
 def _temp():
@@ -19018,6 +20468,31 @@ def _temp():
 
 
 rest_dict['SauI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GGNGAYG'),
+        'compsite': '(?=(?P<Sba460II>GG.GA[CT]G))|(?=(?P<Sba460II_as>C[AG]TC.CC))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GGNGAYG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Sba460II'] = _temp()
 
 
 def _temp():
@@ -19347,8 +20822,8 @@ rest_dict['SelI'] = _temp()
 
 def _temp():
     return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen13311III>GATCAG))|(?=(?P<Sen13311III_as>CTGATC))',
+        'charac': (None, None, None, None, 'CCAAAC'),
+        'compsite': '(?=(?P<Sen17963III>CCAAAC))|(?=(?P<Sen17963III_as>GTTTGG))',
         'dna': None,
         'freq': 4096.0,
         'fst3': None,
@@ -19360,20 +20835,20 @@ def _temp():
         'results': None,
         'scd3': None,
         'scd5': None,
-        'site': 'GATCAG',
+        'site': 'CCAAAC',
         'size': 6,
         'substrat': 'DNA',
         'suppl': (),
     }
 
 
-rest_dict['Sen13311III'] = _temp()
+rest_dict['Sen17963III'] = _temp()
 
 
 def _temp():
     return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen13III>GATCAG))|(?=(?P<Sen13III_as>CTGATC))',
+        'charac': (None, None, None, None, 'GNGGCAG'),
+        'compsite': '(?=(?P<SenA1673III>G.GGCAG))|(?=(?P<SenA1673III_as>CTGCC.C))',
         'dna': None,
         'freq': 4096.0,
         'fst3': None,
@@ -19385,264 +20860,14 @@ def _temp():
         'results': None,
         'scd3': None,
         'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
+        'site': 'GNGGCAG',
+        'size': 7,
         'substrat': 'DNA',
         'suppl': (),
     }
 
 
-rest_dict['Sen13III'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1736II>GATCAG))|(?=(?P<Sen1736II_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1736II'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1878IV>GATCAG))|(?=(?P<Sen1878IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1878IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1880IV>GATCAG))|(?=(?P<Sen1880IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1880IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1896IV>GATCAG))|(?=(?P<Sen1896IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1896IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1898IV>GATCAG))|(?=(?P<Sen1898IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1898IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1906IV>GATCAG))|(?=(?P<Sen1906IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1906IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1908IV>GATCAG))|(?=(?P<Sen1908IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1908IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sen1910IV>GATCAG))|(?=(?P<Sen1910IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sen1910IV'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<SenC1808III>GATCAG))|(?=(?P<SenC1808III_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['SenC1808III'] = _temp()
-
-
-def _temp():
-    return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<SenC1810IV>GATCAG))|(?=(?P<SenC1810IV_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['SenC1810IV'] = _temp()
+rest_dict['SenA1673III'] = _temp()
 
 
 def _temp():
@@ -20243,6 +21468,56 @@ def _temp():
 
 
 rest_dict['SmaI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'CTTGAC'),
+        'compsite': '(?=(?P<SmaUMH5I>CTTGAC))|(?=(?P<SmaUMH5I_as>GTCAAG))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CTTGAC',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['SmaUMH5I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GCGAACB'),
+        'compsite': '(?=(?P<SmaUMH8I>GCGAAC[CGT]))|(?=(?P<SmaUMH8I_as>[ACG]GTTCGC))',
+        'dna': None,
+        'freq': 5461.333333333333,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GCGAACB',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['SmaUMH8I'] = _temp()
 
 
 def _temp():
@@ -20997,6 +22272,31 @@ rest_dict['Sth302II'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'GAAGT'),
+        'compsite': '(?=(?P<SthSt3II>GAAGT))|(?=(?P<SthSt3II_as>ACTTC))',
+        'dna': None,
+        'freq': 1024.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GAAGT',
+        'size': 5,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['SthSt3II'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (15, 14, None, None, 'GGATG'),
         'compsite': '(?=(?P<StsI>GGATG))|(?=(?P<StsI_as>CATCC))',
         'dna': None,
@@ -21047,31 +22347,6 @@ rest_dict['StuI'] = _temp()
 
 def _temp():
     return {
-        'charac': (None, None, None, None, 'GATCAG'),
-        'compsite': '(?=(?P<Sty13348III>GATCAG))|(?=(?P<Sty13348III_as>CTGATC))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'GATCAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Sty13348III'] = _temp()
-
-
-def _temp():
-    return {
         'charac': (0, 0, None, None, 'CCNGG'),
         'compsite': '(?=(?P<StyD4I>CC.GG))',
         'dna': None,
@@ -21118,6 +22393,31 @@ def _temp():
 
 
 rest_dict['StyI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'ACRGAG'),
+        'compsite': '(?=(?P<SurP32aII>AC[AG]GAG))|(?=(?P<SurP32aII_as>CTC[CT]GT))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'ACRGAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['SurP32aII'] = _temp()
 
 
 def _temp():
@@ -21368,6 +22668,31 @@ def _temp():
 
 
 rest_dict['TfiI'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'ACCAAG'),
+        'compsite': '(?=(?P<TpyTP2I>ACCAAG))|(?=(?P<TpyTP2I_as>CTTGGT))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'ACCAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['TpyTP2I'] = _temp()
 
 
 def _temp():
@@ -22047,6 +23372,31 @@ rest_dict['UnbI'] = _temp()
 
 def _temp():
     return {
+        'charac': (None, None, None, None, 'CCKAAG'),
+        'compsite': '(?=(?P<Van9116I>CC[GT]AAG))|(?=(?P<Van9116I_as>CTT[AC]GG))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'CCKAAG',
+        'size': 6,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Van9116I'] = _temp()
+
+
+def _temp():
+    return {
         'charac': (7, -7, None, None, 'CCANNNNNTGG'),
         'compsite': '(?=(?P<Van91I>CCA.....TGG))',
         'dna': None,
@@ -22068,6 +23418,56 @@ def _temp():
 
 
 rest_dict['Van91I'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'RTAAAYG'),
+        'compsite': '(?=(?P<VchE4II>[AG]TAAA[CT]G))|(?=(?P<VchE4II_as>C[AG]TTTA[CT]))',
+        'dna': None,
+        'freq': 4096.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'RTAAAYG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['VchE4II'] = _temp()
+
+
+def _temp():
+    return {
+        'charac': (None, None, None, None, 'GNCYTAG'),
+        'compsite': '(?=(?P<Vdi96II>G.C[CT]TAG))|(?=(?P<Vdi96II_as>CTA[AG]G.C))',
+        'dna': None,
+        'freq': 2048.0,
+        'fst3': None,
+        'fst5': None,
+        'inact_temp': 65,
+        'opt_temp': 37,
+        'ovhg': None,
+        'ovhgseq': None,
+        'results': None,
+        'scd3': None,
+        'scd5': None,
+        'site': 'GNCYTAG',
+        'size': 7,
+        'substrat': 'DNA',
+        'suppl': (),
+    }
+
+
+rest_dict['Vdi96II'] = _temp()
 
 
 def _temp():
@@ -22622,31 +24022,6 @@ rest_dict['YkrI'] = _temp()
 
 def _temp():
     return {
-        'charac': (None, None, None, None, 'CGGAAG'),
-        'compsite': '(?=(?P<Yps3606I>CGGAAG))|(?=(?P<Yps3606I_as>CTTCCG))',
-        'dna': None,
-        'freq': 4096.0,
-        'fst3': None,
-        'fst5': None,
-        'inact_temp': 65,
-        'opt_temp': 37,
-        'ovhg': None,
-        'ovhgseq': None,
-        'results': None,
-        'scd3': None,
-        'scd5': None,
-        'site': 'CGGAAG',
-        'size': 6,
-        'substrat': 'DNA',
-        'suppl': (),
-    }
-
-
-rest_dict['Yps3606I'] = _temp()
-
-
-def _temp():
-    return {
         'charac': (3, -3, None, None, 'GACGTC'),
         'compsite': '(?=(?P<ZraI>GACGTC))',
         'dna': None,
@@ -22726,7 +24101,7 @@ suppliers = {}
 def _temp():
     return (
         'Life Technologies',
-        ['Bsp120I', 'Eco52I', 'Ecl136II', 'Bme1390I', 'XceI', 'RruI', 'XagI', 'Hin6I', 'HpyF3I', 'Ppu21I', 'Cfr13I', 'SacII', 'Hpy8I', 'BseLI', 'HpyF10VI', 'EheI', 'NmuCI', 'Alw26I', 'SgeI', 'BseMII', 'XbaI', 'BglII', 'Bsp143I', 'BmeT110I', 'NotI', 'Psp1406I', 'PfeI', 'LweI', 'AanI', 'CsiI', 'Eco147I', 'SsiI', 'ApaI', 'SfiI', 'SgsI', 'EcoO109I', 'SphI', 'CseI', 'MboI', 'Bsp68I', 'FokI', 'CaiI', 'FspAI', 'Alw44I', 'BglI', 'Lsp1109I', 'Eco88I', 'BspOI', 'AasI', 'PauI', 'Cfr10I', 'PstI', 'SdaI', 'PasI', 'ClaI', 'NdeI', 'Eco105I', 'Bst1107I', 'BseDI', 'Bpu1102I', 'PvuI', 'BstXI', 'BamHI', 'Bsh1285I', 'AjiI', 'Mph1103I', 'Pfl23II', 'SfaAI', 'DraI', 'XhoI', 'XmiI', 'SduI', 'HapII', 'LguI', 'SatI', 'HpaII', 'Kpn2I', 'BcnI', 'BveI', 'TaiI', 'HhaI', 'Eam1104I', 'HincII', 'AjuI', 'AdeI', 'RseI', 'MnlI', 'BshTI', 'ScaI', 'BshNI', 'KspAI', 'BauI', 'BseSI', 'HpaI', 'Mva1269I', 'TscAI', 'MbiI', 'TaaI', 'PfoI', 'FspBI', 'SspI', 'Eam1105I', 'Bpu10I', 'NruI', 'OliI', 'EcoRV', 'PaeI', 'Van91I', 'Eco130I', 'Bsu15I', 'BclI', 'Alw21I', 'VspI', 'SmaI', 'MauBI', 'Hin1II', 'BseGI', 'PsyI', 'Psp5II', 'Csp6I', 'NsbI', 'TasI', 'BpiI', 'MluI', 'BcuI', 'BoxI', 'PvuII', 'Tru1I', 'PsuI', 'SalI', 'TatI', 'XmaJI', 'FaqI', 'BspPI', 'StuI', 'DpnI', 'SgrDI', 'AluI', 'NheI', 'XapI', 'CpoI', 'HindIII', 'BseMI', 'RsaI', 'Cfr9I', 'SmiI', 'BspTI', 'BfoI', 'AatII', 'SacI', 'BfmI', 'Eco81I', 'Bsp119I', 'NcoI', 'MlsI', 'SmoI', 'Bsh1236I', 'BfuI', 'SchI', 'PdiI', 'GsuI', 'Eco57I', 'KflI', 'SaqAI', 'BspLI', 'AloI', 'BmsI', 'SpeI', 'AccI', 'Eco31I', 'Cfr42I', 'PdmI', 'MssI', 'TaqI', 'MunI', 'MspI', 'Eco47I', 'AfaI', 'SspDI', 'EcoT22I', 'PagI', 'Hin1I', 'BsuRI', 'Acc65I', 'Bsp1407I', 'PscI', 'PspFI', 'Eco91I', 'BplI', 'Eco47III', 'BseNI', 'HphI', 'EcoRI', 'EcoRII', 'KpnI', 'MvaI', 'MboII', 'TauI', 'HinfI', 'BseXI', 'AarI', 'Eco24I', 'HaeIII', 'MreI', 'BseJI', 'Eco32I', 'Eco72I', 'Esp3I', 'PteI', 'PacI', 'BalI'],
+        ['BshTI', 'MluI', 'HpaII', 'MreI', 'BclI', 'SacI', 'PauI', 'BglI', 'SalI', 'MspI', 'ScaI', 'Bsu15I', 'Mva1269I', 'Bsp68I', 'LweI', 'SmiI', 'PteI', 'Mph1103I', 'TscAI', 'NcoI', 'PsyI', 'BseJI', 'ClaI', 'MauBI', 'Eco24I', 'CseI', 'Eco47III', 'Eco91I', 'DraI', 'BseXI', 'BstXI', 'RruI', 'Esp3I', 'BseSI', 'Cfr9I', 'AarI', 'OliI', 'PvuI', 'BspOI', 'DpnI', 'Hin6I', 'LguI', 'Van91I', 'Bst1107I', 'Bme1390I', 'PacI', 'Psp5II', 'TaqI', 'Eco52I', 'GsuI', 'KpnI', 'SspDI', 'SsiI', 'RseI', 'MlsI', 'NdeI', 'HapII', 'Cfr13I', 'MboII', 'SdaI', 'BmsI', 'BglII', 'TasI', 'AjuI', 'AloI', 'FspBI', 'SchI', 'PfoI', 'Bpu10I', 'BshNI', 'SacII', 'Acc65I', 'BmeT110I', 'XapI', 'TaaI', 'PscI', 'Bsp1407I', 'NruI', 'MvaI', 'PasI', 'Hin1II', 'PaeI', 'Bsh1236I', 'MssI', 'CpoI', 'Eco130I', 'PspFI', 'TaiI', 'FspAI', 'BfmI', 'Eco47I', 'BoxI', 'RsaI', 'HincII', 'HpyF10VI', 'XbaI', 'Lsp1109I', 'AjiI', 'Bsp119I', 'MboI', 'AluI', 'SduI', 'SgsI', 'BseGI', 'Eco72I', 'BcnI', 'SgeI', 'EcoRII', 'Alw21I', 'XagI', 'Hpy8I', 'PsuI', 'SmaI', 'NheI', 'BplI', 'Ppu21I', 'SmoI', 'FaqI', 'AdeI', 'StuI', 'BcuI', 'BspTI', 'SpeI', 'SphI', 'BseLI', 'AasI', 'PvuII', 'EheI', 'BveI', 'FokI', 'Hin1I', 'Alw26I', 'Cfr10I', 'SgrDI', 'Eco31I', 'HinfI', 'Eam1105I', 'BsuRI', 'Eam1104I', 'Ecl136II', 'XmaJI', 'SfaAI', 'HphI', 'Psp1406I', 'Csp6I', 'EcoO109I', 'BseMII', 'HindIII', 'EcoRV', 'AatII', 'BfuI', 'EcoRI', 'XmiI', 'TauI', 'XhoI', 'Bsp143I', 'BspPI', 'MnlI', 'PfeI', 'CaiI', 'Bpu1102I', 'MunI', 'Tru1I', 'BspLI', 'Eco105I', 'NsbI', 'PstI', 'VspI', 'Alw44I', 'SfiI', 'BpiI', 'XceI', 'BseMI', 'HaeIII', 'Kpn2I', 'Cfr42I', 'SatI', 'AccI', 'SspI', 'Eco32I', 'KflI', 'BseDI', 'KspAI', 'Eco81I', 'BauI', 'AanI', 'ApaI', 'SaqAI', 'EcoT22I', 'Eco88I', 'Eco57I', 'Eco147I', 'PdmI', 'BalI', 'CsiI', 'AfaI', 'Bsp120I', 'NotI', 'MbiI', 'BamHI', 'BfoI', 'TatI', 'HpaI', 'HpyF3I', 'Pfl23II', 'Bsh1285I', 'HhaI', 'NmuCI', 'BseNI', 'PagI', 'PdiI'],
     )
 
 
@@ -22736,7 +24111,7 @@ suppliers['B'] = _temp()
 def _temp():
     return (
         'Minotech Biotechnology',
-        ['SgrBI', 'XbaI', 'BglII', 'BseCI', 'NotI', 'SfiI', 'SphI', 'SlaI', 'MboI', 'MspCI', 'SstI', 'BglI', 'CspAI', 'PstI', 'BamHI', 'ApaLI', 'AsuII', 'SseBI', 'BssAI', 'ScaI', 'HpaI', 'SspI', 'NruI', 'EcoRV', 'BclI', 'SmaI', 'BsiSI', 'Sau3AI', 'PvuII', 'SalI', 'StyI', 'BstEII', 'BseAI', 'AluI', 'NheI', 'PspPI', 'HindIII', 'RsaI', 'NcoI', 'TaqI', 'BseBI', 'SnaBI', 'EcoRI', 'BshFI', 'KpnI', 'HinfI', 'NaeI'],
+        ['SgrBI', 'BclI', 'BglI', 'SalI', 'PspPI', 'ScaI', 'SnaBI', 'BstEII', 'NcoI', 'BshFI', 'AsuII', 'BssAI', 'BseAI', 'TaqI', 'KpnI', 'BglII', 'NaeI', 'BseBI', 'NruI', 'RsaI', 'BsiSI', 'XbaI', 'MboI', 'AluI', 'SlaI', 'SseBI', 'SmaI', 'NheI', 'SstI', 'Sau3AI', 'SphI', 'PvuII', 'ApaLI', 'HinfI', 'MspCI', 'HindIII', 'EcoRV', 'EcoRI', 'BseCI', 'PstI', 'SfiI', 'SspI', 'CspAI', 'NotI', 'BamHI', 'HpaI', 'StyI'],
     )
 
 
@@ -22756,7 +24131,7 @@ suppliers['E'] = _temp()
 def _temp():
     return (
         'SibEnzyme Ltd.',
-        ['BsuI', 'BstHHI', 'PspXI', 'AsuC2I', 'RgaI', 'BlsI', 'BstPAI', 'AspS9I', 'PpsI', 'AclI', 'GlaI', 'XbaI', 'BglII', 'AsuHPI', 'BstMBI', 'AbsI', 'MalI', 'PceI', 'BstX2I', 'BstSCI', 'BstDSI', 'AluBI', 'ApaI', 'CciI', 'SfiI', 'SphI', 'FblI', 'MfeI', 'FokI', 'AsiGI', 'Bst2BI', 'Bst2UI', 'PalAI', 'MspR9I', 'Rsr2I', 'BglI', 'Sse9I', 'MspA1I', 'BspACI', 'BstMAI', 'BstBAI', 'Tth111I', 'Ama87I', 'DriI', 'PstI', 'Bso31I', 'SetI', 'BstDEI', 'MhlI', 'SmiMI', 'BstXI', 'Bse8I', 'BamHI', 'BstACI', 'BstKTI', 'BssECI', 'BslFI', 'BstV2I', 'PsiI', 'DraI', 'Bse21I', 'BstMWI', 'FauNDI', 'Bsp19I', 'Zsp2I', 'AccB1I', 'Ple19I', 'HpaII', 'PcsI', 'BstH2I', 'CciNI', 'SspMI', 'PspPPI', 'Ksp22I', 'GluI', 'Sfr274I', 'AcoI', 'Bsp13I', 'RsaNI', 'Fsp4HI', 'FalI', 'BsePI', 'SfaNI', 'MnlI', 'DseDI', 'EgeI', 'DraIII', 'BstC8I', 'Mox20I', 'BstSFI', 'Kzo9I', 'Psp6I', 'MabI', 'HpaI', 'ZraI', 'BstAFI', 'PkrI', 'BtrI', 'PspLI', 'Bme18I', 'FatI', 'VneI', 'XmaI', 'SspI', 'Bse1I', 'Bpu10I', 'NruI', 'KroI', 'AccBSI', 'EcoRV', 'AsiSI', 'BpmI', 'AcsI', 'PctI', 'VspI', 'BmuI', 'HgaI', 'AspLEI', 'BstSLI', 'HindII', 'Bst4CI', 'SmaI', 'PstNI', 'BstNSI', 'Bst6I', 'Sfr303I', 'BssT1I', 'Bbv12I', 'GsaI', 'BisI', 'Bsa29I', 'AcuI', 'BstENI', 'Psp124BI', 'AclWI', 'Bse118I', 'MluI', 'PspOMI', 'PvuII', 'BstAUI', 'AgsI', 'SalI', 'FaeI', 'BstSNI', 'Bsc4I', 'AluI', 'ArsI', 'AjnI', 'RigI', 'Acc36I', 'HindIII', 'AspA2I', 'RsaI', 'FaiI', 'SmiI', 'LmnI', 'MroXI', 'AatII', 'ErhI', 'BstV1I', 'ZrmI', 'MteI', 'Bse3DI', 'BstFNI', 'EcoICRI', 'SbfI', 'PspCI', 'AsuNHI', 'TaqI', 'Acc16I', 'MspI', 'PspEI', 'AfeI', 'BseX3I', 'FauI', 'BarI', 'Bpu14I', 'BsuRI', 'HspAI', 'Acc65I', 'BspFNI', 'Tru9I', 'AhlI', 'AoxI', 'EcoRI', 'BstMCI', 'AccB7I', 'KpnI', 'BssNAI', 'MboII', 'TseFI', 'HinfI', 'BmtI', 'BstF5I', 'HaeIII', 'PspN4I', 'FriOI', 'PciI', 'PciSI', 'HpySE526I', 'MroNI', 'Bsp1720I', 'BstAPI', 'Mly113I', 'PsrI'],
+        ['AsuNHI', 'AgsI', 'MluI', 'CciI', 'BstHHI', 'HpaII', 'AhlI', 'KroI', 'PspN4I', 'BglI', 'SalI', 'PspEI', 'MspI', 'VneI', 'BstH2I', 'BisI', 'BmtI', 'PspXI', 'AsiGI', 'CciNI', 'Sfr274I', 'SmiI', 'Ksp22I', 'BstSFI', 'BssT1I', 'PciSI', 'Bsp19I', 'Bse1I', 'AspS9I', 'AbsI', 'FauNDI', 'LmnI', 'AclWI', 'DraI', 'Bst2UI', 'AluBI', 'PsrI', 'BstACI', 'BstXI', 'BstDEI', 'GluI', 'AcoI', 'XmaI', 'BstF5I', 'BstMBI', 'BstENI', 'BssECI', 'FalI', 'EgeI', 'Ama87I', 'BstDSI', 'BstV2I', 'AjnI', 'AspLEI', 'PalAI', 'Zsp2I', 'DseDI', 'BstAUI', 'Bpu14I', 'FaeI', 'TaqI', 'KpnI', 'BstSNI', 'AclI', 'MboII', 'BglII', 'PspPPI', 'SetI', 'AcsI', 'BstNSI', 'BseX3I', 'RsaNI', 'Bpu10I', 'Rsr2I', 'Acc65I', 'Bst2BI', 'NruI', 'Ple19I', 'TseFI', 'SspMI', 'PciI', 'MalI', 'Bse118I', 'BsuI', 'BsePI', 'BstMCI', 'Bme18I', 'RsaI', 'BssNAI', 'BstV1I', 'Bsp13I', 'Bst4CI', 'MabI', 'AsuHPI', 'BtrI', 'XbaI', 'ArsI', 'BstC8I', 'Psp124BI', 'GlaI', 'HgaI', 'BstX2I', 'AluI', 'ZraI', 'Bse21I', 'Sfr303I', 'BstSCI', 'Bse3DI', 'Bso31I', 'AccB7I', 'BstKTI', 'AccBSI', 'SmaI', 'SmiMI', 'BspACI', 'AspA2I', 'Bsp1720I', 'Bsc4I', 'SphI', 'Mly113I', 'FriOI', 'PvuII', 'MfeI', 'ErhI', 'FokI', 'AsuC2I', 'GsaI', 'HinfI', 'MroNI', 'BsuRI', 'PpsI', 'BstPAI', 'PsiI', 'HspAI', 'RgaI', 'MspA1I', 'Fsp4HI', 'Kzo9I', 'Acc36I', 'DraIII', 'Acc16I', 'MspR9I', 'HindIII', 'Tth111I', 'EcoRV', 'AatII', 'MroXI', 'EcoRI', 'ZrmI', 'BstFNI', 'BslFI', 'Bsa29I', 'MnlI', 'SbfI', 'PstI', 'Bse8I', 'FauI', 'VspI', 'SfiI', 'Bst6I', 'BspFNI', 'Bbv12I', 'HaeIII', 'BstAPI', 'SspI', 'AfeI', 'PspOMI', 'BstMAI', 'BstSLI', 'ApaI', 'BlsI', 'Mox20I', 'FblI', 'BmuI', 'PcsI', 'BstMWI', 'BarI', 'PctI', 'FaiI', 'BpmI', 'PstNI', 'AcuI', 'AccB1I', 'PceI', 'PkrI', 'HpySE526I', 'Sse9I', 'Tru9I', 'MhlI', 'BstBAI', 'MteI', 'DriI', 'AoxI', 'EcoICRI', 'FatI', 'BamHI', 'Psp6I', 'BstAFI', 'SfaNI', 'RigI', 'HpaI', 'PspCI', 'HindII', 'PspLI', 'AsiSI'],
     )
 
 
@@ -22766,7 +24141,7 @@ suppliers['I'] = _temp()
 def _temp():
     return (
         'Nippon Gene Co., Ltd.',
-        ['SacII', 'XbaI', 'FspI', 'BglII', 'NotI', 'AxyI', 'ApaI', 'SfiI', 'EcoO109I', 'BssHII', 'SphI', 'FokI', 'Alw44I', 'BglI', 'PstI', 'NdeI', 'AflII', 'NspV', 'BstXI', 'BamHI', 'AseI', 'AccIII', 'DraI', 'XhoI', 'ScrFI', 'EcoT38I', 'AvaII', 'HhaI', 'HincII', 'AgeI', 'ScaI', 'Bsp1286I', 'AvaI', 'Sau96I', 'HpaI', 'SspI', 'NruI', 'EcoRV', 'NciI', 'BclI', 'AccII', 'SmaI', 'Sau3AI', 'MluI', 'PvuII', 'SalI', 'StyI', 'BstEII', 'StuI', 'AluI', 'NheI', 'HindIII', 'RsaI', 'SacI', 'NcoI', 'SwaI', 'SpeI', 'AccI', 'TaqI', 'MspI', 'NdeII', 'AcyI', 'HaeII', 'NsiI', 'EcoRI', 'NarI', 'EcoRII', 'KpnI', 'BsmI', 'MboII', 'HinfI', 'HaeIII', 'BalI'],
+        ['BssHII', 'AxyI', 'MluI', 'BclI', 'SacI', 'EcoT38I', 'BglI', 'SalI', 'MspI', 'ScaI', 'BstEII', 'NcoI', 'AgeI', 'DraI', 'BstXI', 'SwaI', 'AvaI', 'TaqI', 'AseI', 'KpnI', 'Sau96I', 'HaeII', 'NdeI', 'MboII', 'AflII', 'BglII', 'AccII', 'SacII', 'NruI', 'NarI', 'RsaI', 'HincII', 'XbaI', 'AluI', 'ScrFI', 'EcoRII', 'SmaI', 'NheI', 'StuI', 'Sau3AI', 'SpeI', 'SphI', 'FspI', 'PvuII', 'FokI', 'HinfI', 'NciI', 'EcoO109I', 'HindIII', 'EcoRV', 'EcoRI', 'XhoI', 'Bsp1286I', 'AccIII', 'PstI', 'BsmI', 'Alw44I', 'SfiI', 'HaeIII', 'NdeII', 'AccI', 'SspI', 'NsiI', 'ApaI', 'NspV', 'BalI', 'NotI', 'AcyI', 'BamHI', 'AvaII', 'HpaI', 'StyI', 'HhaI'],
     )
 
 
@@ -22776,7 +24151,7 @@ suppliers['J'] = _temp()
 def _temp():
     return (
         'Takara Bio Inc.',
-        ['Eco52I', 'SacII', 'Aor13HI', 'XbaI', 'BglII', 'Aor51HI', 'BmeT110I', 'NotI', 'Psp1406I', 'ApaI', 'SfiI', 'EcoO109I', 'BssHII', 'SphI', 'MboI', 'PshBI', 'FokI', 'BglI', 'Cfr10I', 'Tth111I', 'PstI', 'ClaI', 'NdeI', 'AflII', 'BspT107I', 'Bst1107I', 'Bpu1102I', 'PvuI', 'BstXI', 'BamHI', 'BspT104I', 'ApaLI', 'AccIII', 'DraI', 'XhoI', 'HapII', 'BciT130I', 'BcnI', 'HhaI', 'HincII', 'ScaI', 'Bsp1286I', 'DdeI', 'EcoO65I', 'HpaI', 'EcoT14I', 'PmaCI', 'SspI', 'NruI', 'EcoRV', 'Van91I', 'VpaK11BI', 'AccII', 'PshAI', 'SmaI', 'Sau3AI', 'NsbI', 'MluI', 'PvuII', 'SalI', 'FbaI', 'StuI', 'DpnI', 'AluI', 'NheI', 'CpoI', 'HindIII', 'SmiI', 'AatII', 'SacI', 'Eco81I', 'NcoI', 'MflI', 'XspI', 'SpeI', 'AccI', 'TaqI', 'MunI', 'MspI', 'AfaI', 'BanII', 'EcoT22I', 'BstPI', 'BlnI', 'Hin1I', 'Bsp1407I', 'HaeII', 'SnaBI', 'EcoRI', 'KpnI', 'MboII', 'HinfI', 'HaeIII', 'NaeI', 'Sse8387I', 'BmgT120I', 'EaeI', 'BalI'],
+        ['BssHII', 'PshBI', 'MluI', 'BspT107I', 'SacI', 'XspI', 'BglI', 'SalI', 'MspI', 'BstPI', 'ScaI', 'BanII', 'PmaCI', 'SnaBI', 'SmiI', 'BmgT120I', 'NcoI', 'ClaI', 'DraI', 'BstXI', 'PshAI', 'PvuI', 'DpnI', 'Van91I', 'Bst1107I', 'TaqI', 'EaeI', 'Eco52I', 'BspT104I', 'KpnI', 'HaeII', 'EcoO65I', 'NdeI', 'HapII', 'MboII', 'AflII', 'EcoT14I', 'BglII', 'NaeI', 'AccII', 'SacII', 'BmeT110I', 'Aor51HI', 'Bsp1407I', 'NruI', 'Sse8387I', 'CpoI', 'HincII', 'XbaI', 'MboI', 'AluI', 'BcnI', 'SmaI', 'NheI', 'StuI', 'Sau3AI', 'SpeI', 'SphI', 'PvuII', 'MflI', 'FokI', 'Hin1I', 'ApaLI', 'Cfr10I', 'HinfI', 'Psp1406I', 'EcoO109I', 'HindIII', 'Tth111I', 'EcoRV', 'AatII', 'EcoRI', 'XhoI', 'VpaK11BI', 'Bsp1286I', 'AccIII', 'Bpu1102I', 'MunI', 'Aor13HI', 'PstI', 'SfiI', 'BlnI', 'HaeIII', 'BciT130I', 'AccI', 'SspI', 'FbaI', 'Eco81I', 'ApaI', 'EcoT22I', 'BalI', 'DdeI', 'AfaI', 'NotI', 'BamHI', 'HpaI', 'HhaI'],
     )
 
 
@@ -22786,7 +24161,7 @@ suppliers['K'] = _temp()
 def _temp():
     return (
         'Roche Applied Science',
-        ['XbaI', 'BglII', 'NotI', 'SfuI', 'ApaI', 'SfiI', 'BssHII', 'SphI', 'FokI', 'PstI', 'ClaI', 'NdeI', 'PvuI', 'BstXI', 'BamHI', 'DraI', 'XhoI', 'MaeIII', 'Asp718I', 'ScaI', 'DraIII', 'DdeI', 'MroI', 'HpaI', 'NruI', 'EcoRV', 'MvnI', 'BclI', 'HindII', 'SmaI', 'KspI', 'Sau3AI', 'Asp700I', 'MluI', 'PvuII', 'MaeI', 'SalI', 'StuI', 'DpnI', 'AluI', 'NheI', 'HindIII', 'RsaI', 'AatII', 'SacI', 'AflIII', 'NcoI', 'SwaI', 'SpeI', 'AccI', 'TaqI', 'MunI', 'CfoI', 'BfrI', 'NdeII', 'BlnI', 'BbrPI', 'Tru9I', 'NsiI', 'Eco47III', 'SnaBI', 'EcoRI', 'NarI', 'KpnI', 'MvaI', 'BsmI', 'HinfI', 'MluNI', 'HaeIII', 'MaeII', 'SexAI'],
+        ['BssHII', 'MluI', 'BclI', 'SacI', 'SalI', 'Asp718I', 'ScaI', 'SnaBI', 'NcoI', 'ClaI', 'Eco47III', 'DraI', 'BstXI', 'SwaI', 'PvuI', 'DpnI', 'BbrPI', 'TaqI', 'SexAI', 'KpnI', 'NdeI', 'BglII', 'MaeI', 'NruI', 'MvaI', 'NarI', 'RsaI', 'MaeII', 'AflIII', 'XbaI', 'MvnI', 'AluI', 'CfoI', 'SmaI', 'NheI', 'StuI', 'Sau3AI', 'SpeI', 'SphI', 'MaeIII', 'PvuII', 'FokI', 'HinfI', 'DraIII', 'MluNI', 'HindIII', 'EcoRV', 'AatII', 'EcoRI', 'XhoI', 'MunI', 'PstI', 'BsmI', 'SfiI', 'BlnI', 'HaeIII', 'NdeII', 'AccI', 'NsiI', 'ApaI', 'SfuI', 'BfrI', 'KspI', 'Tru9I', 'DdeI', 'NotI', 'MroI', 'Asp700I', 'BamHI', 'HpaI', 'HindII'],
     )
 
 
@@ -22796,7 +24171,7 @@ suppliers['M'] = _temp()
 def _temp():
     return (
         'New England Biolabs',
-        ['BsaJI', 'PflMI', 'NmeAIII', 'EcoNI', 'MslI', 'AciI', 'Tsp45I', 'XmnI', 'BstUI', 'CviAII', 'PspXI', 'ApoI', 'SacII', 'BmgBI', 'HpyCH4III', 'TspRI', 'MwoI', 'NlaIII', 'AclI', 'HinP1I', 'BseRI', 'PflFI', 'XbaI', 'FspI', 'BaeI', 'BglII', 'BccI', 'CspCI', 'MscI', 'NotI', 'BsaI', 'BsiEI', 'BsoBI', 'BssSI', 'ApaI', 'SfiI', 'EcoO109I', 'BsmFI', 'BssHII', 'SphI', 'HpyCH4V', 'BtgZI', 'BsiHKAI', 'MfeI', 'MboI', 'FokI', 'BsmBI', 'BsrI', 'PmlI', 'AlwI', 'BceAI', 'BglI', 'MspA1I', 'NlaIV', 'MluCI', 'PleI', 'Tth111I', 'TseI', 'BspMI', 'RsrII', 'PstI', 'AbaSI', 'Fnu4HI', 'BanI', 'ClaI', 'NdeI', 'AflII', 'BtsI', 'MmeI', 'PvuI', 'BstXI', 'BamHI', 'BfuAI', 'LpnPI', 'ApaLI', 'AseI', 'PsiI', 'DraI', 'XhoI', 'BaeGI', 'ScrFI', 'MseI', 'SrfI', 'HpaII', 'BcoDI', 'KasI', 'BsaBI', 'AvaII', 'SapI', 'BsmAI', 'HhaI', 'BsgI', 'HincII', 'PluTI', 'SfaNI', 'MnlI', 'AgeI', 'AleI', 'Cac8I', 'ScaI', 'BlpI', 'DraIII', 'BstNI', 'SfoI', 'Bsu36I', 'Bsp1286I', 'EciI', 'AvaI', 'DdeI', 'BbvCI', 'BsrFI', 'DpnII', 'Sau96I', 'HpaI', 'EarI', 'PmeI', 'ZraI', 'FatI', 'BstYI', 'XmaI', 'SspI', 'Bpu10I', 'NruI', 'FspEI', 'TfiI', 'EagI', 'EcoRV', 'SgrAI', 'AsiSI', 'FseI', 'BpmI', 'BciVI', 'NciI', 'BpuEI', 'BclI', 'HgaI', 'PspGI', 'PshAI', 'AvrII', 'BsrGI', 'BbvI', 'SmaI', 'ApeKI', 'CviKI_1', 'BsaHI', 'BsiWI', 'AcuI', 'Sau3AI', 'SfcI', 'MluI', 'PspOMI', 'PvuII', 'AhdI', 'CviQI', 'BspHI', 'BseYI', 'HpyAV', 'BtgI', 'SalI', 'StyI', 'Eco53kI', 'BstEII', 'StuI', 'DpnI', 'MspJI', 'AluI', 'BtsCI', 'NheI', 'HindIII', 'BsrDI', 'RsaI', 'Hpy188III', 'BfaI', 'NgoMIV', 'AatII', 'BspCNI', 'SacI', 'AflIII', 'PaeR7I', 'NcoI', 'BstZ17I', 'BspQI', 'SwaI', 'SbfI', 'BsaXI', 'BspEI', 'Hpy166II', 'BbsI', 'SpeI', 'Hpy99I', 'AccI', 'TaqI', 'BcgI', 'MspI', 'BanII', 'AfeI', 'FauI', 'TspMI', 'BtsIMutI', 'Acc65I', 'NspI', 'HaeII', 'NsiI', 'BsrBI', 'BslI', 'StyD4I', 'BstBI', 'SnaBI', 'HphI', 'EcoRI', 'NarI', 'Hpy188I', 'BsaAI', 'KpnI', 'BmrI', 'AscI', 'BsmI', 'MboII', 'BspDI', 'HinfI', 'BmtI', 'AlwNI', 'SmlI', 'HaeIII', 'NaeI', 'PciI', 'SexAI', 'XcmI', 'PacI', 'BstAPI', 'BsaWI', 'PpuMI', 'HpyCH4IV', 'MlyI', 'EaeI', 'DrdI'],
+        ['BssHII', 'EciI', 'BsrFI', 'DpnII', 'AlwI', 'MluI', 'AlwNI', 'NgoMIV', 'HpaII', 'TspMI', 'BclI', 'MlyI', 'BsaWI', 'SacI', 'MwoI', 'BfaI', 'DrdI', 'BmgBI', 'BglI', 'SalI', 'MspI', 'ScaI', 'BanII', 'MslI', 'BmtI', 'PspXI', 'BsaBI', 'SnaBI', 'BstEII', 'NcoI', 'BtgI', 'ClaI', 'BsaI', 'BsrBI', 'AgeI', 'XmnI', 'DraI', 'Hpy166II', 'Hpy99I', 'StyD4I', 'BstXI', 'PspGI', 'BsiHKAI', 'PpuMI', 'BsoBI', 'BlpI', 'Esp3I', 'PshAI', 'XmaI', 'BtsIMutI', 'SwaI', 'AvaI', 'PvuI', 'DpnI', 'CspCI', 'PflFI', 'BpuEI', 'PacI', 'TaqI', 'EaeI', 'SexAI', 'BsrI', 'AseI', 'KpnI', 'Sau96I', 'BstNI', 'HaeII', 'AclI', 'ApoI', 'HpyCH4IV', 'NdeI', 'MboII', 'AflII', 'TseI', 'BglII', 'SmlI', 'NaeI', 'Bpu10I', 'SacII', 'Acc65I', 'BspQI', 'MseI', 'AvrII', 'NruI', 'BaeI', 'BtsCI', 'PciI', 'BcgI', 'BsaHI', 'SfoI', 'MspJI', 'NarI', 'Bsu36I', 'RsaI', 'HincII', 'AflIII', 'BspCNI', 'BsgI', 'XbaI', 'AbaSI', 'BfuAI', 'TfiI', 'PmlI', 'BbvI', 'MboI', 'HgaI', 'BanI', 'AluI', 'BaeGI', 'ZraI', 'Hpy188III', 'RsrII', 'BspMI', 'MluCI', 'AciI', 'ScrFI', 'MscI', 'BseYI', 'CviQI', 'BmrI', 'Hpy188I', 'SmaI', 'PleI', 'EcoNI', 'NheI', 'BccI', 'FspEI', 'BsiEI', 'StuI', 'Sau3AI', 'BcoDI', 'SpeI', 'BsiWI', 'SphI', 'HpyAV', 'FspI', 'CviAII', 'PvuII', 'Eco53kI', 'MfeI', 'BsrDI', 'BssSI', 'TspRI', 'FokI', 'ApaLI', 'ApeKI', 'HinfI', 'BciVI', 'HinP1I', 'NciI', 'PsiI', 'BceAI', 'HphI', 'MspA1I', 'BsmAI', 'DraIII', 'EcoO109I', 'HindIII', 'BtsI', 'SapI', 'Tth111I', 'EcoRV', 'AatII', 'EcoRI', 'BsmFI', 'XhoI', 'Bsp1286I', 'PluTI', 'MnlI', 'EagI', 'AscI', 'AhdI', 'NlaIII', 'SbfI', 'PstI', 'FauI', 'SfcI', 'BspEI', 'BsmI', 'SfiI', 'BstUI', 'BstZ17I', 'KasI', 'HaeIII', 'BsmBI', 'XcmI', 'LpnPI', 'BstAPI', 'AccI', 'SspI', 'HpyCH4III', 'BsrGI', 'AfeI', 'SrfI', 'SgrAI', 'NsiI', 'BspHI', 'BstYI', 'PspOMI', 'PmeI', 'FseI', 'ApaI', 'BseRI', 'MmeI', 'BtgZI', 'BpmI', 'EarI', 'CviKI_1', 'AcuI', 'NspI', 'BstBI', 'HpyCH4V', 'NlaIV', 'BbsI', 'DdeI', 'NotI', 'BsaXI', 'FatI', 'BamHI', 'BslI', 'AvaII', 'BspDI', 'PaeR7I', 'SfaNI', 'HpaI', 'BsaJI', 'BbvCI', 'Fnu4HI', 'Cac8I', 'Tsp45I', 'StyI', 'PflMI', 'HhaI', 'AsiSI', 'AleI', 'NmeAIII', 'BsaAI'],
     )
 
 
@@ -22806,7 +24181,7 @@ suppliers['N'] = _temp()
 def _temp():
     return (
         'Toyobo Biochemicals',
-        ['SacII', 'BglII', 'MscI', 'NotI', 'SfiI', 'SphI', 'BglI', 'PstI', 'PvuI', 'BamHI', 'XhoI', 'HincII', 'ScaI', 'DdeI', 'MroI', 'EcoRV', 'BclI', 'SmaI', 'MluI', 'PvuII', 'SalI', 'DpnI', 'AluI', 'NheI', 'HindIII', 'SacI', 'NcoI', 'SpeI', 'EcoRI', 'KpnI', 'HinfI', 'HaeIII', 'PacI'],
+        ['MluI', 'BclI', 'SacI', 'BglI', 'SalI', 'ScaI', 'NcoI', 'PvuI', 'DpnI', 'PacI', 'KpnI', 'BglII', 'SacII', 'HincII', 'AluI', 'MscI', 'SmaI', 'NheI', 'SpeI', 'SphI', 'PvuII', 'HinfI', 'HindIII', 'EcoRV', 'EcoRI', 'XhoI', 'PstI', 'SfiI', 'HaeIII', 'DdeI', 'NotI', 'MroI', 'BamHI'],
     )
 
 
@@ -22816,7 +24191,7 @@ suppliers['O'] = _temp()
 def _temp():
     return (
         'Molecular Biology Resources - CHIMERx',
-        ['SacII', 'XbaI', 'BglII', 'NotI', 'BsiHKCI', 'ApaI', 'SfiI', 'BssHII', 'SphI', 'MboI', 'BglI', 'Tth111I', 'RsrII', 'PstI', 'ClaI', 'NdeI', 'PvuI', 'BstXI', 'BamHI', 'PinAI', 'DraI', 'XhoI', 'HpaII', 'TaqII', 'HhaI', 'HincII', 'MnlI', 'ScaI', 'TspDTI', 'AvaI', 'DdeI', 'HpaI', 'SspI', 'NruI', 'EcoRV', 'SmaI', 'MluI', 'PvuII', 'SalI', 'StuI', 'DpnI', 'AluI', 'NheI', 'HindIII', 'RsaI', 'SacI', 'NcoI', 'TspGWI', 'SpeI', 'AccI', 'TaqI', 'MspI', 'NsiI', 'EcoRI', 'NarI', 'CviJI', 'KpnI', 'MboII', 'AcvI', 'HinfI', 'HaeIII', 'BalI'],
+        ['BssHII', 'MluI', 'HpaII', 'SacI', 'BglI', 'SalI', 'MspI', 'ScaI', 'NcoI', 'ClaI', 'CviJI', 'DraI', 'BstXI', 'AcvI', 'AvaI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'MboII', 'BglII', 'SacII', 'NruI', 'NarI', 'TaqII', 'RsaI', 'HincII', 'XbaI', 'TspGWI', 'MboI', 'AluI', 'RsrII', 'SmaI', 'NheI', 'StuI', 'SpeI', 'SphI', 'PvuII', 'HinfI', 'BsiHKCI', 'HindIII', 'Tth111I', 'EcoRV', 'EcoRI', 'XhoI', 'MnlI', 'PinAI', 'PstI', 'SfiI', 'HaeIII', 'AccI', 'SspI', 'NsiI', 'ApaI', 'TspDTI', 'BalI', 'DdeI', 'NotI', 'BamHI', 'HpaI', 'HhaI'],
     )
 
 
@@ -22826,7 +24201,7 @@ suppliers['Q'] = _temp()
 def _temp():
     return (
         'Promega Corporation',
-        ['XmnI', 'SacII', 'XbaI', 'BglII', 'NotI', 'ApaI', 'SfiI', 'BssHII', 'SphI', 'MboI', 'BglI', 'MspA1I', 'PstI', 'BanI', 'ClaI', 'NdeI', 'CspI', 'PvuI', 'BstXI', 'BamHI', 'AccIII', 'DraI', 'XhoI', 'SgfI', 'HpaII', 'AvaII', 'HhaI', 'HincII', 'AgeI', 'ScaI', 'DdeI', 'HpaI', 'Hsp92II', 'XmaI', 'SspI', 'NruI', 'EcoRV', 'NciI', 'BclI', 'VspI', 'SmaI', 'Sau3AI', 'BstZI', 'MluI', 'PvuII', 'SalI', 'BstEII', 'StuI', 'DpnI', 'AluI', 'Hsp92I', 'NheI', 'HindIII', 'RsaI', 'SacI', 'NcoI', 'EcoICRI', 'SpeI', 'AccI', 'TaqI', 'MspI', 'CfoI', 'Tru9I', 'HaeII', 'NsiI', 'Eco47III', 'SnaBI', 'EcoRI', 'NarI', 'KpnI', 'MboII', 'HinfI', 'HaeIII', 'BalI'],
+        ['BssHII', 'MluI', 'HpaII', 'BclI', 'SacI', 'BglI', 'SalI', 'MspI', 'ScaI', 'SnaBI', 'BstEII', 'NcoI', 'ClaI', 'AgeI', 'XmnI', 'Eco47III', 'DraI', 'BstXI', 'XmaI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'HaeII', 'NdeI', 'MboII', 'BglII', 'SacII', 'NruI', 'CspI', 'NarI', 'RsaI', 'Hsp92II', 'HincII', 'XbaI', 'MboI', 'BanI', 'AluI', 'CfoI', 'SmaI', 'NheI', 'StuI', 'Sau3AI', 'SpeI', 'SphI', 'PvuII', 'HinfI', 'NciI', 'MspA1I', 'HindIII', 'SgfI', 'EcoRV', 'EcoRI', 'XhoI', 'AccIII', 'PstI', 'VspI', 'BstZI', 'SfiI', 'Hsp92I', 'HaeIII', 'AccI', 'SspI', 'NsiI', 'ApaI', 'BalI', 'Tru9I', 'DdeI', 'NotI', 'EcoICRI', 'BamHI', 'AvaII', 'HpaI', 'HhaI'],
     )
 
 
@@ -22836,7 +24211,7 @@ suppliers['R'] = _temp()
 def _temp():
     return (
         'Sigma Chemical Corporation',
-        ['XbaI', 'BglII', 'NotI', 'SfuI', 'ApaI', 'SfiI', 'SphI', 'PstI', 'ClaI', 'NdeI', 'PvuI', 'BamHI', 'DraI', 'XhoI', 'MaeIII', 'Asp718I', 'ScaI', 'DdeI', 'HpaI', 'NruI', 'EcoRV', 'BclI', 'HindII', 'SmaI', 'KspI', 'MluI', 'PvuII', 'SalI', 'StuI', 'DpnI', 'AluI', 'NheI', 'HindIII', 'RsaI', 'SacI', 'AflIII', 'NcoI', 'SwaI', 'SpeI', 'TaqI', 'MunI', 'CfoI', 'BfrI', 'BlnI', 'NsiI', 'Eco47III', 'EcoRI', 'NarI', 'KpnI', 'BsmI', 'HinfI', 'HaeIII', 'EclXI'],
+        ['MluI', 'BclI', 'SacI', 'SalI', 'Asp718I', 'ScaI', 'NcoI', 'ClaI', 'Eco47III', 'DraI', 'SwaI', 'PvuI', 'DpnI', 'TaqI', 'KpnI', 'NdeI', 'BglII', 'NruI', 'RsaI', 'AflIII', 'XbaI', 'AluI', 'CfoI', 'SmaI', 'NheI', 'StuI', 'SpeI', 'SphI', 'MaeIII', 'PvuII', 'HindIII', 'EcoRV', 'EcoRI', 'XhoI', 'MunI', 'EclXI', 'PstI', 'BsmI', 'SfiI', 'BlnI', 'HaeIII', 'NsiI', 'ApaI', 'SfuI', 'BfrI', 'KspI', 'DdeI', 'NotI', 'BamHI', 'HpaI', 'HindII'],
     )
 
 
@@ -22846,7 +24221,7 @@ suppliers['S'] = _temp()
 def _temp():
     return (
         'Vivantis Technologies',
-        ['BstHHI', 'BmeRI', 'BstPAI', 'AspS9I', 'AclI', 'XbaI', 'BglII', 'AsuHPI', 'BstMBI', 'PceI', 'BstX2I', 'BstDSI', 'ApaI', 'SfiI', 'SphI', 'BshVI', 'BtuMI', 'FblI', 'FokI', 'AsiGI', 'Bst2UI', 'Rsr2I', 'BglI', 'Sse9I', 'MspA1I', 'BstMAI', 'BstBAI', 'Tth111I', 'Ama87I', 'PstI', 'BmcAI', 'BmrFI', 'Bso31I', 'BpuMI', 'BstDEI', 'MhlI', 'SmiMI', 'BstXI', 'Bse8I', 'BamHI', 'Msp20I', 'BstV2I', 'DraI', 'Bse21I', 'FauNDI', 'Bsp19I', 'Zsp2I', 'AccB1I', 'HpaII', 'BstH2I', 'CciNI', 'Ksp22I', 'Sfr274I', 'Bsp13I', 'BsePI', 'SfaNI', 'MnlI', 'DseDI', 'DraIII', 'HpaI', 'ZraI', 'AfiI', 'Bme18I', 'VneI', 'XmaI', 'SspI', 'Bse1I', 'Bpu10I', 'AccBSI', 'EcoRV', 'AcsI', 'PctI', 'VspI', 'AspLEI', 'HindII', 'Bst4CI', 'SmaI', 'BstNSI', 'Bst6I', 'Sfr303I', 'BssT1I', 'Bbv12I', 'BstENI', 'Psp124BI', 'Bse118I', 'MluI', 'PspOMI', 'PvuII', 'BstAUI', 'SalI', 'BstSNI', 'BsnI', 'AluI', 'HindIII', 'AspA2I', 'RsaI', 'SmiI', 'BssNI', 'MroXI', 'AatII', 'Bse3DI', 'BstFNI', 'EcoICRI', 'BmiI', 'SbfI', 'PspCI', 'AsuNHI', 'Vha464I', 'TaqI', 'Acc16I', 'MspI', 'PspEI', 'BseX3I', 'Bpu14I', 'HspAI', 'Acc65I', 'Tru9I', 'AhlI', 'EcoRI', 'BstMCI', 'AccB7I', 'KpnI', 'BssNAI', 'MboII', 'HinfI', 'BmtI', 'BstF5I', 'DinI', 'BssMI', 'FriOI', 'MroNI', 'Bsp1720I'],
+        ['BssMI', 'AsuNHI', 'MluI', 'BstHHI', 'HpaII', 'AhlI', 'BglI', 'SalI', 'PspEI', 'MspI', 'VneI', 'BstH2I', 'BmtI', 'AsiGI', 'CciNI', 'Sfr274I', 'SmiI', 'Ksp22I', 'BssT1I', 'Bsp19I', 'Bse1I', 'AspS9I', 'BmcAI', 'FauNDI', 'DraI', 'Bst2UI', 'Vha464I', 'BstXI', 'BstDEI', 'XmaI', 'BstF5I', 'BstMBI', 'BstENI', 'Ama87I', 'BstDSI', 'BstV2I', 'AspLEI', 'Zsp2I', 'DseDI', 'BstAUI', 'Bpu14I', 'TaqI', 'KpnI', 'BstSNI', 'AclI', 'MboII', 'BmrFI', 'BglII', 'AcsI', 'BstNSI', 'BmeRI', 'BseX3I', 'Bpu10I', 'Rsr2I', 'Acc65I', 'BtuMI', 'Bse118I', 'BsnI', 'BmiI', 'BsePI', 'BstMCI', 'Bme18I', 'RsaI', 'BssNAI', 'Bsp13I', 'Bst4CI', 'AsuHPI', 'XbaI', 'Psp124BI', 'BstX2I', 'AluI', 'ZraI', 'Bse21I', 'Sfr303I', 'BpuMI', 'Bse3DI', 'Bso31I', 'AccB7I', 'AccBSI', 'SmaI', 'SmiMI', 'AspA2I', 'Bsp1720I', 'SphI', 'FriOI', 'PvuII', 'BshVI', 'FokI', 'HinfI', 'MroNI', 'BstPAI', 'HspAI', 'MspA1I', 'DraIII', 'Acc16I', 'HindIII', 'Tth111I', 'EcoRV', 'AatII', 'MroXI', 'EcoRI', 'DinI', 'BstFNI', 'AfiI', 'MnlI', 'SbfI', 'PstI', 'Bse8I', 'VspI', 'SfiI', 'Bst6I', 'Msp20I', 'Bbv12I', 'SspI', 'PspOMI', 'BstMAI', 'ApaI', 'FblI', 'PctI', 'AccB1I', 'BssNI', 'PceI', 'Sse9I', 'Tru9I', 'MhlI', 'BstBAI', 'EcoICRI', 'BamHI', 'SfaNI', 'HpaI', 'PspCI', 'HindII'],
     )
 
 
@@ -22856,7 +24231,7 @@ suppliers['V'] = _temp()
 def _temp():
     return (
         'EURx Ltd.',
-        ['SacII', 'XbaI', 'BglII', 'NotI', 'BsiHKCI', 'ApaI', 'SfiI', 'BssHII', 'SphI', 'MboI', 'FokI', 'BglI', 'Tth111I', 'RsrII', 'PstI', 'ClaI', 'NdeI', 'MmeI', 'PvuI', 'BstXI', 'BamHI', 'PinAI', 'DraI', 'XhoI', 'HpaII', 'TaqII', 'AvaII', 'HhaI', 'HincII', 'BspMAI', 'MnlI', 'ScaI', 'TspDTI', 'AvaI', 'DdeI', 'HpaI', 'SspI', 'NruI', 'EcoRV', 'SinI', 'SmaI', 'Sau3AI', 'MluI', 'PvuII', 'SalI', 'StuI', 'DpnI', 'AluI', 'NheI', 'BsuTUI', 'HindIII', 'RsaI', 'SacI', 'BspANI', 'NcoI', 'TspGWI', 'SpeI', 'AccI', 'TaqI', 'MspI', 'BanII', 'NsiI', 'BspTNI', 'EcoRI', 'NarI', 'CviJI', 'KpnI', 'MboII', 'AcvI', 'HinfI', 'HaeIII', 'BalI'],
+        ['BssHII', 'MluI', 'HpaII', 'BspTNI', 'SacI', 'BglI', 'SalI', 'MspI', 'ScaI', 'BanII', 'NcoI', 'ClaI', 'CviJI', 'DraI', 'BstXI', 'AcvI', 'AvaI', 'PvuI', 'DpnI', 'TaqI', 'SinI', 'KpnI', 'NdeI', 'MboII', 'BglII', 'SacII', 'NruI', 'NarI', 'TaqII', 'RsaI', 'HincII', 'XbaI', 'BspANI', 'TspGWI', 'MboI', 'AluI', 'RsrII', 'SmaI', 'NheI', 'StuI', 'Sau3AI', 'SpeI', 'SphI', 'PvuII', 'FokI', 'HinfI', 'BsiHKCI', 'HindIII', 'Tth111I', 'EcoRV', 'EcoRI', 'XhoI', 'MnlI', 'PinAI', 'PstI', 'BspMAI', 'SfiI', 'HaeIII', 'AccI', 'SspI', 'NsiI', 'ApaI', 'MmeI', 'TspDTI', 'BalI', 'DdeI', 'NotI', 'BamHI', 'BsuTUI', 'AvaII', 'HpaI', 'HhaI'],
     )
 
 
@@ -22866,7 +24241,7 @@ suppliers['X'] = _temp()
 def _temp():
     return (
         'SinaClon BioScience Co.',
-        ['SlaI', 'MboI', 'FokI', 'BstXI', 'BamHI', 'SmaI', 'BsiSI', 'AluI', 'HindIII', 'RsaI', 'NcoI', 'EcoRI', 'KpnI', 'HinfI'],
+        ['NcoI', 'BstXI', 'KpnI', 'RsaI', 'BsiSI', 'MboI', 'AluI', 'SlaI', 'SmaI', 'FokI', 'HinfI', 'HindIII', 'EcoRI', 'BamHI'],
     )
 
 
@@ -22929,7 +24304,7 @@ typedict['type144'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['Sno506I', 'Cla11845III', 'Hpy99XIV', 'Lmo370I', 'Pdi8503III', 'Pac19842II', 'AteTI', 'Sth20745III', 'Sen1880IV', 'RflFIII', 'MspI7II', 'Ecl35734I', 'PacIII', 'Hpy99XIII', 'TspARh3I', 'SenC1810IV', 'AhyRBAHI', 'Mcr10I', 'Sbo46I', 'Saf8902III', 'Sen1910IV', 'Hpy99XXII', 'Pst273I', 'Sen13311III', 'Kor51II', 'Awo1030IV', 'EsaSSI', 'PliMI', 'HbaII', 'Hpy99XIV_mut1', 'Cly7489II', 'CjeNV', 'Jsp2502II', 'BfaSII', 'Pse18267I', 'SenC1808III', 'Asp114II', 'RspPBTS2III', 'Bce3081I', 'PcaII', 'SenSARA26III', 'DrdII', 'PfrJS12V', 'MkaDII', 'SpoDI', 'Jma19592II', 'Pal408I', 'Ble402II', 'Adh6U21I', 'Lsp6406VI', 'Exi27195I', 'RdeGBI', 'Cal14237I', 'Rsp008V', 'Acc65V', 'Nal45188II', 'Eco4465II', 'KpnNIH30III', 'Cau10061II', 'Ssp714II', 'Mba11I', 'Pdu1735I', 'Sen1898IV', 'Bag18758I', 'Yps3606I', 'NpeUS61II', 'AspJHL3II', 'Rba2021I', 'OspHL35III', 'ScoDS2II', 'AbaCIII', 'CjeFV', 'Sen1736II', 'Lmo911II', 'HpyAXIV', 'Ssp6803IV', 'Cdi11397I', 'AspDUT2V', 'RpaTI', 'Sen1878IV', 'BscGI', 'Xca85IV', 'Psp0357II', 'FtnUV', 'Cma23826I', 'Rsp008IV', 'Cgl13032I', 'Sen1906IV', 'EcoMVII', 'Cbo67071IV', 'Nbr128II', 'MtuHN878II', 'Jma19592I', 'Gba708II', 'Bsp3004IV', 'Pst14472I', 'HpyUM032XIII_mut1', 'Sen1896IV', 'PfrJS12IV', 'NhaXI', 'Lba2029III', 'Aco12261II', 'HpyUM032XIV', 'Aba6411II', 'Eli8509II', 'Cba16038I', 'Esp3007I', 'Csp2014I', 'GauT27I', 'BloAII', 'Sty13348III', 'BanLI', 'HpyAXVI_mut1', 'PfrJS15III', 'Cdu23823II', 'Vtu19109I', 'Sen1908IV', 'CcrNAIII', 'Bsp460III', 'Cgl13032II', 'Cch467III', 'SenTFIV', 'Cfupf3II', 'HpyAXVI_mut2', 'Pin17FIII', 'SpnRII', 'Asu14238IV', 'Lsp48III', 'CalB3II', 'CjeFIII', 'AchA6III', 'Sen13III', 'AhyYL17I', 'EcoE1140I', 'CjeNII', 'Cdi81III', 'HpyUM037X', 'Cba13II'],
+        ['SpoDI', 'OspHL35III', 'Xca85IV', 'Pba2294I', 'Kpn156V', 'Pcr308II', 'Cgl13032I', 'RspPBTS2III', 'Rmu369III', 'Pal408I', 'EsaSSI', 'Pse18267I', 'HpyUM032XIV', 'PpiP13II', 'BbuB31I', 'Hpy99XIV_mut1', 'Sba460II', 'AbaB8342IV', 'Eco4465II', 'Cdu23823II', 'RflFIII', 'CcrNAIII', 'Pdi8503III', 'MspI7IV', 'Bga514I', 'Bau1417V', 'Nbr128II', 'Cgl13032II', 'Lra68I', 'Adh6U21I', 'Kpn327I', 'Mlu211III', 'Pst273I', 'CjeFV', 'Bbr7017II', 'Fco1691IV', 'Asp103I', 'SenSARA26III', 'HdeNY26I', 'Lsp48III', 'EcoMVII', 'Bbr57III', 'BscGI', 'Bsp3004IV', 'DvuIII', 'SenA1673III', 'SpnRII', 'PliMI', 'EcoE1140I', 'SurP32aII', 'Ble402II', 'Ecl35734I', 'Sbo46I', 'Pac19842II', 'BbuB31II', 'HdeZA17I', 'Sno506I', 'Hpy99XIV', 'Bbr7017III', 'Aco12261II', 'AspJHL3II', 'Asp114pII', 'FspPK15I', 'SthSt3II', 'KpnNIH50I', 'Sth20745III', 'Cco14983VI', 'CfrMH16VI', 'Cdi11397I', 'Mba11I', 'EcoNIH6II', 'RdeGBI', 'Jma19592II', 'Vtu19109I', 'CjeFIII', 'FtnUV', 'Ssp714II', 'AhyYL17I', 'PinP23II', 'PflPt14I', 'Hpy300XI', 'AspNIH4III', 'Hpy99XXII', 'ObaBS10I', 'DrdII', 'Eco43896II', 'Cch467III', 'Lba2029III', 'TpyTP2I', 'Cje265V', 'MspSC27II', 'HpyAXVI_mut2', 'Bbr52II', 'AchA6III', 'BanLI', 'HbaII', 'SmaUMH5I', 'NhaXI', 'CjeNV', 'Lpl1004II', 'RpaTI', 'Vdi96II', 'BkrAM31DI', 'BspNCI', 'Cau10061II', 'PinP59III', 'PacIII', 'Cal14237I', 'Rsp531II', 'Esp3007I', 'BloAII', 'CfrMH13II', 'Cfupf3II', 'Csp2014I', 'Lde4408II', 'Ssp6803IV', 'Cba16038I', 'PfrJS12V', 'SenTFIV', 'GauT27I', 'Pdu1735I', 'HpyAXIV', 'LlaG50I', 'KpnNIH30III', 'Cba13II', 'Psp0357II', 'MtuHN878II', 'Lmo911II', 'Pst145I', 'Lsp6406VI', 'Gba708II', 'MkaDII', 'PfrJS12IV', 'Jma19592I', 'Eli8509II', 'VchE4II', 'Awo1030IV', 'Saf8902III', 'Sen17963III', 'EcoHSI', 'Nal45188II', 'BfaSII', 'Cbo67071IV', 'Mcr10I', 'Aod1I', 'Cla11845III', 'AhyRBAHI', 'MspI7II', 'Rtr1953I', 'Bve1B23I', 'Rsp008IV', 'HpyAXVI_mut1', 'Rba2021I', 'KpnNH25III', 'Lmo370I', 'ScoDS2II', 'Cco14983V', 'AbaCIII', 'CjeNII', 'AteTI', 'Aba6411II', 'SmaUMH8I', 'Sag901I', 'Rsp008V', 'AspSLV7III', 'HpyUM037X', 'OgrI', 'AspDUT2V', 'PfrJS15III', 'Jsp2502II', 'Pst14472I', 'LsaDS4I', 'Ecl234I', 'NpeUS61II', 'Acc65V', 'Bsp460III', 'Cje54107III', 'Cma23826I', 'Hpy99XIII', 'TspARh3I', 'AcoY31II', 'Cly7489II', 'CalB3II', 'Bag18758I', 'Kor51II', 'Van9116I', 'Asu14238IV', 'Pin17FIII', 'HpyUM032XIII_mut1', 'PcaII', 'Bce3081I'],
     )
 
 
@@ -22939,7 +24314,7 @@ typedict['type146'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['RlaI', 'BspNCI', 'AbaUMB2I', 'BspGI', 'UbaPI', 'BmgI', 'UbaF14I', 'FinI', 'CjeP659IV', 'AlwFI', 'TsuI', 'UbaF9I', 'UbaF13I', 'PsuGI', 'Pfl1108I', 'CjuII', 'UbaF12I', 'PenI', 'UbaF11I'],
+        ['UbaF14I', 'CjeP659IV', 'PsuGI', 'CjuII', 'AlwFI', 'BspGI', 'Pfl1108I', 'UbaF13I', 'AbaUMB2I', 'RlaI', 'PenI', 'UbaF12I', 'TsuI', 'UbaF9I', 'FinI', 'UbaF11I', 'UbaPI', 'BmgI'],
     )
 
 
@@ -22949,7 +24324,7 @@ typedict['type148'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['HpyUM032XIII', 'MjaIV'],
+        ['MjaIV', 'HpyUM032XIII'],
     )
 
 
@@ -22959,7 +24334,7 @@ typedict['type2'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['BsrBI', 'MlyI'],
+        ['MlyI', 'BsrBI'],
     )
 
 
@@ -22979,7 +24354,7 @@ typedict['type210'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['BmgBI', 'AjiI', 'MbiI', 'BtrI', 'AccBSI', 'SchI'],
+        ['BmgBI', 'SchI', 'BtrI', 'AjiI', 'AccBSI', 'MbiI'],
     )
 
 
@@ -22999,7 +24374,7 @@ typedict['type212'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['AciI', 'BssSI', 'BspACI', 'BbvCI'],
+        ['AciI', 'BspACI', 'BssSI', 'BbvCI'],
     )
 
 
@@ -23009,7 +24384,7 @@ typedict['type221'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['SsiI', 'Bst2BI', 'BauI', 'BseYI', 'PspFI'],
+        ['SsiI', 'Bst2BI', 'PspFI', 'BseYI', 'BauI'],
     )
 
 
@@ -23019,7 +24394,7 @@ typedict['type223'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['SimI', 'BsiI', 'GdiII'],
+        ['SimI', 'GdiII', 'BsiI'],
     )
 
 
@@ -23029,7 +24404,7 @@ typedict['type224'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['Alw26I', 'BccI', 'BsmFI', 'BtgZI', 'FokI', 'BsmBI', 'AlwI', 'BceAI', 'Lsp1109I', 'PleI', 'BspMI', 'BfuAI', 'BcoDI', 'BsmAI', 'Bpu10I', 'HgaI', 'BbvI', 'Eco31I', 'Esp3I'],
+        ['AlwI', 'BsaI', 'Esp3I', 'Bpu10I', 'Lsp1109I', 'BfuAI', 'BbvI', 'HgaI', 'BspMI', 'PleI', 'BccI', 'BcoDI', 'FokI', 'Alw26I', 'Eco31I', 'BceAI', 'BsmAI', 'SapI', 'BsmFI', 'BsmBI', 'BtgZI', 'EarI'],
     )
 
 
@@ -23049,7 +24424,7 @@ typedict['type226'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['PpsI', 'LweI', 'BsaI', 'CseI', 'BstMAI', 'Bso31I', 'LpnPI', 'BslFI', 'BstV2I', 'LguI', 'SapI', 'BveI', 'Eam1104I', 'SfaNI', 'EarI', 'FspEI', 'Bst6I', 'BpiI', 'AclWI', 'FaqI', 'BspPI', 'MspJI', 'Acc36I', 'BstV1I', 'BspQI', 'BmsI', 'BbsI', 'FauI', 'BspTNI', 'BseXI', 'AarI', 'PciSI'],
+        ['BspTNI', 'LweI', 'PciSI', 'CseI', 'AclWI', 'BseXI', 'BstV2I', 'AarI', 'LguI', 'BmsI', 'BspQI', 'MspJI', 'BstV1I', 'Bso31I', 'FaqI', 'FspEI', 'BveI', 'PpsI', 'Eam1104I', 'Acc36I', 'BspPI', 'BslFI', 'FauI', 'Bst6I', 'BpiI', 'LpnPI', 'BstMAI', 'BbsI', 'SfaNI'],
     )
 
 
@@ -23059,7 +24434,7 @@ typedict['type227'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['EcoBLMcrX', 'BspD6I', 'BbvII', 'BcefI', 'AspBHI', 'AceIII', 'Ksp632I', 'SgrTI', 'BinI', 'Sth132I'],
+        ['SgrTI', 'Sth132I', 'EcoBLMcrX', 'BbvII', 'BinI', 'AspBHI', 'BspD6I', 'BcefI', 'AceIII', 'Ksp632I'],
     )
 
 
@@ -23079,7 +24454,7 @@ typedict['type235'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['NmeAIII', 'BseMII', 'BseRI', 'BsrI', 'MmeI', 'TaqII', 'BsgI', 'MnlI', 'BpmI', 'BpuEI', 'AcuI', 'HpyAV', 'BspCNI', 'TspGWI', 'Eco57I', 'HphI', 'BmrI', 'MboII', 'BstF5I'],
+        ['BstF5I', 'BpuEI', 'BsrI', 'MboII', 'TaqII', 'BspCNI', 'BsgI', 'TspGWI', 'BmrI', 'HpyAV', 'HphI', 'BseMII', 'MnlI', 'BseRI', 'MmeI', 'Eco57I', 'BpmI', 'AcuI', 'NmeAIII'],
     )
 
 
@@ -23089,7 +24464,7 @@ typedict['type237'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['CstMI', 'BfiI', 'BsbI', 'CdpI', 'ApyPI', 'SdeAI', 'DraRI', 'RpaBI', 'TsoI', 'TaqIII', 'Tth111II', 'CchIII', 'PspPRI', 'AquII', 'AquIII', 'SstE37I', 'AmaCSI', 'RceI', 'WviI', 'PlaDI', 'CchII', 'RpaI', 'NlaCI', 'RpaB5I', 'RlaII', 'MaqI', 'CjeNIII', 'PspOMII', 'AquIV', 'RdeGBII'],
+        ['MaqI', 'RpaBI', 'DraRI', 'SdeAI', 'RceI', 'WviI', 'BfiI', 'CstMI', 'PspOMII', 'TaqIII', 'RlaII', 'DrdIV', 'CchII', 'AmaCSI', 'PlaDI', 'NmeA6CIII', 'TsoI', 'SstE37I', 'RpaB5I', 'CdpI', 'CchIII', 'CjeNIII', 'BsbI', 'NlaCI', 'AquII', 'AquIV', 'ApyPI', 'Tth111II', 'RpaI', 'PspPRI', 'AquIII', 'RdeGBII'],
     )
 
 
@@ -23099,7 +24474,7 @@ typedict['type238'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['BsuI', 'AsuHPI', 'AbaSI', 'BtsI', 'TspDTI', 'EciI', 'Mva1269I', 'Bse1I', 'BciVI', 'PctI', 'BmuI', 'BseGI', 'BtsCI', 'BsrDI', 'BseMI', 'LmnI', 'Bse3DI', 'BfuI', 'GsuI', 'BtsIMutI', 'BseNI', 'BsmI'],
+        ['EciI', 'Mva1269I', 'Bse1I', 'LmnI', 'BtsIMutI', 'GsuI', 'BtsCI', 'BsuI', 'AsuHPI', 'AbaSI', 'BseGI', 'Bse3DI', 'BsrDI', 'BciVI', 'BtsI', 'BfuI', 'BsmI', 'BseMI', 'TspDTI', 'BmuI', 'PctI', 'BseNI'],
     )
 
 
@@ -23109,7 +24484,7 @@ typedict['type239'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['Eco57MI', 'Bce83I', 'YkrI', 'Hin4II', 'BmeDI', 'RleAI'],
+        ['BmeDI', 'Bce83I', 'Hin4II', 'Eco57MI', 'YkrI', 'RleAI'],
     )
 
 
@@ -23139,7 +24514,7 @@ typedict['type285'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['NgoAVIII', 'TstI', 'SdeOSI', 'CjeI', 'PpiI'],
+        ['TstI', 'NgoAVIII', 'PpiI', 'SdeOSI', 'CjeI'],
     )
 
 
@@ -23149,7 +24524,7 @@ typedict['type286'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['BaeI', 'AjuI', 'ArsI', 'BsaXI', 'BarI', 'PsrI'],
+        ['PsrI', 'AjuI', 'BaeI', 'ArsI', 'BarI', 'BsaXI'],
     )
 
 
@@ -23159,7 +24534,7 @@ typedict['type287'] = _temp()
 def _temp():
     return (
         ('NonPalindromic', 'TwoCuts', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['Bsp24I', 'CjePI', 'Hin4I'],
+        ['CjePI', 'Bsp24I', 'Hin4I'],
     )
 
 
@@ -23169,7 +24544,7 @@ typedict['type288'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'NoCut', 'Unknown', 'NotDefined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['NhoI', 'AvaIII', 'HgiEII', 'TssI', 'SnaI', 'CjuI', 'Dde51507I'],
+        ['NhoI', 'CjuI', 'AvaIII', 'TssI', 'Dde51507I', 'SnaI', 'HgiEII'],
     )
 
 
@@ -23179,7 +24554,7 @@ typedict['type4'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['XmnI', 'BstUI', 'Hpy8I', 'FspI', 'AluBI', 'PmlI', 'MspA1I', 'NlaIV', 'DraI', 'HincII', 'AleI', 'Cac8I', 'ScaI', 'BstC8I', 'SfoI', 'HpaI', 'SspI', 'NruI', 'EcoRV', 'PshAI', 'HindII', 'SmaI', 'PvuII', 'AluI', 'RsaI', 'SwaI', 'BsuRI', 'SnaBI', 'BsaAI', 'CviJI', 'HaeIII', 'NaeI', 'BalI'],
+        ['ScaI', 'SnaBI', 'CviJI', 'XmnI', 'DraI', 'AluBI', 'PshAI', 'SwaI', 'NaeI', 'NruI', 'SfoI', 'RsaI', 'HincII', 'BstC8I', 'PmlI', 'AluI', 'Hpy8I', 'SmaI', 'FspI', 'PvuII', 'BsuRI', 'MspA1I', 'EcoRV', 'BstUI', 'HaeIII', 'SspI', 'BalI', 'NlaIV', 'HpaI', 'Cac8I', 'HindII', 'AleI', 'BsaAI'],
     )
 
 
@@ -23189,7 +24564,7 @@ typedict['type65'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['FnuDII', 'CviRI', 'EsaBC3I'],
+        ['FnuDII', 'EsaBC3I', 'CviRI'],
     )
 
 
@@ -23199,7 +24574,7 @@ typedict['type66'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['MslI', 'Ecl136II', 'RruI', 'Ppu21I', 'BstPAI', 'EheI', 'GlaI', 'Aor51HI', 'MalI', 'PceI', 'MscI', 'AanI', 'Eco147I', 'BtuMI', 'HpyCH4V', 'Bsp68I', 'FspAI', 'BstBAI', 'BmcAI', 'Eco105I', 'Bst1107I', 'SmiMI', 'Bse8I', 'Msp20I', 'PsiI', 'SrfI', 'BsaBI', 'SseBI', 'RseI', 'EgeI', 'Mox20I', 'KspAI', 'PmeI', 'ZraI', 'PmaCI', 'OliI', 'MvnI', 'AccII', 'CviKI_1', 'Asp700I', 'NsbI', 'BoxI', 'BstSNI', 'BsnI', 'Eco53kI', 'StuI', 'DpnI', 'FaiI', 'SmiI', 'MroXI', 'ZrmI', 'BspANI', 'BstZ17I', 'BstFNI', 'EcoICRI', 'BmiI', 'MlsI', 'Bsh1236I', 'PdiI', 'PspCI', 'BspLI', 'Hpy166II', 'PdmI', 'MssI', 'Acc16I', 'AfaI', 'AfeI', 'BbrPI', 'BspFNI', 'Eco47III', 'BshFI', 'BssNAI', 'AcvI', 'MluNI', 'DinI', 'PspN4I', 'BseJI', 'Eco32I', 'Eco72I'],
+        ['PspN4I', 'MslI', 'Bsp68I', 'PmaCI', 'BsaBI', 'SmiI', 'BseJI', 'BshFI', 'BmcAI', 'Eco47III', 'Hpy166II', 'AcvI', 'RruI', 'EgeI', 'OliI', 'DpnI', 'Bst1107I', 'BbrPI', 'BstSNI', 'RseI', 'MlsI', 'AccII', 'BtuMI', 'Aor51HI', 'Bsh1236I', 'MalI', 'MssI', 'BsnI', 'FspAI', 'BmiI', 'BoxI', 'BssNAI', 'BspANI', 'GlaI', 'MvnI', 'ZraI', 'Eco72I', 'MscI', 'SseBI', 'SmiMI', 'Ppu21I', 'StuI', 'Eco53kI', 'EheI', 'BstPAI', 'PsiI', 'Ecl136II', 'Acc16I', 'MluNI', 'MroXI', 'ZrmI', 'DinI', 'BstFNI', 'BspLI', 'Eco105I', 'NsbI', 'Bse8I', 'BspFNI', 'BstZ17I', 'Msp20I', 'AfeI', 'SrfI', 'Eco32I', 'KspAI', 'AanI', 'PmeI', 'Mox20I', 'FaiI', 'Eco147I', 'CviKI_1', 'PdmI', 'HpyCH4V', 'PceI', 'BstBAI', 'AfaI', 'Asp700I', 'EcoICRI', 'PspCI', 'PdiI'],
     )
 
 
@@ -23209,7 +24584,7 @@ typedict['type67'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Blunt', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['SciI', 'MstI', 'Sth302II', 'HaeI', 'AhaIII', 'Pfl8569I', 'NspBII', 'LpnI'],
+        ['Pfl8569I', 'HaeI', 'NspBII', 'SciI', 'LpnI', 'AhaIII', 'Sth302II', 'MstI'],
     )
 
 
@@ -23219,7 +24594,7 @@ typedict['type68'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['CviAII', 'ApoI', 'AclI', 'HinP1I', 'XbaI', 'BglII', 'BseCI', 'NotI', 'BssHII', 'MfeI', 'MboI', 'Sse9I', 'Cfr10I', 'ClaI', 'NdeI', 'AflII', 'BamHI', 'ApaLI', 'AseI', 'XhoI', 'MseI', 'HapII', 'HpaII', 'Kpn2I', 'KasI', 'AgeI', 'BsrFI', 'DpnII', 'FatI', 'BstYI', 'XmaI', 'EagI', 'SgrAI', 'Bsu15I', 'BclI', 'VspI', 'BsaHI', 'Sau3AI', 'MluI', 'CviQI', 'BspHI', 'SalI', 'NheI', 'HindIII', 'Cfr9I', 'NgoMIV', 'PaeR7I', 'NcoI', 'TaqI', 'MunI', 'MspI', 'TspMI', 'HspAI', 'Acc65I', 'EcoRI', 'AscI', 'BsaWI', 'HpyCH4IV', 'EaeI'],
+        ['BssHII', 'BsrFI', 'DpnII', 'MluI', 'NgoMIV', 'HpaII', 'TspMI', 'BclI', 'BsaWI', 'SalI', 'MspI', 'Bsu15I', 'NcoI', 'ClaI', 'AgeI', 'XmaI', 'Cfr9I', 'TaqI', 'EaeI', 'AseI', 'AclI', 'ApoI', 'HpyCH4IV', 'NdeI', 'HapII', 'AflII', 'BglII', 'Acc65I', 'MseI', 'BsaHI', 'XbaI', 'MboI', 'CviQI', 'NheI', 'Sau3AI', 'BsiWI', 'CviAII', 'MfeI', 'ApaLI', 'Cfr10I', 'HinP1I', 'HspAI', 'HindIII', 'EcoRI', 'XhoI', 'BseCI', 'AccIII', 'MunI', 'EagI', 'AscI', 'VspI', 'KasI', 'Kpn2I', 'SgrAI', 'BspHI', 'BstYI', 'Sse9I', 'NotI', 'FatI', 'BamHI', 'PaeR7I'],
     )
 
 
@@ -23229,7 +24604,7 @@ typedict['type77'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['XhoII', 'XmaIII', 'CfrI'],
+        ['XmaIII', 'CfrI', 'XhoII'],
     )
 
 
@@ -23239,7 +24614,7 @@ typedict['type78'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['Bsp120I', 'Eco52I', 'PspXI', 'Hin6I', 'Aor13HI', 'BstMBI', 'AbsI', 'Bsp143I', 'BstX2I', 'Psp1406I', 'SfuI', 'CciI', 'SgsI', 'BshVI', 'SlaI', 'PshBI', 'AsiGI', 'MspCI', 'PalAI', 'Alw44I', 'MluCI', 'PauI', 'CspAI', 'NspV', 'BspT104I', 'BstACI', 'PinAI', 'Pfl23II', 'AccIII', 'FauNDI', 'Bsp19I', 'CciNI', 'SspMI', 'Ksp22I', 'Asp718I', 'AsuII', 'Sfr274I', 'AcoI', 'Bsp13I', 'BssAI', 'RsaNI', 'BsePI', 'BshTI', 'Kzo9I', 'MroI', 'BstAFI', 'PspLI', 'VneI', 'FspBI', 'KroI', 'AcsI', 'AvrII', 'BsrGI', 'MauBI', 'BsiSI', 'Bsa29I', 'BsiWI', 'Csp6I', 'BstZI', 'TasI', 'Bse118I', 'BcuI', 'PspOMI', 'MaeI', 'BstAUI', 'Tru1I', 'PsuI', 'FbaI', 'TatI', 'XmaJI', 'BseAI', 'SgrDI', 'Hsp92I', 'BsuTUI', 'XapI', 'AspA2I', 'BssNI', 'BfaI', 'BspTI', 'Bsp119I', 'MflI', 'SaqAI', 'XspI', 'BspEI', 'AsuNHI', 'SpeI', 'Vha464I', 'SspDI', 'BseX3I', 'BfrI', 'NdeII', 'PagI', 'BlnI', 'Hin1I', 'Bpu14I', 'AcyI', 'Bsp1407I', 'Tru9I', 'PscI', 'AhlI', 'BstBI', 'AoxI', 'NarI', 'BspDI', 'MreI', 'BssMI', 'MaeII', 'PciI', 'HpySE526I', 'MroNI', 'PteI', 'Mly113I', 'EclXI'],
+        ['BssMI', 'AsuNHI', 'PshBI', 'BshTI', 'CciI', 'MreI', 'AhlI', 'XspI', 'KroI', 'BfaI', 'PauI', 'Asp718I', 'VneI', 'PspXI', 'AsiGI', 'CciNI', 'Sfr274I', 'PteI', 'Ksp22I', 'Bsp19I', 'MauBI', 'AbsI', 'AsuII', 'FauNDI', 'Vha464I', 'BstACI', 'AcoI', 'BstMBI', 'BssAI', 'BseAI', 'Hin6I', 'PalAI', 'BstAUI', 'Bpu14I', 'Eco52I', 'BspT104I', 'SspDI', 'TasI', 'AcsI', 'BseX3I', 'FspBI', 'RsaNI', 'AvrII', 'MaeI', 'XapI', 'PscI', 'Bsp1407I', 'SspMI', 'PciI', 'Bse118I', 'NarI', 'BsePI', 'MaeII', 'Bsp13I', 'BsiSI', 'Bsp119I', 'BstX2I', 'SlaI', 'SgsI', 'MluCI', 'PsuI', 'AspA2I', 'BcuI', 'BspTI', 'SpeI', 'Mly113I', 'MflI', 'BshVI', 'Hin1I', 'SgrDI', 'MroNI', 'XmaJI', 'MspCI', 'Psp1406I', 'Kzo9I', 'Csp6I', 'Bsp143I', 'Bsa29I', 'Tru1I', 'Aor13HI', 'PinAI', 'EclXI', 'BspEI', 'BstZI', 'Alw44I', 'Hsp92I', 'BlnI', 'NdeII', 'BsrGI', 'CspAI', 'FbaI', 'PspOMI', 'SaqAI', 'SfuI', 'NspV', 'BfrI', 'BstBI', 'BssNI', 'HpySE526I', 'Tru9I', 'Bsp120I', 'MroI', 'AoxI', 'AcyI', 'BsuTUI', 'BspDI', 'BstAFI', 'TatI', 'Pfl23II', 'PspLI', 'PagI'],
     )
 
 
@@ -23249,7 +24624,7 @@ typedict['type79'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['BspLU11I', 'Ppu10I', 'Sse232I', 'BetI', 'Asi256I', 'SelI', 'BspMII', 'SplI', 'TspEI'],
+        ['SelI', 'BspLU11I', 'SplI', 'TspEI', 'Asi256I', 'Ppu10I', 'Sse232I', 'BetI', 'BspMII'],
     )
 
 
@@ -23259,7 +24634,7 @@ typedict['type80'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['BsaJI', 'EcoNI', 'Tsp45I', 'Cfr13I', 'AspS9I', 'BsoBI', 'EcoO109I', 'Tth111I', 'TseI', 'RsrII', 'Fnu4HI', 'BanI', 'BssECI', 'ScrFI', 'AvaII', 'BcnI', 'Fsp4HI', 'BlpI', 'BstNI', 'AvaI', 'DdeI', 'Sau96I', 'TfiI', 'NciI', 'SinI', 'PspGI', 'ApeKI', 'AjnI', 'PspPI', 'AflIII', 'AccI', 'StyD4I', 'EcoRII', 'MvaI', 'HinfI', 'SmlI', 'SexAI', 'PpuMI'],
+        ['PspPI', 'AspS9I', 'StyD4I', 'PspGI', 'PpuMI', 'BsoBI', 'BlpI', 'BssECI', 'AjnI', 'AvaI', 'SexAI', 'SinI', 'Sau96I', 'BstNI', 'Cfr13I', 'TseI', 'SmlI', 'MvaI', 'Bsu36I', 'AflIII', 'TfiI', 'BanI', 'RsrII', 'BcnI', 'ScrFI', 'EcoRII', 'EcoNI', 'ApeKI', 'HinfI', 'NciI', 'Fsp4HI', 'EcoO109I', 'Tth111I', 'AccI', 'DdeI', 'AvaII', 'BsaJI', 'Fnu4HI', 'Tsp45I', 'StyI'],
     )
 
 
@@ -23279,7 +24654,7 @@ typedict['type82'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['Bme1390I', 'AsuC2I', 'XagI', 'HpyF3I', 'NmuCI', 'SgeI', 'PflFI', 'BmeT110I', 'BstSCI', 'AxyI', 'PfeI', 'CsiI', 'BstDSI', 'BsiHKCI', 'FblI', 'Bst2UI', 'MspR9I', 'Rsr2I', 'Eco88I', 'Ama87I', 'PasI', 'BmrFI', 'BspT107I', 'BpuMI', 'BstDEI', 'BseDI', 'Bpu1102I', 'CspI', 'XmiI', 'Bse21I', 'AccB1I', 'SatI', 'BciT130I', 'MaeIII', 'PspPPI', 'GluI', 'BshNI', 'BstSFI', 'Bsu36I', 'Psp6I', 'EcoO65I', 'MabI', 'Bme18I', 'PfoI', 'EcoT14I', 'Eco130I', 'VpaK11BI', 'PsyI', 'BssT1I', 'BisI', 'BstENI', 'Psp5II', 'SfcI', 'BtgI', 'StyI', 'BstEII', 'CpoI', 'Hpy188III', 'ErhI', 'MteI', 'BfmI', 'Eco81I', 'SmoI', 'KflI', 'PspEI', 'Eco47I', 'BstPI', 'BseBI', 'Eco91I', 'TseFI', 'Bsp1720I', 'BmgT120I'],
+        ['AxyI', 'BspT107I', 'PspEI', 'BisI', 'BstPI', 'BstSFI', 'BstEII', 'BmgT120I', 'BssT1I', 'PsyI', 'BtgI', 'Eco91I', 'Bst2UI', 'BstDEI', 'GluI', 'BstENI', 'Ama87I', 'BstDSI', 'PflFI', 'Bme1390I', 'Psp5II', 'EcoO65I', 'BmrFI', 'EcoT14I', 'PspPPI', 'BseBI', 'PfoI', 'BshNI', 'Rsr2I', 'BmeT110I', 'PasI', 'TseFI', 'CpoI', 'Eco130I', 'CspI', 'BfmI', 'Eco47I', 'Bme18I', 'MabI', 'Hpy188III', 'Bse21I', 'BstSCI', 'BpuMI', 'SgeI', 'XagI', 'SmoI', 'Bsp1720I', 'MaeIII', 'ErhI', 'AsuC2I', 'BsiHKCI', 'MspR9I', 'XmiI', 'VpaK11BI', 'PfeI', 'Bpu1102I', 'SfcI', 'SatI', 'BciT130I', 'KflI', 'BseDI', 'Eco81I', 'Eco88I', 'FblI', 'AccB1I', 'CsiI', 'MteI', 'Psp6I', 'HpyF3I', 'NmuCI'],
     )
 
 
@@ -23289,7 +24664,7 @@ typedict['type83'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov5', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['Hpy178III', 'SecI', 'EspI', 'CauII', 'DraII', 'AsuI', 'DsaI', 'SanDI', 'Sse8647I', 'UnbI', 'SfeI', 'VpaK11AI', 'SauI'],
+        ['SanDI', 'DsaI', 'SauI', 'DraII', 'UnbI', 'VpaK11AI', 'Hpy178III', 'SfeI', 'CauII', 'AsuI', 'SecI', 'EspI', 'Sse8647I'],
     )
 
 
@@ -23299,7 +24674,7 @@ typedict['type84'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['SacII', 'NlaIII', 'ApaI', 'PstI', 'HhaI', 'PluTI', 'AsiSI', 'FseI', 'AatII', 'SacI', 'Cfr42I', 'NspI', 'HaeII', 'KpnI'],
+        ['SacI', 'KpnI', 'HaeII', 'SacII', 'AatII', 'PluTI', 'NlaIII', 'PstI', 'Cfr42I', 'FseI', 'ApaI', 'NspI', 'HhaI', 'AsiSI'],
     )
 
 
@@ -23309,7 +24684,7 @@ typedict['type89'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Dep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['McaTI', 'PabI'],
+        ['PabI', 'McaTI'],
     )
 
 
@@ -23319,7 +24694,7 @@ typedict['type90'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['SgrBI', 'BstHHI', 'XceI', 'RgaI', 'SphI', 'SstI', 'BspOI', 'SdaI', 'PvuI', 'Mph1103I', 'BstKTI', 'SfaAI', 'SgfI', 'Zsp2I', 'Ple19I', 'BstH2I', 'TaiI', 'BspMAI', 'Hsp92II', 'PaeI', 'AspLEI', 'BstNSI', 'Sfr303I', 'Hin1II', 'KspI', 'Psp124BI', 'FaeI', 'RigI', 'BfoI', 'SbfI', 'CfoI', 'EcoT22I', 'NsiI', 'BmtI', 'Sse8387I', 'PacI'],
+        ['SgrBI', 'BstHHI', 'BstH2I', 'BmtI', 'Mph1103I', 'PvuI', 'BspOI', 'AspLEI', 'Zsp2I', 'PacI', 'FaeI', 'SdaI', 'BstNSI', 'Ple19I', 'Hin1II', 'Sse8387I', 'PaeI', 'TaiI', 'Hsp92II', 'Psp124BI', 'Sfr303I', 'CfoI', 'BstKTI', 'SstI', 'SphI', 'SfaAI', 'RgaI', 'SgfI', 'SbfI', 'BspMAI', 'XceI', 'NsiI', 'EcoT22I', 'KspI', 'BfoI', 'RigI'],
     )
 
 
@@ -23329,7 +24704,7 @@ typedict['type91'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Defined', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['ChaI'],
+        ['ChaI', 'MspGI'],
     )
 
 
@@ -23339,7 +24714,7 @@ typedict['type92'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Dep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['TspRI', 'MwoI', 'SfiI', 'BglI', 'BstXI', 'BaeGI', 'EcoT38I', 'DraIII', 'Bsp1286I', 'AhdI', 'AgsI', 'Bsc4I', 'Hpy99I', 'BanII', 'BslI', 'Hpy188I', 'XcmI', 'BstAPI'],
+        ['AgsI', 'MwoI', 'EcoT38I', 'BglI', 'BanII', 'Hpy99I', 'BstXI', 'BaeGI', 'Hpy188I', 'Bsc4I', 'TspRI', 'DraIII', 'Bsp1286I', 'AhdI', 'SfiI', 'XcmI', 'BstAPI', 'BslI'],
     )
 
 
@@ -23359,7 +24734,7 @@ typedict['type94'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Commercially_available', 'AbstractCut', 'RestrictionType'),
-        ['PflMI', 'BmeRI', 'BlsI', 'BseLI', 'HpyF10VI', 'HpyCH4III', 'BsiEI', 'BsiHKAI', 'CaiI', 'AasI', 'DriI', 'SetI', 'MhlI', 'Bsh1285I', 'BstMWI', 'SduI', 'PcsI', 'AdeI', 'DseDI', 'BseSI', 'TscAI', 'PkrI', 'TaaI', 'AfiI', 'Eam1105I', 'Van91I', 'Alw21I', 'BstSLI', 'Bst4CI', 'PstNI', 'Bbv12I', 'BstMCI', 'AccB7I', 'TauI', 'Eco24I', 'AlwNI', 'FriOI', 'DrdI'],
+        ['AlwNI', 'DrdI', 'TscAI', 'Eco24I', 'BsiHKAI', 'BseSI', 'Van91I', 'DseDI', 'SetI', 'BmeRI', 'TaaI', 'BstMCI', 'HpyF10VI', 'Bst4CI', 'SduI', 'Alw21I', 'AccB7I', 'AdeI', 'BsiEI', 'BseLI', 'FriOI', 'AasI', 'Eam1105I', 'TauI', 'AfiI', 'CaiI', 'Bbv12I', 'HpyCH4III', 'BstSLI', 'BlsI', 'PcsI', 'BstMWI', 'PstNI', 'PkrI', 'MhlI', 'DriI', 'Bsh1285I', 'PflMI'],
     )
 
 
@@ -23369,7 +24744,7 @@ typedict['type95'] = _temp()
 def _temp():
     return (
         ('Palindromic', 'OneCut', 'Ov3', 'Ambiguous', 'Meth_Undep', 'Not_available', 'AbstractCut', 'RestrictionType'),
-        ['Psp03I', 'Tsp4CI', 'ApaBI', 'FmuI', 'BsiYI', 'Nli3877I', 'HgiJII', 'PssI', 'McrI', 'HgiAI'],
+        ['Nli3877I', 'Psp03I', 'BsiYI', 'ApaBI', 'Tsp4CI', 'FmuI', 'McrI', 'HgiJII', 'PssI', 'HgiAI'],
     )
 
 
