@@ -149,7 +149,7 @@ class AmbiguousCodonsTests(unittest.TestCase):
 
         Stop codons should not appear in forward tables. This should give a
         KeyError. If an ambiguous codon may code for both (stop codon and
-        amino acid, this should raise a TranslationError.
+        amino acid), this should raise a TranslationError.
         """
         for id in ids:
             rna = unambiguous_rna_by_id[id]
@@ -159,7 +159,7 @@ class AmbiguousCodonsTests(unittest.TestCase):
 
             # R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
             if "UAA" in amb_rna.stop_codons and "UGA" in amb_rna.stop_codons \
-               and id != 28:
+               and id not in (28, 32):
                 self.assertEqual(amb_dna.forward_table.get("TRA", "X"), "X")
                 with self.assertRaises(KeyError):
                     amb_dna.forward_table["TRA"]
@@ -171,7 +171,7 @@ class AmbiguousCodonsTests(unittest.TestCase):
                 self.assertIn("TRA", amb_dna.stop_codons)
 
             if "UAG" in rna.stop_codons and "UAA" in rna.stop_codons \
-               and "UGA" in rna.stop_codons and id != 28:
+               and "UGA" in rna.stop_codons and id not in (28, 32):
                 with self.assertRaises(KeyError):
                     amb_dna.forward_table["TAR"]
                     amb_rna.forward_table["UAR"]
@@ -254,16 +254,17 @@ class SingleTableTests(unittest.TestCase):
     def test_table03(self):
         """Check table 3: Yeast Mitochondrial.
 
-        Start codons ATG and ATA -> ATR
+        Start codons ATG and ATA -> ATR and start codon GTG (since ver. 4.4)
         Stop codons TAA and TAG -> TAR
         TGA codes for W (instead of stop) and CTN codes for T (instead of L).
         """
         self.assertEqual(generic_by_name["Yeast Mitochondrial"].id, 3)
         self.assertEqual(generic_by_name["SGC2"].id, 3)
         self.assertIn("SGC2", generic_by_id[3].names)
-        self.assertEqual(len(unambiguous_dna_by_id[3].start_codons), 2)
+        self.assertEqual(len(unambiguous_dna_by_id[3].start_codons), 3)
         self.assertEqual(len(unambiguous_dna_by_id[3].stop_codons), 2)
         self.assertIn("ATR", ambiguous_dna_by_id[3].start_codons)
+        self.assertIn("GTG", unambiguous_dna_by_id[3].start_codons)
         self.assertIn("TAR", ambiguous_dna_by_id[3].stop_codons)
         self.assertNotIn("TGA", ambiguous_dna_by_id[3].stop_codons)
         self.assertEqual(generic_by_id[3].forward_table["UGA"],
@@ -666,6 +667,29 @@ class SingleTableTests(unittest.TestCase):
         self.assertNotIn("TGA", amb_dna_table.stop_codons)
         self.assertEqual(amb_dna_table.forward_table["TAR"], "E")
         self.assertEqual(nuc_table.forward_table["UGA"], "W")
+
+    def test_table32(self):
+        """Check table 32: Balanophoraceae Plastid.
+
+        NOTE: This code has one unambiguous stop codon! TAA codes for either
+        stop or W, dependent on the context.
+        Another note: I guess this is wrong. There is a recent publication
+        that shows that TAA is not a stop codon anymore but only coding for
+        W. So table 32 may change in the near future.
+        """
+        dna_table = unambiguous_dna_by_id[32]
+        nuc_table = generic_by_id[32]
+        amb_dna_table = ambiguous_dna_by_id[32]
+        amb_rna_table = ambiguous_rna_by_id[32]
+
+        self.assertEqual(generic_by_name["Balanophoraceae Plastid"].id, 32)
+        self.assertIn("Balanophoraceae Plastid", nuc_table.names)
+        self.assertEqual(len(dna_table.start_codons), 7)
+        for codon in ("TTG", "CTG", "ATT", "ATC", "ATA", "ATG", "GTG"):
+            self.assertIn(codon, dna_table.start_codons)
+        self.assertEqual(len(dna_table.stop_codons), 3)
+        self.assertIn("UAR", amb_rna_table.stop_codons)
+        self.assertEqual(nuc_table.forward_table["UAA"], "W")
 
 
 class ErrorConditions(unittest.TestCase):

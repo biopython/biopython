@@ -10,7 +10,7 @@ These tables are based on parsing the NCBI file
 ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 using Scripts/update_ncbi_codon_table.py
 
-Last updated at Version 4.2 (January 2018)
+Last updated at Version 4.4 (May 2019)
 """
 
 from Bio import Alphabet
@@ -564,7 +564,7 @@ def register_ncbi_table(name, alt_name, id,
 ##########################################################################
 
 
-# Data from NCBI genetic code table version 4.2
+# Data from NCBI genetic code table version 4.4
 
 register_ncbi_table(name='Standard',
                     alt_name='SGC0', id=1,
@@ -626,7 +626,7 @@ register_ncbi_table(name='Yeast Mitochondrial',
                            'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
                            'GGA': 'G', 'GGG': 'G'},
                     stop_codons=['TAA', 'TAG'],
-                    start_codons=['ATA', 'ATG'])
+                    start_codons=['ATA', 'ATG', 'GTG'])
 
 register_ncbi_table(name='Mold Mitochondrial; Protozoan Mitochondrial; '
                     'Coelenterate Mitochondrial; Mycoplasma; Spiroplasma',
@@ -1092,6 +1092,28 @@ register_ncbi_table(name='Blastocrithidia Nuclear',
                            'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
                     stop_codons=['TAA', 'TAG'],
                     start_codons=['ATG'])
+
+register_ncbi_table(name='Balanophoraceae Plastid',
+                    alt_name=None, id=32,
+                    table={'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
+                           'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
+                           'TAT': 'Y', 'TAC': 'Y', 'TAA': 'W', 'TGT': 'C',
+                           'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
+                           'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
+                           'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H',
+                           'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R', 'CGC': 'R',
+                           'CGA': 'R', 'CGG': 'R', 'ATT': 'I', 'ATC': 'I',
+                           'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
+                           'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
+                           'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S',
+                           'AGA': 'R', 'AGG': 'R', 'GTT': 'V', 'GTC': 'V',
+                           'GTA': 'V', 'GTG': 'V', 'GCT': 'A', 'GCC': 'A',
+                           'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
+                           'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
+                           'GGA': 'G', 'GGG': 'G'},
+                    stop_codons=['TAA', 'TAG', 'TGA'],
+                    start_codons=['TTG', 'CTG', 'ATT', 'ATC', 'ATA', 'ATG',
+                                  'GTG'])
 
 
 ########################################################################
