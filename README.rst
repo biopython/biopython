@@ -281,8 +281,10 @@ backgrounds. We are always looking for people interested in helping with code
 development, web-site management, documentation writing, technical
 administration, and whatever else comes up.
 
-If you wish to contribute, please visit the web site http://biopython.org
-and join our mailing list: http://biopython.org/wiki/Mailing_lists
+If you wish to contribute, please first read `CONTRIBUTING.rst
+<https://github.com/biopython/biopython/blob/master/CONTRIBUTING.rst>`_ here,
+visit our web site http://biopython.org and join our mailing list:
+http://biopython.org/wiki/Mailing_lists
 
 
 Distribution Structure
@@ -293,6 +295,7 @@ Distribution Structure
 - ``LICENSE.rst`` -- What you can do with the code.
 - ``CONTRIB.rst`` -- An (incomplete) list of people who helped Biopython in
   one way or another.
+- ``CONTRIBUTING.rst`` -- An overview about how to contribute to Biopython.
 - ``DEPRECATED.rst`` -- Contains information about modules in Biopython that
   were removed or no longer recommended for use, and how to update code that
   uses those modules.

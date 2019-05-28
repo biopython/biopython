@@ -69,11 +69,11 @@ def read(handle):
     record = content_handler.record
     return record
 
-# The functions below are considered private
+# The classess below are considered private
 
 
 class Parser(ExpatParser):
-    """Process the result from a ScanProsite search."""
+    """Process the result from a ScanProsite search (PRIVATE)."""
 
     def __init__(self):
         """Initialize the class."""
@@ -98,7 +98,7 @@ class Parser(ExpatParser):
 
 
 class ContentHandler(handler.ContentHandler):
-    """Process and fill in the records, results of the search."""
+    """Process and fill in the records, results of the search (PRIVATE)."""
 
     integers = ("start", "stop")
     strings = ("sequence_ac",

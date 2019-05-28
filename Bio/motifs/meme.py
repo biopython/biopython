@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
@@ -191,11 +190,11 @@ def __read_alphabet(record, handle):
     line = line.strip()
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
-        al = IUPAC.unambiguous_dna
+        al = 'ACGT'
     elif line == 'ACGU':
-        al = IUPAC.unambiguous_rna
+        al = 'ACGU'
     else:
-        al = IUPAC.protein
+        al = 'ACDEFGHIKLMNPQRSTVWY'
     record.alphabet = al
 
 

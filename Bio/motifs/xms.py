@@ -7,7 +7,6 @@
 """Parse XMS motif files."""
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 from xml.dom import minidom, Node
@@ -25,6 +24,7 @@ class XMSScanner:
                 self.handle_motif(child)
 
     def handle_motif(self, node):
+        """Read the motif's name and column from the node and add the motif record."""
         motif_name = self.get_text(node.getElementsByTagName("name"))
         nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
 
@@ -32,12 +32,13 @@ class XMSScanner:
             [nucleotide_counts[nucleotide].append(float(nucleotide_count))
              for nucleotide, nucleotide_count in zip(['A', 'C', 'G', 'T'], self.get_acgt(column))]
 
-        motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+        motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
         motif.name = motif_name
 
         self.record.append(motif)
 
     def get_property_value(self, node, key_name):
+        """Extract the value of the motif's property named key_name from node."""
         for cur_property in node.getElementsByTagName('prop'):
             right_property = False
             cur_value = None
@@ -53,6 +54,7 @@ class XMSScanner:
         return None
 
     def get_acgt(self, node):
+        """Get and return the motif's weights of A, C, G, T."""
         a, c, g, t = 0.0, 0.0, 0.0, 0.0
         for weight in node.getElementsByTagName('weight'):
             if weight.getAttribute("symbol") == "adenine":
@@ -66,6 +68,7 @@ class XMSScanner:
         return a, c, g, t
 
     def get_text(self, nodelist):
+        """Return a string representation of the motif's properties listed on nodelist ."""
         retlist = []
         for node in nodelist:
             if node.nodeType == Node.TEXT_NODE:

@@ -111,15 +111,11 @@ You can also directly access columns of the counts matrix
 {'A': 2, 'C': 2, 'T': 0, 'G': 3}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
-in the sorted letters in the alphabet of the motif:
+in the alphabet of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.alphabet
-IUPACUnambiguousDNA()
->>> m.alphabet.letters
-'GATC'
->>> sorted(m.alphabet.letters)
-['A', 'C', 'G', 'T']
+'ACGT'
 >>> m.counts["A",:]
 (3, 7, 0, 2, 1)
 >>> m.counts[0,:]
@@ -131,22 +127,24 @@ corresponding columns of the \verb+.counts+ matrix is obtained:
 %cont-doctest
 \begin{verbatim}
 >>> m.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
+Seq('TACGC')
 \end{verbatim}
 as well as an anticonsensus sequence, corresponding to the smallest values in
 the columns of the \verb+.counts+ matrix:
 %cont-doctest
 \begin{verbatim}
 >>> m.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
+Seq('CCATG')
 \end{verbatim}
+Note that there is some ambiguity in the definition of the consensus and anticonsensus sequence if in some columns multiple nucleotides have the maximum or minimum count.
+
 You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
 high counts:
 %cont-doctest
 \begin{verbatim}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
+Seq('WACVC')
 \end{verbatim}
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
@@ -157,9 +155,9 @@ We can also get the reverse complement of a motif:
 \begin{verbatim}
 >>> r = m.reverse_complement()
 >>> r.consensus
-Seq('GCGTA', IUPACUnambiguousDNA())
+Seq('GCGTA')
 >>> r.degenerate_consensus
-Seq('GBGTW', IUPACAmbiguousDNA())
+Seq('GBGTW')
 >>> print(r)
 TTGTA
 GCGTA
@@ -243,7 +241,7 @@ The instances from which this motif was created is stored in the \verb+.instance
 %cont-doctest
 \begin{verbatim}
 >>> print(arnt.instances[:3])
-[Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
+[Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
 >>> for instance in arnt.instances:
 ...     print(instance)
 ...
@@ -497,7 +495,7 @@ To convert the absolute score of an instance back to a relative score, one can u
 For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
 %TODO - Check missing ... lines, make into a doctest?
 \begin{verbatim}
->>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA")
 >>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt)
 >>> pssm = arnt.pssm
 >>> max_score = pssm.max
@@ -591,7 +589,7 @@ The header information is stored in attributes:
 >>> record.command
 'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s'
 >>> record.alphabet
-IUPACUnambiguousDNA()
+'ACGT'
 >>> record.sequences
 ['CHO1', 'CHO2', 'FAS1', 'FAS2', 'ACC1', 'INO1', 'OPI3']
 \end{verbatim}
@@ -634,7 +632,7 @@ in which the motif was found, providing some information on each instance:
 >>> len(motif.instances)
 7
 >>> motif.instances[0]
-Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
+Instance('TTCACATGCCGC', 'ACGT')
 >>> motif.instances[0].motif_name
 'Motif 1'
 >>> motif.instances[0].sequence_name
@@ -730,7 +728,7 @@ store any additional information about the motif:
 \begin{verbatim}
 >>> motif = record[0]
 >>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
-Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
+Seq('SRACAGGTGKYG')
 >>> motif["ID"] # Using motif as a dictionary
 'motif1'
 \end{verbatim}
@@ -967,11 +965,11 @@ consensus, anticonsensus, and degenerate consensus sequences:
 %cont-doctest
 \begin{verbatim}
 >>> pwm.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
+Seq('TACGC')
 >>> pwm.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
+Seq('CCGTG')
 >>> pwm.degenerate_consensus
-Seq('WACNC', IUPACAmbiguousDNA())
+Seq('WACNC')
 \end{verbatim}
 Note that due to the pseudocounts, the degenerate consensus sequence
 calculated from the position-weight matrix is slightly different
@@ -980,7 +978,7 @@ in the motif:
 %cont-doctest
 \begin{verbatim}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
+Seq('WACVC')
 \end{verbatim}
 The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
 %cont-doctest
@@ -1072,7 +1070,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{verbatim}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA")
 >>> len(test_seq)
 26
 \end{verbatim}
@@ -1393,7 +1391,7 @@ which is similar to our test motif \verb|m|:
 ...    m_reb1 = motifs.read(handle, "pfm")
 ...
 >>> m_reb1.consensus
-Seq('GTTACCCGG', IUPACUnambiguousDNA())
+Seq('GTTACCCGG')
 >>> print(m_reb1.counts)
         0      1      2      3      4      5      6      7      8
 A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
@@ -1480,7 +1478,7 @@ functionality, by adding additional information about the instances.
 %cont-doctest
 \begin{verbatim}
 >>> motifsM[0].consensus
-Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+Seq('CTCAATCGTA')
 >>> motifsM[0].instances[0].sequence_name
 'SEQ10;'
 >>> motifsM[0].instances[0].start

@@ -7,7 +7,6 @@
 """Parse Cluster Buster position frequency matrix files."""
 
 from Bio import motifs
-from Bio.Alphabet import IUPAC
 
 
 class Record(list):
@@ -36,7 +35,7 @@ def read(handle):
             if line.startswith('>'):
 
                 if motif_nbr != 0:
-                    motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+                    motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
                     motif.name = motif_name
                     record.append(motif)
 
@@ -53,7 +52,7 @@ def read(handle):
                     [nucleotide_counts[nucleotide].append(float(nucleotide_count))
                      for nucleotide, nucleotide_count in zip(['A', 'C', 'G', 'T'], matrix_columns)]
 
-    motif = motifs.Motif(alphabet=IUPAC.unambiguous_dna, counts=nucleotide_counts)
+    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
     motif.name = motif_name
     record.append(motif)
 

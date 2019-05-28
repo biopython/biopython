@@ -8,12 +8,7 @@
 from __future__ import print_function
 import xml.etree.ElementTree as ET
 
-from Bio.Alphabet import IUPAC
 from Bio.motifs import meme
-
-
-alphabet_name_map = {'DNA': IUPAC.unambiguous_dna,
-                     'Protein': IUPAC.protein}
 
 
 class Record(list):
@@ -79,8 +74,7 @@ def __read_version(record, xml_tree):
 
 def __read_database_and_motifs(record, xml_tree):
     record.database = xml_tree.find('sequence_dbs').find('sequence_db').get('source')
-    alphabet_str = xml_tree.find('alphabet').get('name')
-    record.alphabet = alphabet_name_map[alphabet_str]
+    record.alphabet = xml_tree.find('alphabet').get('name')
     record.strand_handling = xml_tree.find('settings').get('strand_handling')
     # TODO - read other metadata
     for i, motif_tree in enumerate(xml_tree.find('motifs').findall('motif')):
