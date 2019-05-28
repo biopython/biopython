@@ -56,9 +56,9 @@ _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
 
 
 def _alb_line2coords(line):
-    return tuple((int(coord) + 1  # one-based -> zero-based
-                  for coord
-                  in _re_alb_line2coords.match(line).groups()))
+    return tuple(int(coord) + 1  # one-based -> zero-based
+                 for coord
+                 in _re_alb_line2coords.match(line).groups())
 
 
 def _get_coords(filename):

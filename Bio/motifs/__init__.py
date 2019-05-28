@@ -526,7 +526,7 @@ class Motif(object):
                   }
 
         values.update(
-            {k: ("" if v is False else str(v)) for k, v in kwds.items()})
+            {k: "" if v is False else str(v) for k, v in kwds.items()})
         data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)

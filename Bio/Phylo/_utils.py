@@ -250,7 +250,7 @@ def draw_ascii(tree, file=None, column_width=80):
                 for clade, blen in depths.items()}
 
     def get_row_positions(tree):
-        positions = {taxon: (2 * idx) for idx, taxon in enumerate(taxa)}
+        positions = {taxon: 2 * idx for idx, taxon in enumerate(taxa)}
 
         def calc_row(clade):
             for subclade in clade:
@@ -431,7 +431,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         """
         maxheight = tree.count_terminals()
         # Rows are defined by the tips
-        heights = {tip: (maxheight - i)
+        heights = {tip: maxheight - i
                    for i, tip in enumerate(reversed(tree.get_terminals()))}
 
         # Internal nodes: place at midpoint of children
