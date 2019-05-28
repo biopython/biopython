@@ -428,7 +428,7 @@ class DSSP(AbstractResiduePropertyMap):
                 # contains blank, A or 1, then use it.  Otherwise, look for HET
                 # residues of the same seq+icode.  If not such HET residues are
                 # found, just accept the current one.
-                altlocs = set(a.get_altloc() for a in res.get_unpacked_list())
+                altlocs = {a.get_altloc() for a in res.get_unpacked_list()}
                 if altlocs.isdisjoint('A1 '):
                     # Try again with all HETATM other than water
                     res_seq_icode = resid2code(res_id)

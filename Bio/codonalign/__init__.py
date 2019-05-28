@@ -115,8 +115,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
                 from Bio import SeqIO
                 nucl_seqs = SeqIO.to_dict(nucl_seqs)
             elif nucl_seqs.__class__.__name__ in ("list", "tuple"):
-                nucl_seqs = dict((i.id, i) for i in nucl_seqs)
-                # nucl_seqs = {i.id: i for i in nucl_seqs}
+                nucl_seqs = {i.id: i for i in nucl_seqs}
             elif nucl_seqs.__class__.__name__ in \
                     ("_IndexedSeqFileDict", "dict"):
                 pass
@@ -136,7 +135,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
     # corr_method = 1, keyword pairing
     elif corr_method == 1:
         nucl_id = set(nucl_seqs.keys())
-        pro_id = set(i.id for i in pro_align)
+        pro_id = {i.id for i in pro_align}
         # check if there is pro_id that does not have a nucleotide match
         if pro_id - nucl_id:
             diff = pro_id - nucl_id

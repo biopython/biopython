@@ -323,7 +323,7 @@ def _unique_label(previous_labels, label):
 
 def _seqmatrix2strmatrix(matrix):
     """Convert a Seq-object matrix to a plain sequence-string matrix (PRIVATE)."""
-    return dict((t, str(matrix[t])) for t in matrix)
+    return {t: str(matrix[t]) for t in matrix}
 
 
 def _compact4nexus(orig_list):
@@ -378,7 +378,7 @@ def combine(matrices):
         return None
     name = matrices[0][0]
     combined = copy.deepcopy(matrices[0][1])  # initiate with copy of first matrix
-    mixed_datatypes = (len(set(n[1].datatype for n in matrices)) > 1)
+    mixed_datatypes = len({n[1].datatype for n in matrices}) > 1
     if mixed_datatypes:
         # dealing with mixed matrices is application specific.
         # You take care of that yourself!
@@ -427,16 +427,16 @@ def combine(matrices):
             if not combined.taxsets:
                 combined.taxsets = {}
             # update taxon sets
-            combined.taxsets.update(dict(('%s.%s' % (n, tn), ts)
-                                         for tn, ts in m.taxsets.items()))
+            combined.taxsets.update({'%s.%s' % (n, tn): ts
+                                         for tn, ts in m.taxsets.items()})
         # update new charpartition
         combined.charpartitions['combined'][n] = list(range(combined.nchar, combined.nchar + m.nchar))
         # update charlabels
         if m.charlabels:
             if not combined.charlabels:
                 combined.charlabels = {}
-            combined.charlabels.update(dict((combined.nchar + i, label)
-                                            for (i, label) in m.charlabels.items()))
+            combined.charlabels.update({combined.nchar + i: label
+                                            for i, label in m.charlabels.items()})
         combined.nchar += m.nchar  # update nchar and ntax
         combined.ntax += len(m_only)
 
@@ -809,9 +809,9 @@ class Nexus(object):
                 self.valid_characters = self.valid_characters.lower() + self.valid_characters.upper()
             # we have to sort the reverse ambig coding dict key characters:
             # to be sure that it's 'ACGT':'N' and not 'GTCA':'N'
-            rev = dict((i[1], i[0]) for i in self.ambiguous_values.items() if i[0] != 'X')
+            rev = {k: v for k, v in self.ambiguous_values.items() if k != 'X'}
             self.rev_ambiguous_values = {}
-            for (k, v) in rev.items():
+            for k, v in rev.items():
                 key = sorted(c for c in k)
                 self.rev_ambiguous_values[''.join(key)] = v
         # overwrite symbols for datype rna,dna,nucleotide
@@ -874,7 +874,7 @@ class Nexus(object):
         """Check for presence of taxon in self.taxlabels (PRIVATE)."""
         # According to NEXUS standard, underscores shall be treated as spaces...,
         # so checking for identity is more difficult
-        nextaxa = dict((t.replace(' ', '_'), t) for t in self.taxlabels)
+        nextaxa = {t.replace(' ', '_'): t for t in self.taxlabels}
         nexid = taxon.replace(' ', '_')
         return nextaxa.get(nexid)
 
@@ -1745,12 +1745,12 @@ class Nexus(object):
             m = [str(matrix[k]) for k in undelete]
             sitesm = [s for i, s in enumerate(zip(*m)) if i not in exclude]
             if sitesm == []:
-                return dict((t, Seq('', self.alphabet)) for t in undelete)
+                return {t: Seq('', self.alphabet) for t in undelete}
             else:
                 m = [Seq(s, self.alphabet) for s in (''.join(x) for x in zip(*sitesm))]
                 return dict(zip(undelete, m))
         else:
-            return dict((t, matrix[t]) for t in self.taxlabels if t in matrix and t not in delete)
+            return {t: matrix[t] for t in self.taxlabels if t in matrix and t not in delete}
 
     def bootstrap(self, matrix=None, delete=(), exclude=()):
         """Return a bootstrapped matrix."""

@@ -305,10 +305,10 @@ def seq1(seq, custom_map=None, undef_code='X'):
         custom_map = {'Ter': '*'}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
-    onecode = dict((k.upper(), v) for k, v in
-                   IUPACData.protein_letters_3to1_extended.items())
+    onecode = {k.upper(): v for k, v in
+               IUPACData.protein_letters_3to1_extended.items()}
     # add the given termination codon code and custom maps
-    onecode.update((k.upper(), v) for (k, v) in custom_map.items())
+    onecode.update((k.upper(), v) for k, v in custom_map.items())
     seqlist = [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
     return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 

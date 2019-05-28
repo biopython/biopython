@@ -678,11 +678,11 @@ class MultipleSeqAlignment(object):
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
         merged = (left + right for left, right in zip(self, other))
         # Take any common annotation:
-        annotations = dict()
+        annotations = {}
         for k, v in self.annotations.items():
             if k in other.annotations and other.annotations[k] == v:
                 annotations[k] = v
-        column_annotations = dict()
+        column_annotations = {}
         for k, v in self.column_annotations.items():
             if k in other.column_annotations:
                 column_annotations[k] = v + other.column_annotations[k]

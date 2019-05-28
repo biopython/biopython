@@ -277,7 +277,7 @@ class HSP(_BaseHSP):
         # check that all fragments contain the same IDs, descriptions, alphabet
         for attr in ('query_id', 'query_description', 'hit_id',
                      'hit_description', 'alphabet'):
-            if len(set(getattr(frag, attr) for frag in fragments)) != 1:
+            if len({getattr(frag, attr) for frag in fragments)} != 1:
                 raise ValueError("HSP object can not contain fragments with "
                                  "more than one %s." % attr)
 

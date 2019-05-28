@@ -310,21 +310,21 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
 
 def _fastq_sanger_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = dict((chr(q + 33), str(q)) for q in range(0, 93 + 1))
+    mapping = {(chr(q + 33): str(q) for q in range(0, 93 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
 def _fastq_solexa_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
     from Bio.SeqIO.QualityIO import phred_quality_from_solexa
-    mapping = dict((chr(q + 64), str(int(round(phred_quality_from_solexa(q)))))
-                   for q in range(-5, 62 + 1))
+    mapping = {chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
+                   for q in range(-5, 62 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
 def _fastq_illumina_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = dict((chr(q + 64), str(q)) for q in range(0, 62 + 1))
+    mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 

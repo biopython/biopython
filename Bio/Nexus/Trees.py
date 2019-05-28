@@ -434,7 +434,7 @@ class Tree(Nodes.Chain):
         result = is_monophyletic(self,taxon_list)
         """
         if isinstance(taxon_list, str):
-            taxon_set = set([taxon_list])
+            taxon_set = set(taxon_list)
         else:
             taxon_set = set(taxon_list)
         node_id = self.root

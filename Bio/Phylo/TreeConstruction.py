@@ -430,8 +430,8 @@ class DistanceCalculator(object):
     # matrices available
     dna_matrices = {'blastn': blastn, 'trans': trans}
     protein_models = MatrixInfo.available_matrices
-    protein_matrices = dict((name, getattr(MatrixInfo, name))
-                            for name in protein_models)
+    protein_matrices = {name: getattr(MatrixInfo, name)
+                        for name in protein_models}
 
     dna_models = list(dna_matrices.keys())
 
@@ -787,7 +787,7 @@ class DistanceTreeConstructor(TreeConstructor):
         if clade.is_terminal():
             height = clade.branch_length
         else:
-            height = height + max([self._height_of(c) for c in clade.clades])
+            height = height + max(self._height_of(c) for c in clade.clades)
         return height
 
 # #################### Tree Scoring and Searching Classes #####################

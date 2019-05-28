@@ -62,7 +62,7 @@ class InterproscanXmlParser(object):
     def _parse_header(self):
         """Parse the header for the InterProScan version (PRIVATE)."""
         event, elem = next(self.xml_iter)
-        meta = dict()
+        meta = {}
         meta['target'] = 'InterPro'
         meta['program'] = 'InterProScan'
         meta['version'] = elem.attrib['interproscan-version']

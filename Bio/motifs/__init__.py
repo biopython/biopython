@@ -317,7 +317,7 @@ class Motif(object):
     def __set_pseudocounts(self, value):
         self._pseudocounts = {}
         if isinstance(value, dict):
-            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet)
+            self._pseudocounts = {letter: value[letter] for letter in self.alphabet}
         else:
             if value is None:
                 value = 0.0
@@ -332,7 +332,7 @@ class Motif(object):
 
     def __set_background(self, value):
         if isinstance(value, dict):
-            self._background = dict((letter, value[letter]) for letter in self.alphabet)
+            self._background = {letter, value[letter] for letter in self.alphabet}
         elif value is None:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
@@ -526,7 +526,7 @@ class Motif(object):
                   }
 
         values.update(
-            dict((k, "" if v is False else str(v)) for k, v in kwds.items()))
+            {k: ("" if v is False else str(v)) for k, v in kwds.items()})
         data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)

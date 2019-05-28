@@ -135,7 +135,7 @@ class Hit(_BaseSearchObject):
             # This makes it easier to work with file formats with unpredictable
             # hit-hsp ordering. The empty hit object itself is nonfunctional,
             # however, since all its cascading properties are empty.
-            if len(set(getattr(hsp, attr) for hsp in hsps)) > 1:
+            if len({getattr(hsp, attr) for hsp in hsps}) > 1:
                 raise ValueError("Hit object can not contain HSPs with "
                                  "more than one %s." % attr)
 

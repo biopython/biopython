@@ -74,7 +74,7 @@ class MultiGraph(object):
 
     def children(self, parent):
         """Return a list of unique children for parent."""
-        return sorted(set(x[0] for x in self.child_edges(parent)))
+        return sorted({x[0] for x in self.child_edges(parent)})
 
     def edges(self, label):
         """Return a list of all the edges with this label."""
@@ -103,7 +103,7 @@ class MultiGraph(object):
 
     def parents(self, child):
         """Return a list of unique parents for child."""
-        return sorted(set(x[0] for x in self.parent_edges(child)))
+        return sorted({x[0] for x in self.parent_edges(child)})
 
     def remove_node(self, node):
         """Remove node and all edges connected to it."""
@@ -113,12 +113,12 @@ class MultiGraph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list:
-            self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
-                                          if x[0] != node)
+            self._adjacency_list[n] = {x for x in self._adjacency_list[n]
+                                       if x[0] != node}
         # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
-            lm = set(x for x in self._label_map[label]
-                     if (x[0] != node) and (x[1] != node))
+            lm = {x for x in self._label_map[label]
+                  if (x[0] != node) and (x[1] != node)}
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm

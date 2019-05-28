@@ -391,7 +391,7 @@ def _part(clades):
     if len(terms) == 1 or len(terms) == 2:
         new_clade = clades[0]
     else:
-        bitstrs = set([_BitString('1' * len(terms))])
+        bitstrs = set(_BitString('1' * len(terms)))
         for clade in clades:
             for child in clade.clades:
                 bitstr = _clade_to_bitstr(child, term_names)
@@ -598,8 +598,8 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
 
 def _clade_to_bitstr(clade, tree_term_names):
     """Create a BitString representing a clade, given ordered tree taxon names (PRIVATE)."""
-    clade_term_names = set(term.name for term in
-                           clade.find_clades(terminal=True))
+    clade_term_names = {term.name for term in
+                        clade.find_clades(terminal=True)}
     return _BitString.from_bool((name in clade_term_names)
                                 for name in tree_term_names)
 
@@ -631,7 +631,7 @@ def _equal_topology(tree1, tree2):
 
     (Branch lengths checked to 5 decimal places.)
     """
-    term_names1 = set(term.name for term in tree1.find_clades(terminal=True))
-    term_names2 = set(term.name for term in tree2.find_clades(terminal=True))
-    return ((term_names1 == term_names2) and
-            (_bitstring_topology(tree1) == _bitstring_topology(tree2)))
+    term_names1 = {term.name for term in tree1.find_clades(terminal=True)}
+    term_names2 = {term.name for term in tree2.find_clades(terminal=True)}
+    return (term_names1 == term_names2) and
+            (_bitstring_topology(tree1) == _bitstring_topology(tree2))

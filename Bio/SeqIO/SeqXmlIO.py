@@ -97,8 +97,8 @@ class XMLRecordIterator(object):
 
     def _attributes(self, node):
         """Return the attributes of a DOM node as dictionary (PRIVATE)."""
-        return dict((node.attributes.item(i).name, node.attributes.item(i).value)
-                    for i in range(node.attributes.length))
+        return {node.attributes.item(i).name: node.attributes.item(i).value
+                for i in range(node.attributes.length)}
 
 
 class SeqXmlIterator(XMLRecordIterator):

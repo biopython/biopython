@@ -72,7 +72,7 @@ class MMCIFParser(object):
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
-        _unassigned = set(('.', '?'))
+        _unassigned = {'.', '?'}
 
         mmcif_dict = self._mmcif_dict
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
@@ -276,7 +276,7 @@ class FastMMCIFParser(object):
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
-        _unassigned = set(('.', '?'))
+        _unassigned = {'.', '?'}
 
         # Read only _atom_site. and atom_site_anisotrop entries
         read_atom, read_aniso = False, False

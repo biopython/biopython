@@ -35,8 +35,8 @@ class Graph(object):
         """Return a unique string representation of this graph."""
         s = "<Graph: "
         for key in sorted(self._adjacency_list):
-            values = sorted([(x, self._edge_map[(key, x)])
-                            for x in list(self._adjacency_list[key])])
+            values = sorted((x, self._edge_map[(key, x)])
+                            for x in list(self._adjacency_list[key]))
             s += "(%r: %s)" % (key, ",".join(repr(v) for v in values))
         return s + ">"
 
@@ -108,7 +108,7 @@ class Graph(object):
 
     def parents(self, child):
         """Return a list of unique parents for child."""
-        return sorted(set(x[0] for x in self.parent_edges(child)))
+        return sorted({x[0] for x in self.parent_edges(child)})
 
     def remove_node(self, node):
         """Remove node and all edges connected to it."""
@@ -118,12 +118,12 @@ class Graph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list.keys():
-            self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
-                                          if x != node)
+            self._adjacency_list[n] = {x for x in self._adjacency_list[n]
+                                       if x != node}
         # remove all referring pairs in label map
         for label in list(self._label_map.keys()):  # we're editing this!
-            lm = set(x for x in self._label_map[label]
-                     if (x[0] != node) and (x[1] != node))
+            lm = {x for x in self._label_map[label]
+                  if (x[0] != node) and (x[1] != node)}
             # remove the entry completely if the label is now unused
             if lm:
                 self._label_map[label] = lm

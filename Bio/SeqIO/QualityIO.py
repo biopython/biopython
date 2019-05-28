@@ -538,13 +538,12 @@ def _get_phred_quality(record):
 
 
 # Only map 0 to 93, we need to give a warning on truncating at 93
-_phred_to_sanger_quality_str = dict((qp, chr(min(126, qp + SANGER_SCORE_OFFSET)))
-                                    for qp in range(0, 93 + 1))
+_phred_to_sanger_quality_str = {qp: chr(min(126, qp + SANGER_SCORE_OFFSET))
+                                for qp in range(0, 93 + 1)}
 # Only map -5 to 93, we need to give a warning on truncating at 93
-_solexa_to_sanger_quality_str = dict(
-    (qs, chr(min(126, int(round(phred_quality_from_solexa(qs))) +
-     SANGER_SCORE_OFFSET)))
-    for qs in range(-5, 93 + 1))
+_solexa_to_sanger_quality_str = {
+     qs: chr(min(126, int(round(phred_quality_from_solexa(qs)) +
+     SANGER_SCORE_OFFSET))) for qs in range(-5, 93 + 1)}
 
 
 def _get_sanger_quality_str(record):
@@ -659,12 +658,12 @@ def _get_sanger_quality_str(record):
 
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
-_phred_to_illumina_quality_str = dict((qp, chr(qp + SOLEXA_SCORE_OFFSET))
-                                      for qp in range(0, 62 + 1))
+_phred_to_illumina_quality_str = {qp: chr(qp + SOLEXA_SCORE_OFFSET)
+                                  for qp in range(0, 62 + 1)}
 # Only map -5 to 62, we need to give a warning on truncating at 62
-_solexa_to_illumina_quality_str = dict(
-    (qs, chr(int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET))
-    for qs in range(-5, 62 + 1))
+_solexa_to_illumina_quality_str = {
+    qs, chr(int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET)
+    for qs in range(-5, 62 + 1)}
 
 
 def _get_illumina_quality_str(record):
@@ -728,13 +727,13 @@ def _get_illumina_quality_str(record):
 
 # Only map 0 to 62, we need to give a warning on truncating at 62
 assert 62 + SOLEXA_SCORE_OFFSET == 126
-_solexa_to_solexa_quality_str = dict((qs, chr(min(126, qs + SOLEXA_SCORE_OFFSET)))
-                                     for qs in range(-5, 62 + 1))
+_solexa_to_solexa_quality_str = {qs: chr(min(126, qs + SOLEXA_SCORE_OFFSET))
+                                 for qs in range(-5, 62 + 1)}
 # Only map -5 to 62, we need to give a warning on truncating at 62
-_phred_to_solexa_quality_str = dict(
-    (qp, chr(min(126, int(round(solexa_quality_from_phred(qp))) +
-     SOLEXA_SCORE_OFFSET)))
-    for qp in range(0, 62 + 1))
+_phred_to_solexa_quality_str = {
+    qp: chr(min(126, int(round(solexa_quality_from_phred(qp))) +
+    SOLEXA_SCORE_OFFSET))
+    for qp in range(0, 62 + 1)}
 
 
 def _get_solexa_quality_str(record):
@@ -1023,7 +1022,7 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
     #
     # Precomputing is faster, perhaps partly by avoiding the subtractions.
-    q_mapping = dict()
+    q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
@@ -1182,7 +1181,7 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
     As shown above, the poor quality Solexa reads have been mapped to the
     equivalent PHRED score (e.g. -5 to 1 as shown earlier).
     """
-    q_mapping = dict()
+    q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
@@ -1234,7 +1233,7 @@ def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=Non
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
-    q_mapping = dict()
+    q_mapping = {}
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SOLEXA_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):

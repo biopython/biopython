@@ -157,8 +157,8 @@ class PlateRecord(object):
 
     def _update(self):
         """Update the rows and columns string identifiers (PRIVATE)."""
-        self._rows = sorted(set(x[0] for x in self._wells))
-        self._columns = sorted(set(x[1:] for x in self._wells))
+        self._rows = sorted({x[0] for x in self._wells})
+        self._columns = sorted({x[1:] for x in self._wells})
 
     def _is_well(self, obj):
         """Check if the given object is a WellRecord object (PRIVATE).
@@ -374,7 +374,7 @@ class PlateRecord(object):
         if not isinstance(plate, PlateRecord):
             raise TypeError('Expecting a PlateRecord object')
 
-        if set(x.id for x in self) != set(x.id for x in plate):
+        if {x.id for x in self} != {x.id for x in plate}:
             raise ValueError('The two plates have different wells')
 
         wells = []
@@ -397,7 +397,7 @@ class PlateRecord(object):
         if not isinstance(plate, PlateRecord):
             raise TypeError('Expecting a PlateRecord object')
 
-        if set(x.id for x in self) != set(x.id for x in plate):
+        if {x.id for x in self} != {x.id for x in plate}:
             raise ValueError('The two plates have different wells')
 
         wells = []
@@ -458,7 +458,7 @@ class PlateRecord(object):
         if wells is None:
             wells = self._wells.keys()
 
-        missing = set(w for w in wells if w not in self)
+        missing = {w for w in wells if w not in self}
         if missing:
             raise ValueError('Some wells to be subtracted are not present')
 
@@ -516,10 +516,10 @@ class PlateRecord(object):
         lines.append("Well: %i" % len(self))
         # Here we assume that all well ID start with a char
         lines.append("Rows: %d" %
-                     len(set(x.id[0] for x in self)))
+                     len({x.id[0] for x in self)})
         # Here we assume that well number is a two-digit number
         lines.append("Columns: %d" %
-                     len(set(x.id[1:3] for x in self)))
+                     len({x.id[1:3] for x in self)})
         lines.append(repr(self))
         return "\n".join(lines)
 
@@ -918,8 +918,8 @@ def JsonIterator(handle):
                 continue
 
             plate[k] = WellRecord(k, plate=plate,
-                                  signals=dict([(times[i], pobj[_measurements][k][i])
-                                                for i in range(len(times))]))
+                                  signals={times[i]: pobj[_measurements][k][i]
+                                                for i in range(len(times))})
 
         # Remove the measurements and assign the other qualifiers
         del pobj['measurements']
