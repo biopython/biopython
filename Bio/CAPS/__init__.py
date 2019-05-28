@@ -43,7 +43,7 @@ class DifferentialCutsite(object):
 
 
 class AlignmentHasDifferentLengthsError(Exception):
-    """Manage exceptions for Alignments with different length."""
+    """Exception where sequences in alignment have different lengths."""
 
     pass
 
