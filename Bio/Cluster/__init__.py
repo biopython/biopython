@@ -53,7 +53,7 @@ class Node(_cluster.Node):
 class Tree(_cluster.Tree):
     """Hierarchical clustering tree.
 
-    A Tree is made of a list of Nodes.
+    A Tree consists of Nodes.
     """
 
     def sort(self, order=None):
