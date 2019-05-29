@@ -361,7 +361,7 @@ class StringMethodTests(unittest.TestCase):
                 # e.g. MutableSeq does not support this
                 continue
             subs = tuple(example1[start:start + 2] for start
-                          in range(0, len(example1) - 2, 3))
+                         in range(0, len(example1) - 2, 3))
             subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(str(example1).startswith(subs_str),
@@ -384,7 +384,7 @@ class StringMethodTests(unittest.TestCase):
                 # e.g. MutableSeq does not support this
                 continue
             subs = tuple(example1[start:start + 2] for start
-                          in range(0, len(example1) - 2, 3))
+                         in range(0, len(example1) - 2, 3))
             subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(str(example1).endswith(subs_str),
