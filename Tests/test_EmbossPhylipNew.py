@@ -23,7 +23,7 @@ os.environ['LANG'] = 'C'
 
 exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
                'fseqboot', 'ftreedist', 'fdnapars']
-exes = dict()  # Dictionary mapping from names to exe locations
+exes = {}  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
     # Windows default installation path is C:\mEMBOSS which contains the exes.

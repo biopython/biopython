@@ -51,7 +51,7 @@ class BlastTabCases(unittest.TestCase):
         # this a single query, with 192 hits and 243 hsps
         self.assertEqual(1, len(qresults))
         self.assertEqual(192, len(qresults[0].hits))
-        self.assertEqual(243, sum([len(x) for x in qresults[0]]))
+        self.assertEqual(243, sum(len(x) for x in qresults[0]))
         # there is one hit with an alternative ID
         self.assertEqual(qresults[0]['gi|31126987|gb|AY255526.2|'],
                          qresults[0]['gi|31342050|ref|NM_181083.2|'])

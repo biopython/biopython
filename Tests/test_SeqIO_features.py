@@ -177,7 +177,7 @@ def compare_features(old_list, new_list):
 
 def make_join_feature(f_list, ftype="misc_feature"):
     # NOTE - Does NOT reorder the sub-features
-    if len(set(f.strand for f in f_list)) == 1:
+    if len({f.strand for f in f_list}) == 1:
         strand = f_list[0].strand
     else:
         strand = None
@@ -319,7 +319,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         for i in feature:
             self.assertIn(i, feature)
         self.assertEqual(set(feature),
-                         set(i for i in range(1000) if i in feature))
+                         {i for i in range(1000) if i in feature})
         if feature.strand == +1:
             self.assertEqual(s, "".join(parent[i] for i in feature))
         if len(feature):

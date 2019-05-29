@@ -28,16 +28,16 @@ class StaticMethodTest(unittest.TestCase):
     """Test static UCSC binning-related functions."""
 
     def test_region2bin(self):
-        data = [(25079603, 25079787, set([0, 1, 11, 96, 776])),
-                (25128173, 25128248, set([0, 1, 11, 96, 776])),
-                (50312474, 50312703, set([0, 1, 968, 14, 120])),
-                (41905591, 41906101, set([0, 1, 904, 13, 112])),
-                (16670899, 16673060, set([0, 1, 10, 712, 88])),
-                (75495356, 75495494, set([0, 1, 2, 1160, 144, 17])),
-                (92259501, 92261053, set([0, 1, 2, 1288, 160, 19])),
-                (83834063, 83838132, set([0, 1, 2, 1224, 18, 152])),
-                (7309597, 7310411, set([0, 1, 640, 79, 9])),
-                (6190410, 6190999, set([0, 1, 632, 78, 9]))]
+        data = [(25079603, 25079787, {0, 1, 11, 96, 776}),
+                (25128173, 25128248, {0, 1, 11, 96, 776}),
+                (50312474, 50312703, {0, 1, 968, 14, 120}),
+                (41905591, 41906101, {0, 1, 904, 13, 112}),
+                (16670899, 16673060, {0, 1, 10, 712, 88}),
+                (75495356, 75495494, {0, 1, 2, 1160, 144, 17}),
+                (92259501, 92261053, {0, 1, 2, 1288, 160, 19}),
+                (83834063, 83838132, {0, 1, 2, 1224, 18, 152}),
+                (7309597, 7310411, {0, 1, 640, 79, 9}),
+                (6190410, 6190999, {0, 1, 632, 78, 9})]
 
         for x, y, z in data:
             self.assertEqual(MafIndex._region2bin(x, y), z)
@@ -292,21 +292,21 @@ if sqlite3:
 
             self.assertEqual(len(results), 4 + 4)
 
-            self.assertEqual(set([len(x) for x in results]),
-                             set([4, 1, 9, 10, 4, 3, 5, 1]))
+            self.assertEqual({len(x) for x in results},
+                             {4, 1, 9, 10, 4, 3, 5, 1})
 
             # Code formatting note:
             # Expected start coordinates are grouped by alignment blocks
             self.assertEqual(
-                set([x.annotations["start"] for y in results for x in y]),
-                set([
-                    3014742, 6283, 184202, 1257,
-                    3014778,
-                    3014795, 184257, 6365, 15871286, 16389854, 16169492, 171521, 7816, 1309,
-                    3014842, 1371, 7842, 171548, 16169512, 16389874, 15871306, 6404, 184317, 14750994,
-                    3018161, 16390178, 15871611, 16169818,
-                    3018230, 15871676, 16390243,
-                    3018359, 16390338, 15871771, 184712, 16169976, 3018482]))
+                {x.annotations["start"] for y in results for x in y},
+                {
+                 3014742, 6283, 184202, 1257,
+                 3014778,
+                 3014795, 184257, 6365, 15871286, 16389854, 16169492, 171521, 7816, 1309,
+                 3014842, 1371, 7842, 171548, 16169512, 16389874, 15871306, 6404, 184317, 14750994,
+                 3018161, 16390178, 15871611, 16169818,
+                 3018230, 15871676, 16390243,
+                 3018359, 16390338, 15871771, 184712, 16169976, 3018482})
 
         def test_correct_retrieval_2(self):
             search = self.idx.search((3009319, 3021421), (3012566, 3021536))
@@ -314,20 +314,20 @@ if sqlite3:
 
             self.assertEqual(len(results), 6)
 
-            self.assertEqual(set([len(x) for x in results]),
-                             set([2, 4, 5, 14, 7, 6]))
+            self.assertEqual({len(x) for x in results},
+                             {2, 4, 5, 14, 7, 6})
 
             # Code formatting note:
             # Expected start coordinates are grouped by alignment blocks
             self.assertEqual(
-                set([x.annotations["start"] for y in results for x in y]),
-                set([
-                    3009319, 11087,
-                    3012076, 16160203, 16379004, 15860456,
-                    3012441, 15860899, 16379447, 16160646, 180525,
-                    3021421, 9910, 996, 16173434, 16393782, 15875216, 11047, 175213, 3552, 677, 78072203, 3590, 95587, 14757054,
-                    3021465, 9957, 16173483, 16393831, 15875265, 78072243, 14757099,
-                    3021494, 16173516, 16393864, 15875298, 78072287, 14757144]))
+                {x.annotations["start"] for y in results for x in y},
+                {
+                 3009319, 11087,
+                 3012076, 16160203, 16379004, 15860456,
+                 3012441, 15860899, 16379447, 16160646, 180525,
+                 3021421, 9910, 996, 16173434, 16393782, 15875216, 11047, 175213, 3552, 677, 78072203, 3590, 95587, 14757054,
+                 3021465, 9957, 16173483, 16393831, 15875265, 78072243, 14757099,
+                 3021494, 16173516, 16393864, 15875298, 78072287, 14757144})
 
         def test_correct_retrieval_3(self):
             """Following issue 1083.
@@ -339,16 +339,16 @@ if sqlite3:
 
             self.assertEqual(len(results), 2)
 
-            self.assertEqual(set([len(x) for x in results]),
-                             set([4, 5]))
+            self.assertEqual({len(x) for x in results},
+                             {4, 5})
 
             # Code formatting note:
             # Expected start coordinates are grouped by alignment blocks
             self.assertEqual(
-                set([x.annotations["start"] for y in results for x in y]),
-                set([
-                    3012076, 16160203, 16379004, 15860456,
-                    3012441, 15860899, 16379447, 16160646, 180525]))
+                {x.annotations["start"] for y in results for x in y},
+                {
+                 3012076, 16160203, 16379004, 15860456,
+                 3012441, 15860899, 16379447, 16160646, 180525})
 
         def test_correct_block_boundary(self):
             """Following issues 504 and 1086.
@@ -443,7 +443,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
-            seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
+            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
             correct_lengths = {
                 "mm9.chr10": 53,
                 "hg18.chr6": 53,
@@ -480,7 +480,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014689], [3014689 + 53])
-            seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
+            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
             correct_sequences = {
                 "mm9.chr10": "GGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
                 "hg18.chr6": "GGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",
@@ -534,7 +534,7 @@ if sqlite3:
             e ponAbe2.chr6                     16161448 8044 - 174210431 I
             """
             ali = self.idx.get_spliced([3014644, 3014689], [3014644 + 45, 3014689 + 53])
-            seq_dict = dict([(seqrec.id, seqrec.seq) for seqrec in ali])
+            seq_dict = {seqrec.id: seqrec.seq for seqrec in ali}
             correct_sequences = {
                 "mm9.chr10": "CCTGTACCCTTTGGTGAGAATTTTTGTTTCAGTGTTAAAAGTTTGGGGAGCATAAAACTCTAAATCTGCTAAATGTCTTGTCCCTTTGGAAAGAGTTG",
                 "hg18.chr6": "CCTATACCTTTCTTTTATGAGAATTTTGTTTTAATCCTAAACTTTTGGGATCATAAACCATTTAATCTGTGAAATATCTAATCTTTTGGGAAATAGTGG",

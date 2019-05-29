@@ -41,7 +41,7 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = set([
+no_alpha_formats = {
     'clustal',
     'emboss',
     'fasta', 'fasta-2line',
@@ -51,13 +51,13 @@ no_alpha_formats = set([
     'qual',
     'stockholm',
     'tab',
-])
-possible_unknown_seq_formats = set([
+}
+possible_unknown_seq_formats = {
     "embl",
     "genbank", "gb",
     "imgt",
     "qual",
-])
+}
 
 # List of formats including alignment only file formats we can read AND write.
 # The list is initially hard coded to preserve the original order of the unit

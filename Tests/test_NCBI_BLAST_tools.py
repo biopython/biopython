@@ -273,8 +273,8 @@ class CheckCompleteArgList(unittest.TestCase):
             cline = wrapper(exe, h=True, dbtype='prot')
         else:
             cline = wrapper(exe, h=True)
-        names = set(parameter.names[0]
-                    for parameter in cline.parameters)
+        names = {parameter.names[0]
+                 for parameter in cline.parameters}
 
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,

@@ -81,10 +81,10 @@ class IOTests(unittest.TestCase):
         # Sanity check
         self.assertEqual(tree2.count_terminals(), 4)
         # Check internal node labels were retained
-        internal_names = set(c.name
-                             for c in tree2.get_nonterminals()
-                             if c is not None)
-        self.assertEqual(internal_names, set(('E', 'F')))
+        internal_names = {c.name
+                          for c in tree2.get_nonterminals()
+                          if c is not None}
+        self.assertEqual(internal_names, {'E', 'F'})
 
     def test_newick_read_scinot(self):
         """Parse Newick branch lengths in scientific notation."""
@@ -175,8 +175,8 @@ class IOTests(unittest.TestCase):
         """Read newick formatted tree with numeric labels."""
         tree = Phylo.read(StringIO('(((0:0.1,1:0.1)0.99:0.1,2:0.1)0.98:0.0);'),
                           'newick')
-        self.assertEqual(set(leaf.name for leaf in tree.get_terminals()),
-                         set(['0', '1', '2']))
+        self.assertEqual({leaf.name for leaf in tree.get_terminals()},
+                         {'0', '1', '2'})
 
 
 class TreeTests(unittest.TestCase):

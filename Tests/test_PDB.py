@@ -538,8 +538,8 @@ class ParseTest(unittest.TestCase):
             io.save(filename)
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename, 'rU') as handle:
-                record_set = set(l[0:6] for l in handle)
-            record_set -= set(('ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'TER   ', 'END\n', 'END   '))
+                record_set = {l[0:6] for l in handle}
+            record_set -= {'ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'TER   ', 'END\n', 'END   '}
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
@@ -1582,7 +1582,7 @@ class DsspTests(unittest.TestCase):
         """Test parsing of DSSP hydrogen bond information."""
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
 
-        dssp_indices = set(v[5] for v in dssp.values())
+        dssp_indices = {v[5] for v in dssp.values()}
         hb_indices = set()
 
         # The integers preceding each hydrogen bond energy (kcal/mol) in the
@@ -1592,8 +1592,8 @@ class DsspTests(unittest.TestCase):
         # that actual h-bonds are typically determined by an energetic
         # threshold.
         for val in dssp.values():
-            hb_indices |= set(
-                (val[5] + x) for x in (val[6], val[8], val[10], val[12]))
+            hb_indices |= {
+                val[5] + x for x in (val[6], val[8], val[10], val[12])}
 
         # Check if all h-bond partner indices were successfully parsed.
         self.assertEqual((dssp_indices & hb_indices), hb_indices)

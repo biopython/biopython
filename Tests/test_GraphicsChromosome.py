@@ -277,7 +277,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                    ("Chr III", "NC_003074", 23470805, f3, colors.blue),
                    ("Chr IV", "NC_003075", 18585042, f4, colors.orange),
                    ("Chr V", "NC_003076", 26992728, f5, colors.purple)]
-        max_length = max([row[2] for row in entries])
+        max_length = max(row[2] for row in entries)
 
         chr_diagram = BasicChromosome.Organism()
         for name, acc, length, features, color in entries:

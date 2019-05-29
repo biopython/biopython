@@ -47,8 +47,8 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          baseml.Baseml, alignment=list())
-        self.bml.alignment = list()
+                          baseml.Baseml, alignment=[])
+        self.bml.alignment = []
         self.bml.tree = self.tree_file
         self.bml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
@@ -65,9 +65,9 @@ class ModTest(unittest.TestCase):
 
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          baseml.Baseml, tree=list())
+                          baseml.Baseml, tree=[])
         self.bml.alignment = self.align_file
-        self.bml.tree = list()
+        self.bml.tree = []
         self.bml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.bml.run)
@@ -85,7 +85,7 @@ class ModTest(unittest.TestCase):
         self.bml.tree = self.tree_file
         self.bml.alignment = self.align_file
         self.bml.out_file = self.out_file
-        self.bml.working_dir = list()
+        self.bml.working_dir = []
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.bml.run)
 
@@ -125,7 +125,7 @@ class ModTest(unittest.TestCase):
         self.bml.tree = self.tree_file
         self.bml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.bml.run, ctl_file=list())
+                          self.bml.run, ctl_file=[])
 
     def testCtlFileExistsOnRun(self):
         self.bml.alignment = self.align_file
@@ -136,7 +136,7 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.bml.read_ctl_file, list())
+                          self.bml.read_ctl_file, [])
         self.assertRaises((AttributeError, KeyError),
                           self.bml.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError,
@@ -180,7 +180,7 @@ class ModTest(unittest.TestCase):
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          baseml.read, list())
+                          baseml.read, [])
 
     def testResultsExist(self):
         self.assertRaises(IOError, baseml.read, "nonexistent")
