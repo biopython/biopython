@@ -398,11 +398,11 @@ class Parser(object):
             reference.authors = ', '.join(authors)
             if journal_name:
                 if pub_date and j_volume and j_first and j_last:
-                    reference.journal = REFERENCE_JOURNAL % dict(name=journal_name,
-                                                                 volume=j_volume,
-                                                                 first=j_first,
-                                                                 last=j_last,
-                                                                 pub_date=pub_date)
+                    reference.journal = REFERENCE_JOURNAL % {'name': journal_name,
+                                                             'volume': j_volume,
+                                                             'first': j_first,
+                                                             'last': j_last,
+                                                             'pub_date': pub_date}
                 else:
                     reference.journal = journal_name
             reference.comment = ' | '.join((pub_type, pub_date, scopes_str, tissues_str))
