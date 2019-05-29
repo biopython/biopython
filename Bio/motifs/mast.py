@@ -129,7 +129,7 @@ def __make_diagram(record, sequence_tree):
                         .format(record.strand_handling))
     tail_length = (sequence_length
                    - int(hit_eles[-1].get('pos'))
-                   - hit_motif.length + 1)
+                   - hit_motifs[-1].length + 1)
     motifs_with_gaps = ([str(s)
                          for pair in zip(gaps, motif_strs)
                          for s in pair] +
