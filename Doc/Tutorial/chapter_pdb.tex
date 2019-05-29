@@ -113,9 +113,11 @@ Example:
 \end{minted}
 The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
 \verb+release_date+, \verb+structure_method+, \verb+resolution+, 
-\verb+structure_reference+ (which maps to a list of references), 
-\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
-\verb+has_missing_residues+, and \verb+missing_residues+.
+\verb+structure_reference+ (which maps to a list of references),
+\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to
+a dictionary with various information about the crystallized compound),
+\verb+has_missing_residues+, \verb+missing_residues+, and \verb+astral+ 
+(which maps to dictionary with additional information about the domain if present).
 
 \verb+has_missing_residues+ maps to a bool that is True if at least
 one non-empty \verb+REMARK 465+ header line was found. In this case
