@@ -1,4 +1,4 @@
-) Copyright 2009-2011 by Eric Talevich.  All rights reserved.
+# Copyright 2009-2011 by Eric Talevich.  All rights reserved.
 # Revisions copyright 2009-2013 by Peter Cock.  All rights reserved.
 # Revisions copyright 2013 Lenna X. Peterson. All rights reserved.
 #
