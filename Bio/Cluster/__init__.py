@@ -42,10 +42,19 @@ __version__ = _cluster.version()
 
 
 class Node(_cluster.Node):
+    """Element of a hierarchical clustering tree.
+
+    A node contains items or other Nodes(sub-nodes).
+    """
+
     __doc__ = _cluster.Node.__doc__
 
 
 class Tree(_cluster.Tree):
+    """Hierarchical clustering tree.
+
+    A Tree consists of Nodes.
+    """
 
     def sort(self, order=None):
         """Sort the hierarchical clustering tree.
