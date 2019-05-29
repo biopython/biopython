@@ -809,7 +809,7 @@ class Nexus(object):
                 self.valid_characters = self.valid_characters.lower() + self.valid_characters.upper()
             # we have to sort the reverse ambig coding dict key characters:
             # to be sure that it's 'ACGT':'N' and not 'GTCA':'N'
-            rev = {k: v for k, v in self.ambiguous_values.items() if k != 'X'}
+            rev = {v: k for k, v in self.ambiguous_values.items() if k != 'X'}
             self.rev_ambiguous_values = {}
             for k, v in rev.items():
                 key = sorted(c for c in k)
