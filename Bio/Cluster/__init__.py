@@ -175,19 +175,17 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
        Examples are:
 
            >>> from numpy import array
-           >>> # option 1.:
+           >>> # option 1:
            >>> distance = array([[0.0, 1.1, 2.3],
            ...                   [1.1, 0.0, 4.5],
            ...                   [2.3, 4.5, 0.0]])
-           ...
-           >>> # option 2.:
+           >>> # option 2:
            >>> distance = array([1.1, 2.3, 4.5])
-           >>> # option 3.:
+           >>> # option 3:
            >>> distance = [array([]),
            ...             array([1.1]),
            ...             array([2.3, 4.5])]
-           ...
-           >>>
+
 
        These three correspond to the same distance matrix.
      - nclusters: number of clusters (the 'k' in k-medoids)
@@ -260,19 +258,16 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
        Examples are:
 
            >>> from numpy import array
-           >>> # option 1.:
+           >>> # option 1:
            >>> distance = array([[0.0, 1.1, 2.3],
            ...                   [1.1, 0.0, 4.5],
            ...                   [2.3, 4.5, 0.0]])
-           ...
-           >>> # option 2.:
+           >>> # option 2:
            >>> distance = array([1.1, 2.3, 4.5])
-           >>> # option 3.:
+           >>> # option 3:
            >>> distance = [array([]),
            ...             array([1.1]),
            ...             array([2.3, 4.5])]
-           ...
-           >>>
 
        These three correspond to the same distance matrix.
 
