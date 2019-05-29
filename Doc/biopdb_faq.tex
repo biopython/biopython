@@ -297,9 +297,10 @@ keywords=structure.header{[}'keywords'{]}
 \end{lyxcode}
 The available keys are \texttt{name, head, deposition\_\-date, release\_\-date,
 structure\_\-method, resolution, structure\_\-reference} (maps to
-a list of references), \texttt{journal\_\-reference, author} and
-\texttt{compound} (maps to a dictionary with various information about
-the crystallized compound).
+a list of references), \texttt{journal\_\-reference, author}, 
+\texttt{compound} (maps to a dictionary with various information about 
+the crystallized compound), and \texttt{astral} 
+(maps to dictionary with additional information about the domain if present).
 
 The dictionary can also be created without creating a \texttt{Structure}
 object, ie. directly from the PDB file:

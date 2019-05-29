@@ -484,13 +484,13 @@ reference
 (maps to a list of references), 
 \family typewriter 
 journal_\SpecialChar \-
-reference, author
+reference, author, compound
 \family default 
- and 
-\family typewriter 
-compound
-\family default 
- (maps to a dictionary with various information about the crystallized compound).
+ (maps to a dictionary with various information about the crystallized compound), and 
+\family typewriter
+astral 
+\family default
+ (maps to dictionary with additional information about the domain if present).
 \layout Standard
 
 The dictionary can also be created without creating a 
