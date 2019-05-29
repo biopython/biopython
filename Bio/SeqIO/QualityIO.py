@@ -662,7 +662,7 @@ _phred_to_illumina_quality_str = {qp: chr(qp + SOLEXA_SCORE_OFFSET)
                                   for qp in range(0, 62 + 1)}
 # Only map -5 to 62, we need to give a warning on truncating at 62
 _solexa_to_illumina_quality_str = {
-    qs, chr(int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET)
+    qs: chr(int(round(phred_quality_from_solexa(qs))) + SOLEXA_SCORE_OFFSET)
     for qs in range(-5, 62 + 1)}
 
 

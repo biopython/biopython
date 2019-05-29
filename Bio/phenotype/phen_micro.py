@@ -516,10 +516,10 @@ class PlateRecord(object):
         lines.append("Well: %i" % len(self))
         # Here we assume that all well ID start with a char
         lines.append("Rows: %d" %
-                     len({x.id[0] for x in self)})
+                     len({x.id[0] for x in self}))
         # Here we assume that well number is a two-digit number
         lines.append("Columns: %d" %
-                     len({x.id[1:3] for x in self)})
+                     len({x.id[1:3] for x in self}))
         lines.append(repr(self))
         return "\n".join(lines)
 

@@ -347,7 +347,7 @@ def _get_atom_radius(atom, rtype='united'):
     elif resname == 'FMN' and at_name in {'N1', 'N5', 'N10'}:
         return _atomic_radii[4][typekey]
     elif resname == 'FMN' and at_name in {'C2', 'C4', 'C7', 'C8', 'C10',
-                                          'C4A', 'C5A', 'C9A':
+                                          'C4A', 'C5A', 'C9A'}:
         return _atomic_radii[10][typekey]
     elif resname == 'FMN' and at_name in {'O2', 'O4'}:
         return _atomic_radii[1][typekey]

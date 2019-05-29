@@ -332,7 +332,7 @@ class Motif(object):
 
     def __set_background(self, value):
         if isinstance(value, dict):
-            self._background = {letter, value[letter] for letter in self.alphabet}
+            self._background = {letter: value[letter] for letter in self.alphabet}
         elif value is None:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:

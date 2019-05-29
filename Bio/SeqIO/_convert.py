@@ -310,7 +310,7 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
 
 def _fastq_sanger_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = {(chr(q + 33): str(q) for q in range(0, 93 + 1)}
+    mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
