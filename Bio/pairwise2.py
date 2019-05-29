@@ -560,7 +560,7 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
             else:
                 row_open = score_matrix[row][col - 1] + gap_A_fn(row, 1)
                 row_extend = max(score_matrix[row][x] + gap_A_fn(row, col - x)
-                                  for x in range(col))
+                                 for x in range(col))
 
             # Try to find a better score by opening gaps in sequenceB.
             if not penalize_end_gaps[1] and col == lenB:
@@ -569,7 +569,7 @@ def _make_score_matrix_generic(sequenceA, sequenceB, match_fn, gap_A_fn,
             else:
                 col_open = score_matrix[row - 1][col] + gap_B_fn(col, 1)
                 col_extend = max(score_matrix[x][col] + gap_B_fn(col, row - x)
-                                  for x in range(row))
+                                 for x in range(row))
 
             best_score = max(nogap_score, row_open, row_extend, col_open,
                              col_extend)

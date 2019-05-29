@@ -428,7 +428,7 @@ def combine(matrices):
                 combined.taxsets = {}
             # update taxon sets
             combined.taxsets.update({'%s.%s' % (n, tn): ts
-                                         for tn, ts in m.taxsets.items()})
+                                     for tn, ts in m.taxsets.items()})
         # update new charpartition
         combined.charpartitions['combined'][n] = list(range(combined.nchar, combined.nchar + m.nchar))
         # update charlabels
@@ -436,7 +436,7 @@ def combine(matrices):
             if not combined.charlabels:
                 combined.charlabels = {}
             combined.charlabels.update({combined.nchar + i: label
-                                            for i, label in m.charlabels.items()})
+                                        for i, label in m.charlabels.items()})
         combined.nchar += m.nchar  # update nchar and ntax
         combined.ntax += len(m_only)
 

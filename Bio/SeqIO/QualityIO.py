@@ -542,8 +542,8 @@ _phred_to_sanger_quality_str = {qp: chr(min(126, qp + SANGER_SCORE_OFFSET))
                                 for qp in range(0, 93 + 1)}
 # Only map -5 to 93, we need to give a warning on truncating at 93
 _solexa_to_sanger_quality_str = {
-     qs: chr(min(126, int(round(phred_quality_from_solexa(qs)) +
-     SANGER_SCORE_OFFSET))) for qs in range(-5, 93 + 1)}
+     qs: chr(min(126, int(round(phred_quality_from_solexa(qs)) + SANGER_SCORE_OFFSET)))
+     for qs in range(-5, 93 + 1)}
 
 
 def _get_sanger_quality_str(record):
@@ -731,8 +731,7 @@ _solexa_to_solexa_quality_str = {qs: chr(min(126, qs + SOLEXA_SCORE_OFFSET))
                                  for qs in range(-5, 62 + 1)}
 # Only map -5 to 62, we need to give a warning on truncating at 62
 _phred_to_solexa_quality_str = {
-    qp: chr(min(126, int(round(solexa_quality_from_phred(qp))) +
-    SOLEXA_SCORE_OFFSET))
+    qp: chr(min(126, int(round(solexa_quality_from_phred(qp))) + SOLEXA_SCORE_OFFSET))
     for qp in range(0, 62 + 1)}
 
 
