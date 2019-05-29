@@ -54,9 +54,11 @@ class Record(list):
 def read(handle):
     """Parse a MAST XML format handle as a Record object."""
     record = Record()
-    xml_tree = ET.parse(handle)
-    __read_version(record, xml_tree)
-    __read_database_and_motifs(record, xml_tree)
+    try:
+        xml_tree = ET.parse(handle)
+    except ET.ParseError:
+        raise ValueError("Improper MAST XML input file. XML root tag should start with <mast version= ...")
+    __read_metadata(record, xml_tree)
     __read_sequences(record, xml_tree)
     return record
 
@@ -64,15 +66,8 @@ def read(handle):
 # Everything below is private
 
 
-def __read_version(record, xml_tree):
-    """Read MAST Version (PRIVATE)."""
-    try:
-        record.version = xml_tree.getroot().get('version')
-    except:
-        raise ValueError("Improper XML input file. XML root tag should start with <mast version= ...")
-
-
-def __read_database_and_motifs(record, xml_tree):
+def __read_metadata(record, xml_tree):
+    record.version = xml_tree.getroot().get('version')
     record.database = xml_tree.find('sequence_dbs').find('sequence_db').get('source')
     record.alphabet = xml_tree.find('alphabet').get('name')
     record.strand_handling = xml_tree.find('settings').get('strand_handling')
@@ -89,7 +84,7 @@ def __read_database_and_motifs(record, xml_tree):
 
 
 def __read_sequences(record, xml_tree):
-    """Read sequences from XML ElementTree object"""
+    """Read sequences from XML ElementTree object."""
     for sequence_tree in xml_tree.find('sequences').findall('sequence'):
         sequence_name = sequence_tree.get('name')
         record.sequences.append(sequence_name)
