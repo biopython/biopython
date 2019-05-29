@@ -105,7 +105,6 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.Phylo.TreeConstruction',
     'Bio.Phylo._utils',
     'BioSQL.BioSeqDatabase',
-    'Bio.TogoWS',
 ]
 
 # Exclude modules with online activity
