@@ -22,7 +22,7 @@ from Bio.PDB import DSSP
 # DSSP version, if known, as DSSP <2.2.0 does not support mmcif files
 dssp_version = '0.0.0'
 # Check if DSSP is installed
-quiet_kwargs = dict(stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+quiet_kwargs = {'stdout': subprocess.PIPE, 'stderr': subprocess.STDOUT}
 try:
     try:
         # Newer versions of DSSP
