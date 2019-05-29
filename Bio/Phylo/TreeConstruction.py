@@ -1019,7 +1019,7 @@ class ParsimonyScorer(Scorer):
             # Fitch algorithm without the penalty matrix
             if not self.matrix:
                 # init by mapping terminal clades and states in column_i
-                clade_states = dict(zip(terms, [set([c]) for c in column_i]))
+                clade_states = dict(zip(terms, [{c} for c in column_i]))
                 for clade in tree.get_nonterminals(order="postorder"):
                     clade_childs = clade.clades
                     left_state = clade_states[clade_childs[0]]

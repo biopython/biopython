@@ -391,7 +391,7 @@ def _part(clades):
     if len(terms) == 1 or len(terms) == 2:
         new_clade = clades[0]
     else:
-        bitstrs = set([_BitString('1' * len(terms))])
+        bitstrs = {_BitString('1' * len(terms))}
         for clade in clades:
             for child in clade.clades:
                 bitstr = _clade_to_bitstr(child, term_names)
