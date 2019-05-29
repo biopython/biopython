@@ -318,7 +318,7 @@ def _fastq_solexa_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
     from Bio.SeqIO.QualityIO import phred_quality_from_solexa
     mapping = {chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
-                   for q in range(-5, 62 + 1)}
+               for q in range(-5, 62 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
