@@ -92,23 +92,30 @@ def str_summary(text, max_len=40):
 
 def alignment_summary(alignment, vertical_threshold=5):
     """Return a concise summary of an Alignment object as a string."""
+    lines = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     if rec_count < vertical_threshold:
         # Show each sequence row horizontally
         for record in alignment:
-            print("  %s %s" % (str_summary(str(record.seq)), record.id))
+            line = "  %s %s" % (str_summary(str(record.seq)), record.id)
+            lines.append(line)
         for key, value in alignment.column_annotations.items():
             if isinstance(value, str):
-                print("  %s %s" % (str_summary(str(value)), key))
+                line = "  %s %s" % (str_summary(str(value)), key)
+                lines.append(line)
     else:
         # Show each sequence row vertically
         for i in range(min(5, alignment_len)):
-            print("  " + str_summary(alignment[:, i]) + " alignment column %i" % i)
+            line = "  " + str_summary(alignment[:, i]) + " alignment column %i" % i
+            lines.append(line)
         if alignment_len > 5:
             i = alignment_len - 1
-            print("  " + str_summary("|" * rec_count) + " ...")
-            print("  " + str_summary(alignment[:, i]) + " alignment column %i" % i)
+            line = "  " + str_summary("|" * rec_count) + " ..."
+            lines.append(line)
+            line = "  " + str_summary(alignment[:, i]) + " alignment column %i" % i
+            lines.append(line)
+    return "\n".join(lines)
 
 
 def check_simple_write_read(alignments, indent=" "):
@@ -371,7 +378,101 @@ class TestAlignIO_exceptions(unittest.TestCase):
 
 class TestAlignIO_reading(unittest.TestCase):
 
+    def check_simple_write_read(self, alignments, indent=" "):
+        for format in test_write_read_align_with_seq_count:
+            records_per_alignment = len(alignments[0])
+            for a in alignments:
+                if records_per_alignment != len(a):
+                    records_per_alignment = None
+            # Can we expect this format to work?
+            if not records_per_alignment \
+                    and format not in test_write_read_alignment_formats:
+                continue
+    
+            # Going to write to a handle...
+            handle = StringIO()
+
+            if format == 'nexus':
+                with self.assertRaises(ValueError) as cm:
+                    c = AlignIO.write(alignments, handle=handle, format=format)
+                self.assertEqual("We can only write one Alignment to a Nexus file.", str(cm.exception))
+                continue
+            c = AlignIO.write(alignments, handle=handle, format=format)
+            self.assertEqual(c, len(alignments))
+
+            # First, try with the seq_count
+            if records_per_alignment:
+                handle.flush()
+                handle.seek(0)
+                alignments2 = list(AlignIO.parse(
+                    handle=handle,
+                    format=format,
+                    seq_count=records_per_alignment))
+                simple_alignment_comparison(alignments, alignments2, format)
+    
+            if format in test_write_read_alignment_formats:
+                # Don't need the seq_count
+                handle.flush()
+                handle.seek(0)
+                alignments2 = list(AlignIO.parse(handle=handle, format=format))
+                simple_alignment_comparison(alignments, alignments2, format)
+    
+            if len(alignments) > 1:
+                # Try writing just one Alignment (not a list)
+                handle = StringIO()
+                AlignIO.write(alignments[0:1], handle, format)
+                self.assertEqual(handle.getvalue(), alignments[0].format(format))
+    
     def test_reading_alignments(self):
+        test_files = [
+        # Following examples are also used in test_Clustalw.py
+            ("clustal", 2, 1, 'Clustalw/cw02.aln'),
+            ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
+            ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
+            ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
+            ("clustal", 20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
+            ("clustal", 20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
+                # Following examples are also used in test_GFF.py
+            ("fasta", 3, 1, 'GFF/multi.fna'),  # Trivial nucleotide alignment
+                # Following example is also used in test_Nexus.py
+            ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
+            ("nexus", 2, 1, 'Nexus/codonposset.nex'),
+            ("stockholm", 2, 1, 'Stockholm/simple.sth'),
+            ("stockholm", 6, 1, 'Stockholm/funny.sth'),
+            ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
+            ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
+            ("phylip", 10, 1, 'Phylip/hennigian.phy'),
+            ("phylip", 10, 1, 'Phylip/horses.phy'),
+            ("phylip", 10, 1, 'Phylip/random.phy'),
+            ("phylip", 3, 1, 'Phylip/interlaced.phy'),
+            ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
+            ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
+            ("phylip-sequential", 3, 1, 'Phylip/sequential.phy'),
+            ("phylip-sequential", 4, 1, 'Phylip/sequential2.phy'),
+            ("emboss", 4, 1, 'Emboss/alignret.txt'),
+            ("emboss", 2, 5, 'Emboss/needle.txt'),
+            ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
+            ("emboss", 2, 1, 'Emboss/water.txt'),
+            ("emboss", 2, 1, 'Emboss/water2.txt'),
+            ("emboss", 2, 1, 'Emboss/matcher_simple.txt'),
+            ("emboss", 2, 5, 'Emboss/matcher_pair.txt'),
+            ("emboss", 2, 1, 'Emboss/emboss_pair_aln_full_blank_line.txt'),
+            ("fasta-m10", 2, 4, 'Fasta/output001.m10'),
+            ("fasta-m10", 2, 6, 'Fasta/output002.m10'),
+            ("fasta-m10", 2, 3, 'Fasta/output003.m10'),
+            ("fasta-m10", 2, 1, 'Fasta/output004.m10'),
+            ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
+            ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
+            ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
+            ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
+            ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
+            ("pir", 2, 1, 'NBRF/clustalw.pir'),
+            ("maf", 3, 2, 'MAF/humor.maf'),
+            ("maf", None, 3, "MAF/bug2453.maf"),  # Have 5, 5, 4 sequences
+            ("maf", None, 3, "MAF/ucsc_test.maf"),  # Have 5, 5, 4 sequences
+            ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf"),
+            ]
+
         for (t_format, t_per, t_count, t_filename) in test_files:
             with open(t_filename, "r") as handle:
                 alignments = list(AlignIO.parse(handle, format=t_format))
@@ -479,6 +580,85 @@ class TestAlignIO_reading(unittest.TestCase):
             alignments.reverse()
             check_simple_write_read(alignments)
         
+    def test_reading_alignments_mauve(self):
+        with open('Mauve/simple.xmfa', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="mauve"))
+            self.assertEqual(len(alignments), 5)
+        
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse('Mauve/simple.xmfa', format="mauve"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 5)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Check Bio.AlignIO.read(...)
+        with open('Mauve/simple.xmfa') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "mauve")
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 5670)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  ATATTAGGTTTTTACCTACCCAGGAAAAGCCAACCA...AAT 1/0-5670
+  ATATTAGGTTTTTACCTACCCAGGAAAAGCCAACCA...AAT 2/0-5670""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 4420)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  GAACATCAGCACCTGAGTTGCTAAAGTCATTTAGAG...CTC 1/5670-9940
+  GAACATCAGCACCTGAGTTGCTAAAGTCATTTAGAG...CTC 2/7140-11410""")
+        self.assertEqual(len(alignments[2]), 1)
+        self.assertEqual(alignments[2].get_alignment_length(), 4970)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  TCTACCAACCACCACAGACATCAATCACTTCTGCTG...GAC 1/9940-14910""")
+        self.assertEqual(len(alignments[3]), 1)
+        self.assertEqual(alignments[3].get_alignment_length(), 1470)
+        self.assertEqual(len(alignments[4]), 1)
+        self.assertEqual(alignments[4].get_alignment_length(), 1470)
+        self.assertEqual(alignment_summary(alignments[4]), """\
+  ATTCGCACATAAGAATGTACCTTGCTGTAATTTATA...ATA 2/11410-12880""")
+
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        self.check_simple_write_read(alignments)
+    
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
