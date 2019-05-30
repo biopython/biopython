@@ -33,7 +33,7 @@ A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
 C_rec = SeqIO.read("NC_003212.gbk",
                    "gb")[2587879:2625807].reverse_complement(name=True)
-records = {rec.name: rec for rec in [A_rec, B_rec, C_rec]}
+records = dict((rec.name, rec) for rec in [A_rec, B_rec, C_rec])
 
 # Here we hard code the gene colors for simiplicity and to match the target image.
 # In practice you might have an automatic mapping based on the gene annotation
