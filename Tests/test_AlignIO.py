@@ -7,6 +7,10 @@
 
 from __future__ import print_function
 
+
+import unittest
+
+
 import os
 from Bio._py3k import StringIO
 from Bio import SeqIO
@@ -215,52 +219,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
     return True
 
 
-# Check Phylip files reject duplicate identifiers.
-def check_phylip_reject_duplicate():
-    """Check writing post-truncation duplicated IDs fails for PHYLIP."""
-    handle = StringIO()
-    sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
-                 SeqRecord(Seq('AAAA'), id='longsequencename2'),
-                 SeqRecord(Seq('AAAA'), id='other_sequence'), ]
-    alignment = MultipleSeqAlignment(sequences)
-    try:
-        # This should raise a ValueError
-        AlignIO.write(alignment, handle, 'phylip')
-        raise ValueError("Duplicate IDs after truncation are not allowed.")
-    except ValueError as err:
-        # Expected - check the error
-        assert "Repeated name 'longsequen'" in str(err)
-
-
-check_phylip_reject_duplicate()
-
-# Check parsers can cope with an empty file
-for t_format in AlignIO._FormatToIterator:
-    handle = StringIO()
-    alignments = list(AlignIO.parse(handle, t_format))
-    assert len(alignments) == 0
-
-# Check writers can cope with no alignments
-for t_format in list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter):
-    handle = StringIO()
-    msg = "Writing no alignments to %s format should work!" % t_format
-    assert AlignIO.write([], handle, t_format) == 0, msg
-    handle.close()
-
-# Check writers reject non-alignments
-list_of_records = list(AlignIO.read("Clustalw/opuntia.aln", "clustal"))
-for t_format in list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter):
-    handle = StringIO()
-    try:
-        AlignIO.write([list_of_records], handle, t_format)
-        raise ValueError("Writing non-alignment to %s format should fail!"
-                         % t_format)
-    except (TypeError, AttributeError, ValueError):
-        pass
-    handle.close()
-    del handle
-del list_of_records, t_format
-
 # Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files:
     print("Testing reading %s format file %s with %i alignments"
@@ -379,3 +337,156 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     check_simple_write_read(alignments)
 
 print("Finished tested reading files")
+
+
+class TestAlignIO_exceptions(unittest.TestCase):
+
+    t_formats = list(AlignIO._FormatToWriter) + list(SeqIO._FormatToWriter)
+
+    def test_phylip_reject_duplicate(self):
+        """Check that writing duplicated IDs after truncation fails for PHYLIP."""
+        handle = StringIO()
+        sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
+                     SeqRecord(Seq('AAAA'), id='longsequencename2'),
+                     SeqRecord(Seq('AAAA'), id='other_sequence'), ]
+        alignment = MultipleSeqAlignment(sequences)
+        with self.assertRaises(ValueError) as cm:
+            AlignIO.write(alignment, handle, 'phylip')
+        self.assertEqual("Repeated name 'longsequen' (originally 'longsequencename2'), possibly due to truncation", str(cm.exception))
+
+    def test_parsing_empty_files(self):
+        """Check that parsing an empty file returns an empty list."""
+        for t_format in AlignIO._FormatToIterator:
+            handle = StringIO()
+            alignments = list(AlignIO.parse(handle, t_format))
+            self.assertEqual(alignments, [])
+
+    def test_writing_empty_files(self):
+        """Check that writers can cope with no alignments."""
+        for t_format in self.t_formats:
+            handle = StringIO()
+            number = AlignIO.write([], handle, t_format)
+            self.assertEqual(number, 0)
+
+    def test_writing_not_alignments(self):
+        """Check that writers reject records that are not alignments."""
+        records = list(AlignIO.read("Clustalw/opuntia.aln", "clustal"))
+        for t_format in self.t_formats:
+            handle = StringIO()
+            self.assertRaises(Exception, AlignIO.write, [records], handle, t_format)
+
+
+class TestAlignIO_reading(unittest.TestCase):
+
+    def test_reading_alignments(self):
+        for (t_format, t_per, t_count, t_filename) in test_files:
+            with open(t_filename, "r") as handle:
+                alignments = list(AlignIO.parse(handle, format=t_format))
+                self.assertEqual(len(alignments), t_count)
+            if t_per is not None:
+                for alignment in alignments:
+                    self.assertEqual(len(alignment), t_per)
+        
+            # Try using the iterator with a for loop and a filename not handle
+            alignments2 = []
+            for record in AlignIO.parse(t_filename, format=t_format):
+                alignments2.append(record)
+            self.assertEqual(len(alignments2), t_count)
+        
+            # Try using the iterator with the next() method
+            alignments3 = []
+            seq_iterator = AlignIO.parse(t_filename, format=t_format)
+            while True:
+                try:
+                    record = next(seq_iterator)
+                except StopIteration:
+                    break
+                assert record is not None, "Should raise StopIteration not return None"
+                alignments3.append(record)
+        
+            # Try a mixture of next() and list (a torture test!)
+            seq_iterator = AlignIO.parse(t_filename, format=t_format)
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                record = None
+            if record is not None:
+                alignments4 = [record]
+                alignments4.extend(list(seq_iterator))
+            else:
+                alignments4 = []
+            assert len(alignments4) == t_count
+        
+            # Try a mixture of next() and for loop (a torture test!)
+            seq_iterator = AlignIO.parse(t_filename, format=t_format)
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                record = None
+            if record is not None:
+                alignments5 = [record]
+                for record in seq_iterator:
+                    alignments5.append(record)
+            else:
+                alignments5 = []
+            assert len(alignments5) == t_count
+        
+            # Check Bio.AlignIO.read(...)
+            if t_count == 1:
+                with open(t_filename) as handle:
+                    alignment = AlignIO.read(handle, format=t_format)
+                assert isinstance(alignment, MultipleSeqAlignment)
+            else:
+                try:
+                    with open(t_filename) as handle:
+                        alignment = AlignIO.read(handle, t_format)
+                    raise ValueError("Bio.AlignIO.read(...) should have failed")
+                except ValueError:
+                    # Expected to fail
+                    pass
+        
+            # Show the alignment
+            for i, alignment in enumerate(alignments):
+                if i < 3 or i + 1 == t_count:
+                    print(" Alignment %i, with %i sequences of length %i"
+                          % (i,
+                             len(alignment),
+                             alignment.get_alignment_length()))
+                    print(alignment_summary(alignment))
+                elif i == 3:
+                    print(" ...")
+        
+            # Check AlignInfo.SummaryInfo likes the alignment
+            summary = AlignInfo.SummaryInfo(alignment)
+            dumb_consensus = summary.dumb_consensus()
+            # gap_consensus = summary.gap_consensus()
+            if t_format != "nexus":
+                # Hack for bug 2535
+                pssm = summary.pos_specific_score_matrix()
+                rep_dict = summary.replacement_dictionary()
+                try:
+                    info_content = summary.information_content()
+                except ValueError as err:
+                    if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
+                        raise err
+        
+            if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
+                # print(" Trying to read a triple concatenation of the input file")
+                with open(t_filename, "r") as handle:
+                    data = handle.read()
+                handle = StringIO()
+                handle.write(data + "\n\n" + data + "\n\n" + data)
+                handle.seek(0)
+                assert len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))) == 3
+                handle.close()
+        
+            # Some alignment file formats have magic characters which mean
+            # use the letter in this position in the first sequence.
+            # They should all have been converted by the parser, but if
+            # not reversing the record order might expose an error.  Maybe.
+            alignments.reverse()
+            check_simple_write_read(alignments)
+        
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
