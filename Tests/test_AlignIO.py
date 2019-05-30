@@ -90,32 +90,25 @@ def str_summary(text, max_len=40):
         return text[:max_len - 4] + "..." + text[-3:]
 
 
-def alignment_summary(alignment, index="  ", vertical_threshold=5):
+def alignment_summary(alignment, vertical_threshold=5):
     """Return a concise summary of an Alignment object as a string."""
-    answer = []
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     if rec_count < vertical_threshold:
         # Show each sequence row horizontally
         for record in alignment:
-            answer.append("%s%s %s" % (
-                index, str_summary(str(record.seq)), record.id))
+            print("  %s %s" % (str_summary(str(record.seq)), record.id))
         for key, value in alignment.column_annotations.items():
             if isinstance(value, str):
-                answer.append("%s%s %s" %
-                              (index, str_summary(str(value)), key))
+                print("  %s %s" % (str_summary(str(value)), key))
     else:
         # Show each sequence row vertically
         for i in range(min(5, alignment_len)):
-            answer.append(index + str_summary(alignment[:, i]) +
-                          " alignment column %i" % i)
+            print("  " + str_summary(alignment[:, i]) + " alignment column %i" % i)
         if alignment_len > 5:
             i = alignment_len - 1
-            answer.append(index + str_summary("|" * rec_count) +
-                          " ...")
-            answer.append(index + str_summary(alignment[:, i]) +
-                          " alignment column %i" % i)
-    return "\n".join(answer)
+            print("  " + str_summary("|" * rec_count) + " ...")
+            print("  " + str_summary(alignment[:, i]) + " alignment column %i" % i)
 
 
 def check_simple_write_read(alignments, indent=" "):
@@ -469,9 +462,8 @@ class TestAlignIO_reading(unittest.TestCase):
                 except ValueError as err:
                     if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
                         raise err
-        
+
             if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
-                # print(" Trying to read a triple concatenation of the input file")
                 with open(t_filename, "r") as handle:
                     data = handle.read()
                 handle = StringIO()
