@@ -216,7 +216,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
             else:
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-    return True
 
 
 # Main tests...
@@ -457,21 +456,7 @@ class TestAlignIO_reading(unittest.TestCase):
             ("emboss", 2, 1, 'Emboss/matcher_simple.txt'),
             ("emboss", 2, 5, 'Emboss/matcher_pair.txt'),
             ("emboss", 2, 1, 'Emboss/emboss_pair_aln_full_blank_line.txt'),
-            ("fasta-m10", 2, 4, 'Fasta/output001.m10'),
-            ("fasta-m10", 2, 6, 'Fasta/output002.m10'),
-            ("fasta-m10", 2, 3, 'Fasta/output003.m10'),
-            ("fasta-m10", 2, 1, 'Fasta/output004.m10'),
-            ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
-            ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
-            ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
-            ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
-            ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
-            ("pir", 2, 1, 'NBRF/clustalw.pir'),
-            ("maf", 3, 2, 'MAF/humor.maf'),
-            ("maf", None, 3, "MAF/bug2453.maf"),  # Have 5, 5, 4 sequences
-            ("maf", None, 3, "MAF/ucsc_test.maf"),  # Have 5, 5, 4 sequences
-            ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf"),
-            ]
+        ]
 
         for (t_format, t_per, t_count, t_filename) in test_files:
             with open(t_filename, "r") as handle:
@@ -579,19 +564,878 @@ class TestAlignIO_reading(unittest.TestCase):
             # not reversing the record order might expose an error.  Maybe.
             alignments.reverse()
             check_simple_write_read(alignments)
-        
+
+    def test_reading_alignments_fasta_m10(self):
+        with open('Fasta/output001.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 4)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output001.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 4)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output001.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output001.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 4)
+        seq_iterator = AlignIO.parse('Fasta/output001.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 4)
+        with open('Fasta/output001.m10') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 108)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
+  AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 64)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
+  ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|""")
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 38)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE gi|10955264|ref|NP_052605.1|
+  IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ gi|152973462|ref|YP_001338513.1|""")
+        self.assertEqual(len(alignments[3]), 2)
+        self.assertEqual(alignments[3].get_alignment_length(), 43)
+        self.assertEqual(alignment_summary(alignments[3]), """\
+  SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEM...TYC gi|10955265|ref|NP_052606.1|
+  SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLI...EYC gi|152973545|ref|YP_001338596.1|""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+
+        with open('Fasta/output002.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 6)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output002.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 6)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output002.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output002.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 6)
+        seq_iterator = AlignIO.parse('Fasta/output002.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 6)
+    
+        with open('Fasta/output002.m10') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 88)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-K...AEV gi|10955263|ref|NP_052604.1|
+  SQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGRK...VQV gi|162139799|ref|NP_309634.2|""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 53)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  EIRKRAAECGKTVSGFLRAAA-LGKKV----NSLTD...KKL gi|10955263|ref|NP_052604.1|
+  EIKPRGTSKGEAIAAFMQEAPFIGRTPVFLGDDLTD...VKI gi|15831859|ref|NP_310632.1|""")
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 92)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  SEFFSKIESDLKKKKSKGDVFFDLIIPNG-----GK...ATS gi|10955264|ref|NP_052605.1|
+  TELNSELAKAMKVDAQRG-AFVSQVLPNSSAAKAGI...QSS gi|15829419|ref|NP_308192.1|""")
+        self.assertEqual(len(alignments[5]), 2)
+        self.assertEqual(alignments[5].get_alignment_length(), 157)
+        self.assertEqual(alignment_summary(alignments[5]), """\
+  QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLIN...REI gi|10955265|ref|NP_052606.1|
+  EFIRLLSDHDQFEKDQISELTVAANALKLEVAK--N...KKV gi|15833861|ref|NP_312634.1|""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open('Fasta/output003.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 3)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output003.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output003.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output003.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 3)
+        seq_iterator = AlignIO.parse('Fasta/output003.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        with open('Fasta/output003.m10') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 55)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGG...IAA gi|152973837|ref|YP_001338874.1|
+  VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAALGK...LGA gi|10955263|ref|NP_052604.1|""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 22)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  DDAEHLFRTLSSR-LDALQDGN gi|152973840|ref|YP_001338877.1|
+  DDRANLFEFLSEEGITITEDNN gi|10955265|ref|NP_052606.1|""")
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 63)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIR...QAM gi|152973841|ref|YP_001338878.1|
+  VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELSAS...KGI gi|10955264|ref|NP_052605.1|""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open('Fasta/output004.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output004.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output004.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output004.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+        seq_iterator = AlignIO.parse('Fasta/output004.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        with open('Fasta/output004.m10') as handle:
+            alignment = AlignIO.read(handle, format='fasta-m10')
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 102)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAA...TCA ref|NC_002127.1|:c1351-971
+  AGAGAAAATAAAACAAGTAATAAAATATTAATGGAA...ACA ref|NC_002695.1|:1970775-1971404""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open('Fasta/output005.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output005.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output005.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output005.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+        seq_iterator = AlignIO.parse('Fasta/output005.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        with open('Fasta/output005.m10') as handle:
+            alignment = AlignIO.read(handle, format='fasta-m10')
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 110)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
+  IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWM...MSE gi|10955282|ref|NP_052623.1|""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open('Fasta/output006.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output006.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output006.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output006.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+        seq_iterator = AlignIO.parse('Fasta/output006.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        with open('Fasta/output006.m10') as handle:
+            alignment = AlignIO.read(handle, format='fasta-m10')
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT query
+  GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT gi|116660610|gb|EG558221.1|EG558221""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+
+        with open('Fasta/output007.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 9)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output007.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 9)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output007.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output007.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 9)
+        seq_iterator = AlignIO.parse('Fasta/output007.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 9)
+        with open('Fasta/output007.m10') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 108)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
+  AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 64)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
+  ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|""")
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 45)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTD...VMR gi|10955263|ref|NP_052604.1|
+  ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTD...MLQ gi|152973480|ref|YP_001338531.1|""")
+        self.assertEqual(len(alignments[8]), 2)
+        self.assertEqual(alignments[8].get_alignment_length(), 64)
+        self.assertEqual(alignment_summary(alignments[8]), """\
+  ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDE...FSD gi|10955265|ref|NP_052606.1|
+  IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---...YPD gi|152973505|ref|YP_001338556.1|""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open('Fasta/output008.m10', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format='fasta-m10'))
+            self.assertEqual(len(alignments), 12)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+        alignments = []
+        for record in AlignIO.parse('Fasta/output008.m10', format='fasta-m10'):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 12)
+        alignments = []
+        seq_iterator = AlignIO.parse('Fasta/output008.m10', format='fasta-m10')
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('Fasta/output008.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 12)
+        seq_iterator = AlignIO.parse('Fasta/output008.m10', format='fasta-m10')
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 12)
+        with open('Fasta/output008.m10') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 65)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-...QML sp|Q9NSY1|BMP2K_HUMAN
+  IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHG...GLL gi|283855822|gb|GQ290312.1|""")
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 201)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQ...NRS sp|Q9NSY1|BMP2K_HUMAN
+  GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAG...QKS gi|57163782|ref|NM_001009242.1|""")
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 348)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQ...APA sp|P08100|OPSD_HUMAN
+  MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQ...APA gi|57163782|ref|NM_001009242.1|""")
+        self.assertEqual(len(alignments[11]), 2)
+        self.assertEqual(alignments[11].get_alignment_length(), 31)
+        self.assertEqual(alignment_summary(alignments[11]), """\
+  AQQQESATTQKAEKEVTRMVIIMVIAFLICW sp|P08100|OPSD_HUMAN
+  SQQIRNATTMMMTMRVTSFSAFWVVADSCCW gi|283855822|gb|GQ290312.1|""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+
+    def test_reading_alignments_ig(self):
+        with open('IntelliGenetics/VIF_mase-pro.txt', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="ig"))
+            self.assertEqual(len(alignments), 1)
+            self.assertEqual(len(alignments[0]), 16)
+        alignments = []
+        for record in AlignIO.parse('IntelliGenetics/VIF_mase-pro.txt', format="ig"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        alignments = []
+        seq_iterator = AlignIO.parse('IntelliGenetics/VIF_mase-pro.txt', format="ig")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('IntelliGenetics/VIF_mase-pro.txt', format="ig")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        seq_iterator = AlignIO.parse('IntelliGenetics/VIF_mase-pro.txt', format="ig")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        with open('IntelliGenetics/VIF_mase-pro.txt') as handle:
+            alignment = AlignIO.read(handle, format="ig")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+
+        self.assertEqual(len(alignments[0]), 16)
+        self.assertEqual(alignments[0].get_alignment_length(), 298)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  MMMMMMMMMMMMMMMM alignment column 0
+  EEEEEEETEEEENEEE alignment column 1
+  NNNNNNNAEEEEQRKK alignment column 2
+  --------DEEEEE-- alignment column 3
+  --------KKKKKK-- alignment column 4
+  |||||||||||||||| ...
+  HHHHHHH-AAAAL-R- alignment column 297""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open('IntelliGenetics/VIF_mase-pro.txt', "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="ig", seq_count=16))), 3)
+        handle.close()
+    
+    def test_reading_alignments_pir(self):
+        with open('NBRF/clustalw.pir', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="pir"))
+            self.assertEqual(len(alignments), 1)
+            self.assertEqual(len(alignments[0]), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse('NBRF/clustalw.pir', format="pir"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse('NBRF/clustalw.pir', format="pir")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse('NBRF/clustalw.pir', format="pir")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+        seq_iterator = AlignIO.parse('NBRF/clustalw.pir', format="pir")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        with open('NBRF/clustalw.pir') as handle:
+            alignment = AlignIO.read(handle, format="pir")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 2527)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  ------------------------------------...--- 804Angiostrongylus_cantonensis
+  ------------------------------------...--- 815Parelaphostrongylus_odocoil""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        try:
+            info_content = summary.information_content()
+        except ValueError as err:
+            if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
+                raise err
+
+        with open('NBRF/clustalw.pir', "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="pir", seq_count=2))), 3)
+        handle.close()
+    
+    def test_reading_alignments_maf(self):
+        with open('MAF/humor.maf', "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="maf"))
+            self.assertEqual(len(alignments), 2)
+        alignments = []
+        for record in AlignIO.parse('MAF/humor.maf', format="maf"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 2)
+        alignments = []
+        seq_iterator = AlignIO.parse('MAF/humor.maf', format="maf")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse('MAF/humor.maf', format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 2)
+        seq_iterator = AlignIO.parse('MAF/humor.maf', format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 2)
+        with open('MAF/humor.maf') as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.assertEqual(len(alignments[0]), 3)
+        self.assertEqual(alignments[0].get_alignment_length(), 5486)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  gcacagcctttactccctgactgcgtttatattctg...CCG NM_006987
+  gcacagcctttactccctgactgcgtttatattctg...TTG mm3
+  gcacagcctttactccctgactgcgtttatattctg...CCG rn3""")
+        self.assertEqual(len(alignments[1]), 3)
+        self.assertEqual(alignments[1].get_alignment_length(), 5753)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT NM_018289
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT mm3
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT rn3""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignments[1])
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open("MAF/bug2453.maf", "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="maf"))
+            self.assertEqual(len(alignments), 3)
+        alignments = []
+        for record in AlignIO.parse("MAF/bug2453.maf", format="maf"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        alignments = []
+        seq_iterator = AlignIO.parse("MAF/bug2453.maf", format="maf")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse("MAF/bug2453.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 3)
+        seq_iterator = AlignIO.parse("MAF/bug2453.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        with open("MAF/bug2453.maf") as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.assertEqual(len(alignments[0]), 5)
+        self.assertEqual(alignments[0].get_alignment_length(), 42)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  AAA-- alignment column 0
+  AAAAA alignment column 1
+  AAAAA alignment column 2
+  ---T- alignment column 3
+  GGGGG alignment column 4
+  ||||| ...
+  GGGGG alignment column 41""")
+        self.assertEqual(len(alignments[1]), 5)
+        self.assertEqual(alignments[1].get_alignment_length(), 6)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  TTTTt alignment column 0
+  AAAAa alignment column 1
+  AAAAa alignment column 2
+  AAAAg alignment column 3
+  GGGGg alignment column 4
+  ||||| ...
+  AAAAa alignment column 5""")
+        self.assertEqual(len(alignments[2]), 4)
+        self.assertEqual(alignments[2].get_alignment_length(), 13)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  gcagctgaaaaca hg16.chr7
+  gcagctgaaaaca panTro1.chr6
+  gcagctgaaaaca baboon
+  ACAGCTGAAAATA mm4.chr6""")
+        summary = AlignInfo.SummaryInfo(alignments[1])
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open("MAF/ucsc_test.maf", "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="maf"))
+            self.assertEqual(len(alignments), 3)
+        alignments = []
+        for record in AlignIO.parse("MAF/ucsc_test.maf", format="maf"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        alignments = []
+        seq_iterator = AlignIO.parse("MAF/ucsc_test.maf", format="maf")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse("MAF/ucsc_test.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 3)
+        seq_iterator = AlignIO.parse("MAF/ucsc_test.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 3)
+        with open("MAF/ucsc_test.maf") as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.assertEqual(len(alignments[0]), 5)
+        self.assertEqual(alignments[0].get_alignment_length(), 42)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  AAA-- alignment column 0
+  AAAAA alignment column 1
+  AAAAA alignment column 2
+  ---T- alignment column 3
+  GGGGG alignment column 4
+  ||||| ...
+  GGGGG alignment column 41""")
+        self.assertEqual(len(alignments[1]), 5)
+        self.assertEqual(alignments[1].get_alignment_length(), 6)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  TTTTt alignment column 0
+  AAAAa alignment column 1
+  AAAAa alignment column 2
+  AAAAg alignment column 3
+  GGGGg alignment column 4
+  ||||| ...
+  AAAAa alignment column 5""")
+        self.assertEqual(len(alignments[2]), 4)
+        self.assertEqual(alignments[2].get_alignment_length(), 13)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  gcagctgaaaaca hg16.chr7
+  gcagctgaaaaca panTro1.chr6
+  gcagctgaaaaca baboon
+  ACAGCTGAAAATA mm4.chr6""")
+        summary = AlignInfo.SummaryInfo(alignments[2])
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        try:
+            info_content = summary.information_content()
+        except ValueError as err:
+            if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
+                raise err
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        with open("MAF/ucsc_mm9_chr10.maf", "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="maf"))
+            self.assertEqual(len(alignments), 48)
+        alignments = []
+        for record in AlignIO.parse("MAF/ucsc_mm9_chr10.maf", format="maf"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 48)
+        alignments = []
+        seq_iterator = AlignIO.parse("MAF/ucsc_mm9_chr10.maf", format="maf")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        seq_iterator = AlignIO.parse("MAF/ucsc_mm9_chr10.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 48)
+        seq_iterator = AlignIO.parse("MAF/ucsc_mm9_chr10.maf", format="maf")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 48)
+        with open("MAF/ucsc_mm9_chr10.maf") as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 164)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  TCATAGGTATTTATTTTTAAATATGGTTTGCTTTAT...GTT mm9.chr10
+  TCACAGATATTTACTATTAAATATGGTTTGTTATAT...GTT oryCun1.scaffold_133159""")
+        self.assertEqual(len(alignments[1]), 4)
+        self.assertEqual(alignments[1].get_alignment_length(), 466)
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  AGTCTTTCCAATGGGACCTGTGAGTCCTAACTATGC...CTG mm9.chr10
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC ponAbe2.chr6
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC panTro2.chr6
+  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC hg18.chr6""")
+        self.assertEqual(len(alignments[2]), 5)
+        self.assertEqual(alignments[2].get_alignment_length(), 127)
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  TTTTT alignment column 0
+  GGGGG alignment column 1
+  GGGGG alignment column 2
+  GGGGG alignment column 3
+  TTTTC alignment column 4
+  ||||| ...
+  CCCCC alignment column 126""")
+        self.assertEqual(len(alignments[47]), 6)
+        self.assertEqual(alignments[47].get_alignment_length(), 46)
+        self.assertEqual(alignment_summary(alignments[47]), """\
+  TTTTTT alignment column 0
+  GGGGGG alignment column 1
+  TTTTTT alignment column 2
+  TTTTTT alignment column 3
+  TGGGAT alignment column 4
+  |||||| ...
+  tTTTT- alignment column 45""")
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        alignments.reverse()
+        check_simple_write_read(alignments)
+ 
     def test_reading_alignments_mauve(self):
         with open('Mauve/simple.xmfa', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="mauve"))
             self.assertEqual(len(alignments), 5)
-        
-        # Try using the iterator with a for loop and a filename not handle
         alignments = []
         for record in AlignIO.parse('Mauve/simple.xmfa', format="mauve"):
             alignments.append(record)
         self.assertEqual(len(alignments), 5)
-    
-        # Try using the iterator with the next() method
         alignments = []
         seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
         while True:
@@ -602,23 +1446,17 @@ class TestAlignIO_reading(unittest.TestCase):
             self.assertIsNotNone(record)
             alignments.append(record)
         self.assertEqual(len(alignments), 5)
-    
-        # Try a mixture of next() and list (a torture test!)
         seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
         record = next(seq_iterator)
         alignments = [record]
         alignments.extend(list(seq_iterator))
         self.assertEqual(len(alignments), 5)
-    
-        # Try a mixture of next() and for loop (a torture test!)
         seq_iterator = AlignIO.parse('Mauve/simple.xmfa', format="mauve")
         record = next(seq_iterator)
         alignments = [record]
         for record in seq_iterator:
             alignments.append(record)
         self.assertEqual(len(alignments), 5)
-    
-        # Check Bio.AlignIO.read(...)
         with open('Mauve/simple.xmfa') as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "mauve")
         self.assertEqual(len(alignments[0]), 2)
