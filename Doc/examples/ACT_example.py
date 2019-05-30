@@ -42,9 +42,9 @@ comparisons = [os.path.join(input_folder, file_a_vs_b)]
 # Create diagram with tracks, each with a feature set
 assert len(genomes) >= 2 and len(genomes) == len(comparisons) + 1
 gd_diagram = Diagram(name, track_size=0.35, circular=False)
-tracks = dict()
-feature_sets = dict()
-records = dict()
+tracks = {}
+feature_sets = {}
+records = {}
 for f, format in genomes:
     records[f] = SeqIO.read(f, format)
     tracks[f] = gd_diagram.new_track(1, name=f, start=0, end=len(records[f]),
