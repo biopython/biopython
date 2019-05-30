@@ -55,6 +55,12 @@ to conform to the ``SeqRecord`` interface. In this case, the parser will
 attempt to decode using ``utf-8`` and fall back to the system encoding if that
 fails. This change affects Python 3 only.
 
+``Bio.motifs.mast`` has been updated to parse XML output files from MAST over
+the plain-text output file. The goal of this change is to parse a more
+structured data source with minimal loss of functionality upon future MAST
+releases. Class structure remains the same plus an additional attribute
+``Record.strand_handling`` required for diagram parsing.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
