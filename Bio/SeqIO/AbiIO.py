@@ -391,7 +391,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # in the SMPL1 tag, but may be missing.
     sample_id = '<unknown id>'
 
-    raw = dict()
+    raw = {}
     for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
         key = tag_name + str(tag_number)
 
@@ -426,7 +426,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot['abif_raw'] = raw
 
     # fsa check
-    is_fsa_file = all([tn not in raw for tn in ('PBAS1', 'PBAS2')])
+    is_fsa_file = all(tn not in raw for tn in ('PBAS1', 'PBAS2'))
 
     if is_fsa_file:
         try:

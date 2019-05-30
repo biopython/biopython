@@ -198,7 +198,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                            e[2].get('width', 1.0) or 1.0
                            for e in G.edges(data=True)]
 
-    posn = dict((n, posi[int_labels[n]]) for n in G)
+    posn = {n: posi[int_labels[n]] for n in G}
     networkx.draw(G, posn, labels=labels, with_labels=True,
                   node_color=node_color, **kwargs)
 
@@ -246,11 +246,11 @@ def draw_ascii(tree, file=None, column_width=80):
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin) /
                                 float(max(depths.values())))
-        return dict((clade, int(blen * cols_per_branch_unit + 1.0))
-                    for clade, blen in depths.items())
+        return {clade: int(blen * cols_per_branch_unit + 1.0)
+                for clade, blen in depths.items()}
 
     def get_row_positions(tree):
-        positions = dict((taxon, 2 * idx) for idx, taxon in enumerate(taxa))
+        positions = {taxon: 2 * idx for idx, taxon in enumerate(taxa)}
 
         def calc_row(clade):
             for subclade in clade:
@@ -431,8 +431,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         """
         maxheight = tree.count_terminals()
         # Rows are defined by the tips
-        heights = dict((tip, maxheight - i)
-                       for i, tip in enumerate(reversed(tree.get_terminals())))
+        heights = {tip: maxheight - i
+                   for i, tip in enumerate(reversed(tree.get_terminals()))}
 
         # Internal nodes: place at midpoint of children
         def calc_row(clade):

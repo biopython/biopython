@@ -35,16 +35,16 @@ class TogoFields(unittest.TestCase):
     def test_databases(self):
         """Check supported databases."""
         dbs = set(TogoWS._get_entry_dbs())
-        expected = set(['nuccore', 'nucest', 'nucgss',
-                        'nucleotide', 'protein', 'gene',
-                        'homologene', 'snp',
-                        'mesh', 'pubmed',  # 'embl',
-                        'uniprot', 'uniparc', 'uniref100',
-                        'uniref90', 'uniref50', 'ddbj',
-                        'dad', 'pdb', 'compound', 'drug',
-                        'enzyme', 'genes', 'glycan',
-                        'orthology', 'reaction', 'module',
-                        'pathway'])
+        expected = {'nuccore', 'nucest', 'nucgss',
+                    'nucleotide', 'protein', 'gene',
+                    'homologene', 'snp',
+                    'mesh', 'pubmed',  # 'embl',
+                    'uniprot', 'uniparc', 'uniref100',
+                    'uniref90', 'uniref50', 'ddbj',
+                    'dad', 'pdb', 'compound', 'drug',
+                    'enzyme', 'genes', 'glycan',
+                    'orthology', 'reaction', 'module',
+                    'pathway'}
         self.assertTrue(dbs.issuperset(expected),
                         "Missing DB: %s" % ", ".join(sorted(expected.difference(dbs))))
 

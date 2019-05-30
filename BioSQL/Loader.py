@@ -912,7 +912,7 @@ class DatabaseLoader(object):
                           % feature.location_operator, BiopythonWarning)
         # This will be a list of length one for simple FeatureLocation:
         parts = feature.location.parts
-        if parts and set(loc.strand for loc in parts) == set([-1]):
+        if parts and {loc.strand for loc in parts} == {-1}:
             # To mimic prior behaviour of Biopython+BioSQL, reverse order
             parts = parts[::-1]
             # TODO - Check what BioPerl does; see also BioSeq.py code

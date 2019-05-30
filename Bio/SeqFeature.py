@@ -1172,7 +1172,7 @@ class CompoundLocation(object):
         # a join feature on the forward strand they all have strand +1.
         # However, we must also consider evil mixed strand examples like
         # this, join(complement(69611..69724),139856..140087,140625..140650)
-        if len(set(loc.strand for loc in self.parts)) == 1:
+        if len({loc.strand for loc in self.parts}) == 1:
             return self.parts[0].strand
         else:
             return None  # i.e. mixed strands

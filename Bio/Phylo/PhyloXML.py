@@ -829,8 +829,8 @@ class Events(PhyloElement):
     keys and deleting a key resets that attribute's value back to None.
     """
 
-    ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
-                   'mixed', 'unassigned'))
+    ok_type = {'transfer', 'fusion', 'speciation_or_duplication', 'other',
+               'mixed', 'unassigned'}
 
     def __init__(self, type=None, duplications=None, speciations=None,
                  losses=None, confidence=None):
@@ -1002,17 +1002,17 @@ class Property(PhyloElement):
     """
 
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
-    ok_applies_to = set(('phylogeny', 'clade', 'node', 'annotation',
-                         'parent_branch', 'other'))
-    ok_datatype = set(('xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
-                       'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
-                       'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
-                       'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
-                       'xsd:normalizedString', 'xsd:token', 'xsd:integer',
-                       'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
-                       'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
-                       'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
-                       'xsd:positiveInteger'))
+    ok_applies_to = {'phylogeny', 'clade', 'node', 'annotation',
+                     'parent_branch', 'other'}
+    ok_datatype = {'xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
+                   'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
+                   'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
+                   'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
+                   'xsd:normalizedString', 'xsd:token', 'xsd:integer',
+                   'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
+                   'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
+                   'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
+                   'xsd:positiveInteger'}
 
     def __init__(self, value, ref, applies_to, datatype,
                  unit=None, id_ref=None):
@@ -1237,8 +1237,8 @@ class Sequence(PhyloElement):
         """
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
-            return dict((key, val) for key, val in dct.items()
-                        if val is not None)
+            return {key: val for key, val in dct.items()
+                    if val is not None}
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
                            **clean_dict({
@@ -1309,8 +1309,8 @@ class SequenceRelation(PhyloElement):
 
     """
 
-    ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
-                   'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
+    ok_type = {'orthology', 'one_to_one_orthology', 'super_orthology',
+               'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'}
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
@@ -1355,16 +1355,16 @@ class Taxonomy(PhyloElement):
     """
 
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
-    ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
-                   'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
-                   'superdivision', 'division', 'subdivision', 'infradivision',
-                   'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
-                   'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
-                   'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
-                   'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
-                   'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
-                   'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
-                   'unknown', 'other'))
+    ok_rank = {'domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
+               'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
+               'superdivision', 'division', 'subdivision', 'infradivision',
+               'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
+               'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
+               'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
+               'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
+               'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
+               'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
+               'unknown', 'other'}
 
     def __init__(self,
                  # Attributes

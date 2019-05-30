@@ -45,8 +45,8 @@ class TestPhenoMicro(unittest.TestCase):
 
         times = p['measurements']['Hour']
         w = phenotype.phen_micro.WellRecord('A10',
-                                            signals=dict([(times[i], p['measurements']['A10'][i])
-                                                          for i in range(len(times))]))
+                                            signals={times[i]: p['measurements']['A10'][i]
+                                                     for i in range(len(times))})
 
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', OptimizeWarning)

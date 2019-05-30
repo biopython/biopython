@@ -90,7 +90,7 @@ class MafWriter(SequentialAlignmentWriter):
         if not isinstance(alignment, MultipleSeqAlignment):
             raise TypeError("Expected an alignment object")
 
-        if len(set([len(x) for x in alignment])) > 1:
+        if len({len(x) for x in alignment}) > 1:
             raise ValueError("Sequences must all be the same length")
 
         # We allow multiple sequences with the same IDs; for example, there may
@@ -227,7 +227,7 @@ def MafIterator(handle, seq_count=None, alphabet=single_letter_alphabet):
             annot_strings = line.strip().split()[1:]
             if len(annot_strings) != line.count("="):
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
-            annotations = dict([a_string.split("=") for a_string in annot_strings])
+            annotations = dict(a_string.split("=") for a_string in annot_strings)
         elif line.startswith("#"):
             # ignore comments
             pass
@@ -497,7 +497,7 @@ class MafIndex(object):
         # Keep track of what blocks have already been yielded
         # in order to avoid duplicating them
         # (see https://github.com/biopython/biopython/issues/1083)
-        yielded_rec_coords = set([])
+        yielded_rec_coords = set()
         # search for every exon
         for exonstart, exonend in zip(starts, ends):
             try:
@@ -587,7 +587,7 @@ class MafIndex(object):
         # keep track of the expected letter count
         # (sum of lengths of [start, end) segments,
         # where [start, end) half-open)
-        expected_letters = sum([end - start for start, end in zip(starts, ends)])
+        expected_letters = sum(end - start for start, end in zip(starts, ends))
 
         # if there's no alignment, return filler for the assembly of the length given
         if len(fetched) == 0:
@@ -595,8 +595,8 @@ class MafIndex(object):
                                                    id=self._target_seqname)])
 
         # find the union of all IDs in these alignments
-        all_seqnames = set(
-            [sequence.id for multiseq in fetched for sequence in multiseq])
+        all_seqnames = {
+            sequence.id for multiseq in fetched for sequence in multiseq}
 
         # split every record by base position
         # key: sequence name
@@ -605,7 +605,7 @@ class MafIndex(object):
         #        value: letter(s) (including letters
         #               aligned to the "-" preceding the letter
         #               at the position in the reference, if any)
-        split_by_position = dict([(seq_name, {}) for seq_name in all_seqnames])
+        split_by_position = {seq_name: {} for seq_name in all_seqnames}
 
         # keep track of what the total number of (unspliced) letters should be
         total_rec_length = 0
@@ -679,9 +679,9 @@ class MafIndex(object):
                               total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length
-        realpos_to_len = dict([(pos, len(gapped_fragment))
-                               for pos, gapped_fragment in split_by_position[self._target_seqname].items()
-                               if len(gapped_fragment) > 1])
+        realpos_to_len = {pos: len(gapped_fragment)
+                          for pos, gapped_fragment in split_by_position[self._target_seqname].items()
+                          if len(gapped_fragment) > 1}
 
         # splice together the exons
         subseq = {}

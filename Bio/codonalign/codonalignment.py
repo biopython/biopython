@@ -214,7 +214,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     for i in range(codon_num):
         uniq_codons = []
         for j in codon_lst:
-            uniq_codon = set(k[i] for k in j)
+            uniq_codon = {k[i] for k in j}
             uniq_codons.append(uniq_codon)
         codon_set.append(uniq_codons)
     syn_fix, nonsyn_fix, syn_poly, nonsyn_poly = 0, 0, 0, 0

@@ -369,7 +369,7 @@ def _retrieve_features(adaptor, primary_id):
             # Locations are typically in biological in order (see negative
             # strands below), but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            strands = set(l.strand for l in locs)
+            strands = {l.strand for l in locs}
             if len(strands) == 1 and -1 in strands:
                 # Evil hack time for backwards compatibility
                 # TODO - Check if BioPerl and (old) Biopython did the same,

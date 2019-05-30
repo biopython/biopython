@@ -60,10 +60,10 @@ class Motif(motifs.Motif, dict):
     For more information, see the TRANSFAC documentation.
     """
 
-    multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
+    multiple_value_keys = {'BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'}
     # These keys can occur multiple times for one motif
 
-    reference_keys = set(['RX', 'RA', 'RT', 'RL'])
+    reference_keys = {'RX', 'RA', 'RT', 'RL'}
     # These keys occur for references
 
 

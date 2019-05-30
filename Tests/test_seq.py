@@ -308,7 +308,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_add_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
-            self.s + dict()
+            self.s + {}
 
     def test_radd_method(self):
         self.assertEqual("TCAAAAGGATGCATCATGTCAAAAGGATGCATCATG",
@@ -321,7 +321,7 @@ class TestSeqStringMethods(unittest.TestCase):
 
     def test_radd_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
-            self.s.__radd__(dict())
+            self.s.__radd__({})
 
     def test_contains_method(self):
         self.assertIn("AAAA", self.s)
@@ -1414,7 +1414,7 @@ class TestTranslating(unittest.TestCase):
             self.assertEqual('J', Seq.translate(codon))
 
     def test_translation_with_bad_table_argument(self):
-        table = dict()
+        table = {}
         with self.assertRaises(ValueError):
             Seq.translate("GTGGCCATTGTAATGGGCCGC", table=table)
 

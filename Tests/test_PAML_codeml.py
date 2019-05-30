@@ -59,8 +59,8 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.Codeml, alignment=list())
-        self.cml.alignment = list()
+                          codeml.Codeml, alignment=[])
+        self.cml.alignment = []
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
@@ -76,9 +76,9 @@ class ModTest(unittest.TestCase):
 
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.Codeml, tree=list())
+                          codeml.Codeml, tree=[])
         self.cml.alignment = self.align_file
-        self.cml.tree = list()
+        self.cml.tree = []
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.cml.run)
@@ -95,7 +95,7 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.alignment = self.align_file
         self.cml.out_file = self.out_file
-        self.cml.working_dir = list()
+        self.cml.working_dir = []
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.cml.run)
 
@@ -135,7 +135,7 @@ class ModTest(unittest.TestCase):
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.run, ctl_file=list())
+                          self.cml.run, ctl_file=[])
 
     def testCtlFileExistsOnRun(self):
         self.cml.alignment = self.align_file
@@ -146,7 +146,7 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.cml.read_ctl_file, list())
+                          self.cml.read_ctl_file, [])
         self.assertRaises((AttributeError, KeyError),
                           self.cml.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError,
@@ -196,7 +196,7 @@ class ModTest(unittest.TestCase):
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          codeml.read, list())
+                          codeml.read, [])
 
     def testResultsExist(self):
         self.assertRaises((EnvironmentError, IOError),

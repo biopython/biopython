@@ -74,7 +74,7 @@ class SimpleEnzyme(unittest.TestCase):
         """Check for error during __init__."""
         with self.assertRaises(ValueError) as ve:
             Restriction.OneCut('bla-me', (Restriction.RestrictionType,),
-                               dict())
+                               {})
             self.assertIn('hyphen', str(ve.exception))
 
     def setUp(self):

@@ -92,7 +92,7 @@ class ProteinAnalysis(object):
         It is not recalculated upon subsequent calls.
         """
         if self.amino_acids_content is None:
-            prot_dic = dict((k, 0) for k in IUPACData.protein_letters)
+            prot_dic = {k: 0 for k in IUPACData.protein_letters}
             for aa in prot_dic:
                 prot_dic[aa] = self.sequence.count(aa)
 

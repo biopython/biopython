@@ -28,7 +28,7 @@ def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state (PRIVATE)."""
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
-    emissions = dict()
+    emissions = {}
     for state, symbol in emission_probs:
         try:
             emissions[state].append(symbol)
@@ -47,7 +47,7 @@ def _calculate_from_transitions(trans_probs):
     lists of destination states reachable from the source state via a
     transition.
     """
-    transitions = dict()
+    transitions = {}
     for from_state, to_state in trans_probs:
         try:
             transitions[from_state].append(to_state)
@@ -66,7 +66,7 @@ def _calculate_to_transitions(trans_probs):
     lists of source states from which the destination is reachable via a
     transition.
     """
-    transitions = dict()
+    transitions = {}
     for from_state, to_state in trans_probs:
         try:
             transitions[to_state].append(from_state)

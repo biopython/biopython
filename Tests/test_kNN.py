@@ -64,7 +64,7 @@ class TestKNN(unittest.TestCase):
     def test_calculate_model(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        self.assertEqual(model.classes, set([0, 1]))
+        self.assertEqual(model.classes, {0, 1})
         n = len(xs)
         for i in range(n):
             self.assertAlmostEqual(model.xs[i, 0], xs[i][0], places=4)

@@ -84,7 +84,7 @@ class WriterTests(unittest.TestCase):
         This has some general expected exceptions hard coded!
         """
         # TODO - Check the exception messages?
-        lengths = len(set(len(r) for r in records))
+        lengths = len({len(r) for r in records})
         if not records and format in ["stockholm", "phylip", "phylip-relaxed",
                                       "phylip-sequential", "nexus", "clustal",
                                       "sff", "mauve"]:

@@ -25,7 +25,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
         self.assertEqual(record.query_id, "gi|49176427|ref|NP_418280.3|")
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 212)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 212)
 
         alignment = alignments[0]
         self.assertEqual(alignment.title[:50], "gi|49176427|ref|NP_418280.3| component of Sec-inde")
@@ -1409,7 +1409,7 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
         self.assertEqual(len(alignments), 2)
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 2)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 2)
         self.assertEqual(alignments[0].title[:50], "gi|9950606|gb|AE004854.1| Pseudomonas aeruginosa P")
         self.assertEqual(alignments[0].length, 11884)
         self.assertEqual(len(alignments[0].hsps), 1)
@@ -1437,7 +1437,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 84)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 84)
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
@@ -1456,7 +1456,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 127)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 127)
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
@@ -1475,7 +1475,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 102)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 102)
         self.assertRaises(StopIteration, next, records)
         handle.close()
 
@@ -1497,7 +1497,7 @@ class TestNCBIXML(unittest.TestCase):
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
-        self.assertEqual(sum([len(a.hsps) for a in alignments]), 14)
+        self.assertEqual(sum(len(a.hsps) for a in alignments), 14)
         self.assertEqual(alignments[0].title[:50], "gi|151942244|gb|EDN60600.1| cytosolic iron-sulfur ")
         self.assertEqual(alignments[0].length, 330)
         self.assertEqual(len(alignments[0].hsps), 1)

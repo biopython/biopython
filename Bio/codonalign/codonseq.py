@@ -113,7 +113,7 @@ class CodonSeq(Seq):
 
     def get_codon(self, index):
         """Get the `index`-th codon from the sequence."""
-        if len(set(i % 3 for i in self.rf_table)) != 1:
+        if len({i % 3 for i in self.rf_table}) != 1:
             raise RuntimeError("frameshift detected. "
                                "CodonSeq object is not able to deal "
                                "with codon sequence with frameshift. "
@@ -590,7 +590,7 @@ def _lwl85(seq1, seq2, k, codon_table):
 def _get_codon_fold(codon_table):
     """Classify different position in a codon into different folds (PRIVATE)."""
     def find_fold_class(codon, forward_table):
-        base = set(['A', 'T', 'C', 'G'])
+        base = {'A', 'T', 'C', 'G'}
         fold = ''
         codon_base_lst = [i for i in codon]
         for i, b in enumerate(codon_base_lst):
@@ -710,7 +710,7 @@ def _yn00(seq1, seq2, k, codon_table):
     # count synonymous sites and non-synonymous sites
     for i in range(3):
         tot = sum(fcodon[i].values())
-        fcodon[i] = dict((j, k / tot) for j, k in fcodon[i].items())
+        fcodon[i] = {j: k / tot for j, k in fcodon[i].items()}
     pi = defaultdict(int)
     for i in list(codon_table.forward_table.keys()) + codon_table.stop_codons:
         if 'U' not in i:
@@ -1112,7 +1112,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
                 for c in i:
                     fcodon[c] += 1
         tot = sum(fcodon.values())
-        fcodon = dict((j, k / tot) for j, k in fcodon.items())
+        fcodon = {j: k / tot for j, k in fcodon.items()}
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
             if 'U' not in i:
                 pi[i] = fcodon[i[0]] * fcodon[i[1]] * fcodon[i[2]]
@@ -1128,7 +1128,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
                 fcodon[2][i[2]] += 1
         for i in range(3):
             tot = sum(fcodon[i].values())
-            fcodon[i] = dict((j, k / tot) for j, k in fcodon[i].items())
+            fcodon[i] = {j: k / tot for j, k in fcodon[i].items()}
         for i in list(codon_table.forward_table.keys()) + \
                 codon_table.stop_codons:
             if 'U' not in i:
@@ -1141,7 +1141,7 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
             if i != '---':
                 pi[i] += 1
         tot = sum(pi.values())
-        pi = dict((j, k / tot) for j, k in pi.items())
+        pi = {j: k / tot for j, k in pi.items()}
     return pi
 
 

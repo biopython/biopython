@@ -2229,7 +2229,7 @@ class RestrictionBatch(set):
 
         Letter code for the suppliers.
         """
-        supply = dict((k, v[0]) for k, v in suppliers_dict.items())
+        supply = {k: v[0] for k, v in suppliers_dict.items()}
         return supply
 
     @classmethod
@@ -2259,14 +2259,14 @@ class RestrictionBatch(set):
             else:
                 self.already_mapped = str(dna), linear
                 fseq = FormattedSeq(dna, linear)
-                self.mapping = dict((x, x.search(fseq)) for x in self)
+                self.mapping = {x: x.search(fseq) for x in self}
                 return self.mapping
         elif isinstance(dna, FormattedSeq):
             if (str(dna), dna.linear) == self.already_mapped:
                 return self.mapping
             else:
                 self.already_mapped = str(dna), dna.linear
-                self.mapping = dict((x, x.search(dna)) for x in self)
+                self.mapping = {x: x.search(dna) for x in self}
                 return self.mapping
         raise TypeError("Expected Seq or MutableSeq instance, got %s instead"
                         % type(dna))
@@ -2320,7 +2320,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         Keep only the results for which the enzymes is in wanted set.
         """
         # It seems that this method is not used in the whole class!
-        return dict((k, v) for k, v in self.mapping.items() if k in wanted)
+        return {k: v for k, v in self.mapping.items() if k in wanted}
 
     def _boundaries(self, start, end):
         """Set boundaries to correct values (PRIVATE).
@@ -2430,49 +2430,49 @@ class Analysis(RestrictionBatch, PrintFormat):
         """Return only cuts that have blunt ends."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if k.is_blunt())
+        return {k: v for k, v in dct.items() if k.is_blunt()}
 
     def overhang5(self, dct=None):
         """Return only cuts that have 5' overhangs."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if k.is_5overhang())
+        return {k: v for k, v in dct.items() if k.is_5overhang()}
 
     def overhang3(self, dct=None):
         """Return only cuts that have 3' overhangs."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if k.is_3overhang())
+        return {k: v for k, v in dct.items() if k.is_3overhang()}
 
     def defined(self, dct=None):
         """Return only results from enzymes that produce defined overhangs."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if k.is_defined())
+        return {k: v for k, v in dct.items() if k.is_defined()}
 
     def with_sites(self, dct=None):
         """Return only results from enzyme with at least one cut."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if v)
+        return {k: v for k, v in dct.items() if v}
 
     def without_site(self, dct=None):
         """Return only results from enzymes that don't cut the sequence."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if not v)
+        return {k: v for k, v in dct.items() if not v}
 
     def with_N_sites(self, N, dct=None):
         """Return only results from enzymes that cut the sequence N times."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items()if len(v) == N)
+        return {k: v for k, v in dct.items() if len(v) == N}
 
     def with_number_list(self, list, dct=None):
         """Return only results from enzymes that cut (x,y,z,...) times."""
         if not dct:
             dct = self.mapping
-        return dict((k, v) for k, v in dct.items() if len(v) in list)
+        return {k: v for k, v in dct.items() if len(v) in list}
 
     def with_name(self, names, dct=None):
         """Return only results from enzymes which names are listed."""
@@ -2483,14 +2483,14 @@ class Analysis(RestrictionBatch, PrintFormat):
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence, self.linear)
-        return dict((n, dct[n]) for n in names if n in dct)
+        return {n: dct[n] for n in names if n in dct}
 
     def with_site_size(self, site_size, dct=None):
         """Return only results form enzymes with a given site size."""
         sites = [name for name in self if name.size == site_size]
         if not dct:
             return RestrictionBatch(sites).search(self.sequence)
-        return dict((k, v) for k, v in dct.items() if k in site_size)
+        return {k: v for k, v in dct.items() if k in site_size}
 
     def only_between(self, start, end, dct=None):
         """Return only results from enzymes that only cut within start, end."""

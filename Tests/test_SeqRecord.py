@@ -82,27 +82,27 @@ class SeqRecordCreation(unittest.TestCase):
 
     def test_valid_id(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), id=dict())
+            SeqRecord(Seq("ACGT", generic_dna), id={})
 
     def test_valid_name(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), name=dict())
+            SeqRecord(Seq("ACGT", generic_dna), name={})
 
     def test_valid_description(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), description=dict())
+            SeqRecord(Seq("ACGT", generic_dna), description={})
 
     def test_valid_dbxrefs(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), dbxrefs=dict())
+            SeqRecord(Seq("ACGT", generic_dna), dbxrefs={})
 
     def test_valid_annotations(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), annotations=list())
+            SeqRecord(Seq("ACGT", generic_dna), annotations=[])
 
     def test_valid_features(self):
         with self.assertRaises(TypeError):
-            SeqRecord(Seq("ACGT", generic_dna), features=dict())
+            SeqRecord(Seq("ACGT", generic_dna), features={})
 
 
 class SeqRecordMethods(unittest.TestCase):

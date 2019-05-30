@@ -47,8 +47,8 @@ class ModTest(unittest.TestCase):
 
     def testAlignmentFileIsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          yn00.Yn00, alignment=list())
-        self.yn00.alignment = list()
+                          yn00.Yn00, alignment=[])
+        self.yn00.alignment = []
         self.yn00.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.yn00.run)
@@ -63,7 +63,7 @@ class ModTest(unittest.TestCase):
     def testWorkingDirValid(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.yn00.working_dir = list()
+        self.yn00.working_dir = []
         self.assertRaises((AttributeError, TypeError, OSError),
                           self.yn00.run)
 
@@ -93,7 +93,7 @@ class ModTest(unittest.TestCase):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.run, ctl_file=list())
+                          self.yn00.run, ctl_file=[])
 
     def testCtlFileExistsOnRun(self):
         self.yn00.alignment = self.align_file
@@ -103,7 +103,7 @@ class ModTest(unittest.TestCase):
 
     def testCtlFileValidOnRead(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          self.yn00.read_ctl_file, list())
+                          self.yn00.read_ctl_file, [])
         self.assertRaises((AttributeError, KeyError),
                           self.yn00.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError,
@@ -122,7 +122,7 @@ class ModTest(unittest.TestCase):
 
     def testResultsValid(self):
         self.assertRaises((AttributeError, TypeError, OSError),
-                          yn00.read, list())
+                          yn00.read, [])
 
     def testResultsExist(self):
         self.assertRaises((EnvironmentError, IOError),
@@ -146,9 +146,9 @@ class ModTest(unittest.TestCase):
             # Expect seven taxa...
             self.assertEqual(len(results), 7)
             # ...each of which is compared to the other six.
-            self.assertEqual(set([len(v) for v in results.values()]), set([6]))
+            self.assertEqual({len(v) for v in results.values()}, {6})
             # ...each of which has five measures.
-            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+            self.assertEqual({len(v) for taxa in results.values() for v in taxa.values()}, {5})
 
     def testParseDottedNames(self):
         pattern = os.path.join(self.results_dir, "yn00", 'yn00_dotted-*')
@@ -157,9 +157,9 @@ class ModTest(unittest.TestCase):
             # Expect seven taxa...
             self.assertEqual(len(results), 5)
             # ...each of which is compared to the other six.
-            self.assertEqual(set([len(v) for v in results.values()]), set([4]))
+            self.assertEqual({len(v) for v in results.values()}, {4})
             # ...each of which has five measures.
-            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+            self.assertEqual({len(v) for taxa in results.values() for v in taxa.values()}, {5})
             self.assertEqual(len(results["Homo.sapie"]), 4)
             self.assertEqual(len(results["Homo.sapie"]["Pan.troglo"]), 5)
 
@@ -170,9 +170,9 @@ class ModTest(unittest.TestCase):
             # Expect seven taxa...
             self.assertEqual(len(results), 7)
             # ...each of which is compared to the other six.
-            self.assertEqual(set([len(v) for v in results.values()]), set([6]))
+            self.assertEqual({len(v) for v in results.values()}, {6})
             # ...each of which has five measures.
-            self.assertEqual(set([len(v) for taxa in results.values() for v in taxa.values()]), set([5]))
+            self.assertEqual({len(v) for taxa in results.values() for v in taxa.values()}, {5})
 
 
 if __name__ == "__main__":

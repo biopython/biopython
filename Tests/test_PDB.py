@@ -538,8 +538,8 @@ class ParseTest(unittest.TestCase):
             io.save(filename)
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename, 'rU') as handle:
-                record_set = set(l[0:6] for l in handle)
-            record_set -= set(('ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'TER   ', 'END\n', 'END   '))
+                record_set = {l[0:6] for l in handle}
+            record_set -= {'ATOM  ', 'HETATM', 'MODEL ', 'ENDMDL', 'TER\n', 'TER   ', 'END\n', 'END   '}
             self.assertEqual(record_set, set())
         finally:
             os.remove(filename)
@@ -1197,18 +1197,18 @@ class Atom_Element(unittest.TestCase):
             return Atom.Atom(fullname.strip(), None, None, None, None,
                              fullname, None).element
 
-        pdb_elements = dict(
-            H=(' H  ', ' HA ', ' HB ', ' HD1', ' HD2', ' HE ', ' HE1', ' HE2',
-               ' HE3', ' HG ', ' HG1', ' HH ', ' HH2', ' HZ ', ' HZ2', ' HZ3',
-               '1H  ', '1HA ', '1HB ', '1HD ', '1HD1', '1HD2', '1HE ', '1HE2',
-               '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
-               '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
-               '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
-               '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21'),
-            O=(' OH ',),  # noqa: E741
-            C=(' CH2',),
-            N=(' NH1', ' NH2'),
-        )
+        pdb_elements = {
+            'H': (' H  ', ' HA ', ' HB ', ' HD1', ' HD2', ' HE ', ' HE1', ' HE2',
+                  ' HE3', ' HG ', ' HG1', ' HH ', ' HH2', ' HZ ', ' HZ2', ' HZ3',
+                  '1H  ', '1HA ', '1HB ', '1HD ', '1HD1', '1HD2', '1HE ', '1HE2',
+                  '1HG ', '1HG1', '1HG2', '1HH1', '1HH2', '1HZ ', '2H  ', '2HA ',
+                  '2HB ', '2HD ', '2HD1', '2HD2', '2HE ', '2HE2', '2HG ', '2HG1',
+                  '2HG2', '2HH1', '2HH2', '2HZ ', '3H  ', '3HB ', '3HD1', '3HD2',
+                  '3HE ', '3HG1', '3HG2', '3HZ ', 'HE21'),
+            'O': (' OH ',),  # noqa: E741
+            'C': (' CH2',),
+            'N': (' NH1', ' NH2')
+        }
 
         for element, atom_names in pdb_elements.items():
             for fullname in atom_names:
@@ -1582,7 +1582,7 @@ class DsspTests(unittest.TestCase):
         """Test parsing of DSSP hydrogen bond information."""
         dssp, keys = make_dssp_dict("PDB/2BEG.dssp")
 
-        dssp_indices = set(v[5] for v in dssp.values())
+        dssp_indices = {v[5] for v in dssp.values()}
         hb_indices = set()
 
         # The integers preceding each hydrogen bond energy (kcal/mol) in the
@@ -1592,8 +1592,8 @@ class DsspTests(unittest.TestCase):
         # that actual h-bonds are typically determined by an energetic
         # threshold.
         for val in dssp.values():
-            hb_indices |= set(
-                (val[5] + x) for x in (val[6], val[8], val[10], val[12]))
+            hb_indices |= {
+                val[5] + x for x in (val[6], val[8], val[10], val[12])}
 
         # Check if all h-bond partner indices were successfully parsed.
         self.assertEqual((dssp_indices & hb_indices), hb_indices)

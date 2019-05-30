@@ -95,7 +95,7 @@ class TestBuildAndIO(unittest.TestCase):
                 nucl = SeqIO.parse(i[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
                 prot = AlignIO.read(i[0][1], 'clustal', alphabet=IUPAC.protein)
                 with open(i[0][2]) as handle:
-                    id = dict((i.split()[0], i.split()[1]) for i in handle)
+                    id = {i.split()[0]: i.split()[1] for i in handle}
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
                     caln = codonalign.build(prot, nucl, corr_dict=id, alphabet=codonalign.default_codon_alphabet)
@@ -161,7 +161,7 @@ class Test_dn_ds(unittest.TestCase):
         nucl = SeqIO.parse(TEST_ALIGN_FILE6[0][0], 'fasta', alphabet=IUPAC.IUPACUnambiguousDNA())
         prot = AlignIO.read(TEST_ALIGN_FILE6[0][1], 'clustal', alphabet=IUPAC.protein)
         with open(TEST_ALIGN_FILE6[0][2]) as handle:
-            id_corr = dict((i.split()[0], i.split()[1]) for i in handle)
+            id_corr = {i.split()[0]: i.split()[1] for i in handle}
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', BiopythonWarning)
             aln = codonalign.build(prot, nucl, corr_dict=id_corr, alphabet=codonalign.default_codon_alphabet)

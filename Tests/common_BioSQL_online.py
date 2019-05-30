@@ -108,7 +108,7 @@ class TaxonomyTest(unittest.TestCase):
         values = set()
         for row in rows:
             values.add(row[0])
-        self.assertEqual(set([3704, 3711, 3708, 3702]), set(values))
+        self.assertEqual({3704, 3711, 3708, 3702}, set(values))
 
     def test_load_database_with_tax_lookup(self):
         """Load SeqRecord objects and fetch the taxonomy information from NCBI."""

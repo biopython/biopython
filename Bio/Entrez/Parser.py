@@ -790,9 +790,9 @@ class DataHandler(object):
                         expat.model.XML_CTYPE_EMPTY):
             if model[1] == expat.model.XML_CQUANT_REP:
                 children = model[3]
-                allowed_tags = frozenset([child[2] for child in children])
+                allowed_tags = frozenset(child[2] for child in children)
             else:
-                allowed_tags = frozenset([])
+                allowed_tags = frozenset()
             self.strings[name] = allowed_tags
             return
         # List-type elements
@@ -803,7 +803,7 @@ class DataHandler(object):
             children = model[3]
             if model[0] == expat.model.XML_CTYPE_SEQ:
                 assert len(children) == 1
-            allowed_tags = frozenset([child[2] for child in children])
+            allowed_tags = frozenset(child[2] for child in children)
             self.lists[name] = allowed_tags
             return
         # This is the tricky case. Check which keys can occur multiple

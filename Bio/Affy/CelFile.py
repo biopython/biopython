@@ -164,8 +164,8 @@ def read_v4(f):
     # http://www.affymetrix.com/estore/support/developer/powertools/changelog/gcos-agcc/cel.html.affx
     record = Record()
     preHeaders = ["magic", "version", "columns", "rows", "cellNo", "headerLen"]
-    preHeadersMap = dict()
-    headersMap = dict()
+    preHeadersMap = {}
+    headersMap = {}
 
     # load pre-headers
     try:

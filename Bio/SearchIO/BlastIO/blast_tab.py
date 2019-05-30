@@ -144,8 +144,8 @@ _DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch',
                    'evalue', 'bitscore']
 # one field from each of the following sets must exist in order for the
 # parser to work
-_MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
-_MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver', 'sallseqid'])
+_MIN_QUERY_FIELDS = {'qseqid', 'qacc', 'qaccver'}
+_MIN_HIT_FIELDS = {'sseqid', 'sacc', 'saccver', 'sallseqid'}
 
 # simple function to create BLAST HSP attributes that may be computed if
 # other certain attributes are present
@@ -708,7 +708,7 @@ class BlastTabWriter(object):
 
     def _build_rows(self, qresult):
         """Return a string containing tabular rows of the QueryResult object (PRIVATE)."""
-        coordinates = set(['qstart', 'qend', 'sstart', 'send'])
+        coordinates = {'qstart', 'qend', 'sstart', 'send'}
         qresult_lines = ''
         for hit in qresult:
             for hsp in hit:
@@ -839,7 +839,7 @@ class BlastTabWriter(object):
         comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
-        inv_field_map = dict((v, k) for k, v in _LONG_SHORT_MAP.items())
+        inv_field_map = {v: k for k, v in _LONG_SHORT_MAP.items()}
 
         # try to anticipate qress without version
         if not hasattr(qres, 'version'):

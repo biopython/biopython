@@ -305,8 +305,8 @@ class Parser(object):
 
     def read(self):
         """Parse the phyloXML file and create a single Phyloxml object."""
-        phyloxml = PX.Phyloxml(dict((_local(key), val)
-                                    for key, val in self.root.items()))
+        phyloxml = PX.Phyloxml({_local(key): val
+                                for key, val in self.root.items()})
         other_depth = 0
         for event, elem in self.context:
             namespace, localtag = _split_namespace(elem.tag)

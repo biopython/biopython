@@ -360,9 +360,9 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "startswith"):
                 # e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start + 2] for start
-                          in range(0, len(example1) - 2, 3)])
-            subs_str = tuple([str(s) for s in subs])
+            subs = tuple(example1[start:start + 2] for start
+                         in range(0, len(example1) - 2, 3))
+            subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs))
@@ -383,9 +383,9 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "endswith"):
                 # e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start + 2] for start
-                          in range(0, len(example1) - 2, 3)])
-            subs_str = tuple([str(s) for s in subs])
+            subs = tuple(example1[start:start + 2] for start
+                         in range(0, len(example1) - 2, 3))
+            subs_str = tuple(str(s) for s in subs)
 
             self.assertEqual(str(example1).endswith(subs_str),
                              example1.endswith(subs))
@@ -707,10 +707,10 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set(str(Seq(a + b + c).translate())
-                                     for a in ambig_values[c1]
-                                     for b in ambig_values[c2]
-                                     for c in ambig_values[c3])
+                        values = {str(Seq(a + b + c).translate())
+                                  for a in ambig_values[c1]
+                                  for b in ambig_values[c2]
+                                  for c in ambig_values[c3]}
                         t = str(Seq(c1 + c2 + c3).translate())
                         if t == "*":
                             self.assertEqual(values, set("*"))
