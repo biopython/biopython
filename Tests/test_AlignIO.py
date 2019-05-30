@@ -401,7 +401,7 @@ class TestAlignIO_reading(unittest.TestCase):
                     record = next(seq_iterator)
                 except StopIteration:
                     break
-                assert record is not None, "Should raise StopIteration not return None"
+                self.assertIsNotNone(record)
                 alignments3.append(record)
         
             # Try a mixture of next() and list (a torture test!)
@@ -415,7 +415,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 alignments4.extend(list(seq_iterator))
             else:
                 alignments4 = []
-            assert len(alignments4) == t_count
+            self.assertEqual(len(alignments4), t_count)
         
             # Try a mixture of next() and for loop (a torture test!)
             seq_iterator = AlignIO.parse(t_filename, format=t_format)
@@ -429,13 +429,13 @@ class TestAlignIO_reading(unittest.TestCase):
                     alignments5.append(record)
             else:
                 alignments5 = []
-            assert len(alignments5) == t_count
+            self.assertEqual(len(alignments5), t_count)
         
             # Check Bio.AlignIO.read(...)
             if t_count == 1:
                 with open(t_filename) as handle:
                     alignment = AlignIO.read(handle, format=t_format)
-                assert isinstance(alignment, MultipleSeqAlignment)
+                self.assertIsInstance(alignment, MultipleSeqAlignment)
             else:
                 try:
                     with open(t_filename) as handle:
@@ -477,7 +477,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 handle = StringIO()
                 handle.write(data + "\n\n" + data + "\n\n" + data)
                 handle.seek(0)
-                assert len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))) == 3
+                self.assertEqual(len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))), 3)
                 handle.close()
         
             # Some alignment file formats have magic characters which mean
