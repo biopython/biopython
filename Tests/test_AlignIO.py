@@ -219,7 +219,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
 
 # Main tests...
-for (t_format, t_per, t_count, t_filename) in test_files:
+for (t_format, t_per, t_count, t_filename) in test_files[:0]:
     print("Testing reading %s format file %s with %i alignments"
           % (t_format, t_filename, t_count))
     assert os.path.isfile(t_filename), t_filename
@@ -436,26 +436,6 @@ class TestAlignIO_reading(unittest.TestCase):
                 # Following example is also used in test_Nexus.py
             ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
             ("nexus", 2, 1, 'Nexus/codonposset.nex'),
-            ("stockholm", 2, 1, 'Stockholm/simple.sth'),
-            ("stockholm", 6, 1, 'Stockholm/funny.sth'),
-            ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
-            ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
-            ("phylip", 10, 1, 'Phylip/hennigian.phy'),
-            ("phylip", 10, 1, 'Phylip/horses.phy'),
-            ("phylip", 10, 1, 'Phylip/random.phy'),
-            ("phylip", 3, 1, 'Phylip/interlaced.phy'),
-            ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
-            ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
-            ("phylip-sequential", 3, 1, 'Phylip/sequential.phy'),
-            ("phylip-sequential", 4, 1, 'Phylip/sequential2.phy'),
-            ("emboss", 4, 1, 'Emboss/alignret.txt'),
-            ("emboss", 2, 5, 'Emboss/needle.txt'),
-            ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
-            ("emboss", 2, 1, 'Emboss/water.txt'),
-            ("emboss", 2, 1, 'Emboss/water2.txt'),
-            ("emboss", 2, 1, 'Emboss/matcher_simple.txt'),
-            ("emboss", 2, 5, 'Emboss/matcher_pair.txt'),
-            ("emboss", 2, 1, 'Emboss/emboss_pair_aln_full_blank_line.txt'),
         ]
 
         for (t_format, t_per, t_count, t_filename) in test_files:
@@ -565,10 +545,1373 @@ class TestAlignIO_reading(unittest.TestCase):
             alignments.reverse()
             check_simple_write_read(alignments)
 
+    def test_reading_alignments_stockholm(self):
+        path = 'Stockholm/simple.sth'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="stockholm"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="stockholm"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="stockholm")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 104)
+        self.assertEqual(alignment_summary(alignment), """\
+  UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
+  AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1
+  .................<<<<<<<<...<<<<<<<....... secondary_structure""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="stockholm", seq_count=2))), 3)
+        handle.close()
+        path = 'Stockholm/funny.sth'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="stockholm"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 6)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="stockholm"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="stockholm")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="stockholm")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 6)
+        self.assertEqual(alignment.get_alignment_length(), 43)
+        self.assertEqual(alignment_summary(alignment), """\
+  MMMEEE alignment column 0
+  TQIVVV alignment column 1
+  CHEMMM alignment column 2
+  RVALLL alignment column 3
+  ASDTTT alignment column 4
+  |||||| ...
+  SYSEEE alignment column 42""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="stockholm", seq_count=6))), 3)
+        handle.close()
+        
+    def test_reading_alignments_phylip(self):
+        path = 'Phylip/reference_dna.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 6)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 6)
+        self.assertEqual(alignments[0].get_alignment_length(), 13)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  CCTTCG alignment column 0
+  GGAAAG alignment column 1
+  ATAAAC alignment column 2
+  TTTTAA alignment column 3
+  GAGGAG alignment column 4
+  |||||| ...
+  CTTTTC alignment column 12""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=6))), 3)
+        handle.close()
+        path = 'Phylip/reference_dna2.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 6)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 6)
+        self.assertEqual(alignments[0].get_alignment_length(), 39)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  CCTTCG alignment column 0
+  GGAAAG alignment column 1
+  ATAAAC alignment column 2
+  TTTTAA alignment column 3
+  GAGGAG alignment column 4
+  |||||| ...
+  CTTTTC alignment column 38""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=6))), 3)
+        handle.close()
+        path = 'Phylip/hennigian.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 10)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 10)
+        self.assertEqual(alignments[0].get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  CCCCCAAAAA alignment column 0
+  AAAAACCCCC alignment column 1
+  CCCAAAAAAA alignment column 2
+  AAACCAAAAA alignment column 3
+  CCAAAAAAAA alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
+        handle.close()
+        path = 'Phylip/horses.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 10)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 10)
+        self.assertEqual(alignments[0].get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  AACCCCCCCC alignment column 0
+  AAAACCCCCC alignment column 1
+  AAAAAAAAAC alignment column 2
+  ACAAAAAAAA alignment column 3
+  ACACCCCCCC alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
+        handle.close()
+        path = 'Phylip/random.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 10)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 10)
+        self.assertEqual(alignments[0].get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  CAAAACAAAC alignment column 0
+  AACAACCACC alignment column 1
+  CAAAACAAAA alignment column 2
+  ACAACACACA alignment column 3
+  CCAAAACCAA alignment column 4
+  |||||||||| ...
+  AAAAAAAAAA alignment column 39""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
+        handle.close()
+        path = 'Phylip/interlaced.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 3)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 3)
+        self.assertEqual(alignments[0].get_alignment_length(), 384)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
+  MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
+  ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=3))), 3)
+        handle.close()
+        path = 'Phylip/interlaced2.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 4)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 4)
+        self.assertEqual(alignments[0].get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+  TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
+  TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=4))), 3)
+        handle.close()
+        path = 'ExtendedPhylip/primates.phyx'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip-relaxed"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 12)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip-relaxed"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip-relaxed")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-relaxed")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-relaxed")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip-relaxed")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 12)
+        self.assertEqual(alignments[0].get_alignment_length(), 898)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  AAAAAAAAAAAA alignment column 0
+  AAAAAAAAAAAA alignment column 1
+  GGGGGGGGGGGG alignment column 2
+  TCCCCCCCCCCC alignment column 3
+  TTTTTTTTTTTT alignment column 4
+  |||||||||||| ...
+  TTTTTTTTTTTT alignment column 897""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-relaxed", seq_count=12))), 3)
+        handle.close()
+        path = 'Phylip/sequential.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip-sequential"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 3)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip-sequential"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip-sequential")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 3)
+        self.assertEqual(alignments[0].get_alignment_length(), 384)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
+  MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
+  ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-sequential", seq_count=3))), 3)
+        handle.close()
+        path = 'Phylip/sequential2.phy'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="phylip-sequential"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 4)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="phylip-sequential"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="phylip-sequential")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 4)
+        self.assertEqual(alignments[0].get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+  TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
+  TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-sequential", seq_count=4))), 3)
+        handle.close()
+        
+    def test_reading_alignments_emboss(self):
+        path = 'Emboss/alignret.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 4)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        alignment = alignments[0]
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(alignment.get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignment), """\
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
+  TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
+  TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        path = 'Emboss/needle.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 5)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 5)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Check Bio.AlignIO.read(...)
+        self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 124)
+        self.assertEqual(len(alignments[1]), 2)
+        self.assertEqual(alignments[1].get_alignment_length(), 119)
+        self.assertEqual(len(alignments[2]), 2)
+        self.assertEqual(alignments[2].get_alignment_length(), 120)
+        self.assertEqual(len(alignments[3]), 2)
+        self.assertEqual(alignments[3].get_alignment_length(), 118)
+        self.assertEqual(len(alignments[4]), 2)
+        self.assertEqual(alignments[4].get_alignment_length(), 125)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  KILIVDD----QYGIRILLNEVFNKEGYQTFQAANG...--- ref_rec
+  -VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDG...GET gi|94968718|receiver""")
+        self.assertEqual(alignment_summary(alignments[1]), """\
+  KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...--- ref_rec
+  -ILIVDDEANTLASLSRAFRLAGHEATVCDNAVRAL...LKR gi|94968761|receiver""")
+        self.assertEqual(alignment_summary(alignments[2]), """\
+  -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQA...--- ref_rec
+  LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAA...HKE gi|94967506|receiver""")
+        self.assertEqual(alignment_summary(alignments[3]), """\
+  KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...DAV ref_rec
+  -VLLVEDEEALRAAAGDFLETRGYKIMTARDGTEAL...EVL gi|94970045|receiver""")
+        self.assertEqual(alignment_summary(alignments[4]), """\
+  KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQAL...--- ref_rec
+  TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEAL...KRQ gi|94970041|receiver""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        path = 'Emboss/needle_asis.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 3653)
+        self.assertEqual(alignment_summary(alignment), """\
+  TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTAT...GAA asis
+  ------------------------------------...GAA asis""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        path = 'Emboss/water.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 2)
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
+  TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        path = 'Emboss/water2.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignments[0].get_alignment_length(), 18)
+        self.assertEqual(alignment_summary(alignments[0]), """\
+  CGTTTGAGT-CTGGGATG asis
+  CGTTTGAGTACTGGGATG asis""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        path = 'Emboss/matcher_simple.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 16)
+        self.assertEqual(alignment_summary(alignment), """\
+  GPPPQSPDENRAGESS AF069992_1
+  GVPPEEAGAAVAAESS CAA85685.1""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        path ='Emboss/matcher_pair.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 5)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 5)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 5)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
+
+        self.assertEquals(len(alignments[0]), 2)
+        self.assertEquals(alignments[0].get_alignment_length(), 145)
+        self.assertEquals(len(alignments[1]), 2)
+        self.assertEquals(alignments[1].get_alignment_length(), 13)
+        self.assertEquals(len(alignments[2]), 2)
+        self.assertEquals(alignments[2].get_alignment_length(), 18)
+        self.assertEquals(len(alignments[3]), 2)
+        self.assertEquals(alignments[3].get_alignment_length(), 10)
+        self.assertEquals(len(alignments[4]), 2)
+        self.assertEquals(alignments[4].get_alignment_length(), 10)
+        self.assertEquals(alignment_summary(alignments[0]), """\
+  LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFP...SKY HBA_HUMAN
+  LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYP...HKY HBB_HUMAN""")
+        self.assertEquals(alignment_summary(alignments[1]), """\
+  KKVADALTNAVAH HBA_HUMAN
+  QKVVAGVANALAH HBB_HUMAN""")
+        self.assertEquals(alignment_summary(alignments[2]), """\
+  KLRVDPVNFKLLSHCLLV HBA_HUMAN
+  KVNVDEVGGEALGRLLVV HBB_HUMAN""")
+        self.assertEquals(alignment_summary(alignments[3]), """\
+  LSALSDLHAH HBA_HUMAN
+  LGAFSDGLAH HBB_HUMAN""")
+        self.assertEquals(alignment_summary(alignments[4]), """\
+  VKAAWGKVGA HBA_HUMAN
+  VQAAYQKVVA HBB_HUMAN""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        # Some alignment file formats have magic characters which mean
+        # use the letter in this position in the first sequence.
+        # They should all have been converted by the parser, but if
+        # not reversing the record order might expose an error.  Maybe.
+        alignments.reverse()
+        check_simple_write_read(alignments)
+        path = 'Emboss/emboss_pair_aln_full_blank_line.txt'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="emboss"))
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="emboss"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="emboss")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="emboss")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(alignment.get_alignment_length(), 1450)
+        self.assertEqual(alignment_summary(alignment), """\
+  GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCC...AAA hg38_chrX_131691529_131830643_47210_48660
+  G--------------------------TTCAAGGCC...AAA mm10_chrX_50555743_50635321_27140_27743""")
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+
     def test_reading_alignments_fasta_m10(self):
         with open('Fasta/output001.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 4)
+        self.assertEqual(len(alignments), 4)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -635,7 +1978,7 @@ class TestAlignIO_reading(unittest.TestCase):
 
         with open('Fasta/output002.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 6)
+        self.assertEqual(len(alignments), 6)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -701,7 +2044,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open('Fasta/output003.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 3)
+        self.assertEqual(len(alignments), 3)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -761,7 +2104,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open('Fasta/output004.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments), 1)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -812,7 +2155,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open('Fasta/output005.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments), 1)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -863,7 +2206,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open('Fasta/output006.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments), 1)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -915,7 +2258,7 @@ class TestAlignIO_reading(unittest.TestCase):
 
         with open('Fasta/output007.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 9)
+        self.assertEqual(len(alignments), 9)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -980,7 +2323,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open('Fasta/output008.m10', "r") as handle:
             alignments = list(AlignIO.parse(handle, format='fasta-m10'))
-            self.assertEqual(len(alignments), 12)
+        self.assertEqual(len(alignments), 12)
         for alignment in alignments:
             self.assertEqual(len(alignment), 2)
         alignments = []
@@ -1047,8 +2390,8 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_alignments_ig(self):
         with open('IntelliGenetics/VIF_mase-pro.txt', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="ig"))
-            self.assertEqual(len(alignments), 1)
-            self.assertEqual(len(alignments[0]), 16)
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 16)
         alignments = []
         for record in AlignIO.parse('IntelliGenetics/VIF_mase-pro.txt', format="ig"):
             alignments.append(record)
@@ -1109,8 +2452,8 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_alignments_pir(self):
         with open('NBRF/clustalw.pir', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="pir"))
-            self.assertEqual(len(alignments), 1)
-            self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments[0]), 2)
     
         # Try using the iterator with a for loop and a filename not handle
         alignments = []
@@ -1172,7 +2515,7 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_alignments_maf(self):
         with open('MAF/humor.maf', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="maf"))
-            self.assertEqual(len(alignments), 2)
+        self.assertEqual(len(alignments), 2)
         alignments = []
         for record in AlignIO.parse('MAF/humor.maf', format="maf"):
             alignments.append(record)
@@ -1224,7 +2567,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open("MAF/bug2453.maf", "r") as handle:
             alignments = list(AlignIO.parse(handle, format="maf"))
-            self.assertEqual(len(alignments), 3)
+        self.assertEqual(len(alignments), 3)
         alignments = []
         for record in AlignIO.parse("MAF/bug2453.maf", format="maf"):
             alignments.append(record)
@@ -1290,7 +2633,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open("MAF/ucsc_test.maf", "r") as handle:
             alignments = list(AlignIO.parse(handle, format="maf"))
-            self.assertEqual(len(alignments), 3)
+        self.assertEqual(len(alignments), 3)
         alignments = []
         for record in AlignIO.parse("MAF/ucsc_test.maf", format="maf"):
             alignments.append(record)
@@ -1358,7 +2701,7 @@ class TestAlignIO_reading(unittest.TestCase):
         check_simple_write_read(alignments)
         with open("MAF/ucsc_mm9_chr10.maf", "r") as handle:
             alignments = list(AlignIO.parse(handle, format="maf"))
-            self.assertEqual(len(alignments), 48)
+        self.assertEqual(len(alignments), 48)
         alignments = []
         for record in AlignIO.parse("MAF/ucsc_mm9_chr10.maf", format="maf"):
             alignments.append(record)
@@ -1417,7 +2760,7 @@ class TestAlignIO_reading(unittest.TestCase):
   TGGGAT alignment column 4
   |||||| ...
   tTTTT- alignment column 45""")
-        summary = AlignInfo.SummaryInfo(alignment)
+        summary = AlignInfo.SummaryInfo(alignments[47])
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
@@ -1431,7 +2774,7 @@ class TestAlignIO_reading(unittest.TestCase):
     def test_reading_alignments_mauve(self):
         with open('Mauve/simple.xmfa', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="mauve"))
-            self.assertEqual(len(alignments), 5)
+        self.assertEqual(len(alignments), 5)
         alignments = []
         for record in AlignIO.parse('Mauve/simple.xmfa', format="mauve"):
             alignments.append(record)
@@ -1481,7 +2824,7 @@ class TestAlignIO_reading(unittest.TestCase):
   ATTCGCACATAAGAATGTACCTTGCTGTAATTTATA...ATA 2/11410-12880""")
 
         # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
+        summary = AlignInfo.SummaryInfo(alignments[4])
         dumb_consensus = summary.dumb_consensus()
         # gap_consensus = summary.gap_consensus()
         pssm = summary.pos_specific_score_matrix()
