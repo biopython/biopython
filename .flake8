@@ -11,6 +11,8 @@
 # =================================================
 [flake8]
 doctests = True
+# Exclude some file types and folders that shouldn't be checked:
+exclude = .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.github,build,
 ignore =
     # =============================================================
     # Biopython's 'standard' ignores we can agree to always accept:
