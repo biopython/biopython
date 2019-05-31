@@ -422,7 +422,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 AlignIO.write(alignments[0:1], handle, format)
                 self.assertEqual(handle.getvalue(), alignments[0].format(format))
     
-    def test_reading_alignments(self):
+    def test_reading_alignments_clustal(self):
         test_files = [
         # Following examples are also used in test_Clustalw.py
             ("clustal", 2, 1, 'Clustalw/cw02.aln'),
@@ -432,27 +432,24 @@ class TestAlignIO_reading(unittest.TestCase):
             ("clustal", 20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
             ("clustal", 20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
                 # Following examples are also used in test_GFF.py
-            ("fasta", 3, 1, 'GFF/multi.fna'),  # Trivial nucleotide alignment
-                # Following example is also used in test_Nexus.py
         ]
 
         for (t_format, t_per, t_count, t_filename) in test_files:
             with open(t_filename, "r") as handle:
-                alignments = list(AlignIO.parse(handle, format=t_format))
+                alignments = list(AlignIO.parse(handle, format="clustal"))
                 self.assertEqual(len(alignments), t_count)
-            if t_per is not None:
-                for alignment in alignments:
-                    self.assertEqual(len(alignment), t_per)
+            for alignment in alignments:
+                self.assertEqual(len(alignment), t_per)
         
             # Try using the iterator with a for loop and a filename not handle
             alignments2 = []
-            for record in AlignIO.parse(t_filename, format=t_format):
+            for record in AlignIO.parse(t_filename, format="clustal"):
                 alignments2.append(record)
-            self.assertEqual(len(alignments2), t_count)
+            self.assertEqual(len(alignments2), 1)
         
             # Try using the iterator with the next() method
             alignments3 = []
-            seq_iterator = AlignIO.parse(t_filename, format=t_format)
+            seq_iterator = AlignIO.parse(t_filename, format="clustal")
             while True:
                 try:
                     record = next(seq_iterator)
@@ -462,87 +459,119 @@ class TestAlignIO_reading(unittest.TestCase):
                 alignments3.append(record)
         
             # Try a mixture of next() and list (a torture test!)
-            seq_iterator = AlignIO.parse(t_filename, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                alignments4 = [record]
-                alignments4.extend(list(seq_iterator))
-            else:
-                alignments4 = []
-            self.assertEqual(len(alignments4), t_count)
+            seq_iterator = AlignIO.parse(t_filename, format="clustal")
+            record = next(seq_iterator)
+            alignments = [record]
+            alignments.extend(list(seq_iterator))
+            self.assertEqual(len(alignments), 1)
         
             # Try a mixture of next() and for loop (a torture test!)
-            seq_iterator = AlignIO.parse(t_filename, format=t_format)
-            try:
-                record = next(seq_iterator)
-            except StopIteration:
-                record = None
-            if record is not None:
-                alignments5 = [record]
-                for record in seq_iterator:
-                    alignments5.append(record)
-            else:
-                alignments5 = []
-            self.assertEqual(len(alignments5), t_count)
+            seq_iterator = AlignIO.parse(t_filename, format="clustal")
+            record = next(seq_iterator)
+            alignments = [record]
+            for record in seq_iterator:
+                alignments.append(record)
+            self.assertEqual(len(alignments), 1)
         
             # Check Bio.AlignIO.read(...)
-            if t_count == 1:
-                with open(t_filename) as handle:
-                    alignment = AlignIO.read(handle, format=t_format)
-                self.assertIsInstance(alignment, MultipleSeqAlignment)
-            else:
-                try:
-                    with open(t_filename) as handle:
-                        alignment = AlignIO.read(handle, t_format)
-                    raise ValueError("Bio.AlignIO.read(...) should have failed")
-                except ValueError:
-                    # Expected to fail
-                    pass
+            with open(t_filename) as handle:
+                alignment = AlignIO.read(handle, format="clustal")
+            self.assertIsInstance(alignment, MultipleSeqAlignment)
         
             # Show the alignment
-            for i, alignment in enumerate(alignments):
-                if i < 3 or i + 1 == t_count:
-                    print(" Alignment %i, with %i sequences of length %i"
-                          % (i,
-                             len(alignment),
-                             alignment.get_alignment_length()))
-                    print(alignment_summary(alignment))
-                elif i == 3:
-                    print(" ...")
+            print(" Alignment 0, with %i sequences of length %i"
+                  % (len(alignment),
+                     alignment.get_alignment_length()))
+            print(alignment_summary(alignment))
         
             # Check AlignInfo.SummaryInfo likes the alignment
             summary = AlignInfo.SummaryInfo(alignment)
             dumb_consensus = summary.dumb_consensus()
             # gap_consensus = summary.gap_consensus()
-            if t_format != "nexus":
-                # Hack for bug 2535
-                pssm = summary.pos_specific_score_matrix()
-                rep_dict = summary.replacement_dictionary()
-                try:
-                    info_content = summary.information_content()
-                except ValueError as err:
-                    if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
-                        raise err
+            pssm = summary.pos_specific_score_matrix()
+            rep_dict = summary.replacement_dictionary()
+            try:
+                info_content = summary.information_content()
+            except ValueError as err:
+                if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
+                    raise err
 
-            if t_count == 1 and t_format not in ["nexus", "emboss", "fasta-m10"]:
-                with open(t_filename, "r") as handle:
-                    data = handle.read()
-                handle = StringIO()
-                handle.write(data + "\n\n" + data + "\n\n" + data)
-                handle.seek(0)
-                self.assertEqual(len(list(AlignIO.parse(handle=handle, format=t_format, seq_count=t_per))), 3)
-                handle.close()
+            with open(t_filename, "r") as handle:
+                data = handle.read()
+            handle = StringIO()
+            handle.write(data + "\n\n" + data + "\n\n" + data)
+            handle.seek(0)
+            self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=t_per))), 3)
+            handle.close()
         
-            # Some alignment file formats have magic characters which mean
-            # use the letter in this position in the first sequence.
-            # They should all have been converted by the parser, but if
-            # not reversing the record order might expose an error.  Maybe.
-            alignments.reverse()
-            check_simple_write_read(alignments)
+    def test_reading_alignments_fasta(self):
+        path = 'GFF/multi.fna'  # Trivial nucleotide alignment
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="fasta"))
+        self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 3)
+       
+        # Try using the iterator with a for loop and a filename not handle
+        alignments = []
+        for record in AlignIO.parse(path, format="fasta"):
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+      
+        # Try using the iterator with the next() method
+        alignments = []
+        seq_iterator = AlignIO.parse(path, format="fasta")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+     
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="fasta")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="fasta")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="fasta")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(alignment.get_alignment_length(), 8)
+        self.assertEqual(alignment_summary(alignment), """\
+  ACGTCGCG test1
+  GGGGCCCC test2
+  AAACACAC test3""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
 
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="fasta", seq_count=3))), 3)
+        handle.close()
+    
     def test_reading_alignments_nexus(self):
         path = 'Nexus/test_Nexus_input.nex'
         with open(path, "r") as handle:
