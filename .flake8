@@ -11,6 +11,7 @@
 # =================================================
 [flake8]
 doctests = True
+exclude = .git,.github,build, # Some folders we don't need to check
 ignore =
     # =============================================================
     # Biopython's 'standard' ignores we can agree to always accept:
