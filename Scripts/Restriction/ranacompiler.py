@@ -323,6 +323,8 @@ class TypeCompiler(object):
                     dct.update({'scd5': None, 'scd3': None})
 
             class klass(type):
+                """Dynamically defined restriction enzyme class."""
+
                 def __new__(cls):
                     return type.__new__(cls, 'type%i' % n, ty, dct)
 
@@ -405,7 +407,7 @@ class DictionaryBuilder(object):
             #   Now select the right type for the enzyme.
             #
             bases = cls.bases
-            clsbases = tuple([eval(x) for x in bases])
+            clsbases = tuple(eval(x) for x in bases)
             typestuff = ''
             for t in tdct.values():
                 #
@@ -432,8 +434,7 @@ class DictionaryBuilder(object):
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = dict([(k, v) for k, v in tydct.items()
-                              if k in commonattr])
+                tydct = {k: v for k, v in tydct.items() if k in commonattr}
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
