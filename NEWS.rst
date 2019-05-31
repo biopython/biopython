@@ -20,12 +20,16 @@ Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
 making an error, but will require user code to be updated accordingly.
 
+``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
+PDB-style Astral files.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Chris Rands
 - Joe Greener
 - Konstantin Vdovkin
+- Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
 - Peter Cock
 - Sergio Valqui

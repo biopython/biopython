@@ -186,6 +186,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michał J. Gajda <https://github.com/mgajda>
 - Michiel de Hoon <https://github.com/mdehoon>
 - Micky Yun Chan <https://github.com/michiboo>
+- Mike Moritz <https://github.com/mikepmikepm35>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>
