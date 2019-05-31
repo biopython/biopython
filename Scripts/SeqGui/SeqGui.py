@@ -51,8 +51,8 @@ codon_list = tk.Listbox(codon_panel, height=5, width=25,
                         yscrollcommand=codon_scroller.set)
 
 # Import actual codon tables from Biopython and sort alphabetically
-codon_table_list = sorted([table.names[0] for n, table in
-                           CodonTable.generic_by_id.items()])
+codon_table_list = sorted(table.names[0] for n, table in
+                          CodonTable.generic_by_id.items())
 
 # 'Standard' table should be first in the list
 del(codon_table_list[codon_table_list.index('Standard')])
