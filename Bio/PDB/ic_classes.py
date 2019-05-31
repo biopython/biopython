@@ -1172,6 +1172,7 @@ class IC_Residue(object):
         else:
             self.alt_ids = []
         self.is20AA = True
+        # rbase = position, insert code or none, resname (1 letter if in 20)
         rid = parent.id
         rbase = [rid[1],
                  rid[2] if ' ' != rid[2] else None,
@@ -2147,36 +2148,33 @@ class IC_Chain:
         """Set rprev, rnext, determine chain break."""
         if not hasattr(res, 'internal_coord'):
             res.internal_coord = IC_Residue(res)
-        if (res.internal_coord.is20AA
-                or res.internal_coord.rbase[2] in res.internal_coord.accept_resnames):
-            if (0 < len(last_res) and last_ord_res == last_res
-                    and self._peptide_check(last_ord_res[0].residue, res)):
-                # no chain break
-                for prev in last_ord_res:
-                    prev.rnext.append(res.internal_coord)
-                    res.internal_coord.rprev.append(prev)
-                return True
-            elif all(atm in res.child_dict for atm in ('N', 'CA', 'C')):
-                # chain break, save coords for restart
-                initNCaC = {}
-                rpic = res.internal_coord
-                for atm in ('N', 'CA', 'C'):
-                    bpAtm = res.child_dict[atm]
-                    if bpAtm.is_disordered():
-                        for altAtom in bpAtm.child_dict.values():
-                            ak = AtomKey(rpic, altAtom)
-                            initNCaC[ak] = IC_Residue.atm241(
-                                altAtom.coord)
-                    else:
-                        ak = AtomKey(rpic, bpAtm)
+        if (0 < len(last_res) and last_ord_res == last_res
+                and self._peptide_check(last_ord_res[0].residue, res)):
+            # no chain break
+            for prev in last_ord_res:
+                prev.rnext.append(res.internal_coord)
+                res.internal_coord.rprev.append(prev)
+            return True
+        elif all(atm in res.child_dict for atm in ('N', 'CA', 'C')):
+            # chain break, save coords for restart
+            initNCaC = {}
+            rpic = res.internal_coord
+            for atm in ('N', 'CA', 'C'):
+                bpAtm = res.child_dict[atm]
+                if bpAtm.is_disordered():
+                    for altAtom in bpAtm.child_dict.values():
+                        ak = AtomKey(rpic, altAtom)
                         initNCaC[ak] = IC_Residue.atm241(
-                            bpAtm.coord)
-                self.initNCaC[rpic.rbase] = initNCaC
-                return True
-            else:
-                # chain break but do not have N, Ca, C coords to restart from
-                return False
-        return False  # res is not accepted hetatm
+                            altAtom.coord)
+                else:
+                    ak = AtomKey(rpic, bpAtm)
+                    initNCaC[ak] = IC_Residue.atm241(
+                        bpAtm.coord)
+            self.initNCaC[rpic.rbase] = initNCaC
+            return True
+
+        # chain break but do not have N, Ca, C coords to restart from
+        return False
 
     def set_residues(self):
         """Initialize pic data for loaded Residues.
@@ -2191,22 +2189,22 @@ class IC_Chain:
         last_res = []
         last_ord_res = []
         for res in self.chain.get_residues():
-            # select only not hetero
-            # if res.id[0] == ' ':  # and not res.disordered:
-            this_res = []
-            if 2 == res.is_disordered():
-                # print('disordered res:', res.is_disordered(), res)
-                for r in res.child_dict.values():
-                    if self._add_residue(r, last_res, last_ord_res):
-                        this_res.append(r.internal_coord)
-            else:
-                if self._add_residue(res, last_res, last_ord_res):
-                    this_res.append(res.internal_coord)
+            # select only not hetero or accepted hetero
+            if res.id[0] == ' ' or res.id[0] in IC_Residue.accept_resnames:
+                this_res = []
+                if 2 == res.is_disordered():
+                    # print('disordered res:', res.is_disordered(), res)
+                    for r in res.child_dict.values():
+                        if self._add_residue(r, last_res, last_ord_res):
+                            this_res.append(r.internal_coord)
+                else:
+                    if self._add_residue(res, last_res, last_ord_res):
+                        this_res.append(res.internal_coord)
 
-            if 0 < len(this_res):
-                self.ordered_aa_pic_list.extend(this_res)
-                last_ord_res = this_res
-            last_res = this_res
+                if 0 < len(this_res):
+                    self.ordered_aa_pic_list.extend(this_res)
+                    last_ord_res = this_res
+                last_res = this_res
 
     def link_residues(self):
         """link_dihedra() for each IC_Residue; needs rprev, rnext set."""
