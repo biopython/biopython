@@ -197,7 +197,7 @@ class TestAlignIO_reading(unittest.TestCase):
                 break
             self.assertIsNotNone(record)
             alignments3.append(record)
-    
+
         # Try a mixture of next() and list (a torture test!)
         seq_iterator = AlignIO.parse(path, format="clustal")
         record = next(seq_iterator)
@@ -1976,7 +1976,7 @@ class TestAlignIO_reading(unittest.TestCase):
         alignments = [record]
         alignments.extend(list(seq_iterator))
         self.assertEqual(len(alignments), 1)
-    
+
         # Try a mixture of next() and for loop (a torture test!)
         seq_iterator = AlignIO.parse(path, format="emboss")
         record = next(seq_iterator)
@@ -2666,7 +2666,7 @@ class TestAlignIO_reading(unittest.TestCase):
         handle.seek(0)
         self.assertEqual(len(list(AlignIO.parse(handle=handle, format="ig", seq_count=16))), 3)
         handle.close()
-    
+
     def test_reading_alignments_pir(self):
         with open('NBRF/clustalw.pir', "r") as handle:
             alignments = list(AlignIO.parse(handle, format="pir"))
