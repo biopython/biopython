@@ -423,87 +423,431 @@ class TestAlignIO_reading(unittest.TestCase):
                 self.assertEqual(handle.getvalue(), alignments[0].format(format))
     
     def test_reading_alignments_clustal(self):
-        test_files = [
-        # Following examples are also used in test_Clustalw.py
-            ("clustal", 2, 1, 'Clustalw/cw02.aln'),
-            ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
-            ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
-            ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
-            ("clustal", 20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
-            ("clustal", 20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
-                # Following examples are also used in test_GFF.py
-        ]
-
-        for (t_format, t_per, t_count, t_filename) in test_files:
-            with open(t_filename, "r") as handle:
-                alignments = list(AlignIO.parse(handle, format="clustal"))
-                self.assertEqual(len(alignments), t_count)
-            for alignment in alignments:
-                self.assertEqual(len(alignment), t_per)
-        
-            # Try using the iterator with a for loop and a filename not handle
-            alignments2 = []
-            for record in AlignIO.parse(t_filename, format="clustal"):
-                alignments2.append(record)
-            self.assertEqual(len(alignments2), 1)
-        
-            # Try using the iterator with the next() method
-            alignments3 = []
-            seq_iterator = AlignIO.parse(t_filename, format="clustal")
-            while True:
-                try:
-                    record = next(seq_iterator)
-                except StopIteration:
-                    break
-                self.assertIsNotNone(record)
-                alignments3.append(record)
-        
-            # Try a mixture of next() and list (a torture test!)
-            seq_iterator = AlignIO.parse(t_filename, format="clustal")
-            record = next(seq_iterator)
-            alignments = [record]
-            alignments.extend(list(seq_iterator))
+        path = 'Clustalw/cw02.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
             self.assertEqual(len(alignments), 1)
-        
-            # Try a mixture of next() and for loop (a torture test!)
-            seq_iterator = AlignIO.parse(t_filename, format="clustal")
-            record = next(seq_iterator)
-            alignments = [record]
-            for record in seq_iterator:
-                alignments.append(record)
-            self.assertEqual(len(alignments), 1)
-        
-            # Check Bio.AlignIO.read(...)
-            with open(t_filename) as handle:
-                alignment = AlignIO.read(handle, format="clustal")
-            self.assertIsInstance(alignment, MultipleSeqAlignment)
-        
-            # Show the alignment
-            print(" Alignment 0, with %i sequences of length %i"
-                  % (len(alignment),
-                     alignment.get_alignment_length()))
-            print(alignment_summary(alignment))
-        
-            # Check AlignInfo.SummaryInfo likes the alignment
-            summary = AlignInfo.SummaryInfo(alignment)
-            dumb_consensus = summary.dumb_consensus()
-            # gap_consensus = summary.gap_consensus()
-            pssm = summary.pos_specific_score_matrix()
-            rep_dict = summary.replacement_dictionary()
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
             try:
-                info_content = summary.information_content()
-            except ValueError as err:
-                if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
-                    raise err
-
-            with open(t_filename, "r") as handle:
-                data = handle.read()
-            handle = StringIO()
-            handle.write(data + "\n\n" + data + "\n\n" + data)
-            handle.seek(0)
-            self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=t_per))), 3)
-            handle.close()
-        
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 601)
+        self.assertEqual(alignment_summary(alignment), """\
+  MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
+  ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|
+            * *: ::    :.   :*  :  :. ...    clustal_consensus""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=2))), 3)
+        handle.close()
+        path = 'Clustalw/opuntia.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 7)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 7)
+        self.assertEqual(alignment.get_alignment_length(), 156)
+        self.assertEqual(alignment_summary(alignment), """\
+  TTTTTTT alignment column 0
+  AAAAAAA alignment column 1
+  TTTTTTT alignment column 2
+  AAAAAAA alignment column 3
+  CCCCCCC alignment column 4
+  ||||||| ...
+  AAAAAAA alignment column 155""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=7))), 3)
+        handle.close()
+        path = 'Clustalw/hedgehog.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 5)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 5)
+        self.assertEqual(alignment.get_alignment_length(), 447)
+        self.assertEqual(alignment_summary(alignment), """\
+  M---- alignment column 0
+  F---- alignment column 1
+  N---- alignment column 2
+  L---- alignment column 3
+  V---- alignment column 4
+  ||||| ...
+  ---SS alignment column 446""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=5))), 3)
+        handle.close()
+        path = 'Clustalw/odd_consensus.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 2)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 687)
+        self.assertEqual(alignment_summary(alignment), """\
+  ------------------------------------...TAG AT3G20900.1-CDS
+  ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGT...TAG AT3G20900.1-SEQ
+                                      ...*** clustal_consensus""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=2))), 3)
+        handle.close()
+        path = 'Clustalw/protein.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 20)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 20)
+        self.assertEqual(alignment.get_alignment_length(), 411)
+        self.assertEqual(alignment_summary(alignment), """\
+  -M------------------ alignment column 0
+  -T------------------ alignment column 1
+  -V------------------ alignment column 2
+  -L-----------------M alignment column 3
+  -E---------------MMS alignment column 4
+  |||||||||||||||||||| ...
+  -------------------T alignment column 410""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=20))), 3)
+        handle.close()
+        path = 'Clustalw/promals3d.aln'
+        with open(path, "r") as handle:
+            alignments = list(AlignIO.parse(handle, format="clustal"))
+            self.assertEqual(len(alignments), 1)
+        for alignment in alignments:
+            self.assertEqual(len(alignment), 20)
+    
+        # Try using the iterator with a for loop and a filename not handle
+        alignments2 = []
+        for record in AlignIO.parse(path, format="clustal"):
+            alignments2.append(record)
+        self.assertEqual(len(alignments2), 1)
+    
+        # Try using the iterator with the next() method
+        alignments3 = []
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        while True:
+            try:
+                record = next(seq_iterator)
+            except StopIteration:
+                break
+            self.assertIsNotNone(record)
+            alignments3.append(record)
+    
+        # Try a mixture of next() and list (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        alignments.extend(list(seq_iterator))
+        self.assertEqual(len(alignments), 1)
+    
+        # Try a mixture of next() and for loop (a torture test!)
+        seq_iterator = AlignIO.parse(path, format="clustal")
+        record = next(seq_iterator)
+        alignments = [record]
+        for record in seq_iterator:
+            alignments.append(record)
+        self.assertEqual(len(alignments), 1)
+    
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format="clustal")
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+    
+        # Show the alignment
+        self.assertEqual(len(alignment), 20)
+        self.assertEqual(alignment.get_alignment_length(), 414)
+        self.assertEqual(alignment_summary(alignment), """\
+  MMMMMMMMMMMMMMMM-M-- alignment column 0
+  -----------------T-- alignment column 1
+  -----------------V-- alignment column 2
+  -----------------L-- alignment column 3
+  -S---------------E-- alignment column 4
+  |||||||||||||||||||| ...
+  -T------------------ alignment column 413""")
+    
+        # Check AlignInfo.SummaryInfo likes the alignment
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=20))), 3)
+        handle.close()
+    
     def test_reading_alignments_fasta(self):
         path = 'GFF/multi.fna'  # Trivial nucleotide alignment
         with open(path, "r") as handle:
