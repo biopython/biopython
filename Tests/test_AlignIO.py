@@ -21,38 +21,6 @@ test_write_read_align_with_seq_count = test_write_read_alignment_formats \
                                      + ["fasta", "tab"]
 
 
-def simple_alignment_comparison(alignments, alignments2, format):
-    assert len(alignments) == len(alignments2)
-    for a1, a2 in zip(alignments, alignments2):
-        assert a1.get_alignment_length() == a2.get_alignment_length()
-        assert len(a1) == len(a2)
-        for r1, r2 in zip(a1, a2):
-            # Check the bare minimum (ID and sequence) as
-            # many formats can't store more than that.
-
-            # Check the sequence
-            assert str(r1.seq) == str(r2.seq)
-
-            # Beware of different quirks and limitations in the
-            # valid character sets and the identifier lengths!
-            if format in ["phylip", "phylip-sequential"]:
-                assert r1.id.replace("[", "").replace("]", "")[:10] == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "phylip-relaxed":
-                assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
-                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "clustal":
-                assert r1.id.replace(" ", "_")[:30] == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format in ["stockholm", "maf"]:
-                assert r1.id.replace(" ", "_") == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "fasta":
-                assert r1.id.split()[0] == r2.id
-            else:
-                assert r1.id == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-
 
 class TestAlignIO_exceptions(unittest.TestCase):
 
@@ -94,27 +62,54 @@ class TestAlignIO_exceptions(unittest.TestCase):
 
 class TestAlignIO_reading(unittest.TestCase):
 
+    def simple_alignment_comparison(self, alignments, alignments2, fmt):
+        self.assertEqual(len(alignments), len(alignments2))
+        for a1, a2 in zip(alignments, alignments2):
+            self.assertEqual(a1.get_alignment_length(), a2.get_alignment_length())
+            self.assertEqual(len(a1), len(a2))
+            for r1, r2 in zip(a1, a2):
+                # Check the bare minimum (ID and sequence) as
+                # many formats can't store more than that.
+                # Check the sequence:
+                self.assertEqual(str(r1.seq), str(r2.seq))
+                # Beware of different quirks and limitations in the
+                # valid character sets and the identifier lengths!
+                if fmt in ["phylip", "phylip-sequential"]:
+                    id1 = r1.id.replace("[", "").replace("]", "")[:10]
+                elif fmt == "phylip-relaxed":
+                    id1 = r1.id.replace(" ", "").replace(':', '|')
+                elif fmt == "clustal":
+                    id1 = r1.id.replace(" ", "_")[:30]
+                elif fmt in ["stockholm", "maf"]:
+                    id1 = r1.id.replace(" ", "_")
+                elif fmt == "fasta":
+                    id1 = r1.id.split()[0]
+                else:
+                    id1 = r1.id
+                id2 = r2.id
+                self.assertEqual(id1, id2)
+    
     def check_reverse_write_read(self, alignments, indent=" "):
         alignments.reverse()
-        for format in test_write_read_align_with_seq_count:
+        for fmt in test_write_read_align_with_seq_count:
             records_per_alignment = len(alignments[0])
             for a in alignments:
                 if records_per_alignment != len(a):
                     records_per_alignment = None
             # Can we expect this format to work?
             if not records_per_alignment \
-                    and format not in test_write_read_alignment_formats:
+                    and fmt not in test_write_read_alignment_formats:
                 continue
 
             # Going to write to a handle...
             handle = StringIO()
 
-            if format == 'nexus':
+            if fmt == 'nexus':
                 with self.assertRaises(ValueError) as cm:
-                    c = AlignIO.write(alignments, handle=handle, format=format)
+                    c = AlignIO.write(alignments, handle=handle, format=fmt)
                 self.assertEqual("We can only write one Alignment to a Nexus file.", str(cm.exception))
                 continue
-            c = AlignIO.write(alignments, handle=handle, format=format)
+            c = AlignIO.write(alignments, handle=handle, format=fmt)
             self.assertEqual(c, len(alignments))
 
             # First, try with the seq_count
@@ -123,21 +118,21 @@ class TestAlignIO_reading(unittest.TestCase):
                 handle.seek(0)
                 alignments2 = list(AlignIO.parse(
                     handle=handle,
-                    format=format,
+                    format=fmt,
                     seq_count=records_per_alignment))
-                simple_alignment_comparison(alignments, alignments2, format)
+                self.simple_alignment_comparison(alignments, alignments2, fmt)
 
-            if format in test_write_read_alignment_formats:
+            if fmt in test_write_read_alignment_formats:
                 # Don't need the seq_count
                 handle.flush()
                 handle.seek(0)
-                alignments2 = list(AlignIO.parse(handle=handle, format=format))
-                simple_alignment_comparison(alignments, alignments2, format)
+                alignments2 = list(AlignIO.parse(handle=handle, format=fmt))
+                self.simple_alignment_comparison(alignments, alignments2, fmt)
 
             # Try writing just one Alignment (not a list)
             handle = StringIO()
-            AlignIO.write(alignments[0:1], handle, format)
-            self.assertEqual(handle.getvalue(), alignments[0].format(format))
+            AlignIO.write(alignments[0:1], handle, fmt)
+            self.assertEqual(handle.getvalue(), alignments[0].format(fmt))
 
     def check_parse1(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle
