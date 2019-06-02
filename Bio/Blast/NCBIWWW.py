@@ -73,7 +73,9 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - short_query    TRUE/FALSE whether to adjust the search parameters for a
-                      short query sequence. Turns off when sequence length > 30
+                      short query sequence. Note that this will override 
+                      manually set parameters like word size and e value. Turns
+                      off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
