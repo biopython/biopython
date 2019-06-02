@@ -258,10 +258,10 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 2)
         alignment = self.check_read(path, "clustal", 2, 601)
         self.check_alignment_rows(
-           alignment,
-           [("gi|4959044|gb|AAD34209.1|AF069", "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQF...SVV"),
-            ("gi|671626|emb|CAA85685.1|", "---------MSPQTETKASVGFKAGVKEYKLTYY...---")],
-           {'clustal_consensus': '          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   '})
+            alignment,
+            [("gi|4959044|gb|AAD34209.1|AF069", "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQF...SVV"),
+             ("gi|671626|emb|CAA85685.1|", "---------MSPQTETKASVGFKAGVKEYKLTYY...---")],
+            {'clustal_consensus': '          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   '})
         self.check_summary(alignment)
 
     def test_reading_alignments_clustal2(self):
@@ -274,13 +274,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 7)
         alignment = self.check_read(path, "clustal", 7, 156)
         self.check_alignment_columns(
-           alignment, ["TTTTTTT",
-                                                 "AAAAAAA",
-                                                 "TTTTTTT",
-                                                 "AAAAAAA",
-                                                 "CCCCCCC",
-                                                 "AAAAAAA"])
-
+            alignment, ["TTTTTTT",
+                        "AAAAAAA",
+                        "TTTTTTT",
+                        "AAAAAAA",
+                        "CCCCCCC",
+                        "AAAAAAA"])
         self.check_summary(alignment)
 
     def test_reading_alignments_clustal3(self):
@@ -293,13 +292,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 5)
         alignment = self.check_read(path, "clustal", 5, 447)
         self.check_alignment_columns(
-           alignment, ["M----",
-                                                 "F----",
-                                                 "N----",
-                                                 "L----",
-                                                 "V----",
-                                                 "---SS"])
-
+            alignment, ["M----",
+                        "F----",
+                        "N----",
+                        "L----",
+                        "V----",
+                        "---SS"])
         self.check_summary(alignment)
 
     def test_reading_alignments_clustal4(self):
@@ -312,7 +310,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 2)
         alignment = self.check_read(path, "clustal", 2, 687)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [("AT3G20900.1-CDS", "----------------------------------...TAG"),
              ("AT3G20900.1-SEQ", "ATGAACAAAGTAGCGAGGAAGAACAAAACATCAG...TAG")],
             {'clustal_consensus': '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *       *  *** ***** *   *  **      *******************************************************************************************************************************************************************************'})
@@ -328,13 +326,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 20)
         alignment = self.check_read(path, "clustal", 20, 411)
         self.check_alignment_columns(
-           alignment, ["-M------------------",
-                                                 "-T------------------",
-                                                 "-V------------------",
-                                                 "-L-----------------M",
-                                                 "-E---------------MMS",
-                                                 "-------------------T"])
-
+            alignment, ["-M------------------",
+                        "-T------------------",
+                        "-V------------------",
+                        "-L-----------------M",
+                        "-E---------------MMS",
+                        "-------------------T"])
         self.check_summary(alignment)
 
     def test_reading_alignments_clustal6(self):
@@ -347,13 +344,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "clustal", 20)
         alignment = self.check_read(path, "clustal", 20, 414)
         self.check_alignment_columns(
-           alignment, ["MMMMMMMMMMMMMMMM-M--",
-                                                 "-----------------T--",
-                                                 "-----------------V--",
-                                                 "-----------------L--",
-                                                 "-S---------------E--",
-                                                 "-T------------------"])
-
+            alignment, ["MMMMMMMMMMMMMMMM-M--",
+                        "-----------------T--",
+                        "-----------------V--",
+                        "-----------------L--",
+                        "-S---------------E--",
+                        "-T------------------"])
         self.check_summary(alignment)
 
     def test_reading_alignments_fasta(self):
@@ -366,7 +362,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "fasta", 3)
         alignment = self.check_read(path, "fasta", 3, 8)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('test1', "ACGTCGCG"),
              ('test2', "GGGGCCCC"),
              ('test3', "AAACACAC")])
@@ -381,13 +377,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "nexus", 1)
         alignment = self.check_read(path, "nexus", 9, 48)
         self.check_alignment_columns(
-           alignment, ["AAAAAAAAc",
-                                                 "-----c?tc",
-                                                 "CCCCCCCCc",
-                                                 "--c-?a-tc",
-                                                 "GGGGGGGGc",
-                                                 "tt--?ag?c"])
-
+            alignment, ["AAAAAAAAc",
+                        "-----c?tc",
+                        "CCCCCCCCc",
+                        "--c-?a-tc",
+                        "GGGGGGGGc",
+                        "tt--?ag?c"])
         self.check_summary_simple(alignment)
 
     def test_reading_alignments_nexus2(self):
@@ -399,7 +394,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "nexus", 1)
         alignment = self.check_read(path, "nexus", 2, 22)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('Aegotheles', "AAAAAGGCATTGTGGTGGGAAT",),
              ('Aerodramus', "?????????TTGTGGTGGGAAT")])
         self.check_summary_simple(alignment)
@@ -414,7 +409,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "stockholm", 2)
         alignment = self.check_read(path, "stockholm", 2, 104)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('AE007476.1', "AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGU...GAU"),
              ('AP001509.1', "UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-U...UGU")],
             {'secondary_structure': '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'})
@@ -430,13 +425,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "stockholm", 6)
         alignment = self.check_read(path, "stockholm", 6, 43)
         self.check_alignment_columns(
-           alignment, ["MMMEEE",
-                                                 "TQIVVV",
-                                                 "CHEMMM",
-                                                 "RVALLL",
-                                                 "ASDTTT",
-                                                 "SYSEEE"])
-
+            alignment, ["MMMEEE",
+                        "TQIVVV",
+                        "CHEMMM",
+                        "RVALLL",
+                        "ASDTTT",
+                        "SYSEEE"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip1(self):
@@ -449,13 +443,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 6)
         alignment = self.check_read(path, "phylip", 6, 13)
         self.check_alignment_columns(
-           alignment, ["CCTTCG",
-                                                 "GGAAAG",
-                                                 "ATAAAC",
-                                                 "TTTTAA",
-                                                 "GAGGAG",
-                                                 "CTTTTC"])
-
+            alignment, ["CCTTCG",
+                        "GGAAAG",
+                        "ATAAAC",
+                        "TTTTAA",
+                        "GAGGAG",
+                        "CTTTTC"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip2(self):
@@ -468,12 +461,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 6)
         alignment = self.check_read(path, "phylip", 6, 39)
         self.check_alignment_columns(
-           alignment, ["CCTTCG",
-                                                 "GGAAAG",
-                                                 "ATAAAC",
-                                                 "TTTTAA",
-                                                 "GAGGAG",
-                                                 "CTTTTC"])
+            alignment, ["CCTTCG",
+                        "GGAAAG",
+                        "ATAAAC",
+                        "TTTTAA",
+                        "GAGGAG",
+                        "CTTTTC"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip3(self):
@@ -486,12 +479,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(
-           alignment, ["CCCCCAAAAA",
-                                                 "AAAAACCCCC",
-                                                 "CCCAAAAAAA",
-                                                 "AAACCAAAAA",
-                                                 "CCAAAAAAAA",
-                                                 "AAAAAAAAAA"])
+            alignment, ["CCCCCAAAAA",
+                        "AAAAACCCCC",
+                        "CCCAAAAAAA",
+                        "AAACCAAAAA",
+                        "CCAAAAAAAA",
+                        "AAAAAAAAAA"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip4(self):
@@ -504,12 +497,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(
-           alignment, ["AACCCCCCCC",
-                                                 "AAAACCCCCC",
-                                                 "AAAAAAAAAC",
-                                                 "ACAAAAAAAA",
-                                                 "ACACCCCCCC",
-                                                 "AAAAAAAAAA"])
+            alignment, ["AACCCCCCCC",
+                        "AAAACCCCCC",
+                        "AAAAAAAAAC",
+                        "ACAAAAAAAA",
+                        "ACACCCCCCC",
+                        "AAAAAAAAAA"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip5(self):
@@ -522,7 +515,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(
-           alignment, ["CAAAACAAAC",
+            alignment, ["CAAAACAAAC",
                                                  "AACAACCACC",
                                                  "CAAAACAAAA",
                                                  "ACAACACACA",
@@ -540,7 +533,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 3)
         alignment = self.check_read(path, "phylip", 3, 384)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
@@ -556,7 +549,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip", 4)
         alignment = self.check_read(path, "phylip", 4, 131)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('IXI_234', "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
              ('IXI_235', "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
@@ -573,13 +566,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip-relaxed", 12)
         alignment = self.check_read(path, "phylip-relaxed", 12, 898)
         self.check_alignment_columns(
-           alignment, ["AAAAAAAAAAAA",
-                                                 "AAAAAAAAAAAA",
-                                                 "GGGGGGGGGGGG",
-                                                 "TCCCCCCCCCCC",
-                                                 "TTTTTTTTTTTT",
-                                                 "TTTTTTTTTTTT"])
-
+            alignment, ["AAAAAAAAAAAA",
+                        "AAAAAAAAAAAA",
+                        "GGGGGGGGGGGG",
+                        "TCCCCCCCCCCC",
+                        "TTTTTTTTTTTT",
+                        "TTTTTTTTTTTT"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip9(self):
@@ -592,7 +584,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip-sequential", 3)
         alignment = self.check_read(path, "phylip-sequential", 3, 384)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
@@ -608,7 +600,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse6(path, "phylip-sequential", 4)
         alignment = self.check_read(path, "phylip-sequential", 4, 131)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('IXI_234', "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
              ('IXI_235', "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
@@ -624,7 +616,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 4, 131)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [("IXI_234", "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
              ("IXI_235", "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ("IXI_236", "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
@@ -677,7 +669,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 2, 3653)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [("asis", "----------------------------------...GAA"),
              ("asis", "TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTT...GAA")])
         self.check_summary(alignment)
@@ -691,7 +683,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 2, 131)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [("IXI_234", "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
              ("IXI_235", "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE")])
         self.check_summary(alignment)
@@ -705,7 +697,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 2, 18)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('asis', "CGTTTGAGT-CTGGGATG"),
              ('asis', "CGTTTGAGTACTGGGATG")])
         self.check_summary(alignment)
@@ -719,7 +711,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 2, 16)
         self.check_alignment_rows(
-           alignment,
+            alignment,
             [('AF069992_1', "GPPPQSPDENRAGESS"),
              ('CAA85685.1', "GVPPEEAGAAVAAESS")])
         self.check_summary(alignment)
@@ -768,7 +760,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
         alignment = self.check_read(path, "emboss", 2, 1450)
-        self.check_alignment_rows(alignment,
+        self.check_alignment_rows(
+            alignment,
             [('hg38_chrX_131691529_131830643_47210_48660', "GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGT...AAA"),
              ('mm10_chrX_50555743_50635321_27140_27743', "G--------------------------TTCAAGG...AAA")])
         self.check_summary(alignment)
@@ -847,7 +840,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(
             alignments[0],
             [('gi|10955263|ref|NP_052604.1|', "VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAAL...LGA"),
-             ('gi|152973837|ref|YP_001338874.1|', "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAA...IAA"),])
+             ('gi|152973837|ref|YP_001338874.1|', "ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAA...IAA")])
         self.assertEqual(alignments[1].get_alignment_length(), 22)
         self.check_alignment_rows(
             alignments[1],
@@ -856,7 +849,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignments[2].get_alignment_length(), 63)
         self.check_alignment_rows(
             alignments[2],
-            [("gi|10955264|ref|NP_052605.1|",     "VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELS...KGI"),
+            [("gi|10955264|ref|NP_052605.1|", "VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELS...KGI"),
              ("gi|152973841|ref|YP_001338878.1|", "VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQV...QAM")])
         self.check_summary(alignments[0])
         self.check_reverse_write_read(alignments)
@@ -1032,20 +1025,20 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignments[0].get_alignment_length(), 42)
         self.check_alignment_columns(
             alignments[0], ["AAA--",
-                                                     "AAAAA",
-                                                     "AAAAA",
-                                                     "---T-",
-                                                     "GGGGG",
-                                                     "GGGGG"])
+                            "AAAAA",
+                            "AAAAA",
+                            "---T-",
+                            "GGGGG",
+                            "GGGGG"])
         self.assertEqual(len(alignments[1]), 5)
         self.assertEqual(alignments[1].get_alignment_length(), 6)
         self.check_alignment_columns(
             alignments[1], ["TTTTt",
-                                                     "AAAAa",
-                                                     "AAAAa",
-                                                     "AAAAg",
-                                                     "GGGGg",
-                                                     "AAAAa"])
+                            "AAAAa",
+                            "AAAAa",
+                            "AAAAg",
+                            "GGGGg",
+                            "AAAAa"])
         self.assertEqual(len(alignments[2]), 4)
         self.assertEqual(alignments[2].get_alignment_length(), 13)
         self.check_alignment_rows(
@@ -1069,29 +1062,29 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignments[0].get_alignment_length(), 42)
         self.check_alignment_columns(
             alignments[0], ["AAA--",
-                                                     "AAAAA",
-                                                     "AAAAA",
-                                                     "---T-",
-                                                     "GGGGG",
-                                                     "GGGGG"])
+                            "AAAAA",
+                            "AAAAA",
+                            "---T-",
+                            "GGGGG",
+                            "GGGGG"])
         self.assertEqual(len(alignments[1]), 5)
         self.assertEqual(alignments[1].get_alignment_length(), 6)
         self.check_alignment_columns(
             alignments[1], ["TTTTt",
-                                                     "AAAAa",
-                                                     "AAAAa",
-                                                     "AAAAg",
-                                                     "GGGGg",
-                                                     "AAAAa"])
+                            "AAAAa",
+                            "AAAAa",
+                            "AAAAg",
+                            "GGGGg",
+                            "AAAAa"])
         self.assertEqual(len(alignments[2]), 4)
         self.assertEqual(alignments[2].get_alignment_length(), 13)
         self.check_alignment_columns(
             alignments[2], ['gggA',
-                                                     'cccC',
-                                                     'aaaA',
-                                                     'gggG',
-                                                     'cccC',
-                                                     'aaaA'])
+                            'cccC',
+                            'aaaA',
+                            'gggG',
+                            'cccC',
+                            'aaaA'])
         self.check_summary(alignments[2])
         self.check_reverse_write_read(alignments)
 
@@ -1121,20 +1114,20 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignments[2].get_alignment_length(), 127)
         self.check_alignment_columns(
             alignments[2], ["TTTTT",
-                                                     "GGGGG",
-                                                     "GGGGG",
-                                                     "GGGGG",
-                                                     "TTTTC",
-                                                     "CCCCC"])
+                            "GGGGG",
+                            "GGGGG",
+                            "GGGGG",
+                            "TTTTC",
+                            "CCCCC"])
         self.assertEqual(len(alignments[47]), 6)
         self.assertEqual(alignments[47].get_alignment_length(), 46)
         self.check_alignment_columns(
             alignments[47], ["TTTTTT",
-                                                      "GGGGGG",
-                                                      "TTTTTT",
-                                                      "TTTTTT",
-                                                      "TGGGAT",
-                                                      "tTTTT-"])
+                             "GGGGGG",
+                             "TTTTTT",
+                             "TTTTTT",
+                             "TGGGAT",
+                             "tTTTT-"])
         self.check_summary(alignments[47])
         self.check_reverse_write_read(alignments)
 
