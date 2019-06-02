@@ -222,6 +222,19 @@ class TestAlignIO_reading(unittest.TestCase):
             counter += 1
         self.assertEqual(counter, length)
 
+    def check_read(self, path, fmt, m, k):
+        # Check Bio.AlignIO.read(...)
+        with open(path) as handle:
+            alignment = AlignIO.read(handle, format=fmt)
+        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        self.assertEqual(len(alignment), m)
+        self.assertEqual(alignment.get_alignment_length(), k)
+        return alignment
+
+    def check_read_fails(self, path, fmt):
+        with open(path) as handle:
+            self.assertRaises(ValueError, AlignIO.read, handle, format=fmt)
+
     def test_reading_alignments_clustal1(self):
         path = 'Clustalw/cw02.aln'
         self.check_parse1(path, "clustal", 1, 2)
@@ -229,15 +242,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 2, 601)
         # Show the alignment
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 601)
         self.assertEqual(alignment_summary(alignment), """\
   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
   ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|
@@ -267,15 +273,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 7, 156)
         # Show the alignment
-        self.assertEqual(len(alignment), 7)
-        self.assertEqual(alignment.get_alignment_length(), 156)
         self.assertEqual(alignment_summary(alignment), """\
   TTTTTTT alignment column 0
   AAAAAAA alignment column 1
@@ -309,15 +308,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 5, 447)
         # Show the alignment
-        self.assertEqual(len(alignment), 5)
-        self.assertEqual(alignment.get_alignment_length(), 447)
         self.assertEqual(alignment_summary(alignment), """\
   M---- alignment column 0
   F---- alignment column 1
@@ -351,15 +343,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 2, 687)
         # Show the alignment
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 687)
         self.assertEqual(alignment_summary(alignment), """\
   ------------------------------------...TAG AT3G20900.1-CDS
   ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGT...TAG AT3G20900.1-SEQ
@@ -389,15 +374,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 20, 411)
         # Show the alignment
-        self.assertEqual(len(alignment), 20)
-        self.assertEqual(alignment.get_alignment_length(), 411)
         self.assertEqual(alignment_summary(alignment), """\
   -M------------------ alignment column 0
   -T------------------ alignment column 1
@@ -431,15 +409,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="clustal")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "clustal", 20, 414)
         # Show the alignment
-        self.assertEqual(len(alignment), 20)
-        self.assertEqual(alignment.get_alignment_length(), 414)
         self.assertEqual(alignment_summary(alignment), """\
   MMMMMMMMMMMMMMMM-M-- alignment column 0
   -----------------T-- alignment column 1
@@ -473,12 +444,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta", 1)
         self.check_parse4(path, "fasta", 1)
         self.check_parse5(path, "fasta", 1)
-
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="fasta")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 3)
-        self.assertEqual(alignment.get_alignment_length(), 8)
+        alignment = self.check_read(path, "fasta", 3, 8)
         self.assertEqual(alignment_summary(alignment), """\
   ACGTCGCG test1
   GGGGCCCC test2
@@ -509,13 +475,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "nexus", 1)
         self.check_parse4(path, "nexus", 1)
         self.check_parse5(path, "nexus", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="nexus")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 9)
-        self.assertEqual(alignment.get_alignment_length(), 48)
+        alignment = self.check_read(path, "nexus", 9, 48)
         self.assertEqual(alignment_summary(alignment), """\
   AAAAAAAAc alignment column 0
   -----c?tc alignment column 1
@@ -537,13 +497,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "nexus", 1)
         self.check_parse4(path, "nexus", 1)
         self.check_parse5(path, "nexus", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="nexus")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 22)
+        alignment = self.check_read(path, "nexus", 2, 22)
         self.assertEqual(alignment_summary(alignment), """\
   AAAAAGGCATTGTGGTGGGAAT Aegotheles
   ?????????TTGTGGTGGGAAT Aerodramus""")
@@ -560,15 +514,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "stockholm", 1)
         self.check_parse4(path, "stockholm", 1)
         self.check_parse5(path, "stockholm", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="stockholm")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "stockholm", 2, 104)
         # Show the alignment
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 104)
         self.assertEqual(alignment_summary(alignment), """\
   UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
   AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1
@@ -597,15 +544,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "stockholm", 1)
         self.check_parse4(path, "stockholm", 1)
         self.check_parse5(path, "stockholm", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="stockholm")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "stockholm", 6, 43)
         # Show the alignment
-        self.assertEqual(len(alignment), 6)
-        self.assertEqual(alignment.get_alignment_length(), 43)
         self.assertEqual(alignment_summary(alignment), """\
   MMMEEE alignment column 0
   TQIVVV alignment column 1
@@ -639,14 +579,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 6, 13)
         # Show the alignment
-        self.assertEqual(len(alignment), 6)
-        self.assertEqual(alignment.get_alignment_length(), 13)
         self.assertEqual(alignment_summary(alignment), """\
   CCTTCG alignment column 0
   GGAAAG alignment column 1
@@ -680,14 +614,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 6, 39)
         # Show the alignment
-        self.assertEqual(len(alignment), 6)
-        self.assertEqual(alignment.get_alignment_length(), 39)
         self.assertEqual(alignment_summary(alignment), """\
   CCTTCG alignment column 0
   GGAAAG alignment column 1
@@ -720,14 +648,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 10, 40)
         # Show the alignment
-        self.assertEqual(len(alignment), 10)
-        self.assertEqual(alignment.get_alignment_length(), 40)
         self.assertEqual(alignment_summary(alignment), """\
   CCCCCAAAAA alignment column 0
   AAAAACCCCC alignment column 1
@@ -760,14 +682,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 10, 40)
         # Show the alignment
-        self.assertEqual(len(alignment), 10)
-        self.assertEqual(alignment.get_alignment_length(), 40)
         self.assertEqual(alignment_summary(alignment), """\
   AACCCCCCCC alignment column 0
   AAAACCCCCC alignment column 1
@@ -800,14 +716,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 10, 40)
         # Show the alignment
-        self.assertEqual(len(alignment), 10)
-        self.assertEqual(alignment.get_alignment_length(), 40)
         self.assertEqual(alignment_summary(alignment), """\
   CAAAACAAAC alignment column 0
   AACAACCACC alignment column 1
@@ -840,14 +750,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 3, 384)
         # Show the alignment
-        self.assertEqual(len(alignment), 3)
-        self.assertEqual(alignment.get_alignment_length(), 384)
         self.assertEqual(alignment_summary(alignment), """\
   -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
@@ -876,14 +780,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip", 4, 131)
         # Show the alignment
-        self.assertEqual(len(alignment), 4)
-        self.assertEqual(alignment.get_alignment_length(), 131)
         self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
@@ -913,14 +811,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-relaxed", 1)
         self.check_parse4(path, "phylip-relaxed", 1)
         self.check_parse5(path, "phylip-relaxed", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip-relaxed")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip-relaxed", 12, 898)
         # Show the alignment
-        self.assertEqual(len(alignment), 12)
-        self.assertEqual(alignment.get_alignment_length(), 898)
         self.assertEqual(alignment_summary(alignment), """\
   AAAAAAAAAAAA alignment column 0
   AAAAAAAAAAAA alignment column 1
@@ -954,14 +846,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-sequential", 1)
         self.check_parse4(path, "phylip-sequential", 1)
         self.check_parse5(path, "phylip-sequential", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip-sequential")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip-sequential", 3, 384)
         # Show the alignment
-        self.assertEqual(len(alignment), 3)
-        self.assertEqual(alignment.get_alignment_length(), 384)
         self.assertEqual(alignment_summary(alignment), """\
   -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
@@ -991,14 +877,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-sequential", 1)
         self.check_parse4(path, "phylip-sequential", 1)
         self.check_parse5(path, "phylip-sequential", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="phylip-sequential")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
+        alignment = self.check_read(path, "phylip-sequential", 4, 131)
         # Show the alignment
-        self.assertEqual(len(alignment), 4)
-        self.assertEqual(alignment.get_alignment_length(), 131)
         self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
@@ -1029,15 +909,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "emboss", 4, 131)
         # Show the alignment
-        self.assertEqual(len(alignment), 4)
-        self.assertEqual(alignment.get_alignment_length(), 131)
         self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
@@ -1060,10 +933,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 5)
         self.check_parse4(path, "emboss", 5)
         self.check_parse5(path, "emboss", 5)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
+        self.check_read_fails(path, "emboss")
         # Show the alignment
         self.assertEqual(alignments[0].get_alignment_length(), 124)
         self.assertEqual(alignments[1].get_alignment_length(), 119)
@@ -1108,15 +978,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "emboss", 2, 3653)
         # Show the alignment
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 3653)
         self.assertEqual(alignment_summary(alignment), """\
   TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTAT...GAA asis
   ------------------------------------...GAA asis""")
@@ -1137,15 +1000,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
+        alignment = self.check_read(path, "emboss", 2, 131)
         # Show the alignment
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 131)
         self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235""")
@@ -1167,14 +1023,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 18)
+        alignment = self.check_read(path, "emboss", 2, 18)
         self.assertEqual(alignment_summary(alignment), """\
   CGTTTGAGT-CTGGGATG asis
   CGTTTGAGTACTGGGATG asis""")
@@ -1195,14 +1044,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 16)
+        alignment = self.check_read(path, "emboss", 2, 16)
         self.assertEqual(alignment_summary(alignment), """\
   GPPPQSPDENRAGESS AF069992_1
   GVPPEEAGAAVAAESS CAA85685.1""")
@@ -1223,11 +1065,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 5)
         self.check_parse4(path, "emboss", 5)
         self.check_parse5(path, "emboss", 5)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
-
+        self.check_read_fails(path, "emboss")
         self.assertEquals(alignments[0].get_alignment_length(), 145)
         self.assertEquals(alignments[1].get_alignment_length(), 13)
         self.assertEquals(alignments[2].get_alignment_length(), 18)
@@ -1271,13 +1109,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "emboss", 1)
         self.check_parse4(path, "emboss", 1)
         self.check_parse5(path, "emboss", 1)
-
-        # Check Bio.AlignIO.read(...)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="emboss")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 1450)
+        alignment = self.check_read(path, "emboss", 2, 1450)
         self.assertEqual(alignment_summary(alignment), """\
   GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCC...AAA hg38_chrX_131691529_131830643_47210_48660
   G--------------------------TTCAAGGCC...AAA mm10_chrX_50555743_50635321_27140_27743""")
@@ -1298,9 +1130,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 4)
         self.check_parse4(path, "fasta-m10", 4)
         self.check_parse5(path, "fasta-m10", 4)
-
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.check_read_fails(path, "fasta-m10")
         self.assertEqual(alignments[0].get_alignment_length(), 108)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
@@ -1340,9 +1170,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 6)
         self.check_parse4(path, "fasta-m10", 6)
         self.check_parse5(path, "fasta-m10", 6)
-
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.check_read_fails(path, "fasta-m10")
         self.assertEqual(alignments[0].get_alignment_length(), 88)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-K...AEV gi|10955263|ref|NP_052604.1|
@@ -1381,8 +1209,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 3)
         self.check_parse4(path, "fasta-m10", 3)
         self.check_parse5(path, "fasta-m10", 3)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.check_read_fails(path, "fasta-m10")
         self.assertEqual(alignments[0].get_alignment_length(), 55)
         self.assertEqual(alignment_summary(alignments[0]), """\
   ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGG...IAA gi|152973837|ref|YP_001338874.1|
@@ -1417,11 +1244,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 1)
         self.check_parse4(path, "fasta-m10", 1)
         self.check_parse5(path, "fasta-m10", 1)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format='fasta-m10')
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 102)
+        alignment = self.check_read(path, "fasta-m10", 2, 102)
         self.assertEqual(alignment_summary(alignment), """\
   AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAA...TCA ref|NC_002127.1|:c1351-971
   AGAGAAAATAAAACAAGTAATAAAATATTAATGGAA...ACA ref|NC_002695.1|:1970775-1971404""")
@@ -1441,11 +1264,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 1)
         self.check_parse4(path, "fasta-m10", 1)
         self.check_parse5(path, "fasta-m10", 1)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format='fasta-m10')
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 110)
+        alignment = self.check_read(path, "fasta-m10", 2, 110)
         self.assertEqual(alignment_summary(alignment), """\
   IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
   IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWM...MSE gi|10955282|ref|NP_052623.1|""")
@@ -1465,11 +1284,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 1)
         self.check_parse4(path, "fasta-m10", 1)
         self.check_parse5(path, "fasta-m10", 1)
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format='fasta-m10')
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 131)
+        alignment = self.check_read(path, "fasta-m10", 2, 131)
         self.assertEqual(alignment_summary(alignment), """\
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT query
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT gi|116660610|gb|EG558221.1|EG558221""")
@@ -1489,8 +1304,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 9)
         self.check_parse4(path, "fasta-m10", 9)
         self.check_parse5(path, "fasta-m10", 9)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.check_read_fails(path, "fasta-m10")
         self.assertEqual(alignments[0].get_alignment_length(), 108)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
@@ -1529,8 +1343,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta-m10", 12)
         self.check_parse4(path, "fasta-m10", 12)
         self.check_parse5(path, "fasta-m10", 12)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
+        self.check_read_fails(path, "fasta-m10")
         self.assertEqual(alignments[0].get_alignment_length(), 65)
         self.assertEqual(alignment_summary(alignments[0]), """\
   LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-...QML sp|Q9NSY1|BMP2K_HUMAN
@@ -1569,13 +1382,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "ig", 1)
         self.check_parse4(path, "ig", 1)
         self.check_parse5(path, "ig", 1)
-
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="ig")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-
-        self.assertEqual(len(alignment), 16)
-        self.assertEqual(alignment.get_alignment_length(), 298)
+        alignment = self.check_read(path, "ig", 16, 298)
         self.assertEqual(alignment_summary(alignment), """\
   MMMMMMMMMMMMMMMM alignment column 0
   EEEEEEETEEEENEEE alignment column 1
@@ -1607,12 +1414,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "pir", 1)
         self.check_parse4(path, "pir", 1)
         self.check_parse5(path, "pir", 1)
-
-        with open(path) as handle:
-            alignment = AlignIO.read(handle, format="pir")
-        self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignment), 2)
-        self.assertEqual(alignment.get_alignment_length(), 2527)
+        alignment = self.check_read(path, "pir", 2, 2527)
         self.assertEqual(alignment_summary(alignment), """\
   ------------------------------------...--- 804Angiostrongylus_cantonensis
   ------------------------------------...--- 815Parelaphostrongylus_odocoil""")
@@ -1642,8 +1444,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "maf", 2)
         self.check_parse4(path, "maf", 2)
         self.check_parse5(path, "maf", 2)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.check_read_fails(path, "maf")
         self.assertEqual(alignments[0].get_alignment_length(), 5486)
         self.assertEqual(alignment_summary(alignments[0]), """\
   gcacagcctttactccctgactgcgtttatattctg...CCG NM_006987
@@ -1673,8 +1474,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "maf", 3)
         self.check_parse4(path, "maf", 3)
         self.check_parse5(path, "maf", 3)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.check_read_fails(path, "maf")
         self.assertEqual(len(alignments[0]), 5)
         self.assertEqual(alignments[0].get_alignment_length(), 42)
         self.assertEqual(alignment_summary(alignments[0]), """\
@@ -1720,8 +1520,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "maf", 3)
         self.check_parse4(path, "maf", 3)
         self.check_parse5(path, "maf", 3)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.check_read_fails(path, "maf")
         self.assertEqual(len(alignments[0]), 5)
         self.assertEqual(alignments[0].get_alignment_length(), 42)
         self.assertEqual(alignment_summary(alignments[0]), """\
@@ -1769,8 +1568,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "maf", 48)
         self.check_parse4(path, "maf", 48)
         self.check_parse5(path, "maf", 48)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "maf")
+        self.check_read_fails(path, "maf")
         self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 164)
         self.assertEqual(alignment_summary(alignments[0]), """\
@@ -1821,8 +1619,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "mauve", 5)
         self.check_parse4(path, "mauve", 5)
         self.check_parse5(path, "mauve", 5)
-        with open(path) as handle:
-            self.assertRaises(ValueError, AlignIO.read, handle, "mauve")
+        self.check_read_fails(path, "mauve")
         self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 5670)
         self.assertEqual(alignment_summary(alignments[0]), """\
