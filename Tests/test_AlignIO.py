@@ -174,7 +174,7 @@ class TestAlignIO_reading(unittest.TestCase):
             AlignIO.write(alignments[0:1], handle, format)
             self.assertEqual(handle.getvalue(), alignments[0].format(format))
 
-    def check_iterator1(self, path, fmt, length, m=None):
+    def check_parse1(self, path, fmt, length, m=None):
         # Try using the iterator with a for loop and a handle
         with open(path, "r") as handle:
             alignments = list(AlignIO.parse(handle, format=fmt))
@@ -184,14 +184,14 @@ class TestAlignIO_reading(unittest.TestCase):
                 self.assertEqual(len(alignment), m)
         return alignments
 
-    def check_iterator2(self, path, fmt, length):
+    def check_parse2(self, path, fmt, length):
         # Try using the iterator with a for loop and a filename not handle
         counter = 0
         for record in AlignIO.parse(path, format=fmt):
             counter += 1
         self.assertEqual(counter, length)
 
-    def check_iterator3(self, path, fmt, length):
+    def check_parse3(self, path, fmt, length):
         # Try using the iterator with the next() method
         counter = 0
         alignments = AlignIO.parse(path, format=fmt)
@@ -204,7 +204,7 @@ class TestAlignIO_reading(unittest.TestCase):
             counter += 1
         self.assertEqual(counter, length)
 
-    def check_iterator4(self, path, fmt, length):
+    def check_parse4(self, path, fmt, length):
         # Try a mixture of next() and list
         counter = 0
         alignments = AlignIO.parse(path, format=fmt)
@@ -213,7 +213,7 @@ class TestAlignIO_reading(unittest.TestCase):
         counter += len(list(alignments))
         self.assertEqual(counter, length)
 
-    def check_iterator5(self, path, fmt, length):
+    def check_parse5(self, path, fmt, length):
         # Try a mixture of next() and for loop
         alignments = AlignIO.parse(path, format=fmt)
         alignment = next(alignments)
@@ -224,11 +224,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal1(self):
         path = 'Clustalw/cw02.aln'
-        self.check_iterator1(path, "clustal", 1, 2)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 2)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -262,11 +262,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal2(self):
         path = 'Clustalw/opuntia.aln'
-        self.check_iterator1(path, "clustal", 1, 7)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 7)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -304,11 +304,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal3(self):
         path = 'Clustalw/hedgehog.aln'
-        self.check_iterator1(path, "clustal", 1, 5)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 5)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -346,11 +346,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal4(self):
         path = 'Clustalw/odd_consensus.aln'
-        self.check_iterator1(path, "clustal", 1, 2)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 2)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -384,11 +384,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal5(self):
         path = 'Clustalw/protein.aln'
-        self.check_iterator1(path, "clustal", 1, 20)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 20)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -426,11 +426,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_clustal6(self):
         path = 'Clustalw/promals3d.aln'
-        self.check_iterator1(path, "clustal", 1, 20)
-        self.check_iterator2(path, "clustal", 1)
-        self.check_iterator3(path, "clustal", 1)
-        self.check_iterator4(path, "clustal", 1)
-        self.check_iterator5(path, "clustal", 1)
+        self.check_parse1(path, "clustal", 1, 20)
+        self.check_parse2(path, "clustal", 1)
+        self.check_parse3(path, "clustal", 1)
+        self.check_parse4(path, "clustal", 1)
+        self.check_parse5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -468,11 +468,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta(self):
         path = 'GFF/multi.fna'  # Trivial nucleotide alignment
-        self.check_iterator1(path, "fasta", 1, 3)
-        self.check_iterator2(path, "fasta", 1)
-        self.check_iterator3(path, "fasta", 1)
-        self.check_iterator4(path, "fasta", 1)
-        self.check_iterator5(path, "fasta", 1)
+        self.check_parse1(path, "fasta", 1, 3)
+        self.check_parse2(path, "fasta", 1)
+        self.check_parse3(path, "fasta", 1)
+        self.check_parse4(path, "fasta", 1)
+        self.check_parse5(path, "fasta", 1)
 
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="fasta")
@@ -504,11 +504,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_nexus1(self):
         path = 'Nexus/test_Nexus_input.nex'
-        self.check_iterator1(path, "nexus", 1, 9)
-        self.check_iterator2(path, "nexus", 1)
-        self.check_iterator3(path, "nexus", 1)
-        self.check_iterator4(path, "nexus", 1)
-        self.check_iterator5(path, "nexus", 1)
+        self.check_parse1(path, "nexus", 1, 9)
+        self.check_parse2(path, "nexus", 1)
+        self.check_parse3(path, "nexus", 1)
+        self.check_parse4(path, "nexus", 1)
+        self.check_parse5(path, "nexus", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -532,11 +532,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_nexus2(self):
         path = 'Nexus/codonposset.nex'
-        self.check_iterator1(path, "nexus", 1, 2)
-        self.check_iterator2(path, "nexus", 1)
-        self.check_iterator3(path, "nexus", 1)
-        self.check_iterator4(path, "nexus", 1)
-        self.check_iterator5(path, "nexus", 1)
+        self.check_parse1(path, "nexus", 1, 2)
+        self.check_parse2(path, "nexus", 1)
+        self.check_parse3(path, "nexus", 1)
+        self.check_parse4(path, "nexus", 1)
+        self.check_parse5(path, "nexus", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -555,11 +555,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_stockholm1(self):
         path = 'Stockholm/simple.sth'
-        self.check_iterator1(path, "stockholm", 1, 2)
-        self.check_iterator2(path, "stockholm", 1)
-        self.check_iterator3(path, "stockholm", 1)
-        self.check_iterator4(path, "stockholm", 1)
-        self.check_iterator5(path, "stockholm", 1)
+        self.check_parse1(path, "stockholm", 1, 2)
+        self.check_parse2(path, "stockholm", 1)
+        self.check_parse3(path, "stockholm", 1)
+        self.check_parse4(path, "stockholm", 1)
+        self.check_parse5(path, "stockholm", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -592,11 +592,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_stockholm2(self):
         path = 'Stockholm/funny.sth'
-        self.check_iterator1(path, "stockholm", 1, 6)
-        self.check_iterator2(path, "stockholm", 1)
-        self.check_iterator3(path, "stockholm", 1)
-        self.check_iterator4(path, "stockholm", 1)
-        self.check_iterator5(path, "stockholm", 1)
+        self.check_parse1(path, "stockholm", 1, 6)
+        self.check_parse2(path, "stockholm", 1)
+        self.check_parse3(path, "stockholm", 1)
+        self.check_parse4(path, "stockholm", 1)
+        self.check_parse5(path, "stockholm", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -634,11 +634,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip1(self):
         path = 'Phylip/reference_dna.phy'
-        self.check_iterator1(path, "phylip", 1, 6)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 6)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -675,11 +675,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip2(self):
         path = 'Phylip/reference_dna2.phy'
-        self.check_iterator1(path, "phylip", 1, 6)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 6)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -715,11 +715,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip3(self):
         path = 'Phylip/hennigian.phy'
-        self.check_iterator1(path, "phylip", 1, 10)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 10)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -755,11 +755,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip4(self):
         path = 'Phylip/horses.phy'
-        self.check_iterator1(path, "phylip", 1, 10)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 10)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -795,11 +795,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip5(self):
         path = 'Phylip/random.phy'
-        self.check_iterator1(path, "phylip", 1, 10)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 10)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -835,11 +835,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip6(self):
         path = 'Phylip/interlaced.phy'
-        self.check_iterator1(path, "phylip", 1, 3)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 3)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -871,11 +871,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip7(self):
         path = 'Phylip/interlaced2.phy'
-        self.check_iterator1(path, "phylip", 1, 4)
-        self.check_iterator2(path, "phylip", 1)
-        self.check_iterator3(path, "phylip", 1)
-        self.check_iterator4(path, "phylip", 1)
-        self.check_iterator5(path, "phylip", 1)
+        self.check_parse1(path, "phylip", 1, 4)
+        self.check_parse2(path, "phylip", 1)
+        self.check_parse3(path, "phylip", 1)
+        self.check_parse4(path, "phylip", 1)
+        self.check_parse5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -908,11 +908,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip8(self):
         path = 'ExtendedPhylip/primates.phyx'
-        self.check_iterator1(path, "phylip-relaxed", 1, 12)
-        self.check_iterator2(path, "phylip-relaxed", 1)
-        self.check_iterator3(path, "phylip-relaxed", 1)
-        self.check_iterator4(path, "phylip-relaxed", 1)
-        self.check_iterator5(path, "phylip-relaxed", 1)
+        self.check_parse1(path, "phylip-relaxed", 1, 12)
+        self.check_parse2(path, "phylip-relaxed", 1)
+        self.check_parse3(path, "phylip-relaxed", 1)
+        self.check_parse4(path, "phylip-relaxed", 1)
+        self.check_parse5(path, "phylip-relaxed", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -949,11 +949,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip9(self):
         path = 'Phylip/sequential.phy'
-        self.check_iterator1(path, "phylip-sequential", 1, 3)
-        self.check_iterator2(path, "phylip-sequential", 1)
-        self.check_iterator3(path, "phylip-sequential", 1)
-        self.check_iterator4(path, "phylip-sequential", 1)
-        self.check_iterator5(path, "phylip-sequential", 1)
+        self.check_parse1(path, "phylip-sequential", 1, 3)
+        self.check_parse2(path, "phylip-sequential", 1)
+        self.check_parse3(path, "phylip-sequential", 1)
+        self.check_parse4(path, "phylip-sequential", 1)
+        self.check_parse5(path, "phylip-sequential", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -986,11 +986,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_phylip10(self):
         path = 'Phylip/sequential2.phy'
-        self.check_iterator1(path, "phylip-sequential", 1, 4)
-        self.check_iterator2(path, "phylip-sequential", 1)
-        self.check_iterator3(path, "phylip-sequential", 1)
-        self.check_iterator4(path, "phylip-sequential", 1)
-        self.check_iterator5(path, "phylip-sequential", 1)
+        self.check_parse1(path, "phylip-sequential", 1, 4)
+        self.check_parse2(path, "phylip-sequential", 1)
+        self.check_parse3(path, "phylip-sequential", 1)
+        self.check_parse4(path, "phylip-sequential", 1)
+        self.check_parse5(path, "phylip-sequential", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1024,11 +1024,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss1(self):
         path = 'Emboss/alignret.txt'
-        self.check_iterator1(path, "emboss", 1, 4)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 4)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1055,25 +1055,20 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss2(self):
         path = 'Emboss/needle.txt'
-        alignments = self.check_iterator1(path, "emboss", 5, 2)
-        self.check_iterator2(path, "emboss", 5)
-        self.check_iterator3(path, "emboss", 5)
-        self.check_iterator4(path, "emboss", 5)
-        self.check_iterator5(path, "emboss", 5)
+        alignments = self.check_parse1(path, "emboss", 5, 2)
+        self.check_parse2(path, "emboss", 5)
+        self.check_parse3(path, "emboss", 5)
+        self.check_parse4(path, "emboss", 5)
+        self.check_parse5(path, "emboss", 5)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 124)
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 119)
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 120)
-        self.assertEqual(len(alignments[3]), 2)
         self.assertEqual(alignments[3].get_alignment_length(), 118)
-        self.assertEqual(len(alignments[4]), 2)
         self.assertEqual(alignments[4].get_alignment_length(), 125)
         self.assertEqual(alignment_summary(alignments[0]), """\
   KILIVDD----QYGIRILLNEVFNKEGYQTFQAANG...--- ref_rec
@@ -1108,11 +1103,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss3(self):
         path = 'Emboss/needle_asis.txt'
-        self.check_iterator1(path, "emboss", 1, 2)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 2)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1137,11 +1132,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss4(self):
         path = 'Emboss/water.txt'
-        self.check_iterator1(path, "emboss", 1, 2)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 2)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1167,11 +1162,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss5(self):
         path = 'Emboss/water2.txt'
-        self.check_iterator1(path, "emboss", 1, 2)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 2)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1195,11 +1190,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss6(self):
         path = 'Emboss/matcher_simple.txt'
-        self.check_iterator1(path, "emboss", 1, 2)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 2)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1223,25 +1218,20 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss7(self):
         path = 'Emboss/matcher_pair.txt'
-        alignments = self.check_iterator1(path, "emboss", 5, 2)
-        self.check_iterator2(path, "emboss", 5)
-        self.check_iterator3(path, "emboss", 5)
-        self.check_iterator4(path, "emboss", 5)
-        self.check_iterator5(path, "emboss", 5)
+        alignments = self.check_parse1(path, "emboss", 5, 2)
+        self.check_parse2(path, "emboss", 5)
+        self.check_parse3(path, "emboss", 5)
+        self.check_parse4(path, "emboss", 5)
+        self.check_parse5(path, "emboss", 5)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "emboss")
 
-        self.assertEquals(len(alignments[0]), 2)
         self.assertEquals(alignments[0].get_alignment_length(), 145)
-        self.assertEquals(len(alignments[1]), 2)
         self.assertEquals(alignments[1].get_alignment_length(), 13)
-        self.assertEquals(len(alignments[2]), 2)
         self.assertEquals(alignments[2].get_alignment_length(), 18)
-        self.assertEquals(len(alignments[3]), 2)
         self.assertEquals(alignments[3].get_alignment_length(), 10)
-        self.assertEquals(len(alignments[4]), 2)
         self.assertEquals(alignments[4].get_alignment_length(), 10)
         self.assertEquals(alignment_summary(alignments[0]), """\
   LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFP...SKY HBA_HUMAN
@@ -1276,11 +1266,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss8(self):
         path = 'Emboss/emboss_pair_aln_full_blank_line.txt'
-        self.check_iterator1(path, "emboss", 1, 2)
-        self.check_iterator2(path, "emboss", 1)
-        self.check_iterator3(path, "emboss", 1)
-        self.check_iterator4(path, "emboss", 1)
-        self.check_iterator5(path, "emboss", 1)
+        self.check_parse1(path, "emboss", 1, 2)
+        self.check_parse2(path, "emboss", 1)
+        self.check_parse3(path, "emboss", 1)
+        self.check_parse4(path, "emboss", 1)
+        self.check_parse5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1303,30 +1293,26 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_1(self):
         path = 'Fasta/output001.m10'
-        alignments = self.check_iterator1(path, "fasta-m10", 4, 2)
-        self.check_iterator2(path, "fasta-m10", 4)
-        self.check_iterator3(path, "fasta-m10", 4)
-        self.check_iterator4(path, "fasta-m10", 4)
-        self.check_iterator5(path, "fasta-m10", 4)
+        alignments = self.check_parse1(path, "fasta-m10", 4, 2)
+        self.check_parse2(path, "fasta-m10", 4)
+        self.check_parse3(path, "fasta-m10", 4)
+        self.check_parse4(path, "fasta-m10", 4)
+        self.check_parse5(path, "fasta-m10", 4)
 
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 108)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
   AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|""")
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 64)
         self.assertEqual(alignment_summary(alignments[1]), """\
   AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
   ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|""")
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 38)
         self.assertEqual(alignment_summary(alignments[2]), """\
   MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE gi|10955264|ref|NP_052605.1|
   IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ gi|152973462|ref|YP_001338513.1|""")
-        self.assertEqual(len(alignments[3]), 2)
         self.assertEqual(alignments[3].get_alignment_length(), 43)
         self.assertEqual(alignment_summary(alignments[3]), """\
   SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEM...TYC gi|10955265|ref|NP_052606.1|
@@ -1349,30 +1335,26 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_2(self):
         path = 'Fasta/output002.m10'
-        alignments = self.check_iterator1(path, "fasta-m10", 6, 2)
-        self.check_iterator2(path, "fasta-m10", 6)
-        self.check_iterator3(path, "fasta-m10", 6)
-        self.check_iterator4(path, "fasta-m10", 6)
-        self.check_iterator5(path, "fasta-m10", 6)
+        alignments = self.check_parse1(path, "fasta-m10", 6, 2)
+        self.check_parse2(path, "fasta-m10", 6)
+        self.check_parse3(path, "fasta-m10", 6)
+        self.check_parse4(path, "fasta-m10", 6)
+        self.check_parse5(path, "fasta-m10", 6)
 
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 88)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-K...AEV gi|10955263|ref|NP_052604.1|
   SQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGRK...VQV gi|162139799|ref|NP_309634.2|""")
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 53)
         self.assertEqual(alignment_summary(alignments[1]), """\
   EIRKRAAECGKTVSGFLRAAA-LGKKV----NSLTD...KKL gi|10955263|ref|NP_052604.1|
   EIKPRGTSKGEAIAAFMQEAPFIGRTPVFLGDDLTD...VKI gi|15831859|ref|NP_310632.1|""")
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 92)
         self.assertEqual(alignment_summary(alignments[2]), """\
   SEFFSKIESDLKKKKSKGDVFFDLIIPNG-----GK...ATS gi|10955264|ref|NP_052605.1|
   TELNSELAKAMKVDAQRG-AFVSQVLPNSSAAKAGI...QSS gi|15829419|ref|NP_308192.1|""")
-        self.assertEqual(len(alignments[5]), 2)
         self.assertEqual(alignments[5].get_alignment_length(), 157)
         self.assertEqual(alignment_summary(alignments[5]), """\
   QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLIN...REI gi|10955265|ref|NP_052606.1|
@@ -1394,24 +1376,21 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_3(self):
         path = 'Fasta/output003.m10'
-        alignments = self.check_iterator1(path, "fasta-m10", 3, 2)
-        self.check_iterator2(path, "fasta-m10", 3)
-        self.check_iterator3(path, "fasta-m10", 3)
-        self.check_iterator4(path, "fasta-m10", 3)
-        self.check_iterator5(path, "fasta-m10", 3)
+        alignments = self.check_parse1(path, "fasta-m10", 3, 2)
+        self.check_parse2(path, "fasta-m10", 3)
+        self.check_parse3(path, "fasta-m10", 3)
+        self.check_parse4(path, "fasta-m10", 3)
+        self.check_parse5(path, "fasta-m10", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 55)
         self.assertEqual(alignment_summary(alignments[0]), """\
   ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGG...IAA gi|152973837|ref|YP_001338874.1|
   VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAALGK...LGA gi|10955263|ref|NP_052604.1|""")
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 22)
         self.assertEqual(alignment_summary(alignments[1]), """\
   DDAEHLFRTLSSR-LDALQDGN gi|152973840|ref|YP_001338877.1|
   DDRANLFEFLSEEGITITEDNN gi|10955265|ref|NP_052606.1|""")
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 63)
         self.assertEqual(alignment_summary(alignments[2]), """\
   VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIR...QAM gi|152973841|ref|YP_001338878.1|
@@ -1433,11 +1412,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_4(self):
         path = 'Fasta/output004.m10'
-        self.check_iterator1(path, "fasta-m10", 1, 2)
-        self.check_iterator2(path, "fasta-m10", 1)
-        self.check_iterator3(path, "fasta-m10", 1)
-        self.check_iterator4(path, "fasta-m10", 1)
-        self.check_iterator5(path, "fasta-m10", 1)
+        self.check_parse1(path, "fasta-m10", 1, 2)
+        self.check_parse2(path, "fasta-m10", 1)
+        self.check_parse3(path, "fasta-m10", 1)
+        self.check_parse4(path, "fasta-m10", 1)
+        self.check_parse5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
@@ -1457,11 +1436,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_5(self):
         path = 'Fasta/output005.m10'
-        self.check_iterator1(path, "fasta-m10", 1, 2)
-        self.check_iterator2(path, "fasta-m10", 1)
-        self.check_iterator3(path, "fasta-m10", 1)
-        self.check_iterator4(path, "fasta-m10", 1)
-        self.check_iterator5(path, "fasta-m10", 1)
+        self.check_parse1(path, "fasta-m10", 1, 2)
+        self.check_parse2(path, "fasta-m10", 1)
+        self.check_parse3(path, "fasta-m10", 1)
+        self.check_parse4(path, "fasta-m10", 1)
+        self.check_parse5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
@@ -1481,11 +1460,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_6(self):
         path = 'Fasta/output006.m10'
-        self.check_iterator1(path, "fasta-m10", 1, 2)
-        self.check_iterator2(path, "fasta-m10", 1)
-        self.check_iterator3(path, "fasta-m10", 1)
-        self.check_iterator4(path, "fasta-m10", 1)
-        self.check_iterator5(path, "fasta-m10", 1)
+        self.check_parse1(path, "fasta-m10", 1, 2)
+        self.check_parse2(path, "fasta-m10", 1)
+        self.check_parse3(path, "fasta-m10", 1)
+        self.check_parse4(path, "fasta-m10", 1)
+        self.check_parse5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
@@ -1505,29 +1484,25 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_7(self):
         path = 'Fasta/output007.m10'
-        alignments = self.check_iterator1(path, "fasta-m10", 9, 2)
-        self.check_iterator2(path, "fasta-m10", 9)
-        self.check_iterator3(path, "fasta-m10", 9)
-        self.check_iterator4(path, "fasta-m10", 9)
-        self.check_iterator5(path, "fasta-m10", 9)
+        alignments = self.check_parse1(path, "fasta-m10", 9, 2)
+        self.check_parse2(path, "fasta-m10", 9)
+        self.check_parse3(path, "fasta-m10", 9)
+        self.check_parse4(path, "fasta-m10", 9)
+        self.check_parse5(path, "fasta-m10", 9)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 108)
         self.assertEqual(alignment_summary(alignments[0]), """\
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
   AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|""")
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 64)
         self.assertEqual(alignment_summary(alignments[1]), """\
   AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
   ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|""")
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 45)
         self.assertEqual(alignment_summary(alignments[2]), """\
   EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTD...VMR gi|10955263|ref|NP_052604.1|
   ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTD...MLQ gi|152973480|ref|YP_001338531.1|""")
-        self.assertEqual(len(alignments[8]), 2)
         self.assertEqual(alignments[8].get_alignment_length(), 64)
         self.assertEqual(alignment_summary(alignments[8]), """\
   ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDE...FSD gi|10955265|ref|NP_052606.1|
@@ -1549,29 +1524,25 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_8(self):
         path = 'Fasta/output008.m10'
-        alignments = self.check_iterator1(path, "fasta-m10", 12, 2)
-        self.check_iterator2(path, "fasta-m10", 12)
-        self.check_iterator3(path, "fasta-m10", 12)
-        self.check_iterator4(path, "fasta-m10", 12)
-        self.check_iterator5(path, "fasta-m10", 12)
+        alignments = self.check_parse1(path, "fasta-m10", 12, 2)
+        self.check_parse2(path, "fasta-m10", 12)
+        self.check_parse3(path, "fasta-m10", 12)
+        self.check_parse4(path, "fasta-m10", 12)
+        self.check_parse5(path, "fasta-m10", 12)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
-        self.assertEqual(len(alignments[0]), 2)
         self.assertEqual(alignments[0].get_alignment_length(), 65)
         self.assertEqual(alignment_summary(alignments[0]), """\
   LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-...QML sp|Q9NSY1|BMP2K_HUMAN
   IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHG...GLL gi|283855822|gb|GQ290312.1|""")
-        self.assertEqual(len(alignments[1]), 2)
         self.assertEqual(alignments[1].get_alignment_length(), 201)
         self.assertEqual(alignment_summary(alignments[1]), """\
   GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQ...NRS sp|Q9NSY1|BMP2K_HUMAN
   GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAG...QKS gi|57163782|ref|NM_001009242.1|""")
-        self.assertEqual(len(alignments[2]), 2)
         self.assertEqual(alignments[2].get_alignment_length(), 348)
         self.assertEqual(alignment_summary(alignments[2]), """\
   MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQ...APA sp|P08100|OPSD_HUMAN
   MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQ...APA gi|57163782|ref|NM_001009242.1|""")
-        self.assertEqual(len(alignments[11]), 2)
         self.assertEqual(alignments[11].get_alignment_length(), 31)
         self.assertEqual(alignment_summary(alignments[11]), """\
   AQQQESATTQKAEKEVTRMVIIMVIAFLICW sp|P08100|OPSD_HUMAN
@@ -1593,11 +1564,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_ig(self):
         path = 'IntelliGenetics/VIF_mase-pro.txt'
-        self.check_iterator1(path, "ig", 1, 16)
-        self.check_iterator2(path, "ig", 1)
-        self.check_iterator3(path, "ig", 1)
-        self.check_iterator4(path, "ig", 1)
-        self.check_iterator5(path, "ig", 1)
+        self.check_parse1(path, "ig", 1, 16)
+        self.check_parse2(path, "ig", 1)
+        self.check_parse3(path, "ig", 1)
+        self.check_parse4(path, "ig", 1)
+        self.check_parse5(path, "ig", 1)
 
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="ig")
@@ -1631,11 +1602,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_pir(self):
         path = 'NBRF/clustalw.pir'
-        self.check_iterator1(path, "pir", 1, 2)
-        self.check_iterator2(path, "pir", 1)
-        self.check_iterator3(path, "pir", 1)
-        self.check_iterator4(path, "pir", 1)
-        self.check_iterator5(path, "pir", 1)
+        self.check_parse1(path, "pir", 1, 2)
+        self.check_parse2(path, "pir", 1)
+        self.check_parse3(path, "pir", 1)
+        self.check_parse4(path, "pir", 1)
+        self.check_parse5(path, "pir", 1)
 
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="pir")
@@ -1666,20 +1637,18 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf1(self):
         path = 'MAF/humor.maf'
-        alignments = self.check_iterator1(path, "maf", 2)
-        self.check_iterator2(path, "maf", 2)
-        self.check_iterator3(path, "maf", 2)
-        self.check_iterator4(path, "maf", 2)
-        self.check_iterator5(path, "maf", 2)
+        alignments = self.check_parse1(path, "maf", 2, 3)
+        self.check_parse2(path, "maf", 2)
+        self.check_parse3(path, "maf", 2)
+        self.check_parse4(path, "maf", 2)
+        self.check_parse5(path, "maf", 2)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
-        self.assertEqual(len(alignments[0]), 3)
         self.assertEqual(alignments[0].get_alignment_length(), 5486)
         self.assertEqual(alignment_summary(alignments[0]), """\
   gcacagcctttactccctgactgcgtttatattctg...CCG NM_006987
   gcacagcctttactccctgactgcgtttatattctg...TTG mm3
   gcacagcctttactccctgactgcgtttatattctg...CCG rn3""")
-        self.assertEqual(len(alignments[1]), 3)
         self.assertEqual(alignments[1].get_alignment_length(), 5753)
         self.assertEqual(alignment_summary(alignments[1]), """\
   tttgtccatgttggtcaggctggtctcgaactcccc...GGT NM_018289
@@ -1699,11 +1668,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf2(self):
         path = "MAF/bug2453.maf"
-        alignments = self.check_iterator1(path, "maf", 3)
-        self.check_iterator2(path, "maf", 3)
-        self.check_iterator3(path, "maf", 3)
-        self.check_iterator4(path, "maf", 3)
-        self.check_iterator5(path, "maf", 3)
+        alignments = self.check_parse1(path, "maf", 3)
+        self.check_parse2(path, "maf", 3)
+        self.check_parse3(path, "maf", 3)
+        self.check_parse4(path, "maf", 3)
+        self.check_parse5(path, "maf", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 5)
@@ -1746,11 +1715,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf3(self):
         path = "MAF/ucsc_test.maf"
-        alignments = self.check_iterator1(path, "maf", 3)
-        self.check_iterator2(path, "maf", 3)
-        self.check_iterator3(path, "maf", 3)
-        self.check_iterator4(path, "maf", 3)
-        self.check_iterator5(path, "maf", 3)
+        alignments = self.check_parse1(path, "maf", 3)
+        self.check_parse2(path, "maf", 3)
+        self.check_parse3(path, "maf", 3)
+        self.check_parse4(path, "maf", 3)
+        self.check_parse5(path, "maf", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 5)
@@ -1795,11 +1764,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf4(self):
         path = "MAF/ucsc_mm9_chr10.maf"
-        alignments = self.check_iterator1(path, "maf", 48)
-        self.check_iterator2(path, "maf", 48)
-        self.check_iterator3(path, "maf", 48)
-        self.check_iterator4(path, "maf", 48)
-        self.check_iterator5(path, "maf", 48)
+        alignments = self.check_parse1(path, "maf", 48)
+        self.check_parse2(path, "maf", 48)
+        self.check_parse3(path, "maf", 48)
+        self.check_parse4(path, "maf", 48)
+        self.check_parse5(path, "maf", 48)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 2)
@@ -1847,11 +1816,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_mauve(self):
         path = 'Mauve/simple.xmfa'
-        alignments = self.check_iterator1(path, "mauve", 5)
-        self.check_iterator2(path, "mauve", 5)
-        self.check_iterator3(path, "mauve", 5)
-        self.check_iterator4(path, "mauve", 5)
-        self.check_iterator5(path, "mauve", 5)
+        alignments = self.check_parse1(path, "mauve", 5)
+        self.check_parse2(path, "mauve", 5)
+        self.check_parse3(path, "mauve", 5)
+        self.check_parse4(path, "mauve", 5)
+        self.check_parse5(path, "mauve", 5)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "mauve")
         self.assertEqual(len(alignments[0]), 2)
