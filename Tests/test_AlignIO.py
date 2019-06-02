@@ -220,6 +220,30 @@ class TestAlignIO_reading(unittest.TestCase):
         if alignment_len > 5:
             self.assertEqual(alignment[:, -1], columns[-1])
 
+    def check_summary_simple(self, alignment):
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+
+    def check_summary(self, alignment):
+        # Check AlignInfo.SummaryInfo likes the alignment; smoke test only
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        with self.assertRaises(ValueError) as cm:
+            info_content = summary.information_content()
+        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+
+    def check_summary_pir(self, alignment):
+        summary = AlignInfo.SummaryInfo(alignment)
+        dumb_consensus = summary.dumb_consensus()
+        # gap_consensus = summary.gap_consensus()
+        pssm = summary.pos_specific_score_matrix()
+        rep_dict = summary.replacement_dictionary()
+        info_content = summary.information_content()
+
     def test_reading_alignments_clustal1(self):
         path = 'Clustalw/cw02.aln'
         self.check_parse1(path, "clustal", 1, 2)
@@ -232,15 +256,7 @@ class TestAlignIO_reading(unittest.TestCase):
            [("gi|4959044|gb|AAD34209.1|AF069", "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQF...SVV"),
             ("gi|671626|emb|CAA85685.1|", "---------MSPQTETKASVGFKAGVKEYKLTYY...---")],
            {'clustal_consensus': '          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   '})
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -264,15 +280,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "CCCCCCC",
                                                  "AAAAAAA"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -296,15 +304,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "V----",
                                                  "---SS"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -325,15 +325,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("AT3G20900.1-CDS", "----------------------------------...TAG"),
              ("AT3G20900.1-SEQ", "ATGAACAAAGTAGCGAGGAAGAACAAAACATCAG...TAG")],
             {'clustal_consensus': '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *       *  *** ***** *   *  **      *******************************************************************************************************************************************************************************'})
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -357,15 +349,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "-E---------------MMS",
                                                  "-------------------T"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -389,15 +373,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "-S---------------E--",
                                                  "-T------------------"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -418,16 +394,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [('test1', "ACGTCGCG"),
              ('test2', "GGGGCCCC"),
              ('test3', "AAACACAC")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
-
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -451,10 +418,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "GGGGGGGGc",
                                                  "tt--?ag?c"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
+        self.check_summary_simple(alignment)
 
     def test_reading_alignments_nexus2(self):
         path = 'Nexus/codonposset.nex'
@@ -467,10 +431,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('Aegotheles', "AAAAAGGCATTGTGGTGGGAAT",),
              ('Aerodramus', "?????????TTGTGGTGGGAAT")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
+        self.check_summary_simple(alignment)
 
     def test_reading_alignments_stockholm1(self):
         path = 'Stockholm/simple.sth'
@@ -484,15 +445,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [('AE007476.1', "AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGU...GAU"),
              ('AP001509.1', "UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-U...UGU")],
             {'secondary_structure': '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'})
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -516,15 +469,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "ASDTTT",
                                                  "SYSEEE"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -548,15 +493,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "GAGGAG",
                                                  "CTTTTC"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -579,15 +516,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "TTTTAA",
                                                  "GAGGAG",
                                                  "CTTTTC"])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -610,15 +539,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "AAACCAAAAA",
                                                  "CCAAAAAAAA",
                                                  "AAAAAAAAAA"])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -641,15 +562,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "ACAAAAAAAA",
                                                  "ACACCCCCCC",
                                                  "AAAAAAAAAA"])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -672,15 +585,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "ACAACACACA",
                                                  "CCAAAACCAA",
                                                  "AAAAAAAAAA"])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -701,15 +606,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -731,15 +628,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ('IXI_235', "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
              ('IXI_237', "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -763,15 +652,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "TTTTTTTTTTTT",
                                                  "TTTTTTTTTTTT"])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -792,15 +673,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -822,15 +695,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ('IXI_235', "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
              ('IXI_237', "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -852,15 +717,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ("IXI_235", "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE"),
              ("IXI_236", "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
              ("IXI_237", "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_emboss2(self):
         path = 'Emboss/needle.txt'
@@ -891,15 +748,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[4],
             [("gi|94970041|receiver", "TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEE...KRQ"),
              ("ref_rec", "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQ...---")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -918,15 +767,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [("asis", "----------------------------------...GAA"),
              ("asis", "TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTT...GAA")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_emboss4(self):
         path = 'Emboss/water.txt'
@@ -939,15 +780,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [("IXI_234", "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
              ("IXI_235", "TSPASIRPPAGPSSR---------RPSPPGPRRP...SHE")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_emboss5(self):
         path = 'Emboss/water2.txt'
@@ -960,15 +793,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('asis', "CGTTTGAGT-CTGGGATG"),
              ('asis', "CGTTTGAGTACTGGGATG")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_emboss6(self):
         path = 'Emboss/matcher_simple.txt'
@@ -981,15 +806,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('AF069992_1', "GPPPQSPDENRAGESS"),
              ('CAA85685.1', "GVPPEEAGAAVAAESS")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_emboss7(self):
         path = 'Emboss/matcher_pair.txt'
@@ -1019,15 +836,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[4],
             [("HBA_HUMAN", "VKAAWGKVGA"),
              ("HBB_HUMAN", "VQAAYQKVVA")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1046,15 +855,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('hg38_chrX_131691529_131830643_47210_48660', "GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGT...AAA"),
              ('mm10_chrX_50555743_50635321_27140_27743', "G--------------------------TTCAAGG...AAA")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_fasta_m10_1(self):
         path = 'Fasta/output001.m10'
@@ -1080,15 +881,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[3],
             [("gi|10955265|ref|NP_052606.1|", "SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDV...TYC"),
              ("gi|152973545|ref|YP_001338596.1|", "SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDM...EYC")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1120,14 +913,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[5],
             [("gi|10955265|ref|NP_052606.1|", "QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASL...REI"),
              ("gi|15833861|ref|NP_312634.1|", "EFIRLLSDHDQFEKDQISELTVAANALKLEVAK-...KKV")])
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1155,14 +941,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[2],
             [("gi|10955264|ref|NP_052605.1|",     "VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELS...KGI"),
              ("gi|152973841|ref|YP_001338878.1|", "VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQV...QAM")])
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1181,14 +960,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('ref|NC_002127.1|:c1351-971', "AAAAAAGATAAAAAATATCAAATAGAAGCAATAA...TCA"),
              ('ref|NC_002695.1|:1970775-1971404', "AGAGAAAATAAAACAAGTAATAAAATATTAATGG...ACA")])
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_fasta_m10_5(self):
         path = 'Fasta/output005.m10'
@@ -1201,14 +973,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('gi|10955264|ref|NP_052605.1|', "IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKK...LSK"),
              ('gi|10955282|ref|NP_052623.1|', "IKDELPVAFCSWASLDLECEVKYINDVTSLYAKD...MSE")])
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_fasta_m10_6(self):
         path = 'Fasta/output006.m10'
@@ -1221,14 +986,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('gi|116660610|gb|EG558221.1|EG558221', "GCAACGCTTCAAGAACTGGAATTAGGAACCGTGA...CAT"),
              ('query', "GCAACGCTTCAAGAACTGGAATTAGGAACCGTGA...CAT")])
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
 
     def test_reading_alignments_fasta_m10_7(self):
         path = 'Fasta/output007.m10'
@@ -1254,14 +1012,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[8],
             [("gi|10955265|ref|NP_052606.1|", "ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYF...FSD"),
              ("gi|152973505|ref|YP_001338556.1|", "IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW-...YPD")])
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1293,14 +1044,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[11],
             [("gi|283855822|gb|GQ290312.1|", "SQQIRNATTMMMTMRVTSFSAFWVVADSCCW"),
              ("sp|P08100|OPSD_HUMAN", "AQQQESATTQKAEKEVTRMVIIMVIAFLICW")])
-        summary = AlignInfo.SummaryInfo(alignments[0])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[0])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
@@ -1322,14 +1066,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "--------DEEEEE--",
                                                  "--------KKKKKK--",
                                                  "HHHHHHH-AAAAL-R-"])
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignment)
         with open(path, "r") as handle:
             data = handle.read()
         handle = StringIO()
@@ -1349,16 +1086,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignment,
             [('804Angiostrongylus_cantonensis', "----------------------------------...---"),
              ('815Parelaphostrongylus_odocoil', "----------------------------------...---")])
-        summary = AlignInfo.SummaryInfo(alignment)
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        try:
-            info_content = summary.information_content()
-        except ValueError as err:
-            if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
-                raise err
+        self.check_summary_pir(alignment)
 
         with open(path, "r") as handle:
             data = handle.read()
@@ -1386,15 +1114,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("NM_018289", "tttgtccatgttggtcaggctggtctcgaactcc...GGT"),
              ("mm3", "tttgtccatgttggtcaggctggtctcgaactcc...GGT"),
              ("rn3", "tttgtccatgttggtcaggctggtctcgaactcc...GGT")])
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignments[1])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[1])
         alignments.reverse()
         self.check_simple_write_read(alignments)
 
@@ -1429,14 +1149,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ('hg16.chr7', "gcagctgaaaaca"),
              ('mm4.chr6', "ACAGCTGAAAATA"),
              ('panTro1.chr6', "gcagctgaaaaca")])
-        summary = AlignInfo.SummaryInfo(alignments[1])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[1])
         alignments.reverse()
         self.check_simple_write_read(alignments)
 
@@ -1472,16 +1185,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                      'gggG',
                                                      'cccC',
                                                      'aaaA'])
-        summary = AlignInfo.SummaryInfo(alignments[2])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        try:
-            info_content = summary.information_content()
-        except ValueError as err:
-            if str(err) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies":
-                raise err
+        self.check_summary(alignments[2])
         alignments.reverse()
         self.check_simple_write_read(alignments)
 
@@ -1521,14 +1225,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                       "TTTTTT",
                                                       "TGGGAT",
                                                       "tTTTT-"])
-        summary = AlignInfo.SummaryInfo(alignments[47])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
+        self.check_summary(alignments[47])
         alignments.reverse()
         self.check_simple_write_read(alignments)
 
@@ -1561,16 +1258,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_alignment_rows(alignments[4],
             [("2/11410-12880", "ATTCGCACATAAGAATGTACCTTGCTGTAATTTA...ATA")])
 
-        # Check AlignInfo.SummaryInfo likes the alignment
-        summary = AlignInfo.SummaryInfo(alignments[4])
-        dumb_consensus = summary.dumb_consensus()
-        # gap_consensus = summary.gap_consensus()
-        pssm = summary.pos_specific_score_matrix()
-        rep_dict = summary.replacement_dictionary()
-        with self.assertRaises(ValueError) as cm:
-            info_content = summary.information_content()
-        self.assertEqual("Error in alphabet: not Nucleotide or Protein, supply expected frequencies", str(cm.exception))
-
+        self.check_summary(alignments[4])
         # Some alignment file formats have magic characters which mean
         # use the letter in this position in the first sequence.
         # They should all have been converted by the parser, but if
