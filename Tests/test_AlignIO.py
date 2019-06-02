@@ -94,7 +94,8 @@ class TestAlignIO_exceptions(unittest.TestCase):
 
 class TestAlignIO_reading(unittest.TestCase):
 
-    def check_simple_write_read(self, alignments, indent=" "):
+    def check_reverse_write_read(self, alignments, indent=" "):
+        alignments.reverse()
         for format in test_write_read_align_with_seq_count:
             records_per_alignment = len(alignments[0])
             for a in alignments:
@@ -186,6 +187,15 @@ class TestAlignIO_reading(unittest.TestCase):
             counter += 1
         self.assertEqual(counter, length)
 
+    def check_parse6(self, path, fmt, m):
+        with open(path, "r") as handle:
+            data = handle.read()
+        handle = StringIO()
+        handle.write(data + "\n\n" + data + "\n\n" + data)
+        handle.seek(0)
+        self.assertEqual(len(list(AlignIO.parse(handle=handle, format=fmt, seq_count=m))), 3)
+        handle.close()
+
     def check_read(self, path, fmt, m, k):
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -251,19 +261,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 2)
         alignment = self.check_read(path, "clustal", 2, 601)
         self.check_alignment_rows(alignment,
            [("gi|4959044|gb|AAD34209.1|AF069", "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQF...SVV"),
             ("gi|671626|emb|CAA85685.1|", "---------MSPQTETKASVGFKAGVKEYKLTYY...---")],
            {'clustal_consensus': '          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   '})
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=2))), 3)
-        handle.close()
 
     def test_reading_alignments_clustal2(self):
         path = 'Clustalw/opuntia.aln'
@@ -272,6 +276,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 7)
         alignment = self.check_read(path, "clustal", 7, 156)
         self.check_alignment_columns(alignment, ["TTTTTTT",
                                                  "AAAAAAA",
@@ -281,13 +286,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "AAAAAAA"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=7))), 3)
-        handle.close()
 
     def test_reading_alignments_clustal3(self):
         path = 'Clustalw/hedgehog.aln'
@@ -296,6 +294,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 5)
         alignment = self.check_read(path, "clustal", 5, 447)
         self.check_alignment_columns(alignment, ["M----",
                                                  "F----",
@@ -305,13 +304,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "---SS"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=5))), 3)
-        handle.close()
 
     def test_reading_alignments_clustal4(self):
         path = 'Clustalw/odd_consensus.aln'
@@ -320,19 +312,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 2)
         alignment = self.check_read(path, "clustal", 2, 687)
         self.check_alignment_rows(alignment,
             [("AT3G20900.1-CDS", "----------------------------------...TAG"),
              ("AT3G20900.1-SEQ", "ATGAACAAAGTAGCGAGGAAGAACAAAACATCAG...TAG")],
             {'clustal_consensus': '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *       *  *** ***** *   *  **      *******************************************************************************************************************************************************************************'})
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=2))), 3)
-        handle.close()
 
     def test_reading_alignments_clustal5(self):
         path = 'Clustalw/protein.aln'
@@ -341,6 +327,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 20)
         alignment = self.check_read(path, "clustal", 20, 411)
         self.check_alignment_columns(alignment, ["-M------------------",
                                                  "-T------------------",
@@ -350,13 +337,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "-------------------T"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=20))), 3)
-        handle.close()
 
     def test_reading_alignments_clustal6(self):
         path = 'Clustalw/promals3d.aln'
@@ -365,6 +345,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "clustal", 1)
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
+        self.check_parse6(path, "clustal", 20)
         alignment = self.check_read(path, "clustal", 20, 414)
         self.check_alignment_columns(alignment, ["MMMMMMMMMMMMMMMM-M--",
                                                  "-----------------T--",
@@ -374,13 +355,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "-T------------------"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="clustal", seq_count=20))), 3)
-        handle.close()
 
     def test_reading_alignments_fasta(self):
         path = 'GFF/multi.fna'  # Trivial nucleotide alignment
@@ -389,19 +363,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "fasta", 1)
         self.check_parse4(path, "fasta", 1)
         self.check_parse5(path, "fasta", 1)
+        self.check_parse6(path, "fasta", 3)
         alignment = self.check_read(path, "fasta", 3, 8)
         self.check_alignment_rows(alignment,
             [('test1', "ACGTCGCG"),
              ('test2', "GGGGCCCC"),
              ('test3', "AAACACAC")])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="fasta", seq_count=3))), 3)
-        handle.close()
 
     def test_reading_alignments_nexus1(self):
         path = 'Nexus/test_Nexus_input.nex'
@@ -440,19 +408,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "stockholm", 1)
         self.check_parse4(path, "stockholm", 1)
         self.check_parse5(path, "stockholm", 1)
+        self.check_parse6(path, "stockholm", 2)
         alignment = self.check_read(path, "stockholm", 2, 104)
         self.check_alignment_rows(alignment,
             [('AE007476.1', "AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGU...GAU"),
              ('AP001509.1', "UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-U...UGU")],
             {'secondary_structure': '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'})
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="stockholm", seq_count=2))), 3)
-        handle.close()
 
     def test_reading_alignments_stockholm2(self):
         path = 'Stockholm/funny.sth'
@@ -461,6 +423,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "stockholm", 1)
         self.check_parse4(path, "stockholm", 1)
         self.check_parse5(path, "stockholm", 1)
+        self.check_parse6(path, "stockholm", 6)
         alignment = self.check_read(path, "stockholm", 6, 43)
         self.check_alignment_columns(alignment, ["MMMEEE",
                                                  "TQIVVV",
@@ -470,13 +433,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "SYSEEE"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="stockholm", seq_count=6))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip1(self):
         path = 'Phylip/reference_dna.phy'
@@ -485,6 +441,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 6)
         alignment = self.check_read(path, "phylip", 6, 13)
         self.check_alignment_columns(alignment, ["CCTTCG",
                                                  "GGAAAG",
@@ -494,13 +451,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "CTTTTC"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=6))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip2(self):
         path = 'Phylip/reference_dna2.phy'
@@ -509,6 +459,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 6)
         alignment = self.check_read(path, "phylip", 6, 39)
         self.check_alignment_columns(alignment, ["CCTTCG",
                                                  "GGAAAG",
@@ -517,13 +468,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "GAGGAG",
                                                  "CTTTTC"])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=6))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip3(self):
         path = 'Phylip/hennigian.phy'
@@ -532,6 +476,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(alignment, ["CCCCCAAAAA",
                                                  "AAAAACCCCC",
@@ -540,13 +485,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "CCAAAAAAAA",
                                                  "AAAAAAAAAA"])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip4(self):
         path = 'Phylip/horses.phy'
@@ -555,6 +493,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(alignment, ["AACCCCCCCC",
                                                  "AAAACCCCCC",
@@ -563,13 +502,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "ACACCCCCCC",
                                                  "AAAAAAAAAA"])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip5(self):
         path = 'Phylip/random.phy'
@@ -578,6 +510,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 10)
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(alignment, ["CAAAACAAAC",
                                                  "AACAACCACC",
@@ -586,13 +519,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "CCAAAACCAA",
                                                  "AAAAAAAAAA"])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=10))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip6(self):
         path = 'Phylip/interlaced.phy'
@@ -601,19 +527,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 3)
         alignment = self.check_read(path, "phylip", 3, 384)
         self.check_alignment_rows(alignment,
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=3))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip7(self):
         path = 'Phylip/interlaced2.phy'
@@ -622,6 +542,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip", 1)
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
+        self.check_parse6(path, "phylip", 4)
         alignment = self.check_read(path, "phylip", 4, 131)
         self.check_alignment_rows(alignment,
             [('IXI_234', "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
@@ -629,13 +550,6 @@ class TestAlignIO_reading(unittest.TestCase):
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
              ('IXI_237', "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE")])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip", seq_count=4))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip8(self):
         path = 'ExtendedPhylip/primates.phyx'
@@ -644,6 +558,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-relaxed", 1)
         self.check_parse4(path, "phylip-relaxed", 1)
         self.check_parse5(path, "phylip-relaxed", 1)
+        self.check_parse6(path, "phylip-relaxed", 12)
         alignment = self.check_read(path, "phylip-relaxed", 12, 898)
         self.check_alignment_columns(alignment, ["AAAAAAAAAAAA",
                                                  "AAAAAAAAAAAA",
@@ -653,13 +568,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "TTTTTTTTTTTT"])
 
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-relaxed", seq_count=12))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip9(self):
         path = 'Phylip/sequential.phy'
@@ -668,19 +576,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-sequential", 1)
         self.check_parse4(path, "phylip-sequential", 1)
         self.check_parse5(path, "phylip-sequential", 1)
+        self.check_parse6(path, "phylip-sequential", 3)
         alignment = self.check_read(path, "phylip-sequential", 3, 384)
         self.check_alignment_rows(alignment,
             [('ALEU_HORVU', "MAHARVLLLALAVLATAAVAVASSSSFADSNPIR...VAA"),
              ('CATH_HUMAN', "------MWATLPLLCAGAWLLGV--------PVC...PLV"),
              ('CYS1_DICDI', "-----MKVILLFVLAVFTVFVSS-----------...I--")])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-sequential", seq_count=3))), 3)
-        handle.close()
 
     def test_reading_alignments_phylip10(self):
         path = 'Phylip/sequential2.phy'
@@ -689,6 +591,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "phylip-sequential", 1)
         self.check_parse4(path, "phylip-sequential", 1)
         self.check_parse5(path, "phylip-sequential", 1)
+        self.check_parse6(path, "phylip-sequential", 4)
         alignment = self.check_read(path, "phylip-sequential", 4, 131)
         self.check_alignment_rows(alignment,
             [('IXI_234', "TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRP...SHE"),
@@ -696,13 +599,6 @@ class TestAlignIO_reading(unittest.TestCase):
              ('IXI_236', "TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRP...SHE"),
              ('IXI_237', "TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRP...SHE")])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="phylip-sequential", seq_count=4))), 3)
-        handle.close()
 
     def test_reading_alignments_emboss1(self):
         path = 'Emboss/alignret.txt'
@@ -749,12 +645,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|94970041|receiver", "TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEE...KRQ"),
              ("ref_rec", "KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQ...---")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_emboss3(self):
         path = 'Emboss/needle_asis.txt'
@@ -837,12 +728,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("HBA_HUMAN", "VKAAWGKVGA"),
              ("HBB_HUMAN", "VQAAYQKVVA")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_emboss8(self):
         path = 'Emboss/emboss_pair_aln_full_blank_line.txt'
@@ -882,12 +768,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|10955265|ref|NP_052606.1|", "SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDV...TYC"),
              ("gi|152973545|ref|YP_001338596.1|", "SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDM...EYC")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_2(self):
         path = 'Fasta/output002.m10'
@@ -914,12 +795,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|10955265|ref|NP_052606.1|", "QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASL...REI"),
              ("gi|15833861|ref|NP_312634.1|", "EFIRLLSDHDQFEKDQISELTVAANALKLEVAK-...KKV")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_3(self):
         path = 'Fasta/output003.m10'
@@ -942,12 +818,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|10955264|ref|NP_052605.1|",     "VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELS...KGI"),
              ("gi|152973841|ref|YP_001338878.1|", "VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQV...QAM")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_4(self):
         path = 'Fasta/output004.m10'
@@ -1013,12 +884,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|10955265|ref|NP_052606.1|", "ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYF...FSD"),
              ("gi|152973505|ref|YP_001338556.1|", "IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW-...YPD")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_fasta_m10_8(self):
         path = 'Fasta/output008.m10'
@@ -1045,12 +911,7 @@ class TestAlignIO_reading(unittest.TestCase):
             [("gi|283855822|gb|GQ290312.1|", "SQQIRNATTMMMTMRVTSFSAFWVVADSCCW"),
              ("sp|P08100|OPSD_HUMAN", "AQQQESATTQKAEKEVTRMVIIMVIAFLICW")])
         self.check_summary(alignments[0])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_ig(self):
         path = 'IntelliGenetics/VIF_mase-pro.txt'
@@ -1059,6 +920,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "ig", 1)
         self.check_parse4(path, "ig", 1)
         self.check_parse5(path, "ig", 1)
+        self.check_parse6(path, "ig", 16)
         alignment = self.check_read(path, "ig", 16, 298)
         self.check_alignment_columns(alignment, ["MMMMMMMMMMMMMMMM",
                                                  "EEEEEEETEEEENEEE",
@@ -1067,13 +929,6 @@ class TestAlignIO_reading(unittest.TestCase):
                                                  "--------KKKKKK--",
                                                  "HHHHHHH-AAAAL-R-"])
         self.check_summary(alignment)
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="ig", seq_count=16))), 3)
-        handle.close()
 
     def test_reading_alignments_pir(self):
         path = 'NBRF/clustalw.pir'
@@ -1082,19 +937,12 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse3(path, "pir", 1)
         self.check_parse4(path, "pir", 1)
         self.check_parse5(path, "pir", 1)
+        self.check_parse6(path, "pir", 2)
         alignment = self.check_read(path, "pir", 2, 2527)
         self.check_alignment_rows(alignment,
             [('804Angiostrongylus_cantonensis', "----------------------------------...---"),
              ('815Parelaphostrongylus_odocoil', "----------------------------------...---")])
         self.check_summary_pir(alignment)
-
-        with open(path, "r") as handle:
-            data = handle.read()
-        handle = StringIO()
-        handle.write(data + "\n\n" + data + "\n\n" + data)
-        handle.seek(0)
-        self.assertEqual(len(list(AlignIO.parse(handle=handle, format="pir", seq_count=2))), 3)
-        handle.close()
 
     def test_reading_alignments_maf1(self):
         path = 'MAF/humor.maf'
@@ -1115,8 +963,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ("mm3", "tttgtccatgttggtcaggctggtctcgaactcc...GGT"),
              ("rn3", "tttgtccatgttggtcaggctggtctcgaactcc...GGT")])
         self.check_summary(alignments[1])
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf2(self):
         path = "MAF/bug2453.maf"
@@ -1150,8 +997,7 @@ class TestAlignIO_reading(unittest.TestCase):
              ('mm4.chr6', "ACAGCTGAAAATA"),
              ('panTro1.chr6', "gcagctgaaaaca")])
         self.check_summary(alignments[1])
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf3(self):
         path = "MAF/ucsc_test.maf"
@@ -1186,8 +1032,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                      'cccC',
                                                      'aaaA'])
         self.check_summary(alignments[2])
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_maf4(self):
         path = "MAF/ucsc_mm9_chr10.maf"
@@ -1226,8 +1071,7 @@ class TestAlignIO_reading(unittest.TestCase):
                                                       "TGGGAT",
                                                       "tTTTT-"])
         self.check_summary(alignments[47])
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
     def test_reading_alignments_mauve(self):
         path = 'Mauve/simple.xmfa'
@@ -1257,14 +1101,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertEqual(alignments[4].get_alignment_length(), 1470)
         self.check_alignment_rows(alignments[4],
             [("2/11410-12880", "ATTCGCACATAAGAATGTACCTTGCTGTAATTTA...ATA")])
-
         self.check_summary(alignments[4])
-        # Some alignment file formats have magic characters which mean
-        # use the letter in this position in the first sequence.
-        # They should all have been converted by the parser, but if
-        # not reversing the record order might expose an error.  Maybe.
-        alignments.reverse()
-        self.check_simple_write_read(alignments)
+        self.check_reverse_write_read(alignments)
 
 
 if __name__ == "__main__":
