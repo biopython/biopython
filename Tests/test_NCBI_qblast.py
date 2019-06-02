@@ -14,11 +14,13 @@ Goals:
 
 """
 import unittest
+import warnings
 
 from Bio._py3k import HTTPError
 from Bio._py3k import StringIO
 
 from Bio import MissingExternalDependencyError
+from Bio import BiopythonWarning
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
@@ -46,7 +48,9 @@ class TestQblast(unittest.TestCase):
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
                         "rat [ORGN]", {'megablast': 'FALSE'},
-                        ['9506405', '13592137', '37589612', '149064087', '56912225'])
+                        ["NP_112408.1", "AAH59131.1", "EDM14357.1",
+                         "NP_001008766.1", "NP_001102411.1", "EDL80109.1",
+                         "EDL80106.1", "NP_001100434.1", "AAI67084.1"])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
@@ -71,7 +75,9 @@ class TestQblast(unittest.TestCase):
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
                         0.0000001, None, {'megablast': 'FALSE'},
-                        ["21554275", "18409071", "296087288", "566183510"])
+                        ["XP_021665344.1", "XP_021615158.1", "XP_017223689.1",
+                         "OMP06800.1", "XP_021634873.1", "XP_021299673.1",
+                         "XP_002311451.2", "XP_021976565.1", "OMO90244.1"])
 
     def test_discomegablast(self):
         self.run_qblast("blastn", "nr",
@@ -122,6 +128,7 @@ class TestQblast(unittest.TestCase):
                         }, ['XM_635681.1', 'XM_008496783.1'])
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
+        """Do qblast searches with given parameters and analyze results."""
         try:
             if program == "blastn":
                 # Check the megablast parameter is accepted
@@ -141,6 +148,7 @@ class TestQblast(unittest.TestCase):
         except HTTPError:
             # e.g. a proxy error
             raise MissingExternalDependencyError("internet connection failed")
+
         record = NCBIXML.read(handle)
 
         if record.query == "No definition line":
@@ -199,6 +207,40 @@ class TestQblast(unittest.TestCase):
         with open("Blast/html_msgid_29_blastx_001.html", "r") as f:
             handle = StringIO(f.read())
         self.assertRaises(ValueError, NCBIWWW._parse_qblast_ref_page, handle)
+
+    def test_short_query(self):
+        """Test SHORT_QUERY_ADJUST parameter."""
+        # Should give no hits:
+        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5)
+        my_hits = NCBIXML.read(my_search)
+        my_search.close()
+        self.assertEqual(len(my_hits.alignments), 0)
+
+        # Should give hits:
+        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5,
+                                   short_query=True)
+        my_hits = NCBIXML.read(my_search)
+        my_search.close()
+        self.assertEqual(len(my_hits.alignments), 5)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter('always')
+            # Trigger a warning.
+            my_search = NCBIWWW.qblast('blastn', 'nt', 'ATGTCAACTTCAGAA',
+                                       hitlist_size=5, short_query=True)
+            # Verify some things
+            self.assertEqual(len(w), 1)
+            self.assertEqual(w[-1].category, BiopythonWarning)
+            self.assertIn('blastn', str(w[-1].message))
+            my_hits = NCBIXML.read(my_search)
+            my_search.close()
+            self.assertEqual(len(my_hits.alignments), 5)
+
+    def test_error_conditions(self):
+        """Test if exceptions were properly handled."""
+        self.assertRaises(ValueError, NCBIWWW.qblast, 'megablast', 'nt',
+                          'ATGCGTACGCAGCTAAAGTAAACCTATCGCGTCTCCT')
 
 
 if __name__ == "__main__":
