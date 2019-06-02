@@ -207,16 +207,13 @@ class TestAlignIO_reading(unittest.TestCase):
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, format=fmt)
 
-    def check_summary(self, alignment, text):
+    def check_summary(self, alignment, text, column_annotations={}):
         lines = []
         for record in alignment:
             line = "  %s %s" % (str_summary(str(record.seq)), record.id)
             lines.append(line)
-        for key, value in alignment.column_annotations.items():
-            if isinstance(value, str):
-                line = "  %s %s" % (str_summary(str(value)), key)
-                lines.append(line)
         self.assertEqual(lines, text)
+        self.assertEqual(alignment.column_annotations, column_annotations)
 
     def check_summary2(self, alignment, text):
         vertical_threshold = 5
@@ -255,9 +252,8 @@ class TestAlignIO_reading(unittest.TestCase):
         alignment = self.check_read(path, "clustal", 2, 601)
         self.check_summary(alignment, [
 "  MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069",
-"  ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|",
-"            * *: ::    :.   :*  :  :. ...    clustal_consensus"])
-
+"  ---------MSPQTETKASVGFKAGVKEYKLTYYTP...--- gi|671626|emb|CAA85685.1|"],
+                                      {'clustal_consensus': '          * *: ::    :.   :*  :  :. : . :*  ::   .:   **                  **:...   *.*** ..          .:*   * *: .* :*        : :* .*                   *::.  .    .:: :*..*  :* .*   .. .  :    .  :    *. .:: : .      .* .  :  *.:     ..::   * .  ::  :  .*.    :.    :. .  .  .* **.*..  :..  *.. .    . ::*                         :.: .*:    :     * ::   ***  . * :. .  .  :  *: .:: :::   ..   . : :   ::  *    *  : .. :.* . ::.  :: * :  :   * *   :..  * ..  * :**                             .  .:. ..   :*.  ..: :. .  .:* * :   : * .             ..*:.  .**   *.*... :  ::   :* .*  ::* : :.  :.    :   '})
         # Check AlignInfo.SummaryInfo likes the alignment
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
@@ -353,9 +349,8 @@ class TestAlignIO_reading(unittest.TestCase):
         alignment = self.check_read(path, "clustal", 2, 687)
         self.check_summary(alignment, [
 "  ------------------------------------...TAG AT3G20900.1-CDS",
-"  ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGT...TAG AT3G20900.1-SEQ",
-"                                      ...*** clustal_consensus"])
-
+"  ATGAACAAAGTAGCGAGGAAGAACAAAACATCAGGT...TAG AT3G20900.1-SEQ"],
+                                      {'clustal_consensus': '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *       *  *** ***** *   *  **      *******************************************************************************************************************************************************************************'})
         # Check AlignInfo.SummaryInfo likes the alignment
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
@@ -521,8 +516,8 @@ class TestAlignIO_reading(unittest.TestCase):
         alignment = self.check_read(path, "stockholm", 2, 104)
         self.check_summary(alignment, [
 "  UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1",
-"  AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1",
-"  .................<<<<<<<<...<<<<<<<....... secondary_structure"])
+"  AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGA...GAU AE007476.1"],
+                                      {'secondary_structure': '.................<<<<<<<<...<<<<<<<........>>>>>>>........<<<<<<<.......>>>>>>>..>>>>>>>>...............'})
         # Check AlignInfo.SummaryInfo likes the alignment
         summary = AlignInfo.SummaryInfo(alignment)
         dumb_consensus = summary.dumb_consensus()
