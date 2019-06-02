@@ -516,11 +516,11 @@ class TestAlignIO_reading(unittest.TestCase):
         alignment = self.check_read(path, "phylip", 10, 40)
         self.check_alignment_columns(
             alignment, ["CAAAACAAAC",
-                                                 "AACAACCACC",
-                                                 "CAAAACAAAA",
-                                                 "ACAACACACA",
-                                                 "CCAAAACCAA",
-                                                 "AAAAAAAAAA"])
+                        "AACAACCACC",
+                        "CAAAACAAAA",
+                        "ACAACACACA",
+                        "CCAAAACCAA",
+                        "AAAAAAAAAA"])
         self.check_summary(alignment)
 
     def test_reading_alignments_phylip6(self):
