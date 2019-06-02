@@ -182,6 +182,7 @@ class TestAlignIO_reading(unittest.TestCase):
         if m is not None:
             for alignment in alignments:
                 self.assertEqual(len(alignment), m)
+        return alignments
 
     def check_iterator2(self, path, fmt, length):
         # Try using the iterator with a for loop and a filename not handle
@@ -212,20 +213,22 @@ class TestAlignIO_reading(unittest.TestCase):
         counter += len(list(alignments))
         self.assertEqual(counter, length)
 
+    def check_iterator5(self, path, fmt, length):
+        # Try a mixture of next() and for loop
+        alignments = AlignIO.parse(path, format=fmt)
+        alignment = next(alignments)
+        counter = 1
+        for alignment in alignments:
+            counter += 1
+        self.assertEqual(counter, length)
+
     def test_reading_alignments_clustal1(self):
         path = 'Clustalw/cw02.aln'
         self.check_iterator1(path, "clustal", 1, 2)
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -263,14 +266,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -312,14 +308,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -361,14 +350,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -406,14 +388,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -455,14 +430,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "clustal", 1)
         self.check_iterator3(path, "clustal", 1)
         self.check_iterator4(path, "clustal", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="clustal")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "clustal", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -504,14 +472,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "fasta", 1)
         self.check_iterator3(path, "fasta", 1)
         self.check_iterator4(path, "fasta", 1)
+        self.check_iterator5(path, "fasta", 1)
 
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="fasta")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="fasta")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
@@ -546,14 +508,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "nexus", 1)
         self.check_iterator3(path, "nexus", 1)
         self.check_iterator4(path, "nexus", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="nexus")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "nexus", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -581,14 +536,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "nexus", 1)
         self.check_iterator3(path, "nexus", 1)
         self.check_iterator4(path, "nexus", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="nexus")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "nexus", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -611,14 +559,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "stockholm", 1)
         self.check_iterator3(path, "stockholm", 1)
         self.check_iterator4(path, "stockholm", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="stockholm")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "stockholm", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -655,14 +596,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "stockholm", 1)
         self.check_iterator3(path, "stockholm", 1)
         self.check_iterator4(path, "stockholm", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="stockholm")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "stockholm", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -704,23 +638,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 6)
-        self.assertEqual(alignments[0].get_alignment_length(), 13)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 6)
+        self.assertEqual(alignment.get_alignment_length(), 13)
+        self.assertEqual(alignment_summary(alignment), """\
   CCTTCG alignment column 0
   GGAAAG alignment column 1
   ATAAAC alignment column 2
@@ -752,23 +679,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 6)
-        self.assertEqual(alignments[0].get_alignment_length(), 39)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 6)
+        self.assertEqual(alignment.get_alignment_length(), 39)
+        self.assertEqual(alignment_summary(alignment), """\
   CCTTCG alignment column 0
   GGAAAG alignment column 1
   ATAAAC alignment column 2
@@ -799,23 +719,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 10)
-        self.assertEqual(alignments[0].get_alignment_length(), 40)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 10)
+        self.assertEqual(alignment.get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignment), """\
   CCCCCAAAAA alignment column 0
   AAAAACCCCC alignment column 1
   CCCAAAAAAA alignment column 2
@@ -846,23 +759,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 10)
-        self.assertEqual(alignments[0].get_alignment_length(), 40)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 10)
+        self.assertEqual(alignment.get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignment), """\
   AACCCCCCCC alignment column 0
   AAAACCCCCC alignment column 1
   AAAAAAAAAC alignment column 2
@@ -893,23 +799,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 10)
-        self.assertEqual(alignments[0].get_alignment_length(), 40)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 10)
+        self.assertEqual(alignment.get_alignment_length(), 40)
+        self.assertEqual(alignment_summary(alignment), """\
   CAAAACAAAC alignment column 0
   AACAACCACC alignment column 1
   CAAAACAAAA alignment column 2
@@ -940,23 +839,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 3)
-        self.assertEqual(alignments[0].get_alignment_length(), 384)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(alignment.get_alignment_length(), 384)
+        self.assertEqual(alignment_summary(alignment), """\
   -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
   ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN""")
@@ -983,23 +875,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip", 1)
         self.check_iterator3(path, "phylip", 1)
         self.check_iterator4(path, "phylip", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 4)
-        self.assertEqual(alignments[0].get_alignment_length(), 131)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(alignment.get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
@@ -1027,23 +912,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip-relaxed", 1)
         self.check_iterator3(path, "phylip-relaxed", 1)
         self.check_iterator4(path, "phylip-relaxed", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip-relaxed")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip-relaxed", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip-relaxed")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 12)
-        self.assertEqual(alignments[0].get_alignment_length(), 898)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 12)
+        self.assertEqual(alignment.get_alignment_length(), 898)
+        self.assertEqual(alignment_summary(alignment), """\
   AAAAAAAAAAAA alignment column 0
   AAAAAAAAAAAA alignment column 1
   GGGGGGGGGGGG alignment column 2
@@ -1075,23 +953,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip-sequential", 1)
         self.check_iterator3(path, "phylip-sequential", 1)
         self.check_iterator4(path, "phylip-sequential", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip-sequential", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip-sequential")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 3)
-        self.assertEqual(alignments[0].get_alignment_length(), 384)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 3)
+        self.assertEqual(alignment.get_alignment_length(), 384)
+        self.assertEqual(alignment_summary(alignment), """\
   -----MKVILLFVLAVFTVFVSS-------------...I-- CYS1_DICDI
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
   ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN""")
@@ -1119,23 +990,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "phylip-sequential", 1)
         self.check_iterator3(path, "phylip-sequential", 1)
         self.check_iterator4(path, "phylip-sequential", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="phylip-sequential")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "phylip-sequential", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="phylip-sequential")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 4)
-        self.assertEqual(alignments[0].get_alignment_length(), 131)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 4)
+        self.assertEqual(alignment.get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
@@ -1164,14 +1028,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1179,7 +1036,6 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertIsInstance(alignment, MultipleSeqAlignment)
 
         # Show the alignment
-        alignment = alignments[0]
         self.assertEqual(len(alignment), 4)
         self.assertEqual(alignment.get_alignment_length(), 131)
         self.assertEqual(alignment_summary(alignment), """\
@@ -1199,18 +1055,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss2(self):
         path = 'Emboss/needle.txt'
-        self.check_iterator1(path, "emboss", 5, 2)
+        alignments = self.check_iterator1(path, "emboss", 5, 2)
         self.check_iterator2(path, "emboss", 5)
         self.check_iterator3(path, "emboss", 5)
         self.check_iterator4(path, "emboss", 5)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 5)
+        self.check_iterator5(path, "emboss", 5)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1263,14 +1112,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1278,8 +1120,8 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertIsInstance(alignment, MultipleSeqAlignment)
 
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 3653)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 3653)
         self.assertEqual(alignment_summary(alignment), """\
   TATTTTTTGGATTTTTTTCTAGATTTTCTAGGTTAT...GAA asis
   ------------------------------------...GAA asis""")
@@ -1299,14 +1141,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1314,9 +1149,9 @@ class TestAlignIO_reading(unittest.TestCase):
         self.assertIsInstance(alignment, MultipleSeqAlignment)
 
         # Show the alignment
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 131)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignment), """\
   TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTG...SHE IXI_234
   TSPASIRPPAGPSSR---------RPSPPGPRRPTG...SHE IXI_235""")
 
@@ -1336,23 +1171,16 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="emboss")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
 
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 18)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 18)
+        self.assertEqual(alignment_summary(alignment), """\
   CGTTTGAGT-CTGGGATG asis
   CGTTTGAGTACTGGGATG asis""")
         # Check AlignInfo.SummaryInfo likes the alignment
@@ -1371,14 +1199,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1402,18 +1223,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_emboss7(self):
         path = 'Emboss/matcher_pair.txt'
-        self.check_iterator1(path, "emboss", 5, 2)
+        alignments = self.check_iterator1(path, "emboss", 5, 2)
         self.check_iterator2(path, "emboss", 5)
         self.check_iterator3(path, "emboss", 5)
         self.check_iterator4(path, "emboss", 5)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 5)
+        self.check_iterator5(path, "emboss", 5)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
@@ -1466,20 +1280,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "emboss", 1)
         self.check_iterator3(path, "emboss", 1)
         self.check_iterator4(path, "emboss", 1)
-
-        # Try a mixture of next() and for loop (a torture test!)
-        seq_iterator = AlignIO.parse(path, format="emboss")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "emboss", 1)
 
         # Check Bio.AlignIO.read(...)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="emboss")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignments[0]), 2)
+        self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.get_alignment_length(), 1450)
         self.assertEqual(alignment_summary(alignment), """\
   GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCC...AAA hg38_chrX_131691529_131830643_47210_48660
@@ -1496,17 +1303,12 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_1(self):
         path = 'Fasta/output001.m10'
-        self.check_iterator1(path, "fasta-m10", 4, 2)
+        alignments = self.check_iterator1(path, "fasta-m10", 4, 2)
         self.check_iterator2(path, "fasta-m10", 4)
         self.check_iterator3(path, "fasta-m10", 4)
         self.check_iterator4(path, "fasta-m10", 4)
+        self.check_iterator5(path, "fasta-m10", 4)
 
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 4)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
         self.assertEqual(len(alignments[0]), 2)
@@ -1547,16 +1349,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_2(self):
         path = 'Fasta/output002.m10'
-        self.check_iterator1(path, "fasta-m10", 6, 2)
+        alignments = self.check_iterator1(path, "fasta-m10", 6, 2)
         self.check_iterator2(path, "fasta-m10", 6)
         self.check_iterator3(path, "fasta-m10", 6)
         self.check_iterator4(path, "fasta-m10", 6)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 6)
+        self.check_iterator5(path, "fasta-m10", 6)
 
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
@@ -1597,16 +1394,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_3(self):
         path = 'Fasta/output003.m10'
-        self.check_iterator1(path, "fasta-m10", 3, 2)
+        alignments = self.check_iterator1(path, "fasta-m10", 3, 2)
         self.check_iterator2(path, "fasta-m10", 3)
         self.check_iterator3(path, "fasta-m10", 3)
         self.check_iterator4(path, "fasta-m10", 3)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 3)
+        self.check_iterator5(path, "fasta-m10", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
         self.assertEqual(len(alignments[0]), 2)
@@ -1645,18 +1437,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "fasta-m10", 1)
         self.check_iterator3(path, "fasta-m10", 1)
         self.check_iterator4(path, "fasta-m10", 1)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 102)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 102)
+        self.assertEqual(alignment_summary(alignment), """\
   AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAA...TCA ref|NC_002127.1|:c1351-971
   AGAGAAAATAAAACAAGTAATAAAATATTAATGGAA...ACA ref|NC_002695.1|:1970775-1971404""")
         summary = AlignInfo.SummaryInfo(alignment)
@@ -1674,18 +1461,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "fasta-m10", 1)
         self.check_iterator3(path, "fasta-m10", 1)
         self.check_iterator4(path, "fasta-m10", 1)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 110)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 110)
+        self.assertEqual(alignment_summary(alignment), """\
   IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKS...LSK gi|10955264|ref|NP_052605.1|
   IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWM...MSE gi|10955282|ref|NP_052623.1|""")
         summary = AlignInfo.SummaryInfo(alignment)
@@ -1703,18 +1485,13 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "fasta-m10", 1)
         self.check_iterator3(path, "fasta-m10", 1)
         self.check_iterator4(path, "fasta-m10", 1)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "fasta-m10", 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format='fasta-m10')
         self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 131)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 131)
+        self.assertEqual(alignment_summary(alignment), """\
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT query
   GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT gi|116660610|gb|EG558221.1|EG558221""")
         summary = AlignInfo.SummaryInfo(alignment)
@@ -1728,16 +1505,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_7(self):
         path = 'Fasta/output007.m10'
-        self.check_iterator1(path, "fasta-m10", 9, 2)
+        alignments = self.check_iterator1(path, "fasta-m10", 9, 2)
         self.check_iterator2(path, "fasta-m10", 9)
         self.check_iterator3(path, "fasta-m10", 9)
         self.check_iterator4(path, "fasta-m10", 9)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 9)
+        self.check_iterator5(path, "fasta-m10", 9)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
         self.assertEqual(len(alignments[0]), 2)
@@ -1777,16 +1549,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_fasta_m10_8(self):
         path = 'Fasta/output008.m10'
-        self.check_iterator1(path, "fasta-m10", 12, 2)
+        alignments = self.check_iterator1(path, "fasta-m10", 12, 2)
         self.check_iterator2(path, "fasta-m10", 12)
         self.check_iterator3(path, "fasta-m10", 12)
         self.check_iterator4(path, "fasta-m10", 12)
-        seq_iterator = AlignIO.parse(path, format='fasta-m10')
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 12)
+        self.check_iterator5(path, "fasta-m10", 12)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, 'fasta-m10')
         self.assertEqual(len(alignments[0]), 2)
@@ -1830,21 +1597,15 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "ig", 1)
         self.check_iterator3(path, "ig", 1)
         self.check_iterator4(path, "ig", 1)
-
-        seq_iterator = AlignIO.parse(path, format="ig")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
+        self.check_iterator5(path, "ig", 1)
 
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="ig")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
 
-        self.assertEqual(len(alignments[0]), 16)
-        self.assertEqual(alignments[0].get_alignment_length(), 298)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 16)
+        self.assertEqual(alignment.get_alignment_length(), 298)
+        self.assertEqual(alignment_summary(alignment), """\
   MMMMMMMMMMMMMMMM alignment column 0
   EEEEEEETEEEENEEE alignment column 1
   NNNNNNNAEEEEQRKK alignment column 2
@@ -1874,19 +1635,14 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_iterator2(path, "pir", 1)
         self.check_iterator3(path, "pir", 1)
         self.check_iterator4(path, "pir", 1)
+        self.check_iterator5(path, "pir", 1)
 
-        seq_iterator = AlignIO.parse(path, format="pir")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 1)
         with open(path) as handle:
             alignment = AlignIO.read(handle, format="pir")
         self.assertIsInstance(alignment, MultipleSeqAlignment)
-        self.assertEqual(len(alignments[0]), 2)
-        self.assertEqual(alignments[0].get_alignment_length(), 2527)
-        self.assertEqual(alignment_summary(alignments[0]), """\
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment.get_alignment_length(), 2527)
+        self.assertEqual(alignment_summary(alignment), """\
   ------------------------------------...--- 804Angiostrongylus_cantonensis
   ------------------------------------...--- 815Parelaphostrongylus_odocoil""")
         summary = AlignInfo.SummaryInfo(alignment)
@@ -1910,16 +1666,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf1(self):
         path = 'MAF/humor.maf'
-        self.check_iterator1(path, "maf", 2)
+        alignments = self.check_iterator1(path, "maf", 2)
         self.check_iterator2(path, "maf", 2)
         self.check_iterator3(path, "maf", 2)
         self.check_iterator4(path, "maf", 2)
-        seq_iterator = AlignIO.parse(path, format="maf")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 2)
+        self.check_iterator5(path, "maf", 2)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 3)
@@ -1948,16 +1699,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf2(self):
         path = "MAF/bug2453.maf"
-        self.check_iterator1(path, "maf", 3)
+        alignments = self.check_iterator1(path, "maf", 3)
         self.check_iterator2(path, "maf", 3)
         self.check_iterator3(path, "maf", 3)
         self.check_iterator4(path, "maf", 3)
-        seq_iterator = AlignIO.parse(path, format="maf")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 3)
+        self.check_iterator5(path, "maf", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 5)
@@ -2000,16 +1746,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf3(self):
         path = "MAF/ucsc_test.maf"
-        self.check_iterator1(path, "maf", 3)
+        alignments = self.check_iterator1(path, "maf", 3)
         self.check_iterator2(path, "maf", 3)
         self.check_iterator3(path, "maf", 3)
         self.check_iterator4(path, "maf", 3)
-        seq_iterator = AlignIO.parse(path, format="maf")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 3)
+        self.check_iterator5(path, "maf", 3)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 5)
@@ -2054,16 +1795,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_maf4(self):
         path = "MAF/ucsc_mm9_chr10.maf"
-        self.check_iterator1(path, "maf", 48)
+        alignments = self.check_iterator1(path, "maf", 48)
         self.check_iterator2(path, "maf", 48)
         self.check_iterator3(path, "maf", 48)
         self.check_iterator4(path, "maf", 48)
-        seq_iterator = AlignIO.parse(path, format="maf")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 48)
+        self.check_iterator5(path, "maf", 48)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "maf")
         self.assertEqual(len(alignments[0]), 2)
@@ -2111,16 +1847,11 @@ class TestAlignIO_reading(unittest.TestCase):
 
     def test_reading_alignments_mauve(self):
         path = 'Mauve/simple.xmfa'
-        self.check_iterator1(path, "mauve", 5)
+        alignments = self.check_iterator1(path, "mauve", 5)
         self.check_iterator2(path, "mauve", 5)
         self.check_iterator3(path, "mauve", 5)
         self.check_iterator4(path, "mauve", 5)
-        seq_iterator = AlignIO.parse(path, format="mauve")
-        record = next(seq_iterator)
-        alignments = [record]
-        for record in seq_iterator:
-            alignments.append(record)
-        self.assertEqual(len(alignments), 5)
+        self.check_iterator5(path, "mauve", 5)
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, "mauve")
         self.assertEqual(len(alignments[0]), 2)
