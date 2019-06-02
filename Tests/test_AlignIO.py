@@ -208,6 +208,17 @@ class TestAlignIO_reading(unittest.TestCase):
             self.assertRaises(ValueError, AlignIO.read, handle, format=fmt)
 
     def check_summary(self, alignment, text):
+        lines = []
+        for record in alignment:
+            line = "  %s %s" % (str_summary(str(record.seq)), record.id)
+            lines.append(line)
+        for key, value in alignment.column_annotations.items():
+            if isinstance(value, str):
+                line = "  %s %s" % (str_summary(str(value)), key)
+                lines.append(line)
+        self.assertEqual(lines, text)
+
+    def check_summary2(self, alignment, text):
         vertical_threshold = 5
         lines = []
         alignment_len = alignment.get_alignment_length()
@@ -272,7 +283,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
         alignment = self.check_read(path, "clustal", 7, 156)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  TTTTTTT alignment column 0",
 "  AAAAAAA alignment column 1",
 "  TTTTTTT alignment column 2",
@@ -306,7 +317,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
         alignment = self.check_read(path, "clustal", 5, 447)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  M---- alignment column 0",
 "  F---- alignment column 1",
 "  N---- alignment column 2",
@@ -370,7 +381,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
         alignment = self.check_read(path, "clustal", 20, 411)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  -M------------------ alignment column 0",
 "  -T------------------ alignment column 1",
 "  -V------------------ alignment column 2",
@@ -404,7 +415,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "clustal", 1)
         self.check_parse5(path, "clustal", 1)
         alignment = self.check_read(path, "clustal", 20, 414)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  MMMMMMMMMMMMMMMM-M-- alignment column 0",
 "  -----------------T-- alignment column 1",
 "  -----------------V-- alignment column 2",
@@ -469,7 +480,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "nexus", 1)
         self.check_parse5(path, "nexus", 1)
         alignment = self.check_read(path, "nexus", 9, 48)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  AAAAAAAAc alignment column 0",
 "  -----c?tc alignment column 1",
 "  CCCCCCCCc alignment column 2",
@@ -537,7 +548,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "stockholm", 1)
         self.check_parse5(path, "stockholm", 1)
         alignment = self.check_read(path, "stockholm", 6, 43)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  MMMEEE alignment column 0",
 "  TQIVVV alignment column 1",
 "  CHEMMM alignment column 2",
@@ -571,7 +582,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
         alignment = self.check_read(path, "phylip", 6, 13)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  CCTTCG alignment column 0",
 "  GGAAAG alignment column 1",
 "  ATAAAC alignment column 2",
@@ -605,7 +616,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
         alignment = self.check_read(path, "phylip", 6, 39)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  CCTTCG alignment column 0",
 "  GGAAAG alignment column 1",
 "  ATAAAC alignment column 2",
@@ -638,7 +649,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
         alignment = self.check_read(path, "phylip", 10, 40)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  CCCCCAAAAA alignment column 0",
 "  AAAAACCCCC alignment column 1",
 "  CCCAAAAAAA alignment column 2",
@@ -671,7 +682,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
         alignment = self.check_read(path, "phylip", 10, 40)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  AACCCCCCCC alignment column 0",
 "  AAAACCCCCC alignment column 1",
 "  AAAAAAAAAC alignment column 2",
@@ -704,7 +715,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip", 1)
         self.check_parse5(path, "phylip", 1)
         alignment = self.check_read(path, "phylip", 10, 40)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  CAAAACAAAC alignment column 0",
 "  AACAACCACC alignment column 1",
 "  CAAAACAAAA alignment column 2",
@@ -796,7 +807,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "phylip-relaxed", 1)
         self.check_parse5(path, "phylip-relaxed", 1)
         alignment = self.check_read(path, "phylip-relaxed", 12, 898)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  AAAAAAAAAAAA alignment column 0",
 "  AAAAAAAAAAAA alignment column 1",
 "  GGGGGGGGGGGG alignment column 2",
@@ -1361,7 +1372,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_parse4(path, "ig", 1)
         self.check_parse5(path, "ig", 1)
         alignment = self.check_read(path, "ig", 16, 298)
-        self.check_summary(alignment, [
+        self.check_summary2(alignment, [
 "  MMMMMMMMMMMMMMMM alignment column 0",
 "  EEEEEEETEEEENEEE alignment column 1",
 "  NNNNNNNAEEEEQRKK alignment column 2",
@@ -1455,7 +1466,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_read_fails(path, "maf")
         self.assertEqual(len(alignments[0]), 5)
         self.assertEqual(alignments[0].get_alignment_length(), 42)
-        self.check_summary(alignments[0], [
+        self.check_summary2(alignments[0], [
 "  AAA-- alignment column 0",
 "  AAAAA alignment column 1",
 "  AAAAA alignment column 2",
@@ -1465,7 +1476,7 @@ class TestAlignIO_reading(unittest.TestCase):
 "  GGGGG alignment column 41"])
         self.assertEqual(len(alignments[1]), 5)
         self.assertEqual(alignments[1].get_alignment_length(), 6)
-        self.check_summary(alignments[1], [
+        self.check_summary2(alignments[1], [
 "  TTTTt alignment column 0",
 "  AAAAa alignment column 1",
 "  AAAAa alignment column 2",
@@ -1501,7 +1512,7 @@ class TestAlignIO_reading(unittest.TestCase):
         self.check_read_fails(path, "maf")
         self.assertEqual(len(alignments[0]), 5)
         self.assertEqual(alignments[0].get_alignment_length(), 42)
-        self.check_summary(alignments[0], [
+        self.check_summary2(alignments[0], [
 "  AAA-- alignment column 0",
 "  AAAAA alignment column 1",
 "  AAAAA alignment column 2",
@@ -1511,7 +1522,7 @@ class TestAlignIO_reading(unittest.TestCase):
 "  GGGGG alignment column 41"])
         self.assertEqual(len(alignments[1]), 5)
         self.assertEqual(alignments[1].get_alignment_length(), 6)
-        self.check_summary(alignments[1], [
+        self.check_summary2(alignments[1], [
 "  TTTTt alignment column 0",
 "  AAAAa alignment column 1",
 "  AAAAa alignment column 2",
@@ -1521,7 +1532,7 @@ class TestAlignIO_reading(unittest.TestCase):
 "  AAAAa alignment column 5"])
         self.assertEqual(len(alignments[2]), 4)
         self.assertEqual(alignments[2].get_alignment_length(), 13)
-        self.check_summary(alignments[2], [
+        self.check_summary2(alignments[2], [
 "  gcagctgaaaaca hg16.chr7",
 "  gcagctgaaaaca panTro1.chr6",
 "  gcagctgaaaaca baboon",
@@ -1561,7 +1572,7 @@ class TestAlignIO_reading(unittest.TestCase):
 "  AGTCTTCATAAGTGGAAATATAAGTTTTAATTATTC...TTC hg18.chr6"])
         self.assertEqual(len(alignments[2]), 5)
         self.assertEqual(alignments[2].get_alignment_length(), 127)
-        self.check_summary(alignments[2], [
+        self.check_summary2(alignments[2], [
 "  TTTTT alignment column 0",
 "  GGGGG alignment column 1",
 "  GGGGG alignment column 2",
@@ -1571,7 +1582,7 @@ class TestAlignIO_reading(unittest.TestCase):
 "  CCCCC alignment column 126"])
         self.assertEqual(len(alignments[47]), 6)
         self.assertEqual(alignments[47].get_alignment_length(), 46)
-        self.check_summary(alignments[47], [
+        self.check_summary2(alignments[47], [
 "  TTTTTT alignment column 0",
 "  GGGGGG alignment column 1",
 "  TTTTTT alignment column 2",
