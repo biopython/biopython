@@ -13,6 +13,14 @@ import unittest
 from Bio import Geo
 
 
+if sys.version_info[0] >= 3:
+    # Python 3 problem: Can't use utf8 on Tests/Geo/soft_ex_*.txt
+    # due to micro (\xb5) and degrees (\xb0) symbols
+    import builtins
+    def open(path):
+        return builtins.open(path, encoding="latin")
+
+
 class TestGeo(unittest.TestCase):
 
     def test_soft_ex_dual(self):
