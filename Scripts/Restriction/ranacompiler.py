@@ -33,11 +33,15 @@ digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
 There files are available by FTP from ftp://ftp.neb.com/pub/rebase/ which
-should allow automated fetching (the the update code and RanaConfig.py).
+should allow automated fetching.
+
 In addition there are links on this HTML page which requires manual download
 and renaming of the files: http://rebase.neb.com/rebase/rebase.f37.html
 This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
+
+Automated downloads by FTP proved unreliable, currently we download the
+three files by hand into the directory of this script.
 """
 
 from __future__ import print_function
@@ -64,7 +68,6 @@ from Bio.Restriction.Restriction import NotDefined, Defined, Ambiguous
 from Bio.Restriction.Restriction import Commercially_available, Not_available
 
 import Bio.Restriction.RanaConfig as config
-from rebase_update import RebaseUpdate
 
 
 enzymedict = {}
@@ -323,6 +326,8 @@ class TypeCompiler(object):
                     dct.update({'scd5': None, 'scd3': None})
 
             class klass(type):
+                """Dynamically defined restriction enzyme class."""
+
                 def __new__(cls):
                     return type.__new__(cls, 'type%i' % n, ty, dct)
 
@@ -617,13 +622,10 @@ class DictionaryBuilder(object):
             \n Would you like to update them before proceeding?(y/n)')
             r = _input(' update [n] >>> ')
             if r in ['y', 'yes', 'Y', 'Yes']:
-                updt = RebaseUpdate(self.proxy)
-                updt.openRebase()
-                updt.getfiles()
-                updt.close()
-                print('\n Update complete. Creating the dictionaries.\n')
-                print('\n Using the files : %s' % ', '.join(emboss_now))
-                return tuple(open(os.path.join(base, n)) for n in emboss_now)
+                print("Download emboss_e.XXX, emboss_r.XXX and emboss_s.XXX from")
+                print("ftp://ftp.neb.com/pub/rebase (into this folder), where XXX")
+                print("is three digits, YMM, the last digit of the year and the month.")
+                sys.exit()
             else:
                 #
                 #   we will use the last files found without updating.
