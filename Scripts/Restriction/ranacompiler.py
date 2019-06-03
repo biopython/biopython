@@ -407,7 +407,7 @@ class DictionaryBuilder(object):
             #   Now select the right type for the enzyme.
             #
             bases = cls.bases
-            clsbases = tuple(eval(x) for x in bases)
+            clsbases = tuple([eval(x) for x in bases])  # noqa: C407
             typestuff = ''
             for t in tdct.values():
                 #
@@ -434,7 +434,8 @@ class DictionaryBuilder(object):
             else:
                 enzlst = []
                 tydct = dict(typestuff.__dict__)
-                tydct = {k: v for k, v in tydct.items() if k in commonattr}
+                tydct = dict([(k, v) for k, v in tydct.items()  # noqa: C404
+                              if k in commonattr])
                 enzlst.append(name)
                 typedict[typename] = (bases, enzlst)
             for letter in cls.__dict__['suppl']:
