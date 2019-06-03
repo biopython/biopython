@@ -17,6 +17,7 @@ if sys.version_info[0] >= 3:
     # Python 3 problem: Can't use utf8 on Tests/Geo/soft_ex_*.txt
     # due to micro (\xb5) and degrees (\xb0) symbols
     import builtins
+
     def open(path):
         return builtins.open(path, encoding="latin")
 
@@ -3163,7 +3164,8 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_attributes["Series_overall_design"], 'Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.')
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
