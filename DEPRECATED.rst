@@ -190,6 +190,10 @@ Release 1.54 and deprecated in Release 1.55 final; their functionality is now
 available through a ``read()`` function in ``Bio.Motif.Parsers.MEME`` and
 ``Bio.Motif.Parsers.MAST``, respectively.
 
+``Bio.motifs.mast`` plain-text parsing deprecated in favor of XML parsing as of
+release 1.74. Also affects ``Bio.motifs.read`` and ``Bio.motifs.parse`` for the
+``mast`` format.
+
 AlignAceCommandline and CompareAceCommandline
 =============================================
 Deprecated in release 1.62, removed in Release 1.67. An up to date version of

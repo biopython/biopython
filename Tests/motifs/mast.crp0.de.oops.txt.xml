@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<mast version="5.0.1" release="Wed Aug 22 15:26:53 2018 -0700">
+	<command_line><arg>mast</arg><arg>-oc</arg><arg>results/mast4</arg><arg>-nostatus</arg><arg>meme/meme.crp0.de.oops.txt</arg><arg>common/crp0.s</arg></command_line>
+	<settings strand_handling="combine" max_correlation="0.60" remove_correlated="n" max_seq_evalue="10" adjust_hit="n" max_hit_pvalue="0.0001" max_weak_pvalue="0.0001"/>
+	<alphabet name="DNA" like="dna">
+		<letter id="A" symbol="A" complement="T" name="Adenine" colour="CC0000"/>
+		<letter id="C" symbol="C" complement="G" name="Cytosine" colour="0000CC"/>
+		<letter id="G" symbol="G" complement="C" name="Guanine" colour="FFB300"/>
+		<letter id="T" symbol="T" aliases="U" complement="A" name="Thymine" colour="008000"/>
+		<letter id="N" symbol="N" aliases="X." equals="ACGT" name="Any base"/>
+		<letter id="V" symbol="V" equals="ACG" name="Not T"/>
+		<letter id="H" symbol="H" equals="ACT" name="Not G"/>
+		<letter id="D" symbol="D" equals="AGT" name="Not C"/>
+		<letter id="B" symbol="B" equals="CGT" name="Not A"/>
+		<letter id="M" symbol="M" equals="AC" name="Amino"/>
+		<letter id="R" symbol="R" equals="AG" name="Purine"/>
+		<letter id="W" symbol="W" equals="AT" name="Weak"/>
+		<letter id="S" symbol="S" equals="CG" name="Strong"/>
+		<letter id="Y" symbol="Y" equals="CT" name="Pyrimidine"/>
+		<letter id="K" symbol="K" equals="GT" name="Keto"/>
+	</alphabet>
+	<background source="--nrdb--" A="0.274262" C="0.22521" G="0.22521" T="0.274262"/>
+	<motif_dbs>
+		<motif_db source="meme/meme.crp0.de.oops.txt" last_mod_date="Wed Jan 24 18:36:51 2018">
+			<background A="0.304" C="0.196" G="0.196" T="0.304"/>
+		</motif_db>
+	</motif_dbs>
+	<motifs>
+		<motif db="0" id="AHSGYAWWWAAT" alt="MEME-1" length="12" nsites="18" evalue="6.0e-001">
+			<pos A="163" C="-1081" G="-1081" T="-245"/>
+			<pos A="13" C="50" G="-1081" T="35"/>
+			<pos A="-245" C="118" G="135" T="-1081"/>
+			<pos A="-245" C="18" G="188" T="-1081"/>
+			<pos A="-87" C="135" G="-182" T="-13"/>
+			<pos A="125" C="50" G="-1081" T="-1081"/>
+			<pos A="87" C="-1081" G="-182" T="35"/>
+			<pos A="72" C="-1081" G="-182" T="55"/>
+			<pos A="35" C="-182" G="-1081" T="87"/>
+			<pos A="72" C="18" G="-82" T="-87"/>
+			<pos A="72" C="18" G="18" T="-245"/>
+			<pos A="-245" C="-1081" G="50" T="113"/>
+		</motif>
+		<motif db="0" id="GTGADYDDDNTC" alt="MEME-2" length="12" nsites="18" evalue="9.3e-001">
+			<pos A="-1081" C="-182" G="209" T="-145"/>
+			<pos A="-145" C="-1081" G="-182" T="145"/>
+			<pos A="-245" C="-1081" G="227" T="-1081"/>
+			<pos A="125" C="50" G="-1081" T="-1081"/>
+			<pos A="35" C="-182" G="77" T="-45"/>
+			<pos A="-245" C="118" G="-23" T="13"/>
+			<pos A="-13" C="-182" G="50" T="35"/>
+			<pos A="35" C="-182" G="50" T="-13"/>
+			<pos A="-13" C="-82" G="18" T="35"/>
+			<pos A="13" C="-23" G="18" T="-13"/>
+			<pos A="-1081" C="-23" G="-23" T="113"/>
+			<pos A="-245" C="218" G="-1081" T="-245"/>
+		</motif>
+	</motifs>
+	<correlations>
+		<correlation idx_a="0" idx_b="1" value="0.13"/>
+	</correlations>
+	<sequence_dbs>
+		<sequence_db source="common/crp0.s" last_mod_date="Tue Jun 20 11:02:46 2017" seq_count="18" residue_count="1890"/>
+	</sequence_dbs>
+	<sequences>
+		<sequence db="0" name="lac" comment="9 80" length="105">
+			<score strand="both" combined_pvalue="1.30e-05" evalue="0.00023"/>
+			<seg start="1">
+				<data>
+AACGCAATTAATGTGAGTTAGCTCACTCATTAGGCACCCCAGGCTTTACACTTTATGCTTCCGGCTCGTATGTTG
+				</data>
+				<hit pos="1" idx="0" rc="n" pvalue="3.4e-06" match="++++++++++++"/>
+				<hit pos="15" idx="1" rc="y" pvalue="7.2e-06" match="++  ++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="bglr1" comment="76" length="105">
+			<score strand="both" combined_pvalue="5.42e-04" evalue="0.0098"/>
+			<seg start="76">
+				<data>
+AACTGTGAGCATGGTCATATTTTTATCAAT
+				</data>
+				<hit pos="80" idx="1" rc="n" pvalue="9.1e-06" match="++++++  ++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="tdc" comment="78" length="105">
+			<score strand="both" combined_pvalue="2.39e-03" evalue="0.043"/>
+			<seg start="1">
+				<data>
+GATTTTTATACTTTAACTTGTTGATATTTAAAGGTATTTAATTGTAATAACGATACTCTGGAAAGTATTGAAAGT
+				</data>
+				<hit pos="31" idx="0" rc="n" pvalue="7.8e-05" match="++++ +++++++"/>
+			</seg>
+			<seg start="76">
+				<data>
+TAATTTGTGAGTGGTCGCACATATCCTGTT
+				</data>
+				<hit pos="82" idx="1" rc="n" pvalue="9.4e-05" match="+++++++++  +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="deop2" comment="7 60" length="105">
+			<score strand="both" combined_pvalue="3.05e-03" evalue="0.055"/>
+			<seg start="1">
+				<data>
+AGTGAATTATTTGAACCAGATCGCATTACAGTGATGCAAACTTGTAAGTAGATTTCCTTAATTGTGATGTGTATC
+				</data>
+				<hit pos="20" idx="0" rc="n" pvalue="9.0e-05" match="++++++++++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="pbr322" comment="53" length="105">
+			<score strand="both" combined_pvalue="3.06e-03" evalue="0.055"/>
+			<seg start="1">
+				<data>
+CTGGCTTAACTATGCGGCATCAGAGCAGATTGTACTGAGAGTGCACCATATGCGGTGTGAAATACCGCACAGATG
+				</data>
+				<hit pos="59" idx="1" rc="y" pvalue="9.4e-05" match="++ +++ +++++"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="malk" comment="29 61" length="105">
+			<score strand="both" combined_pvalue="8.04e-03" evalue="0.14"/>
+			<seg start="1">
+				<data>
+GGAGGAGGCGGGAGGATGAGAACACGGCTTCTGTGAACTAAACCGAGGTCATGTAAGGAATTTCGTGATGTTGCT
+				</data>
+				<hit pos="33" idx="1" rc="n" pvalue="7.1e-05" match="++++++++ + +"/>
+			</seg>
+		</sequence>
+		<sequence db="0" name="tnaa" comment="71 " length="105">
+			<score strand="both" combined_pvalue="3.85e-02" evalue="0.69"/>
+		</sequence>
+		<sequence db="0" name="male" comment="14" length="105">
+			<score strand="both" combined_pvalue="5.05e-02" evalue="0.91"/>
+		</sequence>
+		<sequence db="0" name="ara" comment="17 55" length="105">
+			<score strand="both" combined_pvalue="5.22e-02" evalue="0.94"/>
+		</sequence>
+		<sequence db="0" name="cya" comment="50" length="105">
+			<score strand="both" combined_pvalue="5.58e-02" evalue="1"/>
+		</sequence>
+		<sequence db="0" name="ompa" comment="48" length="105">
+			<score strand="both" combined_pvalue="1.17e-01" evalue="2.1"/>
+		</sequence>
+		<sequence db="0" name="ilv" comment="39" length="105">
+			<score strand="both" combined_pvalue="1.46e-01" evalue="2.6"/>
+		</sequence>
+		<sequence db="0" name="gale" comment="42" length="105">
+			<score strand="both" combined_pvalue="1.70e-01" evalue="3.1"/>
+		</sequence>
+		<sequence db="0" name="malt" comment="41" length="105">
+			<score strand="both" combined_pvalue="1.78e-01" evalue="3.2"/>
+		</sequence>
+		<sequence db="0" name="crp" comment="63" length="105">
+			<score strand="both" combined_pvalue="2.48e-01" evalue="4.5"/>
+		</sequence>
+		<sequence db="0" name="ce1cg" comment="17 61" length="105">
+			<score strand="both" combined_pvalue="2.68e-01" evalue="4.8"/>
+		</sequence>
+		<sequence db="0" name="trn9cat" comment="1 84" length="105">
+			<score strand="both" combined_pvalue="3.26e-01" evalue="5.9"/>
+		</sequence>
+		<sequence db="0" name="uxu1" comment="17" length="105">
+			<score strand="both" combined_pvalue="3.66e-01" evalue="6.6"/>
+		</sequence>
+	</sequences>
+	<runtime host="Timothys-iMac.rd.unr.edu" when="Fri Aug 24 16:48:54 2018" cycles="7712" seconds="0.008"/>
+</mast>
