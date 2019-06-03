@@ -203,7 +203,7 @@ class TestAlignIO_reading(unittest.TestCase):
         with open(path) as handle:
             self.assertRaises(ValueError, AlignIO.read, handle, format=fmt)
 
-    def check_alignment_rows(self, alignment, sequences, column_annotations={}):
+    def check_alignment_rows(self, alignment, sequences, column_annotations=None):
         max_len = 40
         items = []
         for record in alignment:
@@ -214,7 +214,10 @@ class TestAlignIO_reading(unittest.TestCase):
             item = (name, sequence)
             items.append(item)
         self.assertEqual(sequences, sorted(items))
-        self.assertEqual(alignment.column_annotations, column_annotations)
+        if column_annotations is None:
+            self.assertEqual(alignment.column_annotations, {})
+        else:
+            self.assertEqual(alignment.column_annotations, column_annotations)
 
     def check_alignment_columns(self, alignment, columns):
         alignment_len = alignment.get_alignment_length()
