@@ -48,13 +48,18 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
-    Supports all parameters of the qblast API for Put and Get.
+    Supports all parameters of the old qblast API for Put and Get.
 
-    Please note that BLAST on the cloud supports the NCBI-BLAST Common
-    URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
-    use this feature, please set url_base to
-    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and
-    format_object='Alignment'. For more details, please see
+    Please note that NCBI uses the new Common URL API for BLAST searches
+    on the internet (http://ncbi.github.io/blast-cloud/dev/api.html). Thus,
+    some of the parameters used by this function are not (or are no longer)
+    officially supported by NCBI. Although they are still functioning, this
+    may change in the future.
+
+    The Common URL API (http://ncbi.github.io/blast-cloud/dev/api.html) allows
+    doing BLAST searches on cloud servers. To use this feature, please set
+    ``url_base='http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'``
+    and ``format_object='Alignment'``. For more details, please see
     https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
 
     Some useful parameters:
@@ -73,7 +78,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
      - short_query    TRUE/FALSE whether to adjust the search parameters for a
-                      short query sequence. Note that this will override 
+                      short query sequence. Note that this will override
                       manually set parameters like word size and e value. Turns
                       off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
