@@ -51,6 +51,17 @@ class Record(list):
             return list.__getitem__(self, key)
 
 
+class Sequence(object):
+    def __init__(self):
+        self.name = ""
+        self.description = ""
+        self.length = None
+        self.strand = ""
+        self.evalue = None
+        self.combined_pvalue = None
+        self.diagram = ""
+
+
 def read(handle):
     """Parse a MAST XML format handle as a Record object."""
     record = Record()
@@ -86,11 +97,17 @@ def __read_metadata(record, xml_tree):
 def __read_sequences(record, xml_tree):
     """Read sequences from XML ElementTree object."""
     for sequence_tree in xml_tree.find('sequences').findall('sequence'):
-        sequence_name = sequence_tree.get('name')
-        record.sequences.append(sequence_name)
-        diagram_str = __make_diagram(record, sequence_tree)
-        record.diagrams[sequence_name] = diagram_str
-        # TODO - add description, evalue, length, combined_pvalue
+        sequence = Sequence()
+        sequence.name = sequence_tree.get('name')
+        sequence.description = sequence_tree.get('comment')
+        sequence.length = int(sequence_tree.get('length'))
+        score_tree = sequence_tree.find('score')
+        sequence.strand = score_tree.get('strand')
+        sequence.combined_pvalue = float(score_tree.get('combined_pvalue'))
+        sequence.evalue = float(score_tree.get('evalue'))
+        sequence.diagram = __make_diagram(record, sequence_tree)
+        record.sequences.append(sequence)
+        record.diagrams[sequence.name] = sequence.diagram
 
 
 def __make_diagram(record, sequence_tree):
