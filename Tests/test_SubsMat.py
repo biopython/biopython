@@ -22,6 +22,8 @@ import os
 import unittest
 
 
+from Bio._py3k import StringIO
+
 from Bio import SubsMat
 from Bio.SubsMat import FreqTable, MatrixInfo
 
@@ -37,37 +39,6 @@ f.write("letter. Differences should be very small\n")
 for i in ftab_prot.alphabet.letters:
     f.write("%s %f\n" % (i, abs(ftab_prot[i] - ctab_prot[i])))
 
-pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
-# Don't want to use text mode on Python 3,
-with open(pickle_file, 'rb') as handle:
-    acc_rep_mat = pickle.load(handle)
-acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
-obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
-ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
-obs_freq_mat.print_mat(f=f, format=" %4.3f")
-
-
-f.write("Diff between supplied and matrix-derived frequencies, should be small\n")
-for i in sorted(ftab_prot):
-    f.write("%s %.2f\n" % (i, abs(ftab_prot[i] - ftab_prot2[i])))
-
-s = 0.
-f.write("Calculating sum of letters for an observed frequency matrix\n")
-counts = obs_freq_mat.sum()
-for key in sorted(counts):
-    f.write("%s\t%.2f\n" % (key, counts[key]))
-    s += counts[key]
-f.write("Total sum %.2f should be 1.0\n" % (s))
-lo_mat_prot = \
-SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat, round_digit=1)  # ,ftab_prot
-f.write("\nLog odds matrix\n")
-f.write("\nLog odds half matrix\n")
-# Was %.1f. Let us see if this is OK
-lo_mat_prot.print_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
-f.write("\nLog odds full matrix\n")
-# Was %.1f. Let us see if this is OK
-lo_mat_prot.print_full_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
-
 class TestGeo(unittest.TestCase):
 
     def test_check_accepted_replacements(self):
@@ -78,25 +49,317 @@ class TestGeo(unittest.TestCase):
         acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
         obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
         ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
-        # obs_freq_mat.print_mat(f=f, format=" %4.3f")
-        # f.write("Diff between supplied and matrix-derived frequencies, should be small\n")
-        # for i in sorted(ftab_prot):
-            # f.write("%s %.2f\n" % (i, abs(ftab_prot[i] - ftab_prot2[i])))
+        self.assertEqual(len(obs_freq_mat), 210)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'A')], 0.010561, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'C')], 0.002452, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'C')], 0.002102, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'D')], 0.008559, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'D')], 0.000751, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'D')], 0.007558, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'E')], 0.010360, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'E')], 0.001301, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'E')], 0.008158, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'E')], 0.005956, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'F')], 0.006106, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'F')], 0.001602, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'F')], 0.003153, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'F')], 0.002503, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'F')], 0.003954, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'G')], 0.011461, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'G')], 0.001952, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'G')], 0.007157, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'G')], 0.007307, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'G')], 0.005105, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'G')], 0.016066, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'H')], 0.003303, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'H')], 0.000501, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'H')], 0.002603, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'H')], 0.001902, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'H')], 0.001952, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'H')], 0.002653, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'H')], 0.002803, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'I')], 0.010110, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'I')], 0.002102, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'I')], 0.003303, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'I')], 0.003153, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'I')], 0.007558, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'I')], 0.004605, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'I')], 0.001552, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'I')], 0.007257, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'K')], 0.009560, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'K')], 0.001201, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'K')], 0.008458, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'K')], 0.008208, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'K')], 0.003353, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'K')], 0.007407, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'K')], 0.003153, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'K')], 0.004004, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'K')], 0.006056, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'L')], 0.015365, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'L')], 0.003103, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'L')], 0.006006, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'L')], 0.006657, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'L')], 0.011812, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'L')], 0.007708, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'L')], 0.003504, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'L')], 0.017417, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'L')], 0.005606, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'L')], 0.016016, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'M')], 0.003954, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'M')], 0.000701, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'M')], 0.001001, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'M')], 0.001652, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'M')], 0.003353, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'M')], 0.002452, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'M')], 0.000801, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'M')], 0.004404, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'M')], 0.001602, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'M')], 0.007658, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'M')], 0.001101, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'N')], 0.006957, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'N')], 0.001201, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'N')], 0.008158, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'N')], 0.005756, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'N')], 0.002753, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'N')], 0.007357, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'N')], 0.002853, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'N')], 0.003253, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'N')], 0.006957, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'N')], 0.005055, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'N')], 0.001702, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'N')], 0.003303, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'P')], 0.005956, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'P')], 0.001051, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'P')], 0.005255, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'P')], 0.004555, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'P')], 0.002503, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'P')], 0.005405, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'P')], 0.001151, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'P')], 0.003353, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'P')], 0.004705, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'P')], 0.003954, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'P')], 0.001001, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'P')], 0.004705, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'P')], 0.006006, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'Q')], 0.006456, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'Q')], 0.000801, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'Q')], 0.005806, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'Q')], 0.005255, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'Q')], 0.001952, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'Q')], 0.004454, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'Q')], 0.002202, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'Q')], 0.003103, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'Q')], 0.005405, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'Q')], 0.003954, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'Q')], 0.001351, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'Q')], 0.003854, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'Q')], 0.003403, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'Q')], 0.002102, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'R')], 0.007608, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'R')], 0.000751, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'R')], 0.005756, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'R')], 0.005906, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'R')], 0.002853, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'R')], 0.004054, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'R')], 0.002202, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'R')], 0.002903, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'R')], 0.007558, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'R')], 0.005455, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'R')], 0.002002, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'R')], 0.004505, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'R')], 0.003604, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'R')], 0.003654, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'R')], 0.004805, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'S')], 0.009960, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'S')], 0.001151, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'S')], 0.008358, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'S')], 0.007157, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'S')], 0.004605, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'S')], 0.008058, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'S')], 0.002953, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'S')], 0.004204, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'S')], 0.007207, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'S')], 0.007958, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'S')], 0.002052, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'S')], 0.005756, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'S')], 0.005155, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'S')], 0.005055, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'S')], 0.004705, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('S', 'S')], 0.005806, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'T')], 0.009760, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'T')], 0.001502, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'T')], 0.006256, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'T')], 0.007508, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'T')], 0.003453, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'T')], 0.007658, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'T')], 0.003453, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'T')], 0.004404, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'T')], 0.007007, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'T')], 0.009159, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'T')], 0.001752, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'T')], 0.005255, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'T')], 0.004605, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'T')], 0.004855, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'T')], 0.005706, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('S', 'T')], 0.008609, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('T', 'T')], 0.004204, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'V')], 0.012613, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'V')], 0.002953, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'V')], 0.004755, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'V')], 0.005506, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'V')], 0.008008, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'V')], 0.006557, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'V')], 0.002703, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'V')], 0.015516, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'V')], 0.006557, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'V')], 0.022372, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'V')], 0.004755, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'V')], 0.004655, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'V')], 0.005455, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'V')], 0.003453, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'V')], 0.004404, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('S', 'V')], 0.005706, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('T', 'V')], 0.007257, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('V', 'V')], 0.011962, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'W')], 0.002352, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'W')], 0.000400, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'W')], 0.001101, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'W')], 0.001051, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'W')], 0.002152, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'W')], 0.001752, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'W')], 0.000651, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'W')], 0.001902, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'W')], 0.001051, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'W')], 0.003704, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'W')], 0.001251, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'W')], 0.001451, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'W')], 0.000901, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'W')], 0.000751, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'W')], 0.001151, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('S', 'W')], 0.001101, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('T', 'W')], 0.001752, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('V', 'W')], 0.002202, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('W', 'W')], 0.001602, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('A', 'Y')], 0.006206, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('C', 'Y')], 0.000951, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('D', 'Y')], 0.003203, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('E', 'Y')], 0.003003, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('F', 'Y')], 0.007107, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('G', 'Y')], 0.005055, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('H', 'Y')], 0.002152, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('I', 'Y')], 0.004705, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('K', 'Y')], 0.003303, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('L', 'Y')], 0.008659, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('M', 'Y')], 0.002052, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('N', 'Y')], 0.003754, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('P', 'Y')], 0.003003, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Q', 'Y')], 0.002052, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('R', 'Y')], 0.003103, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('S', 'Y')], 0.003654, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('T', 'Y')], 0.004555, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('V', 'Y')], 0.006707, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('W', 'Y')], 0.002553, places=6)
+        self.assertAlmostEqual(obs_freq_mat[('Y', 'Y')], 0.004104, places=6)
+        self.assertEqual(len(ftab_prot2), 20)
+        self.assertAlmostEqual(abs(ftab_prot['A']-ftab_prot2['A']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['C']-ftab_prot2['C']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['D']-ftab_prot2['D']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['E']-ftab_prot2['E']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['F']-ftab_prot2['F']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['G']-ftab_prot2['G']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['H']-ftab_prot2['H']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['I']-ftab_prot2['I']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['K']-ftab_prot2['K']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['L']-ftab_prot2['L']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['M']-ftab_prot2['M']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['N']-ftab_prot2['N']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['P']-ftab_prot2['P']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['Q']-ftab_prot2['Q']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['R']-ftab_prot2['R']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['S']-ftab_prot2['S']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['T']-ftab_prot2['T']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['V']-ftab_prot2['V']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['W']-ftab_prot2['W']), 0, places=1)
+        self.assertAlmostEqual(abs(ftab_prot['Y']-ftab_prot2['Y']), 0, places=1)
 
-        s = 0.
-        # f.write("Calculating sum of letters for an observed frequency matrix\n")
         counts = obs_freq_mat.sum()
-        for key in sorted(counts):
-            # f.write("%s\t%.2f\n" % (key, counts[key]))
-            s += counts[key]
-        # f.write("Total sum %.2f should be 1.0\n" % (s))
+        self.assertEqual(len(counts), 20)
+        self.assertAlmostEqual(counts['A'], 0.0851, places=3)
+        self.assertAlmostEqual(counts['C'], 0.0153, places=3)
+        self.assertAlmostEqual(counts['D'], 0.0565, places=3)
+        self.assertAlmostEqual(counts['E'], 0.0544, places=3)
+        self.assertAlmostEqual(counts['F'], 0.0449, places=3)
+        self.assertAlmostEqual(counts['G'], 0.0701, places=3)
+        self.assertAlmostEqual(counts['H'], 0.0239, places=3)
+        self.assertAlmostEqual(counts['I'], 0.0580, places=3)
+        self.assertAlmostEqual(counts['K'], 0.0572, places=3)
+        self.assertAlmostEqual(counts['L'], 0.0936, places=3)
+        self.assertAlmostEqual(counts['M'], 0.0238, places=3)
+        self.assertAlmostEqual(counts['N'], 0.0463, places=3)
+        self.assertAlmostEqual(counts['P'], 0.0409, places=3)
+        self.assertAlmostEqual(counts['Q'], 0.0360, places=3)
+        self.assertAlmostEqual(counts['R'], 0.0437, places=3)
+        self.assertAlmostEqual(counts['S'], 0.0575, places=3)
+        self.assertAlmostEqual(counts['T'], 0.0565, places=3)
+        self.assertAlmostEqual(counts['V'], 0.0780, places=3)
+        self.assertAlmostEqual(counts['W'], 0.0162, places=3)
+        self.assertAlmostEqual(counts['Y'], 0.0420, places=3)
         lo_mat_prot = SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,
                                                    round_digit=1)  # ,ftab_prot
-        # f.write("\nLog odds matrix\n")
-        # f.write("\nLog odds half matrix\n")
-        # lo_mat_prot.print_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
-        # f.write("\nLog odds full matrix\n")
-        # lo_mat_prot.print_full_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
+        handle = StringIO()
+        lo_mat_prot.print_mat(f=handle, format=" %d",
+                              alphabet='AVILMCFWYHSTNQKRDEGP')
+        text = handle.getvalue()
+        self.assertEqual(text, """\
+A 0
+V 0 1
+I 0 0 1
+L 0 0 0 0
+M 0 0 0 0 1
+C 0 0 0 0 0 3
+F 0 0 0 0 0 0 1
+W 0 0 0 0 0 0 0 2
+Y 0 0 0 0 0 0 0 0 1
+H 0 0 0 0 0 0 0 0 0 2
+S 0 0 0 0 0 0 0 0 0 0 0
+T 0 0 0 0 0 0 0 0 0 0 0 0
+N 0 0 0 0 0 0 0 0 0 0 0 0 0
+Q 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+K 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+D 0 0 -1 0 -1 -1 0 0 0 0 0 0 0 0 0 0 1
+E 0 0 -1 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 1
+G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+   A   V   I   L   M   C   F   W   Y   H   S   T   N   Q   K   R   D   E   G   P
+""")
+        handle = StringIO()
+        lo_mat_prot.print_full_mat(f=handle, format=" %d",
+                                   alphabet='AVILMCFWYHSTNQKRDEGP')
+        text = handle.getvalue()
+        self.assertEqual(text, """\
+   A   V   I   L   M   C   F   W   Y   H   S   T   N   Q   K   R   D   E   G   P
+A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+V 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+I 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 -1 0 0
+L 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1
+M 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 -1 0 0 -1
+C 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 -1 0 0 0
+F 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 -1 0 0
+W 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0
+Y 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+H 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0
+S 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+T 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+N 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+Q 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+K 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
+D 0 0 -1 0 -1 -1 0 0 0 0 0 0 0 0 0 0 1 0 0 0
+E 0 0 -1 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 1 0 0
+G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+""")
 
         self.assertEqual(len(MatrixInfo.available_matrices), 40)
         mat = SubsMat.SeqMat(MatrixInfo.benner6)
