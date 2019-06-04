@@ -29,21 +29,17 @@ from Bio.SubsMat import FreqTable, MatrixInfo
 
 class TestGeo(unittest.TestCase):
 
-    ftab_file = os.path.join('SubsMat', 'protein_count.txt')
-    with open(ftab_file) as handle:
-        ftab_prot = FreqTable.read_count(handle)
-    del ftab_file
-
-    pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
-    # Don't want to use text mode on Python 3,
-    with open(pickle_file, 'rb') as handle:
-        acc_rep_mat = pickle.load(handle)
-    acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
-    del pickle_file
-
-    obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
-
-    del handle
+    @classmethod
+    def setUpClass(cls):
+        ftab_file = os.path.join('SubsMat', 'protein_count.txt')
+        with open(ftab_file) as handle:
+            cls.ftab_prot = FreqTable.read_count(handle)
+        pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
+        # Don't want to use text mode on Python 3,
+        with open(pickle_file, 'rb') as handle:
+            dictionary = pickle.load(handle)
+        cls.acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(dictionary)
+        cls.obs_freq_mat = SubsMat._build_obs_freq_mat(cls.acc_rep_mat)
 
     def checkMatrix(self, mat, expected):
         handle = StringIO()
