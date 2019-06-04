@@ -53,6 +53,7 @@ class Record(list):
 
 class Sequence(object):
     def __init__(self):
+        """Initialize the class."""
         self.name = ""
         self.description = ""
         self.length = None
@@ -60,6 +61,10 @@ class Sequence(object):
         self.evalue = None
         self.combined_pvalue = None
         self.diagram = ""
+
+    def __str__(self):
+        """Return the name of the sequence."""
+        return self.name
 
 
 def read(handle):
