@@ -53,7 +53,7 @@ class TestGeo(unittest.TestCase):
         self.assertEqual(self.ftab_prot.alphabet.letters, letters)
         for letter in letters:
             difference = self.ftab_prot[letter] - ctab_prot[letter]
-            self.assertAlmostEqual(abs(difference), 0, places=3)        
+            self.assertAlmostEqual(abs(difference), 0, places=3)
 
     def test_freqtable(self):
         ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(self.obs_freq_mat)
@@ -10348,6 +10348,7 @@ P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
         self.assertAlmostEqual(correlation, 0.878, places=3)
         correlation = SubsMat.two_mat_correlation(blosum90, blosum30)
         self.assertAlmostEqual(correlation, 0.878, places=3)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
