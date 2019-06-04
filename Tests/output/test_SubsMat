@@ -1163,10 +1163,3 @@ V   0  -4  -4  -2  -1  -4  -2   2  -3   1   0  -4  -4  -2  -3  -3  -1   5
 W  -3  -6  -6  -6   2  -4  -3  -2  -3  -1  -2  -5  -4  -5  -2  -5  -5  -4  10
 Y  -3  -6  -3  -2   3  -3   0  -1  -2  -2  -1  -1  -6  -3  -1  -2  -2  -1   2   7
    A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-
-Testing Entropy
-relative entropy 0.162
-
-matrix correlations
-BLOSUM30 & BLOSUM90 0.88
-BLOSUM90 & BLOSUM30 0.88

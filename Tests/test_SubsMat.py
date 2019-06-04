@@ -19,6 +19,9 @@ except ImportError:
 
 import sys
 import os
+import unittest
+
+
 from Bio import SubsMat
 from Bio.SubsMat import FreqTable, MatrixInfo
 
@@ -70,12 +73,53 @@ for i in MatrixInfo.available_matrices:
     mat = SubsMat.SeqMat(getattr(MatrixInfo, i))
     f.write("\n%s\n------------\n" % i)
     mat.print_mat(f=f)
-f.write("\nTesting Entropy\n")
-relative_entropy = lo_mat_prot.calculate_relative_entropy(obs_freq_mat)
-f.write("relative entropy %.3f\n" % relative_entropy)
 
-f.write("\nmatrix correlations\n")
-blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
-blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
-f.write("BLOSUM30 & BLOSUM90 %.2f\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
-f.write("BLOSUM90 & BLOSUM30 %.2f\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
+class TestGeo(unittest.TestCase):
+
+    def test_check_accepted_replacements(self):
+        pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
+        # Don't want to use text mode on Python 3,
+        with open(pickle_file, 'rb') as handle:
+            acc_rep_mat = pickle.load(handle)
+        acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
+        obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
+        ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
+        # obs_freq_mat.print_mat(f=f, format=" %4.3f")
+        # f.write("Diff between supplied and matrix-derived frequencies, should be small\n")
+        # for i in sorted(ftab_prot):
+            # f.write("%s %.2f\n" % (i, abs(ftab_prot[i] - ftab_prot2[i])))
+
+        s = 0.
+        # f.write("Calculating sum of letters for an observed frequency matrix\n")
+        counts = obs_freq_mat.sum()
+        for key in sorted(counts):
+            # f.write("%s\t%.2f\n" % (key, counts[key]))
+            s += counts[key]
+        # f.write("Total sum %.2f should be 1.0\n" % (s))
+        lo_mat_prot = SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,
+                                                   round_digit=1)  # ,ftab_prot
+        # f.write("\nLog odds matrix\n")
+        # f.write("\nLog odds half matrix\n")
+        # lo_mat_prot.print_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
+        # f.write("\nLog odds full matrix\n")
+        # lo_mat_prot.print_full_mat(f=f, format=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
+
+        self.assertEqual(len(MatrixInfo.available_matrices), 40)
+        for i in MatrixInfo.available_matrices:
+            mat = SubsMat.SeqMat(getattr(MatrixInfo, i))
+            # f.write("\n%s\n------------\n" % i)
+            # mat.print_mat(f=f)
+        relative_entropy = lo_mat_prot.calculate_relative_entropy(obs_freq_mat)
+        self.assertAlmostEqual(relative_entropy, 0.162, places=3)
+
+    def test_matrix_correlations(self):
+        blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        correlation = SubsMat.two_mat_correlation(blosum30, blosum90)
+        self.assertAlmostEqual(correlation, 0.878, places=3)
+        correlation = SubsMat.two_mat_correlation(blosum90, blosum30)
+        self.assertAlmostEqual(correlation, 0.878, places=3)
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=0)
+    unittest.main(testRunner=runner)
