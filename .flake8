@@ -40,12 +40,12 @@ ignore =
 # Folder specific ignores:
 # ========================
 per-file-ignores =
-    Bio/*:E122,E126,F401,F841,D101,D102,D105,B009,B010,B011,C812,C815
+    Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
     Tests/*:E122,E126,F401,F841,D101,D102,D103,B009,B010,B011,C812
-    
+
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
-    /Bio/*:E122,E126,F401,F841,D101,D102,D105,B009,B010,B011,C812,C815
+    /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
     /Tests/*:E122,E126,F401,F841,D101,D102,D103,B009,B010,B011,C812
 
 #=============================
@@ -55,8 +55,6 @@ per-file-ignores =
 #      E126 continuation line over-indented for hanging indent TODO?  (53 occurrences)
 #      F401 module imported but unused TODO? (107 occurrences)
 #      F841 local variable is assigned to but never used TODO? (55 occurrences)
-#      D101 missing docstring in public class WIP (15 occurrences)
-#      D102 missing docstring in public method WIP (32 occurrences)
 #      D105 missing docstring magic method (121 occurrences)
 #      B009 do not call getattr with a constant attribute value,
 #           it is not any safer than normal property access
