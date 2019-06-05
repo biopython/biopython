@@ -107,10 +107,11 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
             nucl_reward = 1
             filter = None
             lcase_mask = None
-            warnings.warn('"short_query" for blastn is wronlgy implemented by '
-                          'NCBI. We bypass the problem by manually adjusting '
-                          'the search parameters. Thus, results may slightly '
-                          'differ from web page searches.', BiopythonWarning)
+            warnings.warn('"SHORT_QUERY_ADJUST" is incorrectly implemented '
+                          '(by NCBI) for blastn. We bypass the problem by '
+                          'manually adjusting the search parameters. Thus, '
+                          'results may slightly differ from web page '
+                          'searches.', BiopythonWarning)
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
