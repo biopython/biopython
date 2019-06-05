@@ -19,6 +19,7 @@ Right now we've got tests for:
 from __future__ import print_function
 
 import os
+import unittest
 
 # biopython
 from Bio import Alphabet
@@ -71,21 +72,47 @@ test_files = []
 for name in test_names:
     test_files.append(os.path.join(test_dir, name))
 
-for test_file in test_files:
-    # parse the alignment file and get an aligment object
-    alignment = AlignIO.read(test_file, "clustal")
+test_file = test_files[0]
+# parse the alignment file and get an aligment object
+alignment = AlignIO.read(test_file, "clustal")
+# print the alignment back out
+print(alignment.format("clustal"))
 
-    # print the alignment back out
-    print(alignment.format("clustal"))
+test_file = test_files[1]
+# parse the alignment file and get an aligment object
+alignment = AlignIO.read(test_file, "clustal")
+# print the alignment back out
+print(alignment.format("clustal"))
 
 alignment = AlignIO.read(os.path.join(test_dir, test_names[0]), "clustal",
                          alphabet=Alphabet.Gapped(IUPAC.unambiguous_dna))
 
 # test the base alignment stuff
 print('all_seqs...')
-for seq_record in alignment:
-    print('description: %s' % seq_record.description)
-    print('seq: %r' % seq_record.seq)
+assert len(alignment) == 7
+seq_record = alignment[0]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[1]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[2]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[3]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[4]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[5]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[6]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+
+
 print('length: %i' % alignment.get_alignment_length())
 
 print('Calculating summary information...')
@@ -97,8 +124,39 @@ print('consensus: %r' % consensus)
 
 print('Replacement dictionary')
 ks = sorted(align_info.replacement_dictionary(['N']))
-for key in ks:
-    print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+assert len(ks) == 16
+key = ('A', 'A')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('A', 'C')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('A', 'G')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('A', 'T')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('C', 'A')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('C', 'C')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('C', 'G')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('C', 'T')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('G', 'A')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('G', 'C')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('G', 'G')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('G', 'T')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('T', 'A')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('T', 'C')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('T', 'G')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
+key = ('T', 'T')
+print("%s : %s" % (key, align_info.replacement_dictionary(['N'])[key]))
 
 print('position specific score matrix.')
 print('with a supplied consensus sequence...')
@@ -145,9 +203,16 @@ alignment = AlignIO.read(to_parse, "fasta",
 
 # test the base alignment stuff
 print('all_seqs...')
-for seq_record in alignment:
-    print('description: %s' % seq_record.description)
-    print('seq: %r' % seq_record.seq)
+assert len(alignment) == 3
+seq_record = alignment[0]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[1]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
+seq_record = alignment[2]
+print('description: %s' % seq_record.description)
+print('seq: %r' % seq_record.seq)
 
 print('length: %i' % alignment.get_alignment_length())
 align_info = AlignInfo.SummaryInfo(alignment)
@@ -169,33 +234,7 @@ print(alignment.format("fasta"))
 print("As Clustal:")
 print(alignment.format("clustal"))
 
-"""
-# test to find a position in an original sequence given a
-# column position in an alignment
-print("Testing finding column positions...")
-alignment_info = ["GATC--CGATC--G",
-                  "GA--CCCG-TC--G",
-                  "GAT--CC--TC--G"]
 
-gapped_unambiguous = Alphabet.Gapped(IUPAC.unambiguous_dna)
-
-alignment = Alignment(gapped_unambiguous)
-for seq in alignment_info:
-    alignment.add_sequence("Blah", seq)
-
-test_seq_1 = Seq("GATCCGATCG")
-orig_pos = alignment.original_sequence_pos(3, test_seq_1, 0)
-assert orig_pos == 3, "Got unexpected position: %s" % orig_pos
-orig_pos = alignment.original_sequence_pos(7, test_seq_1, 0)
-assert orig_pos == 5, "Got unexpected position: %s" % orig_pos
-orig_pos = alignment.original_sequence_pos(0, test_seq_1, 0)
-assert orig_pos == 0, "Got unexpected position: %s" % orig_pos
-orig_pos = alignment.original_sequence_pos(13, test_seq_1, 0)
-assert orig_pos == 9, "Got unexpected position: %s" % orig_pos
-
-try:
-    orig_pos = alignment.original_sequence_pos(5, test_seq_1, 0)
-    raise AssertionError("Did not fail with a junk position")
-except AssertionError:
-    pass
-"""
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
