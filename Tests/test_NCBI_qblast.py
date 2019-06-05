@@ -13,7 +13,6 @@ Goals:
     - Make sure we can parse the latest XML format being used by the NCBI.
 
 """
-from __future__ import print_function
 import unittest
 
 from Bio._py3k import HTTPError
@@ -37,8 +36,6 @@ requires_internet.check()
 # - expectation value threshold
 # - Entrez filter string (or None)
 # - list of hit identifiers expected to be found (or None if expect 0)
-
-print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
 
 
 class TestQblast(unittest.TestCase):
@@ -178,10 +175,6 @@ class TestQblast(unittest.TestCase):
                     if expected_hit in alignment.hit_id.split("|"):
                         found_result = True
                         break
-            if len(expected_hits) == 1:
-                print("Update this test to have some redundancy...")
-                for alignment in record.alignments:
-                    print(alignment.hit_id)
             self.assertTrue(found_result,
                             "Missing all expected hits (%s), instead have: %s"
                             % (", ".join(expected_hits),
