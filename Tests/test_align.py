@@ -32,7 +32,7 @@ from Bio.SubsMat import FreqTable
 from Bio.Align import MultipleSeqAlignment
 
 
-class Test(unittest.TestCase):
+class TestBasics(unittest.TestCase):
 
     def test_empty_alignment(self):
         """Very simple tests on an empty alignment"""
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         self.assertEqual(len(alignment), 0)
 
     def test_basic_alignment(self):
-        """Basic tests on simple three string alignment"""
+        """Basic tests on a simple alignment of three sequences"""
         alignment = MultipleSeqAlignment([])
         letters = "AbcDefGhiJklMnoPqrStuVwxYz"
         alignment.append(SeqRecord(Seq(letters), id="mixed"))
@@ -65,7 +65,9 @@ class Test(unittest.TestCase):
         self.assertEqual(alignment[::-1][0].id, "upper")
         self.assertEqual(alignment[::-1][2].id, "mixed")
 
-    def test_read_clustal(self):
+class TestReading(unittest.TestCase):
+
+    def test_read_clustal1(self):
         """Parse an alignment file and get an aligment object"""
         path = os.path.join(os.getcwd(), 'Clustalw', 'opuntia.aln')
         alignment = AlignIO.read(path, "clustal")
@@ -111,10 +113,10 @@ gi|6273291|gb|AF191665.1|AF191      ACCAGA
 
 
 """)
+    def test_read_clustal2(self):
+        """Parse an alignment file and get an aligment object"""
         path = os.path.join(os.curdir, 'Clustalw', 'cw02.aln')
-        # parse the alignment file and get an aligment object
         alignment = AlignIO.read(path, "clustal")
-        # print the alignment back out
         self.assertEqual(alignment.format("clustal"), """\
 CLUSTAL X (1.81) multiple sequence alignment
 
@@ -888,18 +890,18 @@ A  7.0 0.0 0.0 0.0
         self.assertEqual(len(alignment), 3)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_413_324")
-        self.assertEqual(repr(seq_record.seq), "Seq('CCCTTCTTGTCTTCAGCGTTTCTCC', Gapped(IUPACAmbiguousDNA(), '-'))")
+        self.assertEqual(seq_record.seq, "CCCTTCTTGTCTTCAGCGTTTCTCC")
         seq_record = alignment[1]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_540_792")
-        self.assertEqual(repr(seq_record.seq), "Seq('TTGGCAGGCCAAGGCCGATGGATCA', Gapped(IUPACAmbiguousDNA(), '-'))")
+        self.assertEqual(seq_record.seq, "TTGGCAGGCCAAGGCCGATGGATCA")
         seq_record = alignment[2]
         self.assertEqual(seq_record.description, "EAS54_6_R1_2_1_443_348")
-        self.assertEqual(repr(seq_record.seq), "Seq('GTTGCTTCTGGCGTGGGTGGGGGGG', Gapped(IUPACAmbiguousDNA(), '-'))")
+        self.assertEqual(seq_record.seq, "GTTGCTTCTGGCGTGGGTGGGGGGG")
         self.assertEqual(alignment.get_alignment_length(), 25)
         align_info = AlignInfo.SummaryInfo(alignment)
         consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
         self.assertIsInstance(consensus, Seq)
-        self.assertEqual(repr(consensus), "Seq('NTNGCNTNNNNNGNNGGNTGGNTCN', IUPACAmbiguousDNA())")
+        self.assertEqual(consensus, "NTNGCNTNNNNNGNNGGNTGGNTCN")
         self.assertEqual(str(alignment), """\
 Gapped(IUPACAmbiguousDNA(), '-') alignment with 3 rows and 25 columns
 CCCTTCTTGTCTTCAGCGTTTCTCC EAS54_6_R1_2_1_413_324
