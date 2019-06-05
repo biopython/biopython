@@ -35,13 +35,13 @@ from Bio.Align import MultipleSeqAlignment
 class TestBasics(unittest.TestCase):
 
     def test_empty_alignment(self):
-        """Very simple tests on an empty alignment"""
+        """Very simple tests on an empty alignment."""
         alignment = MultipleSeqAlignment([])
         self.assertEqual(alignment.get_alignment_length(), 0)
         self.assertEqual(len(alignment), 0)
 
     def test_basic_alignment(self):
-        """Basic tests on a simple alignment of three sequences"""
+        """Basic tests on a simple alignment of three sequences."""
         alignment = MultipleSeqAlignment([])
         letters = "AbcDefGhiJklMnoPqrStuVwxYz"
         alignment.append(SeqRecord(Seq(letters), id="mixed"))
@@ -65,10 +65,11 @@ class TestBasics(unittest.TestCase):
         self.assertEqual(alignment[::-1][0].id, "upper")
         self.assertEqual(alignment[::-1][2].id, "mixed")
 
+
 class TestReading(unittest.TestCase):
 
     def test_read_clustal1(self):
-        """Parse an alignment file and get an aligment object"""
+        """Parse an alignment file and get an aligment object."""
         path = os.path.join(os.getcwd(), 'Clustalw', 'opuntia.aln')
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(alignment.format("clustal"), """\
@@ -113,8 +114,9 @@ gi|6273291|gb|AF191665.1|AF191      ACCAGA
 
 
 """)
+
     def test_read_clustal2(self):
-        """Parse an alignment file and get an aligment object"""
+        """Parse an alignment file and get an aligment object."""
         path = os.path.join(os.curdir, 'Clustalw', 'cw02.aln')
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(alignment.format("clustal"), """\
@@ -174,10 +176,10 @@ gi|671626|emb|CAA85685.1|           -
                                      
 
 
-""")
+""")  # noqa: W291
 
     def test_read_write_clustal(self):
-        """Test the base alignment stuff"""
+        """Test the base alignment stuff."""
         path = os.path.join(os.getcwd(), 'Clustalw', 'opuntia.aln')
         alignment = AlignIO.read(path, "clustal", alphabet=Alphabet.Gapped(IUPAC.unambiguous_dna))
         self.assertEqual(len(alignment), 7)
@@ -909,7 +911,7 @@ TTGGCAGGCCAAGGCCGATGGATCA EAS54_6_R1_2_1_540_792
 GTTGCTTCTGGCGTGGGTGGGGGGG EAS54_6_R1_2_1_443_348""")
 
     def test_format_conversion(self):
-        """parse the alignment file and get an aligment object"""
+        """Parse the alignment file and get an aligment object."""
         path = os.path.join(os.curdir, 'Clustalw', 'opuntia.aln')
         alignment = AlignIO.read(path, 'clustal')
         self.assertEqual(alignment.format("fasta"), """\
