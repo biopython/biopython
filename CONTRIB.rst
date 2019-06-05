@@ -84,6 +84,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - David Weisman <david.weisman at domain acm.org>
 - David Winter <https://github.com/dwinter>
 - Devang Thakkar <https://github.com/devangthakkar>
+- Deepak Khatri <https://github.com/deepaklorkhatri007>
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
 - Edward Liaw <https://github.com/edliaw>
