@@ -415,10 +415,10 @@ residues are dealt with in a special way, as described in section \ref{point mut
 A Residue object has a number of additional methods:
 
 \begin{minted}{pycon}
->>> residue.get_resname()       # returns the residue name, e.g. "ASN"
->>> residue.is_disordered()     # returns 1 if the residue has disordered atoms
->>> residue.get_segid()	        # returns the SEGID, e.g. "CHN1"
->>> residue.has_id(name)        # test if a residue has a certain atom
+>>> residue.get_resname()    # returns the residue name, e.g. "ASN"
+>>> residue.is_disordered()  # returns 1 if the residue has disordered atoms
+>>> residue.get_segid()      # returns the SEGID, e.g. "CHN1"
+>>> residue.has_id(name)     # test if a residue has a certain atom
 \end{minted}
 
 You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino acid.
