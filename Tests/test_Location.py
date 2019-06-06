@@ -9,41 +9,53 @@
 This checks to be sure fuzzy and non-fuzzy representations of locations
 are working properly.
 """
-from __future__ import print_function
+
+import unittest
 
 from Bio import SeqFeature
 
-# --- test fuzzy representations
-print("Testing fuzzy representations...")
 
-# check the positions alone
-exact_pos = SeqFeature.ExactPosition(5)
-within_pos_s = SeqFeature.WithinPosition(10, left=10, right=13)
-within_pos_e = SeqFeature.WithinPosition(13, left=10, right=13)
-between_pos_e = SeqFeature.BetweenPosition(24, left=20, right=24)
-before_pos = SeqFeature.BeforePosition(15)
-after_pos = SeqFeature.AfterPosition(40)
+class TestLocations(unittest.TestCase):
 
-print("Exact: %s" % exact_pos)
-print("Within (as start, %i): %s" % (int(within_pos_s), within_pos_s))
-print("Within (as end, %i): %s" % (int(within_pos_e), within_pos_e))
-print("Between (as end, %i): %s" % (int(between_pos_e), between_pos_e))
-print("Before: %s" % before_pos)
-print("After: %s" % after_pos)
+    def test_fuzzy(self):
+        """Test fuzzy representations."""
+        # check the positions alone
+        exact_pos = SeqFeature.ExactPosition(5)
+        within_pos_s = SeqFeature.WithinPosition(10, left=10, right=13)
+        within_pos_e = SeqFeature.WithinPosition(13, left=10, right=13)
+        between_pos_e = SeqFeature.BetweenPosition(24, left=20, right=24)
+        before_pos = SeqFeature.BeforePosition(15)
+        after_pos = SeqFeature.AfterPosition(40)
+        self.assertEqual(int(within_pos_s), 10)
+        self.assertEqual(str(within_pos_s), "(10.13)")
+        self.assertEqual(int(within_pos_e), 13)
+        self.assertEqual(str(within_pos_e), "(10.13)")
+        self.assertEqual(int(between_pos_e), 24)
+        self.assertEqual(str(between_pos_e), "(20^24)")
+        self.assertEqual(str(before_pos), "<15")
+        self.assertEqual(str(after_pos), ">40")
+        # put these into Locations
+        location1 = SeqFeature.FeatureLocation(exact_pos, within_pos_e)
+        location2 = SeqFeature.FeatureLocation(before_pos, between_pos_e)
+        location3 = SeqFeature.FeatureLocation(within_pos_s, after_pos)
+        self.assertEqual(str(location1), "[5:(10.13)]")
+        self.assertEqual(str(location1.start), "5")
+        self.assertEqual(str(location1.end), "(10.13)")
+        self.assertEqual(str(location2), "[<15:(20^24)]")
+        self.assertEqual(str(location2.start), "<15")
+        self.assertEqual(str(location2.end), "(20^24)")
+        self.assertEqual(str(location3), "[(10.13):>40]")
+        self.assertEqual(str(location3.start), "(10.13)")
+        self.assertEqual(str(location3.end), ">40")
+        # --- test non-fuzzy representations
+        self.assertEqual(location1.nofuzzy_start, 5)
+        self.assertEqual(location1.nofuzzy_end, 13)
+        self.assertEqual(location2.nofuzzy_start, 15)
+        self.assertEqual(location2.nofuzzy_end, 24)
+        self.assertEqual(location3.nofuzzy_start, 10)
+        self.assertEqual(location3.nofuzzy_end, 40)
 
-# put these into Locations
-location1 = SeqFeature.FeatureLocation(exact_pos, within_pos_e)
-location2 = SeqFeature.FeatureLocation(before_pos, between_pos_e)
-location3 = SeqFeature.FeatureLocation(within_pos_s, after_pos)
 
-for location in [location1, location2, location3]:
-    print("Location: %s" % location)
-    print("   Start: %s" % location.start)
-    print("   End  : %s" % location.end)
-
-# --- test non-fuzzy represenations
-print("Testing non-fuzzy representations...")
-for location in [location1, location2, location3]:
-    print("Location: %s" % location)
-    print("  Non-Fuzzy Start: %s" % location.nofuzzy_start)
-    print("  Non-Fuzzy End: %s" % location.nofuzzy_end)
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

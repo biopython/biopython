@@ -15,13 +15,3 @@ Location: [<15:(20^24)]
 Location: [(10.13):>40]
    Start: (10.13)
    End  : >40
-Testing non-fuzzy representations...
-Location: [5:(10.13)]
-  Non-Fuzzy Start: 5
-  Non-Fuzzy End: 13
-Location: [<15:(20^24)]
-  Non-Fuzzy Start: 15
-  Non-Fuzzy End: 24
-Location: [(10.13):>40]
-  Non-Fuzzy Start: 10
-  Non-Fuzzy End: 40
