@@ -61,6 +61,11 @@ structured data source with minimal loss of functionality upon future MAST
 releases. Class structure remains the same plus an additional attribute
 ``Record.strand_handling`` required for diagram parsing.
 
+On the documentation side, all the public modules, classes, methods and
+functions now have docstrings (built in help strings). Furthermore, the PDF
+version of the *Biopython Tutorial and Cookbook* now uses syntax coloring
+for code snippets.
+
 Additionally, a number of small bugs and typos have been fixed with further
 additions to the test suite, and there has been further work to follow the
 Python PEP8, PEP257 and best practice standard coding style.
