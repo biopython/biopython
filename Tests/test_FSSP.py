@@ -11,6 +11,7 @@ import unittest
 from Bio import FSSP
 from Bio.FSSP import FSSPTools
 
+
 class TestGeo(unittest.TestCase):
 
     @classmethod
@@ -23,7 +24,7 @@ class TestGeo(unittest.TestCase):
     def test_attributes(self):
         self.assertEqual(self.head_rec.author, ['M.Hennig'])
         self.assertEqual(self.head_rec.compnd, ['concanavalin', 'b'])
-        self.assertEqual(self.head_rec.database, 2645 )
+        self.assertEqual(self.head_rec.database, 2645)
         self.assertEqual(self.head_rec.header, "SEED PROTEIN")
         self.assertEqual(self.head_rec.nalign, 214)
         self.assertEqual(self.head_rec.pdbid, '1cnv')
@@ -37,9 +38,10 @@ class TestGeo(unittest.TestCase):
         sum_newnames, align_newnames = FSSPTools.name_filter(self.sum_rec, self.align_rec,
                                                              name_list)
         self.assertEqual(len(sum_newnames), 4)
-        self.assertEqual(str(sum_newnames[2]), """\
+        line = """\
    2: 1cnv   2hvm   39.2  1.7  270   273   42      0      0    10 S    hevamine (chitinaseLYSOZYME) 
-""")
+"""  # noqa: w291
+        self.assertEqual(str(sum_newnames[2]), line)
         self.assertEqual(str(sum_newnames[3]), """\
    3: 1cnv   1hvq   39.0  1.7  271   273   41      0      0    10 S    hevamine a 
 """)
