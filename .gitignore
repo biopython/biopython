@@ -65,6 +65,7 @@ Doc/examples/tree1.nwk
 
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
+Doc/*.gz
 Doc/*.log
 Doc/*.out
 Doc/*.toc
@@ -103,3 +104,6 @@ Doc/*/*/hevea.sty
 
 #Ignore unittest cache dirctory
 .cache/
+
+#Ignore vscode directory
+.vscode

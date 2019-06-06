@@ -74,6 +74,7 @@ possible, especially the following contributors:
 - Brandon Invergo
 - Catherine Lesuisse
 - Chris Rands
+- Deepak Khatri (first contribution)
 - Gert Hulselmans
 - Jared Andrews
 - Jens Thomas (first contribution)

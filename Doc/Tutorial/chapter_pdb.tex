@@ -1,73 +1,10 @@
 \chapter{Going 3D: The PDB module}
 
-Bio.PDB is a Biopython module that focuses on working with crystal structures of biological macromolecules. Among other things, Bio.PDB includes a PDBParser class that produces a Structure object, which can be used to access the atomic data in the file in a convenient manner. There is limited support for parsing the information contained in the PDB header.
+Bio.PDB is a Biopython module that focuses on working with crystal structures of biological macromolecules. Among other things, Bio.PDB includes a PDBParser class that produces a Structure object, which can be used to access the atomic data in the file in a convenient manner. There is limited support for parsing the information contained in the PDB header. PDB file format is no longer being modified or extended to support new content and PDBx/mmCIF became the standard PDB archive format in 2014. All the Worldwide Protein Data Bank (wwPDB) sites uses the macromolecular Crystallographic Information File (mmCIF) data dictionaries to describe the information content of PDB entries. mmCIF uses a flexible and extensible key-value pair format for representing macromolecular structural data and imposes no limitations for the number of atoms, residues or chains that can be represented in a single PDB entry (no split entries!).
 
 %Note the \verb|Bio.PDB| module requires Numerical Python (numpy) to be installed.
 
 \section{Reading and writing crystal structure files}
-
-\subsection{Reading a PDB file}
-
-First we create a \texttt{PDBParser} object:
-
-\begin{verbatim}
->>> from Bio.PDB.PDBParser import PDBParser
->>> parser = PDBParser(PERMISSIVE=1)
-\end{verbatim}
-
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
-
-The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
-
-\begin{verbatim}
->>> structure_id = "1fat"
->>> filename = "pdb1fat.ent"
->>> structure = parser.get_structure(structure_id, filename)
-\end{verbatim}
-
-You can extract the header and trailer (simple lists of strings) of the PDB
-file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
-methods.  Note however that many PDB files contain headers with
-incomplete or erroneous information. Many of the errors have been
-fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
-in the header information, it is a good idea to extract information
-from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
-described below, instead of parsing the PDB header. }
-
-Now that is clarified, let's return to parsing the PDB header. The
-structure object has an attribute called \texttt{header} which is
-a Python dictionary that maps header records to their values.
-
-Example:
-
-\begin{verbatim}
->>> resolution = structure.header["resolution"]
->>> keywords = structure.header["keywords"]
-\end{verbatim}
-The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
-\verb+release_date+, \verb+structure_method+, \verb+resolution+, 
-\verb+structure_reference+ (which maps to a list of references), 
-\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
-\verb+has_missing_residues+, and \verb+missing_residues+.
-
-\verb+has_missing_residues+ maps to a bool that is True if at least
-one non-empty \verb+REMARK 465+ header line was found. In this case
-you should assume that the molecule used in the experiment has some 
-residues for which no ATOM coordinates could be determined. 
-\verb+missing_residues+ maps to a list of dictionaries with information
-about the missing residues. \emph{The list of missing residues will be
-empty or incomplete if the PDB header does not follow the template from
-the PDB specification.}
-
-The dictionary can also be created without creating a \texttt{Structure}
-object, ie. directly from the PDB file:
-
-\begin{verbatim}
->>> from Bio.PDB import parse_pdb_header
->>> with open(filename, "r") as handle:
-...     header_dict = parse_pdb_header(handle)
-...
-\end{verbatim}
 
 \subsection{Reading an mmCIF file}
 
@@ -135,11 +72,93 @@ For example you can access just the X-coordinate.
 ...
 \end{verbatim}
 
+\subsection{Reading a PDB file}
+
+First we create a \texttt{PDBParser} object:
+
+\begin{verbatim}
+>>> from Bio.PDB.PDBParser import PDBParser
+>>> parser = PDBParser(PERMISSIVE=1)
+\end{verbatim}
+
+The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
+
+The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
+
+\begin{verbatim}
+>>> structure_id = "1fat"
+>>> filename = "pdb1fat.ent"
+>>> structure = parser.get_structure(structure_id, filename)
+\end{verbatim}
+
+You can extract the header and trailer (simple lists of strings) of the PDB
+file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
+methods.  Note however that many PDB files contain headers with
+incomplete or erroneous information. Many of the errors have been
+fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
+in the header information, it is a good idea to extract information
+from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
+described below, instead of parsing the PDB header. }
+
+Now that is clarified, let's return to parsing the PDB header. The
+structure object has an attribute called \texttt{header} which is
+a Python dictionary that maps header records to their values.
+
+Example:
+
+\begin{verbatim}
+>>> resolution = structure.header["resolution"]
+>>> keywords = structure.header["keywords"]
+\end{verbatim}
+The available keys are \verb+name+, \verb+head+, \verb+deposition_date+, 
+\verb+release_date+, \verb+structure_method+, \verb+resolution+, 
+\verb+structure_reference+ (which maps to a list of references), 
+\verb+journal_reference+, \verb+author+, \verb+compound+ (which maps to a dictionary with various information about the crystallized compound),
+\verb+has_missing_residues+, and \verb+missing_residues+.
+
+\verb+has_missing_residues+ maps to a bool that is True if at least
+one non-empty \verb+REMARK 465+ header line was found. In this case
+you should assume that the molecule used in the experiment has some 
+residues for which no ATOM coordinates could be determined. 
+\verb+missing_residues+ maps to a list of dictionaries with information
+about the missing residues. \emph{The list of missing residues will be
+empty or incomplete if the PDB header does not follow the template from
+the PDB specification.}
+
+The dictionary can also be created without creating a \texttt{Structure}
+object, ie. directly from the PDB file:
+
+\begin{verbatim}
+>>> from Bio.PDB import parse_pdb_header
+>>> with open(filename, "r") as handle:
+...     header_dict = parse_pdb_header(handle)
+...
+\end{verbatim}
+
 \subsection{Reading files in the PDB XML format}
 
 That's not yet supported, but we are definitely planning to support that
 in the future (it's not a lot of work). Contact the Biopython developers
 via the mailing list if you need this.
+
+
+\subsection{Writing mmCIF files}
+
+A similar interface can be used to write structures to the mmCIF file format:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_structure(s)
+>>> io.save("out.cif")
+\end{verbatim}
+The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
+mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
+
+\begin{verbatim}
+>>> io = MMCIFIO()
+>>> io.set_dict(d)
+>>> io.save("out.cif")
+\end{verbatim}
 
 \subsection{Writing PDB files}
 
@@ -184,23 +203,6 @@ If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
 
-\subsection{Writing mmCIF files}
-
-A similar interface can be used to write structures to the mmCIF file format:
-
-\begin{verbatim}
->>> io = MMCIFIO()
->>> io.set_structure(s)
->>> io.save("out.cif")
-\end{verbatim}
-The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
-mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
-
-\begin{verbatim}
->>> io = MMCIFIO()
->>> io.set_dict(d)
->>> io.save("out.cif")
-\end{verbatim}
 
 \section{Structure representation}
 
