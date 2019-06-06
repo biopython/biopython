@@ -5,49 +5,59 @@
 
 """Tests for FSSP module."""
 
+import os
+import unittest
+
 from Bio import FSSP
 from Bio.FSSP import FSSPTools
-import sys
-import os
-# import pickle
 
-test_file = os.path.join('FSSP', '1cnv.fssp')
-f = sys.stdout
-f.write("\nRead in %s\n" % os.path.basename(test_file))
-handle = open(test_file)
-head_rec, sum_rec, align_rec = FSSP.read_fssp(handle)
-handle.close()
-f.write("...1cnv.fssp read\n")
-for i in ["author", "compnd", "database", "header", "nalign",
-          "pdbid", "seqlength", "source"]:
-    f.write('head_rec.%s %s\n' % (i, str(getattr(head_rec, i))))
-f.write("\nlen(sum_rec) = %d; head_rec.nalign = %d\n" %
-        (len(sum_rec), head_rec.nalign))
-f.write("The above two numbers should be the same\n")
-f.write("\nCreate a multiple alignment instance using Bio.Align\n")
-alignment = FSSPTools.mult_align(sum_rec, align_rec)
-f.write("...Done\n")
-# Percent ID filtering takes too long.. remove from test.
+class TestGeo(unittest.TestCase):
 
-# f.write("\nFilter in percent ID's >= 15%\n")
-# sum_ge_15, align_ge_15 = FSSPTools.filter(sum_rec, align_rec, 'pID', 15,100)
+    @classmethod
+    def setUpClass(cls):
+        path = os.path.join('FSSP', '1cnv.fssp')
+        handle = open(path)
+        cls.head_rec, cls.sum_rec, cls.align_rec = FSSP.read_fssp(handle)
+        handle.close()
 
-# f.write("\nnumber of records filtered in: %d\n" % len(sum_ge_15))
-# k = sorted(sum_ge_15)
-# f.write("\nRecords filtered in %s\n" % k)
-# Pickling takes too long.. remove from test.
-# f.write("\nLet's Pickle this\n")
-# dump_file = os.path.join('FSSP', 'mydump.pik')
-# pickle.dump((head_rec, sum_rec, align_rec),open(dump_file, 'w'))
+    def test_attributes(self):
+        self.assertEqual(self.head_rec.author, ['M.Hennig'])
+        self.assertEqual(self.head_rec.compnd, ['concanavalin', 'b'])
+        self.assertEqual(self.head_rec.database, 2645 )
+        self.assertEqual(self.head_rec.header, "SEED PROTEIN")
+        self.assertEqual(self.head_rec.nalign, 214)
+        self.assertEqual(self.head_rec.pdbid, '1cnv')
+        self.assertEqual(self.head_rec.seqlength, 283)
+        self.assertEqual(self.head_rec.source, '(canavalia ensiformis) jack bean')
 
-f.write("\nFilter by name\n")
-name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
-f.write("\nname list %s\n" % str(name_list))
-sum_newnames, align_newnames = FSSPTools.name_filter(sum_rec, align_rec,
-                                                     name_list)
-for key in sorted(sum_newnames):
-    f.write("%s : %s\n" % (key, sum_newnames[key]))
+    def test_alignment(self):
+        self.assertEqual(len(self.sum_rec), self.head_rec.nalign)
+        alignment = FSSPTools.mult_align(self.sum_rec, self.align_rec)
+        name_list = ['2hvm0', '1hvq0', '1nar0', '2ebn0']
+        sum_newnames, align_newnames = FSSPTools.name_filter(self.sum_rec, self.align_rec,
+                                                             name_list)
+        self.assertEqual(len(sum_newnames), 4)
+        self.assertEqual(str(sum_newnames[2]), """\
+   2: 1cnv   2hvm   39.2  1.7  270   273   42      0      0    10 S    hevamine (chitinaseLYSOZYME) 
+""")
+        self.assertEqual(str(sum_newnames[3]), """\
+   3: 1cnv   1hvq   39.0  1.7  271   273   41      0      0    10 S    hevamine a 
+""")
+        self.assertEqual(str(sum_newnames[5]), """\
+   5: 1cnv   1nar   20.0  3.1  246   289   13      0      0    27 S    Narbonin 
+""")
+        self.assertEqual(str(sum_newnames[11]), """\
+  11: 1cnv   2ebn   16.9  3.0  215   285   13      0      0    25 S    Endo-beta-n-acetylglucosaminidase f1 (endoglycosidase f
+""")
 
-new_dict = align_newnames['0P168'].pos_align_dict
-for key in sorted(new_dict):
-    f.write("%s : %s\n" % (key, new_dict[key]))
+        new_dict = align_newnames['0P168'].pos_align_dict
+        self.assertEqual(len(new_dict), 4)
+        self.assertEqual(str(new_dict[2]), 'Ps')
+        self.assertEqual(str(new_dict[3]), 'Ps')
+        self.assertEqual(str(new_dict[5]), '..')
+        self.assertEqual(str(new_dict[11]), '..')
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
