@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for FSSP module."""
+"""Tests for the FSSP module."""
 
 import os
 import unittest
