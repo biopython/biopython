@@ -40,18 +40,20 @@ class TestGeo(unittest.TestCase):
         self.assertEqual(len(sum_newnames), 4)
         line = """\
    2: 1cnv   2hvm   39.2  1.7  270   273   42      0      0    10 S    hevamine (chitinaseLYSOZYME) 
-"""  # noqa: w291
+"""  # noqa : W291
         self.assertEqual(str(sum_newnames[2]), line)
-        self.assertEqual(str(sum_newnames[3]), """\
+        line =  """\
    3: 1cnv   1hvq   39.0  1.7  271   273   41      0      0    10 S    hevamine a 
-""")
-        self.assertEqual(str(sum_newnames[5]), """\
+"""  # noqa : W291
+        self.assertEqual(str(sum_newnames[3]), line)
+        line = """\
    5: 1cnv   1nar   20.0  3.1  246   289   13      0      0    27 S    Narbonin 
-""")
-        self.assertEqual(str(sum_newnames[11]), """\
+"""  # noqa : W291
+        self.assertEqual(str(sum_newnames[5]), line)
+        line =  """\
   11: 1cnv   2ebn   16.9  3.0  215   285   13      0      0    25 S    Endo-beta-n-acetylglucosaminidase f1 (endoglycosidase f
-""")
-
+"""  # noqa : W291
+        self.assertEqual(str(sum_newnames[11]), line)
         new_dict = align_newnames['0P168'].pos_align_dict
         self.assertEqual(len(new_dict), 4)
         self.assertEqual(str(new_dict[2]), 'Ps')
