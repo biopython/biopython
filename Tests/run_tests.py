@@ -100,10 +100,6 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.phenotype',
     'Bio.phenotype.parse',
     'Bio.phenotype.phen_micro',
-    'Bio.Phylo.Applications._Fasttree',
-    'Bio.Phylo._io',
-    'Bio.Phylo.TreeConstruction',
-    'Bio.Phylo._utils',
     'BioSQL.BioSeqDatabase',
 ]
 

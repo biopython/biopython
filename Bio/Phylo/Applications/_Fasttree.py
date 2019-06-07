@@ -44,15 +44,23 @@ class FastTreeCommandline(AbstractCommandline):
 
     Examples
     --------
-    >>> import _Fasttree
-    >>> fasttree_exe = r"C:\FasttreeWin32\fasttree.exe"
-    >>> cmd = _Fasttree.FastTreeCommandline(fasttree_exe,
-    ...                                     input=r'C:\Input\ExampleAlignment.fsa',
-    ...                                     out=r'C:\Output\ExampleTree.tree')
-    >>> print(cmd)
-    >>> out, err = cmd()
-    >>> print(out)
-    >>> print(err)
+    >>> import Bio.Phylo.Applications as BPA
+    >>> import os
+    >>> import tempfile
+    >>> # If FastTree executable is on your home directory
+    >>> home_path = os.path.expanduser('~')
+    >>> fasttree_path = os.path.join(home_path,'FastTree')
+    >>> input_file = "./TreeConstruction/msa.phy"
+    >>> # Create a temporal file for the output
+    >>> f_descriptor, output_file = tempfile.mkstemp()
+    >>> # We do not need the file descriptor, clear it
+    >>> os.close(f_descriptor)
+    >>> cmd = BPA.FastTreeCommandline(fasttree_path, input=input_file, out=output_file)
+    >>> o_str, e_str = cmd()
+    >>> print(open(output_file, 'r').read())
+    ((Delta:0.24771,Epsilon:0.00054)0.999:0.71510,Beta:0.00054,(Gamma:0.34881,Alpha:0.29449)0.553:0.06991);
+    <BLANKLINE>
+    >>> os.remove(output_file)
 
     """
 
