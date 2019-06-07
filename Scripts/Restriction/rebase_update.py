@@ -20,15 +20,50 @@ import sys
 import time
 import optparse
 
+# Proxies
+#
+# Enter here the address of your proxy if any.
+# If you don't use proxy use an empty string
+#
+# Example:
+#
+#  ftp_proxy       =   ''
+#                  -> no proxy
+#
+#  ftp_proxy       =   'http://www.somewhere.something:one_number'
+#                  -> www.somewhere.something is the address of the proxy.
+#                     one_number is the port number.
+ftp_proxy = ''
+
+###############################################################################
+#                   Rebase ftp location
+#
+#   Do not modify the addresses.
+#
+ftp_Rebase = 'ftp://ftp.neb.com/'
+ftp_emb_e = ftp_Rebase + 'pub/rebase/emboss_e.###'
+ftp_emb_s = ftp_Rebase + 'pub/rebase/emboss_s.###'
+ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
+###############################################################################
+#                   ftp rebase account.
+#
+#   In order to update the rebase files, Rana need to connect to the
+#   ftp server corresponding.
+#
+#   the general procedure for accessing a ftp server is generally to
+#   connect as anonymous user (rebase_name) and providing your e-mail address
+#   as password.
+#
+#   However, a password is not required (any more?) for connecting to REBASE,
+#   so we don't send our e-mail
+#
+Rebase_name = 'anonymous'
 
 try:
     from urllib import FancyURLopener, urlcleanup
 except ImportError:
     # Python 3
     from urllib.request import FancyURLopener, urlcleanup
-
-from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase, Rebase_name
-from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 
 
 class RebaseUpdate(FancyURLopener):
