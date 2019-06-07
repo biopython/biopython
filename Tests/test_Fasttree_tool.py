@@ -85,6 +85,7 @@ class FastTreeTestCase(unittest.TestCase):
         out, err = cline()
         self.assertTrue(err.strip().startswith("FastTree"))
         tree = Phylo.read(StringIO(out), 'newick')
+
         def lookup_by_names(tree):
             names = {}
             for clade in tree.find_clades():
@@ -95,6 +96,7 @@ class FastTreeTestCase(unittest.TestCase):
             return names
         names = lookup_by_names(tree)
         self.assertTrue(len(names) > 0)
+
         def terminal_neighbor_dists(self):
             """Return a list of distances between adjacent terminals."""
             def generate_pairs(self):
@@ -128,7 +130,7 @@ class FastTreeTestCase(unittest.TestCase):
                         "not produced" in message or
                         "No sequences in file" in message or
                         "Error parsing header line:" in message or
-                        "Non-zero return code " in message, 
+                        "Non-zero return code " in message,
                         msg="Unknown ApplicationError raised: %s" % message)
 
     def test_single(self):
