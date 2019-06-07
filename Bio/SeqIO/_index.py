@@ -252,6 +252,7 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to a GenBank file."""
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
@@ -308,6 +309,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
     """Indexed dictionary like access to an EMBL file."""
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
@@ -369,6 +371,7 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a SwissProt file."""
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
@@ -402,6 +405,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
     """Random access to a UniProt XML file."""
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
@@ -491,6 +495,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
         self._marker_re = re.compile(b"^;")
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         # Skip any header
@@ -540,6 +545,7 @@ class TabRandomAccess(SeqFileRandomAccess):
     """Random access to a simple tabbed file."""
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         tab_char = b"\t"
@@ -578,6 +584,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
     """
 
     def __iter__(self):
+        """Iterate over the sequence records in the file."""
         handle = self._handle
         handle.seek(0)
         id = None
