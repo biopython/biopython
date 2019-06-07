@@ -10,178 +10,55 @@
 """Update the Rebase EMBOSS files.
 
 The Rebase EMBOSS files are used by `ranacompiler.py` to build the updated
-`Restriction_Dictionary.py` module for  `Bio.Restriction`.
+`Restriction_Dictionary.py` module for `Bio.Restriction`.
+
 """
 
 from __future__ import print_function
 
 import os
-import sys
-import time
-import optparse
+from datetime import date
 
-# Proxies
-#
-# Enter here the address of your proxy if any.
-# If you don't use proxy use an empty string
-#
-# Example:
-#
-#  ftp_proxy       =   ''
-#                  -> no proxy
-#
-#  ftp_proxy       =   'http://www.somewhere.something:one_number'
-#                  -> www.somewhere.something is the address of the proxy.
-#                     one_number is the port number.
-ftp_proxy = ''
+try:
+    # Python 2
+    from urllib import urlretrieve, urlcleanup
+except ImportError:
+    # Python 3
+    from urllib.request import urlretrieve, urlcleanup
 
-###############################################################################
-#                   Rebase ftp location
-#
-#   Do not modify the addresses.
-#
+
+# Rebase ftp location, do not modify these addresses:
 ftp_Rebase = 'ftp://ftp.neb.com/'
 ftp_emb_e = ftp_Rebase + 'pub/rebase/emboss_e.###'
 ftp_emb_s = ftp_Rebase + 'pub/rebase/emboss_s.###'
 ftp_emb_r = ftp_Rebase + 'pub/rebase/emboss_r.###'
-###############################################################################
-#                   ftp rebase account.
-#
-#   In order to update the rebase files, Rana need to connect to the
-#   ftp server corresponding.
-#
-#   the general procedure for accessing a ftp server is generally to
-#   connect as anonymous user (rebase_name) and providing your e-mail address
-#   as password.
-#
-#   However, a password is not required (any more?) for connecting to REBASE,
-#   so we don't send our e-mail
-#
-Rebase_name = 'anonymous'
 
-try:
-    from urllib import FancyURLopener, urlcleanup
-except ImportError:
-    # Python 3
-    from urllib.request import FancyURLopener, urlcleanup
+# Generate 'time stamp' of type ymm to add to Rebase file names.
+# This is the 3 digit number REBASE release number (e.g. 312).
+# The first digit is the last digit of the year (e.g. 3 for 2013)
+# and the two last the month (e.g. 12 for December)
+release_number = date.today().strftime("%y%m")[1:]
+
+# Replace '###' with the 'time stamp'
+files = [x.replace('###', release_number)
+         for x in [ftp_emb_e, ftp_emb_s, ftp_emb_r]]
 
 
-class RebaseUpdate(FancyURLopener):
-    """A class to fetch the Rebase EMBOSS files."""
-
-    def __init__(self, ftpproxy=''):
-        """RebaseUpdate([ftpproxy]]) -> new RebaseUpdate instance.
-
-        if ftpproxy is not given RebaseUpdate uses the corresponding
-        variable from RanaConfig.
-
-        ftpproxy is the proxy to use if any.
-        """
-        proxy = {'ftp': ftpproxy or ftp_proxy}
-        if not Rebase_name:
-            raise FtpNameError('Rebase')
-        if not proxy['ftp']:
-            proxy = {}
-        FancyURLopener.__init__(self, proxy)
-
-    def openRebase(self, name=ftp_Rebase):
-        """Connect to Rebase ftp server."""
-        print('\n Please wait, trying to connect to Rebase\n')
+def get_files():
+    """Download Rebase files."""
+    for file in files:
+        print('copying %s' % file)
+        fn = os.path.basename(file)
+        filename = os.path.join(os.getcwd(), fn)
+        print('to %s' % filename)
         try:
-            self.open(name)
-        except Exception:
-            raise ConnectionError('Rebase')
-        return
-
-    def getfiles(self, *files):
-        """Download Rebase files."""
-        for file in self.update(*files):
-            print('copying %s' % file)
-            fn = os.path.basename(file)
-            # filename = os.path.join(Rebase, fn)
-            filename = os.path.join(os.getcwd(), fn)
-            print('to %s' % filename)
-            try:
-                self.retrieve(file, filename)
-                # The following line is a workaround for an urllib bug in
-                # Python 2.7.11 - 2.7.xx (?). It does not seem to work on
-                # Python 3.xx. Try to remove the line in new Python versions.
-                urlcleanup()
-            except IOError as e:
-                print(e)
-                print('This error is probably due to a non-solved ftp bug in '
-                      'recent Python versions. Please download the emboss '
-                      'files manually from http://rebase.neb.com/rebase/'
-                      'rebase.f37.html and then run ranacompiler.py. Find '
-                      'more details in the Restriction manual.')
-                self.close()
-                return
-        self.close()
-        return
-
-    def localtime(self):
-        """Generate 'time stamp' of type ymm to add to Rebase file names."""
-        t = time.gmtime()
-        year = str(t.tm_year)[-1]
-        month = str(t.tm_mon)
-        if len(month) == 1:
-            month = '0' + month
-        return year + month
-
-    def update(self, *files):
-        """Update filenames to recent versions (indicated by 'time stamp')."""
-        if not files:
-            files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
-        return [x.replace('###', self.localtime()) for x in files]
-
-    def __del__(self):
-        """Close tmpcache on exiting."""
-        if hasattr(self, 'tmpcache'):
-            self.close()
-        #
-        #   self.tmpcache is created by URLopener.__init__ method.
-        #
-        return
+            urlretrieve(file, filename)
+            urlcleanup()
+        except IOError as e:
+            print(e)
+            return
+    return
 
 
-class FtpNameError(ValueError):
-    """Error class for missing user name (usually 'anonymous')."""
-
-    def __init__(self, which_server):
-        """Print the error message."""
-        print(" In order to connect to %s ftp server, you must provide a name.\
-        \n Please edit Bio.Restriction.RanaConfig\n" % which_server)
-        sys.exit()
-
-
-class ConnectionError(IOError):
-    """Error class for failing connections to Rebase ftp server."""
-
-    def __init__(self, which_server):
-        """Print the error message."""
-        print('\
-        \n Unable to connect to the %s ftp server, make sure your computer\
-        \n is connected to the internet and that you have correctly configured\
-        \n the ftp proxy.\
-        \n Use the --proxy switch to enter the address of your proxy\
-        \n' % which_server)
-        sys.exit()
-
-
-if __name__ == '__main__':
-    parser = optparse.OptionParser()
-    add = parser.add_option
-
-    add('-p', '--proxy',
-        action="store",
-        dest='ftp_proxy',
-        default='',
-        help="set the proxy to be used by the ftp connection.")
-
-    (option, args) = parser.parse_args()
-
-    Getfiles = RebaseUpdate(option.ftp_proxy)
-    Getfiles.openRebase()
-    Getfiles.getfiles()
-    Getfiles.close()
-    sys.exit()
+if __name__ == "__main__":
+    get_files()
