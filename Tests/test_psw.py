@@ -74,13 +74,13 @@ class TestPSW(unittest.TestCase):
 
     def test_ColumnUnit(self):
         self.assertEqual(repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
-                         "ColumnUnit(unit=0, column=33, SEQUENCE)")
+                         "ColumnUnit(unit=0, column=33, kind='SEQUENCE')")
 
         self.assertEqual(repr(psw.ColumnUnit(1, 33, "INSERT")),
-                         "ColumnUnit(unit=1, column=33, INSERT)")
+                         "ColumnUnit(unit=1, column=33, kind='INSERT')")
 
         self.assertEqual(repr(psw.ColumnUnit(1, 33, "END")),
-                         "ColumnUnit(unit=1, column=33, END)")
+                         "ColumnUnit(unit=1, column=33, kind='END')")
 
     PARSED = "[SEQUENCE(39, 22), SEQUENCE(40, 23), SEQUENCE(41, 24), SEQUENCE(42, 25), SEQUENCE(43, 26), SEQUENCE(44, 27), END(0, 27)]"
 
