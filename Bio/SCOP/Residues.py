@@ -73,6 +73,7 @@ class Residues(object):
         self.fragments = tuple(fragments)
 
     def __str__(self):
+        """Represent the SCOP residues record as a string."""
         prefix = ""
         if self.pdbid:
             prefix = self.pdbid + ' '
