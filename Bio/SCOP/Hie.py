@@ -73,6 +73,7 @@ class Record(object):
             self.children = [int(x) for x in children]
 
     def __str__(self):
+        """Represent the SCOP hierarchy record as a string."""
         s = []
         s.append(str(self.sunid))
 
