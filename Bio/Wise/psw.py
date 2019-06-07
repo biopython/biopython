@@ -63,7 +63,8 @@ class AlignmentColumn(list):
         list.__init__(self, [column_unit.column, None])
 
     def __repr__(self):
-        return "%s(%s, %s)" % (self.kind, self[0], self[1])
+        """Represent the AlignmentColumn object as a string for debugging."""
+        return "%s(%r, %r)" % (self.kind, self[0], self[1])
 
     def append(self, column_unit):
         """Add a unit to the Column."""
@@ -85,10 +86,9 @@ class ColumnUnit(object):
         self.column = column
         self.kind = kind
 
-    def __str__(self):
-        return "ColumnUnit(unit=%s, column=%s, %s)" % (self.unit, self.column, self.kind)
-
-    __repr__ = __str__
+    def __repr__(self):
+        """Represent the ColumnUnit object as a string for debugging."""
+        return "ColumnUnit(unit=%r, column=%r, kind=%r)" % (self.unit, self.column, self.kind)
 
 
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
@@ -100,9 +100,9 @@ def parse_line(line):
     >>> print(parse_line("Column 0:"))
     None
     >>> parse_line("Unit  0- [  -1-   0] [SEQUENCE]")
-    ColumnUnit(unit=0, column=0, SEQUENCE)
+    ColumnUnit(unit=0, column=0, kind='SEQUENCE')
     >>> parse_line("Unit  1- [  85-  86] [SEQUENCE]")
-    ColumnUnit(unit=1, column=86, SEQUENCE)
+    ColumnUnit(unit=1, column=86, kind='SEQUENCE')
     """
     match = _re_unit.match(line.rstrip())
 

@@ -130,6 +130,7 @@ class SequenceLine(object):
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene SequenceLine object as a string."""
         return self.text
 
 
@@ -165,6 +166,7 @@ class ProtsimLine(object):
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene ProtsimLine object as a string."""
         return self.text
 
 
@@ -195,6 +197,7 @@ class STSLine(object):
             setattr(self, key.lower(), val)
 
     def __repr__(self):
+        """Return UniGene STSLine object as a string."""
         return self.text
 
 
@@ -246,6 +249,7 @@ class Record(object):
         self.txmap = []  # TXMAP entries, array of TXMap entries
 
     def __repr__(self):
+        """Represent the UniGene Record object as a string for debugging."""
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
                                    self.ID, self.symbol, self.title)
 
