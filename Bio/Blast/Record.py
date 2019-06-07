@@ -79,6 +79,7 @@ class Description(object):
         self.num_alignments = None
 
     def __str__(self):
+        """Return the description as a string."""
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
 
@@ -119,6 +120,7 @@ class DescriptionExtItem(object):
         self.sciname = None
 
     def __str__(self):
+        """Return the description identifier and title as a string."""
         return "%s %s" % (self.id, self.title)
 
 
@@ -143,6 +145,7 @@ class Alignment(object):
         self.hsps = []
 
     def __str__(self):
+        """Return the BLAST alignment as a formatted string."""
         lines = self.title.split('\n')
         lines.append("Length = %s\n" % self.length)
         return '\n           '.join(lines)
@@ -219,6 +222,7 @@ class HSP(object):
         self.sbjct_end = None
 
     def __str__(self):
+        """Return the BLAST HSP as a formatted string."""
         lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
                  % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:

@@ -71,6 +71,7 @@ class BlastTableReader(object):
         self._in_header = 1
 
     def __next__(self):
+        """Return the next record when iterating over the file."""
         self.table_record = BlastTableRec()
         self._n += 1
         inline = self._lookahead
