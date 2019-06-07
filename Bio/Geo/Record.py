@@ -39,6 +39,7 @@ class Record(object):
         self.table_rows = []
 
     def __str__(self):
+        """Return the GEO record as a string."""
         output = ''
         output += 'GEO Type: %s\n' % self.entity_type
         output += 'GEO Id: %s\n' % self.entity_id
