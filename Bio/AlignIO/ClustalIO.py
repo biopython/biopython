@@ -94,6 +94,7 @@ class ClustalIterator(AlignmentIterator):
     _header = None  # for caching lines between __next__ calls
 
     def __next__(self):
+        """Parse the next alignment from the handle."""
         handle = self.handle
 
         if self._header is None:
