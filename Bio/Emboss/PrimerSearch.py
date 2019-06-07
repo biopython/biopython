@@ -20,6 +20,7 @@ class InputRecord(object):
         self.primer_info = []
 
     def __str__(self):
+        """Summarize the primersearch input record as a string."""
         output = ""
         for name, primer1, primer2 in self.primer_info:
             output += "%s %s %s\n" % (name, primer1, primer2)
