@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -22,6 +20,7 @@ from __future__ import print_function
 # standard modules
 import os
 import random
+import unittest
 
 # biopython
 from Bio import Alphabet
@@ -101,17 +100,14 @@ def generate_rolls(num_rolls):
     cur_state = 'F'
     roll_seq = MutableSeq('', DiceRollAlphabet())
     state_seq = MutableSeq('', DiceTypeAlphabet())
-
     # generate the sequence
     for roll in range(num_rolls):
         state_seq.append(cur_state)
         # generate a random number
         chance_num = random.random()
-
         # add on a new roll to the sequence
         new_roll = _loaded_dice_roll(chance_num, cur_state)
         roll_seq.append(new_roll)
-
         # now give us a chance to switch to a new state
         chance_num = random.random()
         if cur_state == 'F':
@@ -120,93 +116,63 @@ def generate_rolls(num_rolls):
         elif cur_state == 'L':
             if chance_num <= .1:
                 cur_state = 'F'
-
     return roll_seq.toseq(), state_seq.toseq()
 
 
-# -- build a MarkovModel
-mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
-                                            DiceRollAlphabet())
+class TestHMMCasino(unittest.TestCase):
 
-mm_builder.allow_all_transitions()
-mm_builder.set_random_probabilities()
-"""
-mm_builder.set_transition_score('F', 'L', .05)
-mm_builder.set_transition_score('F', 'F', .95)
-mm_builder.set_transition_score('L', 'F', .10)
-mm_builder.set_transition_score('L', 'L', .9)
-mm_builder.set_emission_score('F', '1', .17)
-mm_builder.set_emission_score('F', '2', .17)
-mm_builder.set_emission_score('F', '3', .17)
-mm_builder.set_emission_score('F', '4', .17)
-mm_builder.set_emission_score('F', '5', .17)
-mm_builder.set_emission_score('F', '6', .17)
-mm_builder.set_emission_score('L', '1', .1)
-mm_builder.set_emission_score('L', '2', .1)
-mm_builder.set_emission_score('L', '3', .1)
-mm_builder.set_emission_score('L', '4', .1)
-mm_builder.set_emission_score('L', '5', .1)
-mm_builder.set_emission_score('L', '6', .5)
-"""
+    @classmethod
+    def setUpClass(cls):
+        cls.mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
+                                                        DiceRollAlphabet())
+        cls.mm_builder.allow_all_transitions()
+        cls.mm_builder.set_random_probabilities()
+        # get a sequence of rolls to train the markov model with
+        cls.rolls, cls.states = generate_rolls(3000)
 
-# just get two different Markov Models -- we'll train one using
-# Baum Welch, and one using the Standard trainer
-baum_welch_mm = mm_builder.get_markov_model()
-standard_mm = mm_builder.get_markov_model()
+    def test_baum_welch_training_standard(self):
+        """Standard Training with known states."""
+        known_training_seq = Trainer.TrainingSequence(self.rolls, self.states)
+        standard_mm = self.mm_builder.get_markov_model()
+        trainer = Trainer.KnownStateTrainer(standard_mm)
+        trained_mm = trainer.train([known_training_seq])
+        if VERBOSE:
+            print(trained_mm.transition_prob)
+            print(trained_mm.emission_prob)
+        test_rolls, test_states = generate_rolls(300)
+        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        if VERBOSE:
+            print("Prediction probability: %f" % prob)
+            Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
 
-# get a sequence of rolls to train the markov model with
-rolls, states = generate_rolls(3000)
+    def test_baum_welch_training_without(self):
+        """Baum-Welch training without known state sequences."""
+        training_seq = Trainer.TrainingSequence(self.rolls, Seq("", DiceTypeAlphabet()))
 
-# predicted_states, prob = my_mm.viterbi(rolls, DiceTypeAlphabet())
-# print("prob: %f" % prob)
-# Utilities.pretty_print_prediction(rolls, states, predicted_states)
+        def stop_training(log_likelihood_change, num_iterations):
+            """Tell the training model when to stop."""
+            if VERBOSE:
+                print("ll change: %f" % log_likelihood_change)
+            if log_likelihood_change < 0.01:
+                return 1
+            elif num_iterations >= 10:
+                return 1
+            else:
+                return 0
+
+        baum_welch_mm = self.mm_builder.get_markov_model()
+        trainer = Trainer.BaumWelchTrainer(baum_welch_mm)
+        trained_mm = trainer.train([training_seq], stop_training)
+        if VERBOSE:
+            print(trained_mm.transition_prob)
+            print(trained_mm.emission_prob)
+        test_rolls, test_states = generate_rolls(300)
+        predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
+        if VERBOSE:
+            print("Prediction probability: %f" % prob)
+            Utilities.pretty_print_prediction(self.test_rolls, test_states, predicted_states)
 
 
-# -- now train the model
-def stop_training(log_likelihood_change, num_iterations):
-    """Tell the training model when to stop."""
-    if VERBOSE:
-        print("ll change: %f" % log_likelihood_change)
-    if log_likelihood_change < 0.01:
-        return 1
-    elif num_iterations >= 10:
-        return 1
-    else:
-        return 0
-
-
-# -- Standard Training with known states
-print("Training with the Standard Trainer...")
-known_training_seq = Trainer.TrainingSequence(rolls, states)
-
-trainer = Trainer.KnownStateTrainer(standard_mm)
-trained_mm = trainer.train([known_training_seq])
-
-if VERBOSE:
-    print(trained_mm.transition_prob)
-    print(trained_mm.emission_prob)
-
-test_rolls, test_states = generate_rolls(300)
-
-predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
-if VERBOSE:
-    print("Prediction probability: %f" % prob)
-    Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
-
-# -- Baum-Welch training without known state sequences
-print("Training with Baum-Welch...")
-training_seq = Trainer.TrainingSequence(rolls, Seq("", DiceTypeAlphabet()))
-
-trainer = Trainer.BaumWelchTrainer(baum_welch_mm)
-trained_mm = trainer.train([training_seq], stop_training)
-
-if VERBOSE:
-    print(trained_mm.transition_prob)
-    print(trained_mm.emission_prob)
-
-test_rolls, test_states = generate_rolls(300)
-
-predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
-if VERBOSE:
-    print("Prediction probability: %f" % prob)
-    Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
