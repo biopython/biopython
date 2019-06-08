@@ -172,6 +172,7 @@ class TestHMMCasino(unittest.TestCase):
             print("Prediction probability: %f" % prob)
             Utilities.pretty_print_prediction(self.test_rolls, test_states, predicted_states)
 
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
