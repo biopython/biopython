@@ -29,6 +29,13 @@ text_31b2_phmmer_001.out     multiple queries, with -A flag (issue #588)
 text_31b2_hmmsearch_001.out  single query, comment lines after query section (issue #1126)
 text_31b2_hmmsearch_002.out  multiple queries, multiple comment lines after query section (issue #1126)
 
+text_32b2_nhmmscan_001.out   multiple queries
+text_32b2_nhmmscan_002.out   single query, no match
+text_31b2_nhmmscan_003.out   single query, one match, one hsp per match
+text_31b2_nhmmscan_004.out   single query, multiple matches, multiple hsps per match, inclusion threshold present
+text_31b2_nhmmscan_005.out   single query, multiple matches, multiple hsps per match, inclusion threshold present, unlimited alignment width
+text_31b2_nhmmscan_006.out   single query, multiple matches, multiple hsps per match, inclusion threshold present, no alignment
+
 tab_31b1_hmmscan_001.out    multiple queries
 tab_30_hmmscan_001.out      multiple queries
 tab_30_hmmscan_002.out      single query, no match
@@ -43,6 +50,9 @@ domtab_30_hmmscan_003.out       single query, one match, one hsp per match, hmm 
 domtab_30_hmmscan_004.out       single query, multiple matches, one hsp per match, hmm as hit
 domtab_31b1_hmmsearch_001.out
 domtab_30_hmmsearch_001.out     single query, multiple matches, hmm as query
+
+pfamtab_hmmsearch_31b2_001.out  multiple queries
+pfamtab_hmmscan_31b2_001.out    multiple queries
 
 
 HMMER2 OUTPUT FILES (plain text)

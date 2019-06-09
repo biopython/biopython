@@ -1,0 +1,185 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             single_rna.fa
+# target HMM database:             hmms/multi_rna_01.hmm
+# output directed to file:         text_31b2_nhmmscan_005.out
+# max ASCII text line length:      unlimited
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       rmark1  [L=1013859]
+Description: rna_sequence_1
+Scores for complete hit:
+    E-value  score  bias  Model          start    end  Description
+    ------- ------ -----  --------       -----  -----  -----------
+    1.5e-56  191.4  11.6  RNaseP_bact_a  29033  29418  Bacterial RNase P class A
+    3.3e-55  187.0   1.8  RNaseP_bact_a 675576 675173  Bacterial RNase P class A
+    2.7e-37  128.3   3.8  RNaseP_bact_a 652120 652466  Bacterial RNase P class A
+    6.4e-11   43.4   1.7  mir-81        291266 291192  microRNA mir-81
+    4.6e-09   37.5   1.4  L10_leader    770568 770713  Ribosomal protein L10 leader
+    4.5e-08   34.3   3.9  L10_leader    560309 560365  Ribosomal protein L10 leader
+    7.9e-07   30.3   6.0  L10_leader    791970 791852  Ribosomal protein L10 leader
+     0.0022   19.2   1.4  mir-81        291203 291260  microRNA mir-81
+     0.0035   17.8   6.6  SRP_euk_arch  889453 889294  Eukaryotic type signal recognition particle RNA
+  ------ inclusion threshold ------
+        1.3   10.3   3.4  mir-81        301064 301027  microRNA mir-81
+
+
+Annotation for each hit  (and alignments):
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  191.4  11.6   1.5e-56         5       362 ..     29033     29418 ..     29029     29423 ..       367    0.83
+
+  Alignment:
+  score: 191.4 bits
+                      {{{{{{{{{{{{{{,<<<<<<<<<______>>>>>>>>>,,,,,,,,,,,,,[[[[---.-----[[[[[<<<<<_____>>>>><<<<<....____>>>>->((---(((((,,,,,,,,,,,,<<<<<<<<<<<...____>>>>>>>>>-->>,,,,,,,<<<<<<_______>>>>>><<<<<<<<<____>>>>>>>>->,,)))--))))]]]]]]]]],,,<<<<------<<<<<<----...................-<<<<<_____>>>>>->>>>>>----->>>>,,,,,,<<<<<<<<____>>>>>>>>,,,,,,,,,,}}}}}}}---------------....----------------}-}}}}}}}}} CS
+                      ccgGccgggcggcCGCcgccggaaaaaaaauuccggcgGAGGAAAGUCCGGgCuCCAuA.gggcAggguGccgGgUAAcgcCcggcgggg....GugAccccAgGGAaAGugCcACAGAaAaaAaACCgCCaggcac...uuaagugccuGGcAAGGGUGAAAaGGuGcgGUAAGAGcgCaCCGcggcaccGGuaACggugccgGCaagGcAAaCCCCacccGGaGCAAggccAAAuAGggaggcaaua...................aagggcggcucgcccuagccuccGGGUAggccGCuuGAGgcggccgGuAAcggccgcCcuAGAugAAUGgccgccaaaaaaaaaaaaaaa....aACAGAAccCGGCUUAcaggCcggcuc RF
+  RNaseP_bact_a     5 uuggccgggcggucgcgguuuuuuuuaaaagggauguggAggAAaguccgggcuccaca.gggcagggugccggguaacgcccggcgggg....gugacccuagggaaagugccacagaaaacagaccgccuggcac...uuaggggccggguaagggugaaaaggugcgguaAgagcgcaccgcggcguugguaAcggugguggcuagguaAaccccacccggagcAAggccaaauagggaagcguuu...................aggggcggcccgcccuaguuuccggguaggucgcuugaggcggucggcaacggcugucccAgAugaAugacugcccuccgguuaaguuug....gacagaacccggcuuAuaggccggcuu 362  
+                      u gg cg g++gu gcg   uuuuu    a   au  +gAggAAaguccgg cuc a+a  gg a ggugccggguaacgcccggcgg g     u ac +uagggaaagugcc cagaaaa a accgcc         uu+      +gguaagggugaaaaggug gguaAgagc caccg    guugguaAc  +    gc++gguaAaccccacc  gagcAA + caaauagg+++  +                         + c+  ccg+ +u+   u cggguag u+gcuugagg+   cg +aacg  u ucc+AgAu aAu acu c  +  g+u     u g     acagaa+ccggcuuAuag cc   uu
+         rmark1 29033 UAGGUCGUGUAGUUGCGUGAUUUUUA---AAAAAUUACGAGGAAAGUCCGGACUCUAUAgAGGUAUGGUGCCGGGUAACGCCCGGCGGAGuaauAUUACUUUAGGGAAAGUGCCGCAGAAAAUAAACCGCCAUAAUAuauUUUAUAUUACGGUAAGGGUGAAAAGGUGUGGUAAGAGCACACCGGUAAGUUGGUAACAAGUUACGCAUGGUAAACCCCACCAAGAGCAAAAUCAAAUAGGCGUUACAGAgcuuuuauaagcuccagggUAUCUCUAACCGGUUUGUAAUGCGGGUAGAUUGCUUGAGGUAAACGAUAACGUUUAUCCUAGAUAAAUAACUACAACGAGCUAUUUAUAGuucgUACAGAAUCCGGCUUAUAGACCUUAUU 29418
+                      56788999999999999988887544...445578899******************99977999*******************999876644445667999******************************5544332224555567788****************************************************************************************9998766555456667777777777554432222333334455555677899**************************************************9988665544433332224444*******************99877655 PP
+
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  187.0   1.8   3.3e-55         9       362 ..    675576    675173 ..    675585    675168 ..       367    0.86
+
+  Alignment:
+  score: 187.0 bits
+                       {{{{{{{{{{,<<<<<<<<<______.>>>>>>>>>,,,,,,,,,,,,,[[[[..--------[[[.[[<<<<<_____>>>>><<<<<____>>>>->((---(((((,,,,,,,,,,,,<<<<<<<<<<<......................................................____>>>>>>>>>-->>,,,,,,,<<<<<<_______>>>>>>.<<<<<<<<<____>>>>>>>>->,,)))--))))]]]]].]]]],,,<<<<------<<<<<<-----<<<<<_____>>>>>->>>>>>----->>>>,,,,,,<<<<<<<<____>>>>>>>>,,,,,,,,,,}}}}}}}-------------------------------}-}}}}}}}}} CS
+                       ccgggcggcCGCcgccggaaaaaaaa.uuccggcgGAGGAAAGUCCGGgCuCC..AuAgggcAggg.uGccgGgUAAcgcCcggcggggGugAccccAgGGAaAGugCcACAGAaAaaAaACCgCCaggcac......................................................uuaagugccuGGcAAGGGUGAAAaGGuGcgGUAAGAGcgCaCC.GcggcaccGGuaACggugccgGCaagGcAAaCCCCaccc.GGaGCAAggccAAAuAGggaggcaauaaagggcggcucgcccuagccuccGGGUAggccGCuuGAGgcggccgGuAAcggccgcCcuAGAugAAUGgccgccaaaaaaaaaaaaaaaaACAGAAccCGGCUUAcaggCcggcuc RF
+  RNaseP_bact_a      9 ccgggcggucgcgguuuuuuuuaaaa.gggauguggAggAAaguccgggcucc..acagggcaggg.ugccggguaacgcccggcgggggugacccuagggaaagugccacagaaaacagaccgccuggcac......................................................uuaggggccggguaagggugaaaaggugcgguaAgagcgcacc.gcggcguugguaAcggugguggcuagguaAaccccaccc.ggagcAAggccaaauagggaagcguuuaggggcggcccgcccuaguuuccggguaggucgcuugaggcggucggcaacggcugucccAgAugaAugacugcccuccgguuaaguuuggacagaacccggcuuAuaggccggcuu 362   
+                        c ggcggu gc g u  +u+ +a    ++   u+gAggAAaguccgggcucc  a ag  ca    ugc+gg uaacg+cc g+g g g+ga c u  gga+agugccacagaaa+   accgcc g ++                                                       u a+ g +c gguaagggug aaaggugcgguaAgagcgcacc gc g+ u+ g +A ggug+uggcu+gguaAacccc  ++ ggagcAAggc a  uagg a+  +  u gg+ ++ + c   +u    uc   g   g+cgcu gaggcg+u+gg+aac   +gucccAgAu++Au acugcccuc +   a+      acagaacccggcuuAu   c+g   u
+         rmark1 675576 GCAGGCGGUUGCAGAUCAGUCAUAGUcACUGAUUUGAGGAAAGUCCGGGCUCCcgAAAGACCAAACuUGCUGGAUAACGUCCAGUGCGAGCGAUCGUGAGGAUAGUGCCACAGAAAGAU-ACCGCCAGAUCAauuaaaaauuaaaaauuaaaaaucuaaaaugaguaauuuuuaauuuuacauuuuUAAUUGAUCUGGUAAGGGUGCAAAGGUGCGGUAAGAGCGCACCaGCAGUAUC-GAGA-GGUGCUGGCUCGGUAAACCCCGGUUgGGAGCAAGGCGA--UAGGAACUACGGUUGGUCUUUUACCAGUUCCGCUCAAUGAGAGCCGCUAGAGGCGUUUGGUAACAAGCGUCCCAGAUAGAUAACUGCCCUCGCAAGAG-----AACAGAACCCGGCUUAUGUACUGCUCU 675173
+                       4679999999999998887766444336778999*******************766668889887779************************************************999.******88877788999*******************************************9999875555567889*********************************999999999.9***.*********************999989********964..555555554444334444444444333333444444566778***********************************************997666666.....****************98777665544 PP
+
+>> RNaseP_bact_a  Bacterial RNase P class A
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  128.3   3.8   2.7e-37        32       357 ..    652120    652466 ..    652099    652474 ..       367    0.77
+
+  Alignment:
+  score: 128.3 bits
+                       ___>>>>>>>>>,,,,,,,,,,,,,[[[[--------[[[[[<<<<<_____.......>>>>><<<<<____>>>>->((---(((((,,,,,,,,,,,,<<<<<<<<<<<____>>>>>>>>>-->>,,,,,,,<<<<<<_______>>>>>><<<<<<.<<<____>>>>>>>>->,,)))--))))]]]]]]]]],,,<<<<------<<<<<<----..-<<<<<_____>>>>>->>>>>>..................----->>>>,,,,,,<<<<<<<<____>>>>>>>>,,,,,,,,,,}}}}}}}---------------.----------------}-}}}} CS
+                       aaauuccggcgGAGGAAAGUCCGGgCuCCAuAgggcAggguGccgGgUAAcg.......cCcggcggggGugAccccAgGGAaAGugCcACAGAaAaaAaACCgCCaggcacuuaagugccuGGcAAGGGUGAAAaGGuGcgGUAAGAGcgCaCCGcggca.ccGGuaACggugccgGCaagGcAAaCCCCacccGGaGCAAggccAAAuAGggaggcaaua..aagggcggcucgcccuagccucc..................GGGUAggccGCuuGAGgcggccgGuAAcggccgcCcuAGAugAAUGgccgccaaaaaaaaaaaaaaa.aACAGAAccCGGCUUAcaggCc RF
+  RNaseP_bact_a     32 aaagggauguggAggAAaguccgggcuccacagggcagggugccggguaacg.......cccggcgggggugacccuagggaaagugccacagaaaacagaccgccuggcacuuaggggccggguaagggugaaaaggugcgguaAgagcgcaccgcggcg.uugguaAcggugguggcuagguaAaccccacccggagcAAggccaaauagggaagcguuu..aggggcggcccgcccuaguuucc..................ggguaggucgcuugaggcggucggcaacggcugucccAgAugaAugacugcccuccgguuaaguuug.gacagaacccggcuuAuaggcc 357   
+                       + a + + g++gAggAAaguccgg c  cacag gca     c+   uaacg       +ccg ++ gg  ga   +a+ g aagugccacagaaaa+a accgccu g+++u    g +  gguaagggugaaaa gug gguaAgagc cac g +++g  ugg++Ac+  g u   ++gguaAacc     +g  g AAg+ccaaauagg  a   + +   + ggc+gc+cg+c+u  uuu c                  ggguaggu+g u gag c+guc gcaa+ggc g  c+AgAu+aAuga+ g    ccg uu +++  + +acagaacccggcuuA+  gc+
+         rmark1 652120 CGAUCCCCGGCGAGGAAAGUCCGGACAACACAGAGCAACUCACUUCCUAACGggaaggcUCCGUUCAGGCGGA---GACAGCAAGUGCCACAGAAAAUAUACCGCCUUGUCUU---UGAUGAGGUAAGGGUGAAAACGUGAGGUAAGAGCUCACGGUAUUGcAUGGCGACAUGGAUU--ACGGUAAACCUUGAGUGUUGAAAGACCAAAUAGGUUACGAAACucGAAGGCUGCUCGUCUUCUUUUACuucgguaagauucguaauGGGUAGGUUGAUGGAGUCUGUCAGCAAUGGCAGAUCUAGAUAAAUGAUAGAAAACCGAUUUUUCGGUgUACAGAACCCGGCUUACCUGCU 652466
+                       44456778899*********************************999**999444444434444444333333...4567899***********************9987543...346889********************************97665542799****99988886..67******************************99877655544443444555555554443222221111111111111112222289**********************************************99988776665555544445****************987765 PP
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   43.4   1.7   6.4e-11        17        92 ..    291266    291192 ..    291282    291183 ..       102    0.85
+
+  Alignment:
+  score: 43.4 bits
+                <<<<<-<<<<<<<<<-<<<<<<<-<<<<<<<___._____>>>--->>>>>>>>>>>->>>>>>>>>->>>>>>--- CS
+                gCaacagGuuuUCaCcaUGAUCUGCAGAgcaauA.aaaAaugcaaaUCUGAGAUCAuCGuGAaagCcAguuGcuuuu RF
+  mir-81     17 gcagccgguuuucaccgugaucugcagaguaaua.aaaaaugcuuaucugagaucaucgugaaagccaguuguuuuu 92    
+                gcag++gg  uucacc ugaucu caga u +ua +a   ug    ucugagaucau gugaaagc+a uug+ uu+
+  rmark1 291266 GCAGUAGGCCUUCACCAUGAUCUACAGAAUGCUAuCAUUUUGAG--UCUGAGAUCAUUGUGAAAGCUAUUUGCCUUC 291192
+                7999**************************99974555555555..*************************987654 PP
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   37.5   1.4   4.6e-09         9       133 ..    770568    770713 ..    770563    770717 ..       137    0.78
+
+  Alignment:
+  score: 37.5 bits
+                    :::::::::::::::::::<<<<<<<<<_____>>>------...........->>>>>>::::::::::::::::::::::............::::::::::::::::::<<<<<<<<<<_____>>>>>>>>>>::::::::::: CS
+                    AaaaauuaUACCGAAGACAGcAGGuGCcgaaaagGCUUAAuu...........auCCUgCCGAGGuauaaaauaaaauuaaa............uuaauaauuuuuauuaaacCccucuuucuuuuugaaagaggGgUUUUUUUUUuu RF
+  L10_leader      9 aaaaauucuaCCgaAGACaGuaGGugccgaaagggcuuAAua...........uuCCugCCgAGGuauguauauaaaaaaau............uuuuuuugguuuuauaaaccucuaugucuuuuuggcauggggguUUuuuuuuug 133   
+                    a aaau+c aCCg+AGACaG+aGGugc  +    gcuuAAu+            +CC gCCgAGGua  u   + a +a  +              uuu+ug++ u+ u    cu + uguc uu + +c  +ggg uUUuuu uuug
+      rmark1 770568 AGAAAUACCACCGUAGACAGCAGGUGCGUUCG-CGCUUAAUGaugccaagcauCGCCCGCCGAGGUAGCUGAUAGAUUAUUGcaaucuuccacaCAUUUGUGUGCUACUGCCUCUGCGUGUCGUUAC-ACUCAGGGCUUUUUUAUUUG 770713
+                    5677888899****************866655.9*******9999999999999************9887777666666555677778888866555566666666666677777777777755555.89999999999999887765 PP
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   34.3   3.9   4.5e-08        12        70 ..    560309    560365 ..    560300    560389 ..       137    0.84
+
+  Alignment:
+  score: 34.3 bits
+                    ::::::::::::::::<<<<<<<<<_____>>>------->>>>>>::::::::::::: CS
+                    aauuaUACCGAAGACAGcAGGuGCcgaaaagGCUUAAuuauCCUgCCGAGGuauaaaau RF
+  L10_leader     12 aauucuaCCgaAGACaGuaGGugccgaaagggcuuAAuauuCCugCCgAGGuauguaua 70    
+                    +a     CCgaAGACaG+aGG gcc a   ggcuuAAu  uCCugCCgAGGu ug+   
+      rmark1 560309 UAGCGAGCCGAAGACAGCAGGGGCCAAGG-GGCUUAAU-GUCCUGCCGAGGUUUGAGCG 560365
+                    55566789****************99888.********.*************9988665 PP
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   30.3   6.0   7.9e-07         5       126 ..    791970    791852 ..    791974    791842 ..       137    0.59
+
+  Alignment:
+  score: 30.3 bits
+                    :::::::::::::::::::::::<<<<<<<<<_____>>>------->>>>>>::::::::::::::::::::::.::::::::::::::::::<<<<<<<<<<_____.>>>>>>>>>>:::: CS
+                    aauaAaaaauuaUACCGAAGACAGcAGGuGCcgaaaagGCUUAAuuauCCUgCCGAGGuauaaaauaaaauuaaa.uuaauaauuuuuauuaaacCccucuuucuuuuu.gaaagaggGgUUUU RF
+  L10_leader      5 aauuaaaaauucuaCCgaAGACaGuaGGugccgaaagggcuuAAuauuCCugCCgAGGuauguauauaaaaaaau.uuuuuuugguuuuauaaaccucuaugucuuuuu.ggcauggggguUUu 126   
+                    aa u aa+auu u+CCg AGA aGuaGGugc       gcuuAA   uCCu+CCgAGG  u     +aa + a +    +u+u  uu u u    c  uau+u   +++ g  a+gg+ +uUUu
+      rmark1 791970 AAGUGAAUAUUUUGCCGCAGAAAGUAGGUGC--GUU-AGCUUAAAUAUCCUACCGAGGCUUUGGAUAAAUUUAUCaAAGAUCUCUUUCUGUGUGACGUUAUUU--ACGCaGAGAGGGAUCUUUU 791852
+                    556677888999******************9..444.789***999************877665554444333332111222222222222222222222222..3333333333333344444 PP
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   19.2   1.4    0.0022        24        82 ..    291203    291260 ..    291183    291280 ..       102    0.86
+
+  Alignment:
+  score: 19.2 bits
+                <<<<<<<<-<<<<<<<-<<<<<<<________>>>--->>>>.>>>>>>>->>>>>>>>> CS
+                GuuuUCaCcaUGAUCUGCAGAgcaauAaaaAaugcaaaUCUG.AGAUCAuCGuGAaagCc RF
+  mir-81     24 guuuucaccgugaucugcagaguaauaaaaaaugcuuaucug.agaucaucgugaaagcc 82    
+                g uuucac  ugaucu  aga u a aa +a  gc+u ucug agaucau gugaa gcc
+  rmark1 291203 GCUUUCACAAUGAUCUC-AGACUCAAAAUGAUAGCAU-UCUGuAGAUCAUGGUGAAGGCC 291260
+                6799************8.***9999988888888876.999989************9987 PP
+
+>> SRP_euk_arch  Eukaryotic type signal recognition particle RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   17.8   6.6    0.0035        92       253 ..    889453    889294 ..    889477    889272 ..       295    0.80
+
+  Alignment:
+  score: 17.8 bits
+                      (-((((-((---(((((((((-(((((((((((((((<<<<<-<<<<<<<<<<<<____>>>>>>>>>>>>->>>>>,,,,,,,<<<<<<<----<<<<----<<<____>>>---->>>>-->>>>>>>))))))))))-)))))))---))))))))))) CS
+                      uaugcgcuagauggcccGuCCuuuCcAggucgggaGuggacgggGuggccCcggcGaAGgccgGggccaCc.cgucccu.AAAGgggggggaAccgcGucAGGCcgGaaAcgGAGCAgCgcaaaccccccgCucccgaccgUgGaaGGAUaaCgggccugcg RF
+  SRP_euk_arch     92 ugcguugccgaucgggcguccgcacuaagcucggcaucaauAuggggacccugggggAgcccggggccuccagguugccuaaggaggggugaaccggcccAgggcggaaAcggagcAggcaAaAgcccccgugcuggucaguagugggAucgcgccugugau 253   
+                        ++  g+cgau g g+gucc c    ag++c   +uc   A gg+  c+ +    gA     gg + +cc gguug +  a  ag    g accg  + Agg  ggaaAc gagcAg  aAaAg   c g+   gg c g     ggAucgc + ++uga 
+        rmark1 889453 GCUUCCGUCGAUAGCGUGUCCUCUUCGAGUCCACAGUCGGCAAGGUCGCUGCCCU-GAUGGGUGGCUGACCUGGUUGAU-GAUUAGUCCCGCACCGCGUGAGGCAGGAAACUGAGCAGCGAAAAGGGACAGCUGCGGACGGCGAAAGGAUCGCAUGCUUGAG 889294
+                      3445556678888888999999999999999999999999999999877665554.577778889999********976.778899999************************************9999988888888888888999999999866665533 PP
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?   10.3   3.4       1.3        36        78 ..    301064    301027 ..    301081    301011 ..       102    0.77
+
+  Alignment:
+  score: 10.3 bits
+                <<<<-<<<<<<<________>>>--->>>>>>>>>>>->>>>> CS
+                AUCUGCAGAgcaauAaaaAaugcaaaUCUGAGAUCAuCGuGAa RF
+  mir-81     36 aucugcagaguaauaaaaaaugcuuaucugagaucaucgugaa 78    
+                aucug aga u aua  aa u+   +uc gagau aucgugaa
+  rmark1 301064 AUCUG-AGACUUAUA--AAUUAA--GUCGGAGAUUAUCGUGAA 301027
+                78999.999888774..333333..3***************98 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2027718 residues searched)
+Target model(s):                           4  (901 nodes)
+Residues passing SSV filter:            197482  (0.0243); expected (0.02)
+Residues passing bias filter:           151845  (0.0187); expected (0.02)
+Residues passing Vit filter:             12964  (0.0016); expected (0.003)
+Residues passing Fwd filter:              5955  (0.000734); expected (3e-05)
+Total number of hits:                       10  (0.000221)
+# CPU time: 0.49u 0.00s 00:00:00.49 Elapsed: 00:00:00.17
+# Mc/sec: 10746.91
+//
+[ok]

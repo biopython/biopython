@@ -1,0 +1,37 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             single_rna.fa
+# target HMM database:             hmms/multi_rna_00.hmm
+# output directed to file:         text_31b2_nhmmscan_002.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       rmark1  [L=1013859]
+Description: rna_sequence_1
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+
+   [No hits detected that satisfy reporting thresholds]
+
+
+Annotation for each hit  (and alignments):
+
+   [No targets detected that satisfy reporting thresholds]
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2027718 residues searched)
+Target model(s):                           2  (264 nodes)
+Residues passing SSV filter:             85182  (0.021); expected (0.02)
+Residues passing bias filter:            78338  (0.0193); expected (0.02)
+Residues passing Vit filter:              7718  (0.0019); expected (0.003)
+Residues passing Fwd filter:                 0  (0); expected (3e-05)
+Total number of hits:                        0  (0)
+# CPU time: 0.17u 0.00s 00:00:00.17 Elapsed: 00:00:00.08
+# Mc/sec: 6691.47
+//
+[ok]

@@ -283,9 +283,63 @@ The following SearchIO objects attributes are provided:
 |                 | query_strand            | query sequence strand            |
 +-----------------+-------------------------+----------------------------------+
 
+
+hmmer3-pfamtab
+==============
+To parse pfam table files, you must use the HMMER flavor that produced the
+file. So instead of using 'hmmer3-pfamtab', use either 'hmmsearch3-pfamtab',
+'hmmscan3-pfamtab', or 'phmmer3-pfamtab'.
+
+The following SearchIO objects attributes are provided:
+
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Value                            |
++=================+=========================+==================================+
+| QueryResult     | n/a                     | n/a                              |
++-----------------+-------------------------+----------------------------------+
+| Hit             | bias                    | hit-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hit-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hit-level e-value                |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | hit sequence ID                  |
++-----------------+-------------------------+----------------------------------+
+| HSP             | bias                    | hsp-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hsp-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | env_end                 | end coordinate of the envelope   |
+|                 +-------------------------+----------------------------------+
+|                 | env_start               | start coordinate of the envelope |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hsp-level independent e-value    |
+|                 +-------------------------+----------------------------------+
+|                 | evalue_cond             | hsp-level conditional e-value    |
++-----------------+-------------------------+----------------------------------+
+| HSPFragment     | hit_end                 | hit sequence end coordinate, may |
+| (also via HSP)  |                         | be 'hmmto' or 'alito' depending  |
+|                 |                         | on the HMMER flavor              |
+|                 +-------------------------+----------------------------------+
+|                 | hit_start               | hit sequence start coordinate,   |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_end               | query sequence end coordinate,   |
+|                 |                         | may be 'hmmto' or 'alito'        |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_start             | query sequence start coordinate, |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_strand            | query sequence strand            |
++-----------------+-------------------------+----------------------------------+
+
 """
 
 from .hmmer2_text import Hmmer2TextParser, Hmmer2TextIndexer
+from .hmmer3_pfamtab import Hmmer3PfamtabParser, Hmmer3PfamtabHmmhitParser, Hmmer3PfamtabHmmqueryParser
 from .hmmer3_domtab import Hmmer3DomtabParser, Hmmer3DomtabHmmhitParser, Hmmer3DomtabHmmqueryParser
 from .hmmer3_domtab import Hmmer3DomtabHmmhitIndexer, Hmmer3DomtabHmmqueryIndexer
 from .hmmer3_domtab import Hmmer3DomtabHmmhitWriter, Hmmer3DomtabHmmqueryWriter

@@ -1,0 +1,214 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.1b2 (February 2015); http://hmmer.org/
+# Copyright (C) 2015 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             multi_rna.fa
+# target HMM database:             hmms/multi_rna_01.hmm
+# output directed to file:         text_31b2_nhmmscan_001.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       rmark2  [L=1014774]
+Description: rna_sequence_2
+Scores for complete hit:
+    E-value  score  bias  Model       start    end  Description
+    ------- ------ -----  --------    -----  -----  -----------
+  ------ inclusion threshold ------
+       0.61   11.3   0.9  L10_leader 840864 840770  Ribosomal protein L10 leader
+        4.5    8.6   2.8  mir-81     413767 413806  microRNA mir-81
+
+
+Annotation for each hit  (and alignments):
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?   11.3   0.9      0.61        29       124 ..    840864    840770 ..    840876    840759 ..       137    0.64
+
+  Alignment:
+  score: 11.3 bits
+                    <<<<<<<<_____>>>------->>>>>>::::::::::::::::::::::.::::::::::::::::::<<<<<<<<<<_____.>>>>>>> CS
+                    cAGGuGCcgaaaagGCUUAAuuauCCUgCCGAGGuauaaaauaaaauuaaa.uuaauaauuuuuauuaaacCccucuuucuuuuu.gaaagag RF
+  L10_leader     29 uaGGugccgaaagggcuuAAuauuCCugCCgAGGuauguauauaaaaaaau.uuuuuuugguuuuauaaaccucuaugucuuuuu.ggcaugg 119   
+                    +aGGugcc +aa ggc uAA+au   u+CC AGG  ugu    a   ++    u u u++g+u u+u    c cu  +uc u+++  g a g 
+      rmark2 840864 CAGGUGCCAUAAUGGCAUAAGAU---UACCAAGGCCUGUUAUCACUGGGGCcAUCUAUAUGAUGUUUCCUUCACUGCUUCCUCGCcUGUAAGA 840775
+                    69******99999********65...89*******9999888777655555433333333333333333333333333443444443444444 PP
+
+                    >>>:: CS
+                    gGgUU RF
+  L10_leader    120 ggguU 124   
+                    +gguU
+      rmark2 840774 AGGUU 840770
+                    45544 PP
+
+>> mir-81  microRNA mir-81
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?    8.6   2.8       4.5        50        92 ..    413767    413806 ..    413752    413818 ..       102    0.83
+
+  Alignment:
+  score: 8.6 bits
+                ______>>>--->>>>>>>>>>>->>>>>>>>>->>>>>>--- CS
+                AaaaAaugcaaaUCUGAGAUCAuCGuGAaagCcAguuGcuuuu RF
+  mir-81     50 aaaaaaugcuuaucugagaucaucgugaaagccaguuguuuuu 92    
+                +  aaaugc+u uc gagau    g ga agc+aguuguuu +
+  rmark2 413767 CGUAAAUGCAUUUCAGAGAU---GGAGAUAGCUAGUUGUUUAC 413806
+                456789999*9*******75...799************99865 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2029548 residues searched)
+Target model(s):                           4  (901 nodes)
+Residues passing SSV filter:            209501  (0.0258); expected (0.02)
+Residues passing bias filter:           152207  (0.0187); expected (0.02)
+Residues passing Vit filter:              9441  (0.00116); expected (0.003)
+Residues passing Fwd filter:               555  (6.84e-05); expected (3e-05)
+Total number of hits:                        2  (1.66e-05)
+# CPU time: 0.46u 0.00s 00:00:00.46 Elapsed: 00:00:00.15
+# Mc/sec: 12190.82
+//
+Query:       rmark3  [L=1015227]
+Scores for complete hit:
+    E-value  score  bias  Model         start    end  Description
+    ------- ------ -----  --------      -----  -----  -----------
+    6.6e-11   43.4   1.8  L10_leader   608875 608759  Ribosomal protein L10 leader
+    2.8e-07   31.7   4.6  L10_leader   308002 308110  Ribosomal protein L10 leader
+  ------ inclusion threshold ------
+      0.082   13.3   2.1  SRP_euk_arch 173466 173320  Eukaryotic type signal recognition particle RNA
+       0.69   10.3   3.4  SRP_euk_arch  85938  85977  Eukaryotic type signal recognition particle RNA
+        1.2    9.5   1.1  SRP_euk_arch 502794 502743  Eukaryotic type signal recognition particle RNA
+
+
+Annotation for each hit  (and alignments):
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   43.4   1.8   6.6e-11        15       132 ..    608875    608759 ..    608889    608754 ..       137    0.70
+
+  Alignment:
+  score: 43.4 bits
+                    :::::::::::::<<<<<<<<<_____>>>------->>>>>>::::::::::::::::::::::...::::::::::::::::::<<<<<<< CS
+                    uaUACCGAAGACAGcAGGuGCcgaaaagGCUUAAuuauCCUgCCGAGGuauaaaauaaaauuaaa...uuaauaauuuuuauuaaacCccucu RF
+  L10_leader     15 ucuaCCgaAGACaGuaGGugccgaaagggcuuAAuauuCCugCCgAGGuauguauauaaaaaaau...uuuuuuugguuuuauaaaccucuau 104   
+                    uc aC g+AGACaG+aGGugc  ++ag gcuuAAuau CCugCCgAGGu  g+a ++ a  +      u u+uu gg  uu u aaccucu  
+      rmark3 608875 UCCACUGUAGACAGCAGGUGCUCUUAGAGCUUAAUAUCCCUGCCGAGGUUGGAAAGAUAGCCUUAaguUAUAUUGGGCCUUCUUAACCUCUGC 608783
+                    4556779***************99999**********************99988887666554444433333344444444444444444432 PP
+
+                    <<<_____>>>>>>>>>>:::::::::: CS
+                    uucuuuuugaaagaggGgUUUUUUUUUu RF
+  L10_leader    105 gucuuuuuggcauggggguUUuuuuuuu 132   
+                        + u+ ++  ggggguUUuu u+uu
+      rmark3 608782 ----AGUCAAAGCGGGGGUUUUUCUAUU 608759
+                    ....333446677788888888877654 PP
+
+>> L10_leader  Ribosomal protein L10 leader
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   31.7   4.6   2.8e-07        15       128 ..    308002    308110 ..    307988    308119 ..       137    0.74
+
+  Alignment:
+  score: 31.7 bits
+                    :::::::::::::<<<<<<<<<_____>>>------->>>>>>::::::::::::::::::::::::::::::::::::::::<<<<<<<<<< CS
+                    uaUACCGAAGACAGcAGGuGCcgaaaagGCUUAAuuauCCUgCCGAGGuauaaaauaaaauuaaauuaauaauuuuuauuaaacCccucuuuc RF
+  L10_leader     15 ucuaCCgaAGACaGuaGGugccgaaagggcuuAAuauuCCugCCgAGGuauguauauaaaaaaauuuuuuuugguuuuauaaaccucuauguc 107   
+                       aCC aAGAC GuaGG g+ ga+a  +cuuAA +  CCu+CCgAGGu  g+a+ ua+aa a+u     +++     +u+aacc+cu  guc
+      rmark3 308002 CAAACCAAAGACCGUAGGGGGAGAUAAUCCUUAAAUAACCUACCGAGGUUGGAAGUUAGAAUACU---AACCUCAACAUUCAACCCCU--GUC 308089
+                    5558999***************999999***********************99999888877666...33445555566666666655..555 PP
+
+                    _____>>>>>>>>>>:::::: CS
+                    uuuuugaaagaggGgUUUUUU RF
+  L10_leader    108 uuuuuggcauggggguUUuuu 128   
+                    uuu+ug  a+ggg  u Uuuu
+      rmark3 308090 UUUGUGAUAGGGGUAUAUUUU 308110
+                    577776655555544434433 PP
+
+>> SRP_euk_arch  Eukaryotic type signal recognition particle RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?   13.3   2.1     0.082       101       245 ..    173466    173320 ..    173507    173296 ..       295    0.75
+
+  Alignment:
+  score: 13.3 bits
+                      ---((((.(((((-(((((((((((((((<..<<<<-<<<<<<<<<<<<____>>>>>>>>>>>>->>>>>,,,,,,,<<<<<<<----<< CS
+                      gauggcc.cGuCCuuuCcAggucgggaGug..gacgggGuggccCcggcGaAGgccgGggccaCc.cgucccu.AAAGgggggggaAccgc RF
+  SRP_euk_arch    101 gaucggg.cguccgcacuaagcucggcauc..aauAuggggacccugggggAgcccggggccuccagguugccuaaggaggggugaaccgg 188   
+                      g u gg  +g ccgc c aag+u  g +u     +Auggg a+c+ugg g Ag c   g++cucc ggu  c ua    gg g ga ccg 
+        rmark3 173466 GCU-GGCcUGCCCGCUCCAAGUUGAGAGUUggGCCAUGGG-AUCUUGGCGAAGGCACAGAUCUCCUGGUCCC-UAGAAUGGAGGGAUCCGC 173379
+                      443.33348899*******999997777752246889876.67889999*******************9864.344334455556779999 PP
+
+                      <<----<<<___.._>>>---->>>>-->>>>>>>))))))))))-)))))))---))) CS
+                      GucAGGCcgGaa..AcgGAGCAgCgcaaaccccccgCucccgaccgUgGaaGGAUaaCg RF
+  SRP_euk_arch    189 cccAgggcggaa..AcggagcAggcaAaAgcccccgugcuggucaguagugggAucgcg 245   
+                         Agg  gg    Ac gagcAg  aA A ++cc  + cu g cagu g gggAuc c 
+        rmark3 173378 AUGAGGCUGGUUucACAGAGCAGUGAACACUUCCUUCUCUUGACAGUGGAGGGAUCACA 173320
+                      9*****99997555999************99999999999***************9875 PP
+
+>> SRP_euk_arch  Eukaryotic type signal recognition particle RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?   10.3   3.4      0.69       172       213 ..     85938     85977 ..     85918     85997 ..       295    0.84
+
+  Alignment:
+  score: 10.3 bits
+                     ,,,,<<<<<<<----<<<<----<<<____>>>---->>>>- CS
+                     AAAGgggggggaAccgcGucAGGCcgGaaAcgGAGCAgCgca RF
+  SRP_euk_arch   172 aaggaggggugaaccggcccAgggcggaaAcggagcAggcaA 213  
+                     aag ag    gaac gg +cAgg cgg aAcggagcAg c+A
+        rmark3 85938 AAGUAGA--GGAACUGGGUCAGGCCGGCAACGGAGCAGCCCA 85977
+                     4444554..579**************************9886 PP
+
+>> SRP_euk_arch  Eukaryotic type signal recognition particle RNA
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ ?    9.5   1.1       1.2        97       149 ..    502794    502743 ..    502827    502723 ..       295    0.76
+
+  Alignment:
+  score: 9.5 bits
+                      (-((---(((((((((-(((((((((((((((<<<<<-<<<<<<<<<<<<___ CS
+                      gcuagauggcccGuCCuuuCcAggucgggaGuggacgggGuggccCcggcGaA RF
+  SRP_euk_arch     97 ugccgaucgggcguccgcacuaagcucggcaucaauAuggggacccugggggA 149   
+                       g c  u+ggg+gucc c+c a   + g ++uc a+A gg+gac  ug gggA
+        rmark3 502794 GGACC-UUGGGUGUCCUCGCCAGCACGGUUGUCCACAAGGUGACAGUGCGGGA 502743
+                      22222.37999***********************************9999997 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (2030454 residues searched)
+Target model(s):                           4  (901 nodes)
+Residues passing SSV filter:            221316  (0.0272); expected (0.02)
+Residues passing bias filter:           174559  (0.0215); expected (0.02)
+Residues passing Vit filter:             15745  (0.00194); expected (0.003)
+Residues passing Fwd filter:              2032  (0.00025); expected (3e-05)
+Total number of hits:                        5  (5.73e-05)
+# CPU time: 0.50u 0.00s 00:00:00.50 Elapsed: 00:00:00.17
+# Mc/sec: 10761.41
+//
+Query:       rmark4  [L=180]
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+
+   [No hits detected that satisfy reporting thresholds]
+
+
+Annotation for each hit  (and alignments):
+
+   [No targets detected that satisfy reporting thresholds]
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (360 residues searched)
+Target model(s):                           4  (901 nodes)
+Residues passing SSV filter:                 0  (0); expected (0.02)
+Residues passing bias filter:                0  (0); expected (0.02)
+Residues passing Vit filter:                 0  (0); expected (0.003)
+Residues passing Fwd filter:                 0  (0); expected (3e-05)
+Total number of hits:                        0  (0)
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: inf
+//
+[ok]
