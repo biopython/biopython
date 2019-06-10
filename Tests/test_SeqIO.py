@@ -5,6 +5,7 @@
 
 """Tests for SeqIO module."""
 
+
 from Bio._py3k import basestring
 
 import unittest
