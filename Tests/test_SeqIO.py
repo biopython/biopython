@@ -190,7 +190,8 @@ class TestSeqIO(unittest.TestCase):
                 self.assertEqual(str(e), message)
                 if records[0].seq.alphabet.letters is not None:
                     self.assertNotEqual(format, t_format,
-                        "Should be able to re-write in the original format!")
+                                        "Should be able to re-write "
+                                        "in the original format!")
                 # Carry on to the next format:
                 continue
 
@@ -235,13 +236,13 @@ class TestSeqIO(unittest.TestCase):
                 # valid character sets and the identifier lengths!
                 if format in ["phylip", "phylip-sequential"]:
                     self.assertEqual(PhylipIO.sanitize_name(r1.id, 10), r2.id,
-                            "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format == "phylip-relaxed":
                     self.assertEqual(PhylipIO.sanitize_name(r1.id), r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format == "clustal":
                     self.assertEqual(r1.id.replace(" ", "_")[:30], r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format == "stockholm":
                     r1_id = r1.id.replace(" ", "_")
                     if "start" in r1.annotations and "end" in r1.annotations:
@@ -251,17 +252,17 @@ class TestSeqIO(unittest.TestCase):
                             r1_id += suffix
 
                     self.assertEqual(r1_id, r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format == "maf":
                     self.assertEqual(r1.id.replace(" ", "_"), r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
                 elif format == 'nib':
                     self.assertEqual(r2.id, '<unknown id>')
                 else:
                     self.assertEqual(r1.id, r2.id,
-                        "'%s' vs '%s'" % (r1.id, r2.id))
+                                     "'%s' vs '%s'" % (r1.id, r2.id))
 
             if len(records) > 1:
                 # Try writing just one record (passing a SeqRecord, not a list)
@@ -296,7 +297,8 @@ class TestSeqIO(unittest.TestCase):
             records = list(SeqIO.parse(handle=h, format=t_format))
             h.close()
             self.assertEqual(len(records), t_count,
-                "Found %i records but expected %i" % (len(records), t_count))
+                             "Found %i records but expected %i"
+                             % (len(records), t_count))
 
             # Try using the iterator with a for loop, and a filename not handle
             records2 = []
@@ -314,7 +316,8 @@ class TestSeqIO(unittest.TestCase):
                 except StopIteration:
                     break
                 self.assertIsNotNone(record,
-                    "Should raise StopIteration not return None")
+                                     "Should raise StopIteration, "
+                                     "not return None")
                 records3.append(record)
             h.close()
             self.assertEqual(len(records3), t_count)
@@ -376,18 +379,24 @@ class TestSeqIO(unittest.TestCase):
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
                         self.assertTrue(acc,
-                            "Bad accession in annotations: %s" % repr(acc))
+                                        "Bad accession in annotations: %s"
+                                        % repr(acc))
                         self.assertEqual(acc, acc.strip(),
-                            "Bad accession in annotations: %s" % repr(acc))
+                                         "Bad accession in annotations: %s"
+                                         % repr(acc))
                     self.assertEqual(len(set(accs)), len(accs),
-                        "Repeated accession in annotations: %s" % repr(accs))
+                                     "Repeated accession in annotations: %s"
+                                     % repr(accs))
                 for ref in record.dbxrefs:
                     self.assertTrue(ref,
-                        "Bad cross reference in dbxrefs: %s" % repr(ref))
+                                    "Bad cross reference in dbxrefs: %s"
+                                    % repr(ref))
                     self.assertEqual(ref, ref.strip(),
-                        "Bad cross reference in dbxrefs: %s" % repr(ref))
+                                     "Bad cross reference in dbxrefs: %s"
+                                     % repr(ref))
                 self.assertEqual(len(set(record.dbxrefs)), len(record.dbxrefs),
-                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs))
+                                 "Repeated cross reference in dbxrefs: %s"
+                                 % repr(record.dbxrefs))
 
                 # Check the lists obtained by the different methods agree
                 self.assertEqual(record, records2[i])
@@ -395,7 +404,7 @@ class TestSeqIO(unittest.TestCase):
                 self.assertEqual(record, records4[i])
                 self.assertEqual(record, records5[i])
 
-                if i == t_count-1:
+                if i == t_count - 1:
                     i = -1
                 if i < 3:
                     self.assertEqual(record.id, expected_records[i].id)
@@ -445,7 +454,8 @@ class TestSeqIO(unittest.TestCase):
                 bad = protein_alphas
             else:
                 self.assertIn(t_format, no_alpha_formats,
-                    "Got %s from %s file" % (repr(base_alpha), t_format))
+                              "Got %s from %s file"
+                              % (repr(base_alpha), t_format))
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
                 bad = []
             for given_alpha in good:
@@ -466,8 +476,9 @@ class TestSeqIO(unittest.TestCase):
                 with open(t_filename, mode) as h:
                     records6 = SeqIO.parse(h, t_format, given_alpha)
                     self.assertRaises(ValueError, next, records6,
-                        "Forcing wrong alphabet, %s, should fail (%s)"
-                                     % (repr(given_alpha), t_filename))
+                                      "Forcing wrong alphabet, %s, "
+                                      "should fail (%s)"
+                                      % (repr(given_alpha), t_filename))
             del good, bad, given_alpha, base_alpha
 
             if t_alignment:
@@ -1905,7 +1916,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_genbank18(self):
         records = [SeqRecord(Seq("GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCG...ACCTGCA"), "NC_001422.1", "NC_001422"),
-                  ]
+                   ]
         lengths = [5386]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).",
@@ -1920,7 +1931,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_genbank19(self):
         records = [SeqRecord(Seq("MKVKVLSLLVPALLVAGAANAAEVYNKDGNKLDLYGKVDG...LGLVYQF"), "NP_416719.1", "NP_416719"),
-                  ]
+                   ]
         lengths = [367]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
@@ -1938,7 +1949,7 @@ class TestSeqIO(unittest.TestCase):
     def test_genbank20(self):
         """Test parsing GenPept file with nasty bond locations."""
         records = [SeqRecord(Seq("AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLI...DLSNFQL"), "1MRR_A", "1MRR_A"),
-                  ]
+                   ]
         lengths = [375]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=1MRR_A).",
@@ -1954,7 +1965,7 @@ class TestSeqIO(unittest.TestCase):
     def test_genbank21(self):
         # This and the next one are a pair, and should be roughly equivalent.
         records = [SeqRecord(Seq("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"), "DS830848.1", "DS830848"),
-                  ]
+                   ]
         lengths = [1311]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1).",
@@ -1963,7 +1974,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl1(self):
         records = [SeqRecord(Seq("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"), "DS830848.1", "DS830848"),
-                  ]
+                   ]
         lengths = [1311]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=DS830848.1).",
@@ -1975,7 +1986,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("CIARIIRYFYNAKA"), "A00028.1", "A00028"),
                    SeqRecord(Seq("RPDFCLEPPYTGPCKARIIRYFYNAKAGLCQTFVYGGCRA...ERTCGGA"), "A00031.1", "A00031"),
                    SeqRecord(Seq("MAIGTLEATTLIRGRAMTTVLPSPELIASFVDIVGPGNAL...LREDRGE"), "CQ797900.1", "CQ797900"),
-                  ]
+                   ]
         lengths = [14, 14, 58, 496]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2001,7 +2012,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXXXXX"), "NRP00000002", "NRP00000002"),
                    SeqRecord(Seq("XXXXXXXXXXXXXXXXXXXXXXXXX"), "NRP00210944", "NRP00210944"),
                    SeqRecord(Seq("XXXXXXXXXXXXXXXXXXXXXXXXX"), "NRP00210945", "NRP00210945"),
-                  ]
+                   ]
         lengths = [358, 65, 25, 25]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2025,7 +2036,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl4(self):
         records = [SeqRecord(Seq("AAACAAACCAAATATGGATTTTATTGTAGCCATATTTGCT...AAAAAAA"), "X56734.1", "X56734"),
-                  ]
+                   ]
         lengths = [1859]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).",
@@ -2040,7 +2051,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl5(self):
         records = [SeqRecord(Seq("GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA"), "DD231055.1", "DD231055"),
-                  ]
+                   ]
         lengths = [315]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).",
@@ -2055,7 +2066,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl6(self):
         records = [SeqRecord(Seq("GCCGAGCTGACCCAGTCTCCATCCTCCCTGTCTGCATCTG...TATGAGA"), "DD231055.1", "DD231055"),
-                  ]
+                   ]
         lengths = [315]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -2075,7 +2086,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl7(self):
         records = [SeqRecord(Seq("GATCAGTAGACCCAGCGACAGCAGGGCGGGGCCCAGCAGG...CGAGCAT"), "AL031232", "SC10H5"),
-                  ]
+                   ]
         lengths = [4870]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).",
@@ -2090,7 +2101,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl8(self):
         records = [SeqRecord(Seq("CAATTACTGCAATGCCCTCGTAATTAAGTGAATTTACAAT...CATCACC"), "U87107.1", "U87107"),
-                  ]
+                   ]
         lengths = [8840]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).",
@@ -2105,7 +2116,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl9(self):
         records = [SeqRecord(Seq("ATGAAGCTTTTAGTGCGCCTAGCACCGATCCTGCTGCTAG...GGTGTGA"), "AAA03323.1", "AAA03323"),
-                  ]
+                   ]
         lengths = [1545]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).",
@@ -2120,7 +2131,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_embl10(self):
         records = [SeqRecord(Seq("TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTG...ACCCCTG"), "AE017046.1", "AE017046"),
-                  ]
+                   ]
         lengths = [9609]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).",
@@ -2136,7 +2147,7 @@ class TestSeqIO(unittest.TestCase):
     def test_embl11(self):
         records = [SeqRecord(Seq("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"), "AJ229040.1", "AJ229040"),
                    SeqRecord(Seq("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"), "AL954800.2", "AL954800"),
-                  ]
+                   ]
         lengths = [958952, 87191216]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).",
@@ -2148,7 +2159,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("GSSSSSSSSSSSSSSSSXYSCFWKTCT"), "DI500002", "DI500002"),
                    SeqRecord(Seq("GSSNRAT"), "DI500003", "DI500003"),
                    SeqRecord(Seq("MKRSKRFAVLAQRPVNQDGLIGEWPEEGLIAMDSPFDPVS...HIDLVRE"), "DI500020", "DI500020"),
-                  ]
+                   ]
         lengths = [111, 27, 7, 754]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2176,7 +2187,7 @@ class TestSeqIO(unittest.TestCase):
     def test_embl13(self):
         """Test parsing embl file with wrapped locations and unspecified type."""
         records = [SeqRecord(Seq("CGACTTTCCACTGCCCTCTACGCCCGCGCAATGGGTCGTA...CTACGTT"), "Test", "Tester"),
-                  ]
+                   ]
         lengths = [120]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -2197,7 +2208,7 @@ class TestSeqIO(unittest.TestCase):
     def test_embl14(self):
         """Test parsing file with features over-indented for EMBL."""
         records = [SeqRecord(Seq("GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA"), "A04195", "A04195"),
-                  ]
+                   ]
         lengths = [51]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
@@ -2213,7 +2224,7 @@ class TestSeqIO(unittest.TestCase):
     def test_imgt1(self):
         """Test parsing file with features over-indented for EMBL."""
         records = [SeqRecord(Seq("GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA"), "A04195", "A04195"),
-                  ]
+                   ]
         lengths = [51]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).",
@@ -2231,7 +2242,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("GATTGGGGAGTCCCAGCCTTGGGGATTCCCCAACTCCGCA...TGACCCT"), "HLA02169.1", "HLA02169"),
                    SeqRecord(Seq("ATGGCCGTCATGGCGCCCCGAACCCTCCTCCTGCTACTCT...AGTGTGA"), "HLA14798.1", "HLA14798"),
                    SeqRecord(Seq("GCTCCCACTCCATGAGGTATTTCTTCACATCCGTGTCCCG...AGATGGG"), "HLA03131.1", "HLA03131"),
-                  ]
+                   ]
         lengths = [3503, 3291, 2903, 822]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2255,7 +2266,7 @@ class TestSeqIO(unittest.TestCase):
     def test_stockholm1(self):
         records = [SeqRecord(Seq("UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU"), "AP001509.1", "AP001509.1"),
                    SeqRecord(Seq("AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-U...GUGAGAU"), "AE007476.1", "AE007476.1"),
-                  ]
+                   ]
         lengths = [104, 104]
         alignment = """\
  UA alignment column 0
@@ -2285,7 +2296,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("MQHVSAPVFVFECTRLAY--VQHKLRAH----SRAVAIVLDEY"), "O83071/259-312", "O83071"),
                    SeqRecord(Seq("MIEADKVAHVQVGNNLEH--ALLVLTKT----GYTAIPVLDPS"), "O31698/18-71", "O31698"),
                    SeqRecord(Seq("EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE"), "363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00", "363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00"),
-                  ]
+                   ]
         lengths = [43, 43, 43, 43]
         alignment = """\
  MMMEEE alignment column 0
@@ -2315,7 +2326,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("CGTTACTCGTTGT"), "Hesperorni", "Hesperorni"),
                    SeqRecord(Seq("TAATGTTAATTGT"), "Baluchithe", "Baluchithe"),
                    SeqRecord(Seq("GGCAGCCAATCAC"), "B.subtilis", "B.subtilis"),
-                  ]
+                   ]
         lengths = [13, 13, 13, 13]
         alignment = """\
  CCTTCG alignment column 0
@@ -2346,7 +2357,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("CGTTACTCGTTGTCGTTACTCGTTGTCGTTACTCGTTGT"), "Hesperorni", "Hesperorni"),
                    SeqRecord(Seq("TAATGTTAATTGTTAATGTTAATTGTTAATGTTAATTGT"), "Baluchithe", "Baluchithe"),
                    SeqRecord(Seq("GGCAGCCAATCACGGCAGCCAATCACGGCAGCCAATCAC"), "B.subtilis", "B.subtilis"),
-                  ]
+                   ]
         lengths = [39, 39, 39, 39]
         alignment = """\
  CCTTCG alignment column 0
@@ -2377,7 +2388,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("CACACAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA"), "B", "B"),
                    SeqRecord(Seq("CACAACAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA"), "C", "C"),
                    SeqRecord(Seq("ACAAAAAAAAACAAAAACACAAAAAAAAAAAAAAAAAAAA"), "J", "J"),
-                  ]
+                   ]
         lengths = [40, 40, 40, 40]
         alignment = """\
  CCCCCAAAAA alignment column 0
@@ -2407,7 +2418,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("AAACCCCCCCAAAAAAAAACAAAAAAAAAAAAAAAAAAAA"), "Hypohippus", "Hypohippus"),
                    SeqRecord(Seq("CAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAA"), "Archaeohip", "Archaeohip"),
                    SeqRecord(Seq("CCCACCCCCCCCCACACCCCAAAAAAAAAAAAAAAAAAAA"), "Pliohippus", "Pliohippus"),
-                  ]
+                   ]
         lengths = [40, 40, 40, 40]
         alignment = """\
  AACCCCCCCC alignment column 0
@@ -2438,7 +2449,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("AAACCACACACACAAACCCAAAAAAAAAAAAAAAAAAAAA"), "B", "B"),
                    SeqRecord(Seq("ACAAAACCAAACCACCCACAAAAAAAAAAAAAAAAAAAAA"), "C", "C"),
                    SeqRecord(Seq("CCAAAAACACCCAACCCAACAAAAAAAAAAAAAAAAAAAA"), "J", "J"),
-                  ]
+                   ]
         lengths = [40, 40, 40, 40]
         alignment = """\
  CAAAACAAAC alignment column 0
@@ -2467,7 +2478,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("-----MKVILLFVLAVFTVFVSS---------------RG...STSII--"), "CYS1_DICDI", "CYS1_DICDI"),
                    SeqRecord(Seq("MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRA...SYPVVAA"), "ALEU_HORVU", "ALEU_HORVU"),
                    SeqRecord(Seq("------MWATLPLLCAGAWLLGV--------PVCGAAELS...SYPIPLV"), "CATH_HUMAN", "CATH_HUMAN"),
-                  ]
+                   ]
         lengths = [384, 384, 384]
         alignment = """\
  -M- alignment column 0
@@ -2497,7 +2508,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE"), "IXI_235", "IXI_235"),
                    SeqRecord(Seq("TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCC...AGDRSHE"), "IXI_236", "IXI_236"),
                    SeqRecord(Seq("TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE"), "IXI_237", "IXI_237"),
-                  ]
+                   ]
         lengths = [131, 131, 131, 131]
         alignment = """\
  TTTT alignment column 0
@@ -2527,7 +2538,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE"), "IXI_235"),
                    SeqRecord(Seq("TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPGRPCC...AGDRSHE"), "IXI_236"),
                    SeqRecord(Seq("TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT----C...AGDRSHE"), "IXI_237"),
-                  ]
+                   ]
         lengths = [131, 131, 131, 131]
         alignment = """\
  TTTT alignment column 0
@@ -2557,7 +2568,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("-VLLADDHALVRRGFRLMLED--DPEIEIVAEAGDGAQAV...RVANGET"), "gi|94968718|receiver"),
                    SeqRecord(Seq("KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVT...-------"), "ref_rec"),
                    SeqRecord(Seq("TVLLVEDEEGVRKLVRGILSRQGYHVLEATSGEEALEIVR...AVLQKRQ"), "gi|94970041|receiver"),
-                  ]
+                   ]
         lengths = [124, 124, 119, 125]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2585,7 +2596,7 @@ class TestSeqIO(unittest.TestCase):
     def test_emboss3(self):
         records = [SeqRecord(Seq("TSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGRPCC...AGDRSHE"), "IXI_234"),
                    SeqRecord(Seq("TSPASIRPPAGPSSR---------RPSPPGPRRPTGRPCC...AGDRSHE"), "IXI_235"),
-                  ]
+                   ]
         lengths = [131, 131]
         alignment = """\
  TT alignment column 0
@@ -2614,7 +2625,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("ctccgtcggaacatcatcggatcctatcacagagtttttg...aagcgtg"), "34_222_(80-A03-19).b.ab1", "34_222_(80-A03-19).b.ab1"),
                    SeqRecord(Seq("cgggatcccacctgatccgaggtcaacctgaaaaaatatg...agccaag"), "425_103_(81-A03-19).g.ab1", "425_103_(81-A03-19).g.ab1"),
                    SeqRecord(Seq("acataaatcaaattactnaccaacacacaaaccngtctcg...tgctttn"), "425_7_(71-A03-19).b.ab1", "425_7_(71-A03-19).b.ab1"),
-                  ]
+                   ]
         lengths = [876, 862, 1280]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2632,7 +2643,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_phd2(self):
         records = [SeqRecord(Seq("actttggtcgcctgcaggtaccggtccgngattcccgggt...ggtgaga"), "ML4924R", "ML4924R"),
-                  ]
+                   ]
         lengths = [180]
         alignment = None
         messages = ["Missing SFF flow information",
@@ -2642,7 +2653,7 @@ class TestSeqIO(unittest.TestCase):
     def test_phd3(self):
         records = [SeqRecord(Seq("gccaatcaggtttctctgcaagcccctttagcagctgagc"), "HWI-EAS94_4_1_1_537_446", "HWI-EAS94_4_1_1_537_446"),
                    SeqRecord(Seq("gccatggcacatatatgaaggtcagaggacaacttgctgt"), "HWI-EAS94_4_1_1_602_99", "HWI-EAS94_4_1_1_602_99"),
-                  ]
+                   ]
         lengths = [40, 40]
         alignment = None
         messages = ["Repeated name 'HWI-EAS94_' (originally 'HWI-EAS94_4_1_1_537_446'), possibly due to truncation",
@@ -2654,7 +2665,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_phd4(self):
         records = [SeqRecord(Seq("ggggatgaaagggatctcggtggtaggtga"), "EBE03TV04IHLTF.77-243", "EBE03TV04IHLTF.77-243"),
-                  ]
+                   ]
         lengths = [30]
         alignment = None
         messages = ["Sequence should contain A,C,G,T,N,a,c,g,t,n only",
@@ -2665,7 +2676,7 @@ class TestSeqIO(unittest.TestCase):
     def test_ace1(self):
         records = [SeqRecord(Seq("aatacgGGATTGCCCTAGTAACGGCGAGTGAAGCGGCAAC...CTAGtac"), "Contig1", "Contig1"),
                    SeqRecord(Seq("cacggatgatagcttcgcgacactagcttttcagctaacc...cttgtag"), "Contig2", "Contig2"),
-                  ]
+                   ]
         lengths = [856, 3296]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2683,7 +2694,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_ace2(self):
         records = [SeqRecord(Seq("agccccgggccgtggggttccttgagcactcccaaagttc...gggtttg"), "Contig1", "Contig1"),
-                  ]
+                   ]
         lengths = [1475]
         alignment = None
         messages = ["Sequence should contain A,C,G,T,N,a,c,g,t,n only",
@@ -2693,7 +2704,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_ace3(self):
         records = [SeqRecord(Seq("AGTTTTAGTTTTCCTCTGAAGCAAGCACACCTTCCCTTTC...TCACATT"), "Contig1", "Contig1"),
-                  ]
+                   ]
         lengths = [1222]
         alignment = None
         messages = ["Sequence should contain A,C,G,T,N,a,c,g,t,n only",
@@ -2706,7 +2717,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ATGGAGCCAGTAGATCCTAGACTAGAGCCCTGGAAGCATC...CGATTAG"), "B_HXB2R", "B_HXB2R"),
                    SeqRecord(Seq("%CAGGAAGTCAGCCTAAAACTCCTTGTACTAAGTGTTTTG...AGATTAA"), "C_UG268A", "C_UG268A"),
                    SeqRecord(Seq("ATGTCCTCAACGGACCAGATATGCCAGACACAGAGGGTAC...GAATCTT"), "SYK_SYK", "SYK_SYK"),
-                  ]
+                   ]
         lengths = [303, 306, 267, 330]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2736,7 +2747,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("MEN--RW-QVMIVWQVDRMKIRTWNSLVKHHMYVSKKA-Q...-----RH"), "U455", "U455"),
                    SeqRecord(Seq("MEN--RW-QVMIVWQVDRMRIRTWKSLVKHHMYVSGKA-R...-----GH"), "HXB2R", "HXB2R"),
                    SeqRecord(Seq("MEK--EW-IVVPTWRMTPRQIDRLQHIIKTHKYKSKELEK...-------"), "SYK", "SYK"),
-                  ]
+                   ]
         lengths = [298, 298, 298, 298]
         alignment = """\
  MMMMMMMMMMMMMMMM alignment column 0
@@ -2767,7 +2778,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ATGACACCTTTGGAAATCTGGGCAATAACAGGGCTGATAG...-AATTTG"), "A_U455", "A_U455"),
                    SeqRecord(Seq("ATGCAATCTTTACAAATATTAGCAATAGTATCATTAGTAG...-GATCTG"), "B_SF2", "B_SF2"),
                    SeqRecord(Seq("ATGACTAATATATTTGAGTATGCTTTT-------------...-GACGAA"), "CPZANT", "CPZANT"),
-                  ]
+                   ]
         lengths = [294, 294, 294, 294]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2797,7 +2808,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ATGCTGGTCATGGCGCCCCGAACCGTCCTCCTGCTGCTCT...AAGAGTT"), "HLA:HLA00133", "HLA:HLA00133"),
                    SeqRecord(Seq("GCTCCCACTCCATGAGGTATTTCTACACCTCCGTGTCCCG...CGCGCTG"), "HLA:HLA00134", "HLA:HLA00134"),
                    SeqRecord(Seq("ATGCGGGTCACGGCGCCCCGAACCCTCCTCCTGCTGCTCT...CGCGCGG"), "HLA:HLA01135", "HLA:HLA01135"),
-                  ]
+                   ]
         lengths = [1089, 1009, 546, 619]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2823,7 +2834,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("MRVMAPRTLILLLSGALALTETWACSHSMKYFFTSVSRPG...SLIACKA"), "HLA:HLA00402", "HLA:HLA00402"),
                    SeqRecord(Seq("MRVMAPRTLILLLSGALALTETWACSHSMKYFFTSVSRPG...SLIACKA"), "HLA:HLA01075", "HLA:HLA01075"),
                    SeqRecord(Seq("MRVMAPRALLLLLSGGLALTETWACSHSMRYFDTAVSRPG...SLIACKA"), "HLA:HLA00484", "HLA:HLA00484"),
-                  ]
+                   ]
         lengths = [366, 366, 366, 366]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2849,7 +2860,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("CTCCTACTCCAATGTGGCCAGATGACCTGCAAAACCACAC...TATTGGG"), "HLA:HLA00486", "HLA:HLA00486"),
                    SeqRecord(Seq("GGGTTTCCTATCGCTGAAGTGTTCACGCTGAAGCCCCTGG...CTATTGG"), "HLA:HLA00487", "HLA:HLA00487"),
                    SeqRecord(Seq("GGGTTTCCTATCGCTGAAGTGTTCACGCTGAAGCCCCTGG...CTATTGG"), "HLA:HLA00488", "HLA:HLA00488"),
-                  ]
+                   ]
         lengths = [786, 564, 279, 279]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2875,7 +2886,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("PPSVQVAKTTPFNTREPVMLACYVWGFYPAEVTITWRKNG...EPILRDW"), "HLA:HLA00490", "HLA:HLA00490"),
                    SeqRecord(Seq("PPSVQVAKTTPFNTREPVMLACYVWGFYPAEVTITWRKNG...EPILRDW"), "HLA:HLA00491", "HLA:HLA00491"),
                    SeqRecord(Seq("GFVAHVESTCLLDDAGTPKDFTYCIFFNKDLLTCWDPEEN...EPILRDW"), "HLA:HLA01083", "HLA:HLA01083"),
-                  ]
+                   ]
         lengths = [263, 94, 94, 188]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -2899,7 +2910,7 @@ class TestSeqIO(unittest.TestCase):
     def test_pir5(self):
         records = [SeqRecord(Seq("----------------------------------------...-------"), "804Angiostrongylus_cantonensis", "804Angiostrongylus_cantonensis"),
                    SeqRecord(Seq("----------------------------------------...-------"), "815Parelaphostrongylus_odocoil", "815Parelaphostrongylus_odocoil"),
-                  ]
+                   ]
         lengths = [2527, 2527]
         alignment = """\
  -- alignment column 0
@@ -2923,7 +2934,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("CCCTTCTTGTCTTCAGCGTTTCTCC"), "EAS54_6_R1_2_1_413_324", "EAS54_6_R1_2_1_413_324"),
                    SeqRecord(Seq("TTGGCAGGCCAAGGCCGATGGATCA"), "EAS54_6_R1_2_1_540_792", "EAS54_6_R1_2_1_540_792"),
                    SeqRecord(Seq("GTTGCTTCTGGCGTGGGTGGGGGGG"), "EAS54_6_R1_2_1_443_348", "EAS54_6_R1_2_1_443_348"),
-                  ]
+                   ]
         lengths = [25, 25, 25]
         alignment = """\
  CTG alignment column 0
@@ -2954,7 +2965,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("?????????????????????????"), "EAS54_6_R1_2_1_413_324", "EAS54_6_R1_2_1_413_324"),
                    SeqRecord(Seq("?????????????????????????"), "EAS54_6_R1_2_1_540_792", "EAS54_6_R1_2_1_540_792"),
                    SeqRecord(Seq("?????????????????????????"), "EAS54_6_R1_2_1_443_348", "EAS54_6_R1_2_1_443_348"),
-                  ]
+                   ]
         lengths = [25, 25, 25]
         alignment = None
         messages = ["Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
@@ -2973,7 +2984,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("CCCTTCTTGTCTTCAGCGTTTCTCC"), "EAS54_6_R1_2_1_413_324", "EAS54_6_R1_2_1_413_324"),
                    SeqRecord(Seq("TTGGCAGGCCAAGGCCGATGGATCA"), "EAS54_6_R1_2_1_540_792", "EAS54_6_R1_2_1_540_792"),
                    SeqRecord(Seq("GTTGCTTCTGGCGTGGGTGGGGGGG"), "EAS54_6_R1_2_1_443_348", "EAS54_6_R1_2_1_443_348"),
-                  ]
+                   ]
         lengths = [25, 25, 25]
         alignment = """\
  CTG alignment column 0
@@ -2999,7 +3010,7 @@ class TestSeqIO(unittest.TestCase):
         records = [SeqRecord(Seq("CCCTTCTTGTCTTCAGCGTTTCTCC"), "EAS54_6_R1_2_1_413_324", "EAS54_6_R1_2_1_413_324"),
                    SeqRecord(Seq("TTGGCAGGCCAAGGCCGATGGATCA"), "EAS54_6_R1_2_1_540_792", "EAS54_6_R1_2_1_540_792"),
                    SeqRecord(Seq("GTTGCTTCTGGCGTGGGTGGGGGGG"), "EAS54_6_R1_2_1_443_348", "EAS54_6_R1_2_1_443_348"),
-                  ]
+                   ]
         lengths = [25, 25, 25]
         alignment = """\
  CTG alignment column 0
@@ -3026,7 +3037,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ACCCAGCTAATTTTTGTATTTTTGTTAGAGACAGTG"), "071113_EAS56_0053:1:1:182:712", "071113_EAS56_0053:1:1:182:712"),
                    SeqRecord(Seq("TGTTCTGAAGGAAGGTGTGCGTGCGTGTGTGTGTGT"), "071113_EAS56_0053:1:1:153:10", "071113_EAS56_0053:1:1:153:10"),
                    SeqRecord(Seq("TGGGAGGTTTTATGTGGAAAGCAGCAATGTACAAGA"), "071113_EAS56_0053:1:3:990:501", "071113_EAS56_0053:1:3:990:501"),
-                  ]
+                   ]
         lengths = [36, 36, 36, 36]
         alignment = """\
  TATT alignment column 0
@@ -3050,7 +3061,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_fastq4(self):
         records = [SeqRecord(Seq("ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN"), "Test", "Test"),
-                  ]
+                   ]
         lengths = [41]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -3064,7 +3075,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_fastq5(self):
         records = [SeqRecord(Seq("ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG...GACTGAN"), "Test", "Test"),
-                  ]
+                   ]
         lengths = [94]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -3078,7 +3089,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_fastq_illumina1(self):
         records = [SeqRecord(Seq("ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN"), "Test", "Test"),
-                  ]
+                   ]
         lengths = [41]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -3092,7 +3103,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_fastq_solexa1(self):
         records = [SeqRecord(Seq("ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN"), "slxa_0001_1_0001_01", "slxa_0001_1_0001_01"),
-                  ]
+                   ]
         lengths = [46]
         alignment = None
         messages = ["Need a DNA, RNA or Protein alphabet",
@@ -3109,7 +3120,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("GGTTTGAGAAAGAGAAATGAGATAA"), "SLXA-B3_649_FC8437_R1_1_1_397_389", "SLXA-B3_649_FC8437_R1_1_1_397_389"),
                    SeqRecord(Seq("GAGGGTGTTGATCATGATGATGGCG"), "SLXA-B3_649_FC8437_R1_1_1_850_123", "SLXA-B3_649_FC8437_R1_1_1_850_123"),
                    SeqRecord(Seq("GTATTATTTAATGGCATACACTCAA"), "SLXA-B3_649_FC8437_R1_1_1_183_714", "SLXA-B3_649_FC8437_R1_1_1_183_714"),
-                  ]
+                   ]
         lengths = [25, 25, 25, 25]
         alignment = """\
  GGGGG alignment column 0
@@ -3136,7 +3147,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ACGTMRWSYKVHDBXN.-"), "fake1"),
                    SeqRecord(Seq("AAGGCGTTAAACCC"), "fake2"),
                    SeqRecord(Seq("G"), "minimal"),
-                  ]
+                   ]
         lengths = [2460, 18, 14, 1]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -3162,7 +3173,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ACGUMRWSYKVHDBXN.-"), "fake1"),
                    SeqRecord(Seq("GGAGAU"), "fake2"),
                    SeqRecord(Seq("UGUGGGAUGAGGUAGUAGGUUGUAUAGUUUUAGGGUCAUACCCGCAAC"), "empty description"),
-                  ]
+                   ]
         lengths = [90, 18, 6, 48]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -3191,7 +3202,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*"), "fake1"),
                    SeqRecord(Seq("GAKKVFIEDVSKEFVEEFIWPAVQSSALYE"), "fake2"),
                    SeqRecord(Seq("PPPWAKKVFIEDVIIAGSKEFVEEFIWPAVQSE"), "UniprotProtein"),
-                  ]
+                   ]
         lengths = [412, 29, 30, 33]
         alignment = None
         messages = ["Sequences must all be the same length",
@@ -3214,7 +3225,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_abi1(self):
         records = [SeqRecord(Seq("TGATNTTNACNNTTTTGAANCANTGAGTTAATAGCAATNC...NNNNNNG"), "D11F", "310"),
-                  ]
+                   ]
         lengths = [868]
         alignment = None
         messages = ["Missing SFF flow information",
@@ -3223,7 +3234,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_abi2(self):
         records = [SeqRecord(Seq("CAAGATTGCATTCATGATCTACGATTACTAGCGATTCCAG...CCTTTTA"), "16S_S2_1387R", "3100"),
-                  ]
+                   ]
         lengths = [795]
         alignment = None
         messages = ["Sequence should contain A,C,G,T,N,a,c,g,t,n only",
@@ -3233,7 +3244,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_abi3(self):
         records = [SeqRecord(Seq("GGGCGAGCKYYAYATTTTGGCAAGAATTGAGCTCTATGGC...ACCTTTC"), "226032_C-ME-18_pCAGseqF", "3730"),
-                  ]
+                   ]
         lengths = [1165]
         alignment = None
         messages = ["Sequence should contain A,C,G,T,N,a,c,g,t,n only",
@@ -3243,7 +3254,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_pdb_atom1(self):
         records = [SeqRecord(Seq("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"), "1A8O:A"),
-                  ]
+                   ]
         lengths = [70]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
@@ -3262,7 +3273,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:B"),
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:C"),
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:E"),
-                  ]
+                   ]
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
@@ -3278,7 +3289,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_pdb_atom3(self):
         records = [SeqRecord(Seq("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEA...LNYIPNR"), "????:A"),
-                  ]
+                   ]
         lengths = [51]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
@@ -3294,7 +3305,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_pdb_seqres1(self):
         records = [SeqRecord(Seq("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"), "1A8O:A", "1A8O:A"),
-                  ]
+                   ]
         lengths = [70]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
@@ -3312,7 +3323,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:B", "2BEG:B"),
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:C", "2BEG:C"),
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:E", "2BEG:E"),
-                  ]
+                   ]
         lengths = [42, 42, 42, 42]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
@@ -3327,7 +3338,7 @@ class TestSeqIO(unittest.TestCase):
 
     def test_cif_atom1(self):
         records = [SeqRecord(Seq("MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLL...MMTACQG"), "1A8O:A"),
-                  ]
+                   ]
         lengths = [70]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=1A8O:A).",
@@ -3345,7 +3356,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:B"),
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:C"),
                    SeqRecord(Seq("LVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:E"),
-                  ]
+                   ]
         lengths = [26, 26, 26, 26]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
@@ -3378,7 +3389,7 @@ class TestSeqIO(unittest.TestCase):
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:B", "2BEG:B"),
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:C", "2BEG:C"),
                    SeqRecord(Seq("DAEFRHDSGYEVHHQKLVFFAEDVGSNKGAIIGLMVGGVVIA"), "2BEG:E", "2BEG:E"),
-                  ]
+                   ]
         lengths = [42, 42, 42, 42]
         alignment = None
         messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
