@@ -5,10 +5,8 @@
 
 """Tests for SeqIO module."""
 
-from __future__ import print_function
 from Bio._py3k import basestring
 
-import os
 import unittest
 import warnings
 
@@ -75,61 +73,6 @@ for format in sorted(AlignIO._FormatToWriter):
 test_write_read_alignment_formats.remove("gb")  # an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
-test_files = [
-    ("genbank", False, 'GenBank/NC_000932.gb', 1),
-    # Odd LOCUS line from Vector NTI
-    ("genbank", False, 'GenBank/pBAD30.gb', 1),
-    # The next example is a truncated copy of gbvrl1.seq from
-    # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
-    # This includes an NCBI header, and the first three records:
-    ("genbank", False, 'GenBank/gbvrl1_start.seq', 3),
-    # Following files are also used in test_GFF.py
-    ("genbank", False, 'GFF/NC_001422.gbk', 1),
-    # Generated with Entrez.efetch("protein", id="16130152",
-    # rettype="gbwithparts")
-    ("genbank", False, 'GenBank/NP_416719.gbwithparts', 1),
-    # GenPept file with nasty bond locations,
-    ("genbank", False, 'GenBank/1MRR_A.gp', 1),
-    # These are a pair, and should be roughly equivalent:
-    ("genbank", False, 'GenBank/DS830848.gb', 1), ("embl", False, 'EMBL/DS830848.embl', 1),
-    # Following files are currently only used here or in test_SeqIO_index.py:
-    ("embl", False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
-    ("embl", False, 'EMBL/patents.embl', 4),  # more proteins, but no seq
-    ("embl", False, 'EMBL/TRBG361.embl', 1),
-    ("embl", False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl", False, 'EMBL/DD231055_edited2.embl', 1),  # Partial ID line
-    ("embl", False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
-    ("embl", False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
-    ("embl", False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
-    ("embl", False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
-    ("embl", False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
-    ("embl", False, 'EMBL/kipo_prt_sample.embl', 20),  # Alt. patent ID line
-    # wrapped locations and unspecified type
-    ("embl", False, 'EMBL/location_wrap.embl', 1),
-    # features over indented for EMBL
-    ("embl", False, 'EMBL/A04195.imgt', 1),
-    # features over indented for EMBL
-    ("imgt", False, 'EMBL/A04195.imgt', 1),
-    ("imgt", False, 'EMBL/hla_3260_sample.imgt', 8),
-    ("stockholm", True, 'Stockholm/simple.sth', 2),
-    ("stockholm", True, 'Stockholm/funny.sth', 6),
-    # Following PHYLIP files are currently only used here and in test_AlignIO.py,
-    # and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
-    ("phylip", True, 'Phylip/reference_dna.phy', 6),
-    ("phylip", True, 'Phylip/reference_dna2.phy', 6),
-    ("phylip", True, 'Phylip/hennigian.phy', 10),
-    ("phylip", True, 'Phylip/horses.phy', 10),
-    ("phylip", True, 'Phylip/random.phy', 10),
-    ("phylip", True, 'Phylip/interlaced.phy', 3),
-    ("phylip", True, 'Phylip/interlaced2.phy', 4),
-    # This next file is a MASE alignment but sequence O_ANT70 is shorter than
-    # the others (so as an alignment will fail).  Perhaps MASE doesn't
-    # write trailing gaps?
-    ("ig", False, 'IntelliGenetics/vpu_nucaligned.txt', 9),
-    ("fastq", True, 'Quality/example.fastq', 3),  # Unix new lines
-    ("fastq", True, 'Quality/example_dos.fastq', 3),  # DOS/Windows new lines
-]
-
 
 class ForwardOnlyHandle(object):
     """Mimic a network handle without seek and tell methods etc."""
@@ -158,37 +101,6 @@ class ForwardOnlyHandle(object):
         return self._handle.close()
 
 
-def compare_record(record_one, record_two):
-    """Attempt strict SeqRecord comparison."""
-    assert isinstance(record_one, SeqRecord)
-    assert isinstance(record_two, SeqRecord)
-    assert record_one.seq is not None
-    assert record_two.seq is not None
-    if record_one.id != record_two.id:
-        return False
-    if record_one.name != record_two.name:
-        return False
-    if record_one.description != record_two.description:
-        return False
-    if len(record_one) != len(record_two):
-        return False
-    if isinstance(record_one.seq, UnknownSeq) \
-            and isinstance(record_two.seq, UnknownSeq):
-        # Jython didn't like us comparing the string of very long UnknownSeq
-        # object (out of heap memory error)
-        if record_one.seq._character != record_two.seq._character:
-            return False
-    elif str(record_one.seq) != str(record_two.seq):
-        return False
-    # TODO - check features and annotation (see code for BioSQL tests)
-    for key in set(record_one.letter_annotations).intersection(
-            record_two.letter_annotations):
-        if record_one.letter_annotations[key] != \
-           record_two.letter_annotations[key]:
-            return False
-    return True
-
-
 def col_summary(col_text):
     if len(col_text) < 65:
         return col_text
@@ -213,129 +125,154 @@ def alignment_summary(alignment, index=" "):
     return "\n".join(answer)
 
 
-def check_simple_write_read(records, t_format, t_count, messages):
-    messages = iter(messages)
-    for format in test_write_read_alignment_formats:
-        if format not in possible_unknown_seq_formats \
-                and isinstance(records[0].seq, UnknownSeq) \
-                and len(records[0].seq) > 100:
-            # Skipping for speed.  Some of the unknown sequences are
-            # rather long, and it seems a bit pointless to record them.
-            continue
-        # Going to write to a handle...
-        if format in SeqIO._BinaryFormats:
-            handle = BytesIO()
-        else:
-            handle = StringIO()
+class TestSeqIO(unittest.TestCase):
 
-        try:
-            with warnings.catch_warnings():
-                # e.g. data loss
-                warnings.simplefilter("ignore", BiopythonWarning)
-                c = SeqIO.write(
-                    sequences=records, handle=handle, format=format)
-            assert c == len(records)
-        except (ValueError, TypeError) as e:
-            message = next(messages)
-            assert str(e) == message
-            if records[0].seq.alphabet.letters is not None:
-                assert format != t_format, \
-                    "Should be able to re-write in the original format!"
-            # Carry on to the next format:
-            continue
+    def setUp(self):
+        self.addTypeEqualityFunc(SeqRecord, self.compare_record)
 
-        handle.flush()
-        handle.seek(0)
-        # Now ready to read back from the handle...
-        try:
-            records2 = list(SeqIO.parse(handle=handle, format=format))
-        except ValueError as e:
-            # This is BAD.  We can't read our own output.
-            # I want to see the output when called from the test harness,
-            # run_tests.py (which can be funny about new lines on Windows)
-            handle.seek(0)
-            raise ValueError("%s\n\n%s\n\n%s"
-                             % (str(e), repr(handle.read()), repr(records)))
+    def compare_record(self, record_one, record_two, msg=None):
+        """Attempt strict SeqRecord comparison."""
+        if not isinstance(record_one, SeqRecord):
+            self.failureException(msg)
+        if not isinstance(record_two, SeqRecord):
+            self.failureException(msg)
+        if record_one.seq is None:
+            self.failureException(msg)
+        if record_two.seq is None:
+            self.failureException(msg)
+        if record_one.id != record_two.id:
+            self.failureException(msg)
+        if record_one.name != record_two.name:
+            self.failureException(msg)
+        if record_one.description != record_two.description:
+            self.failureException(msg)
+        if len(record_one) != len(record_two):
+            self.failureException(msg)
+        if isinstance(record_one.seq, UnknownSeq) \
+                and isinstance(record_two.seq, UnknownSeq):
+            # Jython didn't like us comparing the string of very long UnknownSeq
+            # object (out of heap memory error)
+            if record_one.seq._character != record_two.seq._character:
+                self.failureException(msg)
+        elif str(record_one.seq) != str(record_two.seq):
+            self.failureException(msg)
+        # TODO - check features and annotation (see code for BioSQL tests)
+        for key in set(record_one.letter_annotations).intersection(
+                record_two.letter_annotations):
+            if record_one.letter_annotations[key] != \
+               record_two.letter_annotations[key]:
+                self.failureException(msg)
 
-        assert len(records2) == t_count
-        for r1, r2 in zip(records, records2):
-            # Check the bare minimum (ID and sequence) as
-            # many formats can't store more than that.
-            assert len(r1) == len(r2)
-
-            # Check the sequence
-            if format in ["gb", "genbank", "embl", "imgt"]:
-                # The GenBank/EMBL parsers will convert to upper case.
-                if isinstance(r1.seq, UnknownSeq) \
-                        and isinstance(r2.seq, UnknownSeq):
-                    # Jython didn't like us comparing the string of very long
-                    # UnknownSeq object (out of heap memory error)
-                    assert r1.seq._character.upper() == r2.seq._character
-                else:
-                    assert str(r1.seq).upper() == str(r2.seq)
-            elif format == "qual":
-                assert isinstance(r2.seq, UnknownSeq)
-                assert len(r2) == len(r1)
-            elif format == "nib":
-                assert str(r1.seq).upper() == str(r2.seq)
-            else:
-                assert str(r1.seq) == str(r2.seq)
-            # Beware of different quirks and limitations in the
-            # valid character sets and the identifier lengths!
-            if format in ["phylip", "phylip-sequential"]:
-                assert PhylipIO.sanitize_name(r1.id, 10) == r2.id, \
-                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "phylip-relaxed":
-                assert PhylipIO.sanitize_name(r1.id) == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "clustal":
-                assert r1.id.replace(" ", "_")[:30] == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "stockholm":
-                r1_id = r1.id.replace(" ", "_")
-                if "start" in r1.annotations and "end" in r1.annotations:
-                    suffix = "/%d-%d" % (r1.annotations["start"],
-                                         r1.annotations["end"])
-                    if not r1_id.endswith(suffix):
-                        r1_id += suffix
-
-                assert r1_id == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format == "maf":
-                assert r1.id.replace(" ", "_") == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format in ["fasta", "fasta-2line"]:
-                assert r1.id.split()[0] == r2.id
-            elif format == 'nib':
-                assert r2.id == '<unknown id>'
-            else:
-                assert r1.id == r2.id, \
-                    "'%s' vs '%s'" % (r1.id, r2.id)
-
-        if len(records) > 1:
-            # Try writing just one record (passing a SeqRecord, not a list)
+    def check_simple_write_read(self, records, t_format, t_count, messages):
+        messages = iter(messages)
+        for format in test_write_read_alignment_formats:
+            if format not in possible_unknown_seq_formats \
+                    and isinstance(records[0].seq, UnknownSeq) \
+                    and len(records[0].seq) > 100:
+                # Skipping for speed.  Some of the unknown sequences are
+                # rather long, and it seems a bit pointless to record them.
+                continue
+            # Going to write to a handle...
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO()
             else:
                 handle = StringIO()
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", BiopythonWarning)
-                SeqIO.write(records[0], handle, format)
-                assert handle.getvalue() == records[0].format(format)
-
-
-# Check parsers can cope with an empty file
-for t_format in SeqIO._FormatToIterator:
-    if t_format in SeqIO._BinaryFormats or \
-       t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom", "cif-atom"):
-        # Not allowed empty SFF files.
-        continue
-    handle = StringIO()
-    records = list(SeqIO.parse(handle, t_format))
-    assert len(records) == 0
-
-
-class TestSeqIO(unittest.TestCase):
+    
+            try:
+                with warnings.catch_warnings():
+                    # e.g. data loss
+                    warnings.simplefilter("ignore", BiopythonWarning)
+                    c = SeqIO.write(
+                        sequences=records, handle=handle, format=format)
+                self.assertEqual(c, len(records))
+            except (ValueError, TypeError) as e:
+                message = next(messages)
+                self.assertEqual(str(e), message)
+                if records[0].seq.alphabet.letters is not None:
+                    self.assertNotEqual(format, t_format,
+                        "Should be able to re-write in the original format!")
+                # Carry on to the next format:
+                continue
+    
+            handle.flush()
+            handle.seek(0)
+            # Now ready to read back from the handle...
+            try:
+                records2 = list(SeqIO.parse(handle=handle, format=format))
+            except ValueError as e:
+                # This is BAD.  We can't read our own output.
+                # I want to see the output when called from the test harness,
+                # run_tests.py (which can be funny about new lines on Windows)
+                handle.seek(0)
+                raise ValueError("%s\n\n%s\n\n%s"
+                                 % (str(e), repr(handle.read()), repr(records)))
+    
+            self.assertEqual(len(records2), t_count)
+            for r1, r2 in zip(records, records2):
+                # Check the bare minimum (ID and sequence) as
+                # many formats can't store more than that.
+                self.assertEqual(len(r1), len(r2))
+    
+                # Check the sequence
+                if format in ["gb", "genbank", "embl", "imgt"]:
+                    # The GenBank/EMBL parsers will convert to upper case.
+                    if isinstance(r1.seq, UnknownSeq) \
+                            and isinstance(r2.seq, UnknownSeq):
+                        # Jython didn't like us comparing the string of very long
+                        # UnknownSeq object (out of heap memory error)
+                        self.assertEqual(r1.seq._character.upper(),
+                                         r2.seq._character)
+                    else:
+                        self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                elif format == "qual":
+                    self.assertIsInstance(r2.seq, UnknownSeq)
+                    self.assertEqual(len(r2), len(r1))
+                elif format == "nib":
+                    self.assertEqual(str(r1.seq).upper(), str(r2.seq))
+                else:
+                    self.assertEqual(str(r1.seq), str(r2.seq))
+                # Beware of different quirks and limitations in the
+                # valid character sets and the identifier lengths!
+                if format in ["phylip", "phylip-sequential"]:
+                    self.assertEqual(PhylipIO.sanitize_name(r1.id, 10), r2.id,
+                            "'%s' vs '%s'" % (r1.id, r2.id))
+                elif format == "phylip-relaxed":
+                    self.assertEqual(PhylipIO.sanitize_name(r1.id), r2.id,
+                        "'%s' vs '%s'" % (r1.id, r2.id))
+                elif format == "clustal":
+                    self.assertEqual(r1.id.replace(" ", "_")[:30], r2.id,
+                        "'%s' vs '%s'" % (r1.id, r2.id))
+                elif format == "stockholm":
+                    r1_id = r1.id.replace(" ", "_")
+                    if "start" in r1.annotations and "end" in r1.annotations:
+                        suffix = "/%d-%d" % (r1.annotations["start"],
+                                             r1.annotations["end"])
+                        if not r1_id.endswith(suffix):
+                            r1_id += suffix
+    
+                    self.assertEqual(r1_id, r2.id,
+                        "'%s' vs '%s'" % (r1.id, r2.id))
+                elif format == "maf":
+                    self.assertEqual(r1.id.replace(" ", "_"), r2.id,
+                        "'%s' vs '%s'" % (r1.id, r2.id))
+                elif format in ["fasta", "fasta-2line"]:
+                    self.assertEqual(r1.id.split()[0], r2.id)
+                elif format == 'nib':
+                    self.assertEqual(r2.id, '<unknown id>')
+                else:
+                    self.assertEqual(r1.id, r2.id,
+                        "'%s' vs '%s'" % (r1.id, r2.id))
+    
+            if len(records) > 1:
+                # Try writing just one record (passing a SeqRecord, not a list)
+                if format in SeqIO._BinaryFormats:
+                    handle = BytesIO()
+                else:
+                    handle = StringIO()
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", BiopythonWarning)
+                    SeqIO.write(records[0], handle, format)
+                    self.assertEqual(handle.getvalue(), records[0].format(format))
 
     def perform_test(self, t_format, t_alignment, t_filename, t_count,
                      expected_records, expected_lengths, expected_alignment,
@@ -344,8 +281,6 @@ class TestSeqIO(unittest.TestCase):
             mode = "rb"
         else:
             mode = "r"
-
-        assert os.path.isfile(t_filename), t_filename
 
         with warnings.catch_warnings():
             # e.g. BiopythonParserWarning: Dropping bond qualifier in feature
@@ -360,14 +295,14 @@ class TestSeqIO(unittest.TestCase):
             h = open(t_filename, mode)
             records = list(SeqIO.parse(handle=h, format=t_format))
             h.close()
-            assert len(records) == t_count, \
-                "Found %i records but expected %i" % (len(records), t_count)
+            self.assertEqual(len(records), t_count,
+                "Found %i records but expected %i" % (len(records), t_count))
 
             # Try using the iterator with a for loop, and a filename not handle
             records2 = []
             for record in SeqIO.parse(t_filename, format=t_format):
                 records2.append(record)
-            assert len(records2) == t_count
+            self.assertEqual(len(records2), t_count)
 
             # Try using the iterator with the next() method
             records3 = []
@@ -378,9 +313,11 @@ class TestSeqIO(unittest.TestCase):
                     record = next(seq_iterator)
                 except StopIteration:
                     break
-                assert record is not None, "Should raise StopIteration not return None"
+                self.assertIsNotNone(record,
+                    "Should raise StopIteration not return None")
                 records3.append(record)
             h.close()
+            self.assertEqual(len(records3), t_count)
 
             # Try a mixture of next() and list (a torture test!)
             h = open(t_filename, mode)
@@ -394,8 +331,8 @@ class TestSeqIO(unittest.TestCase):
                 records4.extend(list(seq_iterator))
             else:
                 records4 = []
-            assert len(records4) == t_count
             h.close()
+            self.assertEqual(len(records4), t_count)
 
             # Try a mixture of next() and for loop (a torture test!)
             # with a forward-only-handle
@@ -415,49 +352,54 @@ class TestSeqIO(unittest.TestCase):
                     records5.append(record)
             else:
                 records5 = []
-            assert len(records5) == t_count
             h.close()
+            self.assertEqual(len(records5), t_count)
 
             for i in range(t_count):
                 record = records[i]
 
                 # Check returned expected object type
-                assert isinstance(record, SeqRecord)
+                self.assertIsInstance(record, SeqRecord)
                 if t_format in possible_unknown_seq_formats:
-                    assert isinstance(record.seq, Seq) or \
-                        isinstance(record.seq, UnknownSeq)
+                    if (not isinstance(record.seq, Seq)) and \
+                       (not isinstance(record.seq, UnknownSeq)):
+                        self.failureException("Expected a Seq or UnknownSeq object")
                 else:
-                    assert isinstance(record.seq, Seq)
-                assert isinstance(record.id, basestring)
-                assert isinstance(record.name, basestring)
-                assert isinstance(record.description, basestring)
-                assert record.id != ""
+                    self.assertIsInstance(record.seq, Seq)
+                self.assertIsInstance(record.id, basestring)
+                self.assertIsInstance(record.name, basestring)
+                self.assertIsInstance(record.description, basestring)
+                self.assertTrue(record.id)
     
                 if "accessions" in record.annotations:
                     accs = record.annotations["accessions"]
                     # Check for blanks, or entries with leading/trailing spaces
                     for acc in accs:
-                        assert acc and acc == acc.strip(), \
-                            "Bad accession in annotations: %s" % repr(acc)
-                    assert len(set(accs)) == len(accs), \
-                        "Repeated accession in annotations: %s" % repr(accs)
+                        self.assertTrue(acc,
+                            "Bad accession in annotations: %s" % repr(acc))
+                        self.assertEqual(acc, acc.strip(),
+                            "Bad accession in annotations: %s" % repr(acc))
+                    self.assertEqual(len(set(accs)), len(accs),
+                        "Repeated accession in annotations: %s" % repr(accs))
                 for ref in record.dbxrefs:
-                    assert ref and ref == ref.strip(), \
-                        "Bad cross reference in dbxrefs: %s" % repr(ref)
-                assert len(record.dbxrefs) == len(record.dbxrefs), \
-                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
+                    self.assertTrue(ref,
+                        "Bad cross reference in dbxrefs: %s" % repr(ref))
+                    self.assertEqual(ref, ref.strip(),
+                        "Bad cross reference in dbxrefs: %s" % repr(ref))
+                self.assertEqual(len(set(record.dbxrefs)), len(record.dbxrefs),
+                    "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs))
 
                 # Check the lists obtained by the different methods agree
-                assert compare_record(record, records2[i])
-                assert compare_record(record, records3[i])
-                assert compare_record(record, records4[i])
-                assert compare_record(record, records5[i])
+                self.assertEqual(record, records2[i])
+                self.assertEqual(record, records3[i])
+                self.assertEqual(record, records4[i])
+                self.assertEqual(record, records5[i])
 
                 if i == t_count-1:
                     i = -1
                 if i < 3:
-                    assert record.id == expected_records[i].id
-                    assert record.name == expected_records[i].name
+                    self.assertEqual(record.id, expected_records[i].id)
+                    self.assertEqual(record.name, expected_records[i].name)
                     if record.seq is None:
                         length = None
                         seq = record.seq
@@ -472,14 +414,9 @@ class TestSeqIO(unittest.TestCase):
             # Check Bio.SeqIO.read(...)
             if t_count == 1:
                 record = SeqIO.read(t_filename, format=t_format)
-                assert isinstance(record, SeqRecord)
+                self.assertIsInstance(record, SeqRecord)
             else:
-                try:
-                    record = SeqIO.read(t_filename, t_format)
-                    raise ValueError("Bio.SeqIO.read(...) should have failed")
-                except ValueError:
-                    # Expected to fail
-                    pass
+                self.assertRaises(ValueError, SeqIO.read, t_filename, t_format)
 
             # Check alphabets
             for record in records:
@@ -487,7 +424,7 @@ class TestSeqIO(unittest.TestCase):
                 if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
                     if t_format in no_alpha_formats:
                         # Too harsh?
-                        assert base_alpha == Alphabet.single_letter_alphabet
+                        self.assertIs(base_alpha, Alphabet.single_letter_alphabet)
                 else:
                     base_alpha = None
             if base_alpha is None:
@@ -507,8 +444,8 @@ class TestSeqIO(unittest.TestCase):
                 good = nucleotide_alphas
                 bad = protein_alphas
             else:
-                assert t_format in no_alpha_formats, "Got %s from %s file" \
-                    % (repr(base_alpha), t_format)
+                self.assertIn(t_format, no_alpha_formats,
+                    "Got %s from %s file" % (repr(base_alpha), t_format))
                 good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
                 bad = []
             for given_alpha in good:
@@ -516,40 +453,35 @@ class TestSeqIO(unittest.TestCase):
                 given_base = Alphabet._get_base_alphabet(given_alpha)
                 for record in SeqIO.parse(t_filename, t_format, given_alpha):
                     base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                    assert isinstance(base_alpha, given_base.__class__)
-                    assert base_alpha == given_base
+                    self.assertIsInstance(base_alpha, given_base.__class__)
+                    self.assertEqual(base_alpha, given_base)
                 if t_count == 1:
                     h = open(t_filename, mode)
                     record = SeqIO.read(h, t_format, given_alpha)
                     h.close()
-                    assert isinstance(base_alpha, given_base.__class__)
-                    assert base_alpha == given_base
+                    self.assertIsInstance(base_alpha, given_base.__class__)
+                    self.assertEqual(base_alpha, given_base)
             for given_alpha in bad:
                 # These should all fail...
-                h = open(t_filename, mode)
-                try:
-                    print(next(SeqIO.parse(h, t_format, given_alpha)))
-                    h.close()
-                    raise ValueError("Forcing wrong alphabet, %s, should fail (%s)"
+                with open(t_filename, mode) as h:
+                    records6 = SeqIO.parse(h, t_format, given_alpha)
+                    self.assertRaises(ValueError, next, records6,
+                        "Forcing wrong alphabet, %s, should fail (%s)"
                                      % (repr(given_alpha), t_filename))
-                except ValueError:
-                    # Good - should fail
-                    pass
-                h.close()
             del good, bad, given_alpha, base_alpha
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(SeqIO.parse(
                         handle=t_filename, format=t_format))
-                assert len(alignment) == t_count
+                self.assertEqual(len(alignment), t_count)
     
                 alignment_len = alignment.get_alignment_length()
 
                 # Check the record order agrees, and double check the
                 # sequence lengths all agree too.
                 for i in range(t_count):
-                    assert compare_record(records[i], alignment[i])
-                    assert len(records[i].seq) == alignment_len
+                    self.assertEqual(records[i], alignment[i])
+                    self.assertEqual(len(records[i].seq), alignment_len)
 
                 self.assertEqual(str(alignment_summary(alignment)),
                                  expected_alignment)
@@ -559,7 +491,8 @@ class TestSeqIO(unittest.TestCase):
         # They should all have been converted by the parser, but if
         # not reversing the record order might expose an error.  Maybe.
         records.reverse()
-        check_simple_write_read(records, t_format, t_count, expected_messages)
+        self.check_simple_write_read(records, t_format, t_count,
+                                     expected_messages)
 
     def test_sff1(self):
         records = [SeqRecord(Seq("tcagGGTCTACATGTTGGTTAACCCGTACTGATTTGAATT...GGGCTTa"), "E3MFGYR02JWQ7T", "E3MFGYR02JWQ7T"),
@@ -1928,6 +1861,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("genbank", False, "GenBank/NC_000932.gb", 1, records, lengths, alignment, messages)
 
     def test_genbank16(self):
+        """Test parsing Genbank file from Vector NTI with an odd LOCUS line."""
         records = [SeqRecord(Seq("GCTAGCGGAGTGTATACTGGCTTACTATGTTGGCACTGAT...GCCCATG"), "pBAD30", "pBAD30"),
                   ]
         lengths = [4923]
@@ -1965,6 +1899,9 @@ class TestSeqIO(unittest.TestCase):
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     ]
+        # This example is a truncated copy of gbvrl1.seq from
+        # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
+        # including an NCBI header, and the first three records.
         self.perform_test("genbank", False, "GenBank/gbvrl1_start.seq", 3, records, lengths, alignment, messages)
 
     def test_genbank18(self):
@@ -1995,9 +1932,12 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=NP_416719.1).",
                     "Missing SFF flow information",
                     ]
+        # Generated with Entrez.efetch("protein", id="16130152",
+        # rettype="gbwithparts")
         self.perform_test("genbank", False, "GenBank/NP_416719.gbwithparts", 1, records, lengths, alignment, messages)
 
     def test_genbank20(self):
+        """Test parsing GenPept file with nasty bond locations."""
         records = [SeqRecord(Seq("AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLI...DLSNFQL"), "1MRR_A", "1MRR_A"),
                   ]
         lengths = [375]
@@ -2013,6 +1953,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("genbank", False, "GenBank/1MRR_A.gp", 1, records, lengths, alignment, messages)
 
     def test_genbank21(self):
+        # This and the next one are a pair, and should be roughly equivalent.
         records = [SeqRecord(Seq("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN"), "DS830848.1", "DS830848"),
                   ]
         lengths = [1311]
@@ -2234,6 +2175,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("embl", False, "EMBL/kipo_prt_sample.embl", 20, records, lengths, alignment, messages)
 
     def test_embl13(self):
+        "Test parsing embl file with wrapped locations and unspecified type."
         records = [SeqRecord(Seq("CGACTTTCCACTGCCCTCTACGCCCGCGCAATGGGTCGTA...CTACGTT"), "Test", "Tester"),
                   ]
         lengths = [120]
@@ -2254,6 +2196,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("embl", False, "EMBL/location_wrap.embl", 1, records, lengths, alignment, messages)
 
     def test_embl14(self):
+        "Test parsing file with features over-indented for EMBL."
         records = [SeqRecord(Seq("GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA"), "A04195", "A04195"),
                   ]
         lengths = [51]
@@ -2269,6 +2212,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("embl", False, "EMBL/A04195.imgt", 1, records, lengths, alignment, messages)
 
     def test_imgt1(self):
+        "Test parsing file with features over-indented for EMBL."
         records = [SeqRecord(Seq("GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA"), "A04195", "A04195"),
                   ]
         lengths = [51]
@@ -2819,6 +2763,7 @@ class TestSeqIO(unittest.TestCase):
         self.perform_test("ig", True, "IntelliGenetics/VIF_mase-pro.txt", 16, records, lengths, alignment, messages)
 
     def test_ig3(self):
+        "Test parsing a MASE alignment with sequence O_ANT70 being shorter."
         records = [SeqRecord(Seq("ATGc?tcattt?ga??t?ttagcaaTaa?agcattaatag...?gA?ctg"), "VPU_CONSENSUS", "VPU_CONSENSUS"),
                    SeqRecord(Seq("ATGACACCTTTGGAAATCTGGGCAATAACAGGGCTGATAG...-AATTTG"), "A_U455", "A_U455"),
                    SeqRecord(Seq("ATGCAATCTTTACAAATATTAGCAATAGTATCATTAGTAG...-GATCTG"), "B_SF2", "B_SF2"),
@@ -3446,6 +3391,17 @@ class TestSeqIO(unittest.TestCase):
                     "Missing SFF flow information",
                     ]
         self.perform_test("cif-seqres", False, "PDB/2BEG.cif", 5, records, lengths, alignment, messages)
+
+    def test_empty_file(self):
+        """Check parsers can cope with an empty file"""
+        for t_format in SeqIO._FormatToIterator:
+            if t_format in SeqIO._BinaryFormats or \
+               t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom", "cif-atom"):
+                # Not allowed empty SFF files.
+                continue
+            handle = StringIO()
+            records = list(SeqIO.parse(handle, t_format))
+            self.assertEqual(len(records), 0)
 
 
 if __name__ == "__main__":
