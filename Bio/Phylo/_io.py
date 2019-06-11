@@ -42,7 +42,7 @@ def parse(file, format, **kwargs):
     Examples
     --------
     >>> import Bio.Phylo
-    >>> trees = Bio.Phylo.parse('./PhyloXML/apaf.xml', 'phyloxml')
+    >>> trees = Bio.Phylo.parse('PhyloXML/apaf.xml', 'phyloxml')
     >>> for tree in trees:
     ...     print(tree.rooted)
     True

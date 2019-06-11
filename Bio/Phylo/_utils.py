@@ -108,7 +108,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                 from Bio import Phylo, AlignIO
                 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
                 constructor = DistanceTreeConstructor()
-                aln = AlignIO.read(open('./TreeConstruction/msa.phy'), 'phylip')
+                aln = AlignIO.read(open('/TreeConstruction/msa.phy'), 'phylip')
                 calculator = DistanceCalculator('identity')
                 dm = calculator.get_distance(aln)
                 tree = constructor.upgma(dm)
@@ -129,7 +129,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     --------
     import pylab
     from Bio import Phylo
-    tree = Phylo.read('./PhyloXML/apaf.xml', 'phyloxml')
+    tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
     Phylo.draw_graphviz(tree)
     pylab.show()
     pylab.savefig('apaf.png')
@@ -310,17 +310,17 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict), or
     pyplot_option_name=(dict).
 
-    Example using the pyplot options 'axhspan' and 'axvline':
+    Example using the pyplot options 'axhspan' and 'axvline'::
 
-    from Bio import Phylo, AlignIO
-    from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
-    constructor = DistanceTreeConstructor()
-    aln = AlignIO.read(open('./TreeConstruction/msa.phy'), 'phylip')
-    calculator = DistanceCalculator('identity')
-    dm = calculator.get_distance(aln)
-    tree = constructor.upgma(dm)
-    Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
-    ... axvline={'x':0, 'ymin':0, 'ymax':1})
+        from Bio import Phylo, AlignIO
+        from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+        constructor = DistanceTreeConstructor()
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        calculator = DistanceCalculator('identity')
+        dm = calculator.get_distance(aln)
+        tree = constructor.upgma(dm)
+        Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
+        ... axvline={'x':0, 'ymin':0, 'ymax':1})
 
     Visual aspects of the plot can also be modified using pyplot's own functions
     and objects (via pylab or matplotlib). In particular, the pyplot.rcParams
