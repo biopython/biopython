@@ -14,6 +14,7 @@ from __future__ import print_function
 import os
 from Bio._py3k import StringIO
 import warnings
+import unittest
 
 from Bio import BiopythonParserWarning
 
@@ -62,10 +63,6 @@ all_parsers = [feat_parser, rec_parser]
 print("Testing parsers...")
 for parser in all_parsers:
     for filename in files_to_parse:
-        if not os.path.isfile(filename):
-            print("Missing test input file: %s" % filename)
-            continue
-
         handle = open(filename, "r")
         gb_iterator = GenBank.Iterator(handle, parser)
 
@@ -125,119 +122,88 @@ for parser in all_parsers:
 
         handle.close()
 
-# test writing GenBank format
-print("Testing writing GenBank format...")
 
+class TestGenBank(unittest.TestCase):
 
-def do_comparison(good_record, test_record):
-    """Compare two records to see if they are the same.
+    def do_comparison(self, good_record, test_record):
+        """Compare two records to see if they are the same.
 
-    Ths compares the two GenBank record, and will raise an AssertionError
-    if two lines do not match, showing the non-matching lines.
-    """
-    good_handle = StringIO(good_record)
-    test_handle = StringIO(test_record)
-
-    while True:
-        good_line = good_handle.readline()
-        test_line = test_handle.readline()
-
-        if not good_line and not test_line:
-            break
-        if not good_line:
-            raise AssertionError("Extra info in Test: %r" % test_line)
-        if not test_line:
-            raise AssertionError("Extra info in Expected: %r" % good_line)
-        test_normalized = " ".join(x for x in test_line.split() if x)
-        good_normalized = " ".join(x for x in good_line.split() if x)
-        assert test_normalized == good_normalized, \
-            "Expected does not match Test.\nExpect: %r\nTest:   %r\n" % (good_line, test_line)
-
-
-def t_write_format():
-    """Test writing to the difference formats."""
-    record_parser = GenBank.RecordParser(debug_level=0)
-
-    for next_file in write_format_files:
-        print("Testing GenBank writing for %s..." % os.path.basename(next_file))
-        cur_handle = open(os.path.join("GenBank", next_file), "r")
-        compare_handle = open(os.path.join("GenBank", next_file), "r")
-
-        iterator = GenBank.Iterator(cur_handle, record_parser)
-        compare_iterator = GenBank.Iterator(compare_handle)
-
+        This compares the two GenBank record line by line.
+        """
+        good_handle = StringIO(good_record)
+        test_handle = StringIO(test_record)
         while True:
-            cur_rec = next(iterator)
-            compare_record = next(compare_iterator)
-
-            if cur_rec is None or compare_record is None:
+            good_line = good_handle.readline()
+            test_line = test_handle.readline()
+            if not good_line and not test_line:
                 break
+            self.assertTrue(good_line, "Extra info in Test: %r" % test_line)
+            self.assertTrue(test_line, "Extra info in Expected: %r" % good_line)
+            test_normalized = " ".join(x for x in test_line.split() if x)
+            good_normalized = " ".join(x for x in good_line.split() if x)
+            self.assertEqual(test_normalized, good_normalized)
 
-            print("\tTesting for %s" % cur_rec.version)
+    def test_write_format(self):
+        """Test writing to the difference formats."""
+        record_parser = GenBank.RecordParser(debug_level=0)
+        for next_file in write_format_files:
+            cur_handle = open(os.path.join("GenBank", next_file), "r")
+            compare_handle = open(os.path.join("GenBank", next_file), "r")
+            iterator = GenBank.Iterator(cur_handle, record_parser)
+            compare_iterator = GenBank.Iterator(compare_handle)
+            while True:
+                cur_rec = next(iterator)
+                compare_record = next(compare_iterator)
+                if cur_rec is None or compare_record is None:
+                    break
+                output_record = str(cur_rec) + "\n"
+                self.do_comparison(compare_record, output_record)
+            cur_handle.close()
+            compare_handle.close()
 
-            output_record = str(cur_rec) + "\n"
-            do_comparison(compare_record, output_record)
+    def test_cleaning_features(self):
+        """Test the ability to clean up feature values."""
+        gb_parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
+        handle = open(os.path.join("GenBank", "arab1.gb"))
+        iterator = GenBank.Iterator(handle, gb_parser)
+        first_record = next(iterator)
+        # test for cleaning of translation
+        translation_feature = first_record.features[1]
+        test_trans = translation_feature.qualifiers["translation"][0]
+        self.assertNotIn(" ", test_trans,
+                         "Did not clean spaces out of the translation")
+        self.assertNotIn("\012", test_trans,
+                         "Did not clean newlines out of the translation")
+        handle.close()
 
-        cur_handle.close()
-        compare_handle.close()
-
-
-t_write_format()
-
-
-def t_cleaning_features():
-    """Test the ability to clean up feature values."""
-    gb_parser = GenBank.FeatureParser(feature_cleaner=utils.FeatureValueCleaner())
-    handle = open(os.path.join("GenBank", "arab1.gb"))
-    iterator = GenBank.Iterator(handle, gb_parser)
-
-    first_record = next(iterator)
-
-    # test for cleaning of translation
-    translation_feature = first_record.features[1]
-    test_trans = translation_feature.qualifiers["translation"][0]
-    assert " " not in test_trans, "Did not clean spaces out of the translation"
-    assert "\012" not in test_trans, "Did not clean newlines out of the translation"
-
-    handle.close()
-
-
-print("Testing feature cleaning...")
-t_cleaning_features()
-
-
-def t_ensembl_locus():
-    """Test the ENSEMBL locus line."""
-    line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
-    s = GenBank.Scanner.GenBankScanner()
-    c = GenBank._FeatureConsumer(True)
-    s._feed_first_line(c, line)
-    assert c.data.name == "HG531_PATCH", c.data.name
-    assert c._expected_size == 1000000, c._expected_size
-
-    line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
-    s = GenBank.Scanner.GenBankScanner()
-    c = GenBank._FeatureConsumer(True)
-    s._feed_first_line(c, line)
-    assert c.data.name == "HG531_PATCH", c.data.name
-    assert c._expected_size == 759984, c._expected_size
-
-    line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
-    s = GenBank.Scanner.GenBankScanner()
-    c = GenBank._FeatureConsumer(True)
-    s._feed_first_line(c, line)
-    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
-    assert c._expected_size == 814959, c._expected_size
-
-    line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
-    s = GenBank.Scanner.GenBankScanner()
-    c = GenBank._FeatureConsumer(True)
-    s._feed_first_line(c, line)
-    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
-    assert c._expected_size == 1219964, c._expected_size
-
-    print("Done")
+    def test_ensembl_locus(self):
+        """Test the ENSEMBL locus line."""
+        line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
+        s = GenBank.Scanner.GenBankScanner()
+        c = GenBank._FeatureConsumer(True)
+        s._feed_first_line(c, line)
+        self.assertEqual(c.data.name, "HG531_PATCH")
+        self.assertEqual(c._expected_size, 1000000)
+        line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
+        s = GenBank.Scanner.GenBankScanner()
+        c = GenBank._FeatureConsumer(True)
+        s._feed_first_line(c, line)
+        self.assertEqual(c.data.name, "HG531_PATCH")
+        self.assertEqual(c._expected_size, 759984)
+        line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
+        s = GenBank.Scanner.GenBankScanner()
+        c = GenBank._FeatureConsumer(True)
+        s._feed_first_line(c, line)
+        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(c._expected_size, 814959)
+        line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
+        s = GenBank.Scanner.GenBankScanner()
+        c = GenBank._FeatureConsumer(True)
+        s._feed_first_line(c, line)
+        self.assertEqual(c.data.name, "HG506_HG1000_1_PATCH")
+        self.assertEqual(c._expected_size, 1219964)
 
 
-print("Testing EnsEMBL LOCUS lines...")
-t_ensembl_locus()
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)
