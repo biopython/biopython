@@ -826,7 +826,7 @@ qualifiers:
     Key: protein_id, Value: ['NP_006132.1']
     Key: translation, Value: ['MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPSGKNILVFGEDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHTRCNVWILDGDLYHKGLLKFAVSAESLPETLVIFVADMSRPWTVMESLQKWASVLREHIDKMKIPPEKMRELERKFVKDFQDYMEPEEGCQGSPQRRGPLTSGSDEENVALPLGDNVLTHNLGIPVLVVCTKCDAVSVLEKEHDYRDEHLDFIQSHLRRFCLQYGAALIYTSVKEEKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVFIPAGWDNEKKIAILHENFTTVKPEDAYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLAKQPATPTRASESPARGPSGSPRTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFFNSLLSKKTGSPGSPGAGGVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -882,7 +882,7 @@ qualifiers:
     Key: protein_id, Value: ['CAA38894.1']
     Key: translation, Value: ['MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -1001,7 +1001,7 @@ type: polyA_site
 location: [799:800](+)
 qualifiers:
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -1071,7 +1071,7 @@ location: [440:441](+)
 qualifiers:
     Key: gene, Value: ['kin1']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -1146,7 +1146,7 @@ qualifiers:
     Key: gene, Value: ['csp14']
     Key: number, Value: ['3']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -1193,7 +1193,7 @@ qualifiers:
     Key: protein_id, Value: ['AAA91051.1']
     Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -1249,7 +1249,7 @@ qualifiers:
     Key: protein_id, Value: ['AAG13407.1']
     Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -1329,7 +1329,7 @@ qualifiers:
     Key: gene, Value: ['FTCD']
     Key: number, Value: ['2']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -1395,7 +1395,7 @@ qualifiers:
     Key: number, Value: ['1']
     Key: product, Value: ['fructose transporter']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -1650,7 +1650,7 @@ qualifiers:
     Key: protein_id, Value: ['AAF26465.1']
     Key: translation, Value: ['MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTITIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQRIASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRAMGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDLLKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLDFQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEMIFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMIKEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKPERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSVEANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF']
 """, -1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -1732,7 +1732,7 @@ qualifiers:
     Key: db_xref, Value: ['LocusID:15977', 'MGD:MGI:107657']
     Key: gene, Value: ['Ifnb']
 """, None),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -1995,7 +1995,7 @@ qualifiers:
     Key: protein_id, Value: ['CAB72295.1']
     Key: translation, Value: ['MEEEAPRFNVLEEAFNGNGNGCANVEATQSAILKVLTRVNRFQMRVRKHIEDNYTEFLPNNTSPDIFLEESGSLNREIHDMLENLGSEGLDALDEANVKMAGNGRQLREILLGLGVSEHVLRIDELFQCVEEAKATKDYLVLLDLVGRLRAFIYGDDSVDGDAQVATPEVRRIFKALECYETIKVKYHVQAYMLQQSLQERFDRLVQLQCKSFPTSRCVTLQVSRDQTQLQDIVQALFQEPYNPARLAEFLLDNCIEPVIMRPVMADYSEEADGGTYVRLSLSYATKEPSSAHVRPNYKQVLENLRLLLHTLAGINCSVSRDQHVFGIIGDHVKDKMLKLLVDECLIPAVPESTEEYQTSTLCEDVAQLEQLLVDSFIINPEQDRALGQFVEKYETYYRNRMYRRVLETAREIIQRDLQDMVLVAPNNHSAEVANDPFLFPRCMISKSAQDFVKLMDRILRQPTDKLGDQEADPIAGVISIMLHTYINEVPKVHRKLLESIPQQAVLFHNNCMFFTHWVAQHANKGIESLAALAKTLQATGQQHFRVQVDYQSSILMGIMQEFEFESTHTLGSGPLKLVRQCLRQLELLKNVWANVLPETVYNATFCELINTFVAELIRRVFTLRHISAQMACELSDLIDVVLQRAPTLFREPNEVVQVLSWLKLQQLKAMLNASLMEITELWGDGVGPLTASYKSDEIKHLIRALFQDTDWRAKAITQIV']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2076,7 +2076,7 @@ qualifiers:
     Key: protein_id, Value: ['AAB60433.1']
     Key: translation, Value: ['MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKPRQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSSTPLPTISSSAENTRQNGSNDSDRYSDNEEGKKKEHKKVKSTRDIVPFSELGTTPSGGGFFQGISFPEISTRPPLGSTELQAAKKVHTSKGDLPREPLVATNLPGRGQLQKLASERNLFISCKSSHDRCLEKSSSSSSQPEHSAMLVSTAASPSLIKETTTGYYKDIVENICGREKSGIQPLCPERSHISDQSPLSSKRKALEESESSQLISPPLAQAIRDYVNSLLVQGGVGSLPGTSNSMPPLDVENIQKRIDQSKFQETEFLSPPRKVPRLSEKSVEERDSGSFVAFQNIPGSELMSSFAKTVVSHSLTTLGLEVAKQSQHDKIDASELSFPFHESILKVIEEEWQQVDRQLPSLACKYPVSSREATQILSVPKVDDEILGFISEATPLGGIQAASTESCNQQLDLALCRAYEAAASALQIATHTAFVAKAMQADISEAAQILSSDPSRTHQALGILSKTYDAASYICEAAFDEVKMAAHTMGNATVGRRYLWLKDCKINLASKNKLASTPFKGGTLFGGEVCKVIKKRGNKH']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2151,7 +2151,7 @@ qualifiers:
     Key: product, Value: ['hypothetical protein FLJ10737']
     Key: transcript_id, Value: ['XM_057697.1']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2194,7 +2194,7 @@ location: [19:120](+)
 qualifiers:
     Key: gene, Value: ['fake']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2270,7 +2270,7 @@ qualifiers:
     Key: gene, Value: ['CNR2']
     Key: pseudo, Value: ['']
 """, None),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2352,7 +2352,7 @@ location: [63:64]
 qualifiers:
     Key: site_type, Value: ['amidation']
 """, None),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2401,7 +2401,7 @@ qualifiers:
     Key: protein_id, Value: ['BAA19009.1']
     Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -2445,7 +2445,7 @@ qualifiers:
     Key: protein_id, Value: ['BAA19010.1']
     Key: translation, Value: ['MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
         with warnings.catch_warnings():
@@ -2489,7 +2489,7 @@ qualifiers:
     Key: protein_id, Value: ['BAA19011.1']
     Key: translation, Value: ['MSDGAVQPDGGQPAVRNERATGSGNGSGGGGGGGSGGVGISTGTFNNQTEFKFLENGWVEITANSSRLVHLNMPESENYKRVVVNNMDKTAVKGNMALDDTHVQIVTPWSLVDANAWGVWFNPGDWQLIVNTMSELHLVSFEQEIFNVVLKTVSESATQPPTKVYNNDLTASLMVALDSNNTMPFTPAAMRSETLGFYPWKPTIPTPWRYYFQWDRTLIPSHTGTSGTPTNVYHGTDPDDVQFYTIENSVPVHLLRTGDEFATGTFFFDCKPCRLTHTWQTNRALGLPPFLNSLPQSEGATNFGDIGVQQDKRRGVTQMGNTDYITEATIMRPAEVGYSAPYYSFEASTQGPFKTPIAAGRGGAQTDENQAADGDPRYAFGRQHGQKTTTTGETPERFTYIAHQDTGRYPEGDWIQNINFNLPVTNDNVLLPTDPIGGKTGINYTNIFNTYGPLTALNNVPPVYPNGQIWDKEFDTDLKPRLHVNAPFVCQNNCPGQLFVKVAPNLTNEYDPDASANMSRIVTYSDFWWKGKLVFKAKLRASHTWNPIQQMSINVDNQFNYVPNNIGAMKIVYEKSQLAPRKLY']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2897,7 +2897,7 @@ qualifiers:
     Key: note, Value: ['compared to AL109969']
     Key: replace, Value: ['tt']
 """, 1),
-                                        )
+                    )
         dbxrefs = ['Project:58037']
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2934,7 +2934,7 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Streptomyces avermitilis']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -2971,7 +2971,7 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Streptomyces avermitilis']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -3007,7 +3007,7 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Streptomyces avermitilis']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -3045,7 +3045,7 @@ qualifiers:
     Key: note, Value: ["This is a correct note, the following one isn't"]
     Key: organism, Value: ['Streptomyces avermitilis']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -3082,7 +3082,7 @@ qualifiers:
     Key: mol_type, Value: ['genomic DNA']
     Key: organism, Value: ['Streptomyces avermitilis']
 """, 1),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
 
@@ -3305,15 +3305,11 @@ qualifiers:
     Key: note, Value: ['helix 12']
     Key: sec_str_type, Value: ['helix']
 """, None),
-                                        )
+                    )
         dbxrefs = []
         self.perform_feature_parser_test(record, sequence, id, name, description, annotations, references, features, dbxrefs)
-
-
-
 
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
