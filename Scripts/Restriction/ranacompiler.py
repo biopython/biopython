@@ -597,7 +597,7 @@ class DictionaryBuilder(object):
             #
             #   may be download the files.
             #
-            print('\n The rebase files are more than one month old.\
+            print('\n The rebase files are missing or more than one month old.\
             \n Would you like to update them before proceeding?(y/n)')
             r = _input(' update [n] >>> ')
             if r in ['y', 'yes', 'Y', 'Yes']:
