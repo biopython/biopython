@@ -166,6 +166,7 @@ except ImportError:
 # Can't easily write exceptions with consistent class name in python 2 and 3
 if sys.version_info[0] == 2:
     EXCLUDE_DOCTEST_MODULES.append("Bio.Seq")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.Phylo")
 
 
 def find_modules(path):
