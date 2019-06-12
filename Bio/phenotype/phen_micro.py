@@ -62,7 +62,7 @@ class PlateRecord(object):
     accessed calling their id as an index or iterating on the PlateRecord:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for well in plate:
     ...    print("%s" % well.id) # doctest:+ELLIPSIS
@@ -126,7 +126,7 @@ class PlateRecord(object):
     Two PlateRecord objects can be compared: if all their wells are equal the
     two plates are considered equal:
 
-    >>> plate2 = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate2 = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> plate == plate2
     True
 
@@ -205,7 +205,7 @@ class PlateRecord(object):
         plate[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
 
         You can access a well of the plate, using its id.
 
@@ -537,7 +537,7 @@ class PlateRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> record = next(phenotype.parse("Tests/phenotype/Plates.csv", "pm-csv"))
+        >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
         >>> print(record)
         Plate ID: PM01
         Well: 96
@@ -568,7 +568,7 @@ class WellRecord(object):
     WellRecord or using lists indexes or slices:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for time, signal in well:
     ...    print("Time: %f, Signal: %f" % (time, signal)) # doctest:+ELLIPSIS
@@ -616,16 +616,20 @@ class WellRecord(object):
     * richards
     The functions are described in Zwietering et al., 1990 (PMID: 16348228)
 
-    >>> well.fit()
-    >>> print(well.slope, well.model)
-    (61.853516785566917, 'logistic')
+    For example::
+
+        well.fit()
+        print(well.slope, well.model)
+        (61.853516785566917, 'logistic')
 
     If not sigmoid function is specified, the first one that is successfully
     fitted is used. The user can also specify a specific function.
 
-    >>> well.fit('gompertz')
-    >>> print(well.slope, well.model)
-    (127.94630059171354, 'gompertz')
+    To specify gompertz::
+
+        well.fit('gompertz')
+        print(well.slope, well.model)
+        (127.94630059171354, 'gompertz')
 
     If no function can be fitted, the parameters are left as None, except for
     the max, min, average_height and area.
@@ -787,7 +791,7 @@ class WellRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("plates.csv", "pm-csv")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
         >>> record = plate['A05']
         >>> print(record)
         Plate ID: PM01

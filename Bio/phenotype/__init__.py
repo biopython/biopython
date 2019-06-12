@@ -12,12 +12,10 @@ The main function is Bio.phenotype.parse(...) which takes an input file,
 and format string.  This returns an iterator giving PlateRecord objects:
 
     >>> from Bio import phenotype
-    >>> for record in phenotype.parse("plates.csv", "pm-csv"):
+    >>> for record in phenotype.parse("phenotype/Plates.csv", "pm-csv"):
     ...     print("%s %i" % (record.id, len(record)))
     ...
     PM01 96
-    PM01 96
-    PM09 96
     PM09 96
 
 Note that the parse() function will invoke the relevant parser for the
@@ -31,7 +29,7 @@ the following 'helper' function which will return a single PlateRecord, or
 raise an exception if there are no records or more than one record:
 
     >>> from Bio import phenotype
-    >>> record = phenotype.read("plate.json", "pm-json")
+    >>> record = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> print("%s %i" % (record.id, len(record)))
     PM01 96
 
@@ -44,7 +42,7 @@ record, use the next() function on the iterator (or under Python 2, the
 iterator's next() method):
 
     >>> from Bio import phenotype
-    >>> record = next(phenotype.parse("plates.csv", "pm-csv"))
+    >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
     >>> print("%s %i" % (record.id, len(record)))
     PM01 96
 
@@ -57,18 +55,18 @@ Output
 Use the function Bio.phenotype.write(...), which takes a complete set of
 PlateRecord objects (either as a list, or an iterator), an output file handle
 (or in recent versions of Biopython an output filename as a string) and of
-course the file format:
+course the file format::
 
-    >>> from Bio import phenotype
-    >>> records = ...
-    >>> phenotype.write(records, "example.json", "pm-json")
+        from Bio import phenotype
+        records = ...
+        phenotype.write(records, "example.json", "pm-json")
 
 Or, using a handle::
 
-    >>> from Bio import phenotype
-    >>> records = ...
-    >>> with open("example.json", "w") as handle:
-    >>>    phenotype.write(records, handle, "pm-json")
+        from Bio import phenotype
+        records = ...
+        with open("example.json", "w") as handle:
+           phenotype.write(records, handle, "pm-json")
 
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.
@@ -159,12 +157,14 @@ def parse(handle, format):
     Typical usage, opening a file to read in, and looping over the record(s):
 
     >>> from Bio import phenotype
-    >>> filename = "plates.csv"
+    >>> filename = "phenotype/Plates.csv"
     >>> for record in phenotype.parse(filename, "pm-csv"):
     ...    print("ID %s" % record.id)
     ...    print("Number of wells %i" % len(record))
     ...
     ID PM01
+    Number of wells 96
+    ID PM09
     Number of wells 96
 
     Use the Bio.phenotype.read(...) function when you expect a single record
@@ -201,29 +201,29 @@ def read(handle, format):
     exactly one record.  For example, reading a PM JSON file:
 
     >>> from Bio import phenotype
-    >>> record = phenotype.read("plate.json", "pm-json")
+    >>> record = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> print("ID %s" % record.id)
-    PM09
+    ID PM01
     >>> print("Number of wells %i" % len(record))
     Number of wells 96
 
     If the handle contains no records, or more than one record,
     an exception is raised.  For example:
 
-    >>> from Bio import phenotype
-    >>> record = phenotype.read("plates.csv", "pm-csv")
-    Traceback (most recent call last):
+        from Bio import phenotype
+        record = phenotype.read("plates.csv", "pm-csv")
+        Traceback (most recent call last):
         ...
-    ValueError: More than one record found in handle
+        ValueError: More than one record found in handle
 
     If however you want the first record from a file containing
     multiple records this function would raise an exception (as
     shown in the example above).  Instead use:
 
     >>> from Bio import phenotype
-    >>> record = next(phenotype.parse("plates.csv", "pm-csv"))
+    >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
     >>> print("First record's ID %s" % record.id)
-    First record's ID PM09
+    First record's ID PM01
 
     Use the Bio.phenotype.parse(handle, format) function if you want
     to read multiple records from the handle.
