@@ -12,7 +12,9 @@
 import os
 from Bio._py3k import StringIO
 import unittest
+import warnings
 
+from Bio import BiopythonParserWarning
 
 # GenBank stuff to test
 from Bio import GenBank
@@ -2352,7 +2354,10 @@ qualifiers:
         path = 'GenBank/NC_005816.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: Premature end of file in sequence data
+            record = next(gb_iterator)
         seq = "TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG"
         id = "NC_005816.1"
         name = "NC_005816"
@@ -2757,7 +2762,10 @@ qualifiers:
         path = 'GenBank/no_end_marker.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: Premature end of file in sequence data
+            record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2791,7 +2799,10 @@ qualifiers:
         path = 'GenBank/wrong_sequence_indent.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: Invalid indentation for sequence line
+            record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2825,7 +2836,10 @@ qualifiers:
         path = 'GenBank/invalid_locus_line_spacing.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: Attempting to parse malformed locus line
+            record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2893,7 +2907,10 @@ qualifiers:
         path = 'GenBank/invalid_misc_feature.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: line too short to contain a feature
+            record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2927,7 +2944,10 @@ qualifiers:
         path = 'GenBank/1MRR_A.gp'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        record = next(gb_iterator)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            # BiopythonParserWarning: Dropping bond qualifier in feature location
+            record = next(gb_iterator)
         seq = "AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL"
         id = "1MRR_A"
         name = "1MRR_A"
