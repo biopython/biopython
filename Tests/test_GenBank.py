@@ -11,10 +11,8 @@
 
 import os
 from Bio._py3k import StringIO
-import warnings
 import unittest
 
-from Bio import BiopythonParserWarning
 
 # GenBank stuff to test
 from Bio import GenBank
@@ -137,10 +135,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/noref.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 1622
         locus = 'NM_006141'
         definition = 'Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2 (DNCLI2), mRNA'
@@ -156,10 +151,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/cor6_6.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 513
         locus = 'ATCOR66M'
         definition = 'A.thaliana cor6.6 mRNA'
@@ -170,10 +162,7 @@ class TestRecordParser(unittest.TestCase):
                     ('CDS', '50..250', (('/gene=', '"cor6.6"'), ('/note=', '"cold regulated"'), ('/codon_start=', '1'), ('/protein_id=', '"CAA38894.1"'), ('/db_xref=', '"GI:16230"'), ('/db_xref=', '"SWISS-PROT:P31169"'), ('/translation=', '"MSETNKNAFQAGQAAGKAEEKSNVLLDKAKDAAAAAGASAQQAGKSISDAAVGGVNFVKDKTGLNK"'))),
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 880
         locus = 'ATKIN2'
         definition = 'A.thaliana kin2 gene'
@@ -196,10 +185,7 @@ class TestRecordParser(unittest.TestCase):
                     ('polyA_site', '800', ()),
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 441
         locus = 'BNAKINI'
         definition = 'Rapeseed Kin1 protein (kin1) mRNA, complete cds'
@@ -213,10 +199,7 @@ class TestRecordParser(unittest.TestCase):
                     ('polyA_site', '441', (('/gene=', '"kin1"'), )),
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 206
         locus = 'ARU237582'
         definition = 'Armoracia rusticana csp14 gene (partial), exons 2-3'
@@ -231,10 +214,7 @@ class TestRecordParser(unittest.TestCase):
                     ('exon', '143..206', (('/gene=', '"csp14"'), ('/number=', '3'))),
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 282
         locus = 'BRRBIF72'
         definition = 'Brassica rapa (clone bif72) kin mRNA, complete cds'
@@ -245,10 +225,7 @@ class TestRecordParser(unittest.TestCase):
                     ('CDS', '24..221', (('/gene=', '"kin"'), ('/codon_start=', '1'), ('/protein_id=', '"AAA91051.1"'), ('/db_xref=', '"GI:1209262"'), ('/translation=', '"MADNKQSFQAGQAAGRAEEKGNVLLMDKVKDAATAAGALQTAGQKITEAAGGAVNLVKEKTGMNK"'))),
                     ]
         self.perform_record_parser_test(record, length, locus, definition, accession, titles, features)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 497
         locus = 'AF297471'
         definition = 'Brassica napus BN28a (BN28a) gene, complete cds'
@@ -265,10 +242,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/iro.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 1326
         locus = 'IRO125195'
         definition = 'Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195'
@@ -286,10 +260,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/pri1.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 741
         locus = 'HUGLUT1'
         definition = 'Human fructose transporter (GLUT5) gene, promoter and exon 1'
@@ -307,10 +278,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/arab1.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 86436
         locus = 'AC007323'
         definition = 'Genomic sequence for Arabidopsis thaliana BAC T25K16 from chromosome I, complete sequence'
@@ -342,10 +310,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/protein_refseq.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 182
         locus = 'NP_034640'
         definition = 'interferon beta, fibroblast [Mus musculus]'
@@ -365,10 +330,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/extra_keywords.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 154329
         locus = 'DMBR25B3'
         definition = 'Drosophila melanogaster BAC clone BACR25B3'
@@ -406,10 +368,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/one_of.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 2509
         locus = 'HSTMPO1'
         definition = 'Human thymopoietin (TMPO) gene, exon 1'
@@ -428,10 +387,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/NT_019265.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 0
         locus = 'NT_019265'
         definition = 'Homo sapiens chromosome 1 working draft sequence segment'
@@ -449,10 +405,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/origin_line.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 180
         locus = 'NC_002678'
         definition = 'Mesorhizobium loti, complete genome (edited)'
@@ -467,10 +420,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/blank_seq.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 360
         locus = 'NP_001832'
         definition = 'cannabinoid receptor 2 (macrophage) [Homo sapiens]'
@@ -487,10 +437,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/dbsource_wrap.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 64
         locus = 'SCX3_BUTOC'
         definition = 'Neurotoxin III'
@@ -510,10 +457,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/gbvrl1_start.seq'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 2007
         locus = 'AB000048'
         definition = 'Feline panleukopenia virus DNA for nonstructural protein 1, complete cds'
@@ -523,10 +467,7 @@ class TestRecordParser(unittest.TestCase):
                     ('CDS', '1..2007', (('/codon_start=', '1'), ('/product=', '"nonstructural protein 1"'), ('/protein_id=', '"BAA19009.1"'), ('/db_xref=', '"GI:1769754"'), ('/translation=', '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"'))),
                     ]
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 2007
         locus = 'AB000049'
         definition = 'Feline panleukopenia virus DNA for nonstructural protein 1, complete cds'
@@ -536,10 +477,7 @@ class TestRecordParser(unittest.TestCase):
                     ('CDS', '1..2007', (('/codon_start=', '1'), ('/product=', '"nonstructural protein 1"'), ('/protein_id=', '"BAA19010.1"'), ('/db_xref=', '"GI:1769756"'), ('/translation=', '"MSGNQYTEEVMEGVNWLKKHAEDEAFSFVFKCDNVQLNGKDVRWNNYTKPIQNEELTSLIRGAQTAMDQTEEEEMDWESEVDSLAKKQVQTFDALIKKCLFEVFVSKNIEPNECVWFIQHEWGKDQGWHCHVLLHSKNLQQATGKWLRRQMNMYWSRWLVTLCSINLTPTEKIKLREIAEDSEWVTILTYRHKQTKKDYVKMVHFGNMIAYYFLTKKKIVHMTKESGYFLSTDSGWKFNFMKYQDRHTVSTLYTEQMKPETVETTVTTAQETKRGRIQTKKEVSIKCTLRDLVSKRVTSPEDWMMLQPDSYIEMMAQPGGENLLKNTLEICTLTLARTKTAFELILEKADNTKLTNFDLANSRTCQIFRMHGWNWIKVCHAIACVLNRQGGKRNTVLFHGPASTGKSIIAQAIAQAVGNVGCYNAANVNFPFNDCTNKNLIWVEEAGNFGQQVNQFKAICSGQTIRIDQKGKGSKQIEPTPVIMTTNENITIVRIGCEERPEHTQPIRDRMLNIKLVCKLPGDFGLVDKEEWPLICAWLVKHGYQSTMANYTHHWGKVPEWDENWAEPKIQEGINSPGCKDLETQAASNPQSQDHVLTPLTPDVVDLALEPWSTPDTPIAETANQQSNQLGVTHKDVQASPTWSEIEADLRAIFTSEQLEEDFRDDLD"'))),
                     ]
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 1755
         locus = 'AB000050'
         definition = 'Feline panleukopenia virus DNA for capsid protein 2, complete cds'
@@ -554,10 +492,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/NC_005816.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 9609
         locus = 'NC_005816'
         definition = 'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
@@ -611,10 +546,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/no_end_marker.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 6497
         locus = 'AB070938'
         definition = 'Streptomyces avermitilis melanin biosynthetic gene cluster'
@@ -628,10 +560,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/wrong_sequence_indent.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 6497
         locus = 'AB070938'
         definition = 'Streptomyces avermitilis melanin biosynthetic gene cluster'
@@ -645,10 +574,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/invalid_locus_line_spacing.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 6497
         locus = 'AB070938'
         definition = 'Streptomyces avermitilis melanin biosynthetic gene cluster'
@@ -662,10 +588,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/empty_feature_qualifier.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 6497
         locus = 'AB070938'
         definition = 'Streptomyces avermitilis melanin biosynthetic gene cluster'
@@ -679,10 +602,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/invalid_misc_feature.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 6497
         locus = 'AB070938'
         definition = 'Streptomyces avermitilis melanin biosynthetic gene cluster'
@@ -696,10 +616,7 @@ class TestRecordParser(unittest.TestCase):
         path = 'GenBank/1MRR_A.gp'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.rec_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         length = 375
         locus = '1MRR_A'
         definition = 'Chain A, Substitution Of Manganese For Iron In Ribonucleotide Reductase From Escherichia Coli. Spectroscopic And Crystallographic Characterization'
@@ -773,10 +690,7 @@ class TestFeatureParser(unittest.TestCase):
         path = 'GenBank/noref.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA"
         id = "NM_006141.1"
         name = "NM_006141"
@@ -832,10 +746,7 @@ qualifiers:
         path = 'GenBank/cor6_6.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "AACAAAACACACATCAAAAACGATTTTACAAGAAAAAAATATCTGAAAAATGTC...AAA"
         id = "X55053.1"
         name = "ATCOR66M"
@@ -883,10 +794,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "ATTTGGCCTATAAATATAAACCCTTAAGCCCACATATCTTCTCAATCCATCACA...ATA"
         id = "X62281.1"
         name = "ATKIN2"
@@ -1002,10 +910,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "AAAAAAACACAACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGC...TTC"
         id = "M81224.1"
         name = "BNAKINI"
@@ -1072,10 +977,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "GGACAAGGCCAAGGATGCTGCTGCTGCAGCTGGAGCTTCCGCGCAACAAGTAAA...GGC"
         id = "AJ237582.1"
         name = "ARU237582"
@@ -1147,10 +1049,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "AACAAAACTCAATAAATAAACAAATGGCAGACAACAAGCAGAGCTTCCAAGCCG...TTT"
         id = "L31939.1"
         name = "BRRBIF72"
@@ -1194,10 +1093,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAG...TAG"
         id = "AF297471.1"
         name = "AF297471"
@@ -1255,10 +1151,7 @@ qualifiers:
         path = 'GenBank/iro.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CACAGGCCCAGAGCCACTCCTGCCTACAGGTTCTGAGGGCTCAGGGGACCTCCT...AAA"
         id = "AL109817.1"
         name = "IRO125195"
@@ -1335,10 +1228,7 @@ qualifiers:
         path = 'GenBank/pri1.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "GATCATGCATGCACTCCAGCCTGGGACAAGAGCGAAACTCCGTCTCAAAAAAAA...GCA"
         id = "U05344.1"
         name = "HUGLUT1"
@@ -1401,10 +1291,7 @@ qualifiers:
         path = 'GenBank/arab1.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "AAGCTTTGCTACGATCTACATTTGGGAATGTGAGTCTCTTATTGTAACCTTAGG...CTT"
         id = "AC007323.5"
         name = "AC007323"
@@ -1656,10 +1543,7 @@ qualifiers:
         path = 'GenBank/protein_refseq.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "MNNRWILHAAFLLCFSTTALSINYKQLQLQERTNIRKCQELLEQLNGKINLTYR...FQN"
         id = "NP_034640.1"
         name = "NP_034640"
@@ -1738,10 +1622,7 @@ qualifiers:
         path = 'GenBank/extra_keywords.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "TCCAGGGGATTCACGCGCAATATGTTTCCCTCGCTCGTCTGCAGGGTGTGGGAA...TTG"
         id = "AL138972.1"
         name = "DMBR25B3"
@@ -2001,10 +1882,7 @@ qualifiers:
         path = 'GenBank/one_of.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "GAATTCAGATAGAATGTAGACAAGAGGGATGGTGAGGAAAACCTACGGCAAGCA...GGC"
         id = "U18266.1"
         name = "HSTMPO1"
@@ -2082,10 +1960,7 @@ qualifiers:
         path = 'GenBank/NT_019265.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNN"
         id = "NT_019265.6"
         name = "NT_019265"
@@ -2157,10 +2032,7 @@ qualifiers:
         path = 'GenBank/origin_line.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC"
         id = "NC_002678.1"
         name = "NC_002678"
@@ -2200,10 +2072,7 @@ qualifiers:
         path = 'GenBank/blank_seq.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "MEECWVTEIANGSKDGLDSNPMKDYMILSGPQKTAVAVLCTLLGLLSALENVAV...SDC"
         id = "NP_001832.1"
         name = "NP_001832"
@@ -2276,10 +2145,7 @@ qualifiers:
         path = 'GenBank/dbsource_wrap.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "VKDGYIVDDRNCTYFCGRNAYCNEECTKLKGESGYCQWASPYGNACYCYKVPDH...RCN"
         id = "P01485"
         name = "SCX3_BUTOC"
@@ -2358,10 +2224,7 @@ qualifiers:
         path = 'GenBank/gbvrl1_start.seq'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
         id = "AB000048.1"
         name = "AB000048"
@@ -2402,10 +2265,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAGTAAATTGGTTAAAG...TAA"
         id = "AB000049.1"
         name = "AB000049"
@@ -2446,10 +2306,7 @@ qualifiers:
                     )
         dbxrefs = []
         self.perform_feature_parser_test(record, seq, id, name, description, annotations, references, features, dbxrefs)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "ATGAGTGATGGAGCAGTTCAACCAGACGGTGGTCAACCTGCTGTCAGAAATGAA...TAA"
         id = "AB000050.1"
         name = "AB000050"
@@ -2495,10 +2352,7 @@ qualifiers:
         path = 'GenBank/NC_005816.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG"
         id = "NC_005816.1"
         name = "NC_005816"
@@ -2903,10 +2757,7 @@ qualifiers:
         path = 'GenBank/no_end_marker.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2940,10 +2791,7 @@ qualifiers:
         path = 'GenBank/wrong_sequence_indent.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -2977,10 +2825,7 @@ qualifiers:
         path = 'GenBank/invalid_locus_line_spacing.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -3013,10 +2858,7 @@ qualifiers:
         path = 'GenBank/empty_feature_qualifier.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -3051,10 +2893,7 @@ qualifiers:
         path = 'GenBank/invalid_misc_feature.gb'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA"
         id = "AB070938.1"
         name = "AB070938"
@@ -3088,10 +2927,7 @@ qualifiers:
         path = 'GenBank/1MRR_A.gp'
         handle = open(path, "r")
         gb_iterator = GenBank.Iterator(handle, self.feat_parser)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", BiopythonParserWarning)
-            # e.g. BiopythonParserWarning: Premature end of file in sequence data
-            record = next(gb_iterator)
+        record = next(gb_iterator)
         seq = "AYTTFSATKNDQLKEPMFFGQPVQVARYDQQKYDIFEKLIEKQLSFFWRPEEVD...FQL"
         id = "1MRR_A"
         name = "1MRR_A"
