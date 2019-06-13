@@ -308,7 +308,7 @@ def angle2trig(theta):
     """
     c = cos(theta * pi / 180)
     s = sin(theta * pi / 180)
-    return(c, s, -s, c)  # Vector for rotating point around an origin
+    return (c, s, -s, c)  # Vector for rotating point around an origin
 
 
 def intermediate_points(start, end, graph_data):
