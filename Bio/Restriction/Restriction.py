@@ -139,9 +139,9 @@ DNA = Seq
 
 
 class FormattedSeq(object):
-    """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
+    """A linear or ciruclar sequence object for restriction analysis.
 
-    Translate a Bio.Seq into a formatted sequence to be used with Restriction.
+    Translates a Bio.Seq into a formatted sequence to be used with Restriction.
 
     Roughly: remove anything which is not IUPAC alphabet and then add a space
              in front of the sequence to get a biological index instead of a
@@ -152,7 +152,7 @@ class FormattedSeq(object):
     """
 
     def __init__(self, seq, linear=True):
-        """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
+        """Initialize ``FormattedSeq`` with sequence and topology (optional).
 
         ``seq`` is either a ``Bio.Seq``, ``Bio.MutableSeq`` or a
         ``FormattedSeq``. If ``seq`` is a ``FormattedSeq``, ``linear``
@@ -241,7 +241,7 @@ class FormattedSeq(object):
         """Return substring of ``FormattedSeq``.
 
         The class of the returned object is the class of the respective
-        sequence. Note that due to the leading space, indexing is 1-based::
+        sequence. Note that due to the leading space, indexing is 1-based:
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Restriction.Restriction import FormattedSeq
