@@ -106,8 +106,8 @@ class GraphData(object):
         """Return (minimum, lowerQ, medianQ, upperQ, maximum) values as tuple."""
         data = sorted(self.data.values())
         datalen = len(data)
-        return(data[0], data[datalen // 4], data[datalen // 2],
-               data[3 * datalen // 4], data[-1])
+        return (data[0], data[datalen // 4], data[datalen // 2],
+                data[3 * datalen // 4], data[-1])
 
     def range(self):
         """Return range of data as (start, end) tuple.
