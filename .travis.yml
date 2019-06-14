@@ -38,6 +38,7 @@ matrix:
           packages:
       before_install: echo "Going to run basic checks"
     - stage: basics
+      python: 3.7
       env: TOXENV=sdist,bdist_wheel
       services:
       addons:
@@ -45,7 +46,7 @@ matrix:
           packages:
       before_install: echo "Going to run basic checks"
     - stage: test
-      python: 2.7
+      python: 3.7
       env: TOXENV=api
       services:
       addons:
