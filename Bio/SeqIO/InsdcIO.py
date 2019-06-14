@@ -612,7 +612,7 @@ class GenBankWriter(_InsdcWriter):
 
         if len(locus.split()) > 1:
             # locus could be unicode, and u'with space' versus 'with space'
-            # causes trouble with doctest or print-and-compare tests, so
+            # causes trouble with doctests, so
             tmp = repr(locus)
             if tmp.startswith("u'") and tmp.endswith("'"):
                 tmp = tmp[1:]
