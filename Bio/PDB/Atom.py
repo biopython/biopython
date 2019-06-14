@@ -434,6 +434,12 @@ class DisorderedAtom(DisorderedEntityWrapper):
         """Return disordered atom identifier."""
         return "<Disordered Atom %s>" % self.get_id()
 
+    def __copy__(self):
+        shallow = copy.copy(self)
+        for child in self.child_dict.values():
+            shallow.disordered_add(child.copy())
+        return shallow
+
     def disordered_add(self, atom):
         """Add a disordered atom."""
         # Add atom to dict, use altloc as key
