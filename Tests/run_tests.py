@@ -26,7 +26,6 @@ from __future__ import print_function
 # standard modules
 import sys
 import os
-import re
 import getopt
 import time
 import traceback
