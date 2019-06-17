@@ -372,22 +372,30 @@ class DistanceCalculator(object):
 
     Examples
     --------
-    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
-    >>> from Bio import AlignIO
-    >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-    >>> print(aln)
-    SingleLetterAlphabet() alignment with 5 rows and 13 columns
-    AACGTGGCCACAT Alpha
-    AAGGTCGCCACAC Beta
-    CAGTTCGCCACAA Gamma
-    GAGATTTCCGCCT Delta
-    GAGATCTCCGCCC Epsilon
+    ::
+
+        from Bio.Phylo.TreeConstruction import DistanceCalculator
+        from Bio import AlignIO
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        print(aln)
+
+    Output::
+
+        SingleLetterAlphabet() alignment with 5 rows and 13 columns
+        AACGTGGCCACAT Alpha
+        AAGGTCGCCACAC Beta
+        CAGTTCGCCACAA Gamma
+        GAGATTTCCGCCT Delta
+        GAGATCTCCGCCC Epsilon
 
     DNA calculator with 'identity' model::
 
-        >>> calculator = DistanceCalculator('identity')
-        >>> dm = calculator.get_distance(aln)
-        >>> print(dm) # doctest: +NORMALIZE_WHITESPACE
+        calculator = DistanceCalculator('identity')
+        dm = calculator.get_distance(aln)
+        print(dm)
+
+    Output::
+
         Alpha	0
         Beta	0.23076923076923073	0
         Gamma	0.3846153846153846	0.23076923076923073	0
@@ -397,9 +405,12 @@ class DistanceCalculator(object):
 
     Protein calculator with 'blosum62' model::
 
-        >>> calculator = DistanceCalculator('blosum62')
-        >>> dm = calculator.get_distance(aln)
-        >>> print(dm) # doctest: +NORMALIZE_WHITESPACE
+        calculator = DistanceCalculator('blosum62')
+        dm = calculator.get_distance(aln)
+        print(dm)
+
+    Output::
+
         Alpha	0
         Beta	0.36904761904761907	0
         Gamma	0.49397590361445787	0.25	0
@@ -545,42 +556,50 @@ class DistanceTreeConstructor(TreeConstructor):
 
     Examples
     --------
-    >>> from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-    >>> constructor = DistanceTreeConstructor()
+    ::
 
-    UPGMA Tree:
+        from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+        constructor = DistanceTreeConstructor()
 
-    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator
-    >>> from Bio import AlignIO
-    >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-    >>> calculator = DistanceCalculator('identity')
-    >>> dm = calculator.get_distance(aln)
-    >>> upgmatree = constructor.upgma(dm)
-    >>> print(upgmatree)
-    Tree(rooted=True)
-        Clade(branch_length=0, name='Inner4')
-            Clade(branch_length=0.18749999999999994, name='Inner1')
-                Clade(branch_length=0.07692307692307693, name='Epsilon')
-                Clade(branch_length=0.07692307692307693, name='Delta')
-            Clade(branch_length=0.11057692307692304, name='Inner3')
-                Clade(branch_length=0.038461538461538464, name='Inner2')
-                    Clade(branch_length=0.11538461538461536, name='Gamma')
-                    Clade(branch_length=0.11538461538461536, name='Beta')
-                Clade(branch_length=0.15384615384615383, name='Alpha')
+    UPGMA Tree::
 
-    NJ Tree:
+        from Bio.Phylo.TreeConstruction import DistanceCalculator
+        from Bio import AlignIO
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        calculator = DistanceCalculator('identity')
+        dm = calculator.get_distance(aln)
+        upgmatree = constructor.upgma(dm)
+        print(upgmatree)
 
-    >>> njtree = constructor.nj(dm)
-    >>> print(njtree)
-    Tree(rooted=False)
-        Clade(branch_length=0, name='Inner3')
-            Clade(branch_length=0.18269230769230765, name='Alpha')
-            Clade(branch_length=0.04807692307692307, name='Beta')
-            Clade(branch_length=0.04807692307692307, name='Inner2')
-                Clade(branch_length=0.27884615384615385, name='Inner1')
-                    Clade(branch_length=0.051282051282051266, name='Epsilon')
-                    Clade(branch_length=0.10256410256410259, name='Delta')
-                Clade(branch_length=0.14423076923076922, name='Gamma')
+    Output::
+
+        Tree(rooted=True)
+            Clade(branch_length=0, name='Inner4')
+                Clade(branch_length=0.18749999999999994, name='Inner1')
+                    Clade(branch_length=0.07692307692307693, name='Epsilon')
+                    Clade(branch_length=0.07692307692307693, name='Delta')
+                Clade(branch_length=0.11057692307692304, name='Inner3')
+                    Clade(branch_length=0.038461538461538464, name='Inner2')
+                        Clade(branch_length=0.11538461538461536, name='Gamma')
+                        Clade(branch_length=0.11538461538461536, name='Beta')
+                    Clade(branch_length=0.15384615384615383, name='Alpha')
+
+    NJ Tree::
+
+        njtree = constructor.nj(dm)
+        print(njtree)
+
+    Output::
+
+        Tree(rooted=False)
+            Clade(branch_length=0, name='Inner3')
+                Clade(branch_length=0.18269230769230765, name='Alpha')
+                Clade(branch_length=0.04807692307692307, name='Beta')
+                Clade(branch_length=0.04807692307692307, name='Inner2')
+                    Clade(branch_length=0.27884615384615385, name='Inner1')
+                        Clade(branch_length=0.051282051282051266, name='Epsilon')
+                        Clade(branch_length=0.10256410256410259, name='Delta')
+                    Clade(branch_length=0.14423076923076922, name='Gamma')
 
     """
 
@@ -1078,41 +1097,58 @@ class ParsimonyTreeConstructor(TreeConstructor):
 
     Examples
     --------
-    >>> from Bio import AlignIO, Phylo
-    >>> aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
-    >>> print(aln)
-    SingleLetterAlphabet() alignment with 5 rows and 13 columns
-    AACGTGGCCACAT Alpha
-    AAGGTCGCCACAC Beta
-    CAGTTCGCCACAA Gamma
-    GAGATTTCCGCCT Delta
-    GAGATCTCCGCCC Epsilon
-    >>> starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
-    >>> print(starting_tree)
-    Tree(rooted=False, weight=1.0)
-        Clade(branch_length=0.0, name='Inner3')
-            Clade(branch_length=0.01421, name='Inner2')
-                Clade(branch_length=0.23927, name='Inner1')
-                    Clade(branch_length=0.08531, name='Epsilon')
+    ::
+
+        from Bio import AlignIO, Phylo
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        print(aln)
+
+    Output::
+
+        SingleLetterAlphabet() alignment with 5 rows and 13 columns
+        AACGTGGCCACAT Alpha
+        AAGGTCGCCACAC Beta
+        CAGTTCGCCACAA Gamma
+        GAGATTTCCGCCT Delta
+        GAGATCTCCGCCC Epsilon
+
+    ::
+
+        starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
+        print(starting_tree)
+
+    Output::
+
+        Tree(rooted=False, weight=1.0)
+            Clade(branch_length=0.0, name='Inner3')
+                Clade(branch_length=0.01421, name='Inner2')
+                    Clade(branch_length=0.23927, name='Inner1')
+                        Clade(branch_length=0.08531, name='Epsilon')
+                        Clade(branch_length=0.13691, name='Delta')
+                    Clade(branch_length=0.2923, name='Alpha')
+                Clade(branch_length=0.07477, name='Beta')
+                Clade(branch_length=0.17523, name='Gamma')
+
+    Parsimony tree::
+
+        scorer = Phylo.TreeConstruction.ParsimonyScorer()
+        searcher = Phylo.TreeConstruction.NNITreeSearcher(scorer)
+        constructor = Phylo.TreeConstruction.ParsimonyTreeConstructor(searcher, starting_tree)
+        pars_tree = constructor.build_tree(aln)
+        print(pars_tree)
+
+    Output::
+
+        Tree(rooted=True, weight=1.0)
+            Clade(branch_length=0.0)
+                Clade(branch_length=0.19732999999999998, name='Inner1')
                     Clade(branch_length=0.13691, name='Delta')
-                Clade(branch_length=0.2923, name='Alpha')
-            Clade(branch_length=0.07477, name='Beta')
-            Clade(branch_length=0.17523, name='Gamma')
-    >>> scorer = Phylo.TreeConstruction.ParsimonyScorer()
-    >>> searcher = Phylo.TreeConstruction.NNITreeSearcher(scorer)
-    >>> constructor = Phylo.TreeConstruction.ParsimonyTreeConstructor(searcher, starting_tree)
-    >>> pars_tree = constructor.build_tree(aln)
-    >>> print(pars_tree)
-    Tree(rooted=True, weight=1.0)
-        Clade(branch_length=0.0)
-            Clade(branch_length=0.19732999999999998, name='Inner1')
-                Clade(branch_length=0.13691, name='Delta')
-                Clade(branch_length=0.08531, name='Epsilon')
-            Clade(branch_length=0.04194000000000003, name='Inner2')
-                Clade(branch_length=0.01421, name='Inner3')
-                    Clade(branch_length=0.17523, name='Gamma')
-                    Clade(branch_length=0.07477, name='Beta')
-                Clade(branch_length=0.2923, name='Alpha')
+                    Clade(branch_length=0.08531, name='Epsilon')
+                Clade(branch_length=0.04194000000000003, name='Inner2')
+                    Clade(branch_length=0.01421, name='Inner3')
+                        Clade(branch_length=0.17523, name='Gamma')
+                        Clade(branch_length=0.07477, name='Beta')
+                    Clade(branch_length=0.2923, name='Alpha')
 
     """
 
