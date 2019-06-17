@@ -208,7 +208,7 @@ def read(handle, format):
     Number of wells 96
 
     If the handle contains no records, or more than one record,
-    an exception is raised.  For example:
+    an exception is raised.  For example::
 
         from Bio import phenotype
         record = phenotype.read("plates.csv", "pm-csv")
