@@ -587,7 +587,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.close()
                 raise ValueError("Unfinished/partial database")
             count, = con.execute(
-                "SELECT COUNT(key) FROM offset_data;").fetchone()
+                "SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
             if self._length != int(count):
                 con.close()
                 raise ValueError("Corrupt database? %i entries not %i"
