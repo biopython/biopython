@@ -88,8 +88,10 @@ We now capture the IDcode field from PDB Header records.
 ``Bio.pairwise2``'s pretty-print output from ``format_alignment`` has been
 optimized for local alignments: If they do not consist of the whole sequences,
 only the aligned section of the sequences are shown, together with the start
-positions of the sequences (in 1-based notation). Alignments of lists will now
-also be prettily printed.
+positions of the sequences (in 1-based notation). For seeing the whole
+sequences including the un-aligned parts, the keyword-parameter
+``show_full_sequences`` was added. Alignments of lists will now also be
+prettily printed.
 
 ``Bio.SearchIO`` now supports parsing the text output of the HHsuite protein
 sequence search tool. The format name is ``hhsuite2-text`` and
