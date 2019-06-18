@@ -78,10 +78,6 @@ VERBOSITY = 0
 # Following modules have historic failures. If you fix one of these
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-    'Bio.motifs.jaspar.db',
-    'Bio.motifs.mast',
-    'Bio.motifs.meme',
-    'Bio.motifs.minimal',
     'Bio.PDB',
     'Bio.PDB.AbstractPropertyMap',
     'Bio.PDB.Atom',
