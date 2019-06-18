@@ -586,8 +586,12 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             if self._length == -1:
                 con.close()
                 raise ValueError("Unfinished/partial database")
+
+            # use MAX(_ROWID_) to obtain the number of sequences in the database
+            # using COUNT(key) is quite slow in SQLITE
+            # (https://stackoverflow.com/questions/8988915/sqlite-count-slow-on-big-tables)
             count, = con.execute(
-                "SELECT COUNT(key) FROM offset_data;").fetchone()
+                "SELECT MAX(_ROWID_) FROM offset_data;").fetchone()
             if self._length != int(count):
                 con.close()
                 raise ValueError("Corrupt database? %i entries not %i"

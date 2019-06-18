@@ -92,6 +92,7 @@ possible, especially the following contributors:
 - Micky Yun Chan (first contribution)
 - Nick Negretti
 - Peter Cock
+- Peter Kerpedjiev
 - Ralf Stephan
 - Rob Miller
 - Sergio Valqui
