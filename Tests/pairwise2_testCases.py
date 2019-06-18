@@ -151,7 +151,7 @@ GAACT
 class TestPairwiseLocal(unittest.TestCase):
     """Test some simple local alignments."""
 
-    def test_localxs(self):
+    def test_localxs_1(self):
         """Test localxx."""
         aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
         # From Biopython 1.74 on this should only give one alignment, since
@@ -166,6 +166,23 @@ class TestPairwiseLocal(unittest.TestCase):
 2 A-B
   Score=1.9
 """)
+
+    def test_localxs_2(self):
+        """Test localxx with ``show_full_sequences=True``."""
+        aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
+        # From Biopython 1.74 on this should only give one alignment, since
+        # we disallow leading and trailing 'zero-extensions'
+        self.assertEqual(len(aligns), 1)
+        seq1, seq2, score, begin, end = aligns[0]
+        alignment = pairwise2.format_alignment(seq1, seq2, score,
+                                               begin, end,
+                                               show_full_sequences=True)
+        self.assertEqual(alignment, """\
+-AxBx
+ | | 
+zA-Bz
+  Score=1.9
+""")  # noqa: W291
 
     def test_localds_zero_score_segments_symmetric(self):
         """Test if alignment is independent on direction of sequence."""
