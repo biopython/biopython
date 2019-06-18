@@ -38,15 +38,11 @@ class Hmmer3TabParser(object):
     def _parse_row(self):
         """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(' ') if x]
+        if len(cols) < 18:
+            raise ValueError("Less columns than expected, only %i" % len(cols))
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
-        if len(cols) > 19:
-            cols[18] = ' '.join(cols[18:])
-        # if it's < 19, we have no description columns, so use an empty string
-        # instead
-        elif len(cols) < 19:
-            cols.append('')
-            assert len(cols) == 19
+        cols[18] = ' '.join(cols[18:])
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
