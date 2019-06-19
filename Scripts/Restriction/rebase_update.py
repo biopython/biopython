@@ -47,20 +47,10 @@ class RebaseUpdate(FTP):
         ftpproxy is the proxy to use if any.
         """
         proxy = {'ftp': ftpproxy or ftp_proxy}
-        if not Rebase_name:
-            raise FtpNameError('Rebase')
         if not proxy['ftp']:
-            proxy = {}
-        FancyURLopener.__init__(self, proxy)
-
-    def openRebase(self, name=ftp_Rebase):
-        """Connect to Rebase ftp server."""
-        print('\n Please wait, trying to connect to Rebase\n')
-        try:
-            self.open(name)
-        except Exception:
-            raise ConnectionError('Rebase')
-        return
+            FTP.__init__(self, host=ftp_Rebase)
+        else:
+            FTP.__init__(self, host=proxy)
 
     def getfiles(self, *files):
         """Download Rebase files."""
