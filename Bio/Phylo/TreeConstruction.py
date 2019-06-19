@@ -372,7 +372,7 @@ class DistanceCalculator(object):
 
     Examples
     --------
-    ::
+    Loading a small PHYLIP alignment from which to compute distances::
 
         from Bio.Phylo.TreeConstruction import DistanceCalculator
         from Bio import AlignIO
@@ -556,18 +556,18 @@ class DistanceTreeConstructor(TreeConstructor):
 
     Examples
     --------
-    ::
+    Loading a small PHYLIP alignment from which to compute distances, and then trees::
 
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-        constructor = DistanceTreeConstructor()
-
-    UPGMA Tree::
-
         from Bio.Phylo.TreeConstruction import DistanceCalculator
         from Bio import AlignIO
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        constructor = DistanceTreeConstructor()
         calculator = DistanceCalculator('identity')
         dm = calculator.get_distance(aln)
+
+    UPGMA Tree::
+
         upgmatree = constructor.upgma(dm)
         print(upgmatree)
 
@@ -1097,7 +1097,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
 
     Examples
     --------
-    ::
+    We will load an alignment, and then load various trees which have already been computed from it::
 
         from Bio import AlignIO, Phylo
         aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
@@ -1112,7 +1112,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
         GAGATTTCCGCCT Delta
         GAGATCTCCGCCC Epsilon
 
-    ::
+    Load an starting tree::
 
         starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
         print(starting_tree)
@@ -1129,7 +1129,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
                 Clade(branch_length=0.07477, name='Beta')
                 Clade(branch_length=0.17523, name='Gamma')
 
-    Parsimony tree::
+    Build the Parsimony tree from the starting tree::
 
         scorer = Phylo.TreeConstruction.ParsimonyScorer()
         searcher = Phylo.TreeConstruction.NNITreeSearcher(scorer)

@@ -12,11 +12,7 @@ Command line options::
 
     --help        -- show usage info
     --offline     -- skip tests which require internet access
-    -g;--generate -- write the output file for a test instead of comparing it.
-                     The name of the test to write the output for must be
-                     specified.
-    -v;--verbose  -- run tests with higher verbosity (does not affect our
-                     print-and-compare style unit tests).
+    -v;--verbose  -- run tests with higher verbosity
     <test_name>   -- supply the name of one (or more) tests to be run.
                      The .py file extension is optional.
     doctest       -- run the docstring tests.
@@ -30,7 +26,6 @@ from __future__ import print_function
 # standard modules
 import sys
 import os
-import re
 import getopt
 import time
 import traceback
@@ -83,10 +78,6 @@ VERBOSITY = 0
 # Following modules have historic failures. If you fix one of these
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-    'Bio.motifs.jaspar.db',
-    'Bio.motifs.mast',
-    'Bio.motifs.meme',
-    'Bio.motifs.minimal',
     'Bio.PDB',
     'Bio.PDB.AbstractPropertyMap',
     'Bio.PDB.Atom',
@@ -97,9 +88,6 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.PDB.PDBIO',
     'Bio.PDB.ResidueDepth',
     'Bio.PDB.vectors',
-    'Bio.phenotype',
-    'Bio.phenotype.parse',
-    'Bio.phenotype.phen_micro',
     'BioSQL.BioSeqDatabase',
 ]
 
@@ -147,6 +135,9 @@ if numpy is None:
         "Bio.PDB.Structure",
         "Bio.PDB.Superimposer",
         "Bio.PDB.Vector",
+        'Bio.phenotype',
+        'Bio.phenotype.parse',
+        'Bio.phenotype.phen_micro',
         "Bio.phenotype.pm_fitting",
         "Bio.SeqIO.PdbIO",
         "Bio.Statistics.lowess",
@@ -273,22 +264,6 @@ def main(argv):
                 raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
             Bio._py3k.urlopen = dummy_urlopen
-        if opt == "-g" or opt == "--generate":
-            if len(args) > 1:
-                print("Only one argument (the test name) needed for generate")
-                print(__doc__)
-                return 2
-            elif len(args) == 0:
-                print("No test name specified to generate output for.")
-                print(__doc__)
-                return 2
-            # strip off .py if it was included
-            if args[0][-3:] == ".py":
-                args[0] = args[0][:-3]
-
-            test = ComparisonTestCase(args[0])
-            test.generate_output()
-            return 0
 
         if opt == "-v" or opt == "--verbose":
             verbosity = 2
@@ -305,109 +280,6 @@ def main(argv):
     # run the tests
     runner = TestRunner(args, verbosity)
     return runner.run()
-
-
-class ComparisonTestCase(unittest.TestCase):
-    """Run a print-and-compare test and check it against expected output."""
-
-    def __init__(self, name, output=None):
-        """Initialize with the test to run.
-
-        Arguments:
-            - name - The name of the test. The expected output should be
-              stored in the file output/name.
-            - output - The output that was generated when this test was run.
-
-        """
-        unittest.TestCase.__init__(self)
-        self.name = name
-        self.output = output
-
-    def shortDescription(self):
-        return self.name
-
-    def runTest(self):
-        # check the expected output to be consistent with what
-        # we generated
-        outputdir = os.path.join(TestRunner.testdir, "output")
-        outputfile = os.path.join(outputdir, self.name)
-        try:
-            if sys.version_info[0] >= 3:
-                # Python 3 problem: Can't use utf8 on output/test_geo
-                # due to micro (\xb5) and degrees (\xb0) symbols
-                # Also universal new lines mode deprecated on Python 3
-                expected = open(outputfile, encoding="latin")
-            else:
-                expected = open(outputfile, "rU")
-        except IOError:
-            self.fail("Warning: Can't open %s for test %s" %
-                      (outputfile, self.name))
-
-        self.output.seek(0)
-        # first check that we are dealing with the right output
-        # the first line of the output file is the test name
-        expected_test = expected.readline().strip()
-
-        if expected_test != self.name:
-            expected.close()
-            raise ValueError("\nOutput:   %s\nExpected: %s"
-                             % (self.name, expected_test))
-
-        # Track the line number. Starts at 1 to account for the output file
-        # header line.
-        line_number = 1
-
-        # now loop through the output and compare it to the expected file
-        while True:
-            expected_line = expected.readline()
-            output_line = self.output.readline()
-            line_number += 1
-
-            # stop looping if either of the info handles reach the end
-            if (not expected_line) or (not output_line):
-                # make sure both have no information left
-                assert expected_line == '', "Unread: %s" % expected_line
-                assert output_line == '', "Extra output: %s" % output_line
-                break
-
-            # normalize the newlines in the two lines
-            expected_line = expected_line.strip("\r\n")
-            output_line = output_line.strip("\r\n")
-
-            # if the line is a doctest or PyUnit time output like:
-            # Ran 2 tests in 0.285s
-            # ignore it, so we don't have problems with different running times
-            if re.compile("^Ran [0-9]+ tests? in ").match(expected_line):
-                pass
-            # otherwise make sure the two lines are the same
-            elif expected_line != output_line:
-                expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s\n%s line %s"
-                                 % (repr(output_line), repr(expected_line),
-                                    outputfile, line_number))
-
-        expected.close()
-
-    def generate_output(self):
-        """Generate the golden output for the specified test."""
-        outputdir = os.path.join(TestRunner.testdir, "output")
-        outputfile = os.path.join(outputdir, self.name)
-
-        output_handle = open(outputfile, 'w')
-
-        # write the test name as the first line of the output
-        output_handle.write(self.name + "\n")
-
-        # remember standard out so we can reset it after we are done
-        save_stdout = sys.stdout
-        try:
-            # write the output from the test into a string
-            sys.stdout = output_handle
-            __import__(self.name)
-        finally:
-            output_handle.close()
-            # return standard out to its normal setting
-            sys.stdout = save_stdout
 
 
 class TestRunner(unittest.TextTestRunner):
@@ -463,8 +335,8 @@ class TestRunner(unittest.TextTestRunner):
             stdout = sys.stdout
             sys.stdout = output
             if name.startswith("test_"):
+                # It's a unittest
                 sys.stderr.write("%s ... " % name)
-                # It's either a unittest or a print-and-compare test
                 loader = unittest.TestLoader()
                 suite = loader.loadTestsFromName(name)
                 if hasattr(loader, "errors") and loader.errors:
@@ -484,10 +356,7 @@ class TestRunner(unittest.TextTestRunner):
                         sys.stderr.write("%s\n" % msg)
                     return False
                 if suite.countTestCases() == 0:
-                    # This is a print-and-compare test instead of a
-                    # unittest-type test.
-                    test = ComparisonTestCase(name, output)
-                    suite = unittest.TestSuite([test])
+                    raise RuntimeError("No tests found in %s" % name)
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
