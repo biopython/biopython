@@ -76,6 +76,7 @@ Python PEP8, PEP257 and best practice standard coding style.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Andrey Raspopov (first contribution)
 - Antony Lee
 - Benjamin Rowell (first contribution)
 - Bernhard Thiel
