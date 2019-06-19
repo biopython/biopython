@@ -25,7 +25,17 @@ from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase, Rebase_name
 from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
 
 
-class RebaseUpdate(FancyURLopener):
+def localtime():
+    """Generate 'time stamp' of type ymm to add to Rebase file names."""
+    t = time.gmtime()
+    year = str(t.tm_year)[-1]
+    month = str(t.tm_mon)
+    if len(month) == 1:
+        month = '0' + month
+    return year + month
+
+
+class RebaseUpdate(FTP):
     """A class to fetch the Rebase EMBOSS files."""
 
     def __init__(self, ftpproxy=''):
