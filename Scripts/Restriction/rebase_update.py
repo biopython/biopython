@@ -15,17 +15,11 @@ The Rebase EMBOSS files are used by `ranacompiler.py` to build the updated
 
 from __future__ import print_function
 
+import optparse
 import os
 import sys
 import time
-import optparse
-
-
-try:
-    from urllib import FancyURLopener, urlcleanup
-except ImportError:
-    # Python 3
-    from urllib.request import FancyURLopener, urlcleanup
+from ftplib import FTP
 
 from Bio.Restriction.RanaConfig import ftp_proxy, ftp_Rebase, Rebase_name
 from Bio.Restriction.RanaConfig import ftp_emb_e, ftp_emb_s, ftp_emb_r
