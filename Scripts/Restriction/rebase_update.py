@@ -88,7 +88,7 @@ if __name__ == '__main__':
     (option, args) = parser.parse_args()
 
     Getfiles = RebaseUpdate(option.ftp_proxy)
-    Getfiles.openRebase()
+    Getfiles.login(Rebase_name)
     Getfiles.getfiles()
     Getfiles.close()
     sys.exit()
