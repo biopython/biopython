@@ -57,74 +57,22 @@ class RebaseUpdate(FTP):
         for file in self.update(*files):
             print('copying %s' % file)
             fn = os.path.basename(file)
-            # filename = os.path.join(Rebase, fn)
             filename = os.path.join(os.getcwd(), fn)
             print('to %s' % filename)
             try:
-                self.retrieve(file, filename)
-                # The following line is a workaround for an urllib bug in
-                # Python 2.7.11 - 2.7.xx (?). It does not seem to work on
-                # Python 3.xx. Try to remove the line in new Python versions.
-                urlcleanup()
+                self.retrbinary('RETR ' + file, open(filename, 'wb').write)
             except IOError as e:
                 print(e)
-                print('This error is probably due to a non-solved ftp bug in '
-                      'recent Python versions. Please download the emboss '
-                      'files manually from http://rebase.neb.com/rebase/'
-                      'rebase.f37.html and then run ranacompiler.py. Find '
-                      'more details in the Restriction manual.')
                 self.close()
                 return
         self.close()
         return
 
-    def localtime(self):
-        """Generate 'time stamp' of type ymm to add to Rebase file names."""
-        t = time.gmtime()
-        year = str(t.tm_year)[-1]
-        month = str(t.tm_mon)
-        if len(month) == 1:
-            month = '0' + month
-        return year + month
-
     def update(self, *files):
         """Update filenames to recent versions (indicated by 'time stamp')."""
         if not files:
             files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
-        return [x.replace('###', self.localtime()) for x in files]
-
-    def __del__(self):
-        """Close tmpcache on exiting."""
-        if hasattr(self, 'tmpcache'):
-            self.close()
-        #
-        #   self.tmpcache is created by URLopener.__init__ method.
-        #
-        return
-
-
-class FtpNameError(ValueError):
-    """Error class for missing user name (usually 'anonymous')."""
-
-    def __init__(self, which_server):
-        """Print the error message."""
-        print(" In order to connect to %s ftp server, you must provide a name.\
-        \n Please edit Bio.Restriction.RanaConfig\n" % which_server)
-        sys.exit()
-
-
-class ConnectionError(IOError):
-    """Error class for failing connections to Rebase ftp server."""
-
-    def __init__(self, which_server):
-        """Print the error message."""
-        print('\
-        \n Unable to connect to the %s ftp server, make sure your computer\
-        \n is connected to the internet and that you have correctly configured\
-        \n the ftp proxy.\
-        \n Use the --proxy switch to enter the address of your proxy\
-        \n' % which_server)
-        sys.exit()
+        return [x.replace('###', localtime()) for x in files]
 
 
 if __name__ == '__main__':
