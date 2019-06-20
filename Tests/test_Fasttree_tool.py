@@ -8,13 +8,14 @@
 
 """Tests for Fasttree tool."""
 
-from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
 
 import sys
 import os
 import itertools
+import unittest
+
 from Bio._py3k import StringIO
 from Bio._py3k import zip
 
@@ -70,125 +71,89 @@ if not fasttree_exe:
         "Install FastTree and correctly set the file path to the program "
         "if you want to use it from Biopython.")
 
-#################################################################
 
-print("Checking error conditions")
-print("=========================")
+class FastTreeTestCase(unittest.TestCase):
 
-print("Empty file")
-input_file = "does_not_exist.fasta"
-assert not os.path.isfile(input_file)
-cline = FastTreeCommandline(fasttree_exe, input=input_file)
+    def check(self, path, length):
+        input_records = SeqIO.to_dict(SeqIO.parse(path, "fasta"))
+        self.assertEqual(len(input_records), length)
+        # Any filesnames with spaces should get escaped with quotes
+        #  automatically.
+        # Using keyword arguments here.
+        cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=path, nt=True)
+        self.assertEqual(str(eval(repr(cline))), str(cline))
+        out, err = cline()
+        self.assertTrue(err.strip().startswith("FastTree"))
+        tree = Phylo.read(StringIO(out), 'newick')
 
-try:
-    stdout, stderr = cline()
-    raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
-except ApplicationError as err:
-    print("Failed (good)")
-    # Python 2.3 on Windows gave (0, 'Error')
-    # Python 2.5 on Windows gives [Errno 0] Error
-    if "Cannot open sequence file" not in str(err) or \
-            "Cannot open input file" not in str(err) or \
-            "Non-zero return code " not in str(err):
-        raise ValueError("Unknown ApplicationError raised: %s" % str(err))
+        def lookup_by_names(tree):
+            names = {}
+            for clade in tree.find_clades():
+                if clade.name:
+                    if clade.name in names:
+                        raise ValueError("Duplicate key: %s" % clade.name)
+                    names[clade.name] = clade
+            return names
+        names = lookup_by_names(tree)
+        self.assertTrue(len(names) > 0)
 
-print("")
-print("Single sequence")
-input_file = "Fasta/f001"
-assert os.path.isfile(input_file)
-assert len(list(SeqIO.parse(input_file, "fasta"))) == 1
-cline = FastTreeCommandline(fasttree_exe, input=input_file)
-try:
-    stdout, stderr = cline()
-    if "Unique: 1/1" in stderr:
-        print("Failed (good)")
-    else:
-        raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
-except ApplicationError as err:
-    print("Failed (good)")
-    # assert str(err) == "No records found in handle", str(err)
+        def terminal_neighbor_dists(self):
+            """Return a list of distances between adjacent terminals."""
+            def generate_pairs(self):
+                pairs = itertools.tee(self)
+                next(pairs[1])  # Advance second iterator one step
+                return zip(pairs[0], pairs[1])
+            return [self.distance(*i) for i in
+                    generate_pairs(self.find_clades(terminal=True))]
+        for dist in terminal_neighbor_dists(tree):
+            self.assertTrue(dist > 0.0)
 
-print("")
-print("Invalid sequence")
-input_file = "Medline/pubmed_result1.txt"
-assert os.path.isfile(input_file)
-cline = FastTreeCommandline(fasttree_exe, input=input_file)
-try:
-    stdout, stderr = cline()
-    raise ValueError("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
-except ApplicationError as err:
-    print("Failed (good)")
-    # Ideally we'd catch the return code and raise the specific
-    # error for "invalid format", rather than just notice there
-    # is not output file.
-    # Note:
-    # Python 2.3 on Windows gave (0, 'Error')
-    # Python 2.5 on Windows gives [Errno 0] Error
-    if "invalid format" not in str(err) \
-            or "not produced" not in str(err) \
-            or "No sequences in file" not in str(err) \
-            or "Non-zero return code " not in str(err):
-        raise ValueError("Unknown ApplicationError raised: %s" % str(err))
+    def test_normal(self):
+        self.check("Quality/example.fasta", 3)
 
-#################################################################
-print("")
-print("Checking normal situations")
-print("==========================")
+    def test_filename_spaces(self):
+        path = "Clustalw/temp horses.fasta"  # note spaces in filename
+        handle = open(path, "w")
+        records = SeqIO.parse("Phylip/hennigian.phy", "phylip")
+        length = SeqIO.write(records, handle, "fasta")
+        handle.close()
+        self.assertEqual(length, 10)
+        self.check(path, length)
 
-# Create a temp fasta file with a space in the name
-temp_filename_with_spaces = "Clustalw/temp horses.fasta"
-handle = open(temp_filename_with_spaces, "w")
-SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
-handle.close()
+    def test_invalid(self):
+        path = "Medline/pubmed_result1.txt"
+        cline = FastTreeCommandline(fasttree_exe, input=path)
+        with self.assertRaises(ApplicationError) as cm:
+            stdout, stderr = cline()
+        message = str(cm.exception)
+        self.assertTrue("invalid format" in message or
+                        "not produced" in message or
+                        "No sequences in file" in message or
+                        "Error parsing header line:" in message or
+                        "Non-zero return code " in message,
+                        msg="Unknown ApplicationError raised: %s" % message)
 
-for input_file in ["Quality/example.fasta", "Clustalw/temp horses.fasta"]:
-    input_records = SeqIO.to_dict(SeqIO.parse(input_file, "fasta"))
-    print("")
-    print("Calling fasttree on %s (with %i records)"
-          % (repr(input_file), len(input_records)))
+    def test_single(self):
+        path = "Fasta/f001"
+        records = list(SeqIO.parse(path, "fasta"))
+        self.assertEqual(len(records), 1)
+        cline = FastTreeCommandline(fasttree_exe, input=path)
+        stdout, stderr = cline()
+        self.assertTrue("Unique: 1/1" in stderr)
 
-    # Any filesnames with spaces should get escaped with quotes automatically.
-    # Using keyword arguments here.
-    cline = _Fasttree.FastTreeCommandline(fasttree_exe, input=input_file, nt=True)
-    assert str(eval(repr(cline))) == str(cline)
+    def test_empty(self):
+        path = "does_not_exist.fasta"
+        cline = FastTreeCommandline(fasttree_exe, input=path)
+        with self.assertRaises(ApplicationError) as cm:
+            stdout, stderr = cline()
+        message = str(cm.exception)
+        self.assertTrue("Cannot open sequence file" in message or
+                        "Cannot open sequence file" in message or
+                        "Cannot read %s" % path in message or
+                        "Non-zero return code " in message,
+                        msg="Unknown ApplicationError raised: %s" % message)
 
-    out, err = cline()
-    assert err.strip().startswith("FastTree")
 
-    print("")
-    print("Checking generation of tree terminals")
-    tree = Phylo.read(StringIO(out), 'newick')
-
-    def lookup_by_names(tree):
-        names = {}
-        for clade in tree.find_clades():
-            if clade.name:
-                if clade.name in names:
-                    raise ValueError("Duplicate key: %s" % clade.name)
-                names[clade.name] = clade
-        return names
-
-    names = lookup_by_names(tree)
-
-    assert len(names) > 0.0
-    print("Success")
-
-    print("")
-    print("Checking distances between tree terminals")
-
-    def terminal_neighbor_dists(self):
-        """Return a list of distances between adjacent terminals."""
-        def generate_pairs(self):
-            pairs = itertools.tee(self)
-            next(pairs[1])  # Advance second iterator one step
-            return zip(pairs[0], pairs[1])
-        return [self.distance(*i) for i in
-                generate_pairs(self.find_clades(terminal=True))]
-
-    for dist in terminal_neighbor_dists(tree):
-        assert dist > 0.0
-
-    print("Success")
-
-print("")
-print("Done")
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity=2)
+    unittest.main(testRunner=runner)

@@ -198,6 +198,7 @@ class SeqMap(object):
         raise KeyError("No such residue " + chainid + resid)
 
     def __getitem__(self, index):
+        """Extract a single Res object from the SeqMap."""
         if not isinstance(index, slice):
             raise NotImplementedError
         s = copy(self)
@@ -228,10 +229,12 @@ class SeqMap(object):
         self.res += other.res
 
     def __iadd__(self, other):
+        """In place addition of SeqMap objects."""
         self.extend(other)
         return self
 
     def __add__(self, other):
+        """Addition of SeqMap objects."""
         s = copy(self)
         s.extend(other)
         return s

@@ -13,13 +13,15 @@ class fff_rec(object):
         self.data = inrec
 
     def __repr__(self):
+        """Return FSSP record object as a string."""
         return str(self.data)
-    __str__ = __repr__
 
     def __len__(self):
+        """Return length (number of rows)."""
         return len(self.data)
 
     def __getitem__(self, index):
+        """Extract a subset of the record (treating it like an array)."""
         if isinstance(index, slice):
             return self.data[index]
         elif (isinstance(index, tuple) or isinstance(index, list)) \

@@ -96,13 +96,12 @@ class PosAlign(object):
                 self.ss = '0'
 
     def __repr__(self):
+        """Return position alignments as a string."""
         if self.gap:
             outstring = '..'
         else:
             outstring = self.aa + self.ss.lower()
         return outstring
-
-    __str__ = __repr__
 
 
 class FSSPSumRec(object):
@@ -143,8 +142,8 @@ class FSSPSumRec(object):
         self.doc = self.doc.rstrip() + '\n'
 
     def __repr__(self):
+        """Return the text from the FSSP SUMMARY section."""
         return self.raw
-    __str__ = __repr__
 
 
 class FSSPAlignRec(object):

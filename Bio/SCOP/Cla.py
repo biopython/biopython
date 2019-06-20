@@ -62,6 +62,7 @@ class Record(object):
             self.hierarchy[key] = int(value)
 
     def __str__(self):
+        """Represent the SCOP classification record as a tab-separated string."""
         s = []
         s.append(self.sid)
         s += str(self.residues).split(" ")

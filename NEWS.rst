@@ -61,6 +61,9 @@ structured data source with minimal loss of functionality upon future MAST
 releases. Class structure remains the same plus an additional attribute
 ``Record.strand_handling`` required for diagram parsing.
 
+All tests using the older print-and-compare approach have been replaced by
+unittests following Python's standard testing framework.
+
 On the documentation side, all the public modules, classes, methods and
 functions now have docstrings (built in help strings). Furthermore, the PDF
 version of the *Biopython Tutorial and Cookbook* now uses syntax coloring
@@ -89,6 +92,7 @@ possible, especially the following contributors:
 - Micky Yun Chan (first contribution)
 - Nick Negretti
 - Peter Cock
+- Peter Kerpedjiev
 - Ralf Stephan
 - Rob Miller
 - Sergio Valqui

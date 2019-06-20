@@ -16,11 +16,15 @@ provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 
 from __future__ import print_function
 
+import warnings
+
 from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
+
+from Bio import BiopythonWarning
 
 
 NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
@@ -35,7 +39,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            other_advanced=None, perc_ident=None, phi_pattern=None,
            query_file=None, query_believe_defline=None, query_from=None,
            query_to=None, searchsp_eff=None, service=None, threshold=None,
-           ungapped_alignment=None, word_size=None,
+           ungapped_alignment=None, word_size=None, short_query=None,
            alignments=500, alignment_view=None, descriptions=500,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
@@ -44,13 +48,18 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            ):
     """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
-    Supports all parameters of the qblast API for Put and Get.
+    Supports all parameters of the old qblast API for Put and Get.
 
-    Please note that BLAST on the cloud supports the NCBI-BLAST Common
-    URL API (http://ncbi.github.io/blast-cloud/dev/api.html). To
-    use this feature, please set url_base to
-    'http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi' and
-    format_object='Alignment'. For more details, please see
+    Please note that NCBI uses the new Common URL API for BLAST searches
+    on the internet (http://ncbi.github.io/blast-cloud/dev/api.html). Thus,
+    some of the parameters used by this function are not (or are no longer)
+    officially supported by NCBI. Although they are still functioning, this
+    may change in the future.
+
+    The Common URL API (http://ncbi.github.io/blast-cloud/dev/api.html) allows
+    doing BLAST searches on cloud servers. To use this feature, please set
+    ``url_base='http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'``
+    and ``format_object='Alignment'``. For more details, please see
     https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
 
     Some useful parameters:
@@ -68,6 +77,10 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
      - entrez_query   Entrez query to limit Blast search
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+     - short_query    TRUE/FALSE whether to adjust the search parameters for a
+                      short query sequence. Note that this will override
+                      manually set parameters like word size and e value. Turns
+                      off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
@@ -81,6 +94,24 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
     if program not in programs:
         raise ValueError("Program specified is %s. Expected one of %s"
                          % (program, ", ".join(programs)))
+
+    # SHORT_QUERY_ADJUST throws an error when using blastn (wrong parameter
+    # assignment from NCBIs side).
+    # Thus we set the (known) parameters directly:
+    if short_query and program == 'blastn':
+        short_query = None
+        # We only use the 'short-query' parameters for short sequences:
+        if len(sequence) < 31:
+            expect = 1000
+            word_size = 7
+            nucl_reward = 1
+            filter = None
+            lcase_mask = None
+            warnings.warn('"SHORT_QUERY_ADJUST" is incorrectly implemented '
+                          '(by NCBI) for blastn. We bypass the problem by '
+                          'manually adjusting the search parameters. Thus, '
+                          'results may slightly differ from web page '
+                          'searches.', BiopythonWarning)
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -119,6 +150,7 @@ def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
         # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
+        ('SHORT_QUERY_ADJUST', short_query),
         ('TEMPLATE_TYPE', template_type),
         ('TEMPLATE_LENGTH', template_length),
         ('THRESHOLD', threshold),

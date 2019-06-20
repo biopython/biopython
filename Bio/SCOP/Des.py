@@ -63,6 +63,7 @@ class Record(object):
         self.sunid = int(sunid)
 
     def __str__(self):
+        """Represent the SCOP description record as a tab-separated string."""
         s = []
         s.append(self.sunid)
         s.append(self.nodetype)

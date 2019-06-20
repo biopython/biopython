@@ -55,6 +55,7 @@ class Record(object):
         self.residues.pdbid = pdbid
 
     def __str__(self):
+        """Represent the SCOP domain record as a tab-separated string."""
         s = []
         s.append(self.sid)
         s.append(str(self.residues).replace(" ", "\t"))

@@ -47,6 +47,7 @@ class Alphabet(object):
     # objects.
 
     def __repr__(self):
+        """Represent the alphabet class as a string for debugging."""
         return self.__class__.__name__ + "()"
 
     def contains(self, other):
@@ -197,11 +198,13 @@ class AlphabetEncoder(object):
             self.letters = None
 
     def __getattr__(self, key):
+        """Proxy method for accessing attributes of the wrapped alphabet."""
         if key[:2] == "__" and key[-2:] == "__":
             raise AttributeError(key)
         return getattr(self.alphabet, key)
 
     def __repr__(self):
+        """Represent the alphabet encoder class as a string for debugging."""
         return "%s(%r, %r)" % (self.__class__.__name__, self.alphabet,
                                self.new_letters)
 

@@ -62,27 +62,39 @@ class PlateRecord(object):
     accessed calling their id as an index or iterating on the PlateRecord:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("plate.csv", "pm-csv")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for well in plate:
-    ...    print("%s" % well.id)
+    ...    print("%s" % well.id) # doctest:+ELLIPSIS
     ...
     A01
-    A02
     ...
 
     The plate rows and columns can be queried with an indexing system similar
     to NumPy and other matrices:
 
     >>> print(plate[1])
+    Plate ID: PM01
+    Well: 12
+    Rows: 1
+    Columns: 12
     PlateRecord('WellRecord['B01'], WellRecord['B02'], WellRecord['B03'], ..., WellRecord['B12']')
 
     >>> print(plate[:,1])
+    Plate ID: PM01
+    Well: 8
+    Rows: 8
+    Columns: 1
     PlateRecord('WellRecord['A02'], WellRecord['B02'], WellRecord['C02'], ..., WellRecord['H02']')
 
     Single WellRecord objects can be accessed using this indexing system:
 
     >>> print(plate[1,2])
+    Plate ID: PM01
+    Well ID: B03
+    Time points: 384
+    Minum signal 0.00 at time 11.00
+    Maximum signal 76.25 at time 18.00
     WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0), ..., (95.75, 11.0)')
 
     The presence of a particular well can be inspected with the "in" keyword:
@@ -93,7 +105,7 @@ class PlateRecord(object):
     the well id) in the plate can be obtained:
 
     >>> for well in plate.get_row('H'):
-    ...     print("%s" % well.id)
+    ...     print("%s" % well.id) # doctest:+ELLIPSIS
     ...
     H01
     H02
@@ -104,9 +116,9 @@ class PlateRecord(object):
     in the plate can be obtained:
 
     >>> for well in plate.get_column(12):
-    ...     print("%s" % well.id)
+    ...     print("%s" % well.id) # doctest:+ELLIPSIS
     ...
-    A01
+    A12
     B12
     C12
     ...
@@ -114,7 +126,7 @@ class PlateRecord(object):
     Two PlateRecord objects can be compared: if all their wells are equal the
     two plates are considered equal:
 
-    >>> plate2 = phenotype.read("plate.json", "pm-json")
+    >>> plate2 = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> plate == plate2
     True
 
@@ -130,6 +142,7 @@ class PlateRecord(object):
     be subtracted to all wells:
 
     >>> subplate = plate.subtract_control()
+
     """
 
     def __init__(self, plateid, wells=None):
@@ -192,7 +205,7 @@ class PlateRecord(object):
         plate[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("plate.csv", "pm-csv")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
 
         You can access a well of the plate, using its id.
 
@@ -203,9 +216,17 @@ class PlateRecord(object):
 
         >>> first_row = plate[0]
         >>> print(first_row)
+        Plate ID: PM01
+        Well: 12
+        Rows: 1
+        Columns: 12
         PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['A12']')
         >>> last_row = plate[-1]
         >>> print(last_row)
+        Plate ID: PM01
+        Well: 12
+        Rows: 1
+        Columns: 12
         PlateRecord('WellRecord['H01'], WellRecord['H02'], WellRecord['H03'], ..., WellRecord['H12']')
 
         You can also access use python's slice notation to sub-plates
@@ -213,6 +234,10 @@ class PlateRecord(object):
 
         >>> sub_plate = plate[2:5]
         >>> print(sub_plate)
+        Plate ID: PM01
+        Well: 36
+        Rows: 3
+        Columns: 12
         PlateRecord('WellRecord['C01'], WellRecord['C02'], WellRecord['C03'], ..., WellRecord['E12']')
 
         This includes support for a step, i.e. plate[start:end:step], which
@@ -225,23 +250,35 @@ class PlateRecord(object):
 
         >>> w = plate[3, 4]
         >>> print(w.id)
-        'D05'
+        D05
 
         To get a single column use this syntax:
 
         >>> sub_plate = plate[:, 4]
         >>> print(sub_plate)
+        Plate ID: PM01
+        Well: 8
+        Rows: 8
+        Columns: 1
         PlateRecord('WellRecord['A05'], WellRecord['B05'], WellRecord['C05'], ..., WellRecord['H05']')
 
         Or, to get part of a column,
 
         >>> sub_plate = plate[1:3, 4]
         >>> print(sub_plate)
+        Plate ID: PM01
+        Well: 2
+        Rows: 2
+        Columns: 1
         PlateRecord(WellRecord['B05'], WellRecord['C05'])
 
         However, in general you get a sub-plate,
 
         >>> print(plate[1:5, 3:6])
+        Plate ID: PM01
+        Well: 12
+        Rows: 4
+        Columns: 3
         PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], ..., WellRecord['E06']')
 
         This should all seem familiar to anyone who has used the NumPy
@@ -500,13 +537,13 @@ class PlateRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> record = phenotype.read("plates.csv", "pm-csv")
+        >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
         >>> print(record)
-        Plate ID: PM09
+        Plate ID: PM01
         Well: 96
         Rows: 8
         Columns: 12
-        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], WellRecord['A04']...WellRecord['H12']')
+        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['H12']')
 
         Note that long well lists are shown truncated.
         """
@@ -528,32 +565,32 @@ class WellRecord(object):
     """WellRecord stores all time course signals of a phenotype Microarray well.
 
     The single time points and signals can be accessed iterating on the
-    WellRecord or using lists indeces or slices:
+    WellRecord or using lists indexes or slices:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("plate.csv", "pm-csv")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for time, signal in well:
-    ...    print("Time: %f, Signal: %f" % (time, signal))
+    ...    print("Time: %f, Signal: %f" % (time, signal)) # doctest:+ELLIPSIS
     ...
-    Time: 0.0, Signal: 10.0
-    Time: 0.25, Signal: 14.0
-    Time: 0.5, Signal: 19.0
-    Time: 24.25, Signal: 32.0
+    Time: 0.000000, Signal: 14.000000
+    Time: 0.250000, Signal: 13.000000
+    Time: 0.500000, Signal: 15.000000
+    Time: 0.750000, Signal: 15.000000
     ...
     >>> well[1]
-    23.0
+    16.0
     >>> well[1:5]
-    [23.0, 23.0, 26.0, 26.0]
+    [16.0, 20.0, 18.0, 15.0]
     >>> well[1:5:0.5]
-    [23.0, 23.0, 23.0, 26.0, 26.0, 26.0, 26.0, 26.0]
+    [16.0, 19.0, 20.0, 18.0, 18.0, 18.0, 15.0, 18.0]
 
     If a time point was not present in the input file but it's between the
     minimum and maximum time point, the interpolated signal is returned,
     otherwise a nan value:
 
     >>> well[1.3]
-    23.0
+    19.0
     >>> well[1250]
     nan
 
@@ -579,16 +616,20 @@ class WellRecord(object):
     * richards
     The functions are described in Zwietering et al., 1990 (PMID: 16348228)
 
-    >>> well.fit()
-    >>> print(well.slope, well.model)
-    (61.853516785566917, 'logistic')
+    For example::
+
+        well.fit()
+        print(well.slope, well.model)
+        (61.853516785566917, 'logistic')
 
     If not sigmoid function is specified, the first one that is successfully
     fitted is used. The user can also specify a specific function.
 
-    >>> well.fit('gompertz')
-    >>> print(well.slope, well.model)
-    (127.94630059171354, 'gompertz')
+    To specify gompertz::
+
+        well.fit('gompertz')
+        print(well.slope, well.model)
+        (127.94630059171354, 'gompertz')
 
     If no function can be fitted, the parameters are left as None, except for
     the max, min, average_height and area.
@@ -750,15 +791,15 @@ class WellRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("plates.csv", "pm-csv")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
         >>> record = plate['A05']
         >>> print(record)
-        Plate ID: PM09
+        Plate ID: PM01
         Well ID: A05
-        Time points: 288
-        Minum signal 0.00 at time 10.00
-        Maximum signal 7.50 at time 32.00
-        WellRecord('(0.0, 10.0), (0.25, 14.0), (0.5, 19.0), (0.75, 19.0), (1.0, 23.0)...(71.75, 32.0)')
+        Time points: 384
+        Minum signal 0.25 at time 13.00
+        Maximum signal 19.50 at time 23.00
+        WellRecord('(0.0, 14.0), (0.25, 13.0), (0.5, 15.0), (0.75, 15.0), (1.0, 16.0), ..., (95.75, 16.0)')
 
         Note that long time spans are shown truncated.
         """

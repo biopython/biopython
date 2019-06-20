@@ -556,7 +556,8 @@ class DistanceTreeConstructor(TreeConstructor):
 
     Examples
     --------
-    Loading a small PHYLIP alignment from which to compute distances, and then trees::
+    Loading a small PHYLIP alignment from which to compute distances, and then
+    build a upgma Tree::
 
         from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
         from Bio.Phylo.TreeConstruction import DistanceCalculator
@@ -565,9 +566,6 @@ class DistanceTreeConstructor(TreeConstructor):
         constructor = DistanceTreeConstructor()
         calculator = DistanceCalculator('identity')
         dm = calculator.get_distance(aln)
-
-    UPGMA Tree::
-
         upgmatree = constructor.upgma(dm)
         print(upgmatree)
 
@@ -584,7 +582,7 @@ class DistanceTreeConstructor(TreeConstructor):
                         Clade(branch_length=0.11538461538461536, name='Beta')
                     Clade(branch_length=0.15384615384615383, name='Alpha')
 
-    NJ Tree::
+    Build a NJ Tree::
 
         njtree = constructor.nj(dm)
         print(njtree)
@@ -1112,7 +1110,7 @@ class ParsimonyTreeConstructor(TreeConstructor):
         GAGATTTCCGCCT Delta
         GAGATCTCCGCCC Epsilon
 
-    Load an starting tree::
+    Load a starting tree::
 
         starting_tree = Phylo.read('TreeConstruction/nj.tre', 'newick')
         print(starting_tree)

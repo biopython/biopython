@@ -139,9 +139,9 @@ DNA = Seq
 
 
 class FormattedSeq(object):
-    """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
+    """A linear or ciruclar sequence object for restriction analysis.
 
-    Translate a Bio.Seq into a formatted sequence to be used with Restriction.
+    Translates a Bio.Seq into a formatted sequence to be used with Restriction.
 
     Roughly: remove anything which is not IUPAC alphabet and then add a space
              in front of the sequence to get a biological index instead of a
@@ -152,11 +152,11 @@ class FormattedSeq(object):
     """
 
     def __init__(self, seq, linear=True):
-        """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
+        """Initialize ``FormattedSeq`` with sequence and topology (optional).
 
         ``seq`` is either a ``Bio.Seq``, ``Bio.MutableSeq`` or a
-        ``FormattedSeq``. if ``seq`` is a ``FormattedSeq``, linear will have
-        no effect on the shape of the sequence.
+        ``FormattedSeq``. If ``seq`` is a ``FormattedSeq``, ``linear``
+        will have no effect on the shape of the sequence.
         """
         if isinstance(seq, (Seq, MutableSeq)):
             stringy = str(seq)
@@ -176,13 +176,19 @@ class FormattedSeq(object):
             raise TypeError('expected Seq or MutableSeq, got %s' % type(seq))
 
     def __len__(self):
+        """Return length of ``FormattedSeq``.
+
+        ``FormattedSeq`` has a leading space, thus substract 1.
+        """
         return len(self.data) - 1
 
     def __repr__(self):
+        """Represent ``FormattedSeq`` class as a string."""
         return 'FormattedSeq(%s, linear=%s)' % (repr(self[1:]),
                                                 repr(self.linear))
 
     def __eq__(self, other):
+        """Implement equality operator for ``FormattedSeq`` object."""
         if isinstance(other, FormattedSeq):
             if repr(self) == repr(other):
                 return True
@@ -232,6 +238,18 @@ class FormattedSeq(object):
         return [(i.start(), i.group) for i in re.finditer(pattern, data)]
 
     def __getitem__(self, i):
+        """Return substring of ``FormattedSeq``.
+
+        The class of the returned object is the class of the respective
+        sequence. Note that due to the leading space, indexing is 1-based:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Restriction.Restriction import FormattedSeq
+        >>> f_seq = FormattedSeq(Seq('ATGCATGC'))
+        >>> f_seq[1]
+        Seq('A')
+
+        """
         if self.lower:
             return self.klass((self.data[i]).lower(), self.alphabet)
         return self.klass(self.data[i], self.alphabet)
@@ -361,8 +379,11 @@ class RestrictionType(type):
             return 0
 
     def __hash__(cls):
-        # Python default is to use id(...)
-        # This is consistent with the __eq__ implementation
+        """Implement ``hash()`` method for ``RestrictionType``.
+
+        Python default is to use ``id(...)``
+        This is consistent with the ``__eq__`` implementation
+        """
         return id(cls)
 
     def __eq__(cls, other):
@@ -2027,6 +2048,7 @@ class RestrictionBatch(set):
         self.suppliers = [x for x in suppliers if x in suppliers_dict]
 
     def __str__(self):
+        """Return a readable representation of the ``RestrictionBatch``."""
         if len(self) < 5:
             return '+'.join(self.elements())
         else:
@@ -2034,9 +2056,11 @@ class RestrictionBatch(set):
                                '+'.join(self.elements()[-2:])))
 
     def __repr__(self):
+        """Represent ``RestrictionBatch`` class as a string for debugging."""
         return 'RestrictionBatch(%s)' % self.elements()
 
     def __contains__(self, other):
+        """Implement ``in`` for ``RestrictionBatch``."""
         try:
             other = self.format(other)
         except ValueError:  # other is not a restriction enzyme
@@ -2306,6 +2330,7 @@ class Analysis(RestrictionBatch, PrintFormat):
             self.search(self.sequence, self.linear)
 
     def __repr__(self):
+        """Represent ``Analysis`` class as a string."""
         return 'Analysis(%s,%s,%s)' %\
                (repr(self.rb), repr(self.sequence), self.linear)
 

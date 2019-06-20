@@ -111,6 +111,7 @@ class Statistics(object):
     header = "identity_fraction\tmatches\tmismatches\tgaps\textensions"
 
     def __str__(self):
+        """Statistics as a tab separated string."""
         return "\t".join(str(x) for x in (self.identity_fraction(),
                                           self.matches, self.mismatches,
                                           self.gaps, self.extensions))

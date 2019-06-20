@@ -83,12 +83,15 @@ class StandardData(object):
         return len(self._data)
 
     def __getitem__(self, arg):
+        """Pull out child by index."""
         return self._data[arg]
 
     def __iter__(self):
+        """Iterate over the items."""
         return self
 
     def __next__(self):
+        """Return next item."""
         try:
             return_coding = self._data[self._current_pos]
         except IndexError:

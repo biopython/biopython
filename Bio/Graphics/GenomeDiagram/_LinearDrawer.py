@@ -202,17 +202,19 @@ class LinearDrawer(AbstractDrawer):
         self.fragment_bases = ceil(1. * self.length / self.fragments)    # fragment length in bases
 
         # Key fragment base and top lines by fragment number
-        self.fragment_lines = {}    # Holds bottom and top line locations of fragments, keyed by fragment number
-        fragment_crop = (1 - self.fragment_size) / 2    # No of pixels to crop the fragment
-        fragy = self.ylim           # Holder for current absolute fragment base
+        # Holds bottom and top line locations of fragments, keyed by fragment number
+        self.fragment_lines = {}
+        # Number of pixels to crop the fragment:
+        fragment_crop = (1 - self.fragment_size) / 2
+        fragy = self.ylim  # Holder for current absolute fragment base
         for fragment in range(self.fragments):
-            fragtop = fragy - fragment_crop * self.fragment_height     # top - crop
+            fragtop = fragy - fragment_crop * self.fragment_height  # top - crop
             fragbtm = fragy - (1 - fragment_crop) * self.fragment_height  # bottom + crop
             self.fragment_lines[fragment] = (fragbtm, fragtop)
-            fragy -= self.fragment_height                   # next fragment base
+            fragy -= self.fragment_height  # next fragment base
 
         # Key base starts and ends for each fragment by fragment number
-        self.fragment_limits = {}   # Holds first and last base positions in a fragment
+        self.fragment_limits = {}  # Holds first and last base positions in a fragment
         fragment_step = self.fragment_bases  # bases per fragment
         fragment_count = 0
         # Add start and end positions for each fragment to dictionary
