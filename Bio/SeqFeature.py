@@ -2073,8 +2073,7 @@ class OneOfPosition(int, AbstractPosition):
         for position in self.position_choices:
             out += "%s," % position
         # replace the last comma with the closing parenthesis
-        out = out[:-1] + ")"
-        return out
+        return out[:-1] + ")"
 
     def _shift(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2100,8 +2099,7 @@ class PositionGap(object):
 
     def __str__(self):
         """Return a representation of the PositionGap object (with python counting)."""
-        out = "gap(%s)" % self.gap_size
-        return out
+        return "gap(%s)" % self.gap_size
 
 
 if __name__ == "__main__":
