@@ -1168,3 +1168,8 @@ class JsonWriter(object):
         handle.write(json.dumps(out) + '\n')
 
         return len(out)
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
