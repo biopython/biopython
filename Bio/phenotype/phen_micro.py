@@ -65,7 +65,7 @@ class PlateRecord(object):
     >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for well in plate:
-    ...    print("%s" % well.id) # doctest:+ELLIPSIS
+    ...    print(well.id)
     ...
     A01
     ...
@@ -105,7 +105,7 @@ class PlateRecord(object):
     the well id) in the plate can be obtained:
 
     >>> for well in plate.get_row('H'):
-    ...     print("%s" % well.id) # doctest:+ELLIPSIS
+    ...     print(well.id)
     ...
     H01
     H02
@@ -116,7 +116,7 @@ class PlateRecord(object):
     in the plate can be obtained:
 
     >>> for well in plate.get_column(12):
-    ...     print("%s" % well.id) # doctest:+ELLIPSIS
+    ...     print(well.id)
     ...
     A12
     B12
