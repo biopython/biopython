@@ -1539,6 +1539,11 @@ class ExactPosition(int, AbstractPosition):
                                  % extension)
         return int.__new__(cls, position)
 
+    # Must define this on Python 3.8 onwards because we redefine __repr__
+    def __str__(self):
+        """Return a representation of the ExactPosition object (with python counting)."""
+        return str(int(self))
+
     def __repr__(self):
         """Represent the ExactPosition object as a string for debugging."""
         return "%s(%i)" % (self.__class__.__name__, int(self))
