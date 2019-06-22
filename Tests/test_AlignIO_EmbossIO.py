@@ -60,7 +60,7 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 #---------------------------------------
 #---------------------------------------
 
-"""
+"""  # noqa: E122 not clear to me, why this comes up here
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
 pair_example = \

@@ -18,7 +18,7 @@ from Bio.SeqRecord import SeqRecord
 
 test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter)
 test_write_read_align_with_seq_count = test_write_read_alignment_formats \
-                                     + ["fasta", "tab"]
+    + ["fasta", "tab"]
 
 
 class TestAlignIO_exceptions(unittest.TestCase):

@@ -80,7 +80,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 80, ' ') redefined at line 633.",
                     "Residue (' ', 81, ' ') redefined at line 646.",
                     'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902.'
-                    ]):
+            ]):
                 self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
@@ -1248,7 +1248,7 @@ class ChangingIdTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.struc = PDBParser(PERMISSIVE=True).get_structure(
-                                                  'X', "PDB/a_structure.pdb")
+                'X', "PDB/a_structure.pdb")
 
     def test_change_model_id(self):
         """Change the id of a model."""

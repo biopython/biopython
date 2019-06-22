@@ -26,7 +26,7 @@ ignore =
     # Ignores that we have to accept for a while:
     # ===========================================
     E123, # closing bracket does not match indentation of opening bracket's line
-          # TODO? (main/Bio/Tests: 3/91/37 occurrences)
+          # TODO? (main/Bio/Tests: 3/91/31 occurrences)
     E501, # line too long
           # Maybe we find a sensible limit, e.g. 88 (black) and enforce it
     W504, # line break after binary operator (Bio/Tests/Scripts: 225/119/7) TODO?
@@ -41,18 +41,18 @@ ignore =
 # ========================
 per-file-ignores =
     Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    Tests/*:E122,E126,F401,F841,D101,D102,D103,B009,B010,B011,C812
+    Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812
 
     # Due to a bug in flake8, we need the following lines for running the
     # pre-commit hook. If you made edits above, please change also here!
     /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
-    /Tests/*:E122,E126,F401,F841,D101,D102,D103,B009,B010,B011,C812
+    /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812
 
 #=============================
 # per-file-ignores error codes
 #==============================
 #Bio/*:E122 continuation line missing indentation or outdented TODO? (264 occurrences)
-#      E126 continuation line over-indented for hanging indent TODO?  (53 occurrences)
+#      E126 continuation line over-indented for hanging indent TODO?  (54 occurrences)
 #      F401 module imported but unused TODO? (107 occurrences)
 #      F841 local variable is assigned to but never used TODO? (55 occurrences)
 #      D105 missing docstring magic method (121 occurrences)
@@ -64,9 +64,7 @@ per-file-ignores =
 #           instead callers should raise AssertionError().
 #      C812 missing trailing comma
 #      C815 missing trailing comma in Python 3.5+
-#Tests/*:E122 continuation line missing indentation or outdented TODO? (48 occurrences)
-#        E126 continuation line over-indented for hanging indent TODO? (39 occurrences)
-#        F401 module imported but unused TODO? (88 occurrences)
+#Tests/*:F401 module imported but unused TODO? (88 occurrences)
 #        F841 local variable is assigned to but never used TODO? (64 occurrences)
 #        D101 missing docstring in public class (207 occurrences)
 #        D102 missing docstring in public method (956 occurrences)

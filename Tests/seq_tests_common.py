@@ -137,9 +137,8 @@ def compare_feature(old_f, new_f):
             elif isinstance(new_f.qualifiers[key], list):
                 # Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
-                        "%s -> %s" \
-                        % (repr(old_f.qualifiers[key]),
-                           repr(new_f.qualifiers[key]))
+                    "%s -> %s" % (repr(old_f.qualifiers[key]),
+                                  repr(new_f.qualifiers[key]))
             else:
                 raise ValueError("Problem with feature's '%s' qualifier" % key)
         else:
@@ -289,15 +288,15 @@ def compare_record(old, new):
             assert old.annotations[key] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
-        elif isinstance(old.annotations[key], str) \
-        and isinstance(new.annotations[key], list):
+        elif (isinstance(old.annotations[key], str)
+              and isinstance(new.annotations[key], list)):
             # Any annotation which is a single string gets turned into
             # a list containing one string by BioSQL at the moment.
             assert [old.annotations[key]] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
-        elif isinstance(old.annotations[key], list) \
-        and isinstance(new.annotations[key], str):
+        elif (isinstance(old.annotations[key], list)
+              and isinstance(new.annotations[key], str)):
             assert old.annotations[key] == [new.annotations[key]], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
