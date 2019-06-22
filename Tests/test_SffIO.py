@@ -468,7 +468,7 @@ if False:
 
     # Ugly bit of code to make a fake index at start
     records = list(SffIterator(
-            open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
+        open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
     out_handle = open(
         "Roche/E3MFGYR02_alt_index_at_start.sff", "w")
     index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
@@ -534,11 +534,11 @@ if False:
     for old, new in zip(records, records2):
         assert str(old.seq) == str(new.seq)
     j = list(_sff_do_slow_index(
-            open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+             open("Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
 
     # Ugly bit of code to make a fake index at end
     records = list(SffIterator(
-            open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
+                   open("Roche/E3MFGYR02_random_10_reads.sff", "rb")))
     with open("Roche/E3MFGYR02_alt_index_at_end.sff", "w") as out_handle:
         w = SffWriter(out_handle, index=False, xml=None)
         # Fake the header...

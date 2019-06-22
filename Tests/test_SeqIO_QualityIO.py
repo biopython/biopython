@@ -66,7 +66,7 @@ def compare_record(old, new, truncate=None):
     if old.id != new.id:
         raise ValueError("'%s' vs '%s' " % (old.id, new.id))
     if old.description != new.description \
-    and (old.id + " " + old.description).strip() != new.description:
+       and (old.id + " " + old.description).strip() != new.description:
         raise ValueError("'%s' vs '%s' " % (old.description, new.description))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
@@ -78,23 +78,23 @@ def compare_record(old, new, truncate=None):
         else:
             raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
     if "phred_quality" in old.letter_annotations \
-    and "phred_quality" in new.letter_annotations \
-    and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
+       and "phred_quality" in new.letter_annotations \
+       and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"]:
         if truncate and [min(q, truncate) for q in old.letter_annotations["phred_quality"]] == \
                         [min(q, truncate) for q in new.letter_annotations["phred_quality"]]:
             pass
         else:
             raise ValueError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
-    and "solexa_quality" in new.letter_annotations \
-    and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:
+       and "solexa_quality" in new.letter_annotations \
+       and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"]:
         if truncate and [min(q, truncate) for q in old.letter_annotations["solexa_quality"]] == \
                         [min(q, truncate) for q in new.letter_annotations["solexa_quality"]]:
             pass
         else:
             raise ValueError("Mismatch in phred_quality")
     if "phred_quality" in old.letter_annotations \
-    and "solexa_quality" in new.letter_annotations:
+       and "solexa_quality" in new.letter_annotations:
         # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.solexa_quality_from_phred(q))
@@ -108,7 +108,7 @@ def compare_record(old, new, truncate=None):
             print(new.letter_annotations["solexa_quality"])
             raise ValueError("Mismatch in phred_quality vs solexa_quality")
     if "solexa_quality" in old.letter_annotations \
-    and "phred_quality" in new.letter_annotations:
+       and "phred_quality" in new.letter_annotations:
         # Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         # Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.phred_quality_from_solexa(q))

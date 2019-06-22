@@ -235,7 +235,7 @@ class TestSeqStringMethods(unittest.TestCase):
         """Test __eq__ comparison method."""
         with warnings.catch_warnings(record=True):
             Seq.Seq("TCAAAA", IUPAC.ambiguous_dna) == \
-                              Seq.Seq("TCAAAA", IUPAC.ambiguous_rna)
+                Seq.Seq("TCAAAA", IUPAC.ambiguous_rna)
 
     def test_not_equal_comparsion(self):
         """Test __ne__ comparison method."""
@@ -1054,7 +1054,7 @@ class TestReverseComplement(unittest.TestCase):
         for nucleotide_seq in test_seqs_copy:
             if not isinstance(nucleotide_seq.alphabet,
                               Alphabet.ProteinAlphabet) and \
-                              isinstance(nucleotide_seq, Seq.Seq):
+                    isinstance(nucleotide_seq, Seq.Seq):
                 expected = Seq.reverse_complement(nucleotide_seq)
                 self.assertEqual(
                     repr(expected), repr(nucleotide_seq.reverse_complement()))

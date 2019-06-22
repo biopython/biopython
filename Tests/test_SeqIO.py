@@ -484,7 +484,7 @@ class TestSeqIO(unittest.TestCase):
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(SeqIO.parse(
-                        handle=t_filename, format=t_format))
+                    handle=t_filename, format=t_format))
                 self.assertEqual(len(alignment), t_count)
                 alignment_len = alignment.get_alignment_length()
 

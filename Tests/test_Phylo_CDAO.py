@@ -19,9 +19,7 @@ except ImportError:
     raise MissingExternalDependencyError('Install RDFlib if you want to use the CDAO tree format.')
 
 # Example CDAO files
-cdao_files = (
-              'test.cdao',
-              )
+cdao_files = ('test.cdao',)
 
 # Temporary file name for Writer tests below
 DUMMY = tempfile.mktemp()

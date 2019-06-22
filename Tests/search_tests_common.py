@@ -154,11 +154,11 @@ def compare_attrs(obj_a, obj_b, attrs):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
                 assert str(val_a.seq) == str(val_b.seq), \
-                        "%s: %r vs %r" % (attr, val_a, val_b)
+                    "%s: %r vs %r" % (attr, val_a, val_b)
             elif isinstance(val_a, list) and isinstance(val_b, list):
                 for seq_a, seq_b in zip(val_a, val_b):
                     assert str(seq_a.seq) == str(seq_b.seq), \
-                            "%s: %r vs %r" % (attr, seq_a, seq_b)
+                        "%s: %r vs %r" % (attr, seq_a, seq_b)
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
