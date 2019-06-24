@@ -103,7 +103,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             ValueError); all other exception types will still be raised. This
             means you can use a lambda expression that simply attempts to look
             up the desired value without checking if the intermediate attributes
-            are available:
+            are available::
 
                 from Bio import Phylo, AlignIO
                 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
@@ -127,12 +127,14 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
 
     Examples
     --------
-    import pylab
-    from Bio import Phylo
-    tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
-    Phylo.draw_graphviz(tree)
-    pylab.show()
-    pylab.savefig('apaf.png')
+    Load a PhyloXML format tree, and draw a PNG using GraphViz::
+
+        import pylab
+        from Bio import Phylo
+        tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
+        Phylo.draw_graphviz(tree)
+        pylab.show()
+        pylab.savefig('apaf.png')
 
     """
     # Deprecated in Biopython 1.70 (#1247)
