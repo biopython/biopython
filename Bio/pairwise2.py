@@ -1100,7 +1100,7 @@ def print_matrix(matrix):
 
 
 def format_alignment(align1, align2, score, begin, end,
-                     show_full_sequences=False):
+                     full_sequences=False):
     """Format the alignment prettily into a string.
 
     IMPORTANT: Gap symbol must be "-" (or ['-'] for lists)!
@@ -1122,7 +1122,7 @@ def format_alignment(align1, align2, score, begin, end,
     in the *aligned* sequences.
 
     If you want to see the whole sequences (including the non-
-    aligned parts), use ``show_full_sequences=True``. In this
+    aligned parts), use ``full_sequences=True``. In this
     case, the non-aligned leading and trailing parts are also
     indicated by spaces in the match-line.
     """
@@ -1131,13 +1131,13 @@ def format_alignment(align1, align2, score, begin, end,
     start1 = start2 = ''
     start_m = begin  # Begin of match line (how many spaces to include)
     # For local alignments:
-    if not show_full_sequences and (begin != 0 or end != len(align1)):
+    if not full_sequences and (begin != 0 or end != len(align1)):
         # Calculate the actual start positions in the un-aligned sequences
         # This will only work if the gap symbol is '-' or ['-']!
         start1 = str(len(align1[:begin]) - align1[:begin].count("-") + 1) + " "
         start2 = str(len(align2[:begin]) - align2[:begin].count("-") + 1) + " "
         start_m = max(len(start1), len(start2))
-    elif show_full_sequences:
+    elif full_sequences:
         start_m = 0
         begin = 0
         end = len(align1)
@@ -1159,7 +1159,7 @@ def format_alignment(align1, align2, score, begin, end,
         m_len = max(len(a), len(b))
         s1_line.append("{:^{width}}".format(a, width=m_len))
         s2_line.append("{:^{width}}".format(b, width=m_len))
-        if show_full_sequences and (n < align_begin or n >= align_end):
+        if full_sequences and (n < align_begin or n >= align_end):
             m_line.append("{:^{width}}".format(' ', width=m_len))  # space
             continue
         if a == b:

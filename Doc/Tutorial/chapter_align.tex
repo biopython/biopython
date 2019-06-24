@@ -1534,14 +1534,14 @@ where again XX stands for a two letter code for the match and gap functions:
 In recent Biopython versions, \verb|format_alignment| will only print the 
 aligned part of a local alignment (together with the start positions in 1-based
 notation, as shown in the above example). If you are also interested in the non-
-aligned parts of the sequences, use the keyword-parameter \verb|show_full_sequences=True|:
+aligned parts of the sequences, use the keyword-parameter \verb|full_sequences=True|:
 
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
 >>> alignments = pairwise2.align.localds("LSPADKTNVKAA", "PEEKSAV", blosum62, -10, -1)
->>> print(pairwise2.format_alignment(*alignments[0], show_full_sequences=True))
+>>> print(pairwise2.format_alignment(*alignments[0], full_sequences=True))
 LSPADKTNVKAA
   |..|..|   
 --PEEKSAV---

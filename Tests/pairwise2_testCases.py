@@ -168,7 +168,7 @@ class TestPairwiseLocal(unittest.TestCase):
 """)
 
     def test_localxs_2(self):
-        """Test localxx with ``show_full_sequences=True``."""
+        """Test localxx with ``full_sequences=True``."""
         aligns = sorted(pairwise2.align.localxs("AxBx", "zABz", -0.1, 0))
         # From Biopython 1.74 on this should only give one alignment, since
         # we disallow leading and trailing 'zero-extensions'
@@ -176,7 +176,7 @@ class TestPairwiseLocal(unittest.TestCase):
         seq1, seq2, score, begin, end = aligns[0]
         alignment = pairwise2.format_alignment(seq1, seq2, score,
                                                begin, end,
-                                               show_full_sequences=True)
+                                               full_sequences=True)
         self.assertEqual(alignment, """\
 -AxBx
  | | 
