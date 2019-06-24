@@ -16,13 +16,14 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
+from Bio.PDB.vectors import Vector
+
 
 class VectorTests(unittest.TestCase):
     """Tests for the Vector class."""
 
     def test_division(self):
         """Confirm division works."""
-        from Bio.PDB.Vector import Vector
         v = Vector(1, 1, 1) / 2
         self.assertEqual(repr(v), "<Vector 0.50, 0.50, 0.50>")
 
