@@ -46,8 +46,12 @@ def SimpleFastaParser(handle):
         if line[0] == '>':
             title = line[1:].rstrip()
             break
-    else:   # no break encountered
-        return  # Premature end of file, or just empty?
+        elif isinstance(line[0], int):
+            # Same exception as for FASTQ files
+            raise ValueError("Is this handle in binary mode not text mode?")
+    else:
+        # no break encountered - probably an empty file
+        return
 
     # Main logic
     # Note, remove trailing whitespace, and any internal spaces
