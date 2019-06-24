@@ -150,7 +150,7 @@ class JASPAR5(object):
         Arguments:
         name - a single name or list of names
         Returns:
-        A list of Bio.motifs.Motif.japar objects
+        A list of Bio.motifs.jaspar.Motif objects
 
         Notes:
         Names are not guaranteed to be unique. There may be more than one
