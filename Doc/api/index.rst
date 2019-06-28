@@ -6,8 +6,8 @@ Welcome to Biopython's API documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: API Contents:
 
    Bio
    BioSQL
