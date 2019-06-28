@@ -214,7 +214,7 @@ If you want to skip the online tests (which is recommended when doing repeated
 testing), use::
 
     python setup.py test --offline
-    
+
 Do not panic if you see messages warning of skipped tests::
 
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
