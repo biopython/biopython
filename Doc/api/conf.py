@@ -26,7 +26,8 @@ needs_sphinx = '1.8'
 # ones.
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
-              'sphinx.ext.viewcode',
+              # Don't want to include source code in the API docs
+              # 'sphinx.ext.viewcode',
               'sphinx.ext.autosummary',
               'numpydoc']
 
