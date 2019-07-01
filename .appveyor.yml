@@ -39,6 +39,8 @@ build_script:
   - cmd: C:\Miniconda.exe /S /D=C:\Py
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes --set channel_priority strict
+  - conda config --add channels defaults
+  - conda config --add channels conda-forge
   - conda update conda
   - conda info -a
 # Pinning pillow==5.4.1 as version 6 breaks on current latest reportlab
