@@ -3251,7 +3251,8 @@ class GenBankTests(unittest.TestCase):
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, 'genbank')
-            self.assertEqual("Ignoring invalid location: '6801..100'", str(cm.exception))
+            self.assertIn("It appears that '6801..100' is a feature "
+                          "that spans the origin", str(cm.exception))
 
     def test_implicit_orign_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
@@ -3284,6 +3285,26 @@ class GenBankTests(unittest.TestCase):
                          "MPYKTQGCLGKGATPTPSSRGI*")
         self.assertEqual(str(seq_features[2].extract(seq_record).seq.translate()),
                          "MPRLEGVGVAPFPRQPWVL*")
+
+    def test_fuzzy_origin_wrap(self):
+        """Test features that wrap an origin, and have fuzzy location"""
+        path = "GenBank/bad_origin_wrap_fuzzy.gb"
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            with self.assertRaises(BiopythonParserWarning) as cm:
+                record = SeqIO.read(path, 'genbank')
+            self.assertEqual(str(cm.exception),
+                             "Attempting to fix invalid location '<2644..159' "
+                             "as it looks like incorrect origin wrapping. "
+                             "Please fix input file, this could have "
+                             "unintended behavior.")
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonParserWarning)
+                with open(path) as handle:
+                    seq_record = SeqIO.read(handle, "genbank")
+                    self.assertEqual(str(seq_record.features[3].location),
+                                     "join{[<2643:2686](+), [0:159](+)}")
 
     def test_genbank_bad_loc_wrap_parsing(self):
         """Bad location wrapping."""

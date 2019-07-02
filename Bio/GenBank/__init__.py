@@ -238,8 +238,11 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
-def _loc(loc_str, expected_seq_length, strand):
+def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     """Make FeatureLocation from non-compound non-complement location (PRIVATE).
+
+    This is also invoked to 'automatically' fix ambiguous formatting of features
+    that span the origin of a circular sequence.
 
     Simple examples,
 
@@ -278,6 +281,8 @@ def _loc(loc_str, expected_seq_length, strand):
     >>> _loc("AL391218.9:105173..108462", 2000000, 1)
     FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
 
+    >>> _loc("<2644..159", 2868, 1, "circular")
+    CompoundLocation([FeatureLocation(BeforePosition(2643), ExactPosition(2868), strand=1), FeatureLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
     """
     if ":" in loc_str:
         ref, loc_str = loc_str.split(":")
@@ -285,6 +290,36 @@ def _loc(loc_str, expected_seq_length, strand):
         ref = None
     try:
         s, e = loc_str.split("..")
+
+        # Attempt to fix features that span the origin
+        import warnings
+        from Bio import BiopythonParserWarning
+        s_pos = _pos(s, -1)
+        e_pos = _pos(e)
+        if int(s_pos) > int(e_pos):
+            if seq_type is None or "circular" not in seq_type.lower():
+                warnings.warn("It appears that %r is a feature that spans "
+                              "the origin, but the sequence topology is "
+                              "undefined. Skipping feature." % loc_str,
+                              BiopythonParserWarning)
+                return None
+            warnings.warn("Attempting to fix invalid location %r as "
+                          "it looks like incorrect origin wrapping. "
+                          "Please fix input file, this could have "
+                          "unintended behavior." % loc_str,
+                          BiopythonParserWarning)
+
+            f1 = SeqFeature.FeatureLocation(s_pos,
+                                            expected_seq_length,
+                                            strand)
+            f2 = SeqFeature.FeatureLocation(0, int(e_pos), strand)
+
+            if strand == -1:
+                # For complementary features spanning the origin
+                return f2 + f1
+            else:
+                return f1 + f2
+
     except ValueError:
         assert ".." not in loc_str
         if "^" in loc_str:
@@ -1056,29 +1091,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                                   strand)
             except ValueError:
                 # Could be non-integers, more likely bad origin wrapping
-                import warnings
-                from Bio import BiopythonParserWarning
-                if int(s) > int(e) and "circular" in self._seq_type.lower():
-                    warnings.warn("Attempting to fix invalid location %r as "
-                                  "it looks like incorrect origin wrapping. "
-                                  "Please fix input file, this could have "
-                                  "unintended behavior." % location_line,
-                                  BiopythonParserWarning)
-
-                    f1 = SeqFeature.FeatureLocation(int(s) - 1,
-                                                    self._expected_size,
-                                                    strand)
-                    f2 = SeqFeature.FeatureLocation(0, int(e), strand)
-
-                    if strand == -1:
-                        # For complementary features spanning the origin
-                        cur_feature.location = f2 + f1
-                    else:
-                        cur_feature.location = f1 + f2
-                else:
-                    warnings.warn("Ignoring invalid location: %r" %
-                                  location_line, BiopythonParserWarning)
-                    cur_feature.location = None
+                cur_feature.location = _loc(location_line,
+                                            self._expected_size,
+                                            strand,
+                                            seq_type=self._seq_type.lower())
             return
 
         if ",)" in location_line:
@@ -1129,7 +1145,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             # e.g. "AL121804.2:41..610"
-            cur_feature.location = _loc(location_line, self._expected_size, strand)
+            cur_feature.location = _loc(location_line,
+                                        self._expected_size,
+                                        strand,
+                                        seq_type=self._seq_type.lower())
             return
 
         if _re_complex_compound.match(location_line):
@@ -1148,8 +1167,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
-                    print(location_line)
-                    print(part)
                     raise err
                 locs.append(loc)
             # Historically a join on the reverse strand has been represented
