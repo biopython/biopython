@@ -45,7 +45,7 @@ build_script:
 # Pinning mysql-connector-python==8.0.13 for Python 3 as 8.0.16 breaks our tests
 # https://github.com/biopython/biopython/issues/2120
   - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
-  - if "%PY_MAJOR_VER%"=="2" conda install python==2.7 unittest2 mysql-connector-python
+  - if "%PY_MAJOR_VER%"=="2" conda install python=2.7.16 unittest2 mysql-connector-python
   - if "%PY_MAJOR_VER%"=="3" conda install mysql-connector-python==8.0.13
   - python setup.py build
 
