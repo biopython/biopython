@@ -13,9 +13,6 @@
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg
    :alt: TravisCI test coverage
    :target: https://codecov.io/github/biopython/biopython/
-.. image:: https://landscape.io/github/biopython/biopython/master/landscape.svg?style=flat
-   :alt: Landscape Code Metrics
-   :target: https://landscape.io/github/biopython/biopython
 .. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
    :target: http://depsy.org/package/python/biopython
