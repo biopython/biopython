@@ -260,7 +260,7 @@ def elink(**keywds):
 
 
 def einfo(**keywds):
-    """Return a summary of the Entez databases as a results handle.
+    """Return a summary of the Entrez databases as a results handle.
 
     EInfo provides field names, index term counts, last update, and
     available links for each Entrez database.
@@ -288,7 +288,7 @@ def einfo(**keywds):
 
 
 def esummary(**keywds):
-    """Rtrieve document summaries as a results handle.
+    """Retrieve document summaries as a results handle.
 
     ESummary retrieves document summaries from a list of primary IDs or
     from the user's environment.
@@ -508,9 +508,9 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
     params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
-    The arugment post should be a boolean to explicitly control if an HTTP
+    The argument post should be a boolean to explicitly control if an HTTP
     POST should be used rather an HTTP GET based on the query length.
-    By default (post=None), POST is used if the URL encoded paramters would
+    By default (post=None), POST is used if the URL encoded parameters would
     be over 1000 characters long.
 
     This function also enforces the "up to three queries per second rule"
