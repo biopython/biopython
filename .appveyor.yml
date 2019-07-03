@@ -45,12 +45,9 @@ build_script:
   - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
 
 # Pinning mysql-connector-python==8.0.13 for Python 3 as 8.0.16 breaks our tests
-# and to 2.0.4 for Python 2 because there is no more recent version for Python 2
 # https://github.com/biopython/biopython/issues/2120
+# We don't install mysql-connector-python for Python 2
   - if "%PY_MAJOR_VER%"=="3" conda install mysql-connector-python==8.0.13
-  - if "%PY_MAJOR_VER%"=="2" (
-       conda config --set restore_free_channel true & conda install mysql-connector-python==2.0.4
-    )
   - python setup.py build
 
 test_script:
