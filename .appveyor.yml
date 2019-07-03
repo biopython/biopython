@@ -48,9 +48,6 @@ build_script:
 # and to 2.0.4 for Python 2 because there is no more recent version for Python 2
 # https://github.com/biopython/biopython/issues/2120
   - if "%PY_MAJOR_VER%"=="3" conda install mysql-connector-python==8.0.13
-  - if "%PY_MAJOR_VER%"=="2" (
-       conda config --set restore_free_channel true & conda install mysql-connector-python==2.0.4
-    )
   - python setup.py build
 
 test_script:
