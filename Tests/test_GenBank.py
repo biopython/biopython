@@ -3287,7 +3287,7 @@ class GenBankTests(unittest.TestCase):
                          "MPRLEGVGVAPFPRQPWVL*")
 
     def test_fuzzy_origin_wrap(self):
-        """Test features that wrap an origin, and have fuzzy location"""
+        """Test features that wrap an origin, and have fuzzy location."""
         path = "GenBank/bad_origin_wrap_fuzzy.gb"
         with warnings.catch_warnings():
             warnings.simplefilter("error", BiopythonParserWarning)
