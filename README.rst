@@ -184,9 +184,14 @@ Now change directory to the Biopython source code folder and run::
 Substitute ``python`` with your specific version, for example ``python3``,
 ``pypy`` or ``jython``.
 
-If you need to do additional configuration, e.g. changing the install
-directory prefix, please type ``python setup.py``, or see the documentation
-here:
+To exlude tests that require an internet connection (and which may take a long
+time), use the ``--offline`` option::
+
+    python setup.py test --offline
+
+If you need to do additional configuration, e.g. changing
+the install directory prefix, please type ``python setup.py``, or see the
+documentation here:
 
 * HTML - http://biopython.org/DIST/docs/install/Installation.html
 * PDF - http://biopython.org/DIST/docs/install/Installation.pdf
@@ -202,6 +207,11 @@ directory and type::
     python setup.py build
     python setup.py test
 
+If you want to skip the online tests (which is recommended when doing repeated
+testing), use::
+
+    python setup.py test --offline
+
 Do not panic if you see messages warning of skipped tests::
 
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
@@ -213,7 +223,7 @@ the required dependency and re-run the tests.
 
 Some of the tests may fail due to network issues, this is often down to
 chance or a service outage. If the problem does not go away on
-re-running the tests, it is possible to run only the offline tests.
+re-running the tests, you can use the ``--offline`` option.
 
 There is more testing information in the Biopython Tutorial & Cookbook.
 

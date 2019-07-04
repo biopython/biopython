@@ -228,11 +228,11 @@ class test_biopython(Command):
     """
 
     description = "Automatically run the test suite for Biopython."
-    user_options = []
+    user_options = [("offline", None, "Don't run online tests")]
 
     def initialize_options(self):
         """No-op, initialise options."""
-        pass
+        self.offline = None
 
     def finalize_options(self):
         """No-op, finalise options."""
@@ -246,7 +246,10 @@ class test_biopython(Command):
         os.chdir("Tests")
         sys.path.insert(0, '')
         import run_tests
-        run_tests.main([])
+        if self.offline:
+            run_tests.main(['--offline'])
+        else:
+            run_tests.main([])
 
         # change back to the current directory
         os.chdir(this_dir)
