@@ -103,7 +103,7 @@ import warnings
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import HTTPError as _HTTPError
+from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
@@ -536,13 +536,30 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         post = True
     cgi = _construct_cgi(cgi, post, options)
 
-    try:
-        if post:
-            handle = _urlopen(cgi, data=_as_bytes(options))
+    tries = 3
+    sleep_on_failure = 10
+    for i in range(tries):
+        try:
+            if post:
+                handle = _urlopen(cgi, data=_as_bytes(options))
+            else:
+                handle = _urlopen(cgi)
+        except _URLError as exception:
+            # Reraise if the final try fails
+            if i == tries - 1:
+                raise
+
+            # Reraise if the exception is triggered by a HTTP 4XX error
+            # indicating some kind of bad request
+            if isinstance(exception, _HTTPError) \
+                    and exception.status // 100 == 4:
+                raise
+
+            # Treat everything else as a transient error and try again after a
+            # brief delay.
+            time.sleep(sleep_on_failure)
         else:
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
+            break
 
     return _binary_to_string_handle(handle)
 

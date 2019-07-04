@@ -133,7 +133,7 @@ if sys.version_info[0] >= 3:
     # On Python 3 urllib, urllib2, and urlparse were merged:
     from urllib.request import urlopen, Request, urlretrieve, urlparse, urlcleanup
     from urllib.parse import urlencode, quote
-    from urllib.error import HTTPError
+    from urllib.error import URLError, HTTPError
 
 else:
     # Python 2 code
@@ -194,7 +194,7 @@ else:
     from urllib import urlencode, quote
 
     # Under urllib.error on Python 3:
-    from urllib2 import HTTPError
+    from urllib2 import URLError, HTTPError
 
 
 if sys.platform == "win32":
