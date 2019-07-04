@@ -1167,6 +1167,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 try:
                     loc = _loc(part, self._expected_size, part_strand)
                 except ValueError as err:
+                    print(location_line)
+                    print(part)
                     raise err
                 locs.append(loc)
             # Historically a join on the reverse strand has been represented
