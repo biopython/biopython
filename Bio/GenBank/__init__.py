@@ -290,36 +290,6 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
         ref = None
     try:
         s, e = loc_str.split("..")
-
-        # Attempt to fix features that span the origin
-        import warnings
-        from Bio import BiopythonParserWarning
-        s_pos = _pos(s, -1)
-        e_pos = _pos(e)
-        if int(s_pos) > int(e_pos):
-            if seq_type is None or "circular" not in seq_type.lower():
-                warnings.warn("It appears that %r is a feature that spans "
-                              "the origin, but the sequence topology is "
-                              "undefined. Skipping feature." % loc_str,
-                              BiopythonParserWarning)
-                return None
-            warnings.warn("Attempting to fix invalid location %r as "
-                          "it looks like incorrect origin wrapping. "
-                          "Please fix input file, this could have "
-                          "unintended behavior." % loc_str,
-                          BiopythonParserWarning)
-
-            f1 = SeqFeature.FeatureLocation(s_pos,
-                                            expected_seq_length,
-                                            strand)
-            f2 = SeqFeature.FeatureLocation(0, int(e_pos), strand)
-
-            if strand == -1:
-                # For complementary features spanning the origin
-                return f2 + f1
-            else:
-                return f1 + f2
-
     except ValueError:
         assert ".." not in loc_str
         if "^" in loc_str:
@@ -342,6 +312,36 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
             # e.g. "123"
             s = loc_str
             e = loc_str
+
+    # Attempt to fix features that span the origin
+    s_pos = _pos(s, -1)
+    e_pos = _pos(e)
+    if int(s_pos) > int(e_pos):
+        import warnings
+        from Bio import BiopythonParserWarning
+        if seq_type is None or "circular" not in seq_type.lower():
+            warnings.warn("It appears that %r is a feature that spans "
+                          "the origin, but the sequence topology is "
+                          "undefined. Skipping feature." % loc_str,
+                          BiopythonParserWarning)
+            return None
+        warnings.warn("Attempting to fix invalid location %r as "
+                      "it looks like incorrect origin wrapping. "
+                      "Please fix input file, this could have "
+                      "unintended behavior." % loc_str,
+                      BiopythonParserWarning)
+
+        f1 = SeqFeature.FeatureLocation(s_pos,
+                                        expected_seq_length,
+                                        strand)
+        f2 = SeqFeature.FeatureLocation(0, int(e_pos), strand)
+
+        if strand == -1:
+            # For complementary features spanning the origin
+            return f2 + f1
+        else:
+            return f1 + f2
+
     return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
