@@ -46,6 +46,8 @@ import sys  # for checking if Python 2
 
 # other Biopython stuff
 from Bio import SeqFeature
+import warnings
+from Bio import BiopythonParserWarning
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
@@ -317,8 +319,6 @@ def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     s_pos = _pos(s, -1)
     e_pos = _pos(e)
     if int(s_pos) > int(e_pos):
-        import warnings
-        from Bio import BiopythonParserWarning
         if seq_type is None or "circular" not in seq_type.lower():
             warnings.warn("It appears that %r is a feature that spans "
                           "the origin, but the sequence topology is "
@@ -723,8 +723,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # the m in mRNA, but thanks to the strip we lost the spaces
             # so we need to index from the back
             if mol_type[-3:].upper() in ('DNA', 'RNA') and not mol_type[-3:].isupper():
-                import warnings
-                from Bio import BiopythonParserWarning
                 warnings.warn("Non-upper case molecule type in LOCUS line: %s"
                               % mol_type, BiopythonParserWarning)
 
@@ -994,8 +992,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def title(self, content):
         if self._cur_reference is None:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("GenBank TITLE line without REFERENCE line.",
                           BiopythonParserWarning)
         elif self._cur_reference.title:
@@ -1098,8 +1094,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             return
 
         if ",)" in location_line:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Dropping trailing comma in malformed feature location",
                           BiopythonParserWarning)
             location_line = location_line.replace(",)", ")")
@@ -1107,8 +1101,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Dropping bond qualifier in feature location", BiopythonParserWarning)
             # There ought to be a better way to do this...
             for x in _solo_bond.finditer(location_line):
@@ -1128,8 +1120,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                        strand))
             if len(locs) < 2:
                 # The CompoundLocation will raise a ValueError here!
-                import warnings
-                from Bio import BiopythonParserWarning
                 warnings.warn("Should have at least 2 parts for compound location",
                               BiopythonParserWarning)
                 cur_feature.location = None
@@ -1197,8 +1187,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise LocationParserError(msg)
         # This used to be an error....
         cur_feature.location = None
-        import warnings
-        from Bio import BiopythonParserWarning
         warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r"
                                              % location_line))
 
@@ -1222,8 +1210,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Handle NCBI escaping
         # Warn if escaping is not according to standard
         if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
                           '(two double - quotes), but here it was not: %r' % value, BiopythonParserWarning)
         # Undo escaping, repeated double quotes -> one double quote
@@ -1315,8 +1301,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._expected_size is not None \
                 and len(sequence) != 0 \
                 and self._expected_size != len(sequence):
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Expected sequence length %i, found %i (%s)."
                           % (self._expected_size, len(sequence), self.data.id),
                           BiopythonParserWarning)
@@ -1379,8 +1363,6 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def residue_type(self, content):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
         if 'dna' in content or 'rna' in content:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
                           BiopythonParserWarning)
         self.data.residue_type = content
@@ -1456,8 +1438,6 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def title(self, content):
         if self._cur_reference is None:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("GenBank TITLE line without REFERENCE line.",
                           BiopythonParserWarning)
             return
