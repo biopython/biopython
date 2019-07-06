@@ -92,7 +92,7 @@ If you have multiple versions of Python installed, ideally test them all
 (the Python tool ``tox`` can be helpful here).
 
 
-Continous Integration
+Continuous Integration
 ---------------------
 
 Once you submit your pull request on GitHub, several automated tests should
