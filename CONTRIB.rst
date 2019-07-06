@@ -3,7 +3,7 @@ CONTRIBUTORS
 
 This is a list of people who have made contributions to Biopython.
 
-People are listed alphabetically, as verfied with Unix sort::
+People are listed alphabetically, as verified with Unix sort::
 
     $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
