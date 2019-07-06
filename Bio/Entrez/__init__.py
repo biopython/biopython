@@ -29,6 +29,13 @@ which has a ``.name`` attribute giving the filename, the handles from
 ``Bio.Entrez`` all have a ``.url`` attribute instead giving the URL
 used to connect to the NCBI Entrez API.
 
+All the functions that send requests to the NCBI Entrez API will
+automatically respect the NCBI rate limit (of 3 requests per second
+without an API key, or 10 requests per second with an API key) and
+will automatically retry when encountering transient failures
+(i.e. connection failures or HTTP 5XX codes) until three failures
+have been reached.
+
 The Entrez module also provides an XML parser which takes a handle
 as input.
 
