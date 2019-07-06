@@ -33,8 +33,10 @@ All the functions that send requests to the NCBI Entrez API will
 automatically respect the NCBI rate limit (of 3 requests per second
 without an API key, or 10 requests per second with an API key) and
 will automatically retry when encountering transient failures
-(i.e. connection failures or HTTP 5XX codes) until three failures
-have been reached.
+(i.e. connection failures or HTTP 5XX codes). By default, Biopython
+does a maximum of three tries before giving up, and sleeps for 15
+seconds between tries. You can tweak these parameters by setting
+``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 
 The Entrez module also provides an XML parser which takes a handle
 as input.
@@ -116,6 +118,8 @@ from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 
 email = None
+max_tries = 3
+sleep_between_tries = 15
 tool = "biopython"
 api_key = None
 
@@ -543,9 +547,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         post = True
     cgi = _construct_cgi(cgi, post, options)
 
-    tries = 3
-    sleep_on_failure = 10
-    for i in range(tries):
+    for i in range(max_tries):
         try:
             if post:
                 handle = _urlopen(cgi, data=_as_bytes(options))
@@ -553,7 +555,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
                 handle = _urlopen(cgi)
         except _URLError as exception:
             # Reraise if the final try fails
-            if i == tries - 1:
+            if i >= max_tries - 1:
                 raise
 
             # Reraise if the exception is triggered by a HTTP 4XX error
@@ -564,7 +566,7 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
 
             # Treat everything else as a transient error and try again after a
             # brief delay.
-            time.sleep(sleep_on_failure)
+            time.sleep(sleep_between_tries)
         else:
             break
 
