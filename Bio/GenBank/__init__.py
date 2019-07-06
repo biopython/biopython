@@ -46,6 +46,8 @@ import sys  # for checking if Python 2
 
 # other Biopython stuff
 from Bio import SeqFeature
+import warnings
+from Bio import BiopythonParserWarning
 
 # other Bio.GenBank stuff
 from .utils import FeatureValueCleaner
@@ -238,8 +240,11 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str) + offset)
 
 
-def _loc(loc_str, expected_seq_length, strand):
+def _loc(loc_str, expected_seq_length, strand, seq_type=None):
     """Make FeatureLocation from non-compound non-complement location (PRIVATE).
+
+    This is also invoked to 'automatically' fix ambiguous formatting of features
+    that span the origin of a circular sequence.
 
     Simple examples,
 
@@ -278,6 +283,8 @@ def _loc(loc_str, expected_seq_length, strand):
     >>> _loc("AL391218.9:105173..108462", 2000000, 1)
     FeatureLocation(ExactPosition(105172), ExactPosition(108462), strand=1, ref='AL391218.9')
 
+    >>> _loc("<2644..159", 2868, 1, "circular")
+    CompoundLocation([FeatureLocation(BeforePosition(2643), ExactPosition(2868), strand=1), FeatureLocation(ExactPosition(0), ExactPosition(159), strand=1)], 'join')
     """
     if ":" in loc_str:
         ref, loc_str = loc_str.split(":")
@@ -307,6 +314,34 @@ def _loc(loc_str, expected_seq_length, strand):
             # e.g. "123"
             s = loc_str
             e = loc_str
+
+    # Attempt to fix features that span the origin
+    s_pos = _pos(s, -1)
+    e_pos = _pos(e)
+    if int(s_pos) > int(e_pos):
+        if seq_type is None or "circular" not in seq_type.lower():
+            warnings.warn("It appears that %r is a feature that spans "
+                          "the origin, but the sequence topology is "
+                          "undefined. Skipping feature." % loc_str,
+                          BiopythonParserWarning)
+            return None
+        warnings.warn("Attempting to fix invalid location %r as "
+                      "it looks like incorrect origin wrapping. "
+                      "Please fix input file, this could have "
+                      "unintended behavior." % loc_str,
+                      BiopythonParserWarning)
+
+        f1 = SeqFeature.FeatureLocation(s_pos,
+                                        expected_seq_length,
+                                        strand)
+        f2 = SeqFeature.FeatureLocation(0, int(e_pos), strand)
+
+        if strand == -1:
+            # For complementary features spanning the origin
+            return f2 + f1
+        else:
+            return f1 + f2
+
     return SeqFeature.FeatureLocation(_pos(s, -1), _pos(e), strand, ref=ref)
 
 
@@ -688,8 +723,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # the m in mRNA, but thanks to the strip we lost the spaces
             # so we need to index from the back
             if mol_type[-3:].upper() in ('DNA', 'RNA') and not mol_type[-3:].isupper():
-                import warnings
-                from Bio import BiopythonParserWarning
                 warnings.warn("Non-upper case molecule type in LOCUS line: %s"
                               % mol_type, BiopythonParserWarning)
 
@@ -959,8 +992,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def title(self, content):
         if self._cur_reference is None:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("GenBank TITLE line without REFERENCE line.",
                           BiopythonParserWarning)
         elif self._cur_reference.title:
@@ -1056,34 +1087,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                                   strand)
             except ValueError:
                 # Could be non-integers, more likely bad origin wrapping
-                import warnings
-                from Bio import BiopythonParserWarning
-                if int(s) > int(e) and "circular" in self._seq_type.lower():
-                    warnings.warn("Attempting to fix invalid location %r as "
-                                  "it looks like incorrect origin wrapping. "
-                                  "Please fix input file, this could have "
-                                  "unintended behavior." % location_line,
-                                  BiopythonParserWarning)
-
-                    f1 = SeqFeature.FeatureLocation(int(s) - 1,
-                                                    self._expected_size,
-                                                    strand)
-                    f2 = SeqFeature.FeatureLocation(0, int(e), strand)
-
-                    if strand == -1:
-                        # For complementary features spanning the origin
-                        cur_feature.location = f2 + f1
-                    else:
-                        cur_feature.location = f1 + f2
-                else:
-                    warnings.warn("Ignoring invalid location: %r" %
-                                  location_line, BiopythonParserWarning)
-                    cur_feature.location = None
+                cur_feature.location = _loc(location_line,
+                                            self._expected_size,
+                                            strand,
+                                            seq_type=self._seq_type.lower())
             return
 
         if ",)" in location_line:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Dropping trailing comma in malformed feature location",
                           BiopythonParserWarning)
             location_line = location_line.replace(",)", ")")
@@ -1091,8 +1101,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _solo_bond.search(location_line):
             # e.g. bond(196)
             # e.g. join(bond(284),bond(305),bond(309),bond(305))
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Dropping bond qualifier in feature location", BiopythonParserWarning)
             # There ought to be a better way to do this...
             for x in _solo_bond.finditer(location_line):
@@ -1112,8 +1120,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                        strand))
             if len(locs) < 2:
                 # The CompoundLocation will raise a ValueError here!
-                import warnings
-                from Bio import BiopythonParserWarning
                 warnings.warn("Should have at least 2 parts for compound location",
                               BiopythonParserWarning)
                 cur_feature.location = None
@@ -1129,7 +1135,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             # e.g. "AL121804.2:41..610"
-            cur_feature.location = _loc(location_line, self._expected_size, strand)
+            cur_feature.location = _loc(location_line,
+                                        self._expected_size,
+                                        strand,
+                                        seq_type=self._seq_type.lower())
             return
 
         if _re_complex_compound.match(location_line):
@@ -1178,8 +1187,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise LocationParserError(msg)
         # This used to be an error....
         cur_feature.location = None
-        import warnings
-        from Bio import BiopythonParserWarning
         warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r"
                                              % location_line))
 
@@ -1203,8 +1210,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # Handle NCBI escaping
         # Warn if escaping is not according to standard
         if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
                           '(two double - quotes), but here it was not: %r' % value, BiopythonParserWarning)
         # Undo escaping, repeated double quotes -> one double quote
@@ -1296,8 +1301,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._expected_size is not None \
                 and len(sequence) != 0 \
                 and self._expected_size != len(sequence):
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Expected sequence length %i, found %i (%s)."
                           % (self._expected_size, len(sequence), self.data.id),
                           BiopythonParserWarning)
@@ -1360,8 +1363,6 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def residue_type(self, content):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
         if 'dna' in content or 'rna' in content:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
                           BiopythonParserWarning)
         self.data.residue_type = content
@@ -1437,8 +1438,6 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def title(self, content):
         if self._cur_reference is None:
-            import warnings
-            from Bio import BiopythonParserWarning
             warnings.warn("GenBank TITLE line without REFERENCE line.",
                           BiopythonParserWarning)
             return
