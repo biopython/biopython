@@ -29,6 +29,15 @@ which has a ``.name`` attribute giving the filename, the handles from
 ``Bio.Entrez`` all have a ``.url`` attribute instead giving the URL
 used to connect to the NCBI Entrez API.
 
+All the functions that send requests to the NCBI Entrez API will
+automatically respect the NCBI rate limit (of 3 requests per second
+without an API key, or 10 requests per second with an API key) and
+will automatically retry when encountering transient failures
+(i.e. connection failures or HTTP 5XX codes). By default, Biopython
+does a maximum of three tries before giving up, and sleeps for 15
+seconds between tries. You can tweak these parameters by setting
+``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
+
 The Entrez module also provides an XML parser which takes a handle
 as input.
 
@@ -103,12 +112,14 @@ import warnings
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
-from Bio._py3k import HTTPError as _HTTPError
+from Bio._py3k import URLError as _URLError, HTTPError as _HTTPError
 
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 
 email = None
+max_tries = 3
+sleep_between_tries = 15
 tool = "biopython"
 api_key = None
 
@@ -536,13 +547,28 @@ def _open(cgi, params=None, post=None, ecitmatch=False):
         post = True
     cgi = _construct_cgi(cgi, post, options)
 
-    try:
-        if post:
-            handle = _urlopen(cgi, data=_as_bytes(options))
+    for i in range(max_tries):
+        try:
+            if post:
+                handle = _urlopen(cgi, data=_as_bytes(options))
+            else:
+                handle = _urlopen(cgi)
+        except _URLError as exception:
+            # Reraise if the final try fails
+            if i >= max_tries - 1:
+                raise
+
+            # Reraise if the exception is triggered by a HTTP 4XX error
+            # indicating some kind of bad request
+            if isinstance(exception, _HTTPError) \
+                    and exception.status // 100 == 4:
+                raise
+
+            # Treat everything else as a transient error and try again after a
+            # brief delay.
+            time.sleep(sleep_between_tries)
         else:
-            handle = _urlopen(cgi)
-    except _HTTPError as exception:
-        raise exception
+            break
 
     return _binary_to_string_handle(handle)
 

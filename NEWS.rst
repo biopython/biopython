@@ -61,6 +61,11 @@ structured data source with minimal loss of functionality upon future MAST
 releases. Class structure remains the same plus an additional attribute
 ``Record.strand_handling`` required for diagram parsing.
 
+``Bio.Entrez`` now automatically retries HTTP requests on failure. The
+maximum number of tries and the sleep between them can be configured by
+changing ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
+(The defaults are 3 tries and 15 seconds, respectively.)
+
 All tests using the older print-and-compare approach have been replaced by
 unittests following Python's standard testing framework.
 
@@ -88,6 +93,7 @@ possible, especially the following contributors:
 - Jens Thomas (first contribution)
 - Konstantin Vdovkin
 - Lenna Peterson
+- Mark Amery
 - Markus Piotrowski
 - Micky Yun Chan (first contribution)
 - Nick Negretti
