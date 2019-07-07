@@ -247,6 +247,7 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
+import os
 import struct
 import sys
 import zlib
@@ -806,8 +807,10 @@ class BgzfWriter:
             if "w" not in mode.lower() and "a" not in mode.lower():
                 raise ValueError(f"Must use write or append mode, not {mode!r}")
             if "a" in mode.lower():
-                raise NotImplementedError("Append mode is not implemented yet")
-                # handle = _open(filename, "ab")
+                handle = _open(filename, "ab")
+                # py27 on Windows will get confused about our current position
+                # immediately after opening; explicitly seek to end to fix it
+                handle.seek(0, os.SEEK_END)
             else:
                 handle = _open(filename, "wb")
         self._text = "b" not in mode.lower()
