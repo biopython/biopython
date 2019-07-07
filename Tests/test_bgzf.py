@@ -387,6 +387,27 @@ class BgzfTests(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             bgzf.open(self.temp_file, "ab")
 
+    def test_double_flush(self):
+        with bgzf.open(self.temp_file, "wb") as h:
+            h.write(b">hello\n")
+            h.write(b"aaaaaaaaaaaaaaaaaa\n")
+            h.flush()
+            pos = h.tell()
+            h.flush()
+            self.assertGreater(h.tell(), pos)  # sanity check
+            h.write(b">there\n")
+            h.write(b"cccccccccccccccccc\n")
+        with bgzf.open(self.temp_file, "rb") as h:
+            self.assertEqual(
+                list(h),
+                [
+                    b">hello\n",
+                    b"aaaaaaaaaaaaaaaaaa\n",
+                    b">there\n",
+                    b"cccccccccccccccccc\n",
+                ],
+            )
+
     def test_many_blocks_in_single_read(self):
         n = 1000
 

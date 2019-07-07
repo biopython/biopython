@@ -669,7 +669,7 @@ class BgzfReader:
             raise NotImplementedError("Don't be greedy, that could be massive!")
 
         result = "" if self._text else b""
-        while size and self._buffer:
+        while size and self._block_raw_length:
             if self._within_block_offset + size <= len(self._buffer):
                 # This may leave us right at the end of a block
                 # (lazy loading, don't load the next block unless we have too)
@@ -684,8 +684,6 @@ class BgzfReader:
                 data = self._buffer[self._within_block_offset :]
                 size -= len(data)
                 self._load_block()  # will reset offsets
-                # TODO - Test with corner case of an empty block followed by
-                # a non-empty block
                 result += data
 
         return result
@@ -693,7 +691,7 @@ class BgzfReader:
     def readline(self):
         """Read a single line for the BGZF file."""
         result = "" if self._text else b""
-        while self._buffer:
+        while self._block_raw_length:
             i = self._buffer.find(self._newline, self._within_block_offset)
             # Three cases to consider,
             if i == -1:
