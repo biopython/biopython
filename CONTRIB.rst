@@ -30,6 +30,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrew Dalke <dalke at domain dalke scientific dot com>
 - Andrew Guy <https://github.com/andrewguy>
 - Andrew Sczesnak <https://github.com/polyatail>
+- Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Anne Pajon <ap one two at sanger ac uk>
 - Anthony Bradley <https://github.com/abradle>
 - Antony Lee <https://github.com/anntzer>
