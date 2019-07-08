@@ -99,14 +99,14 @@ class CodonAdaptationIndex(object):
         for aa in SynonymousCodons:
             codons = SynonymousCodons[aa]
 
-            count_max = max([self.codon_count[codon] for codon in codons])
+            count_max = max((self.codon_count[codon] for codon in codons))
 
             if count_max == 0:  # the residue does not occur at all
                 for codon in codons:
                     self.index[codon] = None
             else:
                 # now generate the index W=RCSUi/RCSUmax = COUNTi/COUNTmax:
-                # see equation 2 in Sharp & Li 1987 NAR 
+                # see equation 2 in Sharp & Li 1987 NAR
                 for codon in codons:
                     self.index[codon] = self.codon_count[codon] / count_max
 
