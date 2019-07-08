@@ -32,9 +32,9 @@ Here `###` is the 3 digit number REBASE release number (e.g. 312). The first
 digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
-There files are available by FTP from ftp://ftp.neb.com/pub/rebase/ which
-should allow automated fetching (the the update code and RanaConfig.py).
-In addition there are links on this HTML page which requires manual download
+These files are available by FTP from ftp://ftp.neb.com/pub/rebase/ which
+should allow automated fetching via ``rebase_update.py``.
+In addition there are links on this HTML page which allows manual download
 and renaming of the files: http://rebase.neb.com/rebase/rebase.f37.html
 This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
@@ -63,8 +63,7 @@ from Bio.Restriction.Restriction import Blunt, Ov5, Ov3
 from Bio.Restriction.Restriction import NotDefined, Defined, Ambiguous
 from Bio.Restriction.Restriction import Commercially_available, Not_available
 
-import Bio.Restriction.RanaConfig as config
-from rebase_update import RebaseUpdate
+from rebase_update import release_number, get_files
 
 
 enzymedict = {}
@@ -117,16 +116,6 @@ def is_palindrom(sequence):
 def is_palindrome(sequence):
     """Check whether the sequence is a palindrome or not."""
     return str(sequence) == str(sequence.reverse_complement())
-
-
-def LocalTime():
-    """Extension for emboss file for the current year and month."""
-    t = time.gmtime()
-    year = str(t.tm_year)[-1]
-    month = str(t.tm_mon)
-    if len(month) == 1:
-        month = '0' + month
-    return year + month
 
 
 class newenzyme(object):
@@ -354,22 +343,15 @@ into steps, using temporary functions to avoid the JVM limits.
 Used REBASE emboss files version {} ({}).
 
 """
-'''.format(LocalTime(), time.gmtime().tm_year)
+'''.format(release_number, time.gmtime().tm_year)
 
 
 class DictionaryBuilder(object):
-    """Builds ``Restriction_Dictionary.py`` from Rebase files."""
+    """Builds ``Restriction_Dictionary.py`` from Rebase files.
 
-    def __init__(self, ftp_proxy=''):
-        """Initialize class.
-
-        If the emboss files used for the construction need to be updated this
-        class will download them if the ftp connection is correctly set.
-        either in RanaConfig.py or given at run time.
-
-        proxy is the ftp_proxy to use if any.
-        """
-        self.proxy = ftp_proxy or config.ftp_proxy
+    If the emboss files used for the construction need to be updated this
+    class will download them if the ftp connection is correctly set.
+    """
 
     def build_dict(self):
         """Construct dictionary and build files containing new dictionaries."""
@@ -594,7 +576,7 @@ class DictionaryBuilder(object):
         #
         #   first check if we have the last update:
         #
-        emboss_now = ['.'.join((x, LocalTime())) for x in embossnames]
+        emboss_now = ['.'.join((x, release_number)) for x in embossnames]
         update_needed = False
         # dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
@@ -615,14 +597,11 @@ class DictionaryBuilder(object):
             #
             #   may be download the files.
             #
-            print('\n The rebase files are more than one month old.\
+            print('\n The rebase files are missing or more than one month old.\
             \n Would you like to update them before proceeding?(y/n)')
             r = _input(' update [n] >>> ')
             if r in ['y', 'yes', 'Y', 'Yes']:
-                updt = RebaseUpdate(self.proxy)
-                updt.openRebase()
-                updt.getfiles()
-                updt.close()
+                get_files()
                 print('\n Update complete. Creating the dictionaries.\n')
                 print('\n Using the files : %s' % ', '.join(emboss_now))
                 return tuple(open(os.path.join(base, n)) for n in emboss_now)
@@ -639,8 +618,7 @@ class DictionaryBuilder(object):
                             if file.startswith(name):
                                 break
                         else:
-                            pass
-                        raise NotFoundError
+                            raise NotFoundError
                     except NotFoundError:
                         print("\nNo %s file found. Upgrade is impossible.\n" %
                               name)
@@ -1012,18 +990,13 @@ def standalone():
         help="compile and install the newly created file. "
         "default behaviour (without switch): "
         "Compile the enzymes and store them in the Updates folder")
-    add('-p', '--proxy',
-        action="store",
-        dest='ftp_proxy',
-        default='',
-        help="set the proxy to be used by the ftp connection.")
     options, args = parser.parse_args()
     return options, args
 
 
 if __name__ == '__main__':
     options, args = standalone()
-    Builder = DictionaryBuilder(options.ftp_proxy)
+    Builder = DictionaryBuilder()
     Builder.build_dict()
     if options.i:
         Builder.install_dict()

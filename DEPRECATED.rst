@@ -47,6 +47,14 @@ Jython
 Biopython is mostly working under Jython 2.7.0, but support for Jython
 is deprecated as of Release 1.70.
 
+Bio.Restriction.RanaConfig
+==========================
+Removed in Biopython 1.74 without explicit depreciation period. RanaConfig was
+a configuration file containing some constants for Bio.Restriction.PrintFormat
+and ranacompiler.py, a script to update Bio.Restriction.Restriction_Dictionary,
+and which is not part of the Biopython installation. The constants were
+implemented in the respective modules.
+
 Bio.Alphabet
 ============
 Declared obsolete in Biopython 1.74, please avoid using this module
