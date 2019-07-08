@@ -48,6 +48,7 @@ build_script:
 # https://github.com/biopython/biopython/issues/2120
 # We don't install mysql-connector-python for Python 2
   - if "%PY_MAJOR_VER%"=="3" conda install mysql-connector-python==8.0.13
+  - if "%PY_MAJOR_VER%"=="2" conda install unittest2
   - python setup.py build
 
 test_script:
