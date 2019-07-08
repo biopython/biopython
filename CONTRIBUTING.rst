@@ -93,7 +93,7 @@ If you have multiple versions of Python installed, ideally test them all
 
 
 Continuous Integration
----------------------
+----------------------
 
 Once you submit your pull request on GitHub, several automated tests should
 be run, and their results reported on the pull request.
