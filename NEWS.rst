@@ -89,6 +89,7 @@ possible, especially the following contributors:
 - Chris Rands
 - Deepak Khatri (first contribution)
 - Gert Hulselmans
+- Hongbo Zhu
 - Jared Andrews
 - Jens Thomas (first contribution)
 - Konstantin Vdovkin
