@@ -225,7 +225,7 @@ def compare_records(old_list, new_list):
                                  % (old.seq[:60], old.seq[-10:],
                                     new.seq[:60], new.seq[-10:]))
         if old.features and new.features \
-        and len(old.features) != len(new.features):
+           and len(old.features) != len(new.features):
             raise ValueError("%i vs %i features"
                              % (len(old.features), len(new.features)))
         # TODO - check annotation
@@ -463,7 +463,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
             self.assertEqual(len(alignment), 2)
             # self.assertEqual(target.id, alignment[1].id) #too strict
             if alignment[1].id not in target.id \
-            and alignment[1].id not in target.name:
+               and alignment[1].id not in target.name:
                 raise AssertionError("%s vs %s or %s"
                                      % (alignment[1].id, target.id, target.name))
             if local:
@@ -837,8 +837,8 @@ def check_translation(sequence, translation, table=None):
     else:
         t = table
     if translation != str(sequence.translate(t)) \
-    or translation != str(translate(sequence, t)) \
-    or translation != translate(str(sequence), t):
+       or translation != str(translate(sequence, t)) \
+       or translation != translate(str(sequence), t):
         # More details...
         for i, amino in enumerate(translation):
             codon = sequence[i * 3:i * 3 + 3]

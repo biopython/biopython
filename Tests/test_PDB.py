@@ -25,7 +25,7 @@ try:
     from numpy import dot  # Missing on old PyPy's micronumpy
     del dot
     from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
-    from numpy.random import random
+    del svd, det
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -38,7 +38,7 @@ from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO, Select, MMCIFParse
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
-from Bio.PDB import rotmat, Vector, refmat, calc_angle, calc_dihedral, rotaxis, m2rotaxis
+from Bio.PDB import rotmat, Vector
 from Bio.PDB import Residue, Atom
 from Bio.PDB import make_dssp_dict
 from Bio.PDB import DSSP
@@ -80,7 +80,7 @@ class A_ExceptionTest(unittest.TestCase):
                     "Residue (' ', 80, ' ') redefined at line 633.",
                     "Residue (' ', 81, ' ') redefined at line 646.",
                     'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 902.'
-                    ]):
+            ]):
                 self.assertIn(msg, str(wrn))
 
     def test_2_strict(self):
@@ -1248,7 +1248,7 @@ class ChangingIdTests(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             self.struc = PDBParser(PERMISSIVE=True).get_structure(
-                                                  'X', "PDB/a_structure.pdb")
+                'X', "PDB/a_structure.pdb")
 
     def test_change_model_id(self):
         """Change the id of a model."""
@@ -1392,110 +1392,6 @@ class TransformTests(unittest.TestCase):
             newpos_check = numpy.dot(oldpos, rotation) + translation
             for i in range(0, 3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
-
-    def test_Vector(self):
-        """Test Vector object."""
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 0, 0)
-        v3 = Vector(0, 1, 0)
-        v4 = Vector(1, 1, 0)
-
-        self.assertEqual(calc_angle(v1, v2, v3), 1.5707963267948966)
-        self.assertEqual(calc_dihedral(v1, v2, v3, v4), 1.5707963267948966)
-        self.assertTrue(numpy.array_equal((v1 - v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.array_equal((v1 - 1).get_array(), numpy.array([-1.0, -1.0, 0.0])))
-        self.assertTrue(numpy.array_equal((v1 - (1, 2, 3)).get_array(), numpy.array([-1.0, -2.0, -2.0])))
-        self.assertTrue(numpy.array_equal((v1 + v2).get_array(), numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.array_equal((v1 + 3).get_array(), numpy.array([3.0, 3.0, 4.0])))
-        self.assertTrue(numpy.array_equal((v1 + (1, 2, 3)).get_array(), numpy.array([1.0, 2.0, 4.0])))
-        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
-        self.assertTrue(numpy.array_equal(v1.get_array() / 2, numpy.array([0, 0, 0.5])))
-        self.assertEqual(v1 * v2, 0.0)
-        self.assertTrue(numpy.array_equal((v1 ** v2).get_array(), numpy.array([0.0, -0.0, 0.0])))
-        self.assertTrue(numpy.array_equal((v1 ** 2).get_array(), numpy.array([0.0, 0.0, 2.0])))
-        self.assertTrue(numpy.array_equal((v1 ** (1, 2, 3)).get_array(), numpy.array([0.0, 0.0, 3.0])))
-        self.assertEqual(v1.norm(), 1.0)
-        self.assertEqual(v1.normsq(), 1.0)
-        v1[2] = 10
-        self.assertEqual(v1.__getitem__(2), 10)
-
-        # Vector normalization
-        v1 = Vector([2, 0, 0])
-        self.assertTrue(numpy.array_equal(v1.normalized().get_array(), numpy.array([1, 0, 0])))
-        # State of v1 should not be affected by `normalized`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([2, 0, 0])))
-        v1.normalize()
-        # State of v1 should be affected by `normalize`
-        self.assertTrue(numpy.array_equal(v1.get_array(), numpy.array([1, 0, 0])))
-
-    def test_refmat(self):
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        ref = refmat(v1, v2)
-        self.assertTrue(numpy.allclose(ref[0], [1.0, 0.0, 0.0]))
-        self.assertTrue(numpy.allclose(ref[1], [0.0, 0.0, 1.0]))
-        self.assertTrue(numpy.allclose(ref[2], [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.left_multiply(ref).get_array(), [0.0, 1.0, 0.0]))
-
-    def test_rotmat(self):
-        # Regular 90 deg rotation
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        rot = rotmat(v1, v2)
-        self.assertTrue(numpy.allclose(rot[0], numpy.array([1.0, 0.0, 0.0])))
-        self.assertTrue(numpy.allclose(rot[1], numpy.array([0.0, 0.0, 1.0])))
-        self.assertTrue(numpy.allclose(rot[2], numpy.array([0.0, -1.0, 0.0])))
-        self.assertTrue(numpy.allclose(v1.left_multiply(rot).get_array(), [0.0, 1.0, 0.0]))
-        self.assertTrue(numpy.allclose(v1.right_multiply(numpy.transpose(rot)).get_array(), [0.0, 1.0, 0.0]))
-
-        # Applying rotmat works when the rotation is 180 deg (singularity)
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([-1.0, -0.8, 0])
-        rot = rotmat(v1, v2)
-        v3 = v1.left_multiply(rot)
-        self.assertTrue(numpy.allclose(v2.get_array(), v3.get_array()))
-
-        # Applying rotmat works when the rotation is 0 deg (singularity)
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([1.0, 0.8, 0])
-        rot = rotmat(v1, v2)
-        v3 = v1.left_multiply(rot)
-        self.assertTrue(numpy.allclose(v1.get_array(), v3.get_array()))
-
-    def test_m2rotaxis(self):
-        # Regular 90 deg rotation
-        v1 = Vector(0, 0, 1)
-        v2 = Vector(0, 1, 0)
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.allclose(axis.get_array(), [-1.0, 0.0, 0.0]))
-        self.assertTrue(abs(angle - numpy.pi / 2) < 1e-5)
-
-        # 180 deg rotation
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([-1.0, -0.8, 0])
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(abs(axis * v1) < 1e-5)  # axis orthogonal to v1
-        self.assertTrue(abs(angle - numpy.pi) < 1e-5)
-
-        # 0 deg rotation. Axis must be [1, 0, 0] as per Vector documentation
-        v1 = Vector([1.0, 0.8, 0])
-        v2 = Vector([1.0, 0.8, 0])
-        rot = rotmat(v1, v2)
-        angle, axis = m2rotaxis(rot)
-        self.assertTrue(numpy.allclose(axis.get_array(), [1, 0, 0]))
-        self.assertTrue(abs(angle) < 1e-5)
-
-    def test_Vector_angles(self):
-        angle = random() * numpy.pi
-        axis = Vector(random(3) - random(3))
-        axis.normalize()
-        m = rotaxis(angle, axis)
-        cangle, caxis = m2rotaxis(m)
-        self.assertAlmostEqual(angle, cangle, places=3)
-        self.assertTrue(numpy.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
-                        "Want %r and %r to be almost equal" % (axis.get_array(), caxis.get_array()))
 
 
 class PDBParserTests(unittest.TestCase):

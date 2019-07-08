@@ -347,8 +347,8 @@ class TestUniprot(unittest.TestCase):
                     pass
                 else:
                     raise ValueError(key)
-            elif isinstance(old.annotations[key], list) \
-            and sorted(old.annotations[key]) == sorted(new.annotations[key]):
+            elif (isinstance(old.annotations[key], list) and
+                  sorted(old.annotations[key]) == sorted(new.annotations[key])):
                 pass
             else:
                 raise ValueError("%s gives %s vs %s" %

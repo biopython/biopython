@@ -3,7 +3,7 @@ CONTRIBUTORS
 
 This is a list of people who have made contributions to Biopython.
 
-People are listed alphabetically, as verfied with Unix sort::
+People are listed alphabetically, as verified with Unix sort::
 
     $ grep "^- " CONTRIB.rst | LC_ALL=C sort -u -c -f
 
@@ -172,6 +172,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marc Colosimo <mcolosimo at domain mitre.org>
 - Marcin Magnus <https://github.com/mmagnus>
 - Marco Galardini <https://github.com/mgalardini>
+- Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>

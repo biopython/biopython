@@ -265,7 +265,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # set initial probabilities
         prob_initial = [0.4, 0.6]
         self.mm_builder.set_initial_probabilities(
-                {'1': prob_initial[0], '2': prob_initial[1]})
+            {'1': prob_initial[0], '2': prob_initial[1]})
 
         # set transition probabilities
         prob_transition = [[0.35, 0.65], [0.45, 0.55]]
@@ -330,7 +330,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # make state '1' the initial state
         prob_1_initial = 1.0
         self.mm_builder.set_initial_probabilities(
-                {'1': prob_1_initial})
+            {'1': prob_1_initial})
 
         # probabilities of transitioning from state 1 to 1, and 1 to 2
         prob_1_to_1 = 0.5
@@ -432,9 +432,9 @@ class AbstractTrainerTest(unittest.TestCase):
 
         for test_result in result_tests:
             assert results[test_result[0]] == test_result[1], \
-                   "Got %f, expected %f for %s" % (results[test_result[0]],
-                                                   test_result[1],
-                                                   test_result[0])
+                "Got %f, expected %f for %s" % (results[test_result[0]],
+                                                test_result[1],
+                                                test_result[0])
 
     def test_log_likelihood(self):
         """Calculate log likelihood."""

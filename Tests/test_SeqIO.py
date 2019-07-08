@@ -8,6 +8,8 @@
 
 from Bio._py3k import basestring
 
+import gzip
+import sys
 import unittest
 import warnings
 
@@ -124,6 +126,56 @@ def alignment_summary(alignment, index=" "):
         answer.append(index + col_summary(alignment[:, i]) +
                       " alignment column %i" % i)
     return "\n".join(answer)
+
+
+class TestZipped(unittest.TestCase):
+    """Test parsing gzip compressed files in various formats."""
+
+    def test_gzip_fastq(self):
+        """Testing FASTQ with gzip."""
+        if sys.version_info >= (3,):
+            mode = "rt"
+        else:
+            # Workaround for bug https://bugs.python.org/issue30012
+            mode = "r"  # implicitly text mode, rejects making explicit
+        with gzip.open("Quality/example.fastq.gz", mode) as handle:
+            self.assertEqual(3, len(list(SeqIO.parse(handle, "fastq"))))
+        if 3 <= sys.version_info[0]:
+            with gzip.open("Quality/example.fastq.gz") as handle:
+                with self.assertRaisesRegex(ValueError,
+                                            "Is this handle in binary mode not text mode"):
+                    list(SeqIO.parse(handle, "fastq"))
+
+    def test_gzip_fasta(self):
+        """Testing FASTA with gzip."""
+        if sys.version_info >= (3,):
+            mode = "rt"
+        else:
+            # Workaround for bug https://bugs.python.org/issue30012
+            mode = "r"  # implicitly text mode, rejects making explicit
+        with gzip.open("Fasta/flowers.pro.gz", mode) as handle:
+            self.assertEqual(3, len(list(SeqIO.parse(handle, "fasta"))))
+        if 3 <= sys.version_info[0]:
+            with gzip.open("Fasta/flowers.pro.gz") as handle:
+                with self.assertRaisesRegex(ValueError,
+                                            "Is this handle in binary mode not text mode"):
+                    list(SeqIO.parse(handle, "fasta"))
+
+    def test_gzip_genbank(self):
+        """Testing GenBank with gzip."""
+        # BGZG files are still GZIP files
+        if sys.version_info >= (3,):
+            mode = "rt"
+        else:
+            # Workaround for bug https://bugs.python.org/issue30012
+            mode = "r"  # implicitly text mode, rejects making explicit
+        with gzip.open("GenBank/cor6_6.gb.bgz", mode) as handle:
+            self.assertEqual(6, len(list(SeqIO.parse(handle, "gb"))))
+        if 3 <= sys.version_info[0]:
+            with gzip.open("GenBank/cor6_6.gb.bgz") as handle:
+                with self.assertRaisesRegex(ValueError,
+                                            "Is this handle in binary mode not text mode"):
+                    list(SeqIO.parse(handle, "gb"))
 
 
 class TestSeqIO(unittest.TestCase):
@@ -484,7 +536,7 @@ class TestSeqIO(unittest.TestCase):
 
             if t_alignment:
                 alignment = MultipleSeqAlignment(SeqIO.parse(
-                        handle=t_filename, format=t_format))
+                    handle=t_filename, format=t_format))
                 self.assertEqual(len(alignment), t_count)
                 alignment_len = alignment.get_alignment_length()
 

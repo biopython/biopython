@@ -17,7 +17,7 @@ try:
     import matplotlib
 except ImportError:
     raise MissingExternalDependencyError(
-            "Install matplotlib if you want to use Bio.Phylo._utils.")
+        "Install matplotlib if you want to use Bio.Phylo._utils.")
 
 # Don't use the Wx backend for matplotlib, use the simpler postscript
 # backend -- we're not going to display or save the plot anyway, so it
@@ -29,7 +29,7 @@ try:
 except ImportError:
     # Can fail here with font problems
     raise MissingExternalDependencyError(
-            "Install matplotlib if you want to use Bio.Phylo._utils.")
+        "Install matplotlib if you want to use Bio.Phylo._utils.")
 
 
 # Example PhyloXML file

@@ -42,10 +42,12 @@ build_script:
   - conda update conda
 # Pinning pillow==5.4.1 as version 6 breaks on current latest reportlab
 # https://bitbucket.org/rptlab/reportlab/issues/176/incompatibility-with-pillow-600
-# Pinning mysql-connector-python==8.0.13 as 8.0.16 breaks  our tests
+  - conda install setuptools numpy psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
+
+# Pinning mysql-connector-python==8.0.13 for Python 3 as 8.0.16 breaks our tests
 # https://github.com/biopython/biopython/issues/2120
-  - conda install setuptools numpy mysql-connector-python==8.0.13 psycopg2 matplotlib networkx reportlab scipy coverage pillow==5.4.1
-  - if "PY_MAJOR_VER"=="2" conda install unittest2
+# We don't install mysql-connector-python for Python 2
+  - if "%PY_MAJOR_VER%"=="3" conda install mysql-connector-python==8.0.13
   - python setup.py build
 
 test_script:

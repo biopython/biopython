@@ -88,6 +88,9 @@ class InsdcScanner(object):
                 if self.debug:
                     print("End of file")
                 return None
+            if isinstance(line[0], int):
+                # Same exception as for FASTQ files
+                raise ValueError("Is this handle in binary mode not text mode?")
             if line[:self.HEADER_WIDTH] == self.RECORD_START:
                 if self.debug > 1:
                     print("Found the start of a record:\n" + line)

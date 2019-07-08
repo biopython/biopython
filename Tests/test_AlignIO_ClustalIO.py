@@ -151,7 +151,7 @@ aln_example4 = \
 Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
 AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 
-"""
+"""  # noqa: E122 not clear to me, why this comes up here
 
 
 class TestClustalIO(unittest.TestCase):

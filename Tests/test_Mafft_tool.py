@@ -37,7 +37,7 @@ def check_mafft_version(mafft_exe):
     return_code = child.returncode
     del child
     if "correctly installed?" in output \
-    or "mafft binaries have to be installed" in output:
+       or "mafft binaries have to be installed" in output:
         raise MissingExternalDependencyError(
             "MAFFT does not seem to be correctly installed.")
 
