@@ -28,10 +28,10 @@ except OSError:
 
 
 class NACCESS_test(unittest.TestCase):
-    """Test NACCESS module"""
+    """Test NACCESS module."""
 
     def test_NACCESS(self):
-        """Test NACCESS generation from PDB"""
+        """Test NACCESS generation from PDB."""
         p = PDBParser()
         pdbfile = "PDB/1A8O.pdb"
         model = p.get_structure("1A8O", pdbfile)[0]

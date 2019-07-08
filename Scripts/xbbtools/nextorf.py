@@ -8,13 +8,14 @@
 # Authors: Thomas Sicheritz-Ponten and Jan O. Andersson
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # Jan.O.Andersson@home.se
-# File: nextorf.py
+# flake8: noqa
+
+"""Find next open reading frame in sequence data."""
 
 from __future__ import print_function
 
 import re
 import sys
-import os
 import getopt
 
 from Bio import SeqIO
@@ -27,10 +28,11 @@ from Bio.Data import IUPACData, CodonTable
 class ProteinX(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters + "X"
 
+
 proteinX = ProteinX()
 
 
-class MissingTable:
+class MissingTable(object):
     def __init__(self, table):
         self._table = table
 
@@ -45,12 +47,12 @@ class MissingTable:
 def makeTableX(table):
     assert table.protein_alphabet == IUPAC.extended_protein
     return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                                MissingTable(table.forward_table),
-                                table.back_table, table.start_codons,
-                                table.stop_codons)
+                                 MissingTable(table.forward_table),
+                                 table.back_table, table.start_codons,
+                                 table.stop_codons)
 
 
-class NextOrf:
+class NextOrf(object):
     def __init__(self, file, options):
         self.options = options
         self.file = file
@@ -63,7 +65,6 @@ class NextOrf:
         handle = open(self.file)
         for record in SeqIO.parse(handle, "fasta"):
             self.header = record.id
-            frame_coordinates = ''
             dir = self.options['strand']
             plus = dir in ['both', 'plus']
             minus = dir in ['both', 'minus']
@@ -85,7 +86,8 @@ class NextOrf:
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
-        seq = re.sub('(............................................................)', '\\1\n', seq)
+        seq = re.sub('(............................................................)',
+                     '\\1\n', seq)
         return '>%s\n%s' % (header, seq)
 
     def Gc(self, seq):
@@ -98,15 +100,15 @@ class NextOrf:
         return round(gc * 100.0 / (d['A'] + d['T'] + gc), 1)
 
     def Gc2(self, seq):
-        l = len(seq)
+        length = len(seq)
         d = {}
         for nt in ['A', 'T', 'G', 'C']:
             d[nt] = [0, 0, 0]
 
-        for i in range(0, l, 3):
-            codon = seq[i:i+3]
+        for i in range(0, length, 3):
+            codon = seq[i:i + 3]
             if len(codon) < 3:
-                codon = codon + '  '
+                codon += '  '
             for pos in range(0, 3):
                 for nt in ['A', 'T', 'G', 'C']:
                     if codon[pos] == nt:
@@ -119,21 +121,18 @@ class NextOrf:
             try:
                 n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
                 gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
-            except:
+            except KeyError:
                 gc[i] = 0
 
             gcall = gcall + d['G'][i] + d['C'][i]
-            nall = nall + n
+            nall += n
 
         gcall = 100.0 * gcall / nall
         res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
         return res
 
     def GetOrfCoordinates(self, seq):
-        s = seq.data
-        letters = []
-        table = self.table
-        get = self.table.forward_table.get
+        s = str(seq)
         n = len(seq)
         start_codons = self.table.start_codons
         stop_codons = self.table.stop_codons
@@ -143,7 +142,7 @@ class NextOrf:
         for frame in range(0, 3):
             coordinates = []
             for i in range(0 + frame, n - n % 3, 3):
-                codon = s[i:i+3]
+                codon = s[i:i + 3]
                 if codon in start_codons:
                     coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
@@ -160,7 +159,7 @@ class NextOrf:
         CDS = []
         f = 0
         for frame in frame_coordinates:
-            f+=1
+            f += 1
             start_site = 0
             if nostart == '1':
                 start_site = 1
@@ -180,9 +179,10 @@ class NextOrf:
                         if nostart == '1' and start_site == 1:
                             start_site = start_site + f - 1
                         if codon == 'XXX':
-                            stop = start_site + 3*((int((stop-1)-start_site)/3))
-                        s = seq[start_site-1:stop]
-                        CDS.append((start_site, stop, length, s, strand*f))
+                            stop = start_site \
+                                + 3 * ((int((stop - 1) - start_site) // 3))
+                        s = seq[start_site - 1:stop]
+                        CDS.append((start_site, stop, length, s, strand * f))
                         start_site = 0
                         if nostart == '1':
                             start_site = stop + 1
@@ -195,22 +195,25 @@ class NextOrf:
 
     def Output(self, CDS):
         out = self.options['output']
-        seqs = (self.seq, self.rseq)
         n = len(self.seq)
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
             if strand > 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start, stop)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header,
+                                               strand, start, stop)
             if strand < 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1, n-start+1)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header,
+                                               strand,
+                                               n - stop + 1,
+                                               n - start + 1)
             if self.options['gc']:
-                head = '%s:%s' % (head, self.Gc2(subs.data))
+                head = '%s:%s' % (head, self.Gc2(subs))
 
             if out == 'aa':
                 orf = subs.translate(table=self.genetic_code)
-                print(self.ToFasta(head, orf.data))
+                print(self.ToFasta(head, str(orf)))
             elif out == 'nt':
-                print(self.ToFasta(head, subs.data))
+                print(self.ToFasta(head, str(subs)))
             elif out == 'pos':
                 print(head)
 
@@ -237,7 +240,8 @@ def help():
     print("\nNCBI's Codon Tables:")
     for key, table in CodonTable.ambiguous_dna_by_id.items():
         print('\t%s %s' % (key, table._codon_table.names[0]))
-    print('\ne.g.\n./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas')
+    print('\ne.g.')
+    print('./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas')
     sys.exit(0)
 
 
@@ -252,7 +256,7 @@ options = {
     'gc': 0,
     'nostart': 0,
     'table': 1,
-    }
+}
 
 if __name__ == '__main__':
     args = sys.argv[1:]

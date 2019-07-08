@@ -3,19 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This module provides classes and functions to parse a KGML pathway map.
+"""Classes and functions to parse a KGML pathway map.
 
 The KGML pathway map is parsed into the object structure defined in
 KGML_Pathway.py in this module.
 
 Classes:
-
-    - KGMLParser             Parses KGML file
+ - KGMLParser - Parses KGML file
 
 Functions:
+ - read - Returns a single Pathway object, using KGMLParser internally
 
-    - read                   Returns a single Pathway object, using KGMLParser
-      internally
 """
 
 from __future__ import print_function
@@ -25,15 +23,14 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ElementTree
 
-
 from Bio._py3k import StringIO
 
-from Bio.KEGG.KGML.KGML_pathway import *
+from Bio.KEGG.KGML.KGML_pathway import Component, Entry, Graphics
+from Bio.KEGG.KGML.KGML_pathway import Pathway, Reaction, Relation
 
-__docformat__ = "restructuredtext en"
 
 def read(handle, debug=0):
-    """Parses a single KEGG Pathway from given file handle.
+    """Parse a single KEGG Pathway from given file handle.
 
     Returns a single Pathway object.  There should be one and only
     one pathway in each file, but there may well be pathological
@@ -56,11 +53,11 @@ def read(handle, debug=0):
 
 
 def parse(handle, debug=0):
-    """Returns an iterator over Pathway elements.
+    """Return an iterator over Pathway elements.
 
     Arguments:
-    - handle - file handle to a KGML file for parsing
-    - debug - integer for amount of debug information to print
+     - handle - file handle to a KGML file for parsing
+     - debug - integer for amount of debug information to print
 
     This is a generator for the return of multiple Pathway objects.
     """
@@ -69,8 +66,8 @@ def parse(handle, debug=0):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
-            exc_txt = "An XML-containing handle or an XML string " +\
-                "must be provided"
+            exc_txt = "An XML-containing handle or an XML string " + \
+                      "must be provided"
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
@@ -81,14 +78,39 @@ def parse(handle, debug=0):
 
 
 class KGMLParser(object):
-    """Parses a KGML XML Pathway entry into a Pathway object."""
+    """Parses a KGML XML Pathway entry into a Pathway object.
+
+    Example: Read and parse large metabolism file
+
+    >>> from Bio.KEGG.KGML.KGML_parser import read
+    >>> pathway = read(open('KEGG/ko01100.xml', 'r'))
+    >>> print(len(pathway.entries))
+    3628
+    >>> print(len(pathway.reactions))
+    1672
+    >>> print(len(pathway.maps))
+    149
+
+    >>> pathway = read(open('KEGG/ko00010.xml', 'r'))
+    >>> print(pathway) #doctest: +NORMALIZE_WHITESPACE
+    Pathway: Glycolysis / Gluconeogenesis
+    KEGG ID: path:ko00010
+    Image file: http://www.kegg.jp/kegg/pathway/ko/ko00010.png
+    Organism: ko
+    Entries: 99
+    Entry types:
+        ortholog: 61
+        compound: 31
+        map: 7
+
+    """
 
     def __init__(self, elem):
+        """Initialize the class."""
         self.entry = elem
 
     def parse(self):
         """Parse the input elements."""
-
         def _parse_pathway(attrib):
             for k, v in attrib.items():
                 self.pathway.__setattr__(k, v)
@@ -141,7 +163,7 @@ class KGMLParser(object):
             self.pathway.add_relation(new_relation)
 
         # ==========
-        # Initialise Pathway
+        # Initialize Pathway
         self.pathway = Pathway()
         # Get information about the pathway itself
         _parse_pathway(self.entry.attrib)
@@ -157,41 +179,11 @@ class KGMLParser(object):
                 # This should warn us of any unimplemented tags
                 import warnings
                 from Bio import BiopythonParserWarning
-                warnings.warn("Warning: tag %s not implemented in parser" % element.tag,
-                              BiopythonParserWarning)
+                warnings.warn("Warning: tag %s not implemented in parser" %
+                              element.tag, BiopythonParserWarning)
         return self.pathway
 
 
-if __name__ == '__main__':
-    # Check large metabolism
-    pathway = read(open('ko01100.xml', 'rU'))
-    print(pathway)
-    for k, v in list(pathway.entries.items())[:20]:
-        print(v)
-    for r in list(pathway.reactions)[:20]:
-        print(r)
-    print(len(pathway.maps))
-
-    # Check relations
-    pathway = read(open('ko_metabolic/ko00010.xml', 'rU'))
-    print(pathway)
-    for k, v in list(pathway.entries.items())[:20]:
-        print(v)
-    for r in list(pathway.reactions[:20]):
-        print(r)
-    for r in list(pathway.relations[:20]):
-        print(r)
-    print(len(pathway.maps))
-
-    # Check components
-    pathway = read(open('ko_metabolic/ko00253.xml', 'rU'))
-    print(pathway)
-    for k, v in pathway.entries.items():
-        print(v)
-    print(len(pathway.maps))
-
-    # Test XML representation
-    print(pathway.get_KGML())
-
-    # Test bounds of pathway
-    print(pathway.bounds)
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

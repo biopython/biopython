@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.ExPASy.Prodoc module."""
 
 import os
 import unittest
@@ -10,13 +11,13 @@ from Bio.ExPASy import Prodoc
 
 
 class TestProdocRead(unittest.TestCase):
+    """Tests for the Prodoc read function."""
 
     def test_read_pdoc00100(self):
-        """Reading Prodoc record PDOC00100"""
+        """Reading Prodoc record PDOC00100."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00100.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00100")
         self.assertEqual(len(record.prosite_refs), 4)
@@ -171,11 +172,10 @@ PubMed=2165531""")
                          "Cell 67:995-1006(1991).")
 
     def test_read_pdoc00113(self):
-        """Reading Prodoc record PDOC00113"""
+        """Reading Prodoc record PDOC00113."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00113.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00113")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -242,11 +242,10 @@ Mol. Gen. Genet. 228:459-469(1991).
 PubMed=1654502""")
 
     def test_read_pdoc00144(self):
-        """Reading Prodoc record PDOC00144"""
+        """Reading Prodoc record PDOC00144."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00144.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00144")
         self.assertEqual(len(record.prosite_refs), 2)
@@ -302,11 +301,10 @@ J. Biol. Chem. 263:11683-11691(1988).
 PubMed=3136164""")
 
     def test_read_pdoc00149(self):
-        "Reading Prodoc record PDOC00149"
+        """Reading Prodoc record PDOC00149."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00149.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00149")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -382,11 +380,10 @@ Trends Biochem. Sci. 18:297-300(1993).
 PubMed=8236444""")
 
     def test_read_pdoc00340(self):
-        "Reading Prodoc record PDOC00340"
+        """Reading Prodoc record PDOC00340."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00340.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00340")
         self.assertEqual(len(record.prosite_refs), 3)
@@ -485,11 +482,10 @@ PubMed=2203335""")
                          "Cell Motil. Cytoskeleton 16:164-166(1990).")
 
     def test_read_pdoc00424(self):
-        """Reading Prodoc record PDOC00424"""
+        """Reading Prodoc record PDOC00424."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00424.txt',)
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00424")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -566,11 +562,10 @@ J. Biol. Chem. 269:27473-27477(1994).
 PubMed=7961661""")
 
     def test_read_pdoc00472(self):
-        """Reading Prodoc record PDOC00472"""
+        """Reading Prodoc record PDOC00472."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00472.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00472")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -660,11 +655,10 @@ Proc. Natl. Acad. Sci. U.S.A. 89:4693-4697(1992).
 PubMed=1584806""")
 
     def test_read_pdoc00640(self):
-        """Reading Prodoc record PDOC00640"""
+        """Reading Prodoc record PDOC00640."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00640.txt',)
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00640")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -755,11 +749,10 @@ PubMed=8805535""")
         self.assertEqual(record.references[5].citation, 'http://www.expasy.org/cgi-bin/lists?glycosid.txt')
 
     def test_read_pdoc00787(self):
-        """Reading Prodoc record PDOC00787"""
+        """Reading Prodoc record PDOC00787."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00787.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00787")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -818,11 +811,10 @@ PubMed=7624375""")
                          "http://www.expasy.org/cgi-bin/lists?glycosid.txt")
 
     def test_read_pdoc0933(self):
-        """Reading Prodoc record PDOC00933"""
+        """Reading Prodoc record PDOC00933."""
         filename = os.path.join('Prosite', 'Doc', 'pdoc00933.txt')
-        handle = open(filename)
-        record = Prodoc.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prodoc.read(handle)
 
         self.assertEqual(record.accession, "PDOC00933")
         self.assertEqual(len(record.prosite_refs), 1)
@@ -887,19 +879,20 @@ PubMed=10903511""")
 
 
 class TestProdocParse(unittest.TestCase):
+    """Tests for the Prodoc parse function."""
 
     def test_parse_pdoc(self):
-        """Parsing an excerpt of prosite.doc"""
+        """Parsing an excerpt of prosite.doc."""
         filename = os.path.join('Prosite', 'Doc',
                                 'prosite.excerpt.doc')
-        handle = open(filename)
-        records = Prodoc.parse(handle)
+        with open(filename) as handle:
+            records = Prodoc.parse(handle)
 
-        # Testing the first parsed record
-        record = next(records)
-        self.assertEqual(record.accession, "PDOC00000")
-        self.assertEqual(len(record.prosite_refs), 0)
-        self.assertEqual(record.text, """\
+            # Testing the first parsed record
+            record = next(records)
+            self.assertEqual(record.accession, "PDOC00000")
+            self.assertEqual(len(record.prosite_refs), 0)
+            self.assertEqual(record.text, """\
 **********************************
 *** PROSITE documentation file ***
 **********************************
@@ -957,13 +950,13 @@ Acknowledgements:
 
 """)
 
-        # Testing the second parsed record
-        record = next(records)
-        self.assertEqual(record.accession, "PDOC00001")
-        self.assertEqual(len(record.prosite_refs), 1)
-        self.assertEqual(record.prosite_refs[0],
-                         ("PS00001", "ASN_GLYCOSYLATION"))
-        self.assertEqual(record.text, """\
+            # Testing the second parsed record
+            record = next(records)
+            self.assertEqual(record.accession, "PDOC00001")
+            self.assertEqual(len(record.prosite_refs), 1)
+            self.assertEqual(record.prosite_refs[0],
+                             ("PS00001", "ASN_GLYCOSYLATION"))
+            self.assertEqual(record.text, """\
 ************************
 * N-glycosylation site *
 ************************
@@ -987,52 +980,52 @@ of such a non-standard site is found in the plasma protein C [5].
 -Last update: May 1991 / Text revised.
 
 """)
-        self.assertEqual(record.references[0].number, "1")
-        self.assertEqual(record.references[0].authors,
-                         "Marshall R.D.")
-        self.assertEqual(record.references[0].citation, """\
+            self.assertEqual(record.references[0].number, "1")
+            self.assertEqual(record.references[0].authors,
+                             "Marshall R.D.")
+            self.assertEqual(record.references[0].citation, """\
 "Glycoproteins."
 Annu. Rev. Biochem. 41:673-702(1972).
 PubMed=4563441; DOI=10.1146/annurev.bi.41.070172.003325""")
-        self.assertEqual(record.references[1].number, "2")
-        self.assertEqual(record.references[1].authors,
-                         "Pless D.D., Lennarz W.J.")
-        self.assertEqual(record.references[1].citation, """\
+            self.assertEqual(record.references[1].number, "2")
+            self.assertEqual(record.references[1].authors,
+                             "Pless D.D., Lennarz W.J.")
+            self.assertEqual(record.references[1].citation, """\
 "Enzymatic conversion of proteins to glycoproteins."
 Proc. Natl. Acad. Sci. U.S.A. 74:134-138(1977).
 PubMed=264667""")
-        self.assertEqual(record.references[2].number, "3")
-        self.assertEqual(record.references[2].authors, "Bause E.")
-        self.assertEqual(record.references[2].citation, """\
+            self.assertEqual(record.references[2].number, "3")
+            self.assertEqual(record.references[2].authors, "Bause E.")
+            self.assertEqual(record.references[2].citation, """\
 "Structural requirements of N-glycosylation of proteins. Studies with
 proline peptides as conformational probes."
 Biochem. J. 209:331-336(1983).
 PubMed=6847620""")
-        self.assertEqual(record.references[3].number, "4")
-        self.assertEqual(record.references[3].authors,
-                         "Gavel Y., von Heijne G.")
-        self.assertEqual(record.references[3].citation, """\
+            self.assertEqual(record.references[3].number, "4")
+            self.assertEqual(record.references[3].authors,
+                             "Gavel Y., von Heijne G.")
+            self.assertEqual(record.references[3].citation, """\
 "Sequence differences between glycosylated and non-glycosylated
 Asn-X-Thr/Ser acceptor sites: implications for protein engineering."
 Protein Eng. 3:433-442(1990).
 PubMed=2349213""")
-        self.assertEqual(record.references[4].number, "5")
-        self.assertEqual(record.references[4].authors,
-                         "Miletich J.P., Broze G.J. Jr.")
-        self.assertEqual(record.references[4].citation, """\
+            self.assertEqual(record.references[4].number, "5")
+            self.assertEqual(record.references[4].authors,
+                             "Miletich J.P., Broze G.J. Jr.")
+            self.assertEqual(record.references[4].citation, """\
 "Beta protein C is not glycosylated at asparagine 329. The rate of
 translation may influence the frequency of usage at
 asparagine-X-cysteine sites."
 J. Biol. Chem. 265:11397-11404(1990).
 PubMed=1694179""")
 
-        # Testing the third parsed record
-        record = next(records)
-        self.assertEqual(record.accession, "PDOC00004")
-        self.assertEqual(len(record.prosite_refs), 1)
-        self.assertEqual(record.prosite_refs[0],
-                         ("PS00004", "CAMP_PHOSPHO_SITE"))
-        self.assertEqual(record.text, """\
+            # Testing the third parsed record
+            record = next(records)
+            self.assertEqual(record.accession, "PDOC00004")
+            self.assertEqual(len(record.prosite_refs), 1)
+            self.assertEqual(record.prosite_refs[0],
+                             ("PS00004", "CAMP_PHOSPHO_SITE"))
+            self.assertEqual(record.text, """\
 ****************************************************************
 * cAMP- and cGMP-dependent protein kinase phosphorylation site *
 ****************************************************************
@@ -1049,36 +1042,36 @@ to note that there are quite a number of exceptions to this rule.
 
 """)
 
-        self.assertEqual(record.references[0].number, "1")
-        self.assertEqual(record.references[0].authors,
-                         "Fremisco J.R., Glass D.B., Krebs E.G.")
-        self.assertEqual(record.references[0].citation, """\
+            self.assertEqual(record.references[0].number, "1")
+            self.assertEqual(record.references[0].authors,
+                             "Fremisco J.R., Glass D.B., Krebs E.G.")
+            self.assertEqual(record.references[0].citation, """\
 J. Biol. Chem. 255:4240-4245(1980).""")
-        self.assertEqual(record.references[1].number, "2")
-        self.assertEqual(record.references[1].authors,
-                         "Glass D.B., Smith S.B.")
-        self.assertEqual(record.references[1].citation, """\
+            self.assertEqual(record.references[1].number, "2")
+            self.assertEqual(record.references[1].authors,
+                             "Glass D.B., Smith S.B.")
+            self.assertEqual(record.references[1].citation, """\
 "Phosphorylation by cyclic GMP-dependent protein kinase of a synthetic
 peptide corresponding to the autophosphorylation site in the enzyme."
 J. Biol. Chem. 258:14797-14803(1983).
 PubMed=6317673""")
-        self.assertEqual(record.references[2].number, "3")
-        self.assertEqual(record.references[2].authors,
-                         "Glass D.B., el-Maghrabi M.R., Pilkis S.J.")
-        self.assertEqual(record.references[2].citation, """\
+            self.assertEqual(record.references[2].number, "3")
+            self.assertEqual(record.references[2].authors,
+                             "Glass D.B., el-Maghrabi M.R., Pilkis S.J.")
+            self.assertEqual(record.references[2].citation, """\
 "Synthetic peptides corresponding to the site phosphorylated in
 6-phosphofructo-2-kinase/fructose-2,6-bisphosphatase as substrates of
 cyclic nucleotide-dependent protein kinases."
 J. Biol. Chem. 261:2987-2993(1986).
 PubMed=3005275""")
 
-        # Testing the fourth parsed record
-        record = next(records)
-        self.assertEqual(record.accession, "PDOC60030")
-        self.assertEqual(len(record.prosite_refs), 1)
-        self.assertEqual(record.prosite_refs[0],
-                         ("PS60030", "BACTERIOCIN_IIA"))
-        self.assertEqual(record.text, """\
+            # Testing the fourth parsed record
+            record = next(records)
+            self.assertEqual(record.accession, "PDOC60030")
+            self.assertEqual(len(record.prosite_refs), 1)
+            self.assertEqual(record.prosite_refs[0],
+                             ("PS60030", "BACTERIOCIN_IIA"))
+            self.assertEqual(record.text, """\
 ******************************************
 * Bacteriocin class IIa family signature *
 ******************************************
@@ -1133,34 +1126,32 @@ The pattern  we  developed  for  the  class  IIa bacteriocin family covers the
 
 """)
 
-        self.assertEqual(record.references[0].number, "1")
-        self.assertEqual(record.references[0].authors,
-                         "Ennahar S., Sonomoto K., Ishizaki A.")
-        self.assertEqual(record.references[0].citation, """\
+            self.assertEqual(record.references[0].number, "1")
+            self.assertEqual(record.references[0].authors,
+                             "Ennahar S., Sonomoto K., Ishizaki A.")
+            self.assertEqual(record.references[0].citation, """\
 "Class IIa bacteriocins from lactic acid bacteria: antibacterial
 activity and food preservation."
 J. Biosci. Bioeng. 87:705-716(1999).
 PubMed=16232543""")
-        self.assertEqual(record.references[1].number, "2")
-        self.assertEqual(record.references[1].authors,
-                         "Johnsen L., Fimland G., Nissen-Meyer J.")
-        self.assertEqual(record.references[1].citation, """\
+            self.assertEqual(record.references[1].number, "2")
+            self.assertEqual(record.references[1].authors,
+                             "Johnsen L., Fimland G., Nissen-Meyer J.")
+            self.assertEqual(record.references[1].citation, """\
 "The C-terminal domain of pediocin-like antimicrobial peptides (class
 IIa bacteriocins) is involved in specific recognition of the
 C-terminal part of cognate immunity proteins and in determining the
 antimicrobial spectrum."
 J. Biol. Chem. 280:9243-9250(2005).
 PubMed=15611086; DOI=10.1074/jbc.M412712200""")
-        self.assertEqual(record.references[2].number, "3")
-        self.assertEqual(record.references[2].authors, "Fimland G., Johnsen L., Dalhus B., Nissen-Meyer J.")
+            self.assertEqual(record.references[2].number, "3")
+            self.assertEqual(record.references[2].authors, "Fimland G., Johnsen L., Dalhus B., Nissen-Meyer J.")
         self.assertEqual(record.references[2].citation, """\
 "Pediocin-like antimicrobial peptides (class IIa bacteriocins) and
 their immunity proteins: biosynthesis, structure, and mode of
 action."
 J. Pept. Sci. 11:688-696(2005).
 PubMed=16059970; DOI=10.1002/psc.699""")
-
-        handle.close()
 
 
 if __name__ == "__main__":

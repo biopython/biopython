@@ -5,7 +5,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Scop"""
+"""Unit test for Scop."""
 
 from __future__ import print_function
 
@@ -13,13 +13,13 @@ import unittest
 from Bio._py3k import StringIO
 from Bio._py3k import zip
 
-from Bio.SCOP import *
+from Bio.SCOP import Scop, cmp_sccs, parse_domain
 
 
 class ScopTests(unittest.TestCase):
 
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
-        """Compares the two specified Cla lines for equality.
+        """Compare the two specified Cla lines for equality.
 
         The order of the key-value pairs in the sixth field of the lines does
         not matter. For more information, see
@@ -92,7 +92,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(cmp_sccs("b.1.2.2", "b.1.2"), 1)
 
     def testParseDomain(self):
-        s=">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
+        s = ">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
         dom = parse_domain(s)
 
         self.assertEqual(dom.sid, 'd1tpt_1')
@@ -100,18 +100,18 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(dom.residues.pdbid, '1tpt')
         self.assertEqual(dom.description, 'Thymidine phosphorylase {Escherichia coli}')
 
-        s2="d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
+        s2 = "d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
 
         # Genetic domains (See Astral release notes)
-        s3="g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
+        s3 = "g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s3, str(parse_domain(s3)))
 
-        s4="e1cph.1a g.1.1.1 (1cph A:) Insulin {Cow (Bos taurus)}"
+        s4 = "e1cph.1a g.1.1.1 (1cph A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s4, str(parse_domain(s4)))
 
         # Raw Astral header
-        s5=">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
+        s5 = ">e1cph.1a g.1.1.1 (A:) Insulin {Cow (Bos taurus)}"
         self.assertEqual(s4, str(parse_domain(s5)))
 
         self.assertRaises(ValueError, parse_domain, "Totally wrong")
@@ -144,7 +144,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(px2, None)
 
     def test_get_descendents(self):
-        """Test getDescendents method"""
+        """Test getDescendents method."""
         scop = Scop(dir_path="SCOP", version="test")
         fold = scop.getNodeBySunid(46457)
 
@@ -164,6 +164,6 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(cl, [])
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

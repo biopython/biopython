@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Ace module."""
+
 import unittest
 
 from Bio.Sequencing import Ace
@@ -34,13 +36,13 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 2)
         self.assertEqual(record.contigs[0].nsegments, 31)
         self.assertEqual(record.contigs[0].uorc, 'U')
-        center = len(record.contigs[0].sequence)//2
+        center = len(record.contigs[0].sequence) // 2
         self.assertEqual(record.contigs[0].sequence[:10], "aatacgGGAT")
-        self.assertEqual(record.contigs[0].sequence[center-5:center+5], "ACATCATCTG")
+        self.assertEqual(record.contigs[0].sequence[center - 5:center + 5], "ACATCATCTG")
         self.assertEqual(record.contigs[0].sequence[-10:], "cATCTAGtac")
-        center = len(record.contigs[0].quality)//2
+        center = len(record.contigs[0].quality) // 2
         self.assertEqual(record.contigs[0].quality[:10], [0, 0, 0, 0, 0, 0, 22, 23, 25, 28])
-        self.assertEqual(record.contigs[0].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
+        self.assertEqual(record.contigs[0].quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(record.contigs[0].quality[-10:], [15, 22, 30, 24, 28, 22, 21, 15, 19, 0])
         self.assertEqual(len(record.contigs[0].af), 2)
         self.assertEqual(record.contigs[0].af[1].name, "BL060c3-LR0R.b.ab1")
@@ -67,9 +69,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 868)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)//2
+        center = len(record.contigs[0].reads[0].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "tagcgaggaa")
-        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "CCGAGGCCAA")
+        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center - 5:center + 5], "CCGAGGCCAA")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "gaaccatcag")
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_start, 80)
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_end, 853)
@@ -111,9 +113,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 856)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)//2
+        center = len(record.contigs[0].reads[1].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "aatacgGGAT")
-        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "ACATCATCTG")
+        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center - 5:center + 5], "ACATCATCTG")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "cATCTAGtac")
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_start, 7)
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_end, 778)
@@ -131,11 +133,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].uorc, 'U')
         center = len(record.contigs[1].sequence) // 2
         self.assertEqual(record.contigs[1].sequence[:10], "cacggatgat")
-        self.assertEqual(record.contigs[1].sequence[center-5:center+5], "TTTGAATATT")
+        self.assertEqual(record.contigs[1].sequence[center - 5:center + 5], "TTTGAATATT")
         self.assertEqual(record.contigs[1].sequence[-10:], "Atccttgtag")
         center = len(record.contigs[1].quality) // 2
         self.assertEqual(record.contigs[1].quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.assertEqual(record.contigs[1].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
+        self.assertEqual(record.contigs[1].quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(record.contigs[1].quality[-10:], [24, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(len(record.contigs[1].af), 14)
         self.assertEqual(record.contigs[1].af[7].name, "BL060-LR3R.b.ab1")
@@ -172,9 +174,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[0].rd.padded_bases, 862)
         self.assertEqual(record.contigs[1].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[0].rd.sequence)//2
+        center = len(record.contigs[1].reads[0].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[0].rd.sequence[:10], "cacggatgat")
-        self.assertEqual(record.contigs[1].reads[0].rd.sequence[center-5:center+5], "GTTCTCGTTG")
+        self.assertEqual(record.contigs[1].reads[0].rd.sequence[center - 5:center + 5], "GTTCTCGTTG")
         self.assertEqual(record.contigs[1].reads[0].rd.sequence[-10:], "CGTTTACCcg")
         self.assertEqual(record.contigs[1].reads[0].qa.qual_clipping_start, 81)
         self.assertEqual(record.contigs[1].reads[0].qa.qual_clipping_end, 842)
@@ -195,9 +197,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[1].rd.padded_bases, 880)
         self.assertEqual(record.contigs[1].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[1].rd.sequence)//2
+        center = len(record.contigs[1].reads[1].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[1].rd.sequence[:10], "ctttctgacC")
-        self.assertEqual(record.contigs[1].reads[1].rd.sequence[center-5:center+5], "CTGTGGTTTC")
+        self.assertEqual(record.contigs[1].reads[1].rd.sequence[center - 5:center + 5], "CTGTGGTTTC")
         self.assertEqual(record.contigs[1].reads[1].rd.sequence[-10:], "cggagttacg")
         self.assertEqual(record.contigs[1].reads[1].qa.qual_clipping_start, 11)
         self.assertEqual(record.contigs[1].reads[1].qa.qual_clipping_end, 807)
@@ -218,9 +220,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[2].rd.padded_bases, 864)
         self.assertEqual(record.contigs[1].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[2].rd.sequence)//2
+        center = len(record.contigs[1].reads[2].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[2].rd.sequence[:10], "cacccaCTTT")
-        self.assertEqual(record.contigs[1].reads[2].rd.sequence[center-5:center+5], "ACCAAACATT")
+        self.assertEqual(record.contigs[1].reads[2].rd.sequence[center - 5:center + 5], "ACCAAACATT")
         self.assertEqual(record.contigs[1].reads[2].rd.sequence[-10:], "GGTAGCACgc")
         self.assertEqual(record.contigs[1].reads[2].qa.qual_clipping_start, 7)
         self.assertEqual(record.contigs[1].reads[2].qa.qual_clipping_end, 840)
@@ -241,9 +243,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[3].rd.padded_bases, 863)
         self.assertEqual(record.contigs[1].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[3].rd.sequence)//2
+        center = len(record.contigs[1].reads[3].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[3].rd.sequence[:10], "ctaattggcc")
-        self.assertEqual(record.contigs[1].reads[3].rd.sequence[center-5:center+5], "GGAACCTTTC")
+        self.assertEqual(record.contigs[1].reads[3].rd.sequence[center - 5:center + 5], "GGAACCTTTC")
         self.assertEqual(record.contigs[1].reads[3].rd.sequence[-10:], "CAACCTgact")
         self.assertEqual(record.contigs[1].reads[3].qa.qual_clipping_start, 63)
         self.assertEqual(record.contigs[1].reads[3].qa.qual_clipping_end, 857)
@@ -264,9 +266,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[4].rd.padded_bases, 877)
         self.assertEqual(record.contigs[1].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[4].rd.sequence)//2
+        center = len(record.contigs[1].reads[4].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[4].rd.sequence[:10], "tgCTGCGGTT")
-        self.assertEqual(record.contigs[1].reads[4].rd.sequence[center-5:center+5], "GGCAGTTTCA")
+        self.assertEqual(record.contigs[1].reads[4].rd.sequence[center - 5:center + 5], "GGCAGTTTCA")
         self.assertEqual(record.contigs[1].reads[4].rd.sequence[-10:], "tactcataaa")
         self.assertEqual(record.contigs[1].reads[4].qa.qual_clipping_start, 13)
         self.assertEqual(record.contigs[1].reads[4].qa.qual_clipping_end, 729)
@@ -287,9 +289,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[5].rd.padded_bases, 874)
         self.assertEqual(record.contigs[1].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[5].rd.sequence)//2
+        center = len(record.contigs[1].reads[5].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[5].rd.sequence[:10], "ctCTTAGGAT")
-        self.assertEqual(record.contigs[1].reads[5].rd.sequence[center-5:center+5], "AACTCACATT")
+        self.assertEqual(record.contigs[1].reads[5].rd.sequence[center - 5:center + 5], "AACTCACATT")
         self.assertEqual(record.contigs[1].reads[5].rd.sequence[-10:], "*CACCCAAac")
         self.assertEqual(record.contigs[1].reads[5].qa.qual_clipping_start, 65)
         self.assertEqual(record.contigs[1].reads[5].qa.qual_clipping_end, 874)
@@ -310,9 +312,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[6].rd.padded_bases, 864)
         self.assertEqual(record.contigs[1].reads[6].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[6].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[6].rd.sequence)//2
+        center = len(record.contigs[1].reads[6].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[6].rd.sequence[:10], "CCaTGTCCAA")
-        self.assertEqual(record.contigs[1].reads[6].rd.sequence[center-5:center+5], "AAGGGTT*CA")
+        self.assertEqual(record.contigs[1].reads[6].rd.sequence[center - 5:center + 5], "AAGGGTT*CA")
         self.assertEqual(record.contigs[1].reads[6].rd.sequence[-10:], "ACACTCGCga")
         self.assertEqual(record.contigs[1].reads[6].qa.qual_clipping_start, 73)
         self.assertEqual(record.contigs[1].reads[6].qa.qual_clipping_end, 862)
@@ -333,9 +335,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[7].rd.padded_bases, 857)
         self.assertEqual(record.contigs[1].reads[7].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[7].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[7].rd.sequence)//2
+        center = len(record.contigs[1].reads[7].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[7].rd.sequence[:10], "agaaagagga")
-        self.assertEqual(record.contigs[1].reads[7].rd.sequence[center-5:center+5], "nnnannnnnn")
+        self.assertEqual(record.contigs[1].reads[7].rd.sequence[center - 5:center + 5], "nnnannnnnn")
         self.assertEqual(record.contigs[1].reads[7].rd.sequence[-10:], "gtctttgctc")
         self.assertEqual(record.contigs[1].reads[7].qa.qual_clipping_start, 548)
         self.assertEqual(record.contigs[1].reads[7].qa.qual_clipping_end, 847)
@@ -356,9 +358,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[8].rd.padded_bases, 878)
         self.assertEqual(record.contigs[1].reads[8].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[8].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[8].rd.sequence)//2
+        center = len(record.contigs[1].reads[8].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[8].rd.sequence[:10], "agTttc*ctc")
-        self.assertEqual(record.contigs[1].reads[8].rd.sequence[center-5:center+5], "TCATAAAACT")
+        self.assertEqual(record.contigs[1].reads[8].rd.sequence[center - 5:center + 5], "TCATAAAACT")
         self.assertEqual(record.contigs[1].reads[8].rd.sequence[-10:], "xxxxxxxxxx")
         self.assertEqual(record.contigs[1].reads[8].qa.qual_clipping_start, 20)
         self.assertEqual(record.contigs[1].reads[8].qa.qual_clipping_end, 798)
@@ -379,9 +381,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[9].rd.padded_bases, 880)
         self.assertEqual(record.contigs[1].reads[9].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[9].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[9].rd.sequence)//2
+        center = len(record.contigs[1].reads[9].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[9].rd.sequence[:10], "ggctaCGCCc")
-        self.assertEqual(record.contigs[1].reads[9].rd.sequence[center-5:center+5], "ATTGAGTTTC")
+        self.assertEqual(record.contigs[1].reads[9].rd.sequence[center - 5:center + 5], "ATTGAGTTTC")
         self.assertEqual(record.contigs[1].reads[9].rd.sequence[-10:], "tggcgttgcg")
         self.assertEqual(record.contigs[1].reads[9].qa.qual_clipping_start, 14)
         self.assertEqual(record.contigs[1].reads[9].qa.qual_clipping_end, 765)
@@ -402,9 +404,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[10].rd.padded_bases, 871)
         self.assertEqual(record.contigs[1].reads[10].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[10].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[10].rd.sequence)//2
+        center = len(record.contigs[1].reads[10].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[10].rd.sequence[:10], "ggtTCGATTA")
-        self.assertEqual(record.contigs[1].reads[10].rd.sequence[center-5:center+5], "ACCAATTGAC")
+        self.assertEqual(record.contigs[1].reads[10].rd.sequence[center - 5:center + 5], "ACCAATTGAC")
         self.assertEqual(record.contigs[1].reads[10].rd.sequence[-10:], "ACCACCCatt")
         self.assertEqual(record.contigs[1].reads[10].qa.qual_clipping_start, 12)
         self.assertEqual(record.contigs[1].reads[10].qa.qual_clipping_end, 767)
@@ -425,9 +427,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[11].rd.padded_bases, 839)
         self.assertEqual(record.contigs[1].reads[11].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[11].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[11].rd.sequence)//2
+        center = len(record.contigs[1].reads[11].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[11].rd.sequence[:10], "ggttcatatg")
-        self.assertEqual(record.contigs[1].reads[11].rd.sequence[center-5:center+5], "TAAAATCAGT")
+        self.assertEqual(record.contigs[1].reads[11].rd.sequence[center - 5:center + 5], "TAAAATCAGT")
         self.assertEqual(record.contigs[1].reads[11].rd.sequence[-10:], "TCTTGCaata")
         self.assertEqual(record.contigs[1].reads[11].qa.qual_clipping_start, 11)
         self.assertEqual(record.contigs[1].reads[11].qa.qual_clipping_end, 757)
@@ -448,9 +450,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[12].rd.padded_bases, 855)
         self.assertEqual(record.contigs[1].reads[12].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[12].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[12].rd.sequence)//2
+        center = len(record.contigs[1].reads[12].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[12].rd.sequence[:10], "cACTCGCGTA")
-        self.assertEqual(record.contigs[1].reads[12].rd.sequence[center-5:center+5], "CTCGTAAAAT")
+        self.assertEqual(record.contigs[1].reads[12].rd.sequence[center - 5:center + 5], "CTCGTAAAAT")
         self.assertEqual(record.contigs[1].reads[12].rd.sequence[-10:], "aacccctgca")
         self.assertEqual(record.contigs[1].reads[12].qa.qual_clipping_start, 94)
         self.assertEqual(record.contigs[1].reads[12].qa.qual_clipping_end, 835)
@@ -477,9 +479,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[13].rd.padded_bases, 852)
         self.assertEqual(record.contigs[1].reads[13].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[13].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[13].rd.sequence)//2
+        center = len(record.contigs[1].reads[13].rd.sequence) // 2
         self.assertEqual(record.contigs[1].reads[13].rd.sequence[:10], "cgCGTa*tTG")
-        self.assertEqual(record.contigs[1].reads[13].rd.sequence[center-5:center+5], "GTAAAATATT")
+        self.assertEqual(record.contigs[1].reads[13].rd.sequence[center - 5:center + 5], "GTAAAATATT")
         self.assertEqual(record.contigs[1].reads[13].rd.sequence[-10:], "Atccttgtag")
         self.assertEqual(record.contigs[1].reads[13].qa.qual_clipping_start, 33)
         self.assertEqual(record.contigs[1].reads[13].qa.qual_clipping_end, 831)
@@ -501,7 +503,7 @@ class AceTestOne(unittest.TestCase):
 
     def test_check_record_parser(self):
         """Test to check that contig parser parses each contig into a contig."""
-        contigs=Ace.parse(self.handle)
+        contigs = Ace.parse(self.handle)
 
         # First contig
         contig = next(contigs)
@@ -511,13 +513,13 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.nreads, 2)
         self.assertEqual(contig.nsegments, 31)
         self.assertEqual(contig.uorc, 'U')
-        center = len(contig.sequence)//2
+        center = len(contig.sequence) // 2
         self.assertEqual(contig.sequence[:10], "aatacgGGAT")
-        self.assertEqual(contig.sequence[center-5:center+5], "ACATCATCTG")
+        self.assertEqual(contig.sequence[center - 5:center + 5], "ACATCATCTG")
         self.assertEqual(contig.sequence[-10:], "cATCTAGtac")
-        center = len(contig.quality)//2
+        center = len(contig.quality) // 2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 22, 23, 25, 28])
-        self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
+        self.assertEqual(contig.quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(contig.quality[-10:], [15, 22, 30, 24, 28, 22, 21, 15, 19, 0])
         self.assertEqual(len(contig.af), 2)
         self.assertEqual(contig.af[1].name, "BL060c3-LR0R.b.ab1")
@@ -537,9 +539,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 868)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)//2
+        center = len(contig.reads[0].rd.sequence) // 2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "tagcgaggaa")
-        self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "CCGAGGCCAA")
+        self.assertEqual(contig.reads[0].rd.sequence[center - 5:center + 5], "CCGAGGCCAA")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "gaaccatcag")
         self.assertEqual(contig.reads[0].qa.qual_clipping_start, 80)
         self.assertEqual(contig.reads[0].qa.qual_clipping_end, 853)
@@ -570,9 +572,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 856)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)//2
+        center = len(contig.reads[1].rd.sequence) // 2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "aatacgGGAT")
-        self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "ACATCATCTG")
+        self.assertEqual(contig.reads[1].rd.sequence[center - 5:center + 5], "ACATCATCTG")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "cATCTAGtac")
         self.assertEqual(contig.reads[1].qa.qual_clipping_start, 7)
         self.assertEqual(contig.reads[1].qa.qual_clipping_end, 778)
@@ -592,11 +594,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.uorc, 'U')
         center = len(contig.sequence) // 2
         self.assertEqual(contig.sequence[:10], "cacggatgat")
-        self.assertEqual(contig.sequence[center-5:center+5], "TTTGAATATT")
+        self.assertEqual(contig.sequence[center - 5:center + 5], "TTTGAATATT")
         self.assertEqual(contig.sequence[-10:], "Atccttgtag")
         center = len(contig.quality) // 2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
+        self.assertEqual(contig.quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(contig.quality[-10:], [24, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(len(contig.af), 14)
         self.assertEqual(contig.af[7].name, "BL060-LR3R.b.ab1")
@@ -649,9 +651,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 862)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)//2
+        center = len(contig.reads[0].rd.sequence) // 2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "cacggatgat")
-        self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "GTTCTCGTTG")
+        self.assertEqual(contig.reads[0].rd.sequence[center - 5:center + 5], "GTTCTCGTTG")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "CGTTTACCcg")
         self.assertEqual(contig.reads[0].qa.qual_clipping_start, 81)
         self.assertEqual(contig.reads[0].qa.qual_clipping_end, 842)
@@ -672,9 +674,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 880)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)//2
+        center = len(contig.reads[1].rd.sequence) // 2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "ctttctgacC")
-        self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "CTGTGGTTTC")
+        self.assertEqual(contig.reads[1].rd.sequence[center - 5:center + 5], "CTGTGGTTTC")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "cggagttacg")
         self.assertEqual(contig.reads[1].qa.qual_clipping_start, 11)
         self.assertEqual(contig.reads[1].qa.qual_clipping_end, 807)
@@ -701,9 +703,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 864)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)//2
+        center = len(contig.reads[2].rd.sequence) // 2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "cacccaCTTT")
-        self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "ACCAAACATT")
+        self.assertEqual(contig.reads[2].rd.sequence[center - 5:center + 5], "ACCAAACATT")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "GGTAGCACgc")
         self.assertEqual(contig.reads[2].qa.qual_clipping_start, 7)
         self.assertEqual(contig.reads[2].qa.qual_clipping_end, 840)
@@ -724,9 +726,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 863)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)//2
+        center = len(contig.reads[3].rd.sequence) // 2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "ctaattggcc")
-        self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "GGAACCTTTC")
+        self.assertEqual(contig.reads[3].rd.sequence[center - 5:center + 5], "GGAACCTTTC")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "CAACCTgact")
         self.assertEqual(contig.reads[3].qa.qual_clipping_start, 63)
         self.assertEqual(contig.reads[3].qa.qual_clipping_end, 857)
@@ -753,9 +755,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 877)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)//2
+        center = len(contig.reads[4].rd.sequence) // 2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "tgCTGCGGTT")
-        self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "GGCAGTTTCA")
+        self.assertEqual(contig.reads[4].rd.sequence[center - 5:center + 5], "GGCAGTTTCA")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "tactcataaa")
         self.assertEqual(contig.reads[4].qa.qual_clipping_start, 13)
         self.assertEqual(contig.reads[4].qa.qual_clipping_end, 729)
@@ -776,9 +778,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 874)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)//2
+        center = len(contig.reads[5].rd.sequence) // 2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "ctCTTAGGAT")
-        self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "AACTCACATT")
+        self.assertEqual(contig.reads[5].rd.sequence[center - 5:center + 5], "AACTCACATT")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "*CACCCAAac")
         self.assertEqual(contig.reads[5].qa.qual_clipping_start, 65)
         self.assertEqual(contig.reads[5].qa.qual_clipping_end, 874)
@@ -799,9 +801,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[6].rd.padded_bases, 864)
         self.assertEqual(contig.reads[6].rd.info_items, 0)
         self.assertEqual(contig.reads[6].rd.read_tags, 0)
-        center = len(contig.reads[6].rd.sequence)//2
+        center = len(contig.reads[6].rd.sequence) // 2
         self.assertEqual(contig.reads[6].rd.sequence[:10], "CCaTGTCCAA")
-        self.assertEqual(contig.reads[6].rd.sequence[center-5:center+5], "AAGGGTT*CA")
+        self.assertEqual(contig.reads[6].rd.sequence[center - 5:center + 5], "AAGGGTT*CA")
         self.assertEqual(contig.reads[6].rd.sequence[-10:], "ACACTCGCga")
         self.assertEqual(contig.reads[6].qa.qual_clipping_start, 73)
         self.assertEqual(contig.reads[6].qa.qual_clipping_end, 862)
@@ -822,9 +824,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[7].rd.padded_bases, 857)
         self.assertEqual(contig.reads[7].rd.info_items, 0)
         self.assertEqual(contig.reads[7].rd.read_tags, 0)
-        center = len(contig.reads[7].rd.sequence)//2
+        center = len(contig.reads[7].rd.sequence) // 2
         self.assertEqual(contig.reads[7].rd.sequence[:10], "agaaagagga")
-        self.assertEqual(contig.reads[7].rd.sequence[center-5:center+5], "nnnannnnnn")
+        self.assertEqual(contig.reads[7].rd.sequence[center - 5:center + 5], "nnnannnnnn")
         self.assertEqual(contig.reads[7].rd.sequence[-10:], "gtctttgctc")
         self.assertEqual(contig.reads[7].qa.qual_clipping_start, 548)
         self.assertEqual(contig.reads[7].qa.qual_clipping_end, 847)
@@ -845,9 +847,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[8].rd.padded_bases, 878)
         self.assertEqual(contig.reads[8].rd.info_items, 0)
         self.assertEqual(contig.reads[8].rd.read_tags, 0)
-        center = len(contig.reads[8].rd.sequence)//2
+        center = len(contig.reads[8].rd.sequence) // 2
         self.assertEqual(contig.reads[8].rd.sequence[:10], "agTttc*ctc")
-        self.assertEqual(contig.reads[8].rd.sequence[center-5:center+5], "TCATAAAACT")
+        self.assertEqual(contig.reads[8].rd.sequence[center - 5:center + 5], "TCATAAAACT")
         self.assertEqual(contig.reads[8].rd.sequence[-10:], "xxxxxxxxxx")
         self.assertEqual(contig.reads[8].qa.qual_clipping_start, 20)
         self.assertEqual(contig.reads[8].qa.qual_clipping_end, 798)
@@ -868,9 +870,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[9].rd.padded_bases, 880)
         self.assertEqual(contig.reads[9].rd.info_items, 0)
         self.assertEqual(contig.reads[9].rd.read_tags, 0)
-        center = len(contig.reads[9].rd.sequence)//2
+        center = len(contig.reads[9].rd.sequence) // 2
         self.assertEqual(contig.reads[9].rd.sequence[:10], "ggctaCGCCc")
-        self.assertEqual(contig.reads[9].rd.sequence[center-5:center+5], "ATTGAGTTTC")
+        self.assertEqual(contig.reads[9].rd.sequence[center - 5:center + 5], "ATTGAGTTTC")
         self.assertEqual(contig.reads[9].rd.sequence[-10:], "tggcgttgcg")
         self.assertEqual(contig.reads[9].qa.qual_clipping_start, 14)
         self.assertEqual(contig.reads[9].qa.qual_clipping_end, 765)
@@ -891,9 +893,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[10].rd.padded_bases, 871)
         self.assertEqual(contig.reads[10].rd.info_items, 0)
         self.assertEqual(contig.reads[10].rd.read_tags, 0)
-        center = len(contig.reads[10].rd.sequence)//2
+        center = len(contig.reads[10].rd.sequence) // 2
         self.assertEqual(contig.reads[10].rd.sequence[:10], "ggtTCGATTA")
-        self.assertEqual(contig.reads[10].rd.sequence[center-5:center+5], "ACCAATTGAC")
+        self.assertEqual(contig.reads[10].rd.sequence[center - 5:center + 5], "ACCAATTGAC")
         self.assertEqual(contig.reads[10].rd.sequence[-10:], "ACCACCCatt")
         self.assertEqual(contig.reads[10].qa.qual_clipping_start, 12)
         self.assertEqual(contig.reads[10].qa.qual_clipping_end, 767)
@@ -914,9 +916,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[11].rd.padded_bases, 839)
         self.assertEqual(contig.reads[11].rd.info_items, 0)
         self.assertEqual(contig.reads[11].rd.read_tags, 0)
-        center = len(contig.reads[11].rd.sequence)//2
+        center = len(contig.reads[11].rd.sequence) // 2
         self.assertEqual(contig.reads[11].rd.sequence[:10], "ggttcatatg")
-        self.assertEqual(contig.reads[11].rd.sequence[center-5:center+5], "TAAAATCAGT")
+        self.assertEqual(contig.reads[11].rd.sequence[center - 5:center + 5], "TAAAATCAGT")
         self.assertEqual(contig.reads[11].rd.sequence[-10:], "TCTTGCaata")
         self.assertEqual(contig.reads[11].qa.qual_clipping_start, 11)
         self.assertEqual(contig.reads[11].qa.qual_clipping_end, 757)
@@ -937,9 +939,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[12].rd.padded_bases, 855)
         self.assertEqual(contig.reads[12].rd.info_items, 0)
         self.assertEqual(contig.reads[12].rd.read_tags, 0)
-        center = len(contig.reads[12].rd.sequence)//2
+        center = len(contig.reads[12].rd.sequence) // 2
         self.assertEqual(contig.reads[12].rd.sequence[:10], "cACTCGCGTA")
-        self.assertEqual(contig.reads[12].rd.sequence[center-5:center+5], "CTCGTAAAAT")
+        self.assertEqual(contig.reads[12].rd.sequence[center - 5:center + 5], "CTCGTAAAAT")
         self.assertEqual(contig.reads[12].rd.sequence[-10:], "aacccctgca")
         self.assertEqual(contig.reads[12].qa.qual_clipping_start, 94)
         self.assertEqual(contig.reads[12].qa.qual_clipping_end, 835)
@@ -960,9 +962,9 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[13].rd.padded_bases, 852)
         self.assertEqual(contig.reads[13].rd.info_items, 0)
         self.assertEqual(contig.reads[13].rd.read_tags, 0)
-        center = len(contig.reads[13].rd.sequence)//2
+        center = len(contig.reads[13].rd.sequence) // 2
         self.assertEqual(contig.reads[13].rd.sequence[:10], "cgCGTa*tTG")
-        self.assertEqual(contig.reads[13].rd.sequence[center-5:center+5], "GTAAAATATT")
+        self.assertEqual(contig.reads[13].rd.sequence[center - 5:center + 5], "GTAAAATATT")
         self.assertEqual(contig.reads[13].rd.sequence[-10:], "Atccttgtag")
         self.assertEqual(contig.reads[13].qa.qual_clipping_start, 33)
         self.assertEqual(contig.reads[13].qa.qual_clipping_end, 831)
@@ -998,6 +1000,7 @@ class AceTestTwo(unittest.TestCase):
     The sample input file seq.cap.ace was downloaded from:
     http://genome.cs.mtu.edu/cap/data/seq.cap.ace
     """
+
     def setUp(self):
         self.handle = open("Ace/seq.cap.ace")
 
@@ -1006,7 +1009,7 @@ class AceTestTwo(unittest.TestCase):
 
     def test_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
-        record=Ace.read(self.handle)
+        record = Ace.read(self.handle)
         self.assertEqual(record.ncontigs, 1)
         self.assertEqual(record.nreads, 6)
         self.assertEqual(record.wa, None)
@@ -1018,13 +1021,13 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 6)
         self.assertEqual(record.contigs[0].nsegments, 0)
         self.assertEqual(record.contigs[0].uorc, "U")
-        center = len(record.contigs[0].sequence)//2
+        center = len(record.contigs[0].sequence) // 2
         self.assertEqual(record.contigs[0].sequence[:10], "AGTTTTAGTT")
-        self.assertEqual(record.contigs[0].sequence[center-5:center+5], "TGTGCGCGCA")
+        self.assertEqual(record.contigs[0].sequence[center - 5:center + 5], "TGTGCGCGCA")
         self.assertEqual(record.contigs[0].sequence[-10:], "ATATCACATT")
-        center = len(record.contigs[0].quality)//2
+        center = len(record.contigs[0].quality) // 2
         self.assertEqual(record.contigs[0].quality[:10], [61, 66, 67, 70, 71, 73, 73, 77, 77, 87])
-        self.assertEqual(record.contigs[0].quality[center-5:center+5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
+        self.assertEqual(record.contigs[0].quality[center - 5:center + 5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
         self.assertEqual(record.contigs[0].quality[-10:], [56, 51, 49, 41, 38, 39, 45, 44, 49, 46])
         self.assertEqual(len(record.contigs[0].af), 6)
         self.assertEqual(len(record.contigs[0].bs), 0)
@@ -1043,9 +1046,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 919)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)//2
+        center = len(record.contigs[0].reads[0].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "ATGTGCGCTC")
+        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center - 5:center + 5], "ATGTGCGCTC")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "CAGCTCACCA")
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_start, 55)
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_end, 916)
@@ -1065,9 +1068,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 864)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)//2
+        center = len(record.contigs[0].reads[1].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "AGCCGGTACC")
-        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "GGGATGGCAC")
+        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center - 5:center + 5], "GGGATGGCAC")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "GGGCTGGGAG")
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_start, 12)
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_end, 863)
@@ -1087,9 +1090,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 1026)
         self.assertEqual(record.contigs[0].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[2].rd.sequence)//2
+        center = len(record.contigs[0].reads[2].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(record.contigs[0].reads[2].rd.sequence[center-5:center+5], "GGATGCCTGG")
+        self.assertEqual(record.contigs[0].reads[2].rd.sequence[center - 5:center + 5], "GGATGCCTGG")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[-10:], "GGTTGAGGCC")
         self.assertEqual(record.contigs[0].reads[2].qa.qual_clipping_start, 55)
         self.assertEqual(record.contigs[0].reads[2].qa.qual_clipping_end, 1000)
@@ -1109,9 +1112,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 925)
         self.assertEqual(record.contigs[0].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[3].rd.sequence)//2
+        center = len(record.contigs[0].reads[3].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(record.contigs[0].reads[3].rd.sequence[center-5:center+5], "CCTCCCTACA")
+        self.assertEqual(record.contigs[0].reads[3].rd.sequence[center - 5:center + 5], "CCTCCCTACA")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[-10:], "GCCCCCGGNN")
         self.assertEqual(record.contigs[0].reads[3].qa.qual_clipping_start, 293)
         self.assertEqual(record.contigs[0].reads[3].qa.qual_clipping_end, 874)
@@ -1131,9 +1134,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 816)
         self.assertEqual(record.contigs[0].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[4].rd.sequence)//2
+        center = len(record.contigs[0].reads[4].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[:10], "CACTCAGCTC")
-        self.assertEqual(record.contigs[0].reads[4].rd.sequence[center-5:center+5], "TCCAAAGGGT")
+        self.assertEqual(record.contigs[0].reads[4].rd.sequence[center - 5:center + 5], "TCCAAAGGGT")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[-10:], "AGCTGAATCG")
         self.assertEqual(record.contigs[0].reads[4].qa.qual_clipping_start, 1)
         self.assertEqual(record.contigs[0].reads[4].qa.qual_clipping_end, 799)
@@ -1153,9 +1156,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 857)
         self.assertEqual(record.contigs[0].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[5].rd.sequence)//2
+        center = len(record.contigs[0].reads[5].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[:10], "CCGGCAGTGA")
-        self.assertEqual(record.contigs[0].reads[5].rd.sequence[center-5:center+5], "AAAAAAAACC")
+        self.assertEqual(record.contigs[0].reads[5].rd.sequence[center - 5:center + 5], "AAAAAAAACC")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[-10:], "NNNNNNNNNN")
         self.assertEqual(record.contigs[0].reads[5].qa.qual_clipping_start, 24)
         self.assertEqual(record.contigs[0].reads[5].qa.qual_clipping_end, 706)
@@ -1173,7 +1176,7 @@ class AceTestTwo(unittest.TestCase):
 
     def test_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
-        contigs=Ace.parse(self.handle)
+        contigs = Ace.parse(self.handle)
 
         # First (and only) contig
         contig = next(contigs)
@@ -1184,13 +1187,13 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.nreads, 6)
         self.assertEqual(contig.nsegments, 0)
         self.assertEqual(contig.uorc, "U")
-        center = len(contig.sequence)//2
+        center = len(contig.sequence) // 2
         self.assertEqual(contig.sequence[:10], "AGTTTTAGTT")
-        self.assertEqual(contig.sequence[center-5:center+5], "TGTGCGCGCA")
+        self.assertEqual(contig.sequence[center - 5:center + 5], "TGTGCGCGCA")
         self.assertEqual(contig.sequence[-10:], "ATATCACATT")
-        center = len(contig.quality)//2
+        center = len(contig.quality) // 2
         self.assertEqual(contig.quality[:10], [61, 66, 67, 70, 71, 73, 73, 77, 77, 87])
-        self.assertEqual(contig.quality[center-5:center+5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
+        self.assertEqual(contig.quality[center - 5:center + 5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
         self.assertEqual(contig.quality[-10:], [56, 51, 49, 41, 38, 39, 45, 44, 49, 46])
         self.assertEqual(len(contig.af), 6)
         self.assertEqual(len(contig.bs), 0)
@@ -1209,9 +1212,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 919)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)//2
+        center = len(contig.reads[0].rd.sequence) // 2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "ATGTGCGCTC")
+        self.assertEqual(contig.reads[0].rd.sequence[center - 5:center + 5], "ATGTGCGCTC")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "CAGCTCACCA")
         self.assertEqual(contig.reads[0].qa.qual_clipping_start, 55)
         self.assertEqual(contig.reads[0].qa.qual_clipping_end, 916)
@@ -1231,9 +1234,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 864)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)//2
+        center = len(contig.reads[1].rd.sequence) // 2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "AGCCGGTACC")
-        self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "GGGATGGCAC")
+        self.assertEqual(contig.reads[1].rd.sequence[center - 5:center + 5], "GGGATGGCAC")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "GGGCTGGGAG")
         self.assertEqual(contig.reads[1].qa.qual_clipping_start, 12)
         self.assertEqual(contig.reads[1].qa.qual_clipping_end, 863)
@@ -1253,9 +1256,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 1026)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)//2
+        center = len(contig.reads[2].rd.sequence) // 2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "GGATGCCTGG")
+        self.assertEqual(contig.reads[2].rd.sequence[center - 5:center + 5], "GGATGCCTGG")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "GGTTGAGGCC")
         self.assertEqual(contig.reads[2].qa.qual_clipping_start, 55)
         self.assertEqual(contig.reads[2].qa.qual_clipping_end, 1000)
@@ -1275,9 +1278,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 925)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)//2
+        center = len(contig.reads[3].rd.sequence) // 2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "NNNNNNNNNN")
-        self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "CCTCCCTACA")
+        self.assertEqual(contig.reads[3].rd.sequence[center - 5:center + 5], "CCTCCCTACA")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "GCCCCCGGNN")
         self.assertEqual(contig.reads[3].qa.qual_clipping_start, 293)
         self.assertEqual(contig.reads[3].qa.qual_clipping_end, 874)
@@ -1297,9 +1300,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 816)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)//2
+        center = len(contig.reads[4].rd.sequence) // 2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "CACTCAGCTC")
-        self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "TCCAAAGGGT")
+        self.assertEqual(contig.reads[4].rd.sequence[center - 5:center + 5], "TCCAAAGGGT")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "AGCTGAATCG")
         self.assertEqual(contig.reads[4].qa.qual_clipping_start, 1)
         self.assertEqual(contig.reads[4].qa.qual_clipping_end, 799)
@@ -1319,9 +1322,9 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 857)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)//2
+        center = len(contig.reads[5].rd.sequence) // 2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "CCGGCAGTGA")
-        self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "AAAAAAAACC")
+        self.assertEqual(contig.reads[5].rd.sequence[center - 5:center + 5], "AAAAAAAACC")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "NNNNNNNNNN")
         self.assertEqual(contig.reads[5].qa.qual_clipping_start, 24)
         self.assertEqual(contig.reads[5].qa.qual_clipping_end, 706)
@@ -1347,6 +1350,7 @@ class AceTestThree(unittest.TestCase):
     The sample input file was downloaded from:
     http://bozeman.mbt.washington.edu/consed/distributions/README.16.0.txt
     """
+
     def setUp(self):
         self.handle = open("Ace/consed_sample.ace")
 
@@ -1355,7 +1359,7 @@ class AceTestThree(unittest.TestCase):
 
     def test_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
-        record=Ace.read(self.handle)
+        record = Ace.read(self.handle)
         self.assertEqual(record.ncontigs, 1)
         self.assertEqual(record.nreads, 8)
         self.assertEqual(len(record.wa), 1)
@@ -1371,13 +1375,13 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 8)
         self.assertEqual(record.contigs[0].nsegments, 156)
         self.assertEqual(record.contigs[0].uorc, "U")
-        center = len(record.contigs[0].sequence)//2
+        center = len(record.contigs[0].sequence) // 2
         self.assertEqual(record.contigs[0].sequence[:10], "agccccgggc")
-        self.assertEqual(record.contigs[0].sequence[center-5:center+5], "CTTCCCCAGG")
+        self.assertEqual(record.contigs[0].sequence[center - 5:center + 5], "CTTCCCCAGG")
         self.assertEqual(record.contigs[0].sequence[-10:], "gttgggtttg")
-        center = len(record.contigs[0].quality)//2
+        center = len(record.contigs[0].quality) // 2
         self.assertEqual(record.contigs[0].quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.assertEqual(record.contigs[0].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
+        self.assertEqual(record.contigs[0].quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
         self.assertEqual(record.contigs[0].quality[-10:], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(len(record.contigs[0].af), 8)
         self.assertEqual(len(record.contigs[0].bs), 156)
@@ -1427,9 +1431,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 563)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)//2
+        center = len(record.contigs[0].reads[0].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "tcccCgtgag")
-        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "CTCCTGcctg")
+        self.assertEqual(record.contigs[0].reads[0].rd.sequence[center - 5:center + 5], "CTCCTGcctg")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "ggcccccctc")
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_start, 19)
         self.assertEqual(record.contigs[0].reads[0].qa.qual_clipping_end, 349)
@@ -1449,9 +1453,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 687)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)//2
+        center = len(record.contigs[0].reads[1].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "ccgtcctgag")
-        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "cacagcccT*")
+        self.assertEqual(record.contigs[0].reads[1].rd.sequence[center - 5:center + 5], "cacagcccT*")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "Ttttgtttta")
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_start, 12)
         self.assertEqual(record.contigs[0].reads[1].qa.qual_clipping_end, 353)
@@ -1471,9 +1475,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 517)
         self.assertEqual(record.contigs[0].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[2].rd.sequence)//2
+        center = len(record.contigs[0].reads[2].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[:10], "aatattaccg")
-        self.assertEqual(record.contigs[0].reads[2].rd.sequence[center-5:center+5], "CAGATGGGTT")
+        self.assertEqual(record.contigs[0].reads[2].rd.sequence[center - 5:center + 5], "CAGATGGGTT")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[-10:], "ctattcaggg")
         self.assertEqual(record.contigs[0].reads[2].qa.qual_clipping_start, 20)
         self.assertEqual(record.contigs[0].reads[2].qa.qual_clipping_end, 415)
@@ -1493,9 +1497,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 628)
         self.assertEqual(record.contigs[0].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[3].rd.sequence)//2
+        center = len(record.contigs[0].reads[3].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[:10], "ctgcgtatcg")
-        self.assertEqual(record.contigs[0].reads[3].rd.sequence[center-5:center+5], "AGGATTGCTT")
+        self.assertEqual(record.contigs[0].reads[3].rd.sequence[center - 5:center + 5], "AGGATTGCTT")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[-10:], "aaccctgggt")
         self.assertEqual(record.contigs[0].reads[3].qa.qual_clipping_start, 18)
         self.assertEqual(record.contigs[0].reads[3].qa.qual_clipping_end, 368)
@@ -1515,9 +1519,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 556)
         self.assertEqual(record.contigs[0].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[4].rd.sequence)//2
+        center = len(record.contigs[0].reads[4].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[:10], "gaggatcgct")
-        self.assertEqual(record.contigs[0].reads[4].rd.sequence[center-5:center+5], "GTgcgaggat")
+        self.assertEqual(record.contigs[0].reads[4].rd.sequence[center - 5:center + 5], "GTgcgaggat")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[-10:], "caggcagatg")
         self.assertEqual(record.contigs[0].reads[4].qa.qual_clipping_start, 11)
         self.assertEqual(record.contigs[0].reads[4].qa.qual_clipping_end, 373)
@@ -1537,9 +1541,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 593)
         self.assertEqual(record.contigs[0].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[5].rd.sequence)//2
+        center = len(record.contigs[0].reads[5].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[:10], "ggggatccg*")
-        self.assertEqual(record.contigs[0].reads[5].rd.sequence[center-5:center+5], "GCaAgacCCt")
+        self.assertEqual(record.contigs[0].reads[5].rd.sequence[center - 5:center + 5], "GCaAgacCCt")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[-10:], "gttgggtttg")
 
         self.assertEqual(record.contigs[0].reads[5].qa.qual_clipping_start, 25)
@@ -1560,9 +1564,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[6].rd.padded_bases, 594)
         self.assertEqual(record.contigs[0].reads[6].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[6].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[6].rd.sequence)//2
+        center = len(record.contigs[0].reads[6].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[6].rd.sequence[:10], "agccccgggc")
-        self.assertEqual(record.contigs[0].reads[6].rd.sequence[center-5:center+5], "ggatcACATA")
+        self.assertEqual(record.contigs[0].reads[6].rd.sequence[center - 5:center + 5], "ggatcACATA")
         self.assertEqual(record.contigs[0].reads[6].rd.sequence[-10:], "aatagtaaca")
         self.assertEqual(record.contigs[0].reads[6].qa.qual_clipping_start, 249)
         self.assertEqual(record.contigs[0].reads[6].qa.qual_clipping_end, 584)
@@ -1582,9 +1586,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[7].rd.padded_bases, 603)
         self.assertEqual(record.contigs[0].reads[7].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[7].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[7].rd.sequence)//2
+        center = len(record.contigs[0].reads[7].rd.sequence) // 2
         self.assertEqual(record.contigs[0].reads[7].rd.sequence[:10], "gaataattgg")
-        self.assertEqual(record.contigs[0].reads[7].rd.sequence[center-5:center+5], "TggCCCATCT")
+        self.assertEqual(record.contigs[0].reads[7].rd.sequence[center - 5:center + 5], "TggCCCATCT")
         self.assertEqual(record.contigs[0].reads[7].rd.sequence[-10:], "gaaccacacg")
         self.assertEqual(record.contigs[0].reads[7].qa.qual_clipping_start, 240)
         self.assertEqual(record.contigs[0].reads[7].qa.qual_clipping_end, 584)
@@ -1602,7 +1606,7 @@ class AceTestThree(unittest.TestCase):
 
     def test_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
-        contigs=Ace.parse(self.handle)
+        contigs = Ace.parse(self.handle)
 
         # First (and only) contig
         contig = next(contigs)
@@ -1613,13 +1617,13 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.nreads, 8)
         self.assertEqual(contig.nsegments, 156)
         self.assertEqual(contig.uorc, "U")
-        center = len(contig.sequence)//2
+        center = len(contig.sequence) // 2
         self.assertEqual(contig.sequence[:10], "agccccgggc")
-        self.assertEqual(contig.sequence[center-5:center+5], "CTTCCCCAGG")
+        self.assertEqual(contig.sequence[center - 5:center + 5], "CTTCCCCAGG")
         self.assertEqual(contig.sequence[-10:], "gttgggtttg")
-        center = len(contig.quality)//2
+        center = len(contig.quality) // 2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
+        self.assertEqual(contig.quality[center - 5:center + 5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
         self.assertEqual(contig.quality[-10:], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(len(contig.af), 8)
         self.assertEqual(len(contig.bs), 156)
@@ -1669,9 +1673,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 563)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)//2
+        center = len(contig.reads[0].rd.sequence) // 2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "tcccCgtgag")
-        self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "CTCCTGcctg")
+        self.assertEqual(contig.reads[0].rd.sequence[center - 5:center + 5], "CTCCTGcctg")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "ggcccccctc")
         self.assertEqual(contig.reads[0].qa.qual_clipping_start, 19)
         self.assertEqual(contig.reads[0].qa.qual_clipping_end, 349)
@@ -1691,9 +1695,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 687)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)//2
+        center = len(contig.reads[1].rd.sequence) // 2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "ccgtcctgag")
-        self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "cacagcccT*")
+        self.assertEqual(contig.reads[1].rd.sequence[center - 5:center + 5], "cacagcccT*")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "Ttttgtttta")
         self.assertEqual(contig.reads[1].qa.qual_clipping_start, 12)
         self.assertEqual(contig.reads[1].qa.qual_clipping_end, 353)
@@ -1713,9 +1717,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 517)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)//2
+        center = len(contig.reads[2].rd.sequence) // 2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "aatattaccg")
-        self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "CAGATGGGTT")
+        self.assertEqual(contig.reads[2].rd.sequence[center - 5:center + 5], "CAGATGGGTT")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "ctattcaggg")
         self.assertEqual(contig.reads[2].qa.qual_clipping_start, 20)
         self.assertEqual(contig.reads[2].qa.qual_clipping_end, 415)
@@ -1735,9 +1739,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 628)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)//2
+        center = len(contig.reads[3].rd.sequence) // 2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "ctgcgtatcg")
-        self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "AGGATTGCTT")
+        self.assertEqual(contig.reads[3].rd.sequence[center - 5:center + 5], "AGGATTGCTT")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "aaccctgggt")
         self.assertEqual(contig.reads[3].qa.qual_clipping_start, 18)
         self.assertEqual(contig.reads[3].qa.qual_clipping_end, 368)
@@ -1757,9 +1761,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 556)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)//2
+        center = len(contig.reads[4].rd.sequence) // 2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "gaggatcgct")
-        self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "GTgcgaggat")
+        self.assertEqual(contig.reads[4].rd.sequence[center - 5:center + 5], "GTgcgaggat")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "caggcagatg")
         self.assertEqual(contig.reads[4].qa.qual_clipping_start, 11)
         self.assertEqual(contig.reads[4].qa.qual_clipping_end, 373)
@@ -1779,9 +1783,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 593)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)//2
+        center = len(contig.reads[5].rd.sequence) // 2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "ggggatccg*")
-        self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "GCaAgacCCt")
+        self.assertEqual(contig.reads[5].rd.sequence[center - 5:center + 5], "GCaAgacCCt")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "gttgggtttg")
 
         self.assertEqual(contig.reads[5].qa.qual_clipping_start, 25)
@@ -1802,9 +1806,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[6].rd.padded_bases, 594)
         self.assertEqual(contig.reads[6].rd.info_items, 0)
         self.assertEqual(contig.reads[6].rd.read_tags, 0)
-        center = len(contig.reads[6].rd.sequence)//2
+        center = len(contig.reads[6].rd.sequence) // 2
         self.assertEqual(contig.reads[6].rd.sequence[:10], "agccccgggc")
-        self.assertEqual(contig.reads[6].rd.sequence[center-5:center+5], "ggatcACATA")
+        self.assertEqual(contig.reads[6].rd.sequence[center - 5:center + 5], "ggatcACATA")
         self.assertEqual(contig.reads[6].rd.sequence[-10:], "aatagtaaca")
         self.assertEqual(contig.reads[6].qa.qual_clipping_start, 249)
         self.assertEqual(contig.reads[6].qa.qual_clipping_end, 584)
@@ -1824,9 +1828,9 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[7].rd.padded_bases, 603)
         self.assertEqual(contig.reads[7].rd.info_items, 0)
         self.assertEqual(contig.reads[7].rd.read_tags, 0)
-        center = len(contig.reads[7].rd.sequence)//2
+        center = len(contig.reads[7].rd.sequence) // 2
         self.assertEqual(contig.reads[7].rd.sequence[:10], "gaataattgg")
-        self.assertEqual(contig.reads[7].rd.sequence[center-5:center+5], "TggCCCATCT")
+        self.assertEqual(contig.reads[7].rd.sequence[center - 5:center + 5], "TggCCCATCT")
         self.assertEqual(contig.reads[7].rd.sequence[-10:], "gaaccacacg")
         self.assertEqual(contig.reads[7].qa.qual_clipping_start, 240)
         self.assertEqual(contig.reads[7].qa.qual_clipping_end, 584)

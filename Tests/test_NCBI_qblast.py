@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,23 +9,25 @@ Uses Bio.Blast.NCBIWWW.qblast() to run some online blast queries, get XML
 blast results back, and then checks Bio.Blast.NCBIXML.parse() can read them.
 
 Goals:
-    Make sure that all retrieval is working as expected.
-    Make sure we can parse the latest XML format being used by the NCBI.
+    - Make sure that all retrieval is working as expected.
+    - Make sure we can parse the latest XML format being used by the NCBI.
+
 """
-from __future__ import print_function
 import unittest
+import warnings
 
 from Bio._py3k import HTTPError
 from Bio._py3k import StringIO
 
-import requires_internet
-requires_internet.check()
 from Bio import MissingExternalDependencyError
+from Bio import BiopythonWarning
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
 
+import requires_internet
+requires_internet.check()
 
 #####################################################################
 
@@ -37,21 +39,27 @@ from Bio.Blast import NCBIXML
 # - Entrez filter string (or None)
 # - list of hit identifiers expected to be found (or None if expect 0)
 
-print("Checking Bio.Blast.NCBIWWW.qblast() with various queries")
-
 
 class TestQblast(unittest.TestCase):
 
     def test_blastp_nr_actin(self):
-        # Simple protein blast filtered for rat only, using protein GI:160837788
+        # Simple protein blast filtered for rat only, using protein
+        # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
-        self.run_qblast("blastp", "nr", "160837788", 0.001,
-                        "rat [ORGN]", ['9506405', '13592137', '37589612', '149064087', '56912225'])
+        self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
+                        "rat [ORGN]", {'megablast': 'FALSE'},
+                        ["NP_112408.1", "AAH59131.1", "EDM14357.1",
+                         "NP_001008766.1", "NP_001102411.1", "EDL80109.1",
+                         "EDL80106.1", "NP_001100434.1", "AAI67084.1"])
 
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", ["37953274", "51104367", "51104367", "51104367"])
+                        10, "pan [ORGN]", {'megablast': 'FALSE'},
+                        ["XM_009432096.3", "XM_009432102.3", "XM_009432101.3",
+                         "XM_016930487.2", "XM_009432104.3", "XM_009432099.3",
+                         "XR_001710553.2", "XM_016930485.2", "XM_009432089.3",
+                         "XM_016930484.2"])
 
     def test_orchid_est(self):
         # Try an orchid EST (nucleotide) sequence against NR using BLASTX
@@ -66,9 +74,61 @@ class TestQblast(unittest.TestCase):
                         AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-                        0.0000001, None, ["21554275", "18409071", "296087288"])
+                        0.0000001, None, {'megablast': 'FALSE'},
+                        ["XP_021665344.1", "XP_021615158.1", "XP_017223689.1",
+                         "OMP06800.1", "XP_021634873.1", "XP_021299673.1",
+                         "XP_002311451.2", "XP_021976565.1", "OMO90244.1"])
 
-    def run_qblast(self, program, database, query, e_value, entrez_filter, expected_hits):
+    def test_discomegablast(self):
+        self.run_qblast("blastn", "nr",
+                        """>some sequence
+                        ATGAAGATCTTCCAGATCCAGTGCAGCAGCTTCAAGGAGAGCAGGTGGCAGAAGAGCAAGTGCGACAACT
+                        GCCTGAAGTTCCACATCGACATCAACAACAACAGCAAGACCAGCAACACCGACACCGACTTCGACGCCAA
+                        CACCAACATCAACAGCAACATCAACAGCAACATCAACAGCAACATCAACATCAACAACAGCGGCAACAAC
+                        AACAAGAACAGCAACAACATCGAGATCACCGAGAACATCGACAACAAGGCCAAGATCATCAACAAGCACA
+                        TCAAGACCATCACCAACAGCAAGCCCATCCCCATCCCCATCCCCACCCCCACCCCCATCAGCATCAAGGA
+                        GAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGAAGGAGATG
+                        AAGAGCACCATCAACCTGAGGAGCGAGGACACCACCAGCAACAAGAGCACCATCGTGTTCACCGAGTGCC
+                        TGGAGTACAAGGGCCACCAGTGGAGGCCCAACATCTGCGTGACCTGCTTCAGCCCCAAGAACAAGCACAA
+                        GAACGTGCTGCCCGAGACCAGCACCCCCCTGATCAGCCAGAGCAGCCAGACCAGCACCATCACCCCCAGC
+                        AGCAGCAGCACCAGCACCAGCACCAGCAGCATCAGCACCCACAAGACCGCCAACAACAAGACCGTGATCA
+                        CCTACATCAGCAGCACCACCACCACCACCACCACCAGCAGCAGCAGCAGCAGCCCCCCCAGCAGCAGCAT
+                        CGCCGGCATCACCAACCCCACCAGCAGGAGCAGCAGCCCCATCCTGAAGAGCGTGCCCCCCAGCGCCTAC
+                        AGCAACGTGGTGATCCCCATCAACAACATCAACAACAGCAACAGCAACAGCAGCAGCGGCGGCGGCAACA
+                        ACAACAACAAGAGCATCAGCACCCCCAGCAGCCCCATCATCAGCAGGCCCATCACCAACAAGATCAACAA
+                        CAACAACAACAACAACCAGCCCCAGCTGCACTACAACCAGCCCCAGAGCAGCAGCGTGAGCACCACCAGC
+                        AGCCCCATCATCAGGCCCGTGCTGAGGAGGCAGTTCCAGAGCTTCCCCAGCAACCCCAAGATCAGCAAGG
+                        CCATCCTGGAGCAGTGCAACATCATCAACAACAACAGCAACAGCAACAACAGCAACAACAAGGACCCCGT
+                        GATCCTGTGCAAGTACACCATCGAGAGCCAGCCCAAGAGCAACATCAGCGTGCTGAAGCCCACCCTGGTG
+                        GAGTTCATCAACCAGCCCGACAGCAAGGACGACGAGAGCAGCGTGAAGAGCCCCCCCCTGCCCGTGGAGA
+                        GCCAGCCCATCTTCAACAGCAAGCAGAGCGCCACCATGGACGGCATCACCACCCACAAGAGCGTGAGCAT
+                        CACCATCAGCACCAGCACCAGCCCCAGCAGCACCACCACCACCACCAGCACCACCACCAGCATCATCGCC
+                        GAGGAGCCCAGCAGCCCCATCCTGCCCACCGCCAGCCCCAGCAGCAGCAGCAGCAGCATCATCACCACCG
+                        CCACCGCCAGCACCATCCCCATGAGCCCCAGCCTGCCCAGCATCCCCTTCCACGAGTTCGAGACCATGGA
+                        GAGCAGCACCACCACCACCCTGCTGAGCGAGAACAACGGCGGCGGCGGCGGCAGCAGCTGCAACGACAAC
+                        AGCAGGAGGAACAGCCTGAACATCCTGCCCCTGAGGCTGAAGAGCTTCAGCTTCAGCGCCCCCCAGAGCG
+                        ACAGCATGATCGAGCAGCCCGAGGACGACCCCTTCTTCGACTTCGAGGACCTGAGCGACGACGACGACAG
+                        CAACGACAACGACGACGAGGAGCTGAAGGAGATCAACGGCGAGAAGATCATCCAGCAGAACGACCTGACC
+                        CCCACCACCACCATCACCAGCACCACCACCATCCTGCAGAGCCCCACCCTGGAGAAGACCCTGAGCACCA
+                        CCACCACCACCACCATCCCCAGCCCCAGCACCAACAGCAGGAGCATCTGCAACACCCTGATGGACAGCAC
+                        CGACAGCATCAACAACACCAACACCAACACCAACACCAACACCAACACCAACACCAACACCAACACCAAC
+                        ACCAACACCAACACCAACACCAACGCCAACATCAACAACAAGGTGAGCACCACCACCACCACCACCACCA
+                        CCAAGAGGAGGAGCCTGAAGATGGACCAGTTCAAGGAGAAGGAGGACGAGTGGGACCAGGGCGTGGACCT
+                        GACCAGCTTCCTGAAGAGGAAGCCCACCCTGCAGAGGGACTTCAGCTACTGCAACAACAAGGTGATGGAG
+                        ATCAGCAGCGTGAAGGAGGAGGCCAAGAGGCTGCACGGCGGCACCGGCTACATCCACCAGTTCGCCTTCG
+                        AGGCCTTCAAGGACATCCTGGAGGCCAAGCAGACCCAGATCAACAGGGCCTTCTGCAGCCAGAAGATCGA
+                        CGCCCCCGACTGCGAGATGCTGATCAACGAGATCAACACCGCCAAGAAGCTGCTGGAGGACCTGCTGGAG
+                        CTGAACAGCAACAGCAGCGGCAGCGGCAACAACAGCAACGACAACAGCGGCAGCAGCAGCCCCAGCAGCA
+                        GCAAGACCAACACCCTGAACCAGCAGAGCATCTGCATCAAGAGCGAGATCCAACGATACGTTGAAATTCG
+                        CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
+                        0.0000001, None, {
+                            'template_type': 0,
+                            'template_length': 18,
+                            'megablast': 'on',
+                        }, ['XM_635681.1', 'XM_008496783.1'])
+
+    def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
+        """Do qblast searches with given parameters and analyze results."""
         try:
             if program == "blastn":
                 # Check the megablast parameter is accepted
@@ -76,16 +136,19 @@ class TestQblast(unittest.TestCase):
                                         alignments=10, descriptions=10,
                                         hitlist_size=10,
                                         entrez_query=entrez_filter,
-                                        expect=e_value, megablast="FALSE")
+                                        expect=e_value,
+                                        **additional_args)
             else:
                 handle = NCBIWWW.qblast(program, database, query,
                                         alignments=10, descriptions=10,
                                         hitlist_size=10,
                                         entrez_query=entrez_filter,
-                                        expect=e_value)
+                                        expect=e_value,
+                                        **additional_args)
         except HTTPError:
             # e.g. a proxy error
             raise MissingExternalDependencyError("internet connection failed")
+
         record = NCBIXML.read(handle)
 
         if record.query == "No definition line":
@@ -95,40 +158,41 @@ class TestQblast(unittest.TestCase):
             # We used a FASTA record as the query
             expected = query[1:].split("\n", 1)[0]
             self.assertEqual(expected, record.query)
+        elif record.query_id.startswith("Query_") and len(query) == record.query_letters:
+            # We used a sequence as the entry and it was given a placeholder name
+            pass
         else:
             # We used an identifier as the query
-            self.assertTrue(query in record.query_id.split("|"))
+            self.assertIn(query, record.query_id.split("|"),
+                          "Expected %r within query_id %r" % (query, record.query_id))
 
         # Check the recorded input parameters agree with those requested
         self.assertEqual(float(record.expect), e_value)
         self.assertEqual(record.application.lower(), program)
-        self.assertLessEqual(len(record.alignments), 10)
-        self.assertLessEqual(len(record.descriptions), 10)
+        self.assertTrue(len(record.alignments) <= 10)
+        self.assertTrue(len(record.descriptions) <= 10)
 
         # Check the expected result(s) are found in the alignments
         if expected_hits is None:
             self.assertEqual(len(record.alignments), 0)  # Expected no alignments!
         else:
-            self.assertGreater(len(record.alignments), 0)  # Expected some alignments!
+            self.assertTrue(len(record.alignments) > 0)  # Expected some alignments!
             found_result = False
             for expected_hit in expected_hits:
                 for alignment in record.alignments:
                     if expected_hit in alignment.hit_id.split("|"):
                         found_result = True
                         break
-            if len(expected_hits) == 1:
-                print("Update this test to have some redundancy...")
-                for alignment in record.alignments:
-                    print(alignment.hit_id)
-            assert found_result, "Missing all of %s in alignments" \
-                % ", ".join(expected_hits)
-            self.assertTrue(found_result)
+            self.assertTrue(found_result,
+                            "Missing all expected hits (%s), instead have: %s"
+                            % (", ".join(expected_hits),
+                               ", ".join(a.hit_id for a in record.alignments)))
 
         # Check the expected result(s) are found in the descriptions
         if expected_hits is None:
             self.assertEqual(len(record.descriptions), 0)  # Expected no descriptions!
         else:
-            self.assertGreater(len(record.descriptions), 0)  # Expected some descriptions!
+            self.assertTrue(len(record.descriptions) > 0)  # Expected some descriptions!
             found_result = False
             for expected_hit in expected_hits:
                 for descr in record.descriptions:
@@ -143,6 +207,40 @@ class TestQblast(unittest.TestCase):
         with open("Blast/html_msgid_29_blastx_001.html", "r") as f:
             handle = StringIO(f.read())
         self.assertRaises(ValueError, NCBIWWW._parse_qblast_ref_page, handle)
+
+    def test_short_query(self):
+        """Test SHORT_QUERY_ADJUST parameter."""
+        # Should give no hits:
+        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5)
+        my_hits = NCBIXML.read(my_search)
+        my_search.close()
+        self.assertEqual(len(my_hits.alignments), 0)
+
+        # Should give hits:
+        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5,
+                                   short_query=True)
+        my_hits = NCBIXML.read(my_search)
+        my_search.close()
+        self.assertEqual(len(my_hits.alignments), 5)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter('always')
+            # Trigger a warning.
+            my_search = NCBIWWW.qblast('blastn', 'nt', 'ATGTCAACTTCAGAA',
+                                       hitlist_size=5, short_query=True)
+            # Verify some things
+            self.assertEqual(len(w), 1)
+            self.assertEqual(w[-1].category, BiopythonWarning)
+            self.assertIn('blastn', str(w[-1].message))
+            my_hits = NCBIXML.read(my_search)
+            my_search.close()
+            self.assertEqual(len(my_hits.alignments), 5)
+
+    def test_error_conditions(self):
+        """Test if exceptions were properly handled."""
+        self.assertRaises(ValueError, NCBIWWW.qblast, 'megablast', 'nt',
+                          'ATGCGTACGCAGCTAAAGTAAACCTATCGCGTCTCCT')
 
 
 if __name__ == "__main__":

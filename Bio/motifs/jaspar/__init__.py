@@ -6,7 +6,6 @@
 """JASPAR2014 module."""
 
 from Bio.Seq import Seq
-from Bio.Alphabet.IUPAC import unambiguous_dna as dna
 import re
 import math
 
@@ -23,12 +22,11 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet=dna, instances=None,
+    def __init__(self, matrix_id, name, alphabet='ACGT', instances=None,
                  counts=None, collection=None, tf_class=None, tf_family=None,
                  species=None, tax_group=None, acc=None, data_type=None,
                  medline=None, pazar_id=None, comment=None):
         """Construct a JASPAR Motif instance."""
-
         motifs.Motif.__init__(self, alphabet, instances, counts)
         self.name = name
         self.matrix_id = matrix_id
@@ -104,10 +102,12 @@ class Motif(motifs.Motif):
         """Return the hash key corresponding to the JASPAR profile.
 
         :note: We assume the unicity of matrix IDs
+
         """
         return self.matrix_id.__hash__()
 
     def __eq__(self, other):
+        """Return True if matrix IDs are the same."""
         return self.matrix_id == other.matrix_id
 
 
@@ -115,19 +115,20 @@ class Record(list):
     """Represent a list of jaspar motifs.
 
     Attributes:
-
      - version: The JASPAR version used
 
     """
 
     def __init__(self):
+        """Initialize the class."""
         self.version = None
 
     def __str__(self):
+        """Return a string of all motifs in the Record."""
         return "\n".join(str(the_motif) for the_motif in self)
 
     def to_dict(self):
-        """Return the list of matrices as a dictionnary of matrices."""
+        """Return the list of matrices as a dictionary of matrices."""
         dic = {}
         for motif in self:
             dic[motif.matrix_id] = motif
@@ -168,7 +169,11 @@ def write(motifs, format):
     elif format == 'jaspar':
         for m in motifs:
             counts = m.counts
-            line = ">{0} {1}\n".format(m.matrix_id, m.name)
+            try:
+                matrix_id = m.matrix_id
+            except AttributeError:
+                matrix_id = None
+            line = ">{0} {1}\n".format(matrix_id, m.name)
             lines.append(line)
             for letter in letters:
                 terms = ["{0:6.2f}".format(value) for value in counts[letter]]
@@ -185,11 +190,10 @@ def write(motifs, format):
 
 def _read_pfm(handle):
     """Read the motif from a JASPAR .pfm file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'ACGT'
     counts = {}
 
-    letters = "ACGT"
-    for letter, line in zip(letters, handle):
+    for letter, line in zip(alphabet, handle):
         words = line.split()
         # if there is a letter in the beginning, ignore it
         if words[0] == letter:
@@ -206,7 +210,7 @@ def _read_pfm(handle):
 
 def _read_sites(handle):
     """Read the motif from JASPAR .sites file (PRIVATE)."""
-    alphabet = dna
+    alphabet = 'ACGT'
     instances = []
 
     for line in handle:
@@ -219,7 +223,7 @@ def _read_sites(handle):
         for c in line.strip():
             if c == c.upper():
                 instance += c
-        instance = Seq(instance, alphabet)
+        instance = Seq(instance)
         instances.append(instance)
 
     instances = motifs.Instances(instances, alphabet)
@@ -238,37 +242,38 @@ def _read_jaspar(handle):
 
     Format is one or more records of the form, e.g.::
 
-        >MA0001.1 AGL3
-        A  [ 0  3 79 40 66 48 65 11 65  0 ]
-        C  [94 75  4  3  1  2  5  2  3  3 ]
-        G  [ 1  0  3  4  1  0  5  3 28 88 ]
-        T  [ 2 19 11 50 29 47 22 81  1  6 ]
+      - JASPAR 2010 matrix_only format::
 
-    or::
+                >MA0001.1 AGL3
+                A  [ 0  3 79 40 66 48 65 11 65  0 ]
+                C  [94 75  4  3  1  2  5  2  3  3 ]
+                G  [ 1  0  3  4  1  0  5  3 28 88 ]
+                T  [ 2 19 11 50 29 47 22 81  1  6 ]
 
-        >MA0001.1 AGL3
-        0  3 79 40 66 48 65 11 65  0
-        4 75  4  3  1  2  5  2  3  3
-        1  0  3  4  1  0  5  3 28 88
-        2 19 11 50 29 47 22 81  1  6
+      - JASPAR 2010-2014 PFMs format::
+
+                >MA0001.1 AGL3
+                0	3	79	40	66	48	65	11	65	0
+                94	75	4	3	1	2	5	2	3	3
+                1	0	3	4	1	0	5	3	28	88
+                2	19	11	50	29	47	22	81	1	6
 
     """
-
-    alphabet = dna
+    alphabet = 'ACGT'
     counts = {}
 
     record = Record()
 
     head_pat = re.compile(r"^>\s*(\S+)(\s+(\S+))?")
     row_pat_long = re.compile(r"\s*([ACGT])\s*\[\s*(.*)\s*\]")
-    row_pat_short = re.compile(r"\s*(.*)\s*")
+    row_pat_short = re.compile(r"\s*(.+)\s*")
 
     identifier = None
     name = None
     row_count = 0
     nucleotides = ['A', 'C', 'G', 'T']
     for line in handle:
-        line.rstrip('\r\n')
+        line = line.strip()
 
         head_match = head_pat.match(line)
         row_match_long = row_pat_long.match(line)
@@ -276,8 +281,8 @@ def _read_jaspar(handle):
 
         if head_match:
             identifier = head_match.group(1)
-            if head_match.group(2):
-                name = head_match.group(2)
+            if head_match.group(3):
+                name = head_match.group(3)
             else:
                 name = identifier
         elif row_match_long:
@@ -308,6 +313,11 @@ def _read_jaspar(handle):
 
 
 def calculate_pseudocounts(motif):
+    """Calculate pseudocounts.
+
+    Computes the root square of the total number of sequences multiplied by
+    the background nucleotide.
+    """
     alphabet = motif.alphabet
     background = motif.background
 
@@ -337,12 +347,11 @@ def calculate_pseudocounts(motif):
 
 
 def split_jaspar_id(id):
-    """Utility function to split a JASPAR matrix ID into its component.
+    """Split a JASPAR matrix ID into its component.
 
     Components are base ID and version number, e.g. 'MA0047.2' is returned as
     ('MA0047', 2).
     """
-
     id_split = id.split('.')
 
     base_id = None

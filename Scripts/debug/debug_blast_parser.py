@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+# Copyright 2002 Jeffrey Chang.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Script to help diagnose problems with BLAST parser."""
 
 # To do:
 # - Let user specify the parser class on the command line.
@@ -14,7 +20,8 @@ import getopt
 import traceback
 
 from Bio import ParserSupport
-from Bio.Blast import NCBIStandalone, NCBIWWW
+from Bio.Blast import NCBIStandalone
+
 
 CONTEXT = 5   # show 5 lines of context around the error in the format file
 
@@ -37,8 +44,11 @@ OPTIONS:
 """ % sys.argv[0]
 
 
-class DebuggingConsumer:
+class DebuggingConsumer(object):
+    """A Debugging Consumer..."""
+
     def __init__(self, decorated=None):
+        """Initialize the DebuggingConsumer."""
         self.linenum = 0
         if decorated is None:
             decorated = ParserSupport.AbstractConsumer()
@@ -53,6 +63,7 @@ class DebuggingConsumer:
         self.linenum += 1
 
     def __getattr__(self, attr):
+        """Override __getattr__."""
         self._prev_attr = attr
         if attr.startswith('start_') or attr.startswith('end_'):
             return self._decorated_section
@@ -61,20 +72,24 @@ class DebuggingConsumer:
 
 
 def chomp(line):
+    """Remove line-breaks from line."""
     return re.sub(r"[\r\n]*$", "", line)
 
 
 def choose_parser(outfile):
+    """Select corret parser automatically."""
     data = open(outfile).read()
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
-        return NCBIWWW.BlastParser
+        raise NotImplementedError("Biopython no longer has an HTML BLAST "
+                                  "parser.")
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
 
 
 def test_blast_output(outfile):
+    """Try to find BLAST parser error from output file."""
     # Try to auto-detect the format
     if 1:
         print("No parser specified.  I'll try to choose one for you based")
@@ -83,13 +98,12 @@ def test_blast_output(outfile):
 
         parser_class = choose_parser(outfile)
         print("It looks like you have given output that should be parsed")
-        print("with %s.%s.  If I'm wrong, you can select the correct parser" %\
-              (parser_class.__module__, parser_class.__name__))
+        print("with %s.%s.  If I'm wrong, you can select the correct parser"
+              % (parser_class.__module__, parser_class.__name__))
         print("on the command line of this script (NOT IMPLEMENTED YET).")
     else:
-        raise NotImplementedError
-        parser_class = NCBIWWW.BlastParser
-        print("Using %s to parse the file." % parser_class.__name__)
+        raise NotImplementedError("Biopython no longer has an HTML "
+                                  "BLAST parser.")
     print("")
 
     scanner_class = parser_class()._scanner.__class__
@@ -97,14 +111,14 @@ def test_blast_output(outfile):
 
     # parser_class()._scanner.feed(
     #    open(outfile), ParserSupport.TaggingConsumer())
-    print("I'm going to run the data through the parser to see what happens...")
+    print("I'm going to run the data through the parser to see what happens..")
     parser = parser_class()
     try:
-        rec = parser.parse_file(outfile)
+        parser.parse_file(outfile)
     except (KeyboardInterrupt, SystemExit):
         raise
-    except Exception as x:
-        exception_info = str(x)
+    except Exception as err:
+        exception_info = str(err)
         print("Dang, the parsing failed.")
     else:
         print("Parsing succeeded, no problems detected.")
@@ -136,7 +150,7 @@ def test_blast_output(outfile):
         traceback.print_exception(etype, value, tb)
         return 1
     else:
-        print("I found the problem in %s.%s.%s, line %d:" % \
+        print("I found the problem in %s.%s.%s, line %d:" %
               (class_found.__module__, class_found.__name__,
                err_function, err_line))
         print("    %s" % err_text)
@@ -150,7 +164,7 @@ def test_blast_output(outfile):
     consumer = DebuggingConsumer(consumer)
     try:
         scanner.feed(open(outfile), consumer)
-    except etype as x:
+    except etype:
         pass
     else:
         print("Odd, the exception disappeared!  What happened?")
@@ -176,9 +190,9 @@ def test_blast_output(outfile):
     print("")
 
     if class_found == scanner_class:
-        print("Problems in %s are most likely caused by changed formats." % \
+        print("Problems in %s are most likely caused by changed formats." %
               class_found.__name__)
-        print("You can start to fix this by going to line %d in module %s." % \
+        print("You can start to fix this by going to line %d in module %s." %
               (err_line, class_found.__module__))
         print("Perhaps the scanner needs to be made more lenient by accepting")
         print("the changed format?")
@@ -195,23 +209,23 @@ def test_blast_output(outfile):
             try:
                 parser_class()._scanner.feed(
                     open(outfile), ParserSupport.TaggingConsumer())
-            except etype as x:
+            except etype:
                 pass
             print("*" * 20 + " END SCANNER TRACE " + "*" * 20)
         print("")
 
     elif class_found == consumer_class:
-        print("Problems in %s can be caused by two things:" % \
+        print("Problems in %s can be caused by two things:" %
               class_found.__name__)
-        print("    - The format of the line parsed by '%s' changed." % \
+        print("    - The format of the line parsed by '%s' changed." %
               err_function)
         print("    - The scanner misidentified the line.")
-        print("Check to make sure '%s' should parse the line:" % \
+        print("Check to make sure '%s' should parse the line:" %
               err_function)
         s = "    %s" % chomp(lines[consumer.linenum])
         s = s[:80]
         print(s)
-        print("If so, debug %s.%s.  Otherwise, debug %s." % \
+        print("If so, debug %s.%s.  Otherwise, debug %s." %
               (class_found.__name__, err_function, scanner_class.__name__))
 
 
@@ -219,8 +233,8 @@ VERBOSITY = 0
 if __name__ == '__main__':
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hpnov")
-    except getopt.error as x:
-        sys.stderr.write("%s\n" % x)
+    except getopt.error as err:
+        sys.stderr.write("%s\n" % err)
         sys.exit(-1)
     if len(args) != 1:
         sys.stderr.write(USAGE)
@@ -246,7 +260,8 @@ if __name__ == '__main__':
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:
         OUTPUT = 1
-        # sys.stderr.write("Exactly one of -p, -n, or -o should be specified.\n")
+        # sys.stderr.write("Exactly one of -p, -n, or -o should be "
+        #                  "specified.\n")
         # sys.exit(-1)
     if PROTEIN or NUCLEOTIDE:
         sys.stderr.write("-p and -n not implemented yet\n")

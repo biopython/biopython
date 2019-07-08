@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" ?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ncbi="http://www.ncbi.nlm.nih.gov"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified"
+>
+  <xs:element name="CDS">
+    <xs:complexType>
+      <xs:attribute name="accver" type="xs:string" use="required"/>
+      <xs:attribute name="kingdom" type="xs:string" use="required"/>
+      <xs:attribute name="kingdom_taxid" type="xs:integer" use="required"/>
+      <xs:attribute name="org" type="xs:string" use="required"/>
+      <xs:attribute name="start" type="xs:integer" use="required"/>
+      <xs:attribute name="stop" type="xs:integer" use="required"/>
+      <xs:attribute name="strand" type="xs:string" use="required"/>
+      <xs:attribute name="strain" type="xs:string" use="optional"/>
+      <xs:attribute name="taxid" type="xs:integer" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="CDSList">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="CDS"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="IPGReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Product"/>
+        <xs:element ref="ProteinList"/>
+        <xs:element ref="Statistics"/>
+      </xs:sequence>
+      <xs:attribute name="product_acc" type="xs:string" use="required"/>
+      <xs:attribute name="ipg" type="xs:integer" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="IPGReportSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="IPGReport"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Product">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="accver" type="xs:string" use="required"/>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+          <xs:attribute name="org" type="xs:string" use="required"/>
+          <xs:attribute name="kingdom" type="xs:string" use="required"/>
+          <xs:attribute name="taxid" type="xs:integer" use="optional"/>
+          <xs:attribute name="slen" type="xs:integer" use="required"/>
+          <xs:attribute name="kingdom_taxid" type="xs:integer" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Protein">
+    <xs:complexType>
+      <xs:sequence minOccurs="0">
+        <xs:element ref="CDSList"/>
+      </xs:sequence>
+      <xs:attribute name="accver" type="xs:string" use="required"/>
+      <xs:attribute name="source" type="xs:string" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="org" type="xs:string" use="required"/>
+      <xs:attribute name="kingdom" type="xs:string" use="required"/>
+      <xs:attribute name="kingdom_taxid" type="xs:integer" use="required"/>
+      <xs:attribute name="taxid" type="xs:integer" use="optional"/>
+      <xs:attribute name="priority" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ProteinList">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="Protein"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Statistics">
+    <xs:complexType>
+      <xs:attribute name="nuc_count" type="xs:integer" use="required"/>
+      <xs:attribute name="prot_count" type="xs:integer" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

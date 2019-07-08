@@ -1,14 +1,13 @@
 # Copyright 2000 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-# Gavin E. Crooks 2001-11-03
-# Minor extensions, some bug fixes, and major changes to the interface
+# Revisions copyright 2001 by Gavin E. Crooks. All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""A collection of residues from a PDB structure."""
 
 import re
 
-"""A collection of residues from a PDB structure."""
 
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
@@ -35,6 +34,7 @@ class Residues(object):
     """
 
     def __init__(self, str=None):
+        """Initialize the class."""
         self.pdbid = ''
         self.fragments = ()
         if str is not None:
@@ -47,9 +47,9 @@ class Residues(object):
         m = _pdbid_re.match(str)
         if m is not None:
             self.pdbid = m.group(1)
-            str = m.group(2) # Everything else
+            str = m.group(2)  # Everything else
 
-        if str=='' or str == '-' or str=='(-)':  # no fragments, whole sequence
+        if str == '' or str == '-' or str == '(-)':  # no fragments, whole sequence
             return
 
         fragments = []
@@ -73,9 +73,10 @@ class Residues(object):
         self.fragments = tuple(fragments)
 
     def __str__(self):
+        """Represent the SCOP residues record as a string."""
         prefix = ""
         if self.pdbid:
-            prefix = self.pdbid +' '
+            prefix = self.pdbid + ' '
 
         if not self.fragments:
             return prefix + '-'

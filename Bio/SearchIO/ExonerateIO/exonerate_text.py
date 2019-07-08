@@ -1,14 +1,14 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for Exonerate plain text output format."""
 
 import re
 from itertools import chain
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _bytes_to_string
 from Bio._py3k import zip
 
 
@@ -19,7 +19,7 @@ from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
 from .exonerate_vulgar import _RE_VULGAR
 
 
-__all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
+__all__ = ('ExonerateTextParser', 'ExonerateTextIndexer')
 
 
 # for capturing sequences in alignment blocks
@@ -42,7 +42,7 @@ _RE_SCODON_END = re.compile(r'^\{(\w{1,2})\}')
 
 
 def _flip_codons(codon_seq, target_seq):
-    """Flips the codon characters from one seq to another."""
+    """Flips the codon characters from one seq to another (PRIVATE)."""
     a, b = '', ''
     for char1, char2 in zip(codon_seq, target_seq):
         # no need to do anything if the codon seq line has nothing
@@ -57,7 +57,7 @@ def _flip_codons(codon_seq, target_seq):
 
 
 def _get_block_coords(parsed_seq, row_dict, has_ner=False):
-    """Returns a list of start, end coordinates for each given block in the sequence."""
+    """Return a list of start, end coordinates for each given block in the sequence (PRIVATE)."""
     start = 0
     coords = []
     if not has_ner:
@@ -77,8 +77,11 @@ def _get_block_coords(parsed_seq, row_dict, has_ner=False):
 
 
 def _get_inter_coords(coords, strand=1):
-    """From the given pairs of coordinates, returns a list of pairs
-    covering the intervening ranges."""
+    """Return list of pairs covering intervening ranges (PRIVATE).
+
+    From the given pairs of coordinates, returns a list of pairs
+    covering the intervening ranges.
+    """
     # adapted from Python's itertools guide
     # if strand is -1, adjust coords to the ends and starts are chained
     if strand == -1:
@@ -91,7 +94,7 @@ def _get_inter_coords(coords, strand=1):
 
 
 def _stitch_rows(raw_rows):
-    """Stitches together the parsed alignment rows and returns them in a list."""
+    """Stitches together the parsed alignment rows and returns them in a list (PRIVATE)."""
     # deal with possible codon surprise!
     # (i.e. alignments with codons using cdna2genome model)
     # by creating additional rows to contain the codons
@@ -116,17 +119,15 @@ def _stitch_rows(raw_rows):
     # to flip them with their 'inner' pairs
     if len(cmbn_rows) == 5:
         # flip query sequence
-        cmbn_rows[0], cmbn_rows[1] = \
-                _flip_codons(cmbn_rows[0], cmbn_rows[1])
+        cmbn_rows[0], cmbn_rows[1] = _flip_codons(cmbn_rows[0], cmbn_rows[1])
         # flip hit sequence
-        cmbn_rows[4], cmbn_rows[3] = \
-                _flip_codons(cmbn_rows[4], cmbn_rows[3])
+        cmbn_rows[4], cmbn_rows[3] = _flip_codons(cmbn_rows[4], cmbn_rows[3])
 
     return cmbn_rows
 
 
 def _get_row_dict(row_len, model):
-    """Returns a dictionary of row indices for parsing alignment blocks."""
+    """Return a dictionary of row indices for parsing alignment blocks (PRIVATE)."""
     idx = {}
     # 3 lines, usually in dna vs dna models
     if row_len == 3:
@@ -162,12 +163,12 @@ def _get_row_dict(row_len, model):
         idx['hannot'] = 4
     else:
         raise ValueError("Unexpected row count in alignment block: "
-                "%i" % row_len)
+                         "%i" % row_len)
     return idx
 
 
 def _get_blocks(rows, coords, idx):
-    """Returns a list of dictionaries of sequences split by the coordinates."""
+    """Return a list of dictionaries of sequences split by the coordinates (PRIVATE)."""
     for idx_name in ('query', 'hit', 'midline', 'qannot', 'hannot'):
         assert idx_name in idx
     blocks = []
@@ -187,8 +188,7 @@ def _get_blocks(rows, coords, idx):
 
 
 def _get_scodon_moves(tmp_seq_blocks):
-    """Returns a dictionary of split codon locations relative to each
-    fragment's end"""
+    """Get a dictionary of split codon locations relative to each fragment end (PRIVATE)."""
     scodon_moves = {'query': [], 'hit': []}
     for seq_type in scodon_moves:
         scoords = []
@@ -212,7 +212,7 @@ def _get_scodon_moves(tmp_seq_blocks):
 
 
 def _clean_blocks(tmp_seq_blocks):
-    """Removes curly braces (split codon markers) from the given sequences."""
+    """Remove curly braces (split codon markers) from the given sequences (PRIVATE)."""
     seq_blocks = []
     for seq_block in tmp_seq_blocks:
         for line_name in seq_block:
@@ -224,7 +224,7 @@ def _clean_blocks(tmp_seq_blocks):
 
 
 def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
-    """Returns the length of introns between fragments."""
+    """Return the length of introns between fragments (PRIVATE)."""
     # set opposite type, for setting introns
     opp_type = 'hit' if seq_type == 'query' else 'query'
     # list of flags to denote if an intron follows a block
@@ -233,7 +233,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
     # and sets the opposing sequence type's intron (since this
     # line is present on the opposite sequence type line)
     has_intron_after = ['Intron' in x[seq_type] for x in
-            inter_blocks]
+                        inter_blocks]
     assert len(has_intron_after) == len(raw_inter_lens)
     # create list containing coord adjustments incorporating
     # intron lengths
@@ -250,7 +250,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
                 intron_len = int(parsed_len[2])
             else:
                 raise ValueError("Unexpected intron parsing "
-                        "result: %r" % parsed_len)
+                                 "result: %r" % parsed_len)
         else:
             intron_len = 0
 
@@ -260,21 +260,19 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
 
 
 def _comp_coords(hsp, seq_type, inter_lens):
-    """Fill the block coordinates of the given hsp dictionary."""
+    """Fill the block coordinates of the given hsp dictionary (PRIVATE)."""
     assert seq_type in ('hit', 'query')
     # manually fill the first coord
     seq_step = 1 if hsp['%s_strand' % seq_type] >= 0 else -1
     fstart = hsp['%s_start' % seq_type]
     # fend is fstart + number of residues in the sequence, minus gaps
     fend = fstart + len(
-            hsp[seq_type][0].replace('-', '').replace('>',
-            '').replace('<', '')) * seq_step
+        hsp[seq_type][0].replace('-', '').replace('>', '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
     for idx, block in enumerate(hsp[seq_type][1:]):
         bstart = coords[-1][1] + inter_lens[idx] * seq_step
-        bend = bstart + seq_step * \
-                len(block.replace('-', ''))
+        bend = bstart + seq_step * len(block.replace('-', ''))
         coords.append((bstart, bend))
 
     # adjust the coords so the smallest is [0], if strand is -1
@@ -288,8 +286,7 @@ def _comp_coords(hsp, seq_type, inter_lens):
 
 
 def _comp_split_codons(hsp, seq_type, scodon_moves):
-    """Computes the positions of split codons and puts the values in the given
-    HSP dictionary."""
+    """Compute positions of split codons, store in given HSP dictionary (PRIVATE)."""
     scodons = []
     for idx in range(len(scodon_moves[seq_type])):
         pair = scodon_moves[seq_type][idx]
@@ -315,18 +312,18 @@ def _comp_split_codons(hsp, seq_type, scodon_moves):
 
 
 class ExonerateTextParser(_BaseExonerateParser):
-
     """Parser for Exonerate plain text output."""
 
     _ALN_MARK = 'C4 Alignment:'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block, return query result, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']
         # check for values that must have been set by previous methods
         for val_name in ('query_start', 'query_end', 'hit_start', 'hit_end',
-                'query_strand', 'hit_strand'):
+                         'query_strand', 'hit_strand'):
             assert val_name in hsp, hsp
 
         # get the alignment rows
@@ -390,7 +387,7 @@ class ExonerateTextParser(_BaseExonerateParser):
             # first two component filled == intron in hit and query
             # last component filled == intron in hit or query
             raw_inter_lens = re.findall(_RE_EXON_LEN,
-                    cmbn_rows[row_dict['midline']])
+                                        cmbn_rows[row_dict['midline']])
 
         # compute start and end coords for each block
         for seq_type in ('query', 'hit'):
@@ -399,20 +396,21 @@ class ExonerateTextParser(_BaseExonerateParser):
             if not has_ner:
                 opp_type = 'hit' if seq_type == 'query' else 'query'
                 inter_lens = _comp_intron_lens(seq_type, inter_blocks,
-                        raw_inter_lens)
+                                               raw_inter_lens)
             else:
                 # for NER blocks, the length of the inter-fragment gaps is
                 # written on the same strand, so opp_type is seq_type
                 opp_type = seq_type
                 inter_lens = [int(x) for x in
-                        re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])]
+                              re.findall(_RE_NER_LEN,
+                                         cmbn_rows[row_dict[seq_type]])]
 
             # check that inter_lens's length is len opp_type block - 1
-            assert len(inter_lens) == len(hsp[opp_type])-1, \
-                    "%r vs %r" % (len(inter_lens), len(hsp[opp_type])-1)
+            if len(inter_lens) != len(hsp[opp_type]) - 1:
+                raise ValueError("Length mismatch: %r vs %r"
+                                 % (len(inter_lens), len(hsp[opp_type]) - 1))
             # fill the hsp query and hit coordinates
-            hsp['%s_ranges' % opp_type] = \
-                    _comp_coords(hsp, opp_type, inter_lens)
+            hsp['%s_ranges' % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner
             # can't do this in the if-else clause above since we need to
             # compute the ranges first
@@ -431,7 +429,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def _read_alignment(self):
-        """Reads the raw alignment block strings, returns them in a list."""
+        """Read the raw alignment block strings, returns them in a list (PRIVATE)."""
         raw_aln_blocks = []
         # flag to check whether we're in an aligment row
         in_aln_row = False
@@ -448,7 +446,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 raw_aln_block = []
             # if we're in an alignment row, grab the sequence
             if in_aln_row:
-                raw_aln_block.append(self.line[start_idx:start_idx+row_len])
+                raw_aln_block.append(self.line[start_idx:start_idx + row_len])
             # reset flags and values if the line matches, we're in an alignment
             # row, and there are more than 1 line in rows
             if match and in_aln_row and len(raw_aln_block) > 1:
@@ -476,17 +474,16 @@ class ExonerateTextParser(_BaseExonerateParser):
 
 
 class ExonerateTextIndexer(_BaseExonerateIndexer):
-
     """Indexer class for Exonerate plain text."""
 
     _parser = ExonerateTextParser
-    _query_mark = _as_bytes('C4 Alignment')
+    _query_mark = b"C4 Alignment"
 
     def get_qresult_id(self, pos):
-        """Returns the query ID from the nearest "Query:" line."""
+        """Return the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
-        sentinel = _as_bytes('Query:')
+        sentinel = b"Query:"
 
         while True:
             line = handle.readline().strip()
@@ -499,11 +496,11 @@ class ExonerateTextIndexer(_BaseExonerateIndexer):
         return qid
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Return the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = _as_bytes('')
+        qresult_raw = b""
 
         while True:
             line = handle.readline()

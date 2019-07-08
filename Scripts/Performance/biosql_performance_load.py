@@ -1,14 +1,21 @@
 #!/usr/bin/env python
-"""Small script to test timing of loading records into a BioSQL database.
-"""
+# Copyright 2002 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Test timing of loading records into a BioSQL database."""
 from __future__ import print_function
 
 import time
 # set up the connection
 from Bio import GenBank
 from BioSQL import BioSeqDatabase
+
+
 server = BioSeqDatabase.open_database(host="192.168.0.192", user="root",
-                                       passwd="", db="pythonloadtest")
+                                      passwd="", db="pythonloadtest")
 
 # remove the database if it already exists
 db_name = "testload"
@@ -30,5 +37,5 @@ num_records = db.load(iterator)
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("Loading")
-print("\tDid %s records in %s seconds for\n\t%f records per second" % \
+print("\tDid %s records in %s seconds for\n\t%f records per second" %
       (num_records, elapsed_time, float(num_records) / float(elapsed_time)))

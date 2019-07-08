@@ -1,0 +1,73 @@
+LOCUS       DS830848                1311 bp    DNA     linear   CON 13-NOV-2008
+DEFINITION  Ixodes scapularis 1108462666300 genomic scaffold, whole genome
+            shotgun sequence.
+ACCESSION   DS830848 ABJB010000000
+VERSION     DS830848.1  GI:183757675
+DBLINK      BioProject: PRJNA16232
+            BioSample: SAMN03004382
+KEYWORDS    WGS.
+SOURCE      Ixodes scapularis (black-legged tick)
+  ORGANISM  Ixodes scapularis
+            Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Chelicerata; Arachnida;
+            Acari; Parasitiformes; Ixodida; Ixodoidea; Ixodidae; Ixodinae;
+            Ixodes.
+REFERENCE   1  (bases 1 to 1311)
+  AUTHORS   Caler,E., Hannick,L.I., Bidwell,S., Joardar,V., Thiagarajan,M.,
+            Amedeo,P., Galinsky,K.J., Schobel,S., Inman,J., Hostetler,J.,
+            Miller,J., Hammond,M., Megy,K., Lawson,D., Kodira,C., Sutton,G.,
+            Meyer,J., Hill,C.A., Birren,B., Nene,V., Collins,F.,
+            Alarcon-Chaidez,F., Wikel,S. and Strausberg,R.
+  CONSRTM   Ixodes scapularis Genome Project Consortium
+  TITLE     Annotation of Ixodes scapularis
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1311)
+  AUTHORS   Nene,V.
+  CONSRTM   Ixodes scapularis Genome Project Consortium
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-MAR-2008) J. Craig Venter Institute, 9704 Medical
+            Center Drive, Rockville, MD 20850, USA
+COMMENT     
+            This Wikel tick colony was established in 1996 using field
+            collected ticks from New York, Oklahoma and a Lyme Disease endemic
+            area of Connecticut.  This colony has been continuously in-bred
+            since establishment and has not been supplemented with field
+            collected material.  The colony is known to be a competent vector
+            of various Borrelia and Babesia isolates. Genomic DNA was prepared
+            from embryonated eggs.
+            
+            The Ixodes scapularis Genome Project (IGP) is a community-based
+            effort initiated in early 2004 to sequence the I. scapularis
+            genome.  The IGP is funded by the National Institute of Allergy and
+            Infectious Diseases (NIAID)/National Institute of Health as part of
+            the NIAID-funded Microbial Sequencing Centers (MSCs) at The J.
+            Craig Venter Institute (http://www.jcvi.org) and The Broad
+            Institute (http://www.broad.mit.edu/).  The genome sequencing was
+            performed at both MSCs and the assembly at JCVI. The sum of all
+            reads equals 6X based on an estimated genome size of 2.1 Gbp, while
+            the coverage on assembled contigs is 3.8X.  The scaffolds are
+            comprised of 570637 contigs; the other 570958 contigs in the 01
+            version of this project represent degenerate contigs that were not
+            incorporated into scaffolds.  The annotation for this assembly will
+            be produced jointly by the MSCs and VectorBase
+            (http://www.vectorbase.org).  Data release and use follow NIAID
+            guidelines
+            (http://www.niaid.nih.gov/dmid/genomes/mscs/data_release.htm).
+            
+            VectorBase (www.vectorbase.org), a NIAID Bioinformatics Resource
+            Center, is responsible for the long-term curation of the assembled
+            genome sequence  and its annotation.  For more information, contact
+            info@vectorbase.org.
+            Assembly name: JCVI_ISG_i3_1.0
+            Coverage: 3.8x on assembled contigs; 6x based on an estimated
+            genome size of 2.1 Gbp
+            Annotation was added to the scaffolds in December 2008.
+FEATURES             Location/Qualifiers
+     source          1..1311
+                     /organism="Ixodes scapularis"
+                     /mol_type="genomic DNA"
+                     /strain="Wikel colony"
+                     /db_xref="taxon:6945"
+                     /dev_stage="embryonated eggs"
+CONTIG      join(ABJB010667125.1:1..1311)
+//
+

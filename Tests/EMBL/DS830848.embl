@@ -1,0 +1,86 @@
+ID   DS830848; SV 1; linear; genomic DNA; CON; INV; 1311 BP.
+XX
+AC   DS830848;
+XX
+PR   Project:PRJNA16232;
+XX
+DT   21-APR-2008 (Rel. 95, Created)
+DT   18-NOV-2008 (Rel. 97, Last updated, Version 3)
+XX
+DE   Ixodes scapularis 1108462666300 genomic scaffold, whole genome shotgun
+DE   sequence.
+XX
+KW   .
+XX
+OS   Ixodes scapularis (black-legged tick)
+OC   Eukaryota; Metazoa; Ecdysozoa; Arthropoda; Chelicerata; Arachnida; Acari;
+OC   Parasitiformes; Ixodida; Ixodoidea; Ixodidae; Ixodinae; Ixodes.
+XX
+RN   [1]
+RP   1-1311
+RG   Ixodes scapularis Genome Project Consortium
+RA   Caler E., Hannick L.I., Bidwell S., Joardar V., Thiagarajan M., Amedeo P.,
+RA   Galinsky K.J., Schobel S., Inman J., Hostetler J., Miller J., Hammond M.,
+RA   Megy K., Lawson D., Kodira C., Sutton G., Meyer J., Hill C.A., Birren B.,
+RA   Nene V., Collins F., Alarcon-Chaidez F., Wikel S., Strausberg R.;
+RT   "Annotation of Ixodes scapularis";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1311
+RG   Ixodes scapularis Genome Project Consortium
+RA   Nene V.;
+RT   ;
+RL   Submitted (18-MAR-2008) to the INSDC.
+RL   J. Craig Venter Institute, 9704 Medical Center Drive, Rockville, MD 20850,
+RL   USA
+XX
+DR   MD5; 387e72e4f7ae804780d06f875ab3bc41.
+DR   ENA; ABJB010000000; SET.
+DR   ENA; ABJB000000000; SET.
+DR   BioSample; SAMN03004382.
+XX
+CC   This Wikel tick colony was established in 1996 using field
+CC   collected ticks from New York, Oklahoma and a Lyme Disease endemic
+CC   area of Connecticut.  This colony has been continuously in-bred
+CC   since establishment and has not been supplemented with field
+CC   collected material.  The colony is known to be a competent vector
+CC   of various Borrelia and Babesia isolates. Genomic DNA was prepared
+CC   from embryonated eggs.
+CC   The Ixodes scapularis Genome Project (IGP) is a community-based
+CC   effort initiated in early 2004 to sequence the I. scapularis
+CC   genome.  The IGP is funded by the National Institute of Allergy and
+CC   Infectious Diseases (NIAID)/National Institute of Health as part of
+CC   the NIAID-funded Microbial Sequencing Centers (MSCs) at The J.
+CC   Craig Venter Institute (http://www.jcvi.org) and The Broad
+CC   Institute (http://www.broad.mit.edu/).  The genome sequencing was
+CC   performed at both MSCs and the assembly at JCVI. The sum of all
+CC   reads equals 6X based on an estimated genome size of 2.1 Gbp, while
+CC   the coverage on assembled contigs is 3.8X.  The scaffolds are
+CC   comprised of 570637 contigs; the other 570958 contigs in the 01
+CC   version of this project represent degenerate contigs that were not
+CC   incorporated into scaffolds.  The annotation for this assembly will
+CC   be produced jointly by the MSCs and VectorBase
+CC   (http://www.vectorbase.org).  Data release and use follow NIAID
+CC   guidelines
+CC   (http://www.niaid.nih.gov/dmid/genomes/mscs/data_release.htm).
+CC   VectorBase (www.vectorbase.org), a NIAID Bioinformatics Resource
+CC   Center, is responsible for the long-term curation of the assembled
+CC   genome sequence  and its annotation.  For more information, contact
+CC   info@vectorbase.org.
+CC   Assembly name: JCVI_ISG_i3_1.0
+CC   Coverage: 3.8x on assembled contigs; 6x based on an estimated
+CC   genome size of 2.1 Gbp
+CC   Annotation was added to the scaffolds in December 2008.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1311
+FT                   /organism="Ixodes scapularis"
+FT                   /strain="Wikel colony"
+FT                   /mol_type="genomic DNA"
+FT                   /dev_stage="embryonated eggs"
+FT                   /db_xref="taxon:6945"
+XX
+CO   join(ABJB010667125.1:1..1311)
+//

@@ -3,12 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Module to represent the NDB Atlas structure (a minimal subset of PDB format).
+"""Represent the NDB Atlas structure (a minimal subset of PDB format).
 
 Hetero, Crystal and Chain exist to represent the NDB Atlas structure.  Atlas
 is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
-The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
+The NDB web interface is located at http://ndbserver.rutgers.edu
 """
 
 import copy
@@ -17,14 +16,15 @@ from functools import reduce
 from Bio._py3k import map
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"
-
 
 class CrystalError(Exception):
+    """Class to manage errors."""
+
     pass
 
 
 def wrap_line(line):
+    """Add end of line at character eighty, to match PDB record standard."""
     output = ''
     for i in range(0, len(line), 80):
         output += '%s\n' % line[i: i + 80]
@@ -32,6 +32,7 @@ def wrap_line(line):
 
 
 def validate_key(key):
+    """Check if key is a string and has at least one character."""
     if not isinstance(key, str):
         raise CrystalError('chain requires a string label')
     if len(key) != 1:
@@ -39,17 +40,19 @@ def validate_key(key):
 
 
 class Hetero(object):
-    """This class exists to support the PDB hetero codes.
+    """Class to support the PDB hetero codes.
 
-    Supports only the 3 alphameric code.
-    The annotation is available from http://alpha2.bmc.uu.se/hicup/
+    Supports only the 3 alphanumeric code.
+    The annotation is available from http://xray.bmc.uu.se/hicup/
     """
+
     def __init__(self, data):
+        """Initialize the class."""
         # Enforce string storage
         if not isinstance(data, str):
-            raise CrystalError('Hetero data must be an alphameric string')
+            raise CrystalError('Hetero data must be an alphanumeric string')
         if data.isalnum() == 0:
-            raise CrystalError('Hetero data must be an alphameric string')
+            raise CrystalError('Hetero data must be an alphanumeric string')
         if len(data) > 3:
             raise CrystalError('Hetero data may contain up to 3 characters')
         if len(data) < 1:
@@ -61,7 +64,7 @@ class Hetero(object):
         return self.data == other.data
 
     def __ne__(self, other):
-        """Returns true iff self is not equal to other."""
+        """Return true iff self is not equal to other."""
         return not self.__eq__(other)
 
     def __repr__(self):
@@ -75,9 +78,10 @@ class Hetero(object):
 
 
 class Chain(object):
-    """This class represents a sequence of Hetero elements."""
+    """Class representing a sequence of Hetero elements."""
 
     def __init__(self, residues=''):
+        """Initialize the class."""
         self.data = []
         if isinstance(residues, str):
             residues = residues.replace('*', ' ')
@@ -96,11 +100,13 @@ class Chain(object):
         self.validate()
 
     def validate(self):
+        """Check all data elements are of type Hetero."""
         data = self.data
         for element in data:
             self.validate_element(element)
 
     def validate_element(self, element):
+        """Check the element is of type Hetero."""
         if not isinstance(element, Hetero):
             raise TypeError
 
@@ -119,7 +125,7 @@ class Chain(object):
         return ok
 
     def __ne__(self, other):
-        """Returns true iff self is not equal to other."""
+        """Return true iff self is not equal to other."""
         return not self.__eq__(other)
 
     def __len__(self):
@@ -163,6 +169,7 @@ class Chain(object):
         return item in self.data
 
     def append(self, item):
+        """Add Hetero element."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -170,6 +177,7 @@ class Chain(object):
         self.data.append(item)
 
     def insert(self, i, item):
+        """Insert Hetero element in position i of the Chain."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -177,10 +185,12 @@ class Chain(object):
         self.data.insert(i, item)
 
     def remove(self, item):
+        """Delete Hetero element."""
         item = Hetero(item.lower())
         self.data.remove(item)
 
     def count(self, item):
+        """Return number of elements in the Chain."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -188,6 +198,7 @@ class Chain(object):
         return self.data.count(item)
 
     def index(self, item):
+        """Find the index of the item."""
         try:
             self.validate_element(item)
         except TypeError:
@@ -224,7 +235,8 @@ class Crystal(object):
     """Represents a dictionary of labeled chains from the same structure."""
 
     def __init__(self, data=None):
-        # Enforcestorage
+        """Initialize the class."""
+        # Enforce storage
         if not isinstance(data, dict):
             raise CrystalError('Crystal must be a dictionary')
         if data is None:
@@ -234,6 +246,10 @@ class Crystal(object):
         self.fix()
 
     def fix(self):
+        """Change element of type string to type Chain.
+
+        All elements of Crystal shall be Chain.
+        """
         data = self.data
         for key in data:
             element = data[key]
@@ -257,6 +273,7 @@ class Crystal(object):
         return output
 
     def tostring(self):
+        """Return Chains and correspondent Heteros."""
         return self.data
 
     def __len__(self):
@@ -277,33 +294,42 @@ class Crystal(object):
         del self.data[key]
 
     def clear(self):
+        """Empty the data."""
         self.data.clear()
 
     def copy(self):
+        """Copy the Crystal object."""
         return copy.copy(self)
 
     def keys(self):
+        """Return all Chain labels."""
         return self.data.keys()
 
     def items(self):
+        """Return all tuples (Chain label, Hetero)."""
         return self.data.items()
 
     def values(self):
+        """Return all Hetero in the Chains."""
         return self.data.values()
 
     def __contains__(self, value):
         return value in self.data
 
     def has_key(self, key):
+        """Return true if the Chain Label is in the dictionary."""
         return key in self.data
 
     def get(self, key, failobj=None):
+        """Return Hetero for the given Chain Label."""
         return self.data.get(key, failobj)
 
     def setdefault(self, key, failobj=None):
+        """Return Hetero for the given Chain Label, if Chain Label is not there add it."""
         if key not in self.data:
             self.data[key] = failobj
         return self.data[key]
 
     def popitem(self):
+        """Return and delete a Chain."""
         return self.data.popitem()

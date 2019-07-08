@@ -1,32 +1,36 @@
 #!/usr/bin/env python
-# Created: Sun Oct 15 16:16:20 2000
-# Last changed: Time-stamp: <01/02/15 09:01:27 thomas>
-# thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: getgene.py
+# Copyright 2000 Thomas Hamelryck.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-""" Example code to index a non-reduntant protein database of
-    SwissProt + TrEMBL for fast lookup and retrieval.
+"""Example indexing plain text SwissProt files.
 
-    To build the database and index it:
-        cd /opt/bio/data/
-        wget -N -nd -r -l1 -A'.dat.Z' ftp://expasy.cbr.nrc.ca/databases/sp_tr_nrdb/
-        zcat *.dat.Z > nr.dat
-        ./getgene.py --index nr.dat
-        setenv PYPHY '/opt/bio/data'
+Example code to index a non-reduntant protein database of
+SwissProt + TrEMBL for fast lookup and retrieval.
 
-    To retrieve entries from the command line:
+To build the database and index it::
+
+    cd /opt/bio/data/
+    wget -N -nd -r -l1 -A'.dat.Z' ftp://expasy.cbr.nrc.ca/databases/sp_tr_nrdb/
+    zcat *.dat.Z > nr.dat
+    ./getgene.py --index nr.dat
+    setenv PYPHY '/opt/bio/data'
+
+To retrieve entries from the command line::
+
     ./getgene.py EFTU_ECOLI
 
-    To use from a python script:
+To use from a python script::
+
     from getgene import DB_Index
-
     db_index = DB_Index()
-
     # retrieve a complete entry:
     db_index.Get('EFTU_ECOLI')
-
     # get organism, lineage and gene
     db_index.Get_OS_OC_GN('EFTU_ECOLI')
+
 """
 
 from __future__ import print_function
@@ -42,46 +46,54 @@ except ImportError:
     from dbm import gnu as gdbm  # Python 3
 
 
-class DB_Index:
-    def __init__(self, open=1):
+class DB_Index(object):
+    """A class to index a SwissProt/TrEMBL database file for fast retrieval."""
+
+    def __init__(self, open=True):
+        """Initialise.
+
+        Optional argument open controls if the index should be opened.
+        """
         if open:
             self.Open()
 
     def Create(self, infile, outfile):
+        """Build the database from file."""
         db = gdbm.open(outfile, 'n')
-        fid = open(infile)
+        with open(infile) as fid:
 
-        db['datafile'] = os.path.abspath(infile)
+            db['datafile'] = os.path.abspath(infile)
 
-        while True:
-            line = fid.readline()
-            if not line or not len(line):
-                break
+            while True:
+                line = fid.readline()
+                if not line or not len(line):
+                    break
 
-            if line[:3] == 'ID ':
-                id = string.split(line)[1]
-                start = fid.tell() - len(line)
+                if line[:3] == 'ID ':
+                    id = string.split(line)[1]
+                    start = fid.tell() - len(line)
 
-            elif line[:3] == 'AC ':
-                acc = string.split(line)[1]
-                if acc[-1] == ';':
-                    acc = acc[:-1]
+                elif line[:3] == 'AC ':
+                    acc = string.split(line)[1]
+                    if acc[-1] == ';':
+                        acc = acc[:-1]
 
-            elif line[:2] == '//':
-                stop = fid.tell()
-                try:
-                    value = '%d %d' % (start, stop)
-                    db[id] = value
-                    db[acc] = value
-                    id, acc, start, stop = None, None, None, None
-                except:
-                    print("AARRGGGG %d %d %s %s" % (start, stop, type(start), type(stop)))
-                    print("%s %s" % (id, acc))
+                elif line[:2] == '//':
+                    stop = fid.tell()
+                    try:
+                        value = '%d %d' % (start, stop)
+                        db[id] = value
+                        db[acc] = value
+                        id, acc, start, stop = None, None, None, None
+                    except Exception:
+                        print("AARRGGGG %d %d %s %s" %
+                              (start, stop, type(start), type(stop)))
+                        print("%s %s" % (id, acc))
 
-        db.close()
-        fid.close()
+            db.close()
 
     def Open(self, indexfile=None):
+        """Open the indexed database file."""
         if not indexfile:
             indexfile = os.path.join(os.environ['PYPHY'], 'nr.dat.indexed')
 
@@ -90,12 +102,14 @@ class DB_Index:
         self.fid = open(self.datafile)
 
     def Close(self):
+        """Close the database."""
         self.db.close()
 
     def Get(self, id):
+        """Retrieve complete entry for given id."""
         try:
             values = self.db[id]
-        except:
+        except Exception:
             return None
         start, stop = [int(x) for x in values.split()]
         self.fid.seek(start)
@@ -103,6 +117,7 @@ class DB_Index:
         return txt
 
     def Get_Organism(self, id):
+        """Retrieve the organism species (OS)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -115,14 +130,16 @@ class DB_Index:
                 return OS
             if line[0:2] == "//":
                 break
-        return OS
+        return None
 
     def FixOS(self, os):
+        """Extract species from organism species field (OS)."""
         os = string.split(os, ',')[0]
         os = string.split(os, '(')[0]
         return string.strip(os)
 
     def Get_Taxonomy(self, id):
+        """Retrieve the organism classification (OC)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -137,8 +154,9 @@ class DB_Index:
         return OC
 
     def Get_Kingdom(self, id):
+        """Retrieve kingdom from OC field and return as single letter code."""
         res = self.Get_Taxonomy(id)
-        #print("%s %s" % (id, res))
+        # print("%s %s" % (id, res))
         if not res:
             return "U"
         kd = string.strip(string.split(res, ";")[0])
@@ -155,6 +173,7 @@ class DB_Index:
             return "U"
 
     def Get_Gene(self, id):
+        """Retreive the gene name (GN)."""
         entry = self.Get(id)
         if not entry:
             return None
@@ -170,6 +189,7 @@ class DB_Index:
         return GN
 
     def Get_OS_OC_GN(self, id):
+        """Retrieve organism species + classification and gene name."""
         entry = self.Get(id)
         if not entry:
             return None, None, None
@@ -192,6 +212,7 @@ class DB_Index:
         return OS, OC, GN
 
     def Get_OS_OC_OG(self, id):
+        """Retreive organism species + classification and organelle."""
         entry = self.Get(id)
         if not entry:
             return None, None, None
@@ -214,6 +235,7 @@ class DB_Index:
         return OS, OC, OG
 
     def Get_SQ(self, id, fasta=1):
+        """Retrieve sequence."""
         entry = self.Get(id)
         if not entry:
             return ""
@@ -233,6 +255,7 @@ class DB_Index:
         return SQ
 
     def Get_XX(self, id, xx):
+        """Retrieve the information with a given line code (e.g. ID, AC)."""
         entry = self.Get(id)
         if not entry:
             return ""
@@ -247,6 +270,7 @@ class DB_Index:
         return XX
 
     def Get_Keywords(self, id):
+        """Retrieve the keywords (KW)."""
         entry = self.Get(id)
         if not entry:
             return []
@@ -265,18 +289,20 @@ class DB_Index:
         return keywords
 
 
-def help(exit=0):
+def usage(exit=0):
+    """Print a short help message."""
     name = os.path.basename(sys.argv[0])
     print('Usage: %s <db> <gene ID>' % name)
     print('  or   %s --index <db.dat>' % name)
     if exit:
         sys.exit(0)
 
+
 if __name__ == '__main__':
-    pyphy_home = os.environ.get('PYPHY', None)
+    pyphy_home = os.environ.get('PYPHY')
 
     if len(sys.argv) == 1:
-        help(exit=1)
+        usage(exit=1)
     db_index = DB_Index(open=0)
     func = db_index.Get
     for arg in sys.argv[1:]:
@@ -292,7 +318,7 @@ if __name__ == '__main__':
             func = getattr(db_index, arg[1:])
 
         elif arg == '-h' or arg == '--help':
-            help(exit=1)
+            usage(exit=1)
 
     db = 'nr.dat'
     if len(sys.argv) == 2:
@@ -302,8 +328,8 @@ if __name__ == '__main__':
         try:
             db = sys.argv[1]
             ids = sys.argv[2:]
-        except:
-            help(exit=1)
+        except Exception:
+            usage(exit=1)
 
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)

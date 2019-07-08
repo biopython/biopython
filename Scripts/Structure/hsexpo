@@ -10,6 +10,9 @@ from optparse import OptionParser
 from Bio.PDB import *
 import sys
 
+__docformat__ = "restructuredtext en"
+
+
 __doc__ = """
 This program calculates solvent exposure for all amino
 acids in a PDB file using 5 different methods:
@@ -25,7 +28,7 @@ See --help for all options.
 """
 
 if len(sys.argv) == 1:
-    print __doc__
+    print(__doc__)
     sys.exit()
 
 # Get the user's options
@@ -102,7 +105,7 @@ elif options.exp == "RDA":
     k = 'EXP_RD_CA'
     format = "%4.1f"
 else:
-    print "ERROR: Unknown option."
+    print("ERROR: Unknown option.")
     sys.exit()
 
 residue_list = Selection.unfold_entities(m, 'R')
@@ -125,7 +128,7 @@ for r in residue_list:
 
         resname = r.get_resname()
 
-        print (("%s %4i %c\t" + format) % (resname, resseq, icode, exposure))
+        print(("%s %4i %c\t" + format) % (resname, resseq, icode, exposure))
     else:
         exposure = 0.0
 

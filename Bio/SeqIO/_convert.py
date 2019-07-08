@@ -1,7 +1,9 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2009-2016 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Optimised sequence conversion code (PRIVATE).
 
 You are not expected to access this module, or any of its code, directly. This
@@ -24,10 +26,9 @@ means that using Bio.SeqIO.convert() may be faster, as well as more convenient.
 All these file format specific optimisations are handled by this (private) module.
 """
 
+from Bio import BiopythonWarning
 from Bio import SeqIO
 # NOTE - Lots of lazy imports further on...
-
-__docformat__ = "restructuredtext en"
 
 
 def _genbank_convert_fasta(in_handle, out_handle, alphabet=None):
@@ -79,7 +80,7 @@ def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg)
         if truncate_char in qual:
             qual = qual.replace(truncate_char, chr(126))
             import warnings
-            warnings.warn(truncate_msg)
+            warnings.warn(truncate_msg, BiopythonWarning)
         out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
     return count
 
@@ -94,9 +95,9 @@ def _fastq_sanger_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     conversion.
     """
     # Map unexpected chars to null
-    mapping = "".join([chr(0) for ascii in range(0, 33)]
-                      + [chr(ascii) for ascii in range(33, 127)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 33)] +
+                      [chr(ascii) for ascii in range(33, 127)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -110,9 +111,9 @@ def _fastq_solexa_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
     conversion.
     """
     # Map unexpected chars to null
-    mapping = "".join([chr(0) for ascii in range(0, 59)]
-                      + [chr(ascii) for ascii in range(59, 127)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 59)] +
+                      [chr(ascii) for ascii in range(59, 127)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -126,9 +127,9 @@ def _fastq_illumina_convert_fastq_illumina(in_handle, out_handle, alphabet=None)
     conversion.
     """
     # Map unexpected chars to null
-    mapping = "".join([chr(0) for ascii in range(0, 64)]
-                      + [chr(ascii) for ascii in range(64, 127)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 64)] +
+                      [chr(ascii) for ascii in range(64, 127)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -140,9 +141,9 @@ def _fastq_illumina_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     conversion.
     """
     # Map unexpected chars to null
-    mapping = "".join([chr(0) for ascii in range(0, 64)]
-                      + [chr(33 + q) for q in range(0, 62 + 1)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 64)] +
+                      [chr(33 + q) for q in range(0, 62 + 1)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -156,10 +157,10 @@ def _fastq_sanger_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
     """
     # Map unexpected chars to null
     trunc_char = chr(1)
-    mapping = "".join([chr(0) for ascii in range(0, 33)]
-                      + [chr(64 + q) for q in range(0, 62 + 1)]
-                      + [trunc_char for ascii in range(96, 127)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 33)] +
+                      [chr(64 + q) for q in range(0, 62 + 1)] +
+                      [trunc_char for ascii in range(96, 127)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic2(in_handle, out_handle, mapping, trunc_char,
                            "Data loss - max PHRED quality 62 in Illumina 1.3+ FASTQ")
@@ -173,10 +174,10 @@ def _fastq_solexa_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     """
     # Map unexpected chars to null
     from Bio.SeqIO.QualityIO import phred_quality_from_solexa
-    mapping = "".join([chr(0) for ascii in range(0, 59)]
-                      + [chr(33 + int(round(phred_quality_from_solexa(q))))
-                         for q in range(-5, 62 + 1)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 59)] +
+                      [chr(33 + int(round(phred_quality_from_solexa(q))))
+                       for q in range(-5, 62 + 1)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -191,11 +192,11 @@ def _fastq_sanger_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
     # Map unexpected chars to null
     from Bio.SeqIO.QualityIO import solexa_quality_from_phred
     trunc_char = chr(1)
-    mapping = "".join([chr(0) for ascii in range(0, 33)]
-                      + [chr(64 + int(round(solexa_quality_from_phred(q))))
-                         for q in range(0, 62 + 1)]
-                      + [trunc_char for ascii in range(96, 127)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 33)] +
+                      [chr(64 + int(round(solexa_quality_from_phred(q))))
+                       for q in range(0, 62 + 1)] +
+                      [trunc_char for ascii in range(96, 127)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic2(in_handle, out_handle, mapping, trunc_char,
                            "Data loss - max Solexa quality 62 in Solexa FASTQ")
@@ -209,10 +210,10 @@ def _fastq_solexa_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
     """
     # Map unexpected chars to null
     from Bio.SeqIO.QualityIO import phred_quality_from_solexa
-    mapping = "".join([chr(0) for ascii in range(0, 59)]
-                      + [chr(64 + int(round(phred_quality_from_solexa(q))))
-                         for q in range(-5, 62 + 1)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 59)] +
+                      [chr(64 + int(round(phred_quality_from_solexa(q))))
+                       for q in range(-5, 62 + 1)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -225,11 +226,10 @@ def _fastq_illumina_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
     """
     # Map unexpected chars to null
     from Bio.SeqIO.QualityIO import solexa_quality_from_phred
-    trunc_char = chr(1)
-    mapping = "".join([chr(0) for ascii in range(0, 64)]
-                      + [chr(64 + int(round(solexa_quality_from_phred(q))))
-                         for q in range(0, 62 + 1)]
-                      + [chr(0) for ascii in range(127, 256)])
+    mapping = "".join([chr(0) for ascii in range(0, 64)] +
+                      [chr(64 + int(round(solexa_quality_from_phred(q))))
+                       for q in range(0, 62 + 1)] +
+                      [chr(0) for ascii in range(127, 256)])
     assert len(mapping) == 256
     return _fastq_generic(in_handle, out_handle, mapping)
 
@@ -310,21 +310,21 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
 
 def _fastq_sanger_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = dict((chr(q + 33), str(q)) for q in range(0, 93 + 1))
+    mapping = {chr(q + 33): str(q) for q in range(0, 93 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
 def _fastq_solexa_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
     from Bio.SeqIO.QualityIO import phred_quality_from_solexa
-    mapping = dict((chr(q + 64), str(int(round(phred_quality_from_solexa(q)))))
-                   for q in range(-5, 62 + 1))
+    mapping = {chr(q + 64): str(int(round(phred_quality_from_solexa(q))))
+               for q in range(-5, 62 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
 def _fastq_illumina_convert_qual(in_handle, out_handle, alphabet=None):
     """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
-    mapping = dict((chr(q + 64), str(q)) for q in range(0, 62 + 1))
+    mapping = {chr(q + 64): str(q) for q in range(0, 62 + 1)}
     return _fastq_convert_qual(in_handle, out_handle, mapping)
 
 
@@ -365,7 +365,7 @@ _converter = {
 
 
 def _handle_convert(in_handle, in_format, out_handle, out_format, alphabet=None):
-    """SeqIO conversion function (PRIVATE)."""
+    """Convert handles from one format to another (PRIVATE)."""
     try:
         f = _converter[(in_format, out_format)]
     except KeyError:

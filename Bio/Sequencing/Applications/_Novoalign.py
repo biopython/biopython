@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-import types
 from Bio.Application import _Option, AbstractCommandline
 
 
@@ -16,8 +15,8 @@ class NovoalignCommandline(AbstractCommandline):
 
     See www.novocraft.com - novoalign is a short read alignment program.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.Sequencing.Applications import NovoalignCommandline
     >>> novoalign_cline = NovoalignCommandline(database='some_db',
     ...                                        readfile='some_seq.txt')
@@ -38,15 +37,16 @@ class NovoalignCommandline(AbstractCommandline):
     the Python subprocess module, as described in the Biopython tutorial.
 
     Last checked against version: 2.05.04
-    """
-    def __init__(self, cmd="novoalign", **kwargs):
 
+    """
+
+    def __init__(self, cmd="novoalign", **kwargs):
+        """Initialize the class."""
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']
 
-        self.parameters = \
-           [
+        self.parameters = [
             _Option(["-d", "database"],
                     "database filename",
                     filename=True,
@@ -177,12 +177,6 @@ class NovoalignCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running Novoalign doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

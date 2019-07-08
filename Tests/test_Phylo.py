@@ -81,10 +81,10 @@ class IOTests(unittest.TestCase):
         # Sanity check
         self.assertEqual(tree2.count_terminals(), 4)
         # Check internal node labels were retained
-        internal_names = set(c.name
-                for c in tree2.get_nonterminals()
-                if c is not None)
-        self.assertEqual(internal_names, set(('E', 'F')))
+        internal_names = {c.name
+                          for c in tree2.get_nonterminals()
+                          if c is not None}
+        self.assertEqual(internal_names, {'E', 'F'})
 
     def test_newick_read_scinot(self):
         """Parse Newick branch lengths in scientific notation."""
@@ -92,6 +92,34 @@ class IOTests(unittest.TestCase):
         clade_a = tree.clade[0]
         self.assertEqual(clade_a.name, 'foo')
         self.assertAlmostEqual(clade_a.branch_length, 0.1)
+
+    def test_phylo_read_extra(self):
+        """Additional tests to check correct parsing."""
+        tree = Phylo.read(StringIO("(A:1, B:-2, (C:3, D:4):-2)"), 'newick')
+        self.assertEqual(tree.distance('A'), 1)
+        self.assertEqual(tree.distance('B'), -2)
+        self.assertEqual(tree.distance('C'), 1)
+        self.assertEqual(tree.distance('D'), 2)
+
+        tree = Phylo.read(StringIO("((A:1, B:-2):-5, (C:3, D:4):-2)"), 'newick')
+        self.assertEqual(tree.distance('A'), -4)
+        self.assertEqual(tree.distance('B'), -7)
+        self.assertEqual(tree.distance('C'), 1)
+        self.assertEqual(tree.distance('D'), 2)
+
+        tree = Phylo.read(StringIO("((:1, B:-2):-5, (C:3, D:4):-2)"), 'newick')
+        distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
+        for x in tree.get_terminals():
+            entry = int(tree.distance(x))
+            distances[entry] -= distances[entry]
+            self.assertEqual(distances[entry], 0)
+
+        tree = Phylo.read(StringIO("((:\n1\n,\n B:-2):-5, (C:3, D:4):-2);"), 'newick')
+        distances = {-4.0: 1, -7.0: 1, 1: 1, 2: 1}
+        for x in tree.get_terminals():
+            entry = int(tree.distance(x))
+            distances[entry] -= distances[entry]
+            self.assertEqual(distances[entry], 0)
 
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
@@ -147,12 +175,13 @@ class IOTests(unittest.TestCase):
         """Read newick formatted tree with numeric labels."""
         tree = Phylo.read(StringIO('(((0:0.1,1:0.1)0.99:0.1,2:0.1)0.98:0.0);'),
                           'newick')
-        self.assertEqual(set(leaf.name for leaf in tree.get_terminals()),
-                         set(['0', '1', '2']))
+        self.assertEqual({leaf.name for leaf in tree.get_terminals()},
+                         {'0', '1', '2'})
 
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+
     def test_randomized(self):
         """Tree.randomized: generate a new randomized tree."""
         for N in (2, 5, 20):
@@ -182,7 +211,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         tree.root_with_outgroup('36_BRAFL', '37_BRAFL',
-                outgroup_branch_length=0.5)
+                                outgroup_branch_length=0.5)
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         # On small contrived trees, testing edge cases
@@ -204,7 +233,7 @@ class TreeTests(unittest.TestCase):
         for treefname, fmt in [(EX_APAF, 'phyloxml'),
                                (EX_BCL2, 'phyloxml'),
                                (EX_NEWICK, 'newick'),
-                              ]:
+                               ]:
             tree = Phylo.read(treefname, fmt)
             orig_tree_len = tree.total_branch_length()
             # Total branch length does not change
@@ -232,6 +261,7 @@ class TreeTests(unittest.TestCase):
 
 class MixinTests(unittest.TestCase):
     """Tests for TreeMixin methods."""
+
     def setUp(self):
         self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
@@ -249,7 +279,7 @@ class MixinTests(unittest.TestCase):
         # Iteration and regexps
         tree = self.phylogenies[10]
         for point, alt in zip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
-                               (472, 10, 452)):
+                              (472, 10, 452)):
             self.assertTrue(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
@@ -275,7 +305,7 @@ class MixinTests(unittest.TestCase):
         """TreeMixin: find_clades() method."""
         # boolean filter
         for clade, name in zip(self.phylogenies[10].find_clades(name=True),
-                                list('ABCD')):
+                               list('ABCD')):
             self.assertTrue(isinstance(clade, PhyloXML.Clade))
             self.assertEqual(clade.name, name)
         # finding deeper attributes
@@ -353,7 +383,7 @@ class MixinTests(unittest.TestCase):
     def test_is_bifurcating(self):
         """TreeMixin: is_bifurcating() method."""
         for tree, is_b in zip(self.phylogenies,
-                (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
+                              (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
             self.assertEqual(tree.is_bifurcating(), is_b)
 
     def test_is_monophyletic(self):
@@ -384,8 +414,8 @@ class MixinTests(unittest.TestCase):
         parent = tree.collapse(tree.clade[0])
         self.assertEqual(len(parent), 3)
         for clade, name, blength in zip(parent,
-                ('C', 'A', 'B'),
-                (0.4, 0.162, 0.29)):
+                                        ('C', 'A', 'B'),
+                                        (0.4, 0.162, 0.29)):
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blength)
 
@@ -405,7 +435,7 @@ class MixinTests(unittest.TestCase):
         tree = Phylo.read(EX_APAF, 'phyloxml')
         d1 = tree.depths()
         internal_node_ct = len(tree.get_nonterminals())
-        tree.collapse_all(lambda c: c.branch_length < 0.1)
+        tree.collapse_all(lambda c: c.branch_length < 0.1)  # noqa: E731
         d2 = tree.depths()
         # Should have collapsed 7 internal nodes
         self.assertEqual(len(tree.get_nonterminals()), internal_node_ct - 7)
@@ -467,8 +497,8 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 6)
         self.assertEqual(len(tree.get_nonterminals()), 4)
         for clade, name, blen in zip(C[0],
-                ('C00', 'C01', 'C02'),
-                (0.5, 0.5, 0.5)):
+                                     ('C00', 'C01', 'C02'),
+                                     (0.5, 0.5, 0.5)):
             self.assertTrue(clade.is_terminal())
             self.assertEqual(clade.name, name)
             self.assertEqual(clade.branch_length, blen)

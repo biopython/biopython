@@ -9,14 +9,8 @@
 import os
 import unittest
 
-from Bio import BiopythonExperimentalWarning
+from Bio.SearchIO import parse
 
-import warnings
-
-
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'
@@ -24,15 +18,15 @@ FMT = 'hmmer3-tab'
 
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
 class HmmscanCases(unittest.TestCase):
+    """Test parsing hmmscan output."""
 
     def test_31b1_hmmscan_001(self):
-        """Test parsing hmmer3-tab, hmmscan 3.1b1, multiple queries (tab_31b1_hmmscan_001)"""
-
+        """Test parsing hmmer3-tab, hmmscan 3.1b1, multiple queries (tab_31b1_hmmscan_001)."""
         tab_file = get_file('tab_31b1_hmmscan_001.out')
         qresults = list(parse(tab_file, FMT))
         self.assertEqual(4, len(qresults))
@@ -90,8 +84,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(0.1, hsp.bias)
 
     def test_30_hmmscan_001(self):
-        "Test parsing hmmer3-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)"
-
+        """Test parsing hmmer3-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)."""
         tab_file = get_file('tab_30_hmmscan_001.out')
         qresults = parse(tab_file, FMT)
         counter = 0
@@ -334,16 +327,14 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(4, counter)
 
     def test_30_hmmscan_002(self):
-        "Test parsing hmmer3-tab, hmmscan 3.0, single query, no hits (tab_30_hmmscan_002)"
-
+        """Test parsing hmmer3-tab, hmmscan 3.0, single query, no hits (tab_30_hmmscan_002)."""
         tab_file = get_file('tab_30_hmmscan_002.out')
         qresults = parse(tab_file, FMT)
 
         self.assertRaises(StopIteration, next, qresults)
 
     def test_30_hmmscan_003(self):
-        "Test parsing hmmer3-tab, hmmscan 3.0, single query, single hit, single hsp (tab_30_hmmscan_003)"
-
+        """Test parsing hmmer3-tab, hmmscan 3.0, single query, single hit, single hsp (tab_30_hmmscan_003)."""
         tab_file = get_file('tab_30_hmmscan_003.out')
         qresults = parse(tab_file, FMT)
         counter = 0
@@ -379,8 +370,7 @@ class HmmscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
-        "Test parsing hmmer3-tab, hmmscan 3.0, single query, multiple hits (tab_30_hmmscan_004)"
-
+        """Test parsing hmmer3-tab, hmmscan 3.0, single query, multiple hits (tab_30_hmmscan_004)."""
         tab_file = get_file('tab_30_hmmscan_004.out')
         qresults = parse(tab_file, FMT)
         counter = 0
@@ -437,10 +427,10 @@ class HmmscanCases(unittest.TestCase):
 
 
 class HmmsearchCases(unittest.TestCase):
+    """Tests for hmmsearch output."""
 
     def test_31b1_hmmsearch_001(self):
-        """Test parsing hmmer3-tab, hmmsearch 3.1b1, multiple queries (tab_31b1_hmmscan_001)"""
-
+        """Test parsing hmmer3-tab, hmmsearch 3.1b1, multiple queries (tab_31b1_hmmscan_001)."""
         tab_file = get_file('tab_31b1_hmmsearch_001.out')
         qresults = list(parse(tab_file, FMT))
         self.assertEqual(1, len(qresults))

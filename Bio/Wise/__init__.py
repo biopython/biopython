@@ -1,15 +1,19 @@
 #!/usr/bin/env python
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-#
-# Bio.Wise contains modules for running and processing the output of
-# some of the models in the Wise2 package by Ewan Birney available from:
-# ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
-# http://www.ebi.ac.uk/Wise2/
-#
-# Bio.Wise.psw is for protein Smith-Waterman alignments
-# Bio.Wise.dnal is for Smith-Waterman DNA alignments
+# Copyright 2004-2005 by Michael Hoffman. All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Run and process output from the Wise2 package tools.
+
+Bio.Wise contains modules for running and processing the output of
+some of the models in the Wise2 package by Ewan Birney available from:
+ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
+http://www.ebi.ac.uk/Wise2/
+
+Bio.Wise.psw is for protein Smith-Waterman alignments
+Bio.Wise.dnal is for Smith-Waterman DNA alignments
+"""
 
 from __future__ import print_function
 
@@ -21,7 +25,7 @@ from Bio import SeqIO
 
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
-    """Helper function to build a command line string (PRIVATE).
+    """Build a command line string (PRIVATE).
 
     >>> os.environ["WISE_KBYTE"]="300000"
     >>> if os.isatty(sys.stderr.fileno()):
@@ -59,15 +63,11 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     cmdline.extend((">", output_filename))
     if quiet:
         cmdline.extend(("2>", "/dev/null"))
-    cmdline_str = ' '.join(cmdline)
-
-    return cmdline_str
+    return ' '.join(cmdline)
 
 
 def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
-    """
-    Returns a filehandle
-    """
+    """Run an alignment. Returns a filehandle."""
     if not pair or len(pair) != 2:
         raise ValueError("Expected pair of filename, not %s" % repr(pair))
 
@@ -106,7 +106,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     status = os.system(cmdline_str) >> 8
 
     if status > 1:
-        if kbyte != 0: # possible memory problem; could be None
+        if kbyte != 0:  # possible memory problem; could be None
             sys.stderr.write("INFO trying again with the linear model\n")
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
@@ -116,8 +116,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
 
 
 def all_pairs(singles):
-    """
-    Generate pairs list for all-against-all alignments
+    """Generate pairs list for all-against-all alignments.
 
     >>> all_pairs(range(4))
     [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
@@ -126,19 +125,21 @@ def all_pairs(singles):
 
     singles = list(singles)
     while singles:
-        suitor = singles.pop(0) # if sorted, stay sorted
+        suitor = singles.pop(0)  # if sorted, stay sorted
         pairs.extend((suitor, single) for single in singles)
 
     return pairs
 
 
 def main():
+    """Provision for command line testing."""
     pass
 
 
 def _test(*args, **keywds):
     import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
+
 
 if __name__ == "__main__":
     if __debug__:

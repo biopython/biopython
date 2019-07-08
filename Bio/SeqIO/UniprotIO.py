@@ -1,5 +1,5 @@
 # Copyright 2010 by Andrea Pierleoni
-# Revisions copyright 2010 by Peter Cock
+# Revisions copyright 2010, 2016 by Peter Cock
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -8,12 +8,12 @@
 
 """Bio.SeqIO support for the "uniprot-xml" file format.
 
-See also:
-
+See Also:
 http://www.uniprot.org
 
 The UniProt XML format essentially replaces the old plain text file format
 originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
+
 """
 import sys
 
@@ -22,8 +22,6 @@ from Bio import SeqFeature
 from Bio import Alphabet
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import StringIO
-
-__docformat__ = "restructuredtext en"
 
 
 # For speed try to use cElementTree rather than ElementTree
@@ -41,8 +39,8 @@ NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
 
-def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
-    """Generator function to parse UniProt XML as SeqRecord objects.
+def UniprotIterator(handle, alphabet=Alphabet.generic_protein, return_raw_comments=False):
+    """Iterate over UniProt XML as SeqRecord objects.
 
     parses an XML entry at a time from any UniProt XML file
     returns a SeqRecord for each iteration
@@ -52,6 +50,10 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
     return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
+    # check if file is empty
+    if handle.readline() == '':
+        raise ValueError("Empty file.")
+
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
         raise ValueError("Wrong alphabet %r" % alphabet)
     if isinstance(alphabet, Alphabet.Gapped):
@@ -60,9 +62,14 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
 
     if not hasattr(handle, "read"):
         if isinstance(handle, str):
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Passing an XML-containing handle is recommended",
+                          BiopythonDeprecationWarning)
             handle = StringIO(handle)
         else:
-            raise Exception('An XML-containing handler or an XML string must be passed')
+            raise TypeError("Requires an XML-containing handle"
+                            " (or XML as a string, but that's deprecated)")
 
     if ElementTree is None:
         from Bio import MissingExternalDependencyError
@@ -83,7 +90,9 @@ class Parser(object):
     return_raw_comments=True to get back the complete comment field in XML format
     alphabet=Alphabet.ProteinAlphabet()    can be modified if needed, default is protein alphabet.
     """
-    def __init__(self, elem, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
+
+    def __init__(self, elem, alphabet=Alphabet.generic_protein, return_raw_comments=False):
+        """Initialize the class."""
         self.entry = elem
         self.alphabet = alphabet
         self.return_raw_comments = return_raw_comments
@@ -110,7 +119,7 @@ class Parser(object):
             """Parse protein names (PRIVATE)."""
             descr_set = False
             for protein_element in element:
-                if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
+                if protein_element.tag in [NS + 'recommendedName', NS + 'submittedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
                     # use protein fields for name and description
                     for rec_name in protein_element:
                         ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''),
@@ -183,37 +192,37 @@ class Parser(object):
             The original XML is returned in the annotation fields.
 
             Available comment types at december 2009:
-                "allergen"
-                "alternative products"
-                "biotechnology"
-                "biophysicochemical properties"
-                "catalytic activity"
-                "caution"
-                "cofactor"
-                "developmental stage"
-                "disease"
-                "domain"
-                "disruption phenotype"
-                "enzyme regulation"
-                "function"
-                "induction"
-                "miscellaneous"
-                "pathway"
-                "pharmaceutical"
-                "polymorphism"
-                "PTM"
-                "RNA editing"
-                "similarity"
-                "subcellular location"
-                "sequence caution"
-                "subunit"
-                "tissue specificity"
-                "toxic dose"
-                "online information"
-                "mass spectrometry"
-                "interaction"
-            """
+             - "allergen"
+             - "alternative products"
+             - "biotechnology"
+             - "biophysicochemical properties"
+             - "catalytic activity"
+             - "caution"
+             - "cofactor"
+             - "developmental stage"
+             - "disease"
+             - "domain"
+             - "disruption phenotype"
+             - "enzyme regulation"
+             - "function"
+             - "induction"
+             - "miscellaneous"
+             - "pathway"
+             - "pharmaceutical"
+             - "polymorphism"
+             - "PTM"
+             - "RNA editing"
+             - "similarity"
+             - "subcellular location"
+             - "sequence caution"
+             - "subunit"
+             - "tissue specificity"
+             - "toxic dose"
+             - "online information"
+             - "mass spectrometry"
+             - "interaction"
 
+            """
             simple_comments = ["allergen",
                                "biotechnology",
                                "biophysicochemical properties",
@@ -273,7 +282,7 @@ class Parser(object):
                         else:
                             start = int(list(loc_element.getiterator(NS + 'begin'))[0].attrib['position']) - 1
                             end = int(list(loc_element.getiterator(NS + 'end'))[0].attrib['position'])
-                    except:  # undefined positions or erroneously mapped
+                    except (ValueError, KeyError):  # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib['mass']
                 method = element.attrib['method']
@@ -361,8 +370,8 @@ class Parser(object):
                             for person_element in cit_element:
                                 authors.append(person_element.attrib['name'])
                         elif cit_element.tag == NS + 'dbReference':
-                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type']
-                                                                + ':' + cit_element.attrib['id'])
+                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type'] +
+                                                                ':' + cit_element.attrib['id'])
                             if cit_element.attrib['type'] == 'PubMed':
                                 reference.pubmed_id = cit_element.attrib['id']
                             elif ref_element.attrib['type'] == 'MEDLINE':
@@ -389,8 +398,11 @@ class Parser(object):
             reference.authors = ', '.join(authors)
             if journal_name:
                 if pub_date and j_volume and j_first and j_last:
-                    reference.journal = REFERENCE_JOURNAL % dict(name=journal_name,
-                        volume=j_volume, first=j_first, last=j_last, pub_date=pub_date)
+                    reference.journal = REFERENCE_JOURNAL % {'name': journal_name,
+                                                             'volume': j_volume,
+                                                             'first': j_first,
+                                                             'last': j_last,
+                                                             'pub_date': pub_date}
                 else:
                     reference.journal = journal_name
             reference.comment = ' | '.join((pub_type, pub_date, scopes_str, tissues_str))
@@ -439,7 +451,7 @@ class Parser(object):
                 else:
                     try:
                         feature.qualifiers[feature_element.tag.replace(NS, '')] = feature_element.text
-                    except:
+                    except Exception:  # TODO - Which exceptions?
                         pass  # skip unparsable tag
             self.ParsedSeqRecord.features.append(feature)
 

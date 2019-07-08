@@ -1,32 +1,30 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-"""Code to parse the keywlist.txt file from SwissProt/UniProt
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Code to parse the keywlist.txt file from SwissProt/UniProt.
 
 See:
-http://www.expasy.ch/sprot/sprot-top.html
-ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/docs/keywlist.txt
+ - https://www.uniprot.org/docs/keywlist
+ - https://www.uniprot.org/docs/keywlist.txt
 
 Classes:
-
-    - Record            Stores the information about one keyword or one category
-      in the keywlist.txt file.
+ - Record            Stores the information about one keyword or one category
+   in the keywlist.txt file.
 
 Functions:
+ - parse             Parses the keywlist.txt file and returns an iterator to
+   the records it contains.
 
-    - parse             Parses the keywlist.txt file and returns an iterator to
-      the records it contains.
 """
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 
 class Record(dict):
-    """
+    """Store information of one keyword or category from the keywords list.
+
     This record stores the information of one keyword or category in the
     keywlist.txt as a Python dictionary. The keys in this dictionary are
     the line codes that can appear in the keywlist.txt file::
@@ -44,14 +42,22 @@ class Record(dict):
         WW         Relevant WWW site               Optional; once or more
         CA         Category                        Once per keyword entry; absent
                                                    in category entries
+
     """
+
     def __init__(self):
+        """Initialize the class."""
         dict.__init__(self)
         for keyword in ("DE", "SY", "GO", "HI", "WW"):
             self[keyword] = []
 
 
 def parse(handle):
+    """Parse the keyword list from file handle.
+
+    Returns a generator object which yields keyword entries as
+    Bio.SwissProt.KeyWList.Record() object.
+    """
     record = Record()
     # First, skip the header - look for start of a record
     for line in handle:

@@ -1,8 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for Exonerate vulgar output format."""
 
 import re
@@ -13,7 +13,7 @@ from Bio._py3k import zip
 from ._base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
 
 
-__all__ = ['ExonerateVulgarParser', 'ExonerateVulgarIndexer']
+__all__ = ('ExonerateVulgarParser', 'ExonerateVulgarIndexer')
 
 
 # precompile regex
@@ -32,16 +32,21 @@ _RE_VCOMP = re.compile(r"""
 
 
 def parse_vulgar_comp(hsp, vulgar_comp):
-    """Parses the vulgar components present in the hsp dictionary."""
+    """Parse the vulgar components present in the hsp dictionary."""
     # containers for block coordinates
-    qstarts, qends, hstarts, hends = \
-            [hsp['query_start']], [], [hsp['hit_start']], []
+    qstarts = [hsp['query_start']]
+    qends = []
+    hstarts = [hsp['hit_start']]
+    hends = []
     # containers for split codons
-    hsp['query_split_codons'], hsp['hit_split_codons'] = [], []
+    hsp['query_split_codons'] = []
+    hsp['hit_split_codons'] = []
     # containers for ner blocks
-    hsp['query_ner_ranges'], hsp['hit_ner_ranges'] = [], []
+    hsp['query_ner_ranges'] = []
+    hsp['hit_ner_ranges'] = []
     # sentinels for tracking query and hit positions
-    qpos, hpos = hsp['query_start'], hsp['hit_start']
+    qpos = hsp['query_start']
+    hpos = hsp['hit_start']
     # multiplier for determining sentinel movement
     qmove = 1 if hsp['query_strand'] >= 0 else -1
     hmove = 1 if hsp['hit_strand'] >= 0 else -1
@@ -55,7 +60,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         if label in 'MCGS':
             # if the previous comp is not an MCGS block, it's the
             # start of a new block
-            if vcomps[idx-1][0] not in 'MCGS':
+            if vcomps[idx - 1][0] not in 'MCGS':
                 qstarts.append(qpos)
                 hstarts.append(hpos)
         # other labels
@@ -84,10 +89,10 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
         # append to ends if the next comp is not an MCGS block or
         # if it's the last comp
-        if idx == len(vcomps)-1 or \
-                (label in 'MCGS' and vcomps[idx+1][0] not in 'MCGS'):
-                qends.append(qpos)
-                hends.append(hpos)
+        if idx == len(vcomps) - 1 or \
+                (label in 'MCGS' and vcomps[idx + 1][0] not in 'MCGS'):
+            qends.append(qpos)
+            hends.append(hpos)
 
     # adjust coordinates
     for seq_type in ('query_', 'hit_'):
@@ -109,12 +114,12 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
 
 class ExonerateVulgarParser(_BaseExonerateParser):
-
     """Parser for Exonerate vulgar strings."""
 
     _ALN_MARK = 'vulgar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for vulgar format, return query results, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']
@@ -162,14 +167,13 @@ class ExonerateVulgarParser(_BaseExonerateParser):
 
 
 class ExonerateVulgarIndexer(_BaseExonerateIndexer):
-
     """Indexer class for exonerate vulgar lines."""
 
     _parser = ExonerateVulgarParser
     _query_mark = _as_bytes('vulgar')
 
     def get_qresult_id(self, pos):
-        """Returns the query ID of the nearest vulgar line."""
+        """Return the query ID of the nearest vulgar line."""
         handle = self._handle
         handle.seek(pos)
         # get line, check if it's a vulgar line, and get query ID
@@ -179,7 +183,7 @@ class ExonerateVulgarIndexer(_BaseExonerateIndexer):
         return id.group(1)
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Return the raw bytes string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
         qresult_key = None

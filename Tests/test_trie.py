@@ -4,19 +4,30 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for trie module."""
+
+import random
+import tempfile
 import unittest
+from string import ascii_lowercase
 from io import BytesIO
 
-try:
-    from Bio import trie
-except ImportError:
-    import os
-    from Bio import MissingPythonDependencyError
-    if os.name=="java":
-        message = "Not available on Jython, Bio.trie requires compiled C code."
-    else:
-        message = "Could not import Bio.trie, check C code was compiled."
-    raise MissingPythonDependencyError(message)
+import warnings
+from Bio import BiopythonDeprecationWarning
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    warnings.simplefilter('ignore', RuntimeWarning)  # for the trie module
+    try:
+        from Bio import trie
+        from Bio import triefind
+    except ImportError:
+        import os
+        from Bio import MissingPythonDependencyError
+        if os.name == "java":
+            message = "Not available on Jython, Bio.trie requires compiled C code."
+        else:
+            message = "Could not import Bio.trie, check C code was compiled."
+        raise MissingPythonDependencyError(message)
 
 
 class TestTrie(unittest.TestCase):
@@ -48,8 +59,8 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(k, ["foo", "he", "hej", "hello"])
         self.assertEqual(trieobj["hello"], 5)
         self.assertEqual(trieobj.get("bye"), None)
-        self.assertTrue("hello" in trieobj)
-        self.assertTrue("he" in trieobj)
+        self.assertIn("hello", trieobj)
+        self.assertIn("he", trieobj)
         self.assertFalse("bye" in trieobj)
         self.assertTrue(trieobj.has_prefix("h"))
         self.assertTrue(trieobj.has_prefix("hel"))
@@ -96,8 +107,8 @@ class TestTrie(unittest.TestCase):
         h.seek(0)
         trieobj = trie.load(h)
         k = list(trieobj.keys())
-        self.assertTrue("foo" in k)
-        self.assertTrue("hello" in k)
+        self.assertIn("foo", k)
+        self.assertIn("hello", k)
         self.assertEqual(repr(trieobj["foo"]), '1')
         self.assertEqual(repr(trieobj["hello"]), "'55a'")
 
@@ -118,22 +129,48 @@ class TestTrie(unittest.TestCase):
             trieobj[s[i:]] = i
             self.assertEqual(trieobj[s[i:]], i)
         self.assertEqual(set(trieobj.values()), set(range(6)))
-        self.assertEqual(set(['A', 'ANA', 'ANANA', 'BANANA', 'NA', 'NANA']),
+        self.assertEqual({'A', 'ANA', 'ANANA', 'BANANA', 'NA', 'NANA'},
                          set(trieobj.keys()))
-        self.assertEqual(set(['NA', 'NANA']),
+        self.assertEqual({'NA', 'NANA'},
                          set(trieobj.with_prefix("N")))
-        self.assertEqual(set(['NA', 'NANA']),
+        self.assertEqual({'NA', 'NANA'},
                          set(trieobj.with_prefix("NA")))
-        self.assertEqual(set(['A', 'ANA', 'ANANA']),
+        self.assertEqual({'A', 'ANA', 'ANANA'},
                          set(trieobj.with_prefix("A")))
-        self.assertEqual(set(['ANA', 'ANANA']),
+        self.assertEqual({'ANA', 'ANANA'},
                          set(trieobj.with_prefix("AN")))
+
+    def test_large_save_load(self):
+        """Generate random key/val pairs in three length categories.
+
+        100 items in each category. Insert them into a trie and into a reference dict.
+        Write the trie to a temp file and read it back, verify that trie entries match
+        the reference dict.
+        """
+        cmp_dict = {}
+        trieobj = trie.trie()
+        self.assertEqual(trieobj.get("foobar"), None)
+        for max_str_len in [100, 1000, 10000]:
+            cmp_dict = {}
+            for i in range(1000):
+                key = ''.join([random.choice(ascii_lowercase) for _ in range(max_str_len)])
+                val = ''.join([random.choice(ascii_lowercase) for _ in range(max_str_len)])
+                trieobj[key] = val
+                cmp_dict[key] = val
+            for key in cmp_dict:
+                self.assertEqual(trieobj[key], cmp_dict[key])
+
+        with tempfile.TemporaryFile(mode='w+b') as f:
+            trie.save(f, trieobj)
+            f.seek(0)
+            trieobj = trie.load(f)
+        for key in cmp_dict:
+            self.assertEqual(trieobj[key], cmp_dict[key])
 
 
 class TestTrieFind(unittest.TestCase):
 
     def test_find(self):
-        from Bio import triefind
         trieobj = trie.trie()
         trieobj["hello"] = 5
         trieobj["he"] = 7

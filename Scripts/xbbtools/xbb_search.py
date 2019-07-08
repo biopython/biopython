@@ -1,34 +1,44 @@
 #!/usr/bin/env python
+# Copyright 2000 by Thomas Sicheritz-Ponten.
+# Copyrigth 2016 by Markus Piotrowski.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 # Created: Sun Dec  3 13:38:52 2000
-# Last changed: Time-stamp: <01/09/04 09:51:21 thomas>
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
-# File: xbb_search.py
 
-import os
+"""Search code for graphical Xbbtools tool."""
+
 import re
-import sys
-sys.path.insert(0, '.')
 
-try:
-    from Tkinter import * # Python 2
-except ImportError:
-    from tkinter import * # Python 3
 
-try:
-    import tkColorChooser as colorchooser # Python 2
-except ImportError:
-    from tkinter import colorchooser # Python 3
+try:  # Python 2
+    import Tkinter as tk
+    import ttk
+    import tkColorChooser as colorchooser
+except ImportError:  # Python 3
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    from tkinter import colorchooser
 
 from Bio.Data.IUPACData import ambiguous_dna_values
 from Bio.Seq import reverse_complement
 
+import xbb_widget
 
-class DNAsearch:
+
+class DNAsearch(object):
+    """Class to search a DNA sequence."""
+
     def __init__(self):
+        """Set up the alphabet."""
         self.init_alphabet()
         self.sequence = ''
 
     def init_alphabet(self):
+        """Expand alphabet values for ambiguous codes."""
         self.alphabet = ambiguous_dna_values
         other = ''.join(self.alphabet)
         self.alphabet['N'] = self.alphabet['N'] + other
@@ -40,14 +50,17 @@ class DNAsearch:
             self.alphabet[key] = self.alphabet[key] + key
 
     def SetSeq(self, seq):
+        """Set sequence."""
         self.sequence = seq
 
     def SetPattern(self, pattern):
+        """Convert search pattern to regular expression."""
         self.pattern = pattern
         self.rx_pattern = self.IUPAC2regex(pattern)
         self.rx = re.compile(self.rx_pattern)
 
     def IUPAC2regex(self, s):
+        """Translate search text into pattern."""
         rx = ''
         for i in s:
             r = self.alphabet.get(i, i)
@@ -58,10 +71,13 @@ class DNAsearch:
         return rx
 
     def _Search(self, start=0):
+        """Search and return MatchObject (PRIVAT)."""
+        # Only called from SearchAll. Is it used?
         pos = self.rx.search(self.sequence, start)
         return pos
 
     def Search(self, start=0):
+        """Search for query sequence and return position."""
         pos = self.rx.search(self.sequence, start)
         if pos:
             return pos.start()
@@ -69,6 +85,8 @@ class DNAsearch:
             return -1
 
     def SearchAll(self):
+        """Search the whole sequence."""
+        # Doesn't seem to be used...
         pos = -1
         positions = []
         while True:
@@ -83,8 +101,11 @@ class DNAsearch:
         return positions
 
 
-class XDNAsearch(Toplevel, DNAsearch):
+class XDNAsearch(tk.Toplevel, DNAsearch):
+    """Graphical tools to perform the DNA search."""
+
     def __init__(self, seq='', master=None, highlight=0):
+        """Initialize the search GUI."""
         DNAsearch.__init__(self)
         self.master = master
         self.highlight = highlight
@@ -94,53 +115,57 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.cur_pos = 0
 
     def init_graphics(self):
-        Toplevel.__init__(self, self.master)
-        self.frame = Frame(self)
-        self.frame.pack(fill=BOTH, expand=1)
+        """Build the search window."""
+        tk.Toplevel.__init__(self, self.master)
+        self.frame = ttk.Frame(self)
+        self.frame.pack(fill=tk.BOTH, expand=1)
 
-        self.search_entry = Entry(self.frame)
-        self.search_entry.pack(fill=BOTH, expand=1)
+        self.search_entry = ttk.Entry(self.frame)
+        self.search_entry.pack(fill=tk.BOTH, expand=1)
 
-        f2 = Frame(self.frame)
-        f2.pack(side=TOP, fill=BOTH, expand=1)
+        f2 = ttk.Frame(self.frame)
+        f2.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         f = f2
-        self.forward = Button(f, text='Search +', command=self.do_search)
-        self.forward.pack(side=LEFT)
-        self.forward = Button(f, text='Search -',
-                              command=lambda x=self.do_search: x(other_strand=1))
-        self.forward.pack(side=LEFT)
-        self.cancel = Button(f, text='Cancel', command=self.exit)
-        self.cancel.pack(side=LEFT)
+        self.forward = ttk.Button(f, text='Search +', command=self.do_search)
+        self.forward.pack(side=tk.LEFT)
+        self.forward = ttk.Button(
+            f, text='Search -',
+            command=lambda x=self.do_search: x(other_strand=1))
+        self.forward.pack(side=tk.LEFT)
+        self.cancel = ttk.Button(f, text='Cancel', command=self.exit)
+        self.cancel.pack(side=tk.LEFT)
         self.current_color = 'cyan'
-        self.colorb = Button(f, text='Color', command=self.change_color, foreground=self.current_color)
-        self.colorb.pack(side=LEFT)
+        self.colorb = ttk.Button(f, text='Color', command=self.change_color)
+        self.colorb.pack(side=tk.LEFT)
         self.config_color(self.current_color)
 
     def config_color(self, color=None):
+        """Set color for found sequence tag."""
         if not self.highlight:
             return
         if not color:
-            try:
-                color = colorchooser.askcolor()[1]
-            except:
+            color = colorchooser.askcolor()[1]
+            if not color:
                 color = 'cyan'
         self.current_color = color
         self.current_tag = 'searched_%s' % self.current_color
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag + 'R', background=self.current_color, underline=1)
+        self.master.tag_config(self.current_tag + 'R',
+                               background=self.current_color, underline=1)
         self.colors.append(color)
 
     def change_color(self):
+        """Call back for color button."""
         self.config_color()
-        self.colorb.configure(foreground=self.current_color)
-        self.colorb.update()
 
     def get_pattern(self):
+        """Retrieve query sequence."""
         pattern = self.search_entry.get()
         return pattern
 
     def do_search(self, other_strand=0):
+        """Start the search."""
         pattern = self.get_pattern()
         if other_strand:
             pattern = reverse_complement(pattern)
@@ -152,25 +177,27 @@ class XDNAsearch(Toplevel, DNAsearch):
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag + 'R', '1.%d' % start, '1.%s' % stop)
+                    w.tag_add(self.current_tag + 'R', '1.%d' % start,
+                              '1.%s' % stop)
                 else:
                     w.tag_add(self.current_tag, '1.%d' % start, '1.%s' % stop)
                 w.see('1.%d' % start)
 
     def exit(self):
+        """Clean up on exit."""
         for c in self.colors:
-            self.master.tag_remove('searched_%s' % c, 1.0, END)
-            self.master.tag_remove('searched_%sR' % c, 1.0, END)
+            self.master.tag_remove('searched_%s' % c, 1.0, tk.END)
+            self.master.tag_remove('searched_%sR' % c, 1.0, tk.END)
         self.destroy()
         del(self)
 
-    def showcolor(self):
-        pass
-
 
 if __name__ == '__main__':
+    win = tk.Tk()
+    xbbtools = xbb_widget.xbb_widget()
+
     seq = 'ATGGTGTGTGTGTACGATCGCCCCCCCCAGTCGATCGATGCATCGTA'
-    win = Tk()
-    xtest = XDNAsearch(seq=seq, master=win)
+    xbbtools.insert_sequence(('Test_seq', seq))
+    xbbtools.search()
 
     win.mainloop()

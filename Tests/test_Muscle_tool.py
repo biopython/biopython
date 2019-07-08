@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for Muscle tool."""
+
 from __future__ import print_function
 from Bio._py3k import _universal_read_mode
 
@@ -23,7 +25,7 @@ from Bio import AlignIO
 os.environ['LANG'] = 'C'
 
 muscle_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     try:
         # This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
@@ -53,7 +55,7 @@ else:
     # Since "not found" may be in another language, try and be sure this is
     # really the MUSCLE tool's output
     if "not found" not in output and "MUSCLE" in output \
-    and "Edgar" in output:
+       and "Edgar" in output:
         muscle_exe = "muscle"
 
 if not muscle_exe:
@@ -85,19 +87,19 @@ class MuscleApplication(unittest.TestCase):
             os.remove(self.outfile4)
 
     def test_Muscle_simple(self):
-        """Simple round-trip through app just infile and outfile"""
+        """Simple round-trip through app just infile and outfile."""
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), _escape_filename(muscle_exe)
-                         + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
+        self.assertEqual(str(cmdline), _escape_filename(muscle_exe) +
+                         ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
 
     def test_Muscle_with_options(self):
-        """Round-trip through app with a switch and valued option"""
+        """Round-trip through app with a switch and valued option."""
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("input", self.infile1)  # "input" is alias for "in"
         cmdline.set_parameter("out", self.outfile2)
@@ -111,11 +113,11 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_simple(self):
-        """Simple round-trip through app doing a profile alignment"""
+        """Simple round-trip through app doing a profile alignment."""
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("out", self.outfile3)
         cmdline.set_parameter("profile", True)
@@ -127,11 +129,11 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(output, "")
-        self.assertTrue("ERROR" not in error)
+        self.assertNotIn("ERROR", error)
         self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_with_options(self):
-        """Profile alignment, and switch and valued options"""
+        """Profile alignment, and switch and valued options."""
         # Using some keyword arguments, note -stable isn't supported in v3.8
         cmdline = MuscleCommandline(muscle_exe, out=self.outfile4,
                                     in1=self.infile2, in2=self.infile3,
@@ -149,13 +151,13 @@ class MuscleApplication(unittest.TestCase):
         #NOTE: generic_run has been removed from Biopython
         self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
-        self.assertTrue("ERROR" not in stderr.read())
+        self.assertNotIn("ERROR", stderr.read())
         self.assertEqual(str(result._cl), str(cmdline))
         """
 
 
 class SimpleAlignTest(unittest.TestCase):
-    """Simple MUSCLE tests"""
+    """Simple MUSCLE tests."""
 
     """
     #FASTA output seems broken on Muscle 3.6 (on the Mac).
@@ -183,11 +185,11 @@ class SimpleAlignTest(unittest.TestCase):
     """
 
     def test_simple_clustal(self):
-        """Simple muscle call using Clustal output with a MUSCLE header"""
+        """Simple muscle call using Clustal output with a MUSCLE header."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file, clw=True)
         self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
@@ -197,7 +199,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()  # by record.id
@@ -213,11 +215,11 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
 
     def test_simple_clustal_strict(self):
-        """Simple muscle call using strict Clustal output"""
+        """Simple muscle call using strict Clustal output."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command...
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("in", input_file)
@@ -230,7 +232,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
@@ -246,7 +248,7 @@ class SimpleAlignTest(unittest.TestCase):
         del child
 
     def test_long(self):
-        """Simple muscle call using long file"""
+        """Simple muscle call using long file."""
         # Create a large input file by converting some of another example file
         temp_large_fasta_file = "temp_cw_prot.fasta"
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
@@ -271,10 +273,10 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -289,7 +291,7 @@ class SimpleAlignTest(unittest.TestCase):
         os.remove(temp_large_fasta_file)
 
     def test_using_stdin(self):
-        """Simple alignment using stdin"""
+        """Simple alignment using stdin."""
         input_file = "Fasta/f002"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
@@ -303,13 +305,13 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         SeqIO.write(records, child.stdin, "fasta")
         child.stdin.close()
         # Alignment will now run...
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -320,13 +322,13 @@ class SimpleAlignTest(unittest.TestCase):
         del child
 
     def test_with_multiple_output_formats(self):
-        """Simple muscle call with multiple output formats"""
+        """Simple muscle call with multiple output formats."""
         input_file = "Fasta/f002"
         output_html = "temp_f002.html"
         output_clwstrict = "temp_f002.clw"
         self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(input_file, "fasta"))
-        records.sort(key=lambda rec: rec.id)
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
         # Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
                                     clw=True, htmlout=output_html,
@@ -339,7 +341,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
+                                 shell=(sys.platform != "win32"))
         # Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")
         align.sort()
@@ -366,6 +368,7 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(old.id, new.id)
         os.remove(output_html)
         os.remove(output_clwstrict)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

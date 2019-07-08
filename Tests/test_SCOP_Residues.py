@@ -3,26 +3,26 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit test for Residues"""
+"""Unit test for Residues."""
 
 import unittest
-from Bio.SCOP.Residues import *
+from Bio.SCOP.Residues import Residues
 
 
 class ResiduesTests(unittest.TestCase):
     res = (
-        ( "-",           () ),
-        ( "A:",          (("A", "", ""),) ),
-        ( "1:",          (("1", "", ""),) ),
-        ( "1-100",       (("", "1", "100"),)  ),
-        ( "B:1-101",     (("B",   "1", "101"),) ),
-        ( "1:1a-100a",   (("1", "1a", "100a"),) ),
-        ( "a:-100a--1a", (("a", "-100a", "-1a"),) ),
-        ( "-1-100",      (("", "-1", "100"),) ),
-        ( "-1-100",      (("", "-1", "100"),) ),
-        ( "A:12-19,A:23-25", (("A", "12", "19"), ("A", "23", "25")) ),
-        ( "12-19,1:23-25", (("", "12", "19"), ("1", "23", "25")) ),
-        ( "0-1,1:-1a-25a,T:", (("", "0", "1"), ("1", "-1a", "25a"), ("T", "", "")) ),
+        ("-", ()),
+        ("A:", (("A", "", ""),)),
+        ("1:", (("1", "", ""),)),
+        ("1-100", (("", "1", "100"),)),
+        ("B:1-101", (("B", "1", "101"),)),
+        ("1:1a-100a", (("1", "1a", "100a"),)),
+        ("a:-100a--1a", (("a", "-100a", "-1a"),)),
+        ("-1-100", (("", "-1", "100"),)),
+        ("-1-100", (("", "-1", "100"),)),
+        ("A:12-19,A:23-25", (("A", "12", "19"), ("A", "23", "25"))),
+        ("12-19,1:23-25", (("", "12", "19"), ("1", "23", "25"))),
+        ("0-1,1:-1a-25a,T:", (("", "0", "1"), ("1", "-1a", "25a"), ("T", "", ""))),
         )
 
     def testParse(self):
@@ -36,21 +36,21 @@ class ResiduesTests(unittest.TestCase):
             self.assertEqual(str(r), loc[0])
 
     def testAstralParse(self):
-        """Test if we can parse residue subsets enclosed in brackets"""
+        """Test if we can parse residue subsets enclosed in brackets."""
         for loc in self.res:
-            r = Residues("("+loc[0]+")")
+            r = Residues("(" + loc[0] + ")")
             self.assertEqual(r.fragments, loc[1])
 
     def testPdbId(self):
-        pdbid ="1ddf"
+        pdbid = "1ddf"
         for loc in self.res:
-            r = Residues("\t 1ddf \t"+loc[0]+"\t\n\n\n")
+            r = Residues("\t 1ddf \t" + loc[0] + "\t\n\n\n")
             self.assertEqual(r.pdbid, pdbid)
-            self.assertEqual(str(r), pdbid+" "+loc[0])
+            self.assertEqual(str(r), pdbid + " " + loc[0])
 
-            r = Residues(pdbid+" "+loc[0])
+            r = Residues(pdbid + " " + loc[0])
             self.assertEqual(r.pdbid, pdbid)
-            self.assertEqual(str(r), pdbid+" "+loc[0])
+            self.assertEqual(str(r), pdbid + " " + loc[0])
 
             r = Residues("104l A:112-113")
             self.assertEqual(r.pdbid, "104l")
@@ -65,6 +65,6 @@ class ResiduesTests(unittest.TestCase):
         self.assertRaises(ValueError, Residues, "09324923423hh./;,.389")
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

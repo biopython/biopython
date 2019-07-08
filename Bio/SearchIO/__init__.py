@@ -1,7 +1,8 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Biopython interface for sequence search program outputs.
 
@@ -187,6 +188,7 @@ Support for parsing and indexing:
 Support for parsing:
 
  - blast-text       - BLAST+ plain text output.
+ - hhsuite2-text    - HHSUITE plain text output.
 
 Each of these formats have different keyword arguments available for use with
 the main SearchIO functions. More details and examples are available in each
@@ -198,22 +200,21 @@ from __future__ import print_function
 from Bio._py3k import basestring
 
 import sys
-import warnings
+from collections import OrderedDict
 
-from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
 
 
-warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
-        'significant changes prior to its future official release.',
-        BiopythonExperimentalWarning)
+if sys.version_info < (3, 6):
+    from collections import OrderedDict as _dict
+else:
+    # Default dict is sorted in Python 3.6 onwards
+    _dict = dict
 
 
-__all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert')
 
 
 # dictionary of supported formats for parse() and read()
@@ -226,6 +227,8 @@ _ITERATOR_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
         'fasta-m10': ('FastaIO', 'FastaM10Parser'),
+        'hhsuite2-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
+        'hhsuite3-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
         'hmmer2-text': ('HmmerIO', 'Hmmer2TextParser'),
         'hmmer3-text': ('HmmerIO', 'Hmmer3TextParser'),
         'hmmer3-tab': ('HmmerIO', 'Hmmer3TabParser'),
@@ -233,6 +236,7 @@ _ITERATOR_MAP = {
         # as we need it distinguish hit / target coordinates
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
         'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        'interproscan-xml': ('InterproscanIO', 'InterproscanXmlParser'),
         'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
 }
 
@@ -266,9 +270,9 @@ _WRITER_MAP = {
 
 
 def parse(handle, format=None, **kwargs):
-    """Turns a search output file into a generator that yields QueryResult
-    objects.
+    """Iterate over search tool output file as QueryResult objects.
 
+    Arguments:
      - handle - Handle to the file, or the filename as a string.
      - format - Lower case string denoting one of the supported formats.
      - kwargs - Format-specific keyword arguments.
@@ -318,7 +322,7 @@ def parse(handle, format=None, **kwargs):
 
 
 def read(handle, format=None, **kwargs):
-    """Turns a search output file containing one query into a single QueryResult.
+    """Turn a search output file containing one query into a single QueryResult.
 
      - handle - Handle to the file, or the filename as a string.
      - format - Lower case string denoting one of the supported formats.
@@ -372,7 +376,7 @@ def read(handle, format=None, **kwargs):
 
 
 def to_dict(qresults, key_function=lambda rec: rec.id):
-    """Turns a QueryResult iterator or list into a dictionary.
+    """Turn a QueryResult iterator or list into a dictionary.
 
      - qresults     - Iterable returning QueryResult objects.
      - key_function - Optional callback function which when given a
@@ -385,8 +389,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> search_dict = SearchIO.to_dict(qresults)
-    >>> sorted(search_dict)
-    ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
+    >>> list(search_dict)
+    ['gi|195230749:301-1383', 'gi|325053704:108-1166', ..., 'gi|53729353:216-1313']
     >>> search_dict['gi|156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -399,8 +403,8 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
     >>> key_func = lambda qresult: qresult.id.split('|')[1]
     >>> search_dict = SearchIO.to_dict(qresults, key_func)
-    >>> sorted(search_dict)
-    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
+    >>> list(search_dict)
+    ['195230749:301-1383', '325053704:108-1166', ..., '53729353:216-1313']
     >>> search_dict['156630997:105-1160']
     QueryResult(id='gi|156630997:105-1160', 5 hits)
 
@@ -411,8 +415,15 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     unsuitable for dealing with files containing many queries. In that case, it
     is recommended that you use either `index` or `index_db`.
 
+    Since Python 3.7, the default dict class maintains key order, meaning
+    this dictionary will reflect the order of records given to it. For
+    CPython, this was already implemented in 3.6.
+
+    As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+    than 3.6 (and for other Python older than 3.7) so that you can always
+    assume the record order is preserved.
     """
-    qdict = {}
+    qdict = _dict()
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
@@ -492,7 +503,7 @@ def index(filename, format=None, key_function=None, **kwargs):
 
 
 def index_db(index_filename, filenames=None, format=None,
-        key_function=None, **kwargs):
+             key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
      - index_filename - The SQLite filename.
@@ -558,8 +569,8 @@ def index_db(index_filename, filenames=None, format=None,
         filenames = [filenames]
 
     from Bio.File import _SQLiteManySeqFilesDict
-    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" \
-               % (index_filename, filenames, format, key_function)
+    repr = ("SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)"
+            % (index_filename, filenames, format, key_function))
 
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
@@ -574,7 +585,7 @@ def index_db(index_filename, filenames=None, format=None,
 
 
 def write(qresults, handle, format=None, **kwargs):
-    """Writes QueryResult objects to a file in the given format.
+    """Write QueryResult objects to a file in the given format.
 
      - qresults - An iterator returning QueryResult objects or a single
                   QueryResult object.
@@ -616,14 +627,13 @@ def write(qresults, handle, format=None, **kwargs):
     with as_handle(handle, 'w') as target_file:
         writer = writer_class(target_file, **kwargs)
         # count how many qresults, hits, and hsps
-        qresult_count, hit_count, hsp_count, frag_count = \
-                writer.write_file(qresults)
+        qresult_count, hit_count, hsp_count, frag_count = writer.write_file(qresults)
 
     return qresult_count, hit_count, hsp_count, frag_count
 
 
 def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
-        out_kwargs=None):
+            out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
      - in_file    - Handle to the input file, or the filename as string.

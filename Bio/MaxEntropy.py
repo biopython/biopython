@@ -1,8 +1,9 @@
 # Copyright 2001 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Maximum Entropy code.
 
 Uses Improved Iterative Scaling.
@@ -12,34 +13,81 @@ Uses Improved Iterative Scaling.
 from __future__ import print_function
 from functools import reduce
 
-from Bio._py3k import map
-
-import numpy
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.MaxEntropy.")
 
 
 class MaxEntropy(object):
-    """Holds information for a Maximum Entropy classifier.
+    """Hold information for a Maximum Entropy classifier.
 
     Members:
     classes      List of the possible classes of data.
     alphas       List of the weights for each feature.
     feature_fns  List of the feature functions.
 
+    Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
+    http://www.inf.u-szeged.hu/~ormandi/teaching
+
+    >>> from Bio.MaxEntropy import train, classify
+    >>> xcar = [
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Red', 'Sports', 'Domestic'],
+    ...     ['Yellow', 'Sports', 'Domestic'],
+    ...     ['Yellow', 'Sports', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Imported'],
+    ...     ['Yellow', 'SUV', 'Domestic'],
+    ...     ['Red', 'SUV', 'Imported'],
+    ...     ['Red', 'Sports', 'Imported']]
+    >>> ycar = ['Yes','No','Yes','No','Yes','No','Yes','No','No','Yes']
+
+    Requires some rules or features
+
+    >>> def udf1(ts, cl):
+    ...     return ts[0] != 'Red'
+    ...
+    >>> def udf2(ts, cl):
+    ...     return ts[1] != 'Sports'
+    ...
+    >>> def udf3(ts, cl):
+    ...     return ts[2] != 'Domestic'
+    ...
+    >>> user_functions = [udf1, udf2, udf3]  # must be an iterable type
+    >>> xe = train(xcar, ycar, user_functions)
+    >>> for xv, yv in zip(xcar, ycar):
+    ...     xc = classify(xe, xv)
+    ...     print('Pred: %s gives %s y is %s' % (xv, xc, yv))
+    ...
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is No
+    Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes
+    Pred: ['Yellow', 'Sports', 'Domestic'] gives No y is No
+    Pred: ['Yellow', 'Sports', 'Imported'] gives No y is Yes
+    Pred: ['Yellow', 'SUV', 'Imported'] gives No y is No
+    Pred: ['Yellow', 'SUV', 'Imported'] gives No y is Yes
+    Pred: ['Yellow', 'SUV', 'Domestic'] gives No y is No
+    Pred: ['Red', 'SUV', 'Imported'] gives No y is No
+    Pred: ['Red', 'Sports', 'Imported'] gives No y is Yes
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.classes = []
         self.alphas = []
         self.feature_fns = []
 
 
 def calculate(me, observation):
-    """calculate(me, observation) -> list of log probs
+    """Calculate the log of the probability for each class.
 
-    Calculate the log of the probability for each class.  me is a
-    MaxEntropy object that has been trained.  observation is a vector
+    me is a MaxEntropy object that has been trained.  observation is a vector
     representing the observed data.  The return value is a list of
     unnormalized log probabilities for each class.
-
     """
     scores = []
     assert len(me.feature_fns) == len(me.alphas)
@@ -52,11 +100,7 @@ def calculate(me, observation):
 
 
 def classify(me, observation):
-    """classify(me, observation) -> class
-
-    Classify an observation into a class.
-
-    """
+    """Classify an observation into a class."""
     scores = calculate(me, observation)
     max_score, klass = scores[0], me.classes[0]
     for i in range(1, len(scores)):
@@ -66,14 +110,12 @@ def classify(me, observation):
 
 
 def _eval_feature_fn(fn, xs, classes):
-    """_eval_feature_fn(fn, xs, classes) -> dict of values
+    """Evaluate a feature function on every instance of the training set and class (PRIVATE).
 
-    Evaluate a feature function on every instance of the training set
-    and class.  fn is a callback function that takes two parameters: a
+    fn is a callback function that takes two parameters: a
     training instance and a class.  Return a dictionary of (training
     set index, class index) -> non-zero value.  Values of 0 are not
     stored in the dictionary.
-
     """
     values = {}
     for i in range(len(xs)):
@@ -85,12 +127,10 @@ def _eval_feature_fn(fn, xs, classes):
 
 
 def _calc_empirical_expects(xs, ys, classes, features):
-    """_calc_empirical_expects(xs, ys, classes, features) -> list of expectations
+    """Calculate the expectation of each function from the data (PRIVATE).
 
-    Calculate the expectation of each function from the data.  This is
-    the constraint for the maximum entropy distribution.  Return a
+    This is the constraint for the maximum entropy distribution. Return a
     list of expectations, parallel to the list of features.
-
     """
     # E[f_i] = SUM_x,y P(x, y) f(x, y)
     #        = 1/N f(x, y)
@@ -110,12 +150,10 @@ def _calc_empirical_expects(xs, ys, classes, features):
 
 
 def _calc_model_expects(xs, classes, features, alphas):
-    """_calc_model_expects(xs, classes, features, alphas) -> list of expectations.
+    """Calculate the expectation of each feature from the model (PRIVATE).
 
-    Calculate the expectation of each feature from the model.  This is
-    not used in maximum entropy training, but provides a good function
+    This is not used in maximum entropy training, but provides a good function
     for debugging.
-
     """
     # SUM_X P(x) SUM_Y P(Y|X) F(X, Y)
     # = 1/N SUM_X SUM_Y P(Y|X) F(X, Y)
@@ -131,11 +169,10 @@ def _calc_model_expects(xs, classes, features, alphas):
 
 
 def _calc_p_class_given_x(xs, classes, features, alphas):
-    """_calc_p_class_given_x(xs, classes, features, alphas) -> matrix
+    """Calculate conditional probability P(y|x) (PRIVATE).
 
-    Calculate P(y|x), where y is the class and x is an instance from
-    the training set.  Return a XSxCLASSES matrix of probabilities.
-
+    y is the class and x is an instance from the training set.
+    Return a XSxCLASSES matrix of probabilities.
     """
     prob_yx = numpy.zeros((len(xs), len(classes)))
 
@@ -154,7 +191,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
 
 
 def _calc_f_sharp(N, nclasses, features):
-    """_calc_f_sharp(N, nclasses, features) -> matrix of f sharp values."""
+    """Calculate a matrix of f sharp values (PRIVATE)."""
     # f#(x, y) = SUM_i feature(x, y)
     f_sharp = numpy.zeros((N, nclasses))
     for feature in features:
@@ -165,7 +202,7 @@ def _calc_f_sharp(N, nclasses, features):
 
 def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
                      max_newton_iterations, newton_converge):
-    # Solve delta using Newton's method for:
+    """Solve delta using Newton's method (PRIVATE)."""
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
     iters = 0
@@ -250,8 +287,8 @@ def train(training_set, results, feature_fns, update_fn=None,
         nalphas = _train_iis(xs, classes, features, f_sharp,
                              alphas, e_empirical,
                              max_newton_iterations, newton_converge)
-        diff = map(lambda x, y: numpy.fabs(x - y), alphas, nalphas)
-        diff = reduce(lambda x, y: x + y, diff, 0)
+        diff = [numpy.fabs(x - y) for x, y in zip(alphas, nalphas)]
+        diff = reduce(numpy.add, diff, 0)
         alphas = nalphas
 
         me = MaxEntropy()
@@ -268,57 +305,5 @@ def train(training_set, results, feature_fns, update_fn=None,
 
 
 if __name__ == "__main__":
-    # Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
-    # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
-
-    xcar = [
-        ['Red', 'Sports', 'Domestic'],
-        ['Red', 'Sports', 'Domestic'],
-        ['Red', 'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Domestic'],
-        ['Yellow', 'Sports', 'Imported'],
-        ['Yellow', 'SUV', 'Imported'],
-        ['Yellow', 'SUV', 'Imported'],
-        ['Yellow', 'SUV', 'Domestic'],
-        ['Red', 'SUV', 'Imported'],
-        ['Red', 'Sports', 'Imported']
-    ]
-
-    ycar = [
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'Yes',
-        'No',
-        'No',
-        'Yes'
-    ]
-
-    # Requires some rules or features
-    def udf1(ts, cl):
-        if ts[0] == 'Red':
-            return 0
-        else:
-            return 1
-
-    def udf2(ts, cl):
-        if ts[1] == 'Sports':
-            return 0
-        else:
-            return 1
-
-    def udf3(ts, cl):
-        if ts[2] == 'Domestic':
-            return 0
-        else:
-            return 1
-
-    user_functions = [udf1, udf2, udf3]  # must be an iterable type
-
-    xe = train(xcar, ycar, user_functions)
-    for xv, yv in zip(xcar, ycar):
-        xc = classify(xe, xv)
-        print('Pred: %s gives %s y is %s' % (xv, xc, yv))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

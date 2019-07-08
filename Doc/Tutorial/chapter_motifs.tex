@@ -14,7 +14,7 @@ Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
-interested in \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
+interested in \href{http://fraenkel-nsf.csbi.mit.edu/TAMO/}{TAMO}, another python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
 motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
@@ -25,10 +25,12 @@ on commercial use.
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import
 the Bio.motifs library:
-%doctest ../Tests/Motif
-\begin{verbatim}
+
+%doctest ../Tests/motifs
+\begin{minted}{pycon}
 >>> from Bio import motifs
-\end{verbatim}
+\end{minted}
+
 and we can start creating our first motif objects. We can either create
 a \verb+Motif+ object from a list of instances of the motif, or we can
 obtain a \verb+Motif+ object by parsing a file from a motif database
@@ -38,7 +40,7 @@ or motif finding software.
 
 Suppose we have these instances of a DNA motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> instances = [Seq("TACAA"),
 ...              Seq("TACGC"),
@@ -48,16 +50,16 @@ Suppose we have these instances of a DNA motif:
 ...              Seq("AATGC"),
 ...              Seq("AATGC"),
 ...             ]
-\end{verbatim}
+\end{minted}
 then we can create a Motif object as follows:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m = motifs.create(instances)
-\end{verbatim}
+\end{minted}
 The instances are saved in an attribute \verb+m.instances+, which is essentially a Python list with some added functionality, as described below.
 Printing out the Motif object shows the instances from which it was constructed:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(m)
 TACAA
 TACGC
@@ -67,17 +69,17 @@ AACCC
 AATGC
 AATGC
 <BLANKLINE>
-\end{verbatim}
-The length of the motif defined as the sequence length, which should be the same for all instances:
+\end{minted}
+The length of the motif is defined as the sequence length, which should be the same for all instances:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(m)
 5
-\end{verbatim}
+\end{minted}
 The Motif object has an attribute \verb+.counts+ containing the counts of each
 nucleotide at each position. Printing this counts matrix shows it in an easily readable format:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(m.counts)
         0      1      2      3      4
 A:   3.00   7.00   0.00   2.00   1.00
@@ -85,81 +87,79 @@ C:   0.00   0.00   5.00   2.00   6.00
 G:   0.00   0.00   0.00   3.00   0.00
 T:   4.00   0.00   2.00   0.00   0.00
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 You can access these counts as a dictionary:
 %cont-doctest
-\begin{verbatim}
->>> m.counts['A']
+\begin{minted}{pycon}
+>>> m.counts["A"]
 [3, 7, 0, 2, 1]
-\end{verbatim}
+\end{minted}
 but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 %cont-doctest
-\begin{verbatim}
->>> m.counts['T', 0]
+\begin{minted}{pycon}
+>>> m.counts["T", 0]
 4
->>> m.counts['T', 2]
+>>> m.counts["T", 2]
 2
->>> m.counts['T', 3]
+>>> m.counts["T", 3]
 0
-\end{verbatim}
+\end{minted}
 You can also directly access columns of the counts matrix
 %Don't doctest this as dictionary order is platform dependent:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.counts[:, 3]
 {'A': 2, 'C': 2, 'T': 0, 'G': 3}
-\end{verbatim}
+\end{minted}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
-in the sorted letters in the alphabet of the motif:
+in the alphabet of the motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.alphabet
-IUPACUnambiguousDNA()
->>> m.alphabet.letters
-'GATC'
->>> sorted(m.alphabet.letters)
-['A', 'C', 'G', 'T']
->>> m.counts['A',:]
+'ACGT'
+>>> m.counts["A",:]
 (3, 7, 0, 2, 1)
 >>> m.counts[0,:]
 (3, 7, 0, 2, 1)
-\end{verbatim}
+\end{minted}
 The motif has an associated consensus sequence, defined as the sequence of
 letters along the positions of the motif for which the largest value in the
 corresponding columns of the \verb+.counts+ matrix is obtained:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
-\end{verbatim}
+Seq('TACGC')
+\end{minted}
 as well as an anticonsensus sequence, corresponding to the smallest values in
 the columns of the \verb+.counts+ matrix:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
-\end{verbatim}
+Seq('CCATG')
+\end{minted}
+Note that there is some ambiguity in the definition of the consensus and anticonsensus sequence if in some columns multiple nucleotides have the maximum or minimum count.
+
 You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
 high counts:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
-\end{verbatim}
+Seq('WACVC')
+\end{minted}
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T,
 and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is
 constructed following the rules specified by Cavener \cite{cavener1987}.
 
 We can also get the reverse complement of a motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> r = m.reverse_complement()
 >>> r.consensus
-Seq('GCGTA', IUPACUnambiguousDNA())
+Seq('GCGTA')
 >>> r.degenerate_consensus
-Seq('GBGTW', IUPACAmbiguousDNA())
+Seq('GBGTW')
 >>> print(r)
 TTGTA
 GCGTA
@@ -169,16 +169,16 @@ GGGTT
 GCATT
 GCATT
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
 \subsection{Creating a sequence logo}
-If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
-\begin{verbatim}
+If we have internet access, we can create a \href{https://weblogo.berkeley.edu}{weblogo}:
+\begin{minted}{pycon}
 >>> m.weblogo("mymotif.png")
-\end{verbatim}
+\end{minted}
 We should get our logo saved as a PNG in the specified file.
 
 \section{Reading motifs}
@@ -200,10 +200,10 @@ One of the most popular motif databases is \href{http://jaspar.genereg.net}{JASP
     \item \verb+tf_family+ - the family to which this TF belongs, e.g. 'Helix-Loop-Helix'
     \item \verb+species+ - the species to which this TF belongs, may have multiple values, these are specified as taxonomy IDs, e.g. 10090
     \item \verb+tax_group+ - the taxonomic supergroup to which this motif belongs, e.g. 'vertebrates'
-    \item \verb+acc+ - the accesion number of the TF protein, e.g. 'P53762'
+    \item \verb+acc+ - the accession number of the TF protein, e.g. 'P53762'
     \item \verb+data_type+ - the type of data used to construct this motif, e.g. 'SELEX'
     \item \verb+medline+ - the Pubmed ID of literature supporting this motif, may be multiple values, e.g. 7592839
-    \item \verb+pazar_id+ - external reference to the TF in the \href{http://pazar.info}{PAZAR} database, e.g. 'TF0000003'
+    \item \verb+pazar_id+ - external reference to the TF in the PAZAR database, e.g. 'TF0000003'
     \item \verb+comment+ - free form text containing notes about the construction of the motif
 \end{itemize}
 
@@ -233,17 +233,17 @@ The parts of the sequence in capital letters are the motif instances that were f
 
 We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
 ...     arnt = motifs.read(handle, "sites")
 ...
-\end{verbatim}
+\end{minted}
 The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(arnt.instances[:3])
-[Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
+[Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
 >>> for instance in arnt.instances:
 ...     print(instance)
 ...
@@ -267,10 +267,10 @@ AACGTG
 AACGTG
 AACGTG
 CGCGTG
-\end{verbatim}
+\end{minted}
 The counts matrix of this motif is automatically calculated from the instances:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(arnt.counts)
         0      1      2      3      4      5
 A:   4.00  19.00   0.00   0.00   0.00   0.00
@@ -278,7 +278,7 @@ C:  16.00   0.00  20.00   0.00   0.00   0.00
 G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 This format does not store any meta information.
 
 \subsubsection*{The JASPAR \texttt{pfm} format}
@@ -295,7 +295,7 @@ For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix
 \end{verbatim}
 We can create a motif for this count matrix as follows:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> with open("SRF.pfm") as handle:
 ...     srf = motifs.read(handle, "pfm")
 ...
@@ -306,23 +306,23 @@ C:   1.00  33.00  45.00  45.00   1.00   1.00   0.00   0.00   0.00   1.00   0.00 
 G:  39.00   2.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00  44.00  43.00
 T:   4.00   2.00   0.00   0.00  13.00  42.00   0.00  45.00   3.00  30.00   0.00   0.00
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 As this motif was created from the counts matrix directly, it has no instances associated with it:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(srf.instances)
 None
-\end{verbatim}
+\end{minted}
 We can now ask for the consensus sequence of these two motifs:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(arnt.counts.consensus)
 CACGTG
 >>> print(srf.counts.consensus)
 GCCCATATATGG
-\end{verbatim}
+\end{minted}
 
-As with the instances file, not meta information is stored in this format.
+As with the instances file, no meta information is stored in this format.
 
 \subsubsection*{The JASPAR format \texttt{jaspar}}
 
@@ -345,7 +345,7 @@ G  [ 0  0  0  0  0  0  0  0  2 50 ]
 T  [ 7 58  0 55 49 52 21 56  0  2 ]
 \end{verbatim}
 The motifs are read as follows:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> fh = open("jaspar_motifs.txt")
 >>> for m in motifs.parse(fh, "jaspar"))
 ...     print(m)
@@ -379,14 +379,14 @@ A:   1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00
 C:  50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00
 G:   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00
 T:   7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00
-\end{verbatim}
+\end{minted}
 
 Note that printing a JASPAR motif yields both the counts data and the available meta-information.
 
 \subsubsection*{Accessing the JASPAR database}
 
 In addition to parsing these flat file formats, we can also retrieve motifs from a JASPAR SQL database. Unlike the flat file formats, a JASPAR database allows storing of all possible meta information defined in the JASPAR \verb+Motif+ class. It is beyond the scope of this document to describe how to set up a JASPAR database (please see the main \href{http://jaspar.genereg.net}{JASPAR} website). Motifs are read from a JASPAR database using the \verb+Bio.motifs.jaspar.db+ module.  First connect to the JASPAR database using the JASPAR5 class which models the the latest JASPAR schema:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.motifs.jaspar.db import JASPAR5
 >>>
 >>> JASPAR_DB_HOST = <hostname>
@@ -400,14 +400,14 @@ In addition to parsing these flat file formats, we can also retrieve motifs from
 ...     user=JASPAR_DB_USER,
 ...     password=JASPAR_DB_PASS
 ... )
-\end{verbatim}
+\end{minted}
 
 Now we can fetch a single motif by its unique JASPAR ID with the \verb+fetch_motif_by_id+ method. Note that a JASPAR ID conists of a base ID and a version number seperated by a decimal point, e.g. 'MA0004.1'. The \verb+fetch_motif_by_id+ method allows you to use either the fully specified ID or just the base ID. If only the base ID is provided, the latest version of the motif is returned.
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> arnt = jdb.fetch_motif_by_id("MA0004")
-\end{verbatim}
-Printing the motif reveals that the JASPAR SQL database stores much more meeta-information than the flat files:
-\begin{verbatim}
+\end{minted}
+Printing the motif reveals that the JASPAR SQL database stores much more meta-information than the flat files:
+\begin{minted}{pycon}
 >>> print(arnt)
 TF name	Arnt
 Matrix ID	MA0004.1
@@ -429,10 +429,10 @@ G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 
 
-\end{verbatim}
+\end{minted}
 
 We can also fetch motifs by name. The name must be an exact match (partial matches or database wildcards are not currently supported). Note that as the name is not guaranteed to be unique, the \verb+fetch_motifs_by_name+ method actually returns a list.
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motifs = jdb.fetch_motifs_by_name("Arnt")
 >>> print(motifs[0])
 TF name	Arnt
@@ -455,20 +455,20 @@ G:   0.00   1.00   0.00  20.00   0.00  20.00
 T:   0.00   0.00   0.00   0.00  20.00   0.00
 
 
-\end{verbatim}
+\end{minted}
 
 The \verb+fetch_motifs+ method allows you to fetch motifs which match a specified set of criteria. These criteria include any of the above described meta information as well as certain matrix properties such as the minimum information content (\verb+min_ic+ in the example below), the minimum length of the matrix or the minimum number of sites used to construct the matrix. Only motifs which pass ALL the specified criteria are returned. Note that selection criteria which correspond to meta information which allow for multiple values may be specified as either a single value or a list of values, e.g. \verb+tax_group+ and \verb+tf_family+ in the example below.
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motifs = jdb.fetch_motifs(
-...     collection = 'CORE',
-...     tax_group = ['vertebrates', 'insects'],
-...     tf_class = 'Winged Helix-Turn-Helix',
-...     tf_family = ['Forkhead', 'Ets'],
+...     collection = "CORE",
+...     tax_group = ["vertebrates", "insects"],
+...     tf_class = "Winged Helix-Turn-Helix",
+...     tf_family = ["Forkhead", "Ets"],
 ...     min_ic = 12
 ... )
 >>> for motif in motifs:
 ...     pass # do something with the motif
-\end{verbatim}
+\end{minted}
 
 \subsubsection*{Compatibility with Perl TFBS modules}
 
@@ -478,30 +478,30 @@ An important thing to note is that the JASPAR \verb+Motif+ class was designed to
 \item{\bf Choice of background:} \\
 The Perl \verb+TFBS+ modules appear to allow a choice of custom background probabilities (although the documentation states that uniform background is assumed). However the default is to use a uniform background. Therefore it is recommended that you use a uniform background for computing the position-specific scoring matrix (PSSM). This is the default when using the Biopython \verb+motifs+ module.
 \item{\bf Choice of pseudocounts:} \\
-By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ funtion:
-\begin{verbatim}
+By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ function:
+\begin{minted}{pycon}
 >>> motif.pseudocounts = motifs.jaspar.calculate_pseudocounts(motif)
-\end{verbatim}
-Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the pssm computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
+\end{minted}
+Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the PSSM computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
 \item{\bf Computation of matrix information content:} \\
 The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
 \item{\bf Searching for instances:} \\
 Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
-\end{verbatim}
+\end{minted}
 To convert the absolute score of an instance back to a relative score, one can use the equation:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> rel_score = (abs_score - pssm.min) / (pssm.max - pssm.min)
-\end{verbatim}
+\end{minted}
 For example, using the Arnt motif before, let's search a sequence with a relative score threshold of 0.8.
 %TODO - Check missing ... lines, make into a doctest?
-\begin{verbatim}
->>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA", unambiguous_dna)
+\begin{minted}{pycon}
+>>> test_seq=Seq("TAAGCGTGCACGCGCAACACGTGCATTA")
 >>> arnt.pseudocounts = motifs.jaspar.calculate_pseudocounts(arnt)
->>> pssm = arnt.pssm()
->>> max_score = pssm.max()
->>> min_score = pssm.min()
+>>> pssm = arnt.pssm
+>>> max_score = pssm.max
+>>> min_score = pssm.min
 >>> abs_score_threshold = (max_score - min_score) * 0.8 + min_score
 >>> for position, score in pssm.search(test_seq,
                                        threshold=abs_score_threshold):
@@ -514,7 +514,7 @@ Position 8: score = 6.112, rel. score = 0.831
 Position -20: score = 7.103, rel. score = 0.870
 Position 17: score = 10.351, rel. score = 1.000
 Position -11: score = 10.351, rel. score = 1.000
-\end{verbatim}
+\end{minted}
 \end{itemize}
 
 \subsection{MEME}
@@ -574,16 +574,16 @@ matrix            T  aa:1::9::11:
 \end{verbatim}
 To parse this file (stored as \verb+meme.dna.oops.txt+), use
 %cont-doctest
-\begin{verbatim}
->>> handle = open("meme.dna.oops.txt")
->>> record = motifs.parse(handle, "meme")
->>> handle.close()
-\end{verbatim}
+\begin{minted}{pycon}
+>>> with open("meme.dna.oops.txt") as handle:
+...     record = motifs.parse(handle, "meme")
+...
+\end{minted}
 The \verb+motifs.parse+ command reads the complete file directly, so you can
 close the file after calling \verb+motifs.parse+.
 The header information is stored in attributes:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> record.version
 '3.0'
 >>> record.datafile
@@ -591,14 +591,14 @@ The header information is stored in attributes:
 >>> record.command
 'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s'
 >>> record.alphabet
-IUPACUnambiguousDNA()
+'ACGT'
 >>> record.sequences
 ['CHO1', 'CHO2', 'FAS1', 'FAS2', 'ACC1', 'INO1', 'OPI3']
-\end{verbatim}
+\end{minted}
 The record is an object of the \verb+Bio.motifs.meme.Record+ class.
 The class inherits from list, and you can think of \verb+record+ as a list of Motif objects:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(record)
 2
 >>> motif = record[0]
@@ -606,11 +606,11 @@ The class inherits from list, and you can think of \verb+record+ as a list of Mo
 TTCACATGCCGC
 >>> print(motif.degenerate_consensus)
 TTCACATGSCNC
-\end{verbatim}
+\end{minted}
 In addition to these generic motif attributes, each motif also stores its
 specific information as calculated by MEME. For example,
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motif.num_occurrences
 7
 >>> motif.length
@@ -620,21 +620,21 @@ specific information as calculated by MEME. For example,
 0.2
 >>> motif.name
 'Motif 1'
-\end{verbatim}
+\end{minted}
 In addition to using an index into the record, as we did above,
 you can also find it by its name:
 %cont-doctest
-\begin{verbatim}
->>> motif = record['Motif 1']
-\end{verbatim}
+\begin{minted}{pycon}
+>>> motif = record["Motif 1"]
+\end{minted}
 Each motif has an attribute \verb+.instances+ with the sequence instances
 in which the motif was found, providing some information on each instance:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> len(motif.instances)
 7
 >>> motif.instances[0]
-Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
+Instance('TTCACATGCCGC', 'ACGT')
 >>> motif.instances[0].motif_name
 'Motif 1'
 >>> motif.instances[0].sequence_name
@@ -648,7 +648,7 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 >>> pvalue = motif.instances[0].pvalue
 >>> print("%5.3g" % pvalue)
 1.85e-08
-\end{verbatim}
+\end{minted}
 
 \subsubsection*{MAST}
 
@@ -704,30 +704,36 @@ P0      A      C      G      T
 \end{verbatim}
 To parse a TRANSFAC file, use
 %cont-doctest
-\begin{verbatim}
->>> handle = open("transfac.dat")
->>> record = motifs.parse(handle, "TRANSFAC")
->>> handle.close()
-\end{verbatim}
+\begin{minted}{pycon}
+>>> with open("transfac.dat") as handle:
+...     record = motifs.parse(handle, "TRANSFAC")
+...
+\end{minted}
+If any discrepancies between the file contents and the TRANSFAC file format are detected, a \verb+ValueError+ is raised. Note that you may encounter files that do not follow the TRANSFAC format strictly. For example, the number of spaces between columns may be different, or a tab may be used instead of spaces. Use \verb+strict=False+ to enable parsing such files without raising a \verb+ValueError+:
+\begin{minted}{pycon}
+>>> record = motifs.parse(handle, "TRANSFAC", strict=False)
+\end{minted}
+When parsing a non-compliant file, we recommend to check the record returned by \verb+motif.parse+ to ensure that it is consistent with the file contents.
+
 The overall version number, if available, is stored as \verb+record.version+:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> record.version
 'EXAMPLE January 15, 2013'
-\end{verbatim}
+\end{minted}
 
 Each motif in \verb+record+ is in instance of the \verb+Bio.motifs.transfac.Motif+
 class, which inherits both from the \verb+Bio.motifs.Motif+ class and
 from a Python dictionary. The dictionary uses the two-letter keys to
 store any additional information about the motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motif = record[0]
 >>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
-Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
->>> motif['ID'] # Using motif as a dictionary
+Seq('SRACAGGTGKYG')
+>>> motif["ID"] # Using motif as a dictionary
 'motif1'
-\end{verbatim}
+\end{minted}
 
 TRANSFAC files are typically much more elaborate than this example, containing
 lots of additional information about the motif. Table \ref{table:transfaccodes}
@@ -779,7 +785,7 @@ references associated with the motif, using these two-letter keys:
 
 Printing the motifs writes them out in their native TRANSFAC format:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(record)
 VV  EXAMPLE January 15, 2013
 XX
@@ -817,41 +823,41 @@ P0      A      C      G      T
 XX
 //
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 You can export the motifs in the TRANSFAC format by capturing this output
 in a string and saving it in a file:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> text = str(record)
->>> handle = open("mytransfacfile.dat", 'w')
->>> handle.write(text)
->>> handle.close()
-\end{verbatim}
+>>> with open("mytransfacfile.dat", "w") as out_handle:
+...     out_handle.write(text)
+...
+\end{minted}
 
 \section{Writing motifs}
 
 Speaking of exporting, let's look at export functions in general.
 We can use the \verb+format+ method to write the motif in the simple JASPAR \verb+pfm+ format:
 %the tabs in the output confuse doctest; don't test
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(arnt.format("pfm"))
   4.00  19.00   0.00   0.00   0.00   0.00
  16.00   0.00  20.00   0.00   0.00   0.00
   0.00   1.00   0.00  20.00   0.00  20.00
   0.00   0.00   0.00   0.00  20.00   0.00
-\end{verbatim}
+\end{minted}
 Similarly, we can use \verb+format+ to write the motif in the JASPAR \verb+jaspar+ format:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(arnt.format("jaspar"))
 >MA0004.1  Arnt
 A [  4.00  19.00   0.00   0.00   0.00   0.00]
 C [ 16.00   0.00  20.00   0.00   0.00   0.00]
 G [  0.00   1.00   0.00  20.00   0.00  20.00]
 T [  0.00   0.00   0.00   0.00  20.00   0.00]
-\end{verbatim}
+\end{minted}
 
 To write the motif in a TRANSFAC-like matrix format, use
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(m.format("transfac"))
 P0      A      C      G      T
 01      3      0      0      4      W
@@ -862,14 +868,14 @@ P0      A      C      G      T
 XX
 //
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 To write out multiple motifs, you can use \verb+motifs.write+.
 This function can be used regardless of whether the motifs originated from a TRANSFAC file. For example,
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> two_motifs = [arnt, srf]
->>> print(motifs.write(two_motifs, 'transfac'))
+>>> print(motifs.write(two_motifs, "transfac"))
 P0      A      C      G      T
 01      4     16      0      0      C
 02     19      0      1      0      A
@@ -889,16 +895,16 @@ P0      A      C      G      T
 07     46      0      0      0      A
 08      1      0      0     45      T
 09     43      0      0      3      A
-10     15      1      0     30      T
+10     15      1      0     30      W
 11      2      0     44      0      G
 12      2      1     43      0      G
 XX
 //
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 Or, to write multiple motifs in the \verb+jaspar+ format:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> two_motifs = [arnt, mef2a]
 >>> print(motifs.write(two_motifs, "jaspar"))
 >MA0004.1  Arnt
@@ -911,7 +917,7 @@ A [  1.00   0.00  57.00   2.00   9.00   6.00  37.00   2.00  56.00   6.00]
 C [ 50.00   0.00   1.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00]
 G [  0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   2.00  50.00]
 T [  7.00  58.00   0.00  55.00  49.00  52.00  21.00  56.00   0.00   2.00]
-\end{verbatim}
+\end{minted}
 
 \section{Position-Weight Matrices}
 
@@ -931,7 +937,7 @@ probabilities from becoming zero. To add a fixed pseudocount to all
 nucleotides at all positions, specify a number for the
 \verb+pseudocounts+ argument:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pwm = m.counts.normalize(pseudocounts=0.5)
 >>> print(pwm)
         0      1      2      3      4
@@ -940,14 +946,14 @@ C:   0.06   0.06   0.61   0.28   0.72
 G:   0.06   0.06   0.06   0.39   0.06
 T:   0.50   0.06   0.28   0.06   0.06
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 Alternatively, \verb+pseudocounts+ can be a dictionary specifying the
 pseudocounts for each nucleotide. For example, as the GC content of
 the human genome is about 40\%, you may want to choose the
 pseudocounts accordingly:
 %cont-doctest
-\begin{verbatim}
->>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+\begin{minted}{pycon}
+>>> pwm = m.counts.normalize(pseudocounts={"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6})
 >>> print(pwm)
         0      1      2      3      4
 A:   0.40   0.84   0.07   0.29   0.18
@@ -955,30 +961,30 @@ C:   0.04   0.04   0.60   0.27   0.71
 G:   0.04   0.04   0.04   0.38   0.04
 T:   0.51   0.07   0.29   0.07   0.07
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 The position-weight matrix has its own methods to calculate the
 consensus, anticonsensus, and degenerate consensus sequences:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pwm.consensus
-Seq('TACGC', IUPACUnambiguousDNA())
+Seq('TACGC')
 >>> pwm.anticonsensus
-Seq('GGGTG', IUPACUnambiguousDNA())
+Seq('CCGTG')
 >>> pwm.degenerate_consensus
-Seq('WACNC', IUPACAmbiguousDNA())
-\end{verbatim}
+Seq('WACNC')
+\end{minted}
 Note that due to the pseudocounts, the degenerate consensus sequence
 calculated from the position-weight matrix is slightly different
 from the degenerate consensus sequence calculated from the instances
 in the motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> m.degenerate_consensus
-Seq('WACVC', IUPACAmbiguousDNA())
-\end{verbatim}
+Seq('WACVC')
+\end{minted}
 The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> rpwm = pwm.reverse_complement()
 >>> print(rpwm)
         0      1      2      3      4
@@ -987,7 +993,7 @@ C:   0.04   0.38   0.04   0.04   0.04
 G:   0.71   0.27   0.60   0.04   0.04
 T:   0.18   0.29   0.07   0.84   0.40
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 \section{Position-Specific Scoring Matrices}
 
@@ -997,7 +1003,7 @@ odds of a particular symbol to be coming from a motif against the
 background. We can use the \verb|.log_odds()| method on the position-weight
 matrix:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pssm = pwm.log_odds()
 >>> print(pssm)
         0      1      2      3      4
@@ -1006,7 +1012,7 @@ C:  -2.49  -2.49   1.26   0.09   1.51
 G:  -2.49  -2.49  -2.49   0.60  -2.49
 T:   1.03  -1.91   0.21  -1.91  -1.91
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 Here we can see positive values for symbols more frequent in the motif
 than in the background and negative for symbols more frequent in the
 background. $0.0$ means that it's equally likely to see a symbol in the
@@ -1017,8 +1023,8 @@ calculate the position-specific scoring matrix against a background with
 unequal probabilities for A, C, G, T, use the \verb+background+ argument.
 For example, against a background with a 40\% GC content, use
 %cont-doctest
-\begin{verbatim}
->>> background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+\begin{minted}{pycon}
+>>> background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
 >>> pssm = pwm.log_odds(background)
 >>> print(pssm)
         0      1      2      3      4
@@ -1027,27 +1033,27 @@ C:  -2.17  -2.17   1.58   0.42   1.83
 G:  -2.17  -2.17  -2.17   0.92  -2.17
 T:   0.77  -2.17  -0.05  -2.17  -2.17
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 The maximum and minimum score obtainable from the PSSM are stored in the
 \verb+.max+ and \verb+.min+ properties:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print("%4.2f" % pssm.max)
 6.59
 >>> print("%4.2f" % pssm.min)
 -10.85
-\end{verbatim}
+\end{minted}
 
 The mean and standard deviation of the PSSM scores with respect to a specific
 background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> mean = pssm.mean(background)
 >>> std = pssm.std(background)
 >>> print("mean = %0.2f, standard deviation = %0.2f" % (mean, std))
 mean = 3.21, standard deviation = 2.59
-\end{verbatim}
+\end{minted}
 A uniform background is used if \verb+background+ is not specified.
 The mean is particularly important, as its value is equal to the
 Kullback-Leibler divergence or relative entropy, and is a measure for the
@@ -1065,40 +1071,40 @@ The most frequent use for a motif is to find its instances in some
 sequence. For the sake of this section, we will use an artificial sequence like this:
 
 %cont-doctest
-\begin{verbatim}
->>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA", m.alphabet)
+\begin{minted}{pycon}
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA")
 >>> len(test_seq)
 26
-\end{verbatim}
+\end{minted}
 
 \subsection{Searching for exact matches}
 
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for pos, seq in m.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
 ...
 0 TACAC
 10 TACAA
 13 AACCC
-\end{verbatim}
+\end{minted}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for pos, seq in r.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
 ...
 6 GCATT
 20 GCATT
-\end{verbatim}
+\end{minted}
 
 \subsection{Searching for matches using the PSSM score}
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for position, score in pssm.search(test_seq, threshold=3.0):
 ...     print("Position %d: score = %5.3f" % (position, score))
 ...
@@ -1107,7 +1113,7 @@ Position -20: score = 4.601
 Position 10: score = 3.037
 Position 13: score = 5.738
 Position -6: score = 4.601
-\end{verbatim}
+\end{minted}
 The negative positions refer to instances of the motif found on the
 reverse strand of the test sequence, and follow the Python convention
 on negative indices. Therefore, the instance of the motif at \verb|pos|
@@ -1122,7 +1128,7 @@ that looks more like the motif than the background.
 
 You can also calculate the scores at all positions along the sequence:
 %Don't use a doc test for this as the spacing can differ
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pssm.calculate(test_seq)
 array([  5.62230396,  -5.6796999 ,  -3.43177247,   0.93827754,
         -6.84962511,  -2.04066086, -10.84962463,  -3.65614533,
@@ -1130,12 +1136,12 @@ array([  5.62230396,  -5.6796999 ,  -3.43177247,   0.93827754,
         -0.6016975 ,   5.7381525 ,  -0.50977498,  -3.56422281,
         -8.73414803,  -0.09919716,  -0.6016975 ,  -2.39429784,
        -10.84962463,  -3.65614533], dtype=float32)
-\end{verbatim}
+\end{minted}
 In general, this is the fastest way to calculate PSSM scores.
 The scores returned by \verb+pssm.calculate+ are for the forward strand
 only. To obtain the scores on the reverse strand, you can take the reverse
 complement of the PSSM:
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> rpssm = pssm.reverse_complement()
 >>> rpssm.calculate(test_seq)
 array([ -9.43458748,  -3.06172252,  -7.18665981,  -7.76216221,
@@ -1144,7 +1150,7 @@ array([ -9.43458748,  -3.06172252,  -7.18665981,  -7.76216221,
         -8.73414803, -10.84962463,  -4.82356262,  -4.82356262,
         -5.64668512,  -8.73414803,  -4.15613794,  -5.6796999 ,
          4.60124254,  -4.2480607 ], dtype=float32)
-\end{verbatim}
+\end{minted}
 
 \subsection{Selecting a score threshold}
 
@@ -1153,46 +1159,46 @@ can explore the distribution of PSSM scores. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> distribution = pssm.distribution(background=background, precision=10**4)
-\end{verbatim}
+\end{minted}
 The \verb+distribution+ object can be used to determine a number of different thresholds.
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%5.3f" % threshold)
 4.009
-\end{verbatim}
+\end{minted}
 or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> threshold = distribution.threshold_fnr(0.1)
 >>> print("%5.3f" % threshold)
 -0.510
-\end{verbatim}
+\end{minted}
 or a threshold (approximately) satisfying some relation between the false-positive rate and the false-negative rate ($\frac{\textrm{fnr}}{\textrm{fpr}}\simeq t$):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> threshold = distribution.threshold_balanced(1000)
 >>> print("%5.3f" % threshold)
 6.241
-\end{verbatim}
-or a threshold satisfying (roughly) the equality between the
-false-positive rate and the $-log$ of the information content (as used
-in patser software by Hertz and Stormo):
+\end{minted}
+or a threshold satisfying (roughly) the equality between the $-log$ of the
+false-positive rate and the information content (as used in patser software by
+Hertz and Stormo):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> threshold = distribution.threshold_patser()
 >>> print("%5.3f" % threshold)
 0.346
-\end{verbatim}
+\end{minted}
 
 For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%5.3f" % threshold)
 4.009
@@ -1203,17 +1209,17 @@ Position 0: score = 5.622
 Position -20: score = 4.601
 Position 13: score = 5.738
 Position -6: score = 4.601
-\end{verbatim}
+\end{minted}
 
 \section{Each motif object has an associated Position-Specific Scoring Matrix}
 
 To facilitate searching for potential TFBSs using PSSMs, both the position-weight matrix and the position-specific scoring matrix are associated with each motif. Using the Arnt motif as an example:
 %TODO - Start a new doctest here?
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
-...     motif = motifs.read(handle, 'sites')
+...     motif = motifs.read(handle, "sites")
 ...
 >>> print(motif.counts)
         0      1      2      3      4      5
@@ -1229,9 +1235,9 @@ C:   0.80   0.00   1.00   0.00   0.00   0.00
 G:   0.00   0.05   0.00   1.00   0.00   1.00
 T:   0.00   0.00   0.00   0.00   1.00   0.00
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 %Can't use next bit in doctest, Windows Python 2.5 and 2.6 put -1.$ not -inf
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(motif.pssm)
         0      1      2      3      4      5
 A:  -0.32   1.93   -inf   -inf   -inf   -inf
@@ -1239,10 +1245,10 @@ C:   1.68   -inf   2.00   -inf   -inf   -inf
 G:   -inf  -2.32   -inf   2.00   -inf   2.00
 T:   -inf   -inf   -inf   -inf   2.00   -inf
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 The negative infinities appear here because the corresponding entry in the frequency matrix is 0, and we are using zero pseudocounts by default:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
 ...
@@ -1250,10 +1256,10 @@ A: 0.00
 C: 0.00
 G: 0.00
 T: 0.00
-\end{verbatim}
+\end{minted}
 If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix and the position-specific scoring matrix are recalculated automatically:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motif.pseudocounts = 3.0
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
@@ -1262,10 +1268,10 @@ A: 3.00
 C: 3.00
 G: 3.00
 T: 3.00
-\end{verbatim}
+\end{minted}
 %Can't use this in doctest, Windows Python 2.5 and 2.6 give G/1 as 0.13 not 0.12
 %TODO - Check why...
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(motif.pwm)
         0      1      2      3      4      5
 A:   0.22   0.69   0.09   0.09   0.09   0.09
@@ -1273,9 +1279,9 @@ C:   0.59   0.09   0.72   0.09   0.09   0.09
 G:   0.09   0.12   0.09   0.72   0.09   0.72
 T:   0.09   0.09   0.09   0.09   0.72   0.09
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(motif.pssm)
         0      1      2      3      4      5
 A:  -0.19   1.46  -1.42  -1.42  -1.42  -1.42
@@ -1283,12 +1289,12 @@ C:   1.25  -1.42   1.52  -1.42  -1.42  -1.42
 G:  -1.42  -1.00  -1.42   1.52  -1.42   1.52
 T:  -1.42  -1.42  -1.42  -1.42   1.52  -1.42
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 You can also set the \verb+.pseudocounts+ to a dictionary over the four nucleotides if you want to use different pseudocounts for them. Setting \verb+motif.pseudocounts+ to \verb+None+ resets it to its default value of zero.
 
 The position-specific scoring matrix depends on the background distribution, which is uniform by default:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
 ...
@@ -1296,11 +1302,11 @@ A: 0.25
 C: 0.25
 G: 0.25
 T: 0.25
-\end{verbatim}
+\end{minted}
 Again, if you modify the background distribution, the position-specific scoring matrix is recalculated:
 %cont-doctest
-\begin{verbatim}
->>> motif.background = {'A': 0.2, 'C': 0.3, 'G': 0.3, 'T': 0.2}
+\begin{minted}{pycon}
+>>> motif.background = {"A": 0.2, "C": 0.3, "G": 0.3, "T": 0.2}
 >>> print(motif.pssm)
         0      1      2      3      4      5
 A:   0.13   1.78  -1.09  -1.09  -1.09  -1.09
@@ -1308,10 +1314,10 @@ C:   0.98  -1.68   1.26  -1.68  -1.68  -1.68
 G:  -1.68  -1.26  -1.68   1.26  -1.68   1.26
 T:  -1.09  -1.09  -1.09  -1.09   1.85  -1.09
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distribution:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motif.background = None
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
@@ -1320,10 +1326,10 @@ A: 0.25
 C: 0.25
 G: 0.25
 T: 0.25
-\end{verbatim}
+\end{minted}
 If you set \verb+motif.background+ equal to a single value, it will be interpreted as the GC content:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motif.background = 0.8
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
@@ -1332,32 +1338,32 @@ A: 0.10
 C: 0.40
 G: 0.40
 T: 0.10
-\end{verbatim}
+\end{minted}
 Note that you can now calculate the mean of the PSSM scores over the background against which it was computed:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print("%f" % motif.pssm.mean(motif.background))
 4.703928
-\end{verbatim}
+\end{minted}
 as well as its standard deviation:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print("%f" % motif.pssm.std(motif.background))
 3.290900
-\end{verbatim}
+\end{minted}
 and its distribution:
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> distribution = motif.pssm.distribution(background=motif.background)
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%f" % threshold)
 3.854375
-\end{verbatim}
+\end{minted}
 
 Note that the position-weight matrix and the position-specific scoring matrix are recalculated each time you call \verb+motif.pwm+ or \verb+motif.pssm+, respectively. If speed is an issue and you want to use the PWM or PSSM repeatedly, you can save them as a variable, as in
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> pssm = motif.pssm
-\end{verbatim}
+\end{minted}
 
 \section{Comparing motifs}
 \label{sec:comp}
@@ -1378,16 +1384,16 @@ from the PSSM.
 The distance function then returns the minimal distance between motifs, as
 well as the corresponding offset in their alignment.
 
-To give an exmaple, let us first load another motif,
+To give an example, let us first load another motif,
 which is similar to our test motif \verb|m|:
 %TODO - Start a new doctest here?
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> with open("REB1.pfm") as handle:
 ...    m_reb1 = motifs.read(handle, "pfm")
 ...
 >>> m_reb1.consensus
-Seq('GTTACCCGG', IUPACUnambiguousDNA())
+Seq('GTTACCCGG')
 >>> print(m_reb1.counts)
         0      1      2      3      4      5      6      7      8
 A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
@@ -1395,13 +1401,13 @@ C:  10.00   0.00   0.00   0.00 100.00 100.00 100.00   0.00  15.00
 G:  50.00   0.00   0.00   0.00   0.00   0.00   0.00  60.00  55.00
 T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 
 To make the motifs comparable, we choose the same values for the pseudocounts and the background distribution as our motif \verb|m|:
 %cont-doctest
-\begin{verbatim}
->>> m_reb1.pseudocounts = {'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6}
->>> m_reb1.background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+\begin{minted}{pycon}
+>>> m_reb1.pseudocounts = {"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6}
+>>> m_reb1.background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
 >>> pssm_reb1 = m_reb1.pssm
 >>> print(pssm_reb1)
         0      1      2      3      4      5      6      7      8
@@ -1410,18 +1416,18 @@ C:  -0.97  -5.67  -5.67  -5.67   2.30   2.30   2.30  -5.67  -0.41
 G:   1.30  -5.67  -5.67  -5.67  -5.67  -5.67  -5.67   1.57   1.44
 T:  -1.53   1.72   1.72  -5.67  -5.67  -5.67  -5.67   0.41  -0.97
 <BLANKLINE>
-\end{verbatim}
+\end{minted}
 We'll compare these motifs using the Pearson correlation.
 Since we want it to resemble a distance measure, we actually take
 $1-r$, where $r$ is the Pearson correlation coefficient (PCC):
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> distance, offset = pssm.dist_pearson(pssm_reb1)
 >>> print("distance = %5.3g" % distance)
 distance = 0.239
 >>> print(offset)
 -2
-\end{verbatim}
+\end{minted}
 This means that the best PCC between motif \verb|m| and  \verb|m_reb1| is obtained with the following alignment:
 \begin{verbatim}
 m:      bbTACGCbb
@@ -1434,7 +1440,7 @@ roughly $1-0.239=0.761$.
 \label{sec:find}
 
 Currently, Biopython has only limited support for \emph{de novo} motif
-finding. Namely, we support running and parsing of AlignAce and
+finding. Namely, we support running \verb|xxmotif| and also parsing of
 MEME. Since the number of motif finding tools is growing rapidly,
 contributions of new parsers are welcome.
 
@@ -1446,17 +1452,17 @@ favorite parameters and saved the output in the file
 \verb|meme.out|. You can retrieve the motifs reported by MEME by
 running the following piece of code:
 
-%doctest ../Tests/Motif
-\begin{verbatim}
+%doctest ../Tests/motifs
+\begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("meme.out") as handle:
 ...     motifsM = motifs.parse(handle, "meme")
 ...
-\end{verbatim}
-\begin{verbatim}
+\end{minted}
+\begin{minted}{pycon}
 >>> motifsM
 [<Bio.motifs.meme.Motif object at 0xc356b0>]
-\end{verbatim}
+\end{minted}
 
 Besides the most wanted list of motifs, the result object contains more useful information, accessible through properties with self-explanatory names:
 \begin{itemize}
@@ -1472,81 +1478,30 @@ Motif objects (with instances), they also provide some extra
 functionality, by adding additional information about the instances.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> motifsM[0].consensus
-Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+Seq('CTCAATCGTA')
 >>> motifsM[0].instances[0].sequence_name
 'SEQ10;'
 >>> motifsM[0].instances[0].start
 3
 >>> motifsM[0].instances[0].strand
 '+'
-\end{verbatim}
-\begin{verbatim}
+\end{minted}
+\begin{minted}{pycon}
 >>> motifsM[0].instances[0].pvalue
 8.71e-07
-\end{verbatim}
+\end{minted}
 
 
-\subsection{AlignAce}
-\label{sec:alignace}
-
-We can do very similar things with the AlignACE program. Assume, you have
-your output in the file \verb|alignace.out|. You can parse your output
-with the following code:
-
-%cont-doctest
-\begin{verbatim}
->>> from Bio import motifs
->>> with open("alignace.out") as handle:
-...     motifsA = motifs.parse(handle, "alignace")
-...
-\end{verbatim}
-
-Again, your motifs behave as they should:
-%cont-doctest
-\begin{verbatim}
->>> motifsA[0].consensus
-Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-In fact you can even see, that AlignAce found a very similar motif as
-MEME. It is just a longer version of a reverse complement of the MEME
-motif:
-%cont-doctest
-\begin{verbatim}
->>> motifsM[0].reverse_complement().consensus
-Seq('TACGATTGAG', IUPACUnambiguousDNA())
-\end{verbatim}
-
-If you have AlignAce installed on the same machine, you can also run
-it directly from Biopython. A short example of how this can be done is
-shown below (other parameters can be specified as keyword parameters):
-
-\begin{verbatim}
->>> command="/opt/bin/AlignACE"
->>> input_file="test.fa"
->>> from Bio.motifs.applications import AlignAceCommandline
->>> cmd = AlignAceCommandline(cmd=command, input=input_file, gcback=0.6, numcols=10)
->>> stdout, stderr= cmd()
-\end{verbatim}
-
-Since AlignAce prints all of its output to standard output, you can get
-to your motifs by parsing the first part of the result:
-\begin{verbatim}
->>> motifs = motifs.parse(stdout, "alignace")
-\end{verbatim}
-
-
-
-\section{Useful links }
+\section{Useful links}
 \label{sec:links}
 
 
 \begin{itemize}
-\item \href{http://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
+\item \href{https://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
 \item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs}
 \end{itemize}
 

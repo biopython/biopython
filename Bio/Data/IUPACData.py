@@ -1,10 +1,10 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2000 Andrew Dalke.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Information about the IUPAC alphabets."""
-
-__docformat__ = "restructuredtext en"
 
 
 protein_letters = "ACDEFGHIKLMNPQRSTVWY"
@@ -41,13 +41,13 @@ protein_letters_1to3 = {
 }
 protein_letters_1to3_extended = dict(list(protein_letters_1to3.items()) + list({
     'B': 'Asx', 'X': 'Xaa', 'Z': 'Glx', 'J': 'Xle',
-    'U': 'Sel', 'O': 'Pyl',
+    'U': 'Sec', 'O': 'Pyl',
 }.items()))
 
-protein_letters_3to1 = dict((x[1], x[0]) for x in
-                            protein_letters_1to3.items())
-protein_letters_3to1_extended = dict((x[1], x[0]) for x in
-                                     protein_letters_1to3_extended.items())
+protein_letters_3to1 = {x[1]: x[0] for x in
+                        protein_letters_1to3.items()}
+protein_letters_3to1_extended = {x[1]: x[0] for x in
+                                 protein_letters_1to3_extended.items()}
 
 ambiguous_dna_letters = "GATCRYWSMKHBVDN"
 unambiguous_dna_letters = "GATC"
@@ -63,6 +63,9 @@ extended_dna_letters = "GATCBDSW"
 # are there extended forms?
 # extended_rna_letters = "GAUCBDSW"
 
+# "X" is included in the following _values and _complement dictionaries,
+# for historical reasons although it is not an IUPAC nucleotide,
+# and so is not in the corresponding _letters strings above
 ambiguous_dna_values = {
     "A": "A",
     "C": "C",
@@ -147,6 +150,7 @@ def _make_ranges(mydict):
 
 # Mass data taken from PubChem
 
+
 # Average masses of monophosphate deoxy nucleotides
 unambiguous_dna_weights = {
     "A": 331.2218,
@@ -197,6 +201,7 @@ def _make_ambiguous_ranges(mydict, weight_table):
             total_w = total_w + w
         avg_d[letter] = total_w / len(weights)
     return range_d, avg_d
+
 
 ambiguous_dna_weight_ranges, avg_ambiguous_dna_weights = \
                _make_ambiguous_ranges(ambiguous_dna_values,
@@ -299,6 +304,7 @@ extended_protein_weight_ranges, avg_extended_protein_weights = \
 # Taken from http://www.chem.qmul.ac.uk/iupac/AtWt/ & PyMol
 atom_weights = {
     'H': 1.00794,
+    'D': 2.01410,
     'He': 4.002602,
     'Li': 6.941,
     'Be': 9.012182,

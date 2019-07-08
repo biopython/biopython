@@ -3,8 +3,7 @@
 # as part of this package.
 #
 
-"""Deal with representations of Markov Models.
-"""
+"""Deal with representations of Markov Models."""
 # standard modules
 import copy
 import math
@@ -19,21 +18,17 @@ from Bio.Seq import MutableSeq
 
 
 def _gen_random_array(n):
-    """ Return an array of n random numbers, where the elements of the array sum
-    to 1.0"""
+    """Return an array of n random numbers summing to 1.0 (PRIVATE)."""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
-    normalizedRandArray = [x/total for x in randArray]
-
-    return normalizedRandArray
+    return [x / total for x in randArray]
 
 
 def _calculate_emissions(emission_probs):
-    """Calculate which symbols can be emitted in each state
-    """
+    """Calculate which symbols can be emitted in each state (PRIVATE)."""
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
-    emissions = dict()
+    emissions = {}
     for state, symbol in emission_probs:
         try:
             emissions[state].append(symbol)
@@ -44,7 +39,7 @@ def _calculate_emissions(emission_probs):
 
 
 def _calculate_from_transitions(trans_probs):
-    """Calculate which 'from transitions' are allowed for each state
+    """Calculate which 'from transitions' are allowed for each state (PRIVATE).
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -52,7 +47,7 @@ def _calculate_from_transitions(trans_probs):
     lists of destination states reachable from the source state via a
     transition.
     """
-    transitions = dict()
+    transitions = {}
     for from_state, to_state in trans_probs:
         try:
             transitions[from_state].append(to_state)
@@ -63,7 +58,7 @@ def _calculate_from_transitions(trans_probs):
 
 
 def _calculate_to_transitions(trans_probs):
-    """Calculate which 'to transitions' are allowed for each state
+    """Calculate which 'to transitions' are allowed for each state (PRIVATE).
 
     This looks through all of the trans_probs, and uses this dictionary
     to determine allowed transitions. It converts this information into
@@ -71,7 +66,7 @@ def _calculate_to_transitions(trans_probs):
     lists of source states from which the destination is reachable via a
     transition.
     """
-    transitions = dict()
+    transitions = {}
     for from_state, to_state in trans_probs:
         try:
             transitions[to_state].append(from_state)
@@ -91,6 +86,7 @@ class MarkovModelBuilder(object):
     So, this builder class should be used to create Markov models instead
     of trying to initiate a Markov Model directly.
     """
+
     # the default pseudo counts to use
     DEFAULT_PSEUDO = 1
 
@@ -98,12 +94,11 @@ class MarkovModelBuilder(object):
         """Initialize a builder to create Markov Models.
 
         Arguments:
+         - state_alphabet -- An alphabet containing all of the letters that
+           can appear in the states
+         - emission_alphabet -- An alphabet containing all of the letters for
+           states that can be emitted by the HMM.
 
-        o state_alphabet -- An alphabet containing all of the letters that
-        can appear in the states
-
-        o emission_alphabet -- An alphabet containing all of the letters for
-        states that can be emitted by the HMM.
         """
         self._state_alphabet = state_alphabet
         self._emission_alphabet = emission_alphabet
@@ -124,7 +119,7 @@ class MarkovModelBuilder(object):
                                                 emission_alphabet)
 
     def _all_blank(self, first_alphabet, second_alphabet):
-        """Return a dictionary with all counts set to zero.
+        """Return a dictionary with all counts set to zero (PRIVATE).
 
         This uses the letters in the first and second alphabet to create
         a dictionary with keys of two tuples organized as
@@ -139,7 +134,7 @@ class MarkovModelBuilder(object):
         return all_blank
 
     def _all_pseudo(self, first_alphabet, second_alphabet):
-        """Return a dictionary with all counts set to a default value.
+        """Return a dictionary with all counts set to a default value (PRIVATE).
 
         This takes the letters in first alphabet and second alphabet and
         creates a dictionary with keys of two tuples organized as:
@@ -159,7 +154,6 @@ class MarkovModelBuilder(object):
         Each markov model returned by a call to this function is unique
         (ie. they don't influence each other).
         """
-
         # user must set initial probabilities
         if not self.initial_prob:
             raise Exception("set_initial_probabilities must be called to " +
@@ -198,8 +192,9 @@ class MarkovModelBuilder(object):
 
         # ensure that all referenced states are valid
         for state in initial_prob:
-            assert state in self._state_alphabet.letters, \
-                   "State %s was not found in the sequence alphabet" % state
+            if state not in self._state_alphabet.letters:
+                raise ValueError("State %s was not found in the sequence "
+                                 "alphabet" % state)
 
         # distribute the residual probability, if any
         num_states_not_set =\
@@ -233,7 +228,6 @@ class MarkovModelBuilder(object):
         emissions to total up to 1, so it doesn't ensure that the sum of
         each set of transitions adds up to 1.
         """
-
         # set initial state probabilities
         new_initial_prob = float(1) / float(len(self.transition_prob))
         for state in self._state_alphabet.letters:
@@ -251,6 +245,7 @@ class MarkovModelBuilder(object):
 
     def set_random_initial_probabilities(self):
         """Set all initial state probabilities to a randomly generated distribution.
+
         Returns the dictionary containing the initial probabilities.
         """
         initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
@@ -261,9 +256,9 @@ class MarkovModelBuilder(object):
 
     def set_random_transition_probabilities(self):
         """Set all allowed transition probabilities to a randomly generated distribution.
+
         Returns the dictionary containing the transition probabilities.
         """
-
         if not self.transition_prob:
             raise Exception("No transitions have been allowed yet. " +
                             "Allow some or all transitions by calling " +
@@ -278,11 +273,10 @@ class MarkovModelBuilder(object):
         return self.transition_prob
 
     def set_random_emission_probabilities(self):
-        """Set all allowed emission probabilities to a randomly generated
-        distribution.  Returns the dictionary containing the emission
-        probabilities.
-        """
+        """Set all allowed emission probabilities to a randomly generated distribution.
 
+        Returns the dictionary containing the emission probabilities.
+        """
         if not self.emission_prob:
             raise Exception("No emissions have been allowed yet. " +
                             "Allow some or all emissions.")
@@ -308,10 +302,11 @@ class MarkovModelBuilder(object):
     # --- functions to deal with the transitions in the sequence
 
     def allow_all_transitions(self):
-        """A convenience function to create transitions between all states.
+        """Create transitions between all states.
 
-        By default all transitions within the alphabet are disallowed; this
-        is a way to change this to allow all possible transitions.
+        By default all transitions within the alphabet are disallowed;
+        this is a convenience function to change this to allow all
+        possible transitions.
         """
         # first get all probabilities and pseudo counts set
         # to the default values
@@ -344,11 +339,13 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError -- if the two states already have an allowed transition.
+
         """
         # check the sanity of adding these states
         for state in [from_state, to_state]:
-            assert state in self._state_alphabet.letters, \
-                   "State %s was not found in the sequence alphabet" % state
+            if state not in self._state_alphabet.letters:
+                raise ValueError("State %s was not found in the sequence "
+                                 "alphabet" % state)
 
         # ensure that the states are not already set
         if (from_state, to_state) not in self.transition_prob and \
@@ -360,7 +357,7 @@ class MarkovModelBuilder(object):
 
             # set the initial pseudocounts
             if pseudocount is None:
-                pseudcount = self.DEFAULT_PSEUDO
+                pseudocount = self.DEFAULT_PSEUDO
             self.transition_pseudo[(from_state, to_state)] = pseudocount
         else:
             raise KeyError("Transition from %s to %s is already allowed."
@@ -371,6 +368,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not currently allowed.
+
         """
         try:
             del self.transition_prob[(from_state, to_state)]
@@ -384,6 +382,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not allowed.
+
         """
         if (from_state, to_state) in self.transition_prob:
             self.transition_prob[(from_state, to_state)] = probability
@@ -402,6 +401,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the transition is not allowed.
+
         """
         if (from_state, to_state) in self.transition_pseudo:
             self.transition_pseudo[(from_state, to_state)] = count
@@ -416,6 +416,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the emission from the given state is not allowed.
+
         """
         if (seq_state, emission_state) in self.emission_prob:
             self.emission_prob[(seq_state, emission_state)] = probability
@@ -434,6 +435,7 @@ class MarkovModelBuilder(object):
 
         Raises:
         KeyError if the emission from the given state is not allowed.
+
         """
         if (seq_state, emission_state) in self.emission_pseudo:
             self.emission_pseudo[(seq_state, emission_state)] = count
@@ -443,8 +445,8 @@ class MarkovModelBuilder(object):
 
 
 class HiddenMarkovModel(object):
-    """Represent a hidden markov model that can be used for state estimation.
-    """
+    """Represent a hidden markov model that can be used for state estimation."""
+
     def __init__(self, initial_prob, transition_prob, emission_prob,
                  transition_pseudo, emission_pseudo):
         """Initialize a Markov Model.
@@ -453,22 +455,17 @@ class HiddenMarkovModel(object):
         initiating this class directly.
 
         Arguments:
+         - initial_prob - A dictionary of initial probabilities for all states.
+         - transition_prob -- A dictionary of transition probabilities for all
+           possible transitions in the sequence.
+         - emission_prob -- A dictionary of emission probabilities for all
+           possible emissions from the sequence states.
+         - transition_pseudo -- Pseudo-counts to be used for the transitions,
+           when counting for purposes of estimating transition probabilities.
+         - emission_pseudo -- Pseudo-counts to be used for the emissions,
+           when counting for purposes of estimating emission probabilities.
 
-        o initial_prob - A dictionary of initial probabilities for all states.
-
-        o transition_prob -- A dictionary of transition probabilities for all
-        possible transitions in the sequence.
-
-        o emission_prob -- A dictionary of emission probabilities for all
-        possible emissions from the sequence states.
-
-        o transition_pseudo -- Pseudo-counts to be used for the transitions,
-        when counting for purposes of estimating transition probabilities.
-
-        o emission_pseudo -- Pseudo-counts to be used for the emissions,
-        when counting for purposes of estimating emission probabilities.
         """
-
         self.initial_prob = initial_prob
 
         self._transition_pseudo = transition_pseudo
@@ -480,14 +477,12 @@ class HiddenMarkovModel(object):
         # a dictionary of the possible transitions from each state
         # each key is a source state, mapped to a list of the destination states
         # that are reachable from the source state via a transition
-        self._transitions_from = \
-           _calculate_from_transitions(self.transition_prob)
+        self._transitions_from = _calculate_from_transitions(self.transition_prob)
 
         # a dictionary of the possible transitions to each state
         # each key is a destination state, mapped to a list of source states
         # from which the destination is reachable via a transition
-        self._transitions_to = \
-           _calculate_to_transitions(self.transition_prob)
+        self._transitions_to = _calculate_to_transitions(self.transition_prob)
 
     def get_blank_transitions(self):
         """Get the default transitions for the model.
@@ -510,12 +505,12 @@ class HiddenMarkovModel(object):
         return self._emission_pseudo
 
     def transitions_from(self, state_letter):
-        """Get all destination states to which there are transitions from the
-        state_letter source state.
+        """Get all destination states which can transition from source state_letter.
 
         This returns all letters which the given state_letter can transition
-        to. An empty list is returned if state_letter has no outgoing
-        transitions.
+        to, i.e. all the destination states reachable from state_letter.
+
+        An empty list is returned if state_letter has no outgoing transitions.
         """
         if state_letter in self._transitions_from:
             return self._transitions_from[state_letter]
@@ -523,11 +518,12 @@ class HiddenMarkovModel(object):
             return []
 
     def transitions_to(self, state_letter):
-        """Get all source states from which there are transitions to the
-        state_letter destination state.
+        """Get all source states which can transition to destination state_letter.
 
         This returns all letters which the given state_letter is reachable
-        from. An empty list is returned if state_letter is unreachable.
+        from, i.e. all the source states which can reach state_later
+
+        An empty list is returned if state_letter is unreachable.
         """
         if state_letter in self._transitions_to:
             return self._transitions_to[state_letter]
@@ -543,14 +539,12 @@ class HiddenMarkovModel(object):
         of emissions.
 
         Arguments:
+         - sequence -- A Seq object with the emission sequence that we
+           want to decode.
+         - state_alphabet -- The alphabet of the possible state sequences
+           that can be generated.
 
-        o sequence -- A Seq object with the emission sequence that we
-        want to decode.
-
-        o state_alphabet -- The alphabet of the possible state sequences
-        that can be generated.
         """
-
         # calculate logarithms of the initial, transition, and emission probs
         log_initial = self._log_transform(self.initial_prob)
         log_trans = self._log_transform(self.transition_prob)
@@ -642,7 +636,7 @@ class HiddenMarkovModel(object):
         return traceback_seq.toseq(), state_path_prob
 
     def _log_transform(self, probability):
-        """Return log transform of the given probability dictionary.
+        """Return log transform of the given probability dictionary (PRIVATE).
 
         When calculating the Viterbi equation, add logs of probabilities rather
         than multiplying probabilities, to avoid underflow errors. This method

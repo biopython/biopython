@@ -15,44 +15,49 @@ format: list, column or map.
 The easiest way to use it is:
 
     >>> from Bio.Restriction.PrintFormat import PrintFormat
-    >>> from Bio.Restriction.Restriction import AllEnzymes
-    >>> from Bio import Entrez
-    >>> from Bio import SeqIO
-    >>> handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="SYNPBR322")
-    >>> pBR322 = SeqIO.read(handle, "fasta")
-    >>> handle.close()
-    >>> dct = AllEnzymes.search(pBR322.seq)
-    >>> new = PrintFormat()
-    >>> new.print_that(dct, 'My pBR322 analysis:\n', 'No site:\n')
-    My pBR322 analysis:
-    AasI       :  2169, 2582.
-    AatII      :  4289.
-    ...
-    ZraI       :  4287.
-    ZrmI       :  3847.
+    >>> from Bio.Restriction.Restriction import RestrictionBatch
+    >>> from Bio.Seq import Seq
+    >>> pBs_mcs = Seq('GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC')
+    >>> restriction_batch = RestrictionBatch(['EcoRI', 'BamHI', 'ApaI'])
+    >>> result = restriction_batch.search(pBs_mcs)
+    >>> my_map = PrintFormat()
+    >>> my_map.print_that(result, 'My pBluescript mcs analysis:\n',
+    ...               'No site:\n')
+    My pBluescript mcs analysis:
+    ApaI       :  12.
+    EcoRI      :  50.
     No site:
-    AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI
-    ...
-    Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI
-    Zsp2I
-    >>> new.sequence = pBR322.seq
-    >>> new.print_as("map")
-    >>> new.print_that(dct)
-    ...
+    BamHI     
+    <BLANKLINE>
+    >>> my_map.sequence = pBs_mcs
+    >>> my_map.print_as("map")
+    >>> my_map.print_that(result)
+               12 ApaI
+               |                                                
+               |                                     50 EcoRI
+               |                                     |          
+    GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC
+    ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+    CCATGGCCCGGGGGGGAGCTCCAGCTGCCATAGCTATTCGAACTATAGCTTAAG
+    1                                                   54
+    <BLANKLINE>
+    <BLANKLINE>
+       Enzymes which do not cut the sequence.
+    <BLANKLINE>
+    BamHI     
+    <BLANKLINE>
+    >>>
 
 Some of the methods of PrintFormat are meant to be overridden by derived
 class.
-"""
+"""  # noqa: W291
 
 from __future__ import print_function
 
 import re
 
 from Bio._py3k import range
-
 from Bio.Restriction import RanaConfig as RanaConf
-
-__docformat__ = "restructuredtext en"
 
 
 class PrintFormat(object):
@@ -67,11 +72,11 @@ class PrintFormat(object):
     linesize = PrefWidth - NameWidth
 
     def __init__(self):
-        """PrintFormat() -> new PrintFormat Instance"""
+        """Initialise."""
         pass
 
     def print_as(self, what='list'):
-        """PF.print_as([what='list']) -> print the results as specified.
+        """Print the results as specified.
 
         Valid format are:
             'list'      -> alphabetical order
@@ -89,8 +94,8 @@ class PrintFormat(object):
 
         return
 
-    def print_that(self, dct, title='', s1=''):
-        """PF.print_that(dct, [title[, s1]]) -> Print dct nicely formatted.
+    def format_output(self, dct, title='', s1=''):
+        """Summarise results as a nicely formatted string.
 
         Arguments:
          - dct is a dictionary as returned by a RestrictionBatch.search()
@@ -100,7 +105,8 @@ class PrintFormat(object):
            those without sites.
          - s1 must be a formatted string as well.
 
-        The format of print_that is a list."""
+        The format of print_that is a list.
+        """
         if not dct:
             dct = self.results
         ls, nc = [], []
@@ -109,11 +115,27 @@ class PrintFormat(object):
                 ls.append((k, v))
             else:
                 nc.append(k)
-        print(self.make_format(ls, title, nc, s1))
+        return self.make_format(ls, title, nc, s1)
+
+    def print_that(self, dct, title='', s1=''):
+        """Print the output of the format_output method (OBSOLETE).
+
+        Arguments:
+         - dct is a dictionary as returned by a RestrictionBatch.search()
+         - title is the title of the map.
+           It must be a formatted string, i.e. you must include the line break.
+         - s1 is the title separating the list of enzymes that have sites from
+           those without sites.
+         - s1 must be a formatted string as well.
+
+        This method prints the output of A.format_output() and it is here
+        for backwards compatibility.
+        """
+        print(self.format_output(dct, title, s1))
         return
 
-    def make_format(self, cut=[], title='', nc=[], s1=''):
-        """PF.make_format(cut, nc, title, s) -> string
+    def make_format(self, cut=(), title='', nc=(), s1=''):
+        """Virtual method used for formatting results.
 
         Virtual method.
         Here to be pointed to one of the _make_* methods.
@@ -124,9 +146,9 @@ class PrintFormat(object):
 # _make_* methods to be used with the virtual method make_format
 
     def _make_list(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise a list of positions by enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -134,17 +156,17 @@ class PrintFormat(object):
             enzyme2     :   position1, position2, position3.
 
         Arguments:
-         - ls is a list of cutting enzymes.
+         - ls is a tuple or list of cutting enzymes.
          - title is the title.
-         - nc is a list of non cutting enzymes.
+         - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
         return self._make_list_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_map(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Summarise mapping information as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -163,7 +185,7 @@ class PrintFormat(object):
         return self._make_map_only(ls, title) + self._make_nocut_only(nc, s1)
 
     def _make_number(self, ls, title, nc, s1):
-        """PF._make_number(ls,title, nc,s1) -> string.
+        """Format cutting position information as a string (PRIVATE).
 
         Returns a string in the form::
 
@@ -184,12 +206,13 @@ class PrintFormat(object):
          - nc is a list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
-        return self._make_number_only(ls, title) + self._make_nocut_only(nc, s1)
+        return self._make_number_only(ls, title) \
+            + self._make_nocut_only(nc, s1)
 
     def _make_nocut(self, ls, title, nc, s1):
-        """PF._make_nocut(ls,title, nc,s1) -> string.
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         ls is a list of cutting enzymes -> will not be used.
         Here for compatibility with make_format.
@@ -201,22 +224,21 @@ class PrintFormat(object):
         """
         return title + self._make_nocut_only(nc, s1)
 
-    def _make_nocut_only(self, nc, s1, ls=[], title=''):
-        """PF._make_nocut_only(nc, s1) -> string.
+    def _make_nocut_only(self, nc, s1, ls=(), title=''):
+        """Summarise non-cutting enzymes (PRIVATE).
 
-        return a formatted string of the non cutting enzymes.
+        Return a formatted string of the non cutting enzymes.
 
         Arguments:
-         - nc is a list of non cutting enzymes.
+         - nc is a tuple or list of non cutting enzymes.
          - s1 is the sentence before the non cutting enzymes.
         """
         if not nc:
             return s1
-        nc.sort()
         st = ''
         stringsite = s1 or '\n   Enzymes which do not cut the sequence.\n\n'
         Join = ''.join
-        for key in nc:
+        for key in sorted(nc):
             st = Join((st, str.ljust(str(key), self.NameWidth)))
             if len(st) > self.linesize:
                 stringsite = Join((stringsite, st, '\n'))
@@ -224,10 +246,10 @@ class PrintFormat(object):
         stringsite = Join((stringsite, st, '\n'))
         return stringsite
 
-    def _make_list_only(self, ls, title, nc=[], s1=''):
-        """PF._make_list_only(ls, title) -> string.
+    def _make_list_only(self, ls, title, nc=(), s1=''):
+        """Summarise list of positions per enzyme (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -236,7 +258,7 @@ class PrintFormat(object):
             ...
 
         Arguments:
-         - ls is a list of results.
+         - ls is a tuple or list of results.
          - title is a string.
          - Non cutting enzymes are not included.
         """
@@ -244,10 +266,10 @@ class PrintFormat(object):
             return title
         return self.__next_section(ls, title)
 
-    def _make_number_only(self, ls, title, nc=[], s1=''):
-        """PF._make_number_only(ls, title) -> string.
+    def _make_number_only(self, ls, title, nc=(), s1=''):
+        """Summarise number of cuts as a string (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             title.
 
@@ -267,25 +289,25 @@ class PrintFormat(object):
         """
         if not ls:
             return title
-        ls.sort(lambda x, y: cmp(len(x[1]), len(y[1])))
+        ls.sort(key=lambda x: len(x[1]))
         iterator = iter(ls)
         cur_len = 1
         new_sect = []
         for name, sites in iterator:
-            l = len(sites)
-            if l > cur_len:
+            length = len(sites)
+            if length > cur_len:
                 title += "\n\nenzymes which cut %i times :\n\n" % cur_len
                 title = self.__next_section(new_sect, title)
-                new_sect, cur_len = [(name, sites)], l
+                new_sect, cur_len = [(name, sites)], length
                 continue
             new_sect.append((name, sites))
         title += "\n\nenzymes which cut %i times :\n\n" % cur_len
         return self.__next_section(new_sect, title)
 
-    def _make_map_only(self, ls, title, nc=[], s1=''):
-        """PF._make_map_only(ls, title) -> string.
+    def _make_map_only(self, ls, title, nc=(), s1=''):
+        """Make string describing cutting map (PRIVATE).
 
-        return a string of form::
+        Return a string of form::
 
             | title.
             |
@@ -316,15 +338,15 @@ class PrintFormat(object):
         x, counter, length = 0, 0, len(self.sequence)
         for x in range(60, length, 60):
             counter = x - 60
-            l = []
+            loc = []
+            cutloc[counter] = loc
+            remaining = []
             for key in mapping:
                 if key <= x:
-                    l.append(key)
+                    loc.append(key)
                 else:
-                    cutloc[counter] = l
-                    mapping = mapping[mapping.index(key):]
-                    break
-            cutloc[x] = l
+                    remaining.append(key)
+            mapping = remaining
         cutloc[x] = mapping
         sequence = str(self.sequence)
         revsequence = str(self.sequence.complement())
@@ -340,9 +362,9 @@ class PrintFormat(object):
                 if key == base:
                     for n in enzymemap[key]:
                         s = ' '.join((s, n))
-                    l = line[0:59]
-                    lineo = Join((l, str(key), s, '\n'))
-                    line2 = Join((l, a, '\n'))
+                    chunk = line[0:59]
+                    lineo = Join((chunk, str(key), s, '\n'))
+                    line2 = Join((chunk, a, '\n'))
                     linetot = Join((lineo, line2))
                     map = Join((map, linetot))
                     break
@@ -356,8 +378,9 @@ class PrintFormat(object):
                 map = Join((map, linetot))
             mapunit = '\n'.join((sequence[counter: base], a * 60,
                                  revsequence[counter: base],
-                                 Join((str.ljust(str(counter + 1), 15), ' ' * 30,
-                                       str.rjust(str(base), 15), '\n\n'))
+                                 Join((str.ljust(str(counter + 1), 15),
+                                       ' ' * 30, str.rjust(str(base), 15),
+                                       '\n\n'))
                                  ))
             map = Join((map, mapunit))
         line = ' ' * 60
@@ -366,9 +389,9 @@ class PrintFormat(object):
             if key == length:
                 for n in enzymemap[key]:
                     s = Join((s, ' ', n))
-                l = line[0:(length - 1)]
-                lineo = Join((l, str(key), s, '\n'))
-                line2 = Join((l, a, '\n'))
+                chunk = line[0:(length - 1)]
+                lineo = Join((chunk, str(key), s, '\n'))
+                line2 = Join((chunk, a, '\n'))
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
                 break
@@ -393,10 +416,10 @@ class PrintFormat(object):
 # private method to do lists:
 
     def __next_section(self, ls, into):
-        """FP.__next_section(ls, into) -> string.
+        """Next section (PRIVATE).
 
         Arguments:
-         - ls is a list of tuple (string, [int, int]).
+         - ls is a tuple/list of tuple (string, [int, int]).
          - into is a string to which the formatted ls will be added.
 
         Format ls as a string of lines:
@@ -408,22 +431,21 @@ class PrintFormat(object):
         then add the formatted ls to tot
         return tot.
         """
-        ls.sort()
         indentation = '\n' + (self.NameWidth + self.Indent) * ' '
         linesize = self.linesize - self.MaxSize
-        pat = re.compile("([\w,\s()]){1,%i}[,\.]" % linesize)
+        pat = re.compile(r"([\w,\s()]){1,%i}[,\.]" % linesize)
         several, Join = '', ''.join
-        for name, sites in ls:
+        for name, sites in sorted(ls):
             stringsite = ''
-            l = Join((', '.join(str(site) for site in sites), '.'))
-            if len(l) > linesize:
+            output = Join((', '.join(str(site) for site in sites), '.'))
+            if len(output) > linesize:
                 #
                 #   cut where appropriate and add the indentation
                 #
-                l = [x.group() for x in re.finditer(pat, l)]
-                stringsite = indentation.join(l)
+                output = [x.group() for x in re.finditer(pat, output)]
+                stringsite = indentation.join(output)
             else:
-                stringsite = l
-            into = Join((into,
-                         str(name).ljust(self.NameWidth), ' :  ', stringsite, '\n'))
+                stringsite = output
+            into = Join((into, str(name).ljust(self.NameWidth), ' :  ',
+                         stringsite, '\n'))
         return into

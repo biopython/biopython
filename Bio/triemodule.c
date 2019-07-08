@@ -1,3 +1,20 @@
+/* Copyright 2002-2004 by Jeff Chang.  All rights reserved.
+ * Revisions copyright 2008-2013 by Michiel de Hoon.  All rights reserved.
+ * Revisions copyright 2014 by Peter Cock.  All rights reserved.
+ * Revisions copyright 2007 by Noam Kremen.  All rights reserved. 
+ *
+ * This file is part of the Biopython distribution and governed by your
+ * choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+ * Please see the LICENSE file that should have been included as part of this
+ * package.
+ *
+ * triemodule.c
+ *
+ * Implements the Bio.trie module providing a trie data structure.
+ *
+ * Used by findtrie.py
+ */
+
 #include <Python.h>
 #include <marshal.h>
 #include "trie.h"
@@ -691,6 +708,12 @@ _read_from_handle(void *wasread, const int length, void *handle)
     }
 
     py_retval = PyObject_CallMethod(py_handle, "read", "i", length);
+    if (!py_retval)
+    {
+        PyErr_SetString(PyExc_RuntimeError, "Failed to read from file. "
+                "Verify that you did not open a binary file ('rb') in text mode ('r') or vice versa.");
+        goto error;
+    }
 #ifdef IS_PY3K
     if(!PyBytes_Check(py_retval)) {
 #else
@@ -785,6 +808,8 @@ trie    Create a new trie object.\n\
 save    Save a trie to a handle.\n\
 load    Load a trie from a handle.\n\
 \n\
+This module is OBSOLETE. We encourage users to switch to alternative\n\
+libraries implementing a trie data structure, for example pygtrie.\n\
 ";
 
 #if PY_MAJOR_VERSION >= 3
@@ -810,6 +835,11 @@ void inittrie(void)
 #endif
 {
     Py_TYPE(&Trie_Type) = &PyType_Type;
+
+    PyErr_WarnEx(NULL,
+"This module has been deprecated. We encourage users to switch "
+"to alternative libraries implementing a trie data structure, "
+"for example pygtrie.", 1);
 
     if (PyType_Ready(&Trie_Type) < 0)
 #if PY_MAJOR_VERSION >= 3

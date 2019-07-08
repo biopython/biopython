@@ -5,7 +5,7 @@
 
 """Code to access resources at ExPASy over the WWW.
 
-See http://www.expasy.ch/
+See https://www.expasy.org/
 
 
 Functions:
@@ -13,102 +13,105 @@ Functions:
  - get_prosite_entry Interface to the get-prosite-entry CGI script.
  - get_prosite_raw   Interface to the get-prosite-raw CGI script.
  - get_sprot_raw     Interface to the get-sprot-raw CGI script.
- - sprot_search_ful  Interface to the sprot-search-ful CGI script.
- - sprot_search_de   Interface to the sprot-search-de CGI script.
+
 """
 
 # Importing these functions with leading underscore as not intended for reuse
 from Bio._py3k import urlopen as _urlopen
-from Bio._py3k import urlencode as _urlencode
-
-__docformat__ = "restructuredtext en"
+from Bio._py3k import _binary_to_string_handle
 
 
-def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
-    """get_prodoc_entry(id,
-    cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry') -> handle
+def get_prodoc_entry(id,
+                     cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry'):
+    """Get a text handle to a PRODOC entry at ExPASy in HTML format.
 
-    Get a handle to a PRODOC entry at ExPASy in HTML format.
+    >>> from Bio import ExPASy
+    >>> in_handle = ExPASy.get_prodoc_entry('PDOC00001')
+    >>> html = in_handle.read()
+    >>> in_handle.close()
+    ...
+    >>> with open("myprodocrecord.html", "w") as out_handle:
+    ...     # Python2/3 docstring workaround: Revise for 'Python 3 only'
+    ...     _ = out_handle.write(html)
+    ...
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
-    containing this line:
-    'There is no PROSITE documentation entry XXX. Please try again.'
+    containing this text: 'There is currently no PROSITE entry for'
     """
-    # Open a handle to ExPASy.
-    return _urlopen("%s?%s" % (cgi, id))
+    return _binary_to_string_handle(_urlopen("%s?%s" % (cgi, id)))
 
 
 def get_prosite_entry(id,
-                      cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry'):
-    """get_prosite_entry(id,
-    cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry') -> handle
+                      cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry'):
+    """Get a text handle to a PROSITE entry at ExPASy in HTML format.
 
-    Get a handle to a PROSITE entry at ExPASy in HTML format.
+    >>> from Bio import ExPASy
+    >>> in_handle = ExPASy.get_prosite_entry('PS00001')
+    >>> html = in_handle.read()
+    >>> in_handle.close()
+    ...
+    >>> with open("myprositerecord.html", "w") as out_handle:
+    ...     # Python 2/3 docstring workaround: Revise for 'Python 3 only'
+    ...     _ = out_handle.write(html)
+    ...
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
-    containing this line:
-    'There is currently no PROSITE entry for XXX. Please try again.'
+    containing this text: 'There is currently no PROSITE entry for'
     """
-    return _urlopen("%s?%s" % (cgi, id))
+    return _binary_to_string_handle(_urlopen("%s?%s" % (cgi, id)))
 
 
-def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
-    """get_prosite_raw(id,
-                       cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl')
-    -> handle
+def get_prosite_raw(id, cgi=None):
+    """Get a text handle to a raw PROSITE or PRODOC record at ExPASy.
 
-    Get a handle to a raw PROSITE or PRODOC entry at ExPASy.
+    The cgi argument is deprecated due to changes in the ExPASy
+    website.
 
-    For a non-existing key, ExPASy returns nothing.
+    >>> from Bio import ExPASy
+    >>> from Bio.ExPASy import Prosite
+    >>> handle = ExPASy.get_prosite_raw('PS00001')
+    >>> record = Prosite.read(handle)
+    >>> handle.close()
+    >>> print(record.accession)
+    PS00001
+
+    For a non-existing key, ExPASy returns an error:
+
+    >>> # Python 2/3 docstring workaround: Revise for 'Python 3 only'
+    >>> try:
+    ...    handle = ExPASy.get_prosite_raw("does_not_exist")
+    ... except Exception as e:
+    ...    print('HTTPError: %s' %e)
+    HTTPError: ... Error 404: Not Found
+
     """
-    return _urlopen("%s?%s" % (cgi, id))
+    url = "https://prosite.expasy.org/%s.txt" % id
+    return _binary_to_string_handle(_urlopen(url))
 
 
 def get_sprot_raw(id):
-    """Get a handle to a raw SwissProt entry at ExPASy.
+    """Get a text handle to a raw SwissProt entry at ExPASy.
 
     For an ID of XXX, fetches http://www.uniprot.org/uniprot/XXX.txt
-    (as per the http://www.expasy.ch/expasy_urls.html documentation).
-    """
-    return _urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
+    (as per the https://www.expasy.org/expasy_urls.html documentation).
 
+    >>> from Bio import ExPASy
+    >>> from Bio import SwissProt
+    >>> handle = ExPASy.get_sprot_raw("O23729")
+    >>> record = SwissProt.read(handle)
+    >>> handle.close()
+    >>> print(record.entry_name)
+    CHS3_BROFI
 
-def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
-                     cgi='http://www.expasy.ch/cgi-bin/sprot-search-ful'):
-    """sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
-    cgi='http://www.expasy.ch/cgi-bin/sprot-search-ful') -> handle
+    For a non-existing identifier, UniProt returns an error:
 
-    Search SwissProt by full text.
+    >>> # Python2/3 docstring workaround: Revise for 'Python 3 only'
+    >>> try:
+    ...    ExPASy.get_sprot_raw("DOES_NOT_EXIST")
+    ... except Exception as e:
+    ...    print('HTTPError: %s' %e)
+    HTTPError: ... Error 404: 
 
-    """
-    variables = {'SEARCH': text}
-    if make_wild:
-        variables['makeWild'] = 'on'
-    if swissprot:
-        variables['S'] = 'on'
-    if trembl:
-        variables['T'] = 'on'
-    options = _urlencode(variables)
-    fullcgi = "%s?%s" % (cgi, options)
-    handle = _urlopen(fullcgi)
-    return handle
-
-
-def sprot_search_de(text, swissprot=1, trembl=None,
-                    cgi='http://www.expasy.ch/cgi-bin/sprot-search-de'):
-    """sprot_search_de(text, swissprot=1, trembl=None,
-    cgi='http://www.expasy.ch/cgi-bin/sprot-search-de') -> handle
-
-    Search SwissProt by name, description, gene name, species, or
-    organelle.
-
-    """
-    variables = {'SEARCH': text}
-    if swissprot:
-        variables['S'] = 'on'
-    if trembl:
-        variables['T'] = 'on'
-    options = _urlencode(variables)
-    fullcgi = "%s?%s" % (cgi, options)
-    handle = _urlopen(fullcgi)
-    return handle
+    """  # noqa: W291
+    url = "http://www.uniprot.org/uniprot/%s.txt" % id
+    return _binary_to_string_handle(_urlopen(url))

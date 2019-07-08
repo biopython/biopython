@@ -2,14 +2,10 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tools to manipulate data from nmrview .xpk peaklist files.
-"""
+"""Tools to manipulate data from nmrview .xpk peaklist files."""
 
 from __future__ import print_function
 
-import sys
-
-__docformat__ = "restructuredtext en"
 
 HEADERLEN = 6
 
@@ -39,7 +35,9 @@ class XpkEntry(object):
         self.field["entrynum"] returns the line number (1st field of line)
 
     """
+
     def __init__(self, entry, headline):
+        """Initialize the class."""
         # Holds all fields from input line in a dictionary
         # keys are data labels from the .xpk header
         self.fields = {}
@@ -49,7 +47,7 @@ class XpkEntry(object):
 
         i = 0
         for i in range(len(datlist) - 1):
-            self.fields[headlist[i]] = datlist[i+1]
+            self.fields[headlist[i]] = datlist[i + 1]
         i = i + 1
 
         try:
@@ -88,7 +86,6 @@ class Peaklist(object):
 
     Examples
     --------
-
     >>> from Bio.NMR.xpktools import Peaklist
     >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
     >>> peaklist.firstline
@@ -101,8 +98,9 @@ class Peaklist(object):
     ' H1.L  H1.P  H1.W  H1.B  H1.E  H1.J  15N2.L  15N2.P  15N2.W  15N2.B  15N2.E  15N2.J  N15.L  N15.P  N15.W  N15.B  N15.E  N15.J  vol  int  stat '
 
     """
-    def __init__(self, infn):
 
+    def __init__(self, infn):
+        """Initialize the class."""
         with open(infn, 'r') as infile:
 
             # Read in the header lines
@@ -117,7 +115,7 @@ class Peaklist(object):
             self.data = [line.split("\012")[0] for line in infile]
 
     def residue_dict(self, index):
-        """Return a dict of lines in \`data\` indexed by residue number or a nucleus.
+        """Return a dict of lines in 'data' indexed by residue number or a nucleus.
 
         The nucleus should be given as the input argument in the same form as
         it appears in the xpk label line (H1, 15N for example)
@@ -134,7 +132,6 @@ class Peaklist(object):
 
         Examples
         --------
-
         >>> from Bio.NMR.xpktools import Peaklist
         >>> peaklist = Peaklist('../Doc/examples/nmr/noed.xpk')
         >>> residue_d = peaklist.residue_dict('H1')
@@ -144,7 +141,6 @@ class Peaklist(object):
         ['8  10.hn   7.663   0.021   0.010   ++   0.000   10.n   118.341   0.324   0.010   +E   0.000   10.n   118.476   0.324   0.010   +E   0.000  0.49840 0.49840 0']
 
         """
-
         maxres = -1
         minres = -1
 
@@ -182,7 +178,7 @@ class Peaklist(object):
 
     def write_header(self, outfn):
         """Write header lines from input file to handle `outfn`."""
-        with open(outfn, 'wb') as outfile:
+        with open(outfn, 'w') as outfile:
             outfile.write(self.firstline)
             outfile.write("\012")
             outfile.write(self.axislabels)
@@ -198,7 +194,7 @@ class Peaklist(object):
 
 
 def replace_entry(line, fieldn, newentry):
-    """Helper function replace an entry in a string by the field number.
+    """Replace an entry in a string by the field number.
 
     No padding is implemented currently.  Spacing will change if
     the original field entry and the new field entry are of
@@ -208,7 +204,7 @@ def replace_entry(line, fieldn, newentry):
 
     start = _find_start_entry(line, fieldn)
     leng = len(line[start:].split()[0])
-    newline = line[:start] + str(newentry) + line[(start+leng):]
+    newline = line[:start] + str(newentry) + line[(start + leng):]
     return newline
 
 
@@ -222,6 +218,7 @@ def _find_start_entry(line, n):
     -------
     starting character : str
         The starting character for entry `n`.
+
     """
     # This function is used by replace_entry
 
@@ -245,7 +242,7 @@ def _find_start_entry(line, n):
 
     while (c < leng and field < n):
         if (infield):
-            if (line[c] == " " and not (line[c-1] == " ")):
+            if (line[c] == " " and not (line[c - 1] == " ")):
                 infield = 0
             else:
                 if (not line[c] == " "):
@@ -278,7 +275,7 @@ def data_table(fn_list, datalabel, keyatom):
     # TODO - Clarify this docstring, add an example?
     outlist = []
 
-    [dict_list, label_line_list] = _read_dicts(fn_list, keyatom)
+    dict_list, label_line_list = _read_dicts(fn_list, keyatom)
 
     # Find global max and min residue numbers
     minr = dict_list[0]["minres"]

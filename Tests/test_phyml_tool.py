@@ -9,6 +9,8 @@ import sys
 import os
 import unittest
 
+from Bio._py3k import getoutput
+
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
 from Bio import MissingExternalDependencyError
@@ -17,18 +19,23 @@ from Bio import MissingExternalDependencyError
 os.environ['LANG'] = 'C'
 
 phyml_exe = None
-if sys.platform=="win32":
-    raise MissingExternalDependencyError(
-        "Testing PhyML on Windows not supported yet")
-else:
-    from Bio._py3k import getoutput
-    output = getoutput("phyml --version")
-    if "not found" not in output and "20" in output:
-        phyml_exe = "phyml"
+exe_name = "PhyML-3.1_win32.exe" if sys.platform == "win32" else "phyml"
+try:
+    output = getoutput(exe_name + " --version")
+    if "not found" not in output and ("20" in output or "PhyML" in output):
+        phyml_exe = exe_name
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    # Python 2.6 or 2.7 on Windows XP:
+    # WindowsError: [Error 2] The system cannot find the file specified
+    # Python 3.3 or 3.4 on Windows XP:
+    # FileNotFoundError: [WinError 2] The system cannot find the file specified
+    pass
 
 if not phyml_exe:
     raise MissingExternalDependencyError(
-        "Install PhyML 3.0 if you want to use the Bio.Phylo.Applications wrapper.")
+        "Install PhyML 3.0 or later if you want to use the "
+        "Bio.Phylo.Applications wrapper.")
 
 
 # Example Phylip file with 4 aligned protein sequences
@@ -47,11 +54,18 @@ class AppTests(unittest.TestCase):
             self.assertTrue(len(out) > 0)
             self.assertEqual(len(err), 0)
             # Check the output tree
-            tree = Phylo.read(EX_PHYLIP + '_phyml_tree.txt', 'newick')
+            outfname = EX_PHYLIP + '_phyml_tree.txt'
+            if not os.path.isfile(outfname):
+                # NB: Briefly, PhyML dropped the .txt suffix (#919)
+                outfname = outfname[:-4]
+            tree = Phylo.read(outfname, 'newick')
             self.assertEqual(tree.count_terminals(), 4)
+        except Exception as exc:
+            self.fail("PhyML wrapper error: %s" % exc)
         finally:
             # Clean up generated files
-            for suffix in ['_phyml_tree.txt', '_phyml_stats.txt']:
+            for suffix in ['_phyml_tree.txt', '_phyml_tree',
+                           '_phyml_stats.txt', '_phyml_stats']:
                 fname = EX_PHYLIP + suffix
                 if os.path.isfile(fname):
                     os.remove(fname)

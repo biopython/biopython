@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>blastx</program>
+      <version>BLASTX 2.9.0+</version>
+      <reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</reference>
+      <search-target>
+        <Target>
+          <db>nr</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <matrix>BLOSUM62</matrix>
+          <expect>10</expect>
+          <gap-open>11</gap-open>
+          <gap-extend>1</gap-extend>
+          <filter>F</filter>
+          <cbs>2</cbs>
+          <query-gencode>1</query-gencode>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <search>
+            <Search>
+              <query-id>AI021773.1</query-id>
+              <query-title>MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5&apos; end similar to S. mansoni actin mRNA, complete cds, mRNA sequence</query-title>
+              <query-len>365</query-len>
+              <hits>
+                <Hit>
+                  <num>1</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|1530504495|emb|VDM03167.1|</id>
+                      <accession>VDM03167</accession>
+                      <title>unnamed protein product, partial [Schistocephalus solidus]</title>
+                      <taxid>70667</taxid>
+                      <sciname>Schistocephalus solidus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>132</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>161.77</bit-score>
+                      <score>408</score>
+                      <evalue>8.11609e-49</evalue>
+                      <identity>81</identity>
+                      <positive>83</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>2</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|510859078|gb|EPB74633.1|</id>
+                      <accession>EPB74633</accession>
+                      <title>hypothetical protein ANCCEY_06263 [Ancylostoma ceylanicum]</title>
+                      <taxid>53326</taxid>
+                      <sciname>Ancylostoma ceylanicum</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>119</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>160.614</bit-score>
+                      <score>405</score>
+                      <evalue>1.40046e-48</evalue>
+                      <identity>81</identity>
+                      <positive>85</positive>
+                      <query-from>20</query-from>
+                      <query-to>364</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>115</hit-to>
+                      <align-len>115</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTELHCIRKP</qseq>
+                      <hseq>MCDDDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTEAHSILKP</hseq>
+                      <midline>M D++V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE H I KP</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>3</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|684409690|ref|XP_009175831.1|</id>
+                      <accession>XP_009175831</accession>
+                      <title>hypothetical protein T265_11027 [Opisthorchis viverrini]</title>
+                      <taxid>6198</taxid>
+                      <sciname>Opisthorchis viverrini</sciname>
+                    </HitDescr>
+                    <HitDescr>
+                      <id>gi|663044098|gb|KER20427.1|</id>
+                      <accession>KER20427</accession>
+                      <title>hypothetical protein T265_11027 [Opisthorchis viverrini]</title>
+                      <taxid>6198</taxid>
+                      <sciname>Opisthorchis viverrini</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>246</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>163.696</bit-score>
+                      <score>413</score>
+                      <evalue>4.40404e-48</evalue>
+                      <identity>81</identity>
+                      <positive>83</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>4</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|449710331|gb|EMD49430.1|</id>
+                      <accession>EMD49430</accession>
+                      <title>actin, putative, partial [Entamoeba histolytica KU27]</title>
+                      <taxid>885311</taxid>
+                      <sciname>Entamoeba histolytica KU27</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>124</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>159.073</bit-score>
+                      <score>401</score>
+                      <evalue>9.0486e-48</evalue>
+                      <identity>78</identity>
+                      <positive>81</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQSKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>5</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|257215766|emb|CAX83035.1|</id>
+                      <accession>CAX83035</accession>
+                      <title>Actin-2, partial [Schistosoma japonicum]</title>
+                      <taxid>6182</taxid>
+                      <sciname>Schistosoma japonicum</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>252</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>162.925</bit-score>
+                      <score>411</score>
+                      <evalue>1.00219e-47</evalue>
+                      <identity>81</identity>
+                      <positive>83</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>6</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|1535393712|emb|VDP83060.1|</id>
+                      <accession>VDP83060</accession>
+                      <title>unnamed protein product, partial [Echinostoma caproni]</title>
+                      <taxid>27848</taxid>
+                      <sciname>Echinostoma caproni</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>209</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>161.384</bit-score>
+                      <score>407</score>
+                      <evalue>1.16397e-47</evalue>
+                      <identity>80</identity>
+                      <positive>83</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADDEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>MAD+EVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>7</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|312773|emb|CAA50205.1|</id>
+                      <accession>CAA50205</accession>
+                      <title>actin, partial [Entamoeba histolytica]</title>
+                      <taxid>5759</taxid>
+                      <sciname>Entamoeba histolytica</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>137</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>159.073</bit-score>
+                      <score>401</score>
+                      <evalue>1.25869e-47</evalue>
+                      <identity>78</identity>
+                      <positive>81</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MGDEEVQALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHVSVMAGMGQKDAYVGDEAQSKRGILTLKYPIEHGIVNNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>M DEEVQALVVDNGSGMCKAG       ++  P               G KD+YVGDEAQSKRGILTLKYPIEHGIV NWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>8</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|1530341495|emb|VDN44756.1|</id>
+                      <accession>VDN44756</accession>
+                      <title>unnamed protein product, partial [Dibothriocephalus latus]</title>
+                      <taxid>60516</taxid>
+                      <sciname>Dibothriocephalus latus</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>145</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>158.688</bit-score>
+                      <score>400</score>
+                      <evalue>1.78336e-47</evalue>
+                      <identity>78</identity>
+                      <positive>82</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MGDEDVQALVIDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>M DE+VQALV+DNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>9</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|1524877828|ref|XP_027046469.1|</id>
+                      <accession>XP_027046469</accession>
+                      <title>actin-1, partial [Pocillopora damicornis]</title>
+                      <taxid>46731</taxid>
+                      <sciname>Pocillopora damicornis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>122</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>157.918</bit-score>
+                      <score>398</score>
+                      <evalue>1.93331e-47</evalue>
+                      <identity>78</identity>
+                      <positive>82</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADEEVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRIAPEEHPILLTE</hseq>
+                      <midline>MADEEV ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELR+APEEHP+LLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>10</num>
+                  <description>
+                    <HitDescr>
+                      <id>gi|1524877860|ref|XP_027046487.1|</id>
+                      <accession>XP_027046487</accession>
+                      <title>actin-1-like [Pocillopora damicornis]</title>
+                      <taxid>46731</taxid>
+                      <sciname>Pocillopora damicornis</sciname>
+                    </HitDescr>
+                  </description>
+                  <len>134</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>158.303</bit-score>
+                      <score>399</score>
+                      <evalue>2.36088e-47</evalue>
+                      <identity>79</identity>
+                      <positive>82</positive>
+                      <query-from>20</query-from>
+                      <query-to>343</query-to>
+                      <query-frame>2</query-frame>
+                      <hit-from>1</hit-from>
+                      <hit-to>108</hit-to>
+                      <align-len>108</align-len>
+                      <gaps>0</gaps>
+                      <qseq>MADEEVQALVVDNGSGMCKAGIRW**CTKSSIPFHRWTTSTSRCDGWYGSKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</qseq>
+                      <hseq>MADEDVAALVVDNGSGMCKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</hseq>
+                      <midline>MADE+V ALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+              </hits>
+              <stat>
+                <Statistics>
+                  <db-num>195483068</db-num>
+                  <db-len>71133367251</db-len>
+                  <hsp-len>88</hsp-len>
+                  <eff-space>1797401858175</eff-space>
+                  <kappa>0.041</kappa>
+                  <lambda>0.267</lambda>
+                  <entropy>0.14</entropy>
+                </Statistics>
+              </stat>
+            </Search>
+          </search>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>
+

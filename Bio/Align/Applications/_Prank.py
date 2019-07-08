@@ -1,13 +1,13 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple alignment program PRANK.
-"""
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple alignment program PRANK."""
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -17,9 +17,22 @@ class PrankCommandline(AbstractCommandline):
 
     http://www.ebi.ac.uk/goldman-srv/prank/prank/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 081202
 
+    References
+    ----------
+    Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
+    multiple alignment of sequences with insertions. Proceedings of
+    the National Academy of Sciences, 102: 10557--10562.
+
+    Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement
+    prevents errors in sequence alignment and evolutionary analysis.
+    Science, 320: 1632.
+
+    Examples
+    --------
     To align a FASTA file (unaligned.fasta) with the output in aligned
     FASTA format with the output filename starting with "aligned" (you
     can't pick the filename explicitly), no tree output and no XML output,
@@ -36,20 +49,10 @@ class PrankCommandline(AbstractCommandline):
     You would typically run the command line with prank_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citations:
-    ----------
-
-    Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
-    multiple alignment of sequences with insertions. Proceedings of
-    the National Academy of Sciences, 102: 10557--10562.
-
-    Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement
-    prevents errors in sequence alignment and evolutionary analysis.
-    Science, 320: 1632.
-
-    Last checked against version: 081202
     """
+
     def __init__(self, cmd="prank", **kwargs):
+        """Initialize the class."""
         OUTPUT_FORMAT_VALUES = list(range(1, 18))
         self.parameters = [
             # ################# input/output parameters: ##################
@@ -130,9 +133,8 @@ class PrankCommandline(AbstractCommandline):
                     "Purine/pyrimidine ratio. Default: 1",
                     checker_function=lambda x: isinstance(x, int)),
             # -codon [for DNA: use empirical codon model]
-            # Assuming this is an input file as in -m
-            _Option(["-codon", "codon"],
-                    "Codon model filename. Default: empirical codon model"),
+            _Switch(["-codon", "codon"],
+                    "Codon aware alignment or not"),
             # -termgap [penalise terminal gaps normally]
             _Switch(["-termgap", "termgap"],
                     "Penalise terminal gaps normally"),
@@ -159,17 +161,17 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-printnodes", "printnodes"],
                     "Output each node; mostly for debugging"),
             # -matresize=# [matrix resizing multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matresize", "matresize"],
                     "Matrix resizing multiplier",
-                    checker_function=lambda x: isinstance(x, float) or
-                                               isinstance(x, int)),
+                    checker_function=lambda x: (isinstance(x, float) or
+                                                isinstance(x, int))),
             # -matinitsize=# [matrix initial size multiplier]
-            # Doesnt specify type but Float and Int work
+            # Doesn't specify type but Float and Int work
             _Option(["-matinitsize", "matinitsize"],
                     "Matrix initial size multiplier",
-                    checker_function=lambda x: isinstance(x, float) or
-                                               isinstance(x, int)),
+                    checker_function=lambda x: (isinstance(x, float) or
+                                                isinstance(x, int))),
             _Switch(["-longseq", "longseq"],
                     "Save space in pairwise alignments"),
             _Switch(["-pwgenomic", "pwgenomic"],
@@ -207,12 +209,6 @@ class PrankCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running modules doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

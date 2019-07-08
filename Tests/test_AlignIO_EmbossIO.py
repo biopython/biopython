@@ -3,7 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for Bio.AlignIO.EmbossIO"""
+"""Tests for Bio.AlignIO.EmbossIO module."""
 
 import unittest
 
@@ -60,7 +60,7 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 #---------------------------------------
 #---------------------------------------
 
-"""
+"""  # noqa: E122 not clear to me, why this comes up here
 
 # http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
 pair_example = \
@@ -104,7 +104,7 @@ IXI_235           82 SRPNRFAPTLMSSCITSTTGPPAWAGDRSHE    112
 #---------------------------------------       
 
 
-"""
+"""  # noqa : W291
 
 pair_example2 = \
 """########################################
@@ -276,7 +276,7 @@ gi|94970041|r     97 AEFLQKPFTSDSLLRKVRAVLQKRQ    121
 #---------------------------------------
 #---------------------------------------
 
-"""
+"""  # noqa : W291
 
 pair_example3 = """########################################
 # Program: needle
@@ -365,7 +365,7 @@ asis             311 -----------------    311
 
 
 #---------------------------------------
-#---------------------------------------"""
+#---------------------------------------"""  # noqa : W291
 
 
 class TestEmbossIO(unittest.TestCase):

@@ -1,16 +1,27 @@
-# A superclass for reading [f]ixed-column type [f]lat-[f]ile records. (e.g.
-class fff_rec:
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""A superclass for reading [f]ixed-column type [f]lat-[f]ile records."""
+
+
+class fff_rec(object):
+    """Define superclass for reading fixed-column type flat-file records."""
+
     def __init__(self, inrec=''):
+        """Initialize the class."""
         self.data = inrec
 
     def __repr__(self):
+        """Return FSSP record object as a string."""
         return str(self.data)
-    __str__ = __repr__
 
     def __len__(self):
+        """Return length (number of rows)."""
         return len(self.data)
 
     def __getitem__(self, index):
+        """Extract a subset of the record (treating it like an array)."""
         if isinstance(index, slice):
             return self.data[index]
         elif (isinstance(index, tuple) or isinstance(index, list)) \
@@ -21,8 +32,9 @@ class fff_rec:
             return self.data[index]
 
 
-# Definition of the align section in a FSSP file
 class align(object):
+    """Definition of the align section in a FSSP file."""
+
     abs_res_num = (0, 4)
     pdb_res_num = (4, 9)
     chain_id = 10

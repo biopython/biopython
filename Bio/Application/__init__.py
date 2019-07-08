@@ -1,9 +1,11 @@
 # Copyright 2001-2004 Brad Chapman.
 # Revisions copyright 2009-2013 by Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """General mechanisms to access applications in Biopython.
 
 This module is not intended for direct use. It provides the basic objects which
@@ -32,7 +34,6 @@ from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
-__docformat__ = "restructuredtext en"
 
 # Use this regular expression to test the property names are going to
 # be valid as Python properties or arguments
@@ -71,17 +72,20 @@ class ApplicationError(_ProcessCalledError):
     Non-zero return code -11 from 'helloworld', message 'Some error text'
 
     """
+
     def __init__(self, returncode, cmd, stdout="", stderr=""):
+        """Initialize."""
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
         self.stderr = stderr
 
     def __str__(self):
+        """Format the error as a string."""
         # get first line of any stderr message
         try:
             msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
-        except:
+        except Exception:  # TODO, ValueError? AttributeError?
             msg = ""
         if msg:
             return "Non-zero return code %d from %r, message %r" \
@@ -91,12 +95,13 @@ class ApplicationError(_ProcessCalledError):
                    % (self.returncode, self.cmd)
 
     def __repr__(self):
+        """Represent the error as a string."""
         return "ApplicationError(%i, %s, %s, %s)" \
                % (self.returncode, self.cmd, self.stdout, self.stderr)
 
 
 class AbstractCommandline(object):
-    """Generic interface for constructing command line strings.
+    r"""Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.
@@ -159,7 +164,7 @@ class AbstractCommandline(object):
     the full path to the binary as the first argument (cmd):
 
     >>> from Bio.Emboss.Applications import WaterCommandline
-    >>> water_cmd = WaterCommandline("C:\Program Files\EMBOSS\water.exe",
+    >>> water_cmd = WaterCommandline(r"C:\Program Files\EMBOSS\water.exe",
     ...                              gapopen=10, gapextend=0.5,
     ...                              asequence="asis:ACCCGGGCGCGGT",
     ...                              bsequence="asis:ACCCGAGCGCGGT",
@@ -171,11 +176,15 @@ class AbstractCommandline(object):
     been quoted.
 
     """
+
     # TODO - Replace the above example since EMBOSS doesn't work properly
     # if installed into a folder with a space like "C:\Program Files\EMBOSS"
-
+    #
     # Note the call example above is not a doctest as we can't handle EMBOSS
     # (or any other tool) being missing in the unit tests.
+
+    parameters = None  # will be a list defined in subclasses
+
     def __init__(self, cmd, **kwargs):
         """Create a new instance of a command line wrapper object."""
         # Init method - should be subclassed!
@@ -203,7 +212,8 @@ class AbstractCommandline(object):
         aliases = set()
         for p in parameters:
             if not p.names:
-                assert isinstance(p, _StaticArgument), p
+                if not isinstance(p, _StaticArgument):
+                    raise TypeError("Expected %r to be of type _StaticArgument" % p)
                 continue
             for name in p.names:
                 if name in aliases:
@@ -212,18 +222,18 @@ class AbstractCommandline(object):
                 aliases.add(name)
             name = p.names[-1]
             if _re_prop_name.match(name) is None:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name in python"
-                                 % repr(name))
+                                 % name)
             if name in _reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name because it is "
-                                 "a reserved word in python" % repr(name))
+                                 "a reserved word in python" % name)
             if name in _local_reserved_names:
-                raise ValueError("Final parameter name %s cannot be used as "
+                raise ValueError("Final parameter name %r cannot be used as "
                                  "an argument or property name due to the "
                                  "way the AbstractCommandline class works"
-                                 % repr(name))
+                                 % name)
 
             # Beware of binding-versus-assignment confusion issues
             def getter(name):
@@ -267,6 +277,7 @@ class AbstractCommandline(object):
         """Make the commandline string with the currently set options.
 
         e.g.
+
         >>> from Bio.Emboss.Applications import WaterCommandline
         >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
@@ -289,6 +300,7 @@ class AbstractCommandline(object):
         """Return a representation of the command line object for debugging.
 
         e.g.
+
         >>> from Bio.Emboss.Applications import WaterCommandline
         >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
         >>> cline.asequence = "asis:ACCCGGGCGCGGT"
@@ -299,19 +311,19 @@ class AbstractCommandline(object):
         >>> cline
         WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
-        answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
+        answer = "%s(cmd=%r" % (self.__class__.__name__, self.program_name)
         for parameter in self.parameters:
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
                 else:
-                    answer += ", %s=%s" \
-                              % (parameter.names[-1], repr(parameter.value))
+                    answer += ", %s=%r" \
+                              % (parameter.names[-1], parameter.value)
         answer += ")"
         return answer
 
     def _get_parameter(self, name):
-        """Get a commandline option value."""
+        """Get a commandline option value (PRIVATE)."""
         for parameter in self.parameters:
             if name in parameter.names:
                 if isinstance(parameter, _Switch):
@@ -321,7 +333,7 @@ class AbstractCommandline(object):
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name):
-        """Reset or clear a commandline option value."""
+        """Reset or clear a commandline option value (PRIVATE)."""
         cleared_option = False
         for parameter in self.parameters:
             if name in parameter.names:
@@ -361,7 +373,7 @@ class AbstractCommandline(object):
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
-        """Check whether the given value is valid.
+        """Check whether the given value is valid (PRIVATE).
 
         No return value - it either works or raises a ValueError.
 
@@ -372,7 +384,9 @@ class AbstractCommandline(object):
         """
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
-            assert is_good in [0, 1, True, False]
+            if is_good not in [0, 1, True, False]:
+                raise ValueError("Result of check_function: %r is of an unexpected value"
+                                 % is_good)
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
                                  % (value, name))
@@ -409,7 +423,7 @@ class AbstractCommandline(object):
 
     def __call__(self, stdin=None, stdout=True, stderr=True,
                  cwd=None, env=None):
-        """Executes the command, waits for it to finish, and returns output.
+        """Execute command, wait for it to finish, return (stdout, stderr).
 
         Runs the command line tool and waits for it to finish. If it returns
         a non-zero error level, an exception is raised. Otherwise two strings
@@ -476,14 +490,12 @@ class AbstractCommandline(object):
         # Using universal newlines is important on Python 3, this
         # gives unicode handles rather than bytes handles.
 
-        # Windows 7 and 8 want shell = True
-        # platform is easier to understand that sys to determine
-        # windows version
+        # Windows 7, 8, 8.1 and 10 want shell = True
         if sys.platform != "win32":
             use_shell = True
         else:
             win_ver = platform.win32_ver()[0]
-            if win_ver in ["7", "8"]:
+            if win_ver in ["7", "8", "post2012Server", "10"]:
                 use_shell = True
             else:
                 use_shell = False
@@ -516,11 +528,12 @@ class AbstractCommandline(object):
         return stdout_str, stderr_str
 
 
-class _AbstractParameter:
+class _AbstractParameter(object):
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.
     """
+
     def __init__(self):
         raise NotImplementedError
 
@@ -538,41 +551,38 @@ class _Option(_AbstractParameter):
     take a value, use the _Switch object instead.
 
     Attributes:
+     - names -- a list of string names (typically two entries) by which
+       the parameter can be set via the legacy set_parameter method
+       (eg ["-a", "--append", "append"]). The first name in list is used
+       when building the command line. The last name in the list is a
+       "human readable" name describing the option in one word. This
+       must be a valid Python identifier as it is used as the property
+       name and as a keyword argument, and should therefore follow PEP8
+       naming.
+     - description -- a description of the option. This is used as
+       the property docstring.
+     - filename -- True if this argument is a filename (or other argument
+       that should be quoted) and should be automatically quoted if it
+       contains spaces.
+     - checker_function -- a reference to a function that will determine
+       if a given value is valid for this parameter. This function can either
+       raise an error when given a bad value, or return a [0, 1] decision on
+       whether the value is correct.
+     - equate -- should an equals sign be inserted if a value is used?
+     - is_required -- a flag to indicate if the parameter must be set for
+       the program to be run.
+     - is_set -- if the parameter has been set
+     - value -- the value of a parameter
 
-    o names -- a list of string names (typically two entries) by which
-    the parameter can be set via the legacy set_parameter method
-    (eg ["-a", "--append", "append"]). The first name in list is used
-    when building the command line. The last name in the list is a
-    "human readable" name describing the option in one word. This
-    must be a valid Python identifier as it is used as the property
-    name and as a keyword argument, and should therefore follow PEP8
-    naming.
-
-    o description -- a description of the option. This is used as
-    the property docstring.
-
-    o filename -- True if this argument is a filename and should be
-    automatically quoted if it contains spaces.
-
-    o checker_function -- a reference to a function that will determine
-    if a given value is valid for this parameter. This function can either
-    raise an error when given a bad value, or return a [0, 1] decision on
-    whether the value is correct.
-
-    o equate -- should an equals sign be inserted if a value is used?
-
-    o is_required -- a flag to indicate if the parameter must be set for
-    the program to be run.
-
-    o is_set -- if the parameter has been set
-
-    o value -- the value of a parameter
     """
+
     def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("Should be a string: %r for %s"
+                            % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -610,22 +620,23 @@ class _Switch(_AbstractParameter):
     take a value, they are either included in the command string
     or omitted.
 
-    o names -- a list of string names (typically two entries) by which
-    the parameter can be set via the legacy set_parameter method
-    (eg ["-a", "--append", "append"]). The first name in list is used
-    when building the command line. The last name in the list is a
-    "human readable" name describing the option in one word. This
-    must be a valid Python identifer as it is used as the property
-    name and as a keyword argument, and should therefore follow PEP8
-    naming.
-
-    o description -- a description of the option. This is used as
-    the property docstring.
-
-    o is_set -- if the parameter has been set
+    Attributes:
+     - names -- a list of string names (typically two entries) by which
+       the parameter can be set via the legacy set_parameter method
+       (eg ["-a", "--append", "append"]). The first name in list is used
+       when building the command line. The last name in the list is a
+       "human readable" name describing the option in one word. This
+       must be a valid Python identifer as it is used as the property
+       name and as a keyword argument, and should therefore follow PEP8
+       naming.
+     - description -- a description of the option. This is used as
+       the property docstring.
+     - is_set -- if the parameter has been set
 
     NOTE - There is no value attribute, see is_set instead,
+
     """
+
     def __init__(self, names, description):
         self.names = names
         self.description = description
@@ -652,14 +663,17 @@ class _Argument(_AbstractParameter):
     property name and as a keyword argument, and should therefore
     follow PEP8 naming.
     """
+
     def __init__(self, names, description, filename=False,
                  checker_function=None, is_required=False):
         # if len(names) != 1:
         #    raise ValueError("The names argument to _Argument should be a "
         #                     "single entry list with a PEP8 property name.")
         self.names = names
-        assert isinstance(description, basestring), \
-               "%r for %s" % (description, names[-1])
+        if not isinstance(description, basestring):
+            raise TypeError("Should be a string: %r for %s"
+                            % (description, names[-1]))
+        # Note 'filename' is for any string with spaces that needs quoting
         self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
@@ -678,12 +692,14 @@ class _Argument(_AbstractParameter):
 
 class _ArgumentList(_Argument):
     """Represent a variable list of arguments on a command line, e.g. multiple filenames."""
+
     # TODO - Option to require at least one value? e.g. min/max count?
 
     def __str__(self):
-        assert isinstance(self.value, list), \
-                "Arguments should be a list"
-        assert self.value, "Requires at least one filename"
+        if not isinstance(self.value, list):
+            raise TypeError("Arguments should be a list")
+        if not self.value:
+            raise ValueError("Requires at least one filename")
         # A trailing space is required so that parameters following the last filename
         # do not appear merged.
         # e.g.:  samtools cat in1.bam in2.bam-o out.sam  [without trailing space][Incorrect]
@@ -700,6 +716,7 @@ class _StaticArgument(_AbstractParameter):
     This is not intended to be exposed as a named argument or
     property of a command line wrapper object.
     """
+
     def __init__(self, value):
         self.names = []
         self.is_required = False
@@ -719,6 +736,11 @@ def _escape_filename(filename):
     "example with spaces"
     >>> print((_escape_filename('"example with spaces"')))
     "example with spaces"
+    >>> print((_escape_filename(1)))
+    1
+
+    Note the function is more generic than the name suggests, since it
+    is used to add quotes around any string arguments containing spaces.
     """
     # Is adding the following helpful
     # if os.path.isfile(filename):
@@ -733,6 +755,9 @@ def _escape_filename(filename):
     #        return short
     #    except ImportError:
     #        pass
+    if not isinstance(filename, str):
+        # for example the NCBI BLAST+ -outfmt argument can be an integer
+        return filename
     if " " not in filename:
         return filename
     # We'll just quote it - works on Windows, Mac OS X etc
@@ -744,9 +769,10 @@ def _escape_filename(filename):
 
 
 def _test():
-    """Run the Bio.Application module's doctests."""
+    """Run the Bio.Application module's doctests (PRIVATE)."""
     import doctest
     doctest.testmod(verbose=1)
+
 
 if __name__ == "__main__":
     # Run the doctests

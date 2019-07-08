@@ -1,19 +1,19 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for Exonerate cigar output format."""
 
 import re
 
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _bytes_to_string
 
 from ._base import _BaseExonerateParser, _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
 
-__all__ = ['ExonerateCigarParser', 'ExonerateCigarIndexer']
+__all__ = ('ExonerateCigarParser', 'ExonerateCigarIndexer')
 
 
 # precompile regex
@@ -25,12 +25,12 @@ _RE_CIGAR = re.compile(r"""^cigar:\s+
 
 
 class ExonerateCigarParser(_BaseExonerateParser):
-
     """Parser for Exonerate cigar strings."""
 
     _ALN_MARK = 'cigar'
 
     def parse_alignment_block(self, header):
+        """Parse alignment block for cigar format, return query results, hits, hsps."""
         qresult = header['qresult']
         hit = header['hit']
         hsp = header['hsp']
@@ -85,14 +85,13 @@ class ExonerateCigarParser(_BaseExonerateParser):
 
 
 class ExonerateCigarIndexer(ExonerateVulgarIndexer):
-
     """Indexer class for exonerate cigar lines."""
 
     _parser = ExonerateCigarParser
-    _query_mark = _as_bytes('cigar')
+    _query_mark = b"cigar"
 
     def get_qresult_id(self, pos):
-        """Returns the query ID of the nearest cigar line."""
+        """Return the query ID of the nearest cigar line."""
         handle = self._handle
         handle.seek(pos)
         # get line, check if it's a vulgar line, and get query ID

@@ -1,17 +1,17 @@
 # Copyright 2003, 2007 by Sebastian Bassi. sbassi@genesdigitales.com
-# All rights reserved.  This code is part of the Biopython
-# distribution and governed by its license.
-# Please see the LICENSE file that should have been included as part
-# of this package.
+# All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Local Composition Complexity."""
 
 import math
 
-__docformat__ = "restructuredtext en"
-
 
 def lcc_mult(seq, wsize):
-    """Local Composition Complexity (LCC) values over sliding window.
+    """Calculate Local Composition Complexity (LCC) values over sliding window.
 
     Returns a list of floats, the LCC values for a sliding window over
     the sequence.
@@ -21,7 +21,8 @@ def lcc_mult(seq, wsize):
 
     The result is the same as applying lcc_simp multiple times, but this
     version is optimized for speed. The optimization works by using the
-    value of previous window as a base to compute the next one."""
+    value of previous window as a base to compute the next one.
+    """
     l2 = math.log(2)
     tamseq = len(seq)
     try:
@@ -123,7 +124,7 @@ def lcc_mult(seq, wsize):
 
 
 def lcc_simp(seq):
-    """Local Composition Complexity (LCC) for a sequence.
+    """Calculate Local Composition Complexity (LCC) for a sequence.
 
     seq - an unambiguous DNA sequence (a string or Seq object)
 
@@ -132,7 +133,7 @@ def lcc_simp(seq):
 
     Reference:
     Andrzej K Konopka (2005) Sequence Complexity and Composition
-    DOI: 10.1038/npg.els.0005260
+    https://doi.org/10.1038/npg.els.0005260
     """
     wsize = len(seq)
     try:
@@ -146,21 +147,21 @@ def lcc_simp(seq):
         term_a = 0
         # Check to avoid calculating the log of 0.
     else:
-        term_a = ((upper.count('A')) / float(wsize)) * ((math.log((upper.count('A'))
-                                                                  / float(wsize))) / l2)
+        term_a = ((upper.count('A')) / float(wsize)) * \
+                 ((math.log((upper.count('A')) / float(wsize))) / l2)
     if 'C' not in seq:
         term_c = 0
     else:
-        term_c = ((upper.count('C')) / float(wsize)) * ((math.log((upper.count('C'))
-                                                                  / float(wsize))) / l2)
+        term_c = ((upper.count('C')) / float(wsize)) * \
+                 ((math.log((upper.count('C')) / float(wsize))) / l2)
     if 'T' not in seq:
         term_t = 0
     else:
-        term_t = ((upper.count('T')) / float(wsize)) * ((math.log((upper.count('T'))
-                                                                  / float(wsize))) / l2)
+        term_t = ((upper.count('T')) / float(wsize)) * \
+                 ((math.log((upper.count('T')) / float(wsize))) / l2)
     if 'G' not in seq:
         term_g = 0
     else:
-        term_g = ((upper.count('G')) / float(wsize)) * ((math.log((upper.count('G'))
-                                                                  / float(wsize))) / l2)
+        term_g = ((upper.count('G')) / float(wsize)) * \
+                 ((math.log((upper.count('G')) / float(wsize))) / l2)
     return -(term_a + term_c + term_t + term_g)

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "entrezgene.asn"
      ::DATATOOL:: by application DATATOOL version 2.4.4
-     ::DATATOOL:: on 02/14/2013 23:04:00
+     ::DATATOOL:: on 03/01/2017 23:04:04
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 389081 $ 
+$Revision: 529103 $ 
 ********************************************************************** 
  
   NCBI Entrezgene 
@@ -84,6 +84,7 @@ $Revision: 389081 $
         transposon |
         miscRNA |
         ncRNA |
+        biological-region |
         other
         ) #IMPLIED >
 
@@ -158,13 +159,11 @@ $Revision: 389081 $
 <!--
     secondary	-  synonym with merged
     discontinued	-  'deleted', still index and display to public
-    newentry	-   for GeneRif submission (DEPRECATED)
 -->
 <!ATTLIST Gene-track_status value (
         live |
         secondary |
-        discontinued |
-        newentry
+        discontinued
         ) #IMPLIED >
 
 
@@ -234,7 +233,8 @@ $Revision: 389081 $
         Gene-commentary_properties?, 
         Gene-commentary_comment?, 
         Gene-commentary_create-date?, 
-        Gene-commentary_update-date?)>
+        Gene-commentary_update-date?, 
+        Gene-commentary_rna?)>
 <!-- type of Gene Commentary -->
 <!ELEMENT Gene-commentary_type (%INTEGER;)>
 
@@ -249,6 +249,8 @@ $Revision: 389081 $
          interaction complexes
     compound	-  pubchem entities
     gene-group	-  for relationship sets (such as pseudogene / parent gene)
+    assembly	-  for full assembly accession
+    assembly-unit	-  for the assembly unit corresponding to the refseq
 -->
 <!ATTLIST Gene-commentary_type value (
         genomic |
@@ -274,6 +276,12 @@ $Revision: 389081 $
         compound |
         ncRNA |
         gene-group |
+        assembly |
+        assembly-unit |
+        c-region |
+        d-segment |
+        j-segment |
+        v-segment |
         comment |
         other
         ) #IMPLIED >
@@ -325,6 +333,8 @@ $Revision: 389081 $
 <!ELEMENT Gene-commentary_create-date (Date)>
 
 <!ELEMENT Gene-commentary_update-date (Date)>
+
+<!ELEMENT Gene-commentary_rna (RNA-ref)>
 
 
 <!ELEMENT Other-source (

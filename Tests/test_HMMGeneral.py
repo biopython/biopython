@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Test the HMM.MarkovModel and HMM.DynamicProgramming modules.
 
 Also tests Training methods.
@@ -22,33 +27,58 @@ from Bio.HMM import Trainer
 
 # create some simple alphabets
 class NumberAlphabet(Alphabet.Alphabet):
-    """Numbers as the states of the model.
-    """
+    """Numbers as the states of the model."""
+
     letters = ['1', '2']
 
 
 class LetterAlphabet(Alphabet.Alphabet):
-    """Letters as the emissions of the model.
-    """
+    """Letters as the emissions of the model."""
+
     letters = ['A', 'B']
 
 
 # -- helper functions
 def test_assertion(name, result, expected):
-    """Helper function to test an assertion and print out a reasonable error.
-    """
-    assert result == expected, "Expected %s, got %s for %s" \
-           % (expected, result, name)
+    """Helper function to test an assertion and print out a reasonable error."""
+    assert result == expected, "Expected %s, got %s for %s" % (expected,
+                                                               result,
+                                                               name)
+
+
+class TrainingSequenceTest(unittest.TestCase):
+    """Training sequence tests."""
+
+    def test_empty_state_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_valid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('12', NumberAlphabet())
+        training_seq = Trainer.TrainingSequence(emission_seq, state_seq)
+        assert training_seq.emissions == emission_seq
+        assert training_seq.states == state_seq
+
+    def test_invalid_training_sequence(self):
+        emission_seq = Seq('AB', LetterAlphabet())
+        state_seq = Seq('1', NumberAlphabet())
+        with self.assertRaises(ValueError):
+            Trainer.TrainingSequence(emission_seq, state_seq)
 
 
 class MarkovModelBuilderTest(unittest.TestCase):
+    """Markov Model builder tests."""
+
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
                                                          LetterAlphabet())
 
     def test_test_initialize(self):
-        """Making sure MarkovModelBuilder is initialized correctly.
-        """
+        """Making sure MarkovModelBuilder is initialized correctly."""
         expected_transition_prob = {}
         expected_transition_pseudo = {}
 
@@ -59,18 +89,17 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         assertions = []
         test_assertion("Transition prob", self.mm_builder.transition_prob,
-                          expected_transition_prob)
+                       expected_transition_prob)
         test_assertion("Transition pseudo",
-                          self.mm_builder.transition_pseudo,
-                          expected_transition_pseudo)
+                       self.mm_builder.transition_pseudo,
+                       expected_transition_pseudo)
         test_assertion("Emission prob", self.mm_builder.emission_prob,
-                           expected_emission_prob)
+                       expected_emission_prob)
         test_assertion("Emission pseudo", self.mm_builder.emission_pseudo,
-                           expected_emission_pseudo)
+                       expected_emission_pseudo)
 
     def test_allow_all_transitions(self):
-        """Testing allow_all_transitions.
-        """
+        """Testing allow_all_transitions."""
         self.mm_builder.allow_all_transitions()
 
         expected_prob = {('2', '1'): 0, ('1', '1'): 0,
@@ -141,11 +170,10 @@ class MarkovModelBuilderTest(unittest.TestCase):
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
-                                                    LetterAlphabet())
+                                                         LetterAlphabet())
 
     def test_transitions_from(self):
-        """Testing the calculation of transitions_from
-        """
+        """Testing the calculation of transitions_from."""
         self.mm_builder.allow_transition('1', '2', 1.0)
         self.mm_builder.allow_transition('2', '1', 0.5)
         self.mm_builder.allow_transition('2', '2', 0.5)
@@ -172,8 +200,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        fake_state, expected_fake_state)
 
     def test_transitions_to(self):
-        """Testing the calculation of transitions_to
-        """
+        """Testing the calculation of transitions_to."""
         self.mm_builder.allow_transition('1', '1', 0.5)
         self.mm_builder.allow_transition('1', '2', 0.5)
         self.mm_builder.allow_transition('2', '1', 1.0)
@@ -200,8 +227,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        fake_state, expected_fake_state)
 
     def test_allow_transition(self):
-        """Testing allow_transition
-        """
+        """Testing allow_transition."""
         self.mm_builder.allow_transition('1', '2', 1.0)
         self.mm_builder.set_initial_probabilities({})
         self.mm = self.mm_builder.get_markov_model()
@@ -235,13 +261,11 @@ class HiddenMarkovModelTest(unittest.TestCase):
                        state_2, expected_state_2)
 
     def test_simple_hmm(self):
-        """Test a simple model with 2 states and 2 symbols.
-        """
-
+        """Test a simple model with 2 states and 2 symbols."""
         # set initial probabilities
         prob_initial = [0.4, 0.6]
         self.mm_builder.set_initial_probabilities(
-                {'1': prob_initial[0], '2': prob_initial[1]})
+            {'1': prob_initial[0], '2': prob_initial[1]})
 
         # set transition probabilities
         prob_transition = [[0.35, 0.65], [0.45, 0.55]]
@@ -264,10 +288,11 @@ class HiddenMarkovModelTest(unittest.TestCase):
                 observed_emissions = [first_letter, second_letter]
                 viterbi = model.viterbi(observed_emissions, NumberAlphabet)
                 self._checkSimpleHmm(prob_initial, prob_transition,
-                                 prob_emission, viterbi, observed_emissions)
+                                     prob_emission, viterbi,
+                                     observed_emissions)
 
     def _checkSimpleHmm(self, prob_initial, prob_transition, prob_emission,
-                         viterbi, observed_emissions):
+                        viterbi, observed_emissions):
         max_prob = 0
 
         # expected first and second states in the sequence, calculated below
@@ -301,14 +326,11 @@ class HiddenMarkovModelTest(unittest.TestCase):
         test_assertion("log probability", round(prob, 11), round(max_prob, 11))
 
     def test_non_ergodic(self):
-        """Test a non-ergodic model (meaning that some transitions are not
-        allowed).
-        """
-
+        """Non-ergodic model (meaning that some transitions are not allowed)."""
         # make state '1' the initial state
         prob_1_initial = 1.0
         self.mm_builder.set_initial_probabilities(
-                {'1': prob_1_initial})
+            {'1': prob_1_initial})
 
         # probabilities of transitioning from state 1 to 1, and 1 to 2
         prob_1_to_1 = 0.5
@@ -348,10 +370,10 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # state 1, then emitting an A, then transitioning 1 -> 2, then
         # emitting a B.
         # Note that probabilities are converted into log space.
-        expected_prob = math.log(prob_1_initial)\
-        + math.log(prob_1_A)\
-        + math.log(prob_1_to_2)\
-        + math.log(prob_2_B)
+        expected_prob = (math.log(prob_1_initial)
+                         + math.log(prob_1_A)
+                         + math.log(prob_1_to_2)
+                         + math.log(prob_2_B))
         test_assertion("log probability of most probable path",
                        prob, expected_prob)
 
@@ -375,13 +397,10 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         self.dp = DynamicProgramming.ScaledDPAlgorithms(mm, training_seq)
 
     def test_calculate_s_value(self):
-        """Testing the calculation of s values.
-        """
+        """Testing the calculation of s values."""
         previous_vars = {('1', 0): .5,
                          ('2', 0): .7}
         s_value = self.dp._calculate_s_value(1, previous_vars)
-
-        # print(s_value)
 
 
 class AbstractTrainerTest(unittest.TestCase):
@@ -391,8 +410,7 @@ class AbstractTrainerTest(unittest.TestCase):
         self.test_trainer = Trainer.AbstractTrainer(hmm)
 
     def test_ml_estimator(self):
-        """Test the maximum likelihood estimator for simple cases.
-        """
+        """Test the maximum likelihood estimator for simple cases."""
         # set up a simple dictionary
         counts = {('A', 'A'): 10,
                   ('A', 'B'): 20,
@@ -414,19 +432,19 @@ class AbstractTrainerTest(unittest.TestCase):
 
         for test_result in result_tests:
             assert results[test_result[0]] == test_result[1], \
-                   "Got %f, expected %f for %s" % (results[test_result[0]],
-                                                   test_result[1],
-                                                   test_result[0])
+                "Got %f, expected %f for %s" % (results[test_result[0]],
+                                                test_result[1],
+                                                test_result[0])
 
     def test_log_likelihood(self):
-        """Calculate log likelihood.
-        """
+        """Calculate log likelihood."""
         probs = [.25, .13, .12, .17]
 
         log_prob = self.test_trainer.log_likelihood(probs)
         expected_log_prob = -7.31873556778
-        assert abs(expected_log_prob - log_prob) < 0.1, \
-          "Bad probability calculated: %s" % log_prob
+        assert abs(expected_log_prob
+                   - log_prob) < 0.1, "Bad probability calculated: %s" % log_prob
+
 
 # run the tests
 if __name__ == "__main__":

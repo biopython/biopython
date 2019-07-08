@@ -1,10 +1,12 @@
 # Copyright 2003 Iddo Friedberg. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""A parser for the NCBI blastpgp version 2.2.5 output format.
 
-"""A parser for the NCBI blastpgp version 2.2.5 output format. Currently only supports
-the '-m 9' option, (table w/ annotations).
+Currently only supports the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
@@ -12,7 +14,10 @@ import sys
 
 
 class BlastTableEntry(object):
+    """Container for Blast Table Entry, the field values from the table."""
+
     def __init__(self, in_rec):
+        """Initialize the class."""
         bt_fields = in_rec.split()
         self.qid = bt_fields[0].split('|')
         self.sid = bt_fields[1].split('|')
@@ -27,7 +32,10 @@ class BlastTableEntry(object):
 
 
 class BlastTableRec(object):
+    """Container for Blast Table record, list of Blast Table Entries."""
+
     def __init__(self):
+        """Initialize the class."""
         self.program = None
         self.version = None
         self.date = None
@@ -37,7 +45,9 @@ class BlastTableRec(object):
         self.entries = []
 
     def add_entry(self, entry):
+        """Add entry to Blast Table."""
         self.entries.append(entry)
+
 
 reader_keywords = {'BLASTP': 'version',
                    'Iteration': 'iteration',
@@ -47,7 +57,10 @@ reader_keywords = {'BLASTP': 'version',
 
 
 class BlastTableReader(object):
+    """Reader for the output of blastpgp."""
+
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         inline = self.handle.readline()
         # zip forward to start of record
@@ -58,6 +71,7 @@ class BlastTableReader(object):
         self._in_header = 1
 
     def __next__(self):
+        """Return the next record when iterating over the file."""
         self.table_record = BlastTableRec()
         self._n += 1
         inline = self._lookahead
@@ -90,9 +104,7 @@ class BlastTableReader(object):
     def _consume_header(self, inline):
         for keyword in reader_keywords:
             if keyword in inline:
-                in_header = self._Parse('_parse_%s' % reader_keywords[keyword], inline)
-                break
-        return in_header
+                return self._Parse('_parse_%s' % reader_keywords[keyword], inline)
 
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]

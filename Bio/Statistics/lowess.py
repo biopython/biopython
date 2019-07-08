@@ -25,6 +25,7 @@ from Bio._py3k import range
 
 import numpy
 
+
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
@@ -35,9 +36,8 @@ except ImportError as x:
 
 
 def lowess(x, y, f=2. / 3., iter=3):
-    """lowess(x, y, f=2./3., iter=3) -> yest
+    """Lowess smoother: Robust locally weighted regression.
 
-    Lowess smoother: Robust locally weighted regression.
     The lowess function fits a nonparametric regression curve to a scatterplot.
     The arrays x and y contain an equal number of elements; each pair
     (x[i], y[i]) defines a data point in the scatterplot. The function returns
@@ -51,6 +51,7 @@ def lowess(x, y, f=2. / 3., iter=3):
     also a numpy float array of that length.
 
     e.g.
+
     >>> import numpy
     >>> x = numpy.array([4,  4,  7,  7,  8,  9, 10, 10, 10, 11, 11, 12, 12, 12,
     ...                 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16, 16,
@@ -96,12 +97,6 @@ def lowess(x, y, f=2. / 3., iter=3):
     return yest
 
 
-def _test():
-    """Run the Bio.Statistics.lowess module's doctests."""
-    print("Running doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -14,12 +14,8 @@ Author: Thomas Hamelryck.  Additional code by Kristian Rother.
 # Get a Structure object from a PDB file
 from .PDBParser import PDBParser
 
-try:
-    # Get a Structure object from an mmCIF file
-    from .MMCIFParser import MMCIFParser
-except:
-    # Not compiled I guess
-    pass
+from .MMCIFParser import MMCIFParser
+from .MMCIFParser import FastMMCIFParser
 
 # Download from the PDB
 from .PDBList import PDBList
@@ -34,6 +30,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 # IO of PDB files (including flexible selective output)
 from .PDBIO import PDBIO, Select
+from .mmcifio import MMCIFIO
 
 # Some methods to eg. get a list of Residues
 # from a list of Atoms.
@@ -43,8 +40,8 @@ from . import Selection
 from .Superimposer import Superimposer
 
 # 3D vector class
-from .Vector import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
-from .Vector import vector_to_axis, m2rotaxis, rotaxis2m
+from .vectors import Vector, calc_angle, calc_dihedral, refmat, rotmat, rotaxis
+from .vectors import vector_to_axis, m2rotaxis, rotaxis2m
 
 # Alignment module
 from .StructureAlignment import StructureAlignment

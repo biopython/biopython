@@ -1,10 +1,10 @@
 # Copyright 2002 by Yves Bastide and Brad Chapman.
 # Copyright 2007 by Sebastian Bassi
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Functions to calculate assorted sequence checksums."""
 
 # crc32, crc64, gcg, and seguid
@@ -15,11 +15,18 @@ from __future__ import print_function
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
-__docformat__ = "restructuredtext en"
-
 
 def crc32(seq):
-    """Returns the crc32 checksum for a sequence (string or Seq object)."""
+    """Return the crc32 checksum for a sequence (string or Seq object).
+
+    Note that the case is important:
+
+    >>> crc32("ACGTACGTACGT")
+    20049947
+    >>> crc32("acgtACGTacgt")
+    1688586483
+
+    """
     # NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
     # Docs suggest should use crc32(x) & 0xffffffff for consistency.
     # TODO - Should we return crc32(x) & 0xffffffff here?
@@ -34,25 +41,35 @@ def crc32(seq):
 def _init_table_h():
     _table_h = []
     for i in range(256):
-        l = i
+        part_l = i
         part_h = 0
         for j in range(8):
-            rflag = l & 1
-            l >>= 1
+            rflag = part_l & 1
+            part_l >>= 1
             if part_h & 1:
-                l |= (1 << 31)
+                part_l |= (1 << 31)
             part_h >>= 1
             if rflag:
                 part_h ^= 0xd8000000
         _table_h.append(part_h)
     return _table_h
 
+
 # Initialisation
 _table_h = _init_table_h()
 
 
 def crc64(s):
-    """Returns the crc64 checksum for a sequence (string or Seq object)."""
+    """Return the crc64 checksum for a sequence (string or Seq object).
+
+    Note that the case is important:
+
+    >>> crc64("ACGTACGTACGT")
+    'CRC-C4FBB762C4A87EBD'
+    >>> crc64("acgtACGTacgt")
+    'CRC-DA4509DC64A87EBD'
+
+    """
     crcl = 0
     crch = 0
     for c in s:
@@ -67,7 +84,7 @@ def crc64(s):
 
 
 def gcg(seq):
-    """Returns the GCG checksum (int) for a sequence (string or Seq object).
+    """Return the GCG checksum (int) for a sequence (string or Seq object).
 
     Given a nucleotide or amino-acid secuence (or any string),
     returns the GCG checksum (int). Checksum used by GCG program.
@@ -77,6 +94,12 @@ def gcg(seq):
     with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
 
     All sequences are converted to uppercase.
+
+    >>> gcg("ACGTACGTACGT")
+    5688
+    >>> gcg("acgtACGTacgt")
+    5688
+
     """
     try:
         # Assume its a Seq object
@@ -94,15 +117,22 @@ def gcg(seq):
 
 
 def seguid(seq):
-    """Returns the SEGUID (string) for a sequence (string or Seq object).
+    """Return the SEGUID (string) for a sequence (string or Seq object).
 
     Given a nucleotide or amino-acid secuence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
     seq type = str.
 
+    Note that the case is not important:
+
+    >>> seguid("ACGTACGTACGT")
+    'If6HIvcnRSQDVNiAoefAzySc6i4'
+    >>> seguid("acgtACGTacgt")
+    'If6HIvcnRSQDVNiAoefAzySc6i4'
+
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
-    DOI: 10.1002/pmic.200600032
+    https://doi.org/10.1002/pmic.200600032
     """
     import hashlib
     import base64
@@ -116,7 +146,8 @@ def seguid(seq):
     m.update(_as_bytes(seq.upper()))
     try:
         # For Python 3+
-        return base64.encodebytes(m.digest()).decode().replace("\n", "").rstrip("=")
+        tmp = base64.encodebytes(m.digest())
+        return tmp.decode().replace("\n", "").rstrip("=")
     except AttributeError:
         pass
     # For all other Pythons
@@ -124,20 +155,5 @@ def seguid(seq):
 
 
 if __name__ == "__main__":
-    print("Quick self test")
-
-    str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                    + "YCSSYAGSSTLVFGGGTKLTVL"
-
-    str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
-                    + "APKLMIYEGSKRPSGVSNRFSGSKSGNTASLTISGLQAEDEADY" \
-                    + "YCCSYAGSSTWVFGGGTKLTVL"
-
-    assert crc64(str_light_chain_one) == crc64(str_light_chain_two)
-    assert 'CRC-44CAAD88706CC153' == crc64(str_light_chain_one)
-
-    assert 'BpBeDdcNUYNsdk46JoJdw7Pd3BI' == seguid(str_light_chain_one)
-    assert 'X5XEaayob1nZLOc7eVT9qyczarY' == seguid(str_light_chain_two)
-
-    print("Done")
+    from Bio._utils import run_doctest
+    run_doctest()

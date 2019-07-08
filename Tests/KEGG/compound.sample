@@ -1,159 +1,455 @@
 ENTRY       C00023                      Compound
 NAME        Iron
-            Fe2+
-            Fe(II)
-            Fe3+
-            Fe(III)
 FORMULA     Fe
-PATHWAY     PATH: MAP00860  Porphyrin and chlorophyll metabolism
-ENZYME      1.1.3.22 (C)    1.1.3.26 (C)    1.2.1.43 (C)    1.2.3.10 (C)
-            1.2.99.2 (C)    1.3.1.31 (C)    1.3.1.53 (C)    1.3.5.1 (C)
-            1.3.99.1 (C)    1.3.99.11 (C)   1.4.1.13 (C)    1.4.7.1 (C)
-            1.5.1.13 (C)    1.5.3.11 (C)    1.5.5.1 (C)     1.6.5.3 (C)
-            1.6.6.4 (C)     1.6.99.3 (C)    1.6.99.13 (R)   1.6.99.13 (R)
-            1.7.7.1 (C)     1.7.7.2 (C)     1.7.99.4 (C)    1.8.1.2 (C)
-            1.8.7.1 (C)     1.8.99.1 (C)    1.8.99.2 (C)    1.8.99.3 (C)
-            1.9.99.1 (R)    1.9.99.1 (R)    1.9.99.1 (C)    1.12.1.2 (C)
-            1.12.2.1 (C)    1.12.99.1 (C)   1.13.11.1 (C)   1.13.11.2 (C)
-            1.13.11.3 (C)   1.13.11.4 (C)   1.13.11.5 (C)   1.13.11.6 (C)
-            1.13.11.8 (C)   1.13.11.9 (C)   1.13.11.10 (C)  1.13.11.12 (C)
-            1.13.11.13 (C)  1.13.11.15 (C)  1.13.11.16 (C)  1.13.11.18 (C)
-            1.13.11.19 (C)  1.13.11.20 (C)  1.13.11.21 (C)  1.13.11.25 (C)
-            1.13.11.32 (C)  1.13.11.36 (C)  1.13.11.37 (C)  1.13.11.38 (C)
-            1.13.11.43 (C)  1.13.99.1 (C)   1.14.11.1 (C)   1.14.11.2 (C)
-            1.14.11.3 (C)   1.14.11.4 (C)   1.14.11.6 (C)   1.14.11.7 (C)
-            1.14.11.8 (C)   1.14.11.9 (C)   1.14.11.10 (C)  1.14.11.11 (C)
-            1.14.11.12 (C)  1.14.11.14 (C)  1.14.11.15 (C)  1.14.11.16 (C)
-            1.14.11.17 (C)  1.14.12.1 (C)   1.14.12.3 (C)   1.14.12.7 (C)
-            1.14.12.8 (C)   1.14.12.9 (C)   1.14.12.10 (C)  1.14.12.12 (C)
-            1.14.12.13 (C)  1.14.13.12 (C)  1.14.13.25 (C)  1.14.13.61 (C)
-            1.14.15.2 (C)   1.14.16.1 (C)   1.14.16.2 (C)   1.14.16.3 (C)
-            1.14.16.4 (C)   1.14.16.6 (C)   1.14.99.3 (R)   1.14.99.5 (C)
-            1.14.99.18 (C)  1.14.99.25 (C)  1.15.1.1 (C)    1.16.3.1 (R)
-            1.16.3.1 (R)    1.17.4.1 (C)    1.17.4.2 (C)    1.18.1.1 (C)
-            1.18.99.1 (C)   3.5.1.56 (C)    3.5.4.8 (C)     3.6.3.30 (R)
-            4.2.1.3 (C)     4.2.1.32 (C)    4.2.1.35 (C)    4.2.1.81 (C)
-            4.2.1.84 (C)    4.2.1.85 (C)    4.99.1.1 (R)
+EXACT_MASS  55.9349
+MOL_WEIGHT  55.845
+COMMENT     Iron and iron compounds
+            Usually existing as +2 or +3 cations
+            Iron(2+) [CPD:C14818]
+            Iron(3+) [CPD:C14819]
+            Iron-sulfur [CPD:C00824]
+            Heme [CPD:C00032]
+BRITE       Risk category of Japanese OTC drugs [BR:br08312]
+             Second-class OTC drugs
+              Crude drugs
+               Iron powder
+                C00023  Iron
 DBLINKS     CAS: 7439-89-6
-            PROMISE: FEFEMAIN RNRR2 FERROXIDASE FERRITIN RUBRERYTHRIN
-                     HAEMERYTHRIN PAP
-                     HAEMMAIN CATALASE CYTOCHROMES COX CYTB BACFERRITIN CYTBHBL
-                     CYTB5 SULFOXIDASE CYTB562 CYTC CYTCI CYTCII CYTCIII CYTCIV
-                     CYTC1 CYTC554 CYTCD1 CYTF HAO CYTBC1 GLOBINS PEROXIDASES
-                     ANPEROXIDASE FPBPEROXIDASE HAEM_THIOLATE HAEMCPO NOS P450
-                     NITROPHORIN SIROHAEM
-                     FESMAIN FECYS4 DESULFOREDOXIN DFX RUBREDOXIN
-                     2FE2S ADRENODOXIN PLANTFRDX FEHASE XANTOXIDASE RIESKE ARHD
-                     4FE4S ACONITASE AOR BACFRDX DMSOR ENDONUCLEASE3 GPATASE
-                     HIPIP NITROGENASE1 NITROGENASE2 NIFE PRISMANE TMADH
-                     FEMAIN AAAOH EARCD FESOD IARCD IPNS LIPOXYGENASE NHASE
-                     PRCPB
+            PubChem: 3325
+            ChEBI: 18248
+            NIKKAJI: J95.171D
+ATOM        1
+            1   Z   Fe   22.1200  -16.1700
+BOND        0
 ///
 ENTRY       C00017                      Compound
 NAME        Protein
-PATHWAY     PATH: MAP00251  Glutamate metabolism
-            PATH: MAP00252  Alanine and aspartate metabolism
-            PATH: MAP00290  Valine, leucine and isoleucine biosynthesis
-            PATH: MAP00330  Arginine and proline metabolism
-            PATH: MAP00450  Selenoamino acid metabolism
-ENZYME      2.3.2.6 (R)     2.3.2.8 (R)     2.4.1.94 (R)    2.4.1.109 (R)
-            2.4.1.112 (R)   2.4.1.113 (R)   2.4.2.33 (R)    2.7.1.37 (R)
-            2.7.1.123 (R)   3.1.2.22 (R)    3.1.3.16 (R)    3.4.11.10 (R)
-            3.4.11.10 (R)   3.4.19.3 (R)    3.4.19.3 (R)    3.4.21.10 (R)
-            3.4.21.10 (R)   3.4.21.20 (R)   3.4.21.32 (R)   3.4.21.32 (R)
-            3.4.21.36 (R)   3.4.21.36 (R)   3.4.21.37 (R)   3.4.21.37 (R)
-            3.4.21.50 (R)   3.4.21.50 (R)   3.4.21.53 (R)   3.4.21.53 (R)
-            3.4.21.59 (R)   3.4.21.59 (R)   3.4.21.61 (R)   3.4.21.62 (R)
-            3.4.21.62 (R)   3.4.21.64 (R)   3.4.21.64 (R)   3.4.21.66 (R)
-            3.4.21.66 (R)   3.4.22.1 (R)    3.4.22.1 (R)    3.4.22.2 (R)
-            3.4.22.2 (R)    3.4.22.3 (R)    3.4.22.3 (R)    3.4.22.6 (R)
-            3.4.22.6 (R)    3.4.22.7 (R)    3.4.22.7 (R)    3.4.22.8 (R)
-            3.4.22.8 (R)    3.4.22.10 (R)   3.4.22.10 (R)   3.4.22.14 (R)
-            3.4.22.14 (R)   3.4.22.15 (R)   3.4.22.15 (R)   3.4.22.16 (R)
-            3.4.22.16 (R)   3.4.22.17 (R)   3.4.22.17 (R)   3.4.22.25 (R)
-            3.4.22.25 (R)   3.4.22.27 (R)   3.4.22.27 (R)   3.4.22.28 (R)
-            3.4.22.29 (R)   3.4.22.30 (R)   3.4.22.30 (R)   3.4.22.31 (R)
-            3.4.22.31 (R)   3.4.22.32 (R)   3.4.22.32 (R)   3.4.22.33 (R)
-            3.4.22.33 (R)   3.4.22.34 (R)   3.4.22.34 (R)   3.4.22.35 (R)
-            3.4.22.35 (R)   3.4.23.1 (R)    3.4.23.1 (R)    3.4.23.3 (R)
-            3.4.23.3 (R)    3.4.23.4 (R)    3.4.23.4 (R)    3.4.23.5 (R)
-            3.4.23.5 (R)    3.4.23.12 (R)   3.4.23.12 (R)   3.4.23.16 (R)
-            3.4.23.16 (R)   3.4.23.17 (R)   3.4.23.17 (R)   3.4.23.18 (R)
-            3.4.23.18 (R)   3.4.23.19 (R)   3.4.23.19 (R)   3.4.23.20 (R)
-            3.4.23.20 (R)   3.4.23.21 (R)   3.4.23.21 (R)   3.4.23.22 (R)
-            3.4.23.22 (R)   3.4.23.23 (R)   3.4.23.23 (R)   3.4.23.24 (R)
-            3.4.23.24 (R)   3.4.23.25 (R)   3.4.23.25 (R)   3.4.23.26 (R)
-            3.4.23.26 (R)   3.4.23.27 (R)   3.4.23.27 (R)   3.4.23.28 (R)
-            3.4.23.28 (R)   3.4.23.29 (R)   3.4.23.29 (R)   3.4.23.30 (R)
-            3.4.23.30 (R)   3.4.23.31 (R)   3.4.23.31 (R)   3.4.23.32 (R)
-            3.4.23.32 (R)   3.4.23.33 (R)   3.4.23.33 (R)   3.4.23.34 (R)
-            3.4.23.34 (R)   3.4.24.1 (R)    3.4.24.1 (R)    3.4.24.3 (R)
-            3.4.24.6 (R)    3.4.24.6 (R)    3.4.24.7 (R)    3.4.24.11 (R)
-            3.4.24.11 (R)   3.4.24.12 (R)   3.4.24.12 (R)   3.4.24.15 (R)
-            3.4.24.15 (R)   3.4.24.17 (R)   3.4.24.17 (R)   3.4.24.18 (R)
-            3.4.24.18 (R)   3.4.24.20 (R)   3.4.24.20 (R)   3.4.24.21 (R)
-            3.4.24.21 (R)   3.4.24.22 (R)   3.4.24.22 (R)   3.4.24.23 (R)
-            3.4.24.24 (R)   3.4.24.25 (R)   3.4.24.25 (R)   3.4.24.26 (R)
-            3.4.24.27 (R)   3.4.24.27 (R)   3.4.24.28 (R)   3.4.24.28 (R)
-            3.4.24.29 (R)   3.4.24.29 (R)   3.4.24.30 (R)   3.4.24.30 (R)
-            3.4.24.31 (R)   3.4.24.31 (R)   3.4.24.32 (R)   3.4.24.32 (R)
-            3.4.24.33 (R)   3.4.24.33 (R)   3.4.24.34 (R)   3.4.24.36 (R)
-            3.4.24.36 (R)   3.4.24.37 (R)   3.4.24.37 (R)   3.4.24.38 (R)
-            3.4.24.38 (R)   3.4.24.39 (R)   3.4.24.39 (R)   3.4.24.40 (R)
-            3.4.24.40 (R)   3.4.24.41 (R)   3.4.24.41 (R)   3.4.24.42 (R)
-            3.4.24.42 (R)   3.4.24.43 (R)   3.4.24.43 (R)   3.4.24.44 (R)
-            3.4.24.44 (R)   3.4.24.45 (R)   3.4.24.45 (R)   3.4.24.46 (R)
-            3.4.24.46 (R)   3.4.24.47 (R)   3.4.24.47 (R)   3.4.24.48 (R)
-            3.4.24.48 (R)   3.4.24.49 (R)   3.4.24.49 (R)   3.4.24.50 (R)
-            3.4.24.50 (R)   3.4.24.51 (R)   3.4.24.51 (R)   3.4.24.52 (R)
-            3.4.24.52 (R)   3.4.24.53 (R)   3.4.24.53 (R)   3.4.24.54 (R)
-            3.4.24.54 (R)   3.4.99.43 (R)   3.4.99.43 (R)   3.4.99.46 (R)
-            3.4.99.46 (R)   6.2.1.19 (R)
+FORMULA     C2H4NO2R(C2H2NOR)n
+COMMENT     Generic compound in reaction hierarchy
+REACTION    R00162 R00164 R00165 R00166 R00168 R00169 R00170 R00172 
+            R01705 R02420 R03813 R03862 R04313
+PATHWAY     map00450  Selenocompound metabolism
+ENZYME      2.3.2.6         2.3.2.8         2.4.1.113       2.7.11.1        
+            2.7.11.8        2.7.11.9        2.7.11.10       2.7.11.11       
+            2.7.11.12       2.7.11.13       2.7.11.17       2.7.11.21       
+            2.7.11.22       2.7.11.24       2.7.11.25       2.7.11.30       
+            2.7.12.1        2.7.12.2        3.1.2.22        3.1.3.16        
+            3.4.-.-
+DBLINKS     PubChem: 3319
+            ChEBI: 16541
+ATOM        11
+            1   N1a N    23.5200  -21.2800
+            2   C1c C    24.7100  -20.5800
+            3   C5a C    25.9700  -21.2800
+            4   N1b N    27.1600  -20.5800
+            5   O5a O    25.9700  -22.6800
+            6   C1c C    28.3500  -21.2800
+            7   R   R    28.3500  -22.6800
+            8   C6a C    29.6100  -20.5800
+            9   O6a O    29.6100  -19.1800
+            10  O6a O    30.8000  -21.2800
+            11  R   R    24.7100  -19.1800
+BOND        10
+            1     1   2 1
+            2     2   3 1
+            3     3   4 1
+            4     3   5 2
+            5     4   6 1
+            6     6   7 1 #Down
+            7     6   8 1
+            8     8   9 2
+            9     8  10 1
+            10    2  11 1 #Up
+BRACKET     1    25.8300  -23.5900   25.8300  -19.1100
+            1    28.4900  -19.1100   28.4900  -23.5900
+            1  n
+  ORIGINAL  1    3   4   5   6   7
+  REPEAT    1 
 ///
 ENTRY       C00099                      Compound
-NAME        beta-Alanine
-            3-aminopropionic acid
+NAME        beta-Alanine;
+            3-Aminopropionic acid;
             3-Aminopropanoate
 FORMULA     C3H7NO2
-PATHWAY     PATH: MAP00240  Pyrimidine metabolism
-            PATH: MAP00252  Alanine and aspartate metabolism
-            PATH: MAP00410  beta-Alanine metabolism
-            PATH: MAP00640  Propanoate metabolism
-            PATH: MAP00770  Pantothenate and CoA biosynthesis
-ENZYME      1.5.1.26 (R)    2.6.1.18 (R)    2.6.1.19 (R)    2.6.1.55 (R)
-            3.4.13.3 (R)    3.4.13.5 (R)    3.4.13.20 (R)   3.5.1.6 (R)
-            3.5.1.21 (R)    3.5.1.22 (R)    3.5.3.17 (R)    4.1.1.11 (R)
-            4.1.1.15 (R)    6.3.2.1 (R)     6.3.2.11 (R)    6.3.2.23 (R)
+EXACT_MASS  89.0477
+MOL_WEIGHT  89.0932
+REMARK      Same as: D07561
+REACTION    R00489 R00904 R00905 R00906 R00907 R00908 R00909 R00910 
+            R00911 R00912 R00913 R00914 R00915 R00916 R00917 R01164 
+            R01166 R02473 R02474 R02741 R03286 R03288 R03935 R09379 
+            R09648 R10821
+PATHWAY     map00240  Pyrimidine metabolism
+            map00410  beta-Alanine metabolism
+            map00640  Propanoate metabolism
+            map00770  Pantothenate and CoA biosynthesis
+            map01100  Metabolic pathways
+            map01110  Biosynthesis of secondary metabolites
+            map04080  Neuroactive ligand-receptor interaction
+            map04974  Protein digestion and absorption
+MODULE      M00046  Pyrimidine degradation, uracil => beta-alanine, thymine => 3-aminoisobutanoate
+            M00119  Pantothenate biosynthesis, valine/L-aspartate => pantothenate
+ENZYME      1.2.1.3         1.2.1.5         1.2.1.19        1.5.1.26        
+            2.6.1.18        2.6.1.19        2.6.1.55        2.8.3.-         
+            3.4.13.4        3.4.13.5        3.4.13.18       3.4.13.20       
+            3.5.1.6         3.5.1.21        3.5.1.22        3.5.1.100       
+            3.5.3.17        4.1.1.11        4.1.1.15        6.3.2.1         
+            6.3.2.11        6.3.2.23        6.3.2.36        6.3.2.44
+BRITE       Compounds with biological roles [BR:br08001]
+             Peptides
+              Amino acids
+               Other amino acids
+                C00099  beta-Alanine
+              Amines
+               Biogenic amines
+                C00099  beta-Alanine
 DBLINKS     CAS: 107-95-9
+            PubChem: 3399
+            ChEBI: 16958
+            ChEMBL: CHEMBL297569
+            KNApSAcK: C00001333
+            PDB-CCD: BAL
+            3DMET: B00025
+            NIKKAJI: J4.070C
+ATOM        6
+            1   C1b C    25.6778  -16.8919
+            2   C6a C    24.4732  -16.1936
+            3   C1b C    26.8940  -16.1936
+            4   O6a O    23.2571  -16.8978
+            5   O6a O    24.4732  -14.7912
+            6   N1a N    28.1045  -16.8919
+BOND        5
+            1     1   2 1
+            2     1   3 1
+            3     2   4 1
+            4     2   5 2
+            5     3   6 1
 ///
 ENTRY       C00294                      Compound
 NAME        Inosine
 FORMULA     C10H12N4O5
-PATHWAY     PATH: MAP00230  Purine metabolism
-ENZYME      1.1.3.28 (R)    2.7.1.73 (R)    3.2.2.2 (R)     3.5.4.4 (R)
-            3.5.4.17 (R)
+EXACT_MASS  268.0808
+MOL_WEIGHT  268.2261
+REMARK      Same as: D00054
+REACTION    R00055 R01126 R01131 R01560 R01770 R01863 R05821
+PATHWAY     map00230  Purine metabolism
+            map01100  Metabolic pathways
+ENZYME      1.1.3.28        2.4.2.1         2.4.2.15        2.7.1.73        
+            3.1.3.5         3.1.3.99        3.2.2.1         3.2.2.2         
+            3.2.2.8         3.5.4.4
+BRITE       Anatomical Therapeutic Chemical (ATC) classification [BR:br08303]
+             D DERMATOLOGICALS
+              D06 ANTIBIOTICS AND CHEMOTHERAPEUTICS FOR DERMATOLOGICAL USE
+               D06B CHEMOTHERAPEUTICS FOR TOPICAL USE
+                D06BB Antivirals
+                 D06BB05 Inosine
+                  D00054  Inosine (JAN/INN)
+             G GENITO URINARY SYSTEM AND SEX HORMONES
+              G01 GYNECOLOGICAL ANTIINFECTIVES AND ANTISEPTICS
+               G01A ANTIINFECTIVES AND ANTISEPTICS, EXCL. COMBINATIONS WITH CORTICOSTEROIDS
+                G01AX Other antiinfectives and antiseptics
+                 G01AX02 Inosine
+                  D00054  Inosine (JAN/INN)
+             S SENSORY ORGANS
+              S01 OPHTHALMOLOGICALS
+               S01X OTHER OPHTHALMOLOGICALS
+                S01XA Other ophthalmologicals
+                 S01XA10 Inosine
+                  D00054  Inosine (JAN/INN)
 DBLINKS     CAS: 58-63-9
+            PubChem: 3588
+            ChEBI: 17596
+            ChEMBL: CHEMBL1556
+            KNApSAcK: C00019692
+            PDB-CCD: NOS
+            3DMET: B01208
+            NIKKAJI: J1.388I
+ATOM        19
+            1   N4y N    26.2067  -17.2376
+            2   C8y C    27.4680  -16.8872
+            3   C1y C    24.6651  -17.8682
+            4   C8x C    25.3658  -16.1865
+            5   C8y C    27.4680  -15.4858
+            6   N5x N    28.7293  -17.5879
+            7   O2x O    23.4739  -16.9573
+            8   C1y C    24.1746  -19.1295
+            9   N5x N    26.2067  -15.0654
+            10  C8y C    28.7293  -14.7851
+            11  C8x C    29.9205  -16.8872
+            12  C1y C    22.3528  -17.8682
+            13  C1y C    22.7732  -19.1295
+            14  O1a O    25.0155  -20.2506
+            15  N4x N    29.9205  -15.4858
+            16  O5x O    28.7293  -13.4537
+            17  C1b C    21.0915  -17.4478
+            18  O1a O    22.0024  -20.2506
+            19  O1a O    19.9704  -18.3587
+BOND        21
+            1     1   2 1
+            2     3   1 1 #Up
+            3     1   4 1
+            4     2   5 2
+            5     2   6 1
+            6     3   7 1
+            7     3   8 1
+            8     4   9 2
+            9     5  10 1
+            10    6  11 2
+            11    7  12 1
+            12    8  13 1
+            13    8  14 1 #Down
+            14   10  15 1
+            15   10  16 2
+            16   12  17 1 #Up
+            17   13  18 1 #Down
+            18   17  19 1
+            19    5   9 1
+            20   11  15 1
+            21   12  13 1
 ///
 ENTRY       C00298                      Compound
-NAME        Trypsin
-ENZYME      3.4.21.9 (R)    3.4.23.18 (R)   3.4.23.20 (R)   3.4.23.24 (R)
-            3.4.23.26 (R)
+NAME        Trypsin;
+            Trypsin crystallized
+REMARK      Same as: D00056
+BRITE       Anatomical Therapeutic Chemical (ATC) classification [BR:br08303]
+             B BLOOD AND BLOOD FORMING ORGANS
+              B06 OTHER HEMATOLOGICAL AGENTS
+               B06A OTHER HEMATOLOGICAL AGENTS
+                B06AA Enzymes
+                 B06AA07 Trypsin
+                  D00056  Trypsin, crystallized (USP)
+             D DERMATOLOGICALS
+              D03 PREPARATIONS FOR TREATMENT OF WOUNDS AND ULCERS
+               D03B ENZYMES
+                D03BA Proteolytic enzymes
+                 D03BA01 Trypsin
+                  D00056  Trypsin, crystallized (USP)
+            Pharmaceutical additives [BR:br08316]
+             Unclassified
+              D00056  [107484] Trypsin
+DBLINKS     CAS: 9002-07-7
+            PubChem: 3592
+            ChEBI: 9765
+            NIKKAJI: J247.642H
 ///
 ENTRY       C00348                      Compound
-NAME        Undecaprenyl phosphate
-PATHWAY     PATH: MAP00550  Peptideglycan biosynthesis
-ENZYME      2.4.1.54 (R)    2.7.1.66 (R)    2.7.8.6 (R)     2.7.8.13 (R)
-            3.6.1.27 (R)
+NAME        all-trans-Undecaprenyl phosphate
+FORMULA     C55H91O4P
+EXACT_MASS  846.6655
+MOL_WEIGHT  847.2824
+BRITE       Lipids [BR:br08002]
+             PR  Prenol Lipids
+              PR03 Polyprenols
+               PR0302 Bactoprenol monophosphates
+                C00348  Undecaprenyl phosphate
+DBLINKS     PubChem: 3641
+            ChEBI: 16141
+            LIPIDMAPS: LMPR03020006
+            LipidBank: IIP0063
+            KNApSAcK: C00019557
+            3DMET: B00093
+            NIKKAJI: J2.313.901D
+ATOM        60
+            1   C1a C    19.8100  -22.5400
+            2   C2c C    21.0224  -21.8400
+            3   C2b C    22.2349  -22.5400
+            4   C1b C    23.4473  -21.8400
+            5   C1b C    24.6597  -22.5400
+            6   C2c C    25.8722  -21.8400
+            7   C2b C    27.0846  -22.5400
+            8   C1a C    21.0224  -20.4402
+            9   C1b C    28.3024  -21.8400
+            10  O2b O    30.8449  -22.5400
+            11  P1b P    32.2449  -22.5400
+            12  O1c O    33.6449  -22.5400
+            13  O1c O    32.2449  -21.1402
+            14  O1c O    32.2449  -23.9398
+            15  C1a C    25.8722  -20.4403
+            16  C1b C    24.6597  -22.5400
+            17  C2c C    25.8722  -21.8400
+            18  C2b C    27.0846  -22.5400
+            19  C1b C    28.3024  -21.8400
+            20  C1a C    25.8722  -20.4403
+            21  C1b C    24.6597  -22.5400
+            22  C2c C    25.8722  -21.8400
+            23  C2b C    27.0846  -22.5400
+            24  C1b C    28.3024  -21.8400
+            25  C1a C    25.8722  -20.4403
+            26  C1b C    24.6597  -22.5400
+            27  C2c C    25.8722  -21.8400
+            28  C2b C    27.0846  -22.5400
+            29  C1b C    28.3024  -21.8400
+            30  C1a C    25.8722  -20.4403
+            31  C1b C    24.6597  -22.5400
+            32  C2c C    25.8722  -21.8400
+            33  C2b C    27.0846  -22.5400
+            34  C1b C    28.3024  -21.8400
+            35  C1a C    25.8722  -20.4403
+            36  C1b C    24.6597  -22.5400
+            37  C2c C    25.8722  -21.8400
+            38  C2b C    27.0846  -22.5400
+            39  C1b C    28.3024  -21.8400
+            40  C1a C    25.8722  -20.4403
+            41  C1b C    24.6597  -22.5400
+            42  C2c C    25.8722  -21.8400
+            43  C2b C    27.0846  -22.5400
+            44  C1b C    28.3024  -21.8400
+            45  C1a C    25.8722  -20.4403
+            46  C1b C    24.6597  -22.5400
+            47  C2c C    25.8722  -21.8400
+            48  C2b C    27.0846  -22.5400
+            49  C1b C    28.3024  -21.8400
+            50  C1a C    25.8722  -20.4403
+            51  C1b C    24.6597  -22.5400
+            52  C2c C    25.8722  -21.8400
+            53  C2b C    27.0846  -22.5400
+            54  C1b C    28.3024  -21.8400
+            55  C1a C    25.8722  -20.4403
+            56  C1b C    24.6597  -22.5400
+            57  C2c C    25.8722  -21.8400
+            58  C2b C    27.0846  -22.5400
+            59  C1b C    28.3024  -21.8400
+            60  C1a C    25.8722  -20.4403
+BOND        59
+            1     1   2 1
+            2     2   3 2
+            3     3   4 1
+            4     2   8 1
+            5    10  11 1
+            6    11  12 1
+            7    11  13 1
+            8    11  14 2
+            9     4   5 1
+            10    5   6 1
+            11    6   7 2
+            12    7   9 1
+            13    6  15 1
+            14    9  16 1
+            15   16  17 1
+            16   17  18 2
+            17   18  19 1
+            18   17  20 1
+            19   19  21 1
+            20   21  22 1
+            21   22  23 2
+            22   23  24 1
+            23   22  25 1
+            24   24  26 1
+            25   26  27 1
+            26   27  28 2
+            27   28  29 1
+            28   27  30 1
+            29   29  31 1
+            30   31  32 1
+            31   32  33 2
+            32   33  34 1
+            33   32  35 1
+            34   34  36 1
+            35   36  37 1
+            36   37  38 2
+            37   38  39 1
+            38   37  40 1
+            39   39  41 1
+            40   41  42 1
+            41   42  43 2
+            42   43  44 1
+            43   42  45 1
+            44   44  46 1
+            45   46  47 1
+            46   47  48 2
+            47   48  49 1
+            48   47  50 1
+            49   49  51 1
+            50   51  52 1
+            51   52  53 2
+            52   53  54 1
+            53   52  55 1
+            54   54  56 1
+            55   56  57 1
+            56   57  58 2
+            57   58  59 1
+            58   57  60 1
+            59   59  10 1
+BRACKET     1    24.0800  -23.3800   24.0800  -21.4900
+            1    28.7700  -21.4900   28.7700  -23.3800
+            1  10
+  ORIGINAL  1    5   6   7   9  15
+  REPEAT    1   16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31
+            1   32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47
+            1   48  49  50  51  52  53  54  55  56  57  58  59  60
 ///
 ENTRY       C00349                      Compound
-NAME        2-Methyl-3-oxopropanoate
-            3-Oxo-2-methylpropanoate
+NAME        2-Methyl-3-oxopropanoate;
+            3-Oxo-2-methylpropanoate;
             Methylmalonate semialdehyde
 FORMULA     C4H6O3
-ENZYME      1.1.1.31 (R)    1.2.1.27 (R)    2.6.1.22 (R)    2.6.1.40 (R)
-            2.6.1.61 (R)
+EXACT_MASS  102.0317
+MOL_WEIGHT  102.0886
+COMMENT     (S)-Methylmalonate semialdehyde [CPD:C06002]
+            (R)-Methylmalonate semialdehyde [CPD:C21030]
+            (non-enzymatic racemization, see [RN:R11028])
+REACTION    R00922 R02047 R02050
+PATHWAY     map00280  Valine, leucine and isoleucine degradation
+ENZYME      1.1.1.31        1.2.1.27        2.6.1.40
+DBLINKS     PubChem: 3642
+            ChEBI: 16256
+            LIPIDMAPS: LMFA01060193
+            NIKKAJI: J707.628B
+ATOM        7
+            1   C1c C    22.1537  -16.5424
+            2   C6a C    20.9444  -15.8412
+            3   C4a C    23.3629  -15.8412
+            4   C1a C    22.1537  -17.9380
+            5   O6a O    19.7288  -16.5424
+            6   O6a O    20.9444  -14.4391
+            7   O4a O    24.5785  -16.5424
+BOND        6
+            1     1   2 1
+            2     1   3 1
+            3     1   4 1
+            4     2   5 1
+            5     2   6 2
+            6     3   7 2
 ///
 ENTRY       C01386                      Compound
-NAME        NH2Mec
-ENZYME      3.4.22.32 (R)
+NAME        NH2Mec;
+            7-Amino-4-methylcoumarin
+FORMULA     C10H9NO2
+EXACT_MASS  175.0633
+MOL_WEIGHT  175.184
+DBLINKS     CAS: 26093-31-2
+            PubChem: 4580
+            ChEBI: 51771
+            ChEMBL: CHEMBL270672
+            KNApSAcK: C00048593
+            PDB-CCD: MCM
+            NIKKAJI: J150.531I
+ATOM        13
+            1   C8y C    25.8983  -16.5846
+            2   C8x C    25.8983  -17.9851
+            3   C8x C    27.1141  -18.6854
+            4   C8x C    27.1141  -15.8843
+            5   C8y C    28.3228  -16.5846
+            6   C8y C    28.3169  -17.9851
+            7   C8y C    29.5268  -18.6905
+            8   C8x C    30.7426  -17.9955
+            9   C8y C    30.7485  -16.5949
+            10  O7x O    29.5387  -15.8896
+            11  O6a O    31.9644  -15.8999
+            12  C1a C    29.5208  -20.0910
+            13  N1a N    24.6857  -15.8836
+BOND        14
+            1     3   6 1
+            2     5   4 1
+            3     4   1 2
+            4     5   6 2
+            5     6   7 1
+            6     7   8 2
+            7     8   9 1
+            8     9  10 1
+            9    10   5 1
+            10    9  11 2
+            11    1   2 1
+            12    7  12 1
+            13    2   3 2
+            14    1  13 1
 ///

@@ -1,13 +1,19 @@
 #!/usr/bin/env python
-"""clustal_run.py
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Run clustalw and parse the output.
 
 Example code to show how to create a clustalw command line, run clustalw
-and parse the results into an object that can be dealt with easily."""
+and parse the results into an object that can be dealt with easily.
+"""
 # standard library
 
 from __future__ import print_function
 
-import os
 import sys
 import subprocess
 

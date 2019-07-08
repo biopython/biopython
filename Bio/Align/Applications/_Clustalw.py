@@ -1,13 +1,12 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple alignment program Clustal W.
-"""
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple alignment program Clustal W."""
 
 from __future__ import print_function
-
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 import os
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -18,9 +17,19 @@ class ClustalwCommandline(AbstractCommandline):
 
     http://www.clustal.org/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against versions: 1.83 and 2.1
 
+    References
+    ----------
+    Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
+    McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
+    Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
+    Bioinformatics, 23, 2947-2948.
+
+    Examples
+    --------
     >>> from Bio.Align.Applications import ClustalwCommandline
     >>> in_file = "unaligned.fasta"
     >>> clustalw_cline = ClustalwCommandline("clustalw2", infile=in_file)
@@ -30,20 +39,12 @@ class ClustalwCommandline(AbstractCommandline):
     You would typically run the command line with clustalw_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
-
-    Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
-    McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
-    Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
-    Bioinformatics, 23, 2947-2948.
-
-    Last checked against versions: 1.83 and 2.1
     """
+
     # TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
-        self.parameters = \
-            [
+        """Initialize the class."""
+        self.parameters = [
             _Option(["-infile", "-INFILE", "INFILE", "infile"],
                     "Input sequences.",
                     filename=True),
@@ -129,20 +130,20 @@ class ClustalwCommandline(AbstractCommandline):
             # ***Fast Pairwise Alignments:***
             _Option(["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
                     "Word size",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-topdiags", "-TOPDIAGS", "TOPDIAGS", "topdiags"],
                     "Number of best diags.",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-window", "-WINDOW", "WINDOW", "window"],
                     "Window around best diags.",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-pairgap", "-PAIRGAP", "PAIRGAP", "pairgap"],
                     "Gap penalty",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-score", "-SCORE", "SCORE", "score"],
                     "Either: PERCENT or ABSOLUTE",
                     checker_function=lambda x: x in ["percent", "PERCENT",
@@ -150,26 +151,26 @@ class ClustalwCommandline(AbstractCommandline):
             # ***Slow Pairwise Alignments:***
             _Option(["-pwmatrix", "-PWMATRIX", "PWMATRIX", "pwmatrix"],
                     "Protein weight matrix=BLOSUM, PAM, GONNET, ID or filename",
-                    checker_function=lambda x: x in ["BLOSUM", "PAM",
-                                                     "GONNET", "ID",
-                                                     "blosum", "pam",
-                                                     "gonnet", "id"] or
-                                                os.path.exists(x),
+                    checker_function=lambda x: (x in ["BLOSUM", "PAM",
+                                                      "GONNET", "ID",
+                                                      "blosum", "pam",
+                                                      "gonnet", "id"]
+                                                or os.path.exists(x)),
                     filename=True),
             _Option(["-pwdnamatrix", "-PWDNAMATRIX", "PWDNAMATRIX", "pwdnamatrix"],
                     "DNA weight matrix=IUB, CLUSTALW or filename",
-                    checker_function=lambda x: x in ["IUB", "CLUSTALW",
-                                                     "iub", "clustalw"] or
-                                               os.path.exists(x),
+                    checker_function=lambda x: (x in ["IUB", "CLUSTALW",
+                                                      "iub", "clustalw"]
+                                                or os.path.exists(x)),
                     filename=True),
             _Option(["-pwgapopen", "-PWGAPOPEN", "PWGAPOPEN", "pwgapopen"],
                     "Gap opening penalty",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-pwgapext", "-PWGAPEXT", "PWGAPEXT", "pwgapext"],
                     "Gap extension penalty",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             # ***Multiple Alignments:***
             _Option(["-newtree", "-NEWTREE", "NEWTREE", "newtree"],
                     "Output file name for newly created guide tree",
@@ -180,32 +181,32 @@ class ClustalwCommandline(AbstractCommandline):
                     filename=True),
             _Option(["-matrix", "-MATRIX", "MATRIX", "matrix"],
                     "Protein weight matrix=BLOSUM, PAM, GONNET, ID or filename",
-                    checker_function=lambda x: x in ["BLOSUM", "PAM",
-                                                     "GONNET", "ID",
-                                                     "blosum", "pam",
-                                                     "gonnet", "id"] or
-                                               os.path.exists(x),
+                    checker_function=lambda x: (x in ["BLOSUM", "PAM",
+                                                      "GONNET", "ID",
+                                                      "blosum", "pam",
+                                                      "gonnet", "id"]
+                                                or os.path.exists(x)),
                     filename=True),
             _Option(["-dnamatrix", "-DNAMATRIX", "DNAMATRIX", "dnamatrix"],
                     "DNA weight matrix=IUB, CLUSTALW or filename",
-                    checker_function=lambda x: x in ["IUB", "CLUSTALW",
-                                                     "iub", "clustalw"] or
-                                               os.path.exists(x),
+                    checker_function=lambda x: (x in ["IUB", "CLUSTALW",
+                                                      "iub", "clustalw"]
+                                                or os.path.exists(x)),
                     filename=True),
             _Option(["-gapopen", "-GAPOPEN", "GAPOPEN", "gapopen"],
                     "Gap opening penalty",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-gapext", "-GAPEXT", "GAPEXT", "gapext"],
                     "Gap extension penalty",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Switch(["-endgaps", "-ENDGAPS", "ENDGAPS", "endgaps"],
                     "No end gap separation pen."),
             _Option(["-gapdist", "-GAPDIST", "GAPDIST", "gapdist"],
                     "Gap separation pen. range",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Switch(["-nopgap", "-NOPGAP", "NOPGAP", "nopgap"],
                     "Residue-specific gaps off"),
             _Switch(["-nohgap", "-NOHGAP", "NOHGAP", "nohgap"],
@@ -214,8 +215,8 @@ class ClustalwCommandline(AbstractCommandline):
                     "List hydrophilic res."),
             _Option(["-maxdiv", "-MAXDIV", "MAXDIV", "maxdiv"],
                     "% ident. for delay",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             # Already handled in General Settings section, but appears a second
             # time under Multiple Alignments in the help
             # _Option(["-type", "-TYPE", "TYPE", "type"],
@@ -224,8 +225,8 @@ class ClustalwCommandline(AbstractCommandline):
             #                                         "protein", "dna"]),
             _Option(["-transweight", "-TRANSWEIGHT", "TRANSWEIGHT", "transweight"],
                     "Transitions weighting",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-iteration", "-ITERATION", "ITERATION", "iteration"],
                     "NONE or TREE or ALIGNMENT",
                     checker_function=lambda x: x in ["NONE", "TREE",
@@ -279,20 +280,20 @@ class ClustalwCommandline(AbstractCommandline):
                                                      "both", "none"]),
             _Option(["-helixgap", "-HELIXGAP", "HELIXGAP", "helixgap"],
                     "Gap penalty for helix core residues",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-strandgap", "-STRANDGAP", "STRANDGAP", "strandgap"],
                     "gap penalty for strand core residues",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-loopgap", "-LOOPGAP", "LOOPGAP", "loopgap"],
                     "Gap penalty for loop regions",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-terminalgap", "-TERMINALGAP", "TERMINALGAP", "terminalgap"],
                     "Gap penalty for structure termini",
-                    checker_function=lambda x: isinstance(x, int) or
-                                               isinstance(x, float)),
+                    checker_function=lambda x: (isinstance(x, int) or
+                                                isinstance(x, float))),
             _Option(["-helixendin", "-HELIXENDIN", "HELIXENDIN", "helixendin"],
                     "Number of residues inside helix to be treated as terminal",
                     checker_function=lambda x: isinstance(x, int)),
@@ -330,12 +331,6 @@ class ClustalwCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running ClustalW doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

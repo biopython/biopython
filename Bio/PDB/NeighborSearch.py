@@ -1,22 +1,22 @@
-# Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+# Copyright (C) 2002, 2004 Thomas Hamelryck (thamelry@binf.ku.dk)
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Fast atom neighbor lookup using a KD tree (implemented in C++)."""
+
+"""Fast atom neighbor lookup using a KD tree (implemented in C)."""
 
 from __future__ import print_function
 
 import numpy
-
-from Bio.KDTree import KDTree
 
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
 class NeighborSearch(object):
-    """Class for neighbor searching,
+    """Class for neighbor searching.
 
     This class can be used for two related purposes:
 
@@ -25,27 +25,28 @@ class NeighborSearch(object):
      2. To find all atoms/residues/chains/models/structures that are within
         a fixed radius of each other.
 
-    NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
+    NeighborSearch makes use of the KDTree class implemented in C for speed.
     """
+
     def __init__(self, atom_list, bucket_size=10):
         """Create the object.
 
         Arguments:
-
          - atom_list - list of atoms. This list is used in the queries.
            It can contain atoms from different structures.
          - bucket_size - bucket size of KD tree. You can play around
            with this to optimize speed if you feel like it.
+
         """
-        self.atom_list=atom_list
+        from Bio.PDB.kdtrees import KDTree
+        self.atom_list = atom_list
         # get the coordinates
         coord_list = [a.get_coord() for a in atom_list]
         # to Nx3 array of type float
-        self.coords=numpy.array(coord_list).astype("f")
-        assert(bucket_size>1)
-        assert(self.coords.shape[1]==3)
-        self.kdt=KDTree(3, bucket_size)
-        self.kdt.set_coords(self.coords)
+        self.coords = numpy.array(coord_list, dtype="d")
+        assert bucket_size > 1
+        assert self.coords.shape[1] == 3
+        self.kdt = KDTree(self.coords, bucket_size)
 
     # Private
 
@@ -55,13 +56,13 @@ class NeighborSearch(object):
         # thereby removing duplicate (parent entity, parent entity)
         # pairs.
         # o pair_list - a list of (entity, entity) tuples
-        parent_pair_list=[]
+        parent_pair_list = []
         for (e1, e2) in pair_list:
-            p1=e1.get_parent()
-            p2=e2.get_parent()
-            if p1==p2:
+            p1 = e1.get_parent()
+            p2 = e2.get_parent()
+            if p1 == p2:
                 continue
-            elif p1<p2:
+            elif p1 < p2:
                 parent_pair_list.append((p1, p2))
             else:
                 parent_pair_list.append((p2, p1))
@@ -74,29 +75,27 @@ class NeighborSearch(object):
 
         Return all atoms/residues/chains/models/structures
         that have at least one atom within radius of center.
-        What entitity level is returned (e.g. atoms or residues)
+        What entity level is returned (e.g. atoms or residues)
         is determined by level (A=atoms, R=residues, C=chains,
         M=models, S=structures).
 
         Arguments:
-
          - center - Numeric array
          - radius - float
          - level - char (A, R, C, M, S)
+
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        self.kdt.search(center, radius)
-        indices=self.kdt.get_indices()
-        n_atom_list=[]
-        atom_list=self.atom_list
-        for i in indices:
-            a=atom_list[i]
-            n_atom_list.append(a)
-        if level=="A":
-            return n_atom_list
+        center = numpy.require(center, dtype='d', requirements='C')
+        if center.shape != (3,):
+            raise Exception("Expected a 3-dimensional NumPy array")
+        points = self.kdt.search(center, radius)
+        atom_list = [self.atom_list[point.index] for point in points]
+        if level == "A":
+            return atom_list
         else:
-            return unfold_entities(n_atom_list, level)
+            return unfold_entities(atom_list, level)
 
     def search_all(self, radius, level="A"):
         """All neighbor search.
@@ -105,38 +104,44 @@ class NeighborSearch(object):
         radius.
 
         Arguments:
-
          - radius - float
          - level - char (A, R, C, M, S)
+
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        self.kdt.all_search(radius)
-        indices=self.kdt.all_get_indices()
-        atom_list=self.atom_list
-        atom_pair_list=[]
-        for i1, i2 in indices:
-            a1=atom_list[i1]
-            a2=atom_list[i2]
+        neighbors = self.kdt.neighbor_search(radius)
+        atom_list = self.atom_list
+        atom_pair_list = []
+        for neighbor in neighbors:
+            i1 = neighbor.index1
+            i2 = neighbor.index2
+            a1 = atom_list[i1]
+            a2 = atom_list[i2]
             atom_pair_list.append((a1, a2))
-        if level=="A":
+        if level == "A":
             # return atoms
             return atom_pair_list
-        next_level_pair_list=atom_pair_list
+        next_level_pair_list = atom_pair_list
         for l in ["R", "C", "M", "S"]:
-            next_level_pair_list=self._get_unique_parent_pairs(next_level_pair_list)
-            if level==l:
+            next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
+            if level == l:
                 return next_level_pair_list
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
 
     from numpy.random import random
 
     class Atom(object):
+        """Define atom class for testing."""
+
         def __init__(self):
-            self.coord=(100*random(3))
+            """Initialize the class."""
+            self.coord = (100 * random(3))
 
         def get_coord(self):
+            """Return coordinates."""
             return self.coord
 
     for i in range(0, 20):

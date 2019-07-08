@@ -7,16 +7,15 @@
 """Code to work with the KEGG Enzyme database.
 
 Functions:
-parse - Returns an iterator giving Record objects.
+ - parse - Returns an iterator giving Record objects.
 
 Classes:
-Record               -- Holds the information from a KEGG Enzyme record.
+ - Record - Holds the information from a KEGG Enzyme record.
 """
 
 from __future__ import print_function
 
-from Bio.KEGG import _write_kegg
-from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _default_wrap, _struct_wrap, _wrap_kegg, _write_kegg
 
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
@@ -28,36 +27,35 @@ rxn_wrap = [0, "",
 name_wrap = [0, "",
              (" ", "$", 1, 1),
              ("-", "$", 1, 1)]
-id_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
-struct_wrap = lambda indent: [indent, "", ("  ", "", 1, 1)]
+id_wrap = _default_wrap
+struct_wrap = _struct_wrap
 
 
 class Record(object):
     """Holds info from a KEGG Enzyme record.
 
-    Members:
-    entry       The EC number (withou the 'EC ').
-    name        A list of the enzyme names.
-    classname   A list of the classification terms.
-    sysname     The systematic name of the enzyme.
-    reaction    A list of the reaction description strings.
-    substrate   A list of the substrates.
-    product     A list of the products.
-    inhibitor   A list of the inhibitors.
-    cofactor    A list of the cofactors.
-    effector    A list of the effectors.
-    comment     A list of the comment strings.
-    pathway     A list of 3-tuples: (database, id, pathway)
-    genes       A list of 2-tuples: (organism, list of gene ids)
-    disease     A list of 3-tuples: (database, id, disease)
-    structures  A list of 2-tuples: (database, list of struct ids)
-    dblinks     A list of 2-tuples: (database, list of db ids)
-    """
-    def __init__(self):
-        """__init___(self)
+    Attributes:
+     - entry       The EC number (withou the 'EC ').
+     - name        A list of the enzyme names.
+     - classname   A list of the classification terms.
+     - sysname     The systematic name of the enzyme.
+     - reaction    A list of the reaction description strings.
+     - substrate   A list of the substrates.
+     - product     A list of the products.
+     - inhibitor   A list of the inhibitors.
+     - cofactor    A list of the cofactors.
+     - effector    A list of the effectors.
+     - comment     A list of the comment strings.
+     - pathway     A list of 3-tuples: (database, id, pathway)
+     - genes       A list of 2-tuples: (organism, list of gene ids)
+     - disease     A list of 3-tuples: (database, id, disease)
+     - structures  A list of 2-tuples: (database, list of struct ids)
+     - dblinks     A list of 2-tuples: (database, list of db ids)
 
-        Create a new Record.
-        """
+    """
+
+    def __init__(self):
+        """Initialize a new Record."""
         self.entry = ""
         self.name = []
         self.classname = []
@@ -76,27 +74,24 @@ class Record(object):
         self.dblinks = []
 
     def __str__(self):
-        """__str__(self)
-
-        Returns a string representation of this Record.
-        """
-        return self._entry() + \
-               self._name() + \
-               self._classname() + \
-               self._sysname() + \
-               self._reaction() + \
-               self._substrate() + \
-               self._product() + \
-               self._inhibitor() + \
-               self._cofactor() + \
-               self._effector() + \
-               self._comment() + \
-               self._pathway() + \
-               self._genes() + \
-               self._disease() + \
-               self._structures() + \
-               self._dblinks() + \
-               "///"
+        """Return a string representation of this Record."""
+        return (self._entry() +
+                self._name() +
+                self._classname() +
+                self._sysname() +
+                self._reaction() +
+                self._substrate() +
+                self._product() +
+                self._inhibitor() +
+                self._cofactor() +
+                self._effector() +
+                self._comment() +
+                self._pathway() +
+                self._genes() +
+                self._disease() +
+                self._structures() +
+                self._dblinks() +
+                "///")
 
     def _entry(self):
         return _write_kegg("ENTRY",
@@ -205,35 +200,35 @@ def parse(handle):
     ...     for record in parse(handle):
     ...         print("%s %s" % (record.entry, record.name[0]))
     ...
-    1.1.1.1 Alcohol dehydrogenase
-    1.1.1.62 Estradiol 17beta-dehydrogenase
-    1.1.1.68 Transferred to EC 1.7.99.5
-    1.6.5.3 NADH dehydrogenase (ubiquinone)
-    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
-    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
-    3.1.1.6 Acetylesterase
-    2.7.2.1 Acetate kinase
+    1.1.1.1 alcohol dehydrogenase
+    1.1.1.62 17beta-estradiol 17-dehydrogenase
+    1.1.1.68 Transferred to 1.5.1.20
+    1.6.5.3 NADH:ubiquinone reductase (H+-translocating)
+    1.14.13.28 3,9-dihydroxypterocarpan 6a-monooxygenase
+    2.4.1.68 glycoprotein 6-alpha-L-fucosyltransferase
+    3.1.1.6 acetylesterase
+    2.7.2.1 acetate kinase
 
     """
     record = Record()
     for line in handle:
-        if line[:3]=="///":
+        if line[:3] == "///":
             yield record
             record = Record()
             continue
-        if line[:12]!="            ":
+        if line[:12] != "            ":
             keyword = line[:12]
         data = line[12:].strip()
-        if keyword=="ENTRY       ":
+        if keyword == "ENTRY       ":
             words = data.split()
             record.entry = words[1]
-        elif keyword=="CLASS       ":
+        elif keyword == "CLASS       ":
             record.classname.append(data)
-        elif keyword=="COFACTOR    ":
+        elif keyword == "COFACTOR    ":
             record.cofactor.append(data)
-        elif keyword=="COMMENT     ":
+        elif keyword == "COMMENT     ":
             record.comment.append(data)
-        elif keyword=="DBLINKS     ":
+        elif keyword == "DBLINKS     ":
             if ":" in data:
                 key, values = data.split(":")
                 values = values.split()
@@ -245,7 +240,7 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
-        elif keyword=="DISEASE     ":
+        elif keyword == "DISEASE     ":
             if ":" in data:
                 database, data = data.split(":")
                 number, name = data.split(None, 1)
@@ -257,10 +252,10 @@ def parse(handle):
                 name = name + " " + data
                 row = database, number, name
                 record.disease[-1] = row
-        elif keyword=="EFFECTOR    ":
+        elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
-        elif keyword=="GENES       ":
-            if data[3:5]==': ':
+        elif keyword == "GENES       ":
+            if data[3:5] == ': ' or data[4:6] == ': ':
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
@@ -273,12 +268,12 @@ def parse(handle):
                     values.append(value)
                 row = key, values
                 record.genes[-1] = row
-        elif keyword=="INHIBITOR   ":
+        elif keyword == "INHIBITOR   ":
             record.inhibitor.append(data.strip(";"))
-        elif keyword=="NAME        ":
+        elif keyword == "NAME        ":
             record.name.append(data.strip(";"))
-        elif keyword=="PATHWAY     ":
-            if data[:5]=='PATH:':
+        elif keyword == "PATHWAY     ":
+            if data[:5] == 'PATH:':
                 _, map_num, name = data.split(None, 2)
                 pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
@@ -286,12 +281,12 @@ def parse(handle):
                 ec_num, name = data.split(None, 1)
                 pathway = 'PATH', ec_num, name
                 record.pathway.append(pathway)
-        elif keyword=="PRODUCT     ":
+        elif keyword == "PRODUCT     ":
             record.product.append(data.strip(";"))
-        elif keyword=="REACTION    ":
+        elif keyword == "REACTION    ":
             record.reaction.append(data.strip(";"))
-        elif keyword=="STRUCTURES  ":
-            if data[:4]=='PDB:':
+        elif keyword == "STRUCTURES  ":
+            if data[:4] == 'PDB:':
                 database = data[:3]
                 accessions = data[4:].split()
                 row = (database, accessions)
@@ -302,10 +297,38 @@ def parse(handle):
                 accessions.extend(data.split())
                 row = (database, accessions)
                 record.structures[-1] = row
-        elif keyword=="SUBSTRATE   ":
+        elif keyword == "SUBSTRATE   ":
             record.substrate.append(data.strip(";"))
-        elif keyword=="SYSNAME     ":
+        elif keyword == "SYSNAME     ":
             record.sysname.append(data.strip(";"))
+
+
+def read(handle):
+    """Parse a KEGG Enzyme file with exactly one entry.
+
+    If the handle contains no records, or more than one record,
+    an exception is raised.  For example:
+
+    >>> with open("KEGG/enzyme.new") as handle:
+    ...     record = read(handle)
+    ...     print("%s %s" % (record.entry, record.name[0]))
+    ...
+    6.2.1.25 benzoate---CoA ligase
+    """
+    iterator = parse(handle)
+    try:
+        first = next(iterator)
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = next(iterator)
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
 
 
 if __name__ == "__main__":

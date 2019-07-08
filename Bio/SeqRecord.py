@@ -1,21 +1,22 @@
-# Copyright 2000-2002 Andrew Dalke.
-# Copyright 2002-2004 Brad Chapman.
-# Copyright 2006-2010 by Peter Cock.
-# All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2000-2002 Andrew Dalke.  All rights reserved.
+# Copyright 2002-2004 Brad Chapman.  All rights reserved.
+# Copyright 2006-2017 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Represent a Sequence Record, a sequence with annotation."""
 
 
 from Bio._py3k import basestring
 
-__docformat__ = "restructuredtext en"  # Simple markup to show doctests nicely
-
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
+
+_NO_SEQRECORD_COMPARISON = "SeqRecord comparison is deliberately not implemented. Explicitly compare the attributes of interest."
 
 
 class _RestrictedDict(dict):
@@ -80,7 +81,7 @@ class _RestrictedDict(dict):
         if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
                 or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
-                            "strings) of length %i." % self._length)
+                            "strings) of length {0}.".format(self._length))
         dict.__setitem__(self, key, value)
 
     def update(self, new_dict):
@@ -93,22 +94,22 @@ class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
-        - id          - Identifier such as a locus tag (string)
-        - seq         - The sequence itself (Seq object or similar)
+     - id          - Identifier such as a locus tag (string)
+     - seq         - The sequence itself (Seq object or similar)
 
     Additional attributes:
-        - name        - Sequence name, e.g. gene name (string)
-        - description - Additional text (string)
-        - dbxrefs     - List of database cross references (list of strings)
-        - features    - Any (sub)features defined (list of SeqFeature objects)
-        - annotations - Further information about the whole sequence (dictionary).
-          Most entries are strings, or lists of strings.
-        - letter_annotations - Per letter/symbol annotation (restricted
-          dictionary). This holds Python sequences (lists, strings
-          or tuples) whose length matches that of the sequence.
-          A typical use would be to hold a list of integers
-          representing sequencing quality scores, or a string
-          representing the secondary structure.
+     - name        - Sequence name, e.g. gene name (string)
+     - description - Additional text (string)
+     - dbxrefs     - List of database cross references (list of strings)
+     - features    - Any (sub)features defined (list of SeqFeature objects)
+     - annotations - Further information about the whole sequence (dictionary).
+       Most entries are strings, or lists of strings.
+     - letter_annotations - Per letter/symbol annotation (restricted
+       dictionary). This holds Python sequences (lists, strings
+       or tuples) whose length matches that of the sequence.
+       A typical use would be to hold a list of integers
+       representing sequencing quality scores, or a string
+       representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -157,16 +158,16 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-            - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
-            - id          - Sequence identifier, recommended (string)
-            - name        - Sequence name, optional (string)
-            - description - Sequence description, optional (string)
-            - dbxrefs     - Database cross references, optional (list of strings)
-            - features    - Any (sub)features, optional (list of SeqFeature objects)
-            - annotations - Dictionary of annotations for the whole sequence
-            - letter_annotations - Dictionary of per-letter-annotations, values
-              should be strings, list or tuples of the same
-              length as the full sequence.
+         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
+         - id          - Sequence identifier, recommended (string)
+         - name        - Sequence name, optional (string)
+         - description - Sequence description, optional (string)
+         - dbxrefs     - Database cross references, optional (list of strings)
+         - features    - Any (sub)features, optional (list of SeqFeature objects)
+         - annotations - Dictionary of annotations for the whole sequence
+         - letter_annotations - Dictionary of per-letter-annotations, values
+           should be strings, list or tuples of the same length as the full
+           sequence.
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -217,7 +218,7 @@ class SeqRecord(object):
                 try:
                     self._per_letter_annotations = \
                         _RestrictedDict(length=len(seq))
-                except:
+                except TypeError:
                     raise TypeError("seq argument should be a Seq object or similar")
         else:
             # This will be handled via the property set function, which will
@@ -292,40 +293,51 @@ class SeqRecord(object):
         >>> sub_record.letter_annotations = {}
         >>> sub_record.letter_annotations
         {}
+
+        Note that if replacing the record's sequence with a sequence of a
+        different length you must first clear the letter_annotations dict.
         """)
 
     def _set_seq(self, value):
         # TODO - Add a deprecation warning that the seq should be write only?
         if self._per_letter_annotations:
-            # TODO - Make this a warning? Silently empty the dictionary?
-            raise ValueError("You must empty the letter annotations first!")
-        self._seq = value
-        try:
-            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
-        except AttributeError:
-            # e.g. seq is None
-            self._per_letter_annotations = _RestrictedDict(length=0)
+            if len(self) != len(value):
+                # TODO - Make this a warning? Silently empty the dictionary?
+                raise ValueError("You must empty the letter annotations first!")
+            else:
+                # Leave the existing per letter annotations unchanged:
+                self._seq = value
+        else:
+            self._seq = value
+            # Reset the (empty) letter annotations dict with new length:
+            try:
+                self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+            except AttributeError:
+                # e.g. seq is None
+                self._per_letter_annotations = _RestrictedDict(length=0)
 
     seq = property(fget=lambda self: self._seq,
                    fset=_set_seq,
                    doc="The sequence itself, as a Seq or MutableSeq object.")
 
     def __getitem__(self, index):
-        """Returns a sub-sequence or an individual letter.
+        """Return a sub-sequence or an individual letter.
 
         Slicing, e.g. my_record[5:10], returns a new SeqRecord for
-        that sub-sequence with approriate annotation preserved.  The
-        name, id and description are kept.
+        that sub-sequence with some annotation preserved as follows:
 
-        Any per-letter-annotations are sliced to match the requested
-        sub-sequence.  Unless a stride is used, all those features
-        which fall fully within the subsequence are included (with
-        their locations adjusted accordingly).
-
-        However, the annotations dictionary and the dbxrefs list are
-        not used for the new SeqRecord, as in general they may not
-        apply to the subsequence.  If you want to preserve them, you
-        must explictly copy them to the new SeqRecord yourself.
+        * The name, id and description are kept as-is.
+        * Any per-letter-annotations are sliced to match the requested
+          sub-sequence.
+        * Unless a stride is used, all those features which fall fully
+          within the subsequence are included (with their locations
+          adjusted accordingly). If you want to preserve any truncated
+          features (e.g. GenBank/EMBL source features), you must
+          explicitly add them to the new SeqRecord yourself.
+        * The annotations dictionary and the dbxrefs list are not used
+          for the new SeqRecord, as in general they may not apply to the
+          subsequence. If you want to preserve them, you must explicitly
+          copy them to the new SeqRecord yourself.
 
         Using an integer index, e.g. my_record[5] is shorthand for
         extracting that letter from the sequence, my_record.seq[5].
@@ -357,8 +369,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
-        >>> print(rec.letter_annotations["secondary_structure"])
-          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
+        >>> rec.letter_annotations["secondary_structure"]
+        '  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  '
         >>> print(rec.features[0].location)
         [20:21]
 
@@ -373,8 +385,8 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
-        >>> print(sub.letter_annotations["secondary_structure"])
-        HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH
+        >>> sub.letter_annotations["secondary_structure"]
+        'HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH'
         >>> print(sub.features[0].location)
         [9:10]
 
@@ -427,11 +439,23 @@ class SeqRecord(object):
             if self.seq is None:
                 raise ValueError("If the sequence is None, we cannot slice it.")
             parent_length = len(self)
-            answer = self.__class__(self.seq[index],
-                                    id=self.id,
-                                    name=self.name,
-                                    description=self.description)
-            # TODO - The desription may no longer apply.
+            try:
+                from BioSQL.BioSeq import DBSeqRecord
+                biosql_available = True
+            except ImportError:
+                biosql_available = False
+
+            if biosql_available and isinstance(self, DBSeqRecord):
+                answer = SeqRecord(self.seq[index],
+                                   id=self.id,
+                                   name=self.name,
+                                   description=self.description)
+            else:
+                answer = self.__class__(self.seq[index],
+                                        id=self.id,
+                                        name=self.name,
+                                        description=self.description)
+            # TODO - The description may no longer apply.
             # It would be safer to change it to something
             # generic like "edited" or the default value.
 
@@ -521,7 +545,7 @@ class SeqRecord(object):
         return iter(self.seq)
 
     def __contains__(self, char):
-        """Implements the 'in' keyword, searches the sequence.
+        """Implement the 'in' keyword, searches the sequence.
 
         e.g.
 
@@ -553,7 +577,7 @@ class SeqRecord(object):
         return char in self.seq
 
     def __str__(self):
-        """A human readable summary of the record and its annotation (string).
+        """Return a human readable summary of the record and its annotation (string).
 
         The python built in function str works by calling the object's ___str__
         method.  e.g.
@@ -586,27 +610,25 @@ class SeqRecord(object):
         """
         lines = []
         if self.id:
-            lines.append("ID: %s" % self.id)
+            lines.append("ID: {0}".format(self.id))
         if self.name:
-            lines.append("Name: %s" % self.name)
+            lines.append("Name: {0}".format(self.name))
         if self.description:
-            lines.append("Description: %s" % self.description)
+            lines.append("Description: {0}".format(self.description))
         if self.dbxrefs:
-            lines.append("Database cross-references: "
-                         + ", ".join(self.dbxrefs))
-        lines.append("Number of features: %i" % len(self.features))
+            lines.append("Database cross-references: " + ", ".join(self.dbxrefs))
+        lines.append("Number of features: {0}".format(len(self.features)))
         for a in self.annotations:
-            lines.append("/%s=%s" % (a, str(self.annotations[a])))
+            lines.append("/{0}={1}".format(a, str(self.annotations[a])))
         if self.letter_annotations:
-            lines.append("Per letter annotation for: "
-                         + ", ".join(self.letter_annotations))
+            lines.append("Per letter annotation for: " + ", ".join(self.letter_annotations))
         # Don't want to include the entire sequence,
         # and showing the alphabet is useful:
         lines.append(repr(self.seq))
         return "\n".join(lines)
 
     def __repr__(self):
-        """A concise summary of the record for debugging (string).
+        """Return a concise summary of the record for debugging (string).
 
         The python built in function repr works by calling the object's ___repr__
         method.  e.g.
@@ -634,13 +656,13 @@ class SeqRecord(object):
         annotations, letter_annotations and features are not shown (as they
         would lead to a very long string).
         """
-        return self.__class__.__name__ \
-            + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
-            % tuple(map(repr, (self.seq, self.id, self.name,
-                               self.description, self.dbxrefs)))
+        return "{0}(seq={1!r}, id={2!r}, name={3!r}, description={4!r}, dbxrefs={5!r})".format(
+               self.__class__.__name__,
+               self.seq, self.id, self.name,
+               self.description, self.dbxrefs)
 
     def format(self, format):
-        r"""Returns the record as a string in the specified file format.
+        r"""Return the record as a string in the specified file format.
 
         The format should be a lower case string supported as an output
         format by Bio.SeqIO, which is used to turn the SeqRecord into a
@@ -674,7 +696,7 @@ class SeqRecord(object):
         return self.__format__(format)
 
     def __format__(self, format_spec):
-        """Returns the record as a string in the specified file format.
+        """Return the record as a string in the specified file format.
 
         This method supports the python format() function added in
         Python 2.6/3.0.  The format_spec should be a lower case string
@@ -688,6 +710,12 @@ class SeqRecord(object):
             # Follow python convention and default to using __str__
             return str(self)
         from Bio import SeqIO
+
+        # Easy case, can call string-building function directly
+        if format_spec in SeqIO._FormatToString:
+            return SeqIO._FormatToString[format_spec](self)
+
+        # Harder case, make a temp handle instead
         if format_spec in SeqIO._BinaryFormats:
             # Return bytes on Python 3
             from io import BytesIO
@@ -699,7 +727,7 @@ class SeqRecord(object):
         return handle.getvalue()
 
     def __len__(self):
-        """Returns the length of the sequence.
+        """Return the length of the sequence.
 
         For example, using Bio.SeqIO to read in a FASTA nucleotide file:
 
@@ -711,6 +739,37 @@ class SeqRecord(object):
         309
         """
         return len(self.seq)
+
+    def __lt__(self, other):
+        """Define the less-than operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __le___(self, other):
+        """Define the less-than-or-equal-to operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __eq__(self, other):
+        """Define the equal-to operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __ne__(self, other):
+        """Define the not-equal-to operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __gt__(self, other):
+        """Define the greater-than operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    def __ge__(self, other):
+        """Define the greater-than-or-equal-to operand (not implemented)."""
+        raise NotImplementedError(_NO_SEQRECORD_COMPARISON)
+
+    # Make SeqRecord unhashable explicit, required for Python 2.
+    # See github issue 929 for related discussion.
+    __hash__ = None
+
+    # Note Python 3 does not use __cmp__ and there is no need to
+    # define __cmp__ on Python 2 as have all of  _lt__ etc defined.
 
     # Python 3:
     def __bool__(self):
@@ -815,10 +874,10 @@ class SeqRecord(object):
                            features=self.features[:],
                            dbxrefs=self.dbxrefs[:])
         # Will take all the features and all the db cross refs,
-        l = len(self)
+        length = len(self)
         for f in other.features:
-            answer.features.append(f._shift(l))
-        del l
+            answer.features.append(f._shift(length))
+        del length
         for ref in other.dbxrefs:
             if ref not in answer.dbxrefs:
                 answer.dbxrefs.append(ref)
@@ -872,7 +931,7 @@ class SeqRecord(object):
                          dbxrefs=self.dbxrefs[:])
 
     def upper(self):
-        """Returns a copy of the record with an upper case sequence.
+        """Return a copy of the record with an upper case sequence.
 
         All the annotation is preserved unchanged. e.g.
 
@@ -907,7 +966,7 @@ class SeqRecord(object):
                          letter_annotations=self.letter_annotations.copy())
 
     def lower(self):
-        """Returns a copy of the record with a lower case sequence.
+        """Return a copy of the record with a lower case sequence.
 
         All the annotation is preserved unchanged. e.g.
 
@@ -949,7 +1008,11 @@ class SeqRecord(object):
     def reverse_complement(self, id=False, name=False, description=False,
                            features=True, annotations=False,
                            letter_annotations=True, dbxrefs=False):
-        """Returns new SeqRecord with reverse complement sequence.
+        """Return new SeqRecord with reverse complement sequence.
+
+        By default the new record does NOT preserve the sequence identifier,
+        name, description, general annotation or database cross-references -
+        these are unlikely to apply to the reversed sequence.
 
         You can specify the returned record's id, name and description as
         strings, or True to keep that of the parent, or False for a default.
@@ -977,9 +1040,10 @@ class SeqRecord(object):
         >>> print(record.letter_annotations["solexa_quality"])
         [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
-        Now take the reverse complement,
+        Now take the reverse complement, here we explicitly give a new
+        identifier (the old identifier with a suffix):
 
-        >>> rc_record = record.reverse_complement(id=record.id+"_rc")
+        >>> rc_record = record.reverse_complement(id=record.id + "_rc")
         >>> print("%s %s" % (rc_record.id, rc_record.seq))
         slxa_0001_1_0001_01_rc NNNNNNACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 
@@ -1043,7 +1107,7 @@ class SeqRecord(object):
 
         Note that if the SeqFeature annotation includes any strand specific
         information (e.g. base changes for a SNP), this information is not
-        ammended, and would need correction after the reverse complement.
+        amended, and would need correction after the reverse complement.
 
         Note trying to reverse complement a protein SeqRecord raises an
         exception:
@@ -1097,8 +1161,8 @@ class SeqRecord(object):
             answer.features = features
         elif features:
             # Copy the old features, adjusting location and string
-            l = len(answer)
-            answer.features = [f._flip(l) for f in self.features]
+            length = len(answer)
+            answer.features = [f._flip(length) for f in self.features]
             # The old list should have been sorted by start location,
             # reversing it will leave it sorted by what is now the end position,
             # so we need to resort in case of overlapping features.
@@ -1116,6 +1180,98 @@ class SeqRecord(object):
             # Copy the old per letter annotations, reversing them
             for key, value in self.letter_annotations.items():
                 answer._per_letter_annotations[key] = value[::-1]
+        return answer
+
+    def translate(self,
+                  # Seq translation arguments:
+                  table="Standard", stop_symbol="*", to_stop=False,
+                  cds=False, gap=None,
+                  # SeqRecord annotation arguments:
+                  id=False, name=False, description=False,
+                  features=False, annotations=False,
+                  letter_annotations=False, dbxrefs=False):
+        """Return new SeqRecord with translated sequence.
+
+        This calls the record's .seq.translate() method (which describes
+        the translation related arguments, like table for the genetic code),
+
+        By default the new record does NOT preserve the sequence identifier,
+        name, description, general annotation or database cross-references -
+        these are unlikely to apply to the translated sequence.
+
+        You can specify the returned record's id, name and description as
+        strings, or True to keep that of the parent, or False for a default.
+
+        You can specify the returned record's features with a list of
+        SeqFeature objects, or False (default) to omit them.
+
+        You can also specify both the returned record's annotations and
+        letter_annotations as dictionaries, True to keep that of the parent
+        (annotations only), or False (default) to omit them.
+
+        e.g. Loading a FASTA gene and translating it,
+
+        >>> from Bio import SeqIO
+        >>> gene_record = SeqIO.read("Fasta/sweetpea.nu", "fasta")
+        >>> print(gene_record.format("fasta"))
+        >gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds
+        CAGGCTGCGCGGTTTCTATTTATGAAGAACAAGGTCCGTATGATAGTTGATTGTCATGCA
+        AAACATGTGAAGGTTCTTCAAGACGAAAAACTCCCATTTGATTTGACTCTGTGCGGTTCG
+        ACCTTAAGAGCTCCACATAGTTGCCATTTGCAGTACATGGCTAACATGGATTCAATTGCT
+        TCATTGGTTATGGCAGTGGTCGTCAATGACAGCGATGAAGATGGAGATAGCCGTGACGCA
+        GTTCTACCACAAAAGAAAAAGAGACTTTGGGGTTTGGTAGTTTGTCATAACACTACTCCG
+        AGGTTTGTT
+        <BLANKLINE>
+
+        And now translating the record, specifying the new ID and description:
+
+        >>> protein_record = gene_record.translate(table=11,
+        ...                                        id="phya",
+        ...                                        description="translation")
+        >>> print(protein_record.format("fasta"))
+        >phya translation
+        QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+        SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV
+        <BLANKLINE>
+
+        """
+        answer = SeqRecord(self.seq.translate(table=table,
+                                              stop_symbol=stop_symbol,
+                                              to_stop=to_stop,
+                                              cds=cds,
+                                              gap=gap))
+        if isinstance(id, basestring):
+            answer.id = id
+        elif id:
+            answer.id = self.id
+        if isinstance(name, basestring):
+            answer.name = name
+        elif name:
+            answer.name = self.name
+        if isinstance(description, basestring):
+            answer.description = description
+        elif description:
+            answer.description = self.description
+        if isinstance(dbxrefs, list):
+            answer.dbxrefs = dbxrefs
+        elif dbxrefs:
+            # Copy the old dbxrefs
+            answer.dbxrefs = self.dbxrefs[:]
+        if isinstance(features, list):
+            answer.features = features
+        elif features:
+            # Does not make sense to copy old features as locations wrong
+            raise TypeError("Unexpected features argument %r" % features)
+        if isinstance(annotations, dict):
+            answer.annotations = annotations
+        elif annotations:
+            # Copy the old annotations
+            answer.annotations = self.annotations.copy()
+        if isinstance(letter_annotations, dict):
+            answer.letter_annotations = letter_annotations
+        elif letter_annotations:
+            # Does not make sense to copy these as length now wrong
+            raise TypeError("Unexpected letter_annotations argument %r" % letter_annotations)
         return answer
 
 

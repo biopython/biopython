@@ -1,10 +1,7 @@
-"""
-Unittests for Bio.Align.Applications interface for PRANK
-
-This code is part of the Biopython distribution and governed by its
-license.  Please see the LICENSE file that should have been included
-as part of this package.
-"""
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Unittests for Bio.Align.Applications interface for PRANK."""
 
 import sys
 import os
@@ -55,7 +52,8 @@ class PrankApplication(unittest.TestCase):
         self.infile1 = "Fasta/fa01"
 
     def tearDown(self):
-        """
+        """Remove generated files.
+
         output.1.dnd  output.1.fas  output.1.xml  output.2.dnd  output.2.fas  output.2.xml
         """
         if os.path.isfile("output.1.dnd"):
@@ -77,6 +75,7 @@ class PrankApplication(unittest.TestCase):
 
     def test_Prank_simple(self):
         """Simple round-trip through app with infile.
+
         output.?.??? files written to cwd - no way to redirect
         """
         cmdline = PrankCommandline(prank_exe)
@@ -86,10 +85,11 @@ class PrankApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
         self.assertEqual(error, "")
-        self.assertTrue("Total time" in output)
+        self.assertIn("Total time", output)
 
     def test_Prank_simple_with_NEXUS_output(self):
-        """Simple round-trip through app with infile, output in NEXUS
+        """Simple round-trip through app with infile, output in NEXUS.
+
         output.?.??? files written to cwd - no way to redirect
         """
         records = list(SeqIO.parse(self.infile1, "fasta"))
@@ -103,7 +103,7 @@ class PrankApplication(unittest.TestCase):
                          " -d=Fasta/fa01 -f=17 -dots")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
-        self.assertTrue("Total time" in stdout)
+        self.assertIn("Total time", stdout)
         self.assertEqual(stderr, "")
         try:
             if os.path.isfile("output.best.nex"):
@@ -144,7 +144,7 @@ class PrankApplication(unittest.TestCase):
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
-        self.assertTrue("Total time" in stdout, stdout)
+        self.assertIn("Total time", stdout)
 
 
 class PrankConversion(unittest.TestCase):
@@ -161,14 +161,14 @@ class PrankConversion(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
                                    o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), _escape_filename(prank_exe)
-                         + ' -d=%s' % self.input
-                         + ' -o="%s"' % self.output
-                         + ' -f=%i' % prank_number
-                         + ' -convert')
+        self.assertEqual(str(cmdline), _escape_filename(prank_exe) +
+                         ' -d=%s' % self.input +
+                         ' -o="%s"' % self.output +
+                         ' -f=%i' % prank_number +
+                         ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
-        self.assertTrue("PRANK" in message, message)
+        self.assertIn("PRANK", message)
         self.assertTrue(("converting '%s' to '%s'" % (self.input, filename))
                         in message, message)
         self.assertEqual(error, "")

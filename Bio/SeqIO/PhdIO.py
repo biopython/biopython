@@ -1,10 +1,10 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2016 by Peter Cock.  All rights reserved.
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "phd" file format.
 
 PHD files are output by PHRED and used by PHRAP and CONSED.
@@ -59,11 +59,9 @@ from Bio.Sequencing import Phd
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.SeqIO import QualityIO
 
-__docformat__ = "restructuredtext en"
-
 
 def PhdIterator(handle):
-    """Returns SeqRecord objects from a PHD file.
+    """Return SeqRecord objects from a PHD file.
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
     """
@@ -95,9 +93,10 @@ def PhdIterator(handle):
 
 
 class PhdWriter(SequentialSequenceWriter):
-    """Class to write Phd format files"""
+    """Class to write Phd format files."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         SequentialSequenceWriter.__init__(self, handle)
 
     def write_record(self, record):
@@ -106,12 +105,14 @@ class PhdWriter(SequentialSequenceWriter):
         # This method returns the 'phred_quality' scores or converted
         # 'solexa_quality' scores if present, else raises a value error
         phred_qualities = QualityIO._get_phred_quality(record)
-        peak_locations = record.letter_annotations.get("peak_location", None)
-        assert len(record.seq) == len(phred_qualities), "Number of " + \
-            "phd quality scores does not match length of sequence"
+        peak_locations = record.letter_annotations.get("peak_location")
+        if len(record.seq) != len(phred_qualities):
+            raise ValueError("Number of phd quality scores does not match "
+                             "length of sequence")
         if peak_locations:
-            assert len(record.seq) == len(peak_locations), "Number " + \
-                "of peak location scores does not match length of sequence"
+            if len(record.seq) != len(peak_locations):
+                raise ValueError("Number of peak location scores does not "
+                                 "match length of sequence")
         if None in phred_qualities:
             raise ValueError("A quality value of None was found")
         if record.description.startswith("%s " % record.id):
@@ -123,14 +124,14 @@ class PhdWriter(SequentialSequenceWriter):
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
             if annot == "trim":
-                if record.annotations.get("trim", None):
+                if record.annotations.get("trim"):
                     value = "%s %s %.4f" % record.annotations["trim"]
             elif annot == "trace_peak_area_ratio":
-                if record.annotations.get("trace_peak_area_ratio", None):
+                if record.annotations.get("trace_peak_area_ratio"):
                     value = "%.4f" % record.annotations[
                         "trace_peak_area_ratio"]
             else:
-                value = record.annotations.get(annot, None)
+                value = record.annotations.get(annot)
             if value or value == 0:
                 self.handle.write("%s: %s\n" % (annot.upper(), value))
 

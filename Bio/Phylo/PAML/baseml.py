@@ -1,24 +1,28 @@
-# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# Copyright (C) 2011, 2018 by Brandon Invergo (b.invergo@gmail.com)
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Classes for the support of baseml.
+
+Maximum likelihood analysis of nucleotide sequences.
+"""
+
 import os
 import os.path
-from ._paml import Paml, _relpath
+from ._paml import Paml
 from . import _parse_baseml
 
 
 class BasemlError(EnvironmentError):
-    """BASEML has failed. Run with verbose = True to view BASEML's error
-message"""
+    """BASEML failed. Run with verbose=True to view BASEML's error message."""
 
 
 class Baseml(Paml):
-    """This class implements an interface to BASEML, part of the PAML package."""
+    """An interface to BASEML, part of the PAML package."""
 
     def __init__(self, alignment=None, tree=None, working_dir=None,
-                out_file=None):
+                 out_file=None):
         """Initialize the Baseml instance.
 
         The user may optionally pass in strings specifying the locations
@@ -32,30 +36,30 @@ class Baseml(Paml):
         self.tree = tree
         self.ctl_file = "baseml.ctl"
         self._options = {"noisy": None,
-                        "verbose": None,
-                        "runmode": None,
-                        "model": None,
-                        "model_options": None,
-                        "Mgene": None,
-                        "ndata": None,
-                        "clock": None,
-                        "fix_kappa": None,
-                        "kappa": None,
-                        "fix_alpha": None,
-                        "alpha": None,
-                        "Malpha": None,
-                        "ncatG": None,
-                        "fix_rho": None,
-                        "rho": None,
-                        "nparK": None,
-                        "nhomo": None,
-                        "getSE": None,
-                        "RateAncestor": None,
-                        "Small_Diff": None,
-                        "cleandata": None,
-                        "icode": None,
-                        "fix_blength": None,
-                        "method": None}
+                         "verbose": None,
+                         "runmode": None,
+                         "model": None,
+                         "model_options": None,
+                         "Mgene": None,
+                         "ndata": None,
+                         "clock": None,
+                         "fix_kappa": None,
+                         "kappa": None,
+                         "fix_alpha": None,
+                         "alpha": None,
+                         "Malpha": None,
+                         "ncatG": None,
+                         "fix_rho": None,
+                         "rho": None,
+                         "nparK": None,
+                         "nhomo": None,
+                         "getSE": None,
+                         "RateAncestor": None,
+                         "Small_Diff": None,
+                         "cleandata": None,
+                         "icode": None,
+                         "fix_blength": None,
+                         "method": None}
 
     def write_ctl_file(self):
         """Dynamically build a BASEML control file from the options.
@@ -87,13 +91,12 @@ class Baseml(Paml):
                     if option[0] == "model" and option[1] in [9, 10]:
                         if self._options["model_options"] is not None:
                             ctl_handle.write("model = %s  %s" % (option[1],
-                                            self._options["model_options"]))
+                                             self._options["model_options"]))
                             continue
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
-        """Parse a control file and load the options into the Baseml instance.
-        """
+        """Parse a control file and load the options into the Baseml instance."""
         temp_options = {}
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
@@ -130,12 +133,12 @@ class Baseml(Paml):
                             if "." in value or "e-" in value:
                                 try:
                                     converted_value = float(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             else:
                                 try:
                                     converted_value = int(value)
-                                except:
+                                except ValueError:
                                     converted_value = value
                             temp_options[option] = converted_value
         for option in self._options:
@@ -145,7 +148,7 @@ class Baseml(Paml):
                 self._options[option] = None
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current working directory.
+        """Make file/directory paths relative to the PWD (PRIVATE).
 
         BASEML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
@@ -153,17 +156,18 @@ class Baseml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = _relpath(self.tree, self.working_dir)
+            self._rel_tree = os.path.relpath(self.tree, self.working_dir)
 
     def run(self, ctl_file=None, verbose=False, command="baseml",
-                parse=True):
-        """Run baseml using the current configuration and then parse the results.
+            parse=True):
+        """Run baseml using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that BASEML
-        requires relative paths.
+        Check that the tree attribute is specified and exists, and then
+        run baseml. If parse is True then read and return the result,
+        otherwise return none.
+
+        The arguments may be passed as either absolute or relative paths,
+        despite the fact that BASEML requires relative paths.
         """
         if self.tree is None:
             raise ValueError("Tree file not specified.")
@@ -171,10 +175,8 @@ class Baseml(Paml):
             raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
-            results = read(self.out_file)
-        else:
-            results = None
-        return results
+            return read(self.out_file)
+        return None
 
 
 def read(results_file):
@@ -184,6 +186,9 @@ def read(results_file):
         raise IOError("Results file does not exist.")
     with open(results_file) as handle:
         lines = handle.readlines()
+    if not lines:
+        raise ValueError("Empty results file.  Did BASEML exit successfully?  "
+                         "Run 'Baseml.run()' with 'verbose=True'.")
     (results, num_params) = _parse_baseml.parse_basics(lines, results)
     results = _parse_baseml.parse_parameters(lines, results, num_params)
     if results.get("version") is None:

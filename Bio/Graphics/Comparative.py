@@ -1,8 +1,9 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2001 by Brad Chapman.  All rights reserved.
 #
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Plots to compare information between different sources.
 
 This file contains high level plots which are designed to be used to
@@ -10,19 +11,17 @@ compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.graphics.charts.lineplots import LinePlot
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from reportlab.graphics.shapes import Drawing, String, Group
-from reportlab.graphics import renderPDF, renderPS
-from reportlab.graphics.charts.markers import *
+from reportlab.graphics.shapes import Drawing, String
+from reportlab.graphics.charts.markers import makeEmptySquare, makeFilledSquare
+from reportlab.graphics.charts.markers import makeFilledDiamond, makeSmiley
+from reportlab.graphics.charts.markers import makeFilledCircle, makeEmptyCircle
 
 from Bio.Graphics import _write
-
-__docformat__ = "restructuredtext en"
 
 
 class ComparativeScatterPlot(object):
@@ -41,8 +40,11 @@ class ComparativeScatterPlot(object):
     If everything is just one set of points, display_info can look like::
 
         display_info = [[(1, 2), (3, 4), (5, 6)]]
+
     """
+
     def __init__(self, output_format='pdf'):
+        """Initialize."""
         # customizable attributes
         self.number_of_columns = 1
         self.page_size = letter
@@ -64,10 +66,10 @@ class ComparativeScatterPlot(object):
         """Write the comparative plot to a file.
 
         Arguments:
-
          - output_file - The name of the file to output the information to,
            or a handle to write to.
          - title - A title to display on the graphic.
+
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
@@ -83,8 +85,7 @@ class ComparativeScatterPlot(object):
         return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
-        """Add a title to the page we are outputting.
-        """
+        """Add a title to the page we are outputting (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
         title_string.fontName = 'Helvetica-Bold'
         title_string.fontSize = self.title_size
@@ -94,7 +95,7 @@ class ComparativeScatterPlot(object):
 
     def _draw_scatter_plot(self, cur_drawing, x_start, y_start,
                            x_end, y_end):
-        """Draw a scatter plot on the drawing with the given coordinates."""
+        """Draw a scatter plot on the drawing with the given coordinates (PRIVATE)."""
         scatter_plot = LinePlot()
 
         # set the dimensions of the scatter plot
@@ -122,7 +123,7 @@ class ComparativeScatterPlot(object):
         cur_drawing.add(scatter_plot)
 
     def _set_colors_and_shapes(self, scatter_plot, display_info):
-        """Set the colors and shapes of the points displayed.
+        """Set the colors and shapes of the points displayed (PRIVATE).
 
         By default this just sets all of the points according to the order
         of colors and shapes defined in self.color_choices and
@@ -144,12 +145,12 @@ class ComparativeScatterPlot(object):
             # otherwise just use the last number
             else:
                 scatter_plot.lines[value_num].strokeColor = \
-                  self.color_choices[-1]
+                    self.color_choices[-1]
                 scatter_plot.lines[value_num].symbol = \
-                  self.shape_choices[-1]
+                    self.shape_choices[-1]
 
     def _find_min_max(self, info):
-        """Find the min and max for the x and y coordinates in the given data."""
+        """Find min and max for x and y coordinates in the given data (PRIVATE)."""
         x_min = info[0][0][0]
         x_max = info[0][0][0]
         y_min = info[0][0][1]

@@ -4,20 +4,20 @@ subdirs := install
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
 pdf:  Tutorial.pdf biopdb_faq.pdf
 
-Tutorial.pdf: Tutorial.tex
-	pdflatex Tutorial.tex
-	pdflatex Tutorial.tex
-	pdflatex Tutorial.tex
+Tutorial.pdf: Tutorial.tex Tutorial/chapter_*.tex
+	pdflatex --shell-escape Tutorial.tex
+	pdflatex --shell-escape Tutorial.tex
+	pdflatex --shell-escape Tutorial.tex
 
 biopdb_faq.pdf: biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 	pdflatex biopdb_faq.tex
 
-Tutorial.html: Tutorial.tex
+Tutorial.html: Tutorial.tex Tutorial/chapter_*.tex
 	hevea -fix Tutorial.tex
 
-Tutorial.txt: Tutorial.tex
+Tutorial.txt: Tutorial.tex Tutorial/chapter_*.tex
 	hevea -fix -text Tutorial.tex
 
 clean-subdirs: $(subdirs)
@@ -33,6 +33,7 @@ clean: clean-subdirs
 	rm -f biopdb_faq.aux
 	rm -f biopdb_faq.log
 	rm -f biopdb_faq.out
+	rm -f Tutorial/*.aux
 
 distclean-subdirs: $(subdirs)
 	( for f in $^ ; do $(MAKE) distclean -C $$f ; done )

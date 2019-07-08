@@ -10,8 +10,6 @@ This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
 from Bio import File
 from Bio.Phylo import (
     BaseTree,
@@ -31,23 +29,23 @@ supported_formats = {
 try:
     from Bio.Phylo import CDAOIO
     supported_formats['cdao'] = CDAOIO
-except:
+except ImportError:
     pass
 
 
 def parse(file, format, **kwargs):
-    """Iteratively parse a file and return each of the trees it contains.
+    """Parse a file iteratively, and yield each of the trees it contains.
 
     If a file only contains one tree, this still returns an iterable object that
     contains one element.
 
-    Example
-    -------
-
+    Examples
+    --------
     >>> trees = parse('../../Tests/PhyloXML/apaf.xml', 'phyloxml')
     >>> for tree in trees:
     ...     print(tree.rooted)
     True
+
     """
     with File.as_handle(file, 'r') as fp:
         for tree in getattr(supported_formats[format], 'parse')(fp, **kwargs):
@@ -76,7 +74,7 @@ def read(file, format, **kwargs):
 
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
-    if isinstance(trees, BaseTree.Tree) or isinstance(trees, BaseTree.Clade):
+    if isinstance(trees, (BaseTree.Tree, BaseTree.Clade)):
         # Passed a single tree instead of an iterable -- that's OK
         trees = [trees]
     with File.as_handle(file, 'w+') as fp:
@@ -84,7 +82,9 @@ def write(trees, file, format, **kwargs):
     return n
 
 
-def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
+def convert(in_file, in_format, out_file, out_format, parse_args=None, **kwargs):
     """Convert between two tree file formats."""
+    if parse_args is None:
+        parse_args = {}
     trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)

@@ -1,15 +1,13 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple alignment programme MAFFT.
-"""
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple alignment programme MAFFT."""
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"
-
-import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 
@@ -18,47 +16,12 @@ class MafftCommandline(AbstractCommandline):
 
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: MAFFT v6.717b (2009/12/03)
 
-    >>> from Bio.Align.Applications import MafftCommandline
-    >>> mafft_exe = "/opt/local/mafft"
-    >>> in_file = "../Doc/examples/opuntia.fasta"
-    >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
-    >>> print(mafft_cline)
-    /opt/local/mafft ../Doc/examples/opuntia.fasta
-
-    If the mafft binary is on the path (typically the case on a Unix style
-    operating system) then you don't need to supply the executable location:
-
-    >>> from Bio.Align.Applications import MafftCommandline
-    >>> in_file = "../Doc/examples/opuntia.fasta"
-    >>> mafft_cline = MafftCommandline(input=in_file)
-    >>> print(mafft_cline)
-    mafft ../Doc/examples/opuntia.fasta
-
-    You would typically run the command line with mafft_cline() or via
-    the Python subprocess module, as described in the Biopython tutorial.
-    Note that MAFFT will write the alignment to stdout, which you may
-    want to save to a file and then parse, e.g.::
-
-        stdout, stderr = mafft_cline()
-        with open("aligned.fasta", "w") as handle:
-            handle.write(stdout)
-        from Bio import AlignIO
-        align = AlignIO.read("aligned.fasta", "fasta")
-
-    Alternatively, to parse the output with AlignIO directly you can
-    use StringIO to turn the string into a handle::
-
-        stdout, stderr = mafft_cline()
-        from StringIO import StringIO
-        from Bio import AlignIO
-        align = AlignIO.read(StringIO(stdout), "fasta")
-
-    Citations:
+    References
     ----------
-
     Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
     multiple ncRNA alignment by incorporating structural information into
     a MAFFT-based framework (describes RNA structural alignment methods)
@@ -78,9 +41,48 @@ class MafftCommandline(AbstractCommandline):
 
     Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
 
-    Last checked against version: MAFFT v6.717b (2009/12/03)
+    Examples
+    --------
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> mafft_exe = "/opt/local/mafft"
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
+    >>> print(mafft_cline)
+    /opt/local/mafft ../Doc/examples/opuntia.fasta
+
+    If the mafft binary is on the path (typically the case on a Unix style
+    operating system) then you don't need to supply the executable location:
+
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(input=in_file)
+    >>> print(mafft_cline)
+    mafft ../Doc/examples/opuntia.fasta
+
+    You would typically run the command line with mafft_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
+    Note that MAFFT will write the alignment to stdout, which you may
+    want to save to a file and then parse, e.g.::
+
+        stdout, stderr = mafft_cline()
+        with open("aligned.fasta", "w") as handle:
+            handle.write(stdout)
+        from Bio import AlignIO
+        align = AlignIO.read("aligned.fasta", "fasta")
+
+    Alternatively, to parse the output with AlignIO directly you can
+    use StringIO to turn the string into a handle::
+
+        stdout, stderr = mafft_cline()
+        from StringIO import StringIO
+        from Bio import AlignIO
+        align = AlignIO.read(StringIO(stdout), "fasta")
+
     """
+
     def __init__(self, cmd="mafft", **kwargs):
+        """Initialize the class."""
         BLOSUM_MATRICES = ["30", "45", "62", "80"]
         self.parameters = \
             [
@@ -143,6 +145,11 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--maxiterate", "maxiterate"],
                     "Number cycles of iterative refinement are performed. "
                     "Default: 0",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
+            # Number of threads to use. Default: 1
+            _Option(["--thread", "thread"],
+                    "Number of threads to use. Default: 1",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
             # Use FFT approximation in group-to-group alignment. Default: on
@@ -274,7 +281,7 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--tm", "tm"],
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
-                    filename=True,
+                    filename=True,  # to ensure spaced inputs are quoted
                     equate=False),
             # Use a user-defined AA scoring matrix. The format of matrixfile is
             # the same to that of BLAST. Ignored when nucleotide sequences are
@@ -282,7 +289,7 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--aamatrix", "aamatrix"],
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
-                    filename=True,
+                    filename=True,  # to ensure spaced inputs are quoted
                     equate=False),
             # Incorporate the AA/nuc composition information into the scoring
             # matrix. Default: off

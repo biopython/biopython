@@ -1,14 +1,15 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Common SearchIO utility functions."""
 
 from Bio._py3k import basestring
 
 
 def get_processor(format, mapping):
-    """Returns the object to process the given format according to the mapping.
+    """Return the object to process the given format according to the mapping.
 
     :param format: format name
     :type format: string, lower case
@@ -27,10 +28,10 @@ def get_processor(format, mapping):
             raise TypeError("Need a string for the file format (lower case)")
         elif format != format.lower():
             raise ValueError("Format string %r should be lower case" %
-                    format)
+                             format)
         else:
             raise ValueError("Unknown format %r. Supported formats are "
-                    "%r" % (format, "', '".join(mapping)))
+                             "%r" % (format, "', '".join(mapping)))
 
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
@@ -39,12 +40,15 @@ def get_processor(format, mapping):
 
 
 def singleitem(attr=None, doc=''):
-    """Returns a property that fetches the given attribute from
-    the first item in a SearchIO container object."""
+    """Property for fetching attribute from first entry of container.
+
+    Returns a property that fetches the given attribute from
+    the first item in a SearchIO container object.
+    """
     def getter(self):
         if len(self._items) > 1:
             raise ValueError("More than one HSPFragment objects "
-                    "found in HSP")
+                             "found in HSP")
         if attr is None:
             return self._items[0]
         return getattr(self._items[0], attr)
@@ -52,8 +56,11 @@ def singleitem(attr=None, doc=''):
 
 
 def allitems(attr=None, doc=''):
-    """Returns a property that fetches the given attributes from
-    all items in a SearchIO container object."""
+    """Property for fetching attribute from all entries of container.
+
+    Returns a property that fetches the given attributes from
+    all items in a SearchIO container object.
+    """
     def getter(self):
         if attr is None:
             return self._items
@@ -62,7 +69,7 @@ def allitems(attr=None, doc=''):
 
 
 def fullcascade(attr, doc=''):
-    """Returns a getter property with a cascading setter.
+    """Return a getter property with a cascading setter.
 
     This is similar to ``optionalcascade``, but for SearchIO containers that have
     at least one item (HSP). The getter always retrieves the attribute
@@ -82,7 +89,7 @@ def fullcascade(attr, doc=''):
 
 
 def optionalcascade(cont_attr, item_attr, doc=''):
-    """Returns a getter property with a cascading setter.
+    """Return a getter property with a cascading setter.
 
     This is used for the ``id`` and ``description`` properties of the container
     objects with zero or more items. These items have their own private
@@ -111,7 +118,7 @@ def optionalcascade(cont_attr, item_attr, doc=''):
 
 
 def fragcascade(attr, seq_type, doc=''):
-    """Returns a getter property with cascading setter, for HSPFragment objects.
+    """Return a getter property with cascading setter, for HSPFragment objects.
 
     Similar to ``partialcascade``, but for HSPFragment objects and acts on ``query``
     or ``hit`` properties of the object if they are not None.

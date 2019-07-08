@@ -1,0 +1,155 @@
+########################################
+# Program: stretcher
+# Rundate: Tue 15 May 2018 17:01:31
+# Commandline: stretcher
+#    -auto
+#    -stdout
+#    -asequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.aupfile
+#    -bsequence emboss_stretcher-I20180515-170128-0371-22292969-p1m.bupfile
+#    -datafile EDNAFULL
+#    -gapopen 16
+#    -gapextend 4
+#    -aformat3 pair
+#    -snucleotide1
+#    -snucleotide2
+# Align_format: pair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: hg38_chrX_131691529_131830643_47210_48660
+# 2: mm10_chrX_50555743_50635321_27140_27743
+# Matrix: EDNAFULL
+# Gap_penalty: 16
+# Extend_penalty: 4
+#
+# Length: 1450
+# Identity:     441/1450 (30.4%)
+# Similarity:   441/1450 (30.4%)
+# Gaps:         847/1450 (58.4%)
+# Score: -2623
+# 
+#
+#=======================================
+
+hg38_chrX_131      1 GGCAGGTGCATAGCTTGAGCCTAGGAGTTCAAGTCCAGCCCTGACAATGT     50
+                     |                          ||||||.|||.||..||.    |
+mm10_chrX_505      1 G--------------------------TTCAAGGCCATCCGGGAT----T     20
+
+hg38_chrX_131     51 AGAGAGACCCCGTCTCTTCAAAAAATACAAAAAATAGCCAGGCATGGTGA    100
+                     |.||       ||.|..|           |.||.|...|.|  ||||.||
+mm10_chrX_505     21 AAAG-------GTGTGGT-----------AGAACTCTTCTG--ATGGAGA     50
+
+hg38_chrX_131    101 CCTACAATGGAAGCCCTAGCTACGTAGGAGGCGGAAATGGGAGGATCACC    150
+                     |    |||..|||                    ||.||.|||.||     
+mm10_chrX_505     51 C----AATATAAG--------------------GACATTGGAAGA-----     71
+
+hg38_chrX_131    151 TCAGCCCAGGGAGGCTGATGTTGCAGTGAGCCATGATCATGCCTCTACAC    200
+                            ||||||     |.||||      ||.||.||.|.|..||||. 
+mm10_chrX_505     72 -------AGGGAG-----TCTTGC------CCTTGCTCCTTCGCCTACT-    102
+
+hg38_chrX_131    201 TCCACCCTGGGCAACAGAGTAAGATGCTGTCTAAAATATATATATATGCA    250
+                                             ||||||.|||.|              
+mm10_chrX_505    103 ------------------------TGCTGTGTAAGA--------------    114
+
+hg38_chrX_131    251 TATCTGTGTGTATATATATATATATATATGTGTGTGTGTGTGTGTGTATA    300
+                        |||.||                                         
+mm10_chrX_505    115 ---CTGAGT-----------------------------------------    120
+
+hg38_chrX_131    301 TACATATGTGTGTGTATATACATATATGTGTATATATATATGTGTGTATA    350
+                                                                       
+mm10_chrX_505    121 --------------------------------------------------    120
+
+hg38_chrX_131    351 TATACATATACATATTCAGCATCACCTTATATTCTTTGAATATATCTACA    400
+                                         |.|.||| |.|..|||.||.|         
+mm10_chrX_505    121 --------------------AACTCCT-AGACCCTTGGACT---------    140
+
+hg38_chrX_131    401 TCAATACATACTTTTGAGTGCTTGAAATTTTTTATATTTTACTCTAGAAG    450
+                             |.|.|||.||..                    |||...|||.
+mm10_chrX_505    141 --------TCCATTTCAGCC--------------------ACTACTGAAC    162
+
+hg38_chrX_131    451 AACTGTAAGAAATTATAAAGTAGAAAACTTGTGGTAGGTCAAACATAGTA    500
+                     .|.|||..|.||||..   |..|.|.|||    |||.||||...|||   
+mm10_chrX_505    163 CATTGTTGGGAATTGG---GCTGCAGACT----GTAAGTCATCAATA---    202
+
+hg38_chrX_131    501 AGAAGAAATAATCACTTTTTAAAGGTCTGTGCTAGGTACTATGATCTGTT    550
+                              |||..||||                   |||||.       
+mm10_chrX_505    203 ---------AATTCCTTT-------------------ACTATA-------    217
+
+hg38_chrX_131    551 CCCTATATATACATAATATGGACTTTTATAAACTAATGTTCAAATTCCCC    600
+                                               ||.|.||||          |||  
+mm10_chrX_505    218 --------------------------TAGAGACTA----------TCC--    229
+
+hg38_chrX_131    601 TGTAGTATAACTTCTTGTTGTTGTTTATTTTTTTTTTTTTGTATTTTTCA    650
+                           ||||.||||.                               |.|
+mm10_chrX_505    230 ------ATAAATTCTG-------------------------------TGA    242
+
+hg38_chrX_131    651 TTTTAGATATGGGGTTTCACTCTGTTGACCAGGCTGATCTCGAACCACTG    700
+                     .|.||||.|         ||.||   |||.|.           ||.||||
+mm10_chrX_505    243 CTCTAGAGA---------ACCCT---GACAAT-----------ACAACTG    269
+
+hg38_chrX_131    701 GTCTCAAGCGATCCTCCCATCTTGGACTCCCAAAGTGCTAGGATTACAGG    750
+                     |                                                 
+mm10_chrX_505    270 G-------------------------------------------------    270
+
+hg38_chrX_131    751 CACGAGGCACCTTGACTGGCCACCATGTACTATAGCTGTTAAAACAAGTT    800
+                        ||.||||       ||.||.|.|.|                      
+mm10_chrX_505    271 ---GAAGCAC-------GGACATCCTCT----------------------    288
+
+hg38_chrX_131    801 TGTTTCACTGATAACTGGAGTACTTTTCAAATATAATTAATAATTCATGG    850
+                                              ||.|.|||||||||     |||   
+mm10_chrX_505    289 -------------------------TTGAGATATAATTA-----TCA---    305
+
+hg38_chrX_131    851 AAATAATGATAGCTTTAAAAGTATTGGCACTTTTAAAAACTGAGTTTGTA    900
+                         |.||   ||     ||||.||.|    ||||          ||| |
+mm10_chrX_505    306 ----ACTG---GC-----AAGTGTTTG----TTTA----------TTG-A    328
+
+hg38_chrX_131    901 AACTTCATATAACATAAAATTAACCATTAAAATGTATTAATTTCAATGGC    950
+                     .|.||.|..|||.|.|||.||||.|.|            |.|.|  ||.|
+mm10_chrX_505    329 TATTTTACTTAAGACAAAGTTAAACCT------------ACTCC--TGTC    364
+
+hg38_chrX_131    951 ATTTAGGACACTCACAATGCAGTGCAAGCATTACCACTATGTAGTGGCAA   1000
+                     .|.|.||     ||        ||..|||||..  ||| |.|..|||   
+mm10_chrX_505    365 CTCTGGG-----CA--------TGGTAGCATGG--ACT-TATTCTGG---    395
+
+hg38_chrX_131   1001 ATCATTTTCACTACCACAAAAGAAAATCCTGGACCCATTAGTTAGTCATT   1050
+                             .|||||||.|.  |||||..|.|.|.||      ||      
+mm10_chrX_505    396 --------AACTACCAGAG--GAAAAGACAGAAGCC------TA------    423
+
+hg38_chrX_131   1051 CCCCATTCCACTCTCTGCCCAGCCCCTGGCAAACACTCATCTGATTTCCC   1100
+                                   |||...||.|||.|||       ||||         
+mm10_chrX_505    424 --------------CTGGAAAGGCCCAGGC-------CATC---------    443
+
+hg38_chrX_131   1101 TCACTACTGATCATCACAACAAGTGGCCTTGTTCATCTTGTTGTGGGAAC   1150
+                           |||                        |.||||||.||      
+mm10_chrX_505    444 ------CTG------------------------CCTCTTGTAGT------    457
+
+hg38_chrX_131   1151 CAGGAGACCAGAGAGACCAATGGGTGGAACAGGAGGATTTTACTAGGTGG   1200
+                                                            |.||||||   
+mm10_chrX_505    458 ---------------------------------------TCACTAGG---    465
+
+hg38_chrX_131   1201 TCACCGACTCAGCAGATTAACATCCAAAGGCTGAGCCCCAAACCAAGAGA   1250
+                               |.|||             ||||.|||           |.|
+mm10_chrX_505    466 ----------ACCAG-------------GGCTCAGC-----------ATA    481
+
+hg38_chrX_131   1251 GGGCTTGACTTTTATACATATATCTGAAAAGGGCCCAAAACCTGTAAGGC   1300
+                     |..||||.|||.|      |.|||||..|      |.|.|.||.||.  |
+mm10_chrX_505    482 GTCCTTGGCTTCT------AAATCTGCTA------CCATATCTTTAT--C    517
+
+hg38_chrX_131   1301 CGGTAAGCAAGCTTACAGCAGAACAAAGGCAGTTTATCAAACAGTGACAG   1350
+                     ..|||   ||.||.|||..|.|..|||  ||   |||||||         
+mm10_chrX_505    518 ATGTA---AAACTGACACAAAATTAAA--CA---TATCAAA---------    550
+
+hg38_chrX_131   1351 GTTTTACAGTTCAGGCATGTCTTGTGACCTTTGCCATAACTGCACAGCTG   1400
+                            |.||.|.|.|.        |||.|     |||.|    |.|||
+mm10_chrX_505    551 -------ATTTTATGAAA--------ACCAT-----TAAGT----ATCTG    576
+
+hg38_chrX_131   1401 GAAAACAGGAACTTACAAAATCCTTACAAGCTTGCAGAAACAGTTACAAA   1450
+                     |||||.|       |.||||||                ||||||||.|||
+mm10_chrX_505    577 GAAAAGA-------AAAAAATC----------------AACAGTTATAAA    603
+
+
+#---------------------------------------
+#---------------------------------------

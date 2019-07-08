@@ -1,18 +1,18 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO object to model search results from a single query."""
 
 from __future__ import print_function
-from Bio._py3k import basestring
 
 from copy import deepcopy
 from itertools import chain
+from collections import OrderedDict
 
-from Bio._py3k import OrderedDict
 from Bio._py3k import filter
+from Bio._py3k import basestring
 
 from Bio._utils import trim_str
 from Bio.SearchIO._utils import optionalcascade
@@ -21,11 +21,7 @@ from ._base import _BaseSearchObject
 from .hit import Hit
 
 
-__docformat__ = "restructuredtext en"
-
-
 class QueryResult(_BaseSearchObject):
-
     """Class representing search results from a single query.
 
     QueryResult is the container object that stores all search hits from a
@@ -188,9 +184,8 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
 
-    def __init__(self, hits=[], id=None,
-            hit_key_function=lambda hit: hit.id):
-        """Initializes a QueryResult object.
+    def __init__(self, hits=(), id=None, hit_key_function=None):
+        """Initialize a QueryResult object.
 
         :param id: query sequence ID
         :type id: string
@@ -202,7 +197,7 @@ class QueryResult(_BaseSearchObject):
         """
         # default values
         self._id = id
-        self._hit_key_function = hit_key_function
+        self._hit_key_function = hit_key_function or _hit_key_func
         self._items = OrderedDict()
         self._description = None
         self.__alt_hit_ids = {}
@@ -219,6 +214,7 @@ class QueryResult(_BaseSearchObject):
     if hasattr(OrderedDict, 'iteritems'):
 
         def __iter__(self):
+            """Iterate over hit items."""
             return self.iterhits()
 
         @property
@@ -237,23 +233,24 @@ class QueryResult(_BaseSearchObject):
             return self._items.items()
 
         def iterhits(self):
-            """Returns an iterator over the Hit objects."""
-            for hit in self._items.itervalues():
+            """Return an iterator over the Hit objects."""
+            for hit in self._items.itervalues():  # noqa: B301
                 yield hit
 
         def iterhit_keys(self):
-            """Returns an iterator over the ID of the Hit objects."""
+            """Return an iterator over the ID of the Hit objects."""
             for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator yielding tuples of Hit ID and Hit objects."""
-            for item in self._items.iteritems():
+            """Return an iterator yielding tuples of Hit ID and Hit objects."""
+            for item in self._items.iteritems():  # noqa: B301
                 yield item
 
     else:
 
         def __iter__(self):
+            """Iterate over hits."""
             return iter(self.hits)
 
         @property
@@ -272,39 +269,44 @@ class QueryResult(_BaseSearchObject):
             return list(self._items.items())
 
         def iterhits(self):
-            """Returns an iterator over the Hit objects."""
+            """Return an iterator over the Hit objects."""
             for hit in self._items.values():
                 yield hit
 
         def iterhit_keys(self):
-            """Returns an iterator over the ID of the Hit objects."""
+            """Return an iterator over the ID of the Hit objects."""
             for hit_id in self._items:
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator yielding tuples of Hit ID and Hit objects."""
+            """Return an iterator yielding tuples of Hit ID and Hit objects."""
             for item in self._items.items():
                 yield item
 
     def __contains__(self, hit_key):
+        """Return True if hit key in items or alternative hit identifiers."""
         if isinstance(hit_key, Hit):
             return self._hit_key_function(hit_key) in self._items
         return hit_key in self._items or hit_key in self.__alt_hit_ids
 
     def __len__(self):
+        """Return the number of items."""
         return len(self._items)
 
     # Python 3:
     def __bool__(self):
+        """Return True if there are items."""
         return bool(self._items)
 
     # Python 2:
-    __nonzero__= __bool__
+    __nonzero__ = __bool__
 
     def __repr__(self):
+        """Return string representation of the QueryResult object."""
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
 
     def __str__(self):
+        """Return a human readable summary of the QueryResult object."""
         lines = []
 
         # set program and version line
@@ -325,10 +327,10 @@ class QueryResult(_BaseSearchObject):
         if not self.hits:
             lines.append('   Hits: 0')
         else:
-            lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
+            lines.append('   Hits: %s  %s  %s' % ('-' * 4, '-' * 5, '-' * 58))
             pattern = '%13s  %5s  %s'
             lines.append(pattern % ('#', '# HSP', 'ID + description'))
-            lines.append(pattern % ('-'*4, '-'*5, '-'*58))
+            lines.append(pattern % ('-' * 4, '-' * 5, '-' * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.description)
@@ -346,6 +348,7 @@ class QueryResult(_BaseSearchObject):
         return '\n'.join(lines)
 
     def __getitem__(self, hit_key):
+        """Return a QueryResult object that matches the hit_key."""
         # retrieval using slice objects returns another QueryResult object
         if isinstance(hit_key, slice):
             # should we return just a list of Hits instead of a full blown
@@ -376,6 +379,7 @@ class QueryResult(_BaseSearchObject):
             return self._items[self.__alt_hit_ids[hit_key]]
 
     def __setitem__(self, hit_key, hit):
+        """Add an item of key hit_key and value hit."""
         # only accept string keys
         if not isinstance(hit_key, basestring):
             raise TypeError("QueryResult object keys must be a string.")
@@ -390,7 +394,7 @@ class QueryResult(_BaseSearchObject):
         if qid is not None:
             if hqid != qid:
                 raise ValueError("Expected Hit with query ID %r, found %r "
-                        "instead." % (qid, hqid))
+                                 "instead." % (qid, hqid))
         else:
             self.id = hqid
         # same thing with descriptions
@@ -399,7 +403,7 @@ class QueryResult(_BaseSearchObject):
         if qdesc is not None:
             if hqdesc != qdesc:
                 raise ValueError("Expected Hit with query description %r, "
-                        "found %r instead." % (qdesc, hqdesc))
+                                 "found %r instead." % (qdesc, hqdesc))
         else:
             self.description = hqdesc
 
@@ -418,6 +422,7 @@ class QueryResult(_BaseSearchObject):
             self.__alt_hit_ids[alt_id] = hit_key
 
     def __delitem__(self, hit_key):
+        """Delete item of key hit_key."""
         # if hit_key an integer or slice, get the corresponding key first
         # and put it into a list
         if isinstance(hit_key, int):
@@ -439,29 +444,32 @@ class QueryResult(_BaseSearchObject):
                 del self.__alt_hit_ids[key]
                 deleted = True
             if not deleted:
-                raise KeyError('%r'.format(key))
+                raise KeyError(repr(key))
         return
 
     # properties #
     id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
     description = optionalcascade('_description', 'query_description',
-            """QueryResult description""")
+                                  """QueryResult description""")
 
     @property
     def hsps(self):
-        """HSP objects contained in the QueryResult."""
-        return [hsp for hsp in chain(*self.hits)]
+        """Access the HSP objects contained in the QueryResult."""
+        return sorted(
+            (hsp for hsp in chain(*self.hits)),
+            key=lambda hsp: hsp.output_index)
 
     @property
     def fragments(self):
-        """HSPFragment objects contained in the QueryResult."""
+        """Access the HSPFragment objects contained in the QueryResult."""
         return [frag for frag in chain(*self.hsps)]
 
     # public methods #
     def absorb(self, hit):
-        """Adds a Hit object to the end of QueryResult. If the QueryResult
-        already has a Hit with the same ID, append the new Hit's HSPs into
-        the existing Hit.
+        """Add a Hit object to the end of QueryResult.
+
+        If the QueryResult already has a Hit with the same ID, append the new
+        Hit's HSPs into the existing Hit.
 
         :param hit: object to absorb
         :type hit: Hit
@@ -481,7 +489,7 @@ class QueryResult(_BaseSearchObject):
                 self[hit.id].append(hsp)
 
     def append(self, hit):
-        """Adds a Hit object to the end of QueryResult.
+        """Add a Hit object to the end of QueryResult.
 
         :param hit: object to append
         :type hit: Hit
@@ -497,15 +505,14 @@ class QueryResult(_BaseSearchObject):
         else:
             hit_key = hit.id
 
-        if hit_key not in self and all([pid not in self for pid in hit.id_all[1:]]):
+        if hit_key not in self and all(pid not in self for pid in hit.id_all[1:]):
             self[hit_key] = hit
         else:
             raise ValueError("The ID or alternative IDs of Hit %r exists in "
-                    "this QueryResult." % hit_key)
+                             "this QueryResult." % hit_key)
 
     def hit_filter(self, func=None):
-        """Creates a new QueryResult object whose Hit objects pass the filter
-        function.
+        """Create new QueryResult object whose Hit objects pass the filter function.
 
         :param func: filter function
         :type func: callable, accepts Hit, returns bool
@@ -551,8 +558,7 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hit_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its
-        Hits.
+        """Create new QueryResult object, mapping the given function to its Hits.
 
         :param func: map function
         :type func: callable, accepts Hit, returns Hit
@@ -607,14 +613,12 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hsp_filter(self, func=None):
-        """Creates a new QueryResult object whose HSP objects pass the filter
-        function.
+        """Create new QueryResult object whose HSP objects pass the filter function.
 
         ``hsp_filter`` is the same as ``hit_filter``, except that it filters
         directly on each HSP object in every Hit. If the filtering removes
         all HSP objects in a given Hit, the entire Hit will be discarded. This
         will result in the QueryResult having less Hit after filtering.
-
         """
         hits = [x for x in (hit.filter(func) for hit in self.hits) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
@@ -622,12 +626,10 @@ class QueryResult(_BaseSearchObject):
         return obj
 
     def hsp_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its
-        HSPs.
+        """Create new QueryResult object, mapping the given function to its HSPs.
 
         ``hsp_map`` is the same as ``hit_map``, except that it applies the given
         function to all HSP objects in every Hit, instead of the Hit objects.
-
         """
         hits = [x for x in (hit.map(func) for hit in list(self.hits)[:]) if x]
         obj = self.__class__(hits, self.id, self._hit_key_function)
@@ -640,7 +642,7 @@ class QueryResult(_BaseSearchObject):
     __marker = object()
 
     def pop(self, hit_key=-1, default=__marker):
-        """Removes the specified hit key and return the Hit object.
+        """Remove the specified hit key and return the Hit object.
 
         :param hit_key: key of the Hit object to return
         :type hit_key: int or string
@@ -704,7 +706,7 @@ class QueryResult(_BaseSearchObject):
         return default
 
     def index(self, hit_key):
-        """Returns the index of a given hit key, zero-based.
+        """Return the index of a given hit key, zero-based.
 
         :param hit_key: hit ID
         :type hit_key: string
@@ -729,7 +731,7 @@ class QueryResult(_BaseSearchObject):
 
     def sort(self, key=None, reverse=False, in_place=True):
         # no cmp argument to make sort more Python 3-like
-        """Sorts the Hit objects.
+        """Sort the Hit objects.
 
         :param key: sorting function
         :type key: callable, accepts Hit, returns key for sorting
@@ -765,6 +767,14 @@ class QueryResult(_BaseSearchObject):
             obj = self.__class__(sorted_hits, self.id, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
+
+
+def _hit_key_func(hit):
+    """Map hit to its identifier (PRIVATE).
+
+    Default hit key function for QueryResult.__init__ use.
+    """
+    return hit.id
 
 
 # if not used as a module, run the doctest

@@ -1,0 +1,69 @@
+ID   F2CXE6_HORVD            Unreviewed;       291 AA.
+AC   F2CXE6;
+DT   31-MAY-2011, integrated into UniProtKB/TrEMBL.
+DT   31-MAY-2011, sequence version 1.
+DT   07-JAN-2015, entry version 17.
+DE   SubName: Full=Plasma membrane intrinsic protein {ECO:0000313|EMBL:BAN04711.1};
+DE   SubName: Full=Predicted protein {ECO:0000313|EMBL:BAJ87517.1};
+GN   Name=HvPIP2;8 {ECO:0000313|EMBL:BAN04711.1};
+OS   Hordeum vulgare var. distichum (Domesticated barley).
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; Liliopsida; Poales; Poaceae; BEP clade;
+OC   Pooideae; Triticeae; Hordeum.
+OX   NCBI_TaxID=112509 {ECO:0000313|EMBL:BAJ87517.1};
+RN   [1] {ECO:0000313|EMBL:BAJ87517.1}
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Shoot {ECO:0000313|EMBL:BAJ87517.1};
+RX   PubMed=21415278; DOI=10.1104/pp.110.171579;
+RA   Matsumoto T., Tanaka T., Sakai H., Amano N., Kanamori H., Kurita K.,
+RA   Kikuta A., Kamiya K., Yamamoto M., Ikawa H., Fujii N., Hori K.,
+RA   Itoh T., Sato K.;
+RT   "Comprehensive sequence analysis of 24,783 barley full-length cDNAs
+RT   derived from 12 clone libraries.";
+RL   Plant Physiol. 156:20-28(2010).
+RN   [2] {ECO:0000313|EMBL:BAN04711.1}
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Shoot {ECO:0000313|EMBL:BAN04711.1};
+RA   Shibasaka M., Sasano S., Utsugi S., Katsuhara M.;
+RT   "Functional characterization of a novel plasma membrane intrinsic
+RT   protein2 in barley.";
+RL   Plant Signal. Behav. 7:1648-1652(2011).
+RN   [3] {ECO:0000313|EMBL:BAN04711.1}
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Shoot {ECO:0000313|EMBL:BAN04711.1};
+RA   Shibasaka M., Katsuhara M., Sasano S.;
+RL   Submitted (FEB-2013) to the EMBL/GenBank/DDBJ databases.
+CC   -!- SIMILARITY: Belongs to the MIP/aquaporin family.
+CC       {ECO:0000256|RuleBase:RU000477}.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AK356299; BAJ87517.1; -; mRNA.
+DR   EMBL; AK359199; BAJ90410.1; -; mRNA.
+DR   EMBL; AB808658; BAN04711.1; -; mRNA.
+DR   ProteinModelPortal; F2CXE6; -.
+DR   ExpressionAtlas; F2CXE6; baseline.
+DR   GO; GO:0016021; C:integral component of membrane; IEA:UniProtKB-KW.
+DR   GO; GO:0005215; F:transporter activity; IEA:InterPro.
+DR   Gene3D; 1.20.1080.10; -; 1.
+DR   InterPro; IPR023271; Aquaporin-like.
+DR   InterPro; IPR000425; MIP.
+DR   InterPro; IPR022357; MIP_CS.
+DR   PANTHER; PTHR19139; PTHR19139; 1.
+DR   Pfam; PF00230; MIP; 1.
+DR   PRINTS; PR00783; MINTRINSICP.
+DR   SUPFAM; SSF81338; SSF81338; 1.
+DR   TIGRFAMs; TIGR00861; MIP; 1.
+DR   PROSITE; PS00221; MIP; 1.
+PE   2: Evidence at transcript level;
+KW   Membrane {ECO:0000256|RuleBase:RU000477};
+KW   Transmembrane {ECO:0000256|RuleBase:RU000477};
+KW   Transport {ECO:0000256|RuleBase:RU000477}.
+SQ   SEQUENCE   291 AA;  30495 MW;  07E95E632BD020E9 CRC64;
+     MTMAAAQGKL SPDAIDNEVI SNGSAKDYLD PPPAPLVDAG ELGKWSLYRA VIAEFTATLL
+     FVYVAVATVV GHKRQTDAQA CSGAGVLGIA WAFGGTIAVL VYCTAGISGG HINPAVTFGL
+     LLARKVSLPR AFLYMVAQCV GAICGAALVR AVHGGHHYAL YGGGANELAP GYSRMAGLIA
+     EIAGTFVLVY TVFSATDPKR IARDPHVPVL APLLIGFSVL MAHLATIPVT GTGINPARSF
+     GAAVVYNNKK AWGDQWIFWV GPFIGSAVAM VYHQYVLRNS AIFRSNYDAA V
+//

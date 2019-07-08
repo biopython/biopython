@@ -6,10 +6,13 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
+"""Tests for kNN module."""
+
 import unittest
 
 try:
     import numpy
+    del numpy
     from numpy import asarray
     del asarray
 except ImportError:
@@ -61,7 +64,7 @@ class TestKNN(unittest.TestCase):
     def test_calculate_model(self):
         k = 3
         model = kNN.train(xs, ys, k)
-        self.assertEqual(model.classes, set([0, 1]))
+        self.assertEqual(model.classes, {0, 1})
         n = len(xs)
         for i in range(n):
             self.assertAlmostEqual(model.xs[i, 0], xs[i][0], places=4)
@@ -98,8 +101,8 @@ class TestKNN(unittest.TestCase):
         for i in range(len(predictions)):
             prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 15)
 
     def test_leave_one_out(self):
@@ -108,12 +111,13 @@ class TestKNN(unittest.TestCase):
         model = kNN.train(xs, ys, k)
         predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1]
         for i in range(len(predictions)):
-            model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
+            model = kNN.train(xs[:i] + xs[i + 1:], ys[:i] + ys[i + 1:], k)
             prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
+            if prediction == ys[i]:
+                correct += 1
         self.assertEqual(correct, 13)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

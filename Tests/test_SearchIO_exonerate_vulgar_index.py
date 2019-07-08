@@ -16,12 +16,12 @@ class ExonerateVulgarIndexCases(CheckIndex):
     fmt = 'exonerate-vulgar'
 
     def test_exn_22_m_est2genome(self):
-        """Test exonerate-vulgar indexing, single"""
+        """Test exonerate-vulgar indexing, single."""
         filename = os.path.join('Exonerate', 'exn_22_o_vulgar.exn')
         self.check_index(filename, self.fmt)
 
     def test_exn_22_q_multiple(self):
-        """Test exonerate-vulgar indexing, single"""
+        """Test exonerate-vulgar indexing, single."""
         filename = os.path.join('Exonerate', 'exn_22_q_multiple_vulgar.exn')
         self.check_index(filename, self.fmt)
 

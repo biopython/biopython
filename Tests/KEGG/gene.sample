@@ -1,0 +1,80 @@
+ENTRY       b1174             CDS       T00007
+NAME        minE
+DEFINITION  (RefSeq) cell division topological specificity factor
+ORTHOLOGY   K03608  cell division topological specificity factor
+ORGANISM    eco  Escherichia coli K-12 MG1655
+BRITE       Chromosome [BR:eco03036]
+             Prokaryotic Type
+              Chromosome partitioning proteins
+               Inhibitors of FtsZ assembly
+                b1174 (minE)
+            Cytoskeleton proteins [BR:eco04812]
+             Prokaryotic cytoskeleton proteins
+              MinD / ParA class of bacterial cytoskeletal proteins
+               b1174 (minE)
+POSITION    complement(1224279..1224545)
+MOTIF       Pfam: MinE DUF4364
+DBLINKS     NCBI-ProteinID: NP_415692
+            NCBI-GeneID: 945740
+            Pasteur: minE
+            RegulonDB: ECK120000591
+            ECOCYC: EG10598
+            ASAP: ABE-0003935
+            UniProt: P0A734
+STRUCTURE   PDB: 3R9I 3R9J 1EV0
+AASEQ       88
+            MALLDFFLSRKKNTANIAKERLQIIVAERRRSDAEPHYLPQLRKDILEVICKYVQIDPEM
+            VTVQLEQKDGDISILELNVTLPEAEELK
+NTSEQ       267
+            atggcattactcgatttctttctctcgcggaagaaaaacacagccaacattgcaaaagaa
+            cggctgcagattattgttgctgaacgccgtcgcagcgatgcagaaccgcattatctgccg
+            cagttgcgtaaagatattcttgaggtcatttgtaaatacgtacaaattgatcctgagatg
+            gtaaccgtacagcttgagcaaaaagatggcgatatttctattcttgagctgaacgtgacc
+            ttaccggaagcagaagagctgaaataa
+///
+ENTRY       b1175             CDS       T00007
+NAME        minD
+DEFINITION  (RefSeq) inhibitor of FtsZ ring polymerization; chromosome-membrane tethering protein; membrane ATPase of the MinCDEE system
+ORTHOLOGY   K03609  septum site-determining protein MinD
+ORGANISM    eco  Escherichia coli K-12 MG1655
+BRITE       Chromosome [BR:eco03036]
+             Prokaryotic Type
+              Chromosome partitioning proteins
+               Inhibitors of FtsZ assembly
+                b1175 (minD)
+            Cytoskeleton proteins [BR:eco04812]
+             Prokaryotic cytoskeleton proteins
+              MinD / ParA class of bacterial cytoskeletal proteins
+               b1175 (minD)
+POSITION    complement(1224549..1225361)
+MOTIF       Pfam: CbiA AAA_31 ParA ArsA_ATPase MipZ CBP_BcsQ Fer4_NifH AAA_24 CLP1_P SRP54 VirC1 DUF87
+DBLINKS     NCBI-ProteinID: NP_415693
+            NCBI-GeneID: 945741
+            Pasteur: minD
+            RegulonDB: ECK120000590
+            ECOCYC: EG10597
+            ASAP: ABE-0003938
+            UniProt: P0AEZ3
+STRUCTURE   PDB: 3Q9L 3R9I 3R9J
+AASEQ       270
+            MARIIVVTSGKGGVGKTTSSAAIATGLAQKGKKTVVIDFDIGLRNLDLIMGCERRVVYDF
+            VNVIQGDATLNQALIKDKRTENLYILPASQTRDKDALTREGVAKVLDDLKAMDFEFIVCD
+            SPAGIETGALMALYFADEAIITTNPEVSSVRDSDRILGILASKSRRAENGEEPIKEHLLL
+            TRYNPGRVSRGDMLSMEDVLEILRIKLVGVIPEDQSVLRASNQGEPVILDINADAGKAYA
+            DTVERLLGEERPFRFIEEEKKGFLKRLFGG
+NTSEQ       813
+            atggcacgcattattgttgttacttcgggcaaagggggtgttggtaagacaacctccagc
+            gcggccatcgccactggtttggcccagaagggaaagaaaactgtcgtgatagattttgat
+            atcggcctgcgtaatctcgacctgattatgggttgtgaacgccgggtcgtttacgatttc
+            gtcaacgtcattcagggcgatgcaacgctaaatcaggcgttaattaaagataagcgtact
+            gaaaatctctatattctgccggcatcgcaaacacgcgataaagatgccctcacccgtgaa
+            ggggtcgccaaagttcttgatgatctgaaagcgatggattttgaatttatcgtttgtgac
+            tccccggcagggattgaaaccggtgcgttaatggcactctattttgcagacgaagccatt
+            attaccaccaacccggaagtctcctcagtacgcgactctgaccgtattttaggcattctg
+            gcgtcgaaatcacgccgcgcagaaaatggcgaagagcctattaaagagcacctgctgtta
+            acgcgctataacccaggccgcgtaagcagaggtgacatgctgagcatggaagatgtgctg
+            gagatcctgcgcatcaaactcgtcggcgtgatcccagaggatcaatcagtattgcgcgcc
+            tctaaccagggtgaaccggtcattctcgacattaacgccgatgcgggtaaagcctacgca
+            gataccgtagaacgtctgttgggagaagaacgtcctttccgcttcattgaagaagagaag
+            aaaggcttcctcaaacgcttgttcggaggataa
+///

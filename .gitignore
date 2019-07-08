@@ -5,6 +5,7 @@ build
 dist
  
 #Ignore backup files from some Unix editors,
+\#*.py\#
 *~
 *.swp
 *.bak
@@ -30,6 +31,12 @@ dist
 #Ignore all Jython class files (present if using Jython)
 *.class
 
+#Ignore any compiled C code
+*.so
+
+#Ignore the .tox directory from running tox locally
+.tox/
+
 #Ignore the MANIFEST file created automatically from MANIFEST.in
 MANIFEST
 
@@ -43,12 +50,22 @@ Tests/Graphics/*.eps
 Tests/Graphics/*.svg
 Tests/Graphics/*.png
 
+#Ignore the local BioSQL test settings:
+Tests/biosql.ini
+
 #TODO - The unit tests shouldn't leave temp files after running:
 Tests/BioSQL/temp_sqlite.db
 Tests/BioSQL/temp_sqlite.db-journal
+Tests/Cluster/cyano_result*
+
+#TODO - The Tutorial doctests should leave example files after
+#running Tests/test_Tutorial.py
+Doc/examples/other_trees.nwk
+Doc/examples/tree1.nwk
 
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
+Doc/*.gz
 Doc/*.log
 Doc/*.out
 Doc/*.toc
@@ -66,6 +83,7 @@ Doc/*/*/*.out
 Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
+Doc/_minted-Tutorial/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
@@ -84,3 +102,9 @@ Doc/*/*/hevea.sty
 #Ignore IntelliJ IDEA directory and project files
 .idea
 *.iml
+
+#Ignore unittest cache dirctory
+.cache/
+
+#Ignore vscode directory
+.vscode

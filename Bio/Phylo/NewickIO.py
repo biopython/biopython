@@ -10,8 +10,6 @@
 See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
 
-__docformat__ = "restructuredtext en"
-
 import re
 from Bio._py3k import StringIO
 
@@ -20,22 +18,23 @@ from Bio.Phylo import Newick
 
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
+
     pass
 
 
 tokens = [
-    (r"\(",                                  'open parens'),
-    (r"\)",                                  'close parens'),
-    (r"[^\s\(\)\[\]\'\:\;\,]+",              'unquoted node label'),
-    (r"\:[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
-    (r"\,",                                  'comma'),
-    (r"\[(\\.|[^\]])*\]",                    'comment'),
-    (r"\'(\\.|[^\'])*\'",                    'quoted node label'),
-    (r"\;",                                  'semicolon'),
-    (r"\n",                                  'newline'),
+    (r"\(", 'open parens'),
+    (r"\)", 'close parens'),
+    (r"[^\s\(\)\[\]\'\:\;\,]+", 'unquoted node label'),
+    (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
+    (r"\,", 'comma'),
+    (r"\[(\\.|[^\]])*\]", 'comment'),
+    (r"\'(\\.|[^\'])*\'", 'quoted node label'),
+    (r"\;", 'semicolon'),
+    (r"\n", 'newline'),
 ]
 tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
-token_dict = dict((name, re.compile(token)) for (token, name) in tokens)
+token_dict = {name: re.compile(token) for token, name in tokens}
 
 
 # ---------------------------------------------------------
@@ -45,6 +44,7 @@ def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
     :returns: generator of Bio.Phylo.Newick.Tree objects.
+
     """
     return Parser(handle).parse(**kwargs)
 
@@ -53,6 +53,7 @@ def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
     :returns: number of trees written.
+
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -91,10 +92,12 @@ class Parser(object):
     """
 
     def __init__(self, handle):
+        """Initialize file handle for the Newick Tree."""
         self.handle = handle
 
     @classmethod
     def from_string(cls, treetext):
+        """Instantiate the Newick Tree class from the given string."""
         handle = StringIO(treetext)
         return cls(handle)
 
@@ -124,7 +127,7 @@ class Parser(object):
             yield self._parse_tree(buf)
 
     def _parse_tree(self, text):
-        """Parses the text representation into an Tree object."""
+        """Parse the text representation into an Tree object (PRIVATE)."""
         tokens = re.finditer(tokenizer, text.strip())
 
         new_clade = self.new_clade
@@ -209,16 +212,14 @@ class Parser(object):
         return Newick.Tree(root=root_clade, rooted=self.rooted)
 
     def new_clade(self, parent=None):
-        """Returns a new Newick.Clade, optionally with a temporary reference
-        to its parent clade."""
+        """Return new Newick.Clade, optionally with temporary reference to parent."""
         clade = Newick.Clade()
         if parent:
             clade.parent = parent
         return clade
 
     def process_clade(self, clade):
-        """Final processing of a parsed clade. Removes the node's parent and
-        returns it."""
+        """Remove node's parent and return it. Final processing of parsed clade."""
         if ((clade.name) and not
                 (self.values_are_confidence or self.comments_are_confidence) and
                 (clade.confidence is None) and
@@ -241,6 +242,7 @@ class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
+        """Initialize parameter for Tree Writer object."""
         self.trees = trees
 
     def write(self, handle, **kwargs):
@@ -273,8 +275,7 @@ class Writer(object):
                         '\\', '\\\\').replace("'", "\\'")
 
             if clade.is_terminal():    # terminal
-                return (label
-                        + make_info_string(clade, terminal=True))
+                return (label + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
@@ -301,7 +302,7 @@ class Writer(object):
     def _info_factory(self, plain, confidence_as_branch_length,
                       branch_length_only, max_confidence, format_confidence,
                       format_branch_length):
-        """Return a function that creates a nicely formatted node tag."""
+        """Return a function that creates a nicely formatted node tag (PRIVATE)."""
         if plain:
             # Plain tree only. That's easy.
             def make_info_string(clade, terminal=False):

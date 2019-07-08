@@ -5,6 +5,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Query PubMed and print MEDLINE format results."""
+
 from __future__ import print_function
 
 import sys
@@ -14,6 +16,7 @@ from Bio import Entrez
 
 
 def print_usage():
+    """Print a help message."""
     print("""query_pubmed.py [-h] [-c] [-d delay] query
 
 This script sends a query to PubMed (via the NCBI Entrez webservice*)
@@ -25,6 +28,7 @@ Arguments:
 
 * http://www.ncbi.nlm.nih.gov/Entrez/
 """)
+
 
 if __name__ == '__main__':
     try:

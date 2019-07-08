@@ -9,14 +9,13 @@ Instantiates tree elements from a parsed PhyloXML file, and constructs an XML
 file from a `Bio.Phylo.PhyloXML` object.
 
 About capitalization:
+ - phyloXML means the file format specification
+ - PhyloXML means the Biopython module `Bio.Phylo.PhyloXML` and its classes
+ - Phyloxml means the top-level class used by `PhyloXMLIO.read` (but not
+   `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
+   `BaseTree.Tree`)
 
-- phyloXML means the file format specification
-- PhyloXML means the Biopython module `Bio.Phylo.PhyloXML` and its classes
-- Phyloxml means the top-level class used by `PhyloXMLIO.read` (but not
-  `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
-  `BaseTree.Tree`)
 """
-__docformat__ = "restructuredtext en"
 
 import sys
 
@@ -36,6 +35,7 @@ try:
 except ImportError:
     from xml.etree import ElementTree as ElementTree
 
+
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {
@@ -51,6 +51,7 @@ except AttributeError:
         ElementTree._namespace_map = ET_py._namespace_map
 
     def register_namespace(prefix, uri):
+        """Set the namespace for ElementTree."""
         ElementTree._namespace_map[uri] = prefix
 
 for prefix, uri in NAMESPACES.items():
@@ -67,6 +68,7 @@ class PhyloXMLError(Exception):
     module; this exception is for valid XML that breaks the phyloXML
     specification.
     """
+
     pass
 
 
@@ -80,6 +82,7 @@ def read(file):
     (non-phyloXML) objects.
 
     :returns: a single `Bio.Phylo.PhyloXML.Phyloxml` object.
+
     """
     return Parser(file).read()
 
@@ -91,6 +94,7 @@ def parse(file):
     memory-efficient than the `read` function.
 
     :returns: a generator of `Bio.Phylo.PhyloXML.Phylogeny` objects.
+
     """
     return Parser(file).parse()
 
@@ -105,6 +109,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
             to a Phyloxml object before serialization.
         file
             either an open handle or a file name.
+
     """
     def fix_single(tree):
         if isinstance(tree, PX.Phylogeny):
@@ -120,8 +125,7 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 
     if isinstance(obj, PX.Phyloxml):
         pass
-    elif (isinstance(obj, PX.BaseTree.Tree) or
-          isinstance(obj, PX.BaseTree.Clade)):
+    elif isinstance(obj, (PX.BaseTree.Tree, PX.BaseTree.Clade)):
         obj = fix_single(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
         obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))
@@ -135,27 +139,27 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 # Functions I wish ElementTree had
 
 def _local(tag):
-    """Extract the local tag from a namespaced tag name."""
+    """Extract the local tag from a namespaced tag name (PRIVATE)."""
     if tag[0] == '{':
         return tag[tag.index('}') + 1:]
     return tag
 
 
 def _split_namespace(tag):
-    """Split a tag into namespace and local tag strings."""
+    """Split a tag into namespace and local tag strings (PRIVATE)."""
     try:
         return tag[1:].split('}', 1)
-    except:
+    except ValueError:
         return ('', tag)
 
 
 def _ns(tag, namespace=NAMESPACES['phy']):
-    """Format an XML tag with the given namespace."""
+    """Format an XML tag with the given namespace (PRIVATE)."""
     return '{%s}%s' % (namespace, tag)
 
 
 def _get_child_as(parent, tag, construct):
-    """Find a child node by tag, and pass it through a constructor.
+    """Find a child node by tag, and pass it through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
     """
@@ -165,7 +169,7 @@ def _get_child_as(parent, tag, construct):
 
 
 def _get_child_text(parent, tag, construct=unicode):
-    """Find a child node by tag; pass its text through a constructor.
+    """Find a child node by tag; pass its text through a constructor (PRIVATE).
 
     Returns None if no matching child is found.
     """
@@ -175,7 +179,7 @@ def _get_child_text(parent, tag, construct=unicode):
 
 
 def _get_children_as(parent, tag, construct):
-    """Find child nodes by tag; pass each through a constructor.
+    """Find child nodes by tag; pass each through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
     """
@@ -184,7 +188,7 @@ def _get_children_as(parent, tag, construct):
 
 
 def _get_children_text(parent, tag, construct=unicode):
-    """Find child nodes by tag; pass each node's text through a constructor.
+    """Find child nodes by tag; pass each node's text through a constructor (PRIVATE).
 
     Returns an empty list if no matching child is found.
     """
@@ -194,12 +198,12 @@ def _get_children_text(parent, tag, construct=unicode):
 
 
 def _indent(elem, level=0):
-    """Add line breaks and indentation to ElementTree in-place.
+    """Add line breaks and indentation to ElementTree in-place (PRIVATE).
 
     Sources:
+     - http://effbot.org/zone/element-lib.htm#prettyprint
+     - http://infix.se/2007/02/06/gentlemen-indent-your-xml
 
-    - http://effbot.org/zone/element-lib.htm#prettyprint
-    - http://infix.se/2007/02/06/gentlemen-indent-your-xml
     """
     i = "\n" + level * "  "
     if len(elem):
@@ -221,6 +225,7 @@ def _indent(elem, level=0):
 
 
 def _str2bool(text):
+    """Convert string to boolean (PRIVATE)."""
     if text == 'true' or text == '1':
         return True
     if text == 'false' or text == '0':
@@ -229,6 +234,7 @@ def _str2bool(text):
 
 
 def _dict_str2bool(dct, keys):
+    """Return a new dictionary where string values are replaced with booleans (PRIVATE)."""
     out = dct.copy()
     for key in keys:
         if key in out:
@@ -237,6 +243,7 @@ def _dict_str2bool(dct, keys):
 
 
 def _int(text):
+    """Return text as an integer (PRIVATE)."""
     if text is not None:
         try:
             return int(text)
@@ -245,6 +252,7 @@ def _int(text):
 
 
 def _float(text):
+    """Return text as a float (PRIVATE)."""
     if text is not None:
         try:
             return float(text)
@@ -253,7 +261,7 @@ def _float(text):
 
 
 def _collapse_wspace(text):
-    """Replace all spans of whitespace with a single space character.
+    """Replace all spans of whitespace with a single space character (PRIVATE).
 
     Also remove leading and trailing whitespace. See "Collapse Whitespace
     Policy" in the phyloXML spec glossary:
@@ -265,7 +273,7 @@ def _collapse_wspace(text):
 
 # NB: Not currently used
 def _replace_wspace(text):
-    """Replace tab, LF and CR characters with spaces, but don't collapse.
+    """Replace tab, LF and CR characters with spaces, but don't collapse (PRIVATE).
 
     See "Replace Whitespace Policy" in the phyloXML spec glossary:
     http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
@@ -288,6 +296,7 @@ class Parser(object):
     """
 
     def __init__(self, file):
+        """Initialize the class."""
         # Get an iterable context for XML parsing events
         context = iter(ElementTree.iterparse(file, events=('start', 'end')))
         event, root = next(context)
@@ -296,8 +305,8 @@ class Parser(object):
 
     def read(self):
         """Parse the phyloXML file and create a single Phyloxml object."""
-        phyloxml = PX.Phyloxml(dict((_local(key), val)
-                                    for key, val in self.root.items()))
+        phyloxml = PX.Phyloxml({_local(key): val
+                                for key, val in self.root.items()})
         other_depth = 0
         for event, elem in self.context:
             namespace, localtag = _split_namespace(elem.tag)
@@ -328,7 +337,7 @@ class Parser(object):
     # Special parsing cases -- incremental, using self.context
 
     def _parse_phylogeny(self, parent):
-        """Parse a single phylogeny within the phyloXML tree.
+        """Parse a single phylogeny within the phyloXML tree (PRIVATE).
 
         Recursively builds a phylogenetic tree with help from parse_clade, then
         clears the XML event history for the phylogeny element and returns
@@ -346,8 +355,9 @@ class Parser(object):
         for event, elem in self.context:
             namespace, tag = _split_namespace(elem.tag)
             if event == 'start' and tag == 'clade':
-                assert phylogeny.root is None, \
-                    "Phylogeny object should only have 1 clade"
+                if phylogeny.root is not None:
+                    raise ValueError("Phylogeny object should only have "
+                                     "1 clade")
                 phylogeny.root = self._parse_clade(elem)
                 continue
             if event == 'end':
@@ -384,7 +394,7 @@ class Parser(object):
         ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
-        """Parse a Clade node and its children, recursively."""
+        """Parse a Clade node and its children, recursively (PRIVATE)."""
         clade = PX.Clade(**parent.attrib)
         if clade.branch_length is not None:
             clade.branch_length = float(clade.branch_length)
@@ -439,6 +449,7 @@ class Parser(object):
         return clade
 
     def _parse_sequence(self, parent):
+        """Parse a molecular sequence (PRIVATE)."""
         sequence = PX.Sequence(**parent.attrib)
         for event, elem in self.context:
             namespace, tag = _split_namespace(elem.tag)
@@ -461,6 +472,7 @@ class Parser(object):
         return sequence
 
     def _parse_taxonomy(self, parent):
+        """Parse taxonomic information for a clade (PRIVATE)."""
         taxonomy = PX.Taxonomy(**parent.attrib)
         for event, elem in self.context:
             namespace, tag = _split_namespace(elem.tag)
@@ -483,6 +495,7 @@ class Parser(object):
         return taxonomy
 
     def other(self, elem, namespace, localtag):
+        """Create an Other object, a non-phyloXML element."""
         return PX.Other(localtag, namespace, elem.attrib,
                         value=elem.text and elem.text.strip() or None,
                         children=[self.other(child, *_split_namespace(child.tag))
@@ -491,9 +504,11 @@ class Parser(object):
     # Complex types
 
     def accession(self, elem):
+        """Create accession object."""
         return PX.Accession(elem.text.strip(), elem.get('source'))
 
     def annotation(self, elem):
+        """Create annotation object."""
         return PX.Annotation(
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
             confidence=_get_child_as(elem, 'confidence', self.confidence),
@@ -502,7 +517,9 @@ class Parser(object):
             **elem.attrib)
 
     def binary_characters(self, elem):
+        """Create binary characters object."""
         def bc_getter(elem):
+            """Get binary characters from subnodes."""
             return _get_children_text(elem, 'bc')
         return PX.BinaryCharacters(
             type=elem.get('type'),
@@ -517,22 +534,26 @@ class Parser(object):
             absent=_get_child_as(elem, 'absent', bc_getter))
 
     def clade_relation(self, elem):
+        """Create clade relationship object."""
         return PX.CladeRelation(
             elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
             distance=elem.get('distance'),
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def color(self, elem):
+        """Create branch color object."""
         red, green, blue = (_get_child_text(elem, color, int) for color in
                             ('red', 'green', 'blue'))
         return PX.BranchColor(red, green, blue)
 
     def confidence(self, elem):
+        """Create confidence object."""
         return PX.Confidence(
             _float(elem.text),
             elem.get('type'))
 
     def date(self, elem):
+        """Create date object."""
         return PX.Date(
             unit=elem.get('unit'),
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
@@ -542,12 +563,14 @@ class Parser(object):
         )
 
     def distribution(self, elem):
+        """Create geographic distribution object."""
         return PX.Distribution(
             desc=_collapse_wspace(_get_child_text(elem, 'desc')),
             points=_get_children_as(elem, 'point', self.point),
             polygons=_get_children_as(elem, 'polygon', self.polygon))
 
     def domain(self, elem):
+        """Create protein domain object."""
         return PX.ProteinDomain(elem.text.strip(),
                                 int(elem.get('from')) - 1,
                                 int(elem.get('to')),
@@ -555,11 +578,13 @@ class Parser(object):
                                 id=elem.get('id'))
 
     def domain_architecture(self, elem):
+        """Create domain architecture object."""
         return PX.DomainArchitecture(
             length=int(elem.get('length')),
             domains=_get_children_as(elem, 'domain', self.domain))
 
     def events(self, elem):
+        """Create events object."""
         return PX.Events(
             type=_get_child_text(elem, 'type'),
             duplications=_get_child_text(elem, 'duplications', int),
@@ -568,16 +593,19 @@ class Parser(object):
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def id(self, elem):
+        """Create identifier object."""
         provider = elem.get('provider') or elem.get('type')
         return PX.Id(elem.text.strip(), provider)
 
     def mol_seq(self, elem):
+        """Create molecular sequence object."""
         is_aligned = elem.get('is_aligned')
         if is_aligned is not None:
             is_aligned = _str2bool(is_aligned)
         return PX.MolSeq(elem.text.strip(), is_aligned=is_aligned)
 
     def point(self, elem):
+        """Create point object, coordinates of a point."""
         return PX.Point(
             elem.get('geodetic_datum'),
             _get_child_text(elem, 'lat', float),
@@ -586,10 +614,12 @@ class Parser(object):
             alt_unit=elem.get('alt_unit'))
 
     def polygon(self, elem):
+        """Create polygon object, list of points."""
         return PX.Polygon(
             points=_get_children_as(elem, 'point', self.point))
 
     def property(self, elem):
+        """Create properties from external resources."""
         return PX.Property(elem.text.strip(),
                            elem.get('ref'),
                            elem.get('applies_to'),
@@ -598,17 +628,20 @@ class Parser(object):
                            id_ref=elem.get('id_ref'))
 
     def reference(self, elem):
+        """Create literature reference object."""
         return PX.Reference(
             doi=elem.get('doi'),
             desc=_get_child_text(elem, 'desc'))
 
     def sequence_relation(self, elem):
+        """Create sequence relationship object, relationship between two sequences."""
         return PX.SequenceRelation(
             elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
             distance=_float(elem.get('distance')),
             confidence=_get_child_as(elem, 'confidence', self.confidence))
 
     def uri(self, elem):
+        """Create uri object, expected to be a url."""
         return PX.Uri(elem.text.strip(),
                       desc=_collapse_wspace(elem.get('desc')),
                       type=elem.get('type'))
@@ -619,7 +652,7 @@ class Parser(object):
 # ---------------------------------------------------------
 
 def _serialize(value):
-    """Convert a Python primitive to a phyloXML-compatible Unicode string."""
+    """Convert a Python primitive to a phyloXML-compatible Unicode string (PRIVATE)."""
     if isinstance(value, float):
         return unicode(value).upper()
     elif isinstance(value, bool):
@@ -628,7 +661,7 @@ def _serialize(value):
 
 
 def _clean_attrib(obj, attrs):
-    """Create a dictionary from an object's specified, non-None attributes."""
+    """Create a dictionary from an object's specified, non-None attributes (PRIVATE)."""
     out = {}
     for key in attrs:
         val = getattr(obj, key)
@@ -638,7 +671,9 @@ def _clean_attrib(obj, attrs):
 
 
 def _handle_complex(tag, attribs, subnodes, has_text=False):
+    """Handle to serialize nodes with subnodes (PRIVATE)."""
     def wrapped(self, obj):
+        """Wrap nodes and subnodes as elements."""
         elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
         for subn in subnodes:
             if isinstance(subn, basestring):
@@ -658,7 +693,9 @@ def _handle_complex(tag, attribs, subnodes, has_text=False):
 
 
 def _handle_simple(tag):
+    """Handle to serialize simple nodes (PRIVATE)."""
     def wrapped(self, obj):
+        """Wrap node as element."""
         elem = ElementTree.Element(tag)
         elem.text = _serialize(obj)
         return elem
@@ -675,6 +712,7 @@ class Writer(object):
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
 
     def write(self, file, encoding=DEFAULT_ENCODING, indent=True):
+        """Write PhyloXML to a file."""
         if indent:
             _indent(self._tree.getroot())
         self._tree.write(file, encoding)
@@ -683,6 +721,7 @@ class Writer(object):
     # Convert classes to ETree elements
 
     def phyloxml(self, obj):
+        """Convert phyloxml to Etree element."""
         elem = ElementTree.Element('phyloxml', obj.attributes)  # Namespaces
         for tree in obj.phylogenies:
             elem.append(self.phylogeny(tree))
@@ -691,6 +730,7 @@ class Writer(object):
         return elem
 
     def other(self, obj):
+        """Convert other to Etree element."""
         elem = ElementTree.Element(_ns(obj.tag, obj.namespace), obj.attributes)
         elem.text = obj.value
         for child in obj.children:

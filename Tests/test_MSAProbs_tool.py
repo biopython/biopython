@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for MSAProbs tool."""
+
 import os
 import sys
 import unittest
@@ -20,13 +22,13 @@ from Bio._py3k import getoutput
 os.environ['LANG'] = 'C'
 
 msaprobs_exe = None
-if sys.platform == "win32":
-    # TODO
-    raise MissingExternalDependencyError("Testing this on Windows is not implemented yet")
-else:
+try:
     output = getoutput("msaprobs -version")
     if output.startswith("MSAPROBS version"):
         msaprobs_exe = "msaprobs"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
 
 if not msaprobs_exe:
     raise MissingExternalDependencyError(
@@ -44,8 +46,7 @@ class MSAProbsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared testing procedure used by all tests."""
         # Mark output files for later cleanup.
         self.add_file_to_clean(cline.outfile)
 
@@ -54,7 +55,7 @@ class MSAProbsTestCase(unittest.TestCase):
         output, error = cline()
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 #################################################################
@@ -85,7 +86,11 @@ class MSAProbsTestErrorConditions(MSAProbsTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertEqual(err.returncode, 139)
+            if sys.platform == "win32":
+                expected = 0xC0000005
+            else:
+                expected = 139  # TODO: Check return codes on various other platforms
+            self.assertEqual(expected, err.returncode)
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -112,9 +117,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp_test.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.standard_test_procedure(cline)
 
@@ -139,9 +144,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp_test.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
@@ -152,9 +157,9 @@ class MSAProbsTestNormalConditions(MSAProbsTestCase):
         output_file = "temp with spaces.aln"
 
         cline = MSAProbsCommandline(msaprobs_exe,
-                                        infile=input_file,
-                                        outfile=output_file,
-                                        clustalw=True)
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    clustalw=True)
 
         self.standard_test_procedure(cline)
 

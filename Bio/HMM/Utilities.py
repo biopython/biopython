@@ -20,13 +20,11 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
     """Print out a state sequence prediction in a nice manner.
 
     Arguments:
+     - emissions -- The sequence of emissions of the sequence you are
+       dealing with.
+     - real_state -- The actual state path that generated the emissions.
+     - predicted_state -- A state path predicted by some kind of HMM model.
 
-    o emissions -- The sequence of emissions of the sequence you are
-    dealing with.
-
-    o real_state -- The actual state path that generated the emissions.
-
-    o predicted_state -- A state path predicted by some kind of HMM model.
     """
     # calculate the length of the titles and sequences
     title_length = max(len(emission_title), len(real_title),

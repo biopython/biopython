@@ -4,19 +4,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Testing online code for fetching sequences, and parsing them
+"""Testing online code for fetching sequences, and parsing them.
 
 Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
 
 Goals:
-    Make sure that all retrieval is working as expected.
-    May catch some format changes early too.
+    - Make sure that all retrieval is working as expected.
+    - May catch some format changes early too.
+
 """
 import unittest
-
-import requires_internet
-requires_internet.check()
 
 # We want to test these:
 from Bio import Entrez
@@ -30,14 +28,18 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.File import UndoHandle
 from Bio._py3k import _as_string
 
+import requires_internet
+requires_internet.check()
+
 # This lets us set the email address to be sent to NCBI Entrez:
-Entrez.email = "biopython-dev@biopython.org"
+Entrez.email = "biopython@biopython.org"
 
 
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
+
     def test_get_sprot_raw(self):
-        """Bio.ExPASy.get_sprot_raw("O23729")"""
+        """Bio.ExPASy.get_sprot_raw("O23729")."""
         identifier = "O23729"
         # This is to catch an error page from our proxy:
         handle = UndoHandle(ExPASy.get_sprot_raw(identifier))
@@ -58,13 +60,21 @@ class EntrezTests(unittest.TestCase):
                 f = "gb"
             record = SeqIO.read(handle, f)
             handle.close()
+            # NCBI still takes GI on input, but phasing it out in output
+            gi_to_acc = {
+                "6273291": "AF191665.1",
+                "16130152": "NP_416719.1",
+            }
+            if entry in gi_to_acc:
+                entry = gi_to_acc[entry]
             self.assertTrue((entry in record.name) or
-                         (entry in record.id) or
-                         ("gi" in record.annotations
-                          and record.annotations["gi"]==entry),
-                         "%s got %s, %s" % (entry, record.name, record.id))
+                            (entry in record.id) or
+                            ("gi" in record.annotations and
+                             record.annotations["gi"] == entry),
+                            "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)
             self.assertEqual(seguid(record.seq), checksum)
+
 
 for database, formats, entry, length, checksum in [
         ("nuccore", ["fasta", "gb"], "X52960", 248,
@@ -76,7 +86,7 @@ for database, formats, entry, length, checksum in [
         ]:
 
     def funct(d, f, e, l, c):
-        method = lambda x: x.simple(d, f, e, l, c)
+        method = lambda x: x.simple(d, f, e, l, c)  # noqa: E731
         method.__doc__ = "Bio.Entrez.efetch(%r, id=%r, ...)" % (d, e)
         return method
 

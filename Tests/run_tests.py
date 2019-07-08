@@ -8,30 +8,24 @@ This will find all modules whose name is "test_*.py" in the test
 directory, and run them.  Various command line options provide
 additional facilities.
 
-Command line options:
+Command line options::
 
---help        -- show usage info
---offline     -- skip tests which require internet access
--g;--generate -- write the output file for a test instead of comparing it.
-                 The name of the test to write the output for must be
-                 specified.
--v;--verbose  -- run tests with higher verbosity (does not affect our
-                 print-and-compare style unit tests).
-<test_name>   -- supply the name of one (or more) tests to be run.
-                 The .py file extension is optional.
-doctest       -- run the docstring tests.
+    --help        -- show usage info
+    --offline     -- skip tests which require internet access
+    -v;--verbose  -- run tests with higher verbosity
+    <test_name>   -- supply the name of one (or more) tests to be run.
+                     The .py file extension is optional.
+    doctest       -- run the docstring tests.
+
+<test_name> and doctest, if supplied, must come after the other options.
 By default, all tests are run.
 """
 
-# The default verbosity (not verbose)
 from __future__ import print_function
-
-VERBOSITY = 0
 
 # standard modules
 import sys
 import os
-import re
 import getopt
 import time
 import traceback
@@ -40,6 +34,9 @@ import doctest
 import distutils.util
 import gc
 from io import BytesIO
+from pkgutil import iter_modules
+from setuptools import find_packages
+
 
 # Note, we want to be able to call run_tests.py BEFORE
 # Biopython is installed, so we can't use this:
@@ -48,6 +45,20 @@ try:
     from StringIO import StringIO  # Python 2 (byte strings)
 except ImportError:
     from io import StringIO  # Python 3 (unicode strings)
+
+
+try:
+    import numpy
+    try:
+        # NumPy 1.14 changed repr output breaking our doctests,
+        # request the legacy 1.13 style
+        numpy.set_printoptions(legacy="1.13")
+    except TypeError:
+        # Old Numpy, output should be fine as it is :)
+        # TypeError: set_printoptions() got an unexpected keyword argument 'legacy'
+        pass
+except ImportError:
+    numpy = None
 
 
 def is_pypy():
@@ -61,82 +72,81 @@ def is_pypy():
     return False
 
 
-def is_numpy():
-    if is_pypy():
-        return False
-    try:
-        import numpy
-        del numpy
-        return True
-    except ImportError:
-        return False
+# The default verbosity (not verbose)
+VERBOSITY = 0
 
-# This is the list of modules containing docstring tests.
-# If you develop docstring tests for other modules, please add
-# those modules here. Please sort names alphabetically.
-DOCTEST_MODULES = [
-    "Bio.Align",
-    "Bio.Align.Generic",
-    "Bio.Align.Applications._Clustalw",
-    "Bio.Align.Applications._ClustalOmega",
-    "Bio.Align.Applications._MSAProbs",
-    "Bio.Align.Applications._Mafft",
-    "Bio.Align.Applications._Muscle",
-    "Bio.Align.Applications._Probcons",
-    "Bio.Align.Applications._Prank",
-    "Bio.Align.Applications._TCoffee",
-    "Bio.AlignIO",
-    "Bio.AlignIO.StockholmIO",
-    "Bio.Alphabet",
-    "Bio.Application",
-    "Bio.bgzf",
-    "Bio.codonalign",
-    "Bio.Blast.Applications",
-    "Bio.Emboss.Applications",
-    "Bio.GenBank",
-    "Bio.KEGG.Compound",
-    "Bio.KEGG.Enzyme",
-    "Bio.NMR.xpktools",
-    "Bio.Motif",
-    "Bio.motifs",
-    "Bio.motifs.applications._alignace",
-    "Bio.motifs.applications._xxmotif",
-    "Bio.pairwise2",
-    "Bio.Phylo.Applications._Raxml",
-    "Bio.SearchIO",
-    "Bio.SearchIO._model",
-    "Bio.SearchIO._model.query",
-    "Bio.SearchIO._model.hit",
-    "Bio.SearchIO._model.hsp",
-    "Bio.SearchIO.BlastIO",
-    "Bio.SearchIO.HmmerIO",
-    "Bio.SearchIO.FastaIO",
-    "Bio.SearchIO.BlatIO",
-    "Bio.SearchIO.ExonerateIO",
-    "Bio.Seq",
-    "Bio.SeqIO",
-    "Bio.SeqIO.FastaIO",
-    "Bio.SeqIO.AceIO",
-    "Bio.SeqIO.PhdIO",
-    "Bio.SeqIO.QualityIO",
-    "Bio.SeqIO.SffIO",
-    "Bio.SeqFeature",
-    "Bio.SeqRecord",
-    "Bio.SeqUtils",
-    "Bio.SeqUtils.MeltingTemp",
-    "Bio.Sequencing.Applications._Novoalign",
-    "Bio.Sequencing.Applications._bwa",
-    "Bio.Sequencing.Applications._samtools",
-    "Bio.Wise",
-    "Bio.Wise.psw",
+# Following modules have historic failures. If you fix one of these
+# please remove here!
+EXCLUDE_DOCTEST_MODULES = [
+    'Bio.PDB',
+    'Bio.PDB.AbstractPropertyMap',
+    'Bio.PDB.Atom',
+    'Bio.PDB.DSSP',
+    'Bio.PDB.Entity',
+    'Bio.PDB.FragmentMapper',
+    'Bio.PDB.mmcifio',
+    'Bio.PDB.PDBIO',
+    'Bio.PDB.ResidueDepth',
+    'Bio.PDB.vectors',
+    'Bio.Phylo.Applications._Fasttree',
+    'Bio.Phylo._io',
+    'Bio.Phylo.TreeConstruction',
+    'Bio.Phylo._utils',
+    'BioSQL.BioSeqDatabase',
 ]
+
+# Exclude modules with online activity
+# They are not excluded by default, use --offline to exclude them
+ONLINE_DOCTEST_MODULES = [
+    'Bio.Entrez',
+    'Bio.ExPASy',
+    'Bio.TogoWS',
+    ]
+
 # Silently ignore any doctests for modules requiring numpy!
-if is_numpy():
-    DOCTEST_MODULES.extend(["Bio.Affy.CelFile",
-                            "Bio.Statistics.lowess",
-                            "Bio.PDB.Polypeptide",
-                            "Bio.PDB.Selection"
-                            ])
+if numpy is None:
+    EXCLUDE_DOCTEST_MODULES.extend([
+        "Bio.Affy.CelFile",
+        "Bio.Cluster",
+        "Bio.KDTree",
+        "Bio.KDTree.KDTree",
+        "Bio.kNN",
+        "Bio.LogisticRegression",
+        "Bio.MarkovModel",
+        "Bio.MaxEntropy",
+        "Bio.NaiveBayes",
+        "Bio.PDB.Chain",
+        "Bio.PDB.Dice",
+        "Bio.PDB.HSExposure",
+        "Bio.PDB.MMCIF2Dict",
+        "Bio.PDB.MMCIFParser",
+        "Bio.PDB.mmtf.DefaultParser",
+        "Bio.PDB.mmtf",
+        "Bio.PDB.Model",
+        "Bio.PDB.NACCESS",
+        "Bio.PDB.NeighborSearch",
+        "Bio.PDB.parse_pdb_header",
+        "Bio.PDB.PDBExceptions",
+        "Bio.PDB.PDBList",
+        "Bio.PDB.PDBParser",
+        "Bio.PDB.Polypeptide",
+        "Bio.PDB.PSEA",
+        "Bio.PDB.QCPSuperimposer",
+        "Bio.PDB.Residue",
+        "Bio.PDB.Selection",
+        "Bio.PDB.StructureAlignment",
+        "Bio.PDB.StructureBuilder",
+        "Bio.PDB.Structure",
+        "Bio.PDB.Superimposer",
+        "Bio.PDB.Vector",
+        'Bio.phenotype',
+        'Bio.phenotype.parse',
+        'Bio.phenotype.phen_micro',
+        "Bio.phenotype.pm_fitting",
+        "Bio.SeqIO.PdbIO",
+        "Bio.Statistics.lowess",
+        "Bio.SVDSuperimposer",
+    ])
 
 
 try:
@@ -144,12 +154,29 @@ try:
     del sqlite3
 except ImportError:
     # Missing on Jython or Python 2.4
-    DOCTEST_MODULES.remove("Bio.SeqIO")
-    DOCTEST_MODULES.remove("Bio.SearchIO")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.SeqIO")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.SearchIO")
 
-# Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
-if sys.version_info[0] == 3:
-    DOCTEST_MODULES.remove("Bio.Seq")
+# Skip Bio.Seq doctest under Python 2, see http://bugs.python.org/issue7490
+# Can't easily write exceptions with consistent class name in python 2 and 3
+if sys.version_info[0] == 2:
+    EXCLUDE_DOCTEST_MODULES.append("Bio.Seq")
+
+
+def find_modules(path):
+    modules = set()
+    for pkg in find_packages(path):
+        modules.add(pkg)
+        pkgpath = path + '/' + pkg.replace('.', '/')
+        if sys.version_info < (3, 6):
+            for _, name, ispkg in iter_modules([pkgpath]):
+                if not ispkg:
+                    modules.add(pkg + '.' + name)
+        else:
+            for info in iter_modules([pkgpath]):
+                if not info.ispkg:
+                    modules.add(pkg + '.' + info.name)
+    return modules
 
 
 # Skip Bio.bgzf doctest for broken gzip, see http://bugs.python.org/issue17666
@@ -169,20 +196,22 @@ def _have_bug17666():
     if sys.version_info[0] >= 3:
         import codecs
         bgzf_eof = codecs.latin_1_encode(bgzf_eof)[0]
-    h = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
+    handle = gzip.GzipFile(fileobj=BytesIO(bgzf_eof))
     try:
-        data = h.read()
-        h.close()
+        data = handle.read()
+        handle.close()
         assert not data, "Should be zero length, not %i" % len(data)
         return False
     except TypeError as err:
         # TypeError: integer argument expected, got 'tuple'
-        h.close()
+        handle.close()
         return True
-if _have_bug17666():
-    DOCTEST_MODULES.remove("Bio.bgzf")
 
-system_lang = os.environ.get('LANG', 'C')  # Cache this
+
+if _have_bug17666():
+    EXCLUDE_DOCTEST_MODULES.append("Bio.bgzf")
+
+SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
 
 
 def main(argv):
@@ -221,34 +250,25 @@ def main(argv):
     verbosity = VERBOSITY
 
     # deal with the options
-    for o, a in opts:
-        if o == "--help":
+    for opt, _ in opts:
+        if opt == "--help":
             print(__doc__)
             return 0
-        if o == "--offline":
+        if opt == "--offline":
             print("Skipping any tests requiring internet access")
+            EXCLUDE_DOCTEST_MODULES.extend(ONLINE_DOCTEST_MODULES)
             # This is a bit of a hack...
             import requires_internet
             requires_internet.check.available = False
-            # The check() function should now report internet not available
-        if o == "-g" or o == "--generate":
-            if len(args) > 1:
-                print("Only one argument (the test name) needed for generate")
-                print(__doc__)
-                return 2
-            elif len(args) == 0:
-                print("No test name specified to generate output for.")
-                print(__doc__)
-                return 2
-            # strip off .py if it was included
-            if args[0][-3:] == ".py":
-                args[0] = args[0][:-3]
+            # Monkey patch for urlopen()
+            import Bio._py3k
 
-            test = ComparisonTestCase(args[0])
-            test.generate_output()
-            return 0
+            def dummy_urlopen(url):
+                raise RuntimeError("Internal test suite error, attempting to use internet despite --offline setting")
 
-        if o == "-v" or o == "--verbose":
+            Bio._py3k.urlopen = dummy_urlopen
+
+        if opt == "-v" or opt == "--verbose":
             verbosity = 2
 
     # deal with the arguments, which should be names of tests to run
@@ -265,114 +285,26 @@ def main(argv):
     return runner.run()
 
 
-class ComparisonTestCase(unittest.TestCase):
-    """Run a print-and-compare test and check it against expected output."""
-
-    def __init__(self, name, output=None):
-        """Initialize with the test to run.
-
-        Arguments:
-        o name - The name of the test. The expected output should be
-          stored in the file output/name.
-        o output - The output that was generated when this test was run.
-        """
-        unittest.TestCase.__init__(self)
-        self.name = name
-        self.output = output
-
-    def shortDescription(self):
-        return self.name
-
-    def runTest(self):
-        # check the expected output to be consistent with what
-        # we generated
-        outputdir = os.path.join(TestRunner.testdir, "output")
-        outputfile = os.path.join(outputdir, self.name)
-        try:
-            if sys.version_info[0] >= 3:
-                # Python 3 problem: Can't use utf8 on output/test_geo
-                # due to micro (\xb5) and degrees (\xb0) symbols
-                # Also universal new lines mode deprecated on Python 3
-                expected = open(outputfile, encoding="latin")
-            else:
-                expected = open(outputfile, "rU")
-        except IOError:
-            self.fail("Warning: Can't open %s for test %s" %
-                      (outputfile, self.name))
-
-        self.output.seek(0)
-        # first check that we are dealing with the right output
-        # the first line of the output file is the test name
-        expected_test = expected.readline().strip()
-
-        if expected_test != self.name:
-            expected.close()
-            raise ValueError("\nOutput:   %s\nExpected: %s"
-                             % (self.name, expected_test))
-
-        # now loop through the output and compare it to the expected file
-        while True:
-            expected_line = expected.readline()
-            output_line = self.output.readline()
-
-            # stop looping if either of the info handles reach the end
-            if not(expected_line) or not(output_line):
-                # make sure both have no information left
-                assert expected_line == '', "Unread: %s" % expected_line
-                assert output_line == '', "Extra output: %s" % output_line
-                break
-
-            # normalize the newlines in the two lines
-            expected_line = expected_line.strip("\r\n")
-            output_line = output_line.strip("\r\n")
-
-            # if the line is a doctest or PyUnit time output like:
-            # Ran 2 tests in 0.285s
-            # ignore it, so we don't have problems with different running times
-            if re.compile("^Ran [0-9]+ tests? in ").match(expected_line):
-                pass
-            # otherwise make sure the two lines are the same
-            elif expected_line != output_line:
-                expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s"
-                                 % (repr(output_line), repr(expected_line)))
-        expected.close()
-
-    def generate_output(self):
-        """Generate the golden output for the specified test.
-        """
-        outputdir = os.path.join(TestRunner.testdir, "output")
-        outputfile = os.path.join(outputdir, self.name)
-
-        output_handle = open(outputfile, 'w')
-
-        # write the test name as the first line of the output
-        output_handle.write(self.name + "\n")
-
-        # remember standard out so we can reset it after we are done
-        save_stdout = sys.stdout
-        try:
-            # write the output from the test into a string
-            sys.stdout = output_handle
-            __import__(self.name)
-        finally:
-            output_handle.close()
-            # return standard out to its normal setting
-            sys.stdout = save_stdout
-
-
 class TestRunner(unittest.TextTestRunner):
 
     if __name__ == '__main__':
         file = sys.argv[0]
     else:
         file = __file__
-    testdir = os.path.dirname(file) or os.curdir
+    testdir = os.path.abspath(os.path.dirname(file) or os.curdir)
 
-    def __init__(self, tests=[], verbosity=0):
-        # if no tests were specified to run, we run them all
-        # including the doctests
-        self.tests = tests
+    def __init__(self, tests=None, verbosity=0):
+        """Initialise test runner.
+
+        If not tests are specified, we run them all,
+        including the doctests.
+
+        Defaults to running without any verbose logging.
+        """
+        if tests is None:
+            self.tests = []
+        else:
+            self.tests = tests
         if not self.tests:
             # Make a list of all applicable test modules.
             names = os.listdir(TestRunner.testdir)
@@ -383,51 +315,77 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.append("doctest")
         if "doctest" in self.tests:
             self.tests.remove("doctest")
-            self.tests.extend(DOCTEST_MODULES)
+            modules = find_modules(self.testdir + '/..')
+            modules.difference_update(set(EXCLUDE_DOCTEST_MODULES))
+            self.tests.extend(sorted(list(modules)))
         stream = StringIO()
         unittest.TextTestRunner.__init__(self, stream,
                                          verbosity=verbosity)
 
     def runTest(self, name):
+        from Bio import MissingPythonDependencyError
         from Bio import MissingExternalDependencyError
         result = self._makeResult()
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
-        global system_lang
-        os.environ['LANG'] = system_lang
-        # Note the current directory:
-        cur_dir = os.path.abspath(".")
+        global SYSTEM_LANG
+        os.environ['LANG'] = SYSTEM_LANG
+        # Always run tests from the Tests/ folder where run_tests.py
+        # should be located (as we assume this with relative paths etc)
+        os.chdir(self.testdir)
         try:
             stdout = sys.stdout
             sys.stdout = output
             if name.startswith("test_"):
+                # It's a unittest
                 sys.stderr.write("%s ... " % name)
-                # It's either a unittest or a print-and-compare test
-                suite = unittest.TestLoader().loadTestsFromName(name)
+                loader = unittest.TestLoader()
+                suite = loader.loadTestsFromName(name)
+                if hasattr(loader, "errors") and loader.errors:
+                    # New in Python 3.5, don't always get an exception anymore
+                    # Instead this is a list of error messages as strings
+                    for msg in loader.errors:
+                        if "Bio.MissingExternalDependencyError: " in msg or \
+                                "Bio.MissingPythonDependencyError: " in msg:
+                            # Remove the traceback etc
+                            msg = msg[msg.find("Bio.Missing"):]
+                            msg = msg[msg.find("Error: "):]
+                            sys.stderr.write("skipping. %s\n" % msg)
+                            return True
+                    # Looks like a real failure
+                    sys.stderr.write("loading tests failed:\n")
+                    for msg in loader.errors:
+                        sys.stderr.write("%s\n" % msg)
+                    return False
                 if suite.countTestCases() == 0:
-                    # This is a print-and-compare test instead of a
-                    # unittest-type test.
-                    test = ComparisonTestCase(name, output)
-                    suite = unittest.TestSuite([test])
+                    raise RuntimeError("No tests found in %s" % name)
             else:
                 # It's a doc test
                 sys.stderr.write("%s docstring test ... " % name)
-                # Can't use fromlist=name.split(".") until python 2.5+
-                module = __import__(name, None, None, name.split("."))
+                try:
+                    module = __import__(name, fromlist=name.split("."))
+                except MissingPythonDependencyError:
+                    sys.stderr.write("skipped, missing Python dependency\n")
+                    return True
+                except ImportError as e:
+                    sys.stderr.write("FAIL, ImportError\n")
+                    result.stream.write("ERROR while importing %s: %s\n" % (name, e))
+                    result.printErrors()
+                    return False
                 suite = doctest.DocTestSuite(module,
                                              optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
-            if cur_dir != os.path.abspath("."):
+            if self.testdir != os.path.abspath("."):
                 sys.stderr.write("FAIL\n")
                 result.stream.write(result.separator1 + "\n")
                 result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2 + "\n")
                 result.stream.write("Current directory changed\n")
-                result.stream.write("Was: %s\n" % cur_dir)
+                result.stream.write("Was: %s\n" % self.testdir)
                 result.stream.write("Now: %s\n" % os.path.abspath("."))
-                os.chdir(cur_dir)
+                os.chdir(self.testdir)
                 if not result.wasSuccessful():
                     result.printErrors()
                 return False
@@ -439,6 +397,8 @@ class TestRunner(unittest.TextTestRunner):
                 result.printErrors()
             return False
         except MissingExternalDependencyError as msg:
+            # Seems this isn't always triggered on Python 3.5,
+            # exception messages can be in loader.errors instead.
             sys.stderr.write("skipping. %s\n" % msg)
             return True
         except Exception as msg:
@@ -453,7 +413,7 @@ class TestRunner(unittest.TextTestRunner):
             # Want to allow this, and abort the test
             # (see below for special case)
             raise err
-        except:
+        except:  # noqa: B901
             # This happens in Jython with java.lang.ClassFormatError:
             # Invalid method Code length ...
             sys.stderr.write("ERROR\n")
@@ -470,18 +430,18 @@ class TestRunner(unittest.TextTestRunner):
     def run(self):
         """Run tests, return number of failures (integer)."""
         failures = 0
-        startTime = time.time()
+        start_time = time.time()
         for test in self.tests:
             ok = self.runTest(test)
             if not ok:
                 failures += 1
         total = len(self.tests)
-        stopTime = time.time()
-        timeTaken = stopTime - startTime
+        stop_time = time.time()
+        time_taken = stop_time - start_time
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write('-' * 70 + "\n")
         sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
-                         (total, total != 1 and "s" or "", timeTaken))
+                         (total, total != 1 and "s" or "", time_taken))
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)

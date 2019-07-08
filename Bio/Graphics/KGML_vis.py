@@ -1,4 +1,10 @@
-""" This module provides classes and functions to visualise a KGML Pathway Map
+# Copyright 2013 Leighton Pritchard.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Classes and functions to visualise a KGML Pathway Map.
 
 The KGML definition is as of release KGML v0.7.1
 (http://www.kegg.jp/kegg/xml/docs/)
@@ -10,42 +16,76 @@ from __future__ import print_function
 
 import os
 import tempfile
-from itertools import chain
 from io import BytesIO
 
-from reportlab.lib import pagesizes
-from reportlab.lib import colors
-from reportlab.lib.utils import ImageReader
-from reportlab.graphics.shapes import *
-from reportlab.pdfgen import canvas
+try:
+    from reportlab.lib import colors
+    from reportlab.pdfgen import canvas
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install reportlab if you want to use KGML_vis.")
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install pillow if you want to use KGML_vis.")
 
 from Bio._py3k import urlopen as _urlopen
 
 from Bio.KEGG.KGML.KGML_pathway import Pathway
 
 
-def hexdarken(hexcolor, factor=0.7):
-    """Returns darkened hex color as a ReportLab RGB color.
+def darken(color, factor=0.7):
+    """Return darkened color as a ReportLab RGB color.
 
-    Take a passed hex color and return an RGB color that is
-    slightly darker (if possible).
+    Take a passed color and returns a Reportlab color that is darker by the
+    factor indicated in the parameter.
     """
-    c = colors.HexColor(hexcolor)
+    newcol = color_to_reportlab(color)
     for a in ['red', 'green', 'blue']:
-        setattr(c, a, factor * getattr(c, a))
-    return c
+        setattr(newcol, a, factor * getattr(newcol, a))
+    return newcol
+
+
+def color_to_reportlab(color):
+    """Return the passed color in Reportlab Color format.
+
+    We allow colors to be specified as hex values, tuples, or Reportlab Color
+    objects, and with or without an alpha channel. This function acts as a
+    Rosetta stone for conversion of those formats to a Reportlab Color
+    object, with alpha value.
+
+    Any other color specification is returned directly
+    """
+    # Reportlab Color objects are in the format we want already
+    if isinstance(color, colors.Color):
+        return color
+    elif isinstance(color, str):  # String implies hex color
+        if color.startswith("0x"):  # Standardise to octothorpe
+            color.replace("0x", "#")
+        if len(color) == 7:
+            return colors.HexColor(color)
+        else:
+            try:
+                return colors.HexColor(color, hasAlpha=True)
+            except TypeError:  # Catch pre-2.7 Reportlab
+                raise RuntimeError("Your reportlab seems to be too old, try 2.7 onwards")
+    elif isinstance(color, tuple):  # Tuple implies RGB(alpha) tuple
+        return colors.Color(*color)
+    return color
 
 
 def get_temp_imagefilename(url):
-    """Returns filename of temporary file containing downloaded image.
+    """Return filename of temporary file containing downloaded image.
 
     Create a new temporary file to hold the image file at the passed URL
     and return the filename.
     """
     img = _urlopen(url).read()
-    im = Image.open(BtyesIO(img))
+    im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
     f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
     fname = f.name
@@ -62,12 +102,14 @@ class KGMLCanvas(object):
                  label_maps=True, show_maps=False, fontname='Helvetica',
                  fontsize=6, draw_relations=True, show_orthologs=True,
                  show_compounds=True, show_genes=True,
-                 margins=(0.02, 0.02)):
+                 show_reaction_entries=True, margins=(0.02, 0.02)):
+        """Initialize."""
         self.pathway = pathway
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs
         self.show_compounds = show_compounds
         self.show_genes = show_genes
+        self.show_reaction_entries = show_reaction_entries
         self.label_compounds = label_compounds
         self.label_orthologs = label_orthologs
         self.label_reaction_entries = label_reaction_entries
@@ -102,10 +144,8 @@ class KGMLCanvas(object):
         # Instantiate canvas
         self.drawing = \
             canvas.Canvas(filename, bottomup=0,
-                          pagesize=(cwidth *
-                                        (1 + 2 * self.margins[0]),
-                                    cheight *
-                                        (1 + 2 * self.margins[1])))
+                          pagesize=(cwidth * (1 + 2 * self.margins[0]),
+                                    cheight * (1 + 2 * self.margins[1])))
         self.drawing.setFont(self.fontname, self.fontsize)
         # Transform the canvas to add the margins
         self.drawing.translate(self.margins[0] * self.pathway.bounds[1][0],
@@ -122,7 +162,8 @@ class KGMLCanvas(object):
         # By default, they're slightly transparent.
         if self.show_maps:
             self.__add_maps()
-        self.__add_reaction_entries()
+        if self.show_reaction_entries:
+            self.__add_reaction_entries()
         if self.show_orthologs:
             self.__add_orthologs()
         if self.show_compounds:
@@ -136,7 +177,7 @@ class KGMLCanvas(object):
         self.drawing.save()
 
     def __add_maps(self):
-        """Adds maps to the drawing of the map.
+        """Add maps to the drawing of the map (PRIVATE).
 
         We do this first, as they're regional labels to be overlaid by
         information.  Also, we want to set the color to something subtle.
@@ -154,7 +195,7 @@ class KGMLCanvas(object):
                     self.__add_labels(g)
 
     def __add_graphics(self, graphics):
-        """Adds the passed graphics object to the map.
+        """Add the passed graphics object to the map (PRIVATE).
 
         Add text, add after the graphics object, for sane Z-ordering.
         """
@@ -176,7 +217,7 @@ class KGMLCanvas(object):
         # rectangle/roundrectangle, but Reportlab uses the co-ordinates of the
         # lower-left corner for rectangle/elif.
         if graphics.type == 'circle':
-            self.drawing.circle(graphics.x, graphics.y, graphics.width*0.5,
+            self.drawing.circle(graphics.x, graphics.y, graphics.width * 0.5,
                                 stroke=1, fill=1)
         elif graphics.type == 'roundrectangle':
             self.drawing.roundRect(graphics.x - graphics.width * 0.5,
@@ -191,7 +232,7 @@ class KGMLCanvas(object):
                               stroke=1, fill=1)
 
     def __add_labels(self, graphics):
-        """Adds labels for the passed graphics objects to the map (PRIVATE).
+        """Add labels for the passed graphics objects to the map (PRIVATE).
 
         We don't check that the labels fit inside objects such as circles/
         rectangles/roundrectangles.
@@ -226,49 +267,49 @@ class KGMLCanvas(object):
         self.drawing.setFont(self.fontname, self.fontsize)
 
     def __add_orthologs(self):
-        """Adds 'ortholog' Entry elements to the drawing of the map (PRIVATE).
+        """Add 'ortholog' Entry elements to the drawing of the map (PRIVATE).
 
         In KGML, these are typically line objects, so we render them
         before the compound circles to cover the unsightly ends/junctions.
         """
         for ortholog in self.pathway.orthologs:
             for g in ortholog.graphics:
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(g.bgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_orthologs:
                     # We want the label color to be slightly darker
                     # (where possible), so it can be read
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_reaction_entries(self):
-        """Adds Entry elements corresponding to Reactions to the map drawing (PRIVATE).
+        """Add Entry elements for Reactions to the map drawing (PRIVATE).
 
         In KGML, these are typically line objects, so we render them
         before the compound circles to cover the unsightly ends/junctions
         """
         for reaction in self.pathway.reaction_entries:
             for g in reaction.graphics:
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(g.bgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_reaction_entries:
                     # We want the label color to be slightly darker
                     # (where possible), so it can be read
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_compounds(self):
-        """Adds compound elements to the drawing of the map (PRIVATE)."""
+        """Add compound elements to the drawing of the map (PRIVATE)."""
         for compound in self.pathway.compounds:
             for g in compound.graphics:
                 # Modify transparency of compounds that don't participate
                 # in reactions
-                fillcolor = colors.HexColor(g.bgcolor)
+                fillcolor = color_to_reportlab(g.bgcolor)
                 if not compound.is_reactant:
                     fillcolor.alpha *= self.non_reactant_transparency
-                self.drawing.setStrokeColor(g.fgcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
                 self.drawing.setFillColor(fillcolor)
                 self.__add_graphics(g)
                 if self.label_compounds:
@@ -280,19 +321,18 @@ class KGMLCanvas(object):
                     self.__add_labels(g)
 
     def __add_genes(self):
-        """Adds gene elements to the drawing of the map (PRIVATE)."""
+        """Add gene elements to the drawing of the map (PRIVATE)."""
         for gene in self.pathway.genes:
             for g in gene.graphics:
-                fillcolor = colors.HexColor(g.bgcolor)
-                self.drawing.setStrokeColor(g.fgcolor)
-                self.drawing.setFillColor(fillcolor)
+                self.drawing.setStrokeColor(color_to_reportlab(g.fgcolor))
+                self.drawing.setFillColor(color_to_reportlab(g.bgcolor))
                 self.__add_graphics(g)
                 if self.label_compounds:
-                    self.drawing.setFillColor(hexdarken(g.fgcolor))
+                    self.drawing.setFillColor(darken(g.fgcolor))
                     self.__add_labels(g)
 
     def __add_relations(self):
-        """Adds relations to the map (PRIVATE).
+        """Add relations to the map (PRIVATE).
 
         This is tricky. There is no defined graphic in KGML for a
         relation, and the corresponding entries are typically defined
@@ -366,58 +406,3 @@ class KGMLCanvas(object):
         # print(bounds_from)
         # print(g_to)
         # print(bounds_to)
-
-
-if __name__ == '__main__':
-    # Test production of Reportlab Canvas PDF visualisation
-    # Try a default KO metabolic map with ortholog lines given
-    pathway = KGML_parser.read(open('ko01100.xml', 'rU'))
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    kgml_map.draw('KGML_canvas_test.pdf')
-
-    # Try a Dickeya metabolic map with ortholog lines, modifying reaction
-    # graphics
-    pathway = KGML_parser.read(open('ddc01100.xml', 'rU'))
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    # Set all reaction linewidths to 3 units
-    for r in pathway.reaction_entries:
-        for g in r.graphics:
-            g.width = 3
-    kgml_map.draw('KGML_canvas_ddc_test.pdf')
-
-    # Try a KO metabolic map with no ortholog lines, using a local .png
-    pathway = KGML_parser.read(open('ko_metabolic/ko00910.xml', 'rU'))
-    pathway.image = 'map/map00910.png'
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    kgml_map.import_imagemap = True
-    kgml_map.show_maps = False
-    kgml_map.draw('KGML_canvas_map_local_test.pdf')
-
-    # Try a KO metabolic map with no ortholog lines, using the KEGG .png
-    pathway = KGML_parser.read(open('ko_metabolic/ko00253.xml', 'rU'))
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    kgml_map.import_imagemap = True
-    kgml_map.show_maps = False
-    kgml_map.draw('KGML_canvas_map_test.pdf')
-
-    # Try a KO metabolic map with no ortholog lines using the KEGG .png,
-    # but this time using a Dickeya XML file
-    pathway = KGML_parser.read(open('dda00190.xml', 'rU'))
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    kgml_map.import_imagemap = True
-    kgml_map.show_maps = True
-    kgml_map.draw('KGML_canvas_dda_map_test.pdf')
-
-    # Try a KO metabolic map with no ortholog lines using the KEGG .png,
-    # but this time using a Dickeya XML file
-    pathway = KGML_parser.read(open('test_retrieve_ddc00190.kgml', 'rU'))
-    print(pathway)
-    kgml_map = KGMLCanvas(pathway)
-    kgml_map.import_imagemap = True
-    kgml_map.show_maps = True
-    kgml_map.draw('KGML_canvas_ddc_map_test.pdf')

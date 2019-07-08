@@ -1,0 +1,13 @@
+The file cyano.txt contains the gene expression data, after preprocessing and
+linear spline fitting, of a time-course cDNA microarray experiment of the
+cyanobacterium Synechocystis sp PCC 6803 under high light conditions.
+This experiment is described in
+Yukako Hihara, Ayako Kamei, Minoru Kanehisa, Aaron Kaplan, and Masahiko Ikeuchi:
+"DNA Microarray Analysis of Cyanobacterial Gene Expression during Acclimation to
+High Light", The Plant Cell, Volume 13, pp. 793-806, April 2001.
+The k-means clustering result applied to these data was published in
+M.J.L. de Hoon, S. Imoto, S. Miyano:
+"Statistical analysis of a small set of time-ordered gene expression data using
+linear splines", Bioinformatics, Volume 18, no. 11, pp. 1477-1485,
+November 2002.
+

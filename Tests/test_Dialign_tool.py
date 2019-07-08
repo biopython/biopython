@@ -15,7 +15,7 @@ from Bio.Align.Applications import DialignCommandline
 os.environ['LANG'] = 'C'
 
 dialign_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else:
     from Bio._py3k import getoutput
@@ -54,8 +54,7 @@ class DialignApplication(unittest.TestCase):
             os.remove(self.outfile2)
 
     def test_Dialign_simple(self):
-        """Simple round-trip through app with infile.
-        """
+        """Simple round-trip through app with infile."""
         # Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
         self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002")
@@ -65,8 +64,7 @@ class DialignApplication(unittest.TestCase):
         self.assertTrue(os.path.exists(self.outfile1))
 
     def test_Dialign_simple_with_options(self):
-        """Simple round-trip through app with infile and options
-        """
+        """Simple round-trip through app with infile and options."""
         cmdline = DialignCommandline(dialign_exe)
         cmdline.set_parameter("input", self.infile1)
         cmdline.set_parameter("-max_link", True)
@@ -79,8 +77,7 @@ class DialignApplication(unittest.TestCase):
         self.assertTrue(os.path.exists(self.outfile1))
 
     def test_Dialign_simple_with_MSF_output(self):
-        """Simple round-trip through app with infile, output MSF
-        """
+        """Simple round-trip through app with infile, output MSF."""
         cmdline = DialignCommandline(dialign_exe)
         # Test with properties
         cmdline.input = self.infile1

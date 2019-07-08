@@ -1,7 +1,9 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SearchIO parser for BLAST+ plain text output formats.
 
@@ -12,29 +14,23 @@ parser (which is now deprecated).
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
-    from Bio.Blast import NCBIStandalone
+from Bio.SearchIO._legacy import NCBIStandalone
 
 
-__all__ = ['BlastTextParser']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('BlastTextParser', )
 
 
 class BlastTextParser(object):
-
     """Parser for the BLAST text format."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         blast_parser = NCBIStandalone.BlastParser()
         self.blast_iter = NCBIStandalone.Iterator(handle, blast_parser)
 
     def __iter__(self):
+        """Iterate over BlastTextParser, yields query results."""
         for rec in self.blast_iter:
             # set attributes to SearchIO's
             # get id and desc
@@ -95,11 +91,11 @@ class BlastTextParser(object):
                             frag.hit_frame = 1
                     # set query coordinates
                     frag.query_start = min(bhsp.query_start,
-                            bhsp.query_end) - 1
+                                           bhsp.query_end) - 1
                     frag.query_end = max(bhsp.query_start, bhsp.query_end)
                     # set hit coordinates
                     frag.hit_start = min(bhsp.sbjct_start,
-                            bhsp.sbjct_end) - 1
+                                         bhsp.sbjct_end) - 1
                     frag.hit_end = max(bhsp.sbjct_start, bhsp.sbjct_end)
                     # set query, hit sequences and its annotation
                     qseq = ''

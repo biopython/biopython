@@ -1,10 +1,13 @@
 #!/usr/bin/env python
-"""Example of generating a substitution matrix from an alignment.
-"""
-# standard library
-from __future__ import print_function
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
-import sys
+"""Example of generating a substitution matrix from an alignment."""
+
+from __future__ import print_function
 
 # Biopython
 from Bio import SubsMat

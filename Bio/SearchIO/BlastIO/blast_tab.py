@@ -1,7 +1,9 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Bio.SearchIO parser for BLAST+ tab output format, with or without comments."""
 
@@ -14,9 +16,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter']
-
-__docformat__ = "restructuredtext en"
+__all__ = ('BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter')
 
 
 # longname-shortname map
@@ -69,10 +69,17 @@ _LONG_SHORT_MAP = {
     '% hsp coverage': 'qcovhsp',
 }
 
+
 # function to create a list from semicolon-delimited string
 # used in BlastTabParser._parse_result_row
-_list_semicol = lambda x: x.split(';')
-_list_diamond = lambda x: x.split('<>')
+def _list_semicol(s):
+    return s.split(';')
+
+
+def _list_diamond(s):
+    return s.split('<>')
+
+
 # column to class attribute map
 _COLUMN_QRESULT = {
     'qseqid': ('id', str),
@@ -133,11 +140,12 @@ _SUPPORTED_FIELDS = set(list(_COLUMN_QRESULT) + list(_COLUMN_HIT) +
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
 _DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch',
-        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
+                   'gapopen', 'qstart', 'qend', 'sstart', 'send',
+                   'evalue', 'bitscore']
 # one field from each of the following sets must exist in order for the
 # parser to work
-_MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
-_MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver', 'sallseqid'])
+_MIN_QUERY_FIELDS = {'qseqid', 'qacc', 'qaccver'}
+_MIN_HIT_FIELDS = {'sseqid', 'sacc', 'saccver', 'sallseqid'}
 
 # simple function to create BLAST HSP attributes that may be computed if
 # other certain attributes are present
@@ -147,7 +155,7 @@ _RE_GAPOPEN = re.compile(r'\w-')
 
 
 def _compute_gapopen_num(hsp):
-    """Returns the number of gap openings in the given HSP."""
+    """Return the number of gap openings in the given HSP (PRIVATE)."""
     gapopen = 0
     for seq_type in ('query', 'hit'):
         seq = str(getattr(hsp, seq_type).seq)
@@ -156,75 +164,68 @@ def _compute_gapopen_num(hsp):
 
 
 def _augment_blast_hsp(hsp, attr):
-    """Calculates the given HSP attribute, for writing."""
-    if attr == 'aln_span':
-        # aln_span is number of identical matches + mismatches + gaps
-        func = lambda hsp: hsp.ident_num + hsp.mismatch_num + hsp.gap_num
-    # ident and gap will require the num values to be computed first
-    elif attr.startswith('ident'):
-        func = lambda hsp: hsp.aln_span - hsp.mismatch_num - hsp.gap_num
-    elif attr.startswith('gap'):
-        func = lambda hsp: hsp.aln_span - hsp.ident_num - hsp.mismatch_num
-    elif attr == 'mismatch_num':
-        func = lambda hsp: hsp.aln_span - hsp.ident_num - hsp.gap_num
-    elif attr == 'gapopen_num':
-        if not hasattr(hsp, 'query') or not hasattr(hsp, 'hit'):
-            # mock function so that the except clause below is triggered
-            # as both the query and hit are required to compute gapopen
-            def mock(hsp):
-                raise AttributeError
-            func = mock
-        else:
-            func = _compute_gapopen_num
-
-    # set the num values
-    # requires the endswith check, since we only want to set 'num' or 'span'
-    # attributes here
+    """Calculate the given HSP attribute, for writing (PRIVATE)."""
     if not hasattr(hsp, attr) and not attr.endswith('_pct'):
-        value = func(hsp)
-        setattr(hsp, attr, value)
+
+        # aln_span is number of identical matches + mismatches + gaps
+        if attr == 'aln_span':
+            hsp.aln_span = hsp.ident_num + hsp.mismatch_num + hsp.gap_num
+
+        # ident and gap requires the num values to be computed first
+        elif attr.startswith('ident'):
+            setattr(hsp, attr, hsp.aln_span - hsp.mismatch_num - hsp.gap_num)
+        elif attr.startswith('gap'):
+            setattr(hsp, attr, hsp.aln_span - hsp.ident_num - hsp.mismatch_num)
+
+        elif attr == 'mismatch_num':
+            hsp.mistmatch_num = hsp.aln_span - hsp.ident_num - hsp.gap_num
+
+        elif attr == 'gapopen_num':
+            if not hasattr(hsp, 'query') or not hasattr(hsp, 'hit'):
+                raise AttributeError
+            hsp.gapopen_num = _compute_gapopen_num(hsp)
 
     # if the attr is a percent value, calculate it
     if attr == 'ident_pct':
-        func2 = lambda hsp: hsp.ident_num / float(hsp.aln_span) * 100
-    elif attr == 'pos_pct':
-        func = lambda hsp: hsp.pos_num / float(hsp.aln_span) * 100
-    elif attr == 'gap_pct':
-        func2 = lambda hsp: hsp.gap_num / float(hsp.aln_span) * 100
-    else:
-        func2 = None
+        hsp.ident_pct = hsp.ident_num / float(hsp.aln_span) * 100
 
-    # set the pct values
-    if func2 is not None:
-        value = func2(hsp)
-        setattr(hsp, attr, value)
+    elif attr == 'pos_pct':
+        hsp.pos_pct = hsp.pos_num / float(hsp.aln_span) * 100
+
+    elif attr == 'gap_pct':
+        hsp.gap_pct = hsp.gap_num / float(hsp.aln_span) * 100
 
 
 class BlastTabParser(object):
-
     """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = self._prep_fields(fields)
         self.line = self.handle.readline().strip()
 
     def __iter__(self):
+        """Iterate over BlastTabParser, yields query results."""
         # stop iteration if file has no lines
         if not self.line:
-            raise StopIteration
+            return
         # determine which iterator to use
         elif self.has_comments:
             iterfunc = self._parse_commented_qresult
         else:
+            if self.line.startswith("#"):
+                raise ValueError("Encountered unexpected character '#' at the"
+                                 " beginning of a line. Set comments=True if"
+                                 " the file is a commented file.")
             iterfunc = self._parse_qresult
 
         for qresult in iterfunc():
             yield qresult
 
     def _prep_fields(self, fields):
-        """Validates and formats the given fields for use by the parser."""
+        """Validate and format the given fields for use by the parser (PRIVATE)."""
         # cast into list if fields is a space-separated string
         if isinstance(fields, basestring):
             fields = fields.strip().split(' ')
@@ -232,7 +233,7 @@ class BlastTabParser(object):
         # we want to transform 'std' to its proper column names
         if 'std' in fields:
             idx = fields.index('std')
-            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx+1:]
+            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx + 1:]
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
         if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
@@ -242,7 +243,7 @@ class BlastTabParser(object):
         return fields
 
     def _parse_commented_qresult(self):
-        """Iterator returning `QueryResult` objects from a commented file."""
+        """Yield `QueryResult` objects from a commented file (PRIVATE)."""
         while True:
             comments = self._parse_comments()
             if comments:
@@ -266,7 +267,7 @@ class BlastTabParser(object):
                 break
 
     def _parse_comments(self):
-        """Returns a dictionary containing tab file comments."""
+        """Return a dictionary containing tab file comments (PRIVATE)."""
         comments = {}
         while True:
             # parse program and version
@@ -307,19 +308,19 @@ class BlastTabParser(object):
                 self.line = self.line.strip()
 
     def _parse_fields_line(self):
-        """Returns a list of column short names from the 'Fields'
-        comment line."""
+        """Return column short names line from 'Fields' comment line (PRIVATE)."""
         raw_field_str = self.line[len('# Fields: '):]
         long_fields = raw_field_str.split(', ')
         fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
         return self._prep_fields(fields)
 
     def _parse_result_row(self):
-        """Returns a dictionary of parsed row values."""
+        """Return a dictionary of parsed row values (PRIVATE)."""
         fields = self.fields
         columns = self.line.strip().split('\t')
-        assert len(fields) == len(columns), "Expected %i columns, found: " \
-            "%i" % (len(fields), len(columns))
+        if len(fields) != len(columns):
+            raise ValueError("Expected %i columns, found: "
+                             "%i" % (len(fields), len(columns)))
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
@@ -347,7 +348,7 @@ class BlastTabParser(object):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def _get_id(self, parsed):
-        """Returns the value used for a QueryResult or Hit ID from a parsed row."""
+        """Return the value used for a QueryResult or Hit ID from a parsed row (PRIVATE)."""
         # use 'id', with 'id_all', 'accession' and 'accession_version'
         # fallbacks one of these must have a value since we've checked whether
         # they exist or not when parsing the comments
@@ -362,7 +363,7 @@ class BlastTabParser(object):
         return id_cache
 
     def _parse_qresult(self):
-        """Generator function that returns QueryResult objects."""
+        """Yield QueryResult objects (PRIVATE)."""
         # state values, used to determine what to do with each line
         state_EOF = 0
         state_QRES_NEW = 1
@@ -373,6 +374,8 @@ class BlastTabParser(object):
         qres_state = None
         hit_state = None
         file_state = None
+        cur_qid = None
+        cur_hid = None
         # dummies for initial id caches
         prev_qid = None
         prev_hid = None
@@ -422,21 +425,21 @@ class BlastTabParser(object):
                     for seq_type in ('query', 'hit'):
                         if attr == seq_type + '_start':
                             value = min(value,
-                                    prev['frag'][seq_type + '_end']) - 1
+                                        prev['frag'][seq_type + '_end']) - 1
                         elif attr == seq_type + '_end':
                             value = max(value,
-                                    prev['frag'][seq_type + '_start'])
+                                        prev['frag'][seq_type + '_start'])
                     setattr(frag, attr, value)
                 # strand and frame setattr require the full parsed values
                 # to be set first
                 for seq_type in ('hit', 'query'):
                     # try to set hit and query frame
                     frame = self._get_frag_frame(frag, seq_type,
-                            prev['frag'])
+                                                 prev['frag'])
                     setattr(frag, '%s_frame' % seq_type, frame)
                     # try to set hit and query strand
                     strand = self._get_frag_strand(frag, seq_type,
-                            prev['frag'])
+                                                   prev['frag'])
                     setattr(frag, '%s_strand' % seq_type, strand)
 
                 hsp = HSP([frag])
@@ -471,8 +474,11 @@ class BlastTabParser(object):
             self.line = self.handle.readline().strip()
 
     def _get_frag_frame(self, frag, seq_type, parsedict):
-        """Returns `HSPFragment` frame given the object, its sequence type,
-        and its parsed dictionary values."""
+        """Return fragment frame for given object (PRIVATE).
+
+        Returns `HSPFragment` frame given the object, its sequence type,
+        and its parsed dictionary values.
+        """
         assert seq_type in ('query', 'hit')
         frame = getattr(frag, '%s_frame' % seq_type, None)
         if frame is not None:
@@ -485,8 +491,11 @@ class BlastTabParser(object):
             # else implicit None return
 
     def _get_frag_strand(self, frag, seq_type, parsedict):
-        """Returns `HSPFragment` strand given the object, its sequence type,
-        and its parsed dictionary values."""
+        """Return fragment strand for given object (PRIVATE).
+
+        Returns `HSPFragment` strand given the object, its sequence type,
+        and its parsed dictionary values.
+        """
         # NOTE: this will never set the strands as 0 for protein
         # queries / hits, since we can't detect the blast flavors
         # from the columns alone.
@@ -505,12 +514,12 @@ class BlastTabParser(object):
 
 
 class BlastTabIndexer(SearchIndexer):
-
     """Indexer class for BLAST+ tab output."""
 
     _parser = BlastTabParser
 
     def __init__(self, filename, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         SearchIndexer.__init__(self, filename, comments=comments, fields=fields)
 
         # if the file doesn't have comments,
@@ -524,10 +533,11 @@ class BlastTabIndexer(SearchIndexer):
                 self._key_idx = fields.index('qaccver')
             else:
                 raise ValueError("Custom fields is missing an ID column. "
-                        "One of these must be present: 'qseqid', 'qacc', or 'qaccver'.")
+                                 "One of these must be present: 'qseqid', "
+                                 "'qacc', or 'qaccver'.")
 
     def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
+        """Iterate over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
 
@@ -540,7 +550,7 @@ class BlastTabIndexer(SearchIndexer):
             yield _bytes_to_string(key), offset, length
 
     def _qresult_index_commented(self):
-        """Indexer for commented BLAST tabular files."""
+        """Indexer for commented BLAST tabular files (PRIVATE)."""
         handle = self._handle
         handle.seek(0)
         start_offset = 0
@@ -567,7 +577,7 @@ class BlastTabIndexer(SearchIndexer):
                 break
 
     def _qresult_index(self):
-        """Indexer for noncommented BLAST tabular files."""
+        """Indexer for noncommented BLAST tabular files (PRIVATE)."""
         handle = self._handle
         handle.seek(0)
         start_offset = 0
@@ -600,7 +610,7 @@ class BlastTabIndexer(SearchIndexer):
                 break
 
     def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
+        """Return the raw bytes string of a QueryResult object from the given offset."""
         if self._kwargs['comments']:
             getfunc = self._get_raw_qresult_commented
         else:
@@ -609,7 +619,7 @@ class BlastTabIndexer(SearchIndexer):
         return getfunc(offset)
 
     def _get_raw_qresult(self, offset):
-        """Returns the raw string of a single QueryResult from a noncommented file."""
+        """Return the raw bytes string of a single QueryResult from a noncommented file (PRIVATE)."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')
@@ -636,7 +646,7 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
     def _get_raw_qresult_commented(self, offset):
-        """Returns the raw string of a single QueryResult from a commented file."""
+        """Return the bytes raw string of a single QueryResult from a commented file (PRIVATE)."""
         handle = self._handle
         handle.seek(offset)
         qresult_raw = _as_bytes('')
@@ -662,16 +672,16 @@ class BlastTabIndexer(SearchIndexer):
 
 
 class BlastTabWriter(object):
-
     """Writer for blast-tab output format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
+        """Initialize the class."""
         self.handle = handle
         self.has_comments = comments
         self.fields = fields
 
     def write_file(self, qresults):
-        """Writes to the handle, returns how many QueryResult objects are written."""
+        """Write to the handle, return how many QueryResult objects were written."""
         handle = self.handle
         qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
@@ -697,8 +707,8 @@ class BlastTabWriter(object):
         return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_rows(self, qresult):
-        """Returns a string containing tabular rows of the QueryResult object."""
-        coordinates = set(['qstart', 'qend', 'sstart', 'send'])
+        """Return a string containing tabular rows of the QueryResult object (PRIVATE)."""
+        coordinates = {'qstart', 'qend', 'sstart', 'send'}
         qresult_lines = ''
         for hit in qresult:
             for hsp in hit:
@@ -745,7 +755,7 @@ class BlastTabWriter(object):
         return qresult_lines
 
     def _adjust_coords(self, field, value, hsp):
-        """Adjusts start and end coordinates according to strand."""
+        """Adjust start and end coordinates according to strand (PRIVATE)."""
         assert field in ('qstart', 'qend', 'sstart', 'send')
         # determine sequence type to operate on based on field's first letter
         seq_type = 'query' if field.startswith('q') else 'hit'
@@ -753,7 +763,7 @@ class BlastTabWriter(object):
         strand = getattr(hsp, '%s_strand' % seq_type, None)
         if strand is None:
             raise ValueError("Required attribute %r not found." %
-                    ('%s_strand' % (seq_type)))
+                             ('%s_strand' % (seq_type)))
         # switch start <--> end coordinates if strand is -1
         if strand < 0:
             if field.endswith('start'):
@@ -767,7 +777,7 @@ class BlastTabWriter(object):
         return value
 
     def _adjust_output(self, field, value):
-        """Adjusts formatting of the given field and value to mimic native tab output."""
+        """Adjust formatting of given field and value to mimic native tab output (PRIVATE)."""
         # qseq and sseq are stored as SeqRecord, but here we only need the str
         if field in ('qseq', 'sseq'):
             value = str(value.seq)
@@ -815,7 +825,7 @@ class BlastTabWriter(object):
 
         # list into ';'-delimited string
         elif field in ('sallseqid', 'sallacc', 'staxids', 'sscinames',
-                'scomnames', 'sblastnames', 'sskingdoms'):
+                       'scomnames', 'sblastnames', 'sskingdoms'):
             value = ';'.join(value)
 
         # everything else
@@ -825,11 +835,11 @@ class BlastTabWriter(object):
         return value
 
     def _build_comments(self, qres):
-        """Returns a string of a QueryResult tabular comment."""
+        """Return QueryResult tabular comment as a string (PRIVATE)."""
         comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
-        inv_field_map = dict((v, k) for k, v in _LONG_SHORT_MAP.items())
+        inv_field_map = {v: k for k, v in _LONG_SHORT_MAP.items()}
 
         # try to anticipate qress without version
         if not hasattr(qres, 'version'):

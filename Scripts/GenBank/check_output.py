@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright 2000 Brad Chapman.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Check for the ability to read and write identical GenBank records.
 
 This script takes as input a single file to be tested for reading records.
@@ -16,9 +21,9 @@ import os
 import gzip
 
 try:
-    from StringIO import StringIO # Python 2
+    from StringIO import StringIO  # Python 2
 except ImportError:
-    from io import StringIO # Python 3
+    from io import StringIO  # Python 3
 
 # biopython
 from Bio import GenBank
@@ -27,7 +32,7 @@ from Bio import GenBank
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
-    Ths compares the two GenBank record, and will raise an AssertionError
+    This compares the two GenBank record, and will raise an AssertionError
     if two lines do not match, showing the non-matching lines.
     """
     good_handle = StringIO(good_record)
@@ -49,11 +54,12 @@ def do_comparison(good_record, test_record):
                                      % good_line)
 
         assert test_line == good_line, \
-               "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
-               (good_line, test_line)
+            "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
+            (good_line, test_line)
 
 
 def write_format(file):
+    """Write a GenBank record from a Genbank file and compare them."""
     record_parser = GenBank.RecordParser(debug_level=2)
 
     print("Testing GenBank writing for %s..." % os.path.basename(file))
@@ -86,6 +92,7 @@ def write_format(file):
 
     cur_handle.close()
     compare_handle.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

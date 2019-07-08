@@ -1,0 +1,10 @@
+Query         2UVO:A|PDBID|CHAIN|SEQUENCE
+Match_columns 171
+No_of_seqs    1560 out of 4005
+Neff          8.3 
+Searched_HMMs 34
+Date          Fri Feb 15 16:34:13 2019
+Command       hhblits -i 2uvoAh.fasta -d /pdb70 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+ 

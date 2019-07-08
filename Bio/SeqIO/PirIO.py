@@ -1,12 +1,13 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 #
-# This module is for reading and writing PIR or NBRF format files as
-# SeqRecord objects.  The code is based on Bio.SeqIO.FastaIO
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "pir" (aka PIR or NBRF) file format.
+
+This module is for reading and writing PIR or NBRF format files as
+SeqRecord objects.
 
 You are expected to use this module via the Bio.SeqIO functions, or if
 the file contains a sequence alignment, optionally via Bio.AlignIO instead.
@@ -73,17 +74,17 @@ terminating in an asterisk.  Space separated blocks of ten letters as shown
 above are typical.
 
 Sequence codes and their meanings:
+ - P1 - Protein (complete)
+ - F1 - Protein (fragment)
+ - D1 - DNA (e.g. EMBOSS seqret output)
+ - DL - DNA (linear)
+ - DC - DNA (circular)
+ - RL - RNA (linear)
+ - RC - RNA (circular)
+ - N3 - tRNA
+ - N1 - Other functional RNA
+ - XX - Unknown
 
-  - P1 - Protein (complete)
-  - F1 - Protein (fragment)
-  - D1 - DNA (e.g. EMBOSS seqret output)
-  - DL - DNA (linear)
-  - DC - DNA (circular)
-  - RL - RNA (linear)
-  - RC - RNA (circular)
-  - N3 - tRNA
-  - N1 - Other functional RNA
-  - XX - Unknown
 """
 
 from __future__ import print_function
@@ -92,8 +93,8 @@ from Bio.Alphabet import single_letter_alphabet, generic_protein, \
     generic_dna, generic_rna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
-__docformat__ = "restructuredtext en"
 
 _pir_alphabets = {"P1": generic_protein,
                   "F1": generic_protein,
@@ -108,7 +109,7 @@ _pir_alphabets = {"P1": generic_protein,
 
 
 def PirIterator(handle):
-    """Generator function to iterate over Fasta records (as SeqRecord objects).
+    """Iterate over Fasta records as SeqRecord objects.
 
     handle - input file
     alphabet - optional alphabet
@@ -121,6 +122,19 @@ def PirIterator(handle):
 
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
+
+    Examples
+    --------
+    >>> with open("NBRF/DMB_prot.pir") as handle:
+    ...    for record in PirIterator(handle):
+    ...        print("%s length %i" % (record.id, len(record)))
+    HLA:HLA00489 length 263
+    HLA:HLA00490 length 94
+    HLA:HLA00491 length 94
+    HLA:HLA00492 length 80
+    HLA:HLA00493 length 175
+    HLA:HLA01083 length 188
+
     """
     # Skip any text before the first record (e.g. blank lines, comments)
     while True:
@@ -168,25 +182,111 @@ def PirIterator(handle):
 
         if not line:
             return  # StopIteration
-    assert False, "Should not reach this line"
+    raise ValueError("Unrecognised PIR record format.")
+
+
+class PirWriter(SequentialSequenceWriter):
+    """Class to write PIR format files."""
+
+    def __init__(self, handle, wrap=60, record2title=None, code=None):
+        """Create a PIR writer.
+
+        Arguments:
+         - handle - Handle to an output file, e.g. as returned
+           by open(filename, "w")
+         - wrap - Optional line length used to wrap sequence lines.
+           Defaults to wrapping the sequence at 60 characters
+           Use zero (or None) for no wrapping, giving a single
+           long line for the sequence.
+         - record2title - Optional function to return the text to be
+           used for the title line of each record.  By default
+           a combination of the record.id, record.name and
+           record.description is used.
+         - code - Optional sequence code must be one of P1, F1,
+           D1, DL, DC, RL, RC, N3 and XX. By default None is used,
+           which means auto detection based on record alphabet.
+
+        You can either use::
+
+            handle = open(filename, "w")
+            writer = PirWriter(handle)
+            writer.write_file(myRecords)
+            handle.close()
+
+        Or, follow the sequential file writer system, for example::
+
+            handle = open(filename, "w")
+            writer = PirWriter(handle)
+            writer.write_header() # does nothing for PIR files
+            ...
+            Multiple writer.write_record() and/or writer.write_records() calls
+            ...
+            writer.write_footer() # does nothing for PIR files
+            handle.close()
+
+        """
+        SequentialSequenceWriter.__init__(self, handle)
+        self.wrap = None
+        if wrap:
+            if wrap < 1:
+                raise ValueError
+        self.wrap = wrap
+        self.record2title = record2title
+        self.code = code
+
+    def write_record(self, record):
+        """Write a single PIR record to the file."""
+        assert self._header_written
+        assert not self._footer_written
+        self._record_written = True
+
+        if self.record2title:
+            title = self.clean(self.record2title(record))
+        else:
+            title = self.clean(record.id)
+
+        if record.name and record.description:
+            description = self.clean(record.name + " - " + record.description)
+        elif record.name and not record.description:
+            description = self.clean(record.name)
+        else:
+            description = self.clean(record.description)
+
+        if self.code:
+            code = self.code
+        else:
+            if isinstance(record.seq.alphabet, type(generic_protein)):
+                code = "P1"
+            elif isinstance(record.seq.alphabet, type(generic_dna)):
+                code = "D1"
+            elif isinstance(record.seq.alphabet, type(generic_rna)):
+                code = "RL"
+            else:
+                code = "XX"
+
+        if code not in _pir_alphabets:
+            raise TypeError("Sequence code must be one of " +
+                            _pir_alphabets.keys() + ".")
+        assert "\n" not in title
+        assert "\r" not in description
+
+        self.handle.write(">%s;%s\n%s\n" % (code, title, description))
+
+        data = self._get_seq_string(record)  # Catches sequence being None
+
+        assert "\n" not in data
+        assert "\r" not in data
+
+        if self.wrap:
+            line = ""
+            for i in range(0, len(data), self.wrap):
+                line += data[i:i + self.wrap] + "\n"
+            line = line[:-1] + "*\n"
+            self.handle.write(line)
+        else:
+            self.handle.write(data + "*\n")
+
 
 if __name__ == "__main__":
-    print("Running quick self test")
-
-    import os
-
-    for name in ["clustalw", "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"]:
-        print(name)
-        filename = "../../Tests/NBRF/%s.pir" % name
-        if not os.path.isfile(filename):
-            print("Missing %s" % filename)
-            continue
-
-        records = list(PirIterator(open(filename)))
-        count = 0
-        for record in records:
-            count += 1
-            parts = record.description.split()
-            if "bases," in parts:
-                assert len(record) == int(parts[parts.index("bases,") - 1])
-        print("Could read %s (%i records)" % (name, count))
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

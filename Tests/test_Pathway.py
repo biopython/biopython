@@ -1,9 +1,12 @@
 # Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.
+# Revisions copyright 2018 by Maximilian Greil. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 # python unittest framework
+"""Tests for Pathway module."""
+
 import unittest
 
 # modules to be tested
@@ -14,7 +17,7 @@ from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 class GraphTestCase(unittest.TestCase):
 
-    def testEquals(self):
+    def test_Equals(self):
         a = Graph(['a', 'b', 'c'])
         a.add_edge('a', 'b', 'label1')
         a.add_edge('b', 'c', 'label1')
@@ -34,7 +37,7 @@ class GraphTestCase(unittest.TestCase):
         self.assertNotEqual(c, Graph(), "equal to empty graph")
         self.assertEqual(Graph(), Graph(), "empty graph not equal to self")
 
-    def testNodes(self):
+    def test_Nodes(self):
         a = Graph()
         self.assertEqual(a.nodes(), [], "default graph not empty")
         a.add_node('a')
@@ -42,10 +45,9 @@ class GraphTestCase(unittest.TestCase):
         a.add_node('a')
         self.assertEqual(a.nodes(), ['a'], "duplicate node added")
         a.add_node('b')
-        l = sorted(a.nodes())
-        self.assertEqual(l, ['a', 'b'], "second node not added")
+        self.assertEqual(sorted(a.nodes()), ['a', 'b'], "second node not added")
 
-    def testEdges(self):
+    def test_Edges(self):
         a = Graph(['a', 'b', 'c', 'd'])
         a.add_edge('a', 'b', 'label1')
         self.assertEqual(a.child_edges('a'), [('b', 'label1')])  # , "incorrect child edges")
@@ -53,12 +55,11 @@ class GraphTestCase(unittest.TestCase):
         self.assertEqual(a.parent_edges('a'), [('b', 'label2')])  # , "incorrect parent edges")
         a.add_edge('b', 'c', 'label3')
         self.assertEqual(a.parent_edges('c'), [('b', 'label3')])  # , "incorrect parent edges")
-        l = sorted(a.children('b'))
-        self.assertEqual(l, ['a', 'c'], "incorrect children")
+        self.assertEqual(sorted(a.children('b')), ['a', 'c'], "incorrect children")
         self.assertEqual(a.children('d'), [], "incorrect children for singleton")
         self.assertEqual(a.parents('a'), ['b'], "incorrect parents")
 
-    def testRemoveNode(self):
+    def test_RemoveNode(self):
         a = Graph(['a', 'b', 'c', 'd', 'e'])
         a.add_edge('a', 'e', 'label1')
         a.add_edge('b', 'e', 'label1')
@@ -71,10 +72,22 @@ class GraphTestCase(unittest.TestCase):
         b.add_edge('a', 'b', 'label5')
         self.assertEqual(a, b)  # , "incorrect node removal")
 
+    def testAdditionalFunctions(self):
+        a = Graph(['a', 'b', 'c'])
+        a.add_edge('a', 'b', 'label1')
+        a.add_edge('b', 'c', 'label1')
+        a.add_edge('b', 'a', 'label2')
+        self.assertTrue(
+            str(a) == "<Graph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertTrue(
+            repr(a) == "<Graph: ('a': ('b', 'label1'))('b': ('a', 'label2'),('c', 'label1'))('c': )>")
+        self.assertListEqual(a.edges('label1'), [('a', 'b'), ('b', 'c')])
+        self.assertListEqual(a.labels(), ['label1', 'label2'])
+
 
 class MultiGraphTestCase(unittest.TestCase):
 
-    def testEquals(self):
+    def test_Equals(self):
         a = MultiGraph(['a', 'b', 'c'])
         a.add_edge('a', 'b', 'label1')
         a.add_edge('b', 'c', 'label1')
@@ -94,7 +107,7 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertNotEqual(c, MultiGraph(), "equal to empty graph")
         self.assertEqual(MultiGraph(), MultiGraph(), "empty graph not equal to self")
 
-    def testNodes(self):
+    def test_Nodes(self):
         a = MultiGraph()
         self.assertEqual(a.nodes(), [], "default graph not empty")
         a.add_node('a')
@@ -102,27 +115,26 @@ class MultiGraphTestCase(unittest.TestCase):
         a.add_node('a')
         self.assertEqual(a.nodes(), ['a'], "duplicate node added")
         a.add_node('b')
-        l = sorted(a.nodes())
-        self.assertEqual(l, ['a', 'b'], "second node not added")
+        self.assertEqual(sorted(a.nodes()), ['a', 'b'], "second node not added")
 
-    def testEdges(self):
+    def test_Edges(self):
         a = MultiGraph(['a', 'b', 'c', 'd'])
         a.add_edge('a', 'b', 'label1')
         self.assertEqual(a.child_edges('a'), [('b', 'label1')])  # , "incorrect child edges")
         a.add_edge('a', 'b', 'label2')
-        l = sorted(a.child_edges('a'))
-        self.assertEqual(l, [('b', 'label1'), ('b', 'label2')])  # , "incorrect child edges")
+        self.assertEqual(sorted(a.child_edges('a')),
+                         [('b', 'label1'), ('b', 'label2')])  # , "incorrect child edges")
         a.add_edge('b', 'a', 'label2')
         self.assertEqual(a.parent_edges('a'), [('b', 'label2')])  # , "incorrect parent edges")
         a.add_edge('b', 'c', 'label3')
         self.assertEqual(a.parent_edges('c'), [('b', 'label3')])  # , "incorrect parent edges")
-        l = a.children('b')
-        l.sort()
-        self.assertEqual(l, ['a', 'c'], "incorrect children")
+        children = a.children('b')
+        children.sort()
+        self.assertEqual(children, ['a', 'c'], "incorrect children")
         self.assertEqual(a.children('d'), [], "incorrect children for singleton")
         self.assertEqual(a.parents('a'), ['b'], "incorrect parents")
 
-    def testRemoveNode(self):
+    def test_RemoveNode(self):
         a = MultiGraph(['a', 'b', 'c', 'd', 'e'])
         a.add_edge('a', 'e', 'label1')
         self.assertEqual(repr(a), "<MultiGraph: ('a': ('e', 'label1'))('b': )('c': )('d': )('e': )>")
@@ -140,6 +152,16 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)  # , "incorrect node removal")
 
+    def testAdditionalFunctions(self):
+        a = MultiGraph(['a', 'b', 'c'])
+        a.add_edge('a', 'b', 'label1')
+        a.add_edge('b', 'c', 'label1')
+        a.add_edge('b', 'a', 'label2')
+        self.assertTrue(
+            str(a) == "<MultiGraph: 3 node(s), 3 edge(s), 2 unique label(s)>")
+        self.assertListEqual(a.edges('label1'), [('a', 'b'), ('b', 'c')])
+        self.assertListEqual(a.labels(), ['label1', 'label2'])
+
 
 class ReactionTestCase(unittest.TestCase):
 
@@ -153,18 +175,18 @@ class ReactionTestCase(unittest.TestCase):
         self.r_3 = Reaction({"a": -1, "d": 2})
         self.r_4 = Reaction({"c": -1, "d": -1, "a": 1, "e": 2})
 
-    def testEq(self):
+    def test_eq(self):
         self.assertEqual(self.r_1, self.r_1i)  # , "not equal to similar")
         self.assertNotEqual(self.r_3, self.r_4)  # , "equal to different")
 
-    def testRev(self):
+    def test_rev(self):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
         self.assertEqual(self.r_prod.reverse(), self.r_dest,
-                          "reversed reaction not equal to similar")
+                         "reversed reaction not equal to similar")
         self.assertEqual(self.r_4.reverse(), Reaction({"c": 1, "d": 1, "a": -1, "e": -2}),
                          "reversed reaction not equal to similar")
         self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
-                          "double reversal not identity")
+                         "double reversal not identity")
 
 
 if __name__ == "__main__":

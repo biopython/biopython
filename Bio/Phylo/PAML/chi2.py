@@ -7,11 +7,16 @@
 # written by Ziheng Yang and included in the PAML software package:
 # http://abacus.gene.ucl.ac.uk/software/paml.html
 
+"""Methods to calculate p-values from a Chi-squared cumulative distribution function.
+
+for likelihood ratio tests.
+"""
+
 from math import log, exp
 
-__docformat__ = "restructuredtext en"
 
 def cdf_chi2(df, stat):
+    """Compute p-value, from distribution function and test statistics."""
     if df < 1:
         raise ValueError("df must be at least 1")
     if stat < 0:
@@ -23,7 +28,7 @@ def cdf_chi2(df, stat):
 
 
 def _ln_gamma_function(alpha):
-    """Compute the log of the gamma function for a given alpha.
+    """Compute the log of the gamma function for a given alpha (PRIVATE).
 
     Comments from Z. Yang:
     Returns ln(gamma(alpha)) for alpha>0, accurate to 10 decimal places.
@@ -38,19 +43,19 @@ def _ln_gamma_function(alpha):
     if x < 7:
         f = 1
         z = x
-        while z<7:
+        while z < 7:
             f *= z
             z += 1
         x = z
         f = -log(f)
     z = 1 / (x * x)
-    return f + (x-0.5)*log(x) - x + .918938533204673             \
-          + (((-.000595238095238*z+.000793650793651)*z-.002777777777778)*z
-               +.083333333333333)/x
+    return (f + (x - 0.5) * log(x) - x + .918938533204673
+            + (((-.000595238095238 * z + .000793650793651) * z - .002777777777778) * z
+            + .083333333333333) / x)
 
 
 def _incomplete_gamma(x, alpha):
-    """Compute an incomplete gamma ratio.
+    """Compute an incomplete gamma ratio (PRIVATE).
 
     Comments from Z. Yang::
 
@@ -63,7 +68,7 @@ def _incomplete_gamma(x, alpha):
         RATNEST FORTRAN by
         Bhattacharjee GP (1970) The incomplete gamma integral.  Applied Statistics,
         19: 285-287 (AS32)
-        
+
     """
     p = alpha
     g = _ln_gamma_function(alpha)
@@ -80,17 +85,17 @@ def _incomplete_gamma(x, alpha):
         return 0
     if x < 0 or p <= 0:
         return -1
-    factor = exp(p*log(x)-x-g)
+    factor = exp(p * log(x) - x - g)
     if x > 1 and x >= p:
         a = 1 - p
         b = a + x + 1
         term = 0
-        pn = [1, x, x+1, x*b, None, None]
+        pn = [1, x, x + 1, x * b, None, None]
         gin = pn[2] / pn[3]
     else:
-        gin=1
-        term=1
-        rn=p
+        gin = 1
+        term = 1
+        rn = p
         while term > accurate:
             rn += 1
             term *= x / rn
@@ -108,11 +113,11 @@ def _incomplete_gamma(x, alpha):
             rn = pn[4] / pn[5]
             dif = abs(gin - rn)
             if dif > accurate:
-                gin=rn
-            elif dif <= accurate*rn:
+                gin = rn
+            elif dif <= accurate * rn:
                 break
         for i in range(4):
-            pn[i] = pn[i+2]
+            pn[i] = pn[i + 2]
         if abs(pn[4]) < overflow:
             continue
         for i in range(4):

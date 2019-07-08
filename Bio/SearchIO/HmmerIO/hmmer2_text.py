@@ -1,8 +1,8 @@
-# Copyright 2012 by Kai Blin.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2012 by Kai Blin.  All rights reserved.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO parser for HMMER 2 text output."""
 
 import re
@@ -14,9 +14,8 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
+__all__ = ('Hmmer2TextParser', 'Hmmer2TextIndexer')
 
-__docformat__ = "restructuredtext en"
 
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
 
@@ -37,11 +36,13 @@ class Hmmer2TextParser(object):
     """Iterator for the HMMER 2.0 text output."""
 
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self.buf = []
         self._meta = self.parse_preamble()
 
     def __iter__(self):
+        """Iterate over Hmmer2TextParser, yields query results."""
         for qresult in self.parse_qresult():
             qresult.program = self._meta.get('program')
             qresult.target = self._meta.get('target')
@@ -49,7 +50,7 @@ class Hmmer2TextParser(object):
             yield qresult
 
     def read_next(self, rstrip=True):
-        """Return the next non-empty line, trailing whitespace removed"""
+        """Return the next non-empty line, trailing whitespace removed."""
         if len(self.buf) > 0:
             return self.buf.pop()
         self.line = self.handle.readline()
@@ -61,11 +62,11 @@ class Hmmer2TextParser(object):
         return self.line
 
     def push_back(self, line):
-        """Un-read a line that should not be parsed yet"""
+        """Un-read a line that should not be parsed yet."""
         self.buf.append(line)
 
     def parse_key_value(self):
-        """Parse key-value pair separated by colon (:)"""
+        """Parse key-value pair separated by colon."""
         key, value = self.line.split(':', 1)
         return key.strip(), value.strip()
 
@@ -108,7 +109,7 @@ class Hmmer2TextParser(object):
         """Parse a HMMER2 query block."""
         while self.read_next():
             if not self.line.startswith('Query'):
-                raise StopIteration()
+                return
             _, id_ = self.parse_key_value()
             self.qresult = QueryResult(id=id_)
 
@@ -137,7 +138,6 @@ class Hmmer2TextParser(object):
 
     def parse_hits(self):
         """Parse a HMMER2 hit block, beginning with the hit table."""
-
         hit_placeholders = []
         while self.read_next():
             if self.line.startswith('Parsed'):
@@ -182,8 +182,8 @@ class Hmmer2TextParser(object):
                self.line.startswith('--------'):
                 continue
 
-            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl, \
-            score, evalue = self.line.split()
+            id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
+                score, evalue = self.line.split()
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
@@ -244,7 +244,7 @@ class Hmmer2TextParser(object):
             if hit.domain_obs_num != num:
                 continue
 
-            frag = hit[idx-1][0]
+            frag = hit[idx - 1][0]
 
             hmmseq = ''
             consensus = ''
@@ -260,22 +260,18 @@ class Hmmer2TextParser(object):
                         break
 
                 # skip the *-> start marker if it exists
-                if self.line[19] == '*':
+                if self.line[19:22] == '*->':
                     seq = self.line[22:]
                     pad = 3
                 else:
                     seq = self.line[19:]
                     pad = 0
 
-                # get rid of the end marker
-                if seq.endswith('<-*'):
-                    seq = seq[:-3]
-
                 hmmseq += seq
                 line_len = len(seq)
                 if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19+pad:19+pad+line_len]
+                consensus += self.line[19 + pad:19 + pad + line_len]
                 # If there's no consensus sequence, hmmer2 doesn't
                 # bother to put spaces here, so add extra padding
                 extra_padding = len(hmmseq) - len(consensus)
@@ -283,9 +279,21 @@ class Hmmer2TextParser(object):
 
                 if not self.read_next():
                     break
-                otherseq += self.line[19:].split()[0].strip()
+
+                # if we have a line break in the end marker, we get a
+                # whitespace-only otherseq line, making split()[0] return
+                # the end coordinate. That'll be a -, which is a valid character
+                # in the sequence, meaning we can't just strip it.
+                parts = self.line[19:].split()
+                if len(parts) == 2:
+                    otherseq += self.line[19:].split()[0].strip()
 
             self.push_back(self.line)
+
+            # get rid of the end marker
+            if hmmseq.endswith('<-*'):
+                hmmseq = hmmseq[:-3]
+                consensus = consensus[:-3]
 
             # add similarity sequence to annotation
             frag.aln_annotation['similarity'] = consensus
@@ -303,7 +311,6 @@ class Hmmer2TextParser(object):
 
 
 class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
-
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
@@ -313,6 +320,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     qresult_end = _as_bytes('//')
 
     def __iter__(self):
+        """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
@@ -343,6 +351,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
                 break
 
             line = read_forward(handle)
+
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

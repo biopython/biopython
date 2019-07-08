@@ -34,22 +34,58 @@ Try something like this:
 
 %not a doctest to avoid temp files being left behind, also no >>>
 %makes it easier to copy and paste the example to a script file.
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
+
 input_file = "big_file.sff"
 id_file = "short_list.txt"
 output_file = "short_list.sff"
-wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
+
+with open(id_file) as id_handle:
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
 print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
 records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
 count = SeqIO.write(records, output_file, "sff")
 print("Saved %i records from %s to %s" % (count, input_file, output_file))
 if count < len(wanted):
-    print("Warning %i IDs not found in %s" % (len(wanted)-count, input_file))
-\end{verbatim}
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
+\end{minted}
 
 Note that we use a Python \verb|set| rather than a \verb|list|, this makes
 testing membership faster.
+
+As discussed in Section~\ref{sec:low-level-fasta-fastq}, for a large FASTA
+or FASTQ file for speed you would be better off not using the high-level
+\verb|SeqIO| interface, but working directly with strings. This next
+example shows how to do this with FASTQ files -- it is more complicated:
+
+%not a doctest to avoid temp files being left behind, also no >>>
+%makes it easier to copy and paste the example to a script file.
+\begin{minted}{python}
+from Bio.SeqIO.QualityIO import FastqGeneralIterator
+
+input_file = "big_file.fastq"
+id_file = "short_list.txt"
+output_file = "short_list.fastq"
+
+with open(id_file) as id_handle:
+    # Taking first word on each line as an identifer
+    wanted = set(line.rstrip("\n").split(None,1)[0] for line in id_handle)
+print("Found %i unique identifiers in %s" % (len(wanted), id_file))
+
+with open(input_file) as in_handle:
+    with open(output_file, "w") as out_handle:
+        for title, seq, qual in FastqGeneralIterator(in_handle):
+            # The ID is the first word in the title line (after the @ sign):
+            if title.split(None, 1)[0] in wanted:
+                # This produces a standard 4-line FASTQ entry:
+                out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
+                count += 1
+print("Saved %i records from %s to %s" % (count, input_file, output_file))
+if count < len(wanted):
+    print("Warning %i IDs not found in %s" % (len(wanted) - count, input_file))
+\end{minted}
 
 \subsection{Producing randomised genomes}
 
@@ -63,16 +99,16 @@ there just by chance).
 For this discussion, we'll use the GenBank file for the pPCP1 plasmid from
 \textit{Yersinia pestis biovar Microtus}.  The file is included with the
 Biopython unit tests under the GenBank folder, or you can get it from our
-website, \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
+website, \href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.gb}
 {\texttt{NC\_005816.gb}}.
 This file contains one and only one record, so we can read it in as a
 \verb|SeqRecord| using the \verb|Bio.SeqIO.read()| function:
 
 %doctest ../Tests/GenBank
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> original_rec = SeqIO.read("NC_005816.gb", "genbank")
-\end{verbatim}
+\end{minted}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
 use the built in Python \verb|random| module for this, in particular the function
@@ -80,11 +116,11 @@ use the built in Python \verb|random| module for this, in particular the functio
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> import random
 >>> nuc_list = list(original_rec.seq)
->>> random.shuffle(nuc_list) #acts in situ!
-\end{verbatim}
+>>> random.shuffle(nuc_list)  # acts in situ!
+\end{minted}
 
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
 to construct a new \verb|SeqRecord| with a new \verb|Seq| object using this
@@ -93,12 +129,13 @@ shuffled list.  In order to do this, we need to turn the list of nucleotides
 this is with the string object's join method.
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
 >>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
 ...                          id="Shuffled", description="Based on %s" % original_rec.id)
-\end{verbatim}
+...
+\end{minted}
 
 Let's put all these pieces together to make a complete Python script which
 generates a single FASTA file containing 30 randomly shuffled versions of
@@ -108,7 +145,7 @@ This first version just uses a big for loop and writes out the records one by on
 (using the \verb|SeqRecord|'s format method described in
 Section~\ref{sec:Bio.SeqIO-and-StringIO}):
 
-\begin{verbatim}
+\begin{minted}{python}
 import random
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -116,21 +153,20 @@ from Bio import SeqIO
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
 
-handle = open("shuffled.fasta", "w")
-for i in range(30):
-    nuc_list = list(original_rec.seq)
-    random.shuffle(nuc_list)
-    shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
-                             id="Shuffled%i" % (i+1), \
-                             description="Based on %s" % original_rec.id)
-    handle.write(shuffled_rec.format("fasta"))
-handle.close()
-\end{verbatim}
+with open("shuffled.fasta", "w") as output_handle:
+    for i in range(30):
+        nuc_list = list(original_rec.seq)
+        random.shuffle(nuc_list)
+        shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
+                                 id="Shuffled%i" % (i+1),
+                                 description="Based on %s" % original_rec.id)
+        out_handle.write(shuffled_rec.format("fasta"))
+\end{minted}
 
 Personally I prefer the following version using a function to shuffle the record
 and a generator expression instead of the for loop:
 
-\begin{verbatim}
+\begin{minted}{python}
 import random
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -139,16 +175,14 @@ from Bio import SeqIO
 def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
-    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
-           id=new_id, description="Based on %s" % original_rec.id)
+    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet),
+                     id=new_id, description="Based on %s" % original_rec.id)
 
 original_rec = SeqIO.read("NC_005816.gb","genbank")
-shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1)) \
+shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1))
                  for i in range(30))
-handle = open("shuffled.fasta", "w")
-SeqIO.write(shuffled_recs, handle, "fasta")
-handle.close()
-\end{verbatim}
+SeqIO.write(shuffled_recs, "shuffled.fasta", "fasta")
+\end{minted}
 
 \subsection{Translating a FASTA file of CDS entries}
 \label{sec:SeqIO-translate}
@@ -168,25 +202,25 @@ You can write you own function to do this, choosing suitable protein identifiers
 for your sequences, and the appropriate genetic code.  In this example we just
 use the default table and add a prefix to the identifier:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.SeqRecord import SeqRecord
 def make_protein_record(nuc_record):
     """Returns a new SeqRecord with the translated sequence (default table)."""
     return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
                      id = "trans_" + nuc_record.id, \
                      description = "translation of CDS, using default table")
-\end{verbatim}
+\end{minted}
 
 We can then use this function to turn the input nucleotide records into protein
 records ready for output.  An elegant way and memory efficient way to do this
 is with a generator expression:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 proteins = (make_protein_record(nuc_rec) for nuc_rec in \
             SeqIO.parse("coding_sequences.fasta", "fasta"))
 SeqIO.write(proteins, "translations.fasta", "fasta")
-\end{verbatim}
+\end{minted}
 
 This should work on any FASTA file of complete coding sequences.
 If you are working on partial coding sequences, you may prefer to use
@@ -202,12 +236,12 @@ important. You may want to edit the file to make everything consistent (e.g.
 all upper case), and you can do this easily using the \verb|upper()| method
 of the \verb|SeqRecord| object (added in Biopython 1.55):
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 records = (rec.upper() for rec in SeqIO.parse("mixed.fas", "fasta"))
 count = SeqIO.write(records, "upper.fas", "fasta")
 print("Converted %i records to upper case" % count)
-\end{verbatim}
+\end{minted}
 
 How does this work? The first line is just importing the \verb|Bio.SeqIO|
 module. The second line is the interesting bit -- this is a Python
@@ -231,24 +265,24 @@ FASTA or FASTQ which \verb|Bio.SeqIO| can read, write (and index).
 If the file is small enough, you can load it all into memory at once
 as a list of \verb|SeqRecord| objects, sort the list, and save it:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(x),len(y)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
-\end{verbatim}
+\end{minted}
 
-The only clever bit is specifying a comparison function for how to
+The only clever bit is specifying a comparison method for how to
 sort the records (here we sort them by length). If you wanted the
 longest records first, you could flip the comparison or use the
 reverse argument:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
-records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
-records.sort(cmp=lambda x,y: cmp(len(y),len(x)))
+records = list(SeqIO.parse("ls_orchid.fasta", "fasta"))
+records.sort(key=lambda r: -len(r))
 SeqIO.write(records, "sorted_orchids.fasta", "fasta")
-\end{verbatim}
+\end{minted}
 
 Now that's pretty straight forward - but what happens if you have a
 very large file and you can't load it all into memory like this?
@@ -256,17 +290,17 @@ For example, you might have some next-generation sequencing reads
 to sort by length. This can be solved using the
 \verb|Bio.SeqIO.index()| function.
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
-#Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+# Get the lengths and ids, and sort on length
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
-del len_and_ids	#free this memory
+del len_and_ids  # free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
 records = (record_index[id] for id in ids)
 SeqIO.write(records, "sorted.fasta", "fasta")
-\end{verbatim}
+\end{minted}
 
 First we scan through the file once using \verb|Bio.SeqIO.parse()|,
 recording the record identifiers and their lengths in a list of tuples.
@@ -282,22 +316,45 @@ support, like the plain text SwissProt format? Here is an alternative
 solution using the \verb|get_raw()| method added to \verb|Bio.SeqIO.index()|
 in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
-#Get the lengths and ids, and sort on length
-len_and_ids = sorted((len(rec), rec.id) for rec in \
-                     SeqIO.parse("ls_orchid.fasta","fasta"))
+
+# Get the lengths and ids, and sort on length
+len_and_ids = sorted((len(rec), rec.id) for rec in
+                     SeqIO.parse("ls_orchid.fasta", "fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
-del len_and_ids	#free this memory
+del len_and_ids  # free this memory
+
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
-handle = open("sorted.fasta", "w")
-for id in ids:
-    handle.write(record_index.get_raw(id))
-handle.close()
-\end{verbatim}
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
+\end{minted}
+
+Note with Python 3 onwards, we have to open the file for writing in
+binary mode because the \verb|get_raw()| method returns bytes strings.
 
 As a bonus, because it doesn't parse the data into \verb|SeqRecord| objects
-a second time it should be faster.
+a second time it should be faster. If you only want to use this with FASTA
+format, we can speed this up one step further by using the low-level FASTA
+parser to get the record identifiers and lengths:
+
+\begin{minted}{python}
+from Bio.SeqIO.FastaIO import SimpleFastaParser
+from Bio import SeqIO
+
+# Get the lengths and ids, and sort on length
+with open("ls_orchid.fasta") as in_handle:
+    len_and_ids = sorted((len(seq), title.split(None, 1)[0]) for
+                         title, seq in SimpleFastaParser(in_handle))
+ids = reversed([id for (length, id) in len_and_ids])
+del len_and_ids  # free this memory
+
+record_index = SeqIO.index("ls_orchid.fasta", "fasta")
+with open("sorted.fasta", "wb") as out_handle:
+    for id in ids:
+        out_handle.write(record_index.get_raw(id))
+\end{minted}
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
@@ -322,28 +379,28 @@ read archive,
 \url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}
 (2MB) which unzips to a 19MB file \texttt{SRR020192.fastq}. This is some
 Roche 454 GS FLX single end data from virus infected California sea lions
-(see \url{http://www.ebi.ac.uk/ena/data/view/SRS004476} for details).
+(see \url{https://www.ebi.ac.uk/ena/data/view/SRS004476} for details).
 
 First, let's count the reads:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 count = 0
 for rec in SeqIO.parse("SRR020192.fastq", "fastq"):
     count += 1
 print("%i reads" % count)
-\end{verbatim}
+\end{minted}
 
 \noindent Now let's do a simple filtering for a minimum PHRED quality of 20:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 good_reads = (rec for rec in \
               SeqIO.parse("SRR020192.fastq", "fastq") \
               if min(rec.letter_annotations["phred_quality"]) >= 20)
 count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 \noindent This pulled out only $14580$ reads out of the $41892$ present.
 A more sensible thing to do would be to quality trim the reads, but this
@@ -354,6 +411,10 @@ them all into memory at once.  This example uses a generator expression, which
 means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
 
+Note that it would be faster to use the low-level \verb|FastqGeneralIterator|
+parser here (see Section~\ref{sec:low-level-fasta-fastq}), but that does not
+turn the quality string into integer scores.
+
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
@@ -361,20 +422,24 @@ For this example we're going to pretend that \texttt{GATGACGGTGT} is a 5' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
 above, we'll use the \texttt{SRR020192.fastq} file downloaded from the ENA
 (\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
-The same approach would work with any other supported file format (e.g. FASTA files).
+
+By using the main \verb|Bio.SeqIO| interface, the same approach would work with
+any other supported file format (e.g. FASTA files). However, for large FASTQ
+files it would be faster the low-level \verb|FastqGeneralIterator| parser here
+(see the earlier example, and Section~\ref{sec:low-level-fasta-fastq}).
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
 all the sequences into memory at once), and the \verb|Seq| object's
 \verb|startswith| method to see if the read starts with the primer sequence:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 primer_reads = (rec for rec in \
                 SeqIO.parse("SRR020192.fastq", "fastq") \
                 if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 \noindent That should find $13819$ reads from \texttt{SRR014849.fastq} and save them to
 a new FASTQ file, \texttt{with\_primer.fastq}.
@@ -384,25 +449,25 @@ but with the primer sequence removed?  That's just a small change as we can slic
 \verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first eleven
 letters (the length of our primer):
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 trimmed_primer_reads = (rec[11:] for rec in \
                         SeqIO.parse("SRR020192.fastq", "fastq") \
                         if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 \noindent Again, that should pull out the $13819$ reads from \texttt{SRR020192.fastq},
 but this time strip off the first ten characters, and save them to another new
 FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
-Finally, suppose you want to create a new FASTQ file where these reads have
+Now, suppose you want to create a new FASTQ file where these reads have
 their primer removed, but all the other reads are kept as they were?
 If we want to still use a generator expression, it is probably clearest to
 define our own trim function:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 def trim_primer(record, primer):
     if record.seq.startswith(primer):
@@ -414,14 +479,14 @@ trimmed_reads = (trim_primer(record, "GATGACGGTGT") for record in \
                  SeqIO.parse("SRR020192.fastq", "fastq"))
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 This takes longer, as this time the output file contains all $41892$ reads.
 Again, we're used a generator expression to avoid any memory problems.
 You could alternatively use a generator function rather than a generator
 expression.
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 def trim_primers(records, primer):
     """Removes perfect primer sequences at start of reads.
@@ -440,7 +505,7 @@ original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_primers(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 This form is more flexible if you want to do something more complicated
 where only some of the records are retained -- as shown in the next example.
@@ -456,7 +521,7 @@ formatted read data, again the \texttt{SRR020192.fastq} file from the NCBI
 This time however, we will look for the sequence \emph{anywhere} in the reads,
 not just at the very beginning:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 
 def trim_adaptors(records, adaptor):
@@ -479,7 +544,7 @@ original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 Because we are using a FASTQ input file in this example, the \verb|SeqRecord|
 objects have per-letter-annotation for the quality scores. By slicing the
@@ -492,7 +557,7 @@ trimmed reads are quite short after trimming (e.g. if the adaptor was
 found in the middle rather than near the start). So, let's add a minimum
 length requirement as well:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 
 def trim_adaptors(records, adaptor, min_len):
@@ -519,7 +584,7 @@ original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT", 100)
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print("Saved %i reads" % count)
-\end{verbatim}
+\end{minted}
 
 By changing the format names, you could apply this to FASTA files instead.
 This code also could be extended to do a fuzzy match instead of an exact
@@ -584,19 +649,19 @@ in the \verb|Bio.SeqIO.QualityIO| module, which are called if you use
 \verb|Bio.SeqIO| to convert an old Solexa/Illumina file into a standard Sanger
 FASTQ file:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 SeqIO.convert("solexa.fastq", "fastq-solexa", "standard.fastq", "fastq")
-\end{verbatim}
+\end{minted}
 
 If you want to convert a new Illumina 1.3+ FASTQ file, all that gets changed
 is the ASCII offset because although encoded differently the scores are all
 PHRED qualities:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 SeqIO.convert("illumina.fastq", "fastq-illumina", "standard.fastq", "fastq")
-\end{verbatim}
+\end{minted}
 
 Note that using \verb|Bio.SeqIO.convert()| like this is \emph{much} faster
 than combining \verb|Bio.SeqIO.parse()| and \verb|Bio.SeqIO.write()|
@@ -614,11 +679,11 @@ the NCBI, and elsewhere (format name \texttt{fastq} or \texttt{fastq-sanger}).
 
 For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.SeqIO import QualityIO
 >>> help(QualityIO)
 ...
-\end{verbatim}
+\end{minted}
 
 \subsection{Converting FASTA and QUAL files into FASTQ files}
 \label{sec:SeqIO-fasta-qual-conversion}
@@ -630,17 +695,17 @@ the qualities. Therefore a single FASTQ file can be converted to or from
 
 Going from FASTQ to FASTA is easy:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 SeqIO.convert("example.fastq", "fastq", "example.fasta", "fasta")
-\end{verbatim}
+\end{minted}
 
 Going from FASTQ to QUAL is also easy:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 SeqIO.convert("example.fastq", "fastq", "example.qual", "qual")
-\end{verbatim}
+\end{minted}
 
 However, the reverse is a little more tricky. You can use \verb|Bio.SeqIO.parse()|
 to iterate over the records in a \emph{single} file, but in this case we have
@@ -651,31 +716,30 @@ together. The code is a little fiddly, so we provide a function called
 this. This takes two handles (the FASTA file and the QUAL file) and returns
 a \verb|SeqRecord| iterator:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
 for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")):
    print(record)
-\end{verbatim}
+\end{minted}
 
 This function will check that the FASTA and QUAL files are consistent (e.g.
 the records are in the same order, and have the same sequence length).
 You can combine this with the \verb|Bio.SeqIO.write()| function to convert a
 pair of FASTA and QUAL files into a single FASTQ files:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
-handle = open("temp.fastq", "w") #w=write
-records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
-count = SeqIO.write(records, handle, "fastq")
-handle.close()
+with open("example.fasta") as f_handle, open("example.qual") as q_handle:
+    records = PairedFastaQualIterator(f_handle, q_handle)
+    count = SeqIO.write(records, "temp.fastq", "fastq")
 print("Converted %i records" % count)
-\end{verbatim}
+\end{minted}
 
 \subsection{Indexing a FASTQ file}
 \label{sec:fastq-indexing}
 
-FASTQ files are often very large, with millions of reads in them. Due to the
+FASTQ files are usually very large, with millions of reads in them. Due to the
 sheer amount of data, you can't load all the records into memory at once.
 This is why the examples above (filtering and trimming) iterate over the file
 looking at just one \verb|SeqRecord| at a time.
@@ -689,7 +753,7 @@ Again we'll use the \texttt{SRR020192.fastq} file from the ENA
 (\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}),
 although this is actually quite a small FASTQ file with less than $50,000$ reads:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> fq_dict = SeqIO.index("SRR020192.fastq", "fastq")
 >>> len(fq_dict)
@@ -698,10 +762,14 @@ although this is actually quite a small FASTQ file with less than $50,000$ reads
 ['SRR020192.38240', 'SRR020192.23181', 'SRR020192.40568', 'SRR020192.23186']
 >>> fq_dict["SRR020192.23186"].seq
 Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetterAlphabet())
-\end{verbatim}
+\end{minted}
 
 When testing this on a FASTQ file with seven million reads,
 indexing took about a minute, but record access was almost instant.
+
+The sister function \verb|Bio.SeqIO.index_db()| lets you save the index
+to an SQLite3 database file for near instantaneous reuse - see
+Section~\ref{sec:SeqIO-index} for more details.
 
 The example in Section~\ref{sec:SeqIO-sort} show how you can use the
 \verb|Bio.SeqIO.index()| function to sort a large FASTA file -- this
@@ -719,7 +787,7 @@ A common task is to convert from SFF to a pair of FASTA and QUAL files,
 or to a single FASTQ file. These operations are trivial using the
 \verb|Bio.SeqIO.convert()| function (see Section~\ref{sec:SeqIO-conversion}):
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff", "reads.fasta", "fasta")
 10
@@ -727,7 +795,7 @@ or to a single FASTQ file. These operations are trivial using the
 10
 >>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff", "reads.fastq", "fastq")
 10
-\end{verbatim}
+\end{minted}
 
 \noindent Remember the convert function returns the number of records, in
 this example just ten. This will give you the \emph{untrimmed} reads, where
@@ -735,7 +803,7 @@ the leading and trailing poor quality sequence or adaptor will be in lower
 case. If you want the \emph{trimmed} reads (using the clipping information
 recorded within the SFF file) use this:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff-trim", "trimmed.fasta", "fasta")
 10
@@ -743,30 +811,30 @@ recorded within the SFF file) use this:
 10
 >>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff-trim", "trimmed.fastq", "fastq")
 10
-\end{verbatim}
+\end{minted}
 
 If you run Linux, you could ask Roche for a copy of their ``off instrument''
 tools (often referred to as the Newbler tools). This offers an alternative way to
 do SFF to FASTA or QUAL conversion at the command line (but currently FASTQ output
 is not supported), e.g.
 
-\begin{verbatim}
+\begin{minted}{bash}
 $ sffinfo -seq -notrim E3MFGYR02_random_10_reads.sff > reads.fasta
 $ sffinfo -qual -notrim E3MFGYR02_random_10_reads.sff > reads.qual
 $ sffinfo -seq -trim E3MFGYR02_random_10_reads.sff > trimmed.fasta
 $ sffinfo -qual -trim E3MFGYR02_random_10_reads.sff > trimmed.qual
-\end{verbatim}
+\end{minted}
 
 \noindent The way Biopython uses mixed case sequence strings to represent
 the trimming points deliberately mimics what the Roche tools do.
 
 For more information on the Biopython SFF support, consult the built in help:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio.SeqIO import SffIO
 >>> help(SffIO)
 ...
-\end{verbatim}
+\end{minted}
 
 \subsection{Identifying open reading frames}
 
@@ -782,23 +850,23 @@ too.  However, this approach is still useful in viruses and Prokaryotes.
 To show how you might approach this with Biopython, we'll need a sequence to
 search, and as an example we'll again use the bacterial plasmid -- although
 this time we'll start with a plain FASTA file with no pre-marked genes:
-\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.fna}
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Tests/GenBank/NC_005816.fna}
 {\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
 NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
 %doctest ../Tests/GenBank
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> table = 11
 >>> min_pro_len = 100
-\end{verbatim}
+\end{minted}
 
 Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
 ...     for frame in range(3):
 ...         length = 3 * ((len(record)-frame) // 3) #Multiple of three
@@ -820,7 +888,7 @@ RGIFMSDTMVVNGSGGVPAFLFSGSTLSSY...LLK - length 361, strand -1, frame 1
 WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, frame 1
 LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, frame 2
 RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, frame 2
-\end{verbatim}
+\end{minted}
 
 Note that here we are counting the frames from the 5' end (start) of
 \emph{each} strand. It is sometimes easier to always count from the 5' end
@@ -835,7 +903,7 @@ the locations in terms of the protein counting, and converts back to the
 parent sequence by multiplying by three, then adjusting for the frame and
 strand:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 record = SeqIO.read("NC_005816.gb","genbank")
 table = 11
@@ -871,7 +939,7 @@ orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
 for start, end, strand, pro in orf_list:
     print("%s...%s - length %i, strand %i, %i:%i" \
           % (pro[:30], pro[-3:], len(pro), strand, start, end))
-\end{verbatim}
+\end{minted}
 
 \noindent And the output:
 
@@ -912,32 +980,39 @@ find whole books about this topic!
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
 
-This section shows some more examples of sequence parsing, using the \verb|Bio.SeqIO|
-module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the Python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/}{the matplotlib website for a tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
+This section shows some more examples of sequence parsing, using the
+\verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO},
+plus the Python library matplotlib's \verb|pylab| plotting interface
+(see \href{https://matplotlib.org}{the matplotlib website
+for a tutorial}).  Note that to follow these examples you will need
+matplotlib installed - but without it you can still try the data
+parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
 There are lots of times when you might want to visualise the distribution of sequence
 lengths in a dataset -- for example the range of contig sizes in a genome assembly
-project.  In this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} which has only 94 sequences.
+project.  In this example we'll reuse our orchid FASTA file
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}
+which has only 94 sequences.
 
 First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
 of all the sequence lengths.  You could do this with a for loop, but I find a list
 comprehension more pleasing:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 >>> len(sizes), min(sizes), max(sizes)
 (94, 572, 789)
 >>> sizes
 [740, 753, 748, 744, 733, 718, 730, 704, 740, 709, 700, 726, ..., 592]
-\end{verbatim}
+\end{minted}
 
 Now that we have the lengths of all the genes (as a list of integers), we can use the
 matplotlib histogram function to display it.
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 
@@ -948,7 +1023,7 @@ pylab.title("%i orchid sequences\nLengths %i to %i" \
 pylab.xlabel("Sequence length (bp)")
 pylab.ylabel("Count")
 pylab.show()
-\end{verbatim}
+\end{minted}
 
 %
 % Have a HTML version and a PDF version to display nicely...
@@ -979,29 +1054,32 @@ shown in Figure~\ref{fig:seq-len-hist}.
 Notice that most of these orchid sequences are about $740$ bp long, and there could be
 two distinct classes of sequence here with a subset of shorter sequences.
 
-\emph{Tip:} Rather than using \verb|pylab.show()| to show the plot in a window, you can also use \verb|pylab.savefig(...)| to save the figure to a file (e.g. as a PNG or PDF).
+\emph{Tip:} Rather than using \verb|pylab.show()| to show the plot in a window,
+you can also use \verb|pylab.savefig(...)| to save the figure to a file
+(e.g. as a PNG or PDF).
 
 \subsection{Plot of sequence GC\%}
 
 Another easily calculated quantity of a nucleotide sequence is the GC\%.  You might
 want to look at the GC\% of all the genes in a bacterial genome for example, and
 investigate any outliers which could have been recently acquired by horizontal gene
-transfer.  Again, for this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
+transfer.  Again, for this example we'll reuse our orchid FASTA file
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
 
 First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
 of all the GC percentages.  Again, you could do this with a for loop, but I prefer this:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
 from Bio.SeqUtils import GC
 
 gc_values = sorted(GC(rec.seq) for rec in SeqIO.parse("ls_orchid.fasta", "fasta"))
-\end{verbatim}
+\end{minted}
 
 Having read in each sequence and calculated the GC\%, we then sorted them into ascending
 order. Now we'll take this list of floating point values and plot them with matplotlib:
 
-\begin{verbatim}
+\begin{minted}{python}
 import pylab
 pylab.plot(gc_values)
 pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
@@ -1009,7 +1087,7 @@ pylab.title("%i orchid sequences\nGC%% %0.1f to %0.1f" \
 pylab.xlabel("Genes")
 pylab.ylabel("GC%")
 pylab.show()
-\end{verbatim}
+\end{minted}
 
 %
 % Have an HTML version and a PDF version to display nicely...
@@ -1065,16 +1143,15 @@ in the plot below).
 \end{latexonly}
 
 To start off, we'll need two sequences.  For the sake of argument, we'll just take
-the first two from our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}:
+the first two from our orchid FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-record_iterator = SeqIO.parse(handle, "fasta")
-rec_one = next(record_iterator)
-rec_two = next(record_iterator)
-handle.close()
-\end{verbatim}
+with open("ls_orchid.fasta") as in_handle:
+    record_iterator = SeqIO.parse(in_handle, "fasta")
+    rec_one = next(record_iterator)
+    rec_two = next(record_iterator)
+\end{minted}
 
 We're going to show two approaches.  Firstly, a simple naive implementation
 which compares all the window sized sub-sequences to each other to compiles a
@@ -1082,21 +1159,21 @@ similarity matrix.  You could construct a matrix or array object, but here we
 just use a list of lists of booleans created with a nested list
 comprehension:
 
-\begin{verbatim}
+\begin{minted}{python}
 window = 7
 seq_one = str(rec_one.seq).upper()
 seq_two = str(rec_two.seq).upper()
-data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
-        for j in range(len(seq_one)-window)] \
-       for i in range(len(seq_two)-window)]
-\end{verbatim}
+data = [[(seq_one[i:i + window] != seq_two[j:j + window])
+         for j in range(len(seq_one) - window)]
+        for i in range(len(seq_two) - window)]
+\end{minted}
 
 Note that we have \emph{not} checked for reverse complement matches here.
 Now we'll use the matplotlib's \verb|pylab.imshow()| function to display this
 data, first requesting the gray color scheme so this is done in black and
 white:
 
-\begin{verbatim}
+\begin{minted}{python}
 import pylab
 pylab.gray()
 pylab.imshow(data)
@@ -1104,7 +1181,7 @@ pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
 pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
 pylab.show()
-\end{verbatim}
+\end{minted}
 %pylab.savefig("dot_plot.png", dpi=75)
 %pylab.savefig("dot_plot.pdf")
 
@@ -1139,7 +1216,7 @@ in the size of matrix it can display.  As an alternative, we'll use the
 \verb|pylab.scatter()| function.
 
 We start by creating dictionaries mapping the window-sized sub-sequences to locations:
-\begin{verbatim}
+\begin{minted}{python}
 window = 7
 dict_one = {}
 dict_two = {}
@@ -1155,10 +1232,10 @@ for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
 #(Python 2.3 would require slightly different code here)
 matches = set(dict_one).intersection(dict_two)
 print("%i unique matches" % len(matches))
-\end{verbatim}
+\end{minted}
 \noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
-\begin{verbatim}
-#Create lists of x and y co-ordinates for scatter plot
+\begin{minted}{python}
+# Create lists of x and y co-ordinates for scatter plot
 x = []
 y = []
 for section in matches:
@@ -1166,9 +1243,9 @@ for section in matches:
         for j in dict_two[section]:
             x.append(i)
             y.append(j)
-\end{verbatim}
+\end{minted}
 \noindent We are now ready to draw the revised dot plot as a scatter plot:
-\begin{verbatim}
+\begin{minted}{python}
 import pylab
 pylab.cla() #clear any prior graph
 pylab.gray()
@@ -1179,7 +1256,7 @@ pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
 pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
 pylab.show()
-\end{verbatim}
+\end{minted}
 %pylab.savefig("dot_plot.png", dpi=75)
 %pylab.savefig("dot_plot.pdf")
 %
@@ -1212,7 +1289,7 @@ the quality data. Here is an example using two FASTQ files containing paired end
 the reverse reads. These were downloaded from the ENA sequence read archive FTP site
 (\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_1.fastq.gz} and
 \url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_2.fastq.gz}), and
-are from \textit{E. coli} -- see \url{http://www.ebi.ac.uk/ena/data/view/SRR001666}
+are from \textit{E. coli} -- see \url{https://www.ebi.ac.uk/ena/data/view/SRR001666}
 for details.
 %Originally from ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/
 
@@ -1220,7 +1297,7 @@ In the following code the \verb|pylab.subplot(...)| function is used in order to
 the forward and reverse qualities on two subplots, side by side. There is also a little
 bit of code to only plot the first fifty reads.
 
-\begin{verbatim}
+\begin{minted}{python}
 import pylab
 from Bio import SeqIO
 for subfigure in [1,2]:
@@ -1234,7 +1311,7 @@ for subfigure in [1,2]:
     pylab.xlabel("Position")
 pylab.savefig("SRR001666.png")
 print("Done")
-\end{verbatim}
+\end{minted}
 
 You should note that we are using the \verb|Bio.SeqIO| format name \texttt{fastq}
 here because the NCBI has saved these reads using the standard Sanger FASTQ format
@@ -1272,10 +1349,10 @@ Once you have an alignment, you are very likely going to want to find out inform
 
 Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|, for example read in using \verb|Bio.AlignIO.read(...)| as described in Chapter~\ref{chapter:Bio.AlignIO}. All we need to do to get an object that will calculate summary information is:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Align import AlignInfo
 summary_align = AlignInfo.SummaryInfo(alignment)
-\end{verbatim}
+\end{minted}
 
 The \verb|summary_align| object is very useful, and will do the following neat things for you:
 
@@ -1291,9 +1368,9 @@ The \verb|summary_align| object is very useful, and will do the following neat t
 
 The \verb|SummaryInfo| object, described in section~\ref{sec:summary_info}, provides functionality to calculate a quick consensus of an alignment. Assuming we've got a \verb|SummaryInfo| object called \verb|summary_align| we can calculate a consensus by doing:
 
-\begin{verbatim}
+\begin{minted}{python}
 consensus = summary_align.dumb_consensus()
-\end{verbatim}
+\end{minted}
 
 As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
 
@@ -1336,17 +1413,17 @@ CTGTC
 
 Let's assume we've got an alignment object called \verb|c_align|. To get a PSSM with the consensus sequence along the side we first get a summary object and calculate the consensus sequence:
 
-\begin{verbatim}
+\begin{minted}{python}
 summary_align = AlignInfo.SummaryInfo(c_align)
 consensus = summary_align.dumb_consensus()
-\end{verbatim}
+\end{minted}
 
 Now, we want to make the PSSM, but ignore any \verb|N| ambiguity residues when calculating this:
 
-\begin{verbatim}
+\begin{minted}{python}
 my_pssm = summary_align.pos_specific_score_matrix(consensus,
                                                   chars_to_ignore = ['N'])
-\end{verbatim}
+\end{minted}
 
 Two notes should be made about this:
 
@@ -1355,11 +1432,11 @@ Two notes should be made about this:
 
   \item The sequence passed to be displayed along the left side of the axis does not need to be the consensus. For instance, if you wanted to display the second sequence in  the alignment along this axis, you would need to do:
 
-\begin{verbatim}
+\begin{minted}{python}
 second_seq = alignment.get_seq_by_num(1)
 my_pssm = summary_align.pos_specific_score_matrix(second_seq
                                                   chars_to_ignore = ['N'])
-\end{verbatim}
+\end{minted}
 
 \end{enumerate}
 
@@ -1382,10 +1459,10 @@ T  1.0 0.0 0.0 6.0
 
 You can access any element of the PSSM by subscripting like \verb|your_pssm[sequence_number][residue_count_name]|. For instance, to get the counts for the 'A' residue in the second element of the above PSSM you would do:
 
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> print(my_pssm[1]["A"])
 7.0
-\end{verbatim}
+\end{minted}
 
 The structure of the PSSM class hopefully makes it easy both to access elements and to pretty print the matrix.
 
@@ -1419,51 +1496,73 @@ Well, now that we have an idea what information content is being calculated in B
 
 First, we need to use our alignment to get an alignment summary object, which we'll assume is called \verb|summary_align| (see section~\ref{sec:summary_info}) for instructions on how to get this. Once we've got this object, calculating the information content for a region is as easy as:
 
-\begin{verbatim}
+\begin{minted}{python}
 info_content = summary_align.information_content(5, 30,
                                                  chars_to_ignore = ['N'])
-\end{verbatim}
+\end{minted}
 
 Wow, that was much easier then the formula above made it look! The variable \verb|info_content| now contains a float value specifying the information content over the specified region (from 5 to 30 of the alignment). We specifically ignore the ambiguity residue 'N' when calculating the information content, since this value is not included in our alphabet (so we shouldn't be interested in looking at it!).
 
 As mentioned above, we can also calculate relative information content by supplying the expected frequencies:
 
-\begin{verbatim}
+\begin{minted}{python}
 expect_freq = {
     'A' : .3,
     'G' : .2,
     'T' : .3,
     'C' : .2}
-\end{verbatim}
+\end{minted}
 
 The expected should not be passed as a raw dictionary, but instead by passed as a \verb|SubsMat.FreqTable| object (see section~\ref{sec:freq_table} for more information about FreqTables). The FreqTable object provides a standard for associating the dictionary with an Alphabet, similar to how the Biopython Seq class works.
 
 To create a FreqTable object, from the frequency dictionary you just need to do:
 
-\begin{verbatim}
+\begin{minted}{python}
 from Bio.Alphabet import IUPAC
 from Bio.SubsMat import FreqTable
 
 e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
-\end{verbatim}
+\end{minted}
 
 Now that we've got that, calculating the relative information content for our region of the alignment is as simple as:
 
-\begin{verbatim}
+\begin{minted}{python}
 info_content = summary_align.information_content(5, 30,
                                                  e_freq_table = e_freq_table,
                                                  chars_to_ignore = ['N'])
-\end{verbatim}
+\end{minted}
 
 Now, \verb|info_content| will contain the relative information content over the region in relation to the expected frequencies.
 
 The value return is calculated using base 2 as the logarithm base in the formula above. You can modify this by passing the parameter \verb|log_base| as the base you want:
 
-\begin{verbatim}
+\begin{minted}{python}
 info_content = summary_align.information_content(5, 30, log_base = 10,
                                                  chars_to_ignore = ['N'])
-\end{verbatim}
+\end{minted}
+
+By default nucleotide or amino acid residues with a frequency of 0 in a column are not take into account when the relative information column for that column is computed. If this is not the desired result, you can use \verb|pseudo_count| instead.
+
+\begin{minted}{python}
+info_content = summary_align.information_content(5, 30,
+                                                 chars_to_ignore = ['N'],
+                                                 pseudo_count = 1)
+\end{minted}
+
+In this case, the observed frequency $P_{ij}$ of a particular letter $i$ in the $j$-th column is computed as follow :
+
+\begin{displaymath}
+P_{ij} = \frac{n_{ij} + k\times Q_{i}}{N_{j} + k}
+\end{displaymath}
+
+\noindent where:
+
+\begin{itemize}
+  \item $k$ -- the pseudo count you pass as argument.
+  \item $k$ -- the pseudo count you pass as argument.
+  \item $Q_{i}$ --  The expected frequency of the letter $i$ as described above.
+\end{itemize}
 
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
@@ -1486,11 +1585,11 @@ alignments. In this example, we'll first get a Biopython alignment
 object and then get a summary object to calculate info about the
 alignment. The file containing \href{examples/protein.aln}{protein.aln}
 (also available online
-\href{http://biopython.org/DIST/docs/tutorial/examples/protein.aln}{here})
+\href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
 contains the Clustalw alignment output.
 
 %doctest examples
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> from Bio import Alphabet
 >>> from Bio.Alphabet import IUPAC
@@ -1499,7 +1598,7 @@ contains the Clustalw alignment output.
 >>> alpha = Alphabet.Gapped(IUPAC.protein)
 >>> c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
 >>> summary_align = AlignInfo.SummaryInfo(c_align)
-\end{verbatim}
+\end{minted}
 
 Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain
 more information on doing this.
@@ -1513,16 +1612,16 @@ characters that should be ignored. Thus we'll create a dictionary of
 replacements for only charged polar amino acids using:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
 ...                                                      "M", "P", "F", "W", "S",
 ...                                                      "T", "N", "Q", "Y", "C"])
-\end{verbatim}
+\end{minted}
 
 This information about amino acid replacements is represented as a
 python dictionary which will look something like (the order can vary):
 
-\begin{verbatim}
+\begin{minted}{python}
 {('R', 'R'): 2079.0, ('R', 'H'): 17.0, ('R', 'K'): 103.0, ('R', 'E'): 2.0,
 ('R', 'D'): 2.0, ('H', 'R'): 0, ('D', 'H'): 15.0, ('K', 'K'): 3218.0,
 ('K', 'H'): 24.0, ('H', 'K'): 8.0, ('E', 'H'): 15.0, ('H', 'H'): 1235.0,
@@ -1530,7 +1629,7 @@ python dictionary which will look something like (the order can vary):
 ('D', 'R'): 48.0, ('E', 'R'): 2.0, ('D', 'K'): 1.0, ('E', 'K'): 45.0,
 ('K', 'R'): 130.0, ('E', 'D'): 241.0, ('E', 'E'): 3305.0,
 ('D', 'E'): 270.0, ('D', 'D'): 2360.0}
-\end{verbatim}
+\end{minted}
 
 This information gives us our accepted number of replacements, or how
 often we expect different things to substitute for each other. It
@@ -1540,18 +1639,18 @@ replacement dictionary information to create an Accepted Replacement
 Matrix (ARM):
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> from Bio import SubsMat
 >>> my_arm = SubsMat.SeqMat(replace_info)
-\end{verbatim}
+\end{minted}
 
 With this accepted replacement matrix, we can go right ahead and
 create our log odds matrix (i.~e.~a standard type Substitution Matrix):
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> my_lom = SubsMat.make_log_odds_matrix(my_arm)
-\end{verbatim}
+\end{minted}
 
 The log odds matrix you create is customizable with the following
 optional arguments:
@@ -1579,7 +1678,7 @@ using the function \verb|print_mat|. Doing this on our created matrix
 gives:
 
 %cont-doctest
-\begin{verbatim}
+\begin{minted}{pycon}
 >>> my_lom.print_mat()
 D   2
 E  -1   1
@@ -1587,14 +1686,14 @@ H  -5  -4   3
 K -10  -5  -4   1
 R  -4  -8  -4  -2   2
    D   E   H   K   R
-\end{verbatim}
+\end{minted}
 
 Very nice. Now we've got our very own substitution matrix to play with!
 
 \section{BioSQL -- storing sequences in a relational database}
 \label{sec:BioSQL}
-\href{http://www.biosql.org/}{BioSQL} is a joint effort between the
-\href{http://open-bio.org/}{OBF} projects (BioPerl, BioJava etc) to support a
+\href{https://www.biosql.org/}{BioSQL} is a joint effort between the
+\href{https://www.open-bio.org/wiki/Main_Page}{OBF} projects (BioPerl, BioJava etc) to support a
 shared database schema for storing sequence data. In theory, you could load a
 GenBank file into the database with BioPerl, then using Biopython extract this
 from the database as a record object with features - and get more or less the same

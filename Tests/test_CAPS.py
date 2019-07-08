@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for CAPS module."""
+
 import unittest
 
 from Bio import CAPS
@@ -14,8 +16,8 @@ from Bio.Align import MultipleSeqAlignment
 
 
 def createAlignment(sequences, alphabet):
-    """Create an Alignment object from a list of sequences"""
-    return MultipleSeqAlignment((SeqRecord(Seq(s, alphabet), id="sequence%i"%(i+1))
+    """Create an Alignment object from a list of sequences."""
+    return MultipleSeqAlignment((SeqRecord(Seq(s, alphabet), id="sequence%i" % (i + 1))
                                  for (i, s) in enumerate(sequences)),
                                 alphabet)
 
@@ -24,9 +26,7 @@ class TestCAPS(unittest.TestCase):
 
     def test_trivial(self):
         enzymes = [EcoRI]
-        alignment = ["gaattc",
-                     "gaactc",
-                    ]
+        alignment = ["gaattc", "gaactc"]
         align = createAlignment(alignment, Alphabet.generic_dna)
         map = CAPS.CAPSMap(align, enzymes)
 
@@ -38,28 +38,23 @@ class TestCAPS(unittest.TestCase):
 
     def test(self):
         alignment = [
-"""\
-AAAagaattcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT
-AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT
-TTAGTGAAAATGGAGGATCAAGTagAtTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT
-GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC
-AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
-""",
-"""\
-AAAagaTttcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT
-AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT
-TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT
-GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC
-AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
-""",
-"""\
-AAAagaTttcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT
-AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT
-TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT
-GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC
-AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
-""",
-                    ]
+            "AAAagaattcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT"
+            "AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT"
+            "TTAGTGAAAATGGAGGATCAAGTagAtTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT"
+            "GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC"
+            "AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC",
+            "AAAagaTttcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT"
+            "AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT"
+            "TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT"
+            "GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC"
+            "AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC",
+            "AAAagaTttcTAGATATACCAAACCAGAGAAAACAAATACATAATCGGAGAAATACAGAT"
+            "AGAGAGCGAGAGAGATCGACGGCGAAGCTCTTTACCCGGAAACCATTGAAATCGGACGGT"
+            "TTAGTGAAAATGGAGGATCAAGTagctTTTGGGTTCCGTCCGAACGACGAGGAGCTCGTT"
+            "GGTCACTATCTCCGTAACAAAATCGAAGGAAACACTAGCCGCGACGTTGAAGTAGCCATC"
+            "AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC",
+            ]
+        self.assertEqual(len(alignment), 3)
         enzymes = [EcoRI, AluI]
         align = createAlignment(alignment, Alphabet.generic_dna)
         map = CAPS.CAPSMap(align, enzymes)
@@ -75,9 +70,7 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
         self.assertEqual(map.dcuts[1].blocked_in, [0])
 
     def testNoCAPS(self):
-        alignment = ["aaaaaaaaaaaaaaaaaaaa",
-                     "aaaaaaaaaaaaaaaaaaaa",
-                    ]
+        alignment = ["aaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaa"]
         enzymes = []
         align = createAlignment(alignment, Alphabet.generic_nucleotide)
         map = CAPS.CAPSMap(align, enzymes)
@@ -87,7 +80,7 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
         alignment = ["aaaaaaaaaaaaaa",
                      "aaaaaaaaaaaaaa",  # we'll change this below
                      "aaaaaaaaaaaaaa",
-                    ]
+                     ]
         align = createAlignment(alignment, Alphabet.generic_nucleotide)
         align[1].seq = align[1].seq[:8]  # evil
         self.assertRaises(CAPS.AlignmentHasDifferentLengthsError,

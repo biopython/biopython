@@ -3,7 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# NOTE - This file has been split in two as a work arround for Jython JVM limits.
+# NOTE - This file has been split in two as a workaround for Jython JVM limits.
+
+"""Tests for prosite1 module."""
 
 import os
 import unittest
@@ -14,11 +16,10 @@ from Bio.ExPASy import Prosite
 class TestPrositeRead(unittest.TestCase):
 
     def test_read1(self):
-        "Parsing Prosite record ps00107.txt"
+        """Parsing Prosite record ps00107.txt."""
         filename = os.path.join('Prosite', 'ps00107.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "PROTEIN_KINASE_ATP")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00107")
@@ -38,6 +39,7 @@ class TestPrositeRead(unittest.TestCase):
         self.read1_positive1(record)
         self.read1_positive2(record)
         self.read1_positive3(record)
+        self.read1_positive4(record)
         self.read1_false_neg(record)
         self.read1_false_pos(record)
         self.read1_potential(record)
@@ -1551,7 +1553,7 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.dr_positive[1498], ('Q62270', 'SRMS_MOUSE'))
         self.assertEqual(record.dr_positive[1499], ('Q96SB4', 'SRPK1_HUMAN'))
 
-    def read1_positive3(self, record):
+    def read1_positive4(self, record):
         self.assertEqual(len(record.dr_positive), 1689)
         self.assertEqual(record.dr_positive[1500], ('O70551', 'SRPK1_MOUSE'))
         self.assertEqual(record.dr_positive[1501], ('Q5RD27', 'SRPK1_PONPY'))
@@ -2523,11 +2525,10 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.pdb_structs[330], '4ERK')
 
     def test_read2(self):
-        "Parsing Prosite record ps00159.txt"
+        """Parsing Prosite record ps00159.txt."""
         filename = os.path.join('Prosite', 'ps00159.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "ALDOLASE_KDPG_KHG_1")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00159")
@@ -2572,11 +2573,10 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.pdb_structs[5], "1VHC")
 
     def test_read3(self):
-        "Parsing Prosite record ps00165.txt"
+        """Parsing Prosite record ps00165.txt."""
         filename = os.path.join('Prosite', 'ps00165.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "DEHYDRATASE_SER_THR")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00165")

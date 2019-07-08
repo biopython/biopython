@@ -1,0 +1,105 @@
+#NEXUS
+
+BEGIN TAXA;
+	DIMENSIONS NTAX=19;
+	TAXLABELS
+		'Heptascelio albipes'
+		'Heptascelio anthonyi'
+		'Heptascelio aquilinus'
+		'Heptascelio bivius'
+		'Heptascelio castor'
+		'Heptascelio dayi'
+		'Heptascelio dispar'
+		'Heptascelio hamatus'
+		'Heptascelio lateralis'
+		'Heptascelio noyesi'
+		'Heptascelio orarius'
+		'Heptascelio paralugens'
+		'Heptascelio strigatus'
+		'Heptascelio teres'
+		'Heptascelio watshami'
+		'Heptascelio lugens'
+		'Heptascelio sicarius'
+		'Heptascelio striatosternus'
+		'A'
+	;
+END;
+
+BEGIN CHARACTERS;
+	DIMENSIONS NCHAR=43;
+	FORMAT DATATYPE=STANDARD MISSING=? GAP=-
+		SYMBOLS="0123456789A"
+	;
+	CHARSET 'Head' = 1 2 3 4 5 6 7 8 9 10;
+	CHARSET 'Antenna' = 11 12;
+	CHARSET 'Mesosoma' = 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31;
+	CHARSET 'Legs' = 32 33;
+	CHARSET 'Wings' = 34 35 36;
+	CHARSET 'Metasoma' = 37 38 39 40 41 42 43;
+	CHARSTATELABELS
+		1 'body color of female'/'entirely dark, dark brown to black' 'bicolored: head and mesosoma dark brown, metasoma yellow',
+		2 'body color of male'/'entirely black' 'entirely dark brown' 'head and metasoma black, mesosoma reddish brown' 'head and mesosoma black, metasoma dark brown',
+		3 'sculpture of occiput and posterior vertex'/'areolate-rugose' 'with strong transverse rugae' 'coarsely punctate' 'irregularly rugulose' 'areolate rugose, with distinct transverse tendency' 'with strong arched rugae',
+		4 'sculpture of frons below ocellus in female'/'transversely striate' 'areolate rugose' 'coarsely punctate' 'dorsoventrally striate',
+		5 'shape of dorsal margin of frontal scrobe'/'evenly arcuate, weakly produced' 'distinctly incised medially, strongly produced anteriorly' 'ecarinate, rounded onto dorsal portion of frons',
+		6 'sculpture of frontal depression in female'/'transversely striate ventrally, with smooth field dorsomedially' 'entirely smooth' 'with short transverse striae on sides, medially entirely smooth' 'irregularly areolate ventrally, smooth dorsally and medially' 'coarsely punctate ventrally and laterally, otherwise smooth' 'transversely rugose throughout' 'diagonally striate laterally, smooth medially' 'coarsely punctate' 'punctate, with broad smooth spaces between punctures',
+		7 'sculpture of gena'/'with irregular dorsoventral rugae' 'with irregular, nearly longitudinal rugulae' 'coarsely punctate' 'areolate rugose, with distinct dorsoventral tendency',
+		8 'setation of gena'/'with short, uniform setae, with few short bristles interspersed' 'with numerous strong, erect, dark bristles amid shorter setation' 'with short, uniform setae, without bristles',
+		9 'shape of mandibles'/'normal length, crossed transversely below head when closed, tips overlapping' 'elongate, extending ventrally below head, tips meeting apically',
+		10 'sculpture of male mesoscutellum'/'coarsely reticulate' 'coarsely reticulate, with distinct longitudinal elements' 'areolate rugose' 'coarsely longitudinally areolate rugose' 'longitudinally strigose',
+		11 'color of female antenna'/'A1-A2 pale brown, A3-A6 brown, A7-A12 dark brown' 'A1 brown, A2-A5 light brown, A6-A12 dark brown' 'dark brown to black throughout' 'dark brown to black throughout, extremities of A1, A2 lighter in color' 'brown to dark brown throughout' 'A1 brownish yellow, A2-A5 yellow, A6-A12 dark brown to black' 'A1 dark brown, A2-A5 off-white, A6-A12 dark brown to black' 'A1 dark brown, A2-A4 brownish yellow, A5-A12 dark brown to black' 'A1 brown, A2-A5 yellow, A6-A12 generally brown to dark brown, A12 lighter' 'A1 brown, A2-A5 yellow, A6-A12 dark brown',
+		12 'color of male antenna'/'light brown throughout' 'brown to dark brown throughout' 'brown' 'A1-A5 brown, A6-A12 pale brown',
+		13 'sculpture of dorsal pronotum'/'longitudinally aciculate, with smooth interspaces' 'areolate rugose' 'coarsely reticulate' 'coarsely punctate' 'areolate rugose, with distinct longitudinal tendency' 'longitudinally strigose',
+		14 'notaulus',
+		15 'sculpture of mesoscutum in female'/'coarsely areolate-rugose' 'finely longitudinally aciculate with smooth interspaces' 'coarsely longitudinally strigose with smooth interspaces' 'longitudinally strigose, with strong transverse sculpture in interspaces' 'sparsely punctate, with broad smooth areas between punctures' 'longitudinally strigose with fine sculpture in interspaces' 'sparsely punctate, with broad smooth areas between punctures, with weak indications of longitudinal rugulae' 'midlobe coarsely punctate, lateral lobes with punctures sparser, separated by smooth areas',
+		16 'sculpture of mesoscutum in male'/'with dense umbilicate punctures' 'finely longitudinally aciculate' 'coarsely areolate rugose' 'sparsely punctate, largely smooth' 'longitudinally strigose, with strong transverse sculpture in interspaces' 'sparsely punctate, with broad smooth areas between punctures, with weak indications of longitudinal rugulae' 'coarsely areolate rugose with distinct longitudinal tendency' 'coarsely longitudinally areolate rugose',
+		17 'parapsidal line'/'present, clearly impressed' 'absent' 'present, evanescent',
+		18 'mesoscutellum shape'/'distinctly narrowed apically, with median longitudinal depression' 'broad, weakly convex, apex broadly rounded' 'nearly parallel-sided, apex weakly excavate, with weak median longitudinal impression' 'semicircular, posteriorly distinctly sloping ventrad, without distinct median longitudinal furrow' 'roughly trapezoidal, sides weakly converging apically, apex excavate, with distinct median longitudinal furrow' 'roughly semicircular, with distinct median longitudinal impression in apical half' 'roughly trapezoidal, sides converging apically, apex weakly excavate, without distinct median longitudinal impression',
+		19 'sculpture of female mesoscutellum'/'coarsely reticulate, with distinct longitudinal elements' 'areolate rugose' 'longitudinally strigate' 'coarsely punctate',
+		20 'mesoscutellar points of female'/'absent, scutellum with rounded lobes laterally' 'broad, short, acute' 'narrow, elongate, acute' 'forming short, acute teeth' 'forming short, sharp angles, not protruding' 'flattened, broadly rounded apically' 'moderately elongate, narrow, acute, curving medially',
+		21 'mesoscutellar points of male'/'apex of scutellum transverse, posterolateral corners very weakly produced' 'apex of scutellum rounded, points entirely absent' 'narrow, short, acute' 'flattened, broadly rounded apically' 'broad, short, acute',
+		22 'posterior surface of propodeum'/'with distinct straight longitudinal paramedian keel arising from apex of inner propodeal projection' 'with medial area covered by elongate areolae, bounded laterally by irregular carinae' 'with central row of quadrate areolae above large smooth central area, bounded laterally by carinae' 'irregularly areolate, without distinct paramedian keel' 'with medial area with elongate areolae, bounded laterally by distinct paramedial carinae' 'with sinuous paramedian keel arising from apex of inner propodeal projection' 'longitudinally carinate, without distinct paramedian keel' 'longitudinally carinate with well-developed transverse striae, without distinct paramedian keel',
+		23 'length of outer propodeal projection in female'/'extending beyond apex of T1' 'extending at most to midlength of T1' 'rather short, extending at most to midlength of T1, distinctly longer than inner propodeal projection' 'moderately elongate, not reaching midpoint of length of T1, subequal in length to inner propodeal projection' 'elongate, extending near or beyond apex of T1, distinctly longer than inner propodeal projection' 'moderately elongate, extending to midpoint of length of T1, distinctly longer than inner propodeal projection' 'rather short, extending at most to midlength of T1, slightly longer than inner propodeal projection',
+		24 'sculpture of propodeum between inner and outer propodeal projections'/'areolate rugose' 'coarsely punctate' 'largely smooth, with variably developed diagonal carinae' 'longitudinally carinate with punctures in interspaces' 'areolate rugose, with distinct longitudinal tendency',
+		25 'netrion shape'/'moderately wide, parallel-sided in ventral half, open' 'strongly narrowed, nearly linear, foveae on surface nearly as high as wide' 'narrow, gradually widened ventrally, foveae on surface distinctly wider than high' 'moderately wide, nearly parallel-sided, with two columns of large punctures' 'moderately wide, nearly parallel-sided, weakly widened ventrally, with single column of large foveae' 'moderately wide, weakly fusiform, with column of elongate foveae' 'moderately wide, weakly fusiform, anterior margin foveate',
+		26 'netrion setation'/'glabrous' 'densely setose',
+		27 'sculpture of lateral pronotum posterior to epomial carina'/'smooth' 'coarsely sculptured' 'with large smooth field dorsally, elsewhere finely rugulose' 'with smooth field dorsally, elsewhere areolate rugose' 'with small smooth field near posterior margin, elsewhere finely rugulose' 'coarsely punctate' 'coarsely rugulose throughout' 'coarsely foveolate immediately behind epomial carina, elsewhere sparsely punctate',
+		28 'setation of posterior half of lateral pronotum'/'largely glabrous, setae limited to small patch near spiracle' 'with numerous scattered setae, densest near spiracle',
+		29 'sculpture of mesopleural scrobe'/'smooth' 'coarsely areolate to rugose' 'finely microreticulate to smooth' 'coarsely punctate' 'with narrow smooth field medially, elsewhere diagonally striate' 'smooth medially, elsewhere rugose',
+		30 'sculpture of lower mesepisternum'/'smooth' 'rugulose to punctate' 'finely microreticulate, nearly smooth, sparsely punctate' 'with distinctly separated, coarse punctures' 'largely smooth, with 2-3 longitudinal lines of punctures',
+		31 'sculpture of metapleuron'/'areolate rugose' 'irregularly longitudinally rugose, with smooth field medially' 'largely smooth' 'areolate rugose above, with smooth or finely sculptured field ventrally' 'coarsely punctate' 'with smooth field in posteroventral quadrant, elsewhere areolate rugose' 'coarsely areolate to rugose throughout' 'with smooth field medially, elsewhere coarsely punctate',
+		32 'color of legs'/'coxae and femora dark brown, tibiae and tarsi yellow' 'coxae dark brown, femora largely brown, legs otherwise brownish yellow' 'tarsi light brown, otherwise brown to dark brown throughout' 'coxae dark brown to black, legs otherwise brown to dark brown' 'coxae, femora dark brown, tarsi brown, tibiae pale, contrasting with femora and tibiae' 'coxae and femora dark brown, otherwise brown' 'coxae dark brown, otherwise yellowish brown throughout' 'coxae dark brown to black, femora dark brown, legs otherwise very pale brown, nearly white' 'coxae and femora brown, elsewhere light brown' 'coxae, femora, tibiae dark brown, otherwise brown' 'entirely yellow',
+		33 'long dark bristles on legs'/'present on all femora, tibiae' 'absent' 'present on hind femur only',
+		34 'color of wing membrane'/'generally hyaline throughout' 'with faint brown infuscation throughout, with strong dark streak below submarginal vein' 'hyaline basally, infuscate in apical two-thirds, streak below submarginal vein weak' 'with weak general brown infuscation, longitudinal dark streak below submarginal vein moderately developed' 'with weak general brown infuscation, longitudinal streak below submarginal vein weak' 'moderately infuscate throughout, streak below submarginal vein darkly pigmented' 'infuscate in apical two thirds, streak below submarginal vein strongly pigmented',
+		35 'fore wing venation'/'well-developed, with R, r-rs clearly visible' 'reduced to basal stub of R, with pale pseudostigma in wing disk',
+		36 'submarginal vein bristles'/'with 1-2 dark bristles near base of fore wing' 'with dark bristles extending length of submarginal vein' 'with dark bristles in basal half of submarginal vein' 'absent',
+		37 'T1 depression'/'glabrous or sparsely setose' 'moderately to densely setose',
+		38 'sublateral lamella on T1'/'distinctly raised more or less perpendicular to T1' 'indicated as low carina' 'absent',
+		39 'sculpture of T2-T4'/'longitudinally striate, with fine cross striae, punctures, smooth or finely punctulate transverse band apically' 'longitudinally striate with cross striae laterally, sculpture effaced medially',
+		40 'setation of laterotergites'/'glabrous' 'setose' 'very sparsely setose',
+		41 'sculpture of S2, S3 of female'/'strongly longitudinally rugose' 'nearly smooth, with scattered small punctures' 'irregularly longitudinally rugulose, apex of S3 nearly smooth' 'longitudinally rugulose laterally, nearly smooth medially, with scattered small punctures',
+		42 'sculpture of S2, S3 of male'/'longitudinal rugulae largely effaced, strongest laterally, otherwise smooth with scattered setigerous punctures' 'strongly longitudinally rugose' 'nearly smooth, with scattered setigerous punctures',
+		43 'distribution of felt fields'/'present on S2-S3' 'present on S3-S4' 'present on S3 only'
+	;
+	MATRIX
+		'Heptascelio albipes' 001(01)0(06)0004(46)15?5413224(04)4(23)(12)030(45)1(16)(47)1101010(12)320
+		'Heptascelio anthonyi' 0?1103000?1?1?3?1012?02010310111120101020?0
+		'Heptascelio aquilinus' ?130161110?12??301??11?020402202001001002?2
+		'Heptascelio bivius' 0?2221200?4?3?7?1134?23051713049130310013?0
+		'Heptascelio castor' 0321053002324?341213203241610151130110010?0
+		'Heptascelio dayi' 0?2224220?2?3?4?1234?33131510343110210010?0
+		'Heptascelio dispar' 1113100101000?111?0500201020213000100200121
+		'Heptascelio hamatus' 0(03)010(0137)0002311?02141(13)(24)33(01)41(56)1(01)1(03)(26)(12)30110010(01)0
+		'Heptascelio lateralis' 0?0102300?5?4?0?1510?(15)5040312101120102013?0
+		'Heptascelio noyesi' 0(03)(05)3010002225?26060320441000002115010111120
+		'Heptascelio orarius' 0201010002431?0?163333404000002803010111?20
+		'Heptascelio paralugens' 0022282002224?43121113516151036614011001310
+		'Heptascelio strigatus' 0011000003725?2(27)132230402021116916010202120
+		'Heptascelio teres' 0?4301000?8?3?4?0630?6645000002A150201010?0
+		'Heptascelio watshami' 0001000002901?32161330401020016922010101020
+		'Heptascelio lugens' 0022043002315?6502162350(05)1(16)1013114011001010
+		'Heptascelio sicarius' 0?2301220?9?3?4?2230?7403030047A160101022?0
+		'Heptascelio striatosternus' 0041000102434?34141330312121017503011001000
+		'A' ???????????????????????????????????????????
+	;
+END;

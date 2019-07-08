@@ -4,6 +4,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for XXmotif tool."""
+
 import glob
 import os
 import shutil
@@ -12,7 +14,7 @@ import unittest
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Application import ApplicationError
-from Bio.Motif.Applications import XXmotifCommandline
+from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language
@@ -48,7 +50,7 @@ class XXmotifTestCase(unittest.TestCase):
             shutil.rmtree(self.out_dir)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Shared test procedure used by all tests."""
         output, error = cline()
 
         self.assertTrue(os.path.isdir(self.out_dir))
@@ -63,7 +65,8 @@ class XXmotifTestCase(unittest.TestCase):
         # MEME parser does not like what XXmotif produces yet.
 
     def copy_and_mark_for_cleanup(self, path):
-        """
+        """Copy file to working directory and marks it for removal.
+
         XXmotif currently only handles a canonical filename as input, no paths.
         This method copies the specified file in the specified path to the
         current working directory and marks it for removal.
@@ -76,7 +79,7 @@ class XXmotifTestCase(unittest.TestCase):
         return filename
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 
@@ -117,8 +120,7 @@ class XXmotifTestErrorConditions(XXmotifTestCase):
         input_file = self.copy_and_mark_for_cleanup("Fasta/f002")
 
         try:
-            cline = XXmotifCommandline(outdir=temp_out_dir,
-                                       seqfile=input_file)
+            XXmotifCommandline(outdir=temp_out_dir, seqfile=input_file)
         except ValueError:
             pass
         else:

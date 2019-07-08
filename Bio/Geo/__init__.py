@@ -25,18 +25,22 @@ def _read_key_value(line):
 
 
 def parse(handle):
+    """Read Gene Expression Omnibus records from file handle.
+
+    Returns a generator object which yields Bio.Geo.Record() objects.
+    """
     record = None
     for line in handle:
         line = line.strip('\n').strip('\r')
         if not line:
             continue  # Ignore empty lines
         c = line[0]
-        if c=='^':
+        if c == '^':
             if record:
                 yield record
             record = Record.Record()
             record.entity_type, record.entity_id = _read_key_value(line)
-        elif c=='!':
+        elif c == '!':
             if line in ('!Sample_table_begin',
                         '!Sample_table_end',
                         '!Platform_table_begin',
@@ -51,7 +55,7 @@ def parse(handle):
                     record.entity_attributes[key] = [existing, value]
             else:
                 record.entity_attributes[key] = value
-        elif c=='#':
+        elif c == '#':
             key, value = _read_key_value(line)
             assert key not in record.col_defs
             record.col_defs[key] = value

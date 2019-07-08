@@ -1,8 +1,10 @@
 # Copyright 2012 by Wibowo Arindrarto. All rights reserved.
-# Revisions Copyright 2012 by Peter Cock. All rights reserved.
+# Revisions Copyright 2012-2015 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
+"""Common code for SearchIO tests."""
 
 from __future__ import print_function
 
@@ -18,33 +20,33 @@ from Bio import SearchIO
 from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
 
-from Bio import BiopythonExperimentalWarning
-
-import warnings
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio import SearchIO
-
 
 class CheckRaw(unittest.TestCase):
-
     """Base class for testing index's get_raw method."""
 
+    fmt = None  # define this in subclasses!
+
     def check_raw(self, filename, id, raw, **kwargs):
-        """Index filename using **kwargs, check get_raw(id)==raw."""
+        """Index filename using keyword arguments, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
         # Anticipate cases where the raw string and/or file uses different
         # newline characters ~ we set everything to \n.
+        new = idx.get_raw(id)
+        self.assertTrue(isinstance(new, bytes),
+                        "Didn't get bytes from %s get_raw" % self.fmt)
         self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                idx.get_raw(id).replace(b'\r\n', b'\n'))
+                         new.replace(b'\r\n', b'\n'))
         idx.close()
 
         # Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
+            new = idx.get_raw(id)
+            self.assertTrue(isinstance(new, bytes),
+                            "Didn't get bytes from %s get_raw" % self.fmt)
             self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                    idx.get_raw(id).replace(b'\r\n', b'\n'))
+                             new.replace(b'\r\n', b'\n'))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
@@ -54,7 +56,6 @@ class CheckRaw(unittest.TestCase):
 
 
 class CheckIndex(unittest.TestCase):
-
     """Base class for testing indexing."""
 
     def check_index(self, filename, format, **kwargs):
@@ -106,7 +107,7 @@ class CheckIndex(unittest.TestCase):
 
 
 def _num_difference(obj_a, obj_b):
-    """Returns the number of instance attributes presence only in one object."""
+    """Return the number of instance attributes presence only in one object."""
     attrs_a = set(obj_a.__dict__)
     attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
@@ -115,8 +116,7 @@ def _num_difference(obj_a, obj_b):
 
 
 def compare_search_obj(obj_a, obj_b):
-    """Compares attribute values of two QueryResult objects."""
-
+    """Compare attribute values of two QueryResult objects."""
     # check that both qresults contain the same instance attributes
     assert _num_difference(obj_a, obj_b) == 0
 
@@ -127,8 +127,9 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
-                len(obj_b), obj_a, obj_b)
+        assert len(obj_a) == len(obj_b), "length: %i vs %i for " \
+            "%r vs %r" % (len(obj_a), len(obj_b), obj_a, obj_b)
+
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
 
@@ -136,7 +137,7 @@ def compare_search_obj(obj_a, obj_b):
 
 
 def compare_attrs(obj_a, obj_b, attrs):
-    """Compares attribute values of two objects."""
+    """Compare attribute values of two objects."""
     for attr in attrs:
         # don't check for contained items, they are handled separately
         if attr.startswith('_items'):
@@ -149,15 +150,15 @@ def compare_attrs(obj_a, obj_b, attrs):
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
         if attr in ('_hit', '_query') and (val_a is not None and val_b is
-                not None):
+                                           not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
                 assert str(val_a.seq) == str(val_b.seq), \
-                        "%s: %r vs %r" % (attr, val_a, val_b)
+                    "%s: %r vs %r" % (attr, val_a, val_b)
             elif isinstance(val_a, list) and isinstance(val_b, list):
                 for seq_a, seq_b in zip(val_a, val_b):
                     assert str(seq_a.seq) == str(seq_b.seq), \
-                            "%s: %r vs %r" % (attr, seq_a, seq_b)
+                        "%s: %r vs %r" % (attr, seq_a, seq_b)
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)
@@ -167,7 +168,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             values_b = sorted(val_b.values())
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
-                    values_b)
+                                                           values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == '_alphabet':
             alph_a = val_a.__class__.__name__

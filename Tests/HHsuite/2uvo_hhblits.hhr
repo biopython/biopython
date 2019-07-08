@@ -1,0 +1,605 @@
+Query         2UVO:A|PDBID|CHAIN|SEQUENCE
+Match_columns 171
+No_of_seqs    1560 out of 4005
+Neff          8.3 
+Searched_HMMs 34
+Date          Fri Feb 15 16:34:13 2019
+Command       hhblits -i 2uvoAh.fasta -d /pdb70 
+
+ No Hit                             Prob E-value P-value  Score    SS Cols Query HMM  Template HMM
+  1 2uvo_A Agglutinin isolectin 1; 100.0 3.7E-34 4.8E-38  210.3   0.0  171    1-171     1-171 (171)
+  2 2wga   ; lectin (agglutinin);   99.9 1.1E-30 1.4E-34  190.4   0.0  162    2-169     2-163 (164)
+  3 1ulk_A Lectin-C; chitin-bindin  99.8 5.2E-24 6.6E-28  148.2   0.0  120    1-124     2-121 (126)
+  4 1ulk_A Lectin-C; chitin-bindin  99.8 6.8E-24 8.7E-28  147.6   0.0  120   44-167     2-121 (126)
+  5 2uvo_A Agglutinin isolectin 1;  99.7 9.7E-23 1.2E-26  148.5   0.0  125   45-169     2-126 (171)
+  6 2wga   ; lectin (agglutinin);   99.7 2.4E-21 3.1E-25  140.1   0.0  121   46-170     3-123 (164)
+  7 1uha_A Lectin-D2; chitin-bindi  99.3 1.2E-16 1.5E-20  102.0   0.0   78   44-123     2-79  (82)
+  8 1en2_A UDA, agglutinin isolect  99.3 3.7E-16 4.7E-20  101.2   0.0   81    1-82      1-86  (89)
+  9 1en2_A UDA, agglutinin isolect  99.2 7.4E-16 9.5E-20   99.8   0.0   79   45-124     2-85  (89)
+ 10 1uha_A Lectin-D2; chitin-bindi  99.2 9.6E-16 1.2E-19   97.7   0.0   78   88-167     3-80  (82)
+ 11 1wkx_A Hevein isoform 2; aller  97.8 7.7E-09 9.7E-13   56.8   0.0   37   88-124     2-40  (43)
+ 12 1p9g_A EAFP 2; antifungal pept  97.7 1.9E-08 2.3E-12   54.6   0.0   37    1-38      1-38  (41)
+ 13 1p9g_A EAFP 2; antifungal pept  97.7 1.9E-08 2.4E-12   54.5   0.0   36   88-124     2-38  (41)
+ 14 1wkx_A Hevein isoform 2; aller  97.7   2E-08 2.5E-12   55.0   0.0   38    1-38      1-40  (43)
+ 15 4mpi_A Class I chitinase; heve  97.6 2.4E-08 3.1E-12   55.2   0.0   37    2-38      4-40  (45)
+ 16 2lb7_A WAMP-1A, antimicrobial   97.6   3E-08 3.8E-12   54.4   0.0   37   88-124     3-40  (44)
+ 17 4mpi_A Class I chitinase; heve  97.6 3.3E-08 4.2E-12   54.6   0.0   38   87-124     3-40  (45)
+ 18 2lb7_A WAMP-1A, antimicrobial   97.5 6.6E-08 8.3E-12   53.0   0.0   38    1-38      2-40  (44)
+ 19 2kus_A SM-AMP-1.1A; plant anti  97.2 2.2E-07 2.8E-11   48.3   0.0   32   42-75      3-34  (35)
+ 20 2kus_A SM-AMP-1.1A; plant anti  97.1 4.2E-07 5.3E-11   47.2   0.0   32   85-118     3-34  (35)
+ 21 1mmc_A AC-AMP2, antimicrobial   97.0 6.8E-07 8.3E-11   44.8   0.0   25   95-119     6-30  (30)
+ 22 1mmc_A AC-AMP2, antimicrobial   97.0 8.4E-07   1E-10   44.4   0.0   27    7-33      4-30  (30)
+ 23 2n1s_A AMP-2; antimicrobial pe  96.9 1.3E-06 1.6E-10   43.6   0.0   23   96-118     8-30  (30)
+ 24 2n1s_A AMP-2; antimicrobial pe  96.8 2.3E-06 2.9E-10   42.7   0.0   27    2-32      4-30  (30)
+ 25 2dkv_A Chitinase; whole struct  96.1 2.5E-05 3.1E-09   59.3   0.0   38   87-124     2-39  (309)
+ 26 2dkv_A Chitinase; whole struct  96.0 3.8E-05 4.8E-09   58.2   0.0   38   44-81      2-39  (309)
+ 27 4zxm_A PGRP domain of peptidog  85.6   0.043 5.5E-06   39.0   0.0   22  144-165    48-70  (256)
+ 28 1wga   ; lectin (agglutinin);   81.0    0.11 1.2E-05   32.7   0.0  150   11-166    11-160 (164)
+ 29 4zxm_A PGRP domain of peptidog  80.3    0.11 1.4E-05   36.8   0.0   35    2-36     27-70  (256)
+ 30 4z8i_A BBTPGRP3, peptidoglycan  80.3    0.11 1.4E-05   36.3   0.0   24  100-123    30-54  (236)
+ 31 4z8i_A BBTPGRP3, peptidoglycan  79.6    0.12 1.5E-05   36.1   0.0   37    1-37      9-54  (236)
+ 32 1wga   ; lectin (agglutinin);   40.4     2.6 0.00029   25.9   0.0  106   54-163    11-116 (164)
+
+No 1  
+>2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*
+Probab=99.95  E-value=3.7e-34  Score=210.31  Aligned_cols=171  Identities=100%  Similarity=2.050  Sum_probs=166.9
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQG   80 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~c~~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~   80 (171)
+                      ||||++.++..||++.|||+|+|||.+.+||+++||.+.|++..+|+++++.++|....|||.++||+.+.+||+.+||.
+T Consensus         1 ~~cg~~~~~~~c~~~~CCS~~g~Cg~~~~~Cg~gC~~~~c~~~~~cg~~~~~~~c~~~~CCs~~g~Cg~~~~~c~~~c~~   80 (171)
+T 2uvo_A            1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQG   80 (171)
+T ss_dssp             CBCBGGGTTBBCGGGCEECTTSBEEBSHHHHSTTCCBSSCSSCCBCBGGGTTBCCSTTCEECTTSBEEBSHHHHSTTCCB
+T ss_pred             CCCCCCCCCcCCCCCCeeCCCCeECCCcccccCCccccccccccccCcccCCcccCCccccCCCceeCCCccccCCCccc
+Confidence            79999999999999999999999999999999999999999999999999999999999999999999999999999999
+
+
+Q 2UVO:A|PDBID|C   81 GPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYC  160 (171)
+Q Consensus        81 ~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C  160 (171)
+                      +++++|+.|+...+++.||++.|||.|||||...+||+.+||+++|++|.+|++.+++++|..+.|||+++-||+...||
+T Consensus        81 ~~~~~~~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~gCq~~~c~~~~~cg~~~~~~~c~~~~ccs~~g~Cg~~~~~C  160 (171)
+T 2uvo_A           81 GPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYC  160 (171)
+T ss_dssp             SSCSSCCBCBGGGTTBCCGGGCEECTTSBEEBSHHHHSTTCCBSSCSSCCCCBTTTTTBCCSTTCEECTTSCEEBSHHHH
+T ss_pred             ccccccccccccccCCCCCCCcccCCCCccCCCcccccCCCcCCccccccccccccccccCCCCCCcCCCCEecCchhhc
+Confidence            99999999999988999999999999999999999999999999999999999999999999999999999999999999
+
+
+Q 2UVO:A|PDBID|C  161 GAGCQSGGCDG  171 (171)
+Q Consensus       161 ~~gCq~~~c~~  171 (171)
+                      +++||++.|||
+T Consensus       161 ~~~cq~~~~~~  171 (171)
+T 2uvo_A          161 GAGCQSGGCDG  171 (171)
+T ss_dssp             STTCCBSSCC-
+T ss_pred             ccccccCCCCC
+Confidence            99999999986
+
+
+No 2  
+>2wga   ; lectin (agglutinin); NMR {}
+Probab=99.92  E-value=1.1e-30  Score=190.44  Aligned_cols=162  Identities=49%  Similarity=1.254  Sum_probs=148.8
+
+Q 2UVO:A|PDBID|C    2 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGG   81 (171)
+Q Consensus         2 ~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~c~~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~   81 (171)
+                      .||+++++++|+.++|||+++|||++++||+++||++++..+.+|++  ...+++++.||++++||+++++||+.+||..
+T Consensus         2 ~~g~~~~~~~c~~~~CCs~~g~Cg~~~~~c~~~C~~~~c~~~~~cg~--~~~~c~~~~CCs~~G~CG~~~~~C~~~C~~~   79 (164)
+T 2wga              2 GXGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCCARGGHCGMGSGYCGXGCXGG   79 (164)
+T ss_dssp             CSGGGSSCCCCSTTCEECTTSCEECSTTTTSTTCCSSSCSSCCCSSS--SSCCCSTTCEECTTSCEESSHHHHSSCCSSS
+T ss_pred             ccCCCcccccCCCCceECCcceECCCCccccCccccCcccccceecc--CCCcCCCCcccCCCceeCCCCcccCCCcccc
+Confidence            69999999999999999999999999999999999988888889987  3567889999999999999999999999988
+
+
+Q 2UVO:A|PDBID|C   82 PCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCG  161 (171)
+Q Consensus        82 ~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~  161 (171)
+                      +++.+.+|++.  ...++.+.|+++++|||++++||+.+||++++..+.+|++.  +++|++++|||++||||++++||+
+T Consensus        80 ~~~~~~~Cg~~--~~~c~~~~Ccs~~G~CGt~~~~C~~~cq~~~c~~~~~cg~~--~~~c~~~~Ccs~~g~Cg~~~~~C~  155 (164)
+T 2wga             80 ACXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGCAAXSPCGXP--GSXCTLDKCCSGXGACXSGSGGCG  155 (164)
+T ss_dssp             SCSSCCCCTTS--SSCCSTTCBCCSSSCCBCSHHHHSTTCCSSSCSSCCCCSSS--CCCCSTTCEECSSSSEECSTTTTS
+T ss_pred             ccccccccCcc--cccCCCCCccCCCCCccCccccccCCccccccccccccCCC--cccCCcccccCCCCceeCCccccC
+Confidence            88888899974  45688999999999999999999999999999988999873  567889999999999999999999
+
+
+Q 2UVO:A|PDBID|C  162 AGCQSGGC  169 (171)
+Q Consensus       162 ~gCq~~~c  169 (171)
+                      .+||+++|
+T Consensus       156 ~~cq~~~~  163 (164)
+T 2wga            156 XGCXAGGC  163 (164)
+T ss_dssp             SCCSSSSC
+T ss_pred             CCCcCCCC
+Confidence            99999876
+
+
+No 3  
+>1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1
+Probab=99.77  E-value=5.2e-24  Score=148.19  Aligned_cols=120  Identities=50%  Similarity=1.303  Sum_probs=103.7
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQG   80 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~c~~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~   80 (171)
+                      .|||++..+.+|+++.|||+++|||++++||+++||+. + .+.+|++.....+++.+.||++++||+++++||+.+||+
+T Consensus         2 ~~cg~~~~~~~c~~g~CCs~~g~CG~~~~~Cg~gCq~~-c-~~~~Cg~~~~~~~c~~~~CCs~~G~CG~~~~~C~~~Cq~   79 (126)
+T 1ulk_A            2 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-C-DYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQS   79 (126)
+T ss_dssp             CCSBGGGTTBCCGGGCEECTTSCEESSHHHHSTTCCBC-T-TTTBCBGGGTTBCCGGGCEECTTSBEECSHHHHSTTCCB
+T ss_pred             CcCcCCCCCCCCCCCCeECCCCeeCCCccccCCCcccc-c-eeeeccccccCCCCCCccccCCCcccccCcccccCCccc
+Confidence            38999999999999999999999999999999999975 2 346788765567888999999999999999999999986
+
+
+Q 2UVO:A|PDBID|C   81 GPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG  124 (171)
+Q Consensus        81 ~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~  124 (171)
+                      . + .+.+|++..+..+|+++.|||+++|||++++||+.+||+.
+T Consensus        80 ~-c-~~~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~gCq~~  121 (126)
+T 1ulk_A           80 Q-C-SYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQSQ  121 (126)
+T ss_dssp             C-T-TTTBCBGGGTTBCCSTTCEECTTSBEECSHHHHSTTCCBC
+T ss_pred             c-c-CcccccccCCCccCCCCcccccCceecCcccccCcccccc
+Confidence            4 2 2467877554567899999999999999999999999973
+
+
+No 4  
+>1ulk_A Lectin-C; chitin-binding protein, hevein domain, PL-C, sugar binding protein; 1.80A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 g.3.1.1
+Probab=99.77  E-value=6.8e-24  Score=147.59  Aligned_cols=120  Identities=52%  Similarity=1.251  Sum_probs=102.2
+
+Q 2UVO:A|PDBID|C   44 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQS  123 (171)
+Q Consensus        44 ~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~  123 (171)
+                      .+||++.++.+|+++.|||+++|||++++||+++||+. + .+.+|++.+...+++++.|+++++||+++++||+.+||+
+T Consensus         2 ~~cg~~~~~~~c~~g~CCs~~g~CG~~~~~Cg~gCq~~-c-~~~~Cg~~~~~~~c~~~~CCs~~G~CG~~~~~C~~~Cq~   79 (126)
+T 1ulk_A            2 PVCGVRASGRVCPDGYCCSQWGYCGTTEEYCGKGCQSQ-C-DYNRCGKEFGGKECHDELCCSQYGWCGNSDGHCGEGCQS   79 (126)
+T ss_dssp             CCSBGGGTTBCCGGGCEECTTSCEESSHHHHSTTCCBC-T-TTTBCBGGGTTBCCGGGCEECTTSBEECSHHHHSTTCCB
+T ss_pred             CcCcCCCCCCCCCCCCeECCCCeeCCCccccCCCcccc-c-eeeeccccccCCCCCCccccCCCcccccCcccccCCccc
+Confidence            46888877899999999999999999999999999864 2 345777654456788899999999999999999999997
+
+
+Q 2UVO:A|PDBID|C  124 GACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSG  167 (171)
+Q Consensus       124 ~~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~gCq~~  167 (171)
+                      . + .+.+|++..++++|+++.|||++||||++++||+.+||++
+T Consensus        80 ~-c-~~~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~gCq~~  121 (126)
+T 1ulk_A           80 Q-C-SYWRCGKDFGGRLCTEDMCCSQYGWCGLTDDHCEDGCQSQ  121 (126)
+T ss_dssp             C-T-TTTBCBGGGTTBCCSTTCEECTTSBEECSHHHHSTTCCBC
+T ss_pred             c-c-CcccccccCCCccCCCCcccccCceecCcccccCcccccc
+Confidence            4 2 2467787555668999999999999999999999999984
+
+
+No 5  
+>2uvo_A Agglutinin isolectin 1; carbohydrate-binding protein, hevein domain, chitin-binding, GERM agglutinin, chitin-binding protein; HET: NDG NAG GOL; 1.40A {Triticum aestivum} PDB: 1wgc_A* 2cwg_A* 2x3t_A* 4aml_A* 7wga_A 9wga_A 2wgc_A 1wgt_A 1k7t_A* 1k7v_A* 1k7u_A 2x52_A* 1t0w_A*
+Probab=99.72  E-value=9.7e-23  Score=148.46  Aligned_cols=125  Identities=61%  Similarity=1.542  Sum_probs=111.6
+
+Q 2UVO:A|PDBID|C   45 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG  124 (171)
+Q Consensus        45 ~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~  124 (171)
+                      +||++..+.+|+.+.|||+++||+++++||+++||++++..+.+|++.....+++++.|+++++||+++++||+.+||.+
+T Consensus         2 ~cg~~~~~~~c~~~~CCS~~g~Cg~~~~~Cg~gC~~~~c~~~~~cg~~~~~~~c~~~~CCs~~g~Cg~~~~~c~~~c~~~   81 (171)
+T 2uvo_A            2 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGG   81 (171)
+T ss_dssp             BCBGGGTTBBCGGGCEECTTSBEEBSHHHHSTTCCBSSCSSCCBCBGGGTTBCCSTTCEECTTSBEEBSHHHHSTTCCBS
+T ss_pred             CCCCCCCCcCCCCCCeeCCCCeECCCcccccCCccccccccccccCcccCCcccCCccccCCCceeCCCccccCCCcccc
+Confidence            57776556789999999999999999999999999888888899998654567889999999999999999999999988
+
+
+Q 2UVO:A|PDBID|C  125 ACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGC  169 (171)
+Q Consensus       125 ~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~gCq~~~c  169 (171)
+                      .+..+.+|++...+++|+.+.|||+++|||++++||+.+||++++
+T Consensus        82 ~~~~~~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~gCq~~~c  126 (171)
+T 2uvo_A           82 PCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGAC  126 (171)
+T ss_dssp             SCSSCCBCBGGGTTBCCGGGCEECTTSBEEBSHHHHSTTCCBSSC
+T ss_pred             cccccccccccccCCCCCCCcccCCCCccCCCcccccCCCcCCcc
+Confidence            888889999754456789999999999999999999999998755
+
+
+No 6  
+>2wga   ; lectin (agglutinin); NMR {}
+Probab=99.66  E-value=2.4e-21  Score=140.12  Aligned_cols=121  Identities=41%  Similarity=1.182  Sum_probs=0.0
+
+Q 2UVO:A|PDBID|C   46 CGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGA  125 (171)
+Q Consensus        46 Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~  125 (171)
+                      ||.++.+.+|.++.|||.|+|||.+++||+.+||.++|+.+.+|+.  ..+.||...|||+|||||.+++||+.+||++.
+T Consensus         3 ~g~~~~~~~c~~~~CCs~~g~Cg~~~~~c~~~C~~~~c~~~~~cg~--~~~~c~~~~CCs~~G~CG~~~~~C~~~C~~~~   80 (164)
+T 2wga              3 XGCXGXXMYCSTNNCCXXWESCGSGGYXCGEGCNLGACQXGXPCXX--PGSVCTNLHCCARGGHCGMGSGYCGXGCXGGA   80 (164)
+T ss_dssp             SGGGSSCCCCSTTCEECTTSCEECSTTTTSTTCCSSSCSSCCCSSS--SSCCCSTTCEECTTSCEESSHHHHSSCCSSSS
+T ss_pred             cCCCcccccCCCCceECCcceECCCCccccCccccCcccccceecc--CCCcCCCCcccCCCceeCCCCcccCCCccccc
+
+
+Q 2UVO:A|PDBID|C  126 CSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSGGCD  170 (171)
+Q Consensus       126 c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~gCq~~~c~  170 (171)
+                      |+.|..|+.+  .+.|.++.|||+|+.||+.+-||+++||++-|+
+T Consensus        81 ~~~~~~Cg~~--~~~c~~~~Ccs~~G~CGt~~~~C~~~cq~~~c~  123 (164)
+T 2wga             81 CXADIXCGXG--XXXCPTDSCCGGWGXCGNGXEFCGXGCXVGGCA  123 (164)
+T ss_dssp             CSSCCCCTTS--SSCCSTTCBCCSSSCCBCSHHHHSTTCCSSSCS
+T ss_pred             cccccccCcc--cccCCCCCccCCCCCccCccccccCCccccccc
+
+
+No 7  
+>1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A
+Probab=99.31  E-value=1.2e-16  Score=102.02  Aligned_cols=78  Identities=47%  Similarity=1.275  Sum_probs=66.8
+
+Q 2UVO:A|PDBID|C   44 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQS  123 (171)
+Q Consensus        44 ~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~  123 (171)
+                      .+||+.+...+|+++.||++++||+++++||+++||+.  ..+++|++...+.+++++.|||+++|||++++||+.+||+
+T Consensus         2 ~~cg~~~~~~~C~~g~CCs~~G~Cg~~~~~c~~~c~~~--~~~g~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~~Cqs   79 (82)
+T 1uha_A            2 PECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ--CDYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQS   79 (82)
+T ss_dssp             CCSBGGGTTBCCGGGCEECTTSCEESSHHHHSTTCCBC--TTTTBCBGGGTTBCCSTTCEECTTSBEECSHHHHSTTCCB
+T ss_pred             CCCCCCCCCCcCCCCCccCCCccccCccccccCCcccc--ccccccccccceecCCCCCccCCCccccCCcccccccccc
+Confidence            46777666778999999999999999999999999864  2356788765567788999999999999999999999986
+
+
+No 8  
+>1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A
+Probab=99.26  E-value=3.7e-16  Score=101.24  Aligned_cols=81  Identities=47%  Similarity=1.259  Sum_probs=71.9
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNGACW----TSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGA   76 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~c~----~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~   76 (171)
+                      |+||++..+.+|+.+.|||+++|||++++||+++||+. +.    ++.+|++..+...|+++.|||+++|||++++||+.
+T Consensus         1 ~~cg~~~~~~~C~~~~CCS~~G~CG~~~~~C~~~Cq~~-c~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~   79 (89)
+T 1en2_A            1 ERCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSG   79 (89)
+T ss_dssp             CBCTTTTTSCCCGGGCEEETTSBEESSHHHHSTTEEES-CGGGCCTTCBCSGGGTCCCCCTTCEEETTSBEESSHHHHSG
+T ss_pred             CCCCCCCCCccCCCCcccCCCceecccccccCCCCcCC-CcccccCCcccCCcccccccCCCCeECCCceECCCccccCC
+Confidence            68999998899999999999999999999999999976 43    47889986556788999999999999999999998
+
+
+Q 2UVO:A|PDBID|C   77 G-CQGGP   82 (171)
+Q Consensus        77 ~-c~~~~   82 (171)
+                      + ||+++
+T Consensus        80 ~~Cq~~~   86 (89)
+T 1en2_A           80 GNCQYRC   86 (89)
+T ss_dssp             GGEEECC
+T ss_pred             CCcccCC
+Confidence            6 98753
+
+
+No 9  
+>1en2_A UDA, agglutinin isolectin I/agglutinin isolectin V/ AG isolectin VI; hevein domain, superantigen, saccharide binding binding protein; HET: NAG; 1.40A {Urtica dioica} SCOP: g.3.1.1 g.3.1.1 PDB: 1eis_A* 1enm_A* 1ehd_A 1ehh_A* 1iqb_A
+Probab=99.22  E-value=7.4e-16  Score=99.76  Aligned_cols=79  Identities=47%  Similarity=1.232  Sum_probs=67.7
+
+Q 2UVO:A|PDBID|C   45 RCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCR----ADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG  120 (171)
+Q Consensus        45 ~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~----~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~  120 (171)
+                      +||+..++.+|+.+.|||+++|||++++||+++||+. +.    .+++|++......|+++.|||+++|||++++||+.+
+T Consensus         2 ~cg~~~~~~~C~~~~CCS~~G~CG~~~~~C~~~Cq~~-c~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~   80 (89)
+T 1en2_A            2 RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENK-CWSGERSDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGG   80 (89)
+T ss_dssp             BCTTTTTSCCCGGGCEEETTSBEESSHHHHSTTEEES-CGGGCCTTCBCSGGGTCCCCCTTCEEETTSBEESSHHHHSGG
+T ss_pred             CCCCCCCCccCCCCcccCCCceecccccccCCCCcCC-CcccccCCcccCCcccccccCCCCeECCCceECCCccccCCC
+Confidence            5777666678999999999999999999999999875 43    478888765456788999999999999999999997
+
+
+Q 2UVO:A|PDBID|C  121 -CQSG  124 (171)
+Q Consensus       121 -Cq~~  124 (171)
+                       ||++
+T Consensus        81 ~Cq~~   85 (89)
+T 1en2_A           81 NCQYR   85 (89)
+T ss_dssp             GEEEC
+T ss_pred             CcccC
+Confidence             9974
+
+
+No 10 
+>1uha_A Lectin-D2; chitin-binding domain, sugar binding protein; 1.50A {Phytolacca americana} SCOP: g.3.1.1 g.3.1.1 PDB: 1ulm_A* 1uln_A
+Probab=99.21  E-value=9.6e-16  Score=97.65  Aligned_cols=78  Identities=54%  Similarity=1.333  Sum_probs=65.9
+
+Q 2UVO:A|PDBID|C   88 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQSG  167 (171)
+Q Consensus        88 ~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~gCq~~  167 (171)
+                      +||+.....+|+++.||++++||+++++||+.+||+. + .+++|++.+.+.+|+++.|||++||||++++||+.+||++
+T Consensus         3 ~cg~~~~~~~C~~g~CCs~~G~Cg~~~~~c~~~c~~~-~-~~g~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~C~~~Cqs~   80 (82)
+T 1uha_A            3 ECGERASGKRCPNGKCCSQWGYCGTTDNYCGQGCQSQ-C-DYWRCGRDFGGRLCEEDMCCSKYGWCGYSDDHCEDGCQSQ   80 (82)
+T ss_dssp             CSBGGGTTBCCGGGCEECTTSCEESSHHHHSTTCCBC-T-TTTBCBGGGTTBCCSTTCEECTTSBEECSHHHHSTTCCBC
+T ss_pred             CCCCCCCCCcCCCCCccCCCccccCccccccCCcccc-c-cccccccccceecCCCCCccCCCccccCCccccccccccc
+Confidence            4666544577899999999999999999999999974 2 3467887655678899999999999999999999999974
+
+
+No 11 
+>1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A
+Probab=97.79  E-value=7.7e-09  Score=56.76  Aligned_cols=37  Identities=68%  Similarity=1.600  Sum_probs=30.2
+
+Q 2UVO:A|PDBID|C   88 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGG--GCQSG  124 (171)
+Q Consensus        88 ~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~--~Cq~~  124 (171)
+                      +||+...+..|+.+.|||++||||++++||..  +||+.
+T Consensus         2 ~CG~~~~~~~C~~~~CCS~~G~CG~t~~~C~~~~~Cq~~   40 (43)
+T 1wkx_A            2 QCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN   40 (43)
+T ss_dssp             CSBGGGTTBCCSTTCEECTTSCEESSHHHHCGGGTCCBS
+T ss_pred             CCCCcCCCcccCCCCeEeecCcccCCcccccCCCCccCC
+Confidence            35554445678899999999999999999986  79874
+
+
+No 12 
+>1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*
+Probab=97.67  E-value=1.9e-08  Score=54.61  Aligned_cols=37  Identities=46%  Similarity=1.182  Sum_probs=32.7
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGK-GCQNG   38 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~-~c~~~   38 (171)
+                      |+||+ ..+.+|+.+.|||+++|||++++||+. .||..
+T Consensus         1 ~~CG~-~~~~~C~~~~CCS~~G~CG~t~~~C~~~~Cq~~   38 (41)
+T 1p9g_A            1 ETCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ   38 (41)
+T ss_dssp             CCGGG-GTTCCSCTTCEEETTSCEECSHHHHSTTTEEEC
+T ss_pred             CCcCC-cCCcccCCCCeECccceeCCCccccCCCccccC
+Confidence            68995 677899999999999999999999998 49864
+
+
+No 13 
+>1p9g_A EAFP 2; antifungal peptide, atomic resolution, antifungal protein; HET: PCA; 0.84A {Eucommia ulmoides} SCOP: g.3.1.1 PDB: 1p9z_A*
+Probab=97.66  E-value=1.9e-08  Score=54.54  Aligned_cols=36  Identities=42%  Similarity=1.206  Sum_probs=29.2
+
+Q 2UVO:A|PDBID|C   88 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG  124 (171)
+Q Consensus        88 ~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~-Cq~~  124 (171)
+                      +||+ ..+..|+.+.|||++||||++++||+.+ ||+.
+T Consensus         2 ~CG~-~~~~~C~~~~CCS~~G~CG~t~~~C~~~~Cq~~   38 (41)
+T 1p9g_A            2 TCAS-RCPRPCNAGLCCSIYGYCGSGAAYCGAGNCRCQ   38 (41)
+T ss_dssp             CGGG-GTTCCSCTTCEEETTSCEECSHHHHSTTTEEEC
+T ss_pred             CcCC-cCCcccCCCCeECccceeCCCccccCCCccccC
+Confidence            3553 3356788999999999999999999984 9874
+
+
+No 14 
+>1wkx_A Hevein isoform 2; allergen, lectin, agglutinin-toxin motif; 1.70A {Hevea brasiliensis} PDB: 1hev_A 1q9b_A* 4wp4_A
+Probab=97.65  E-value=2e-08  Score=54.99  Aligned_cols=38  Identities=50%  Similarity=1.302  Sum_probs=34.5
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGK--GCQNG   38 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~--~c~~~   38 (171)
+                      ++||+...+..|+.+.|||.++|||++++||+.  +||..
+T Consensus         1 ~~CG~~~~~~~C~~~~CCS~~G~CG~t~~~C~~~~~Cq~~   40 (43)
+T 1wkx_A            1 EQCGRQAGGKLCPDNLCCSQWGWCGSTDEYCSPDHNCQSN   40 (43)
+T ss_dssp             CCSBGGGTTBCCSTTCEECTTSCEESSHHHHCGGGTCCBS
+T ss_pred             CCCCCcCCCcccCCCCeEeecCcccCCcccccCCCCccCC
+Confidence            579999888899999999999999999999996  79864
+
+
+No 15 
+>4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}
+Probab=97.62  E-value=2.4e-08  Score=55.16  Aligned_cols=37  Identities=51%  Similarity=1.325  Sum_probs=33.8
+
+Q 2UVO:A|PDBID|C    2 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKGCQNG   38 (171)
+Q Consensus         2 ~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~   38 (171)
+                      +||+...+.+|+.+.|||+++|||++.+||+.+||..
+T Consensus         4 ~CG~~~~~~~C~~~~CCs~~G~CG~t~~~C~~gCq~~   40 (45)
+T 4mpi_A            4 QCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ   40 (45)
+T ss_dssp             BCBGGGTTBCCGGGCEECTTSBEECSHHHHSTTCCBC
+T ss_pred             ccCCcCCCcccCCCCcCcccceecCCccccccccccc
+Confidence            6888887789999999999999999999999999864
+
+
+No 16 
+>2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}
+Probab=97.59  E-value=3e-08  Score=54.44  Aligned_cols=37  Identities=59%  Similarity=1.493  Sum_probs=30.2
+
+Q 2UVO:A|PDBID|C   88 KCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGG-CQSG  124 (171)
+Q Consensus        88 ~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~-Cq~~  124 (171)
+                      +|++...+.+|+.+.|||+++|||++++||..+ ||+.
+T Consensus         3 ~CG~~~~~~~C~~~~CCS~~G~CG~t~~~C~~~~Cq~~   40 (44)
+T 2lb7_A            3 RCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ   40 (44)
+T ss_dssp             ECBGGGTTBCCCTTCEEETTTEEECSHHHHSTTSEEEC
+T ss_pred             CCcCCCCCcccCCCCcCCcceeecCCccccCCCCccCC
+Confidence            455544456788999999999999999999986 8864
+
+
+No 17 
+>4mpi_A Class I chitinase; hevein-like domain, chitin oligomers, sugar binding protein; HET: MES; 1.60A {Hevea brasiliensis subsp}
+Probab=97.57  E-value=3.3e-08  Score=54.59  Aligned_cols=38  Identities=61%  Similarity=1.420  Sum_probs=31.3
+
+Q 2UVO:A|PDBID|C   87 IKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG  124 (171)
+Q Consensus        87 ~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~  124 (171)
+                      ..|++...+..|+.+.|||++||||++++||+.+||+.
+T Consensus         3 ~~CG~~~~~~~C~~~~CCs~~G~CG~t~~~C~~gCq~~   40 (45)
+T 4mpi_A            3 EQCGRQAGGALCPGGLCCSQYGWCANTPEYCGSGCQSQ   40 (45)
+T ss_dssp             CBCBGGGTTBCCGGGCEECTTSBEECSHHHHSTTCCBC
+T ss_pred             cccCCcCCCcccCCCCcCcccceecCCccccccccccc
+Confidence            45665544567889999999999999999999999873
+
+
+No 18 
+>2lb7_A WAMP-1A, antimicrobial peptide 1A; antimicrobial protein; NMR {Triticum kiharae}
+Probab=97.46  E-value=6.6e-08  Score=52.98  Aligned_cols=38  Identities=55%  Similarity=1.488  Sum_probs=34.0
+
+Q 2UVO:A|PDBID|C    1 ERCGEQGSNMECPNNLCCSQYGYCGMGGDYCGKG-CQNG   38 (171)
+Q Consensus         1 ~~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~-c~~~   38 (171)
+                      ++||++..+.+|+.+.|||+++|||++.+||+.+ ||..
+T Consensus         2 ~~CG~~~~~~~C~~~~CCS~~G~CG~t~~~C~~~~Cq~~   40 (44)
+T 2lb7_A            2 QRCGDQARGAKCPNCLCCGKYGFCGSGDAYCGAGSCQSQ   40 (44)
+T ss_dssp             EECBGGGTTBCCCTTCEEETTTEEECSHHHHSTTSEEEC
+T ss_pred             CCCcCCCCCcccCCCCcCCcceeecCCccccCCCCccCC
+Confidence            4789998778999999999999999999999986 8864
+
+
+No 19 
+>2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}
+Probab=97.25  E-value=2.2e-07  Score=48.31  Aligned_cols=32  Identities=50%  Similarity=1.296  Sum_probs=27.1
+
+Q 2UVO:A|PDBID|C   42 TSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCG   75 (171)
+Q Consensus        42 ~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~   75 (171)
+                      ++++|++..+  .|+++.|||+++|||++++||+
+T Consensus         3 ~~~~CG~~~g--~C~~g~CCS~~G~CG~~~~~C~   34 (35)
+T 2kus_A            3 PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA   34 (35)
+T ss_dssp             TTCBCBTTTB--CCCTTCEECTTSBEECSHHHHC
+T ss_pred             CCcccCCCCC--cCCCCcEECCCceecCChhhhC
+Confidence            4567887543  6899999999999999999986
+
+
+No 20 
+>2kus_A SM-AMP-1.1A; plant antimicrobial peptide, chitin-binding peptide, antimic protein; NMR {Stellaria media}
+Probab=97.13  E-value=4.2e-07  Score=47.19  Aligned_cols=32  Identities=44%  Similarity=1.207  Sum_probs=26.5
+
+Q 2UVO:A|PDBID|C   85 ADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCG  118 (171)
+Q Consensus        85 ~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~  118 (171)
+                      ++++|++..+  .|+++.|||+++|||++++||+
+T Consensus         3 ~~~~CG~~~g--~C~~g~CCS~~G~CG~~~~~C~   34 (35)
+T 2kus_A            3 PNGQCGPGWG--GCRGGLCCSQYGYCGSGPKYCA   34 (35)
+T ss_dssp             TTCBCBTTTB--CCCTTCEECTTSBEECSHHHHC
+T ss_pred             CCcccCCCCC--cCCCCcEECCCceecCChhhhC
+Confidence            4567777543  6889999999999999999986
+
+
+No 21 
+>1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*
+Probab=97.04  E-value=6.8e-07  Score=44.77  Aligned_cols=25  Identities=48%  Similarity=1.444  Sum_probs=22.0
+
+Q 2UVO:A|PDBID|C   95 GKLCPNNLCCSQWGFCGLGSEFCGG  119 (171)
+Q Consensus        95 ~~~c~~~~CCS~~G~CG~~~~~C~~  119 (171)
+                      ...|+.+.|||++||||++.+||+.
+T Consensus         6 ~~~C~~~~CCS~~G~CG~t~~~C~~   30 (30)
+T 1mmc_A            6 RGRCPSGMCCSQFGYCGKGPKYCGR   30 (30)
+T ss_dssp             SSCCSTTCEECTTSCEESSHHHHCC
+T ss_pred             cCCCCCCCcccccceeCCchHhhCc
+Confidence            3468899999999999999999963
+
+
+No 22 
+>1mmc_A AC-AMP2, antimicrobial peptide 2; antifungal antimicrobial, chitin-binding; NMR {Amaranthus caudatus} SCOP: g.3.1.2 PDB: 1zuv_A 1zwu_A* 1znt_A*
+Probab=96.99  E-value=8.4e-07  Score=44.41  Aligned_cols=27  Identities=52%  Similarity=1.425  Sum_probs=23.6
+
+Q 2UVO:A|PDBID|C    7 GSNMECPNNLCCSQYGYCGMGGDYCGK   33 (171)
+Q Consensus         7 ~~~~~c~~~~CCs~~g~CG~~~~~c~~   33 (171)
+                      ....+|+.+.|||++||||++.+||++
+T Consensus         4 ~~~~~C~~~~CCS~~G~CG~t~~~C~~   30 (30)
+T 1mmc_A            4 CVRGRCPSGMCCSQFGYCGKGPKYCGR   30 (30)
+T ss_dssp             CSSSCCSTTCEECTTSCEESSHHHHCC
+T ss_pred             CccCCCCCCCcccccceeCCchHhhCc
+Confidence            345689999999999999999999973
+
+
+No 23 
+>2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}
+Probab=96.90  E-value=1.3e-06  Score=43.64  Aligned_cols=23  Identities=48%  Similarity=1.477  Sum_probs=20.7
+
+Q 2UVO:A|PDBID|C   96 KLCPNNLCCSQWGFCGLGSEFCG  118 (171)
+Q Consensus        96 ~~c~~~~CCS~~G~CG~~~~~C~  118 (171)
+                      ..|+.+.|||++||||++++||+
+T Consensus         8 ~~C~~~~CCs~~G~CGtt~~~C~   30 (30)
+T 2n1s_A            8 GRCSGGLCCSKYGYCGSGPAYCG   30 (30)
+T ss_dssp             TBCSTTCEECTTSBEECSHHHHC
+T ss_pred             CCCCCCCccccccccCcchhhcC
+Confidence            36888999999999999999985
+
+
+No 24 
+>2n1s_A AMP-2; antimicrobial peptide, ICK, cystine knot inhibitor, cystine antimicrobial protein; NMR {Stellaria media}
+Probab=96.77  E-value=2.3e-06  Score=42.68  Aligned_cols=27  Identities=56%  Similarity=1.468  Sum_probs=23.6
+
+Q 2UVO:A|PDBID|C    2 RCGEQGSNMECPNNLCCSQYGYCGMGGDYCG   32 (171)
+Q Consensus         2 ~cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~   32 (171)
+                      +||    ..+|+.+.|||++||||++++||+
+T Consensus         4 ~cg----~~~C~~~~CCs~~G~CGtt~~~C~   30 (30)
+T 2n1s_A            4 QCY----RGRCSGGLCCSKYGYCGSGPAYCG   30 (30)
+T ss_dssp             BCB----TTBCSTTCEECTTSBEECSHHHHC
+T ss_pred             hcC----CCCCCCCCccccccccCcchhhcC
+Confidence            566    258999999999999999999985
+
+
+No 25 
+>2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*
+Probab=96.11  E-value=2.5e-05  Score=59.25  Aligned_cols=38  Identities=66%  Similarity=1.556  Sum_probs=32.2
+
+Q 2UVO:A|PDBID|C   87 IKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSG  124 (171)
+Q Consensus        87 ~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~  124 (171)
+                      .+||+..++..|+.+.|||++||||++.+||..+||..
+T Consensus         2 ~~cG~~~~~~~c~~~~ccs~~g~cg~~~~~C~~~cq~~   39 (309)
+T 2dkv_A            2 EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ   39 (309)
+T ss_dssp             CBCSTTTTTCCCGGGCEECTTSBEESSHHHHSTTCCBC
+T ss_pred             CCCCCCCCCCcCCCCCeeCcCCcccCCccccCccccCC
+Confidence            35666555578999999999999999999999999975
+
+
+No 26 
+>2dkv_A Chitinase; whole structure, oryza sativa L. japonica, hydrolase; HET: MES; 2.00A {Oryza sativa japonica group} PDB: 3iwr_A*
+Probab=95.96  E-value=3.8e-05  Score=58.17  Aligned_cols=38  Identities=53%  Similarity=1.380  Sum_probs=33.1
+
+Q 2UVO:A|PDBID|C   44 KRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGG   81 (171)
+Q Consensus        44 ~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~   81 (171)
+                      ++||+..++.+|+.+.|||++||||++.+||..+||..
+T Consensus         2 ~~cG~~~~~~~c~~~~ccs~~g~cg~~~~~C~~~cq~~   39 (309)
+T 2dkv_A            2 EQCGAQAGGARCPNCLCCSRWGWCGTTSDFCGDGCQSQ   39 (309)
+T ss_dssp             CBCSTTTTTCCCGGGCEECTTSBEESSHHHHSTTCCBC
+T ss_pred             CCCCCCCCCCcCCCCCeeCcCCcccCCccccCccccCC
+Confidence            46777666678999999999999999999999999865
+
+
+No 27 
+>4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}
+Probab=85.64  E-value=0.043  Score=38.99  Aligned_cols=22  Identities=41%  Similarity=1.195  Sum_probs=0.0
+
+Q 2UVO:A|PDBID|C  144 NYCCSKWGSCGIGPGYCG-AGCQ  165 (171)
+Q Consensus       144 ~~CCS~~G~CG~~~~~C~-~gCq  165 (171)
+                      ..|||..||||.+.+||. ..|+
+T Consensus        48 ~~CCs~~~~Cg~~~~~C~~~~c~   70 (256)
+T 4zxm_A           48 DHCCSEWGWCGRETSHCTCSSCV   70 (256)
+T ss_dssp             -----------------------
+T ss_pred             CCCCCCCCeEeCCCCCcCCcccc
+Confidence            689999999999999997 3565
+
+
+No 28 
+>1wga   ; lectin (agglutinin); NMR {}
+Probab=80.97  E-value=0.11  Score=32.66  Aligned_cols=150  Identities=20%  Similarity=0.658  Sum_probs=91.1
+
+Q 2UVO:A|PDBID|C   11 ECPNNLCCSQYGYCGMGGDYCGKGCQNGACWTSKRCGSQAGGATCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCG   90 (171)
+Q Consensus        11 ~c~~~~CCs~~g~CG~~~~~c~~~c~~~~c~~~~~Cg~~~~~~~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg   90 (171)
+                      .|....||.....|......|...|....|.....|...  ...|....||.....|......|...|....|.....|.
+T Consensus        11 ~c~~~~cc~~~~~c~~~~~~c~~~c~~~~c~~~~~c~~~--~~~c~~~~cc~~~~~c~~~~~~c~~~c~~~~c~~~~~c~   88 (164)
+T 1wga             11 XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCX   88 (164)
+T ss_pred             ccccccccccccccccccccccccccccccccccccccc--ccccccccccccccccccccccccccccccccccccccc
+Confidence            456667777777777777777665554434333344332  235666778877777777777776665544333333343
+
+
+Q 2UVO:A|PDBID|C   91 SQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCGKDAGGRVCTNNYCCSKWGSCGIGPGYCGAGCQS  166 (171)
+Q Consensus        91 ~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~c~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~gCq~  166 (171)
+                      ..  ...|....||.....|......|...|....+.....|...  ...|....||.....|......|...|..
+T Consensus        89 ~~--~~~c~~~~cc~~~~~c~~~~~~c~~~c~~~~c~~~~~c~~~--~~~c~~~~cc~~~~~c~~~~~~c~~~c~~  160 (164)
+T 1wga             89 XX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXX  160 (164)
+T ss_pred             cc--ccccccccccccccccccccccccccccccccccccccccc--ccccccccccccccccccccccccccccc
+Confidence            32  34566677888888887777777766655444333344432  34566677888777787777777665543
+
+
+No 29 
+>4zxm_A PGRP domain of peptidoglycan recognition protein; amidase, hydrolase; 2.80A {Branchiostoma belcheri tsingtauense}
+Probab=80.29  E-value=0.11  Score=36.76  Aligned_cols=35  Identities=37%  Similarity=0.967  Sum_probs=0.0
+
+Q 2UVO:A|PDBID|C    2 RCGEQG-----SNMECPN---NLCCSQYGYCGMGGDYCGK-GCQ   36 (171)
+Q Consensus         2 ~cg~~~-----~~~~c~~---~~CCs~~g~CG~~~~~c~~-~c~   36 (171)
+                      +||+..     ....|..   ..|||..+|||.+.+||.. .|+
+T Consensus        27 ~Cg~~~~~~~~~~~~C~~~~~~~CCs~~~~Cg~~~~~C~~~~c~   70 (256)
+T 4zxm_A           27 RCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCV   70 (256)
+T ss_dssp             --------------------------------------------
+T ss_pred             CCCCCCCCCCCCCcccCCCCCCCCCCCCCeEeCCCCCcCCcccc
+Confidence            577654     2346765   7899999999999999974 576
+
+
+No 30 
+>4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}
+Probab=80.27  E-value=0.11  Score=36.29  Aligned_cols=24  Identities=38%  Similarity=1.185  Sum_probs=19.7
+
+Q 2UVO:A|PDBID|C  100 NNLCCSQWGFCGLGSEFCGG-GCQS  123 (171)
+Q Consensus       100 ~~~CCS~~G~CG~~~~~C~~-~Cq~  123 (171)
+                      ...|||.++|||.+.++|.- +|+.
+T Consensus        30 ~~~CCs~~~~cg~~~~~c~~~~c~d   54 (236)
+T 4z8i_A           30 VDHCCSEWGWCGRETSHCTCSSCVD   54 (236)
+T ss_dssp             SCCEECTTSBEECSHHHHHSTTCEE
+T ss_pred             CCCCCCCCCEEeCCcccccCCcccc
+Confidence            36899999999999999983 5553
+
+
+No 31 
+>4z8i_A BBTPGRP3, peptidoglycan recognition protein 3; chitin-binding domain, AM hydrolase; 2.70A {Branchiostoma belcheri tsingtauense}
+Probab=79.58  E-value=0.12  Score=36.06  Aligned_cols=37  Identities=35%  Similarity=0.927  Sum_probs=27.4
+
+Q 2UVO:A|PDBID|C    1 ERCGEQG-----SNMECPN---NLCCSQYGYCGMGGDYCGK-GCQN   37 (171)
+Q Consensus         1 ~~cg~~~-----~~~~c~~---~~CCs~~g~CG~~~~~c~~-~c~~   37 (171)
+                      .+||+..     ....|..   ..|||.++|||.+.++|.- +|+.
+T Consensus         9 ~rCg~~~~~~~~~~~~C~~~~~~~CCs~~~~cg~~~~~c~~~~c~d   54 (236)
+T 4z8i_A            9 GRCGPNYPAPDANPGECNPHAVDHCCSEWGWCGRETSHCTCSSCVD   54 (236)
+T ss_dssp             SBCBSSSCBTTBSSBBCCTTSSCCEECTTSBEECSHHHHHSTTCEE
+T ss_pred             CCCCCCCCCCCCCCcccCCCCCCCCCCCCCEEeCCcccccCCcccc
+Confidence            3677664     3345653   7899999999999999984 5654
+
+
+No 32 
+>1wga   ; lectin (agglutinin); NMR {}
+Probab=40.43  E-value=2.6  Score=25.90  Aligned_cols=106  Identities=20%  Similarity=0.652  Sum_probs=54.7
+
+Q 2UVO:A|PDBID|C   54 TCTNNQCCSQYGYCGFGAEYCGAGCQGGPCRADIKCGSQAGGKLCPNNLCCSQWGFCGLGSEFCGGGCQSGACSTDKPCG  133 (171)
+Q Consensus        54 ~c~~~~CCs~~g~CG~~~~~c~~~c~~~~~~~~~~Cg~~~~~~~c~~~~CCS~~G~CG~~~~~C~~~Cq~~~c~~~~~Cg  133 (171)
+                      .|....||.....|......|...|....|.....|...  ...|....||.....|......|...|....+.....|.
+T Consensus        11 ~c~~~~cc~~~~~c~~~~~~c~~~c~~~~c~~~~~c~~~--~~~c~~~~cc~~~~~c~~~~~~c~~~c~~~~c~~~~~c~   88 (164)
+T 1wga             11 XCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCXXX--XXXCXXXXCCXXXXXCXXXXXXCXXXCXXXXCXXXXXCX   88 (164)
+T ss_pred             ccccccccccccccccccccccccccccccccccccccc--ccccccccccccccccccccccccccccccccccccccc
+Confidence            344556666666666666566555543333223333321  234666677777777777766666655544332223333
+
+
+Q 2UVO:A|PDBID|C  134 KDAGGRVCTNNYCCSKWGSCGIGPGYCGAG  163 (171)
+Q Consensus       134 ~~~~~~~c~~~~CCS~~G~CG~~~~~C~~g  163 (171)
+                      ..  ...|....||.....|......|...
+T Consensus        89 ~~--~~~c~~~~cc~~~~~c~~~~~~c~~~  116 (164)
+T 1wga             89 XX--XXXCXXXXCCXXXXXCXXXXXXCXXX  116 (164)
+T ss_pred             cc--cccccccccccccccccccccccccc
+Confidence            22  23344455555555555555544433
+
+
+Done!

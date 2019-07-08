@@ -1,13 +1,15 @@
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# Copyright Lenna Peterson (2012)
+# All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 
 """Additional protein alphabets used in the SCOP database and PDB files.
 
-See Bio.SCOP for more information about SCOP and Biopython"s SCOP module.
+See Bio.SCOP for more information about SCOP and Biopython's SCOP module.
 """
-
-__docformat__ = "restructuredtext en"
 
 
 protein_letters_3to1 = {

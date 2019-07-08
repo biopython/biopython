@@ -7,23 +7,23 @@
 
 import os
 import unittest
-
-from Bio import BiopythonExperimentalWarning
-
 import warnings
 
-
-with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
-    from Bio.SearchIO import parse
+from Bio.SearchIO import parse
+from Bio import BiopythonWarning
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
 FMT = 'blast-text'
 
+# This prevents the NCBIStandalone usage warning from
+# printing to screen when running the test suite
+warnings.filterwarnings('ignore', r'Parsing BLAST plain text output '
+                        'file is not a well supported.*', BiopythonWarning)
+
 
 def get_file(filename):
-    """Returns the path of a test file."""
+    """Return the path of a test file."""
     return os.path.join(TEST_DIR, filename)
 
 
@@ -42,8 +42,7 @@ class BaseBlastCases(unittest.TestCase):
 class BlastnCases(BaseBlastCases):
 
     def test_text_2226_blastn_001(self):
-        """Test parsing blastn output (text_2226_blastn_001.txt)"""
-
+        """Test parsing blastn output (text_2226_blastn_001.txt)."""
         blast_file = get_file('text_2226_blastn_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -60,8 +59,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(0, len(qresult))
 
     def test_text_2226_blastn_002(self):
-        """Test parsing blastn output (text_2226_blastn_002.txt)"""
-
+        """Test parsing blastn output (text_2226_blastn_002.txt)."""
         blast_file = get_file('text_2226_blastn_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -136,8 +134,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastn_003(self):
-        """Test parsing blastn output (text_2226_blastn_003.txt)"""
-
+        """Test parsing blastn output (text_2226_blastn_003.txt)."""
         blast_file = get_file('text_2226_blastn_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -235,8 +232,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('GCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastn_004(self):
-        """Test parsing blastn output (text_2226_blastn_004.txt)"""
-
+        """Test parsing blastn output (text_2226_blastn_004.txt)."""
         blast_file = get_file('text_2226_blastn_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -415,8 +411,7 @@ class BlastnCases(BaseBlastCases):
 class BlastpCases(BaseBlastCases):
 
     def test_text_2226_blastp_001(self):
-        """Test parsing blastp output (text_2226_blastp_001.txt)"""
-
+        """Test parsing blastp output (text_2226_blastp_001.txt)."""
         blast_file = get_file('text_2226_blastp_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -433,8 +428,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(0, len(qresult))
 
     def test_text_2226_blastp_002(self):
-        """Test parsing blastp output (text_2226_blastp_002.txt)"""
-
+        """Test parsing blastp output (text_2226_blastp_002.txt)."""
         blast_file = get_file('text_2226_blastp_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -509,8 +503,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('DITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastp_003(self):
-        """Test parsing blastp output (text_2226_blastp_003.txt)"""
-
+        """Test parsing blastp output (text_2226_blastp_003.txt)."""
         blast_file = get_file('text_2226_blastp_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -631,8 +624,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('GKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastp_004(self):
-        """Test parsing blastp output (text_2226_blastp_004.txt)"""
-
+        """Test parsing blastp output (text_2226_blastp_004.txt)."""
         blast_file = get_file('text_2226_blastp_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -834,8 +826,7 @@ class BlastpCases(BaseBlastCases):
 class BlastxCases(BaseBlastCases):
 
     def test_text_2226_blastx_001(self):
-        """Test parsing blastx output (text_2226_blastx_001.txt)"""
-
+        """Test parsing blastx output (text_2226_blastx_001.txt)."""
         blast_file = get_file('text_2226_blastx_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -852,8 +843,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(0, len(qresult))
 
     def test_text_2226_blastx_002(self):
-        """Test parsing blastx output (text_2226_blastx_002.txt)"""
-
+        """Test parsing blastx output (text_2226_blastx_002.txt)."""
         blast_file = get_file('text_2226_blastx_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -928,8 +918,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('NSEGASSGPCTARPSAVKLEKVEPSPEESQDMKALQKELE', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastx_003(self):
-        """Test parsing blastx output (text_2226_blastx_003.txt)"""
-
+        """Test parsing blastx output (text_2226_blastx_003.txt)."""
         blast_file = get_file('text_2226_blastx_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1050,8 +1039,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('SLPSSWDYRHVPPRLAN-----FVFLVETKFPYVGQAGLE', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastx_004(self):
-        """Test parsing blastx output (text_2226_blastx_004.txt)"""
-
+        """Test parsing blastx output (text_2226_blastx_004.txt)."""
         blast_file = get_file('text_2226_blastx_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(2, len(qresults))
@@ -1185,8 +1173,7 @@ class BlastxCases(BaseBlastCases):
 class TblastnCases(BaseBlastCases):
 
     def test_text_2226_tblastn_001(self):
-        """Test parsing tblastn output (text_2226_tblastn_001.txt)"""
-
+        """Test parsing tblastn output (text_2226_tblastn_001.txt)."""
         blast_file = get_file('text_2226_tblastn_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1203,8 +1190,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(0, len(qresult))
 
     def test_text_2226_tblastn_002(self):
-        """Test parsing tblastn output (text_2226_tblastn_002.txt)"""
-
+        """Test parsing tblastn output (text_2226_tblastn_002.txt)."""
         blast_file = get_file('text_2226_tblastn_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1279,8 +1265,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('DAPQEVIEEIDKFKVALRKYFSSKNQTCVMFERNFRSQHL', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastn_003(self):
-        """Test parsing tblastn output (text_2226_tblastn_003.txt)"""
-
+        """Test parsing tblastn output (text_2226_tblastn_003.txt)."""
         blast_file = get_file('text_2226_tblastn_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1401,8 +1386,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('GKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastn_004(self):
-        """Test parsing tblastn output (text_2226_tblastn_004.txt)"""
-
+        """Test parsing tblastn output (text_2226_tblastn_004.txt)."""
         blast_file = get_file('text_2226_tblastn_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(3, len(qresults))
@@ -1604,8 +1588,7 @@ class TblastnCases(BaseBlastCases):
 class TblastxCases(BaseBlastCases):
 
     def test_text_2226_tblastx_001(self):
-        """Test parsing tblastx output (text_2226_tblastx_001.txt)"""
-
+        """Test parsing tblastx output (text_2226_tblastx_001.txt)."""
         blast_file = get_file('text_2226_tblastx_001.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1622,8 +1605,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(0, len(qresult))
 
     def test_text_2226_tblastx_002(self):
-        """Test parsing tblastx output (text_2226_tblastx_002.txt)"""
-
+        """Test parsing tblastx output (text_2226_tblastx_002.txt)."""
         blast_file = get_file('text_2226_tblastx_002.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1698,8 +1680,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLQRSPRT*KPCRRS*N', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastx_003(self):
-        """Test parsing tblastx output (text_2226_tblastx_003.txt)"""
-
+        """Test parsing tblastx output (text_2226_tblastx_003.txt)."""
         blast_file = get_file('text_2226_tblastx_003.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(1, len(qresults))
@@ -1820,8 +1801,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('PSYSGG*GQRIT*TQETEVAMSQDCAIALQPGQQERNSIS', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastx_004(self):
-        """Test parsing tblastx output (text_2226_tblastx_004.txt)"""
-
+        """Test parsing tblastx output (text_2226_tblastx_004.txt)."""
         blast_file = get_file('text_2226_tblastx_004.txt')
         qresults = list(parse(blast_file, FMT))
         self.assertEqual(2, len(qresults))
@@ -1947,6 +1927,30 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('FRIEKKKFNHSPC*', str(hsp.query.seq))
         self.assertEqual('FRI KKKFNH  C*', hsp.aln_annotation['similarity'])
         self.assertEqual('FRI*KKKFNH*TC*', str(hsp.hit.seq))
+
+    def test_text_2230_blastp_001(self):
+        """Test parsing blastp output (text_2230_blastp_001.txt)."""
+        blast_file = get_file('text_2230_blastp_001.txt')
+        qresults = list(parse(blast_file, FMT))
+        self.assertEqual(1, len(qresults))
+        self.check_common_attrs(qresults)
+
+        # test first qresult
+        qresult = qresults[0]
+        self.assertEqual('TR11080zzzc0_g2_i2_0', qresult.id)
+        self.assertEqual('', qresult.description)
+        self.assertEqual(1691, qresult.seq_len)
+        self.assertEqual('subject.fasta', qresult.target)
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('2.2.30+', qresult.version)
+        self.assertEqual(1, len(qresult))
+        self.assertEqual(3, len(qresult.hsps))
+        hsp = qresult.hsps[0]
+        self.assertIn("PTSP" + ("-" * 79) + "AYSP", hsp.query)
+        hsp = qresult.hsps[1]
+        self.assertTrue(hsp.query.seq.startswith("AYSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPA"))
+        hsp = qresult.hsps[2]
+        self.assertTrue(hsp.query.seq.startswith("YSPTSPAYSPTSPAYSPTSPAYSPTSPAYS----------PTSPAYSPTSPAYSPTSPAY"))
 
 
 if __name__ == "__main__":

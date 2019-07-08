@@ -1,10 +1,9 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
-
-""" Handle the SCOP DEScription file.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Handle the SCOP DEScription file.
 
 The file format is described in the scop
 "release notes.":http://scop.berkeley.edu/release-notes-1.55.html
@@ -19,7 +18,6 @@ class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
     Attributes:
-
      - sunid - SCOP unique identifiers
      - nodetype - One of 'cl' (class), 'cf' (fold), 'sf' (superfamily),
        'fa' (family), 'dm' (protein), 'sp' (species), 'px' (domain).
@@ -29,7 +27,9 @@ class Record(object):
      - description - e.g. "All beta proteins","Fibronectin type III",
 
     """
+
     def __init__(self, line=None):
+        """Initialize the class."""
         self.sunid = ''
         self.nodetype = ''
         self.sccs = ''
@@ -39,7 +39,7 @@ class Record(object):
             self._process(line)
 
     def _process(self, line):
-        """Parses DES records.
+        """Parse DES records (PRIVATE).
 
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
@@ -63,6 +63,7 @@ class Record(object):
         self.sunid = int(sunid)
 
     def __str__(self):
+        """Represent the SCOP description record as a tab-separated string."""
         s = []
         s.append(self.sunid)
         s.append(self.nodetype)
@@ -76,11 +77,11 @@ class Record(object):
 
 
 def parse(handle):
-    """Iterates over a DES file as a Des record for each line
+    """Iterate over a DES file as a Des record for each line.
 
     Arguments:
-
      - handle - file-like object
+
     """
     for line in handle:
         if line.startswith('#'):

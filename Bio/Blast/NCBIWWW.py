@@ -1,19 +1,22 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
 # Patched by Brad Chapman.
 # Chris Wroe added modifications for work in myGrid
 
 """Code to invoke the NCBI BLAST server over the internet.
 
 This module provides code to work with the WWW version of BLAST
-provided by the NCBI.
-http://blast.ncbi.nlm.nih.gov/
+provided by the NCBI. https://blast.ncbi.nlm.nih.gov/
 """
 
 from __future__ import print_function
+
+import warnings
 
 from Bio._py3k import StringIO
 from Bio._py3k import _as_string, _as_bytes
@@ -21,10 +24,13 @@ from Bio._py3k import urlopen as _urlopen
 from Bio._py3k import urlencode as _urlencode
 from Bio._py3k import Request as _Request
 
-__docformat__ = "restructuredtext en"
+from Bio import BiopythonWarning
 
 
-def qblast(program, database, sequence,
+NCBI_BLAST_URL = "https://blast.ncbi.nlm.nih.gov/Blast.cgi"
+
+
+def qblast(program, database, sequence, url_base=NCBI_BLAST_URL,
            auto_format=None, composition_based_statistics=None,
            db_genetic_code=None, endpoints=None, entrez_query='(none)',
            expect=10.0, filter=None, gapcosts=None, genetic_code=None,
@@ -33,15 +39,29 @@ def qblast(program, database, sequence,
            other_advanced=None, perc_ident=None, phi_pattern=None,
            query_file=None, query_believe_defline=None, query_from=None,
            query_to=None, searchsp_eff=None, service=None, threshold=None,
-           ungapped_alignment=None, word_size=None,
+           ungapped_alignment=None, word_size=None, short_query=None,
            alignments=500, alignment_view=None, descriptions=500,
            entrez_links_new_window=None, expect_low=None, expect_high=None,
            format_entrez_query=None, format_object=None, format_type='XML',
            ncbi_gi=None, results_file=None, show_overview=None, megablast=None,
+           template_type=None, template_length=None,
            ):
-    """Do a BLAST search using the QBLAST server at NCBI.
+    """BLAST search using NCBI's QBLAST server or a cloud service provider.
 
-    Supports all parameters of the qblast API for Put and Get.
+    Supports all parameters of the old qblast API for Put and Get.
+
+    Please note that NCBI uses the new Common URL API for BLAST searches
+    on the internet (http://ncbi.github.io/blast-cloud/dev/api.html). Thus,
+    some of the parameters used by this function are not (or are no longer)
+    officially supported by NCBI. Although they are still functioning, this
+    may change in the future.
+
+    The Common URL API (http://ncbi.github.io/blast-cloud/dev/api.html) allows
+    doing BLAST searches on cloud servers. To use this feature, please set
+    ``url_base='http://host.my.cloud.service.provider.com/cgi-bin/blast.cgi'``
+    and ``format_object='Alignment'``. For more details, please see
+    https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast
+
     Some useful parameters:
 
      - program        blastn, blastp, blastx, tblastn, or tblastx (lower case)
@@ -57,15 +77,41 @@ def qblast(program, database, sequence,
      - entrez_query   Entrez query to limit Blast search
      - hitlist_size   Number of hits to return. Default 50
      - megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+     - short_query    TRUE/FALSE whether to adjust the search parameters for a
+                      short query sequence. Note that this will override
+                      manually set parameters like word size and e value. Turns
+                      off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
-    http://www.ncbi.nlm.nih.gov/BLAST/Doc/urlapi.html
+    https://ncbi.github.io/blast-cloud/dev/api.html
+
     """
     import time
 
-    assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    programs = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
+    if program not in programs:
+        raise ValueError("Program specified is %s. Expected one of %s"
+                         % (program, ", ".join(programs)))
+
+    # SHORT_QUERY_ADJUST throws an error when using blastn (wrong parameter
+    # assignment from NCBIs side).
+    # Thus we set the (known) parameters directly:
+    if short_query and program == 'blastn':
+        short_query = None
+        # We only use the 'short-query' parameters for short sequences:
+        if len(sequence) < 31:
+            expect = 1000
+            word_size = 7
+            nucl_reward = 1
+            filter = None
+            lcase_mask = None
+            warnings.warn('"SHORT_QUERY_ADJUST" is incorrectly implemented '
+                          '(by NCBI) for blastn. We bypass the problem by '
+                          'manually adjusting the search parameters. Thus, '
+                          'results may slightly differ from web page '
+                          'searches.', BiopythonWarning)
 
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
@@ -104,6 +150,9 @@ def qblast(program, database, sequence,
         # ('RESULTS_FILE',...), - Can we use this parameter?
         ('SEARCHSP_EFF', searchsp_eff),
         ('SERVICE', service),
+        ('SHORT_QUERY_ADJUST', short_query),
+        ('TEMPLATE_TYPE', template_type),
+        ('TEMPLATE_LENGTH', template_length),
         ('THRESHOLD', threshold),
         ('UNGAPPED_ALIGNMENT', ungapped_alignment),
         ('WORD_SIZE', word_size),
@@ -116,7 +165,7 @@ def qblast(program, database, sequence,
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+    request = _Request(url_base,
                        message,
                        {"User-Agent": "BiopythonClient"})
     handle = _urlopen(request)
@@ -144,23 +193,33 @@ def qblast(program, database, sequence,
     query = [x for x in parameters if x[1] is not None]
     message = _as_bytes(_urlencode(query))
 
-    # Poll NCBI until the results are ready.  Use a backoff delay from 2 - 120 second wait
-    delay = 2.0
-    previous = time.time()
+    # Poll NCBI until the results are ready.
+    # https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=DeveloperInfo
+    # 1. Do not contact the server more often than once every 10 seconds.
+    # 2. Do not poll for any single RID more often than once a minute.
+    # 3. Use the URL parameter email and tool, so that the NCBI
+    #    can contact you if there is a problem.
+    # 4. Run scripts weekends or between 9 pm and 5 am Eastern time
+    #    on weekdays if more than 50 searches will be submitted.
+    # --
+    # Could start with a 10s delay, but expect most short queries
+    # will take longer thus at least 70s with delay. Therefore,
+    # start with 20s delay, thereafter once a minute.
+    delay = 20  # seconds
     while True:
         current = time.time()
-        wait = previous + delay - current
+        wait = qblast._previous + delay - current
         if wait > 0:
             time.sleep(wait)
-            previous = current + wait
+            qblast._previous = current + wait
         else:
-            previous = current
-        if delay + .5 * delay <= 120:
-            delay += .5 * delay
-        else:
-            delay = 120
+            qblast._previous = current
+        # delay by at least 60 seconds only if running the request against the public NCBI API
+        if delay < 60 and url_base == NCBI_BLAST_URL:
+            # Wasn't a quick return, must wait at least a minute
+            delay = 60
 
-        request = _Request("http://blast.ncbi.nlm.nih.gov/Blast.cgi",
+        request = _Request(url_base,
                            message,
                            {"User-Agent": "BiopythonClient"})
         handle = _urlopen(request)
@@ -178,14 +237,16 @@ def qblast(program, database, sequence,
         status = results[i + len("Status="):j].strip()
         if status.upper() == "READY":
             break
-
     return StringIO(results)
+
+
+qblast._previous = 0
 
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
 
-    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is proably
+    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is probably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
     s = _as_string(handle.read())

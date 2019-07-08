@@ -17,28 +17,30 @@ from __future__ import print_function
 
 from Bio._py3k import range
 
-import math
-
-__docformat__ = "restructuredtext en"
 
 def create(instances, alphabet=None):
+    """Create a Motif object."""
     instances = Instances(instances, alphabet)
     return Motif(instances=instances, alphabet=alphabet)
 
 
-def parse(handle, format):
-    """Parses an output file of motif finding programs.
+def parse(handle, format, strict=True):
+    """Parse an output file from a motif finding program.
 
     Currently supported formats (case is ignored):
+     - AlignAce:         AlignAce output file format
+     - ClusterBuster:    Cluster Buster position frequency matrix format
+     - XMS:              XMS matrix format
+     - MEME:             MEME output file motif
+     - MINIMAL:          MINIMAL MEME output file motif
+     - MAST:             MAST output file motif
+     - TRANSFAC:         TRANSFAC database file format
+     - pfm-four-columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
+     - pfm-four-rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
+     - pfm:              JASPAR-style position-frequency matrix
+     - jaspar:           JASPAR-style multiple PFM format
+     - sites:            JASPAR-style sites file
 
-        - AlignAce:      AlignAce output file format
-        - MEME:          MEME output file motif
-        - MAST:          MAST output file motif
-        - TRANSFAC:      TRANSFAC database file format
-        - pfm:           JASPAR-style position-frequency matrix
-        - jaspar:        JASPAR-style multiple PFM format
-        - sites:         JASPAR-style sites file
-     
     As files in the pfm and sites formats contain only a single motif,
     it is easier to use Bio.motifs.read() instead of Bio.motifs.parse()
     for those.
@@ -46,54 +48,64 @@ def parse(handle, format):
     For example:
 
     >>> from Bio import motifs
-    >>> with open("Motif/alignace.out") as handle:
+    >>> with open("motifs/alignace.out") as handle:
     ...     for m in motifs.parse(handle, "AlignAce"):
     ...         print(m.consensus)
     ...
     TCTACGATTGAG
-    CTGCAGCTAGCTACGAGTGAG
-    GTGCTCTAAGCATAGTAGGCG
+    CTGCACCTAGCTACGAGTGAG
+    GTGCCCTAAGCATACTAGGCG
     GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
-    CCACGCTAAGAGAGGTGCCGGAG
-    GCGCGTCGCTGAGCA
+    CCACGCTAAGAGAAGTGCCGGAG
+    GCACGTCCCTGAGCA
     GTCCATCGCAAAGCGTGGGGC
-    GGGATCAGAGGGCCG
-    TGGAGGCGGGG
-    GACCAGAGCTTCGCATGGGGG
-    GGCGTGCGTG
-    GCTGGTTGCTGTTCATTAGG
-    GCCGGCGGCAGCTAAAAGGG
-    GAGGCCGGGGAT
-    CGACTCGTGCTTAGAAGG
+    GAGATCAGAGGGCCG
+    TGGACGCGGGG
+    GACCAGAGCCTCGCATGGGGG
+    AGCGCGCGTG
+    GCCGGTTGCTGTTCATTAGG
+    ACCGACGGCAGCTAAAAGGG
+    GACGCCGGGGAT
+    CGACTCGCGCTTACAAGG
+
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
-    if format=="alignace":
+    if format == "alignace":
         from Bio.motifs import alignace
-        record = alignace.read(handle)
-        return record
-    elif format=="meme":
+        return alignace.read(handle)
+    elif format == "meme":
         from Bio.motifs import meme
-        record = meme.read(handle)
-        return record
-    elif format=="mast":
+        return meme.read(handle)
+    elif format == "minimal":
+        from Bio.motifs import minimal
+        return minimal.read(handle)
+    elif format == "clusterbuster":
+        from Bio.motifs import clusterbuster
+        return clusterbuster.read(handle)
+    elif format in ('pfm-four-columns', 'pfm-four-rows'):
+        from Bio.motifs import pfm
+        return pfm.read(handle, format)
+    elif format == "xms":
+        from Bio.motifs import xms
+        return xms.read(handle)
+    elif format == "mast":
         from Bio.motifs import mast
-        record = mast.read(handle)
-        return record
-    elif format=="transfac":
+        return mast.read(handle)
+    elif format == "transfac":
         from Bio.motifs import transfac
-        record = transfac.read(handle)
-        return record
+        return transfac.read(handle, strict)
     elif format in ('pfm', 'sites', 'jaspar'):
         from Bio.motifs import jaspar
-        record = jaspar.read(handle, format)
-        return record
+        return jaspar.read(handle, format)
     else:
         raise ValueError("Unknown format %s" % format)
 
 
-def read(handle, format):
-    """Reads a motif from a handle using a specified file-format.
+def read(handle, format, strict=True):
+    """Read a motif from a handle using the specified file-format.
 
     This supports the same formats as Bio.motifs.parse(), but
     only for files containing exactly one motif.  For example,
@@ -103,7 +115,7 @@ def read(handle, format):
     >>> with open("motifs/SRF.pfm") as handle:
     ...     m = motifs.read(handle, "pfm")
     >>> m.consensus
-    Seq('GCCCATATATGG', IUPACUnambiguousDNA())
+    Seq('GCCCATATATGG')
 
     Or a single-motif MEME file,
 
@@ -111,7 +123,7 @@ def read(handle, format):
     >>> with open("motifs/meme.out") as handle:
     ...     m = motifs.read(handle, "meme")
     >>> m.consensus
-    Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+    Seq('CTCAATCGTA')
 
     If the handle contains no records, or more than one record,
     an exception is raised:
@@ -132,14 +144,17 @@ def read(handle, format):
     ...     record = motifs.parse(handle, "alignace")
     >>> motif = record[0]
     >>> motif.consensus
-    Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+    Seq('TCTACGATTGAG')
 
     Use the Bio.motifs.parse(handle, format) function if you want
     to read multiple records from the handle.
+
+    If strict is True (default), the parser will raise a ValueError if the
+    file contents does not strictly comply with the specified file format.
     """
     format = format.lower()
-    motifs = parse(handle, format)
-    if len(motifs)==0:
+    motifs = parse(handle, format, strict)
+    if len(motifs) == 0:
         raise ValueError("No motifs found in handle")
     if len(motifs) > 1:
         raise ValueError("More than one motif found in handle")
@@ -148,12 +163,18 @@ def read(handle, format):
 
 
 class Instances(list):
-    """
-    A class representing instances of sequence motifs.
-    """
-    def __init__(self, instances=[], alphabet=None):
-        from Bio.Alphabet import IUPAC
+    """Class containing a list of sequences that made the motifs."""
+
+    def __init__(self, instances=None, alphabet=None):
+        """Initialize the class."""
         from Bio.Seq import Seq
+        try:
+            # Received an old-style alphabet
+            alphabet = alphabet.letters
+        except AttributeError:
+            pass
+        if instances is None:
+            instances = []
         self.length = None
         for instance in instances:
             if self.length is None:
@@ -166,30 +187,37 @@ class Instances(list):
             except AttributeError:
                 # The instance is a plain string
                 continue
+            try:
+                # Received an old-style alphabet
+                a = a.letters
+            except AttributeError:
+                pass
+            if a is None:
+                # If we didn't get a meaningful alphabet from the instances,
+                # assume it is DNA.
+                a = 'ACGT'
             if alphabet is None:
                 alphabet = a
             elif alphabet != a:
                 raise ValueError("Alphabets are inconsistent")
-        if alphabet is None or alphabet.letters is None:
-            # If we didn't get a meaningful alphabet from the instances,
-            # assume it is DNA.
-            alphabet = IUPAC.unambiguous_dna
         for instance in instances:
             if not isinstance(instance, Seq):
                 sequence = str(instance)
-                instance = Seq(sequence, alphabet=alphabet)
+                instance = Seq(sequence)
             self.append(instance)
         self.alphabet = alphabet
 
     def __str__(self):
+        """Return a string containing the sequences of the motif."""
         text = ""
         for instance in self:
             text += str(instance) + "\n"
         return text
 
     def count(self):
+        """Count nucleotides in a position."""
         counts = {}
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             counts[letter] = [0] * self.length
         for instance in self:
             for position, letter in enumerate(instance):
@@ -197,16 +225,19 @@ class Instances(list):
         return counts
 
     def search(self, sequence):
+        """Find positions of motifs in a given sequence.
+
+        This is a generator function, returning found positions of motif
+        instances in a given sequence.
         """
-        a generator function, returning found positions of motif instances in a given sequence
-        """
-        for pos in range(0, len(sequence)-self.length+1):
+        for pos in range(0, len(sequence) - self.length + 1):
             for instance in self:
-                if str(instance) == str(sequence[pos:pos+self.length]):
-                    yield(pos, instance)
-                    break # no other instance will fit (we don't want to return multiple hits)
+                if str(instance) == str(sequence[pos:pos + self.length]):
+                    yield (pos, instance)
+                    break  # no other instance will fit (we don't want to return multiple hits)
 
     def reverse_complement(self):
+        """Compute reverse complement of sequences."""
         instances = Instances(alphabet=self.alphabet)
         instances.length = self.length
         for instance in self:
@@ -216,19 +247,23 @@ class Instances(list):
 
 
 class Motif(object):
-    """
-    A class representing sequence motifs.
-    """
+    """A class representing sequence motifs."""
+
     def __init__(self, alphabet=None, instances=None, counts=None):
+        """Initialize the class."""
         from . import matrix
-        from Bio.Alphabet import IUPAC
-        self.name=""
+        self.name = ""
         if counts is not None and instances is not None:
             raise Exception(ValueError,
-                "Specify either instances or counts, don't specify both")
+                            "Specify either instances or counts, "
+                            "don't specify both")
         elif counts is not None:
+            try:
+                alphabet = alphabet.letters
+            except AttributeError:
+                pass
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
+                alphabet = 'ACGT'
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -243,7 +278,7 @@ class Motif(object):
             self.instances = None
             self.length = None
             if alphabet is None:
-                alphabet = IUPAC.unambiguous_dna
+                alphabet = 'ACGT'
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
@@ -257,17 +292,17 @@ class Motif(object):
             self.__mask = ()
         elif mask is None:
             self.__mask = (1,) * self.length
-        elif len(mask)!=self.length:
+        elif len(mask) != self.length:
             raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
         elif isinstance(mask, str):
-            self.__mask=[]
+            self.__mask = []
             for char in mask:
-                if char=="*":
+                if char == "*":
                     self.__mask.append(1)
-                elif char==" ":
+                elif char == " ":
                     self.__mask.append(0)
                 else:
-                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'"%char)
+                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'" % char)
             self.__mask = tuple(self.__mask)
         else:
             self.__mask = tuple(int(bool(c)) for c in mask)
@@ -282,11 +317,11 @@ class Motif(object):
     def __set_pseudocounts(self, value):
         self._pseudocounts = {}
         if isinstance(value, dict):
-            self._pseudocounts = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._pseudocounts = {letter: value[letter] for letter in self.alphabet}
         else:
             if value is None:
                 value = 0.0
-            self._pseudocounts = dict.fromkeys(self.alphabet.letters, value)
+            self._pseudocounts = dict.fromkeys(self.alphabet, value)
 
     pseudocounts = property(__get_pseudocounts, __set_pseudocounts)
     del __get_pseudocounts
@@ -297,18 +332,21 @@ class Motif(object):
 
     def __set_background(self, value):
         if isinstance(value, dict):
-            self._background = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            self._background = {letter: value[letter] for letter in self.alphabet}
         elif value is None:
-            self._background = dict.fromkeys(self.alphabet.letters, 1.0)
+            self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
-            if sorted(self.alphabet.letters)!=["A", "C", "G", "T"]:
-                raise Exception("Setting the background to a single value only works for DNA motifs (in which case the value is interpreted as the GC content")
-            self._background['A'] = (1.0-value)/2.0
-            self._background['C'] = value/2.0
-            self._background['G'] = value/2.0
-            self._background['T'] = (1.0-value)/2.0
+            if sorted(self.alphabet) != ["A", "C", "G", "T"]:
+                # TODO - Should this be a ValueError?
+                raise Exception("Setting the background to a single value only "
+                                "works for DNA motifs (in which case the value "
+                                "is interpreted as the GC content")
+            self._background['A'] = (1.0 - value) / 2.0
+            self._background['C'] = value / 2.0
+            self._background['G'] = value / 2.0
+            self._background['T'] = (1.0 - value) / 2.0
         total = sum(self._background.values())
-        for letter in self.alphabet.letters:
+        for letter in self.alphabet:
             self._background[letter] /= total
 
     background = property(__get_background, __set_background)
@@ -317,15 +355,16 @@ class Motif(object):
 
     @property
     def pwm(self):
+        """Compute position weight matrices."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
+        """Compute position specific scoring matrices."""
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
-        """ string representation of a motif.
-        """
+        """Return string representation of a motif."""
         text = ""
         if self.instances is not None:
             text += str(self.instances)
@@ -340,7 +379,7 @@ class Motif(object):
         return text
 
     def __len__(self):
-        """return the length of a motif
+        """Return the length of a motif.
 
         Please use this method (i.e. invoke len(m)) instead of referring to m.length directly.
         """
@@ -350,60 +389,59 @@ class Motif(object):
             return self.length
 
     def reverse_complement(self):
-        """
-        Gives the reverse complement of the motif
-        """
+        """Return the reverse complement of the motif as a new motif."""
         alphabet = self.alphabet
         if self.instances is not None:
             instances = self.instances.reverse_complement()
             res = Motif(instances=instances, alphabet=alphabet)
         else:  # has counts
             res = Motif(alphabet)
-            res.counts={}
-            res.counts["A"]=self.counts["T"][::-1]
-            res.counts["T"]=self.counts["A"][::-1]
-            res.counts["G"]=self.counts["C"][::-1]
-            res.counts["C"]=self.counts["G"][::-1]
-            res.length=self.length
+            res.counts = {}
+            res.counts["A"] = self.counts["T"][::-1]
+            res.counts["T"] = self.counts["A"][::-1]
+            res.counts["G"] = self.counts["C"][::-1]
+            res.counts["C"] = self.counts["G"][::-1]
+            res.length = self.length
         res.__mask = self.__mask[::-1]
         return res
 
     @property
     def consensus(self):
-        """Returns the consensus sequence.
-        """
+        """Return the consensus sequence."""
         return self.counts.consensus
 
     @property
     def anticonsensus(self):
-        """returns the least probable pattern to be generated from this motif.
-        """
+        """Return the least probable pattern to be generated from this motif."""
         return self.counts.anticonsensus
 
     @property
     def degenerate_consensus(self):
-        """Following the rules adapted from
-D. R. Cavener: "Comparison of the consensus sequence flanking
-translational start sites in Drosophila and vertebrates."
-Nucleic Acids Research 15(4): 1353-1361. (1987).
-The same rules are used by TRANSFAC."""
+        """Generate degenerate consesnsus sequence.
+
+        Following the rules adapted from
+        D. R. Cavener: "Comparison of the consensus sequence flanking
+        translational start sites in Drosophila and vertebrates."
+        Nucleic Acids Research 15(4): 1353-1361. (1987).
+
+        The same rules are used by TRANSFAC.
+        """
         return self.counts.degenerate_consensus
 
     def weblogo(self, fname, format="PNG", version="2.8.2", **kwds):
-        """
-        uses the Berkeley weblogo service to download and save a weblogo of
-        itself
+        """Download and save a weblogo using the Berkeley weblogo service.
 
-        requires an internet connection.
+        Requires an internet connection.
+
         The parameters from ``**kwds`` are passed directly to the weblogo server.
 
         Currently, this method uses WebLogo version 3.3.
         These are the arguments and their default values passed to
         WebLogo 3.3; see their website at http://weblogo.threeplusone.com
-        for more information:
+        for more information::
 
             'stack_width' : 'medium',
-            'stack_per_line' : '40',
+            'stacks_per_line' : '40',
             'alphabet' : 'alphabet_dna',
             'ignore_lower_case' : True,
             'unit_name' : "bits",
@@ -439,13 +477,22 @@ The same rules are used by TRANSFAC."""
         """
         from Bio._py3k import urlopen, urlencode, Request
 
+        if self.alphabet == 'ACDEFGHIKLMNPQRSTVWY':
+            alpha = "alphabet_protein"
+        elif self.alphabet == 'ACGU':
+            alpha = "alphabet_rna"
+        elif self.alphabet == 'ACGT':
+            alpha = "alphabet_dna"
+        else:
+            alpha = "auto"
+
         frequencies = self.format('transfac')
         url = 'http://weblogo.threeplusone.com/create.cgi'
         values = {'sequences': frequencies,
                   'format': format.lower(),
                   'stack_width': 'medium',
-                  'stack_per_line': '40',
-                  'alphabet': 'alphabet_dna',
+                  'stacks_per_line': '40',
+                  'alphabet': alpha,
                   'ignore_lower_case': True,
                   'unit_name': "bits",
                   'first_index': '1',
@@ -477,56 +524,62 @@ The same rules are used by TRANSFAC."""
                   'color3': '',
                   'color4': '',
                   }
-        for k, v in kwds.items():
-            if isinstance(values[k], bool):
-                if not v:
-                    v = ""
-            values[k]=str(v)
 
-        data = urlencode(values)
+        values.update(
+            {k: "" if v is False else str(v) for k, v in kwds.items()})
+        data = urlencode(values).encode("utf-8")
         req = Request(url, data)
         response = urlopen(req)
-        with open(fname, "w") as f:
+        with open(fname, "wb") as f:
             im = response.read()
             f.write(im)
 
     def format(self, format):
-        """Returns a string representation of the Motif in a given format
+        """Return a string representation of the Motif in the given format.
 
         Currently supported fromats:
+         - clusterbuster: Cluster Buster position frequency matrix format
          - pfm : JASPAR single Position Frequency Matrix
          - jaspar : JASPAR multiple Position Frequency Matrix
          - transfac : TRANSFAC like files
-        """
 
+        """
         if format in ('pfm', 'jaspar'):
             from Bio.motifs import jaspar
             motifs = [self]
             return jaspar.write(motifs, format)
-        elif format=="transfac":
+        elif format == "transfac":
             from Bio.motifs import transfac
             motifs = [self]
             return transfac.write(motifs)
+        elif format == "clusterbuster":
+            from Bio.motifs import clusterbuster
+            motifs = [self]
+            return clusterbuster.write(motifs)
         else:
             raise ValueError("Unknown format type %s" % format)
 
 
 def write(motifs, format):
-    """Returns a string representation of motifs in a given format
+    """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
+     - clusterbuster: Cluster Buster position frequency matrix format
      - pfm : JASPAR simple single Position Frequency Matrix
      - jaspar : JASPAR multiple PFM format
      - transfac : TRANSFAC like files
-    """
 
+    """
     format = format.lower()
     if format in ("pfm", "jaspar"):
         from Bio.motifs import jaspar
         return jaspar.write(motifs, format)
-    elif format=="transfac":
+    elif format == "transfac":
         from Bio.motifs import transfac
         return transfac.write(motifs)
+    elif format == "clusterbuster":
+        from Bio.motifs import clusterbuster
+        return clusterbuster.write(motifs)
     else:
         raise ValueError("Unknown format type %s" % format)
 

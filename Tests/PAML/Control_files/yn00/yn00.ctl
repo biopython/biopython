@@ -1,4 +1,4 @@
-      seqfile = PAML/alignment.phylip * sequence data file name
+      seqfile = Alignments/alignment.phylip * sequence data file name
       outfile = temp.out           * main result file
       verbose = 1  * 1: detailed output (list sequences), 0: concise output
 

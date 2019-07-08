@@ -3,16 +3,18 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Tests for psw module."""
+
 import doctest
 import unittest
 import random
 import sys
 
+from Bio.Wise import psw
+
 if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
-import requires_wise
-
-from Bio.Wise import psw
+import requires_wise  # noqa: E402
 
 
 class TestPSW(unittest.TestCase):
@@ -72,13 +74,13 @@ class TestPSW(unittest.TestCase):
 
     def test_ColumnUnit(self):
         self.assertEqual(repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
-                         "ColumnUnit(unit=0, column=33, SEQUENCE)")
+                         "ColumnUnit(unit=0, column=33, kind='SEQUENCE')")
 
         self.assertEqual(repr(psw.ColumnUnit(1, 33, "INSERT")),
-                         "ColumnUnit(unit=1, column=33, INSERT)")
+                         "ColumnUnit(unit=1, column=33, kind='INSERT')")
 
         self.assertEqual(repr(psw.ColumnUnit(1, 33, "END")),
-                         "ColumnUnit(unit=1, column=33, END)")
+                         "ColumnUnit(unit=1, column=33, kind='END')")
 
     PARSED = "[SEQUENCE(39, 22), SEQUENCE(40, 23), SEQUENCE(41, 24), SEQUENCE(42, 25), SEQUENCE(43, 26), SEQUENCE(44, 27), END(0, 27)]"
 
@@ -93,8 +95,7 @@ def run_tests(argv):
 
 
 def testing_suite():
-    """Generate the suite of tests.
-    """
+    """Generate the suite of tests."""
     unittest_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
@@ -110,6 +111,7 @@ def testing_suite():
     big_suite = unittest.TestSuite((unittest_suite, doctest_suite))
 
     return big_suite
+
 
 if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_psw")

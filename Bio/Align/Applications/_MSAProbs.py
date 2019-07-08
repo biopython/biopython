@@ -1,14 +1,13 @@
 # Copyright 2013 by Christian Brueffer. All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple sequence alignment program MSAProbs.
-"""
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple sequence alignment program MSAProbs."""
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Argument, _Option, _Switch, AbstractCommandline
 
@@ -18,9 +17,18 @@ class MSAProbsCommandline(AbstractCommandline):
 
     http://msaprobs.sourceforge.net
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 0.9.7
 
+    References
+    ----------
+    Yongchao Liu, Bertil Schmidt, Douglas L. Maskell: "MSAProbs: multiple
+    sequence alignment based on pair hidden Markov models and partition
+    function posterior probabilities". Bioinformatics, 2010, 26(16): 1958 -1964
+
+    Examples
+    --------
     >>> from Bio.Align.Applications import MSAProbsCommandline
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.cla"
@@ -31,20 +39,12 @@ class MSAProbsCommandline(AbstractCommandline):
     You would typically run the command line with cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
-
-    Yongchao Liu, Bertil Schmidt, Douglas L. Maskell: "MSAProbs: multiple
-    sequence alignment based on pair hidden Markov models and partition
-    function posterior probabilities". Bioinformatics, 2010, 26(16): 1958 -1964
-
-    Last checked against version: 0.9.7
     """
 
     def __init__(self, cmd="msaprobs", **kwargs):
+        """Initialize the class."""
         # order of parameters is the same as in msaprobs -help
-        self.parameters = \
-            [
+        self.parameters = [
             _Option(["-o", "--outfile", "outfile"],
                     "specify the output file name (STDOUT by default)",
                     filename=True,
@@ -70,19 +70,12 @@ class MSAProbsCommandline(AbstractCommandline):
             _Option(["-version", "version"],
                     "print out version of MSAPROBS"),
             _Argument(["infile"],
-                    "Multiple sequence input file",
-                    filename=True),
-            ]
+                      "Multiple sequence input file",
+                      filename=True),
+        ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running MSAProbs doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -42,8 +42,10 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
 
 class ConvertTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def simple_check(self, filename, in_format, out_format, alphabet):
         check_convert(filename, in_format, out_format, alphabet)
+
 
 tests = [
     ('Clustalw/hedgehog.aln', "clustal", None),
@@ -61,7 +63,7 @@ output_formats = ["fasta"] + sorted(AlignIO._FormatToWriter)
 for filename, in_format, alphabet in tests:
     for out_format in output_formats:
         def funct(fn, fmt1, fmt2, alpha):
-            f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)
+            f = lambda x: x.simple_check(fn, fmt1, fmt2, alpha)  # noqa: E731
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
         setattr(ConvertTests, "test_%s_%s_to_%s"

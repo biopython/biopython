@@ -1,7 +1,9 @@
 # Copyright 2006-2013 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support module (not for general use).
 
 Unless you are writing a new parser or writer for Bio.SeqIO, you should not
@@ -16,46 +18,40 @@ from Bio.Alphabet import generic_alphabet
 from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 
-__docformat__ = "restructuredtext en"
-
 
 class SequenceIterator(object):
     """Base class for building SeqRecord iterators.
 
-    You should write a next() method to return SeqRecord
-    objects.  You may wish to redefine the __init__
-    method as well.
+    You should write a __next__ method to return SeqRecord  objects.  You may
+    wish to redefine the __init__ method as well.
     """
+
     def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
-            - handle - input file
-            - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+        Arguments:
+        - handle - input file
+        - alphabet - optional, e.g. Bio.Alphabet.generic_protein
+
+        This method MAY be overridden by any subclass, for example if you need
+        to process a header or accept additional arguments.
 
         Note when subclassing:
-
-            - there should be a single non-optional argument,
-              the handle.
-            - you do not have to require an alphabet.
-            - you can add additional optional arguments."""
+        - there should be a single non-optional argument, the handle.
+        - you do not have to require an alphabet.
+        - you can add additional optional arguments.
+        """
         self.handle = handle
         self.alphabet = alphabet
-        #####################################################
-        # You may want to subclass this, for example        #
-        # to read through the file to find the first record,#
-        # or if additional arguments are required.          #
-        #####################################################
 
     def __next__(self):
         """Return the next record in the file.
 
-        This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError("This object should be subclassed")
-        #####################################################
-        # You SHOULD subclass this, to split the file up    #
-        # into your individual records, and convert these   #
-        # into useful objects, e.g. return SeqRecord object #
-        #####################################################
+        This method's stub-implementation MUST be overridden by any subclass
+        to actually parse the file and return the next entry as a SeqRecord
+        object.
+        """
+        raise NotImplementedError("The subclass should implement the __next__ method.")
 
     if sys.version_info[0] < 3:
         def next(self):
@@ -72,26 +68,52 @@ class SequenceIterator(object):
                 for record in myFastaReader:
                     print(record.id)
                     print(record.seq)
+
+        This method SHOULD NOT be overridden by any subclass. It should be
+        left as is, which will call the subclass implementation of __next__
+        to actually parse the file.
         """
         return iter(self.__next__, None)
 
 
+# Function variant of the SequenceWriter method.
+def _get_seq_string(record):
+    """Use this to catch errors like the sequence being None (PRIVATE)."""
+    if not isinstance(record, SeqRecord):
+        raise TypeError("Expected a SeqRecord object")
+    if record.seq is None:
+        raise TypeError("SeqRecord (id=%s) has None for its sequence."
+                        % record.id)
+    elif not isinstance(record.seq, (Seq, MutableSeq)):
+        raise TypeError("SeqRecord (id=%s) has an invalid sequence."
+                        % record.id)
+    return str(record.seq)
+
+
+# Function variant of the SequenceWriter method.
+def _clean(text):
+    """Use this to avoid getting newlines in the output (PRIVATE)."""
+    return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+
+
 class SequenceWriter(object):
-    """This class should be subclassed.
+    """Base class for building SeqRecord writers.
 
     Interlaced file formats (e.g. Clustal) should subclass directly.
 
-    Sequential file formats (e.g. Fasta, GenBank) should subclass
-    the SequentialSequenceWriter class instead.
+    Sequential file formats (e.g. Fasta, GenBank) should subclass the
+    SequentialSequenceWriter class instead.
     """
-    def __init__(self, handle):
-        """Creates the writer object.
 
-        Use the method write_file() to actually record your sequence records."""
+    def __init__(self, handle):
+        """Create the writer object.
+
+        Use the method write_file() to actually record your sequence records.
+        """
         self.handle = handle
 
     def _get_seq_string(self, record):
-        """Use this to catch errors like the sequence being None."""
+        """Use this to catch errors like the sequence being None (PRIVATE)."""
         if not isinstance(record, SeqRecord):
             raise TypeError("Expected a SeqRecord object")
         if record.seq is None:
@@ -113,7 +135,8 @@ class SequenceWriter(object):
 
         Should return the number of records (as an integer).
 
-        This method can only be called once."""
+        This method can only be called once.
+        """
         # Note when implementing this, your writer class should NOT close the
         # file at the end, but the calling code should.
         raise NotImplementedError("This object should be subclassed")
@@ -123,7 +146,7 @@ class SequenceWriter(object):
 
 
 class SequentialSequenceWriter(SequenceWriter):
-    """This class should be subclassed.
+    """Base class for sequence writers. This class should be subclassed.
 
     It is intended for sequential file formats with an (optional)
     header, repeated records, and an (optional) footer.
@@ -143,19 +166,37 @@ class SequentialSequenceWriter(SequenceWriter):
     Note that write_header() cannot require any assumptions about
     the number of records.
     """
+
     def __init__(self, handle):
+        """Initialize the class."""
         self.handle = handle
         self._header_written = False
         self._record_written = False
         self._footer_written = False
 
     def write_header(self):
+        """Write the file header.
+
+        If your file format defines a header, you should implement this method
+        in order to write the header before any of the records.
+
+        The default implementation checks the private attribute ._header_written
+        to ensure the header is only written once.
+        """
         assert not self._header_written, "You have aleady called write_header()"
         assert not self._record_written, "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
 
     def write_footer(self):
+        """Write the file footer.
+
+        If your file format defines a footer, you should implement this method
+        in order to write the footer after all the records.
+
+        The default implementation checks the private attribute ._footer_written
+        to ensure the footer is only written once.
+        """
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"
@@ -168,7 +209,8 @@ class SequentialSequenceWriter(SequenceWriter):
 
         Once you have called write_header() you can call write_record()
         and/or write_records() as many times as needed.  Then call
-        write_footer() and close()."""
+        write_footer() and close().
+        """
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         self._record_written = True

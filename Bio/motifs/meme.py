@@ -3,25 +3,35 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Module for the support of MEME motif format."""
 
 from __future__ import print_function
 
-from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into a meme.Record object.
+    """Parse the text output of the MEME program into a meme.Record object.
 
-    Example:
-
+    Examples
+    --------
     >>> from Bio.motifs import meme
-    >>> with open("meme.output.txt") as f:
+    >>> with open("motifs/meme.out") as f:
     ...     record = meme.read(f)
     >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print(instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue)
+    Motif 1 SEQ10; + 8.71e-07
+    Motif 1 SEQ9; + 8.71e-07
+    Motif 1 SEQ8; + 8.71e-07
+    Motif 1 SEQ7; + 8.71e-07
+    Motif 1 SEQ6; + 8.71e-07
+    Motif 1 SEQ5; + 8.71e-07
+    Motif 1 SEQ4; + 8.71e-07
+    Motif 1 SEQ3; + 8.71e-07
+    Motif 1 SEQ2; + 8.71e-07
+    Motif 1 SEQ1; + 8.71e-07
 
     """
     record = Record()
@@ -31,14 +41,14 @@ def read(handle):
     __read_sequences(record, handle)
     __read_command(record, handle)
     for line in handle:
-        if line.startswith('MOTIF  1'):
+        if line.startswith('MOTIF '):
             break
     else:
         raise ValueError('Unexpected end of stream')
     alphabet = record.alphabet
     revcomp = 'revcomp' in record.command
     while True:
-        length, num_occurrences, evalue = __read_motif_statistics(line)
+        motif_number, length, num_occurrences, evalue = __read_motif_statistics(line)
         name = __read_motif_name(handle)
         instances = __read_motif_sequences(handle, name, alphabet, length, revcomp)
         motif = Motif(alphabet, instances)
@@ -47,6 +57,7 @@ def read(handle):
         motif.evalue = evalue
         motif.name = name
         record.append(motif)
+        assert len(record) == motif_number
         __skip_unused_lines(handle)
         try:
             line = next(handle)
@@ -66,17 +77,22 @@ class Motif(motifs.Motif):
     This includes the motif name, the evalue for a motif, and its number
     of occurrences.
     """
+
     def __init__(self, alphabet=None, instances=None):
+        """Initialize the class."""
         motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
         self.num_occurrences = 0
         self.name = None
+        self.id = None
+        self.alt_id = None
 
 
 class Instance(Seq.Seq):
-    """A class describing the instances of a MEME motif, and the data thereof.
-    """
+    """A class describing the instances of a MEME motif, and the data thereof."""
+
     def __init__(self, *args, **kwds):
+        """Initialize the class."""
         Seq.Seq.__init__(self, *args, **kwds)
         self.sequence_name = ""
         self.start = 0
@@ -97,7 +113,7 @@ class Record(list):
     by its name:
 
     >>> from Bio import motifs
-    >>> with open("meme.output.txt") as f:
+    >>> with open("motifs/meme.out") as f:
     ...     record = motifs.parse(f, 'MEME')
     >>> motif = record[0]
     >>> print(motif.name)
@@ -108,7 +124,7 @@ class Record(list):
     """
 
     def __init__(self):
-        """__init__ (self)"""
+        """Initialize."""
         self.version = ""
         self.datafile = ""
         self.command = ""
@@ -116,9 +132,10 @@ class Record(list):
         self.sequences = []
 
     def __getitem__(self, key):
+        """Return the motif of index key."""
         if isinstance(key, str):
             for motif in self:
-                if motif.name==key:
+                if motif.name == key:
                     return motif
         else:
             return list.__getitem__(self, key)
@@ -143,7 +160,9 @@ def __read_datafile(record, handle):
         if line.startswith('TRAINING SET'):
             break
     else:
-        raise ValueError("Unexpected end of stream: 'TRAINING SET' not found.")
+        raise ValueError(
+            "Unexpected end of stream: 'TRAINING SET' not found. This can happen with " +
+            "minimal MEME files (MEME databases) which are not supported yet.")
     try:
         line = next(handle)
     except StopIteration:
@@ -171,9 +190,11 @@ def __read_alphabet(record, handle):
     line = line.strip()
     line = line.replace('ALPHABET= ', '')
     if line == 'ACGT':
-        al = IUPAC.unambiguous_dna
+        al = 'ACGT'
+    elif line == 'ACGU':
+        al = 'ACGU'
     else:
-        al = IUPAC.protein
+        al = 'ACDEFGHIKLMNPQRSTVWY'
     record.alphabet = al
 
 
@@ -214,12 +235,32 @@ def __read_command(record, handle):
 
 
 def __read_motif_statistics(line):
-    line = line[5:].strip()
-    ls = line.split()
-    length = int(ls[3])
-    num_occurrences = int(ls[6])
-    evalue = float(ls[12])
-    return length, num_occurrences, evalue
+    # Depending on the version of MEME, this line either like like
+    #    MOTIF  1        width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or like
+    #    MOTIF  1 MEME    width =  19  sites =   3  llr = 43  E-value = 6.9e-002
+    # or in v 4.11.4 onwards
+    #    MOTIF ATTATAAAAAAA MEME-1	width =  12  sites =   5  llr = 43  E-value = 1.9e-003
+    words = line.split()
+    assert words[0] == 'MOTIF'
+    if words[2][:5] == 'MEME-':
+        motif_number = int(words[2].split('-')[1])
+    else:
+        motif_number = int(words[1])
+    if words[2].startswith('MEME'):
+        key_values = words[3:]
+    else:
+        key_values = words[2:]
+    keys = key_values[::3]
+    equal_signs = key_values[1::3]
+    values = key_values[2::3]
+    assert keys == ['width', 'sites', 'llr', 'E-value']
+    for equal_sign in equal_signs:
+        assert equal_sign == '='
+    length = int(values[0])
+    num_occurrences = int(values[1])
+    evalue = float(values[3])
+    return motif_number, length, num_occurrences, evalue
 
 
 def __read_motif_name(handle):
@@ -264,7 +305,7 @@ def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
         else:
             strand = '+'
         sequence = words[4]
-        assert len(sequence)==length
+        assert len(sequence) == length
         instance = Instance(sequence, alphabet)
         instance.motif_name = motif_name
         instance.sequence_name = words[0]

@@ -91,7 +91,8 @@ while line:
                 three_to_one_buf_noq.append('%s\n' % (current_line_noq,))
                 current_line_noq = '    '
 
-            current_line_noq = '%s\'%s\':\'%s\',' % (current_line_noq, three, one)
+            current_line_noq = '%s\'%s\':\'%s\',' % (current_line_noq, three,
+                                                     one)
             counter_noq += 1
 
         found_one = False
@@ -112,9 +113,11 @@ else:
     three_to_one_buf_noq.append('%s }' % (current_line_noq[:-1]))
 
 # Find path of current script
-_scriptPath = os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0])
+_scriptPath = os.path.abspath(
+    os.path.split(inspect.getfile(inspect.currentframe()))[0])
 # Path to SCOP module
-_rafPath = os.path.normpath(os.path.join(_scriptPath, "..", "..", "Bio", "SCOP"))
+_rafPath = os.path.normpath(os.path.join(_scriptPath,
+                                         "..", "..", "Bio", "SCOP"))
 _threeAllPath = os.path.join(_rafPath, 'three_to_one_all.py')
 _threePath = os.path.join(_rafPath, 'three_to_one_dict.py')
 

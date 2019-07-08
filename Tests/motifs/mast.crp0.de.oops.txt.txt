@@ -1,0 +1,328 @@
+********************************************************************************
+MAST - Motif Alignment and Search Tool
+********************************************************************************
+	MAST version 5.0.1 (Release date: Wed Aug 22 15:26:53 2018 -0700)
+
+	For further information on how to interpret these results please access http://meme-suite.org.
+	To get a copy of the MAST software please access http://meme-suite.org.
+********************************************************************************
+
+
+********************************************************************************
+REFERENCE
+********************************************************************************
+	If you use this program in your research, please cite:
+
+	Timothy L. Bailey and Michael Gribskov,
+	"Combining evidence using p-values: application to sequence homology
+	searches", Bioinformatics, 14(48-54), 1998.
+********************************************************************************
+
+
+********************************************************************************
+DATABASE AND MOTIFS
+********************************************************************************
+	DATABASE crp0.s (nucleotide)
+	Last updated on Tue Jun 20 11:02:46 2017
+	Database contains 18 sequences, 1890 residues
+
+	Scores for positive and reverse complement strands are combined.
+
+	MOTIFS meme.crp0.de.oops.txt (nucleotide)
+	MOTIF ID           ALT ID WIDTH BEST POSSIBLE MATCH
+	----- ------------ ------ ----- -------------------
+	    1 AHSGYAWWWAAT MEME-1    12 ACGGCAAATAAT
+	    2 GTGADYDDDNTC MEME-2    12 GTGAGCGGTGTC
+
+	PAIRWISE MOTIF CORRELATIONS:
+	MOTIF     1
+	----- -----
+	   2   0.13
+	No overly similar pairs (correlation > 0.60) found.
+
+	Random model letter frequencies (from non-redundant database):
+	A 0.274 C 0.225 G 0.225 T 0.274 
+********************************************************************************
+
+
+********************************************************************************
+SECTION I: HIGH-SCORING SEQUENCES
+********************************************************************************
+	- Each of the following 18 sequences has E-value less than 10.
+	- The E-value of a sequence is the expected number of sequences
+	  in a random database of the same size that would match the motifs as
+	  well as the sequence does and is equal to the combined p-value of the
+	  sequence times the number of sequences in the database.
+	- The combined p-value of a sequence measures the strength of the
+	  match of the sequence to all the motifs and is calculated by
+	    o finding the score of the single best match of each motif
+	      to the sequence (best matches may overlap),
+	    o calculating the sequence p-value of each score,
+	    o forming the product of the p-values,
+	    o taking the p-value of the product.
+	- The sequence p-value of a score is defined as the
+	  probability of a random sequence of the same length containing
+	  some match with as good or better a score.
+	- The score for the match of a position in a sequence to a motif
+	  is computed by by summing the appropriate entry from each column of
+	  the position-dependent scoring matrix that represents the motif.
+	- Sequences shorter than one or more of the motifs are skipped.
+	- The table is sorted by increasing E-value.
+********************************************************************************
+
+SEQUENCE NAME                      DESCRIPTION                   E-VALUE  LENGTH
+-------------                      -----------                   -------- ------
+lac                                9 80                           0.00023    105
+bglr1                              76                              0.0098    105
+tdc                                78                               0.043    105
+deop2                              7 60                             0.055    105
+pbr322                             53                               0.055    105
+malk                               29 61                             0.14    105
+tnaa                               71                                0.69    105
+male                               14                                0.91    105
+ara                                17 55                             0.94    105
+cya                                50                                   1    105
+ompa                               48                                 2.1    105
+ilv                                39                                 2.6    105
+gale                               42                                 3.1    105
+malt                               41                                 3.2    105
+crp                                63                                 4.5    105
+ce1cg                              17 61                              4.8    105
+trn9cat                            1 84                               5.9    105
+uxu1                               17                                 6.6    105
+
+********************************************************************************
+
+
+
+********************************************************************************
+SECTION II: MOTIF DIAGRAMS
+********************************************************************************
+	- The ordering and spacing of all non-overlapping motif occurrences
+	  are shown for each high-scoring sequence listed in Section I.
+	- A motif occurrence is defined as a position in the sequence whose
+	  match to the motif has POSITION p-value less than 0.0001.
+	- The POSITION p-value of a match is the probability of
+	  a single random subsequence of the length of the motif
+	  scoring at least as well as the observed match.
+	- For each sequence, all motif occurrences are shown unless there
+	  are overlaps.  In that case, a motif occurrence is shown only if its
+	  p-value is less than the product of the p-values of the other
+	  (lower-numbered) motif occurrences that it overlaps.
+	- The table also shows the E-value of each sequence.
+	- Spacers and motif occurences are indicated by
+	   o -d-    `d' residues separate the end of the preceding motif 
+		    occurrence and the start of the following motif occurrence
+	   o [sn]  occurrence of motif `n' with p-value less than 0.0001.
+		    A minus sign indicates that the occurrence is on the
+		    reverse complement strand.
+********************************************************************************
+
+SEQUENCE NAME                      E-VALUE   MOTIF DIAGRAM
+-------------                      --------  -------------
+lac                                 0.00023  [+1]-2-[-2]-79
+bglr1                                0.0098  79-[+2]-14
+tdc                                   0.043  30-[+1]-39-[+2]-12
+deop2                                 0.055  19-[+1]-74
+pbr322                                0.055  58-[-2]-35
+malk                                   0.14  32-[+2]-61
+tnaa                                   0.69  105
+male                                   0.91  105
+ara                                    0.94  105
+cya                                       1  105
+ompa                                    2.1  105
+ilv                                     2.6  105
+gale                                    3.1  105
+malt                                    3.2  105
+crp                                     4.5  105
+ce1cg                                   4.8  105
+trn9cat                                 5.9  105
+uxu1                                    6.6  105
+
+********************************************************************************
+
+
+
+********************************************************************************
+SECTION III: ANNOTATED SEQUENCES
+********************************************************************************
+	- The positions and p-values of the non-overlapping motif occurrences
+	  are shown above the actual sequence for each of the high-scoring
+	  sequences from Section I.
+	- A motif occurrence is defined as a position in the sequence whose
+	  match to the motif has POSITION p-value less than 0.0001 as 
+	  defined in Section II.
+	- For each sequence, the first line specifies the name of the sequence.
+	- The second (and possibly more) lines give a description of the 
+	  sequence.
+	- Following the description line(s) is a line giving the length, 
+	  combined p-value, and E-value of the sequence as defined in Section I.
+	- The next line reproduces the motif diagram from Section II.
+	- The entire sequence is printed on the following lines.
+	- Motif occurrences are indicated directly above their positions in the
+	  sequence on lines showing
+	   o the motif number of the occurrence (a minus sign indicates that
+	  the occurrence is on the reverse complement strand),
+	   o the position p-value of the occurrence,
+	   o the best possible match to the motif (or its reverse complement), and
+	   o columns whose match to the motif has a positive score (indicated 
+	     by a plus sign).
+********************************************************************************
+
+
+lac
+  9 80
+  LENGTH = 105  COMBINED P-VALUE = 1.30e-05  E-VALUE =  0.00023
+  DIAGRAM: [+1]-2-[-2]-79
+
+     [+1]          [-2]
+     3.4e-06       7.2e-06
+     ACGGCAAATAAT  GACACCGCTCAC
+     ++++++++++++  ++  ++++++++
+1    AACGCAATTAATGTGAGTTAGCTCACTCATTAGGCACCCCAGGCTTTACACTTTATGCTTCCGGCTCGTATGTTG
+
+
+bglr1
+  76
+  LENGTH = 105  COMBINED P-VALUE = 5.42e-04  E-VALUE =   0.0098
+  DIAGRAM: 79-[+2]-14
+
+         [+2]
+         9.1e-06
+         GTGAGCGGTGTC
+         ++++++  ++++
+76   AACTGTGAGCATGGTCATATTTTTATCAAT
+
+
+tdc
+  78
+  LENGTH = 105  COMBINED P-VALUE = 2.39e-03  E-VALUE =    0.043
+  DIAGRAM: 30-[+1]-39-[+2]-12
+
+                                   [+1]
+                                   7.8e-05
+                                   ACGGCAAATAAT
+                                   ++++ +++++++
+1    GATTTTTATACTTTAACTTGTTGATATTTAAAGGTATTTAATTGTAATAACGATACTCTGGAAAGTATTGAAAGT
+
+           [+2]
+           9.4e-05
+           GTGAGCGGTGTC
+           +++++++++  +
+76   TAATTTGTGAGTGGTCGCACATATCCTGTT
+
+
+deop2
+  7 60
+  LENGTH = 105  COMBINED P-VALUE = 3.05e-03  E-VALUE =    0.055
+  DIAGRAM: 19-[+1]-74
+
+                        [+1]
+                        9.0e-05
+                        ACGGCAAATAAT
+                        ++++++++++++
+1    AGTGAATTATTTGAACCAGATCGCATTACAGTGATGCAAACTTGTAAGTAGATTTCCTTAATTGTGATGTGTATC
+
+
+pbr322
+  53
+  LENGTH = 105  COMBINED P-VALUE = 3.06e-03  E-VALUE =    0.055
+  DIAGRAM: 58-[-2]-35
+
+                                                               [-2]
+                                                               9.4e-05
+                                                               GACACCGCTCAC
+                                                               ++ +++ +++++
+1    CTGGCTTAACTATGCGGCATCAGAGCAGATTGTACTGAGAGTGCACCATATGCGGTGTGAAATACCGCACAGATG
+
+
+malk
+  29 61
+  LENGTH = 105  COMBINED P-VALUE = 8.04e-03  E-VALUE =     0.14
+  DIAGRAM: 32-[+2]-61
+
+                                     [+2]
+                                     7.1e-05
+                                     GTGAGCGGTGTC
+                                     ++++++++ + +
+1    GGAGGAGGCGGGAGGATGAGAACACGGCTTCTGTGAACTAAACCGAGGTCATGTAAGGAATTTCGTGATGTTGCT
+
+
+tnaa
+  71 
+  LENGTH = 105  COMBINED P-VALUE = 3.85e-02  E-VALUE =     0.69
+  DIAGRAM: 105
+
+
+male
+  14
+  LENGTH = 105  COMBINED P-VALUE = 5.05e-02  E-VALUE =     0.91
+  DIAGRAM: 105
+
+
+ara
+  17 55
+  LENGTH = 105  COMBINED P-VALUE = 5.22e-02  E-VALUE =     0.94
+  DIAGRAM: 105
+
+
+cya
+  50
+  LENGTH = 105  COMBINED P-VALUE = 5.58e-02  E-VALUE =        1
+  DIAGRAM: 105
+
+
+ompa
+  48
+  LENGTH = 105  COMBINED P-VALUE = 1.17e-01  E-VALUE =      2.1
+  DIAGRAM: 105
+
+
+ilv
+  39
+  LENGTH = 105  COMBINED P-VALUE = 1.46e-01  E-VALUE =      2.6
+  DIAGRAM: 105
+
+
+gale
+  42
+  LENGTH = 105  COMBINED P-VALUE = 1.70e-01  E-VALUE =      3.1
+  DIAGRAM: 105
+
+
+malt
+  41
+  LENGTH = 105  COMBINED P-VALUE = 1.78e-01  E-VALUE =      3.2
+  DIAGRAM: 105
+
+
+crp
+  63
+  LENGTH = 105  COMBINED P-VALUE = 2.48e-01  E-VALUE =      4.5
+  DIAGRAM: 105
+
+
+ce1cg
+  17 61
+  LENGTH = 105  COMBINED P-VALUE = 2.68e-01  E-VALUE =      4.8
+  DIAGRAM: 105
+
+
+trn9cat
+  1 84
+  LENGTH = 105  COMBINED P-VALUE = 3.26e-01  E-VALUE =      5.9
+  DIAGRAM: 105
+
+
+uxu1
+  17
+  LENGTH = 105  COMBINED P-VALUE = 3.66e-01  E-VALUE =      6.6
+  DIAGRAM: 105
+
+********************************************************************************
+
+
+CPU: Timothys-iMac.rd.unr.edu
+Time 0.008 secs.
+
+mast -oc results/mast4 -nostatus meme/meme.crp0.de.oops.txt common/crp0.s

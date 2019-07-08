@@ -2,9 +2,11 @@
 # Revisions copyright 2009 Leighton Pritchard.
 # Revisions copyright 2010 Peter Cock.
 # All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code to parse output from the EMBOSS eprimer3 program.
 
 As elsewhere in Biopython there are two input functions, read and parse,
@@ -17,7 +19,6 @@ function. If you ran eprimer3 with multiple targets, use the parse
 function to iterate over the retsults.
 """
 
-__docformat__ = "restructuredtext en"
 
 # --- primer3
 
@@ -32,7 +33,9 @@ class Record(object):
         - comments - the comment line(s) for the record
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.comments = ""
         self.primers = []
 
@@ -62,9 +65,11 @@ class Primers(object):
         - internal_length
         - internal_tm
         - internal_gc
-    
+
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.size = 0
         self.forward_seq = ""
         self.forward_start = 0
@@ -88,8 +93,7 @@ class Primers(object):
 
 
 def parse(handle):
-    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects.
-    """
+    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects."""
     # Skip blank lines at head of file
     while True:
         line = handle.readline()
@@ -116,9 +120,9 @@ def parse(handle):
             primer = Primers()
             primer.size = int(line[19:])
             record.primers.append(primer)
-        elif line[5:19]=="FORWARD PRIMER":
+        elif line[5:19] == "FORWARD PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.forward_start = int(words[2])
@@ -126,9 +130,9 @@ def parse(handle):
             primer.forward_tm = float(words[4])
             primer.forward_gc = float(words[5])
             primer.forward_seq = words[6]
-        elif line[5:19]=="REVERSE PRIMER":
+        elif line[5:19] == "REVERSE PRIMER":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.reverse_start = int(words[2])
@@ -136,9 +140,9 @@ def parse(handle):
             primer.reverse_tm = float(words[4])
             primer.reverse_gc = float(words[5])
             primer.reverse_seq = words[6]
-        elif line[5:19]=="INTERNAL OLIGO":
+        elif line[5:19] == "INTERNAL OLIGO":
             words = line.split()
-            if not primer or primer.size==0:
+            if not primer or primer.size == 0:
                 primer = Primers()
                 record.primers.append(primer)
             primer.internal_start = int(words[2])

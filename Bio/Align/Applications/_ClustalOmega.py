@@ -2,30 +2,36 @@
 # Copyright 2011 by Andreas Wilm. All rights reserved.
 # Based on ClustalW wrapper copyright 2009 by Cymon J. Cox.
 #
-# Wrapper for Clustal Omega by Andreas Wilm (2011). Used _Clustalw.py
-# as template.
-#
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple alignment program Clustal Omega.
-"""
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple alignment program Clustal Omega."""
 
 from __future__ import print_function
-
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 
 class ClustalOmegaCommandline(AbstractCommandline):
-    """Command line wrapper for clustal omega
+    u"""Command line wrapper for clustal omega.
 
     http://www.clustal.org/omega
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 1.2.0
 
+    References
+    ----------
+    Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
+    McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
+    Fast, scalable generation of high-quality protein multiple
+    sequence alignments using Clustal Omega.
+    Molecular Systems Biology 7:539 https://doi.org/10.1038/msb.2011.75
+
+    Examples
+    --------
     >>> from Bio.Align.Applications import ClustalOmegaCommandline
     >>> in_file = "unaligned.fasta"
     >>> out_file = "aligned.fasta"
@@ -33,22 +39,13 @@ class ClustalOmegaCommandline(AbstractCommandline):
     >>> print(clustalomega_cline)
     clustalo -i unaligned.fasta -o aligned.fasta --auto -v
 
-
     You would typically run the command line with clustalomega_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
 
-    Citation:
-    ---------
-
-    Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
-    McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
-    Fast, scalable generation of high-quality protein multiple
-    sequence alignments using Clustal Omega.
-    Molecular Systems Biology 7:539 doi:10.1038/msb.2011.75
-
-    Last checked against versions: 1.2.0
     """
+
     def __init__(self, cmd="clustalo", **kwargs):
+        """Initialize the class."""
         # order parameters in the same order as clustalo --help
         self.parameters = \
             [
@@ -201,12 +198,6 @@ class ClustalOmegaCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running ClustalOmega doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

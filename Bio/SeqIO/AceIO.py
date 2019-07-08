@@ -1,9 +1,9 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2015 by Peter Cock.  All rights reserved.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "ace" file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -18,11 +18,9 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
 
-__docformat__ = "restructuredtext en"
-
 
 def AceIterator(handle):
-    """Returns SeqRecord objects from an ACE file.
+    """Return SeqRecord objects from an ACE file.
 
     This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
     by iterating over the file in a single pass, we are forced to ignore any
@@ -97,8 +95,8 @@ def AceIterator(handle):
 
         # Consensus base quality (BQ lines).  Note that any gaps (originally
         # as * characters) in the consensus do not get a quality entry, so
-        # we assign a quality of None (zero would be missleading as there may
-        # be excelent support for having a gap here).
+        # we assign a quality of None (zero would be misleading as there may
+        # be excellent support for having a gap here).
         quals = []
         i = 0
         for base in consensus_seq:

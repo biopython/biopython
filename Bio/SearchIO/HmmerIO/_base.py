@@ -1,28 +1,24 @@
 # Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SearchIO base classes for HMMER-related code."""
 
-from Bio._py3k import _as_bytes
 from Bio.SearchIO._index import SearchIndexer
 
 
-__docformat__ = "restructuredtext en"
-
-
 class _BaseHmmerTextIndexer(SearchIndexer):
-
     """Base indexer class for HMMER plain text output."""
 
     def __init__(self, *args, **kwargs):
         super(_BaseHmmerTextIndexer, self).__init__(*args, **kwargs)
-        self._preamble = _as_bytes('')
+        self._preamble = b""
 
     def get_raw(self, offset):
+        """Return the raw record from the file as a bytes string."""
         handle = self._handle
-        qresult_raw = _as_bytes('')
+        qresult_raw = b""
 
         # read header first
         if not self._preamble:

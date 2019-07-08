@@ -3,6 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for Bio.SeqIO.FastaIO module."""
 
 from __future__ import print_function
 
@@ -11,11 +12,12 @@ from Bio._py3k import StringIO
 
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
-from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
+from Bio.Alphabet import generic_nucleotide, generic_dna
+from Bio.SeqIO.FastaIO import SimpleFastaParser, FastaTwoLineParser
 
 
 def title_to_ids(title):
-    """Function to convert a title into the id, name, and description.
+    """Convert a FASTA title line into the id, name, and description.
 
     This is just a quick-n-dirty implementation, and is definetely not meant
     to handle every FASTA title line case.
@@ -30,7 +32,7 @@ def title_to_ids(title):
     # now extract the ids from the id block
     # gi|5690369|gb|AF158246.1|AF158246
     id_info_items = id_info.split("|")
-    if len(id_info_items) >=4:
+    if len(id_info_items) >= 4:
         assert id_info_items[2] in ["gb", "emb", "dbj", "pdb"], title
         id = id_info_items[3]  # the id with version info
         name = id_info_items[4]  # the id without version info
@@ -43,37 +45,64 @@ def title_to_ids(title):
 
 
 def read_single_with_titles(filename, alphabet):
+    """Parser wrapper to confirm single entry FASTA file."""
     global title_to_ids
-    handle = open(filename)
-    iterator = FastaIterator(handle, alphabet, title_to_ids)
-    record = next(iterator)
-    try:
-        second = next(iterator)
-    except StopIteration:
-        second = None
-    handle.close()
+    with open(filename) as handle:
+        iterator = FastaIterator(handle, alphabet, title_to_ids)
+        record = next(iterator)
+        try:
+            second = next(iterator)
+        except StopIteration:
+            second = None
     assert record is not None and second is None
     return record
 
 
 def read_title_and_seq(filename):
     """Crude parser that gets the first record from a FASTA file."""
-    handle = open(filename)
-    title = handle.readline().rstrip()
-    assert title.startswith(">")
-    seq = ""
-    for line in handle:
-        if line.startswith(">"):
-            break
-        seq += line.strip()
-    handle.close()
+    with open(filename) as handle:
+        title = handle.readline().rstrip()
+        assert title.startswith(">")
+        seq = ""
+        for line in handle:
+            if line.startswith(">"):
+                break
+            seq += line.strip()
     return title[1:], seq
 
 
+class Wrapping(unittest.TestCase):
+    """Tests for two-line-per-record FASTA variant."""
+
+    def test_fails(self):
+        """Test case which should fail."""
+        self.assertRaises(ValueError, SeqIO.read, "Fasta/aster.pro", "fasta-2line")
+
+    def test_passes(self):
+        """Test case which should pass."""
+        expected = SeqIO.read("Fasta/aster.pro", "fasta")
+
+        record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+        record = SeqIO.read("Fasta/aster_no_wrap.pro", "fasta-2line")
+        self.assertEqual(expected.id, record.id)
+        self.assertEqual(expected.name, record.name)
+        self.assertEqual(expected.description, record.description)
+        self.assertEqual(expected.seq, record.seq)
+
+
 class TitleFunctions(unittest.TestCase):
-    """Cunning unit test where methods are added at run time."""
+    """Test using title functions.
+
+    This is a dynamic class where methods are added at run time.
+    """
+
     def simple_check(self, filename, alphabet):
-        """Basic test for parsing single record FASTA files."""
+        """Test parsing single record FASTA files."""
         title, seq = read_title_and_seq(filename)  # crude parser
         # First check using Bio.SeqIO.FastaIO directly with title function,
         record = read_single_with_titles(filename, alphabet)
@@ -94,7 +123,7 @@ class TitleFunctions(unittest.TestCase):
         # print("{%s done}" % filename)
 
     def multi_check(self, filename, alphabet):
-        """Basic test for parsing multi-record FASTA files."""
+        """Test parsing multi-record FASTA files."""
         with open(filename) as handle:
             re_titled = list(FastaIterator(handle, alphabet, title_to_ids))
         default = list(SeqIO.parse(filename, "fasta", alphabet))
@@ -120,6 +149,75 @@ class TitleFunctions(unittest.TestCase):
         self.assertEqual("", record.description)
 
 
+class TestSimpleFastaParsers(unittest.TestCase):
+    """Test SimpleFastaParser and FastaTwoLineParser directly."""
+
+    # Regular cases input strings and outputs
+    ins_two_line = [">1\nACGT", ">1\nACGT",
+                    ">1\nACGT\n>2\nACGT"]
+    outs_two_line = [[("1", "ACGT")], [("1", "ACGT")],
+                     [("1", "ACGT"), ("2", "ACGT")]]
+
+    ins_multiline = [">1\nACGT\nACGT",
+                     ">1\nACGT\nACGT\n>2\nACGT\nACGT"]
+    outs_multiline = [[("1", "ACGTACGT")],
+                      [("1", "ACGTACGT"), ("2", "ACGTACGT")]]
+
+    # Edge case input strings and outputs
+    ins_two_line_edges = [">\nACGT", ">1\n\n",
+                          ">1>1\n\n>1\n\n", ""]
+    outs_two_line_edges = [[("", "ACGT")], [("1", "")],
+                           [("1>1", ""), ("1", "")], []]
+
+    ins_simple_edges = [">1", ">1\n\n\n",
+                        ">\n>1\n>2"]
+    outs_simple_edges = [[("1", "")], [("1", "")],
+                         [("", ""), ("1", ""), ("2", "")]]
+
+    def test_regular_SimpleFastaParser(self):
+        """Test regular SimpleFastaParser cases."""
+        for inp, out in zip(self.ins_two_line, self.outs_two_line):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp + '\n')
+            self.assertEqual(list(SimpleFastaParser(handle1)), out)
+            self.assertEqual(list(SimpleFastaParser(handle2)), out)
+        for inp, out in zip(self.ins_multiline, self.outs_multiline):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp + '\n')
+            self.assertEqual(list(SimpleFastaParser(handle1)), out)
+            self.assertEqual(list(SimpleFastaParser(handle2)), out)
+
+    def test_regular_FastaTwoLineParser(self):
+        """Test regular FastaTwoLineParser cases."""
+        for inp, out in zip(self.ins_two_line, self.outs_two_line):
+            handle1 = StringIO(inp)
+            handle2 = StringIO(inp + '\n')
+            self.assertEqual(list(FastaTwoLineParser(handle1)), out)
+            self.assertEqual(list(FastaTwoLineParser(handle2)), out)
+
+    def test_edgecases_SimpleFastaParser(self):
+        """Test SimpleFastaParser edge-cases."""
+        for inp, out in zip(self.ins_two_line_edges, self.outs_two_line_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(SimpleFastaParser(handle)), out)
+        for inp, out in zip(self.ins_simple_edges, self.outs_simple_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(SimpleFastaParser(handle)), out)
+
+    def test_edgecases_FastaTwoLineParser(self):
+        """Test FastaTwoLineParser edge-cases."""
+        for inp, out in zip(self.ins_two_line_edges, self.outs_two_line_edges):
+            handle = StringIO(inp)
+            self.assertEqual(list(FastaTwoLineParser(handle)), out)
+
+    def test_exceptions_FastaTwoLineParser(self):
+        """Test FastaTwoLineParser exceptions."""
+        for inp in self.ins_multiline + self.ins_simple_edges:
+            handle = StringIO(inp)
+            with self.assertRaises(ValueError):
+                list(FastaTwoLineParser(handle))
+
+
 single_nucleic_files = ['Fasta/lupine.nu', 'Fasta/elderberry.nu',
                         'Fasta/phlox.nu', 'Fasta/centaurea.nu',
                         'Fasta/wisteria.nu', 'Fasta/sweetpea.nu',
@@ -136,44 +234,48 @@ for filename in single_nucleic_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.simple_check(fn, generic_nucleotide)
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_nuc_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_nuc_%s" % name, funct(filename))
     del funct
 
 for filename in multi_dna_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.multi_check(fn, generic_dna)
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_dna_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_mutli_dna_%s" % name, funct(filename))
     del funct
 
 for filename in single_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.simple_check(fn, generic_nucleotide)
+        """Dynamically generated function."""
+        f = lambda x: x.simple_check(fn, generic_nucleotide)  # noqa: E731
         f.__doc__ = "Checking protein file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_pro_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_pro_%s" % name, funct(filename))
     del funct
 
 for filename in multi_amino_files:
     name = filename.split(".")[0]
 
     def funct(fn):
-        f = lambda x: x.multi_check(fn, generic_dna)
+        """Dynamically generated function."""
+        f = lambda x: x.multi_check(fn, generic_dna)  # noqa: E731
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
 
-    setattr(TitleFunctions, "test_mutli_pro_%s"%name, funct(filename))
+    setattr(TitleFunctions, "test_mutli_pro_%s" % name, funct(filename))
     del funct
 
 if __name__ == "__main__":

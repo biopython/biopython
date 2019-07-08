@@ -11,6 +11,7 @@ from Bio import SeqIO
 
 
 def extract_organisms(file_to_parse, format):
+    """Extract species names from sequence description line."""
     all_species = []
     for cur_record in SeqIO.parse(open(file_to_parse), format):
         # extract the info from the description
@@ -21,6 +22,7 @@ def extract_organisms(file_to_parse, format):
             all_species.append(new_species)
 
     return all_species
+
 
 if __name__ == "__main__":
     print("Using Bio.SeqIO on a FASTA file")

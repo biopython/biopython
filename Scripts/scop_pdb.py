@@ -4,7 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
+"""Extract SCOP domain ATOM and HETATOM records from PDB."""
 
 from __future__ import print_function
 
@@ -13,10 +13,11 @@ import sys
 
 from Bio._py3k import urlretrieve as _urlretrieve
 
-from Bio.SCOP import *
+from Bio.SCOP import Raf, Cla
 
 
 def usage():
+    """Print a help message."""
     print("""Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
 
 For example:
@@ -57,12 +58,14 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
   sid      -- A SCOP domain identifier. e.g. d3hbib_
 """)
 
+
 default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
-                      "format=PDB&pdbId=%s&compression=None"
-# default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
+    "format=PDB&pdbId=%s&compression=None"
+# default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"  # noqa: E501
 
 
 def open_pdb(pdbid, pdb_url=None):
+    """Make a local copy of an online pdb file and return a file handle."""
     if pdb_url is None:
         pdb_url = default_pdb_url
     url = pdb_url % pdbid
@@ -71,9 +74,11 @@ def open_pdb(pdbid, pdb_url=None):
 
 
 def main():
+    """Extract a SCOP domain's ATOM and HETATOM records from a PDB file."""
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
-             ["help", "usage", "pdb=", "output=", "input="])
+                                   ["help", "usage", "pdb=", "output=",
+                                    "input="])
     except getopt.GetoptError:
         # show help information and exit:
         usage()
@@ -98,7 +103,8 @@ def main():
             pdb_url = a
 
     if len(args) < 2:
-        sys.stderr.write("Not enough arguments. Try --help for more details.\n")
+        sys.stderr.write("Not enough arguments. "
+                         "Try --help for more details.\n")
         sys.exit(2)
 
     raf_url = args[0]
@@ -150,7 +156,8 @@ def main():
                     finally:
                         f.close()
                 except (IOError, KeyError, RuntimeError) as e:
-                    sys.stderr.write("I cannot do SCOP domain %s : %s\n" % (id, e))
+                    sys.stderr.write("I cannot do SCOP domain %s : %s\n"
+                                     % (id, e))
             finally:
                 out_handle.close()
     finally:

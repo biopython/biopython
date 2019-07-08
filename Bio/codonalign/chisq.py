@@ -4,9 +4,6 @@ Adapted from SciPy: scipy/special/cephes/{chdtr,igam}.
 """
 
 import math
-import sys
-
-__docformat__ = "restructuredtext en"
 
 # Cephes Math Library Release 2.0:  April, 1987
 # Copyright 1985, 1987 by Stephen L. Moshier
@@ -46,16 +43,19 @@ def chisqprob(x, df):
 
 
 def _igamc(a, x):
-    """Complemented incomplete Gamma integral.
+    """Complemented incomplete Gamma integral (PRIVATE).
 
-    SYNOPSIS:
+    Parameters
+    ----------
+    a: float
+    x: float
 
-    double a, x, y, igamc();
+    Returns
+    -------
+    float
 
-    y = igamc( a, x );
-
-    DESCRIPTION:
-
+    Notes
+    -----
     The function is defined by::
 
         igamc(a,x)   =   1 - igam(a,x)
@@ -72,6 +72,7 @@ def _igamc(a, x):
     The integral is evaluated by either a power series or
     continued fraction expansion, depending on the relative
     values of a and x.
+
     """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))
@@ -103,16 +104,16 @@ def _igamc(a, x):
         qkm2 = qkm1
         qkm1 = qk
         if abs(pk) > BIG:
-                pkm2 *= BIGINV
-                pkm1 *= BIGINV
-                qkm2 *= BIGINV
-                qkm1 *= BIGINV
+            pkm2 *= BIGINV
+            pkm1 *= BIGINV
+            qkm2 *= BIGINV
+            qkm1 *= BIGINV
         if t <= MACHEP:
             return ans * ax
 
 
 def _igam(a, x):
-    """Left tail of incomplete Gamma function.
+    """Left tail of incomplete Gamma function (PRIVATE).
 
     Computes this formula::
 
@@ -121,8 +122,8 @@ def _igam(a, x):
          x  e     >   ----------
                   -     -
                 k=0   | (a+k+1)
-    """
 
+    """
     # Compute  x**a * exp(-x) / Gamma(a)
     ax = math.exp(a * math.log(x) - x - math.lgamma(a))
 

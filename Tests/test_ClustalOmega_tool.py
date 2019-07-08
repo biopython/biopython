@@ -5,11 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio import MissingExternalDependencyError
+"""Tests for ClustalOmega tool."""
 
 import sys
 import os
 import unittest
+
+from Bio._py3k import getoutput
+
+from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Applications import ClustalOmegaCommandline
@@ -21,14 +25,13 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalo_exe = None
-if sys.platform=="win32":
-    # TODO
-    raise MissingExternalDependencyError("Testing this on Windows not implemented yet")
-else:
-    from Bio._py3k import getoutput
+try:
     output = getoutput("clustalo --help")
     if output.startswith("Clustal Omega"):
         clustalo_exe = "clustalo"
+except OSError:
+    # TODO: Use FileNotFoundError once we drop Python 2
+    pass
 
 if not clustalo_exe:
     raise MissingExternalDependencyError(
@@ -46,8 +49,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
-
+        """Shared test procedure used by all tests."""
         # Overwrite existing files.
         cline.force = True
 
@@ -63,8 +65,8 @@ class ClustalOmegaTestCase(unittest.TestCase):
 
         # Test if ClustalOmega executed successfully.
         self.assertTrue(error.strip() == "" or
-               error.startswith("WARNING: Sequence type is DNA.") or
-               error.startswith("WARNING: DNA alignment is still experimental."))
+                        error.startswith("WARNING: Sequence type is DNA.") or
+                        error.startswith("WARNING: DNA alignment is still experimental."))
 
         # Check the output...
         align = AlignIO.read(cline.outfile, "clustal")
@@ -78,7 +80,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
             self.assertTrue(os.path.isfile(cline.guidetree_out))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 #################################################################
@@ -109,7 +111,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError as err:
-            self.assertTrue("contains 1 sequence, nothing to align" in str(err))
+            self.assertIn("contains 1 sequence, nothing to align", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -123,7 +125,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         except ApplicationError as err:
             # Ideally we'd catch the return code and raise the specific
             # error for "invalid format".
-            self.assertTrue("Can't determine format of sequence file" in str(err))
+            self.assertIn("Can't determine format of sequence file", str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
@@ -214,10 +216,10 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         newtree_file = "temp_test.dnd"
 
         cline = ClustalOmegaCommandline(clustalo_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    guidetree_out=newtree_file,
-                                    outfmt="clustal")
+                                        infile=input_file,
+                                        outfile=output_file,
+                                        guidetree_out=newtree_file,
+                                        outfmt="clustal")
 
         self.standard_test_procedure(cline)
         cline.guidetree_out = "temp with space.dnd"

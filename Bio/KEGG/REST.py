@@ -22,12 +22,13 @@ requirements are reasonably clear). To avoid risking overloading the service,
 Biopython will only allow three calls per second.
 
 References:
-
 Kanehisa, M. and Goto, S.; KEGG: Kyoto Encyclopedia of Genes and Genomes.
 Nucleic Acids Res. 28, 29-34 (2000).
+
 """
 
 from Bio._py3k import urlopen as _urlopen
+from Bio._py3k import _binary_to_string_handle
 
 
 def _q(op, arg1, arg2=None, arg3=None):
@@ -38,7 +39,12 @@ def _q(op, arg1, arg2=None, arg3=None):
         args = "%s/%s/%s" % (op, arg1, arg2)
     else:
         args = "%s/%s" % (op, arg1)
-    return _urlopen(URL % (args))
+    resp = _urlopen(URL % (args))
+
+    if "image" == arg2:
+        return resp
+
+    return _binary_to_string_handle(resp)
 
 
 # http://www.kegg.jp/kegg/rest/keggapi.html
@@ -138,8 +144,7 @@ def kegg_find(database, query, option=None):
     #
     # <database> = compound | drug
     # <option> = formula | exact_mass | mol_weight
-    if database in ["compound", "drug"] and \
-          option in ["formula", "exact_mass", "mol_weight"]:
+    if (database in ["compound", "drug"] and option in ["formula", "exact_mass", "mol_weight"]):
         resp = _q("find", database, query, option)
     elif option:
         raise Exception("Invalid option arg for kegg find request.")
@@ -195,11 +200,12 @@ def kegg_get(dbentries, option=None):
 
 
 def kegg_conv(target_db, source_db, option=None):
-    """KEGG conv - convert KEGG identifiers to/from outside identifiers
+    """KEGG conv - convert KEGG identifiers to/from outside identifiers.
 
-    target_db - Target database
-    source_db_or_dbentries - source database or database entries
-    option - Can be "turtle" or "n-triple" (string).
+    Arguments:
+     - target_db - Target database
+     - source_db_or_dbentries - source database or database entries
+     - option - Can be "turtle" or "n-triple" (string).
     """
     # http://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
     #

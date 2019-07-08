@@ -1,8 +1,9 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+# Copyright 2008-2017 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the "tab" (simple tab separated) file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
@@ -37,12 +38,11 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
-
-__docformat__ = "restructuredtext en"
+from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 
 
 def TabIterator(handle, alphabet=single_letter_alphabet):
-    """Iterates over tab separated lines (as SeqRecord objects).
+    """Iterate over tab separated lines as SeqRecord objects.
 
     Each line of the file should contain one tab only, dividing the line
     into an identifier and the full sequence.
@@ -55,17 +55,34 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
     any spaces within the text) and the second field is the sequence.
 
     Any blank lines are ignored.
+
+    Examples
+    --------
+    >>> with open("GenBank/NC_005816.tsv") as handle:
+    ...     for record in TabIterator(handle):
+    ...         print("%s length %i" % (record.id, len(record)))
+    gi|45478712|ref|NP_995567.1| length 340
+    gi|45478713|ref|NP_995568.1| length 260
+    gi|45478714|ref|NP_995569.1| length 64
+    gi|45478715|ref|NP_995570.1| length 123
+    gi|45478716|ref|NP_995571.1| length 145
+    gi|45478717|ref|NP_995572.1| length 357
+    gi|45478718|ref|NP_995573.1| length 138
+    gi|45478719|ref|NP_995574.1| length 312
+    gi|45478720|ref|NP_995575.1| length 99
+    gi|45478721|ref|NP_995576.1| length 90
+
     """
     for line in handle:
         try:
             title, seq = line.split("\t")  # will fail if more than one tab!
-        except:
+        except ValueError:
             if line.strip() == "":
                 # It's a blank line, ignore it
                 continue
             raise ValueError("Each line should have one tab separating the" +
-                             " title and sequence, this line has %i tabs: %s"
-                             % (line.count("\t"), repr(line)))
+                             " title and sequence, this line has %i tabs: %r"
+                             % (line.count("\t"), line))
         title = title.strip()
         seq = seq.strip()  # removes the trailing new line
         yield SeqRecord(Seq(seq, alphabet),
@@ -74,44 +91,37 @@ def TabIterator(handle, alphabet=single_letter_alphabet):
 
 
 class TabWriter(SequentialSequenceWriter):
-    """Class to write simple tab separated format files.
+    """Class to write simple tab separated format files (OBSOLETE).
 
     Each line consists of "id(tab)sequence" only.
 
     Any description, name or other annotation is not recorded.
+
+    This class is now obsolete. Please use the function ``as_tab`` instead,
+    or the top level ``Bio.SeqIO.write()`` function with ``format="tab"``.
     """
+
     def write_record(self, record):
         """Write a single tab line to the file."""
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
+        self.handle.write(as_tab(record))
 
-        title = self.clean(record.id)
-        seq = self._get_seq_string(record)  # Catches sequence being None
-        assert "\t" not in title
-        assert "\n" not in title
-        assert "\r" not in title
-        assert "\t" not in seq
-        assert "\n" not in seq
-        assert "\r" not in seq
-        self.handle.write("%s\t%s\n" % (title, seq))
+
+def as_tab(record):
+    """Return record as tab separated (id(tab)seq) string."""
+    title = _clean(record.id)
+    seq = _get_seq_string(record)  # Catches sequence being None
+    assert "\t" not in title
+    assert "\n" not in title
+    assert "\r" not in title
+    assert "\t" not in seq
+    assert "\n" not in seq
+    assert "\r" not in seq
+    return "%s\t%s\n" % (title, seq)
 
 
 if __name__ == "__main__":
-    print("Running quick self test")
-    from Bio._py3k import StringIO
-
-    # This example has a trailing blank line which should be ignored
-    handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")
-    records = list(TabIterator(handle))
-    assert len(records) == 2
-
-    handle = StringIO("Alpha\tAAAAAAA\tExtra\nBeta\tCCCCCCC\n")
-    try:
-        records = list(TabIterator(handle))
-        assert False, "Should have reject this invalid example!"
-    except ValueError:
-        # Good!
-        pass
-
-    print("Done")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

@@ -1,4 +1,4 @@
-# Copyright 2010-2013 by Peter Cock.
+# Copyright 2010-2016 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -14,7 +14,6 @@ import os
 from random import shuffle
 
 from Bio._py3k import _as_bytes, _as_string
-_empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
 
@@ -35,6 +34,7 @@ def _have_bug17666():
     except TypeError as err:
         # TypeError: integer argument expected, got 'tuple'
         return True
+
 
 if _have_bug17666():
     from Bio import MissingPythonDependencyError
@@ -85,7 +85,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text(self, old_file, new_file):
-        """Check text mode using explicit open/close"""
+        """Check text mode using explicit open/close."""
         h = open(old_file)  # text mode!
         old_line = h.readline()
         old = old_line + h.read()
@@ -101,7 +101,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text_with(self, old_file, new_file):
-        """Check text mode using context manager (with statement)"""
+        """Check text mode using context manager (with statement)."""
         with open(old_file) as h:  # text mode!
             old_line = h.readline()
             old = old_line + h.read()
@@ -132,7 +132,7 @@ class BgzfTests(unittest.TestCase):
             for cache in [1, 10]:
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 if "b" in mode:
-                    new = _empty_bytes_string.join(line for line in h)
+                    new = b"".join(line for line in h)
                 else:
                     new = "".join(line for line in h)
                 h.close()
@@ -166,7 +166,7 @@ class BgzfTests(unittest.TestCase):
                         break
                     temp.append(char)
                 if "b" in mode:
-                    new = _empty_bytes_string.join(temp)
+                    new = b"".join(temp)
                 else:
                     new = "".join(temp)
                 del temp
@@ -179,7 +179,7 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(old, new)
 
     def check_random(self, filename):
-        """Check BGZF random access by reading blocks in forward & reverse order"""
+        """Check BGZF random access by reading blocks in forward & reverse order."""
         h = gzip.open(filename, "rb")
         old = h.read()
         h.close()
@@ -189,7 +189,7 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
         # Forward, using explicit open/close
-        new = _empty_bytes_string
+        new = b""
         h = bgzf.BgzfReader(filename, "rb")
         self.assertTrue(h.seekable())
         self.assertFalse(h.isatty())
@@ -206,7 +206,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
         # Reverse, using with statement
-        new = _empty_bytes_string
+        new = b""
         with bgzf.BgzfReader(filename, "rb") as h:
             for start, raw_len, data_start, data_len in blocks[::-1]:
                 h.seek(bgzf.make_virtual_offset(start, 0))
@@ -227,7 +227,7 @@ class BgzfTests(unittest.TestCase):
             h.seek(voffset)
             self.assertEqual(voffset, h.tell())
             data = h.read(1000)
-            self.assertTrue(data in old)
+            self.assertIn(data, old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             # Now seek to an early block in the file,
             # half way into the second block
@@ -238,7 +238,7 @@ class BgzfTests(unittest.TestCase):
             self.assertEqual(voffset, h.tell())
             # Now read all rest of this block and start of next block
             data = h.read(data_len + 1000)
-            self.assertTrue(data in old)
+            self.assertIn(data, old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             h.close()
 
@@ -264,65 +264,65 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
     def test_random_bam_ex1(self):
-        """Check random access to SamBam/ex1.bam"""
+        """Check random access to SamBam/ex1.bam."""
         self.check_random("SamBam/ex1.bam")
 
     def test_random_bam_ex1_refresh(self):
-        """Check random access to SamBam/ex1_refresh.bam"""
+        """Check random access to SamBam/ex1_refresh.bam."""
         self.check_random("SamBam/ex1_refresh.bam")
 
     def test_random_bam_ex1_header(self):
-        """Check random access to SamBam/ex1_header.bam"""
+        """Check random access to SamBam/ex1_header.bam."""
         self.check_random("SamBam/ex1_header.bam")
 
     def test_random_wnts_xml(self):
-        """Check random access to Blast/wnts.xml.bgz"""
+        """Check random access to Blast/wnts.xml.bgz."""
         self.check_random("Blast/wnts.xml.bgz")
 
     def test_random_example_fastq(self):
-        """Check random access to Quality/example.fastq.bgz (Unix newlines)"""
+        """Check random access to Quality/example.fastq.bgz (Unix newlines)."""
         self.check_random("Quality/example.fastq.bgz")
 
     def test_random_example_dos_fastq(self):
-        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)"""
+        """Check random access to Quality/example_dos.fastq.bgz (DOS newlines)."""
         self.check_random("Quality/example_dos.fastq.bgz")
 
     def test_random_example_cor6(self):
-        """Check random access to GenBank/cor6_6.gb.bgz"""
+        """Check random access to GenBank/cor6_6.gb.bgz."""
         self.check_random("GenBank/cor6_6.gb.bgz")
 
     def test_text_wnts_xml(self):
-        """Check text mode access to Blast/wnts.xml.bgz"""
+        """Check text mode access to Blast/wnts.xml.bgz."""
         self.check_text("Blast/wnts.xml", "Blast/wnts.xml.bgz")
         self.check_text_with("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_text_example_fastq(self):
-        """Check text mode access to Quality/example.fastq.bgz"""
+        """Check text mode access to Quality/example.fastq.bgz."""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
         self.check_text_with("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_iter_wnts_xml(self):
-        """Check iteration over Blast/wnts.xml.bgz"""
+        """Check iteration over Blast/wnts.xml.bgz."""
         self.check_by_line("Blast/wnts.xml", "Blast/wnts.xml.bgz")
         self.check_by_char("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_iter_example_fastq(self):
-        """Check iteration over Quality/example.fastq.bgz"""
+        """Check iteration over Quality/example.fastq.bgz."""
         self.check_by_line("Quality/example.fastq", "Quality/example.fastq.bgz")
         self.check_by_char("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_iter_example_cor6(self):
-        """Check iteration over GenBank/cor6_6.gb.bgz"""
+        """Check iteration over GenBank/cor6_6.gb.bgz."""
         self.check_by_line("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
         self.check_by_char("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
 
     def test_iter_example_gb(self):
-        """Check iteration over GenBank/NC_000932.gb.bgz"""
+        """Check iteration over GenBank/NC_000932.gb.bgz."""
         self.check_by_line("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
         self.check_by_char("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
 
     def test_bam_ex1(self):
-        """Reproduce BGZF compression for BAM file"""
+        """Reproduce BGZF compression for BAM file."""
         temp_file = self.temp_file
 
         # Note this example is from an old version of samtools
@@ -334,35 +334,35 @@ class BgzfTests(unittest.TestCase):
         self.check_blocks("SamBam/ex1.bam", temp_file)
 
     def test_iter_bam_ex1(self):
-        """Check iteration over SamBam/ex1.bam"""
+        """Check iteration over SamBam/ex1.bam."""
         self.check_by_char("SamBam/ex1.bam", "SamBam/ex1.bam", True)
 
     def test_example_fastq(self):
-        """Reproduce BGZF compression for a FASTQ file"""
+        """Reproduce BGZF compression for a FASTQ file."""
         temp_file = self.temp_file
         self.rewrite("Quality/example.fastq.gz", temp_file)
         self.check_blocks("Quality/example.fastq.bgz", temp_file)
 
     def test_example_gb(self):
-        """Reproduce BGZF compression for NC_000932 GenBank file"""
+        """Reproduce BGZF compression for NC_000932 GenBank file."""
         temp_file = self.temp_file
         self.rewrite("GenBank/NC_000932.gb.bgz", temp_file)
         self.check_blocks("GenBank/NC_000932.gb.bgz", temp_file)
 
     def test_example_cor6(self):
-        """Reproduce BGZF compression for cor6_6.gb GenBank file"""
+        """Reproduce BGZF compression for cor6_6.gb GenBank file."""
         temp_file = self.temp_file
         self.rewrite("GenBank/cor6_6.gb.bgz", temp_file)
         self.check_blocks("GenBank/cor6_6.gb.bgz", temp_file)
 
     def test_example_wnts_xml(self):
-        """Reproduce BGZF compression for wnts.xml BLAST file"""
+        """Reproduce BGZF compression for wnts.xml BLAST file."""
         temp_file = self.temp_file
         self.rewrite("Blast/wnts.xml.bgz", temp_file)
         self.check_blocks("Blast/wnts.xml.bgz", temp_file)
 
     def test_write_tell(self):
-        """Check offset works during BGZF writing"""
+        """Check offset works during BGZF writing."""
         temp_file = self.temp_file
 
         h = bgzf.open(temp_file, "w")  # Text mode!
@@ -390,7 +390,7 @@ class BgzfTests(unittest.TestCase):
         h.flush()
         offset3 = h.tell()
         self.assertEqual(((offset3 << 16) - (offset2 << 16)),
-                        ((offset2 << 16) - (offset1 << 16)))
+                         ((offset2 << 16) - (offset1 << 16)))
 
         # Flushing should change the offset
         h.flush()
@@ -414,6 +414,30 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(offset1, h.tell())
         self.assertEqual(h.read(5), "Magic")
 
+        h.close()
+
+    def test_many_blocks_in_single_read(self):
+        n = 1000
+
+        h = bgzf.open(self.temp_file, 'wb')
+        # create a file with a lot of a small blocks
+        for i in range(n):
+            h.write(b'\x01\x02\x03\x04')
+            h.flush()
+        h.write(b'\nABCD')
+        h.close()
+
+        h = bgzf.open(self.temp_file, 'rb')
+        data = h.read(4 * n)
+        self.assertEqual(len(data), 4 * n)
+        self.assertEqual(data[:4], b'\x01\x02\x03\x04')
+        self.assertEqual(data[-4:], b'\x01\x02\x03\x04')
+
+        h.seek(0)
+        data = h.readline()
+        self.assertEqual(len(data), 4 * n + 1)
+        self.assertEqual(data[:4], b'\x01\x02\x03\x04')
+        self.assertEqual(data[-5:], b'\x01\x02\x03\x04\n')
         h.close()
 
 

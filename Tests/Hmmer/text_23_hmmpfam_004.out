@@ -1,0 +1,85 @@
+hmmpfam - search one or more sequences against HMM database
+HMMER 2.3.2 (Oct 2003)
+Copyright (C) 1992-2003 HHMI/Washington University School of Medicine
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                 antismash/modules/active_site_finder/data/PKSI-KS_N.hmm2
+Sequence file:            -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query sequence: 0
+Accession:      [none]
+Description:    [none]
+
+Scores for sequence family classification (score includes all domains):
+Model    Description                                    Score    E-value  N 
+-------- -----------                                    -----    ------- ---
+PKSI-KS                                                 211.2    2.7e-64   1
+PKSI-FK  Fake hit to test other line break              211.2    2.7e-64   1
+
+Parsed for domains:
+Model    Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+-------- ------- ----- -----    ----- -----      -----  -------
+PKSI-KS    1/1       1   275 [.     1   264 []   211.2  2.7e-64
+PKSI-FK    1/1       1   276 [.     1   265 []   211.2  2.7e-64
+
+Alignments of top-scoring domains:
+PKSI-KS: domain 1 of 1, from 1 to 275: score 211.2, E = 2.7e-64
+                   *->epIAIVGmacRFPGgAdspeaFWelLleGrdaisevPadRwdadafy
+                        +A+VG +   PG A++++ +W+    Grd+i+evPa+Rw ++++y
+           0     1    --VAVVGVGALVPG-ATDAAGYWRVVTGGRDLITEVPASRWRVEDHY 44   
+
+                   dPdgerpGktytrwGgFLddvdlFDAaFFgISPrEAeaMDPQQRLLLEva
+                   dPd+++p+kty+r+G+FL++  +FD+   g++P+   a+D  Q L+L+va
+           0    45 DPDPAAPDKTYARRGAFLPE-VDFDPMAYGVPPANLPATDTSQLLALMVA 93   
+
+                   wEALEdAGippeslrGArhgerlgsrtGVFvGasssDYgdllplrdapdd
+                    + L dAG + + +           rtGV  Ga+  + +  +        
+           0    94 DQVLRDAGGT-SGIDR--------DRTGVVLGAAALELLPHM-YG----- 128  
+
+                   pedidaya...............................atGtarsilAN
+                   + + +a+  + ++++ ++ + +   ++   + ++ ++++ +G   +++A+
+           0   129 RSQRPAWLaglresgldeakaqavcdriaarfepwrestFPGLLGNVVAG 178  
+
+                   RiSYffdLrGPSltVDTACSSSLVAlHlACqsLrlsGEcdmAlaGGVNLi
+                   Ri+  fdL+G   t D+AC+SSL+Al  A+  L   + +d+ + GGV   
+           0   179 RIANRFDLHGVNHTTDAACASSLAALSTAVGELS-LHRADLVISGGVDTG 227  
+
+                   lsPdmfialsklgmLSPdGrCktFDarADGYvRGEGvGvVvLKRLsDA<-
+                    + +mf+++sk  +LSP G C++F ++ADG+  GE+v++  LKRLsDA  
+           0   228 NDIGMFLCFSKTPALSPSGDCRPFAEAADGTMLGEAVVMYALKRLSDA   275  
+
+                   *
+                    
+           0     -   -    
+
+PKSI-FK: domain 1 of 1, from 1 to 276: score 211.2, E = 2.7e-64
+                   *->epIAIVGmacRFPGgAdspeaFWelLleGrdaisevPadRwdadafy
+                        +A+VG +   PG A++++ +W+    Grd+i+evPa+Rw ++++y
+           0     1    --VAVVGVGALVPG-ATDAAGYWRVVTGGRDLITEVPASRWRVEDHY 44   
+
+                   dPdgerpGktytrwGgFLddvdlFDAaFFgISPrEAeaMDPQQRLLLEva
+                   dPd+++p+kty+r+G+FL++  +FD+   g++P+   a+D  Q L+L+va
+           0    45 DPDPAAPDKTYARRGAFLPE-VDFDPMAYGVPPANLPATDTSQLLALMVA 93   
+
+                   wEALEdAGippeslrGArhgerlgsrtGVFvGasssDYgdllplrdapdd
+                    + L dAG + + +           rtGV  Ga+  + +  +        
+           0    94 DQVLRDAGGT-SGIDR--------DRTGVVLGAAALELLPHM-YG----- 128  
+
+                   pedidaya...............................atGtarsilAN
+                   + + +a+  + ++++ ++ + +   ++   + ++ ++++ +G   +++A+
+           0   129 RSQRPAWLaglresgldeakaqavcdriaarfepwrestFPGLLGNVVAG 178  
+
+                   RiSYffdLrGPSltVDTACSSSLVAlHlACqsLrlsGEcdmAlaGGVNLi
+                   Ri+  fdL+G   t D+AC+SSL+Al  A+  L   + +d+ + GGV   
+           0   179 RIANRFDLHGVNHTTDAACASSLAALSTAVGELS-LHRADLVISGGVDTG 227  
+
+                   lsPdmfialsklgmLSPdGrCktFDarADGYvRGEGvGvVvLKRLsDAR<
+                    + +mf+++sk  +LSP G C++F ++ADG+  GE+v++  LKRLsDAR 
+           0   228 NDIGMFLCFSKTPALSPSGDCRPFAEAADGTMLGEAVVMYALKRLSDAR  276  
+
+                   -*
+                     
+           0     -    -    
+
+//

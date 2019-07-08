@@ -1,0 +1,48 @@
+ID   TIR43YW1_CE     repeatmasker; DNA;  ???;  1740 BP.
+CC   TIR43YW1_CE DNA
+XX
+DE   RepbaseID: TIR43YW1_CE
+XX
+KW   DNA/.
+XX
+CC   consensus - See RepBase for additional annotations.
+XX
+CC   RepeatMasker Annotations:
+CC        Type: DNA
+CC        SubType: 
+CC        Species: Caenorhabditis_elegans
+CC        SearchStages: 
+CC        BufferStages:
+XX
+SQ   Sequence 1740 BP; 595 A; 300 C; 260 G; 585 T; 0 other;
+     ctcagacaaa cgcttagtag cttaattaga tttcaaccat attaaacgag atttcaacca   60
+     tatttgttta gaaaatccat attggattat atttgctcca tattttatta gaaatccatg   120
+     ttagattaga tttcctccat atttcattag aaaacaaatc aaatccaata tggcacgatc   180
+     tcatccatat tggattagat ttgtccatgt tagattagat ttgttccgta ttggattaga   240
+     aatccatgtt ggattagatt tcctccatat ttcattaaaa aacaaatcta atccaatatg   300
+     gtcgaaatct aatccaatat ggcacgctct cagccatatt tgattagatt tcgcccatgt   360
+     tagattagaa atctcacgag aaatgggcgt attaaaataa ataaataaat aagaagaaaa   420
+     cggaaagtgc aaacgcgtag ggcttaaaat tttttaaatt aaaattgaag acctttaaaa   480
+     agttttaaaa taaaattatg atttgaaaat aagaattatc tcctgcaaat aataatctaa   540
+     agatgatgtc cgctgactga ctttgacgaa tctccgaaaa gtctccaact ggtaatgttt   600
+     ttttcagaaa cacttttttt ttcaaaatcc ggcaagaaat ttcacggcta caactgtgac   660
+     aacttcgatg gttacaaaca acgaaataac atattctatt aatttaaatt aactcctaca   720
+     aaccattact tttttcggta taattcgtgg aaaaattata tcatttcaca caaatgatac   780
+     tagagctctt gctgcgaaaa gcggaaacag tcaataccgt acttttaaag ttttcatgaa   840
+     ttttgtattt tacgtctgtt ttgtgccaac ccgcagacca tagttaaata aaattacttt   900
+     tcctagcatt tacattttga tacaaaatac tttaattcac acttccagca accaaaaagt   960
+     atgatttaac gatttttttt tagaaaaaac tcttttccaa attttctgag actaaaaaaa   1020
+     tctttgttct cttctattgg ttagtacgat tggaggctaa gattaacgaa agcggttaac   1080
+     aaactttttc aaatgaaaaa ccttgatatc aagccgttca agacttcaaa atacattccc   1140
+     tctactcagt tcatctaatt ttccttaact tatcgaagaa acaacgcgcg ccaccaccac   1200
+     cagctattta accgaacagt tcatcgaaag ttcatgtgtg cagattggcc gagtcggtaa   1260
+     gaacacagtc tttagaatat aacatcctgg atcgattccc cacagtggca actccagaga   1320
+     agcgcagtag gggagtttat agagcggcta cagttatcag gcgagacagc cagtgtgtag   1380
+     tgtaagatat atgcgagaca tgagatgttt tctcattttc tttatttttt ccacattatt   1440
+     ttcgggtaaa acattcttcg aaaaaaaatt attcagaaaa tccgagccaa atttgattag   1500
+     attttgtcca tatttgatta gatttgttcc atattggatt agatttcaac catattggat   1560
+     tagaattgtt ccatatttga ttagatttgt tccatattgg attagatttc aaccatattt   1620
+     gattagaaaa tccatattgg attagaatag gaagcctatt aattatgtcc ccattatatt   1680
+     tgctcagttt ctaatcaaat atggttgaaa tctaattaag ctactaagcg tttgtctgag   1740
+                                                                         1740
+//

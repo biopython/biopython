@@ -5,6 +5,9 @@ This directory contains various data files for testing the
 BLAST-related code in Biopython. All files are grouped by BLAST
 release version, from the most recent first.
 
+BLAST+ 2.2.30
+-------------
+text_2230_blastp_001         single query, match with full line of dashes
 
 BLAST 2.2.28+
 -------------

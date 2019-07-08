@@ -29,7 +29,9 @@ class Record(object):
     table_rows
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.entity_type = ''
         self.entity_id = ''
         self.entity_attributes = {}
@@ -37,6 +39,7 @@ class Record(object):
         self.table_rows = []
 
     def __str__(self):
+        """Return the GEO record as a string."""
         output = ''
         output += 'GEO Type: %s\n' % self.entity_type
         output += 'GEO Id: %s\n' % self.entity_id
@@ -48,7 +51,7 @@ class Record(object):
                     try:
                         output += '%s: %s\n' % (key, item[:40])
                         output += out_block(item[40:])
-                    except:
+                    except Exception:  # TODO: IndexError?
                         pass
             elif isinstance(contents, str):
                 output += '%s: %s\n' % (key, contents[:40])
@@ -83,6 +86,7 @@ class Record(object):
 
 
 def out_block(text, prefix=''):
+    """Format text in blocks of 80 chars with an additional optional prefix."""
     output = ''
     for j in range(0, len(text), 80):
         output += '%s%s\n' % (prefix, text[j:j + 80])

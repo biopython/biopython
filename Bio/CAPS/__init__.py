@@ -3,16 +3,16 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module deals with CAPS markers.
+"""Cleaved amplified polymorphic sequence (CAPS) markers.
 
 A CAPS marker is a location a DifferentialCutsite as described below and a
 set of primers that can be used to visualize this.  More information can
 be found in the paper `Konieczny and Ausubel (1993)`_ (PMID 8106085).
 
-.. _`Konieczny and Ausubel (1993)`: http://dx.doi.org/10.1046/j.1365-313X.1993.04020403.x
+.. _`Konieczny and Ausubel (1993)`: https://doi.org/10.1046/j.1365-313X.1993.04020403.x
+
 """
 
-__docformat__ = "restructuredtext en"
 
 class DifferentialCutsite(object):
     """Differential enzyme cutsite in an alignment.
@@ -36,7 +36,6 @@ class DifferentialCutsite(object):
         Each member (as listed in the class description) should be included as a
         keyword.
         """
-
         self.start = int(kwds["start"])
         self.enzyme = kwds["enzyme"]
         self.cuts_in = kwds["cuts_in"]
@@ -44,6 +43,8 @@ class DifferentialCutsite(object):
 
 
 class AlignmentHasDifferentLengthsError(Exception):
+    """Exception where sequences in alignment have different lengths."""
+
     pass
 
 
@@ -54,18 +55,22 @@ class CAPSMap(object):
      - alignment - The alignment that is mapped.
      - dcuts - A list of possible CAPS markers in the form of
        DifferentialCutsites.
+
     """
 
-    def __init__(self, alignment, enzymes = []):
+    def __init__(self, alignment, enzymes=None):
         """Initialize the CAPSMap.
 
         Required:
          - alignment - The alignment to be mapped.
 
         Optional:
-         - enzymes - The enzymes to be used to create the map.
-        """
+         - enzymes - List of enzymes to be used to create the map.
+           Defaults to an empty list.
 
+        """
+        if enzymes is None:
+            enzymes = []
         self.sequences = [rec.seq for rec in alignment]
         self.size = len(self.sequences)
         self.length = len(self.sequences[0])
@@ -117,7 +122,10 @@ class CAPSMap(object):
                     blocked_in.append(i)
 
             if cuts_in != [] and blocked_in != []:
-                self.dcuts.append(DifferentialCutsite(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
+                self.dcuts.append(DifferentialCutsite(start=cut,
+                                                      enzyme=enzyme,
+                                                      cuts_in=cuts_in,
+                                                      blocked_in=blocked_in))
 
     def _digest(self):
         self.dcuts = []

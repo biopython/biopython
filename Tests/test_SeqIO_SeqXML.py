@@ -2,6 +2,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Tests for SeqIO SeqXML module."""
+
 import unittest
 import sys
 
@@ -17,9 +19,10 @@ test_files = {
     "globalSpecies": ["SeqXML/global_species_example.xml", 2],
 }
 
-corrupt_files = ["SeqXML/corrupt_example1.xml",
-                 "SeqXML/corrupt_example2.xml",
-                ]
+corrupt_files = [
+    "SeqXML/corrupt_example1.xml",
+    "SeqXML/corrupt_example2.xml",
+]
 
 
 def assert_equal_records(testCase, record_a, record_b):
@@ -53,23 +56,23 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["dna"][2].description, u'some special characters in the description\n<tag> "quoted string"')
 
     # TODO - Fix this failure under Windows with Python 3.1 and 3.2
-    if not (sys.platform=="win32" and sys.version_info[0] >= 3):
+    if not (sys.platform == "win32" and sys.version_info[0] >= 3):
         def test_unicode_characters_desc(self):
             """Test special unicode characters in the description."""
             self.assertEqual(self.records["rna"][2].description, u"\u00E5\u00C5\u00FC\u00F6\u00D6\u00DF\u00F8\u00E4\u00A2\u00A3$\u20AC\u9999\u80A0")
 
     def test_full_characters_set_read(self):
-        """Read full characters set for each type"""
+        """Read full characters set for each type."""
         self.assertEqual(str(self.records["dna"][1].seq), "ACGTMRWSYKVHDBXN.-")
         self.assertEqual(str(self.records["rna"][1].seq), "ACGUMRWSYKVHDBXN.-")
         self.assertEqual(str(self.records["protein"][1].seq), "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
 
     def test_duplicated_property(self):
-        """Read property with multiple values"""
+        """Read property with multiple values."""
         self.assertEqual(self.records["protein"][2].annotations["test"], [u"1", u"2", u"3"])
 
     def test_duplicated_dbxref(self):
-        """Read multiple cross references to a single source"""
+        """Read multiple cross references to a single source."""
         self.assertEqual(self.records["protein"][2].dbxrefs, [u"someDB:G001", u"someDB:G002"])
 
     def test_read_minimal_required(self):
@@ -152,8 +155,8 @@ class TestReadAndWrite(unittest.TestCase):
         SeqIO.write(record, handle, "seqxml")
         handle.seek(0)
         output = handle.getvalue()
-        self.assertTrue("Homo sapiens (Human)" in output)
-        self.assertTrue("9606" in output)
+        self.assertIn("Homo sapiens (Human)", output)
+        self.assertIn("9606", output)
         if '<species name="Homo sapiens (Human)" ncbiTaxID="9606"/>' in output:
             # Good, but don't get this (do we?)
             pass

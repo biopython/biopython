@@ -3,25 +3,27 @@
 # as part of this package.
 #
 
-"""Main entry point for application command line wrappers related to sequencing.
-"""
+"""Main entry point for sequencing related command line application wrappers."""
 from ._Novoalign import NovoalignCommandline
 from ._bwa import BwaIndexCommandline, BwaAlignCommandline, BwaSamseCommandline
-from ._bwa import BwaSampeCommandline, BwaBwaswCommandline
+from ._bwa import BwaSampeCommandline, BwaBwaswCommandline, BwaMemCommandline
 from ._samtools import SamtoolsViewCommandline, SamtoolsCalmdCommandline
 from ._samtools import SamtoolsCatCommandline, SamtoolsFaidxCommandline
 from ._samtools import SamtoolsFixmateCommandline, SamtoolsIdxstatsCommandline
 from ._samtools import SamtoolsIndexCommandline, SamtoolsMergeCommandline
 from ._samtools import SamtoolsMpileupCommandline, SamtoolsPhaseCommandline
 from ._samtools import SamtoolsReheaderCommandline, SamtoolsRmdupCommandline
-from ._samtools import SamtoolsSortCommandline, SamtoolsTargetcutCommandline
+from ._samtools import SamtoolsVersion0xSortCommandline, SamtoolsVersion1xSortCommandline, SamtoolsTargetcutCommandline
+from ._samtools import SamtoolsVersion0xSortCommandline as SamtoolsSortCommandline
+
 
 # Make this explicit, then they show up in the API docs
-__all__ = ["BwaIndexCommandline",
+__all__ = ("BwaIndexCommandline",
            "BwaAlignCommandline",
            "BwaSamseCommandline",
            "BwaSampeCommandline",
            "BwaBwaswCommandline",
+           "BwaMemCommandline",
            "SamtoolsViewCommandline",
            "SamtoolsCalmdCommandline",
            "SamtoolsCatCommandline",
@@ -35,5 +37,7 @@ __all__ = ["BwaIndexCommandline",
            "SamtoolsReheaderCommandline",
            "SamtoolsRmdupCommandline",
            "SamtoolsSortCommandline",
+           "SamtoolsVersion0xSortCommandline",
+           "SamtoolsVersion1xSortCommandline",
            "SamtoolsTargetcutCommandline",
-           ]
+           )

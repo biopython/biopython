@@ -1,8 +1,9 @@
 # Copyright 1999-2000 by Jeffrey Chang.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Record classes to hold BLAST output.
 
 Classes:
@@ -24,7 +25,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
-__docformat__ = "restructuredtext en"
 
 class Header(object):
     """Saves information from a blast header.
@@ -43,7 +43,9 @@ class Header(object):
     database_letters    Number of letters in the database.  (int)
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.application = ''
         self.version = ''
         self.date = ''
@@ -67,7 +69,9 @@ class Description(object):
     e               E value.  (float)
     num_alignments  Number of alignments for the same subject.  (int)
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.title = ''
         self.score = None
         self.bits = None
@@ -75,7 +79,49 @@ class Description(object):
         self.num_alignments = None
 
     def __str__(self):
+        """Return the description as a string."""
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
+
+
+class DescriptionExt(Description):
+    """Extended description record for BLASTXML version 2.
+
+    Members:
+    items           List of DescriptionExtItem
+    """
+
+    def __init__(self):
+        """Initialize the class."""
+        super(DescriptionExt, self).__init__()
+
+        self.items = []
+
+    def append_item(self, item):
+        """Add a description extended record."""
+        if len(self.items) == 0:
+            self.title = str(item)
+        self.items.append(item)
+
+
+class DescriptionExtItem(object):
+    """Stores information about one record in hit description for BLASTXML version 2.
+
+    Members:
+    id              Database identifier
+    title           Title of the hit.
+    """
+
+    def __init__(self):
+        """Initialize the class."""
+        self.id = None
+        self.title = None
+        self.accession = None
+        self.taxid = None
+        self.sciname = None
+
+    def __str__(self):
+        """Return the description identifier and title as a string."""
+        return "%s %s" % (self.id, self.title)
 
 
 class Alignment(object):
@@ -89,7 +135,9 @@ class Alignment(object):
     hsps       A list of HSP objects.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.title = ''
         self.hit_id = ''
         self.hit_def = ''
@@ -97,6 +145,7 @@ class Alignment(object):
         self.hsps = []
 
     def __str__(self):
+        """Return the BLAST alignment as a formatted string."""
         lines = self.title.split('\n')
         lines.append("Length = %s\n" % self.length)
         return '\n           '.join(lines)
@@ -111,13 +160,13 @@ class HSP(object):
         - expect          Expect value.  (float)
         - num_alignments  Number of alignments for same subject.  (int)
         - identities      Number of identities (int) if using the XML parser.
-          Tuple of numer of identities/total aligned (int, int)
+          Tuple of number of identities/total aligned (int, int)
           if using the (obsolete) plain text parser.
         - positives       Number of positives (int) if using the XML parser.
-          Tuple of numer of positives/total aligned (int, int)
+          Tuple of number of positives/total aligned (int, int)
           if using the (obsolete) plain text parser.
         - gaps            Number of gaps (int) if using the XML parser.
-          Tuple of numer of gaps/total aligned (int, int) if
+          Tuple of number of gaps/total aligned (int, int) if
           using the (obsolete) plain text parser.
         - align_length    Length of the alignment. (int)
         - strand          Tuple of (query, target) strand.
@@ -132,7 +181,7 @@ class HSP(object):
         - sbjct_end       The end residue for the sbjct sequence.  (1-based)
 
     Not all flavors of BLAST return values for every attribute::
-    
+
                   score     expect     identities   positives    strand  frame
         BLASTP     X          X            X            X
         BLASTN     X          X            X            X          X
@@ -150,7 +199,9 @@ class HSP(object):
     query_start and counts down.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.score = None
         self.bits = None
         self.expect = None
@@ -171,17 +222,18 @@ class HSP(object):
         self.sbjct_end = None
 
     def __str__(self):
+        """Return the BLAST HSP as a formatted string."""
         lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
                  % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
-                                       str(self.query),
-                                       str(self.query_end)))
+                                             str(self.query),
+                                             str(self.query_end)))
             lines.append("               %s"
                          % (str(self.match)))
             lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
-                                       str(self.sbjct),
-                                       str(self.sbjct_end)))
+                                             str(self.sbjct),
+                                             str(self.sbjct_end)))
         else:
             lines.append("Query:%s %s...%s %s"
                          % (str(self.query_start).rjust(8),
@@ -209,7 +261,9 @@ class MultipleAlignment(object):
     not aligned in the multiple alignment.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.alignment = []
 
     def to_generic(self, alphabet):
@@ -258,7 +312,9 @@ class Round(object):
     alignments          A list of Alignment objects.
     multiple_alignment  A MultipleAlignment object.
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.number = None
         self.reused_seqs = []
         self.new_seqs = []
@@ -279,7 +335,9 @@ class DatabaseReport(object):
     ka_params_gap              A tuple of (lambda, k, h) values.  (floats)
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.database_name = []
         self.posted_date = []
         self.num_letters_in_database = []
@@ -322,7 +380,9 @@ class Parameters(object):
     gap_trigger         Tuple of (score, bits).  (int, float)
     blast_cutoff        Tuple of (score, bits).  (int, float)
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.matrix = ''
         self.gap_penalties = (None, None)
         self.sc_match = None
@@ -364,7 +424,9 @@ class Blast(Header, DatabaseReport, Parameters):
     + members inherited from base classes
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         Header.__init__(self)
         DatabaseReport.__init__(self)
         Parameters.__init__(self)
@@ -382,7 +444,9 @@ class PSIBlast(Header, DatabaseReport, Parameters):
     + members inherited from base classes
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         Header.__init__(self)
         DatabaseReport.__init__(self)
         Parameters.__init__(self)

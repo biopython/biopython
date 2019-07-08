@@ -1,11 +1,13 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
 #
-# Contact:       Leighton Pritchard, Scottish Crop Research Institute,
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+#
+# Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
-#                L.Pritchard@scri.ac.uk
+#                Leighton.Pritchard@hutton.ac.uk
 ################################################################################
 #
 # Thanks to Peter Cock for the impetus to write the get_features() code to
@@ -13,7 +15,7 @@
 #
 ################################################################################
 
-"""FeatureSet module
+"""FeatureSet module.
 
 Provides:
  - FeatureSet - container for Feature objects
@@ -22,28 +24,13 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# -----------------------------------------------------------------------------
-# IMPORTS
-
-# ReportLab
 from __future__ import print_function
-
-from reportlab.pdfbase import _fontdata
-from reportlab.lib import colors
 
 # GenomeDiagram
 from ._Feature import Feature
 
 # Builtins
 import re
-
-__docformat__ = "restructuredtext en"
-
-# ------------------------------------------------------------------------------
-# CLASSES
-
-# ------------------------------------------------------------
-# FeatureSet
 
 
 class FeatureSet(object):
@@ -55,6 +42,7 @@ class FeatureSet(object):
         Arguments:
          - set_id: Unique id for the set
          - name: String identifying the feature set
+
         """
         self.parent = parent
         self.id = id            # Unique id for the set
@@ -122,7 +110,7 @@ class FeatureSet(object):
         #    self.set_all_feature("color",value)
 
     def get_features(self, attribute=None, value=None, comparator=None):
-        """Retreive features.
+        """Retrieve features.
 
         Arguments:
          - attribute: String, attribute of a Feature object
@@ -170,7 +158,7 @@ class FeatureSet(object):
         return list(self.features.keys())
 
     def range(self):
-        """Returns the lowest and highest base (or mark) numbers as a tuple."""
+        """Return the lowest and highest base (or mark) numbers as a tuple."""
         lows, highs = [], []
         for feature in self.features.values():
             for start, end in feature.locations:
@@ -181,11 +169,13 @@ class FeatureSet(object):
         return 0, 0
 
     def to_string(self, verbose=0):
-        """Returns a formatted string with information about the set
+        """Return a formatted string with information about the set.
 
         Arguments:
-         - verbose: Boolean indicating whether a short (default) or
-           complete account of the set is required
+
+        - verbose: Boolean indicating whether a short (default) or
+          complete account of the set is required
+
         """
         if not verbose:         # Short account only required
             return "%s" % self
@@ -205,31 +195,7 @@ class FeatureSet(object):
         return self.features[key]
 
     def __str__(self):
-        """Returns a formatted string with information about the feature set."""
+        """Return a formatted string with information about the feature set."""
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
-
-################################################################################
-# RUN AS SCRIPT
-################################################################################
-
-if __name__ == '__main__':
-    from Bio import SeqIO
-
-    genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
-
-    # Test code
-    gdfs = FeatureSet(0, 'Nanoarchaeum equitans CDS')
-    for feature in genbank_entry.features:
-        if feature.type == 'CDS':
-            gdfs.add_feature(feature)
-
-    # print len(gdfs)
-    # print gdfs.get_ids()
-    # gdfs.del_feature(560)
-    # print gdfs.get_ids()
-    # print gdfs.get_features()
-    # for feature in gdfs.get_features():
-    #    print feature.id, feature.start, feature.end
-    # print gdfs[500]

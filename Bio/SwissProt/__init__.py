@@ -4,21 +4,15 @@
 # as part of this package.
 """Code to work with the sprotXX.dat file from SwissProt.
 
-http://www.expasy.ch/sprot/sprot-top.html
-
-Tested with:
-Release 56.9, 03-March-2009.
-
+https://web.expasy.org/docs/userman.html
 
 Classes:
-
-    - Record             Holds SwissProt data.
-    - Reference          Holds reference data from a SwissProt record.
+ - Record             Holds SwissProt data.
+ - Reference          Holds reference data from a SwissProt record.
 
 Functions:
-
-    - read               Read one SwissProt record
-    - parse              Read multiple SwissProt records
+ - read               Read one SwissProt record
+ - parse              Read multiple SwissProt records
 
 """
 
@@ -26,45 +20,62 @@ from __future__ import print_function
 
 from Bio._py3k import _as_string
 
-__docformat__ = "restructuredtext en"
 
 class Record(object):
     """Holds information from a SwissProt record.
 
-    Members:
+    Attributes:
+     - entry_name        Name of this entry, e.g. RL1_ECOLI.
+     - data_class        Either 'STANDARD' or 'PRELIMINARY'.
+     - molecule_type     Type of molecule, 'PRT',
+     - sequence_length   Number of residues.
+     - accessions        List of the accession numbers, e.g. ['P00321']
+     - created           A tuple of (date, release).
+     - sequence_update   A tuple of (date, release).
+     - annotation_update A tuple of (date, release).
+     - description       Free-format description.
+     - gene_name         Gene name.  See userman.txt for description.
+     - organism          The source of the sequence.
+     - organelle         The origin of the sequence.
+     - organism_classification  The taxonomy classification.  List of strings.
+       (http://www.ncbi.nlm.nih.gov/Taxonomy/)
+     - taxonomy_id       A list of NCBI taxonomy id's.
+     - host_organism     A list of names of the hosts of a virus, if any.
+     - host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
+     - references        List of Reference objects.
+     - comments          List of strings.
+     - cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
+     - keywords          List of the keywords.
+     - features          List of tuples (key name, from, to, description).
+       from and to can be either integers for the residue
+       numbers, '<', '>', or '?'
+     - protein_existence Numerical value describing the evidence for the existence of the protein.
+     - seqinfo           tuple of (length, molecular weight, CRC32 value)
+     - sequence          The sequence.
 
-        - entry_name        Name of this entry, e.g. RL1_ECOLI.
-        - data_class        Either 'STANDARD' or 'PRELIMINARY'.
-        - molecule_type     Type of molecule, 'PRT',
-        - sequence_length   Number of residues.
-
-        - accessions        List of the accession numbers, e.g. ['P00321']
-        - created           A tuple of (date, release).
-        - sequence_update   A tuple of (date, release).
-        - annotation_update A tuple of (date, release).
-
-        - description       Free-format description.
-        - gene_name         Gene name.  See userman.txt for description.
-        - organism          The source of the sequence.
-        - organelle         The origin of the sequence.
-        - organism_classification  The taxonomy classification.  List of strings.
-          (http://www.ncbi.nlm.nih.gov/Taxonomy/)
-        - taxonomy_id       A list of NCBI taxonomy id's.
-        - host_organism     A list of names of the hosts of a virus, if any.
-        - host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
-        - references        List of Reference objects.
-        - comments          List of strings.
-        - cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
-        - keywords          List of the keywords.
-        - features          List of tuples (key name, from, to, description).
-          from and to can be either integers for the residue
-          numbers, '<', '>', or '?'
-
-        - seqinfo           tuple of (length, molecular weight, CRC32 value)
-        - sequence          The sequence.
+    Examples
+    --------
+    >>> import Bio.SwissProt as sp
+    >>> example_filename = "SwissProt/sp008"
+    >>> with open(example_filename) as handle:
+    ...     records = sp.parse(handle)
+    ...     for record in records:
+    ...         print(record.entry_name)
+    ...         print(",".join(record.accessions))
+    ...         print(record.keywords)
+    ...         print(repr(record.organism))
+    ...         print(record.sequence[:20] + "...")
+    ...
+    1A02_HUMAN
+    P01892,P06338,P30514,P30444,P30445,P30446,Q29680,Q29899,Q95352,Q29837,Q95380
+    ['MHC I', 'Transmembrane', 'Glycoprotein', 'Signal', 'Polymorphism', '3D-structure']
+    'Homo sapiens (Human).'
+    MAVMAPRTLVLLLSGALALT...
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.entry_name = None
         self.data_class = None
         self.molecule_type = None
@@ -88,6 +99,7 @@ class Record(object):
         self.cross_references = []
         self.keywords = []
         self.features = []
+        self.protein_existence = ''
 
         self.seqinfo = None
         self.sequence = ''
@@ -96,17 +108,20 @@ class Record(object):
 class Reference(object):
     """Holds information from one reference in a SwissProt entry.
 
-    Members:
-    number      Number of reference in an entry.
-    positions   Describes extent of work.  List of strings.
-    comments    Comments.  List of (token, text).
-    references  References.  List of (dbname, identifier).
-    authors     The authors of the work.
-    title       Title of the work.
-    location    A citation for the work.
+    Attributes:
+     - number      Number of reference in an entry.
+     - evidence    Evidence code.  List of strings.
+     - positions   Describes extent of work.  List of strings.
+     - comments    Comments.  List of (token, text).
+     - references  References.  List of (dbname, identifier).
+     - authors     The authors of the work.
+     - title       Title of the work.
+     - location    A citation for the work.
 
     """
+
     def __init__(self):
+        """Initialize the class."""
         self.number = None
         self.positions = []
         self.comments = []
@@ -117,6 +132,10 @@ class Reference(object):
 
 
 def parse(handle):
+    """Read multiple SwissProt records from file handle.
+
+    Returns a generator object which yields Bio.SwissProt.Record() objects.
+    """
     while True:
         record = _read(handle)
         if not record:
@@ -125,11 +144,18 @@ def parse(handle):
 
 
 def read(handle):
+    """Read one SwissProt record from file handle.
+
+    Returns a Record() object.
+    """
     record = _read(handle)
     if not record:
         raise ValueError("No SwissProt record found")
     # We should have reached the end of the record by now
-    remainder = handle.read()
+    # Used to check with handle.read() but that breaks on Python 3.5
+    # due to http://bugs.python.org/issue26499 and could download
+    # lot of data needlessly if there were more records.
+    remainder = handle.readline()
     if remainder:
         raise ValueError("More than one SwissProt record found")
     return record
@@ -222,8 +248,7 @@ def _read(handle):
         elif key == 'DR':
             _read_dr(record, value)
         elif key == 'PE':
-            # TODO - Record this information?
-            pass
+            _read_pe(record, value)
         elif key == 'KW':
             _read_kw(record, value)
         elif key == 'FT':
@@ -277,21 +302,21 @@ def _read_id(record, line):
     allowed = ('STANDARD', 'PRELIMINARY', 'IPI', 'Reviewed', 'Unreviewed')
     if record.data_class not in allowed:
         raise ValueError("Unrecognized data class %s in line\n%s" %
-              (record.data_class, line))
+                         (record.data_class, line))
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, 'PRT'):
         raise ValueError("Unrecognized molecule type %s in line\n%s" %
-              (record.molecule_type, line))
+                         (record.molecule_type, line))
 
 
 def _read_dt(record, line):
     value = line[5:]
     uprline = value.upper()
     cols = value.rstrip().split()
-    if 'CREATED' in uprline \
-    or 'LAST SEQUENCE UPDATE' in uprline \
-    or 'LAST ANNOTATION UPDATE' in uprline:
+    if ('CREATED' in uprline
+            or 'LAST SEQUENCE UPDATE' in uprline
+            or 'LAST ANNOTATION UPDATE' in uprline):
         # Old style DT line
         # =================
         # e.g.
@@ -305,15 +330,14 @@ def _read_dt(record, line):
 
         # find where the version information will be located
         # This is needed for when you have cases like IPI where
-        # the release verison is in a different spot:
+        # the release version is in a different spot:
         # DT   08-JAN-2002 (IPI Human rel. 2.3, Created)
         uprcols = uprline.split()
         rel_index = -1
         for index in range(len(uprcols)):
             if 'REL.' in uprcols[index]:
                 rel_index = index
-        assert rel_index >= 0, \
-                "Could not find Rel. in DT line: %s" % line
+        assert rel_index >= 0, "Could not find Rel. in DT line: %s" % line
         version_index = rel_index + 1
         # get the version information
         str_version = cols[version_index].rstrip(",")
@@ -335,10 +359,10 @@ def _read_dt(record, line):
         elif 'LAST ANNOTATION UPDATE' in uprline:
             record.annotation_update = date, version
         else:
-            assert False, "Shouldn't reach this line!"
-    elif 'INTEGRATED INTO' in uprline \
-    or 'SEQUENCE VERSION' in uprline \
-    or 'ENTRY VERSION' in uprline:
+            raise ValueError("Unrecognised DT (DaTe) line.")
+    elif ('INTEGRATED INTO' in uprline
+          or 'SEQUENCE VERSION' in uprline
+          or 'ENTRY VERSION' in uprline):
         # New style DT line
         # =================
         # As of UniProt Knowledgebase release 7.0 (including
@@ -360,7 +384,10 @@ def _read_dt(record, line):
         # Get the version number if there is one.
         # For the three DT lines above: 0, 3, 14
         try:
-            version = int(cols[-1])
+            version = 0
+            for s in cols[-1].split('.'):
+                if s.isdigit():
+                    version = int(s)
         except ValueError:
             version = 0
         date = cols[0].rstrip(",")
@@ -374,7 +401,7 @@ def _read_dt(record, line):
         elif 'ENTRY VERSION' in uprline:
             record.annotation_update = date, version
         else:
-            assert False, "Shouldn't reach this line!"
+            raise ValueError("Unrecognised DT (DaTe) line.")
     else:
         raise ValueError("I don't understand the date line %s" % line)
 
@@ -418,10 +445,14 @@ def _read_rn(reference, rn):
     # RN   [1]
     # As of the 2014-10-01 release, there may be an evidence code, e.g.
     # RN   [1] {ECO:0000313|EMBL:AEX14553.1}
-    # We will for now ignore this
-    rn = rn.split()[0]
-    assert rn[0] == '[' and rn[-1] == ']', "Missing brackets %s" % rn
-    reference.number = int(rn[1:-1])
+    words = rn.split(None, 1)
+    number = words[0]
+    assert number.startswith('[') and number.endswith(']'), "Missing brackets %s" % number
+    reference.number = int(number[1:-1])
+    if len(words) > 1:
+        evidence = words[1]
+        assert evidence.startswith('{') and evidence.endswith('}'), "Missing braces %s" % evidence
+        reference.evidence = evidence[1:-1].split('|')
 
 
 def _read_rc(reference, value):
@@ -508,6 +539,11 @@ def _read_dr(record, value):
     record.cross_references.append(tuple(cols))
 
 
+def _read_pe(record, value):
+    pe = value.split(":")
+    record.protein_existence = int(pe[0])
+
+
 def _read_kw(record, value):
     # Old style - semi-colon separated, multi-line. e.g. Q13639.txt
     # KW   Alternative splicing; Cell membrane; Complete proteome;
@@ -576,21 +612,5 @@ def _read_ft(record, line):
 
 
 if __name__ == "__main__":
-    print("Quick self test...")
-
-    example_filename = "../../Tests/SwissProt/sp008"
-
-    import os
-    if not os.path.isfile(example_filename):
-        print("Missing test file %s" % example_filename)
-    else:
-        # Try parsing it!
-
-        with open(example_filename) as handle:
-            records = parse(handle)
-            for record in records:
-                print(record.entry_name)
-                print(",".join(record.accessions))
-                print(record.keywords)
-                print(repr(record.organism))
-                print(record.sequence[:20] + "...")
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

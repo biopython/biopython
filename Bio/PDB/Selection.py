@@ -27,7 +27,7 @@ def uniqueify(items):
 
 def get_unique_parents(entity_list):
     """Translate a list of entities to a list of their (unique) parents."""
-    unique_parents = set(entity.get_parent() for entity in entity_list)
+    unique_parents = {entity.get_parent() for entity in entity_list}
     return list(unique_parents)
 
 
@@ -41,8 +41,8 @@ def unfold_entities(entity_list, target_level):
     list of modules -> list of atoms
     list of residues -> list of chains
 
-    o entity_list - list of entities or a single entity
-    o target_level - char (A, R, C, M, S)
+    - entity_list - list of entities or a single entity
+    - target_level - char (A, R, C, M, S)
 
     Note that if entity_list is an empty list, you get an empty list back:
 
@@ -54,7 +54,7 @@ def unfold_entities(entity_list, target_level):
         raise PDBException("%s: Not an entity level." % target_level)
     if entity_list == []:
         return []
-    if isinstance(entity_list, Entity) or isinstance(entity_list, Atom):
+    if isinstance(entity_list, (Entity, Atom)):
         entity_list = [entity_list]
 
     level = entity_list[0].get_level()
@@ -73,17 +73,10 @@ def unfold_entities(entity_list, target_level):
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
             # find unique parents
-            entity_list = set(entity.get_parent() for entity in entity_list)
+            entity_list = {entity.get_parent() for entity in entity_list}
     return list(entity_list)
 
 
-def _test():
-    """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
-    import doctest
-    print("Running doctests ...")
-    doctest.testmod()
-    print("Done")
-
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -1,0 +1,566 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st January 2019//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_190101.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="PubMed-not-MEDLINE" Owner="NLM">
+        <PMID Version="1">29963580</PMID>
+        <DateRevised>
+            <Year>2018</Year>
+            <Month>11</Month>
+            <Day>14</Day>
+        </DateRevised>
+        <Article PubModel="Print-Electronic">
+            <Journal>
+                <ISSN IssnType="Print">2329-4302</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>5</Volume>
+                    <Issue>2</Issue>
+                    <PubDate>
+                        <Year>2018</Year>
+                        <Month>Apr</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Journal of medical imaging (Bellingham, Wash.)</Title>
+                <ISOAbbreviation>J Med Imaging (Bellingham)</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Development of a pulmonary imaging biomarker pipeline for phenotyping of chronic lung disease.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>026002</MedlinePgn>
+            </Pagination>
+            <ELocationID EIdType="doi" ValidYN="Y">10.1117/1.JMI.5.2.026002</ELocationID>
+            <Abstract>
+                <AbstractText>We designed and generated pulmonary imaging biomarker pipelines to facilitate high-throughput research and point-of-care use in patients with chronic lung disease. Image processing modules and algorithm pipelines were embedded within a graphical user interface (based on the .NET framework) for pulmonary magnetic resonance imaging (MRI) and x-ray computed-tomography (CT) datasets. The software pipelines were generated using C++ and included: (1) inhaled <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:mrow>
+                            <mml:mmultiscripts>
+                                <mml:mrow>
+                                    <mml:mi>He</mml:mi>
+                                </mml:mrow>
+                                <mml:mprescripts/>
+                                <mml:none/>
+                                <mml:mrow>
+                                    <mml:mn>3</mml:mn>
+                                </mml:mrow>
+                            </mml:mmultiscripts>
+                            <mml:mo>/</mml:mo>
+                            <mml:mmultiscripts>
+                                <mml:mrow>
+                                    <mml:mi>Xe</mml:mi>
+                                </mml:mrow>
+                                <mml:mprescripts/>
+                                <mml:none/>
+                                <mml:mrow>
+                                    <mml:mn>129</mml:mn>
+                                </mml:mrow>
+                            </mml:mmultiscripts>
+                            <mml:mtext> </mml:mtext>
+                            <mml:mi>MRI</mml:mi>
+                        </mml:mrow>
+                    </mml:math> ventilation and apparent diffusion coefficients, (2) CT-MRI coregistration for lobar and segmental ventilation and perfusion measurements, (3) ultrashort echo-time <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:mrow>
+                            <mml:mmultiscripts>
+                                <mml:mrow>
+                                    <mml:mi>H</mml:mi>
+                                </mml:mrow>
+                                <mml:mprescripts/>
+                                <mml:none/>
+                                <mml:mrow>
+                                    <mml:mn>1</mml:mn>
+                                </mml:mrow>
+                            </mml:mmultiscripts>
+                            <mml:mtext> </mml:mtext>
+                            <mml:mi>MRI</mml:mi>
+                        </mml:mrow>
+                    </mml:math> proton density measurements, (4) free-breathing Fourier-decomposition <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:mrow>
+                            <mml:mmultiscripts>
+                                <mml:mrow>
+                                    <mml:mi>H</mml:mi>
+                                </mml:mrow>
+                                <mml:mprescripts/>
+                                <mml:none/>
+                                <mml:mrow>
+                                    <mml:mn>1</mml:mn>
+                                </mml:mrow>
+                            </mml:mmultiscripts>
+                            <mml:mtext> </mml:mtext>
+                            <mml:mi>MRI</mml:mi>
+                        </mml:mrow>
+                    </mml:math> ventilation/perfusion and free-breathing <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:mrow>
+                            <mml:mmultiscripts>
+                                <mml:mrow>
+                                    <mml:mi>H</mml:mi>
+                                </mml:mrow>
+                                <mml:mprescripts/>
+                                <mml:none/>
+                                <mml:mrow>
+                                    <mml:mn>1</mml:mn>
+                                </mml:mrow>
+                            </mml:mmultiscripts>
+                            <mml:mtext> </mml:mtext>
+                            <mml:mi>MRI</mml:mi>
+                        </mml:mrow>
+                    </mml:math> specific ventilation, (5) multivolume CT and MRI parametric response maps, and (6) MRI and CT texture analysis and radiomics. The image analysis framework was implemented on a desktop workstation/tablet to generate biomarkers of regional lung structure and function related to ventilation, perfusion, lung tissue texture, and integrity as well as multiparametric measures of gas trapping and airspace enlargement. All biomarkers were generated within 10 min with measurement reproducibility consistent with clinical and research requirements. The resultant pulmonary imaging biomarker pipeline provides real-time and automated lung imaging measurements for point-of-care and high-throughput research.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Guo</LastName>
+                    <ForeName>Fumin</ForeName>
+                    <Initials>F</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Graduate Program in Biomedical Engineering, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Toronto, Sunnybrook Research Institute, Toronto, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Capaldi</LastName>
+                    <ForeName>Dante</ForeName>
+                    <Initials>D</Initials>
+                    <Identifier Source="ORCID">https://orcid.org/0000-0002-4590-7461</Identifier>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Department of Medical Biophysics, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Kirby</LastName>
+                    <ForeName>Miranda</ForeName>
+                    <Initials>M</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of British Columbia, St. Paul's Hospital, Centre for Heart Lung Innovation, Vancouver, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Sheikh</LastName>
+                    <ForeName>Khadija</ForeName>
+                    <Initials>K</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Svenningsen</LastName>
+                    <ForeName>Sarah</ForeName>
+                    <Initials>S</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>McCormack</LastName>
+                    <ForeName>David G</ForeName>
+                    <Initials>DG</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Division of Respirology, Department of Medicine, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Fenster</LastName>
+                    <ForeName>Aaron</ForeName>
+                    <Initials>A</Initials>
+                    <Identifier Source="ORCID">https://orcid.org/0000-0003-3525-2788</Identifier>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Graduate Program in Biomedical Engineering, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Department of Medical Biophysics, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Parraga</LastName>
+                    <ForeName>Grace</ForeName>
+                    <Initials>G</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Robarts Research Institute, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Graduate Program in Biomedical Engineering, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                    <AffiliationInfo>
+                        <Affiliation>University of Western Ontario, Department of Medical Biophysics, London, Ontario, Canada.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <CollectiveName>Canadian Respiratory Research Network</CollectiveName>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+            <ArticleDate DateType="Electronic">
+                <Year>2018</Year>
+                <Month>06</Month>
+                <Day>28</Day>
+            </ArticleDate>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>J Med Imaging (Bellingham)</MedlineTA>
+            <NlmUniqueID>101643461</NlmUniqueID>
+            <ISSNLinking>2329-4302</ISSNLinking>
+        </MedlineJournalInfo>
+        <KeywordList Owner="NOTNLM">
+            <Keyword MajorTopicYN="N">asthma</Keyword>
+            <Keyword MajorTopicYN="N">chronic obstructive lung disease</Keyword>
+            <Keyword MajorTopicYN="N">image processing, biomarkers</Keyword>
+            <Keyword MajorTopicYN="N">magnetic resonance imaging</Keyword>
+            <Keyword MajorTopicYN="N">thoracic computed tomography</Keyword>
+        </KeywordList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="received">
+                <Year>2017</Year>
+                <Month>12</Month>
+                <Day>12</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="accepted">
+                <Year>2018</Year>
+                <Month>06</Month>
+                <Day>14</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pmc-release">
+                <Year>2019</Year>
+                <Month>06</Month>
+                <Day>28</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2018</Year>
+                <Month>7</Month>
+                <Day>3</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2018</Year>
+                <Month>7</Month>
+                <Day>3</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2018</Year>
+                <Month>7</Month>
+                <Day>3</Day>
+                <Hour>6</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">29963580</ArticleId>
+            <ArticleId IdType="doi">10.1117/1.JMI.5.2.026002</ArticleId>
+            <ArticleId IdType="pii">17360RR</ArticleId>
+            <ArticleId IdType="pmc">PMC6022861</ArticleId>
+        </ArticleIdList>
+        <ReferenceList>
+            <Reference>
+                <Citation>Radiology. 2015 Jan;274(1):250-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25144646</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Nature. 1994 Jul 21;370(6486):199-201</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">8028666</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Magn Reson Med. 2009 Sep;62(3):656-64</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">19585597</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2016 Feb;278(2):563-77</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">26579733</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 1991 Jun;179(3):777-81</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">2027991</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2010 Jul;256(1):280-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">20574101</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Phys Med Biol. 2001 May;46(5):R67-99</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">11384074</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>IEEE Trans Med Imaging. 2011 Nov;30(11):1901-20</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">21632295</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Eur J Cancer. 2012 Mar;48(4):441-6</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">22257792</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Phys. 2017 May;44(5):1718-1733</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">28206676</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>COPD. 2014 Apr;11(2):125-32</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">22433011</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Respir Crit Care Med. 2015 Nov 15;192(10):1215-22</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">26186608</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>N Engl J Med. 2016 May 12;374(19):1811-21</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">27168432</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Epidemiol. 2002 Nov 1;156(9):871-81</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">12397006</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>BMC Cancer. 2014 Dec 11;14:934</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25496482</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Acad Radiol. 2015 Mar;22(3):320-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25491735</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Chest. 1999 Dec;116(6):1750-61</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">10593802</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Acad Radiol. 2012 Feb;19(2):141-52</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">22104288</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Phys. 2014 Mar;41(3):033502</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">24593744</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Phys. 2008 Oct;35(10):4695-707</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">18975715</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Thorax. 2017 May;72(5):475-477</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">28258250</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Nat Med. 1996 Nov;2(11):1236-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">8898751</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>J Magn Reson Imaging. 2015 May;41(5):1465-74</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">24965907</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Acad Radiol. 2008 Jun;15(6):776-85</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">18486013</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Magn Reson Med. 2000 Aug;44(2):174-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">10918314</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Respir Crit Care Med. 2014 Jul 15;190(2):135-44</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">24873985</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Phys. 2016 Jun;43(6):2911-2926</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">27277040</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Nat Med. 2009 May;15(5):572-6</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">19377487</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Eur J Radiol. 2014 Nov;83(11):2093-101</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25176287</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2004 Sep;232(3):739-48</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">15333795</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Image Anal. 2015 Jul;23(1):43-55</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25958028</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2015 Oct;277(1):192-205</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">25961632</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Med Image Anal. 2012 Oct;16(7):1423-35</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">22722056</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2016 May;279(2):597-608</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">26744928</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>J Allergy Clin Immunol. 2003 Jun;111(6):1205-11</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">12789218</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>J Magn Reson Imaging. 2016 Mar;43(3):544-57</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">26199216</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Respir Crit Care Med. 2016 Oct 1;194(7):794-806</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">27482984</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 1996 Nov;201(2):564-8</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">8888259</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Thorax. 2014 May;69(5):491-4</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">24029743</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>J Magn Reson Imaging. 2017 Apr;45(4):1204-1215</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">27731948</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>J Appl Physiol (1985). 2009 Oct;107(4):1258-65</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">19661452</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Acad Radiol. 2016 Feb;23(2):176-85</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">26601971</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2018 May;287(2):693-704</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">29470939</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Eur Respir J. 2016 Aug;48(2):370-9</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">27174885</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Radiology. 2011 Oct;261(1):283-92</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">21813741</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Respir Crit Care Med. 2014 Mar 15;189(6):650-7</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">24401150</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Am J Respir Crit Care Med. 2012 Feb 15;185(4):356-62</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">22095547</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>COPD. 2010 Feb;7(1):32-43</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">20214461</ArticleId>
+                </ArticleIdList>
+            </Reference>
+            <Reference>
+                <Citation>Eur Respir J. 2008 Apr;31(4):869-73</Citation>
+                <ArticleIdList>
+                    <ArticleId IdType="pubmed">18216052</ArticleId>
+                </ArticleIdList>
+            </Reference>
+        </ReferenceList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

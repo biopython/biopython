@@ -61,7 +61,8 @@ CREATE TABLE taxon_name (
        taxon_id		INTEGER,
        name		VARCHAR(255)  NOT NULL,
        name_class	VARCHAR(32)  NOT NULL,
-       UNIQUE (taxon_id,name,name_class)
+    UNIQUE (taxon_id,name,name_class),
+    FOREIGN KEY ( taxon_id ) REFERENCES taxon ( taxon_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX taxnametaxonid ON taxon_name(taxon_id);
@@ -82,7 +83,8 @@ CREATE TABLE term (
 	is_obsolete	   CHAR(1),
 	ontology_id	   INTEGER,
 	UNIQUE (identifier),
-        UNIQUE (name,ontology_id,is_obsolete)
+    UNIQUE (name,ontology_id,is_obsolete),
+    FOREIGN KEY ( ontology_id ) REFERENCES ontology ( ontology_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX term_ont ON term(ontology_id);
@@ -90,14 +92,19 @@ CREATE INDEX term_ont ON term(ontology_id);
 CREATE TABLE term_synonym (
        synonym		  VARCHAR(255)  NOT NULL,
        term_id		  INTEGER,
-       PRIMARY KEY (term_id,synonym)
+    PRIMARY KEY (term_id,synonym),
+
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE
 );
 
 CREATE TABLE term_dbxref (
        	term_id	          INTEGER,
        	dbxref_id         INTEGER,
 	rank		  SMALLINT,
-	PRIMARY KEY (term_id, dbxref_id)
+    PRIMARY KEY (term_id, dbxref_id),
+
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX trmdbxref_dbxrefid ON term_dbxref(dbxref_id);
@@ -108,7 +115,13 @@ CREATE TABLE term_relationship (
        	predicate_term_id    INTEGER,
        	object_term_id       INTEGER,
 	ontology_id	INTEGER,
-	UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id)
+    UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id),
+
+    FOREIGN KEY ( subject_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( predicate_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( object_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( ontology_id ) REFERENCES ontology ( ontology_id ) ON DELETE CASCADE
+
 );
 
 CREATE INDEX trmrel_predicateid ON term_relationship(predicate_term_id);
@@ -118,7 +131,10 @@ CREATE INDEX trmrel_ontid ON term_relationship(ontology_id);
 CREATE TABLE term_relationship_term (
         term_relationship_id INTEGER PRIMARY KEY,
         term_id              INTEGER,
-        UNIQUE ( term_id ) 
+    UNIQUE ( term_id ),
+
+    FOREIGN KEY (term_relationship_id) REFERENCES term_relationship(term_relationship_id) ON DELETE CASCADE,
+    FOREIGN KEY (term_id) REFERENCES term(term_id) ON DELETE CASCADE
 );
 
 CREATE TABLE term_path (
@@ -128,7 +144,11 @@ CREATE TABLE term_path (
        	object_term_id       INTEGER,
 	ontology_id          INTEGER,
 	distance	     INT(10) ,
-	UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id,distance)
+    UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id,distance),
+    FOREIGN KEY ( subject_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( predicate_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( object_term_id ) REFERENCES term ( term_id ) ON DELETE CASCADE ,
+    FOREIGN KEY ( ontology_id ) REFERENCES ontology ( ontology_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX trmpath_predicateid ON term_path(predicate_term_id);
@@ -146,7 +166,10 @@ CREATE TABLE bioentry (
   	description  	TEXT,
   	version 	SMALLINT  NOT NULL, 
   	UNIQUE (accession,biodatabase_id,version),
- 	UNIQUE (identifier, biodatabase_id)
+    UNIQUE (identifier, biodatabase_id),
+
+    FOREIGN KEY ( taxon_id ) REFERENCES taxon ( taxon_id ),
+    FOREIGN KEY ( biodatabase_id ) REFERENCES biodatabase ( biodatabase_id )
 );
 
 CREATE INDEX bioentry_name ON bioentry(name);
@@ -159,7 +182,10 @@ CREATE TABLE bioentry_relationship (
    	subject_bioentry_id 	 INTEGER,
    	term_id 		 INTEGER,
    	rank 			 INT(5),
-	UNIQUE (object_bioentry_id,subject_bioentry_id,term_id)
+    UNIQUE (object_bioentry_id,subject_bioentry_id,term_id),
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( object_bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( subject_bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX bioentryrel_trm   ON bioentry_relationship(term_id);
@@ -170,7 +196,11 @@ CREATE TABLE bioentry_path (
    	subject_bioentry_id 	INTEGER,
    	term_id 		INTEGER,
 	distance	     	INT(10) ,
-	UNIQUE (object_bioentry_id,subject_bioentry_id,term_id,distance)
+    UNIQUE (object_bioentry_id,subject_bioentry_id,term_id,distance),
+
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id )
+    FOREIGN KEY ( object_bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( subject_bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX bioentrypath_trm   ON bioentry_path(term_id);
@@ -181,7 +211,8 @@ CREATE TABLE biosequence (
   	version     	SMALLINT, 
   	length      	INT(10),
   	alphabet        VARCHAR(10),
-  	seq 		LONGTEXT
+    seq 		LONGTEXT,
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
 );
 
 CREATE TABLE dbxref (
@@ -199,7 +230,10 @@ CREATE TABLE dbxref_qualifier_value (
        	term_id 		INTEGER,
   	rank  		   	SMALLINT NOT NULL DEFAULT 0,
        	value			TEXT,
-	PRIMARY KEY (dbxref_id,term_id,rank)
+    PRIMARY KEY (dbxref_id,term_id,rank),
+
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX dbxrefqual_dbx ON dbxref_qualifier_value(dbxref_id);
@@ -209,7 +243,10 @@ CREATE TABLE bioentry_dbxref (
        	bioentry_id        INTEGER,
        	dbxref_id          INTEGER,
   	rank  		   SMALLINT,
-	PRIMARY KEY (bioentry_id,dbxref_id)
+    PRIMARY KEY (bioentry_id,dbxref_id),
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id ) ON DELETE CASCADE
+
 );
 
 CREATE INDEX dblink_dbx  ON bioentry_dbxref(dbxref_id);
@@ -222,7 +259,8 @@ CREATE TABLE reference (
   	authors  	   TEXT,
   	crc	   	   VARCHAR(32),
 	UNIQUE (dbxref_id),
-	UNIQUE (crc)
+    UNIQUE (crc),
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id )
 );
 
 CREATE TABLE bioentry_reference (
@@ -231,7 +269,9 @@ CREATE TABLE bioentry_reference (
   	start_pos	INT(10),
   	end_pos	  	INT(10),
   	rank  		SMALLINT NOT NULL DEFAULT 0,
-  	PRIMARY KEY(bioentry_id,reference_id,rank)
+    PRIMARY KEY(bioentry_id,reference_id,rank),
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
+    FOREIGN KEY ( reference_id ) REFERENCES reference ( reference_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX bioentryref_ref ON bioentry_reference(reference_id);
@@ -241,7 +281,8 @@ CREATE TABLE comment (
   	bioentry_id    	INTEGER,
   	comment_text   	TEXT NOT NULL,
   	rank   		SMALLINT NOT NULL DEFAULT 0,
-  	UNIQUE(bioentry_id, rank)
+    UNIQUE(bioentry_id, rank),
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
 );
 
 CREATE TABLE bioentry_qualifier_value (
@@ -249,7 +290,9 @@ CREATE TABLE bioentry_qualifier_value (
    	term_id  		INTEGER,
    	value         		TEXT,
 	rank			INT(5) NOT NULL DEFAULT 0,
-	UNIQUE (bioentry_id,term_id,rank)
+    UNIQUE (bioentry_id,term_id,rank),
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id )
 );
 
 CREATE INDEX bioentryqual_trm ON bioentry_qualifier_value(term_id);
@@ -261,7 +304,10 @@ CREATE TABLE seqfeature (
    	source_term_id  	INTEGER,
 	display_name		VARCHAR(64),
    	rank 			SMALLINT  NOT NULL DEFAULT 0,
-	UNIQUE (bioentry_id,type_term_id,source_term_id,rank)
+    UNIQUE (bioentry_id,type_term_id,source_term_id,rank),
+    FOREIGN KEY ( type_term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( source_term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( bioentry_id ) REFERENCES bioentry ( bioentry_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX seqfeature_trm  ON seqfeature(type_term_id);
@@ -273,7 +319,10 @@ CREATE TABLE seqfeature_relationship (
    	subject_seqfeature_id 	INTEGER,
    	term_id 	        INTEGER,
    	rank 			INT(5),
-	UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id)
+    UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id),
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( object_seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( subject_seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX seqfeaturerel_trm   ON seqfeature_relationship(term_id);
@@ -284,7 +333,10 @@ CREATE TABLE seqfeature_path (
    	subject_seqfeature_id 	INTEGER,
    	term_id 		INTEGER,
 	distance	     	INT(10) ,
-	UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id,distance)
+    UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id,distance),
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( object_seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( subject_seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX seqfeaturepath_trm   ON seqfeature_path(term_id);
@@ -295,7 +347,9 @@ CREATE TABLE seqfeature_qualifier_value (
    	term_id 		INTEGER,
    	rank 			SMALLINT NOT NULL DEFAULT 0,
    	value  			TEXT NOT NULL,
-   	PRIMARY KEY (seqfeature_id,term_id,rank)
+    PRIMARY KEY (seqfeature_id,term_id,rank),
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id ),
+    FOREIGN KEY ( seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX seqfeaturequal_trm ON seqfeature_qualifier_value(term_id);
@@ -304,7 +358,9 @@ CREATE TABLE seqfeature_dbxref (
        	seqfeature_id      INTEGER,
        	dbxref_id          INTEGER,
   	rank  		   SMALLINT,
-	PRIMARY KEY (seqfeature_id,dbxref_id)
+    PRIMARY KEY (seqfeature_id,dbxref_id),
+    FOREIGN KEY ( seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id ) ON DELETE CASCADE
 );
 
 CREATE INDEX feadblink_dbx  ON seqfeature_dbxref(dbxref_id);
@@ -318,7 +374,10 @@ CREATE TABLE location (
    	end_pos                	INT(10),
    	strand             	TINYINT NOT NULL DEFAULT 0,
    	rank          		SMALLINT NOT NULL DEFAULT 0,
-   	UNIQUE (seqfeature_id, rank)
+    UNIQUE (seqfeature_id, rank),
+    FOREIGN KEY ( seqfeature_id ) REFERENCES seqfeature ( seqfeature_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( dbxref_id ) REFERENCES dbxref ( dbxref_id ),
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id )
 );
 
 CREATE INDEX seqfeatureloc_start ON location(start_pos, end_pos);
@@ -330,14 +389,9 @@ CREATE TABLE location_qualifier_value (
    	term_id 		INTEGER,
    	value  			VARCHAR(255) NOT NULL,
    	int_value 		INT(10),
-	PRIMARY KEY (location_id,term_id)
+    PRIMARY KEY (location_id,term_id),
+    FOREIGN KEY ( location_id ) REFERENCES location ( location_id ) ON DELETE CASCADE,
+    FOREIGN KEY ( term_id ) REFERENCES term ( term_id )
 );
 
 CREATE INDEX locationqual_trm ON location_qualifier_value(term_id);
-
--- SQLite does not enforce foreign key constraints. There are some trigger
--- based ways to replicate this:
---
--- http://www.sqlite.org/cvstrac/wiki?p=ForeignKeyTriggers
---
--- Currently no foreign key constraints are added.

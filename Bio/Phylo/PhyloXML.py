@@ -10,12 +10,12 @@ See Also
 Official specification:
    http://phyloxml.org/
 Journal article:
-    Han and Zmasek (2009), doi:10.1186/1471-2105-10-356
+    Han and Zmasek (2009), https://doi.org/10.1186/1471-2105-10-356
+
 """
 
-__docformat__ = "restructuredtext en"
-
 import re
+import sys
 import warnings
 
 from Bio._py3k import basestring
@@ -32,11 +32,12 @@ from Bio.Phylo import BaseTree
 
 class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""
+
     pass
 
 
 def _check_str(text, testfunc):
-    """Check a string using testfunc, and warn if there's no match."""
+    """Check a string using testfunc, and warn if there's no match (PRIVATE)."""
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
                       PhyloXMLWarning, stacklevel=2)
@@ -61,9 +62,11 @@ class Phyloxml(PhyloElement):
             The phylogenetic trees
         other : list
             Arbitrary non-phyloXML elements, if any
+
     """
 
     def __init__(self, attributes, phylogenies=None, other=None):
+        """Initialize parameters for PhyloXML object."""
         self.attributes = {
             # standard
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
@@ -77,7 +80,7 @@ class Phyloxml(PhyloElement):
 
     def __getitem__(self, index):
         """Get a phylogeny by index or name."""
-        if isinstance(index, int) or isinstance(index, slice):
+        if isinstance(index, (int, slice)):
             return self.phylogenies[index]
         if not isinstance(index, basestring):
             raise KeyError("can't use %s as an index" % type(index))
@@ -92,10 +95,11 @@ class Phyloxml(PhyloElement):
         return iter(self.phylogenies)
 
     def __len__(self):
-        """Number of phylogenetic trees in this object."""
+        """Return the number of phylogenetic trees in this object."""
         return len(self.phylogenies)
 
     def __str__(self):
+        """Return name of phylogenies in the object."""
         return '%s([%s])' % (self.__class__.__name__,
                              ',\n'.join(map(str, self.phylogenies)))
 
@@ -118,10 +122,12 @@ class Other(PhyloElement):
             text contained directly within this XML node
         children : list
             child nodes, if any (also `Other` instances)
+
     """
 
     def __init__(self, tag, namespace=None, attributes=None, value=None,
                  children=None):
+        """Initialize values for non-phyloXML elements."""
         self.tag = tag
         self.namespace = namespace
         self.attributes = attributes or {}
@@ -163,6 +169,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             Property objects
         other : list
             non-phyloXML elements (type `Other`)
+
     """
 
     def __init__(self, root=None, rooted=True,
@@ -173,6 +180,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                  confidences=None, clade_relations=None, sequence_relations=None,
                  properties=None, other=None,
                  ):
+        """Initialize values for phylogenetic tree object."""
         assert isinstance(rooted, bool)
         self.root = root
         self.rooted = rooted
@@ -241,9 +249,10 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     # Singular property for plural attribute
     def _get_confidence(self):
-        """Equivalent to self.confidences[0] if there is only 1 value.
+        """Equivalent to self.confidences[0] if there is only 1 value (PRIVATE).
 
-        See also: `Clade.confidence`, `Clade.taxonomy`
+        See Also: `Clade.confidence`, `Clade.taxonomy`
+
         """
         if len(self.confidences) == 0:
             return None
@@ -257,7 +266,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             # Special case: mirror the behavior of _get_confidence
             self.confidences = []
             return
-        if isinstance(value, float) or isinstance(value, int):
+        if isinstance(value, (float, int)):
             value = Confidence(value)
         elif not isinstance(value, Confidence):
             raise ValueError("value must be a number or Confidence instance")
@@ -321,6 +330,7 @@ class Clade(PhyloElement, BaseTree.Clade):
             Sub-clades
         other : list of Other objects
             non-phyloXML objects
+
     """
 
     def __init__(self,
@@ -334,6 +344,7 @@ class Clade(PhyloElement, BaseTree.Clade):
                  distributions=None, references=None, properties=None, clades=None,
                  other=None,
                  ):
+        """Initialize value for the Clade object."""
         self.branch_length = branch_length
         self.id_source = id_source
         self.name = name
@@ -378,6 +389,7 @@ class Clade(PhyloElement, BaseTree.Clade):
     # Shortcuts for list attributes that are usually only 1 item
     # NB: Duplicated from Phylogeny class
     def _get_confidence(self):
+        """Return confidence values (PRIVATE)."""
         if len(self.confidences) == 0:
             return None
         if len(self.confidences) > 1:
@@ -386,11 +398,12 @@ class Clade(PhyloElement, BaseTree.Clade):
         return self.confidences[0]
 
     def _set_confidence(self, value):
+        """Set the confidence value (PRIVATE)."""
         if value is None:
             # Special case: mirror the behavior of _get_confidence
             self.confidences = []
             return
-        if isinstance(value, float) or isinstance(value, int):
+        if isinstance(value, (float, int)):
             value = Confidence(value)
         elif not isinstance(value, Confidence):
             raise ValueError("value must be a number or Confidence instance")
@@ -403,11 +416,13 @@ class Clade(PhyloElement, BaseTree.Clade):
                              "use Phylogeny.confidences instead")
 
     def _del_confidence(self):
+        """Delete confidences values (PRIVATE)."""
         self.confidences = []
 
     confidence = property(_get_confidence, _set_confidence, _del_confidence)
 
     def _get_taxonomy(self):
+        """Get taxonomy list for the clade (PRIVATE)."""
         if len(self.taxonomies) == 0:
             return None
         if len(self.taxonomies) > 1:
@@ -416,6 +431,7 @@ class Clade(PhyloElement, BaseTree.Clade):
         return self.taxonomies[0]
 
     def _set_taxonomy(self, value):
+        """Set a taxonomy for the clade (PRIVATE)."""
         if not isinstance(value, Taxonomy):
             raise ValueError("assigned value must be a Taxonomy instance")
         if len(self.taxonomies) == 0:
@@ -432,8 +448,10 @@ class Clade(PhyloElement, BaseTree.Clade):
 # PhyloXML wrapper for a special BaseTree attribute
 
 class BranchColor(PhyloElement, BaseTree.BranchColor):
+    """Manage Tree branch's color."""
 
     def __init__(self, *args, **kwargs):
+        """Initialize parameters for the BranchColor object."""
         BaseTree.BranchColor.__init__(self, *args, **kwargs)
 
 
@@ -447,6 +465,7 @@ class Accession(PhyloElement):
     """
 
     def __init__(self, value, source):
+        """Initialize value for Accession object."""
         self.value = value
         self.source = source
 
@@ -476,7 +495,9 @@ class Annotation(PhyloElement):
             typed and referenced annotations from external resources
         uri : Uri
             link
+
     """
+
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
 
     def __init__(self,
@@ -486,6 +507,7 @@ class Annotation(PhyloElement):
                  desc=None, confidence=None, uri=None,
                  # Collection
                  properties=None):
+        """Initialize value for the Annotation object."""
         _check_str(ref, self.re_ref.match)
         self.ref = ref
         self.source = source
@@ -510,6 +532,7 @@ class BinaryCharacters(PhyloElement):
                  absent_count=None,
                  # Child nodes (flattened into collections)
                  gained=None, lost=None, present=None, absent=None):
+        """Initialize values for the BinaryCharacters object."""
         self.type = type
         self.gained_count = gained_count
         self.lost_count = lost_count
@@ -526,16 +549,17 @@ class CladeRelation(PhyloElement):
 
     For example, this could be used to describe multiple parents of a clade.
 
-    @type id_ref_0: str
-    @type id_ref_1: str
-    @type distance: str
-    @type type: str
+    :type id_ref_0: str
+    :type id_ref_1: str
+    :type distance: str
+    :type type: str
 
-    @type confidence: Confidence
+    :type confidence: Confidence
     """
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
+        """Initialize values for the CladeRelation object."""
         self.distance = distance
         self.type = type
         self.id_ref_0 = id_ref_0
@@ -554,9 +578,11 @@ class Confidence(PhyloElement):
             confidence value
         type : string
             label for the type of confidence, e.g. 'bootstrap'
+
     """
 
     def __init__(self, value, type='unknown'):
+        """Initialize values for the Confidence object."""
         self.value = value
         self.type = type
 
@@ -573,11 +599,13 @@ class Confidence(PhyloElement):
         return id(self)
 
     def __eq__(self, other):
+        """Check for equality between Confidence objects."""
         if isinstance(other, Confidence):
             return self.value == other.value
         return self.value == other
 
     def __ne__(self, other):
+        """Check for inequality between two Confidence objects."""
         if isinstance(other, Confidence):
             return self.value != other.value
         return self.value != other
@@ -585,43 +613,55 @@ class Confidence(PhyloElement):
     # Ordering -- see functools.total_ordering in Py2.7
 
     def __lt__(self, other):
+        """Return True if confidence is less than the other confidence."""
         if isinstance(other, Confidence):
             return self.value < other.value
         return self.value < other
 
     def __le__(self, other):
+        """Return True if confidence is less than or equal to the other confidence."""
         return self < other or self == other
 
     def __gt__(self, other):
+        """Return True if confidence is grater than the other confidence."""
         return not (self <= other)
 
     def __ge__(self, other):
+        """Return True if confidence is grater than or equal to the other confidence."""
         return not (self.value < other)
 
     # Arithmetic operators, including reverse
 
     def __add__(self, other):
+        """Conduct addition between values of two Confidence objects."""
         return self.value + other
 
     def __radd__(self, other):
+        """Conduct reverse addition between values of two Confidence objects."""
         return other + self.value
 
     def __sub__(self, other):
+        """Conduct subtraction between values of two Confidence objects."""
         return self.value - other
 
     def __rsub__(self, other):
+        """Conduct reverse subtraction between values of two Confidence objects."""
         return other - self.value
 
     def __mul__(self, other):
+        """Conduct multiplication between values of two Confidence objects."""
         return self.value * other
 
     def __rmul__(self, other):
+        """Conduct reverse multiplication between values of two Confidence objects."""
         return other * self.value
 
     def __div__(self, other):
+        """Conduct division between values of two Confidence objects."""
         return self.value.__div__(other)
 
     def __rdiv__(self, other):
+        """Conduct revers division between values of two Confidence objects."""
         return other.__div__(self.value)
 
     def __truediv__(self, other):
@@ -632,6 +672,7 @@ class Confidence(PhyloElement):
         return self.value / other
 
     def __rtruediv__(self, other):
+        """Conduct revers Rational-style division."""
         return other / self.value
 
     def __floordiv__(self, other):
@@ -642,49 +683,64 @@ class Confidence(PhyloElement):
         return self.value.__floordiv__(other)
 
     def __rfloordiv__(self, other):
+        """Conduct revers C-style and old-style division."""
         return other.__floordiv__(self.value)
 
     def __mod__(self, other):
+        """Conduct modulus between values of two Confidence objects."""
         return self.value % other
 
     def __rmod__(self, other):
+        """Conduct reverse modulus between values of two Confidence objects."""
         return other % self.value
 
     def __divmod__(self, other):
+        """Return quotient and remainder, dividing the Confidence value by the given value."""
         return divmod(self.value, other)
 
     def __rdivmod__(self, other):
+        """Return quotient and remainder, dividing the given value by the Confidence value."""
         return divmod(other, self.value)
 
     def __pow__(self, other, modulo=None):
+        """Return the value of Confidence object raised to the given power."""
         if modulo is not None:
             return pow(self.value, other, modulo)
         return pow(self.value, other)
 
     def __rpow__(self, other):
+        """Return the given value raised to the power of the Confidence object value."""
         return pow(other, self.value)
 
     # Unary arithmetic operations: -, +, abs()
 
     def __neg__(self):
+        """Conduct negation of a Confidence object."""
         return -self.value
 
     def __pos__(self):
+        """Return the value of a Confidence object."""
         return self.value
 
     def __abs__(self):
+        """Return absolute value of Confidence object."""
         return abs(self.value)
 
-    # Explicit coercion to numeric types: int, long, float
+    # Explicit coercion to numeric types: float, int
+    # (and under Python 2 only long)
 
     def __float__(self):
+        """Return float value of Confidence object."""
         return float(self.value)
 
     def __int__(self):
+        """Return integer value of Confidence object."""
         return int(self.value)
 
-    def __long__(self):
-        return long(self.value)
+    if sys.version_info[0] < 3:
+        def __long__(self):
+            """Return long value of Confidence object."""
+            return long(self.value)  # noqa : F821
 
 
 class Date(PhyloElement):
@@ -705,10 +761,12 @@ class Date(PhyloElement):
             lower bound on the date value
         maximum : float
             upper bound on the date value
+
     """
 
     def __init__(self, value=None, unit=None, desc=None,
                  minimum=None, maximum=None):
+        """Initialize values of the Date object."""
         self.value = value
         self.unit = unit
         self.desc = desc
@@ -736,9 +794,11 @@ class Distribution(PhyloElement):
             coordinates (similar to the 'Point' element in Google's KML format)
         polygons : list of `Polygon` objects
             coordinate sets defining geographic regions
+
     """
 
     def __init__(self, desc=None, points=None, polygons=None):
+        """Initialize values of Distribution object."""
         self.desc = desc
         self.points = points or []
         self.polygons = polygons or []
@@ -752,9 +812,11 @@ class DomainArchitecture(PhyloElement):
             total length of the protein sequence
         domains : list ProteinDomain objects
             the domains within this protein
+
     """
 
     def __init__(self, length=None, domains=None):
+        """Initialize values of the DomainArchitecture object."""
         self.length = length
         self.domains = domains
 
@@ -766,11 +828,13 @@ class Events(PhyloElement):
     treated as a dictionary, in which case None values are treated as missing
     keys and deleting a key resets that attribute's value back to None.
     """
-    ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
-                   'mixed', 'unassigned'))
+
+    ok_type = {'transfer', 'fusion', 'speciation_or_duplication', 'other',
+               'mixed', 'unassigned'}
 
     def __init__(self, type=None, duplications=None, speciations=None,
                  losses=None, confidence=None):
+        """Initialize values of the Events object."""
         _check_str(type, self.ok_type.__contains__)
         self.type = type
         self.duplications = duplications
@@ -779,19 +843,24 @@ class Events(PhyloElement):
         self.confidence = confidence
 
     def items(self):
+        """Return Event's items."""
         return [(k, v) for k, v in self.__dict__.items() if v is not None]
 
     def keys(self):
+        """Return Event's keys."""
         return [k for k, v in self.__dict__.items() if v is not None]
 
     def values(self):
+        """Return values from a key-value pair in an Events dict."""
         return [v for v in self.__dict__.values() if v is not None]
 
     def __len__(self):
+        """Return number of Events."""
         # TODO - Better way to do this?
         return len(self.values())
 
     def __getitem__(self, key):
+        """Get value of Event with the given key."""
         if not hasattr(self, key):
             raise KeyError(key)
         val = getattr(self, key)
@@ -800,15 +869,19 @@ class Events(PhyloElement):
         return val
 
     def __setitem__(self, key, val):
+        """Add item to Event dict."""
         setattr(self, key, val)
 
     def __delitem__(self, key):
+        """Delete Event with given key."""
         setattr(self, key, None)
 
     def __iter__(self):
+        """Iterate over the keys present in a Events dict."""
         return iter(self.keys())
 
     def __contains__(self, key):
+        """Return True if Event dict contains key."""
         return (hasattr(self, key) and getattr(self, key) is not None)
 
 
@@ -820,10 +893,12 @@ class Id(PhyloElement):
     """
 
     def __init__(self, value, provider=None):
+        """Initialize values for the identifier object."""
         self.value = value
         self.provider = provider
 
     def __str__(self):
+        """Return identifier as a string."""
         if self.provider is not None:
             return '%s:%s' % (self.provider, self.value)
         return self.value
@@ -838,15 +913,19 @@ class MolSeq(PhyloElement):
         is_aligned : bool
             True if this sequence is aligned with the others (usually meaning
             all aligned seqs are the same length and gaps may be present)
+
     """
+
     re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
 
     def __init__(self, value, is_aligned=None):
+        """Initialize parameters for the MolSeq object."""
         _check_str(value, self.re_value.match)
         self.value = value
         self.is_aligned = is_aligned
 
     def __str__(self):
+        """Return the value of the Molecular Sequence object."""
         return self.value
 
 
@@ -867,9 +946,11 @@ class Point(PhyloElement):
             altitude
         alt_unit : string
             unit for the altitude (e.g. 'meter')
+
     """
 
     def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
+        """Initialize value for the Point object."""
         self.geodetic_datum = geodetic_datum
         self.lat = lat
         self.long = long
@@ -881,12 +962,15 @@ class Polygon(PhyloElement):
     """A polygon defined by a list of 'Points' (used by element 'Distribution').
 
     :param points: list of 3 or more points representing vertices.
+
     """
 
     def __init__(self, points=None):
+        """Initialize value for the Polygon object."""
         self.points = points or []
 
     def __str__(self):
+        """Return list of points as a string."""
         return '%s([%s])' % (self.__class__.__name__,
                              ',\n'.join(map(str, self.points)))
 
@@ -914,22 +998,25 @@ class Property(PhyloElement):
         id_ref : Id (optional)
             allows to attached a property specifically to one element (on the
             xml-level)
+
     """
+
     re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
-    ok_applies_to = set(('phylogeny', 'clade', 'node', 'annotation',
-                         'parent_branch', 'other'))
-    ok_datatype = set(('xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
-                       'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
-                       'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
-                       'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
-                       'xsd:normalizedString', 'xsd:token', 'xsd:integer',
-                       'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
-                       'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
-                       'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
-                       'xsd:positiveInteger'))
+    ok_applies_to = {'phylogeny', 'clade', 'node', 'annotation',
+                     'parent_branch', 'other'}
+    ok_datatype = {'xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
+                   'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
+                   'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
+                   'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
+                   'xsd:normalizedString', 'xsd:token', 'xsd:integer',
+                   'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
+                   'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
+                   'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
+                   'xsd:positiveInteger'}
 
     def __init__(self, value, ref, applies_to, datatype,
                  unit=None, id_ref=None):
+        """Initialize value for the Property object."""
         _check_str(ref, self.re_ref.match)
         _check_str(applies_to, self.ok_applies_to.__contains__)
         _check_str(datatype, self.ok_datatype.__contains__)
@@ -959,9 +1046,11 @@ class ProteinDomain(PhyloElement):
             can be used to store e.g. E-values
         id : string
             unique identifier/name
+
     """
 
     def __init__(self, value, start, end, confidence=None, id=None):
+        """Initialize value for a ProteinDomain object."""
         self.value = value
         self.start = start
         self.end = end
@@ -970,12 +1059,14 @@ class ProteinDomain(PhyloElement):
 
     @classmethod
     def from_seqfeature(cls, feat):
+        """Create ProteinDomain object from SeqFeature."""
         return ProteinDomain(feat.id,
                              feat.location.nofuzzy_start,
                              feat.location.nofuzzy_end,
                              confidence=feat.qualifiers.get('confidence'))
 
     def to_seqfeature(self):
+        """Create a SeqFeature from the ProteinDomain Object."""
         feat = SeqFeature(location=FeatureLocation(self.start, self.end),
                           id=self.value)
         if hasattr(self, 'confidence'):
@@ -989,9 +1080,11 @@ class Reference(PhyloElement):
     NB: Whenever possible, use the ``doi`` attribute instead of the free-text
     ``desc`` element.
     """
+
     re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
 
     def __init__(self, doi=None, desc=None):
+        """Initialize elements of the Reference class object."""
         _check_str(doi, self.re_doi.match)
         self.doi = doi
         self.desc = desc
@@ -1029,7 +1122,9 @@ class Sequence(PhyloElement):
             protein domains on this sequence
         other : list of Other objects
             non-phyloXML elements
+
     """
+
     alphabets = {'dna': Alphabet.generic_dna,
                  'rna': Alphabet.generic_rna,
                  'protein': Alphabet.generic_protein}
@@ -1044,6 +1139,7 @@ class Sequence(PhyloElement):
                  # Collections
                  annotations=None, other=None,
                  ):
+        """Initialize value for a Sequence object."""
         _check_str(type, self.alphabets.__contains__)
         _check_str(symbol, self.re_symbol.match)
         self.type = type
@@ -1137,11 +1233,12 @@ class Sequence(PhyloElement):
                                                for prop in ann.properties],
                               } for ann in self.annotations],
             }
+
         """
         def clean_dict(dct):
             """Remove None-valued items from a dictionary."""
-            return dict((key, val) for key, val in dct.items()
-                        if val is not None)
+            return {key: val for key, val in dct.items()
+                    if val is not None}
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
                            **clean_dict({
@@ -1185,6 +1282,7 @@ class Sequence(PhyloElement):
         return seqrec
 
     def get_alphabet(self):
+        """Get the alphabet for the sequence."""
         alph = self.alphabets.get(self.type, Alphabet.generic_alphabet)
         if self.mol_seq and self.mol_seq.is_aligned:
             return Alphabet.Gapped(alph)
@@ -1208,12 +1306,15 @@ class SequenceRelation(PhyloElement):
             describe the type of relationship
         confidence : Confidence
             confidence value for this relation
+
     """
-    ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
-                   'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
+
+    ok_type = {'orthology', 'one_to_one_orthology', 'super_orthology',
+               'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'}
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
+        """Initialize the class."""
         _check_str(type, self.ok_type.__contains__)
         self.distance = distance
         self.type = type
@@ -1250,18 +1351,20 @@ class Taxonomy(PhyloElement):
             link
         other : list of Other objects
             non-phyloXML elements
+
     """
+
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
-    ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
-                   'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
-                   'superdivision', 'division', 'subdivision', 'infradivision',
-                   'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
-                   'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
-                   'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
-                   'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
-                   'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
-                   'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
-                   'unknown', 'other'))
+    ok_rank = {'domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
+               'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
+               'superdivision', 'division', 'subdivision', 'infradivision',
+               'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
+               'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
+               'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
+               'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
+               'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
+               'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
+               'unknown', 'other'}
 
     def __init__(self,
                  # Attributes
@@ -1272,6 +1375,7 @@ class Taxonomy(PhyloElement):
                  # Collections
                  common_names=None, synonyms=None, other=None,
                  ):
+        """Initialize the class."""
         _check_str(code, self.re_code.match)
         _check_str(rank, self.ok_rank.__contains__)
         self.id_source = id_source
@@ -1307,11 +1411,13 @@ class Uri(PhyloElement):
     """
 
     def __init__(self, value, desc=None, type=None):
+        """Initialize the class."""
         self.value = value
         self.desc = desc
         self.type = type
 
     def __str__(self):
+        """Return string representation of Uri."""
         if self.value:
             return self.value
         return repr(self)

@@ -3,8 +3,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for parsing Compass output.
-"""
+
+"""Tests for parsing Compass output."""
+
 import os
 import unittest
 
@@ -15,9 +16,8 @@ class CompassTest(unittest.TestCase):
     def setUp(self):
         file_dir = os.path.join("Compass")
         self.test_files = [
-          os.path.join(file_dir, "comtest1"),
-          os.path.join(file_dir, "comtest2"),
-          os.path.join(file_dir, "comtest3")]
+            os.path.join(file_dir, "comtest1"),
+            os.path.join(file_dir, "comtest2")]
 
     def testCompassScanAndConsume(self):
         handle = open(self.test_files[0])
@@ -103,6 +103,7 @@ class CompassTest(unittest.TestCase):
         self.assertEqual(2, com_record.hit_start)
         self.assertEqual("LKERKL", com_record.hit_aln[-6:])
         handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

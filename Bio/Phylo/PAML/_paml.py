@@ -3,52 +3,27 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Base class for the support of PAML, Phylogenetic Analysis by Maximum Likelihood."""
+
 from __future__ import print_function
 
 import os
 import subprocess
 
-try:
-    from os.path import relpath as _relpath
-except ImportError:
-    # New in Python 2.6
-    def _relpath(path, start=None):
-        """Return a relative version of a path.
-
-        Implementation by James Gardner in his BareNecessities
-        package, under MIT licence.
-
-        With a fix for Windows where posixpath.sep (and functions like
-        join) use the Unix slash not the Windows slash.
-        """
-        import posixpath
-        if start is None:
-            start = posixpath.curdir
-        else:
-            start = start.replace(os.path.sep, posixpath.sep)
-        if not path:
-            raise ValueError("no path specified")
-        else:
-            path = path.replace(os.path.sep, posixpath.sep)
-        start_list = posixpath.abspath(start).split(posixpath.sep)
-        path_list = posixpath.abspath(path).split(posixpath.sep)
-        # Work out how much of the filepath is shared by start and path.
-        i = len(posixpath.commonprefix([start_list, path_list]))
-        rel_list = [posixpath.pardir] * (len(start_list)-i) + path_list[i:]
-        if not rel_list:
-            return posixpath.curdir.replace(posixpath.sep, os.path.sep)
-        return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
-
 
 class PamlError(EnvironmentError):
-    """paml has failed. Run with verbose = True to view the error
-message"""
+    """paml has failed.
+
+    Run with verbose=True to view the error message.
+    """
 
 
 class Paml(object):
+    """Base class for wrapping PAML commands."""
 
     def __init__(self, alignment=None, working_dir=None,
-                out_file=None):
+                 out_file=None):
+        """Initialize the class."""
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
@@ -58,11 +33,14 @@ class Paml(object):
                 raise IOError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
+        self._options = {}  # will be set in subclasses
 
     def write_ctl_file(self):
+        """Write control file."""
         pass
 
     def read_ctl_file(self):
+        """Read control file."""
         pass
 
     def print_options(self):
@@ -74,7 +52,7 @@ class Paml(object):
         """Set the value of an option.
 
         This function abstracts the options dict to prevent the user from
-        adding options that do not exist or mispelling options.
+        adding options that do not exist or misspelling options.
         """
         for option, value in kwargs.items():
             if option not in self._options:
@@ -94,28 +72,29 @@ class Paml(object):
         return list(self._options.items())
 
     def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current working directory.
+        """Convert all file/directory locations to paths relative to the current working directory (PRIVATE).
 
         paml requires that all paths specified in the control file be
         relative to the directory from which it is called rather than
         absolute paths.
         """
         if self.working_dir is not None:
-            self._rel_working_dir = _relpath(self.working_dir)
+            self._rel_working_dir = os.path.relpath(self.working_dir)
         if self.alignment is not None:
-            self._rel_alignment = _relpath(self.alignment,
-                self.working_dir)
+            self._rel_alignment = os.path.relpath(self.alignment,
+                                                  self.working_dir)
         if self.out_file is not None:
-            self._rel_out_file = _relpath(self.out_file, self.working_dir)
+            self._rel_out_file = os.path.relpath(self.out_file, self.working_dir)
 
     def run(self, ctl_file, verbose, command):
-        """Run a paml program using the current configuration and then parse the results.
+        """Run a paml program using the current configuration.
 
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either
-        absolute or relative paths, despite the fact that paml
-        requires relative paths.
+        Check that the class attributes exist and raise an error
+        if not. Then run the command and check if it succeeds with
+        a return code of 0, otherwise raise an error.
+
+        The arguments may be passed as either absolute or relative
+        paths, despite the fact that paml requires relative paths.`
         """
         if self.alignment is None:
             raise ValueError("Alignment file not specified.")
@@ -135,27 +114,22 @@ class Paml(object):
         if ctl_file is None:
             # Dynamically build a control file
             self.write_ctl_file()
-            if verbose:
-                result_code = subprocess.call([command, self.ctl_file])
-            else:
-                # To suppress output, redirect it to a pipe to nowhere
-                result_code = subprocess.call([command, self.ctl_file],
-                    stdout=subprocess.PIPE)
+            ctl_file = self.ctl_file
         else:
             if not os.path.exists(ctl_file):
                 raise IOError("The specified control file does not exist.")
-            if verbose:
-                result_code = subprocess.call([command, ctl_file])
-            else:
-                result_code = subprocess.call([command, ctl_file],
-                    stdout=subprocess.PIPE)
+        if verbose:
+            result_code = subprocess.call([command, ctl_file])
+        else:
+            with open(os.devnull) as dn:
+                result_code = subprocess.call([command, ctl_file], stdout=dn, stderr=dn)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
             raise PamlError(
-            "%s has failed (return code %i). Run with verbose = True to view error message"
-            % (command, result_code))
+                "%s has failed (return code %i). Run with verbose = True to view error message"
+                % (command, result_code))
         if result_code < 0:
             # If the paml process is killed by a signal somehow
             raise EnvironmentError("The %s process was killed (return code %i)."
-                  % (command, result_code))
+                                   % (command, result_code))

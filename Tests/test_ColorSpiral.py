@@ -4,8 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-""" Tests for general functionality of the ColorSpiral utility
-"""
+"""Tests for general functionality of the ColorSpiral utility."""
 
 # Builtins
 import colorsys
@@ -21,7 +20,7 @@ try:
     from reportlab.lib.pagesizes import A4
 except ImportError:
     raise MissingPythonDependencyError(
-            "Install reportlab if you want to use Bio.Graphics.")
+        "Install reportlab if you want to use Bio.Graphics.")
 
 
 # Biopython Bio.Graphics.ColorSpiral
@@ -30,8 +29,9 @@ from Bio.Graphics.ColorSpiral import ColorSpiral, get_colors, get_color_dict
 
 class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
+
     def setUp(self):
-        """Set up canvas for drawing"""
+        """Set up canvas for drawing."""
         output_filename = os.path.join("Graphics", "spiral_test.pdf")
         self.c = Canvas(output_filename, pagesize=A4)
         # co-ordinates of the centre of the canvas
@@ -42,7 +42,7 @@ class SpiralTest(unittest.TestCase):
         cs = ColorSpiral(a=4, b=0.33, jitter=0)
         colours = list(cs.get_colors(8))
         cstr = ["(%.2f, %.2f, %.2f)" % (r, g, b)
-                    for r, g, b in colours]
+                for r, g, b in colours]
         expected = \
             ['(0.64, 0.74, 0.81)', '(0.68, 0.52, 0.76)', '(0.72, 0.41, 0.55)',
              '(0.68, 0.39, 0.31)', '(0.63, 0.54, 0.22)', '(0.48, 0.59, 0.13)',
@@ -70,8 +70,9 @@ class SpiralTest(unittest.TestCase):
 
 class SquareTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed in a square, with jitter."""
+
     def setUp(self):
-        """Set up canvas for drawing"""
+        """Set up canvas for drawing."""
         output_filename = os.path.join("Graphics", "square_test.pdf")
         self.c = Canvas(output_filename, pagesize=(500, 500))
 
@@ -85,7 +86,7 @@ class SquareTest(unittest.TestCase):
             x1 = boxedge * (i % boxes_per_row)
             y1 = rows * boxedge
             self.c.rect(x1, y1, boxedge, boxedge, fill=1, stroke=0)
-            if not (i+1) % boxes_per_row:
+            if not (i + 1) % boxes_per_row:
                 rows += 1
         self.finish()
 
@@ -96,17 +97,19 @@ class SquareTest(unittest.TestCase):
 
 class DictTest(unittest.TestCase):
     """Generate set of colours on the basis of an iterable."""
+
     def test_dict(self):
         """get_color_dict() for classes A-D, no jitter."""
         classes = ['A', 'B', 'C', 'D']
         colors = get_color_dict(classes, jitter=0)
         cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b)
-                    for c, (r, g, b) in sorted(colors.items())]
+                for c, (r, g, b) in sorted(colors.items())]
         expected = ['A: (0.52, 0.76, 0.69)',
                     'B: (0.40, 0.31, 0.68)',
                     'C: (0.59, 0.13, 0.47)',
                     'D: (0.50, 0.00, 0.00)']
         self.assertEqual(cstr, expected)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

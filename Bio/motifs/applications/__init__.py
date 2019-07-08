@@ -4,6 +4,4 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Motif command line tool wrappers."""
-from ._alignace import AlignAceCommandline
-from ._alignace import CompareAceCommandline
 from ._xxmotif import XXmotifCommandline

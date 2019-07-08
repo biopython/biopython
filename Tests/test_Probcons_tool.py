@@ -15,7 +15,7 @@ from Bio.Align.Applications import ProbconsCommandline
 os.environ['LANG'] = 'C'
 
 probcons_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     raise MissingExternalDependencyError("PROBCONS not available on Windows")
 else:
     from Bio._py3k import getoutput
@@ -39,8 +39,7 @@ class ProbconsApplication(unittest.TestCase):
             os.remove(self.annotation_outfile)
 
     def test_Probcons_alignment_fasta(self):
-        """Round-trip through app and read fasta alignment from stdout
-        """
+        """Round-trip through app and read fasta alignment from stdout."""
         cmdline = ProbconsCommandline(probcons_exe, input=self.infile1)
         self.assertEqual(str(cmdline), probcons_exe + " Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
@@ -54,8 +53,7 @@ class ProbconsApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_alignment_clustalw(self):
-        """Round-trip through app and read clustalw alignment from stdout
-        """
+        """Round-trip through app and read clustalw alignment from stdout."""
         cmdline = ProbconsCommandline(probcons_exe)
         cmdline.set_parameter("input", "Fasta/fa01")
         cmdline.clustalw = True
@@ -71,8 +69,7 @@ class ProbconsApplication(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
     def test_Probcons_complex_commandline(self):
-        """Round-trip through app with complex command line and output file
-        """
+        """Round-trip through app with complex command line and output file."""
         cmdline = ProbconsCommandline(probcons_exe, pre=1)
         cmdline.set_parameter("input", "Fasta/fa01")
         cmdline.consistency = 4
@@ -80,8 +77,8 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.set_parameter("a", True)
         cmdline.annot = self.annotation_outfile
         self.assertEqual(str(cmdline), probcons_exe +
-                " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out "
-                "-a Fasta/fa01")
+                         " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out"
+                         " -a Fasta/fa01")
         stdout, stderr = cmdline()
         self.assertTrue(stderr.startswith("\nPROBCONS"))
         self.assertTrue(stdout.startswith(">AK1H_ECOLI/1-378"))

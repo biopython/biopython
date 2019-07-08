@@ -1,0 +1,389 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="PubMed-not-MEDLINE" Owner="NLM">
+        <PMID Version="1">30108519</PMID>
+        <DateRevised>
+            <Year>2018</Year>
+            <Month>08</Month>
+            <Day>17</Day>
+        </DateRevised>
+        <Article PubModel="Electronic-eCollection">
+            <Journal>
+                <ISSN IssnType="Print">1664-042X</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>9</Volume>
+                    <PubDate>
+                        <Year>2018</Year>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Frontiers in physiology</Title>
+                <ISOAbbreviation>Front Physiol</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>A &quot;<i>Blood Relationship&quot;</i> Between the Overlooked Minimum Lactate Equivalent and Maximal Lactate Steady State in Trained Runners. Back to the Old Days?</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>1034</MedlinePgn>
+            </Pagination>
+            <ELocationID EIdType="doi" ValidYN="Y">10.3389/fphys.2018.01034</ELocationID>
+            <Abstract>
+                <AbstractText>Maximal Lactate Steady State (MLSS) and Lactate Threshold (LT) are physiologically-related and fundamental concepts within the sports and exercise sciences. Literature supporting their relationship, however, is scarce. Among the recognized LTs, we were particularly interested in the disused &quot;Minimum Lactate Equivalent&quot; (LE<sub>min</sub>), first described in the early 1980s. We hypothesized that velocity at LT, conceptually comprehended as in the old days (LE<sub>min</sub>), could predict velocity at MLSS (<sub>V</sub>MLSS) more accurate than some other blood lactate-related thresholds (BL<sub>R</sub>Ts) routinely used nowadays by many sport science practitioners. Thirteen male endurance-trained [<sub>V</sub>MLSS 15.0 ± 1.1 km·h<sup>-1</sup>; maximal oxygen uptake ( <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:msub>
+                            <mml:mrow>
+                                <mml:mover>
+                                    <mml:mrow>
+                                        <mml:mi>V</mml:mi>
+                                    </mml:mrow>
+                                    <mml:mo>.</mml:mo>
+                                </mml:mover>
+                                <mml:mi>O</mml:mi>
+                            </mml:mrow>
+                            <mml:mrow>
+                                <mml:mn>2</mml:mn>
+                                <mml:mi>m</mml:mi>
+                                <mml:mi>a</mml:mi>
+                                <mml:mi>x</mml:mi>
+                            </mml:mrow>
+                        </mml:msub>
+                    </mml:math> ) 67.6 ± 4.1 ml·kg<sup>-1</sup>·min<sup>-1</sup>] homogeneous (coefficient of variation: ≈7%) runners conducted 1) a submaximal discontinuous incremental running test to determine several BL<sub>R</sub>Ts followed by a maximal ramp incremental running test for <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:msub>
+                            <mml:mrow>
+                                <mml:mover>
+                                    <mml:mrow>
+                                        <mml:mi>V</mml:mi>
+                                    </mml:mrow>
+                                    <mml:mo>.</mml:mo>
+                                </mml:mover>
+                                <mml:mi>O</mml:mi>
+                            </mml:mrow>
+                            <mml:mrow>
+                                <mml:mn>2</mml:mn>
+                                <mml:mi>m</mml:mi>
+                                <mml:mi>a</mml:mi>
+                                <mml:mi>x</mml:mi>
+                            </mml:mrow>
+                        </mml:msub>
+                        <mml:mtext> </mml:mtext>
+                    </mml:math> determination, and 2) several (4-5) constant velocity running tests to determine <sub>V</sub>MLSS with a precision of 0.20 km·h<sup>-1</sup>. Determined BL<sub>R</sub>Ts include LE<sub>min</sub> and LE<sub>min</sub>-related LE<sub>min</sub> plus 1 (LE<sub>min+1mM</sub>) and 1.5 mmol·L<sup>-1</sup> (LE<sub>min+1.5mM</sub>), along with well-established BL<sub>R</sub>Ts such as conventionally-calculated LT, D<sub>max</sub> and fixed blood lactate concentration thresholds. LE<sub>min</sub> did not differ from LT (<i>P</i> = 0.71; ES: 0.08) and was 27% lower than MLSS (<i>P</i> &lt; 0.001; ES: 3.54). LE<sub>min+1mM</sub> was not different from MLSS (<i>P</i> = 0.47; ES: 0.09). LE<sub>min</sub> was the best predictor of <sub>V</sub>MLSS (<i>r</i> = 0.91; <i>P</i> &lt; 0.001; SEE = 0.47 km·h<sup>-1</sup>), followed by LE<sub>min+1mM</sub> (<i>r</i> = 0.86; <i>P</i> &lt; 0.001; SEE = 0.58 km·h<sup>-1</sup>) and LE<sub>min+1.5mM</sub> (<i>r</i> = 0.84; <i>P</i> &lt; 0.001; SEE = 0.86 km·h<sup>-1</sup>). There was no statistical difference between MLSS and estimated MLSS using LE<sub>min</sub> prediction formula (<i>P</i> = 0.99; ES: 0.001). Mean bias and limits of agreement were 0.00 ± 0.45 km·h<sup>-1</sup> and ±0.89 km·h<sup>-1</sup>. Additionally, LE<sub>min</sub>, LE<sub>min+1mM</sub> and LE<sub>min+1.5mM</sub> were the best predictors of <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+                        <mml:msub>
+                            <mml:mrow>
+                                <mml:mover>
+                                    <mml:mrow>
+                                        <mml:mi>V</mml:mi>
+                                    </mml:mrow>
+                                    <mml:mo>.</mml:mo>
+                                </mml:mover>
+                                <mml:mi>O</mml:mi>
+                            </mml:mrow>
+                            <mml:mrow>
+                                <mml:mn>2</mml:mn>
+                                <mml:mi>m</mml:mi>
+                                <mml:mi>a</mml:mi>
+                                <mml:mi>x</mml:mi>
+                            </mml:mrow>
+                        </mml:msub>
+                    </mml:math> (<i>r</i> = 0.72-0.79; <i>P</i> &lt; 0.001). These results support LE<sub>min</sub>, an objective submaximal overlooked and underused BL<sub>R</sub>T, to be one of the best single MLSS predictors in endurance trained runners. Our study advocates factors controlling LE<sub>min</sub> to be shared, at least partly, with those controlling MLSS.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Garcia-Tabar</LastName>
+                    <ForeName>Ibai</ForeName>
+                    <Initials>I</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Studies, Research and Sports Medicine Center, Government of Navarre, Pamplona, Spain.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Gorostiaga</LastName>
+                    <ForeName>Esteban M</ForeName>
+                    <Initials>EM</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Studies, Research and Sports Medicine Center, Government of Navarre, Pamplona, Spain.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+            <ArticleDate DateType="Electronic">
+                <Year>2018</Year>
+                <Month>07</Month>
+                <Day>31</Day>
+            </ArticleDate>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>Switzerland</Country>
+            <MedlineTA>Front Physiol</MedlineTA>
+            <NlmUniqueID>101549006</NlmUniqueID>
+            <ISSNLinking>1664-042X</ISSNLinking>
+        </MedlineJournalInfo>
+        <CommentsCorrectionsList>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Stat Med. 2008 Feb 28;27(5):778-80</RefSource>
+                <PMID Version="1">17907247</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2009 Jan;30(1):40-45</RefSource>
+                <PMID Version="1">19202577</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1995 Jun;27(6):863-7</RefSource>
+                <PMID Version="1">7658947</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol. 2010 Apr;108(6):1153-67</RefSource>
+                <PMID Version="1">20033207</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1999 Apr;31(4):578-82</RefSource>
+                <PMID Version="1">10211855</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Sports Med. 1988 Jun;22(2):51-4</RefSource>
+                <PMID Version="1">3167501</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Front Physiol. 2017 Jun 08;8:389</RefSource>
+                <PMID Version="1">28642717</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1999 Sep;31(9):1342-5</RefSource>
+                <PMID Version="1">10487378</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1998 Aug;30(8):1304-13</RefSource>
+                <PMID Version="1">9710874</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports. 1979 Winter;11(4):338-44</RefSource>
+                <PMID Version="1">530025</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Strength Cond Res. 2005 May;19(2):364-8</RefSource>
+                <PMID Version="1">15903376</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol Occup Physiol. 1984;53(3):196-9</RefSource>
+                <PMID Version="1">6542852</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol Occup Physiol. 1978 Oct 20;39(4):219-27</RefSource>
+                <PMID Version="1">710387</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Appl Physiol Respir Environ Exerc Physiol. 1980 Mar;48(3):523-7</RefSource>
+                <PMID Version="1">7372524</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2015 Dec;36(14):1142-8</RefSource>
+                <PMID Version="1">26332904</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Physiol. 1930 Apr 14;69(2):214-37</RefSource>
+                <PMID Version="1">16994099</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Strength Cond Res. 2015 Oct;29(10):2794-801</RefSource>
+                <PMID Version="1">25844867</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>PLoS One. 2018 Mar 13;13(3):e0194313</RefSource>
+                <PMID Version="1">29534108</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Cardiopulm Rehabil Prev. 2012 Nov-Dec;32(6):327-50</RefSource>
+                <PMID Version="1">23103476</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Exerc Sport Sci Rev. 1982;10:49-83</RefSource>
+                <PMID Version="1">6811284</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Physiol Perform. 2010 Sep;5(3):276-91</RefSource>
+                <PMID Version="1">20861519</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol Occup Physiol. 1990;60(4):249-53</RefSource>
+                <PMID Version="1">2357979</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 2004 Oct;36(10):1737-42</RefSource>
+                <PMID Version="1">15595295</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2016 Jun;37(7):539-46</RefSource>
+                <PMID Version="1">27116348</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Scand J Med Sci Sports. 2017 May;27(5):462-473</RefSource>
+                <PMID Version="1">28181710</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1983 Nov;4(4):226-30</RefSource>
+                <PMID Version="1">6654546</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Appl Physiol (1985). 1988 Jun;64(6):2622-30</RefSource>
+                <PMID Version="1">3403447</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 2009 Jan;41(1):3-13</RefSource>
+                <PMID Version="1">19092709</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2009 Sep;30(9):643-6</RefSource>
+                <PMID Version="1">19569005</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol Occup Physiol. 1988;57(4):420-4</RefSource>
+                <PMID Version="1">3396556</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Physiol. 2004 Jul 1;558(Pt 1):5-30</RefSource>
+                <PMID Version="1">15131240</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1990 Feb;11(1):26-32</RefSource>
+                <PMID Version="1">2318561</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Appl Physiol. 1973 Aug;35(2):236-43</RefSource>
+                <PMID Version="1">4723033</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1987 Dec;8(6):401-6</RefSource>
+                <PMID Version="1">3429086</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Sci Med Sport. 2008 Jun;11(3):280-6</RefSource>
+                <PMID Version="1">17553745</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Appl Physiol Respir Environ Exerc Physiol. 1984 May;56(5):1260-4</RefSource>
+                <PMID Version="1">6725086</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2008 Jun;29(6):475-9</RefSource>
+                <PMID Version="1">18302077</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1985 Feb;17(1):22-34</RefSource>
+                <PMID Version="1">3884959</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Sports Med. 2009;39(6):469-90</RefSource>
+                <PMID Version="1">19453206</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2004 Aug;25(6):403-8</RefSource>
+                <PMID Version="1">15346226</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Sports Med Phys Fitness. 2004 Jun;44(2):132-40</RefSource>
+                <PMID Version="1">15470310</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1985 Jun;6(3):117-30</RefSource>
+                <PMID Version="1">4030186</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1999 Feb;20(2):122-7</RefSource>
+                <PMID Version="1">10190774</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2006 May;27(5):368-72</RefSource>
+                <PMID Version="1">16729378</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1985 Jun;6(3):109-16</RefSource>
+                <PMID Version="1">3897079</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Pneumologie. 1990 Jan;44(1):2-13</RefSource>
+                <PMID Version="1">2408033</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Appl Physiol. 2018 Apr;118(4):691-728</RefSource>
+                <PMID Version="1">29322250</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Appl Physiol Respir Environ Exerc Physiol. 1983 Oct;55(4):1178-86</RefSource>
+                <PMID Version="1">6629951</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Sports Med. 2014 Nov;44 Suppl 2:S139-47</RefSource>
+                <PMID Version="1">25200666</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Front Physiol. 2015 Oct 30;6:308</RefSource>
+                <PMID Version="1">26578980</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 2013 Mar;34(3):196-9</RefSource>
+                <PMID Version="1">22972242</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Sports Med. 1992 Oct;13(7):518-22</RefSource>
+                <PMID Version="1">1459746</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Med Sci Sports Exerc. 1993 May;25(5):620-7</RefSource>
+                <PMID Version="1">8492691</PMID>
+            </CommentsCorrections>
+        </CommentsCorrectionsList>
+        <KeywordList Owner="NOTNLM">
+            <Keyword MajorTopicYN="N">Owles' point</Keyword>
+            <Keyword MajorTopicYN="N">aerobic capacity</Keyword>
+            <Keyword MajorTopicYN="N">aerobic threshold</Keyword>
+            <Keyword MajorTopicYN="N">anaerobic threshold</Keyword>
+            <Keyword MajorTopicYN="N">endurance assessment</Keyword>
+            <Keyword MajorTopicYN="N">lactate threshold</Keyword>
+            <Keyword MajorTopicYN="N">oxygen endurance performance limit</Keyword>
+            <Keyword MajorTopicYN="N">submaximal exercise testing</Keyword>
+        </KeywordList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="received">
+                <Year>2018</Year>
+                <Month>05</Month>
+                <Day>22</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="accepted">
+                <Year>2018</Year>
+                <Month>07</Month>
+                <Day>11</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2018</Year>
+                <Month>8</Month>
+                <Day>16</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2018</Year>
+                <Month>8</Month>
+                <Day>16</Day>
+                <Hour>6</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2018</Year>
+                <Month>8</Month>
+                <Day>16</Day>
+                <Hour>6</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>epublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">30108519</ArticleId>
+            <ArticleId IdType="doi">10.3389/fphys.2018.01034</ArticleId>
+            <ArticleId IdType="pmc">PMC6079548</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

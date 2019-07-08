@@ -7,10 +7,14 @@
 
 # Last Checked with samtools [0.1.18 (r982:295)]
 
+"""Tests for samtools tool."""
+
 from Bio import MissingExternalDependencyError
 import sys
 import os
 import unittest
+
+from Bio.Application import ApplicationError
 from Bio.Sequencing.Applications import SamtoolsViewCommandline
 from Bio.Sequencing.Applications import SamtoolsCalmdCommandline
 from Bio.Sequencing.Applications import SamtoolsCatCommandline
@@ -19,6 +23,7 @@ from Bio.Sequencing.Applications import SamtoolsIdxstatsCommandline
 from Bio.Sequencing.Applications import SamtoolsIndexCommandline
 from Bio.Sequencing.Applications import SamtoolsMergeCommandline
 from Bio.Sequencing.Applications import SamtoolsMpileupCommandline
+from Bio.Sequencing.Applications import SamtoolsVersion1xSortCommandline
 from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsPhaseCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsReheaderCommandline
@@ -26,7 +31,7 @@ from Bio.Sequencing.Applications import SamtoolsSortCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsTargetcutCommandline
 # TODO from Bio.Sequencing.Applications import SamtoolsFixmateCommandline
 #################################################################
-
+SamtoolsVersion0xSortCommandline = SamtoolsSortCommandline
 # Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
 
@@ -98,6 +103,12 @@ class SamtoolsTestCase(unittest.TestCase):
         self.bamindexfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                           "SamBam",
                                           "bam1.bam.bai")
+        self.sortedbamfile1 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                           "SamBam",
+                                           "bam1_sorted.bam")
+        self.sortedbamfile2 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                           "SamBam",
+                                           "bam2_sorted.bam")
         self.files_to_clean = [self.referenceindexfile, self.bamindexfile1, self.outbamfile]
 
     def tearDown(self):
@@ -106,8 +117,7 @@ class SamtoolsTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def test_view(self):
-        """Test for samtools view"""
-
+        """Test for samtools view."""
         cmdline = SamtoolsViewCommandline(samtools_exe)
         cmdline.set_parameter("input_file", self.bamfile1)
         stdout_bam, stderr_bam = cmdline()
@@ -118,18 +128,18 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("S", True)
         stdout_sam, stderr_sam = cmdline()
         self.assertTrue(
-            stderr_sam.startswith("[samopen] SAM header is present:"),
+            stdout_sam.startswith("HWI-1KL120:88:D0LRBACXX:1:1101:1780:2146"),
             "SAM file  viewing failed:\n%s\nStderr:%s"
             % (cmdline, stderr_sam))
 
     def create_fasta_index(self):
-        """Creates index for reference fasta sequence."""
+        """Create index for reference fasta sequence."""
         cmdline = SamtoolsFaidxCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
         stdout, stderr = cmdline()
 
     def create_bam_index(self, input_bam):
-        """Creates index of an input bam file"""
+        """Create index of an input bam file."""
         cmdline = SamtoolsIndexCommandline(samtools_exe)
         cmdline.set_parameter("input_bam", input_bam)
         stdout, stderr = cmdline()
@@ -144,7 +154,7 @@ class SamtoolsTestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(self.referenceindexfile))
 
     def test_calmd(self):
-        """Test for samtools calmd"""
+        """Test for samtools calmd."""
         self.create_fasta_index()
         cmdline = SamtoolsCalmdCommandline(samtools_exe)
         cmdline.set_parameter("reference", self.reference)
@@ -171,10 +181,25 @@ class SamtoolsTestCase(unittest.TestCase):
     # TODO: def test_fixmate(self):
 
     def test_sort(self):
-        cmdline = SamtoolsSortCommandline(samtools_exe)
-        cmdline.set_parameter("input_bam", self.bamfile1)
+
+        cmdline = SamtoolsVersion0xSortCommandline(samtools_exe)
+        cmdline.set_parameter("input", self.bamfile1)
         cmdline.set_parameter("out_prefix", "SamBam/out")
-        stdout, stderr = cmdline()
+
+        try:
+            stdout, stderr = cmdline()
+        except ApplicationError as err:
+            if "[bam_sort] Use -T PREFIX / -o FILE to specify temporary and final output files" in str(err):
+                cmdline = SamtoolsVersion1xSortCommandline(samtools_exe)
+                cmdline.set_parameter("input", self.bamfile1)
+                cmdline.set_parameter("-T", "out")
+                cmdline.set_parameter("-o", "out.bam")
+                try:
+                    stdout, stderr = cmdline()
+                except ApplicationError:
+                    raise
+            else:
+                raise
         self.assertFalse(stderr,
                          "Samtools sort failed:\n%s\nStderr:%s"
                          % (cmdline, stderr))
@@ -203,9 +228,11 @@ class SamtoolsTestCase(unittest.TestCase):
         cmdline.set_parameter("out_bam", self.outbamfile)
         cmdline.set_parameter("f", True)  # Overwrite out.bam if it exists
         stdout, stderr = cmdline()
-        self.assertFalse(stderr,
-                         "Samtools merge failed:\n%s\nStderr:%s"
-                         % (cmdline, stderr))
+        # Worked up to v1.2, then there was a regression failing with message
+        # but as of v1.3 expect a warning: [W::bam_merge_core2] No @HD tag found.
+        self.assertTrue(not stderr or stderr.strip() == "[W::bam_merge_core2] No @HD tag found.",
+                        "Samtools merge failed:\n%s\nStderr:%s"
+                        % (cmdline, stderr))
         self.assertTrue(os.path.exists(self.outbamfile))
 
     def test_mpileup(self):
@@ -216,7 +243,7 @@ class SamtoolsTestCase(unittest.TestCase):
 
     def test_mpileup_list(self):
         cmdline = SamtoolsMpileupCommandline(samtools_exe)
-        cmdline.set_parameter("input_file", [self.bamfile1, self.bamfile2])
+        cmdline.set_parameter("input_file", [self.sortedbamfile1, self.sortedbamfile2])
         stdout, stderr = cmdline()
         self.assertFalse("[bam_pileup_core]" in stdout)
 

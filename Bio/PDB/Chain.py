@@ -7,38 +7,71 @@
 
 from Bio.PDB.Entity import Entity
 
-__docformat__ = "restructuredtext en"
 
 class Chain(Entity):
+    """Define Chain class.
+
+    Chain is an object of type Entity, stores residues and includes a method to
+    access atoms from residues.
+    """
+
     def __init__(self, id):
-        self.level="C"
+        """Initialize the class."""
+        self.level = "C"
         Entity.__init__(self, id)
 
-    # Private methods
+    # Sorting methods: empty chain IDs come last.
+    def __gt__(self, other):
+        """Validate if id is greater than other.id."""
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id > other.id
+        else:
+            return NotImplemented
 
-    def _sort(self, r1, r2):
-        """Sort function for residues in a chain
+    def __ge__(self, other):
+        """Validate if id is greater or equal than other.id."""
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id >= other.id
+        else:
+            return NotImplemented
 
-        Residues are first sorted according to their hetatm records.
-        Protein and nucleic acid residues first, hetatm residues next,
-        and waters last. Within each group, the residues are sorted according
-        to their resseq's (sequence identifiers). Finally, residues with the
-        same resseq's are sorted according to icode.
+    def __lt__(self, other):
+        """Validate if id is less than other.id."""
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id < other.id
+        else:
+            return NotImplemented
 
-        Arguments:
-
-            - r1, r2 - Residue objects
-        """
-        hetflag1, resseq1, icode1=r1.id
-        hetflag2, resseq2, icode2=r2.id
-        if hetflag1!=hetflag2:
-            return cmp(hetflag1[0], hetflag2[0])
-        elif resseq1!=resseq2:
-            return cmp(resseq1, resseq2)
-        return cmp(icode1, icode2)
+    def __le__(self, other):
+        """Validate if id is less or equal than other id."""
+        if isinstance(other, Chain):
+            if self.id == ' ' and other.id != ' ':
+                return 0
+            elif self.id != ' ' and other.id == ' ':
+                return 1
+            else:
+                return self.id <= other.id
+        else:
+            return NotImplemented
 
     def _translate_id(self, id):
-        """
+        """Translate sequence identifier to tuple form (PRIVATE).
+
         A residue id is normally a tuple (hetero flag, sequence identifier,
         insertion code). Since for most residues the hetero flag and the
         insertion code are blank (i.e. " "), you can just use the sequence
@@ -47,13 +80,13 @@ class Chain(Entity):
         " ") tuple.
 
         Arguments:
-        o id - int, residue resseq
+
+        - id - int, residue resseq
+
         """
         if isinstance(id, int):
-            id=(' ', id, ' ')
+            id = (' ', id, ' ')
         return id
-
-    # Special methods
 
     def __getitem__(self, id):
         """Return the residue with given id.
@@ -63,29 +96,37 @@ class Chain(Entity):
         method.
 
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__getitem__(self, id)
 
     def __contains__(self, id):
-        """True if a residue with given id is present in this chain.
+        """Check if a residue with given id is present in this chain.
 
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__contains__(self, id)
 
     def __delitem__(self, id):
-        """
+        """Delete item.
+
         Arguments:
-        o id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.__delitem__(self, id)
 
     def __repr__(self):
+        """Return the chain identifier."""
         return "<Chain id=%s>" % self.get_id()
 
     # Public methods
@@ -97,9 +138,9 @@ class Chain(Entity):
         (DisorderedResidue objects). This method unpacks them,
         ie. it returns a list of simple Residue objects.
         """
-        unpacked_list=[]
+        unpacked_list = []
         for residue in self.get_list():
-            if residue.is_disordered()==2:
+            if residue.is_disordered() == 2:
                 for dresidue in residue.disordered_get_list():
                     unpacked_list.append(dresidue)
             else:
@@ -110,24 +151,27 @@ class Chain(Entity):
         """Return 1 if a residue with given id is present.
 
         The id of a residue is (hetero flag, sequence identifier, insertion code).
-        
+
         If id is an int, it is translated to (" ", id, " ") by the _translate_id
         method.
 
         Arguments:
-        
-            - id - (string, int, string) or int
+
+        - id - (string, int, string) or int
+
         """
-        id=self._translate_id(id)
+        id = self._translate_id(id)
         return Entity.has_id(self, id)
 
     # Public
 
     def get_residues(self):
+        """Return residues."""
         for r in self:
             yield r
 
     def get_atoms(self):
-        for r in self:
+        """Return atoms from residues."""
+        for r in self.get_residues():
             for a in r:
                 yield a

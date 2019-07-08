@@ -1,13 +1,13 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-"""Command line wrapper for the multiple alignment program PROBCONS.
-"""
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+"""Command line wrapper for the multiple alignment program PROBCONS."""
 
 from __future__ import print_function
 
-__docformat__ = "restructuredtext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -17,9 +17,18 @@ class ProbconsCommandline(AbstractCommandline):
 
     http://probcons.stanford.edu/
 
-    Example:
-    --------
+    Notes
+    -----
+    Last checked against version: 1.12
 
+    References
+    ----------
+    Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
+    PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
+    Genome Research 15: 330-340.
+
+    Examples
+    --------
     To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format, and otherwise default settings, use:
 
@@ -31,6 +40,7 @@ class ProbconsCommandline(AbstractCommandline):
 
     You would typically run the command line with probcons_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+
     Note that PROBCONS will write the alignment to stdout, which you may
     want to save to a file and then parse, e.g.::
 
@@ -48,16 +58,10 @@ class ProbconsCommandline(AbstractCommandline):
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "clustalw")
 
-    Citations:
-    ----------
-
-    Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
-    PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
-    Genome Research 15: 330-340.
-
-    Last checked against version: 1.12
     """
+
     def __init__(self, cmd="probcons", **kwargs):
+        """Initialize the class."""
         self.parameters = \
             [
             # Note that some options cannot be assigned via properties using the
@@ -104,7 +108,7 @@ class ProbconsCommandline(AbstractCommandline):
                     "order (default: off)"),
             # Input file name
             _Argument(["input"],
-                      "Input file name. Must be multiple FASTA alignment "+
+                      "Input file name. Must be multiple FASTA alignment "
                       "(MFA) format",
                       filename=True,
                       is_required=True),
@@ -112,12 +116,6 @@ class ProbconsCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE)."""
-    print("Running modules doctests...")
-    import doctest
-    doctest.testmod()
-    print("Done")
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

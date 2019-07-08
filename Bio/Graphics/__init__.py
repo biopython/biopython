@@ -1,9 +1,11 @@
+# Copyright 2008 by Brad Chapman. All rights reserved.
 # Copyright 2008 by Michiel de Hoon.  All rights reserved.
-# Copyright 2008-2013 by Peter Cock.  All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-################################################################################
+# Copyright 2009-2017 by Peter Cock.  All rights reserved.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.Graphics offers several graphical outputs, all using ReportLab."""
 
 # Check if ReportLab is installed.
@@ -17,13 +19,14 @@ except ImportError:
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.com/software/opensource/")
 
-__docformat__ = "restructuredtext en"
 
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.
+
+
 def _write(drawing, output_file, format, dpi=72):
-    """Helper function to standardize output to files (PRIVATE).
+    """Standardize output to files (PRIVATE).
 
     Writes the provided drawing out to a file in a prescribed format.
 
@@ -44,7 +47,7 @@ def _write(drawing, output_file, format, dpi=72):
         # This is an optional part of ReportLab, so may not be installed.
         # We'll raise a missing dependency error if rendering to a
         # bitmap format is attempted.
-        renderPM=None
+        renderPM = None
 
     formatdict = {'PS': renderPS, 'EPS': renderPS,
                   # not sure which you actually get, PS or EPS, but
@@ -57,7 +60,7 @@ def _write(drawing, output_file, format, dpi=72):
                   'PNG': renderPM,
                   'TIFF': renderPM,
                   'TIF': renderPM
-                 }
+                  }
     try:
         # If output is not a string, then .upper() will trigger
         # an attribute error...

@@ -7,6 +7,8 @@
 
 # TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
 # and *.aln where we have not requested an explicit name?
+"""Tests for Clustalw tool."""
+
 from __future__ import print_function
 
 from Bio import MissingExternalDependencyError
@@ -68,12 +70,12 @@ else:
     # Since "not found" may be in another language, try and be sure this is
     # really the clustalw tool's output
     if "not found" not in output and "CLUSTAL" in output \
-    and "Multiple Sequence Alignments" in output:
+       and "Multiple Sequence Alignments" in output:
         clustalw_exe = "clustalw2"
     if not clustalw_exe:
         output = getoutput("clustalw --version")
         if "not found" not in output and "CLUSTAL" in output \
-        and "Multiple Sequence Alignments" in output:
+           and "Multiple Sequence Alignments" in output:
             clustalw_exe = "clustalw"
 
 if not clustalw_exe:
@@ -93,10 +95,10 @@ class ClustalWTestCase(unittest.TestCase):
                 os.remove(filename)
 
     def standard_test_procedure(self, cline):
-        """Standard testing procedure used by all tests."""
+        """Shared test procedure used by all tests."""
         self.assertTrue(str(eval(repr(cline))) == str(cline))
         input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
-                                      lambda rec: rec.id.replace(":", "_"))
+                                      lambda rec: rec.id.replace(":", "_"))  # noqa: E731
 
         # Determine name of tree file
         if cline.newtree:
@@ -120,16 +122,17 @@ class ClustalWTestCase(unittest.TestCase):
         output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile, "clustal"))
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
-            self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
-            self.assertTrue(str(record.seq).replace("-", "") ==
-                   str(input_records[record.id].seq))
+            self.assertEqual(str(record.seq),
+                             str(output_records[record.id].seq))
+            self.assertEqual(str(record.seq).replace("-", ""),
+                             str(input_records[record.id].seq))
 
         # Check the DND file was created.
         # TODO - Try and parse this with Bio.Nexus?
         self.assertTrue(os.path.isfile(tree_file))
 
     def add_file_to_clean(self, filename):
-        """Adds a file for deferred removal by the tearDown routine."""
+        """Add a file for deferred removal by the tearDown routine."""
         self.files_to_clean.add(filename)
 
 
@@ -161,7 +164,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
             # Zero return code is a possible bug in clustalw 2.1?
-            self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
+            self.assertIn("cannot do multiple alignment", (stdout + stderr))
         except ApplicationError as err:
             # Good, non-zero return code indicating an error in clustalw
             # e.g. Using clustalw 1.83 get:
@@ -234,7 +237,6 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
 
     def test_large_input_file(self):
         """Test a large input file."""
-
         # Create a large input file by converting another example file
         # (See Bug 2804, this will produce so much output on stdout that
         # subprocess could suffer a deadlock and hang).  Using all the

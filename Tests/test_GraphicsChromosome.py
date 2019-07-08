@@ -26,7 +26,7 @@ from Bio import MissingPythonDependencyError
 try:
     # reportlab
     from reportlab.lib import colors
-except:
+except ImportError:
     raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
@@ -84,8 +84,7 @@ all_chr_info = {"I": chr1_info,
 
 
 def load_chromosome(chr_name):
-    """Load a chromosome and all of its segments.
-    """
+    """Load a chromosome and all of its segments."""
     cur_chromosome = BasicChromosome.Chromosome(chr_name)
 
     chr_segment_info = all_chr_info[chr_name]
@@ -114,6 +113,7 @@ def load_chromosome(chr_name):
 
     return cur_chromosome
 
+
 # --- stuff for generating random organisms
 color_choices = (colors.red, colors.blue)
 letter_choices = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -123,8 +123,7 @@ id_prob = .025
 
 
 def get_random_id():
-    """Generate a random id number.
-    """
+    """Generate a random id number."""
     id = ''
     for n in range(6):
         letter = random.choice(letter_choices)
@@ -134,8 +133,7 @@ def get_random_id():
 
 
 def load_random_chromosome(chr_name):
-    """Generate a chromosome with random information about it.
-    """
+    """Generate a chromosome with random information about it."""
     cur_chromosome = BasicChromosome.Chromosome(chr_name)
 
     num_segments = random.randrange(num_possible_segments)
@@ -165,14 +163,13 @@ def load_random_chromosome(chr_name):
 
 
 class OrganismGraphicTest(unittest.TestCase):
-    """Test the creation of all chromosomes of an organism.
-    """
+    """Test the creation of all chromosomes of an organism."""
+
     def setUp(self):
         self.test_file = os.path.join("Graphics", "organism.pdf")
 
     def test_simple_organism(self):
-        """Test the basic functionality of drawing an organism.
-        """
+        """Test the basic functionality of drawing an organism."""
         pdf_organism = BasicChromosome.Organism()
 
         # add chromosomes
@@ -194,23 +191,19 @@ class OrganismGraphicTest(unittest.TestCase):
         test_organism.draw(test_file, "Test organism")
 
     def test_simple_organism_ps(self):
-        """Output a simple organism to a postscript file.
-        """
+        """Output a simple organism to a postscript file."""
         self._simple_organism("organism.eps", "ps")
 
     def test_simple_organism_pdf(self):
-        """Output a simple organism to a PDF file.
-        """
+        """Output a simple organism to a PDF file."""
         self._simple_organism("organism.pdf", "pdf")
 
     def test_simple_organism_svg(self):
-        """Output a simple organism to an SVG file.
-        """
+        """Output a simple organism to an SVG file."""
         self._simple_organism("organism.svg", "svg")
 
     def test_random_organism(self):
-        """Generate an organism with random chromosome info.
-        """
+        """Generate an organism with random chromosome info."""
         random_file = os.path.join("Graphics", "random_organism.pdf")
         pdf_organism = BasicChromosome.Organism()
 
@@ -232,8 +225,7 @@ class OrganismGraphicTest(unittest.TestCase):
         pdf_organism.draw(random_file, "Randomly generated Organism")
 
     def test_widget(self):
-        """Try widget derived functionality.
-        """
+        """Try widget derived functionality."""
         test_widget = BasicChromosome.ChromosomeSegment()
 
         expected_string = "chr_percent = 0.25"
@@ -249,26 +241,29 @@ class OrganismGraphicTest(unittest.TestCase):
         sys.stdout = save_stdout
 
         self.assertTrue(expected_string in properties,
-               "Unexpected results from dumpProperties: \n %s" % properties)
+                        "Unexpected results from dumpProperties: \n %s"
+                        % properties)
 
         properties = test_widget.getProperties()
         self.assertEqual(properties["label_size"], 6,
-               "Unexpected results from getProperties: %s" % properties)
+                         "Unexpected results from getProperties: %s"
+                         % properties)
 
         test_widget.setProperties({"start_x_position": 12})
         self.assertEqual(test_widget.start_x_position, 12,
-               "setProperties doesn't seem to work right: %s"
-               % test_widget.start_x_position)
+                         "setProperties doesn't seem to work right: %s"
+                         % test_widget.start_x_position)
 
 
 class OrganismSubAnnotationsTest(unittest.TestCase):
     """Test sub-annotations on a segment."""
+
     def test_simple_tRNA_tuples(self):
-        """Test sub-annotations (as tuples) on a genome segment, tRNA for Arabidopsis"""
+        """Test sub-annotations (as tuples) on a genome segment, tRNA for Arabidopsis."""
         self.check_simple_tRNA("Graphics/tRNA_chrom.pdf", False)
 
     def test_simple_tRNA_seqfeatures(self):
-        """Test sub-annotations (as SeqFeatures) on a genome segment, tRNA for Arabidopsis"""
+        """Test sub-annotations (as SeqFeatures) on a genome segment, tRNA for Arabidopsis."""
         self.check_simple_tRNA("Graphics/tRNA_chrom_sf.pdf", True)
 
     def check_simple_tRNA(self, filename, use_seqfeatures=False):
@@ -282,7 +277,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                    ("Chr III", "NC_003074", 23470805, f3, colors.blue),
                    ("Chr IV", "NC_003075", 18585042, f4, colors.orange),
                    ("Chr V", "NC_003076", 26992728, f5, colors.purple)]
-        max_length = max([row[2] for row in entries])
+        max_length = max(row[2] for row in entries)
 
         chr_diagram = BasicChromosome.Organism()
         for name, acc, length, features, color in entries:
@@ -295,7 +290,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 from Bio import SeqIO
                 record = SeqIO.read(filename, "gb")
                 assert length == len(record)
-                features = [f for f in record.features if f.type=="tRNA"]
+                features = [f for f in record.features if f.type == "tRNA"]
                 print(name)
                 # Strip of the first three chars, AT# where # is the chr
                 print([(int(f.location.start), int(f.location.end),
@@ -327,7 +322,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 cytobands.append((start, end, 0, None, colors.black, color))
             # Draw these with black borders, and a brown fill:
             cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.black, colors.brown))
-            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
+            cytobands.append((length - 1000000, length, 0, "Last 1 Mbp", colors.black, colors.brown))
             # Additional dummy entry to check fill colour on both strands,
             if name == "Chr III":
                 cytobands.append((11000000, 13000000, -1, "Reverse", "red", "yellow"))
@@ -372,15 +367,14 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
 
 
 class ChromosomeCountTest(unittest.TestCase):
-    """Test the display representation for simple counts on a chromosome.
-    """
+    """Test the display representation for simple counts on a chromosome."""
+
     def setUp(self):
         self.names = ["Bob", "Dylan", "Doesn't", "Like", "Spam"]
         self.count_display = ChromosomeCounts(self.names)
 
     def test_add_count(self):
-        """Add counts to specific chromosome segments.
-        """
+        """Add counts to specific chromosome segments."""
         self.count_display.add_count(self.names[1])
         self.count_display.add_count(self.names[2], 5)
 
@@ -391,8 +385,7 @@ class ChromosomeCountTest(unittest.TestCase):
             pass
 
     def test_add_label(self):
-        """Add labels to chromosome segments.
-        """
+        """Add labels to chromosome segments."""
         self.count_display.add_label(self.names[1], "Rules")
 
         try:
@@ -402,8 +395,7 @@ class ChromosomeCountTest(unittest.TestCase):
             pass
 
     def test_set_scale(self):
-        """Set the scale for a chromosome segment.
-        """
+        """Set the scale for a chromosome segment."""
         self.count_display.set_scale(self.names[1], 1.5)
 
         try:
@@ -413,8 +405,7 @@ class ChromosomeCountTest(unittest.TestCase):
             pass
 
     def test_color_from_count(self):
-        """Retrieve a color from a count number with the default color scheme.
-        """
+        """Retrieve a color from a count number with the default color scheme."""
         test_color = self.count_display._color_from_count(3)
         assert test_color == colors.blue, "Unexpected color %s" % test_color
 
@@ -428,8 +419,7 @@ class ChromosomeCountTest(unittest.TestCase):
             pass
 
     def test_fill_chromosome(self):
-        """Test filling out the information on a chromosome.
-        """
+        """Test filling out the information on a chromosome."""
         test_chr = BasicChromosome.Chromosome("1")
         self.count_display.add_count(self.names[2], 5)
         self.count_display.add_count(self.names[1], 2)
@@ -438,8 +428,7 @@ class ChromosomeCountTest(unittest.TestCase):
         new_chr = self.count_display.fill_chromosome(test_chr)
 
     def test_get_segment_info(self):
-        """Test retrieval of segment information.
-        """
+        """Test retrieval of segment information."""
         test_count_num = 1
         test_count_value = 5
 
@@ -453,10 +442,11 @@ class ChromosomeCountTest(unittest.TestCase):
 
         seg_info = self.count_display.get_segment_info()
 
-        assert seg_info[test_count_num][0] == test_count_value, \
-               "Did not set and retrieve counts correctly."
-        assert seg_info[test_label_num][1] == test_label_value, \
-               "Did not set and retrieve label correctly."
+        self.assertEqual(seg_info[test_count_num][0], test_count_value,
+                         "Did not set and retrieve counts correctly.")
+        self.assertEqual(seg_info[test_label_num][1], test_label_value,
+                         "Did not set and retrieve label correctly.")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

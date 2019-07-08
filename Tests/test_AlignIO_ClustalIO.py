@@ -2,7 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Tests for Bio.AlignIO.ClustalIO"""
+"""Tests for Bio.AlignIO.ClustalIO module."""
 
 import unittest
 
@@ -35,7 +35,7 @@ gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRL
 gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
 gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
                                     *. .:: : .
-"""
+"""  # noqa : W291
 
 # This example is a truncated version of the dataset used here:
 # http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm
@@ -77,7 +77,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
 HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
                                *.: . *        .  *     *:          :
 
-"""
+"""  # noqa : W291
 
 
 aln_example3 = \
@@ -143,7 +143,15 @@ Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
 AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
 AT3G20900.1-CDS      GCTGGGGATGGAGAGGGAACAGAGTAG
                      *************************  
-"""
+"""  # noqa : W291
+
+aln_example4 = \
+"""Kalign (2.0) alignment in ClustalW format
+
+Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
+
+"""  # noqa: E122 not clear to me, why this comes up here
 
 
 class TestClustalIO(unittest.TestCase):
@@ -189,8 +197,8 @@ class TestClustalIO(unittest.TestCase):
 
     def test_write_read(self):
         """Checking write/read."""
-        alignments = list(ClustalIterator(StringIO(aln_example1))) \
-                   + list(ClustalIterator(StringIO(aln_example2))) * 2
+        alignments = (list(ClustalIterator(StringIO(aln_example1)))
+                      + list(ClustalIterator(StringIO(aln_example2))) * 2)
         handle = StringIO()
         self.assertEqual(3, ClustalWriter(handle).write_file(alignments))
         handle.seek(0)
@@ -213,6 +221,12 @@ class TestClustalIO(unittest.TestCase):
         alignments = list(ClustalIterator(StringIO(aln_example3)))
         self.assertEqual(1, len(alignments))
         self.assertEqual(alignments[0]._version, "2.0.9")
+
+    def test_kalign_header(self):
+        """Make sure we can parse the Kalign header."""
+        alignments = next(ClustalIterator(StringIO(aln_example4)))
+        self.assertEqual(2, len(alignments))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

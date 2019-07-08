@@ -3,7 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# NOTE - This file has been split in two as a work arround for Jython JVM limits.
+# NOTE - This file has been split in two as a workaround for Jython JVM limits.
+
+"""Tests for prosite2 module."""
 
 import os
 import unittest
@@ -14,11 +16,10 @@ from Bio.ExPASy import Prosite
 class TestPrositeRead(unittest.TestCase):
 
     def test_read4(self):
-        "Parsing Prosite record ps00432.txt"
+        """Parsing Prosite record ps00432.txt."""
         filename = os.path.join('Prosite', 'ps00432.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "ACTINS_2")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00432")
@@ -453,11 +454,10 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.pdb_structs[59], '2BTF')
 
     def test_read5(self):
-        "Parsing Prosite record ps00488.txt"
+        """Parsing Prosite record ps00488.txt."""
         filename = os.path.join('Prosite', 'ps00488.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "PAL_HISTIDASE")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00488")
@@ -621,11 +621,10 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(record.pdb_structs[5], "1Y2M")
 
     def test_read6(self):
-        "Parsing Prosite record ps00546.txt"
+        """Parsing Prosite record ps00546.txt."""
         filename = os.path.join('Prosite', 'ps00546.txt')
-        handle = open(filename)
-        record = Prosite.read(handle)
-        handle.close()
+        with open(filename) as handle:
+            record = Prosite.read(handle)
         self.assertEqual(record.name, "CYSTEINE_SWITCH")
         self.assertEqual(record.type, "PATTERN")
         self.assertEqual(record.accession, "PS00546")

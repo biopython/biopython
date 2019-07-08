@@ -1,0 +1,30 @@
+#FormatVersion Mauve1
+#Sequence1File	a.fa
+#Sequence1Entry	1
+#Sequence1Format	FastA
+#Sequence2File	b.fa
+#Sequence2Entry	2
+#Sequence2Format	FastA
+#Sequence3File	c.fa
+#Sequence3Entry	3
+#Sequence3Format	FastA
+#BackboneFile	three.xmfa.bbcols
+> 1:0-0 + a.fa
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+> 2:5417-5968 + b.fa
+TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACGTGAGAGGAGCGCCCTAAGCTTTGGGAAATTCAAGC-
+--------------------------------------------------------------------------------
+CTGGAACGTACTTGCTGGTTTCGCTACTATTTCAAACAAGTTAGAGGCCGTTACCTCGGGCGAACGTATAAACCATTCTG
+> 3:9476-10076 - c.fa
+TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-GGGAGGAGATCGCCCCAAACGTATGGTGAGTCGGGCG
+TTTCCTATAGCTATAGGACCAATCCACTTACCATACGCCCGGCGTCGCCCAGTCCGGTTCGGTACCCTCCATGACCCACG
+---------------------------------------------------------AAATGAGGGCCCAGGGTATGCTT
+=
+> 2:5969-6015 + b.fa
+-----------------------
+GGGCGAACGTATAAACCATTCTG
+> 3:9429-9476 - c.fa
+TTCGGTACCCTCCATGACCCACG
+AAATGAGGGCCCAGGGTATGCTT

@@ -4,8 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Test for the SwissProt parser on SwissProt files.
-"""
+"""Test for the SwissProt parser on SwissProt files."""
 import os
 import unittest
 
@@ -17,15 +16,14 @@ from Bio.SeqRecord import SeqRecord
 class TestSwissProt(unittest.TestCase):
 
     def test_sp001(self):
-        "Parsing SwissProt file sp001"
+        """Parsing SwissProt file sp001."""
         filename = 'sp001'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -34,9 +32,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "N33 PROTEIN.")
         self.assertEqual(repr(seq_record.seq), "Seq('MGARGAPSRRRQAGRRLRYLPTGSFPFLLLLLLLCIQLGGGQKKKENLLAEKVE...DFE', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "N33_HUMAN")
@@ -62,15 +59,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -82,9 +78,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -96,16 +91,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp002(self):
-        "Parsing SwissProt file sp002"
-
+        """Parsing SwissProt file sp002."""
         filename = 'sp002'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -114,9 +107,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "CYSTEINE STRING PROTEIN (CSP).")
         self.assertEqual(repr(seq_record.seq), "Seq('MADQRQRSLSTSGESLYHVLGLDKNATSDDIKKSYRKLALKYHPDKNPDNPEAA...GFN', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "CSP_MOUSE")
@@ -145,15 +137,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -165,9 +156,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -179,16 +169,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp003(self):
-        "Parsing SwissProt file sp003"
-
+        """Parsing SwissProt file sp003."""
         filename = 'sp003'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -197,9 +185,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).")
         self.assertEqual(repr(seq_record.seq), "Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIG...ENQ', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "143E_HUMAN")
@@ -268,15 +255,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -288,9 +274,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -302,16 +287,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp004(self):
-        "Parsing SwissProt file sp004"
-
+        """Parsing SwissProt file sp004."""
         filename = 'sp004'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -320,9 +303,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "NAPHTHALENE 1,2-DIOXYGENASE SYSTEM FERREDOXIN COMPONENT.")
         self.assertEqual(repr(seq_record.seq), "Seq('TVKWIEAVALSDILEGDVLGVTVEGKELALYEVEGEIYATDNLCTHGSARMSDG...DLS', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "NDOA_PSEPU")
@@ -365,15 +347,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -385,9 +366,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -399,16 +379,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp005(self):
-        "Parsing SwissProt file sp005"
-
+        """Parsing SwissProt file sp005."""
         filename = 'sp005'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -417,9 +395,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "NADH-UBIQUINONE OXIDOREDUCTASE CHAIN 3 (EC 1.6.5.3).")
         self.assertEqual(repr(seq_record.seq), "Seq('MNLLLTLLTNTTLALLLVFIAFWLPQLNVYAEKTSPYECGFDPMGSARLPFSMK...WAE', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "NU3M_BALPH")
@@ -443,15 +420,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -463,9 +439,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -477,16 +452,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp006(self):
-        "Parsing SwissProt file sp006"
-
+        """Parsing SwissProt file sp006."""
         filename = 'sp006'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -495,9 +468,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO (EC 2.1.1.-).")
         self.assertEqual(repr(seq_record.seq), "Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGI...KPR', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "TCMO_STRGA")
@@ -517,15 +489,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -537,9 +508,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -551,16 +521,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp007(self):
-        "Parsing SwissProt file sp007"
-
+        """Parsing SwissProt file sp007."""
         filename = 'sp007'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -569,9 +537,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "CLAUDIN-1 (SENESCENCE-ASSOCIATED EPITHELIAL MEMBRANE PROTEIN).")
         self.assertEqual(repr(seq_record.seq), "Seq('MANAGLQLLGFILAFLGWIGAIVSTALPQWRIYSYAGDNIVTAQAMYEGLWMSC...DYV', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "CLD1_HUMAN")
@@ -600,15 +567,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -620,9 +586,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -634,16 +599,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp008(self):
-        "Parsing SwissProt file sp008"
-
+        """Parsing SwissProt file sp008."""
         filename = 'sp008'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -652,9 +615,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "HLA CLASS I HISTOCOMPATIBILITY ANTIGEN, A-2 ALPHA CHAIN PRECURSOR.")
         self.assertEqual(repr(seq_record.seq), "Seq('MAVMAPRTLVLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDD...CKV', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "1A02_HUMAN")
@@ -846,15 +808,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -866,9 +827,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -880,16 +840,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp009(self):
-        "Parsing SwissProt file sp009"
-
+        """Parsing SwissProt file sp009."""
         filename = 'sp009'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -898,9 +856,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).")
         self.assertEqual(repr(seq_record.seq), "Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "CHS3_BROFI")
@@ -920,15 +877,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -940,9 +896,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -954,16 +909,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp010(self):
-        "Parsing SwissProt file sp010"
-
+        """Parsing SwissProt file sp010."""
         filename = 'sp010'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -972,9 +925,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "5-HYDROXYTRYPTAMINE 4 RECEPTOR (5-HT-4) (SEROTONIN RECEPTOR) (5-HT4).")
         self.assertEqual(repr(seq_record.seq), "Seq('MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIK...SDT', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "5H4_HUMAN")
@@ -1036,15 +988,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1056,9 +1006,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -1070,16 +1019,12 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp011(self):
-        "Parsing SwissProt file sp011"
-
+        """Parsing SwissProt file sp011."""
         filename = 'sp011'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
-
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        seq_record = SeqIO.read(datafile, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -1088,9 +1033,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R) (LSH-R) (LUTEINIZING HORMONE RECEPTOR).")
         self.assertEqual(repr(seq_record.seq), "Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAG...LTH', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "LSHR_RAT")
@@ -1198,15 +1142,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1218,9 +1160,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -1232,16 +1173,12 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp012(self):
-        "Parsing SwissProt file sp012"
-
+        """Parsing SwissProt file sp012."""
         filename = 'sp012'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
-
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        seq_record = SeqIO.read(datafile, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -1250,9 +1187,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "UBIQUITIN.")
         self.assertEqual(repr(seq_record.seq), "Seq('MQIFVKTLTGKTITLEVESSDTIDNVKTKIQDKEGIPPDQQRLIFAGKQLEDGR...GGN', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "Q9Y736")
@@ -1274,15 +1210,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1294,9 +1228,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -1308,16 +1241,12 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp013(self):
-        "Parsing SwissProt file sp013"
-
+        """Parsing SwissProt file sp013."""
         filename = 'sp013'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
-
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        seq_record = SeqIO.read(datafile, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -1326,9 +1255,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "MITOCHONDRIAL 28S RIBOSOMAL PROTEIN S36 (MRP-S36).")
         self.assertEqual(repr(seq_record.seq), "Seq('MGSKMASASRVVQVVKPHTPLIRFPDRRDNPKPNVSEALRSAGLPSHSSVISQH...GPE', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "P82909")
@@ -1350,15 +1278,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1370,9 +1296,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -1384,16 +1309,12 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp014(self):
-        "Parsing SwissProt file sp014"
-
+        """Parsing SwissProt file sp014."""
         filename = 'sp014'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
-
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        seq_record = SeqIO.read(datafile, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -1402,9 +1323,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "PHOTOSYSTEM II REACTION CENTER L PROTEIN (PSII 5 KDA PROTEIN).")
         self.assertEqual(repr(seq_record.seq), "Seq('TQSNPNEQNVELNRTSLYWGLLLIFVLAVLFSNYFFN', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "PSBL_ORYSA")
@@ -1517,15 +1437,13 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        records = list(SeqIO.parse(datafile, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1537,9 +1455,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
@@ -1551,16 +1468,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].accessions, record.accessions)
 
     def test_sp015(self):
-        "Parsing SwissProt file sp015"
-
+        """Parsing SwissProt file sp015."""
         filename = 'sp015'
         # test the record parser
 
         datafile = os.path.join('SwissProt', filename)
 
-        test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "swiss")
-        test_handle.close()
+        with open(datafile) as test_handle:
+            seq_record = SeqIO.read(test_handle, "swiss")
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
 
@@ -1569,9 +1484,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.description, "")
         self.assertEqual(repr(seq_record.seq), "Seq('MSFQAPRRLLELAGQSLLRDQALAISVLDELPRELFPRLFVEAFTSRRCEVLKV...TPC', ProteinAlphabet())")
 
-        test_handle = open(datafile)
-        record = SwissProt.read(test_handle)
-        test_handle.close()
+        with open(datafile) as test_handle:
+            record = SwissProt.read(test_handle)
 
         # test a couple of things on the record -- this is not exhaustive
         self.assertEqual(record.entry_name, "IPI00383150.2")
@@ -1586,15 +1500,14 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(str(seq_record.seq), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assertTrue(seq_record.id in record.accessions)
+        self.assertIn(seq_record.id, record.accessions)
 
         # Now try using the iterator - note that all these
         # test cases have only one record.
 
         # With the SequenceParser
-        test_handle = open(datafile)
-        records = list(SeqIO.parse(test_handle, "swiss"))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SeqIO.parse(test_handle, "swiss"))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SeqRecord))
@@ -1606,9 +1519,8 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].id, seq_record.id)
 
         # With the RecordParser
-        test_handle = open(datafile)
-        records = list(SwissProt.parse(test_handle))
-        test_handle.close()
+        with open(datafile) as test_handle:
+            records = list(SwissProt.parse(test_handle))
 
         self.assertEqual(len(records), 1)
         self.assertTrue(isinstance(records[0], SwissProt.Record))
