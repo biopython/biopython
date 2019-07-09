@@ -34,10 +34,10 @@ def open_database(driver="MySQLdb", **kwargs):
     """Load an existing BioSQL-style database.
 
     This function is the easiest way to retrieve a connection to a
-    database, doing something like:
+    database, doing something like::
 
-        >>> from BioSeq import BioSeqDatabase
-        >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
+        from BioSQL import BioSeqDatabase
+        server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     Arguments:
      - driver - The name of the database driver to use for connecting. The
