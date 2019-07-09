@@ -91,7 +91,7 @@ EXCLUDE_DOCTEST_MODULES = [
     'Bio.Phylo.Applications._Fasttree',
     'Bio.Phylo._io',
     'Bio.Phylo.TreeConstruction',
-    'Bio.Phylo._utils'
+    'Bio.Phylo._utils',
 ]
 
 # Exclude modules with online activity
