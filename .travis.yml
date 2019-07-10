@@ -53,7 +53,12 @@ matrix:
         apt:
           packages:
       before_install: echo "Going to build API docs"
-      after_success:  .github/deploy_docs.sh
+      deploy:
+        provider: script
+        script: .github/deploy_docs.sh
+        skip_cleanup: true
+        on:
+          branch: master
     - stage: test
       python: 2.7
       env: TOXENV=py27-cover
