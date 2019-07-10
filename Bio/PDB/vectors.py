@@ -142,12 +142,12 @@ def refmat(p, q):
     Examples
     --------
     >>> from Bio.PDB.vectors import refmat
-    >>> p,q = Vector(1, 2, 3), Vector(2, 3, 5)
+    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
     >>> mirror = refmat(p, q)
     >>> qq = p.left_multiply(mirror)
     >>> print(q)
     <Vector 2.00, 3.00, 5.00>
-    >>> print(qq)  # q and qq should be the same
+    >>> print(qq)
     <Vector 1.21, 1.82, 3.03>
 
     """

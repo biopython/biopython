@@ -29,7 +29,7 @@ The library files can be found in directory 'fragment_data'.
     >>> parser = PDBParser()
     >>> structure = parser.get_structure("1a8o", "PDB/1A8O.pdb")
     >>> model = structure[0]
-    >>> fm = FragmentMapper(model, lsize=10, flength=5, fdir="PDB/fragment_data")
+    >>> fm = FragmentMapper(model, lsize=10, flength=5, fdir="PDB")
     >>> chain = model['A']
     >>> res152 = chain[152]
     >>> res157 = chain[157]

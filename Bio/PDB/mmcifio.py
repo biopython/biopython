@@ -59,7 +59,10 @@ class MMCIFIO(object):
         >>> structure = parser.get_structure("1a8o", "PDB/1A8O.cif")
         >>> io=MMCIFIO()
         >>> io.set_structure(structure)
-        >>> io.save("../../bio-pdb-mmcifio-out.cif")
+        >>> io.save("bio-pdb-mmcifio-out.cif")
+        >>> import os
+        >>> os.remove("bio-pdb-mmcifio-out.cif")  # tidy up
+
 
     """
 

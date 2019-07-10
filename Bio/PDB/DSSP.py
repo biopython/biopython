@@ -168,7 +168,7 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     Examples
     --------
-    How dssp_dict_frompdb_file could be use::
+    How dssp_dict_frompdb_file could be used::
 
         from Bio.PDB.DSSP import dssp_dict_from_pdb_file
         dssp_tuple = dssp_dict_from_pdb_file("/local-pdb/1fat.pdb")
@@ -312,7 +312,7 @@ class DSSP(AbstractResiduePropertyMap):
 
     Examples
     --------
-    How DSSP could be use::
+    How DSSP could be used::
 
         from Bio.PDB import PDBParser
         from Bio.PDB.DSSP import DSSP
