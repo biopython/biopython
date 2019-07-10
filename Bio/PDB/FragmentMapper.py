@@ -24,9 +24,19 @@ You need these files to use this module.
 The following example uses the library with 10 fragments of length 5.
 The library files can be found in directory 'fragment_data'.
 
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> from Bio.PDB.FragmentMapper import FragmentMapper
+    >>> parser = PDBParser()
+    >>> structure = parser.get_structure("1a8o", "PDB/1A8O.pdb")
     >>> model = structure[0]
-    >>> fm = FragmentMapper(model, lsize=10, flength=5, dir="fragment_data")
-    >>> fragment = fm[residue]
+    >>> fm = FragmentMapper(model, lsize=10, flength=5, fdir="PDB/fragment_data")
+    >>> chain = model['A']
+    >>> res152 = chain[152]
+    >>> res157 = chain[157]
+    >>> res152 in fm # is res152 mapped? (fragment of a C-alpha polypeptide)
+    False
+    >>> res157 in fm # is res157 mapped? (fragment of a C-alpha polypeptide)
+    True
 
 """
 

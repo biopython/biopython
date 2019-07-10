@@ -102,6 +102,8 @@ def rotaxis2m(theta, vector):
     Examples
     --------
     >>> from numpy import pi
+    >>> from Bio.PDB.vectors import rotaxis2m
+    >>> from Bio.PDB.vectors import Vector
     >>> m = rotaxis2m(pi, Vector(1, 0, 0))
     >>> Vector(1, 2, 3).left_multiply(m)
     <Vector 1.00, -2.00, -3.00>
@@ -139,13 +141,14 @@ def refmat(p, q):
 
     Examples
     --------
+    >>> from Bio.PDB.vectors import refmat
     >>> p,q = Vector(1, 2, 3), Vector(2, 3, 5)
     >>> mirror = refmat(p, q)
     >>> qq = p.left_multiply(mirror)
     >>> print(q)
     <Vector 2.00, 3.00, 5.00>
     >>> print(qq)  # q and qq should be the same
-    <Vector 1.65, 3.30, 4.94>
+    <Vector 1.21, 1.82, 3.03>
 
     """
     p = p.normalized()
@@ -175,11 +178,14 @@ def rotmat(p, q):
 
     Examples
     --------
-    >>> p,q = Vector(1, 2, 3), Vector(2, 3, 5)
+    >>> from Bio.PDB.vectors import rotmat
+    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
     >>> r = rotmat(p, q)
     >>> print(q)
     <Vector 2.00, 3.00, 5.00>
-    >>> print(p.left_multiply(r))
+    >>> print(p)
+    <Vector 1.00, 2.00, 3.00>
+    >>> p.left_multiply(r)
     <Vector 1.21, 1.82, 3.03>
 
     """

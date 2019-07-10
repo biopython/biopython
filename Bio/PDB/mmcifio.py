@@ -54,11 +54,12 @@ class MMCIFIO(object):
     Examples
     --------
         >>> from Bio.PDB import MMCIFParser
-        >>> p=MMCIFParser()
-        >>> s=p.get_structure("1fat", "1fat.cif")
+        >>> from Bio.PDB.mmcifio import MMCIFIO
+        >>> parser = MMCIFParser()
+        >>> structure = parser.get_structure("1a8o", "PDB/1A8O.cif")
         >>> io=MMCIFIO()
-        >>> io.set_structure(s)
-        >>> io.save("out.cif")
+        >>> io.set_structure(structure)
+        >>> io.save("../../bio-pdb-mmcifio-out.cif")
 
     """
 
