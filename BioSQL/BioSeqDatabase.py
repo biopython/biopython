@@ -253,8 +253,8 @@ class DBServer(object):
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
 
-        Examples:
-        ---------
+        Examples
+        --------
         Try to remove all references to items in a database::
 
             server.remove_database(name)
