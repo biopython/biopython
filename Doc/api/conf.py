@@ -104,6 +104,12 @@ html_theme = 'alabaster'
 #
 # html_theme_options = {}
 
+html_logo = "../images/biopython_logo.svg"
+
+# The RST source is transient, don't need/want to include it
+html_show_sourcelink = False
+html_copy_source = False
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
