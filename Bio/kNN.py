@@ -71,7 +71,7 @@ def train(xs, ys, k, typecode=None):
     return knn
 
 
-def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
+def calculate(knn, x, weight_fn=None, distance_fn=None):
     """Calculate the probability for each class.
 
     Arguments:
@@ -84,6 +84,9 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
 
     Returns a dictionary of the class to the weight given to the class.
     """
+    if weight_fn is None:
+        weight_fn = equal_weight
+
     x = numpy.asarray(x)
 
     order = []  # list of (distance, index)
@@ -113,7 +116,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     return weights
 
 
-def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
+def classify(knn, x, weight_fn=None, distance_fn=None):
     """Classify an observation into a class.
 
     If not specified, weight_fn will give all neighbors equal weight.
@@ -121,6 +124,9 @@ def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
     the distance between them.  If distance_fn is None (the default),
     the Euclidean distance is used.
     """
+    if weight_fn is None:
+        weight_fn = equal_weight
+
     weights = calculate(
         knn, x, weight_fn=weight_fn, distance_fn=distance_fn)
 
