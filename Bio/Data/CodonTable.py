@@ -178,6 +178,11 @@ class NCBICodonTable(CodonTable):
         self.start_codons = start_codons
         self.stop_codons = stop_codons
 
+    def __repr__(self):
+        """Represent the NCBI codon table class as a string for debugging."""
+        return "%s(id=%r, names=%r, ...)" % (self.__class__.__name__,
+                                             self.id, self.names)
+
 
 class NCBICodonTableDNA(NCBICodonTable):
     """Codon table for unambiguous DNA sequences."""
