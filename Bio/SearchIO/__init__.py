@@ -375,13 +375,13 @@ def read(handle, format=None, **kwargs):
     return first
 
 
-def to_dict(qresults, key_function=lambda rec: rec.id):
+def to_dict(qresults, key_function=None):
     """Turn a QueryResult iterator or list into a dictionary.
 
      - qresults     - Iterable returning QueryResult objects.
      - key_function - Optional callback function which when given a
                       QueryResult object should return a unique key for the
-                      dictionary.
+                      dictionary. Defaults to using .id of the result.
 
     This function enables access of QueryResult objects from a single search
     output file using its identifier.
@@ -423,6 +423,12 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     than 3.6 (and for other Python older than 3.7) so that you can always
     assume the record order is preserved.
     """
+    def _default_key_function(rec):
+        return rec.id
+
+    if key_function is None:
+        key_function = _default_key_function
+
     qdict = _dict()
     for qresult in qresults:
         key = key_function(qresult)
