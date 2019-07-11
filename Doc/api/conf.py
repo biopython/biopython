@@ -93,16 +93,16 @@ autodoc_mock_imports = ['MySQLdb', 'Bio.Restriction.Restriction']
 
 # -- Options for HTML output ----------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'alabaster'
+# Sphinx default was html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
+# Sphinx Read The Docs theme settings, see
+# https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html
+html_theme_options = {
+    "prev_next_buttons_location": "both",
+    # Same a Hyde theme sidebar on biopython.org:
+    "style_nav_header_background": "#10100F",
+}
 
 html_logo = "../images/biopython_logo.svg"
 
