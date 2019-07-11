@@ -89,7 +89,7 @@ autodoc_default_values = {
 }
 
 # To avoid import errors.
-autodoc_mock_imports = ['MySQLdb']
+autodoc_mock_imports = ['MySQLdb', 'Bio.Restriction.Restriction']
 
 # -- Options for HTML output ----------------------------------------------
 
