@@ -13,7 +13,7 @@ from Bio._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Alphabet import generic_protein
 
-__all__ = ('Hhsuite2TextParser')
+__all__ = ('Hhsuite2TextParser', )
 
 # precompile regex patterns for faster processing
 # regex for query name capture
