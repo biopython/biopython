@@ -13,9 +13,10 @@ It is used by Bio.GenBank to parse GenBank files
 It is also used by Bio.SeqIO to parse GenBank and EMBL files
 
 Feature Table Documentation:
-http://www.insdc.org/files/feature_table.html
-http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
-ftp://ftp.ncbi.nih.gov/genbank/docs/
+
+- http://www.insdc.org/files/feature_table.html
+- http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
+- ftp://ftp.ncbi.nih.gov/genbank/docs/
 """
 # 17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
 # These are GenBank files that summarize the content of a project, and provide lists of
