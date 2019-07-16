@@ -13,8 +13,9 @@ import numpy
 def m2rotaxis(m):
     """Return angles, axis pair that corresponds to rotation matrix m.
 
-    The case where `m` is the identity matrix corresponds to a singularity where any
-    rotation axis is valid. In that case, `Vector([1,0,0])`, is returned.
+    The case where ``m`` is the identity matrix corresponds to a singularity
+    where any rotation axis is valid. In that case, ``Vector([1, 0, 0])``,
+    is returned.
     """
     eps = 1e-5
 
@@ -326,8 +327,9 @@ class Vector(object):
     def normalize(self):
         """Normalize the Vector object.
 
-        Changes the state of `self` and doesn't return a value. If you need to chain function
-        calls or create a new object use the `normalized` method.
+        Changes the state of ``self`` and doesn't return a value.
+        If you need to chain function calls or create a new object
+        use the ``normalized`` method.
         """
         if self.norm():
             self._ar = self._ar / self.norm()
@@ -335,7 +337,7 @@ class Vector(object):
     def normalized(self):
         """Return a normalized copy of the Vector.
 
-        To avoid allocating new objects use the `normalize` method.
+        To avoid allocating new objects use the ``normalize`` method.
         """
         v = self.copy()
         v.normalize()

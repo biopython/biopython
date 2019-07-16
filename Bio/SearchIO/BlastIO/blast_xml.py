@@ -193,9 +193,9 @@ _RE_ID_DESC_PATTERN = re.compile(" +")
 def _extract_ids_and_descs(raw_id, raw_desc):
     """Extract IDs, descriptions, and raw ID from raw values (PRIVATE).
 
-    Given values of the `Hit_id` and `Hit_def` elements, this function returns
-    a tuple of three elements: all IDs, all descriptions, and the
-    BLAST-generated ID. The BLAST-generated ID is set to `None` if no
+    Given values of the ``Hit_id`` and ``Hit_def`` elements, this function
+    returns a tuple of three elements: all IDs, all descriptions, and the
+    BLAST-generated ID. The BLAST-generated ID is set to ``None`` if no
     BLAST-generated IDs are present.
 
     """

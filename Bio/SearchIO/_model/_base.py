@@ -18,7 +18,7 @@ class _BaseSearchObject(object):
         """Transfer instance attributes to the given object (PRIVATE).
 
         This method is used to transfer attributes set externally (for example
-        using `setattr`) to a new object created from this one (for example
+        using ``setattr``) to a new object created from this one (for example
         from slicing).
 
         The reason this method is necessary is because different parsers will

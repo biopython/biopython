@@ -177,7 +177,7 @@ class Peaklist(object):
         return self.dict
 
     def write_header(self, outfn):
-        """Write header lines from input file to handle `outfn`."""
+        """Write header lines from input file to handle ``outfn``."""
         with open(outfn, 'w') as outfile:
             outfile.write(self.firstline)
             outfile.write("\012")
@@ -209,7 +209,7 @@ def replace_entry(line, fieldn, newentry):
 
 
 def _find_start_entry(line, n):
-    """Find the starting character for entry `n` in a space delimited `line` (PRIVATE).
+    """Find the starting character for entry ``n`` in a space delimited ``line`` (PRIVATE).
 
     n is counted starting with 1.
     The n=1 field by definition begins at the first character.
@@ -217,7 +217,7 @@ def _find_start_entry(line, n):
     Returns
     -------
     starting character : str
-        The starting character for entry `n`.
+        The starting character for entry ``n``.
 
     """
     # This function is used by replace_entry
@@ -269,7 +269,7 @@ def data_table(fn_list, datalabel, keyatom):
     Returns
     -------
     outlist : list
-       List of table rows indexed by `keyatom`.
+       List of table rows indexed by ``keyatom``.
 
     """
     # TODO - Clarify this docstring, add an example?

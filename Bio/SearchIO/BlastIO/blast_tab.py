@@ -243,7 +243,7 @@ class BlastTabParser(object):
         return fields
 
     def _parse_commented_qresult(self):
-        """Yield `QueryResult` objects from a commented file (PRIVATE)."""
+        """Yield ``QueryResult`` objects from a commented file (PRIVATE)."""
         while True:
             comments = self._parse_comments()
             if comments:
@@ -476,7 +476,7 @@ class BlastTabParser(object):
     def _get_frag_frame(self, frag, seq_type, parsedict):
         """Return fragment frame for given object (PRIVATE).
 
-        Returns `HSPFragment` frame given the object, its sequence type,
+        Returns ``HSPFragment`` frame given the object, its sequence type,
         and its parsed dictionary values.
         """
         assert seq_type in ('query', 'hit')
@@ -493,7 +493,7 @@ class BlastTabParser(object):
     def _get_frag_strand(self, frag, seq_type, parsedict):
         """Return fragment strand for given object (PRIVATE).
 
-        Returns `HSPFragment` strand given the object, its sequence type,
+        Returns ``HSPFragment`` strand given the object, its sequence type,
         and its parsed dictionary values.
         """
         # NOTE: this will never set the strands as 0 for protein

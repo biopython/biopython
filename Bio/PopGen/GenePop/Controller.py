@@ -740,7 +740,7 @@ class GenePopController(object):
          - Iterator of tuples
            (Locus name, Fis, Fst, Fit, Qintra, Qinter)
 
-        Will create a file called `fname.FST`.
+        Will create a file called ``fname.FST``.
 
         This does not return the genotype frequencies.
 

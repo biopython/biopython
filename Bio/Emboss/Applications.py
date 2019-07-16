@@ -407,13 +407,13 @@ class Primer3Commandline(_EmbossCommandLine):
                     Option added in EMBOSS 6.1.0, replacing -oligoselfany
                     """),
             _Option(["-oligoselfend", "oligoselfend"],
-                    """Maximum allowable 3`-anchored global alignment score "
+                    """Maximum allowable 3'-anchored global alignment score "
                     for self-complementarity (OBSOLETE).
 
                     Option replaced in EMBOSS 6.1.0 by -oendself
                     """),
             _Option(["-oendself", "oendself"],
-                    """Max 3`-anchored self-complementarity global alignment score.
+                    """Max 3'-anchored self-complementarity global alignment score.
 
                     Option added in EMBOSS 6.1.0, replacing -oligoselfend
                     """),

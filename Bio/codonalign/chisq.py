@@ -27,8 +27,8 @@ def chisqprob(x, df):
     Returns
     -------
     chisqprob : ndarray
-        The area from `chisq` to infinity under the Chi^2 probability
-        distribution with degrees of freedom `df`.
+        The area from ``chisq`` to infinity under the Chi^2 probability
+        distribution with degrees of freedom ``df``.
 
     """
     if x <= 0:

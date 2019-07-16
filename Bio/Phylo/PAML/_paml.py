@@ -94,7 +94,7 @@ class Paml(object):
         a return code of 0, otherwise raise an error.
 
         The arguments may be passed as either absolute or relative
-        paths, despite the fact that paml requires relative paths.`
+        paths, despite the fact that paml requires relative paths.
         """
         if self.alignment is None:
             raise ValueError("Alignment file not specified.")

@@ -53,7 +53,7 @@ Typical use::
     dssp = DSSP(model, "/local-pdb/1mot.pdb")
 
 Note that the recent DSSP executable from the DSSP-2 package was
-renamed from `dssp` to `mkdssp`. If using a recent DSSP release,
+renamed from ``dssp`` to ``mkdssp``. If using a recent DSSP release,
 you may need to provide the name of your DSSP executable::
 
     dssp = DSSP(model, '/local-pdb/1mot.pdb', dssp='mkdssp')

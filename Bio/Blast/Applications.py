@@ -647,7 +647,7 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     Bioinformatics 21:902-911, 2005, unconditionally
 
                     For programs other than tblastn, must either be absent or be D, F or 0
-                    Default = `2'
+                    Default = 2.
                     """,
                     equate=False),
             # Query filtering options:
@@ -1006,7 +1006,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                                  Bioinformatics 15:1000-1011, 1999
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
-                    Default = `0'
+                    Default = 0.
                     """,
                     checker_function=lambda value: value in "Dd0Ff1Tt",
                     equate=False),
@@ -1076,7 +1076,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                                  Bioinformatics 15:1000-1011, 1999
                     1 or T or t: Composition-based statistics as in NAR 29:2994-3005, 2001
 
-                    Default = `0'
+                    Default = 0.
                     """,
                     checker_function=lambda value: value in "Dd0Ff1Tt",
                     equate=False),
