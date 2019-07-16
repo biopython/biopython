@@ -102,6 +102,8 @@ html_theme_options = {
     "prev_next_buttons_location": "both",
     # Same a Hyde theme sidebar on biopython.org:
     "style_nav_header_background": "#10100F",
+    # Since we have the Biopython logo via html_logo,
+    "logo_only": True,
 }
 
 html_logo = "../images/biopython_logo.svg"
