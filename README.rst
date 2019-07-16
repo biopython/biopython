@@ -249,8 +249,7 @@ bug database and our mailing lists to see if it has already been reported
 (and hopefully fixed), and if not please do report the bug. We can't fix
 problems we don't know about ;)
 
-* Old issue tracker: https://redmine.open-bio.org/projects/biopython
-* Current issue tracker: https://github.com/biopython/biopython/issues
+Issue tracker: https://github.com/biopython/biopython/issues
 
 If you suspect the problem lies within a parser, it is likely that the data
 format has changed and broken the parsing code.  (The text BLAST and GenBank
@@ -261,9 +260,7 @@ ones in ``Bio.SeqIO`` or ``Bio.Blast``) from our git repository. However, be
 careful when doing this, because the code in github is not as well-tested
 as released code, and may contain new dependencies.
 
-Finally, you can send a bug report to the bug database or the mailing list at
-biopython@biopython.org (subscription required).  In the bug report, please
-let us know:
+In any bug report, please let us know:
 
 1. Which operating system and hardware (32 bit or 64 bit) you are using
 2. Python version
