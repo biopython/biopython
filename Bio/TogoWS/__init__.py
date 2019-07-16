@@ -189,6 +189,7 @@ def search_iter(db, query, limit=None, batch=100):
        TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
+
     >>> from Bio import TogoWS
     >>> for id in TogoWS.search_iter("pubmed", "diabetes+human", limit=10):
     ...     print("PubMed ID: %s" %id) # maybe fetch data with entry?
@@ -349,3 +350,8 @@ def _open(url, post=None):
 
 
 _open.previous = 0
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)
