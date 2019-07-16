@@ -8,8 +8,8 @@
 
 The SearchIO submodule provides parsers, indexers, and writers for outputs from
 various sequence search programs. It provides an API similar to SeqIO and
-AlignIO, with the following main functions: `parse`, `read`, `to_dict`, `index`,
-`index_db`, `write`, and `convert`.
+AlignIO, with the following main functions: ``parse``, ``read``, ``to_dict``,
+``index``, ``index_db``, ``write``, and ``convert``.
 
 SearchIO parses a search output file's contents into a hierarchy of four nested
 objects: QueryResult, Hit, HSP, and HSPFragment. Each of them models a part of
@@ -36,7 +36,7 @@ The main function for parsing search output files is Bio.SearchIO.parse(...).
 This function parses a given search output file and returns a generator object
 that yields one QueryResult object per iteration.
 
-`parse` takes two arguments: 1) a file handle or a filename of the input file
+``parse`` takes two arguments: 1) a file handle or a filename of the input file
 (the search output file) and 2) the format name.
 
     >>> from Bio import SearchIO
@@ -48,7 +48,7 @@ that yields one QueryResult object per iteration.
     33213 mir_3
 
 SearchIO also provides the Bio.SearchIO.read(...) function, which is intended
-for use on search output files containing only one query. `read` returns one
+for use on search output files containing only one query. ``read`` returns one
 QueryResult object and will raise an exception if the source file contains more
 than one queries:
 
@@ -91,8 +91,8 @@ attribute, an exception will be raised.
 Conversion
 ==========
 SearchIO provides a shortcut function Bio.SearchIO.convert(...) to convert a
-given file into another format. Under the hood, `convert` simply parses a given
-output file and writes it to another using the `parse` and `write` functions.
+given file into another format. Under the hood, ``convert`` simply parses a given
+output file and writes it to another using the ``parse`` and ``write`` functions.
 
 Note that the same restrictions found in Bio.SearchIO.write(...) applies to the
 convert function as well.
@@ -291,7 +291,7 @@ def parse(handle, format=None, **kwargs):
     Search 33212 has 44 hits
     Search 33213 has 95 hits
 
-    Depending on the file format, `parse` may also accept additional keyword
+    Depending on the file format, ``parse`` may also accept additional keyword
     argument(s) that modifies the behavior of the format parser. Here is a
     simple example, where the keyword argument enables parsing of a commented
     BLAST tabular output file:
@@ -328,7 +328,7 @@ def read(handle, format=None, **kwargs):
      - format - Lower case string denoting one of the supported formats.
      - kwargs - Format-specific keyword arguments.
 
-    `read` is used for parsing search output files containing exactly one query:
+    ``read`` is used for parsing search output files containing exactly one query:
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
@@ -353,7 +353,7 @@ def read(handle, format=None, **kwargs):
     ...
     ValueError: More than one query results found in handle
 
-    Like `parse`, `read` may also accept keyword argument(s) depending on the
+    Like ``parse``, ``read`` may also accept keyword argument(s) depending on the
     search output file format.
 
     """
@@ -413,7 +413,7 @@ def to_dict(qresults, key_function=None):
 
     As this function loads all QueryResult objects into memory, it may be
     unsuitable for dealing with files containing many queries. In that case, it
-    is recommended that you use either `index` or `index_db`.
+    is recommended that you use either ``index`` or ``index_db``.
 
     Since Python 3.7, the default dict class maintains key order, meaning
     this dictionary will reflect the order of records given to it. For
@@ -523,7 +523,7 @@ def index_db(index_filename, filenames=None, format=None,
                       key for the dictionary.
      - kwargs       - Format-specific keyword arguments.
 
-    The `index_db` function is similar to `index` in that it indexes the start
+    The ``index_db`` function is similar to ``index`` in that it indexes the start
     position of all queries from search output files. The main difference is
     instead of storing these indices in-memory, they are written to disk as an
     SQLite database file. This allows the indices to persist between Python
@@ -539,7 +539,7 @@ def index_db(index_filename, filenames=None, format=None,
     QueryResult(id='33212', 44 hits)
     >>> db_idx.close()
 
-    `index_db` can also index multiple files and store them in the same
+    ``index_db`` can also index multiple files and store them in the same
     database, making it easier to group multiple search files and access them
     from a single interface.
 
@@ -556,7 +556,7 @@ def index_db(index_filename, filenames=None, format=None,
     One common example where this is helpful is if you had a large set of
     query sequences (say ten thousand) which you split into ten query files
     of one thousand sequences each in order to run as ten separate BLAST jobs
-    on a cluster. You could use `index_db` to index the ten BLAST output
+    on a cluster. You could use ``index_db`` to index the ten BLAST output
     files together for seamless access to all the results as one dictionary.
 
     Note that ':memory:' rather than an index filename tells SQLite to hold
@@ -599,7 +599,7 @@ def write(qresults, handle, format=None, **kwargs):
      - format   - Lower case string denoting one of the supported formats.
      - kwargs   - Format-specific keyword arguments.
 
-    The `write` function writes QueryResult object(s) into the given output
+    The ``write`` function writes QueryResult object(s) into the given output
     handle / filename. You can supply it with a single QueryResult object or an
     iterable returning one or more QueryResult objects. In both cases, the
     function will return a tuple of four values: the number of QueryResult, Hit,
@@ -649,11 +649,11 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
      - in_kwargs  - Dictionary of keyword arguments for the input function.
      - out_kwargs - Dictionary of keyword arguments for the output function.
 
-    The convert function is a shortcut function for `parse` and `write`. It has
-    the same return type as `write`. Format-specific arguments may be passed to
+    The convert function is a shortcut function for ``parse`` and ``write``. It has
+    the same return type as ``write``. Format-specific arguments may be passed to
     the convert function, but only as dictionaries.
 
-    Here is an example of using `convert` to convert from a BLAST+ XML file
+    Here is an example of using ``convert`` to convert from a BLAST+ XML file
     into a tabular file with comments::
 
         from Bio import SearchIO

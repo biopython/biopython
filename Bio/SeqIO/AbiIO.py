@@ -345,7 +345,7 @@ def _get_string_tag(opt_bytes_value, default=None):
     try:
         return _bytes_to_string(opt_bytes_value)
     except UnicodeDecodeError:
-        # If we are in this 'except' block, a `.decode` call must have been
+        # If we are in this 'except' block, a .decode call must have been
         # attempted, and so we must be on Python 3, which means opt_bytes_value
         # is a byte string.
         return opt_bytes_value.decode(encoding=sys.getdefaultencoding())

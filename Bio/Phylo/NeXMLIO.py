@@ -110,7 +110,7 @@ def write(trees, handle, plain=False, **kwargs):
 class Parser(object):
     """Parse a NeXML tree given a file handle.
 
-    Based on the parser in `Bio.Nexus.Trees`.
+    Based on the parser in ``Bio.Nexus.Trees``.
     """
 
     def __init__(self, handle):

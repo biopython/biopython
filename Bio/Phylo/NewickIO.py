@@ -88,7 +88,7 @@ def _get_comment(clade):
 class Parser(object):
     """Parse a Newick tree given a file handle.
 
-    Based on the parser in `Bio.Nexus.Trees`.
+    Based on the parser in ``Bio.Nexus.Trees``.
     """
 
     def __init__(self, handle):

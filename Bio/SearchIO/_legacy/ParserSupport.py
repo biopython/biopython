@@ -79,7 +79,7 @@ class TaggingConsumer(AbstractConsumer):
         """Initialize.
 
         Arguments:
-         - handle to log to, defaults to `sys.stdout`
+         - handle to log to, defaults to ``sys.stdout``
          - colwidth for logging to the handle
          - maxwidth for truncation when logging
 

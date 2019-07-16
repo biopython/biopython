@@ -366,8 +366,8 @@ class DistanceCalculator(object):
     :Parameters:
         model : str
             Name of the model matrix to be used to calculate distance.
-            The attribute `dna_matrices` contains the available model
-            names for DNA sequences and `protein_matrices` for protein
+            The attribute ``dna_matrices`` contains the available model
+            names for DNA sequences and ``protein_matrices`` for protein
             sequences.
 
     Examples
@@ -541,7 +541,7 @@ class DistanceTreeConstructor(TreeConstructor):
             Distance tree construction method, 'nj'(default) or 'upgma'.
         distance_calculator : DistanceCalculator
             The distance matrix calculator for multiple sequence alignment.
-            It must be provided if `build_tree` will be called.
+            It must be provided if ``build_tree`` will be called.
 
     Examples
     --------

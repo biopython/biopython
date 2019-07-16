@@ -6,14 +6,14 @@
 """PhyloXML reader/parser, writer, and associated functions.
 
 Instantiates tree elements from a parsed PhyloXML file, and constructs an XML
-file from a `Bio.Phylo.PhyloXML` object.
+file from a ``Bio.Phylo.PhyloXML`` object.
 
 About capitalization:
  - phyloXML means the file format specification
- - PhyloXML means the Biopython module `Bio.Phylo.PhyloXML` and its classes
- - Phyloxml means the top-level class used by `PhyloXMLIO.read` (but not
-   `Bio.Phylo.read`!), containing a list of Phylogenies (objects derived from
-   `BaseTree.Tree`)
+ - PhyloXML means the Biopython module ``Bio.Phylo.PhyloXML`` and its classes
+ - Phyloxml means the top-level class used by ``PhyloXMLIO.read`` (but not
+   ``Bio.Phylo.read``!), containing a list of Phylogenies (objects derived from
+   ``BaseTree.Tree``)
 
 """
 
@@ -81,7 +81,7 @@ def read(file):
     The children of the root node are phylogenies and possibly other arbitrary
     (non-phyloXML) objects.
 
-    :returns: a single `Bio.Phylo.PhyloXML.Phyloxml` object.
+    :returns: a single ``Bio.Phylo.PhyloXML.Phyloxml`` object.
 
     """
     return Parser(file).read()
@@ -91,9 +91,9 @@ def parse(file):
     """Iterate over the phylogenetic trees in a phyloXML file.
 
     This ignores any additional data stored at the top level, but may be more
-    memory-efficient than the `read` function.
+    memory-efficient than the ``read`` function.
 
-    :returns: a generator of `Bio.Phylo.PhyloXML.Phylogeny` objects.
+    :returns: a generator of ``Bio.Phylo.PhyloXML.Phylogeny`` objects.
 
     """
     return Parser(file).parse()
@@ -104,9 +104,9 @@ def write(obj, file, encoding=DEFAULT_ENCODING, indent=True):
 
     :Parameters:
         obj
-            an instance of `Phyloxml`, `Phylogeny` or `BaseTree.Tree`, or an
-            iterable of either of the latter two. The object will be converted
-            to a Phyloxml object before serialization.
+            an instance of ``Phyloxml``, ``Phylogeny`` or ``BaseTree.Tree``,
+            or an iterable of either of the latter two. The object will be
+            converted to a Phyloxml object before serialization.
         file
             either an open handle or a file name.
 

@@ -115,7 +115,7 @@ def _attribute_matcher(kwargs):
     to be searched, including phyloXML annotations.
 
     Otherwise, for a tree element to match the specification (i.e. for the
-    function produced by `_attribute_matcher` to return True when given a tree
+    function produced by ``_attribute_matcher`` to return True when given a tree
     element), it must have each of the attributes specified by the keys and
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
@@ -163,8 +163,8 @@ def _function_matcher(matcher_func):
 def _object_matcher(obj):
     """Retrieve a matcher function by passing an arbitrary object (PRIVATE).
 
-    i.e. passing a `TreeElement` such as a `Clade` or `Tree` instance returns an
-    identity matcher, passing a type such as the `PhyloXML.Taxonomy` class
+    Passing a ``TreeElement`` such as a ``Clade`` or ``Tree`` instance returns
+    an identity matcher, passing a type such as the ``PhyloXML.Taxonomy`` class
     returns a class matcher, and passing a dictionary returns an attribute
     matcher.
 
@@ -210,8 +210,8 @@ def _combine_matchers(target, kwargs, require_spec):
 def _combine_args(first, *rest):
     """Convert ``[targets]`` or ``*targets`` arguments to a single iterable (PRIVATE).
 
-    This helps other functions work like the built-in functions `max` and
-    `min`.
+    This helps other functions work like the built-in functions ``max`` and
+    ``min``.
     """
     # Background: is_monophyletic takes a single list or iterable (like the
     # same method in Bio.Nexus.Trees); root_with_outgroup and common_ancestor
@@ -223,13 +223,13 @@ def _combine_args(first, *rest):
                                            isinstance(first, type) or
                                            isinstance(first, basestring) or
                                            isinstance(first, dict)):
-        # `terminals` is an iterable of targets
+        # terminals is an iterable of targets
         if rest:
             raise ValueError("Arguments must be either a single list of "
                              "targets, or separately specified targets "
                              "(e.g. foo(t1, t2, t3)), but not both.")
         return first
-    # `terminals` is a single target -- wrap in a container
+    # terminals is a single target -- wrap in a container
     return itertools.chain([first], rest)
 
 
@@ -258,7 +258,7 @@ class TreeElement(object):
 class TreeMixin(object):
     """Methods for Tree- and Clade-based classes.
 
-    This lets `Tree` and `Clade` support the same traversal and searching
+    This lets ``Tree`` and ``Clade`` support the same traversal and searching
     operations without requiring Clade to inherit from Tree, so Clade isn't
     required to have all of Tree's attributes -- just ``root`` (a Clade
     instance) and ``is_terminal``.
@@ -269,7 +269,7 @@ class TreeMixin(object):
     def _filter_search(self, filter_func, order, follow_attrs):
         """Perform a BFS or DFS traversal through all elements in this tree (PRIVATE).
 
-        :returns: generator of all elements for which `filter_func` is True.
+        :returns: generator of all elements for which ``filter_func`` is True.
 
         """
         order_opts = {'preorder': _preorder_traverse,
@@ -410,7 +410,7 @@ class TreeMixin(object):
     def trace(self, start, finish):
         """List of all clade object between two targets in this tree.
 
-        Excluding `start`, including `finish`.
+        Excluding ``start``, including ``finish``.
         """
         mrca = self.common_ancestor(start, finish)
         fromstart = mrca.get_path(start)[-2::-1]
@@ -517,7 +517,7 @@ class TreeMixin(object):
 
         The given targets must be terminals of the tree.
 
-        To match both `Bio.Nexus.Trees` and the other multi-target methods in
+        To match both ``Bio.Nexus.Trees`` and the other multi-target methods in
         Bio.Phylo, arguments to this method can be specified either of two ways:
         (i) as a single list of targets, or (ii) separately specified targets,
         e.g. is_monophyletic(t1, t2, t3) -- but not both.
@@ -744,7 +744,7 @@ class Tree(TreeElement, TreeMixin):
     def from_clade(cls, clade, **kwargs):
         """Create a new Tree object given a clade.
 
-        Keyword arguments are the usual `Tree` constructor parameters.
+        Keyword arguments are the usual ``Tree`` constructor parameters.
         """
         root = copy.deepcopy(clade)
         return cls(root, **kwargs)
@@ -949,7 +949,7 @@ class Tree(TreeElement, TreeMixin):
         This method supports the ``format`` built-in function added in Python
         2.6/3.0.
 
-        :param format_spec: a lower-case string supported by `Bio.Phylo.write`
+        :param format_spec: a lower-case string supported by ``Bio.Phylo.write``
             as an output file format.
 
         """

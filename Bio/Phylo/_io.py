@@ -5,7 +5,8 @@
 
 """I/O function wrappers for phylogenetic tree formats.
 
-This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
+This API follows the same semantics as Biopython's ``SeqIO`` and
+``AlignIO``.
 """
 
 from __future__ import print_function
@@ -55,8 +56,8 @@ def parse(file, format, **kwargs):
 def read(file, format, **kwargs):
     """Parse a file in the given format and return a single tree.
 
-    Raises a `ValueError` if there are zero or multiple trees -- if this occurs,
-    use `parse` instead to get the complete sequence of trees.
+    Raises a ``ValueError`` if there are zero or multiple trees -- if this
+    occurs, use ``parse`` instead to get the complete sequence of trees.
     """
     try:
         tree_gen = parse(file, format, **kwargs)

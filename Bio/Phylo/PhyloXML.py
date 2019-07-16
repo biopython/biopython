@@ -121,7 +121,7 @@ class Other(PhyloElement):
         value : string
             text contained directly within this XML node
         children : list
-            child nodes, if any (also `Other` instances)
+            child nodes, if any (also ``Other`` instances)
 
     """
 
@@ -168,7 +168,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         properties : list
             Property objects
         other : list
-            non-phyloXML elements (type `Other`)
+            non-phyloXML elements (type ``Other``)
 
     """
 
@@ -201,7 +201,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def from_tree(cls, tree, **kwargs):
         """Create a new Phylogeny given a Tree (from Newick/Nexus or BaseTree).
 
-        Keyword arguments are the usual `Phylogeny` constructor parameters.
+        Keyword arguments are the usual ``Phylogeny`` constructor parameters.
         """
         phy = cls(
             root=Clade.from_clade(tree.root),
@@ -215,14 +215,14 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def from_clade(cls, clade, **kwargs):
         """Create a new Phylogeny given a Newick or BaseTree Clade object.
 
-        Keyword arguments are the usual `PhyloXML.Clade` constructor parameters.
+        Keyword arguments are the usual ``PhyloXML.Clade`` constructor parameters.
         """
         return Clade.from_clade(clade).to_phylogeny(**kwargs)
 
     def as_phyloxml(self):
         """Return this tree, a PhyloXML-compatible Phylogeny object.
 
-        Overrides the `BaseTree` method.
+        Overrides the ``BaseTree`` method.
         """
         return self
 
@@ -251,7 +251,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def _get_confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value (PRIVATE).
 
-        See Also: `Clade.confidence`, `Clade.taxonomy`
+        See Also: ``Clade.confidence``, ``Clade.taxonomy``
 
         """
         if len(self.confidences) == 0:
@@ -571,7 +571,7 @@ class Confidence(PhyloElement):
     """A general purpose confidence element.
 
     For example, this can be used to express the bootstrap support value of a
-    clade (in which case the `type` attribute is 'bootstrap').
+    clade (in which case the ``type`` attribute is 'bootstrap').
 
     :Parameters:
         value : float
@@ -790,9 +790,9 @@ class Distribution(PhyloElement):
     :Parameters:
         desc : string
             free-text description of the location
-        points : list of `Point` objects
+        points : list of ``Point`` objects
             coordinates (similar to the 'Point' element in Google's KML format)
-        polygons : list of `Polygon` objects
+        polygons : list of ``Polygon`` objects
             coordinate sets defining geographic regions
 
     """
@@ -978,7 +978,7 @@ class Polygon(PhyloElement):
 class Property(PhyloElement):
     """A typed and referenced property from an external resources.
 
-    Can be attached to `Phylogeny`, `Clade`, and `Annotation` objects.
+    Can be attached to ``Phylogeny``, ``Clade``, and ``Annotation`` objects.
 
     :Parameters:
         value : string

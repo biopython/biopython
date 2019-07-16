@@ -6,7 +6,7 @@
 
 """Classes corresponding to NeXML trees.
 
-See classes in `Bio.Nexus`: Trees.Tree, Trees.NodeData, and Nodes.Chain.
+See classes in ``Bio.Nexus``: Trees.Tree, Trees.NodeData, and Nodes.Chain.
 """
 
 from Bio.Phylo import BaseTree

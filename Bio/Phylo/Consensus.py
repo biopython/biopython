@@ -587,8 +587,8 @@ def bootstrap_consensus(msa, times, tree_constructor, consensus):
         tree_constructor : TreeConstructor
             Tree constructor to be used to build trees.
         consensus : function
-            Consensus method in this module: `strict_consensus`,
-            `majority_consensus`, `adam_consensus`.
+            Consensus method in this module: ``strict_consensus``,
+            ``majority_consensus``, ``adam_consensus``.
 
     """
     trees = bootstrap_trees(msa, times, tree_constructor)

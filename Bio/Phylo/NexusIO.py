@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""I/O function wrappers for `Bio.Nexus` trees."""
+"""I/O function wrappers for ``Bio.Nexus`` trees."""
 
 from itertools import chain
 
