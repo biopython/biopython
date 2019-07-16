@@ -105,6 +105,7 @@ possible, especially the following contributors:
 - Sergio Valqui
 - Victor Lin
 - Wibowo 'Bow' Arindrarto
+- Zheng Ruan
 
 
 18 December 2018: Biopython 1.73
