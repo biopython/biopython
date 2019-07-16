@@ -58,12 +58,12 @@ class DialignCommandline(AbstractCommandline):
                     "Anchored alignment. Requires a file <seq_file>.anc "
                     "containing anchor points."),
             _Switch(["-cs", "cs"],
-                    "If segments are translated, not only the `Watson "
-                    "strand' but also the `Crick strand' is looked at."),
+                    "If segments are translated, not only the 'Watson "
+                    "strand' but also the 'Crick strand' is looked at."),
             _Switch(["-cw", "cw"],
                     "Additional output file in CLUSTAL W format."),
             _Switch(["-ds", "ds"],
-                    "`dna alignment speed up' - non-translated nucleic acid "
+                    "'dna alignment speed up' - non-translated nucleic acid "
                     "fragments are taken into account only if they start "
                     "with at least two matches. Speeds up DNA alignment at "
                     "the expense of sensitivity."),
@@ -89,7 +89,7 @@ class DialignCommandline(AbstractCommandline):
                     "This option speeds up the alignment but may lead "
                     "to reduced alignment quality."),
             _Switch(["-lgs", "lgs"],
-                    "`long genomic sequences' - combines the following "
+                    "'long genomic sequences' - combines the following "
                     "options: -ma, -thr 2, -lmax 30, -smin 8, -nta, -ff, "
                     "-fop, -ff, -cs, -ds, -pst "),
             _Switch(["-lgs_t", "lgs_t"],
@@ -99,7 +99,7 @@ class DialignCommandline(AbstractCommandline):
                     "-lgs but not very sensitive for non-coding regions."),
             _Option(["-lmax", "lmax"],
                     "Maximum fragment length = x  (default: x = 40 or "
-                    "x = 120 for `translated' fragments). Shorter x "
+                    "x = 120 for 'translated' fragments). Shorter x "
                     "speeds up the program but may affect alignment quality.",
                     checker_function=lambda x: isinstance(x, int),
                     equate=False),
@@ -108,11 +108,11 @@ class DialignCommandline(AbstractCommandline):
                     "about fragments selected for pairwise alignment and "
                     "about consistency in multi-alignment procedure."),
             _Switch(["-ma", "ma"],
-                    "`mixed alignments' consisting of P-fragments and "
+                    "'mixed alignments' consisting of P-fragments and "
                     "N-fragments if nucleic acid sequences are aligned."),
             _Switch(["-mask", "mask"],
                     "Residues not belonging to selected fragments are "
-                    "replaced by `*' characters in output alignment "
+                    "replaced by '*' characters in output alignment "
                     "(rather than being printed in lower-case characters)"),
             _Switch(["-mat", "mat"],
                     "Creates file *mat with substitution counts derived "
@@ -135,10 +135,10 @@ class DialignCommandline(AbstractCommandline):
                     "No translation of fragments."),
             _Switch(["-nt", "nt"],
                     "Input sequences are nucleic acid sequences and "
-                    "`nucleic acid segments' are translated to `peptide "
+                    "'nucleic acid segments' are translated to 'peptide "
                     "segments'."),
             _Switch(["-nta", "nta"],
-                    "`no textual alignment' - textual alignment suppressed. "
+                    "'no textual alignment' - textual alignment suppressed. "
                     "This option makes sense if other output files are of "
                     "interest -- e.g. the fragment files created with -ff, "
                     "-fop, -fsm or -lo."),
@@ -161,7 +161,7 @@ class DialignCommandline(AbstractCommandline):
                     "alignment or alignment of translated DNA fragments "
                     "at the expense of sensitivity."),
             _Option(["-stars", "stars"],
-                    "Maximum number of `*' characters indicating degree "
+                    "Maximum number of '*' characters indicating degree "
                     "of local similarity among sequences. By default, no "
                     "stars are used but numbers between 0 and 9, instead.",
                     checker_function=lambda x: x in range(0, 10),
