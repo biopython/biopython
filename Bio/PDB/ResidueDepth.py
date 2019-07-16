@@ -12,31 +12,39 @@ See: http://mgltools.scripps.edu/packages/MSMS
 Residue depth is the average distance of the atoms of a residue from
 the solvent accessible surface.
 
-Residue Depth:
+Residue Depth::
 
-    >>> rd = ResidueDepth(model)
-    >>> print(rd[(chain_id, res_id)])
+    from Bio.PDB.ResidueDepth import ResidueDepth
+    from Bio.PDB.PDBParser import PDBParser
+    parser = PDBParser()
+    structure = parser.get_structure("1a8o", "Tests/PDB/1A8O.pdb")
+    model = structure[0]
+    rd = ResidueDepth(model)
+    print(rd['A',(' ', 152, ' ')])
 
-Direct MSMS interface, typical use:
+Direct MSMS interface, typical use::
 
-    >>> parser = PDBParser()
-    >>> structure = parser.get_structure('1FAT.pdb')
-    >>> model = structure[0]
-    >>> surface = get_surface(model)
+    from Bio.PDB.ResidueDepth import get_surface
+    surface = get_surface(model)
 
 The surface is a Numeric array with all the surface vertices.
 
-Distance to surface:
+Distance to surface::
 
-    >>> dist = min_dist(coord, surface)
+    from Bio.PDB.ResidueDepth import min_dist
+    coord = (1.113, 35.393,  9.268)
+    dist = min_dist(coord, surface)
 
 where coord is the coord of an atom within the volume bound by
 the surface (ie. atom depth).
 
 To calculate the residue depth (average atom depth of the atoms
-in a residue):
+in a residue)::
 
-    >>> rd = residue_depth(residue, surface)
+    from Bio.PDB.ResidueDepth import residue_depth
+    chain = model['A']
+    res152 = chain[152]
+    rd = residue_depth(res152, surface)
 
 """
 

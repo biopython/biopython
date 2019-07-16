@@ -43,25 +43,25 @@ calculations on the first model in the provided PDB file.
 
 Examples
 --------
->>> p = PDBParser()
->>> structure = p.get_structure("1MOT", "1mot.pdb")
->>> model = structure[0]
->>> dssp = DSSP(model, "1mot.pdb")
+Typical use::
+
+    from Bio.PDB import PDBParser
+    from Bio.PDB.DSSP import DSSP
+    p = PDBParser()
+    structure = p.get_structure("1MOT", "/local-pdb/1mot.pdb")
+    model = structure[0]
+    dssp = DSSP(model, "/local-pdb/1mot.pdb")
 
 Note that the recent DSSP executable from the DSSP-2 package was
 renamed from `dssp` to `mkdssp`. If using a recent DSSP release,
-you may need to provide the name of your DSSP executable:
+you may need to provide the name of your DSSP executable::
 
->>> dssp = DSSP(model, '1mot.pdb', dssp='mkdssp')
+    dssp = DSSP(model, '/local-pdb/1mot.pdb', dssp='mkdssp')
 
-DSSP data is accessed by a tuple - (chain id, residue id):
+DSSP data is accessed by a tuple - (chain id, residue id)::
 
->>> a_key = list(dssp.keys())[2]
->>> a_key
-('A', (' ', 251, ' '))
->>> dssp[a_key]
-(3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
- -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+    a_key = list(dssp.keys())[2]
+    dssp[a_key]
 
 The dssp data returned for a single residue is a tuple in the form:
 
@@ -168,8 +168,12 @@ def dssp_dict_from_pdb_file(in_file, DSSP="dssp"):
 
     Examples
     --------
-    >>> dssp_dict=dssp_dict_from_pdb_file("1fat.pdb")
-    >>> aa, ss, acc=dssp_dict[('A', 1)]
+    How dssp_dict_frompdb_file could be used::
+
+        from Bio.PDB.DSSP import dssp_dict_from_pdb_file
+        dssp_tuple = dssp_dict_from_pdb_file("/local-pdb/1fat.pdb")
+        dssp_dict = dssp_tuple[0]
+        print(dssp_dict['A',(' ', 1, ' ')])
 
     """
     # Using universal newlines is important on Python 3, this
@@ -308,18 +312,20 @@ class DSSP(AbstractResiduePropertyMap):
 
     Examples
     --------
-    >>> p = PDBParser()
-    >>> structure = p.get_structure("1MOT", "1mot.pdb")
-    >>> model = structure[0]
-    >>> dssp = DSSP(model, "1mot.pdb")
-    >>> # DSSP data is accessed by a tuple (chain_id, res_id)
-    >>> a_key = list(dssp.keys())[2]
-    >>> # (dssp index, amino acid, secondary structure, relative ASA, phi, psi,
-    >>> # NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
-    >>> # NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
-    >>> dssp[a_key]
-    (3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,
-     -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)
+    How DSSP could be used::
+
+        from Bio.PDB import PDBParser
+        from Bio.PDB.DSSP import DSSP
+        p = PDBParser()
+        structure = p.get_structure("1MOT", "/local-pdb/1mot.pdb")
+        model = structure[0]
+        dssp = DSSP(model, "/local-pdb/1mot.pdb")
+        # DSSP data is accessed by a tuple (chain_id, res_id)
+        a_key = list(dssp.keys())[2]
+        # (dssp index, amino acid, secondary structure, relative ASA, phi, psi,
+        # NH_O_1_relidx, NH_O_1_energy, O_NH_1_relidx, O_NH_1_energy,
+        # NH_O_2_relidx, NH_O_2_energy, O_NH_2_relidx, O_NH_2_energy)
+        dssp[a_key]
 
     """
 

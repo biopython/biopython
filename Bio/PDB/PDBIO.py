@@ -51,11 +51,15 @@ class PDBIO(object):
     Examples
     --------
     >>> from Bio.PDB import PDBParser
-    >>> p=PDBParser()
-    >>> s=p.get_structure("1fat", "1fat.pdb")
+    >>> from Bio.PDB.PDBIO import PDBIO
+    >>> parser = PDBParser()
+    >>> structure = parser.get_structure("1a8o", "PDB/1A8O.pdb")
     >>> io=PDBIO()
-    >>> io.set_structure(s)
-    >>> io.save("out.pdb")
+    >>> io.set_structure(structure)
+    >>> io.save("bio-pdb-pdbio-out.pdb")
+    >>> import os
+    >>> os.remove("bio-pdb-pdbio-out.pdb")  # tidy up
+
 
     """
 
