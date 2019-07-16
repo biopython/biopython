@@ -171,7 +171,7 @@ def read_v4(f):
     try:
         for name in preHeaders:
             preHeadersMap[name] = struct.unpack("<i", f.read(4))[0]
-    except UnicodeDecodeError as e:
+    except UnicodeDecodeError:
         raise _modeError
 
     char = f.read(preHeadersMap["headerLen"])
