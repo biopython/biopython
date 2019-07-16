@@ -100,7 +100,7 @@ def as_handle(handleish, mode='r', **kwargs):
 
     """
     # If we're running under a version of Python that supports PEP 519, try
-    # to convert `handleish` to a string with `os.fspath`.
+    # to convert 'handleish' to a string with 'os.fspath'.
     if hasattr(os, 'fspath'):
         try:
             handleish = os.fspath(handleish)
