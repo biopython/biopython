@@ -15,7 +15,7 @@ http://biopython.org
 import os
 import warnings
 
-__version__ = "1.74.dev0"
+__version__ = "1.74"
 
 
 class MissingExternalDependencyError(Exception):
