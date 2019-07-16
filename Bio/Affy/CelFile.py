@@ -29,7 +29,7 @@ class ParserError(ValueError):
 
 _modeError = ParserError("You're trying to open an Affymetrix v4"
                          " CEL file. You have to use a read binary mode,"
-                         " like this `open(filename \"rb\")`.")
+                         " like this: open(filename, 'rb')")
 
 # for debugging
 # import pprint
@@ -232,7 +232,7 @@ def read_v4(f):
     raiseBadHeader("OffsetY", 0)
 
     # This is unfortunately undocumented, but it turns out that real data has
-    # the `record.AlgorithmParameters` repeated in the data section, until an
+    # the record.AlgorithmParameters repeated in the data section, until an
     # EOF, i.e. b"\x04".
     char = b"\x00"
     safetyValve = 10**4
