@@ -40,12 +40,29 @@ release 1.67 onwards.
 
 Python 3.4
 ==========
-Deprecated as of release 1.74.
+No longer supported as of Release 1.75, having triggered a deprecation
+warning in release 1.74. First supported in release 1.64.
+
+Python 3.5
+==========
+First supported in release 1.66.
+
+Python 3.6
+==========
+First supported in release 1.69.
+
+Python 3.7
+==========
+First supported in release 1.73.
+
+Python 3.8
+==========
+First supported in release 1.75.
 
 Jython
 ======
-Biopython is mostly working under Jython 2.7.0, but support for Jython
-is deprecated as of Release 1.70.
+Biopython was mostly working under Jython 2.7.0, but support for Jython
+was deprecated as of Release 1.70.
 
 Bio.Restriction.RanaConfig
 ==========================

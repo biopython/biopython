@@ -133,15 +133,15 @@ def is_ironpython():
 
 # Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 7):
-    sys.stderr.write("Biopython requires Python 2.7, or Python 3.4 or later. "
+    sys.stderr.write("Biopython requires Python 2.7, or Python 3.5 or later. "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 4):
-    sys.stderr.write("Biopython requires Python 3.4 or later (or Python 2.7). "
+elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 5):
+    sys.stderr.write("Biopython requires Python 3.5 or later (or Python 2.7). "
                      "Python %d.%d detected.\n" % sys.version_info[:2])
     sys.exit(1)
-if sys.version_info[:2] == (3, 4):
-    print("WARNING: Biopython support for Python 3.4 is now deprecated.")
+# if sys.version_info[:2] == (3, 5):
+#     print("WARNING: Biopython support for Python 3.5 is now deprecated.")
 
 if is_jython():
     sys.stderr.write("WARNING: Biopython support for Jython is now deprecated.\n")
