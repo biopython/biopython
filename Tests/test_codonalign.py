@@ -83,7 +83,7 @@ class TestAddition(unittest.TestCase):
         self.multi_aln = MultipleSeqAlignment([tail1, tail2])
 
     def test_addition_MultipleSeqAlignment(self):
-        """Check addition of CodonAlignment and MultipleSeqAlignment"""
+        """Check addition of CodonAlignment and MultipleSeqAlignment."""
         new_aln1 = self.codon_aln + self.multi_aln
 
         self.assertTrue(isinstance(new_aln1, MultipleSeqAlignment))
@@ -97,7 +97,7 @@ class TestAddition(unittest.TestCase):
             self.assertEqual(str(new_aln2[x].seq), str(self.multi_aln[x].seq) + str(self.codon_aln[x].seq))
 
     def test_addition_CodonAlignment(self):
-        """Check addition of CodonAlignment and CodonAlignment"""
+        """Check addition of CodonAlignment and CodonAlignment."""
         new_aln = self.codon_aln + self.codon_aln
 
         self.assertTrue(isinstance(new_aln, codonalign.CodonAlignment))
@@ -105,7 +105,7 @@ class TestAddition(unittest.TestCase):
             self.assertEqual(str(new_aln[x].seq), str(self.codon_aln[x].seq) + str(self.codon_aln[x].seq))
 
     def test_ValueError(self):
-        """Check that ValueError is thrown for Alignments of different lengths"""
+        """Check that ValueError is thrown for Alignments of different lengths."""
         # original len(self.aln) = 2 , len(aln) = 3
         aln = MultipleSeqAlignment([self.pro1, self.pro2, SeqRecord(Seq('M--', alphabet=generic_protein), id='pro3')])
         triple_codon = codonalign.build(aln, [self.seq1, self.seq2, SeqRecord(Seq('ATG', alphabet=generic_dna), id='pro3')])
@@ -115,7 +115,7 @@ class TestAddition(unittest.TestCase):
             triple_codon + self.codon_aln
 
     def test_TypeError(self):
-        """Check that TypeError is thrown for non CodonAlignment/MultipleSequenceAlignment objects"""
+        """Check that TypeError is thrown for non CodonAlignment/MultipleSequenceAlignment objects."""
         for obj in [0, "string", ["str1", "str2"], Seq("ATGTCTCGT")]:
             with self.assertRaises(TypeError):
                 self.codon_aln + obj
