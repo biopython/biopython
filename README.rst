@@ -189,12 +189,8 @@ time), use the ``--offline`` option::
 
     python setup.py test --offline
 
-If you need to do additional configuration, e.g. changing
-the install directory prefix, please type ``python setup.py``, or see the
-documentation here:
-
-* HTML - http://biopython.org/DIST/docs/install/Installation.html
-* PDF - http://biopython.org/DIST/docs/install/Installation.pdf
+If you need to do additional configuration, e.g. changing the install directory
+prefix, please type ``python setup.py``.
 
 
 Testing
