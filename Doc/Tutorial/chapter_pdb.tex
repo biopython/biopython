@@ -536,7 +536,8 @@ Note that you can use a shortcut:
 Bio.PDB can handle both disordered atoms and point mutations (i.e. a
 Gly and an Ala residue in the same position).
 
-\subsection{General approach\label{disorder problems}}
+\subsection{General approach}
+\label{disorder problems}
 
 Disorder should be dealt with from two points of view: the atom and the residue
 points of view. In general, we have tried to encapsulate all the complexity that
@@ -549,7 +550,8 @@ subset of the disordered atoms or residues. Which subset is picked (e.g. which
 of the two disordered OG side chain atom positions of a Ser residue is used)
 can be specified by the user.
 
-\subsection{Disordered atoms\label{disordered atoms}}
+\subsection{Disordered atoms}
+\label{disordered atoms}
 
 Disordered atoms are represented by ordinary \texttt{Atom} objects, but
 all \texttt{Atom} objects that represent the same physical atom are stored
@@ -588,7 +590,8 @@ Atom objects. The DisorderedAtom will behave exactly like an ordinary atom (in
 fact the atom with the highest occupancy) by forwarding all uncaught method
 calls to one of the Atom objects (the selected Atom object) it contains.
 
-\subsubsection*{Point mutations\label{point mutations}}
+\subsubsection*{Point mutations}
+\label{point mutations}
 
 A special case arises when disorder is due to a point mutation, i.e. when two
 or more point mutants of a polypeptide are present in the crystal. An example
@@ -624,7 +627,8 @@ of a \texttt{(Disordered)\-Residue} object.
 
 \section{Hetero residues}
 
-\subsection{Associated problems\label{hetero problems}}
+\subsection{Associated problems}
+\label{hetero problems}
 
 A common problem with hetero residues is that several hetero and non-hetero
 residues present in the same chain share the same sequence identifier (and insertion
@@ -782,7 +786,8 @@ atoms with altloc A are present.
 ...
 \end{minted}
 
-\subsubsection*{Extracting polypeptides from a \texttt{Structure} object\label{subsubsec:extracting_polypeptides}}
+\subsubsection*{Extracting polypeptides from a \texttt{Structure} object}
+\label{subsubsec:extracting_polypeptides}
 
 To extract polypeptides from a structure, construct a list of \texttt{Polypeptide} objects from a \texttt{Structure} object using \texttt{PolypeptideBuilder} as follows:
 
@@ -946,7 +951,7 @@ For this functionality, you need to install DSSP (and obtain a license
 for it --- free for academic use, see \url{https://swift.cmbi.umcn.nl/gv/dssp/}).
 Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
 to their secondary structure (and accessible surface area). The DSSP
-codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
+codes are listed in Table~\ref{table:DSSP-codes}. Note that DSSP (the
 program, and thus by consequence the class) cannot handle multiple
 models!
 
@@ -982,12 +987,14 @@ Bend \\
 Other\\
 \hline
 \end{tabular}
-\caption{\label{cap:DSSP-codes}DSSP codes in Bio.PDB.}
+\caption{DSSP codes in Bio.PDB.}
+\label{table:DSSP-codes}
 \end{table}
 
 The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{subsec:residue_depth}.
 
-\subsection{Calculating the residue depth\label{subsec:residue_depth}}
+\subsection{Calculating the residue depth}
+\label{subsec:residue_depth}
 
 Residue depth is the average distance of a residue's atoms from the
 solvent accessible surface. It's a fairly new and very powerful parameterization
@@ -1048,7 +1055,8 @@ A, followed by residues belonging to chain B, and again followed by
 residues belonging to chain A, i.e. the chains are 'broken'. This
 is also correctly interpreted.
 
-\subsection{Examples\label{problem structures}}
+\subsection{Examples}
+\label{problem structures}
 
 The PDBParser/Structure class was tested on about 800 structures (each belonging
 to a unique SCOP superfamily). This takes about 20 minutes, or on average 1.5
