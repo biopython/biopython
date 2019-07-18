@@ -38,7 +38,7 @@ Note for Python 2 this can be done by using:
 >>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
 \end{minted}
 \item Open a Swiss-Prot file over the internet from the ExPASy database
-(see section \ref{subsec:expasy_swissprot}):
+(see section \ref{sec:expasy_swissprot}):
 \begin{minted}{pycon}
 >>> from Bio import ExPASy
 >>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
@@ -342,7 +342,7 @@ Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from th
 To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
 
 \subsection{Retrieving a Swiss-Prot record}
-\label{subsec:expasy_swissprot}
+\label{sec:expasy_swissprot}
 
 Let's say we are looking at chalcone synthases for Orchids (see section~\ref{sec:orchids} for some justification for looking for interesting things about orchids). Chalcone synthase is involved in flavanoid biosynthesis in plants, and flavanoids make lots of cool things like pigment colors and UV protectants.
 

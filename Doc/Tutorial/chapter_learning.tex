@@ -40,7 +40,7 @@ In the logistic regression model, the probability of belonging to a class depend
 Using a set of gene pairs for which it is known whether they belong to the same operon (class OP) or to different operons (class NOP), we can calculate the weights $\beta_0$, $\beta_1$, $\beta_2$ by maximizing the log-likelihood corresponding to the probability functions (\ref{eq:OP}) and (\ref{eq:NOP}).
 
 \subsection{Training the logistic regression model}
-\label{subsec:LogisticRegressionTraining}
+\label{sec:LogisticRegressionTraining}
 
 \begin{table}[h]
 \begin{center}
@@ -294,7 +294,7 @@ Using the data in Table \ref{table:training}, we create and initialize a $k$-nea
 >>> model = kNN.train(xs, ys, k)
 \end{minted}
 
-where \verb+xs+ and \verb+ys+ are the same as in Section \ref{subsec:LogisticRegressionTraining}. Here, \verb+k+ is the number of neighbors $k$ that will be considered for the classification. For classification into two classes, choosing an odd number for $k$ lets you avoid tied votes. The function name \verb+train+ is a bit of a misnomer, since no model training is done: this function simply stores \verb+xs+, \verb+ys+, and \verb+k+ in \verb+model+.
+where \verb+xs+ and \verb+ys+ are the same as in Section \ref{sec:LogisticRegressionTraining}. Here, \verb+k+ is the number of neighbors $k$ that will be considered for the classification. For classification into two classes, choosing an odd number for $k$ lets you avoid tied votes. The function name \verb+train+ is a bit of a misnomer, since no model training is done: this function simply stores \verb+xs+, \verb+ys+, and \verb+k+ in \verb+model+.
 
 \subsection{Using a $k$-nearest neighbors model for classification}
 

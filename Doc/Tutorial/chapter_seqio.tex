@@ -488,7 +488,7 @@ module which allow dictionary like random access to a multi-sequence file.
 There is a trade off here between flexibility and memory usage. In summary:
 \begin{itemize}
 \item \verb|Bio.SeqIO.to_dict()| is the most flexible but also the most
-memory demanding option (see Section~\ref{SeqIO:to_dict}). This is basically
+memory demanding option (see Section~\ref{sec:seqio_todict}). This is basically
 a helper function to build a normal Python \verb|dictionary| with each entry
 held as a \verb|SeqRecord| object in memory, allowing you to modify the
 records.
@@ -504,7 +504,7 @@ See the discussion for an broad overview
 (Section~\ref{sec:SeqIO-indexing-discussion}).
 
 \subsection{Sequence files as Dictionaries -- In memory}
-\label{SeqIO:to_dict}
+\label{sec:seqio_todict}
 
 The next thing that we'll do with our ubiquitous orchid files is to show how
 to index them and access them like a database using the Python \verb|dictionary|

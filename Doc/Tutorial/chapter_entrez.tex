@@ -553,7 +553,7 @@ For help on ELink, see the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#ch
 There is an entire sub-page just for the \href{https://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
 \section{EGQuery: Global Query - counts for search terms}
-EGQuery provides counts for a search term in each of the Entrez databases (i.e. a global query). This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
+EGQuery provides counts for a search term in each of the Entrez databases (i.e. a global query). This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{sec:entrez_example_genbank} below).
 
 In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
@@ -763,7 +763,7 @@ To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| r
 One obvious case is you may prefer to download sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
 
 \subsection{Parsing Medline records}
-\label{subsec:entrez-and-medline}
+\label{sec:entrez-and-medline}
 You can find the Medline parser in \verb+Bio.Medline+. Suppose we want to parse the file \verb+pubmed_result1.txt+, containing one Medline record. You can find this file in Biopython's \verb+Tests\Medline+ directory. The file looks like this:
 
 \begin{verbatim}
@@ -1031,7 +1031,7 @@ os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 \label{sec:entrez_examples}
 
 \subsection{PubMed and Medline}
-\label{subsec:pub_med}
+\label{sec:pub_med}
 
 If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{https://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in Python scripts.
 
@@ -1119,7 +1119,7 @@ Especially interesting to note is the list of authors, which is returned as a st
 Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
 
 \subsection{Searching, downloading, and parsing Entrez Nucleotide records}
-\label{subsec:entrez_example_genbank}
+\label{sec:entrez_example_genbank}
 
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
@@ -1382,7 +1382,7 @@ additional argument of \verb|usehistory="y"|,
 True
 \end{minted}
 
-\noindent (Remember from Section~\ref{subsec:entrez_example_genbank} that the number of records retrieved will not necessarily be the same as the \verb+Count+, especially if the argument \verb+retmax+ is used.)
+\noindent (Remember from Section~\ref{sec:entrez_example_genbank} that the number of records retrieved will not necessarily be the same as the \verb+Count+, especially if the argument \verb+retmax+ is used.)
 
 \noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:
 
@@ -1448,7 +1448,7 @@ for start in range(0,count,batch_size):
 out_handle.close()
 \end{minted}
 
-\noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
+\noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{sec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
 
 \subsection{Searching for citations}
 \label{sec:elink-citations}

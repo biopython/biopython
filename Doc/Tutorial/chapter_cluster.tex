@@ -162,7 +162,7 @@ As Kendall's $\tau$ is always between -1 and 1, the corresponding distance will 
 For most of the distance functions available in \verb|Bio.Cluster|, a weight vector can be applied. The weight vector contains weights for the items in the data vector. If the weight for item $i$ is $w_i$, then that item is treated as if it occurred $w_i$ times in the data. The weight do not have to be integers.
 
 \subsection*{Calculating the distance matrix}
-\label{subsec:distancematrix}
+\label{sec:distancematrix}
 
 The distance matrix is a square matrix with all pairwise distances between the items in \verb|data|, and can be calculated by the function \verb|distancematrix| in the \verb|Bio.Cluster| module:
 \begin{minted}{pycon}
@@ -223,7 +223,7 @@ $$
 \section{Calculating cluster properties}
 
 \subsection*{Calculating the cluster centroids}
-\label{subsec:clustercentroids}
+\label{sec:clustercentroids}
 
 The centroid of a cluster can be defined either as the mean or as the median of each dimension over all cluster items. The function \verb|clustercentroids| in \verb|Bio.Cluster| can be used to calculate either:
 
@@ -819,7 +819,7 @@ Determines if the distances between the rows of \verb|data| are to be calculated
 Defines the distance function to be used (see \ref{sec:distancefunctions}).
 \end{itemize}
 
-This function returns the distance matrix as a list of rows, where the number of columns of each row is equal to the row number (see section \ref{subsec:distancematrix}).
+This function returns the distance matrix as a list of rows, where the number of columns of each row is equal to the row number (see section \ref{sec:distancematrix}).
 
 \subsection*{Calculating the cluster centroids}
 
@@ -837,7 +837,7 @@ Specifies whether the arithmetic mean (\verb|method=='a'|) or the median (\verb|
 Determines if the centroids of the rows of \verb|data| are to be calculated (\verb|transpose| is \verb|False|), or the centroids of the columns of \verb|data| (\verb|transpose| is \verb|True|).
 \end{itemize}
 
-This function returns the tuple \verb|cdata, cmask|; see section \ref{subsec:clustercentroids} for a description.
+This function returns the tuple \verb|cdata, cmask|; see section \ref{sec:clustercentroids} for a description.
 
 \subsection*{Calculating the distance between clusters}
 To calculate the distance between clusters of items stored in the record, use
