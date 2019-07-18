@@ -71,9 +71,9 @@ except ValueError:
 prev_minor_version = int(minor_version) - (2 if dev_version else 1)
 previous_version = f"{main_version}.{prev_minor_version}"
 versions = [
-    ("Previous", f"../../{previous_version}/api/"),
-    ("Latest", "../../latest/api/"),
-    ("Develop", "../../dev/api/"),
+    ("Previous", f"../../{previous_version}/"),
+    ("Latest", "../../latest/"),
+    ("Develop", "../../dev/"),
 ]
 
 if version < "1.75":  # 1.74 is the earliest Sphinx-generated api documentation
@@ -89,7 +89,7 @@ language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "README.rst", "doc.rst"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -138,7 +138,7 @@ html_context = {
     "github_user": "biopython",
     "github_repo": "biopython",
     "github_version": "master",
-    "conf_py_path": "/Doc/api/",
+    "conf_py_path": "/Doc/",
     # "source_suffix": source_suffix,
     "theme_display_version": False,
     # Biopython-specific values for version-footer (versions.html):
@@ -149,7 +149,7 @@ html_context = {
     "project_github_url": "https://github.com/biopython/biopython",
 }
 
-html_logo = "../images/biopython_logo_white.png"
+html_logo = "images/biopython_logo.svg"
 
 # The RST source is transient, don't need/want to include it
 html_show_sourcelink = False
@@ -203,7 +203,9 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [(master_doc, "Biopython_API.tex", document, author, "manual")]
+latex_documents = [
+    (master_doc, "Biopython_doc.tex", document, author, "manual"),
+]
 
 
 # -- Options for manual page output ---------------------------------------
@@ -302,7 +304,7 @@ def run_apidoc(_):
     # $ sphinx-apidoc -e -F -o /tmp/api/BioSQL BioSQL
     # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
     tmp_path = tempfile.mkdtemp()
-    apidoc_main(["-e", "-F", "-o", tmp_path, "../../BioSQL"])
+    apidoc_main(["-e", "-F", "-o", tmp_path, "../BioSQL"])
     apidoc_main(
         [
             "-e",
@@ -310,17 +312,17 @@ def run_apidoc(_):
             "-o",
             tmp_path,
             # The input path:
-            "../../Bio",
+            "../Bio",
             # These are patterns to exclude:
-            "../../Bio/Alphabet/",
-            "../../Bio/Restriction/Restriction.py",
+            "../Bio/Alphabet/",
+            "../Bio/Restriction/Restriction.py",
         ]
     )
     os.remove(os.path.join(tmp_path, "index.rst"))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):
             shutil.move(
-                os.path.join(tmp_path, filename), os.path.join(cur_dir, filename)
+                os.path.join(tmp_path, filename), os.path.join(cur_dir, "api", filename)
             )
     shutil.rmtree(tmp_path)
 
