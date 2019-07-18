@@ -66,7 +66,7 @@ a list of the record identifiers we can easily do this with the following list c
 \end{minted}
 
 \noindent There are more examples using \verb|SeqIO.parse()| in a list
-comprehension like this in Section~\ref{seq:sequence-parsing-plus-pylab}
+comprehension like this in Section~\ref{sec:sequence-parsing-plus-pylab}
 (e.g. for plotting sequence lengths or GC\%).
 
 \subsection{Iterating over the records in a sequence file}
@@ -568,7 +568,7 @@ So, it is very easy to create an in memory ``database'' of our GenBank records. 
 Note that those of you with prior Python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
 
 \subsubsection{Specifying the dictionary keys}
-\label{seq:seqio-todict-functionkey}
+\label{sec:seqio-todict-functionkey}
 
 Using the same code as above, but for the FASTA file instead:
 
@@ -719,10 +719,10 @@ filename and the format name:
 \end{minted}
 
 \subsubsection{Specifying the dictionary keys}
-\label{seq:seqio-index-functionkey}
+\label{sec:seqio-index-functionkey}
 
 Suppose you want to use the same keys as before? Much like with the
-\verb|Bio.SeqIO.to_dict()| example in Section~\ref{seq:seqio-todict-functionkey},
+\verb|Bio.SeqIO.to_dict()| example in Section~\ref{sec:seqio-todict-functionkey},
 you'll need to write a tiny function to map from the FASTA identifier
 (as a string) to the key you want:
 
