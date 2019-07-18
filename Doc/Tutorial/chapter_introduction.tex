@@ -221,9 +221,6 @@ from __future__ import print_function
   You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
   If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
 
-  \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
-  You need Biopython 1.51 or later.
-
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
 
@@ -242,9 +239,6 @@ from __future__ import print_function
   If you aren't using the latest version of Biopython, you could try upgrading.
   However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
 
-  \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
-  You need Biopython 1.52 or later.
-
   \item \emph{Why has my script using} \verb|Bio.Entrez.efetch()| \emph{stopped working?} \\
   This could be due to NCBI changes in February 2012 introducing EFetch 2.0.
   First, they changed the default return modes - you probably want to add \verb|retmode="text"| to
@@ -256,24 +250,8 @@ from __future__ import print_function
   You need to specify the same options -- the NCBI often adjust the default settings on the website,
   and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
 
-  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
-  You need Biopython 1.50 or later.  Or, use \texttt{next(Bio.Blast.NCBIXML.parse(...))} instead.
-
-  \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
-  Per-letter-annotation support was added in Biopython 1.50.
-
- \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
-  You need Biopython 1.50 or later.
-
- \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
   You need Biopython 1.53 or later.
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
-  You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
-  functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
-
-  \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
-  You need Biopython 1.52 or later.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.index_db()| \emph{work? The module imports fine but there is no \texttt{index\_db} function!} \\
   You need Biopython 1.57 or later (and a Python with SQLite3 support).
@@ -286,9 +264,6 @@ from __future__ import print_function
 
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
-
- \item \emph{Why does the code from CVS seem out of date?} \\
-  In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
 
   \item \emph{Why doesn't} \verb|Bio.Fasta| \emph{work?} \\
   We deprecated the \verb|Bio.Fasta| module in Biopython 1.51 (August 2009) and removed it in Biopython 1.55 (August 2010). There is a brief example showing how to convert old code to use \verb|Bio.SeqIO| instead in the \href{https://github.com/biopython/biopython/blob/master/DEPRECATED.rst}{DEPRECATED.rst} file.
