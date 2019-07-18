@@ -1,0 +1,3 @@
+# dot to mean current dir, i.e. Biopython itself
+.
+numpydoc
