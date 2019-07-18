@@ -1,7 +1,7 @@
 \chapter{Sequence annotation objects}
-\label{chapter:SeqRecord}
+\label{chapter:seq_annot}
 
-Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record or \verb|SeqRecord| class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features (as \verb|SeqFeature| objects) to be associated with the sequence, and is used throughout the sequence input/output interface \verb|Bio.SeqIO| described fully in Chapter~\ref{chapter:Bio.SeqIO}.
+Chapter~\ref{chapter:seq_objects} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record or \verb|SeqRecord| class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features (as \verb|SeqFeature| objects) to be associated with the sequence, and is used throughout the sequence input/output interface \verb|Bio.SeqIO| described fully in Chapter~\ref{chapter:seqio}.
 
 If you are only going to be working with simple data like FASTA files, you can probably skip this chapter
 for now. If on the other hand you are going to be using richly annotated sequence data, say from GenBank
@@ -18,7 +18,7 @@ While this chapter should cover most things to do with the \verb|SeqRecord| and 
 \section{The SeqRecord object}
 \label{sec:SeqRecord}
 
-The \verb|SeqRecord| (Sequence Record) class is defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with a sequence (see Chapter~\ref{chapter:Bio.Seq}), and is the basic data type for the \verb|Bio.SeqIO| sequence input/output interface (see Chapter~\ref{chapter:Bio.SeqIO}).
+The \verb|SeqRecord| (Sequence Record) class is defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with a sequence (see Chapter~\ref{chapter:seq_objects}), and is the basic data type for the \verb|Bio.SeqIO| sequence input/output interface (see Chapter~\ref{chapter:seqio}).
 
 The \verb|SeqRecord| class itself is quite simple, and offers the following information as attributes:
 
@@ -45,7 +45,7 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 Using a \verb|SeqRecord| object is not very complicated, since all of the
 information is presented as attributes of the class. Usually you won't create
 a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a
-sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples
+sequence file for you (see Chapter~\ref{chapter:seqio} and the examples
 below).  However, creating \verb|SeqRecord| can be quite simple.
 
 \subsection{SeqRecord objects from scratch}
@@ -128,9 +128,9 @@ TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
 ...
 \end{verbatim}
 
-Back in Chapter~\ref{chapter:quick-start} you will have seen the function \verb|Bio.SeqIO.parse(...)|
+Back in Chapter~\ref{chapter:quick_start} you will have seen the function \verb|Bio.SeqIO.parse(...)|
 used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
-has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:seqio} for details):
 
 %TODO - line wrapping for doctest?
 \begin{minted}{pycon}
@@ -155,7 +155,7 @@ Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', SingleLetter
 \noindent Here \verb|Bio.SeqIO| has defaulted to a generic alphabet, rather
 than guessing that this is DNA. If you know in advance what kind of sequence
 your FASTA file contains, you can tell \verb|Bio.SeqIO| which alphabet to use
-(see Chapter~\ref{chapter:Bio.SeqIO}).
+(see Chapter~\ref{chapter:seqio}).
 
 Next, the identifiers and description:
 
@@ -214,7 +214,7 @@ PROJECT     GenomeProject:10638
 ...
 \end{verbatim}
 
-Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:seqio} for details):
 
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
@@ -227,7 +227,7 @@ dbxrefs=['Project:10638'])
 \end{minted}
 
 You should be able to spot some differences already! But taking the attributes individually,
-the sequence string is the same as before, but this time \verb|Bio.SeqIO| has been able to automatically assign a more specific alphabet (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+the sequence string is the same as before, but this time \verb|Bio.SeqIO| has been able to automatically assign a more specific alphabet (see Chapter~\ref{chapter:seqio} for details):
 
 \begin{minted}{pycon}
 >>> record.seq
@@ -674,7 +674,7 @@ SSAC
 \end{verbatim}
 
 This \verb|format| method takes a single mandatory argument, a lower case string which is
-supported by \verb|Bio.SeqIO| as an output format (see Chapter~\ref{chapter:Bio.SeqIO}).
+supported by \verb|Bio.SeqIO| as an output format (see Chapter~\ref{chapter:seqio}).
 However, some of the file formats \verb|Bio.SeqIO| can write to \emph{require} more than
 one record (typically the case for multiple sequence alignment formats), and thus won't
 work via this \verb|format()| method.  See also Section~\ref{sec:Bio.SeqIO-and-StringIO}.
@@ -853,7 +853,7 @@ locations adjusted), and any other common annotation is also kept (like the id, 
 and description).
 
 For an example with per-letter annotation, we'll use the first record in a
-FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
+FASTQ file. Chapter~\ref{chapter:seqio} will explain the \verb|SeqIO| functions:
 
 %doctest ../Tests/Quality
 \begin{minted}{pycon}

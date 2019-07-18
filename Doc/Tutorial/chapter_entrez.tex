@@ -405,7 +405,7 @@ plain text files, but now defaults to XML.
 
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch}{EFetch Help page}.
 
-If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
+If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:seqio}), you could directly parse it into a \verb+SeqRecord+:
 
 %doctest . internet
 \begin{minted}{pycon}
@@ -1268,7 +1268,7 @@ REFERENCE   1  (bases 1 to 892)
 ...
 \end{minted}
 
-In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
+In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:seqio}):
 
 \begin{minted}{pycon}
 >>> from Bio import SeqIO

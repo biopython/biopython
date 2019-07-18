@@ -116,7 +116,7 @@ for your sequence automatically.  You might prefer to use the
 
 This approach makes more sense if you have your sequence(s) in a
 non-FASTA file format which you can extract using \verb|Bio.SeqIO|
-(see Chapter~\ref{chapter:Bio.SeqIO}).
+(see Chapter~\ref{chapter:seqio}).
 
 Whatever arguments you give the \verb|qblast()| function, you should
 get back your results in a handle object (by default in XML format).
@@ -332,7 +332,7 @@ BLAST result (i.e., you used a single query):
 \end{minted}
 
 Just like \verb|Bio.SeqIO| and \verb|Bio.AlignIO|
-(see Chapters~\ref{chapter:Bio.SeqIO} and~\ref{chapter:Bio.AlignIO}),
+(see Chapters~\ref{chapter:seqio} and~\ref{chapter:align}),
 we have a pair of input functions, \verb|read| and \verb|parse|, where
 \verb|read| is for when you have exactly one object, and \verb|parse|
 is an iterator for when you can have lots of objects -- but instead of

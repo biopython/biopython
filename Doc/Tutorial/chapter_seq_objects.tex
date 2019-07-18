@@ -1,8 +1,8 @@
 \chapter{Sequence objects}
-\label{chapter:Bio.Seq}
+\label{chapter:seq_objects}
 
 Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object.
-Chapter~\ref{chapter:SeqRecord} will introduce the related \verb|SeqRecord| object, which combines the sequence information with any annotation, used again in Chapter~\ref{chapter:Bio.SeqIO} for Sequence Input/Output.
+Chapter~\ref{chapter:seq_annot} will introduce the related \verb|SeqRecord| object, which combines the sequence information with any annotation, used again in Chapter~\ref{chapter:seqio} for Sequence Input/Output.
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
@@ -206,7 +206,7 @@ GATCGATGGGCCTATATAGGATCGAAAATCGC
 \noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).
 Section~\ref{sec:SeqRecord-format} describes a neat way to get a FASTA formatted
 string from a \verb|SeqRecord| object, while the more general topic of reading and
-writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}.
+writing FASTA format sequence files is covered in Chapter~\ref{chapter:seqio}.
 
 %cont-doctest
 \begin{minted}{pycon}
@@ -868,7 +868,7 @@ XXXXXX
 You may be able to find a use for the \verb|UnknownSeq| object in your own
 code, but it is more likely that you will first come across them in a
 \verb|SeqRecord| object created by \verb|Bio.SeqIO|
-(see Chapter~\ref{chapter:Bio.SeqIO}).
+(see Chapter~\ref{chapter:seqio}).
 Some sequence file formats don't always include the actual sequence, for
 example GenBank and EMBL files may include a list of features but for the
 sequence just present the contig information.  Alternatively, the QUAL files
