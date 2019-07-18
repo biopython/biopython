@@ -45,56 +45,17 @@
 \documentclass{report}
 \usepackage{url}
 \usepackage{fullpage}
-\usepackage{hevea}
 \usepackage{graphicx}
-
-% For syntax coloring of python, pycon, bash etc in pdflatex:
 \usepackage{minted}
-% Minted fails on hevea, https://github.com/gpoore/minted/issues/234
-% silently fall back on verbatim - ignore the language argument:
-%HEVEA \newenvironment{minted}[1]{\verbatim}{\endverbatim}
-
-% make everything have section numbers
-\setcounter{secnumdepth}{4}
-
-% Make links between references
 \usepackage{hyperref}
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-  \pdffalse
-\else
-  \pdfoutput=1
-  \pdftrue
-\fi
-\ifpdf
-  \hypersetup{colorlinks=true, hyperindex=true, citecolor=red, urlcolor=blue}
-\fi
 
 \begin{document}
 
-\begin{htmlonly}
 \title{Biopython Tutorial and Cookbook}
-\end{htmlonly}
-\begin{latexonly}
-\title{
-%Hack to get the logo on the PDF front page:
-\includegraphics[width=\textwidth]{images/biopython_logo.pdf}\\
-%Hack to get some white space using a blank line:
-~\\
-Biopython Tutorial and Cookbook}
-\end{latexonly}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
 \date{Last Update -- 22 July 2019 (Biopython 1.75.dev0)}
-
-%Hack to get the logo at the start of the HTML front page:
-%(hopefully this isn't going to be too wide for most people)
-\begin{rawhtml}
-<P ALIGN="center">
-<IMG ALIGN="center" SRC="images/biopython_logo.svg" TITLE="Biopython Logo" ALT="[Biopython Logo]" width="450" height="300" />
-</p>
-\end{rawhtml}
 
 \maketitle
 \tableofcontents
