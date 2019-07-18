@@ -20,6 +20,6 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 clean:
-	-rm -f Bio*rst
+	-rm -f api/Bio*.rst
 	-rm -rf _build/html
 	-rm -rf _build/doctrees
