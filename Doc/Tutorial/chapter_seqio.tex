@@ -817,7 +817,7 @@ If you were interested in the viruses, you could download all the virus files
 from the command line very easily with the \texttt{rsync} command, and then
 decompress them with \texttt{gunzip}:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 # For illustration only, see reduced example below
 $ rsync -avP "ftp.ncbi.nih.gov::genbank/gbvrl*.seq.gz" .
 $ gunzip gbvrl*.seq.gz
@@ -827,7 +827,7 @@ Unless you care about viruses, that's a lot of data to download just for this
 example - so let's download \emph{just} the first four chunks (about 25MB each
 compressed), and decompress them (taking in all about 1GB of space):
 
-\begin{minted}{bash}
+\begin{minted}{console}
 # Reduced example, download only the first four chunks
 $ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 $ curl -O ftp://ftp.ncbi.nih.gov/genbank/gbvrl2.seq.gz
@@ -917,7 +917,7 @@ You could compress this (while keeping the original file) at the command
 line using the following command -- but don't worry, the compressed file
 is already included with the other example files:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ bgzip -c ls_orchid.gbk > ls_orchid.gbk.bgz
 \end{minted}
 

@@ -595,7 +595,7 @@ The \verb+Entrez.read+ function reads the entire XML file returned by Entrez int
 
 For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ program (see NCBI's ftp site for more information):
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
 \end{minted}
 

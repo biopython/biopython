@@ -27,41 +27,41 @@ As part of building and installing Biopython you will typically
 run the full test suite at the command line from the Biopython
 source top level directory using the following:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python setup.py test
 \end{minted}
 
 This is actually equivalent to going to the \verb|Tests|
 subdirectory and running:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py
 \end{minted}
 
 You'll often want to run just some of the tests, and this is done
 like this:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $python run_tests.py test_SeqIO.py test_AlignIO.py
 \end{minted}
 
 When giving the list of tests, the \verb|.py| extension is optional,
 so you can also just type:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py test_SeqIO test_AlignIO
 \end{minted}
 
 To run the docstring tests (see section \ref{section:doctest}), you can use
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $python run_tests.py doctest
 \end{minted}
 
 You can also skip any tests which have been setup with an explicit
 online component by adding \verb|--offline|, e.g.
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $python run_tests.py --offline
 \end{minted}
 
@@ -125,7 +125,7 @@ optionally a directory with input files used by the test:
 
 Any script with a \verb|test_| prefix in the \verb|Tests| directory will be found and run by \verb|run_tests.py|. Below, we show an example test script \verb|test_Biospam.py|. If you put this script in the Biopython \verb|Tests| directory, then \verb|run_tests.py| will find it and execute the tests contained in it:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py
 test_Ace ... ok
 test_AlignIO ... ok
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         imported from \verb|run_tests.py|).
         If you run this script, then you'll see something like the following:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_BiospamMyModule.py
 test_addition1 (__main__.TestAddition) ... ok
 test_addition2 (__main__.TestAddition) ... ok
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         Running the script will now show you:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_BiospamMyModule.py
 An addition test ... ok
 A second addition test ... ok
@@ -350,7 +350,7 @@ the code will be run from the \verb|Tests| directory, see the
 \verb|Bio.SeqIO| doctests for an example of this.
 
 To run the docstring tests only, use
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py doctest
 \end{minted}
 
@@ -403,12 +403,12 @@ to indicate \verb|import XXX| must work, e.g.
 
 You can run the Tutorial doctests via:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python test_Tutorial.py
 \end{minted}
 
 or:
 
-\begin{minted}{bash}
+\begin{minted}{console}
 $ python run_tests.py test_Tutorial.py
 \end{minted}
