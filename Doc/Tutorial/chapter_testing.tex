@@ -42,7 +42,7 @@ You'll often want to run just some of the tests, and this is done
 like this:
 
 \begin{minted}{console}
-$python run_tests.py test_SeqIO.py test_AlignIO.py
+$ python run_tests.py test_SeqIO.py test_AlignIO.py
 \end{minted}
 
 When giving the list of tests, the \verb|.py| extension is optional,
@@ -55,14 +55,14 @@ $ python run_tests.py test_SeqIO test_AlignIO
 To run the docstring tests (see section \ref{section:doctest}), you can use
 
 \begin{minted}{console}
-$python run_tests.py doctest
+$ python run_tests.py doctest
 \end{minted}
 
 You can also skip any tests which have been setup with an explicit
 online component by adding \verb|--offline|, e.g.
 
 \begin{minted}{console}
-$python run_tests.py --offline
+$ python run_tests.py --offline
 \end{minted}
 
 By default, \verb|run_tests.py| runs all tests, including the docstring tests.
