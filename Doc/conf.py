@@ -106,7 +106,7 @@ html_theme_options = {
     "logo_only": True,
 }
 
-html_logo = "../images/biopython_logo.svg"
+html_logo = "images/biopython_logo.svg"
 
 # The RST source is transient, don't need/want to include it
 html_show_sourcelink = False
@@ -163,7 +163,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Biopython_API.tex', document, author, 'manual'),
+    (master_doc, 'Biopython.tex', document, author, 'manual'),
 ]
 
 
@@ -228,13 +228,13 @@ def run_apidoc(_):
     # $ sphinx-apidoc -e -F -o /tmp/api/BioSQL BioSQL
     # $ sphinx-apidoc -e -F -o /tmp/api/Bio Bio
     tmp_path = tempfile.mkdtemp()
-    apidoc_main(['-e', '-F', '-o', tmp_path, '../../BioSQL'])
-    apidoc_main(['-e', '-F', '-o', tmp_path, '../../Bio'])
+    apidoc_main(['-e', '-F', '-o', tmp_path, '../BioSQL'])
+    apidoc_main(['-e', '-F', '-o', tmp_path, '../Bio'])
     os.remove(os.path.join(tmp_path, 'index.rst'))  # Using our own
     for filename in os.listdir(tmp_path):
         if filename.endswith(".rst"):
             shutil.move(os.path.join(tmp_path, filename),
-                        os.path.join(cur_dir, filename))
+                        os.path.join(cur_dir, "api", filename))
     shutil.rmtree(tmp_path)
 
 

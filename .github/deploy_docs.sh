@@ -72,7 +72,7 @@ DEST_SLUG=biopython/docs
 # Biopython was installed to run Sphinx and build the docs,
 # can use this:
 DEST_DIR=`python -c "import Bio; v=Bio.__version__; print('dev' if 'dev' in v else v)"`
-SOURCE_DIR=${TRAVIS_BUILD_DIR:-$PWD}/Doc/api/_build/html
+SOURCE_DIR=${TRAVIS_BUILD_DIR:-$PWD}/Doc/_build/html
 WORKING_DIR=/tmp/deploy_biopython_docs
 
 if [ -z "$DEST_DIR" ]; then
@@ -80,7 +80,7 @@ if [ -z "$DEST_DIR" ]; then
    python -c "import Bio; print(Bio.__version__)"
    false
 fi
-DEST_DIR=$DEST_DIR/api
+DEST_DIR=$DEST_DIR/
 echo "Aiming to deploy $SOURCE_DIR to $DEST_SLUG branch gh-pages as $DEST_DIR"
 
 # On TravisCI, must create the variable using '\ ' and '\n', so
