@@ -1,5 +1,5 @@
 \chapter{Multiple Sequence Alignment objects}
-\label{chapter:Bio.AlignIO}
+\label{chapter:align}
 
 This chapter is about Multiple Sequence Alignments, by which we mean a collection of
 multiple sequences which have been aligned together -- usually with the insertion of gap
@@ -846,7 +846,7 @@ enhancements and the new \verb|PairwiseAligner| (see Section~\ref{sec:pairwise})
 you can use Biopython to invoke a command line tool on your behalf. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
-      which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:Bio.SeqIO}).
+      which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:seqio}).
 \item Call the command line tool to process this input file, typically via one of Biopython's
       command line wrappers (which we'll discuss here).
 \item Read the output from the tool, i.e. your aligned sequences, typically using
@@ -1020,7 +1020,7 @@ _|_________________ gi|6273287|gb|AF191661.1|AF191661
 <BLANKLINE>
 \end{minted}
 
-\noindent Chapter \ref{sec:Phylo} covers Biopython's support for phylogenetic trees in more
+\noindent Chapter \ref{chapter:phylo} covers Biopython's support for phylogenetic trees in more
 depth.
 
 \subsection{MUSCLE}

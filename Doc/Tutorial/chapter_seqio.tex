@@ -1,7 +1,7 @@
 \chapter{Sequence Input/Output}
-\label{chapter:Bio.SeqIO}
+\label{chapter:seqio}
 
-In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start} and also used in Chapter~\ref{chapter:SeqRecord}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
+In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick_start} and also used in Chapter~\ref{chapter:seq_annot}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
 See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
 
 \begin{minted}{pycon}
@@ -10,7 +10,7 @@ See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}),
 ...
 \end{minted}
 
-The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapter~\ref{chapter:SeqRecord}), which contain a \verb|Seq| object (see Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
+The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapter~\ref{chapter:seq_annot}), which contain a \verb|Seq| object (see Chapter~\ref{chapter:seq_objects}) plus annotation like an identifier and description.
 Note that when dealing with very large FASTA or FASTQ files, the overhead of working with all these objects can make scripts too slow.
 In this case consider the low-level \verb|SimpleFastaParser| and \verb|FastqGeneralIterator| parsers which return just a tuple of strings for each record (see Section~\ref{sec:low-level-fasta-fastq}).
 
@@ -145,7 +145,7 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 \subsection{Extracting data}
 
 The \verb|SeqRecord| object and its annotation structures are described more fully in
-Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
+Chapter~\ref{chapter:seq_annot}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
 
 \begin{minted}{python}
 from Bio import SeqIO
@@ -453,7 +453,7 @@ See Chapter~\ref{chapter:entrez} for more about the \verb|Bio.Entrez| module, an
 \subsection{Parsing SwissProt sequences from the net}
 \label{sec:SeqIO_ExPASy_and_SwissProt}
 Now let's use a handle to download a SwissProt file from ExPASy,
-something covered in more depth in Chapter~\ref{chapter:swiss_prot}.
+something covered in more depth in Chapter~\ref{chapter:uniprot}.
 As mentioned above, when you expect the handle to contain one and only one record,
 use the \verb|Bio.SeqIO.read()| function:
 
