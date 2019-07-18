@@ -319,24 +319,30 @@ have them excluded in the Biopython test suite, you must update
 of \verb|run_tests.py| looks as follows:
 
 \begin{minted}{python}
+# Following modules have historic failures. If you fix one of these
+# please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-DOCTEST_MODULES = [
-    'Bio.AlignIO.MauveIO',
-    ...
+    'Bio.PDB',
+    'Bio.PDB.AbstractPropertyMap',
+    'Bio.Phylo.Applications._Fasttree',
+    'Bio.Phylo._io',
+    'Bio.Phylo.TreeConstruction',
+    'Bio.Phylo._utils',
 ]
 
 # Exclude modules with online activity
-EXCLUDE_DOCTEST_MODULES.extend([
+# They are not excluded by default, use --offline to exclude them
+ONLINE_DOCTEST_MODULES = [
     'Bio.Entrez',
+    'Bio.ExPASy',
     'Bio.TogoWS',
-    ...
-    ])
+    ]
 
 # Silently ignore any doctests for modules requiring numpy!
 if numpy is None:
     EXCLUDE_DOCTEST_MODULES.extend([
-        "Bio.Affy.CelFile",
-        "Bio.KDTree",
+        ``Bio.Affy.CelFile'',
+        ``Bio.Cluster'',
         ...
     ])
 \end{minted}
