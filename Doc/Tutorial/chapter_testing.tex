@@ -52,7 +52,7 @@ so you can also just type:
 $ python run_tests.py test_SeqIO test_AlignIO
 \end{minted}
 
-To run the docstring tests (see section \ref{section:doctest}), you can use
+To run the docstring tests (see section \ref{sec:doctest}), you can use
 
 \begin{minted}{console}
 $ python run_tests.py doctest
@@ -279,7 +279,7 @@ OK
 \end{minted}
 \end{itemize}
 
-If your module contains docstring tests (see section \ref{section:doctest}),
+If your module contains docstring tests (see section \ref{sec:doctest}),
 you \emph{may} want to include those in the tests to be run. You can do so as
 follows by modifying the code under \verb|if __name__ == "__main__":|
 to look like this:
@@ -301,7 +301,7 @@ In general instead include the docstring tests by adding them to the
 \verb|run_tests.py| as explained below.
 
 \section{Writing doctests}
-\label{section:doctest}
+\label{sec:doctest}
 
 Python modules, classes and functions support built in documentation using
 docstrings.  The \href{https://docs.python.org/3/library/doctest.html}{doctest
@@ -366,7 +366,7 @@ your output will match on all the different versions of Python that
 Biopython supports (e.g. differences in floating point numbers).
 
 \section{Writing doctests in the Tutorial}
-\label{section:doctest-tutorial}
+\label{sec:doctest-tutorial}
 
 This Tutorial you are reading has a lot of code snippets, which are
 often formatted like a doctest. We have our own system in file
