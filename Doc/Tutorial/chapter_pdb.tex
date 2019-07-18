@@ -82,7 +82,7 @@ First we create a \texttt{PDBParser} object:
 >>> parser = PDBParser(PERMISSIVE=1)
 \end{minted}
 
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{problem structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
+The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{sec:problem_structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
 
 The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
 
@@ -229,7 +229,7 @@ is fairly certain that the file contains an error or at least does not describe
 the structure unambiguously. If a SMCRA data structure cannot be generated,
 there is reason to suspect a problem. Parsing a PDB file can thus be used to
 detect likely problems. We will give several examples of this in section
-\ref{problem structures}.
+\ref{sec:problem_structures}.
 
 \begin{figure}[htbp]
 \begin{htmlonly}
@@ -366,7 +366,7 @@ A residue id is a tuple with three elements:
     \item \verb+'H_'+ followed by the residue name for other hetero residues (e.g. \verb+'H_GLC'+ in the case of a glucose molecule);
     \item blank for standard amino and nucleic acids.
     \end{itemize}
-This scheme is adopted for reasons described in section \ref{hetero problems}.
+This scheme is adopted for reasons described in section \ref{sec:hetero_problems}.
 \item The \textbf{sequence identifier} (resseq), an integer describing the position of the residue in the chain (e.g., 100);
 \item The \textbf{insertion code} (icode); a string, e.g. 'A'. The insertion code is sometimes used to preserve a certain desirable residue numbering scheme. A Ser 80 insertion mutant (inserted e.g. between a Thr 80 and an Asn 81
 residue) could e.g. have sequence identifiers and insertion codes
@@ -411,7 +411,7 @@ id:
 \end{minted}
 
 Each Residue object in a Chain object should have a unique id. However, disordered
-residues are dealt with in a special way, as described in section \ref{point mutations}.
+residues are dealt with in a special way, as described in section \ref{sec:point_mutations}.
 
 A Residue object has a number of additional methods:
 
@@ -428,7 +428,7 @@ You can use \texttt{is\_aa(residue)} to test if a Residue object is an amino aci
 
 The Atom object stores the data associated with an atom, and has no children.
 The id of an atom is its atom name (e.g. ``OG'' for the side chain oxygen
-of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception is made for disordered atoms, as described in section \ref{disordered atoms}.
+of a Ser residue). An Atom id needs to be unique in a Residue. Again, an exception is made for disordered atoms, as described in section \ref{sec:disordered_atoms}.
 
 The atom id is simply the atom name (eg. \texttt{'CA'}). In practice,
 the atom name is created by stripping all spaces from the atom name
@@ -537,7 +537,7 @@ Bio.PDB can handle both disordered atoms and point mutations (i.e. a
 Gly and an Ala residue in the same position).
 
 \subsection{General approach}
-\label{disorder problems}
+\label{sec:disorder_problems}
 
 Disorder should be dealt with from two points of view: the atom and the residue
 points of view. In general, we have tried to encapsulate all the complexity that
@@ -551,7 +551,7 @@ of the two disordered OG side chain atom positions of a Ser residue is used)
 can be specified by the user.
 
 \subsection{Disordered atoms}
-\label{disordered atoms}
+\label{sec:disordered_atoms}
 
 Disordered atoms are represented by ordinary \texttt{Atom} objects, but
 all \texttt{Atom} objects that represent the same physical atom are stored
@@ -591,7 +591,7 @@ fact the atom with the highest occupancy) by forwarding all uncaught method
 calls to one of the Atom objects (the selected Atom object) it contains.
 
 \subsubsection*{Point mutations}
-\label{point mutations}
+\label{sec:point_mutations}
 
 A special case arises when disorder is due to a point mutation, i.e. when two
 or more point mutants of a polypeptide are present in the crystal. An example
@@ -628,7 +628,7 @@ of a \texttt{(Disordered)\-Residue} object.
 \section{Hetero residues}
 
 \subsection{Associated problems}
-\label{hetero problems}
+\label{sec:hetero_problems}
 
 A common problem with hetero residues is that several hetero and non-hetero
 residues present in the same chain share the same sequence identifier (and insertion
@@ -787,7 +787,7 @@ atoms with altloc A are present.
 \end{minted}
 
 \subsubsection*{Extracting polypeptides from a \texttt{Structure} object}
-\label{subsubsec:extracting_polypeptides}
+\label{sec:extracting_polypeptides}
 
 To extract polypeptides from a structure, construct a list of \texttt{Polypeptide} objects from a \texttt{Structure} object using \texttt{PolypeptideBuilder} as follows:
 
@@ -991,10 +991,10 @@ Other\\
 \label{table:DSSP-codes}
 \end{table}
 
-The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{subsec:residue_depth}.
+The \texttt{DSSP} class can also be used to calculate the accessible surface area of a residue. But see also section \ref{sec:residue_depth}.
 
 \subsection{Calculating the residue depth}
-\label{subsec:residue_depth}
+\label{sec:residue_depth}
 
 Residue depth is the average distance of a residue's atoms from the
 solvent accessible surface. It's a fairly new and very powerful parameterization
@@ -1056,7 +1056,7 @@ residues belonging to chain A, i.e. the chains are 'broken'. This
 is also correctly interpreted.
 
 \subsection{Examples}
-\label{problem structures}
+\label{sec:problem_structures}
 
 The PDBParser/Structure class was tested on about 800 structures (each belonging
 to a unique SCOP superfamily). This takes about 20 minutes, or on average 1.5
