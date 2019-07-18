@@ -39,7 +39,7 @@ A further optional \verb|alphabet| argument allowing you to specify the expected
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
 
-\begin{verbatim}
+\begin{minted}{text}
 # STOCKHOLM 1.0
 #=GS COATB_BPIKE/30-81  AC P03620.1
 #=GS COATB_BPIKE/30-81  DR PDB; 1ifl ; 1-52;
@@ -67,7 +67,7 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 #=GC SS_cons                  XHHHHHHHHHHHHHHHCHHHHHHHHCHHHHHHHHHHHHHHHHHHHHHHHC--
 #=GC seq_cons                 AEssss...AptAhDSLpspAT-hIu.sWshVsslVsAsluIKLFKKFsSKA
 //
-\end{verbatim}
+\end{minted}
 
 This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{https://pfam.xfam.org/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
@@ -138,7 +138,7 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 
 PFAM provide a nice web interface at \url{ http://pfam.xfam.org/family/PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
 
-\begin{verbatim}
+\begin{minted}{text}
 >COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA
 >Q9T0Q8_BPIKE/1-52
@@ -153,7 +153,7 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA
 AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
 >COATB_BPIF1/22-73
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
-\end{verbatim}
+\end{minted}
 
 \noindent Note the website should have an option about showing gaps as periods (dots) or dashes, we've shown dashes above.  Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the same code:
 
@@ -182,18 +182,18 @@ The previous section focused on reading files containing a single alignment.  In
 
 Suppose you have a small alignment in PHYLIP format:
 
-\begin{verbatim}
+\begin{minted}{text}
     5    6
 Alpha     AACAAC
 Beta      AACCCC
 Gamma     ACCAAC
 Delta     CCACCA
 Epsilon   CCAAAC
-\end{verbatim}
+\end{minted}
 
 If you wanted to bootstrap a phylogenetic tree using the PHYLIP tools, one of the steps would be to create a set of many resampled alignments using the tool \verb|bootseq|.  This would give output something like this, which has been abbreviated for conciseness:
 
-\begin{verbatim}
+\begin{minted}{text}
     5     6
 Alpha     AAACCA
 Beta      AAACCC
@@ -219,7 +219,7 @@ Beta      ACCCCC
 Gamma     AAAACC
 Delta     CCCCAA
 Epsilon   CAAACC
-\end{verbatim}
+\end{minted}
 
 If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 
@@ -234,7 +234,7 @@ for alignment in alignments:
 
 \noindent This would give the following output, again abbreviated for display:
 
-\begin{verbatim}
+\begin{minted}{text}
 SingleLetterAlphabet() alignment with 5 rows and 6 columns
 AAACCA Alpha
 AAACCC Beta
@@ -264,7 +264,7 @@ ACCCCC Beta
 AAAACC Gamma
 CCCCAA Delta
 CAAACC Epsilon
-\end{verbatim}
+\end{minted}
 
 As with the function \verb|Bio.SeqIO.parse()|, using \verb|Bio.AlignIO.parse()| returns an iterator.
 If you want to keep all the alignments in memory at once, which will allow you to access them in any order, then turn the iterator into a list:
@@ -280,7 +280,7 @@ first_align = alignments[0]
 \label{sec:AlignIO-count-argument}
 Many alignment file formats can explicitly store more than one alignment, and the division between each alignment is clear.  However, when a general sequence file format has been used there is no such block structure.  The most common such situation is when alignments have been saved in the FASTA file format.  For example consider the following:
 
-\begin{verbatim}
+\begin{minted}{text}
 >Alpha
 ACTACGACTAGCTCAG--G
 >Beta
@@ -293,13 +293,13 @@ ACTACGACTAGCTCAGG--
 ACTACCGCTAGCTCAGAAG
 >Gamma
 ACTACGGCTAGCACAGAAG
-\end{verbatim}
+\end{minted}
 
 \noindent This could be a single alignment containing six sequences (with repeated identifiers).  Or, judging from the identifiers, this is probably two different alignments each with three sequences, which happen to all have the same length.
 
 What about this next example?
 
-\begin{verbatim}
+\begin{minted}{text}
 >Alpha
 ACTACGACTAGCTCAG--G
 >Beta
@@ -312,13 +312,13 @@ ACTACGGCTAGCACAGAAG
 ACTACGACTAGCTCAGG--
 >Delta
 ACTACGGCTAGCACAGAAG
-\end{verbatim}
+\end{minted}
 
 \noindent Again, this could be a single alignment with six sequences.  However this time based on the identifiers we might guess this is three pairwise alignments which by chance have all got the same lengths.
 
 This final example is similar:
 
-\begin{verbatim}
+\begin{minted}{text}
 >Alpha
 ACTACGACTAGCTCAG--G
 >XXX
@@ -331,7 +331,7 @@ ACTACGGCAAGCACAGG
 --ACTACGAC--TAGCTCAGG
 >ZZZ
 GGACTACGACAATAGCTCAGG
-\end{verbatim}
+\end{minted}
 
 \noindent In this third example, because of the differing lengths, this cannot be treated as a single alignment containing all six records.  However, it could be three pairwise alignments.
 
@@ -352,7 +352,7 @@ for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
 
 \noindent giving:
 
-\begin{verbatim}
+\begin{minted}{text}
 Alignment length 19
 ACTACGACTAGCTCAG--G - Alpha
 ACTACCGCTAGCTCAGAAG - XXX
@@ -364,7 +364,7 @@ ACTACGGCAAGCACAGG - YYY
 Alignment length 21
 --ACTACGAC--TAGCTCAGG - Alpha
 GGACTACGACAATAGCTCAGG - ZZZ
-\end{verbatim}
+\end{minted}
 
 Using \verb|Bio.AlignIO.read()| or \verb|Bio.AlignIO.parse()| without the \verb|seq_count| argument would give a single alignment containing all six records for the first two examples.  For the third example, an exception would be raised because the lengths differ preventing them being turned into a single alignment.
 
@@ -415,7 +415,7 @@ AlignIO.write(my_alignments, "my_example.phy", "phylip")
 
 \noindent And if you open this file in your favourite text editor it should look like this:
 
-\begin{verbatim}
+\begin{minted}{text}
  3 12
 Alpha      ACTGCTAGCT AG
 Beta       ACT-CTAGCT AG
@@ -428,7 +428,7 @@ Zeta       GTCAGCTAG
 Eta        ACTAGTACAG CTG
 Theta      ACTAGTACAG CT-
 Iota       -CTACTACAG GTG
-\end{verbatim}
+\end{minted}
 
 Its more common to want to load an existing alignment, and save that, perhaps after some simple manipulation like removing certain rows or columns.
 
@@ -475,7 +475,7 @@ AlignIO.write([alignment], "PF05371_seed.aln", "clustal")
 
 Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln'' with the following content:
 
-\begin{verbatim}
+\begin{minted}{text}
 CLUSTAL X (1.81) multiple sequence alignment
 
 
@@ -494,7 +494,7 @@ COATB_BPM13/24-72                   KA
 COATB_BPZJ2/1-49                    KA
 Q9T0Q9_BPFD/1-49                    KA
 COATB_BPIF1/22-73                   RA
-\end{verbatim}
+\end{minted}
 
 Alternatively, you could make a PHYLIP format file which we'll name ``PF05371\_seed.phy'':
 
@@ -505,7 +505,7 @@ AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip")
 
 This time the output looks like this:
 
-\begin{verbatim}
+\begin{minted}{text}
  7 52
 COATB_BPIK AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
 Q9T0Q8_BPI AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
@@ -522,7 +522,7 @@ COATB_BPIF FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
            KA
            KA
            RA
-\end{verbatim}
+\end{minted}
 
 One of the big handicaps of the original PHYLIP alignment file format is
 that the sequence identifiers are strictly truncated at ten characters.
@@ -538,7 +538,7 @@ AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip-rel
 This time the output looks like this, using a longer indentation to
 allow all the identifers to be given in full:
 
-\begin{verbatim}
+\begin{minted}{text}
  7 52
 COATB_BPIKE/30-81  AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
 Q9T0Q8_BPIKE/1-52  AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
@@ -555,7 +555,7 @@ COATB_BPIF1/22-73  FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
                    KA
                    KA
                    RA
-\end{verbatim}
+\end{minted}
 
 If you have to work with the original strict PHYLIP format, then you may need to
 compress the identifers somehow -- or assign your own names or numbering system.
@@ -579,7 +579,7 @@ AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 \end{minted}
 
 \noindent Here is the new (strict) PHYLIP format output:
-\begin{verbatim}
+\begin{minted}{text}
  7 52
 seq0       AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIRLFKKFSS
 seq1       AEPNAATNYA TEAMDSLKTQ AIDLISQTWP VVTTVVVAGL VIKLFKKFVS
@@ -596,7 +596,7 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
            KA
            KA
            RA
-\end{verbatim}
+\end{minted}
 
 \noindent In general, because of the identifier limitation, working with
 \textit{strict} PHYLIP file formats shouldn't be your first choice.
@@ -1285,21 +1285,21 @@ is trivial -- we'll just use \texttt{needle} here.
 Suppose you want to do a global pairwise alignment between two sequences, prepared in
 FASTA format as follows:
 
-\begin{verbatim}
+\begin{minted}{text}
 >HBA_HUMAN
 MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG
 KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
 AVHASLDKFLASVSTVLTSKYR
-\end{verbatim}
+\end{minted}
 
 \noindent in a file \texttt{alpha.faa}, and secondly in a file \texttt{beta.faa}:
 
-\begin{verbatim}
+\begin{minted}{text}
 >HBB_HUMAN
 MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPK
 VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
 KEFTPPVQAAYQKVVAGVANALAHKYH
-\end{verbatim}
+\end{minted}
 
 You can find copies of these example files with the Biopython source code
 under the \verb|Doc/examples/| directory.

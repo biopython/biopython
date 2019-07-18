@@ -943,7 +943,7 @@ for start, end, strand, pro in orf_list:
 
 \noindent And the output:
 
-\begin{verbatim}
+\begin{minted}{text}
 NQIQGVICSPDSGEFMVTFETVMEIKILHK...GVA - length 355, strand 1, 41:1109
 WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, 491:827
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, 1030:1888
@@ -958,7 +958,7 @@ IYSTSEHTGEQVMRTLDEVIASRSPESQTR...FHV - length 111, strand -1, 7788:8124
 WGKLQVIGLSMWMVLFSQRFDDWLNEQEDA...ESK - length 125, strand -1, 8087:8465
 TGKQNSCQMSAIWQLRQNTATKTRQNRARI...AIK - length 100, strand 1, 8741:9044
 QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, 9264:9609
-\end{verbatim}
+\end{minted}
 
 If you comment out the sort statement, then the protein sequences will be
 shown in the same order as before, so you can check this is doing the same
@@ -1374,10 +1374,10 @@ consensus = summary_align.dumb_consensus()
 
 As the name suggests, this is a really simple consensus calculator, and will just add up all of the residues at each point in the consensus, and if the most common value is higher than some threshold value will add the common residue to the consensus. If it doesn't reach the threshold, it adds an ambiguity character to the consensus. The returned consensus object is Seq object whose alphabet is inferred from the alphabets of the sequences making up the consensus. So doing a \verb|print consensus| would give:
 
-\begin{verbatim}
+\begin{minted}{text}
 consensus Seq('TATACATNAAAGNAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT
 ...', IUPACAmbiguousDNA())
-\end{verbatim}
+\end{minted}
 
 You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
@@ -1394,22 +1394,22 @@ You can adjust how \verb|dumb_consensus| works by passing optional parameters:
 
 Position specific score matrices (PSSMs) summarize the alignment information in a different way than a consensus, and may be useful for different tasks. Basically, a PSSM is a count matrix. For each column in the alignment, the number of each alphabet letters is counted and totaled. The totals are displayed relative to some representative sequence along the left axis. This sequence may be the consesus sequence, but can also be any sequence in the alignment. For instance for the alignment,
 
-\begin{verbatim}
+\begin{minted}{text}
 GTATC
 AT--C
 CTGTC
-\end{verbatim}
+\end{minted}
 
 \noindent the PSSM is:
 
-\begin{verbatim}
+\begin{minted}{text}
       G A T C
     G 1 1 0 1
     T 0 0 3 0
     A 1 1 0 0
     T 0 0 2 0
     C 0 0 0 3
-\end{verbatim}
+\end{minted}
 
 Let's assume we've got an alignment object called \verb|c_align|. To get a PSSM with the consensus sequence along the side we first get a summary object and calculate the consensus sequence:
 
@@ -1444,7 +1444,7 @@ The command above returns a \verb|PSSM| object.
 To print out the PSSM as shown above,
 we simply need to do a \verb|print(my_pssm)|, which gives:
 
-\begin{verbatim}
+\begin{minted}{text}
     A   C   G   T
 T  0.0 0.0 0.0 7.0
 A  7.0 0.0 0.0 0.0
@@ -1455,7 +1455,7 @@ A  7.0 0.0 0.0 0.0
 T  0.0 0.0 0.0 7.0
 T  1.0 0.0 0.0 6.0
 ...
-\end{verbatim}
+\end{minted}
 
 You can access any element of the PSSM by subscripting like \verb|your_pssm[sequence_number][residue_count_name]|. For instance, to get the counts for the 'A' residue in the second element of the above PSSM you would do:
 

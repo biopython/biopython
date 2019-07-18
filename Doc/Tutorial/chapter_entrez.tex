@@ -635,21 +635,21 @@ The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, 
 \section{HTML escape characters}
 
 Pubmed records may contain HTML tags to indicate e.g. subscripts, superscripts, or italic text, as well as mathematical symbols via MathML. By default, the \verb+Bio.Entrez+ parser treats all text as plain text without markup; for example, the fragment ``$P < 0.05$'' in the abstract of a Pubmed record, which is encoded as
-\begin{verbatim}
+\begin{minted}{text}
 <i>P</i> &lt; 0.05
-\end{verbatim}
+\end{minted}
 in the XML returned by Entrez, is converted to the Python string
-\begin{verbatim}
+\begin{minted}{text}
 '<i>P</i> < 0.05'
-\end{verbatim}
+\end{minted}
 by the \verb+Bio.Entrez+ parser. While this is more human-readable, it is not valid HTML due to the less-than sign, and makes further processing of the text e.g. by an HTML parser impractical. To ensure that all strings returned by the parser are valid HTML, call \verb+Entrez.read+ or \verb+Entrez.parse+ with the \verb+escape+ argument set to \verb+True+:
 \begin{minted}{pycon}
 >>> record = Entrez.read(handle, escape=True)
 \end{minted}
 The parser will then replace all characters disallowed in HTML by their HTML-escaped equivalent; in the example above, the parser will generate
-\begin{verbatim}
+\begin{minted}{text}
 '<i>P</i> &lt; 0.05'
-\end{verbatim}
+\end{minted}
 which is a valid HTML fragment. By default, \verb+escape+ is \verb+False+.
 
 \section{Handling errors}
@@ -675,7 +675,7 @@ Here, the parser didn't find the \verb|<?xml ...| tag with which an XML file is 
 
 When your file is in the XML format but is corrupted (for example, by ending prematurely), the parser will raise a CorruptedXMLError.
 Here is an example of an XML file that ends prematurely:
-\begin{verbatim}
+\begin{minted}{text}
 <?xml version="1.0"?>
 <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
 <eInfoResult>
@@ -691,7 +691,7 @@ Here is an example of an XML file that ends prematurely:
         <DbName>books</DbName>
         <DbName>cancerchromosomes</DbName>
         <DbName>cdd</DbName>
-\end{verbatim}
+\end{minted}
 which will generate the following traceback:
 \begin{minted}{pycon}
 >>> Entrez.read(handle)
@@ -703,7 +703,7 @@ Note that the error message tells you at what point in the XML file the error wa
 
 The third type of error occurs if the XML file contains tags that do not have a description in the corresponding DTD file. This is an example of such an XML file:
 
-\begin{verbatim}
+\begin{minted}{text}
 <?xml version="1.0"?>
 <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
 <eInfoResult>
@@ -729,7 +729,7 @@ The third type of error occurs if the XML file contains tags that do not have a 
 ...
         </DbInfo>
 </eInfoResult>
-\end{verbatim}
+\end{minted}
 
 In this file, for some reason the tag \verb|<DocsumList>| (and several others) are not listed in the DTD file \verb|eInfo_020511.dtd|, which is specified on the second line as the DTD for this XML file. By default, the parser will stop and raise a ValidationError if it cannot find some tag in the DTD:
 
@@ -766,7 +766,7 @@ One obvious case is you may prefer to download sequences in the FASTA or GenBank
 \label{sec:entrez-and-medline}
 You can find the Medline parser in \verb+Bio.Medline+. Suppose we want to parse the file \verb+pubmed_result1.txt+, containing one Medline record. You can find this file in Biopython's \verb+Tests\Medline+ directory. The file looks like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 PMID- 12230038
 OWN - NLM
 STAT- MEDLINE
@@ -783,7 +783,7 @@ PG  - 296-302
 AB  - Bioinformatics research is often difficult to do with commercial software. The
       Open Source BioPerl, BioPython and Biojava projects provide toolkits with
 ...
-\end{verbatim}
+\end{minted}
 We first open the file and then parse it:
 %doctest ../Tests/Medline
 \begin{minted}{pycon}
@@ -930,7 +930,7 @@ from \url{ftp://ftp.ncbi.nih.gov/pub/geo/} instead.  In this case you might want
 
 UniGene is an NCBI database of the transcriptome, with each UniGene record showing the set of transcripts that are associated with a particular gene in a specific organism. A typical UniGene record looks like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID          Hs.2
 TITLE       N-acetyltransferase 2 (arylamine N-acetyltransferase)
 GENE        NAT2
@@ -963,7 +963,7 @@ SEQUENCE    ACC=BG569293.1; NID=g13576946; CLONE=IMAGE:4722596; END=5'; LID=6989
 ...
 SEQUENCE    ACC=AU099534.1; NID=g13550663; CLONE=HSI08034; END=5'; LID=8800; SEQTYPE=EST
 //
-\end{verbatim}
+\end{minted}
 
 This particular record shows the set of transcripts (shown in the \verb+SEQUENCE+ lines) that originate from the human gene NAT2, encoding en N-acetyltransferase. The \verb+PROTSIM+ lines show proteins with significant similarity to NAT2, whereas the \verb+STS+ lines show the corresponding sequence-tagged sites in the genome.
 
@@ -1096,14 +1096,14 @@ Let's now iterate over the records to print out some information about each reco
 \end{minted}
 
 The output for this looks like:
-\begin{verbatim}
+\begin{minted}{text}
 title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
 patterns of hydrocarbons as the key mechanism for pollination by sexual
 deception [In Process Citation]
 authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
 'Ibarra F', 'Francke W']
 source: J Comp Physiol [A] 2000 Jun;186(6):567-74
-\end{verbatim}
+\end{minted}
 
 Especially interesting to note is the list of authors, which is returned as a standard Python list. This makes it easy to manipulate and search using standard Python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 \begin{minted}{pycon}

@@ -87,12 +87,12 @@ If you run the search today, you'll get hundreds of results!  When following the
 
 If you open the lady slipper orchids FASTA file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta} in your favourite text editor, you'll see that the file starts like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
 CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
 AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
-\end{verbatim}
+\end{minted}
 
 It contains 94 records, each has a line starting with ``\verb+>+'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
@@ -106,7 +106,7 @@ for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
 
 \noindent You should get something like this on your screen:
 
-\begin{verbatim}
+\begin{minted}{text}
 gi|2765658|emb|Z78533.1|CIZ78533
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetterAlphabet())
 740
@@ -114,7 +114,7 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetter
 gi|2765564|emb|Z78439.1|PBZ78439
 Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', SingleLetterAlphabet())
 592
-\end{verbatim}
+\end{minted}
 
 Notice that the FASTA format does not specify the alphabet, so \verb|Bio.SeqIO| has defaulted to the rather generic \verb|SingleLetterAlphabet()| rather than something DNA specific.
 
@@ -132,7 +132,7 @@ for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
 
 \noindent This should give:
 
-\begin{verbatim}
+\begin{minted}{text}
 Z78533.1
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 740
@@ -140,7 +140,7 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguo
 Z78439.1
 Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
 592
-\end{verbatim}
+\end{minted}
 
 This time \verb|Bio.SeqIO| has been able to choose a sensible alphabet, IUPAC Ambiguous DNA.  You'll also notice that a shorter string has been used as the \verb|seq_record.id| in this case.
 
