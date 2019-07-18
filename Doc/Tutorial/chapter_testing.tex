@@ -86,23 +86,24 @@ of difficulties pinning down user-specific settings (e.g. executable names of th
 Python versions). You may also only be interested in testing Biopython only against
 a subset of the Python versions that we support.
 
-If you are interested in using Tox, you may start with the example \texttt{tox.ini}
-shown below:
+If you are interested in using Tox, you could start with the example
+\texttt{tox.ini} shown below:
 
 \begin{verbatim}
 [tox]
-envlist = py26, py27, pypy, py33, py34, jython
+envlist = py27,pypy,py36,py37
 
 [testenv]
 changedir = Tests
 commands = {envpython} run_tests.py --offline
 deps =
     numpy
+    reportlab
 \end{verbatim}
 
 Using the template above, executing \texttt{tox} will test your Biopython code against
-Python2.6, Python2.7, PyPy, Python3.3, Python3.4, and Jython. It assumes that those
-Pythons' executables are named accordingly: python2.6 for Python2.6, and so on.
+Python 2.7, PyPy, Python 3.6 and Python3.7. It assumes that those
+Pythons' executables are named accordingly: ``python2.7`` for Python 2.7, and so on.
 
 
 \section{Writing tests}
