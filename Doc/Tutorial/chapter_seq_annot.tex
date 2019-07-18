@@ -122,11 +122,11 @@ This example uses a fairly large FASTA file containing the whole sequence for \t
 
 The file starts like this - and you can check there is only one record present (i.e. only one line starting with a greater than symbol):
 
-\begin{verbatim}
+\begin{minted}{text}
 >gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence
 TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
 ...
-\end{verbatim}
+\end{minted}
 
 Back in Chapter~\ref{chapter:quick_start} you will have seen the function \verb|Bio.SeqIO.parse(...)|
 used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
@@ -175,11 +175,11 @@ symbol) is used for the record description. This is deliberate, partly for
 backwards compatibility reasons, but it also makes sense if you have a FASTA
 file like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 >Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1
 TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
 ...
-\end{verbatim}
+\end{minted}
 
 Note that none of the other annotation attributes get populated when reading a
 FASTA file:
@@ -204,7 +204,7 @@ Again, this file is included with the Biopython unit tests under the GenBank fol
 
 This file contains a single record (i.e. only one LOCUS line) and starts:
 
-\begin{verbatim}
+\begin{minted}{text}
 LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008
 DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete
             sequence.
@@ -212,7 +212,7 @@ ACCESSION   NC_005816
 VERSION     NC_005816.1  GI:45478711
 PROJECT     GenomeProject:10638
 ...
-\end{verbatim}
+\end{minted}
 
 Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:seqio} for details):
 
@@ -665,13 +665,13 @@ record = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQA
 print(record.format("fasta"))
 \end{minted}
 \noindent which should give:
-\begin{verbatim}
+\begin{minted}{text}
 >gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
 MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
 GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
 NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
 SSAC
-\end{verbatim}
+\end{minted}
 
 This \verb|format| method takes a single mandatory argument, a lower case string which is
 supported by \verb|Bio.SeqIO| as an output format (see Chapter~\ref{chapter:seqio}).

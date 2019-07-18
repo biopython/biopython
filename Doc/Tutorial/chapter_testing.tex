@@ -89,7 +89,7 @@ a subset of the Python versions that we support.
 If you are interested in using Tox, you could start with the example
 \texttt{tox.ini} shown below:
 
-\begin{verbatim}
+\begin{minted}{text}
 [tox]
 envlist = py27,pypy,py36,py37
 
@@ -99,7 +99,7 @@ commands = {envpython} run_tests.py --offline
 deps =
     numpy
     reportlab
-\end{verbatim}
+\end{minted}
 
 Using the template above, executing \texttt{tox} will test your Biopython code against
 Python 2.7, PyPy, Python 3.6 and Python3.7. It assumes that those
@@ -389,7 +389,7 @@ e.g.
 continue from the previous Python block. Here we use the
 magic comment \verb|%cont-doctest| as shown here:
 
-\begin{verbatim} 
+\begin{verbatim}
 %cont-doctest
 \begin{minted}{pycon}
 >>> Seq("ACGT") == Seq("ACGT", generic_dna)

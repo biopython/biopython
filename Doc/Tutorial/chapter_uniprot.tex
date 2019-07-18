@@ -141,7 +141,7 @@ It is equally easy to extract any kind of information you'd like from Swiss-Prot
 
 Swiss-Prot also distributes a file \verb+keywlist.txt+, which lists the keywords and categories used in Swiss-Prot. The file contains entries in the following form:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID   2Fe-2S.
 AC   KW-0001
 DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
@@ -165,7 +165,7 @@ CA   Technical term.
 //
 ID   3Fe-4S.
 ...
-\end{verbatim}
+\end{minted}
 
 The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
 
@@ -179,13 +179,13 @@ The entries in this file can be parsed by the \verb+parse+ function in the \verb
 \end{minted}
 
 This prints
-\begin{verbatim}
+\begin{minted}{text}
 2Fe-2S.
 Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
 complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
 protein.
 ...
-\end{verbatim}
+\end{minted}
 
 \section{Parsing Prosite records}
 
@@ -265,7 +265,7 @@ Again a \verb|read()| function is provided to read exactly one Prosite documenta
 
 ExPASy's Enzyme database is a repository of information on enzyme nomenclature. A typical Enzyme record looks as follows:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID   3.1.1.34
 DE   Lipoprotein lipase.
 AN   Clearing factor lipase.
@@ -281,7 +281,7 @@ DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
 DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
 DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
 //
-\end{verbatim}
+\end{minted}
 
 In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
 
@@ -447,10 +447,10 @@ For these functions, an invalid accession number returns an error message in HTM
 
 You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
 
-\begin{verbatim}
+\begin{minted}{text}
 MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
 CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
-\end{verbatim}
+\end{minted}
 
 you can use the following code:
 

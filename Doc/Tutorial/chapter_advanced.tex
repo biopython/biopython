@@ -96,12 +96,12 @@ print_mat(self,f,format="%4d",bottomformat="%4s",alphabet=None)
 
     prints the matrix to file handle f. \verb|format| is the format field for the matrix values; \verb|bottomformat| is the format field for the bottom row, containing matrix letters. Example output for a 3-letter alphabet matrix:
 
-\begin{verbatim}
+\begin{minted}{text}
 A 23
 B 12 34
 C 7  22  27
   A   B   C
-\end{verbatim}
+\end{minted}
 
     The \verb|alphabet| optional argument is a string of all characters in the alphabet. If supplied, the order of letters along the axes is taken from the string, rather than by alphabetical order.
 
@@ -118,15 +118,15 @@ C 7  22  27
 
    Initially, you should generate an accepted replacement matrix (ARM) from your data. The values in ARM are the counted number of replacements according to your data. The data could be a set of pairs or multiple alignments. So for instance if Alanine was replaced by Cysteine 10 times, and Cysteine by Alanine 12 times, the corresponding ARM entries would be:
 
-\begin{verbatim}
+\begin{minted}{text}
 ('A','C'): 10, ('C','A'): 12
-\end{verbatim}
+\end{minted}
 
 as order doesn't matter, user can already provide only one entry:
 
-\begin{verbatim}
+\begin{minted}{text}
 ('A','C'): 22
-\end{verbatim}
+\end{minted}
 
  A SeqMat instance may be initialized with either a full (first method of counting: 10, 12) or half (the latter method, 22) matrices. A full protein
    alphabet matrix would be of the size 20x20 = 400. A half matrix of that alphabet would be 20x20/2 + 20/2 = 210. That is because same-letter entries don't
@@ -246,21 +246,21 @@ FreqTable.FreqTable(UserDict.UserDict)
   \item Example of use:
   The expected count of the residues in the database is sitting in a file, whitespace delimited, in the following format (example given for a 3-letter alphabet):
 
-\begin{verbatim}
+\begin{minted}{text}
 A   35
 B   65
 C   100
-\end{verbatim}
+\end{minted}
 
 And will be read using the \verb|FreqTable.read_count(file_handle)| function.
 
 An equivalent frequency file:
 
-\begin{verbatim}
+\begin{minted}{text}
 A  0.175
 B  0.325
 C  0.5
-\end{verbatim}
+\end{minted}
 
 Conversely, the residue frequencies or counts can be passed as a dictionary.
 Example of a count dictionary (3-letter alphabet):

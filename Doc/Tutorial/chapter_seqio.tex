@@ -128,7 +128,7 @@ print(len(first_record))
 
 \noindent Giving:
 
-\begin{verbatim}
+\begin{minted}{text}
 Found 94 records
 The last record
 Z78439.1
@@ -138,7 +138,7 @@ The first record
 Z78533.1
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 740
-\end{verbatim}
+\end{minted}
 
 You can of course still use a for loop with a list of \verb|SeqRecord| objects.  Using a list is much more flexible than an iterator (for example, you can determine the number of records from the length of the list), but does need more memory because it will hold all the records in memory at once.
 
@@ -156,7 +156,7 @@ print(first_record)
 
 \noindent That should give something like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 ID: Z78533.1
 Name: Z78533
 Description: C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA.
@@ -172,7 +172,7 @@ Number of features: 5
 /organism=Cypripedium irapeanum
 /gi=2765658
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
-\end{verbatim}
+\end{minted}
 
 This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.
 For this example we're going to use the \verb|.annotations| attribute which is just a Python dictionary.
@@ -232,20 +232,20 @@ print(all_species)
 \noindent In either case, the result is:
 
 % Try and keep this example output line short enough to fit on one page of PDF output:
-\begin{verbatim}
+\begin{minted}{text}
 ['Cypripedium irapeanum', 'Cypripedium californicum', ..., 'Paphiopedilum barbatum']
-\end{verbatim}
+\end{minted}
 
 Great.  That was pretty easy because GenBank files are annotated in a standardised way.
 
 Now, let's suppose you wanted to extract a list of the species from a FASTA file, rather than the GenBank file.  The bad news is you will have to write some code to extract the data you want from the record's description line - if the information is in the file in the first place!  Our example FASTA format file \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/ls_orchid.fasta}{ls\_orchid.fasta} starts like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
 CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
 AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
-\end{verbatim}
+\end{minted}
 
 You can check by hand, but for every record the species name is in the description line as the second word.  This means if we break up each record's \verb|.description| at the spaces, then the species is there as field number one (field zero is the record identifier).  That means we can do this:
 
@@ -259,9 +259,9 @@ print(all_species)
 
 \noindent This gives:
 
-\begin{verbatim}
+\begin{minted}{text}
 ['C.irapeanum', 'C.californicum', 'C.fasciculatum', 'C.margaritaceum', ..., 'P.barbatum']
-\end{verbatim}
+\end{minted}
 
 The concise alternative using list comprehensions would be:
 
@@ -392,9 +392,9 @@ print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 
 \noindent Expected output:
 
-\begin{verbatim}
+\begin{minted}{text}
 gi|6273291|gb|AF191665.1|AF191665 with 0 features
-\end{verbatim}
+\end{minted}
 
 The NCBI will also let you ask for the file in other formats, in particular as
 a GenBank file. Until Easter 2009, the Entrez EFetch API let you use ``genbank''
@@ -416,9 +416,9 @@ print("%s with %i features" % (seq_record.id, len(seq_record.features)))
 
 \noindent The expected output of this example is:
 
-\begin{verbatim}
+\begin{minted}{text}
 AF191665.1 with 3 features
-\end{verbatim}
+\end{minted}
 
 \noindent Notice this time we have three features.
 
@@ -439,14 +439,14 @@ with Entrez.efetch(db="nucleotide", rettype="gb", retmode="text",
 
 \noindent That should give the following output:
 
-\begin{verbatim}
+\begin{minted}{text}
 AF191665.1 Opuntia marenae rpl16 gene; chloroplast gene for c...
 Sequence length 902, 3 features, from: chloroplast Opuntia marenae
 AF191664.1 Opuntia clavata rpl16 gene; chloroplast gene for c...
 Sequence length 899, 3 features, from: chloroplast Grusonia clavata
 AF191663.1 Opuntia bradtiana rpl16 gene; chloroplast gene for...
 Sequence length 899, 3 features, from: chloroplast Opuntia bradtianaa
-\end{verbatim}
+\end{minted}
 
 See Chapter~\ref{chapter:entrez} for more about the \verb|Bio.Entrez| module, and make sure to read about the NCBI guidelines for using Entrez (Section~\ref{sec:entrez-guidelines}).
 
@@ -472,14 +472,14 @@ print(seq_record.annotations["keywords"])
 
 \noindent Assuming your network connection is OK, you should get back:
 
-\begin{verbatim}
+\begin{minted}{text}
 O23729
 CHS3_BROFI
 RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;
 Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())
 Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
-\end{verbatim}
+\end{minted}
 
 \section{Sequence files as Dictionaries}
 
@@ -580,10 +580,10 @@ print(orchid_dict.keys())
 
 \noindent This time the keys are:
 
-\begin{verbatim}
+\begin{minted}{text}
 ['gi|2765596|emb|Z78471.1|PDZ78471', 'gi|2765646|emb|Z78521.1|CCZ78521', ...
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
-\end{verbatim}
+\end{minted}
 
 You should recognise these strings from when we parsed the FASTA file earlier in Section~\ref{sec:fasta-parsing}.  Suppose you would rather have something else as the keys - like the accession numbers.  This brings us nicely to \verb|SeqIO.to_dict()|'s optional argument \verb|key_function|, which lets you define what to use as the dictionary key for your records.
 
@@ -632,12 +632,12 @@ for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
 
 \noindent This should give:
 
-\begin{verbatim}
+\begin{minted}{text}
 Z78533.1 JUEoWn6DPhgZ9nAyowsgtoD9TTo
 Z78532.1 MN/s0q9zDoCVEEc+k/IFwCNF2pY
 ...
 Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
-\end{verbatim}
+\end{minted}
 
 Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use Python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
@@ -1040,7 +1040,7 @@ SeqIO.write(my_records, "my_example.faa", "fasta")
 
 \noindent And if you open this file in your favourite text editor it should look like this:
 
-\begin{verbatim}
+\begin{minted}{text}
 >gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
 MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
 GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
@@ -1057,7 +1057,7 @@ NKGARVLVVCSEITAVTFRGPNDTHLDSLVGQALFGDGAAAVIIGSDPIPEVERPLFELV
 SAAQTLLPDSEGAIDGHLREVGLTFHLLKDVPGLISKNIEKSLVEAFQPLGISDWNSLFW
 IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT
 TGEGLEWGVLFGFGPGLTVETVVLHSVAT
-\end{verbatim}
+\end{minted}
 
 Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| function wrote to the handle?
 If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  The \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.
@@ -1075,7 +1075,7 @@ As a trivial example, any line wrapping of the sequence data in FASTA files is
 allowed. An identical \verb|SeqRecord| would be given from parsing the following
 two examples which differ only in their line breaks:
 
-\begin{verbatim}
+\begin{minted}{text}
 >YAL068C-7235.2170 Putative promoter sequence
 TACGAGAATAATTTCTCATCATCCAGCTTTAACACAAAATTCGCACAGTTTTCGTTAAGA
 GAACTTAACATTTTCTTATGACGTAAATGAAGTTTATATATAAATTTCCTTTTTATTGGA
@@ -1084,7 +1084,7 @@ GAACTTAACATTTTCTTATGACGTAAATGAAGTTTATATATAAATTTCCTTTTTATTGGA
 TACGAGAATAATTTCTCATCATCCAGCTTTAACACAAAATTCGCA
 CAGTTTTCGTTAAGAGAACTTAACATTTTCTTATGACGTAAATGA
 AGTTTATATATAAATTTCCTTTTTATTGGA
-\end{verbatim}
+\end{minted}
 
 To make a round-tripable FASTA parser you would need to keep track of where the
 sequence line breaks occurred, and this extra information is usually pointless.
