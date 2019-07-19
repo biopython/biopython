@@ -3,7 +3,9 @@
 
 \section{Parsing Swiss-Prot files}
 
-Swiss-Prot (\url{https://web.expasy.org/docs/swiss-prot_guideline.html}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
+Swiss-Prot (\url{https://web.expasy.org/docs/swiss-prot_guideline.html}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.
+
+Although in the following we focus on the older human readable plain text format, \verb|Bio.SeqIO| can read both this and the newer UniProt XML file format for annotated protein sequences.
 
 \subsection{Parsing Swiss-Prot records}
 
@@ -25,7 +27,6 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \begin{minted}{pycon}
 >>> from urllib.request import urlopen # Python 3 only
 >>> from io import TextIOWrapper
->>> 
 >>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"))
 \end{minted}
 to open the file stored on the Internet before calling \verb|read|.
@@ -34,7 +35,6 @@ Note for Python 2 this can be done by using:
 %--doctest . internet
 \begin{minted}{pycon}
 >>> from urllib import urlopen #Python 2 only
->>>
 >>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
 \end{minted}
 \item Open a Swiss-Prot file over the internet from the ExPASy database

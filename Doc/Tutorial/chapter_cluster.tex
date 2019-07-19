@@ -719,7 +719,6 @@ to open a gzipped file, or
 \begin{minted}{pycon}
 >>> from urllib.request import urlopen # Python 3 only
 >>> from io import TextIOWrapper
->>>
 >>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt"))
 \end{minted}
 to open a file stored on the Internet before calling \verb|read|.
@@ -727,7 +726,6 @@ to open a file stored on the Internet before calling \verb|read|.
 Note for Python 2 this can be done by using:
 \begin{minted}{pycon}
 >>> from urllib import urlopen # Python 2 only
->>>
 >>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/Cluster/cyano.txt")
 \end{minted}
 
