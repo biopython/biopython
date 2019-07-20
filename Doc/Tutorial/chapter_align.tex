@@ -1767,28 +1767,28 @@ where $n$ is the length of the gap.
 Biopython's pairwise sequence aligner allows fine-grained control over the gap
 scoring scheme by specifying the following twelve attributes of a \verb+PairwiseAligner+ object:
 
-\begin{table}
-\begin{tabular}{|l|}
-\verb+query_left_open_gap_score+ \\
-\verb+query_left_extend_gap_score+ \\
-\verb+query_internal_open_gap_score+ \\
-\verb+query_internal_extend_gap_score+ \\
-\verb+query_right_open_gap_score+ \\
-\verb+query_right_extend_gap_score+ \\
-\verb+target_left_open_gap_score+ \\
-\verb+target_left_extend_gap_score+ \\
-\verb+target_internal_open_gap_score+ \\
-\verb+target_internal_extend_gap_score+ \\
-\verb+target_right_open_gap_score+ \\
-\verb+target_right_extend_gap_score+ \\
+\begin{table}[h]
+\begin{tabular}{|l|l|}
+\hline
+\bf{Opening scores}                   & \bf{Extending scores} \\
+\hline
+\verb+query_left_open_gap_score+      & \verb+query_left_extend_gap_score+ \\
+\verb+query_internal_open_gap_score+  & \verb+query_internal_extend_gap_score+ \\
+\verb+query_right_open_gap_score+     & \verb+query_right_extend_gap_score+ \\
+\verb+target_left_open_gap_score+     & \verb+target_left_extend_gap_score+ \\
+\verb+target_internal_open_gap_score+ & \verb+target_internal_extend_gap_score+ \\
+\verb+target_right_open_gap_score+    & \verb+target_right_extend_gap_score+ \\
+\hline
 \end{tabular}
 \end{table}
 
 These attributes allow for different gap scores for internal gaps and on either end of the sequence, as shown in this example:
 
-\begin{table}
+\begin{table}[h]
 \begin{tabular}{|c|c|l|}
+\hline
 \bf{target} & \bf{query} & \bf{score} \\
+\hline
 A & - &  query left open gap score \\
 C & - &  query left extend gap score \\
 C & - &  query left extend gap score \\
@@ -1810,14 +1810,18 @@ C & C &  match score \\
 A & A &  match score \\
 - & T &  target right open gap score \\
 - & A &  target right extend gap score \\
-- & A &  target right extend gap score
+- & A &  target right extend gap score \\
+\hline
 \end{tabular}
 \end{table}
 
-For convenience, \verb+PairwiseAligner+ objects have additional attributes that refer to a number of these values collectively, as shown (hierarchically) in this table:
+For convenience, \verb+PairwiseAligner+ objects have additional attributes that refer to a number of these values collectively, as shown (hierarchically) in Table~\ref{table:align-meta-attributes}.
 
 \begin{table}
+\caption{Meta-attributes of the pairwise aligner objects.}
 \begin{tabular}{|l|l|}
+\hline
+\bf{Meta-attribute} & \bf{Attributes it maps to} \\
 \hline
 \verb+gap_score+ & \verb+target_gap_score+, \verb+query_gap_score+ \\
 \verb+open_gap_score+ & \verb+target_open_gap_score+, \verb+query_open_gap_score+ \\
@@ -1834,11 +1838,15 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \verb+left_extend_gap_score+ & \verb+target_left_extend_gap_score+, \verb+query_left_extend_gap_score+ \\
 \verb+right_open_gap_score+ & \verb+target_right_open_gap_score+, \verb+query_right_open_gap_score+ \\
 \verb+right_extend_gap_score+ & \verb+target_right_extend_gap_score+, \verb+query_right_extend_gap_score+ \\
-\verb+target_open_gap_score+ & \verb+target_internal_open_gap_score+, \verb+target_left_open_gap_score+, \verb+target_right_open_gap_score+ \\
-\verb+target_extend_gap_score+ & \verb+target_internal_extend_gap_score+, \verb+target_left_extend_gap_score+, \verb+target_right_extend_gap_score+ \\
+\verb+target_open_gap_score+ & \verb+target_internal_open_gap_score+, \verb+target_left_open_gap_score+, \\
+                             & \verb+target_right_open_gap_score+ \\
+\verb+target_extend_gap_score+ & \verb+target_internal_extend_gap_score+, \verb+target_left_extend_gap_score+, \\
+                               & \verb+target_right_extend_gap_score+ \\
 \verb+target_gap_score+ & \verb+target_open_gap_score+, \verb+target_extend_gap_score+ \\
-\verb+query_open_gap_score+ & \verb+query_internal_open_gap_score+, \verb+query_left_open_gap_score+, \verb+query_right_open_gap_score+ \\
-\verb+query_extend_gap_score+ & \verb+query_internal_extend_gap_score+, \verb+query_left_extend_gap_score+, \verb+query_right_extend_gap_score+ \\
+\verb+query_open_gap_score+ & \verb+query_internal_open_gap_score+, \verb+query_left_open_gap_score+, \\
+                            & \verb+query_right_open_gap_score+ \\
+\verb+query_extend_gap_score+ & \verb+query_internal_extend_gap_score+, \verb+query_left_extend_gap_score+, \\
+                              & \verb+query_right_extend_gap_score+ \\
 \verb+query_gap_score+ & \verb+query_open_gap_score+, \verb+query_extend_gap_score+ \\
 \verb+target_internal_gap_score+ & \verb+target_internal_open_gap_score+, \verb+target_internal_extend_gap_score+ \\
 \verb+target_end_gap_score+ & \verb+target_end_open_gap_score+, \verb+target_end_extend_gap_score+ \\
@@ -1854,6 +1862,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 \verb+query_right_gap_score+ & \verb+query_right_open_gap_score+, \verb+query_right_extend_gap_score+ \\
 \hline
 \end{tabular}
+\label{table:align-meta-attributes}
 \end{table}
 
 \subsubsection{General gap scores}
