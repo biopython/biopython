@@ -1443,6 +1443,11 @@ class TestNCBIXML(unittest.TestCase):
 
         handle = open(datafile, "rb")
         record = NCBIXML.read(handle)
+
+        hsp = record.alignments[0].hsps[0]
+        self.assertEqual(hsp.score, 630.0)
+        self.assertEqual(hsp.bits, 247.284)
+
         handle.close()
 
     def test_xml_2212L_tblastn_001(self):
@@ -2598,6 +2603,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.match,
                          "MADEEVQALVVDNGSGMCKAG       ++  P               G KDSYVGDEAQSKRGILTLKYPIEHGIVTNWDDMEKIWHHTFYNELRVAPEEHPVLLTE")
         self.assertEqual(hsp.score, 408.0)
+        self.assertEqual(hsp.bits, 161.77)
         self.assertEqual(hsp.expect, 8.11609e-49)
         self.assertEqual(hsp.query_start, 20)
         self.assertEqual(hsp.query_end, 343)
@@ -2917,6 +2923,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.match,
                          "MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPN+FLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDL TREKG  AVKEFLNEQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS S ELENFKTIISFL")
         self.assertEqual(hsp.score, 1136.0)
+        self.assertEqual(hsp.bits, 442.195)
         self.assertEqual(hsp.expect, 2.08707e-139)
         self.assertEqual(hsp.query_start, 1)
         self.assertEqual(hsp.query_end, 234)
