@@ -20,13 +20,13 @@ In this case consider the low-level \verb|SimpleFastaParser| and \verb|FastqGene
 The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments:
 
 \begin{enumerate}
-\item The first argument is a {\it handle} to read the data from, or a filename. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
+\item The first argument is a \textit{handle} to read the data from, or a filename. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
 \noindent There is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
 
-The \verb|Bio.SeqIO.parse()| function returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
+The \verb|Bio.SeqIO.parse()| function returns an \textit{iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
 
 Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation use the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
 
@@ -100,7 +100,7 @@ first_record = next(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{minted}
 
 A word of warning here -- using the \verb|next()| function like this will silently ignore any additional records in the file.
-If your files have {\it one and only one} record, like some of the online examples later in this chapter, or a GenBank file for a single chromosome, then use the new \verb|Bio.SeqIO.read()| function instead.
+If your files have \textit{one and only one} record, like some of the online examples later in this chapter, or a GenBank file for a single chromosome, then use the new \verb|Bio.SeqIO.read()| function instead.
 This will check there are no extra unexpected records present.
 
 \subsection{Getting a list of the records in a sequence file}
