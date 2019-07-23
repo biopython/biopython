@@ -82,7 +82,7 @@ First we create a \texttt{PDBParser} object:
 >>> parser = PDBParser(PERMISSIVE=1)
 \end{minted}
 
-The {\tt PERMISSIVE} flag indicates that a number of common problems (see \ref{sec:problem_structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a {\tt PDBConstructionException} will be generated if any problems are detected during the parse operation.
+The \texttt{PERMISSIVE} flag indicates that a number of common problems (see \ref{sec:problem_structures}) associated with PDB files will be ignored (but note that some atoms and/or residues will be missing). If the flag is not present a \texttt{PDBConstructionException} will be generated if any problems are detected during the parse operation.
 
 The Structure object is then produced by letting the \texttt{PDBParser} object parse a PDB file (the PDB file in this case is called \verb|pdb1fat.ent|, \verb|1fat| is a user defined name for the structure):
 
@@ -93,7 +93,7 @@ The Structure object is then produced by letting the \texttt{PDBParser} object p
 \end{minted}
 
 You can extract the header and trailer (simple lists of strings) of the PDB
-file from the PDBParser object with the {\tt get\_header} and {\tt get\_trailer}
+file from the PDBParser object with the \texttt{get\_header} and \texttt{get\_trailer}
 methods.  Note however that many PDB files contain headers with
 incomplete or erroneous information. Many of the errors have been
 fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
@@ -393,13 +393,13 @@ and the segment identifier of the residue (well known to X-PLOR users, but not
 used in the construction of the SMCRA data structure).
 
 Let's look at some examples. Asn 10 with a blank insertion code would have residue
-id {\tt (' ', 10, ' ')}. Water 10 would have residue id {\tt ('W', 10, ' ')}.
+id \texttt{(' ', 10, ' ')}. Water 10 would have residue id \texttt{('W', 10, ' ')}.
 A glucose molecule (a hetero residue with residue name GLC) with sequence identifier
-10 would have residue id {\tt ('H\_GLC', 10, ' ')}. In this way, the three
+10 would have residue id \texttt{('H\_GLC', 10, ' ')}. In this way, the three
 residues (with the same insertion code and sequence identifier) can be part
 of the same chain because their residue id's are distinct.
 
-In most cases, the hetflag and insertion code fields will be blank, e.g. {\tt (' ', 10, ' ')}.
+In most cases, the hetflag and insertion code fields will be blank, e.g. \texttt{(' ', 10, ' ')}.
 In these cases, the sequence identifier can be used as a shortcut for the full
 id:
 
