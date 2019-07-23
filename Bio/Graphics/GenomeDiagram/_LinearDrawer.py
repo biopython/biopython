@@ -9,7 +9,7 @@
 # Contact:       Leighton Pritchard, The James Hutton Institute,
 #                Invergowrie, Dundee, Scotland, DD2 5DA, UK
 #                Leighton.Pritchard@hutton.ac.uk
-################################################################################
+###############################################################################
 
 """Linear Drawer module.
 
@@ -19,21 +19,20 @@ Provides:
 For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
+# Standard Library imports
+from __future__ import print_function
+from math import ceil
 
 # ReportLab imports
-from __future__ import print_function
-
-from reportlab.graphics.shapes import Drawing, Line, String, Group, Polygon
+from reportlab.graphics.shapes import Drawing, Group, Line, Polygon, String
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from ._AbstractDrawer import intermediate_points, angle2trig, deduplicate
+from ._AbstractDrawer import AbstractDrawer, draw_arrow, draw_box
+from ._AbstractDrawer import _stroke_and_fill_colors, draw_cut_corner_box
+from ._AbstractDrawer import angle2trig, deduplicate, intermediate_points
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
-
-from math import ceil
 
 
 class LinearDrawer(AbstractDrawer):
@@ -299,8 +298,8 @@ class LinearDrawer(AbstractDrawer):
                        GraphSet: self.draw_graph_set
                        }
 
-        for set in track.get_sets():        # Draw the feature or graph sets
-            elements, labels = set_methods[set.__class__](set)
+        for track_set in track.get_sets():        # Draw the feature or graph sets
+            elements, labels = set_methods[track_set.__class__](track_set)
             track_elements += elements
             track_labels += labels
         return track_elements, track_labels
@@ -438,12 +437,12 @@ class LinearDrawer(AbstractDrawer):
         # Check to see if the track contains a graph - if it does, get the
         # minimum and maximum values, and put them on the scale Y-axis
         if track.axis_labels:
-            for set in track.get_sets():            # Check all sets...
-                if set.__class__ is GraphSet:     # ...for a graph set
+            for track_set in track.get_sets():            # Check all sets...
+                if track_set.__class__ is GraphSet:     # ...for a graph set
                     graph_label_min = []
                     graph_label_mid = []
                     graph_label_max = []
-                    for graph in set.get_graphs():
+                    for graph in track_set.get_graphs():
                         quartiles = graph.quartiles()
                         minval, maxval = quartiles[0], quartiles[4]
                         if graph.center is None:
@@ -476,8 +475,9 @@ class LinearDrawer(AbstractDrawer):
                                            fillColor=track.scale_color)
                             labelgroup = Group(label)
                             rotation = angle2trig(track.scale_fontangle)
-                            labelgroup.transform = (rotation[0], rotation[1], rotation[2],
-                                                    rotation[3], self.x0 + x_left, pos)
+                            labelgroup.transform = (rotation[0], rotation[1],
+                                                    rotation[2], rotation[3],
+                                                    self.x0 + x_left, pos)
                             scale_labels.append(labelgroup)
 
         return scale_elements, scale_labels
@@ -531,7 +531,8 @@ class LinearDrawer(AbstractDrawer):
                 for x in range(int(self.x0), int(self.xlim), int(labelstep)):
                     if fragment == start_fragment and x < start_offset:
                         continue
-                    if fragment == end_fragment and end_offset < x + label.getBounds()[2]:
+                    if (fragment == end_fragment and
+                            end_offset < x + label.getBounds()[2]):
                         continue
                     labelgroup = Group(label)
                     rotation = angle2trig(track.greytrack_font_rotation)
@@ -557,7 +558,8 @@ class LinearDrawer(AbstractDrawer):
 
         # Collect all the elements for the feature set
         for feature in set.get_features():
-            if self.is_in_bounds(feature.start) or self.is_in_bounds(feature.end):
+            if (self.is_in_bounds(feature.start) or
+                    self.is_in_bounds(feature.end)):
                 features, labels = self.draw_feature(feature)   # get elements and labels
                 feature_elements += features
                 label_elements += labels
@@ -588,7 +590,8 @@ class LinearDrawer(AbstractDrawer):
             if end < locstart:
                 continue
             locend = min(locend, end)
-            feature_boxes = self.draw_feature_location(feature, locstart, locend)
+            feature_boxes = self.draw_feature_location(feature, locstart,
+                                                       locend)
             for box, label in feature_boxes:
                 feature_elements.append(box)
                 if label is not None:
@@ -611,11 +614,14 @@ class LinearDrawer(AbstractDrawer):
         # drawn on a non-existent fragment.  So we check that the start and
         # end fragments do actually exist in terms of the drawing
         allowed_fragments = list(self.fragment_limits.keys())
-        if start_fragment in allowed_fragments and end_fragment in allowed_fragments:
+        if (start_fragment in allowed_fragments and
+                end_fragment in allowed_fragments):
             # print feature.name, feature.start, feature.end, start_offset, end_offset
             if start_fragment == end_fragment:  # Feature is found on one fragment
-                feature_box, label = self.get_feature_sigil(feature, start_offset,
-                                                            end_offset, start_fragment)
+                feature_box, label = self.get_feature_sigil(feature,
+                                                            start_offset,
+                                                            end_offset,
+                                                            start_fragment)
                 feature_boxes.append((feature_box, label))
                 # feature_elements.append(feature_box)
                 # if label is not None:   # There is a label for the feature
@@ -641,7 +647,8 @@ class LinearDrawer(AbstractDrawer):
                 # print locend, self.end, fragment
                 # print self.fragment_bases, self.length
                 feature_box, label = self.get_feature_sigil(feature, 0,
-                                                            end_offset, fragment)
+                                                            end_offset,
+                                                            fragment)
                 feature_boxes.append((feature_box, label))
         # if locstart > locend:
         #    print locstart, locend, feature.strand, feature_boxes, feature.name
@@ -701,7 +708,8 @@ class LinearDrawer(AbstractDrawer):
         if trackA == trackB:
             raise NotImplementedError()
 
-        strokecolor, fillcolor = _stroke_and_fill_colors(cross_link.color, cross_link.border)
+        strokecolor, fillcolor = _stroke_and_fill_colors(cross_link.color,
+                                                         cross_link.border)
 
         allowed_fragments = list(self.fragment_limits.keys())
 
@@ -830,21 +838,24 @@ class LinearDrawer(AbstractDrawer):
                 # On right end... force "crossing" to margin
                 answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
                                                    xBe, yB, xBs, yB,
-                                                   self.x0 + self.pagewidth, 0.5 * (yA + yB)]),
+                                                   self.x0 + self.pagewidth,
+                                                   0.5 * (yA + yB)]),
                                       strokeColor=strokecolor,
                                       fillColor=fillcolor,
                                       # default is mitre/miter which can stick out too much:
                                       strokeLineJoin=1,  # 1=round
                                       strokewidth=0))
             elif cross_link.flip:
-                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBs, yB, xBe, yB]),
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
+                                                   xBs, yB, xBe, yB]),
                                       strokeColor=strokecolor,
                                       fillColor=fillcolor,
                                       # default is mitre/miter which can stick out too much:
                                       strokeLineJoin=1,  # 1=round
                                       strokewidth=0))
             else:
-                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA, xBe, yB, xBs, yB]),
+                answer.append(Polygon(deduplicate([xAs, yA, xAe, yA,
+                                                   xBe, yB, xBs, yB]),
                                       strokeColor=strokecolor,
                                       fillColor=fillcolor,
                                       # default is mitre/miter which can stick out too much:
@@ -982,22 +993,19 @@ class LinearDrawer(AbstractDrawer):
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = 0.5 * (top - btm)
         datarange = maxval - minval
-        if datarange == 0:
-            datarange = trackheight
+        datarange = datarange if datarange else trackheight
 
         start, end = self._current_track_start_end()
         data = graph[start:end]
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
-        if graph.center is None:
-            midval = (maxval + minval) / 2.
-        else:
-            midval = graph.center
+        midval = graph.center if graph.center else (maxval + minval) / 2.
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
         # y-axis
         resolution = max((midval - minval), (maxval - midval))
+        resolution = resolution if resolution else trackheight
 
         # Start from first data point
         pos, val = data[0]
@@ -1118,15 +1126,11 @@ class LinearDrawer(AbstractDrawer):
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = 0.5 * (top - btm)
         datarange = maxval - minval
-        if datarange == 0:
-            datarange = trackheight
+        datarange = datarange if datarange else trackheight
         data = graph[self.start:self.end]
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
-        if graph.center is None:
-            midval = (maxval + minval) / 2.
-        else:
-            midval = graph.center
+        midval = graph.center if graph.center else (maxval + minval) / 2.
 
         # Convert data into 'binned' blocks, covering half the distance to the
         # next data point on either side, accounting for the ends of fragments
@@ -1141,8 +1145,7 @@ class LinearDrawer(AbstractDrawer):
         # taken to specify the number of pixel units resolved along the
         # y-axis
         resolution = max((midval - minval), (maxval - midval))
-        if resolution == 0:
-            resolution = trackheight
+        resolution = resolution if resolution else trackheight
 
         # Create elements for the bar graph based on newdata
         for pos0, pos1, val in data:
@@ -1150,11 +1153,9 @@ class LinearDrawer(AbstractDrawer):
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin
             barval = trackheight * (val - midval) / resolution
-            if barval >= 0:  # Different colors for bars that extend above...
-                barcolor = graph.poscolor
-            else:           # ...or below the axis
-                barcolor = graph.negcolor
-
+            # Different colors for bars that extend above...
+            # ...or below the axis
+            barcolor = graph.poscolor if barval >= 0 else graph.negcolor
             # Draw bar
             if fragment0 == fragment1:  # Box is contiguous
                 if pos1 >= self.fragment_limits[fragment0][1]:
@@ -1203,7 +1204,8 @@ class LinearDrawer(AbstractDrawer):
             base_offset = self.fragment_bases
         else:               # Calculate number of bases from start of fragment
             base_offset = base % self.fragment_bases
-        assert fragment < self.fragments, (base, self.start, self.end, self.length, self.fragment_bases)
+        assert fragment < self.fragments, (base, self.start, self.end,
+                                           self.length, self.fragment_bases)
         # Calculate number of pixels from start of fragment
         x_offset = 1. * self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset
@@ -1271,7 +1273,8 @@ class LinearDrawer(AbstractDrawer):
                            xmin + taillength, y1 + (i + 1) * height / teeth))
         for i in range(teeth):
             points.extend((xmax, y1 + (teeth - i) * height / teeth,
-                           xmax - headlength, y1 + (teeth - i - 1) * height / teeth))
+                           xmax - headlength,
+                           y1 + (teeth - i - 1) * height / teeth))
 
         return Polygon(deduplicate(points),
                        strokeColor=strokecolor,
@@ -1294,12 +1297,15 @@ class LinearDrawer(AbstractDrawer):
             y1 = bottom
             y2 = top
             orientation = "right"  # backward compatibility
-        return draw_arrow((x1, y1), (x2, y2), orientation=orientation, **kwargs)
+        return draw_arrow((x1, y1), (x2, y2),
+                          orientation=orientation, **kwargs)
 
-    def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
+    def _draw_sigil_big_arrow(self, bottom, center, top,
+                              x1, x2, strand, **kwargs):
         """Draw BIGARROW sigil, like ARROW but straddles the axis (PRIVATE)."""
         if strand == -1:
             orientation = "left"
         else:
             orientation = "right"
-        return draw_arrow((x1, bottom), (x2, top), orientation=orientation, **kwargs)
+        return draw_arrow((x1, bottom), (x2, top),
+                          orientation=orientation, **kwargs)
