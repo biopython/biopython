@@ -16,6 +16,13 @@ also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Konstantin Vdovkin
+- Peter Cock
+
+
 16 July 2019: Biopython 1.74
 ============================
 
