@@ -476,17 +476,17 @@ The \verb+fetch_motifs+ method allows you to fetch motifs which match a specifie
 An important thing to note is that the JASPAR \verb+Motif+ class was designed to be compatible with the popular \href{http://tfbs.genereg.net/}{Perl TFBS modules}. Therefore some specifics about the choice of defaults for background and pseudocounts as well as how information content is computed and sequences searched for instances is based on this compatibility criteria. These choices are noted in the specific subsections below.
 
 \begin{itemize}
-\item{\bf Choice of background:} \\
+\item\textbf{Choice of background:} \\
 The Perl \verb+TFBS+ modules appear to allow a choice of custom background probabilities (although the documentation states that uniform background is assumed). However the default is to use a uniform background. Therefore it is recommended that you use a uniform background for computing the position-specific scoring matrix (PSSM). This is the default when using the Biopython \verb+motifs+ module.
-\item{\bf Choice of pseudocounts:} \\
+\item\textbf{Choice of pseudocounts:} \\
 By default, the Perl \verb+TFBS+ modules use a pseudocount equal to $\sqrt{N} * \textrm{bg}[\textrm{nucleotide}]$, where $N$ represents the total number of sequences used to construct the matrix. To apply this same pseudocount formula, set the motif \verb+pseudocounts+ attribute using the \verb+jaspar.calculate\_pseudcounts()+ function:
 \begin{minted}{pycon}
 >>> motif.pseudocounts = motifs.jaspar.calculate_pseudocounts(motif)
 \end{minted}
 Note that it is possible for the counts matrix to have an unequal number of sequences making up the columns. The pseudocount computation uses the average number of sequences making up the matrix. However, when \verb+normalize+ is called on the counts matrix, each count value in a column is divided by the total number of sequences making up that specific column, not by the average number of sequences. This differs from the Perl \verb+TFBS+ modules because the normalization is not done as a separate step and so the average number of sequences is used throughout the computation of the pssm. Therefore, for matrices with unequal column counts, the PSSM computed by the \verb+motifs+ module will differ somewhat from the pssm computed by the Perl \verb+TFBS+ modules.
-\item{\bf Computation of matrix information content:} \\
+\item\textbf{Computation of matrix information content:} \\
 The information content (IC) or specificity of a matrix is computed using the \verb+mean+ method of the \verb+PositionSpecificScoringMatrix+ class. However of note, in the Perl \verb+TFBS+ modules the default behaviour is to compute the IC without first applying pseudocounts, even though by default the PSSMs are computed using pseudocounts as described above.
-\item{\bf Searching for instances:} \\
+\item\textbf{Searching for instances:} \\
 Searching for instances with the Perl \verb+TFBS+ motifs was usually performed using a relative score threshold, i.e. a score in the range 0 to 1. In order to compute the absolute PSSM score corresponding to a relative score one can use the equation:
 \begin{minted}{pycon}
 >>> abs_score =  (pssm.max - pssm.min) * rel_score + pssm.min
