@@ -10,9 +10,10 @@
 """Unit tests for the Bio.PDB.StructureAlignment module."""
 
 import unittest
-
+import warnings
 from Bio.PDB import StructureAlignment
 from Bio.PDB import PDBParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio import AlignIO
 
 
@@ -27,9 +28,12 @@ class StructureAlignTests(unittest.TestCase):
         with open(al_file, 'r') as handle:
             records = AlignIO.read(handle, "fasta")
         p = PDBParser()
-        s1 = p.get_structure('1', pdb1)
-        p = PDBParser()
-        s2 = p.get_structure('2', pdb2)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always", PDBConstructionWarning)
+            s1 = p.get_structure('1', pdb1)
+            p = PDBParser()
+            s2 = p.get_structure('2', pdb2)
+            self.assertEqual(len(w), 2, w)    
         m1 = s1[0]
         m2 = s2[0]
         al = StructureAlignment(records, m1, m2)
