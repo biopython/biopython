@@ -45,3 +45,5 @@ class MMTFParser(object):
         """
         decoder = parse(file_path)
         return get_from_decoded(decoder)
+
+from .mmtfio import MMTFIO
