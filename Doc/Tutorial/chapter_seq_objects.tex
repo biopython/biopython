@@ -401,6 +401,7 @@ encodes a short peptide:
 The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
 Now let's actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
@@ -415,6 +416,7 @@ Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
 \noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
 Now let's transcribe the coding strand into the corresponding mRNA, using the \verb|Seq| object's built in \verb|transcribe| method:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna
@@ -433,6 +435,7 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{minted}
 
 The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
@@ -466,6 +469,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{minted}
 
 You can also translate directly from the coding strand DNA sequence:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
@@ -583,6 +587,7 @@ translation table for Vertebrate Mitochondrial DNA.
 \end{minted}
 
 Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Data import CodonTable
@@ -691,6 +696,7 @@ Now, in everyday use, your sequences will probably all have the same
 alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
 all protein). What you probably want is to just compare the sequences as
 strings -- which you can do explicitly:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
@@ -771,6 +777,7 @@ MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 \end{minted}
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import MutableSeq
@@ -779,6 +786,7 @@ Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 \end{minted}
 
 Either way will give you a sequence object which can be changed:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> mutable_seq

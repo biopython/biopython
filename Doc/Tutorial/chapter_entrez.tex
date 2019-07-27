@@ -41,6 +41,7 @@ Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module lev
 >>> Entrez.api_key = "MyAPIkey"
 \end{minted}
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include \texttt{email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -48,6 +49,7 @@ Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module lev
 \end{minted}
 \texttt{Bio.Entrez} will then use this email address with each call to Entrez.  The \texttt{example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter has been mandatory since June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include \texttt{tool="MyLocalScript"} in the argument list), or you can set a global tool name:
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -63,6 +65,7 @@ In conclusion, be sensible with your usage levels.  If you plan to download lots
 \label{sec:entrez-einfo}
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
 %Run this as a doctest in current directory, requires internet access!
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -121,6 +124,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 \end{minted}
 
 Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -146,6 +150,7 @@ The values stored in this key is the list of database names shown in the XML abo
 \end{minted}
 
 For each of these databases, we can use EInfo again to obtain more information:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -192,6 +197,7 @@ familiar with a particular database.
 \section{ESearch: Searching the Entrez databases}
 \label{sec:entrez-esearch}
 To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -277,6 +283,7 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \end{minted}
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
 You would extract these values for use with another Entrez call such as EFetch:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -290,6 +297,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 
 \section{ESummary: Retrieving summaries from primary IDs}
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -662,6 +670,7 @@ Three things can go wrong when parsing an XML file:
 \end{itemize}
 
 The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
+
 %doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -743,6 +752,7 @@ Traceback (most recent call last):
 Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
 \end{minted}
 Optionally, you can instruct the parser to skip such tags instead of raising a ValidationError. This is done by calling \verb|Entrez.read| or \verb|Entrez.parse| with the argument \verb|validate| equal to False:
+
 %doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -785,6 +795,7 @@ AB  - Bioinformatics research is often difficult to do with commercial software.
 ...
 \end{minted}
 We first open the file and then parse it:
+
 %doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
@@ -793,6 +804,7 @@ We first open the file and then parse it:
 ...
 \end{minted}
 The \verb+record+ now contains the Medline record as a Python dictionary:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> record["PMID"]
@@ -816,6 +828,7 @@ The key names used in a Medline record can be rather obscure; use
 for a brief summary.
 
 To parse a file containing multiple Medline records, you can use the \verb+parse+ function instead:
+
 %doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
@@ -1049,6 +1062,7 @@ In this example, we will query PubMed for all articles having to do with orchids
 \end{minted}
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
@@ -1300,6 +1314,7 @@ Finally, if plan to repeat your analysis, rather than downloading the files from
 \subsection{Finding the lineage of an organism}
 
 Staying with a plant example, let's now find the lineage of the Cypripedioideae orchid family. First, we search the Taxonomy database for Cypripedioideae, which yields exactly one NCBI taxonomy identifier:
+
 %doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez

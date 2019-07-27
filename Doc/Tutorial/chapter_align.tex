@@ -815,6 +815,7 @@ Depending on what you are doing, it can be more useful to turn the alignment
 object into an array of letters -- and you can do this with NumPy:
 
 %This example fails under PyPy 2.0, https://bugs.pypy.org/issue1546
+
 %doctest examples lib:numpy
 \begin{minted}{pycon}
 >>> import numpy as np
@@ -1595,6 +1596,7 @@ We refer to Durbin \textit{et al.} \cite{durbin1998} for in-depth information on
 \label{sec:pairwise-basic}
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -1606,6 +1608,7 @@ stores the alignment parameters to be used for the pairwise alignments.
 
 Use the \verb+aligner.score+ method to calculate the alignment score between
 two sequences:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> seq1 = "GAACT"
@@ -1616,6 +1619,7 @@ two sequences:
 \end{minted}
 
 To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+PairwiseAlignment+ objects returned:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments = aligner.align(seq1, seq2)
@@ -1664,6 +1668,7 @@ Note that there is some ambiguity in the definition of the best local alignments
 
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
 for the pairwise alignments. To see an overview of the values for all parameters, use
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(aligner)
@@ -1692,6 +1697,7 @@ Depending on the gap scoring parameters
 (see Sections~\ref{sec:pairwise-affine-gapscores} and
 \ref{sec:pairwise-general-gapscores}) and mode, a \verb+PairwiseAligner+ object
 automatically chooses the appropriate algorithm to use for pairwise sequence alignment. To verify the selected algorithm, use
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.algorithm
@@ -1700,6 +1706,8 @@ automatically chooses the appropriate algorithm to use for pairwise sequence ali
 This attribute is read-only.
 
 A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used during alignment. The value of $\epsilon$ is stored in the attribute \verb+aligner.epsilon+, and by default is equal to $10^{-6}$:
+
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.epsilon
@@ -1712,6 +1720,7 @@ Two scores will be considered equal to each other for the purpose of the alignme
 
 The match and mismatch scores are stored as attributes of an \verb+PairwiseAligner+
 object:
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -1730,6 +1739,7 @@ object:
 \end{minted}
 
 Alternatively, you can specify a substitution matrix as follows:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> matrix = {('A','A'): 1.0, ('A','B'): -1.0, ('B','B'): 2.0}
@@ -1744,6 +1754,7 @@ specifying \verb+aligner.match_score+ or \verb+aligner.mismatch_score+,
 Note that \verb+aligner.substitution_matrix+ will return a copy of the
 substitution matrix stored in the \verb+PairwiseAligner+ object. Therefore,
 modifying the substitution matrix directly has no effect:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.substitution_matrix[('A','A')] = 5.0 # does nothing
@@ -1910,6 +1921,7 @@ The \verb+alignments+ returned by \verb+aligner.align+ are a kind of immutable i
 You can perform the following operations on \verb+alignments+:
 \begin{itemize}
 \item \verb+len(alignments)+ returns the number of alignments stored. This function returns quickly, even if the number of alignments is huge. If the number of alignments is extremely large (typically, larger than 9,223,372,036,854,775,807, which is the largest integer that can be stored as a \verb+long int+ on 64 bit machines), \verb+len(alignments)+ will raise an \verb+OverflowError+. A large number of alignments suggests that the alignment quality is low.
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -1919,6 +1931,7 @@ You can perform the following operations on \verb+alignments+:
 3
 \end{minted}
 \item You can extract a specific alignment by index:
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -1942,6 +1955,7 @@ AA-
 ...
 \end{minted}
 Note that \verb+alignments+ can be reused, i.e. you can iterate over alignments multiple times:
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -1984,6 +1998,7 @@ You can also convert the \verb+alignments+ iterator into a \verb+list+ or \verb+
 \end{minted}
 It is wise to check the number of alignments by calling \verb+len(alignments)+ before attempting to call \verb+list(alignments)+ to save all alignments as a list.
 \item The alignment score (which has the same value for each alignment in \verb+alignments+), is stored as an attribute. This allows you to check the alignment score before proceeding to extract individual alignments:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignments.score)
@@ -1993,6 +2008,7 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 
 \subsubsection{Alignment objects}
 The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
+
 %doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
@@ -2008,12 +2024,14 @@ The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each r
 \end{minted}
 
 Each alignment stores the alignment score:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.score
 3.0
 \end{minted}
 as well as pointers to the sequences that were aligned:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.target
@@ -2023,6 +2041,7 @@ as well as pointers to the sequences that were aligned:
 \end{minted}
 
 Print the \verb+PairwiseAlignment+ object to show the alignment explicitly:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
@@ -2033,6 +2052,7 @@ GA--T
 \end{minted}
 
 You can also represent the alignment as a string in PSL (Pattern Space Layout, as generated by BLAT \cite{kent2002}) format:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> format(alignment, 'psl')
@@ -2049,12 +2069,14 @@ chunks, you get two tuples of length N:
 \end{minted}
 
 In the current example, `alignment.aligned` returns two tuples of length 2:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment.aligned
 (((0, 2), (4, 5)), ((0, 2), (2, 3)))
 \end{minted}
 while for the alternative alignment, two tuples of length 3 are returned:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment = alignments[1]
@@ -2067,6 +2089,7 @@ G-A-T
 (((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))
 \end{minted}
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mismatch_score = -10
@@ -2110,6 +2133,7 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 \end{minted}
 
 showing an alignment score of 72.0. To see the individual alignments, do
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignments = aligner.align(seq1.seq, seq2.seq)
@@ -2121,6 +2145,7 @@ In this example, the total number of optimal alignments is huge (more than $4 \t
 OverflowError: number of optimal alignments is larger than 9223372036854775807
 \end{minted}
 Let's have a look at the first alignment:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> alignment = alignments[0]
@@ -2128,6 +2153,7 @@ Let's have a look at the first alignment:
 
 The alignment object stores the alignment score, as well as the alignment
 itself:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment.score)
@@ -2180,6 +2206,7 @@ This alignment has the same score that we obtained earlier with EMBOSS needle
 using the same sequences and the same parameters.
 
 To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mode = 'local'

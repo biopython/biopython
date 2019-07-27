@@ -338,6 +338,7 @@ Similarly if we had a bzip2 compressed file (sadly the function name isn't
 quite as consistent under Python 2):
 
 %TODO: Can we make the doctest code Python version specific?
+
 %doctest examples
 \begin{minted}{pycon}
 >>> import bz2
@@ -1164,6 +1165,7 @@ Now, if we want to save these reverse complements to a file, we'll need to make 
 We can use  the \verb|SeqRecord| object's built in \verb|.reverse_complement()| method (see Section~\ref{sec:SeqRecord-reverse-complement}) but we must decide how to name our new records.
 
 This is an excellent place to demonstrate the power of list comprehensions which make a list in memory:
+
 %doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
