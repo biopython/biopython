@@ -71,7 +71,7 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 
 This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{https://pfam.xfam.org/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
@@ -79,7 +79,7 @@ This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downlo
 
 \noindent This code will print out a summary of the alignment:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
@@ -94,7 +94,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 
 You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
@@ -116,7 +116,7 @@ You could also use the alignment object's \verb|format| method to show it in a p
 
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for record in alignment:
 ...     if record.dbxrefs:
@@ -645,7 +645,7 @@ First of all, in some senses the alignment objects act like a Python \verb|list|
 of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
 make sense:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
@@ -668,7 +668,7 @@ more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
 metaphor in mind, simple slicing of the alignment should also make sense -
 it selects some of the rows giving back another alignment object:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
@@ -690,7 +690,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 What if you wanted to select by column? Those of you who have used the NumPy
 matrix or array objects won't be surprised at this - you use a double index.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[2, 6])
 T
@@ -698,7 +698,7 @@ T
 
 \noindent Using two integer indices pulls out a single letter, short hand for this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[2].seq[6])
 T
@@ -706,7 +706,7 @@ T
 
 You can pull out a single column as a string like this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, 6])
 TTT---T
@@ -715,7 +715,7 @@ TTT---T
 You can also select a range of columns. For example, to pick out those same
 three rows we extracted earlier, but take just their first six columns:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[3:6, :6])
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
@@ -726,7 +726,7 @@ AEGDDP Q9T0Q9_BPFD/1-49
 
 Leaving the first index as \verb|:| means take all the rows:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, :6])
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
@@ -742,7 +742,7 @@ FAADDA COATB_BPIF1/22-73
 This brings us to a neat way to remove a section. Notice columns
 7, 8 and 9 which are gaps in three of the seven sequences:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, 6:9])
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
@@ -757,7 +757,7 @@ TSQ COATB_BPIF1/22-73
 
 \noindent Again, you can slice to get everything after the ninth column:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment[:, 9:])
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
@@ -773,7 +773,7 @@ AKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 \noindent Now, the interesting thing is that addition of alignment objects works
 by column. This lets you do this as a way to remove a block of columns:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> edited = alignment[:, :6] + alignment[:, 9:]
 >>> print(edited)
@@ -793,7 +793,7 @@ need to match up (see Section~\ref{sec:SeqRecord-addition} for how adding
 \verb|SeqRecord| objects works). You may find it helpful to first sort the
 alignment rows alphabetically by id:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> edited.sort()
 >>> print(edited)
@@ -816,7 +816,7 @@ object into an array of letters -- and you can do this with NumPy:
 
 %This example fails under PyPy 2.0, https://bugs.pypy.org/issue1546
 
-%doctest examples lib:numpy
+\pandocignoreme .. doctest examples lib:numpy
 \begin{minted}{pycon}
 >>> import numpy as np
 >>> from Bio import AlignIO
@@ -909,7 +909,7 @@ By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
@@ -931,7 +931,7 @@ either update your PATH setting to include the location of your copy of
 ClustalW tools (how you do this will depend on your OS), or simply type in
 the full path of the tool. For example:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> import os
 >>> from Bio.Align.Applications import ClustalwCommandline
@@ -980,7 +980,7 @@ in the file \verb|opuntia.aln|.
 You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> align = AlignIO.read("opuntia.aln", "clustal")
@@ -1000,7 +1000,7 @@ chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
 Newick tree file, and \verb|Bio.Phylo| can parse these:
 
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("opuntia.dnd", "newick")
@@ -1043,7 +1043,7 @@ For the most basic usage, all you need is to have a FASTA input file, such as
 code). You can then tell MUSCLE to read in this FASTA file, and write the
 alignment to an output file:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
@@ -1060,7 +1060,7 @@ sequences). The \verb|Bio.AlignIO| module should be able to read this
 alignment using \texttt{format="fasta"}.
 You can also ask for ClustalW-like output:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
@@ -1071,7 +1071,7 @@ muscle -in opuntia.fasta -out opuntia.aln -clw
 Or, strict ClustalW output where the original ClustalW header line is
 used for maximum compatibility:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
@@ -1101,7 +1101,7 @@ standard out (stdout) or standard error (stderr) handles. However, by default
 MUSCLE will write the alignment to standard output (stdout). We can take
 advantage of this to avoid having a temporary output file! For example:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
@@ -1169,7 +1169,7 @@ First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects
 For this demonstration I'm going to use a filtered version of the original FASTA
 file (using a generator expression), taking just six of the seven sequences:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
@@ -1179,7 +1179,7 @@ Then we create the MUSCLE command line, leaving the input and output to their
 defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
 as for the output.
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(clwstrict=True)
@@ -1245,7 +1245,7 @@ any standard input as a big string, \texttt{muscle\_cline(stdin=...)}. So,
 provided your data isn't very big, you can prepare the FASTA input in memory as
 a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
@@ -1307,7 +1307,7 @@ under the \verb|Doc/examples/| directory.
 
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
@@ -1326,7 +1326,7 @@ probably means that the EMBOSS tools are not on your PATH environment
 variable. You can either update your PATH setting, or simply tell Biopython
 the full path to the tool, for example:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
@@ -1349,7 +1349,7 @@ Biopython help text:
 
 Note that you can also specify (or change or look at) the settings like this:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
@@ -1434,7 +1434,7 @@ Suppose you want to do a global pairwise alignment between the same two
 hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
 stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
@@ -1459,7 +1459,7 @@ have the same optimal score for the given conditions. In our example this are 80
 different alignments with the score 72 (\verb|Bio.pairwise2| will return up to 1000
 alignments). Have a look at one of these alignments:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(alignments)
 80
@@ -1492,7 +1492,7 @@ or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
 obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
 and a gap extension penalty of 0.5 (using \verb|globalds|):
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio import SeqIO
@@ -1518,7 +1518,7 @@ using the same sequences and the same parameters.
 Local alignments are called similarly with the function \verb|align.localXX|,
 where again XX stands for a two letter code for the match and gap functions:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
@@ -1539,7 +1539,7 @@ extensions on either site. In the next example, the pairs serin/aspartate (S/D)
 and lysin/asparagin (K/N) both have a match score of 0. As you see, the aligned
 part has not been extended:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import pairwise2
 >>> from Bio.SubsMat.MatrixInfo import blosum62
@@ -1557,7 +1557,7 @@ Instead of supplying a complete match/mismatch matrix, the match code
 example uses match/mismatch scores of 5/-4 and gap penalties (open/extend)
 of 2/0.5 using \verb|localms|:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignments = pairwise2.align.localms("AGAACT", "GAC", 5, -4, -2, -0.5)
 >>> print(pairwise2.format_alignment(*alignments[0]))
@@ -1597,7 +1597,7 @@ We refer to Durbin \textit{et al.} \cite{durbin1998} for in-depth information on
 
 To generate pairwise alignments, first create a \verb+PairwiseAligner+ object:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1609,7 +1609,7 @@ stores the alignment parameters to be used for the pairwise alignments.
 Use the \verb+aligner.score+ method to calculate the alignment score between
 two sequences:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> seq1 = "GAACT"
 >>> seq2 = "GAT"
@@ -1620,7 +1620,7 @@ two sequences:
 
 To see the actual alignments, use the \verb+aligner.align+ method and iterate over the \verb+PairwiseAlignment+ objects returned:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignments = aligner.align(seq1, seq2)
 >>> for alignment in alignments:
@@ -1643,7 +1643,7 @@ Instead, a local alignment will find the subsequence of
 Local alignments can be generated by setting \verb+aligner.mode+ to
 \verb+"local"+:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mode = 'local'
 >>> seq1 = "AGAACTC"
@@ -1669,7 +1669,7 @@ Note that there is some ambiguity in the definition of the best local alignments
 The \verb+PairwiseAligner+ object stores all alignment parameters to be used
 for the pairwise alignments. To see an overview of the values for all parameters, use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(aligner)
 Pairwise sequence aligner with parameters
@@ -1698,7 +1698,7 @@ Depending on the gap scoring parameters
 \ref{sec:pairwise-general-gapscores}) and mode, a \verb+PairwiseAligner+ object
 automatically chooses the appropriate algorithm to use for pairwise sequence alignment. To verify the selected algorithm, use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.algorithm
 'Smith-Waterman'
@@ -1708,7 +1708,7 @@ This attribute is read-only.
 A \verb+PairwiseAligner+ object also stores the precision $\epsilon$ to be used during alignment. The value of $\epsilon$ is stored in the attribute \verb+aligner.epsilon+, and by default is equal to $10^{-6}$:
 
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.epsilon
 1e-06
@@ -1721,7 +1721,7 @@ Two scores will be considered equal to each other for the purpose of the alignme
 The match and mismatch scores are stored as attributes of an \verb+PairwiseAligner+
 object:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1740,7 +1740,7 @@ object:
 
 Alternatively, you can specify a substitution matrix as follows:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> matrix = {('A','A'): 1.0, ('A','B'): -1.0, ('B','B'): 2.0}
 >>> aligner.substitution_matrix = matrix
@@ -1755,7 +1755,7 @@ Note that \verb+aligner.substitution_matrix+ will return a copy of the
 substitution matrix stored in the \verb+PairwiseAligner+ object. Therefore,
 modifying the substitution matrix directly has no effect:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.substitution_matrix[('A','A')] = 5.0 # does nothing
 >>> aligner.substitution_matrix[('A','A')]
@@ -1881,7 +1881,7 @@ For convenience, \verb+PairwiseAligner+ objects have additional attributes that 
 
 For even more fine-grained control over the gap scores, you can specify a gap scoring function. For example, the gap scoring function below disallows a gap after two nucleotides in the query sequence:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1922,7 +1922,7 @@ You can perform the following operations on \verb+alignments+:
 \begin{itemize}
 \item \verb+len(alignments)+ returns the number of alignments stored. This function returns quickly, even if the number of alignments is huge. If the number of alignments is extremely large (typically, larger than 9,223,372,036,854,775,807, which is the largest integer that can be stored as a \verb+long int+ on 64 bit machines), \verb+len(alignments)+ will raise an \verb+OverflowError+. A large number of alignments suggests that the alignment quality is low.
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1932,7 +1932,7 @@ You can perform the following operations on \verb+alignments+:
 \end{minted}
 \item You can extract a specific alignment by index:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1956,7 +1956,7 @@ AA-
 \end{minted}
 Note that \verb+alignments+ can be reused, i.e. you can iterate over alignments multiple times:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -1999,7 +1999,7 @@ You can also convert the \verb+alignments+ iterator into a \verb+list+ or \verb+
 It is wise to check the number of alignments by calling \verb+len(alignments)+ before attempting to call \verb+list(alignments)+ to save all alignments as a list.
 \item The alignment score (which has the same value for each alignment in \verb+alignments+), is stored as an attribute. This allows you to check the alignment score before proceeding to extract individual alignments:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignments.score)
 2.0
@@ -2009,7 +2009,7 @@ It is wise to check the number of alignments by calling \verb+len(alignments)+ b
 \subsubsection{Alignment objects}
 The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each representing one alignment between the two sequences.
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> aligner = Align.PairwiseAligner()
@@ -2025,14 +2025,14 @@ The \verb+aligner.align+ method returns \verb+PairwiseAlignment+ objects, each r
 
 Each alignment stores the alignment score:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignment.score
 3.0
 \end{minted}
 as well as pointers to the sequences that were aligned:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignment.target
 'GAACT'
@@ -2042,7 +2042,7 @@ as well as pointers to the sequences that were aligned:
 
 Print the \verb+PairwiseAlignment+ object to show the alignment explicitly:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment)
 GAACT
@@ -2053,7 +2053,7 @@ GA--T
 
 You can also represent the alignment as a string in PSL (Pattern Space Layout, as generated by BLAT \cite{kent2002}) format:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> format(alignment, 'psl')
 '3\t0\t0\t0\t0\t0\t1\t2\t+\tquery\t3\t0\t3\ttarget\t5\t0\t5\t2\t2,1,\t0,2,\t0,4,\n'
@@ -2070,14 +2070,14 @@ chunks, you get two tuples of length N:
 
 In the current example, `alignment.aligned` returns two tuples of length 2:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignment.aligned
 (((0, 2), (4, 5)), ((0, 2), (2, 3)))
 \end{minted}
 while for the alternative alignment, two tuples of length 3 are returned:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignment = alignments[1]
 >>> print(alignment)
@@ -2090,7 +2090,7 @@ G-A-T
 \end{minted}
 Note that different alignments may have the same subsequences aligned to each other. In particular, this may occur if alignments differ from each other in terms of their gap placement only:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mismatch_score = -10
 >>> alignments = aligner.align("AAACAAA", "AAAGAAA")
@@ -2120,7 +2120,7 @@ Suppose you want to do a global pairwise alignment between the same two
 hemoglobin sequences from above (\texttt{HBA\_HUMAN}, \texttt{HBB\_HUMAN})
 stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> from Bio import SeqIO
@@ -2134,7 +2134,7 @@ stored in \texttt{alpha.faa} and \texttt{beta.faa}:
 
 showing an alignment score of 72.0. To see the individual alignments, do
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignments = aligner.align(seq1.seq, seq2.seq)
 \end{minted}
@@ -2146,7 +2146,7 @@ OverflowError: number of optimal alignments is larger than 9223372036854775807
 \end{minted}
 Let's have a look at the first alignment:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> alignment = alignments[0]
 \end{minted}
@@ -2154,7 +2154,7 @@ Let's have a look at the first alignment:
 The alignment object stores the alignment score, as well as the alignment
 itself:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(alignment.score)
 72.0
@@ -2174,7 +2174,7 @@ or \texttt{BLOSUM}. Thus, a more meaningful alignment for our example can be
 obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10
 and a gap extension penalty of 0.5:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Align
 >>> from Bio import SeqIO
@@ -2207,7 +2207,7 @@ using the same sequences and the same parameters.
 
 To perform a local alignment, set \verb+aligner.mode+ to \verb+'local'+:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> aligner.mode = 'local'
 >>> aligner.open_gap_score = -10

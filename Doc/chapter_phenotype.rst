@@ -1,5 +1,3 @@
-.. _chapter:phenotype:
-
 Bio.phenotype: analyse phenotypic data
 ======================================
 
@@ -11,8 +9,6 @@ package is focused on the analysis of high-throughput phenotypic
 experiments produced by the `Phenotype Microarray
 technology <https://en.wikipedia.org/wiki/Phenotype_microarray>`__, but
 future developments may include other platforms and formats.
-
-.. _sec:phenotypemicroarrays:
 
 Phenotype Microarrays
 ---------------------
@@ -45,16 +41,18 @@ function by using the
 ```Plates.csv`` <https://github.com/biopython/biopython/blob/master/Doc/examples/Plates.csv>`__
 file provided with the Biopython source code.
 
+.. doctest examples lib:numpy
+
 .. code:: pycon
 
-   >>> from Bio import phenotype
-   >>> for record in phenotype.parse("Plates.csv", "pm-csv"):
-   ...     print("%s %i" % (record.id, len(record)))
-   ...
-   PM01 96
-   PM01 96
-   PM09 96
-   PM09 96
+    >>> from Bio import phenotype
+    >>> for record in phenotype.parse("Plates.csv", "pm-csv"):
+    ...     print("%s %i" % (record.id, len(record)))
+    ...
+    PM01 96
+    PM01 96
+    PM09 96
+    PM09 96
 
 The parser returns a series of PlateRecord objects, each one containing
 a series of WellRecord objects (holding each well’s experimental data)
@@ -64,50 +62,55 @@ number, from 01 to 12. There are several ways to access WellRecord
 objects from a PlateRecord objects:
 
 Well identifier
-   If you know the well identifier (row + column identifiers) you can
-   access the desired well directly.
+    If you know the well identifier (row + column identifiers) you can
+    access the desired well directly.
 
-   .. code:: pycon
+    .. code:: pycon
 
-          >>> record["A02"]
+            >>> record["A02"]
+            
 
 Well plate coordinates
-   The same well can be retrieved by using the row and columns numbers
-   (0-based index).
+    The same well can be retrieved by using the row and columns numbers
+    (0-based index).
 
-   .. code:: pycon
+    .. doctest examples lib:numpy
 
-      >>> from Bio import phenotype
-      >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
-      >>> print(record[0, 1].id)
-      A02
+    .. code:: pycon
+
+        >>> from Bio import phenotype
+        >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
+        >>> print(record[0, 1].id)
+        A02
 
 Row or column coordinates
-   A series of WellRecord objects contiguous to each other in the plate
-   can be retrieved in bulk by using the python list slicing syntax on
-   PlateRecord objects; rows and columns are numbered with a 0-based
-   index.
+    A series of WellRecord objects contiguous to each other in the plate
+    can be retrieved in bulk by using the python list slicing syntax on
+    PlateRecord objects; rows and columns are numbered with a 0-based
+    index.
 
-   .. code:: pycon
+    .. cont-doctest
 
-      >>> print(record[0])
-      Plate ID: PM09
-      Well: 12
-      Rows: 1
-      Columns: 12
-      PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['A12']')
-      >>> print(record[:, 0])
-      Plate ID: PM09
-      Well: 8
-      Rows: 8
-      Columns: 1
-      PlateRecord('WellRecord['A01'], WellRecord['B01'], WellRecord['C01'], ..., WellRecord['H01']')
-      >>> print(record[:3, :3])
-      Plate ID: PM09
-      Well: 9
-      Rows: 3
-      Columns: 3
-      PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['C03']')
+    .. code:: pycon
+
+        >>> print(record[0])
+        Plate ID: PM09
+        Well: 12
+        Rows: 1
+        Columns: 12
+        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['A12']')
+        >>> print(record[:, 0])
+        Plate ID: PM09
+        Well: 8
+        Rows: 8
+        Columns: 1
+        PlateRecord('WellRecord['A01'], WellRecord['B01'], WellRecord['C01'], ..., WellRecord['H01']')
+        >>> print(record[:3, :3])
+        Plate ID: PM09
+        Well: 9
+        Rows: 3
+        Columns: 3
+        PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['C03']')
 
 Manipulating Phenotype Microarray data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,28 +125,30 @@ collects data every fifteen minutes, but that can vary between
 experiments. The raw data can be accessed by iterating on a WellRecord
 object; in the example below only the first ten time points are shown.
 
-.. code:: pycon
-
-   >>> from Bio import phenotype
-   >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
-   >>> well = record["A02"]
+.. doctest examples lib:numpy
 
 .. code:: pycon
 
-   >>> for time, signal in well:
-   ...    print(time, signal)
-   ...
-   (0.0, 12.0)
-   (0.25, 18.0)
-   (0.5, 27.0)
-   (0.75, 35.0)
-   (1.0, 37.0)
-   (1.25, 41.0)
-   (1.5, 44.0)
-   (1.75, 44.0)
-   (2.0, 44.0)
-   (2.25, 44.0)
-   [...]
+    >>> from Bio import phenotype
+    >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
+    >>> well = record["A02"]
+
+.. code:: pycon
+
+    >>> for time, signal in well:
+    ...    print(time, signal)
+    ...
+    (0.0, 12.0)
+    (0.25, 18.0)
+    (0.5, 27.0)
+    (0.75, 35.0)
+    (1.0, 37.0)
+    (1.25, 41.0)
+    (1.5, 44.0)
+    (1.75, 44.0)
+    (2.0, 44.0)
+    (2.25, 44.0)
+    [...]
 
 This method, while providing a way to access the raw data, doesn’t allow
 a direct comparison between different WellRecord objects, which may have
@@ -162,30 +167,32 @@ the time interval where actual data is available. Time intervals can be
 defined with the same syntax as list indexing; the default time interval
 is therefore one hour.
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> well[:10]  
-   [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
+    >>> well[:10]  
+    [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
 
 Different time intervals can be used, for instance five minutes:
 
 .. code:: pycon
 
-   >>> well[63:64:0.083]
-   [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
-   >>> well[9.55]
-   44.0
-   >>> well[63.33:73.33]
-   [113.31999999999999,
-    117.0,
-    120.31999999999999,
-    128.0,
-    129.63999999999999,
-    132.95999999999998,
-    136.95999999999998,
-    140.0,
-    142.0,
-    nan]
+    >>> well[63:64:0.083]
+    [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
+    >>> well[9.55]
+    44.0
+    >>> well[63.33:73.33]
+    [113.31999999999999,
+     117.0,
+     120.31999999999999,
+     128.0,
+     129.63999999999999,
+     132.95999999999998,
+     136.95999999999998,
+     140.0,
+     142.0,
+     nan]
 
 Control well subtraction
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -196,13 +203,15 @@ signal produced by this well can be subtracted from the other wells. The
 PlateRecord objects have a dedicated function for that, which returns
 another PlateRecord object with the corrected data.
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> corrected = record.subtract_control(control="A01")
-   >>> record["A01"][63]
-   336.0
-   >>> corrected["A01"][63]
-   0.0
+    >>> corrected = record.subtract_control(control="A01")
+    >>> record["A01"][63]
+    336.0
+    >>> corrected["A01"][63]
+    0.0
 
 Parameters extraction
 ^^^^^^^^^^^^^^^^^^^^^
@@ -215,7 +224,7 @@ The parameters that can be extracted from the curve are:
 
 -  Minimum (**min**) and maximum (**max**) signal;
 
--  Average height (**average_height**);
+-  Average height (**average\_height**);
 
 -  Area under the curve (**area**);
 
@@ -225,19 +234,19 @@ The parameters that can be extracted from the curve are:
 
 -  Curve lag time (**lag**).
 
-All the parameters (except **min**, **max** and **average_height**)
+All the parameters (except **min**, **max** and **average\_height**)
 require the `scipy library <https://www.scipy.org/>`__ to be installed.
 
 The fit function uses three sigmoid functions:
 
 Gompertz
-   :math:`Ae^{-e^{(\frac{\mu_{m}e}{A}(\lambda - t) + 1)}} + y0`
+    :math:`Ae^{-e^{(\frac{\mu_{m}e}{A}(\lambda - t) + 1)}} + y0`
 
 Logistic
-   :math:`\frac{A}{1+e^{(\frac{4\mu_{m}}{A}(\lambda - t) + 2)}} + y_{0}`
+    :math:`\frac{A}{1+e^{(\frac{4\mu_{m}}{A}(\lambda - t) + 2)}} + y_{0}`
 
 Richards
-   :math:`A(1 + ve^{1 + v} + e^{\frac{\mu_{m}}{A}(1 + v)(1 + \frac{1}{v})(\lambda - t)})^{-\frac{1}{v}} + y0`
+    :math:`A(1 + ve^{1 + v} + e^{\frac{\mu_{m}}{A}(1 + v)(1 + \frac{1}{v})(\lambda - t)})^{-\frac{1}{v}} + y0`
 
 Where:
 
@@ -255,23 +264,23 @@ user can also specify one of the three functions to be applied.
 
 .. code:: pycon
 
-   >>> from Bio import phenotype
-   >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
-   >>> well = record["A02"]
-   >>> well.fit()
-   >>> print("Function fitted: %s" % well.model)
-   Function fitted: gompertz
-   >>> for param in ["area", "average_height", "lag", "max", "min",
-   ...               "plateau", "slope"]:
-   ...     print("%s\t%.2f" % (param, getattr(well, param)))
-   ...
-   area    4414.38
-   average_height  61.58
-   lag     48.60
-   max     143.00
-   min     12.00
-   plateau 120.02
-   slope   4.99
+    >>> from Bio import phenotype
+    >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
+    >>> well = record["A02"]
+    >>> well.fit()
+    >>> print("Function fitted: %s" % well.model)
+    Function fitted: gompertz
+    >>> for param in ["area", "average_height", "lag", "max", "min",
+    ...               "plateau", "slope"]:
+    ...     print("%s\t%.2f" % (param, getattr(well, param)))
+    ...
+    area    4414.38
+    average_height  61.58
+    lag     48.60
+    max     143.00
+    min     12.00
+    plateau 120.02
+    slope   4.99
 
 Writing Phenotype Microarray data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,5 +293,5 @@ or `DuctApe <https://combogenomics.github.io/DuctApe/>`__.
 
 .. code:: pycon
 
-   >>> phenotype.write(record, "out.json", "pm-json")
-   1
+    >>> phenotype.write(record, "out.json", "pm-json")
+    1

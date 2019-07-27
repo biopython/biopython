@@ -52,7 +52,7 @@ below).  However, creating \verb|SeqRecord| can be quite simple.
 
 To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -62,7 +62,7 @@ To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
 Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> simple_seq_r.id
 '<unknown id>'
@@ -76,7 +76,7 @@ Seq('GATC')
 
 Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -88,7 +88,7 @@ As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annot
 for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
 Adding annotations is easy, and just involves dealing directly with the annotation dictionary:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
 >>> print(simple_seq_r.annotations)
@@ -101,7 +101,7 @@ Working with per-letter-annotations is similar, \verb|letter_annotations| is a
 dictionary like attribute which will let you assign any Python sequence (i.e.
 a string, list or tuple) which has the same length as the sequence:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> simple_seq_r.letter_annotations["phred_quality"] = [40, 40, 38, 30]
 >>> print(simple_seq_r.letter_annotations)
@@ -414,7 +414,7 @@ of fuzzy positions, so we have five classes do deal with them:
 
 Here's an example where we create a location with fuzzy end points:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
@@ -430,7 +430,7 @@ be the higher (right) value.
 
 If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(my_location)
 [>5:(8^9)]
@@ -438,7 +438,7 @@ If you print out a \verb|FeatureLocation| object, you can get a nice representat
 
 We can access the fuzzy start and end positions using the start and end attributes of the location:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> my_location.start
 AfterPosition(5)
@@ -453,7 +453,7 @@ BetweenPosition(9, left=8, right=9)
 If you don't want to deal with fuzzy positions and just want numbers,
 they are actually subclasses of integers so should work like integers:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> int(my_location.start)
 5
@@ -465,7 +465,7 @@ For compatibility with older versions of Biopython you can ask for the
 \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location
 which are plain integers:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> my_location.nofuzzy_start
 5
@@ -477,7 +477,7 @@ Notice that this just gives you back the position attributes of the fuzzy locati
 
 Similarly, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> exact_location = SeqFeature.FeatureLocation(5, 9)
 >>> print(exact_location)
@@ -505,7 +505,7 @@ features this SNP is within, and lets suppose this SNP is at index 4350
 (Python counting!). Here is a simple brute force solution where we just
 check all the features one by one in a loop:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> my_snp = 4350
@@ -528,7 +528,7 @@ are the union of the exons -- they do not cover any introns.
 
 A \verb|SeqFeature| or location object doesn't directly contain a sequence, instead the location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(6..18)}, like this:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -539,7 +539,7 @@ A \verb|SeqFeature| or location object doesn't directly contain a sequence, inst
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
 If you are using Biopython 1.59 or later, the feature location's start and end are integer like so this works:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> feature_seq = example_parent[example_feature.location.start:example_feature.location.end].reverse_complement()
 >>> print(feature_seq)
@@ -548,7 +548,7 @@ AGCCTTTGCCGTC
 
 This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> feature_seq = example_feature.extract(example_parent)
 >>> print(feature_seq)
@@ -558,7 +558,7 @@ AGCCTTTGCCGTC
 The length of a \verb|SeqFeature| or location matches
 that of the region of sequence it describes.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(example_feature.extract(example_parent))
 AGCCTTTGCCGTC
@@ -579,7 +579,7 @@ constituent regions.
 
 The \verb|SeqRecord| objects can be very complex, but here's a simple example:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
@@ -610,7 +610,7 @@ False
 As of Biopython 1.67, \verb|SeqRecord| comparison like \verb|record1 == record2|
 will instead raise an explicit error to avoid people being caught out by this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record1 == record2
 Traceback (most recent call last):
@@ -621,7 +621,7 @@ NotImplementedError: SeqRecord comparison is deliberately not implemented. Expli
 Instead you should check the attributes you are interested in, for example the
 identifier and the sequence:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record1.id == record2.id
 True
@@ -689,7 +689,7 @@ completely within the new sequence are preserved (with their locations adjusted)
 
 For example, taking the same GenBank file used earlier:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
@@ -703,7 +703,7 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=['Project:58037'])
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(record)
 9609
@@ -719,7 +719,7 @@ From looking at the file you can work out that these are the twelfth and
 thirteenth entries in the file, so in Python zero-based counting they are
 entries $11$ and $12$ in the \texttt{features} list:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(record.features[20])
 type: gene
@@ -750,7 +750,7 @@ qualifiers:
 Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
 gene/CDS), and see how many features we get:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> sub_record = record[4300:4800]
 \end{minted}
@@ -763,7 +763,7 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=[])
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(sub_record)
 500
@@ -773,7 +773,7 @@ dbxrefs=[])
 
 Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(sub_record.features[0])
 type: gene
@@ -809,7 +809,7 @@ this still applies to the sub-sequence or not. To avoid guessing, the \texttt{an
 and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
 any relevant information as appropriate.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.annotations
 {}
@@ -820,7 +820,7 @@ any relevant information as appropriate.
 The same point could be made about the record \texttt{id}, \texttt{name}
 and \texttt{description}, but for practicality these are preserved:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> sub_record.id
 'NC_005816.1'
@@ -857,7 +857,7 @@ and description).
 For an example with per-letter annotation, we'll use the first record in a
 FASTQ file. Chapter~\ref{chapter:seqio} will explain the \verb|SeqIO| functions:
 
-%doctest ../Tests/Quality
+\pandocignoreme .. doctest ../Tests/Quality
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = next(SeqIO.parse("example.fastq", "fastq"))
@@ -878,7 +878,7 @@ you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
 record by first slicing the \verb|SeqRecord| before and after the ``extra''
 third \texttt{T}:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> left = record[:20]
 >>> print(left.seq)
@@ -894,7 +894,7 @@ CTCC
 
 \noindent Now add the two parts together:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> edited = left + right
 >>> len(edited)
@@ -910,7 +910,7 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> edited = record[:20] + record[21:]
 \end{minted}
@@ -918,7 +918,7 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 Now, for an example with features, we'll use a GenBank file.
 Suppose you have a circular genome:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
@@ -932,7 +932,7 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=['Project:10638'])
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(record)
 9609
@@ -950,7 +950,7 @@ dbxrefs=['Project:10638'])
 
 You can shift the origin like this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> shifted = record[2000:] + record[:2000]
 \end{minted}
@@ -963,7 +963,7 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=[])
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(shifted)
 9609
@@ -972,7 +972,7 @@ dbxrefs=[])
 Note that this isn't perfect in that some annotation like the database cross references
 and one of the features (the source feature) have been lost:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(shifted.features)
 40
@@ -1028,7 +1028,7 @@ the new desired value instead.
 
 Consider this example record:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
@@ -1039,7 +1039,7 @@ NC_005816.1 9609 41 1 13
 Here we take the reverse complement and specify a new identifier -- but notice
 how most of the annotation is dropped (but not the features):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> rc = record.reverse_complement(id="TESTING")
 >>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))

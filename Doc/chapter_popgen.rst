@@ -1,5 +1,3 @@
-.. _chapter:popgen:
-
 Bio.PopGen: Population genetics
 ===============================
 
@@ -26,17 +24,17 @@ GenePop data files in the Test/PopGen directory of Biopython):
 
 .. code:: python
 
-   from Bio.PopGen import GenePop
+    from Bio.PopGen import GenePop
 
-   with open("example.gen") as handle:
-       rec = GenePop.read(handle)
+    with open("example.gen") as handle:
+        rec = GenePop.read(handle)
 
 This will read a file called example.gen and parse it. If you do print
 rec, the record will be output again, in GenePop format.
 
 The most important information in rec will be the loci names and
 population information (but there is more – use help(GenePop.Record) to
-check the API documentation). Loci names can be found on rec.loci_list.
+check the API documentation). Loci names can be found on rec.loci\_list.
 Population information can be found on rec.populations. Populations is a
 list with one element per population. Each element is itself a list of
 individuals, each individual is a pair composed by individual name and a
@@ -44,15 +42,15 @@ list of alleles (2 per marker), here is an example for rec.populations:
 
 .. code:: python
 
-   [
-       [
-           ('Ind1', [(1, 2),    (3, 3), (200, 201)],
-           ('Ind2', [(2, None), (3, 3), (None, None)],
-       ],
-       [
-           ('Other1', [(1, 1),  (4, 3), (200, 200)],
-       ]
-   ]
+    [
+        [
+            ('Ind1', [(1, 2),    (3, 3), (200, 201)],
+            ('Ind2', [(2, None), (3, 3), (None, None)],
+        ],
+        [
+            ('Other1', [(1, 1),  (4, 3), (200, 200)],
+        ]
+    ]
 
 So we have two populations, the first with two individuals, the second
 with only one. The first individual of the first population is called
@@ -65,41 +63,41 @@ available, here is an example:
 
 .. code:: python
 
-   from Bio.PopGen import GenePop
+    from Bio.PopGen import GenePop
 
-   # Imagine that you have loaded rec, as per the code snippet above...
+    # Imagine that you have loaded rec, as per the code snippet above...
 
-   rec.remove_population(pos)
-   # Removes a population from a record, pos is the population position in
-   # rec.populations, remember that it starts on position 0.
-   # rec is altered.
+    rec.remove_population(pos)
+    # Removes a population from a record, pos is the population position in
+    # rec.populations, remember that it starts on position 0.
+    # rec is altered.
 
-   rec.remove_locus_by_position(pos)
-   #Removes a locus by its position, pos is the locus position in
-   #  rec.loci_list, remember that it starts on position 0.
-   #  rec is altered.
+    rec.remove_locus_by_position(pos)
+    #Removes a locus by its position, pos is the locus position in
+    #  rec.loci_list, remember that it starts on position 0.
+    #  rec is altered.
 
-   rec.remove_locus_by_name(name)
-   # Removes a locus by its name, name is the locus name as in
-   # rec.loci_list. If the name doesn't exist the function fails
-   # silently.
-   # rec is altered.
+    rec.remove_locus_by_name(name)
+    # Removes a locus by its name, name is the locus name as in
+    # rec.loci_list. If the name doesn't exist the function fails
+    # silently.
+    # rec is altered.
 
-   rec_loci = rec.split_in_loci()
-   # Splits a record in loci, that is, for each loci, it creates a new
-   # record, with a single loci and all populations.
-   # The result is returned in a dictionary, being each key the locus name.
-   # The value is the GenePop record.
-   # rec is not altered.
+    rec_loci = rec.split_in_loci()
+    # Splits a record in loci, that is, for each loci, it creates a new
+    # record, with a single loci and all populations.
+    # The result is returned in a dictionary, being each key the locus name.
+    # The value is the GenePop record.
+    # rec is not altered.
 
-   rec_pops =  rec.split_in_pops(pop_names)
-   # Splits a record in populations, that is, for each population, it creates
-   # a new record, with a single population and all loci.
-   # The result is returned in a dictionary, being each key
-   # the population name. As population names are not available in GenePop,
-   # they are passed in array (pop_names).
-   # The value of each dictionary entry is the GenePop record.
-   # rec is not altered.
+    rec_pops =  rec.split_in_pops(pop_names)
+    # Splits a record in populations, that is, for each population, it creates
+    # a new record, with a single population and all loci.
+    # The result is returned in a dictionary, being each key
+    # the population name. As population names are not available in GenePop,
+    # they are passed in array (pop_names).
+    # The value of each dictionary entry is the GenePop record.
+    # rec is not altered.
 
 GenePop does not support population names, a limitation which can be
 cumbersome at times. Functionality to enable population names is

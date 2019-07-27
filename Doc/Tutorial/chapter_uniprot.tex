@@ -287,7 +287,7 @@ In this example, the first line shows the EC (Enzyme Commission) number of lipop
 
 In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
 
-%doctest ../Tests/Enzymes
+\pandocignoreme .. doctest ../Tests/Enzymes
 \begin{minted}{pycon}
 >>> from Bio.ExPASy import Enzyme
 >>> with open("lipoprotein.txt") as handle:

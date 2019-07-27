@@ -1,12 +1,8 @@
-.. _chapter:learning:
-
 Supervised learning methods
 ===========================
 
 Note the supervised learning methods described in this chapter all
 require Numerical Python (numpy) to be installed.
-
-.. _sec:LogisticRegression:
 
 The Logistic Regression Model
 -----------------------------
@@ -64,7 +60,7 @@ predictors to calculate a joint score :math:`S`:
 
 .. math:: S = \beta_0 + \beta_1 x_1 + \beta_2 x_2.
 
-The logistic regression model gives us appropriate values for the
+ The logistic regression model gives us appropriate values for the
 parameters :math:`\beta_0`, :math:`\beta_1`, :math:`\beta_2` using two
 sets of example genes:
 
@@ -84,87 +80,101 @@ classes OP and NOP, we can write this as
    \Pr(\mathrm{OP}|x_1, x_2) & = & \frac{\exp(\beta_0 + \beta_1 x_1 + \beta_2 x_2)}{1+\exp(\beta_0 + \beta_1 x_1 + \beta_2 x_2)} \label{eq:OP} \\
    \Pr(\mathrm{NOP}|x_1, x_2) & = & \frac{1}{1+\exp(\beta_0 + \beta_1 x_1 + \beta_2 x_2)} \label{eq:NOP}\end{aligned}
 
-Using a set of gene pairs for which it is known whether they belong to
+ Using a set of gene pairs for which it is known whether they belong to
 the same operon (class OP) or to different operons (class NOP), we can
 calculate the weights :math:`\beta_0`, :math:`\beta_1`, :math:`\beta_2`
 by maximizing the log-likelihood corresponding to the probability
-functions (:ref:`eq:OP`) and (:ref:`eq:NOP`).
-
-.. _sec:LogisticRegressionTraining:
+functions ([eq:OP]) and ([eq:NOP]).
 
 Training the logistic regression model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. table:: Adjacent gene pairs known to belong to the same operon (class
-OP) or to different operons (class NOP). Intergene distances are
-negative if the two genes overlap.
++---------------------+------------------------------------+---------------------------------------+---------+
+| Gene pair           | Intergene distance (:math:`x_1`)   | Gene expression score (:math:`x_2`)   | Class   |
++=====================+====================================+=======================================+=========+
+| *cotJA* — *cotJB*   | -53                                | -200.78                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yesK* — *yesL*     | 117                                | -267.14                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *lplA* — *lplB*     | 57                                 | -163.47                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *lplB* — *lplC*     | 16                                 | -190.30                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *lplC* — *lplD*     | 11                                 | -220.94                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *lplD* — *yetF*     | 85                                 | -193.94                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yfmT* — *yfmS*     | 16                                 | -182.71                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yfmF* — *yfmE*     | 15                                 | -180.41                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *citS* — *citT*     | -26                                | -181.73                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *citM* — *yflN*     | 58                                 | -259.87                               | OP      |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yfiI* — *yfiJ*     | 126                                | -414.53                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *lipB* — *yfiQ*     | 191                                | -249.57                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yfiU* — *yfiV*     | 113                                | -265.28                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yfhH* — *yfhI*     | 145                                | -312.99                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *cotY* — *cotX*     | 154                                | -213.83                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *yjoB* — *rapA*     | 147                                | -380.85                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
+| *ptsI* — *splA*     | 93                                 | -291.13                               | NOP     |
++---------------------+------------------------------------+---------------------------------------+---------+
 
-   ================= ================================ =================================== =====
-   Gene pair         Intergene distance (:math:`x_1`) Gene expression score (:math:`x_2`) Class
-   ================= ================================ =================================== =====
-   *cotJA* — *cotJB* -53                              -200.78                             OP
-   *yesK* — *yesL*   117                              -267.14                             OP
-   *lplA* — *lplB*   57                               -163.47                             OP
-   *lplB* — *lplC*   16                               -190.30                             OP
-   *lplC* — *lplD*   11                               -220.94                             OP
-   *lplD* — *yetF*   85                               -193.94                             OP
-   *yfmT* — *yfmS*   16                               -182.71                             OP
-   *yfmF* — *yfmE*   15                               -180.41                             OP
-   *citS* — *citT*   -26                              -181.73                             OP
-   *citM* — *yflN*   58                               -259.87                             OP
-   *yfiI* — *yfiJ*   126                              -414.53                             NOP
-   *lipB* — *yfiQ*   191                              -249.57                             NOP
-   *yfiU* — *yfiV*   113                              -265.28                             NOP
-   *yfhH* — *yfhI*   145                              -312.99                             NOP
-   *cotY* — *cotX*   154                              -213.83                             NOP
-   *yjoB* — *rapA*   147                              -380.85                             NOP
-   *ptsI* — *splA*   93                               -291.13                             NOP
-   ================= ================================ =================================== =====
+Table: Adjacent gene pairs known to belong to the same operon (class OP)
+or to different operons (class NOP). Intergene distances are negative if
+the two genes overlap.
 
 [table:training]
 
-Table :ref:`table:training` lists some of the *Bacillus
-subtilis* gene pairs for which the operon structure is known. Let’s
-calculate the logistic regression model from these data:
+Table [table:training] lists some of the *Bacillus subtilis* gene pairs
+for which the operon structure is known. Let’s calculate the logistic
+regression model from these data:
 
 .. code:: pycon
 
-   >>> from Bio import LogisticRegression
-   >>> xs = [[-53, -200.78],
-             [117, -267.14],
-             [57, -163.47],
-             [16, -190.30],
-             [11, -220.94],
-             [85, -193.94],
-             [16, -182.71],
-             [15, -180.41],
-             [-26, -181.73],
-             [58, -259.87],
-             [126, -414.53],
-             [191, -249.57],
-             [113, -265.28],
-             [145, -312.99],
-             [154, -213.83],
-             [147, -380.85],
-             [93, -291.13]]
-   >>> ys = [1,
-             1,
-             1,
-             1,
-             1,
-             1,
-             1,
-             1,
-             1,
-             1,
-             0,
-             0,
-             0,
-             0,
-             0,
-             0,
-             0]
-   >>> model = LogisticRegression.train(xs, ys)
+    >>> from Bio import LogisticRegression
+    >>> xs = [[-53, -200.78],
+              [117, -267.14],
+              [57, -163.47],
+              [16, -190.30],
+              [11, -220.94],
+              [85, -193.94],
+              [16, -182.71],
+              [15, -180.41],
+              [-26, -181.73],
+              [58, -259.87],
+              [126, -414.53],
+              [191, -249.57],
+              [113, -265.28],
+              [145, -312.99],
+              [154, -213.83],
+              [147, -380.85],
+              [93, -291.13]]
+    >>> ys = [1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0]
+    >>> model = LogisticRegression.train(xs, ys)
 
 Here, ``xs`` and ``ys`` are the training data: ``xs`` contains the
 predictor variables for each gene pair, and ``ys`` specifies if the gene
@@ -175,8 +185,8 @@ and :math:`\beta_2`:
 
 .. code:: pycon
 
-   >>> model.beta
-   [8.9830290157144681, -0.035968960444850887, 0.02181395662983519]
+    >>> model.beta
+    [8.9830290157144681, -0.035968960444850887, 0.02181395662983519]
 
 Note that :math:`\beta_1` is negative, as gene pairs with a shorter
 intergene distance have a higher probability of belonging to the same
@@ -196,52 +206,52 @@ model):
 
 .. code:: pycon
 
-   >>> def show_progress(iteration, loglikelihood):
-           print("Iteration:", iteration, "Log-likelihood function:", loglikelihood)
-   >>>
-   >>> model = LogisticRegression.train(xs, ys, update_fn=show_progress)
-   Iteration: 0 Log-likelihood function: -11.7835020695
-   Iteration: 1 Log-likelihood function: -7.15886767672
-   Iteration: 2 Log-likelihood function: -5.76877209868
-   Iteration: 3 Log-likelihood function: -5.11362294338
-   Iteration: 4 Log-likelihood function: -4.74870642433
-   Iteration: 5 Log-likelihood function: -4.50026077146
-   Iteration: 6 Log-likelihood function: -4.31127773737
-   Iteration: 7 Log-likelihood function: -4.16015043396
-   Iteration: 8 Log-likelihood function: -4.03561719785
-   Iteration: 9 Log-likelihood function: -3.93073282192
-   Iteration: 10 Log-likelihood function: -3.84087660929
-   Iteration: 11 Log-likelihood function: -3.76282560605
-   Iteration: 12 Log-likelihood function: -3.69425027154
-   Iteration: 13 Log-likelihood function: -3.6334178602
-   Iteration: 14 Log-likelihood function: -3.57900855837
-   Iteration: 15 Log-likelihood function: -3.52999671386
-   Iteration: 16 Log-likelihood function: -3.48557145163
-   Iteration: 17 Log-likelihood function: -3.44508206139
-   Iteration: 18 Log-likelihood function: -3.40799948447
-   Iteration: 19 Log-likelihood function: -3.3738885624
-   Iteration: 20 Log-likelihood function: -3.3423876581
-   Iteration: 21 Log-likelihood function: -3.31319343769
-   Iteration: 22 Log-likelihood function: -3.2860493346
-   Iteration: 23 Log-likelihood function: -3.2607366863
-   Iteration: 24 Log-likelihood function: -3.23706784091
-   Iteration: 25 Log-likelihood function: -3.21488073614
-   Iteration: 26 Log-likelihood function: -3.19403459259
-   Iteration: 27 Log-likelihood function: -3.17440646052
-   Iteration: 28 Log-likelihood function: -3.15588842703
-   Iteration: 29 Log-likelihood function: -3.13838533947
-   Iteration: 30 Log-likelihood function: -3.12181293595
-   Iteration: 31 Log-likelihood function: -3.10609629966
-   Iteration: 32 Log-likelihood function: -3.09116857282
-   Iteration: 33 Log-likelihood function: -3.07696988017
-   Iteration: 34 Log-likelihood function: -3.06344642288
-   Iteration: 35 Log-likelihood function: -3.05054971191
-   Iteration: 36 Log-likelihood function: -3.03823591619
-   Iteration: 37 Log-likelihood function: -3.02646530573
-   Iteration: 38 Log-likelihood function: -3.01520177394
-   Iteration: 39 Log-likelihood function: -3.00441242601
-   Iteration: 40 Log-likelihood function: -2.99406722296
-   Iteration: 41 Log-likelihood function: -2.98413867259
+    >>> def show_progress(iteration, loglikelihood):
+            print("Iteration:", iteration, "Log-likelihood function:", loglikelihood)
+    >>>
+    >>> model = LogisticRegression.train(xs, ys, update_fn=show_progress)
+    Iteration: 0 Log-likelihood function: -11.7835020695
+    Iteration: 1 Log-likelihood function: -7.15886767672
+    Iteration: 2 Log-likelihood function: -5.76877209868
+    Iteration: 3 Log-likelihood function: -5.11362294338
+    Iteration: 4 Log-likelihood function: -4.74870642433
+    Iteration: 5 Log-likelihood function: -4.50026077146
+    Iteration: 6 Log-likelihood function: -4.31127773737
+    Iteration: 7 Log-likelihood function: -4.16015043396
+    Iteration: 8 Log-likelihood function: -4.03561719785
+    Iteration: 9 Log-likelihood function: -3.93073282192
+    Iteration: 10 Log-likelihood function: -3.84087660929
+    Iteration: 11 Log-likelihood function: -3.76282560605
+    Iteration: 12 Log-likelihood function: -3.69425027154
+    Iteration: 13 Log-likelihood function: -3.6334178602
+    Iteration: 14 Log-likelihood function: -3.57900855837
+    Iteration: 15 Log-likelihood function: -3.52999671386
+    Iteration: 16 Log-likelihood function: -3.48557145163
+    Iteration: 17 Log-likelihood function: -3.44508206139
+    Iteration: 18 Log-likelihood function: -3.40799948447
+    Iteration: 19 Log-likelihood function: -3.3738885624
+    Iteration: 20 Log-likelihood function: -3.3423876581
+    Iteration: 21 Log-likelihood function: -3.31319343769
+    Iteration: 22 Log-likelihood function: -3.2860493346
+    Iteration: 23 Log-likelihood function: -3.2607366863
+    Iteration: 24 Log-likelihood function: -3.23706784091
+    Iteration: 25 Log-likelihood function: -3.21488073614
+    Iteration: 26 Log-likelihood function: -3.19403459259
+    Iteration: 27 Log-likelihood function: -3.17440646052
+    Iteration: 28 Log-likelihood function: -3.15588842703
+    Iteration: 29 Log-likelihood function: -3.13838533947
+    Iteration: 30 Log-likelihood function: -3.12181293595
+    Iteration: 31 Log-likelihood function: -3.10609629966
+    Iteration: 32 Log-likelihood function: -3.09116857282
+    Iteration: 33 Log-likelihood function: -3.07696988017
+    Iteration: 34 Log-likelihood function: -3.06344642288
+    Iteration: 35 Log-likelihood function: -3.05054971191
+    Iteration: 36 Log-likelihood function: -3.03823591619
+    Iteration: 37 Log-likelihood function: -3.02646530573
+    Iteration: 38 Log-likelihood function: -3.01520177394
+    Iteration: 39 Log-likelihood function: -3.00441242601
+    Iteration: 40 Log-likelihood function: -2.99406722296
+    Iteration: 41 Log-likelihood function: -2.98413867259
 
 The iteration stops once the increase in the log-likelihood function is
 less than 0.01. If no convergence is reached after 500 iterations, the
@@ -263,14 +273,15 @@ a logistic regression model and the values for :math:`x_1` and
 and class NOP, respectively. For example, let’s consider the gene pairs
 *yxcE*, *yxcD* and *yxiB*, *yxiA*:
 
-.. table:: Adjacent gene pairs of unknown operon status.
++-------------------+----------------------------------+-------------------------------------+
+| Gene pair         | Intergene distance :math:`x_1`   | Gene expression score :math:`x_2`   |
++===================+==================================+=====================================+
+| *yxcE* — *yxcD*   | 6                                | -173.143442352                      |
++-------------------+----------------------------------+-------------------------------------+
+| *yxiB* — *yxiA*   | 309                              | -271.005880394                      |
++-------------------+----------------------------------+-------------------------------------+
 
-   =============== ============================== =================================
-   Gene pair       Intergene distance :math:`x_1` Gene expression score :math:`x_2`
-   =============== ============================== =================================
-   *yxcE* — *yxcD* 6                              -173.143442352
-   *yxiB* — *yxiA* 309                            -271.005880394
-   =============== ============================== =================================
+Table: Adjacent gene pairs of unknown operon status.
 
 The logistic regression model classifies *yxcE*, *yxcD* as belonging to
 the same operon (class OP), while *yxiB*, *yxiA* are predicted to belong
@@ -278,56 +289,55 @@ to different operons:
 
 .. code:: pycon
 
-   >>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6, -173.143442352]))
-   yxcE, yxcD: 1
-   >>> print("yxiB, yxiA:", LogisticRegression.classify(model, [309, -271.005880394]))
-   yxiB, yxiA: 0
+    >>> print("yxcE, yxcD:", LogisticRegression.classify(model, [6, -173.143442352]))
+    yxcE, yxcD: 1
+    >>> print("yxiB, yxiA:", LogisticRegression.classify(model, [309, -271.005880394]))
+    yxiB, yxiA: 0
 
 (which, by the way, agrees with the biological literature).
 
 To find out how confident we can be in these predictions, we can call
 the ``calculate`` function to obtain the probabilities (equations
-(:ref:`eq:OP`) and :ref:`eq:NOP`) for class OP and NOP.
-For *yxcE*, *yxcD* we find
+([eq:OP]) and [eq:NOP]) for class OP and NOP. For *yxcE*, *yxcD* we find
 
 .. code:: pycon
 
-   >>> q, p = LogisticRegression.calculate(model, [6, -173.143442352])
-   >>> print("class OP: probability =", p, "class NOP: probability =", q)
-   class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
+    >>> q, p = LogisticRegression.calculate(model, [6, -173.143442352])
+    >>> print("class OP: probability =", p, "class NOP: probability =", q)
+    class OP: probability = 0.993242163503 class NOP: probability = 0.00675783649744
 
 and for *yxiB*, *yxiA*
 
 .. code:: pycon
 
-   >>> q, p = LogisticRegression.calculate(model, [309, -271.005880394])
-   >>> print("class OP: probability =", p, "class NOP: probability =", q)
-   class OP: probability = 0.000321211251817 class NOP: probability = 0.999678788748
+    >>> q, p = LogisticRegression.calculate(model, [309, -271.005880394])
+    >>> print("class OP: probability =", p, "class NOP: probability =", q)
+    class OP: probability = 0.000321211251817 class NOP: probability = 0.999678788748
 
 To get some idea of the prediction accuracy of the logistic regression
 model, we can apply it to the training data:
 
 .. code:: pycon
 
-   >>> for i in range(len(ys)):
-           print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
+    >>> for i in range(len(ys)):
+            print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
 
 showing that the prediction is correct for all but one of the gene
 pairs. A more reliable estimate of the prediction accuracy can be found
@@ -336,26 +346,26 @@ the training data after removing the gene to be predicted:
 
 .. code:: pycon
 
-   >>> for i in range(len(ys)):
-           model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-           print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 1
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
+    >>> for i in range(len(ys)):
+            model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+            print("True:", ys[i], "Predicted:", LogisticRegression.classify(model, xs[i]))
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 1
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
 
 The leave-one-out analysis shows that the prediction of the logistic
 regression model is incorrect for only two of the gene pairs, which
@@ -366,10 +376,10 @@ Logistic Regression, Linear Discriminant Analysis, and Support Vector Machines
 
 The logistic regression model is similar to linear discriminant
 analysis. In linear discriminant analysis, the class probabilities also
-follow equations (:ref:`eq:OP`) and (:ref:`eq:NOP`).
-However, instead of estimating the coefficients :math:`\beta` directly,
-we first fit a normal distribution to the predictor variables :math:`x`.
-The coefficients :math:`\beta` are then calculated from the means and
+follow equations ([eq:OP]) and ([eq:NOP]). However, instead of
+estimating the coefficients :math:`\beta` directly, we first fit a
+normal distribution to the predictor variables :math:`x`. The
+coefficients :math:`\beta` are then calculated from the means and
 covariances of the normal distribution. If the distribution of :math:`x`
 is indeed normal, then we expect linear discriminant analysis to perform
 better than the logistic regression model. The logistic regression
@@ -379,11 +389,11 @@ Another similar approach is a support vector machine with a linear
 kernel. Such an SVM also uses a linear combination of the predictors,
 but estimates the coefficients :math:`\beta` from the predictor
 variables :math:`x` near the boundary region between the classes. If the
-logistic regression model (equations (:ref:`eq:OP`) and
-(:ref:`eq:NOP`)) is a good description for :math:`x` away from
-the boundary region, we expect the logistic regression model to perform
-better than an SVM with a linear kernel, as it relies on more data. If
-not, an SVM with a linear kernel may perform better.
+logistic regression model (equations ([eq:OP]) and ([eq:NOP])) is a good
+description for :math:`x` away from the boundary region, we expect the
+logistic regression model to perform better than an SVM with a linear
+kernel, as it relies on more data. If not, an SVM with a linear kernel
+may perform better.
 
 Trevor Hastie, Robert Tibshirani, and Jerome Friedman: *The Elements of
 Statistical Learning. Data Mining, Inference, and Prediction*. Springer
@@ -391,8 +401,6 @@ Series in Statistics, 2001. Chapter 4.4.
 
 :math:`k`-Nearest Neighbors
 ---------------------------
-
-.. _background-and-purpose-1:
 
 Background and purpose
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -405,27 +413,27 @@ the training data set.
 In Biopython, the :math:`k`-nearest neighbors method is available in
 ``Bio.kNN``. To illustrate the use of the :math:`k`-nearest neighbor
 method in Biopython, we will use the same operon data set as in section
-:ref:`sec:LogisticRegression`.
+[sec:LogisticRegression].
 
 Initializing a :math:`k`-nearest neighbors model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Using the data in Table :ref:`table:training`, we
-create and initialize a :math:`k`-nearest neighbors model as follows:
+Using the data in Table [table:training], we create and initialize a
+:math:`k`-nearest neighbors model as follows:
 
 .. code:: pycon
 
-   >>> from Bio import kNN
-   >>> k = 3
-   >>> model = kNN.train(xs, ys, k)
+    >>> from Bio import kNN
+    >>> k = 3
+    >>> model = kNN.train(xs, ys, k)
 
 where ``xs`` and ``ys`` are the same as in Section
-:ref:`sec:LogisticRegressionTraining`. Here, ``k`` is the number
-of neighbors :math:`k` that will be considered for the classification.
-For classification into two classes, choosing an odd number for
-:math:`k` lets you avoid tied votes. The function name ``train`` is a
-bit of a misnomer, since no model training is done: this function simply
-stores ``xs``, ``ys``, and ``k`` in ``model``.
+[sec:LogisticRegressionTraining]. Here, ``k`` is the number of neighbors
+:math:`k` that will be considered for the classification. For
+classification into two classes, choosing an odd number for :math:`k`
+lets you avoid tied votes. The function name ``train`` is a bit of a
+misnomer, since no model training is done: this function simply stores
+``xs``, ``ys``, and ``k`` in ``model``.
 
 Using a :math:`k`-nearest neighbors model for classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -442,12 +450,12 @@ find:
 
 .. code:: pycon
 
-   >>> x = [6, -173.143442352]
-   >>> print("yxcE, yxcD:", kNN.classify(model, x))
-   yxcE, yxcD: 1
-   >>> x = [309, -271.005880394]
-   >>> print("yxiB, yxiA:", kNN.classify(model, x))
-   yxiB, yxiA: 0
+    >>> x = [6, -173.143442352]
+    >>> print("yxcE, yxcD:", kNN.classify(model, x))
+    yxcE, yxcD: 1
+    >>> x = [309, -271.005880394]
+    >>> print("yxiB, yxiA:", kNN.classify(model, x))
+    yxiB, yxiA: 0
 
 In agreement with the logistic regression model, *yxcE*, *yxcD* are
 classified as belonging to the same operon (class OP), while *yxiB*,
@@ -462,15 +470,15 @@ Instead, we could for example use the city-block (Manhattan) distance:
 
 .. code:: pycon
 
-   >>> def cityblock(x1, x2):
-   ...    assert len(x1)==2
-   ...    assert len(x2)==2
-   ...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
-   ...    return distance
-   ...
-   >>> x = [6, -173.143442352]
-   >>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock))
-   yxcE, yxcD: 1
+    >>> def cityblock(x1, x2):
+    ...    assert len(x1)==2
+    ...    assert len(x2)==2
+    ...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
+    ...    return distance
+    ...
+    >>> x = [6, -173.143442352]
+    >>> print("yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock))
+    yxcE, yxcD: 1
 
 The weight function can be used for weighted voting. For example, we may
 want to give closer neighbors a higher weight than neighbors that are
@@ -478,14 +486,14 @@ further away:
 
 .. code:: pycon
 
-   >>> def weight(x1, x2):
-   ...    assert len(x1)==2
-   ...    assert len(x2)==2
-   ...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
-   ...
-   >>> x = [6, -173.143442352]
-   >>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight))
-   yxcE, yxcD: 1
+    >>> def weight(x1, x2):
+    ...    assert len(x1)==2
+    ...    assert len(x2)==2
+    ...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
+    ...
+    >>> x = [6, -173.143442352]
+    >>> print("yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight))
+    yxcE, yxcD: 1
 
 By default, all neighbors are given an equal weight.
 
@@ -497,20 +505,20 @@ this reduces to the number of neighbors in each category. For *yxcE*,
 
 .. code:: pycon
 
-   >>> x = [6, -173.143442352]
-   >>> weight = kNN.calculate(model, x)
-   >>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
-   class OP: weight = 0.0 class NOP: weight = 3.0
+    >>> x = [6, -173.143442352]
+    >>> weight = kNN.calculate(model, x)
+    >>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
+    class OP: weight = 0.0 class NOP: weight = 3.0
 
 which means that all three neighbors of ``x1``, ``x2`` are in the NOP
 class. As another example, for *yesK*, *yesL* we find
 
 .. code:: pycon
 
-   >>> x = [117, -267.14]
-   >>> weight = kNN.calculate(model, x)
-   >>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
-   class OP: weight = 2.0 class NOP: weight = 1.0
+    >>> x = [117, -267.14]
+    >>> weight = kNN.calculate(model, x)
+    >>> print("class OP: weight =", weight[0], "class NOP: weight =", weight[1])
+    class OP: weight = 2.0 class NOP: weight = 1.0
 
 which means that two neighbors are operon pairs and one neighbor is a
 non-operon pair.
@@ -520,25 +528,25 @@ neighbors approach, we can apply it to the training data:
 
 .. code:: pycon
 
-   >>> for i in range(len(ys)):
-           print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
+    >>> for i in range(len(ys)):
+            print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
 
 showing that the prediction is correct for all but two of the gene
 pairs. A more reliable estimate of the prediction accuracy can be found
@@ -547,27 +555,27 @@ the training data after removing the gene to be predicted:
 
 .. code:: pycon
 
-   >>> k = 3
-   >>> for i in range(len(ys)):
-           model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
-           print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 1
-   True: 1 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 1
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 0
-   True: 0 Predicted: 1
+    >>> k = 3
+    >>> for i in range(len(ys)):
+            model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
+            print("True:", ys[i], "Predicted:", kNN.classify(model, xs[i]))
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 1
+    True: 1 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 1
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 0
+    True: 0 Predicted: 1
 
 The leave-one-out analysis shows that :math:`k`-nearest neighbors model
 is correct for 13 out of 17 gene pairs, which corresponds to a

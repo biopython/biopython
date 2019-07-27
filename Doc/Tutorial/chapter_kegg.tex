@@ -9,7 +9,7 @@ Please note that the KEGG parser implementation in Biopython is incomplete. Whil
 Parsing a KEGG record is as simple as using any other file format parser in Biopython. 
 (Before running the following codes, please open \url{http://rest.kegg.jp/get/ec:5.4.2.2} with your web browser and save it as \verb|ec_5.4.2.2.txt|.)
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio.KEGG import Enzyme
 >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
@@ -22,7 +22,7 @@ Parsing a KEGG record is as simple as using any other file format parser in Biop
 
 Alternatively, if the input KEGG file has exactly one entry, you can use \verb|read|:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio.KEGG import Enzyme
 >>> record = Enzyme.read(open("ec_5.4.2.2.txt"))

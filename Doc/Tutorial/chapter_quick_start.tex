@@ -20,7 +20,7 @@ Disputably (of course!), the central object in bioinformatics is the sequence. T
 
 Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``\verb+>>>+'' represents the Python prompt followed by what you would type in:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -36,7 +36,7 @@ What we have here is a sequence object with a \emph{generic} alphabet - reflecti
 
 In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> my_seq
 Seq('AGTACACTGGT')

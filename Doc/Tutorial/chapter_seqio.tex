@@ -288,7 +288,7 @@ As you'll have seen above, we can use \verb|Bio.SeqIO.read()| or
 example calculates the total length of the sequences in a multiple
 record GenBank file using a generator expression:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> print(sum(len(r) for r in SeqIO.parse("ls_orchid.gbk", "gb")))
@@ -299,7 +299,7 @@ record GenBank file using a generator expression:
 Here we use a file handle instead, using the \verb|with| statement
 to close the handle automatically:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> with open("ls_orchid.gbk") as handle:
@@ -310,7 +310,7 @@ to close the handle automatically:
 \noindent
 Or, the old fashioned way where you manually close the handle:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> handle = open("ls_orchid.gbk")
@@ -339,7 +339,7 @@ quite as consistent under Python 2):
 
 %TODO: Can we make the doctest code Python version specific?
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> import bz2
 >>> from Bio import SeqIO
@@ -518,7 +518,7 @@ You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictiona
 (in memory).  By default this will use each record's identifier (i.e. the \verb|.id|
 attribute) as the key.  Let's try this using our GenBank file:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
@@ -532,7 +532,7 @@ Python dictionary.
 Since this variable \verb|orchid_dict| is an ordinary Python dictionary,
 we can look at all of the keys we have available:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(orchid_dict)
 94
@@ -555,7 +555,7 @@ If you really want to, you can even look at all the records at once:
 
 We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
@@ -642,7 +642,7 @@ Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 
 Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use Python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> from Bio.SeqUtils.CheckSum import seguid
@@ -675,7 +675,7 @@ it on demand.
 
 As an example, let's use the same GenBank file as before:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
@@ -688,7 +688,7 @@ As an example, let's use the same GenBank file as before:
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print(seq_record.description)
@@ -906,7 +906,7 @@ The \verb|Bio.SeqIO.index()| and \verb|Bio.SeqIO.index_db()| can both be
 used with BGZF compressed files. For example, if you started with an
 uncompressed GenBank file:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
@@ -925,7 +925,7 @@ $ bgzip -c ls_orchid.gbk > ls_orchid.gbk.bgz
 
 You can use the compressed file in exactly the same way:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk.bgz", "genbank")
@@ -1167,7 +1167,7 @@ We can use  the \verb|SeqRecord| object's built in \verb|.reverse_complement()| 
 
 This is an excellent place to demonstrate the power of list comprehensions which make a list in memory:
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
@@ -1178,7 +1178,7 @@ This is an excellent place to demonstrate the power of list comprehensions which
 
 \noindent Now list comprehensions have a nice trick up their sleeves, you can add a conditional statement:
 
-%cont-doctest examples
+\pandocignoreme .. cont-doctest examples
 \begin{minted}{pycon}
 >>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
 ...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700]
@@ -1188,7 +1188,7 @@ This is an excellent place to demonstrate the power of list comprehensions which
 
 That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
-%cont-doctest examples
+\pandocignoreme .. cont-doctest examples
 \begin{minted}{pycon}
 >>> records = (rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
 ...           for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
@@ -1260,7 +1260,7 @@ You can use this directly - it iterates over the file handle returning
 each record as a tuple of two strings, the title line (everything after
 the \verb|>| character) and the sequence (as a plain string):
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio.SeqIO.FastaIO import SimpleFastaParser
 >>> count = 0
@@ -1289,7 +1289,7 @@ calls the low-level \verb|FastqGeneralIterator| with the file handle.
 If you don't need the quality scores turned into integers,
 or can work with them as ASCII strings this is ideal:
 
-%doctest ../Tests/Quality
+\pandocignoreme .. doctest ../Tests/Quality
 \begin{minted}{pycon}
 >>> from Bio.SeqIO.QualityIO import FastqGeneralIterator
 >>> count = 0

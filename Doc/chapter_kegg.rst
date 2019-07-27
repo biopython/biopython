@@ -1,5 +1,3 @@
-.. _chapter:kegg:
-
 KEGG
 ====
 
@@ -23,27 +21,31 @@ in Biopython. (Before running the following codes, please open
 http://rest.kegg.jp/get/ec:5.4.2.2 with your web browser and save it as
 ``ec_5.4.2.2.txt``.)
 
+.. doctest examples
+
 .. code:: pycon
 
-   >>> from Bio.KEGG import Enzyme
-   >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
-   >>> record = list(records)[0]
-   >>> record.classname
-   ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
-   >>> record.entry
-   '5.4.2.2'
+    >>> from Bio.KEGG import Enzyme
+    >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
+    >>> record = list(records)[0]
+    >>> record.classname
+    ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
+    >>> record.entry
+    '5.4.2.2'
 
 Alternatively, if the input KEGG file has exactly one entry, you can use
 ``read``:
 
+.. doctest examples
+
 .. code:: pycon
 
-   >>> from Bio.KEGG import Enzyme
-   >>> record = Enzyme.read(open("ec_5.4.2.2.txt"))
-   >>> record.classname
-   ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
-   >>> record.entry
-   '5.4.2.2'
+    >>> from Bio.KEGG import Enzyme
+    >>> record = Enzyme.read(open("ec_5.4.2.2.txt"))
+    >>> record.classname
+    ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
+    >>> record.entry
+    '5.4.2.2'
 
 The following section will shows how to download the above enzyme using
 the KEGG api as well as how to use the generic parser with data that
@@ -64,61 +66,61 @@ relevant enzyme and passing it through the Enzyme parser.
 
 .. code:: pycon
 
-   >>> from Bio.KEGG import REST
-   >>> from Bio.KEGG import Enzyme
-   >>> request = REST.kegg_get("ec:5.4.2.2")
-   >>> open("ec_5.4.2.2.txt", "w").write(request.read())
-   >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
-   >>> record = list(records)[0]
-   >>> record.classname
-   ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
-   >>> record.entry
-   '5.4.2.2'
+    >>> from Bio.KEGG import REST
+    >>> from Bio.KEGG import Enzyme
+    >>> request = REST.kegg_get("ec:5.4.2.2")
+    >>> open("ec_5.4.2.2.txt", "w").write(request.read())
+    >>> records = Enzyme.parse(open("ec_5.4.2.2.txt"))
+    >>> record = list(records)[0]
+    >>> record.classname
+    ['Isomerases;', 'Intramolecular transferases;', 'Phosphotransferases (phosphomutases)']
+    >>> record.entry
+    '5.4.2.2'
 
 Now, here’s a more realistic example which shows a combination of
 querying the KEGG API. This will demonstrate how to extract a unique set
 of all human pathway gene symbols which relate to DNA repair. The steps
 that need to be taken to do so are as follows. First, we need to get a
 list of all human pathways. Secondly, we need to filter those for ones
-which relate to "repair". Lastly, we need to get a list of all the gene
+which relate to “repair”. Lastly, we need to get a list of all the gene
 symbols in all repair pathways.
 
 .. code:: python
 
-   from Bio.KEGG import REST
+    from Bio.KEGG import REST
 
-   human_pathways = REST.kegg_list("pathway", "hsa").read()
+    human_pathways = REST.kegg_list("pathway", "hsa").read()
 
-   # Filter all human pathways for repair pathways
-   repair_pathways = []
-   for line in human_pathways.rstrip().split("\n"):
-       entry, description = line.split("\t")
-       if "repair" in description:
-           repair_pathways.append(entry)
+    # Filter all human pathways for repair pathways
+    repair_pathways = []
+    for line in human_pathways.rstrip().split("\n"):
+        entry, description = line.split("\t")
+        if "repair" in description:
+            repair_pathways.append(entry)
 
-   # Get the genes for pathways and add them to a list
-   repair_genes = [] 
-   for pathway in repair_pathways:
-       pathway_file = REST.kegg_get(pathway).read()  # query and read each pathway
+    # Get the genes for pathways and add them to a list
+    repair_genes = [] 
+    for pathway in repair_pathways:
+        pathway_file = REST.kegg_get(pathway).read()  # query and read each pathway
 
-       # iterate through each KEGG pathway file, keeping track of which section
-       # of the file we're in, only read the gene in each pathway
-       current_section = None
-       for line in pathway_file.rstrip().split("\n"):
-           section = line[:12].strip()  # section names are within 12 columns
-           if not section == "":
-               current_section = section
-           
-           if current_section == "GENE":
-               gene_identifiers, gene_description = line[12:].split("; ")
-               gene_id, gene_symbol = gene_identifiers.split()
+        # iterate through each KEGG pathway file, keeping track of which section
+        # of the file we're in, only read the gene in each pathway
+        current_section = None
+        for line in pathway_file.rstrip().split("\n"):
+            section = line[:12].strip()  # section names are within 12 columns
+            if not section == "":
+                current_section = section
+            
+            if current_section == "GENE":
+                gene_identifiers, gene_description = line[12:].split("; ")
+                gene_id, gene_symbol = gene_identifiers.split()
 
-               if not gene_symbol in repair_genes:
-                   repair_genes.append(gene_symbol)
+                if not gene_symbol in repair_genes:
+                    repair_genes.append(gene_symbol)
 
-   print("There are %d repair pathways and %d repair genes. The genes are:" % \
-         (len(repair_pathways), len(repair_genes)))
-   print(", ".join(repair_genes))
+    print("There are %d repair pathways and %d repair genes. The genes are:" % \
+          (len(repair_pathways), len(repair_genes)))
+    print(", ".join(repair_genes))
 
 The KEGG API wrapper is compatible with all endpoints. Usage is
 essentially replacing all slashes in the url with commas and using that
@@ -128,6 +130,6 @@ are a few examples from the api documentation
 
 .. code:: text
 
-   /list/hsa:10458+ece:Z5100            -> REST.kegg_list(["hsa:10458", "ece:Z5100"])
-   /find/compound/300-310/mol_weight    -> REST.kegg_find("compound", "300-310", "mol_weight")
-   /get/hsa:10458+ece:Z5100/aaseq      -> REST.kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")
+    /list/hsa:10458+ece:Z5100            -> REST.kegg_list(["hsa:10458", "ece:Z5100"])
+    /find/compound/300-310/mol_weight    -> REST.kegg_find("compound", "300-310", "mol_weight")
+    /get/hsa:10458+ece:Z5100/aaseq      -> REST.kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")

@@ -1,5 +1,3 @@
-.. _chapter:testing:
-
 The Biopython testing framework
 ===============================
 
@@ -30,42 +28,41 @@ directory using the following:
 
 .. code:: console
 
-   $ python setup.py test
+    $ python setup.py test
 
 This is actually equivalent to going to the ``Tests`` subdirectory and
 running:
 
 .. code:: console
 
-   $ python run_tests.py
+    $ python run_tests.py
 
 You’ll often want to run just some of the tests, and this is done like
 this:
 
 .. code:: console
 
-   $ python run_tests.py test_SeqIO.py test_AlignIO.py
+    $ python run_tests.py test_SeqIO.py test_AlignIO.py
 
 When giving the list of tests, the ``.py`` extension is optional, so you
 can also just type:
 
 .. code:: console
 
-   $ python run_tests.py test_SeqIO test_AlignIO
+    $ python run_tests.py test_SeqIO test_AlignIO
 
-To run the docstring tests (see section :ref:`sec:doctest`), you can
-use
+To run the docstring tests (see section [sec:doctest]), you can use
 
 .. code:: console
 
-   $ python run_tests.py doctest
+    $ python run_tests.py doctest
 
 You can also skip any tests which have been setup with an explicit
 online component by adding ``--offline``, e.g.
 
 .. code:: console
 
-   $ python run_tests.py --offline
+    $ python run_tests.py --offline
 
 By default, ``run_tests.py`` runs all tests, including the docstring
 tests.
@@ -97,15 +94,15 @@ If you are interested in using Tox, you could start with the example
 
 .. code:: text
 
-   [tox]
-   envlist = py27,pypy,py36,py37
+    [tox]
+    envlist = py27,pypy,py36,py37
 
-   [testenv]
-   changedir = Tests
-   commands = {envpython} run_tests.py --offline
-   deps =
-       numpy
-       reportlab
+    [testenv]
+    changedir = Tests
+    commands = {envpython} run_tests.py --offline
+    deps =
+        numpy
+        reportlab
 
 Using the template above, executing ``tox`` will test your Biopython
 code against Python 2.7, PyPy, Python 3.6 and Python3.7. It assumes that
@@ -139,17 +136,17 @@ contained in it:
 
 .. code:: console
 
-   $ python run_tests.py
-   test_Ace ... ok
-   test_AlignIO ... ok
-   test_BioSQL ... ok
-   test_BioSQL_SeqIO ... ok
-   test_Biospam ... ok
-   test_CAPS ... ok
-   test_Clustalw ... ok
-   ...
-   ----------------------------------------------------------------------
-   Ran 107 tests in 86.127 seconds
+    $ python run_tests.py
+    test_Ace ... ok
+    test_AlignIO ... ok
+    test_BioSQL ... ok
+    test_BioSQL_SeqIO ... ok
+    test_Biospam ... ok
+    test_CAPS ... ok
+    test_Clustalw ... ok
+    ...
+    ----------------------------------------------------------------------
+    Ran 107 tests in 86.127 seconds
 
 Writing a test using unittest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,33 +165,33 @@ you can copy and paste to get started:
 
 .. code:: python
 
-   import unittest
-   from Bio import Biospam
+    import unittest
+    from Bio import Biospam
 
-   class BiospamTestAddition(unittest.TestCase):
+    class BiospamTestAddition(unittest.TestCase):
 
-       def test_addition1(self):
-           result = Biospam.addition(2, 3)
-           self.assertEqual(result, 5)
+        def test_addition1(self):
+            result = Biospam.addition(2, 3)
+            self.assertEqual(result, 5)
 
-       def test_addition2(self):
-           result = Biospam.addition(9, -1)
-           self.assertEqual(result, 8)
+        def test_addition2(self):
+            result = Biospam.addition(9, -1)
+            self.assertEqual(result, 8)
 
-   class BiospamTestDivision(unittest.TestCase):
+    class BiospamTestDivision(unittest.TestCase):
 
-       def test_division1(self):
-           result = Biospam.division(3.0, 2.0)
-           self.assertAlmostEqual(result, 1.5)
+        def test_division1(self):
+            result = Biospam.division(3.0, 2.0)
+            self.assertAlmostEqual(result, 1.5)
 
-       def test_division2(self):
-           result = Biospam.division(10.0, -2.0)
-           self.assertAlmostEqual(result, -5.0)
+        def test_division2(self):
+            result = Biospam.division(10.0, -2.0)
+            self.assertAlmostEqual(result, -5.0)
 
 
-   if __name__ == "__main__":
-       runner = unittest.TextTestRunner(verbosity = 2)
-       unittest.main(testRunner=runner)
+    if __name__ == "__main__":
+        runner = unittest.TextTestRunner(verbosity = 2)
+        unittest.main(testRunner=runner)
 
 In the division tests, we use ``assertAlmostEqual`` instead of
 ``assertEqual`` to avoid tests failing due to roundoff errors; see the
@@ -221,9 +218,9 @@ These are the key points of ``unittest``-based tests:
 
    .. code:: python
 
-      if __name__ == "__main__":
-          runner = unittest.TextTestRunner(verbosity = 2)
-          unittest.main(testRunner=runner)
+       if __name__ == "__main__":
+           runner = unittest.TextTestRunner(verbosity = 2)
+           unittest.main(testRunner=runner)
 
    to execute the tests when the script is run by itself (rather than
    imported from ``run_tests.py``). If you run this script, then you’ll
@@ -231,16 +228,16 @@ These are the key points of ``unittest``-based tests:
 
    .. code:: console
 
-      $ python test_BiospamMyModule.py
-      test_addition1 (__main__.TestAddition) ... ok
-      test_addition2 (__main__.TestAddition) ... ok
-      test_division1 (__main__.TestDivision) ... ok
-      test_division2 (__main__.TestDivision) ... ok
+       $ python test_BiospamMyModule.py
+       test_addition1 (__main__.TestAddition) ... ok
+       test_addition2 (__main__.TestAddition) ... ok
+       test_division1 (__main__.TestDivision) ... ok
+       test_division2 (__main__.TestDivision) ... ok
 
-      ----------------------------------------------------------------------
-      Ran 4 tests in 0.059s
+       ----------------------------------------------------------------------
+       Ran 4 tests in 0.059s
 
-      OK
+       OK
 
 -  To indicate more clearly what each test is doing, you can add
    docstrings to each test. These are shown when running the tests,
@@ -248,66 +245,66 @@ These are the key points of ``unittest``-based tests:
 
    .. code:: python
 
-      import unittest
-      from Bio import Biospam
+       import unittest
+       from Bio import Biospam
 
-      class BiospamTestAddition(unittest.TestCase):
+       class BiospamTestAddition(unittest.TestCase):
 
-          def test_addition1(self):
-              """An addition test"""
-              result = Biospam.addition(2, 3)
-              self.assertEqual(result, 5)
+           def test_addition1(self):
+               """An addition test"""
+               result = Biospam.addition(2, 3)
+               self.assertEqual(result, 5)
 
-          def test_addition2(self):
-              """A second addition test"""
-              result = Biospam.addition(9, -1)
-              self.assertEqual(result, 8)
+           def test_addition2(self):
+               """A second addition test"""
+               result = Biospam.addition(9, -1)
+               self.assertEqual(result, 8)
 
-      class BiospamTestDivision(unittest.TestCase):
+       class BiospamTestDivision(unittest.TestCase):
 
-          def test_division1(self):
-              """Now let's check division"""
-              result = Biospam.division(3.0, 2.0)
-              self.assertAlmostEqual(result, 1.5)
+           def test_division1(self):
+               """Now let's check division"""
+               result = Biospam.division(3.0, 2.0)
+               self.assertAlmostEqual(result, 1.5)
 
-          def test_division2(self):
-              """A second division test"""
-              result = Biospam.division(10.0, -2.0)
-              self.assertAlmostEqual(result, -5.0)
+           def test_division2(self):
+               """A second division test"""
+               result = Biospam.division(10.0, -2.0)
+               self.assertAlmostEqual(result, -5.0)
 
 
-      if __name__ == "__main__":
-          runner = unittest.TextTestRunner(verbosity = 2)
-          unittest.main(testRunner=runner)
+       if __name__ == "__main__":
+           runner = unittest.TextTestRunner(verbosity = 2)
+           unittest.main(testRunner=runner)
 
    Running the script will now show you:
 
    .. code:: console
 
-      $ python test_BiospamMyModule.py
-      An addition test ... ok
-      A second addition test ... ok
-      Now let's check division ... ok
-      A second division test ... ok
+       $ python test_BiospamMyModule.py
+       An addition test ... ok
+       A second addition test ... ok
+       Now let's check division ... ok
+       A second division test ... ok
 
-      ----------------------------------------------------------------------
-      Ran 4 tests in 0.001s
+       ----------------------------------------------------------------------
+       Ran 4 tests in 0.001s
 
-      OK
+       OK
 
-If your module contains docstring tests (see section
-:ref:`sec:doctest`), you *may* want to include those in the tests to
-be run. You can do so as follows by modifying the code under
-``if __name__ == "__main__":`` to look like this:
+If your module contains docstring tests (see section [sec:doctest]), you
+*may* want to include those in the tests to be run. You can do so as
+follows by modifying the code under ``if __name__ == "__main__":`` to
+look like this:
 
 .. code:: python
 
-   if __name__ == "__main__":
-       unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
-       doctest_suite = doctest.DocTestSuite(Biospam)
-       suite = unittest.TestSuite((unittest_suite, doctest_suite))
-       runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-       runner.run(suite)
+    if __name__ == "__main__":
+        unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
+        doctest_suite = doctest.DocTestSuite(Biospam)
+        suite = unittest.TestSuite((unittest_suite, doctest_suite))
+        runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+        runner.run(suite)
 
 This is only relevant if you want to run the docstring tests when you
 execute ``python test_Biospam.py`` if it has some complex run-time
@@ -315,8 +312,6 @@ dependency checking.
 
 In general instead include the docstring tests by adding them to the
 ``run_tests.py`` as explained below.
-
-.. _sec:doctest:
 
 Writing doctests
 ----------------
@@ -339,32 +334,32 @@ them excluded in the Biopython test suite, you must update
 
 .. code:: python
 
-   # Following modules have historic failures. If you fix one of these
-   # please remove here!
-   EXCLUDE_DOCTEST_MODULES = [
-       'Bio.PDB',
-       'Bio.PDB.AbstractPropertyMap',
-       'Bio.Phylo.Applications._Fasttree',
-       'Bio.Phylo._io',
-       'Bio.Phylo.TreeConstruction',
-       'Bio.Phylo._utils',
-   ]
+    # Following modules have historic failures. If you fix one of these
+    # please remove here!
+    EXCLUDE_DOCTEST_MODULES = [
+        'Bio.PDB',
+        'Bio.PDB.AbstractPropertyMap',
+        'Bio.Phylo.Applications._Fasttree',
+        'Bio.Phylo._io',
+        'Bio.Phylo.TreeConstruction',
+        'Bio.Phylo._utils',
+    ]
 
-   # Exclude modules with online activity
-   # They are not excluded by default, use --offline to exclude them
-   ONLINE_DOCTEST_MODULES = [
-       'Bio.Entrez',
-       'Bio.ExPASy',
-       'Bio.TogoWS',
-       ]
+    # Exclude modules with online activity
+    # They are not excluded by default, use --offline to exclude them
+    ONLINE_DOCTEST_MODULES = [
+        'Bio.Entrez',
+        'Bio.ExPASy',
+        'Bio.TogoWS',
+        ]
 
-   # Silently ignore any doctests for modules requiring numpy!
-   if numpy is None:
-       EXCLUDE_DOCTEST_MODULES.extend([
-           ``Bio.Affy.CelFile'',
-           ``Bio.Cluster'',
-           ...
-       ])
+    # Silently ignore any doctests for modules requiring numpy!
+    if numpy is None:
+        EXCLUDE_DOCTEST_MODULES.extend([
+            ``Bio.Affy.CelFile'',
+            ``Bio.Cluster'',
+            ...
+        ])
 
 Note that we regard doctests primarily as documentation, so you should
 stick to typical usage. Generally complicated examples dealing with
@@ -380,13 +375,11 @@ To run the docstring tests only, use
 
 .. code:: console
 
-   $ python run_tests.py doctest
+    $ python run_tests.py doctest
 
 Note that the doctest system is fragile and care is needed to ensure
 your output will match on all the different versions of Python that
 Biopython supports (e.g. differences in floating point numbers).
-
-.. _sec:doctest-tutorial:
 
 Writing doctests in the Tutorial
 --------------------------------
@@ -399,13 +392,14 @@ source to be run as Python doctests. This works by adding special
 
 ::
 
-   %doctest
-   \begin{minted}{pycon}
-   >>> from Bio.Alphabet import generic_dna
-   >>> from Bio.Seq import Seq
-   >>> len("ACGT")
-   4
-   \end{minted}
+
+    \pandocignoreme .. doctest
+    \begin{minted}{pycon}
+    >>> from Bio.Alphabet import generic_dna
+    >>> from Bio.Seq import Seq
+    >>> len("ACGT")
+    4
+    \end{minted}
 
 Often code examples are not self-contained, but continue from the
 previous Python block. Here we use the magic comment ``%cont-doctest``
@@ -413,11 +407,12 @@ as shown here:
 
 ::
 
-   %cont-doctest
-   \begin{minted}{pycon}
-   >>> Seq("ACGT") == Seq("ACGT", generic_dna)
-   True
-   \end{minted}
+
+    \pandocignoreme .. cont-doctest
+    \begin{minted}{pycon}
+    >>> Seq("ACGT") == Seq("ACGT", generic_dna)
+    True
+    \end{minted}
 
 The special ``%doctest`` comment line can take a working directory
 (relative to the ``Doc/`` folder) to use if you have any example data
@@ -433,10 +428,10 @@ You can run the Tutorial doctests via:
 
 .. code:: console
 
-   $ python test_Tutorial.py
+    $ python test_Tutorial.py
 
 or:
 
 .. code:: console
 
-   $ python run_tests.py test_Tutorial.py
+    $ python run_tests.py test_Tutorial.py

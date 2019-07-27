@@ -1,5 +1,3 @@
-.. _chapter:entrez:
-
 Accessing NCBI’s Entrez databases
 =================================
 
@@ -65,9 +63,7 @@ in the correct location together with the other DTD files.
 The Entrez Programming Utilities can also generate output in other
 formats, such as the Fasta or GenBank file formats for sequence
 databases, or the MedLine format for the literature database, discussed
-in Section :ref:`sec:entrez-specialized-parsers`.
-
-.. _sec:entrez-guidelines:
+in Section [sec:entrez-specialized-parsers].
 
 Entrez Guidelines
 -----------------
@@ -94,18 +90,20 @@ To paraphrase:
 
    .. code:: pycon
 
-      >>> from Bio import Entrez
-      >>> Entrez.api_key = "MyAPIkey"
+       >>> from Bio import Entrez
+       >>> Entrez.api_key = "MyAPIkey"
 
 -  Use the optional email parameter so the NCBI can contact you if there
    is a problem. You can either explicitly set this as a parameter with
-   each call to Entrez (e.g. include ``email="A.N.Other@example.com"``
-   in the argument list), or you can set a global email address:
+   each call to Entrez (e.g. include ``email=A.N.Other@example.com`` in
+   the argument list), or you can set a global email address:
+
+   .. doctest
 
    .. code:: pycon
 
-      >>> from Bio import Entrez
-      >>> Entrez.email = "A.N.Other@example.com"
+       >>> from Bio import Entrez
+       >>> Entrez.email = "A.N.Other@example.com"
 
    ``Bio.Entrez`` will then use this email address with each call to
    Entrez. The ``example.com`` address is a reserved domain name
@@ -118,142 +116,146 @@ To paraphrase:
 -  If you are using Biopython within some larger software suite, use the
    tool parameter to specify this. You can either explicitly set the
    tool name as a parameter with each call to Entrez (e.g. include
-   ``tool="MyLocalScript"`` in the argument list), or you can set a
-   global tool name:
+   ``tool=MyLocalScript`` in the argument list), or you can set a global
+   tool name:
+
+   .. doctest
 
    .. code:: pycon
 
-      >>> from Bio import Entrez
-      >>> Entrez.tool = "MyLocalScript"
+       >>> from Bio import Entrez
+       >>> Entrez.tool = "MyLocalScript"
 
    The tool parameter will default to Biopython.
 
 -  For large queries, the NCBI also recommend using their session
    history feature (the WebEnv session cookie string, see
-   Section :ref:`sec:entrez-webenv`). This is only slightly more
-   complicated.
+   Section [sec:entrez-webenv]). This is only slightly more complicated.
 
 In conclusion, be sensible with your usage levels. If you plan to
 download lots of data, consider other options. For example, if you want
 easy access to all the human genes, consider fetching each chromosome by
 FTP as a GenBank file, and importing these into your own BioSQL database
-(see Section :ref:`sec:BioSQL`).
-
-.. _sec:entrez-einfo:
+(see Section [sec:BioSQL]).
 
 EInfo: Obtaining information about the Entrez databases
 -------------------------------------------------------
 
 EInfo provides field index term counts, last update, and available links
 for each of NCBI’s databases. In addition, you can use EInfo to obtain a
-list of all database names accessible through the Entrez utilities:
+list of all database names accessible through the Entrez utilities: ..
+doctest . internet
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.einfo()
-   >>> result = handle.read()
-   >>> handle.close()
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.einfo()
+    >>> result = handle.read()
+    >>> handle.close()
 
 The variable ``result`` now contains a list of databases in XML format:
 
 .. code:: pycon
 
-   >>> print(result)
-   <?xml version="1.0"?>
-   <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN"
-    "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
-   <eInfoResult>
-   <DbList>
-           <DbName>pubmed</DbName>
-           <DbName>protein</DbName>
-           <DbName>nucleotide</DbName>
-           <DbName>nuccore</DbName>
-           <DbName>nucgss</DbName>
-           <DbName>nucest</DbName>
-           <DbName>structure</DbName>
-           <DbName>genome</DbName>
-           <DbName>books</DbName>
-           <DbName>cancerchromosomes</DbName>
-           <DbName>cdd</DbName>
-           <DbName>gap</DbName>
-           <DbName>domains</DbName>
-           <DbName>gene</DbName>
-           <DbName>genomeprj</DbName>
-           <DbName>gensat</DbName>
-           <DbName>geo</DbName>
-           <DbName>gds</DbName>
-           <DbName>homologene</DbName>
-           <DbName>journals</DbName>
-           <DbName>mesh</DbName>
-           <DbName>ncbisearch</DbName>
-           <DbName>nlmcatalog</DbName>
-           <DbName>omia</DbName>
-           <DbName>omim</DbName>
-           <DbName>pmc</DbName>
-           <DbName>popset</DbName>
-           <DbName>probe</DbName>
-           <DbName>proteinclusters</DbName>
-           <DbName>pcassay</DbName>
-           <DbName>pccompound</DbName>
-           <DbName>pcsubstance</DbName>
-           <DbName>snp</DbName>
-           <DbName>taxonomy</DbName>
-           <DbName>toolkit</DbName>
-           <DbName>unigene</DbName>
-           <DbName>unists</DbName>
-   </DbList>
-   </eInfoResult>
+    >>> print(result)
+    <?xml version="1.0"?>
+    <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN"
+     "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+    <eInfoResult>
+    <DbList>
+            <DbName>pubmed</DbName>
+            <DbName>protein</DbName>
+            <DbName>nucleotide</DbName>
+            <DbName>nuccore</DbName>
+            <DbName>nucgss</DbName>
+            <DbName>nucest</DbName>
+            <DbName>structure</DbName>
+            <DbName>genome</DbName>
+            <DbName>books</DbName>
+            <DbName>cancerchromosomes</DbName>
+            <DbName>cdd</DbName>
+            <DbName>gap</DbName>
+            <DbName>domains</DbName>
+            <DbName>gene</DbName>
+            <DbName>genomeprj</DbName>
+            <DbName>gensat</DbName>
+            <DbName>geo</DbName>
+            <DbName>gds</DbName>
+            <DbName>homologene</DbName>
+            <DbName>journals</DbName>
+            <DbName>mesh</DbName>
+            <DbName>ncbisearch</DbName>
+            <DbName>nlmcatalog</DbName>
+            <DbName>omia</DbName>
+            <DbName>omim</DbName>
+            <DbName>pmc</DbName>
+            <DbName>popset</DbName>
+            <DbName>probe</DbName>
+            <DbName>proteinclusters</DbName>
+            <DbName>pcassay</DbName>
+            <DbName>pccompound</DbName>
+            <DbName>pcsubstance</DbName>
+            <DbName>snp</DbName>
+            <DbName>taxonomy</DbName>
+            <DbName>toolkit</DbName>
+            <DbName>unigene</DbName>
+            <DbName>unists</DbName>
+    </DbList>
+    </eInfoResult>
 
 Since this is a fairly simple XML file, we could extract the information
 it contains simply by string searching. Using ``Bio.Entrez``\ ’s parser
 instead, we can directly parse this XML file into a Python object:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> handle = Entrez.einfo()
-   >>> record = Entrez.read(handle)
+    >>> from Bio import Entrez
+    >>> handle = Entrez.einfo()
+    >>> record = Entrez.read(handle)
 
 Now ``record`` is a dictionary with exactly one key:
 
 .. code:: pycon
 
-   >>> record.keys()
-   ['DbList']
+    >>> record.keys()
+    ['DbList']
 
 The values stored in this key is the list of database names shown in the
 XML above:
 
 .. code:: pycon
 
-   >>> record["DbList"]
-   ['pubmed', 'protein', 'nucleotide', 'nuccore', 'nucgss', 'nucest',
-    'structure', 'genome', 'books', 'cancerchromosomes', 'cdd', 'gap',
-    'domains', 'gene', 'genomeprj', 'gensat', 'geo', 'gds', 'homologene',
-    'journals', 'mesh', 'ncbisearch', 'nlmcatalog', 'omia', 'omim', 'pmc',
-    'popset', 'probe', 'proteinclusters', 'pcassay', 'pccompound',
-    'pcsubstance', 'snp', 'taxonomy', 'toolkit', 'unigene', 'unists']
+    >>> record["DbList"]
+    ['pubmed', 'protein', 'nucleotide', 'nuccore', 'nucgss', 'nucest',
+     'structure', 'genome', 'books', 'cancerchromosomes', 'cdd', 'gap',
+     'domains', 'gene', 'genomeprj', 'gensat', 'geo', 'gds', 'homologene',
+     'journals', 'mesh', 'ncbisearch', 'nlmcatalog', 'omia', 'omim', 'pmc',
+     'popset', 'probe', 'proteinclusters', 'pcassay', 'pccompound',
+     'pcsubstance', 'snp', 'taxonomy', 'toolkit', 'unigene', 'unists']
 
 For each of these databases, we can use EInfo again to obtain more
 information:
 
-.. code:: pycon
-
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.einfo(db="pubmed")
-   >>> record = Entrez.read(handle)
-   >>> record["DbInfo"]["Description"]
-   'PubMed bibliographic record'
+.. doctest . internet
 
 .. code:: pycon
 
-   >>> record["DbInfo"]["Count"]
-   '17989604'
-   >>> record["DbInfo"]["LastUpdate"]
-   '2008/05/24 06:45'
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.einfo(db="pubmed")
+    >>> record = Entrez.read(handle)
+    >>> record["DbInfo"]["Description"]
+    'PubMed bibliographic record'
+
+.. code:: pycon
+
+    >>> record["DbInfo"]["Count"]
+    '17989604'
+    >>> record["DbInfo"]["LastUpdate"]
+    '2008/05/24 06:45'
 
 Try ``record["DbInfo"].keys()`` for other information stored in this
 record. One of the most useful is a list of possible search fields for
@@ -261,20 +263,20 @@ use with ESearch:
 
 .. code:: pycon
 
-   >>> for field in record["DbInfo"]["FieldList"]:
-   ...     print("%(Name)s, %(FullName)s, %(Description)s" % field)
-   ...
-   ALL, All Fields, All terms from all searchable fields
-   UID, UID, Unique number assigned to publication
-   FILT, Filter, Limits the records
-   TITL, Title, Words in title of publication
-   WORD, Text Word, Free text associated with publication
-   MESH, MeSH Terms, Medical Subject Headings assigned to publication
-   MAJR, MeSH Major Topic, MeSH terms of major importance to publication
-   AUTH, Author, Author(s) of publication
-   JOUR, Journal, Journal abbreviation of publication
-   AFFL, Affiliation, Author's institutional affiliation and address
-   ...
+    >>> for field in record["DbInfo"]["FieldList"]:
+    ...     print("%(Name)s, %(FullName)s, %(Description)s" % field)
+    ...
+    ALL, All Fields, All terms from all searchable fields
+    UID, UID, Unique number assigned to publication
+    FILT, Filter, Limits the records
+    TITL, Title, Words in title of publication
+    WORD, Text Word, Free text associated with publication
+    MESH, MeSH Terms, Medical Subject Headings assigned to publication
+    MAJR, MeSH Major Topic, MeSH terms of major importance to publication
+    AUTH, Author, Author(s) of publication
+    JOUR, Journal, Journal abbreviation of publication
+    AFFL, Affiliation, Author's institutional affiliation and address
+    ...
 
 That’s a long list, but indirectly this tells you that for the PubMed
 database, you can do things like ``Jones[AUTH]`` to search the author
@@ -282,49 +284,49 @@ field, or ``Sanger[AFFL]`` to restrict to authors at the Sanger Centre.
 This can be very handy - especially if you are not so familiar with a
 particular database.
 
-.. _sec:entrez-esearch:
-
 ESearch: Searching the Entrez databases
 ---------------------------------------
 
 To search any of these databases, we use ``Bio.Entrez.esearch()``. For
 example, let’s search in PubMed for publications related to Biopython:
 
-.. code:: pycon
-
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="pubmed", term="biopython")
-   >>> record = Entrez.read(handle)
-   >>> "19304878" in record["IdList"]
-   True
+.. doctest . internet
 
 .. code:: pycon
 
-   >>> print(record["IdList"])
-   ['28011774', '24929426', '24497503', '24267035', '24194598', ..., '14871861']
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="pubmed", term="biopython")
+    >>> record = Entrez.read(handle)
+    >>> "19304878" in record["IdList"]
+    True
+
+.. code:: pycon
+
+    >>> print(record["IdList"])
+    ['28011774', '24929426', '24497503', '24267035', '24194598', ..., '14871861']
 
 In this output, you see lots of PubMed IDs (including 19304878 which is
 the PMID for the Biopython application note), which can be retrieved by
-EFetch (see section :ref:`sec:efetch`).
+EFetch (see section [sec:efetch]).
 
 You can also use ESearch to search GenBank. Here we’ll do a quick search
 for the *matK* gene in *Cypripedioideae* orchids (see
-Section :ref:`sec:entrez-einfo` about EInfo for one way to find
-out which fields you can search in each Entrez database):
+Section [sec:entrez-einfo] about EInfo for one way to find out which
+fields you can search in each Entrez database):
 
 .. code:: pycon
 
-   >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
-   >>> record = Entrez.read(handle)
-   >>> record["Count"]
-   '348'
-   >>> record["IdList"]
-   ['JQ660909.1', 'JQ660908.1', 'JQ660907.1', 'JQ660906.1', ..., 'JQ660890.1']
+    >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae[Orgn] AND matK[Gene]", idtype="acc")
+    >>> record = Entrez.read(handle)
+    >>> record["Count"]
+    '348'
+    >>> record["IdList"]
+    ['JQ660909.1', 'JQ660908.1', 'JQ660907.1', 'JQ660906.1', ..., 'JQ660890.1']
 
 Each of the IDs (JQ660909.1, JQ660908.1, JQ660907.1, …) is a GenBank
-identifier (Accession number). See section :ref:`sec:efetch` for
-information on how to actually download these GenBank records.
+identifier (Accession number). See section [sec:efetch] for information
+on how to actually download these GenBank records.
 
 Note that instead of a species name like ``Cypripedioideae[Orgn]``, you
 can restrict the search using an NCBI taxon identifier, here this would
@@ -338,15 +340,15 @@ As a final example, let’s get a list of computational journal titles:
 
 .. code:: pycon
 
-   >>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax="20")
-   >>> record = Entrez.read(handle)
-   >>> print("{} computational journals found".format(record["Count"]))
-   117 computational Journals found
-   >>> print("The first 20 are\n{}".format(record["IdList"]))
-   ['101660833', '101664671', '101661657', '101659814', '101657941',
-    '101653734', '101669877', '101649614', '101647835', '101639023',
-    '101627224', '101647801', '101589678', '101585369', '101645372',
-    '101586429', '101582229', '101574747', '101564639', '101671907']
+    >>> handle = Entrez.esearch(db="nlmcatalog", term="computational[Journal]", retmax="20")
+    >>> record = Entrez.read(handle)
+    >>> print("{} computational journals found".format(record["Count"]))
+    117 computational Journals found
+    >>> print("The first 20 are\n{}".format(record["IdList"]))
+    ['101660833', '101664671', '101661657', '101659814', '101657941',
+     '101653734', '101669877', '101649614', '101647835', '101639023',
+     '101627224', '101647801', '101589678', '101585369', '101645372',
+     '101586429', '101582229', '101574747', '101564639', '101671907']
 
 Again, we could use EFetch to obtain more information for each of these
 journal IDs.
@@ -382,33 +384,34 @@ PubMed identifiers:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-   >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
-   >>> print(Entrez.epost("pubmed", id=",".join(id_list)).read())
-   <?xml version="1.0"?>
-   <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
-    "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
-   <ePostResult>
-       <QueryKey>1</QueryKey>
-       <WebEnv>NCID_01_206841095_130.14.22.101_9001_1242061629</WebEnv>
-   </ePostResult>
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+    >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
+    >>> print(Entrez.epost("pubmed", id=",".join(id_list)).read())
+    <?xml version="1.0"?>
+    <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
+     "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
+    <ePostResult>
+        <QueryKey>1</QueryKey>
+        <WebEnv>NCID_01_206841095_130.14.22.101_9001_1242061629</WebEnv>
+    </ePostResult>
 
 The returned XML includes two important strings, ``QueryKey`` and
 ``WebEnv`` which together define your history session. You would extract
 these values for use with another Entrez call such as EFetch:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-   >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
-   >>> search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
-   >>> webenv = search_results["WebEnv"]
-   >>> query_key = search_results["QueryKey"]
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+    >>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
+    >>> search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
+    >>> webenv = search_results["WebEnv"]
+    >>> query_key = search_results["QueryKey"]
 
-Section :ref:`sec:entrez-webenv` shows how to use the history
-feature.
+Section [sec:entrez-webenv] shows how to use the history feature.
 
 ESummary: Retrieving summaries from primary IDs
 -----------------------------------------------
@@ -420,19 +423,19 @@ for more information). In Biopython, ESummary is available as
 ``Bio.Entrez.esummary()``. Using the search result above, we can for
 example find out more about the journal with ID 30367:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
-   >>> record = Entrez.read(handle)
-   >>> info = record[0]["TitleMainList"][0]
-   >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
-   Journal info
-   id: 101660833
-   Title: IEEE transactions on computational imaging.
-
-.. _sec:efetch:
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esummary(db="nlmcatalog", id="101660833")
+    >>> record = Entrez.read(handle)
+    >>> info = record[0]["TitleMainList"][0]
+    >>> print("Journal info\nid: {}\nTitle: {}".format(record[0]["Id"], info["Title"]))
+    Journal info
+    id: 101660833
+    Title: IEEE transactions on computational imaging.
 
 EFetch: Downloading full records from Entrez
 --------------------------------------------
@@ -450,89 +453,90 @@ webpage <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch>`__.
 
 One common usage is downloading sequences in the FASTA or
 GenBank/GenPept plain text formats (which can then be parsed with
-``Bio.SeqIO``, see
-Sections :ref:`sec:SeqIO_GenBank_Online`
-and :ref:`sec:efetch`). From the *Cypripedioideae* example above,
-we can download GenBank record EU490707 using ``Bio.Entrez.efetch``:
+``Bio.SeqIO``, see Sections [sec:SeqIO\_GenBank\_Online]
+and [sec:efetch]). From the *Cypripedioideae* example above, we can
+download GenBank record EU490707 using ``Bio.Entrez.efetch``:
+
+.. doctest . internet
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
-   >>> print(handle.read())
-   LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
-   DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
-               chloroplast.
-   ACCESSION   EU490707
-   VERSION     EU490707.1
-   KEYWORDS    .
-   SOURCE      chloroplast Selenipedium aequinoctiale
-     ORGANISM  Selenipedium aequinoctiale
-               Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-               Spermatophyta; Magnoliophyta; Liliopsida; Asparagales; Orchidaceae;
-               Cypripedioideae; Selenipedium.
-   REFERENCE   1  (bases 1 to 1302)
-     AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A., Endara,L.,
-               Williams,N.H. and Moore,M.
-     TITLE     Phylogenetic utility of ycf1 in orchids: a plastid gene more
-               variable than matK
-     JOURNAL   Plant Syst. Evol. 277 (1-2), 75-84 (2009)
-   REFERENCE   2  (bases 1 to 1302)
-     AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
-               Endara,C.L., Williams,N.H. and Moore,M.J.
-     TITLE     Direct Submission
-     JOURNAL   Submitted (14-FEB-2008) Department of Botany, University of
-               Florida, 220 Bartram Hall, Gainesville, FL 32611-8526, USA
-   FEATURES             Location/Qualifiers
-        source          1..1302
-                        /organism="Selenipedium aequinoctiale"
-                        /organelle="plastid:chloroplast"
-                        /mol_type="genomic DNA"
-                        /specimen_voucher="FLAS:Blanco 2475"
-                        /db_xref="taxon:256374"
-        gene            <1..>1302
-                        /gene="matK"
-        CDS             <1..>1302
-                        /gene="matK"
-                        /codon_start=1
-                        /transl_table=11
-                        /product="maturase K"
-                        /protein_id="ACC99456.1"
-                        /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
-                        FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
-                        EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
-                        KFIYAFSKRKKRFLWLLYNSYVYECEYLFQFLRKQSSYLRSTSSGVFLERTHLYVKIE
-                        HLLVVCCNSFQRILCFLKDPFMHYVRYQGKAILASKGTLILMKKWKFHLVNFWQSYFH
-                        FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
-                        ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
-                        RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
-   ORIGIN      
-           1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
-          61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
-         121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
-         181 gtatcagaag gttttggagt cattctggaa attccattct cgtcgcaatt agtatcttct
-         241 cttgaagaaa aaaaaatacc aaaatatcag aatttacgat ctattcattc aatatttccc
-         301 tttttagaag acaaattttt acatttgaat tatgtgtcag atctactaat accccatccc
-         361 atccatctgg aaatcttggt tcaaatcctt caatgccgga tcaaggatgt tccttctttg
-         421 catttattgc gattgctttt ccacgaatat cataatttga atagtctcat tacttcaaag
-         481 aaattcattt acgccttttc aaaaagaaag aaaagattcc tttggttact atataattct
-         541 tatgtatatg aatgcgaata tctattccag tttcttcgta aacagtcttc ttatttacga
-         601 tcaacatctt ctggagtctt tcttgagcga acacatttat atgtaaaaat agaacatctt
-         661 ctagtagtgt gttgtaattc ttttcagagg atcctatgct ttctcaagga tcctttcatg
-         721 cattatgttc gatatcaagg aaaagcaatt ctggcttcaa agggaactct tattctgatg
-         781 aagaaatgga aatttcatct tgtgaatttt tggcaatctt attttcactt ttggtctcaa
-         841 ccgtatagga ttcatataaa gcaattatcc aactattcct tctcttttct ggggtatttt
-         901 tcaagtgtac tagaaaatca tttggtagta agaaatcaaa tgctagagaa ttcatttata
-         961 ataaatcttc tgactaagaa attcgatacc atagccccag ttatttctct tattggatca
-        1021 ttgtcgaaag ctcaattttg tactgtattg ggtcatccta ttagtaaacc gatctggacc
-        1081 gatttctcgg attctgatat tcttgatcga ttttgccgga tatgtagaaa tctttgtcgt
-        1141 tatcacagcg gatcctcaaa aaaacaggtt ttgtatcgta taaaatatat acttcgactt
-        1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
-        1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
-   //
-   <BLANKLINE>
-   <BLANKLINE>
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+    >>> print(handle.read())
+    LOCUS       EU490707                1302 bp    DNA     linear   PLN 26-JUL-2016
+    DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
+                chloroplast.
+    ACCESSION   EU490707
+    VERSION     EU490707.1
+    KEYWORDS    .
+    SOURCE      chloroplast Selenipedium aequinoctiale
+      ORGANISM  Selenipedium aequinoctiale
+                Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+                Spermatophyta; Magnoliophyta; Liliopsida; Asparagales; Orchidaceae;
+                Cypripedioideae; Selenipedium.
+    REFERENCE   1  (bases 1 to 1302)
+      AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A., Endara,L.,
+                Williams,N.H. and Moore,M.
+      TITLE     Phylogenetic utility of ycf1 in orchids: a plastid gene more
+                variable than matK
+      JOURNAL   Plant Syst. Evol. 277 (1-2), 75-84 (2009)
+    REFERENCE   2  (bases 1 to 1302)
+      AUTHORS   Neubig,K.M., Whitten,W.M., Carlsward,B.S., Blanco,M.A.,
+                Endara,C.L., Williams,N.H. and Moore,M.J.
+      TITLE     Direct Submission
+      JOURNAL   Submitted (14-FEB-2008) Department of Botany, University of
+                Florida, 220 Bartram Hall, Gainesville, FL 32611-8526, USA
+    FEATURES             Location/Qualifiers
+         source          1..1302
+                         /organism="Selenipedium aequinoctiale"
+                         /organelle="plastid:chloroplast"
+                         /mol_type="genomic DNA"
+                         /specimen_voucher="FLAS:Blanco 2475"
+                         /db_xref="taxon:256374"
+         gene            <1..>1302
+                         /gene="matK"
+         CDS             <1..>1302
+                         /gene="matK"
+                         /codon_start=1
+                         /transl_table=11
+                         /product="maturase K"
+                         /protein_id="ACC99456.1"
+                         /translation="IFYEPVEIFGYDNKSSLVLVKRLITRMYQQNFLISSVNDSNQKG
+                         FWGHKHFFSSHFSSQMVSEGFGVILEIPFSSQLVSSLEEKKIPKYQNLRSIHSIFPFL
+                         EDKFLHLNYVSDLLIPHPIHLEILVQILQCRIKDVPSLHLLRLLFHEYHNLNSLITSK
+                         KFIYAFSKRKKRFLWLLYNSYVYECEYLFQFLRKQSSYLRSTSSGVFLERTHLYVKIE
+                         HLLVVCCNSFQRILCFLKDPFMHYVRYQGKAILASKGTLILMKKWKFHLVNFWQSYFH
+                         FWSQPYRIHIKQLSNYSFSFLGYFSSVLENHLVVRNQMLENSFIINLLTKKFDTIAPV
+                         ISLIGSLSKAQFCTVLGHPISKPIWTDFSDSDILDRFCRICRNLCRYHSGSSKKQVLY
+                         RIKYILRLSCARTLARKHKSTVRTFMRRLGSGLLEEFFMEEE"
+    ORIGIN      
+            1 attttttacg aacctgtgga aatttttggt tatgacaata aatctagttt agtacttgtg
+           61 aaacgtttaa ttactcgaat gtatcaacag aattttttga tttcttcggt taatgattct
+          121 aaccaaaaag gattttgggg gcacaagcat tttttttctt ctcatttttc ttctcaaatg
+          181 gtatcagaag gttttggagt cattctggaa attccattct cgtcgcaatt agtatcttct
+          241 cttgaagaaa aaaaaatacc aaaatatcag aatttacgat ctattcattc aatatttccc
+          301 tttttagaag acaaattttt acatttgaat tatgtgtcag atctactaat accccatccc
+          361 atccatctgg aaatcttggt tcaaatcctt caatgccgga tcaaggatgt tccttctttg
+          421 catttattgc gattgctttt ccacgaatat cataatttga atagtctcat tacttcaaag
+          481 aaattcattt acgccttttc aaaaagaaag aaaagattcc tttggttact atataattct
+          541 tatgtatatg aatgcgaata tctattccag tttcttcgta aacagtcttc ttatttacga
+          601 tcaacatctt ctggagtctt tcttgagcga acacatttat atgtaaaaat agaacatctt
+          661 ctagtagtgt gttgtaattc ttttcagagg atcctatgct ttctcaagga tcctttcatg
+          721 cattatgttc gatatcaagg aaaagcaatt ctggcttcaa agggaactct tattctgatg
+          781 aagaaatgga aatttcatct tgtgaatttt tggcaatctt attttcactt ttggtctcaa
+          841 ccgtatagga ttcatataaa gcaattatcc aactattcct tctcttttct ggggtatttt
+          901 tcaagtgtac tagaaaatca tttggtagta agaaatcaaa tgctagagaa ttcatttata
+          961 ataaatcttc tgactaagaa attcgatacc atagccccag ttatttctct tattggatca
+         1021 ttgtcgaaag ctcaattttg tactgtattg ggtcatccta ttagtaaacc gatctggacc
+         1081 gatttctcgg attctgatat tcttgatcga ttttgccgga tatgtagaaa tctttgtcgt
+         1141 tatcacagcg gatcctcaaa aaaacaggtt ttgtatcgta taaaatatat acttcgactt
+         1201 tcgtgtgcta gaactttggc acggaaacat aaaagtacag tacgcacttt tatgcgaaga
+         1261 ttaggttcgg gattattaga agaattcttt atggaagaag aa
+    //
+    <BLANKLINE>
+    <BLANKLINE>
 
 Please be aware that as of October 2016 GI identifiers are discontinued
 in favour of accession numbers. You can still fetch sequences based on
@@ -558,27 +562,29 @@ database you are downloading from - see the main `EFetch Help
 page <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch>`__.
 
 If you fetch the record in one of the formats accepted by ``Bio.SeqIO``
-(see Chapter :ref:`chapter:seqio`), you could directly
-parse it into a ``SeqRecord``:
+(see Chapter [chapter:seqio]), you could directly parse it into a
+``SeqRecord``:
+
+.. doctest . internet
 
 .. code:: pycon
 
-   >>> from Bio import SeqIO
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
-   >>> record = SeqIO.read(handle, "genbank")
-   >>> handle.close()
-   >>> print(record.id)
-   EU490707.1
-   >>> print(record.name)
-   EU490707
-   >>> print(record.description)
-   Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
-   >>> print(len(record.features))
-   3
-   >>> print(repr(record.seq))
-   Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())
+    >>> from Bio import SeqIO
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+    >>> record = SeqIO.read(handle, "genbank")
+    >>> handle.close()
+    >>> print(record.id)
+    EU490707.1
+    >>> print(record.name)
+    EU490707
+    >>> print(record.description)
+    Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast
+    >>> print(len(record.features))
+    3
+    >>> print(repr(record.seq))
+    Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())
 
 Note that a more typical use would be to save the sequence data to a
 local file, and *then* parse it with ``Bio.SeqIO``. This can save you
@@ -587,48 +593,48 @@ script, and places less load on the NCBI’s servers. For example:
 
 .. code:: python
 
-   import os
-   from Bio import SeqIO
-   from Bio import Entrez
-   Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   filename = "EU490707.gbk"
-   if not os.path.isfile(filename):
-       # Downloading...
-       net_handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
-       out_handle = open(filename, "w")
-       out_handle.write(net_handle.read())
-       out_handle.close()
-       net_handle.close()
-       print("Saved")
+    import os
+    from Bio import SeqIO
+    from Bio import Entrez
+    Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    filename = "EU490707.gbk"
+    if not os.path.isfile(filename):
+        # Downloading...
+        net_handle = Entrez.efetch(db="nucleotide", id="EU490707", rettype="gb", retmode="text")
+        out_handle = open(filename, "w")
+        out_handle.write(net_handle.read())
+        out_handle.close()
+        net_handle.close()
+        print("Saved")
 
-   print("Parsing...")
-   record = SeqIO.read(filename, "genbank")
-   print(record)
+    print("Parsing...")
+    record = SeqIO.read(filename, "genbank")
+    print(record)
 
 To get the output in XML format, which you can parse using the
 ``Bio.Entrez.read()`` function, use ``retmode="xml"``:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
-   >>> record = Entrez.read(handle)
-   >>> handle.close()
-   >>> record[0]["GBSeq_definition"]
-   'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
-   >>> record[0]["GBSeq_source"]
-   'chloroplast Selenipedium aequinoctiale'
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.efetch(db="nucleotide", id="EU490707", retmode="xml")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> record[0]["GBSeq_definition"]
+    'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
+    >>> record[0]["GBSeq_source"]
+    'chloroplast Selenipedium aequinoctiale'
 
 So, that dealt with sequences. For examples of parsing file formats
 specific to the other databases (e.g. the ``MEDLINE`` format used in
-PubMed), see Section :ref:`sec:entrez-specialized-parsers`.
+PubMed), see Section [sec:entrez-specialized-parsers].
 
 If you want to perform a search with ``Bio.Entrez.esearch()``, and then
 download the records with ``Bio.Entrez.efetch()``, you should use the
-WebEnv history feature – see Section :ref:`sec:entrez-webenv`.
-
-.. _sec:elink:
+WebEnv history feature – see Section [sec:entrez-webenv].
 
 ELink: Searching for related items in NCBI Entrez
 -------------------------------------------------
@@ -642,12 +648,14 @@ Let’s use ELink to find articles related to the Biopython application
 note published in *Bioinformatics* in 2009. The PubMed ID of this
 article is 19304878:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> pmid = "19304878"
-   >>> record = Entrez.read(Entrez.elink(dbfrom="pubmed", id=pmid))
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> pmid = "19304878"
+    >>> record = Entrez.read(Entrez.elink(dbfrom="pubmed", id=pmid))
 
 The ``record`` variable consists of a Python list, one for each database
 in which we searched. Since we specified only one PubMed ID to search
@@ -655,38 +663,42 @@ for, ``record`` contains only one item. This item is a dictionary
 containing information about our search term, as well as all the related
 items that were found:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> record[0]["DbFrom"]
-   'pubmed'
-   >>> record[0]["IdList"]
-   ['19304878']
+    >>> record[0]["DbFrom"]
+    'pubmed'
+    >>> record[0]["IdList"]
+    ['19304878']
 
 The ``"LinkSetDb"`` key contains the search results, stored as a list
 consisting of one item for each target database. In our search results,
 we only find hits in the PubMed database (although sub-divided into
 categories):
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> len(record[0]["LinkSetDb"])
-   8
+    >>> len(record[0]["LinkSetDb"])
+    8
 
 The exact numbers should increase over time:
 
 .. code:: pycon
 
-   >>> for linksetdb in record[0]["LinkSetDb"]:
-   ...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
-   ...
-   pubmed pubmed_pubmed 162
-   pubmed pubmed_pubmed_alsoviewed 3
-   pubmed pubmed_pubmed_citedin 430
-   pubmed pubmed_pubmed_combined 6
-   pubmed pubmed_pubmed_five 6
-   pubmed pubmed_pubmed_refs 17
-   pubmed pubmed_pubmed_reviews 7
-   pubmed pubmed_pubmed_reviews_five 6
+    >>> for linksetdb in record[0]["LinkSetDb"]:
+    ...     print(linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"]))
+    ...
+    pubmed pubmed_pubmed 162
+    pubmed pubmed_pubmed_alsoviewed 3
+    pubmed pubmed_pubmed_citedin 430
+    pubmed pubmed_pubmed_combined 6
+    pubmed pubmed_pubmed_five 6
+    pubmed pubmed_pubmed_refs 17
+    pubmed pubmed_pubmed_reviews 7
+    pubmed pubmed_pubmed_reviews_five 6
 
 The actual search results are stored as under the ``"Link"`` key.
 
@@ -694,16 +706,16 @@ Let’s now at the first search result:
 
 .. code:: pycon
 
-   >>> record[0]["LinkSetDb"][0]["Link"][0]
-   {'Id': '19304878'}
+    >>> record[0]["LinkSetDb"][0]["Link"][0]
+    {'Id': '19304878'}
 
 This is the article we searched for, which doesn’t help us much, so
 let’s look at the second search result:
 
 .. code:: pycon
 
-   >>> record[0]["LinkSetDb"][0]["Link"][1]
-   {'Id': '14630660'}
+    >>> record[0]["LinkSetDb"][0]["Link"][1]
+    {'Id': '14630660'}
 
 This paper, with PubMed ID 14630660, is about the Biopython PDB parser.
 
@@ -711,20 +723,19 @@ We can use a loop to print out all PubMed IDs:
 
 .. code:: pycon
 
-   >>> for link in record[0]["LinkSetDb"][0]["Link"]:
-   ...     print(link["Id"])
-   19304878
-   14630660
-   18689808
-   17121776
-   16377612
-   12368254
-   ......
+    >>> for link in record[0]["LinkSetDb"][0]["Link"]:
+    ...     print(link["Id"])
+    19304878
+    14630660
+    18689808
+    17121776
+    16377612
+    12368254
+    ......
 
 Now that was nice, but personally I am often more interested to find out
 if a paper has been cited. Well, ELink can do that too – at least for
-journals in Pubmed Central (see
-Section :ref:`sec:elink-citations`).
+journals in Pubmed Central (see Section [sec:elink-citations]).
 
 For help on ELink, see the `ELink help
 page <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink>`__.
@@ -739,24 +750,24 @@ EGQuery provides counts for a search term in each of the Entrez
 databases (i.e. a global query). This is particularly useful to find out
 how many items your search terms would find in each database without
 actually performing lots of separate searches with ESearch (see the
-example in :ref:`sec:entrez_example_genbank` below).
+example in [sec:entrez\_example\_genbank] below).
 
 In this example, we use ``Bio.Entrez.egquery()`` to obtain the counts
 for “Biopython”:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.egquery(term="biopython")
-   >>> record = Entrez.read(handle)
-   >>> for row in record["eGQueryResult"]:
-   ...     print(row["DbName"], row["Count"])
-   ...
-   pubmed 6
-   pmc 62
-   journals 0
-   ...
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.egquery(term="biopython")
+    >>> record = Entrez.read(handle)
+    >>> for row in record["eGQueryResult"]:
+    ...     print(row["DbName"], row["Count"])
+    ...
+    pubmed 6
+    pmc 62
+    journals 0
+    ...
 
 See the `EGQuery help
 page <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery>`__
@@ -768,16 +779,18 @@ ESpell: Obtaining spelling suggestions
 ESpell retrieves spelling suggestions. In this example, we use
 ``Bio.Entrez.espell()`` to obtain the correct spelling of Biopython:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.espell(term="biopythooon")
-   >>> record = Entrez.read(handle)
-   >>> record["Query"]
-   'biopythooon'
-   >>> record["CorrectedQuery"]
-   'biopython'
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.espell(term="biopythooon")
+    >>> record = Entrez.read(handle)
+    >>> record["Query"]
+    'biopythooon'
+    >>> record["CorrectedQuery"]
+    'biopython'
 
 See the `ESpell help
 page <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell>`__
@@ -805,7 +818,7 @@ NCBI’s ftp site for more information):
 
 .. code:: console
 
-   $ gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
+    $ gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
 
 The resulting XML file has a size of 6.1 GB. Attempting ``Entrez.read``
 on this file will result in a ``MemoryError`` on many computers.
@@ -819,32 +832,32 @@ records and prints out the gene numbers and names for all current genes:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = open("Homo_sapiens.xml")
-   >>> records = Entrez.parse(handle)
-   >>> for record in records:
-   ...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
-   ...     if status.attributes["value"]=="discontinued":
-   ...         continue
-   ...     geneid = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_geneid"]
-   ...     genename = record["Entrezgene_gene"]["Gene-ref"]["Gene-ref_locus"]
-   ...     print(geneid, genename)
-   ...
-   1 A1BG
-   2 A2M
-   3 A2MP
-   8 AA
-   9 NAT1
-   10 NAT2
-   11 AACP
-   12 SERPINA3
-   13 AADAC
-   14 AAMP
-   15 AANAT
-   16 AARS
-   17 AAVS1
-   ...
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = open("Homo_sapiens.xml")
+    >>> records = Entrez.parse(handle)
+    >>> for record in records:
+    ...     status = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_status"]
+    ...     if status.attributes["value"]=="discontinued":
+    ...         continue
+    ...     geneid = record["Entrezgene_track-info"]["Gene-track"]["Gene-track_geneid"]
+    ...     genename = record["Entrezgene_gene"]["Gene-ref"]["Gene-ref_locus"]
+    ...     print(geneid, genename)
+    ...
+    1 A1BG
+    2 A2M
+    3 A2MP
+    8 AA
+    9 NAT1
+    10 NAT2
+    11 AACP
+    12 SERPINA3
+    13 AADAC
+    14 AAMP
+    15 AANAT
+    16 AARS
+    17 AAVS1
+    ...
 
 HTML escape characters
 ----------------------
@@ -857,13 +870,13 @@ abstract of a Pubmed record, which is encoded as
 
 .. code:: text
 
-   <i>P</i> &lt; 0.05
+    <i>P</i> &lt; 0.05
 
 in the XML returned by Entrez, is converted to the Python string
 
 .. code:: text
 
-   '<i>P</i> < 0.05'
+    '<i>P</i> < 0.05'
 
 by the ``Bio.Entrez`` parser. While this is more human-readable, it is
 not valid HTML due to the less-than sign, and makes further processing
@@ -873,14 +886,14 @@ strings returned by the parser are valid HTML, call ``Entrez.read`` or
 
 .. code:: pycon
 
-   >>> record = Entrez.read(handle, escape=True)
+    >>> record = Entrez.read(handle, escape=True)
 
 The parser will then replace all characters disallowed in HTML by their
 HTML-escaped equivalent; in the example above, the parser will generate
 
 .. code:: text
 
-   '<i>P</i> &lt; 0.05'
+    '<i>P</i> &lt; 0.05'
 
 which is a valid HTML fragment. By default, ``escape`` is ``False``.
 
@@ -899,14 +912,16 @@ Three things can go wrong when parsing an XML file:
 The first case occurs if, for example, you try to parse a Fasta file as
 if it were an XML file:
 
+.. doctest ../Tests/GenBank
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> handle = open("NC_005816.fna") # a Fasta file
-   >>> record = Entrez.read(handle)
-   Traceback (most recent call last):
-     ...
-   Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
+    >>> from Bio import Entrez
+    >>> handle = open("NC_005816.fna") # a Fasta file
+    >>> record = Entrez.read(handle)
+    Traceback (most recent call last):
+      ...
+    Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
 
 Here, the parser didn’t find the ``<?xml ...`` tag with which an XML
 file is supposed to start, and therefore decides (correctly) that the
@@ -918,30 +933,30 @@ an example of an XML file that ends prematurely:
 
 .. code:: text
 
-   <?xml version="1.0"?>
-   <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
-   <eInfoResult>
-   <DbList>
-           <DbName>pubmed</DbName>
-           <DbName>protein</DbName>
-           <DbName>nucleotide</DbName>
-           <DbName>nuccore</DbName>
-           <DbName>nucgss</DbName>
-           <DbName>nucest</DbName>
-           <DbName>structure</DbName>
-           <DbName>genome</DbName>
-           <DbName>books</DbName>
-           <DbName>cancerchromosomes</DbName>
-           <DbName>cdd</DbName>
+    <?xml version="1.0"?>
+    <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+    <eInfoResult>
+    <DbList>
+            <DbName>pubmed</DbName>
+            <DbName>protein</DbName>
+            <DbName>nucleotide</DbName>
+            <DbName>nuccore</DbName>
+            <DbName>nucgss</DbName>
+            <DbName>nucest</DbName>
+            <DbName>structure</DbName>
+            <DbName>genome</DbName>
+            <DbName>books</DbName>
+            <DbName>cancerchromosomes</DbName>
+            <DbName>cdd</DbName>
 
 which will generate the following traceback:
 
 .. code:: pycon
 
-   >>> Entrez.read(handle)
-   Traceback (most recent call last):
-     ...
-   Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
+    >>> Entrez.read(handle)
+    Traceback (most recent call last):
+      ...
+    Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
 
 Note that the error message tells you at what point in the XML file the
 error was detected.
@@ -952,31 +967,31 @@ such an XML file:
 
 .. code:: text
 
-   <?xml version="1.0"?>
-   <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
-   <eInfoResult>
-           <DbInfo>
-           <DbName>pubmed</DbName>
-           <MenuName>PubMed</MenuName>
-           <Description>PubMed bibliographic record</Description>
-           <Count>20161961</Count>
-           <LastUpdate>2010/09/10 04:52</LastUpdate>
-           <FieldList>
-                   <Field>
-   ...
-                   </Field>
-           </FieldList>
-           <DocsumList>
-                   <Docsum>
-                           <DsName>PubDate</DsName>
-                           <DsType>4</DsType>
-                           <DsTypeName>string</DsTypeName>
-                   </Docsum>
-                   <Docsum>
-                           <DsName>EPubDate</DsName>
-   ...
-           </DbInfo>
-   </eInfoResult>
+    <?xml version="1.0"?>
+    <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+    <eInfoResult>
+            <DbInfo>
+            <DbName>pubmed</DbName>
+            <MenuName>PubMed</MenuName>
+            <Description>PubMed bibliographic record</Description>
+            <Count>20161961</Count>
+            <LastUpdate>2010/09/10 04:52</LastUpdate>
+            <FieldList>
+                    <Field>
+    ...
+                    </Field>
+            </FieldList>
+            <DocsumList>
+                    <Docsum>
+                            <DsName>PubDate</DsName>
+                            <DsType>4</DsType>
+                            <DsTypeName>string</DsTypeName>
+                    </Docsum>
+                    <Docsum>
+                            <DsName>EPubDate</DsName>
+    ...
+            </DbInfo>
+    </eInfoResult>
 
 In this file, for some reason the tag ``<DocsumList>`` (and several
 others) are not listed in the DTD file ``eInfo_020511.dtd``, which is
@@ -984,30 +999,32 @@ specified on the second line as the DTD for this XML file. By default,
 the parser will stop and raise a ValidationError if it cannot find some
 tag in the DTD:
 
+.. doctest ../Tests/Entrez/
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> handle = open("einfo3.xml")
-   >>> record = Entrez.read(handle)
-   Traceback (most recent call last):
-     ...
-   Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
+    >>> from Bio import Entrez
+    >>> handle = open("einfo3.xml")
+    >>> record = Entrez.read(handle)
+    Traceback (most recent call last):
+      ...
+    Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
 
 Optionally, you can instruct the parser to skip such tags instead of
 raising a ValidationError. This is done by calling ``Entrez.read`` or
 ``Entrez.parse`` with the argument ``validate`` equal to False:
 
+.. doctest ../Tests/Entrez/
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> handle = open("einfo3.xml")
-   >>> record = Entrez.read(handle, validate=False)
-   >>> handle.close()
+    >>> from Bio import Entrez
+    >>> handle = open("einfo3.xml")
+    >>> record = Entrez.read(handle, validate=False)
+    >>> handle.close()
 
 Of course, the information contained in the XML tags that are not in the
 DTD are not present in the record returned by ``Entrez.read``.
-
-.. _sec:entrez-specialized-parsers:
 
 Specialized parsers
 -------------------
@@ -1025,12 +1042,9 @@ webpage <https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch>`__.
 
 One obvious case is you may prefer to download sequences in the FASTA or
 GenBank/GenPept plain text formats (which can then be parsed with
-``Bio.SeqIO``, see
-Sections :ref:`sec:SeqIO_GenBank_Online`
-and :ref:`sec:efetch`). For the literature databases, Biopython
-contains a parser for the ``MEDLINE`` format used in PubMed.
-
-.. _sec:entrez-and-medline:
+``Bio.SeqIO``, see Sections [sec:SeqIO\_GenBank\_Online]
+and [sec:efetch]). For the literature databases, Biopython contains a
+parser for the ``MEDLINE`` format used in PubMed.
 
 Parsing Medline records
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -1042,72 +1056,78 @@ file looks like this:
 
 .. code:: text
 
-   PMID- 12230038
-   OWN - NLM
-   STAT- MEDLINE
-   DA  - 20020916
-   DCOM- 20030606
-   LR  - 20041117
-   PUBM- Print
-   IS  - 1467-5463 (Print)
-   VI  - 3
-   IP  - 3
-   DP  - 2002 Sep
-   TI  - The Bio* toolkits--a brief overview.
-   PG  - 296-302
-   AB  - Bioinformatics research is often difficult to do with commercial software. The
-         Open Source BioPerl, BioPython and Biojava projects provide toolkits with
-   ...
+    PMID- 12230038
+    OWN - NLM
+    STAT- MEDLINE
+    DA  - 20020916
+    DCOM- 20030606
+    LR  - 20041117
+    PUBM- Print
+    IS  - 1467-5463 (Print)
+    VI  - 3
+    IP  - 3
+    DP  - 2002 Sep
+    TI  - The Bio* toolkits--a brief overview.
+    PG  - 296-302
+    AB  - Bioinformatics research is often difficult to do with commercial software. The
+          Open Source BioPerl, BioPython and Biojava projects provide toolkits with
+    ...
 
 We first open the file and then parse it:
 
+.. doctest ../Tests/Medline
+
 .. code:: pycon
 
-   >>> from Bio import Medline
-   >>> with open("pubmed_result1.txt") as handle:
-   ...    record = Medline.read(handle)
-   ...
+    >>> from Bio import Medline
+    >>> with open("pubmed_result1.txt") as handle:
+    ...    record = Medline.read(handle)
+    ...
 
 The ``record`` now contains the Medline record as a Python dictionary:
 
-.. code:: pycon
-
-   >>> record["PMID"]
-   '12230038'
+.. cont-doctest
 
 .. code:: pycon
 
-   >>> record["AB"]
-   'Bioinformatics research is often difficult to do with commercial software.
-   The Open Source BioPerl, BioPython and Biojava projects provide toolkits with
-   multiple functionality that make it easier to create customised pipelines or
-   analysis. This review briefly compares the quirks of the underlying languages
-   and the functionality, documentation, utility and relative advantages of the
-   Bio counterparts, particularly from the point of view of the beginning
-   biologist programmer.'
+    >>> record["PMID"]
+    '12230038'
+
+.. code:: pycon
+
+    >>> record["AB"]
+    'Bioinformatics research is often difficult to do with commercial software.
+    The Open Source BioPerl, BioPython and Biojava projects provide toolkits with
+    multiple functionality that make it easier to create customised pipelines or
+    analysis. This review briefly compares the quirks of the underlying languages
+    and the functionality, documentation, utility and relative advantages of the
+    Bio counterparts, particularly from the point of view of the beginning
+    biologist programmer.'
 
 The key names used in a Medline record can be rather obscure; use
 
 .. code:: pycon
 
-   >>> help(record)
+    >>> help(record)
 
 for a brief summary.
 
 To parse a file containing multiple Medline records, you can use the
 ``parse`` function instead:
 
+.. doctest ../Tests/Medline
+
 .. code:: pycon
 
-   >>> from Bio import Medline
-   >>> with open("pubmed_result2.txt") as handle:
-   ...     for record in Medline.parse(handle):
-   ...         print(record["TI"])
-   ...
-   A high level interface to SCOP and ASTRAL implemented in python.
-   GenomeDiagram: a python package for the visualization of large-scale genomic data.
-   Open source clustering software.
-   PDB file parser and structure class implemented in Python.
+    >>> from Bio import Medline
+    >>> with open("pubmed_result2.txt") as handle:
+    ...     for record in Medline.parse(handle):
+    ...         print(record["TI"])
+    ...
+    A high level interface to SCOP and ASTRAL implemented in python.
+    GenomeDiagram: a python package for the visualization of large-scale genomic data.
+    Open source clustering software.
+    PDB file parser and structure class implemented in Python.
 
 Instead of parsing Medline records stored in files, you can also parse
 Medline records downloaded by ``Bio.Entrez.efetch``. For example, let’s
@@ -1115,19 +1135,19 @@ look at all Medline records in PubMed related to Biopython:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="pubmed", term="biopython")
-   >>> record = Entrez.read(handle)
-   >>> record["IdList"]
-   ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="pubmed", term="biopython")
+    >>> record = Entrez.read(handle)
+    >>> record["IdList"]
+    ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 
 We now use ``Bio.Entrez.efetch`` to download these Medline records:
 
 .. code:: pycon
 
-   >>> idlist = record["IdList"]
-   >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
+    >>> idlist = record["IdList"]
+    >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="text")
 
 Here, we specify ``rettype="medline", retmode="text"`` to obtain the
 Medline records in plain-text Medline format. Now we use ``Bio.Medline``
@@ -1135,40 +1155,40 @@ to parse these records:
 
 .. code:: pycon
 
-   >>> from Bio import Medline
-   >>> records = Medline.parse(handle)
-   >>> for record in records:
-   ...     print(record["AU"])
-   ['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
-   ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
-   ['Casbon JA', 'Crooks GE', 'Saqi MA']
-   ['Pritchard L', 'White JA', 'Birch PR', 'Toth IK']
-   ['de Hoon MJ', 'Imoto S', 'Nolan J', 'Miyano S']
-   ['Hamelryck T', 'Manderick B']
-   ['Mangalam H']
+    >>> from Bio import Medline
+    >>> records = Medline.parse(handle)
+    >>> for record in records:
+    ...     print(record["AU"])
+    ['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
+    ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
+    ['Casbon JA', 'Crooks GE', 'Saqi MA']
+    ['Pritchard L', 'White JA', 'Birch PR', 'Toth IK']
+    ['de Hoon MJ', 'Imoto S', 'Nolan J', 'Miyano S']
+    ['Hamelryck T', 'Manderick B']
+    ['Mangalam H']
 
 For comparison, here we show an example using the XML format:
 
 .. code:: pycon
 
-   >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
-   >>> records = Entrez.read(handle)
-   >>> for record in records["PubmedArticle"]:
-   ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
-   Biopython: freely available Python tools for computational molecular biology and
-    bioinformatics.
-   Enzymes/non-enzymes classification model complexity based on composition, sequence,
-    3D and topological indices.
-   A high level interface to SCOP and ASTRAL implemented in python.
-   GenomeDiagram: a python package for the visualization of large-scale genomic data.
-   Open source clustering software.
-   PDB file parser and structure class implemented in Python.
-   The Bio* toolkits--a brief overview.
+    >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline", retmode="xml")
+    >>> records = Entrez.read(handle)
+    >>> for record in records["PubmedArticle"]:
+    ...     print(record["MedlineCitation"]["Article"]["ArticleTitle"])
+    Biopython: freely available Python tools for computational molecular biology and
+     bioinformatics.
+    Enzymes/non-enzymes classification model complexity based on composition, sequence,
+     3D and topological indices.
+    A high level interface to SCOP and ASTRAL implemented in python.
+    GenomeDiagram: a python package for the visualization of large-scale genomic data.
+    Open source clustering software.
+    PDB file parser and structure class implemented in Python.
+    The Bio* toolkits--a brief overview.
 
 Note that in both of these examples, for simplicity we have naively
 combined ESearch and EFetch. In this situation, the NCBI would expect
 you to use their history feature, as illustrated in
-Section :ref:`sec:entrez-webenv`.
+Section [sec:entrez-webenv].
 
 Parsing GEO records
 ~~~~~~~~~~~~~~~~~~~
@@ -1183,28 +1203,30 @@ The following code fragment shows how to parse the example GEO file
 
 .. code:: pycon
 
-   >>> from Bio import Geo
-   >>> handle = open("GSE16.txt")
-   >>> records = Geo.parse(handle)
-   >>> for record in records:
-   ...     print(record)
+    >>> from Bio import Geo
+    >>> handle = open("GSE16.txt")
+    >>> records = Geo.parse(handle)
+    >>> for record in records:
+    ...     print(record)
 
 You can search the “gds” database (GEO datasets) with ESearch:
 
-.. code:: pycon
-
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="gds", term="GSE16")
-   >>> record = Entrez.read(handle)
-   >>> handle.close()
-   >>> record["Count"]
-   '27'
+.. doctest . internet
 
 .. code:: pycon
 
-   >>> record["IdList"]
-   ['200000016', '100000028', ...]
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="gds", term="GSE16")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> record["Count"]
+    '27'
+
+.. code:: pycon
+
+    >>> record["IdList"]
+    ['200000016', '100000028', ...]
 
 From the Entrez website, UID “200000016” is GDS16 while the other hit
 “100000028” is for the associated platform, GPL28. Unfortunately, at the
@@ -1228,38 +1250,38 @@ like this:
 
 .. code:: text
 
-   ID          Hs.2
-   TITLE       N-acetyltransferase 2 (arylamine N-acetyltransferase)
-   GENE        NAT2
-   CYTOBAND    8p22
-   GENE_ID     10
-   LOCUSLINK   10
-   HOMOL       YES
-   EXPRESS      bone| connective tissue| intestine| liver| liver tumor| normal| soft tissue/muscle tissue tumor| adult
-   RESTR_EXPR   adult
-   CHROMOSOME  8
-   STS         ACC=PMC310725P3 UNISTS=272646
-   STS         ACC=WIAF-2120 UNISTS=44576
-   STS         ACC=G59899 UNISTS=137181
-   ...
-   STS         ACC=GDB:187676 UNISTS=155563
-   PROTSIM     ORG=10090; PROTGI=6754794; PROTID=NP_035004.1; PCT=76.55; ALN=288
-   PROTSIM     ORG=9796; PROTGI=149742490; PROTID=XP_001487907.1; PCT=79.66; ALN=288
-   PROTSIM     ORG=9986; PROTGI=126722851; PROTID=NP_001075655.1; PCT=76.90; ALN=288
-   ...
-   PROTSIM     ORG=9598; PROTGI=114619004; PROTID=XP_519631.2; PCT=98.28; ALN=288
+    ID          Hs.2
+    TITLE       N-acetyltransferase 2 (arylamine N-acetyltransferase)
+    GENE        NAT2
+    CYTOBAND    8p22
+    GENE_ID     10
+    LOCUSLINK   10
+    HOMOL       YES
+    EXPRESS      bone| connective tissue| intestine| liver| liver tumor| normal| soft tissue/muscle tissue tumor| adult
+    RESTR_EXPR   adult
+    CHROMOSOME  8
+    STS         ACC=PMC310725P3 UNISTS=272646
+    STS         ACC=WIAF-2120 UNISTS=44576
+    STS         ACC=G59899 UNISTS=137181
+    ...
+    STS         ACC=GDB:187676 UNISTS=155563
+    PROTSIM     ORG=10090; PROTGI=6754794; PROTID=NP_035004.1; PCT=76.55; ALN=288
+    PROTSIM     ORG=9796; PROTGI=149742490; PROTID=XP_001487907.1; PCT=79.66; ALN=288
+    PROTSIM     ORG=9986; PROTGI=126722851; PROTID=NP_001075655.1; PCT=76.90; ALN=288
+    ...
+    PROTSIM     ORG=9598; PROTGI=114619004; PROTID=XP_519631.2; PCT=98.28; ALN=288
 
-   SCOUNT      38
-   SEQUENCE    ACC=BC067218.1; NID=g45501306; PID=g45501307; SEQTYPE=mRNA
-   SEQUENCE    ACC=NM_000015.2; NID=g116295259; PID=g116295260; SEQTYPE=mRNA
-   SEQUENCE    ACC=D90042.1; NID=g219415; PID=g219416; SEQTYPE=mRNA
-   SEQUENCE    ACC=D90040.1; NID=g219411; PID=g219412; SEQTYPE=mRNA
-   SEQUENCE    ACC=BC015878.1; NID=g16198419; PID=g16198420; SEQTYPE=mRNA
-   SEQUENCE    ACC=CR407631.1; NID=g47115198; PID=g47115199; SEQTYPE=mRNA
-   SEQUENCE    ACC=BG569293.1; NID=g13576946; CLONE=IMAGE:4722596; END=5'; LID=6989; SEQTYPE=EST; TRACE=44157214
-   ...
-   SEQUENCE    ACC=AU099534.1; NID=g13550663; CLONE=HSI08034; END=5'; LID=8800; SEQTYPE=EST
-   //
+    SCOUNT      38
+    SEQUENCE    ACC=BC067218.1; NID=g45501306; PID=g45501307; SEQTYPE=mRNA
+    SEQUENCE    ACC=NM_000015.2; NID=g116295259; PID=g116295260; SEQTYPE=mRNA
+    SEQUENCE    ACC=D90042.1; NID=g219415; PID=g219416; SEQTYPE=mRNA
+    SEQUENCE    ACC=D90040.1; NID=g219411; PID=g219412; SEQTYPE=mRNA
+    SEQUENCE    ACC=BC015878.1; NID=g16198419; PID=g16198420; SEQTYPE=mRNA
+    SEQUENCE    ACC=CR407631.1; NID=g47115198; PID=g47115199; SEQTYPE=mRNA
+    SEQUENCE    ACC=BG569293.1; NID=g13576946; CLONE=IMAGE:4722596; END=5'; LID=6989; SEQTYPE=EST; TRACE=44157214
+    ...
+    SEQUENCE    ACC=AU099534.1; NID=g13550663; CLONE=HSI08034; END=5'; LID=8800; SEQTYPE=EST
+    //
 
 This particular record shows the set of transcripts (shown in the
 ``SEQUENCE`` lines) that originate from the human gene NAT2, encoding en
@@ -1271,9 +1293,9 @@ To parse UniGene files, use the ``Bio.UniGene`` module:
 
 .. code:: pycon
 
-   >>> from Bio import UniGene
-   >>> input = open("myunigenefile.data")
-   >>> record = UniGene.read(input)
+    >>> from Bio import UniGene
+    >>> input = open("myunigenefile.data")
+    >>> record = UniGene.read(input)
 
 The ``record`` returned by ``UniGene.read`` is a Python object with
 attributes corresponding to the fields in the UniGene record. For
@@ -1281,27 +1303,27 @@ example,
 
 .. code:: pycon
 
-   >>> record.ID
-   "Hs.2"
-   >>> record.title
-   "N-acetyltransferase 2 (arylamine N-acetyltransferase)"
+    >>> record.ID
+    "Hs.2"
+    >>> record.title
+    "N-acetyltransferase 2 (arylamine N-acetyltransferase)"
 
 The ``EXPRESS`` and ``RESTR_EXPR`` lines are stored as Python lists of
 strings:
 
 .. code:: python
 
-   ['bone', 'connective tissue', 'intestine', 'liver', 'liver tumor', 'normal', 'soft tissue/muscle tissue tumor', 'adult']
+    ['bone', 'connective tissue', 'intestine', 'liver', 'liver tumor', 'normal', 'soft tissue/muscle tissue tumor', 'adult']
 
 Specialized objects are returned for the ``STS``, ``PROTSIM``, and
 ``SEQUENCE`` lines, storing the keys shown in each line as attributes:
 
 .. code:: pycon
 
-   >>> record.sts[0].acc
-   'PMC310725P3'
-   >>> record.sts[0].unists
-   '272646'
+    >>> record.sts[0].acc
+    'PMC310725P3'
+    >>> record.sts[0].unists
+    '272646'
 
 and similarly for the ``PROTSIM`` and ``SEQUENCE`` lines.
 
@@ -1310,11 +1332,11 @@ To parse a file containing more than one UniGene record, use the
 
 .. code:: pycon
 
-   >>> from Bio import UniGene
-   >>> input = open("unigenerecords.data")
-   >>> records = UniGene.parse(input)
-   >>> for record in records:
-   ...     print(record.ID)
+    >>> from Bio import UniGene
+    >>> input = open("unigenerecords.data")
+    >>> records = UniGene.parse(input)
+    >>> for record in records:
+    ...     print(record.ID)
 
 Using a proxy
 -------------
@@ -1333,19 +1355,15 @@ set this within Python at the start of your script, for example:
 
 .. code:: python
 
-   import os
-   os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
+    import os
+    os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 
 See the `urllib
 documentation <https://docs.python.org/2/library/urllib.html>`__ for
 more details.
 
-.. _sec:entrez_examples:
-
 Examples
 --------
-
-.. _sec:pub_med:
 
 PubMed and Medline
 ~~~~~~~~~~~~~~~~~~
@@ -1357,88 +1375,94 @@ kinds of goodies. So like other things, we’d like to be able to grab
 information from it and use it in Python scripts.
 
 In this example, we will query PubMed for all articles having to do with
-orchids (see section :ref:`sec:orchids` for our
-motivation). We first check how many of such articles there are:
+orchids (see section [sec:orchids] for our motivation). We first check
+how many of such articles there are:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.egquery(term="orchid")
-   >>> record = Entrez.read(handle)
-   >>> for row in record["eGQueryResult"]:
-   ...     if row["DbName"]=="pubmed":
-   ...         print(row["Count"])
-   463
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.egquery(term="orchid")
+    >>> record = Entrez.read(handle)
+    >>> for row in record["eGQueryResult"]:
+    ...     if row["DbName"]=="pubmed":
+    ...         print(row["Count"])
+    463
 
 Now we use the ``Bio.Entrez.efetch`` function to download the PubMed IDs
 of these 463 articles:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
-   >>> record = Entrez.read(handle)
-   >>> handle.close()
-   >>> idlist = record["IdList"]
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="pubmed", term="orchid", retmax=463)
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> idlist = record["IdList"]
 
 This returns a Python list containing all of the PubMed IDs of articles
 related to orchids:
 
 .. code:: pycon
 
-   >>> print(idlist)
-   ['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
-   '18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
-   ...
+    >>> print(idlist)
+    ['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
+    '18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
+    ...
 
 Now that we’ve got them, we obviously want to get the corresponding
 Medline records and extract the information from them. Here, we’ll
 download the Medline records in the Medline flat-file format, and use
 the ``Bio.Medline`` module to parse them:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> from Bio import Medline
-   >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
-   ...                        retmode="text")
-   >>> records = Medline.parse(handle)
+    >>> from Bio import Medline
+    >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
+    ...                        retmode="text")
+    >>> records = Medline.parse(handle)
 
 NOTE - We’ve just done a separate search and fetch here, the NCBI much
 prefer you to take advantage of their history support in this situation.
-See Section :ref:`sec:entrez-webenv`.
+See Section [sec:entrez-webenv].
 
 Keep in mind that ``records`` is an iterator, so you can iterate through
 the records only once. If you want to save the records, you can convert
 them to a list:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> records = list(records)
+    >>> records = list(records)
 
 Let’s now iterate over the records to print out some information about
 each record:
 
 .. code:: pycon
 
-   >>> for record in records:
-   ...     print("title:", record.get("TI", "?"))
-   ...     print("authors:", record.get("AU", "?"))
-   ...     print("source:", record.get("SO", "?"))
-   ...     print("")
-   ...
+    >>> for record in records:
+    ...     print("title:", record.get("TI", "?"))
+    ...     print("authors:", record.get("AU", "?"))
+    ...     print("source:", record.get("SO", "?"))
+    ...     print("")
+    ...
 
 The output for this looks like:
 
 .. code:: text
 
-   title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
-   patterns of hydrocarbons as the key mechanism for pollination by sexual
-   deception [In Process Citation]
-   authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
-   'Ibarra F', 'Francke W']
-   source: J Comp Physiol [A] 2000 Jun;186(6):567-74
+    title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
+    patterns of hydrocarbons as the key mechanism for pollination by sexual
+    deception [In Process Citation]
+    authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
+    'Ibarra F', 'Francke W']
+    source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 
 Especially interesting to note is the list of authors, which is returned
 as a standard Python list. This makes it easy to manipulate and search
@@ -1448,29 +1472,27 @@ following:
 
 .. code:: pycon
 
-   >>> search_author = "Waits T"
-   >>> for record in records:
-   ...     if not "AU" in record:
-   ...         continue
-   ...     if search_author in record["AU"]:
-   ...         print("Author %s found: %s" % (search_author, record["SO"]))
-   ...
+    >>> search_author = "Waits T"
+    >>> for record in records:
+    ...     if not "AU" in record:
+    ...         continue
+    ...     if search_author in record["AU"]:
+    ...         print("Author %s found: %s" % (search_author, record["SO"]))
+    ...
 
 Hopefully this section gave you an idea of the power and flexibility of
 the Entrez and Medline interfaces and how they can be used together.
-
-.. _sec:entrez_example_genbank:
 
 Searching, downloading, and parsing Entrez Nucleotide records
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Here we’ll show a simple example of performing a remote Entrez query. In
-section :ref:`sec:orchids` of the parsing examples, we
-talked about using NCBI’s Entrez website to search the NCBI nucleotide
-databases for info on Cypripedioideae, our friends the lady slipper
-orchids. Now, we’ll look at how to automate that process using a Python
-script. In this example, we’ll just show how to connect, get the
-results, and parse them, with the Entrez module doing all of the work.
+section [sec:orchids] of the parsing examples, we talked about using
+NCBI’s Entrez website to search the NCBI nucleotide databases for info
+on Cypripedioideae, our friends the lady slipper orchids. Now, we’ll
+look at how to automate that process using a Python script. In this
+example, we’ll just show how to connect, get the results, and parse
+them, with the Entrez module doing all of the work.
 
 First, we use EGQuery to find out the number of results we will get
 before actually downloading them. EGQuery will tell us how many search
@@ -1479,14 +1501,14 @@ only interested in nucleotides:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.egquery(term="Cypripedioideae")
-   >>> record = Entrez.read(handle)
-   >>> for row in record["eGQueryResult"]:
-   ...     if row["DbName"]=="nuccore":
-   ...         print(row["Count"])
-   4457
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.egquery(term="Cypripedioideae")
+    >>> record = Entrez.read(handle)
+    >>> for row in record["eGQueryResult"]:
+    ...     if row["DbName"]=="nuccore":
+    ...         print(row["Count"])
+    4457
 
 So, we expect to find 4457 Entrez Nucleotide records (this increased
 from 814 records in 2008; it is likely to continue to increase in the
@@ -1495,13 +1517,15 @@ to reconsider if you really want to download all of them, which is our
 next step. Let’s use the ``retmax`` argument to restrict the maximum
 number of records retrieved to the number available in 2008:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
-   >>> record = Entrez.read(handle)
-   >>> handle.close()
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="nucleotide", term="Cypripedioideae", retmax=814, idtype="acc")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
 
 Here, ``record`` is a Python dictionary containing the search results
 and some auxiliary information. Just for information, let’s look at what
@@ -1509,15 +1533,15 @@ is stored in this dictionary:
 
 .. code:: pycon
 
-   >>> print(record.keys())
-   ['Count', 'RetMax', 'IdList', 'TranslationSet', 'RetStart', 'QueryTranslation']
+    >>> print(record.keys())
+    ['Count', 'RetMax', 'IdList', 'TranslationSet', 'RetStart', 'QueryTranslation']
 
 First, let’s check how many results were found:
 
 .. code:: pycon
 
-   >>> print(record["Count"])
-   '4457'
+    >>> print(record["Count"])
+    '4457'
 
 You might have expected this to be 814, the maximum number of records we
 asked to retrieve. However, ``Count`` represents the total number of
@@ -1527,62 +1551,60 @@ contain the total number we asked for:
 
 .. code:: pycon
 
-   >>> len(record["IdList"])
-   814
+    >>> len(record["IdList"])
+    814
 
 Let’s look at the first five results:
 
 .. code:: pycon
 
-   >>> record["IdList"][:5]
-   ['KX265015.1', 'KX265014.1', 'KX265013.1', 'KX265012.1', 'KX265011.1']
+    >>> record["IdList"][:5]
+    ['KX265015.1', 'KX265014.1', 'KX265013.1', 'KX265012.1', 'KX265011.1']
 
 [sec:entrez-batched-efetch] We can download these records using
 ``efetch``. While you could download these records one by one, to reduce
 the load on NCBI’s servers, it is better to fetch a bunch of records at
 the same time, shown below. However, in this situation you should
 ideally be using the history feature described later in
-Section :ref:`sec:entrez-webenv`.
+Section [sec:entrez-webenv].
 
 .. code:: pycon
 
-   >>> idlist = ",".join(record["IdList"][:5])
-   >>> print(idlist)
-   KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
-   >>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
-   >>> records = Entrez.read(handle)
-   >>> len(records)
-   5
+    >>> idlist = ",".join(record["IdList"][:5])
+    >>> print(idlist)
+    KX265015.1, KX265014.1, KX265013.1, KX265012.1, KX265011.1]
+    >>> handle = Entrez.efetch(db="nucleotide", id=idlist, retmode="xml")
+    >>> records = Entrez.read(handle)
+    >>> len(records)
+    5
 
 Each of these records corresponds to one GenBank record.
 
 .. code:: pycon
 
-   >>> print(records[0].keys())
-   ['GBSeq_moltype', 'GBSeq_source', 'GBSeq_sequence',
-    'GBSeq_primary-accession', 'GBSeq_definition', 'GBSeq_accession-version',
-    'GBSeq_topology', 'GBSeq_length', 'GBSeq_feature-table',
-    'GBSeq_create-date', 'GBSeq_other-seqids', 'GBSeq_division',
-    'GBSeq_taxonomy', 'GBSeq_references', 'GBSeq_update-date',
-    'GBSeq_organism', 'GBSeq_locus', 'GBSeq_strandedness']
+    >>> print(records[0].keys())
+    ['GBSeq_moltype', 'GBSeq_source', 'GBSeq_sequence',
+     'GBSeq_primary-accession', 'GBSeq_definition', 'GBSeq_accession-version',
+     'GBSeq_topology', 'GBSeq_length', 'GBSeq_feature-table',
+     'GBSeq_create-date', 'GBSeq_other-seqids', 'GBSeq_division',
+     'GBSeq_taxonomy', 'GBSeq_references', 'GBSeq_update-date',
+     'GBSeq_organism', 'GBSeq_locus', 'GBSeq_strandedness']
 
-   >>> print(records[0]["GBSeq_primary-accession"])
-   DQ110336
+    >>> print(records[0]["GBSeq_primary-accession"])
+    DQ110336
 
-   >>> print(records[0]["GBSeq_other-seqids"])
-   ['gb|DQ110336.1|', 'gi|187237168']
+    >>> print(records[0]["GBSeq_other-seqids"])
+    ['gb|DQ110336.1|', 'gi|187237168']
 
-   >>> print(records[0]["GBSeq_definition"])
-   Cypripedium calceolus voucher Davis 03-03 A maturase (matR) gene, partial cds;
-   mitochondrial
+    >>> print(records[0]["GBSeq_definition"])
+    Cypripedium calceolus voucher Davis 03-03 A maturase (matR) gene, partial cds;
+    mitochondrial
 
-   >>> print(records[0]["GBSeq_organism"])
-   Cypripedium calceolus
+    >>> print(records[0]["GBSeq_organism"])
+    Cypripedium calceolus
 
 You could use this to quickly set up searches – but for heavy usage, see
-Section :ref:`sec:entrez-webenv`.
-
-.. _sec:entrez-search-fetch-genbank:
+Section [sec:entrez-webenv].
 
 Searching, downloading, and parsing GenBank records
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1594,10 +1616,9 @@ the NCBI databases at https://www.ncbi.nlm.nih.gov/.
 
 In this example we’ll show how to query the NCBI databases,to retrieve
 the records from the query, and then parse them using ``Bio.SeqIO`` -
-something touched on in
-Section :ref:`sec:SeqIO_GenBank_Online`.
-For simplicity, this example *does not* take advantage of the WebEnv
-history feature – see Section :ref:`sec:entrez-webenv` for this.
+something touched on in Section [sec:SeqIO\_GenBank\_Online]. For
+simplicity, this example *does not* take advantage of the WebEnv history
+feature – see Section [sec:entrez-webenv] for this.
 
 First, we want to make a query and find out the ids of the records to
 retrieve. Here we’ll do a quick search for one of our favorite
@@ -1607,26 +1628,26 @@ records. First we check how many records there are:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.egquery(term="Opuntia AND rpl16")
-   >>> record = Entrez.read(handle)
-   >>> for row in record["eGQueryResult"]:
-   ...     if row["DbName"]=="nuccore":
-   ...         print(row["Count"])
-   ...
-   9
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.egquery(term="Opuntia AND rpl16")
+    >>> record = Entrez.read(handle)
+    >>> for row in record["eGQueryResult"]:
+    ...     if row["DbName"]=="nuccore":
+    ...         print(row["Count"])
+    ...
+    9
 
 Now we download the list of GenBank identifiers:
 
 .. code:: pycon
 
-   >>> handle = Entrez.esearch(db="nuccore", term="Opuntia AND rpl16")
-   >>> record = Entrez.read(handle)
-   >>> gi_list = record["IdList"]
-   >>> gi_list
-   ['57240072', '57240071', '6273287', '6273291', '6273290', '6273289', '6273286',
-   '6273285', '6273284']
+    >>> handle = Entrez.esearch(db="nuccore", term="Opuntia AND rpl16")
+    >>> record = Entrez.read(handle)
+    >>> gi_list = record["IdList"]
+    >>> gi_list
+    ['57240072', '57240071', '6273287', '6273291', '6273290', '6273289', '6273286',
+    '6273285', '6273284']
 
 Now we use these GIs to download the GenBank records - note that with
 older versions of Biopython you had to supply a comma separated list of
@@ -1635,66 +1656,66 @@ is converted for you:
 
 .. code:: pycon
 
-   >>> gi_str = ",".join(gi_list)
-   >>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
+    >>> gi_str = ",".join(gi_list)
+    >>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
 
 If you want to look at the raw GenBank files, you can read from this
 handle and print out the result:
 
 .. code:: pycon
 
-   >>> text = handle.read()
-   >>> print(text)
-   LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
-   DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
-   ACCESSION   AY851612
-   VERSION     AY851612.1  GI:57240072
-   KEYWORDS    .
-   SOURCE      chloroplast Austrocylindropuntia subulata
-     ORGANISM  Austrocylindropuntia subulata
-               Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
-               Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons;
-               Caryophyllales; Cactaceae; Opuntioideae; Austrocylindropuntia.
-   REFERENCE   1  (bases 1 to 892)
-     AUTHORS   Butterworth,C.A. and Wallace,R.S.
-   ...
+    >>> text = handle.read()
+    >>> print(text)
+    LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
+    DEFINITION  Opuntia subulata rpl16 gene, intron; chloroplast.
+    ACCESSION   AY851612
+    VERSION     AY851612.1  GI:57240072
+    KEYWORDS    .
+    SOURCE      chloroplast Austrocylindropuntia subulata
+      ORGANISM  Austrocylindropuntia subulata
+                Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+                Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons;
+                Caryophyllales; Cactaceae; Opuntioideae; Austrocylindropuntia.
+    REFERENCE   1  (bases 1 to 892)
+      AUTHORS   Butterworth,C.A. and Wallace,R.S.
+    ...
 
 In this case, we are just getting the raw records. To get the records in
 a more Python-friendly form, we can use ``Bio.SeqIO`` to parse the
 GenBank data into ``SeqRecord`` objects, including ``SeqFeature``
-objects (see Chapter :ref:`chapter:seqio`):
+objects (see Chapter [chapter:seqio]):
 
 .. code:: pycon
 
-   >>> from Bio import SeqIO
-   >>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
-   >>> records = SeqIO.parse(handle, "gb")
+    >>> from Bio import SeqIO
+    >>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
+    >>> records = SeqIO.parse(handle, "gb")
 
 We can now step through the records and look at the information we are
 interested in:
 
 .. code:: pycon
 
-   >>> for record in records:
-   >>> ...    print("%s, length %i, with %i features"
-   >>> ...           % (record.name, len(record), len(record.features)))
-   AY851612, length 892, with 3 features
-   AY851611, length 881, with 3 features
-   AF191661, length 895, with 3 features
-   AF191665, length 902, with 3 features
-   AF191664, length 899, with 3 features
-   AF191663, length 899, with 3 features
-   AF191660, length 893, with 3 features
-   AF191659, length 894, with 3 features
-   AF191658, length 896, with 3 features
+    >>> for record in records:
+    >>> ...    print("%s, length %i, with %i features"
+    >>> ...           % (record.name, len(record), len(record.features)))
+    AY851612, length 892, with 3 features
+    AY851611, length 881, with 3 features
+    AF191661, length 895, with 3 features
+    AF191665, length 902, with 3 features
+    AF191664, length 899, with 3 features
+    AF191663, length 899, with 3 features
+    AF191660, length 893, with 3 features
+    AF191659, length 894, with 3 features
+    AF191658, length 896, with 3 features
 
 Using these automated query retrieval functionality is a big plus over
 doing things by hand. Although the module should obey the NCBI’s max
 three queries per second rule, the NCBI have other recommendations like
-avoiding peak hours. See Section :ref:`sec:entrez-guidelines`. In
-particular, please note that for simplicity, this example does not use
-the WebEnv history feature. You should use this for any non-trivial
-search and download work, see Section :ref:`sec:entrez-webenv`.
+avoiding peak hours. See Section [sec:entrez-guidelines]. In particular,
+please note that for simplicity, this example does not use the WebEnv
+history feature. You should use this for any non-trivial search and
+download work, see Section [sec:entrez-webenv].
 
 Finally, if plan to repeat your analysis, rather than downloading the
 files from the NCBI and parsing them immediately (as shown in this
@@ -1708,48 +1729,50 @@ Staying with a plant example, let’s now find the lineage of the
 Cypripedioideae orchid family. First, we search the Taxonomy database
 for Cypripedioideae, which yields exactly one NCBI taxonomy identifier:
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
-   >>> record = Entrez.read(handle)
-   >>> record["IdList"]
-   ['158330']
-   >>> record["IdList"][0]
-   '158330'
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> handle = Entrez.esearch(db="Taxonomy", term="Cypripedioideae")
+    >>> record = Entrez.read(handle)
+    >>> record["IdList"]
+    ['158330']
+    >>> record["IdList"][0]
+    '158330'
 
 Now, we use ``efetch`` to download this entry in the Taxonomy database,
 and then parse it:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
-   >>> records = Entrez.read(handle)
+    >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
+    >>> records = Entrez.read(handle)
 
 Again, this record stores lots of information:
 
 .. code:: pycon
 
-   >>> records[0].keys()
-   ['Lineage', 'Division', 'ParentTaxId', 'PubDate', 'LineageEx',
-    'CreateDate', 'TaxId', 'Rank', 'GeneticCode', 'ScientificName',
-    'MitoGeneticCode', 'UpdateDate']
+    >>> records[0].keys()
+    ['Lineage', 'Division', 'ParentTaxId', 'PubDate', 'LineageEx',
+     'CreateDate', 'TaxId', 'Rank', 'GeneticCode', 'ScientificName',
+     'MitoGeneticCode', 'UpdateDate']
 
 We can get the lineage directly from this record:
 
 .. code:: pycon
 
-   >>> records[0]["Lineage"]
-   'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
-    Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
-    Liliopsida; Asparagales; Orchidaceae'
+    >>> records[0]["Lineage"]
+    'cellular organisms; Eukaryota; Viridiplantae; Streptophyta; Streptophytina;
+     Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
+     Liliopsida; Asparagales; Orchidaceae'
 
 The record data contains much more than just the information shown here
-- for example look under ``"LineageEx"`` instead of ``"Lineage"`` and
-you’ll get the NCBI taxon identifiers of the lineage entries too.
-
-.. _sec:entrez-webenv:
+- for example look under ``LineageEx`` instead of ``Lineage`` and you’ll
+get the NCBI taxon identifiers of the lineage entries too.
 
 Using the history and WebEnv
 ----------------------------
@@ -1770,9 +1793,9 @@ Searching for and downloading sequences using the history
 
 Suppose we want to search and download all the *Opuntia* rpl16
 nucleotide sequences, and store them in a FASTA file. As shown in
-Section :ref:`sec:entrez-search-fetch-genbank`, we can naively
-combine ``Bio.Entrez.esearch()`` to get a list of Accession numbers, and
-then call ``Bio.Entrez.efetch()`` to download them all.
+Section [sec:entrez-search-fetch-genbank], we can naively combine
+``Bio.Entrez.esearch()`` to get a list of Accession numbers, and then
+call ``Bio.Entrez.efetch()`` to download them all.
 
 However, the approved approach is to run the search with the history
 feature. Then, we can fetch the results by reference to the search
@@ -1781,36 +1804,42 @@ results - which the NCBI can anticipate and cache.
 To do this, call ``Bio.Entrez.esearch()`` as normal, but with the
 additional argument of ``usehistory="y"``,
 
+.. doctest . internet
+
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
-   >>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
-   ...                                usehistory="y", idtype="acc")
-   >>> search_results = Entrez.read(search_handle)
-   >>> search_handle.close()
+    >>> from Bio import Entrez
+    >>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
+    >>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
+    ...                                usehistory="y", idtype="acc")
+    >>> search_results = Entrez.read(search_handle)
+    >>> search_handle.close()
 
 When you get the XML output back, it will still include the usual search
 results.
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> acc_list = search_results["IdList"]
-   >>> count = int(search_results["Count"])
-   >>> count == len(acc_list)
-   True
+    >>> acc_list = search_results["IdList"]
+    >>> count = int(search_results["Count"])
+    >>> count == len(acc_list)
+    True
 
-(Remember from Section :ref:`sec:entrez_example_genbank` that
-the number of records retrieved will not necessarily be the same as the
-``Count``, especially if the argument ``retmax`` is used.)
+(Remember from Section [sec:entrez\_example\_genbank] that the number of
+records retrieved will not necessarily be the same as the ``Count``,
+especially if the argument ``retmax`` is used.)
 
 However, you also get given two additional pieces of information, the
 ``WebEnv`` session cookie, and the ``QueryKey``:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> webenv = search_results["WebEnv"]
-   >>> query_key = search_results["QueryKey"]
+    >>> webenv = search_results["WebEnv"]
+    >>> query_key = search_results["QueryKey"]
 
 Having stored these values in variables ``session_cookie`` and
 ``query_key`` we can use them as parameters to ``Bio.Entrez.efetch()``
@@ -1826,23 +1855,23 @@ automatically try again a couple of times. For example,
 
 .. code:: python
 
-   # This assumes you have already run a search as shown above,
-   # and set the variables count, webenv, query_key
+    # This assumes you have already run a search as shown above,
+    # and set the variables count, webenv, query_key
 
-   batch_size = 3
-   out_handle = open("orchid_rpl16.fasta", "w")
-   for start in range(0, count, batch_size):
-       end = min(count, start+batch_size)
-       print("Going to download record %i to %i" % (start+1, end))
-       fetch_handle = Entrez.efetch(db="nucleotide",
-                                    rettype="fasta", retmode="text",
-                                    retstart=start, retmax=batch_size,
-                                    webenv=webenv, query_key=query_key,
-                                    idtype="acc")
-       data = fetch_handle.read()
-       fetch_handle.close()
-       out_handle.write(data)
-   out_handle.close()
+    batch_size = 3
+    out_handle = open("orchid_rpl16.fasta", "w")
+    for start in range(0, count, batch_size):
+        end = min(count, start+batch_size)
+        print("Going to download record %i to %i" % (start+1, end))
+        fetch_handle = Entrez.efetch(db="nucleotide",
+                                     rettype="fasta", retmode="text",
+                                     retstart=start, retmax=batch_size,
+                                     webenv=webenv, query_key=query_key,
+                                     idtype="acc")
+        data = fetch_handle.read()
+        fetch_handle.close()
+        out_handle.write(data)
+    out_handle.close()
 
 For illustrative purposes, this example downloaded the FASTA records in
 batches of three. Unless you are downloading genomes or chromosomes, you
@@ -1857,56 +1886,54 @@ MedLine format:
 
 .. code:: python
 
-   from Bio import Entrez
-   Entrez.email = "history.user@example.com"
-   search_results = Entrez.read(Entrez.esearch(db="pubmed",
-                                               term="Opuntia[ORGN]",
-                                               reldate=365, datetype="pdat",
-                                               usehistory="y"))
-   count = int(search_results["Count"])
-   print("Found %i results" % count)
+    from Bio import Entrez
+    Entrez.email = "history.user@example.com"
+    search_results = Entrez.read(Entrez.esearch(db="pubmed",
+                                                term="Opuntia[ORGN]",
+                                                reldate=365, datetype="pdat",
+                                                usehistory="y"))
+    count = int(search_results["Count"])
+    print("Found %i results" % count)
 
-   batch_size = 10
-   out_handle = open("recent_orchid_papers.txt", "w")
-   for start in range(0,count,batch_size):
-       end = min(count, start+batch_size)
-       print("Going to download record %i to %i" % (start+1, end))
-       fetch_handle = Entrez.efetch(db="pubmed",rettype="medline",
-                                    retmode="text",retstart=start,
-                                    retmax=batch_size,
-                                    webenv=search_results["WebEnv"],
-                                    query_key=search_results["QueryKey"])
-       data = fetch_handle.read()
-       fetch_handle.close()
-       out_handle.write(data)
-   out_handle.close()
+    batch_size = 10
+    out_handle = open("recent_orchid_papers.txt", "w")
+    for start in range(0,count,batch_size):
+        end = min(count, start+batch_size)
+        print("Going to download record %i to %i" % (start+1, end))
+        fetch_handle = Entrez.efetch(db="pubmed",rettype="medline",
+                                     retmode="text",retstart=start,
+                                     retmax=batch_size,
+                                     webenv=search_results["WebEnv"],
+                                     query_key=search_results["QueryKey"])
+        data = fetch_handle.read()
+        fetch_handle.close()
+        out_handle.write(data)
+    out_handle.close()
 
 At the time of writing, this gave 28 matches - but because this is a
 date dependent search, this will of course vary. As described in
-Section :ref:`sec:entrez-and-medline` above, you can then use
-``Bio.Medline`` to parse the saved records.
-
-.. _sec:elink-citations:
+Section [sec:entrez-and-medline] above, you can then use ``Bio.Medline``
+to parse the saved records.
 
 Searching for citations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Back in Section :ref:`sec:elink` we mentioned ELink can be used to
-search for citations of a given paper. Unfortunately this only covers
-journals indexed for PubMed Central (doing it for all the journals in
-PubMed would mean a lot more work for the NIH). Let’s try this for the
+Back in Section [sec:elink] we mentioned ELink can be used to search for
+citations of a given paper. Unfortunately this only covers journals
+indexed for PubMed Central (doing it for all the journals in PubMed
+would mean a lot more work for the NIH). Let’s try this for the
 Biopython PDB parser paper, PubMed ID 14630660:
 
 .. code:: pycon
 
-   >>> from Bio import Entrez
-   >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
-   >>> pmid = "14630660"
-   >>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-   ...                                    LinkName="pubmed_pmc_refs", id=pmid))
-   >>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
-   >>> pmc_ids
-   ['2744707', '2705363', '2682512', ..., '1190160']
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
+    >>> pmid = "14630660"
+    >>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
+    ...                                    LinkName="pubmed_pmc_refs", id=pmid))
+    >>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
+    >>> pmc_ids
+    ['2744707', '2705363', '2682512', ..., '1190160']
 
 Great - eleven articles. But why hasn’t the Biopython application note
 been found (PubMed ID 19304878)? Well, as you might have guessed from
@@ -1917,23 +1944,23 @@ list, PMCID 2682512.
 So, what if (like me) you’d rather get back a list of PubMed IDs? Well
 we can call ELink again to translate them. This becomes a two step
 process, so by now you should expect to use the history feature to
-accomplish it (Section :ref:`sec:entrez-webenv`).
+accomplish it (Section [sec:entrez-webenv]).
 
 But first, taking the more straightforward approach of making a second
 (separate) call to ELink:
 
 .. code:: pycon
 
-   >>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-   ...                                     id=",".join(pmc_ids)))
-   >>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
-   >>> pubmed_ids
-   ['19698094', '19450287', '19304878', ..., '15985178']
+    >>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
+    ...                                     id=",".join(pmc_ids)))
+    >>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
+    >>> pubmed_ids
+    ['19698094', '19450287', '19304878', ..., '15985178']
 
 This time you can immediately spot the Biopython application note as the
 third hit (PubMed ID 19304878).
 
-Now, let’s do that all again but with the history … *TODO*.
+Now, let’s do that all again but with the history …\ *TODO*.
 
 And finally, don’t forget to include your *own* email address in the
 Entrez calls.

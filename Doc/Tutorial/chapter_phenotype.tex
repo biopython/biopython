@@ -39,7 +39,7 @@ The parser will return one or a generator of PlateRecord objects, depending
 on whether the read or parse method is being used.
 You can test the parse function by using the \href{https://github.com/biopython/biopython/blob/master/Doc/examples/Plates.csv}{\texttt{Plates.csv}} file provided with the Biopython source code.
 
-%doctest examples lib:numpy
+\pandocignoreme .. doctest examples lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import phenotype
 >>> for record in phenotype.parse("Plates.csv", "pm-csv"):
@@ -66,7 +66,7 @@ There are several ways to access WellRecord objects from a PlateRecord objects:
   \item[Well plate coordinates]
     The same well can be retrieved by using the row and columns numbers (0-based index).
 
-%doctest examples lib:numpy
+\pandocignoreme .. doctest examples lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import phenotype
 >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
@@ -79,7 +79,7 @@ A02
     using the python list slicing syntax on PlateRecord objects; rows and columns are numbered with
     a 0-based index.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(record[0])
 Plate ID: PM09
@@ -112,7 +112,7 @@ Usually the instrument collects data every fifteen minutes, but that can vary be
 experiments. The raw data can be accessed by iterating on a WellRecord object;
 in the example below only the first ten time points are shown.
 
-%doctest examples lib:numpy
+\pandocignoreme .. doctest examples lib:numpy
 \begin{minted}{pycon}
 >>> from Bio import phenotype
 >>> record = list(phenotype.parse("Plates.csv", "pm-csv"))[-1]
@@ -149,7 +149,7 @@ This method only works in the time interval where actual data is available.
 Time intervals can be defined with the same syntax as list
 indexing; the default time interval is therefore one hour.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> well[:10]  
 [12.0, 37.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0, 44.0]
@@ -181,7 +181,7 @@ any growth; the low signal produced by this well can be subtracted from the othe
 The PlateRecord objects have a dedicated function for that, which returns another PlateRecord object
 with the corrected data.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> corrected = record.subtract_control(control="A01")
 >>> record["A01"][63]

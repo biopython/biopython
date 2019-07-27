@@ -1,5 +1,3 @@
-.. _chapter:advanced:
-
 Advanced
 ========
 
@@ -47,7 +45,7 @@ MatrixInfo.py, a collection of established substitution matrices. The
 
 .. code:: python
 
-   class SeqMat(dict)
+    class SeqMat(dict)
 
 The dictionary is of the form
 ``{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}`` where i, j are alphabet
@@ -64,7 +62,7 @@ letters, and n is a value.
 
    #. .. code:: python
 
-         __init__(self,data=None,alphabet=None, mat_name='', build_later=0):
+          __init__(self,data=None,alphabet=None, mat_name='', build_later=0):
 
       #. ``data``: can be either a dictionary, or another SeqMat
          instance.
@@ -72,7 +70,7 @@ letters, and n is a value.
       #. ``alphabet``: a Bio.Alphabet instance. If not provided,
          construct an alphabet from data.
 
-      #. ``mat_name``: matrix name, such as "BLOSUM62" or "PAM250"
+      #. ``mat_name``: matrix name, such as “BLOSUM62” or “PAM250”
 
       #. ``build_later``: default false. If true, user may supply only
          alphabet and empty dictionary, if intending to build the matrix
@@ -81,7 +79,7 @@ letters, and n is a value.
 
    #. .. code:: python
 
-         entropy(self,obs_freq_mat)
+          entropy(self,obs_freq_mat)
 
       #. ``obs_freq_mat``: an observed frequency matrix. Returns the
          matrix’s entropy, based on the frequency in ``obs_freq_mat``.
@@ -89,7 +87,7 @@ letters, and n is a value.
 
    #. .. code:: python
 
-         sum(self)
+          sum(self)
 
       Calculates the sum of values for each letter in the matrix’s
       alphabet, and returns it as a dictionary of the form
@@ -103,7 +101,7 @@ letters, and n is a value.
 
    #. .. code:: python
 
-         print_mat(self,f,format="%4d",bottomformat="%4s",alphabet=None)
+          print_mat(self,f,format="%4d",bottomformat="%4s",alphabet=None)
 
       prints the matrix to file handle f. ``format`` is the format field
       for the matrix values; ``bottomformat`` is the format field for
@@ -112,10 +110,10 @@ letters, and n is a value.
 
       .. code:: text
 
-         A 23
-         B 12 34
-         C 7  22  27
-           A   B   C
+          A 23
+          B 12 34
+          C 7  22  27
+            A   B   C
 
       The ``alphabet`` optional argument is a string of all characters
       in the alphabet. If supplied, the order of letters along the axes
@@ -139,13 +137,13 @@ letters, and n is a value.
 
       .. code:: text
 
-         ('A','C'): 10, ('C','A'): 12
+          ('A','C'): 10, ('C','A'): 12
 
       as order doesn’t matter, user can already provide only one entry:
 
       .. code:: text
 
-         ('A','C'): 22
+          ('A','C'): 22
 
       A SeqMat instance may be initialized with either a full (first
       method of counting: 10, 12) or half (the latter method, 22)
@@ -154,7 +152,7 @@ letters, and n is a value.
       20/2 = 210. That is because same-letter entries don’t change. (The
       matrix diagonal). Given an alphabet size of N:
 
-      #. Full matrix size: N*N
+      #. Full matrix size: N\*N
 
       #. Half matrix size: N(N+1)/2
 
@@ -175,7 +173,7 @@ letters, and n is a value.
 
       .. code:: python
 
-         OFM = SubsMat._build_obs_freq_mat(ARM)
+          OFM = SubsMat._build_obs_freq_mat(ARM)
 
       The OFM is generated from the ARM, only instead of replacement
       counts, it contains replacement frequencies.
@@ -186,11 +184,11 @@ letters, and n is a value.
 
       .. code:: python
 
-         EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
+          EFM = SubsMat._build_exp_freq_mat(OFM,exp_freq_table)
 
       #. ``exp_freq_table``: should be a FreqTable instance. See
-         section :ref:`sec:freq_table` for detailed information
-         on FreqTable. Briefly, the expected frequency table has the
+         section [sec:freq\_table] for detailed information on
+         FreqTable. Briefly, the expected frequency table has the
          frequencies of appearance for each member of the alphabet. It
          is implemented as a dictionary with the alphabet letters as
          keys, and each letter’s frequency as a value. Values sum to 1.
@@ -201,8 +199,8 @@ letters, and n is a value.
 
       .. code:: pycon
 
-         >>> exp_freq_table = SubsMat._exp_freq_table_from_obs_freq(OFM)
-         >>> EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
+          >>> exp_freq_table = SubsMat._exp_freq_table_from_obs_freq(OFM)
+          >>> EFM = SubsMat._build_exp_freq_mat(OFM, exp_freq_table)
 
       But you can supply your own ``exp_freq_table``, if you wish
 
@@ -212,7 +210,7 @@ letters, and n is a value.
 
       .. code:: python
 
-         SFM = SubsMat._build_subs_mat(OFM,EFM)
+          SFM = SubsMat._build_subs_mat(OFM,EFM)
 
       Accepts an OFM, EFM. Provides the division product of the
       corresponding values.
@@ -223,7 +221,7 @@ letters, and n is a value.
 
       .. code:: python
 
-         LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
+          LOM=SubsMat._build_log_odds_mat(SFM[,logbase=10,factor=10.0,round_digit=1])
 
       #. Accepts an SFM.
 
@@ -231,7 +229,7 @@ letters, and n is a value.
          log-odds values.
 
       #. ``factor``: factor used to multiply the log-odds values. Each
-         entry is generated by log(LOM[key])*factor And rounded to the
+         entry is generated by log(LOM[key])\*factor And rounded to the
          ``round_digit`` place after the decimal point, if required.
 
 #. Example of use
@@ -241,8 +239,8 @@ letters, and n is a value.
 
    .. code:: python
 
-      make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
-                            factor=10.0,round_digit=0):
+       make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=10,
+                             factor=10.0,round_digit=0):
 
    #. ``acc_rep_mat``: user provided accepted replacements matrix
 
@@ -255,14 +253,12 @@ letters, and n is a value.
    #. ``round_digit``: number after decimal digit to which result should
       be rounded. Default zero.
 
-.. _sec:freq_table:
-
 FreqTable
 ~~~~~~~~~
 
 .. code:: python
 
-   FreqTable.FreqTable(UserDict.UserDict)
+    FreqTable.FreqTable(UserDict.UserDict)
 
 #. Attributes:
 
@@ -287,9 +283,9 @@ FreqTable
 
    .. code:: text
 
-      A   35
-      B   65
-      C   100
+       A   35
+       B   65
+       C   100
 
    And will be read using the ``FreqTable.read_count(file_handle)``
    function.
@@ -298,16 +294,16 @@ FreqTable
 
    .. code:: text
 
-      A  0.175
-      B  0.325
-      C  0.5
+       A  0.175
+       B  0.325
+       C  0.5
 
    Conversely, the residue frequencies or counts can be passed as a
    dictionary. Example of a count dictionary (3-letter alphabet):
 
    .. code:: python
 
-      {'A': 35, 'B': 65, 'C': 100}
+       {'A': 35, 'B': 65, 'C': 100}
 
    Which means that an expected data count would give a 0.5 frequency
    for ’C’, a 0.325 probability of ’B’ and a 0.175 probability of ’A’
@@ -317,7 +313,7 @@ FreqTable
 
    .. code:: python
 
-      {'A': 0.175, 'B': 0.325, 'C': 0.5}
+       {'A': 0.175, 'B': 0.325, 'C': 0.5}
 
    Summing up to 1.
 
@@ -333,8 +329,8 @@ FreqTable
 
    .. code:: pycon
 
-      >>> from SubsMat import *
-      >>> ftab = FreqTable.FreqTable(my_frequency_dictionary, FreqTable.FREQ)
-      >>> ftab = FreqTable.FreqTable(my_count_dictionary, FreqTable.COUNT)
-      >>> ftab = FreqTable.read_count(open("myCountFile"))
-      >>> ftab = FreqTable.read_frequency(open("myFrequencyFile"))
+       >>> from SubsMat import *
+       >>> ftab = FreqTable.FreqTable(my_frequency_dictionary, FreqTable.FREQ)
+       >>> ftab = FreqTable.FreqTable(my_count_dictionary, FreqTable.COUNT)
+       >>> ftab = FreqTable.read_count(open("myCountFile"))
+       >>> ftab = FreqTable.read_frequency(open("myFrequencyFile"))

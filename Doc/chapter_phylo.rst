@@ -1,5 +1,3 @@
-.. _chapter:phylo:
-
 Phylogenetics with Bio.Phylo
 ============================
 
@@ -28,7 +26,7 @@ provided with the Biopython source code:
 
 .. code:: text
 
-   (((A,B),(C,D)),(E,F,G));
+    (((A,B),(C,D)),(E,F,G));
 
 This tree has no branch lengths, only a topology and labelled terminals.
 (If you have a real tree file available, you can follow this demo using
@@ -38,7 +36,7 @@ Launch the Python interpreter of your choice:
 
 .. code:: console
 
-   $ ipython -pylab
+    $ ipython -pylab
 
 For interactive work, launching the IPython interpreter with the
 ``-pylab`` flag enables **matplotlib** integration, so graphics will pop
@@ -47,30 +45,34 @@ up automatically. We’ll use that during this demo.
 Now, within Python, read the tree file, giving the file name and the
 name of the format.
 
+.. doctest examples
+
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> tree = Phylo.read("simple.dnd", "newick")
+    >>> from Bio import Phylo
+    >>> tree = Phylo.read("simple.dnd", "newick")
 
 Printing the tree object as a string gives us a look at the entire
 object hierarchy.
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> print(tree)
-   Tree(rooted=False, weight=1.0)
-       Clade()
-           Clade()
-               Clade()
-                   Clade(name='A')
-                   Clade(name='B')
-               Clade()
-                   Clade(name='C')
-                   Clade(name='D')
-           Clade()
-               Clade(name='E')
-               Clade(name='F')
-               Clade(name='G')
+    >>> print(tree)
+    Tree(rooted=False, weight=1.0)
+        Clade()
+            Clade()
+                Clade()
+                    Clade(name='A')
+                    Clade(name='B')
+                Clade()
+                    Clade(name='C')
+                    Clade(name='D')
+            Clade()
+                Clade(name='E')
+                Clade(name='F')
+                Clade(name='G')
 
 The ``Tree`` object contains global information about the tree, such as
 whether it’s rooted or unrooted. It has one root clade, and under that,
@@ -80,40 +82,40 @@ The function ``draw_ascii`` creates a simple ASCII-art (plain text)
 dendrogram. This is a convenient visualization for interactive
 exploration, in case better graphical tools aren’t available.
 
+.. doctest examples
+
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> tree = Phylo.read("simple.dnd", "newick")
-   >>> Phylo.draw_ascii(tree)
-                                                       ________________________ A
-                              ________________________|
-                             |                        |________________________ B
-     ________________________|
-    |                        |                         ________________________ C
-    |                        |________________________|
-   _|                                                 |________________________ D
-    |
-    |                         ________________________ E
-    |                        |
-    |________________________|________________________ F
-                             |
-                             |________________________ G
-   <BLANKLINE>
+    >>> from Bio import Phylo
+    >>> tree = Phylo.read("simple.dnd", "newick")
+    >>> Phylo.draw_ascii(tree)
+                                                        ________________________ A
+                               ________________________|
+                              |                        |________________________ B
+      ________________________|
+     |                        |                         ________________________ C
+     |                        |________________________|
+    _|                                                 |________________________ D
+     |
+     |                         ________________________ E
+     |                        |
+     |________________________|________________________ F
+                              |
+                              |________________________ G
+    <BLANKLINE>
 
 If you have **matplotlib** or **pylab** installed, you can create a
-graphic using the ``draw`` function (see Fig.
-:ref:`fig:phylo-simple-draw`):
+graphic using the ``draw`` function (see Fig. [fig:phylo-simple-draw]):
 
 .. code:: pycon
 
-   >>> tree.rooted = True
-   >>> Phylo.draw(tree)
+    >>> tree.rooted = True
+    >>> Phylo.draw(tree)
 
 [fig:phylo-simple-draw]
 
 .. figure:: images/phylo-simple-draw.png
    :alt: A rooted tree drawn with ``Phylo.draw``.
-   :name: fig:phylo-simple-draw
    :width: 70.0%
 
    A rooted tree drawn with ``Phylo.draw``.
@@ -138,15 +140,15 @@ In Biopython 1.55 and later, this is a convenient tree method:
 
 .. code:: pycon
 
-   >>> tree = tree.as_phyloxml()
+    >>> tree = tree.as_phyloxml()
 
 In Biopython 1.54, you can accomplish the same thing with one extra
 import:
 
 .. code:: pycon
 
-   >>> from Bio.Phylo.PhyloXML import Phylogeny
-   >>> tree = Phylogeny.from_tree(tree)
+    >>> from Bio.Phylo.PhyloXML import Phylogeny
+    >>> tree = Phylogeny.from_tree(tree)
 
 Note that the file formats Newick and Nexus don’t support branch colors
 or widths, so if you use these attributes in Bio.Phylo, you will only be
@@ -161,19 +163,19 @@ colors.
 
 .. code:: pycon
 
-   >>> tree.root.color = (128, 128, 128)
+    >>> tree.root.color = (128, 128, 128)
 
 Or:
 
 .. code:: pycon
 
-   >>> tree.root.color = "#808080"
+    >>> tree.root.color = "#808080"
 
 Or:
 
 .. code:: pycon
 
-   >>> tree.root.color = "gray"
+    >>> tree.root.color = "gray"
 
 Colors for a clade are treated as cascading down through the entire
 clade, so when we colorize the root here, it turns the whole tree gray.
@@ -187,8 +189,8 @@ color will show up in the original tree.
 
 .. code:: pycon
 
-   >>> mrca = tree.common_ancestor({"name": "E"}, {"name": "F"})
-   >>> mrca.color = "salmon"
+    >>> mrca = tree.common_ancestor({"name": "E"}, {"name": "F"})
+    >>> mrca.color = "salmon"
 
 If we happened to know exactly where a certain clade is in the tree, in
 terms of nested list entries, we can jump directly to that position in
@@ -197,19 +199,18 @@ child of the first child of the root.
 
 .. code:: pycon
 
-   >>> tree.clade[0, 1].color = "blue"
+    >>> tree.clade[0, 1].color = "blue"
 
-Finally, show our work (see Fig. :ref:`fig:phylo-color-draw`):
+Finally, show our work (see Fig. [fig:phylo-color-draw]):
 
 .. code:: pycon
 
-   >>> Phylo.draw(tree)
+    >>> Phylo.draw(tree)
 
 [fig:phylo-color-draw]
 
 .. figure:: images/phylo-color-draw.png
    :alt: A colorized tree drawn with ``Phylo.draw``.
-   :name: fig:phylo-color-draw
    :width: 70.0%
 
    A colorized tree drawn with ``Phylo.draw``.
@@ -228,25 +229,25 @@ colors will show up there, too.
 
 .. code:: pycon
 
-   >>> import sys
-   >>> Phylo.write(tree, sys.stdout, "phyloxml")
+    >>> import sys
+    >>> Phylo.write(tree, sys.stdout, "phyloxml")
 
-   <phy:phyloxml xmlns:phy="http://www.phyloxml.org">
-     <phy:phylogeny rooted="true">
-       <phy:clade>
-         <phy:branch_length>1.0</phy:branch_length>
-         <phy:color>
-           <phy:red>128</phy:red>
-           <phy:green>128</phy:green>
-           <phy:blue>128</phy:blue>
-         </phy:color>
-         <phy:clade>
-           <phy:branch_length>1.0</phy:branch_length>
-           <phy:clade>
-             <phy:branch_length>1.0</phy:branch_length>
-             <phy:clade>
-               <phy:name>A</phy:name>
-               ...
+    <phy:phyloxml xmlns:phy="http://www.phyloxml.org">
+      <phy:phylogeny rooted="true">
+        <phy:clade>
+          <phy:branch_length>1.0</phy:branch_length>
+          <phy:color>
+            <phy:red>128</phy:red>
+            <phy:green>128</phy:green>
+            <phy:blue>128</phy:blue>
+          </phy:color>
+          <phy:clade>
+            <phy:branch_length>1.0</phy:branch_length>
+            <phy:clade>
+              <phy:branch_length>1.0</phy:branch_length>
+              <phy:clade>
+                <phy:name>A</phy:name>
+                ...
 
 The rest of this chapter covers the core functionality of Bio.Phylo in
 greater detail. For more examples of using Bio.Phylo, see the cookbook
@@ -268,9 +269,9 @@ tree, or no trees.
 
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
-   >>> print(tree)
+    >>> from Bio import Phylo
+    >>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
+    >>> print(tree)
 
 (Example files are available in the ``Tests/Nexus/`` and
 ``Tests/PhyloXML/`` directories of the Biopython distribution.)
@@ -280,42 +281,46 @@ function iterates through each of the trees in the given file:
 
 .. code:: pycon
 
-   >>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
-   >>> for tree in trees:
-   ...     print(tree)
+    >>> trees = Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+    >>> for tree in trees:
+    ...     print(tree)
 
 Write a tree or iterable of trees back to file with the ``write``
 function:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
-   >>> tree1 = trees[0]
-   >>> others = trees[1:]
-   >>> Phylo.write(tree1, "tree1.nwk", "newick")
-   1
-   >>> Phylo.write(others, "other_trees.nwk", "newick")
-   12
+    >>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
+    >>> tree1 = trees[0]
+    >>> others = trees[1:]
+    >>> Phylo.write(tree1, "tree1.nwk", "newick")
+    1
+    >>> Phylo.write(others, "other_trees.nwk", "newick")
+    12
 
 Convert files between any of the supported formats with the ``convert``
 function:
 
 .. code:: pycon
 
-   >>> Phylo.convert("tree1.nwk", "newick", "tree1.xml", "nexml")
-   1
-   >>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", "nexus")
-   12
+    >>> Phylo.convert("tree1.nwk", "newick", "tree1.xml", "nexml")
+    1
+    >>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", "nexus")
+    12
 
 To use strings as input or output instead of actual files, use
 ``StringIO`` as you would with SeqIO and AlignIO:
 
+.. doctest
+
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> from StringIO import StringIO
-   >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
-   >>> tree = Phylo.read(handle, "newick")
+    >>> from Bio import Phylo
+    >>> from StringIO import StringIO
+    >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
+    >>> tree = Phylo.read(handle, "newick")
 
 View and export trees
 ---------------------
@@ -323,17 +328,19 @@ View and export trees
 The simplest way to get an overview of a ``Tree`` object is to ``print``
 it:
 
+.. doctest ../Tests
+
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")
-   >>> print(tree)
-   Phylogeny(description='phyloXML allows to use either a "branch_length" attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...', rooted=True)
-       Clade()
-           Clade(branch_length=0.06)
-               Clade(branch_length=0.102, name='A')
-               Clade(branch_length=0.23, name='B')
-           Clade(branch_length=0.4, name='C')
+    >>> from Bio import Phylo
+    >>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")
+    >>> print(tree)
+    Phylogeny(description='phyloXML allows to use either a "branch_length" attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...', rooted=True)
+        Clade()
+            Clade(branch_length=0.06)
+                Clade(branch_length=0.102, name='A')
+                Clade(branch_length=0.23, name='B')
+            Clade(branch_length=0.4, name='C')
 
 This is essentially an outline of the object hierarchy Biopython uses to
 represent a tree. But more likely, you’d want to see a drawing of the
@@ -347,13 +354,13 @@ external dependencies.
 
 .. code:: pycon
 
-   >>> tree = Phylo.read("example.xml", "phyloxml")
-   >>> Phylo.draw_ascii(tree)
-                __________________ A
-     __________|
-   _|          |___________________________________________ B
-    |
-    |___________________________________________________________________________ C
+    >>> tree = Phylo.read("example.xml", "phyloxml")
+    >>> Phylo.draw_ascii(tree)
+                 __________________ A
+      __________|
+    _|          |___________________________________________ B
+     |
+     |___________________________________________________________________________ C
 
 The ``draw`` function draws a more attractive image using the matplotlib
 library. See the API documentation for details on the arguments it
@@ -361,14 +368,13 @@ accepts to customize the output.
 
 .. code:: pycon
 
-   >>> tree = Phylo.read("example.xml", "phyloxml")
-   >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
+    >>> tree = Phylo.read("example.xml", "phyloxml")
+    >>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
 
 [fig:phylo-draw-example]
 
 .. figure:: images/phylo-draw-example.png
    :alt: A simple rooted tree plotted with the ``draw`` function.
-   :name: fig:phylo-draw-example
    :width: 70.0%
 
    A simple rooted tree plotted with the ``draw`` function.
@@ -406,10 +412,10 @@ For convenience, we provide a couple of simplified methods that return
 all external or internal nodes directly as a list:
 
 ``get_terminals``
-   makes a list of all of this tree’s terminal (leaf) nodes.
+    makes a list of all of this tree’s terminal (leaf) nodes.
 
 ``get_nonterminals``
-   makes a list of all of this tree’s nonterminal (internal) nodes.
+    makes a list of all of this tree’s nonterminal (internal) nodes.
 
 These both wrap a method with full control over tree traversal,
 ``find_clades``. Two more traversal methods, ``find_elements`` and
@@ -469,16 +475,16 @@ the following types:
 After the target, there are two optional keyword arguments:
 
 terminal
-   — A boolean value to select for or against terminal clades (a.k.a.
-   leaf nodes): True searches for only terminal clades, False for
-   non-terminal (internal) clades, and the default, None, searches both
-   terminal and non-terminal clades, as well as any tree elements
-   lacking the ``is_terminal`` method.
+    — A boolean value to select for or against terminal clades (a.k.a.
+    leaf nodes): True searches for only terminal clades, False for
+    non-terminal (internal) clades, and the default, None, searches both
+    terminal and non-terminal clades, as well as any tree elements
+    lacking the ``is_terminal`` method.
 
 order
-   — Tree traversal order: ``"preorder"`` (default) is depth-first
-   search, ``"postorder"`` is DFS with child nodes preceding parents,
-   and ``"level"`` is breadth-first search.
+    — Tree traversal order: ``preorder`` (default) is depth-first
+    search, ``postorder`` is DFS with child nodes preceding parents, and
+    ``level`` is breadth-first search.
 
 Finally, the methods accept arbitrary keyword arguments which are
 treated the same way as a dictionary target specification: keys indicate
@@ -497,36 +503,36 @@ Now that we’ve mastered target specifications, here are the methods used
 to traverse a tree:
 
 ``find_clades``
-   Find each clade containing a matching element. That is, find each
-   element as with ``find_elements``, but return the corresponding clade
-   object. (This is usually what you want.)
+    Find each clade containing a matching element. That is, find each
+    element as with ``find_elements``, but return the corresponding
+    clade object. (This is usually what you want.)
 
-   The result is an iterable through all matching objects, searching
-   depth-first by default. This is not necessarily the same order as the
-   elements appear in the Newick, Nexus or XML source file!
+    The result is an iterable through all matching objects, searching
+    depth-first by default. This is not necessarily the same order as
+    the elements appear in the Newick, Nexus or XML source file!
 
 ``find_elements``
-   Find all tree elements matching the given attributes, and return the
-   matching elements themselves. Simple Newick trees don’t have complex
-   sub-elements, so this behaves the same as ``find_clades`` on them.
-   PhyloXML trees often do have complex objects attached to clades, so
-   this method is useful for extracting those.
+    Find all tree elements matching the given attributes, and return the
+    matching elements themselves. Simple Newick trees don’t have complex
+    sub-elements, so this behaves the same as ``find_clades`` on them.
+    PhyloXML trees often do have complex objects attached to clades, so
+    this method is useful for extracting those.
 
 ``find_any``
-   Return the first element found by ``find_elements()``, or None. This
-   is also useful for checking whether any matching element exists in
-   the tree, and can be used in a conditional.
+    Return the first element found by ``find_elements()``, or None. This
+    is also useful for checking whether any matching element exists in
+    the tree, and can be used in a conditional.
 
 Two more methods help navigating between nodes in the tree:
 
 ``get_path``
-   List the clades directly between the tree root (or current clade) and
-   the given target. Returns a list of all clade objects along this
-   path, ending with the given target, but excluding the root clade.
+    List the clades directly between the tree root (or current clade)
+    and the given target. Returns a list of all clade objects along this
+    path, ending with the given target, but excluding the root clade.
 
 ``trace``
-   List of all clade object between two targets in this tree. Excluding
-   start, including finish.
+    List of all clade object between two targets in this tree. Excluding
+    start, including finish.
 
 Information methods
 ~~~~~~~~~~~~~~~~~~~
@@ -534,57 +540,59 @@ Information methods
 These methods provide information about the whole tree (or any clade).
 
 ``common_ancestor``
-   Find the most recent common ancestor of all the given targets. (This
-   will be a Clade object). If no target is given, returns the root of
-   the current clade (the one this method is called from); if 1 target
-   is given, this returns the target itself. However, if any of the
-   specified targets are not found in the current tree (or clade), an
-   exception is raised.
+    Find the most recent common ancestor of all the given targets. (This
+    will be a Clade object). If no target is given, returns the root of
+    the current clade (the one this method is called from); if 1 target
+    is given, this returns the target itself. However, if any of the
+    specified targets are not found in the current tree (or clade), an
+    exception is raised.
 
 ``count_terminals``
-   Counts the number of terminal (leaf) nodes within the tree.
+    Counts the number of terminal (leaf) nodes within the tree.
 
 ``depths``
-   Create a mapping of tree clades to depths. The result is a dictionary
-   where the keys are all of the Clade instances in the tree, and the
-   values are the distance from the root to each clade (including
-   terminals). By default the distance is the cumulative branch length
-   leading to the clade, but with the ``unit_branch_lengths=True``
-   option, only the number of branches (levels in the tree) is counted.
+    Create a mapping of tree clades to depths. The result is a
+    dictionary where the keys are all of the Clade instances in the
+    tree, and the values are the distance from the root to each clade
+    (including terminals). By default the distance is the cumulative
+    branch length leading to the clade, but with the
+    ``unit_branch_lengths=True`` option, only the number of branches
+    (levels in the tree) is counted.
 
 ``distance``
-   Calculate the sum of the branch lengths between two targets. If only
-   one target is specified, the other is the root of this tree.
+    Calculate the sum of the branch lengths between two targets. If only
+    one target is specified, the other is the root of this tree.
 
 ``total_branch_length``
-   Calculate the sum of all the branch lengths in this tree. This is
-   usually just called the “length” of the tree in phylogenetics, but we
-   use a more explicit name to avoid confusion with Python terminology.
+    Calculate the sum of all the branch lengths in this tree. This is
+    usually just called the “length” of the tree in phylogenetics, but
+    we use a more explicit name to avoid confusion with Python
+    terminology.
 
 The rest of these methods are boolean checks:
 
 ``is_bifurcating``
-   True if the tree is strictly bifurcating; i.e. all nodes have either
-   2 or 0 children (internal or external, respectively). The root may
-   have 3 descendents and still be considered part of a bifurcating
-   tree.
+    True if the tree is strictly bifurcating; i.e. all nodes have either
+    2 or 0 children (internal or external, respectively). The root may
+    have 3 descendents and still be considered part of a bifurcating
+    tree.
 
 ``is_monophyletic``
-   Test if all of the given targets comprise a complete subclade — i.e.,
-   there exists a clade such that its terminals are the same set as the
-   given targets. The targets should be terminals of the tree. For
-   convenience, this method returns the common ancestor (MCRA) of the
-   targets if they are monophyletic (instead of the value ``True``), and
-   ``False`` otherwise.
+    Test if all of the given targets comprise a complete subclade —
+    i.e., there exists a clade such that its terminals are the same set
+    as the given targets. The targets should be terminals of the tree.
+    For convenience, this method returns the common ancestor (MCRA) of
+    the targets if they are monophyletic (instead of the value
+    ``True``), and ``False`` otherwise.
 
 ``is_parent_of``
-   True if target is a descendent of this tree — not required to be a
-   direct descendent. To check direct descendents of a clade, simply use
-   list membership testing: ``if subclade in clade: ...``
+    True if target is a descendent of this tree — not required to be a
+    direct descendent. To check direct descendents of a clade, simply
+    use list membership testing: ``if subclade in clade: ...``
 
 ``is_preterminal``
-   True if all direct descendents are terminal; False if any direct
-   descendent is not terminal.
+    True if all direct descendents are terminal; False if any direct
+    descendent is not terminal.
 
 Modification methods
 ~~~~~~~~~~~~~~~~~~~~
@@ -595,63 +603,61 @@ tree intact, make a complete copy of the tree first, using Python’s
 
 .. code:: python
 
-   tree = Phylo.read('example.xml', 'phyloxml')
-   import copy
-   newtree = copy.deepcopy(tree)
+    tree = Phylo.read('example.xml', 'phyloxml')
+    import copy
+    newtree = copy.deepcopy(tree)
 
 ``collapse``
-   Deletes the target from the tree, relinking its children to its
-   parent.
+    Deletes the target from the tree, relinking its children to its
+    parent.
 
 ``collapse_all``
-   Collapse all the descendents of this tree, leaving only terminals.
-   Branch lengths are preserved, i.e. the distance to each terminal
-   stays the same. With a target specification (see above), collapses
-   only the internal nodes matching the specification.
+    Collapse all the descendents of this tree, leaving only terminals.
+    Branch lengths are preserved, i.e. the distance to each terminal
+    stays the same. With a target specification (see above), collapses
+    only the internal nodes matching the specification.
 
 ``ladderize``
-   Sort clades in-place according to the number of terminal nodes.
-   Deepest clades are placed last by default. Use ``reverse=True`` to
-   sort clades deepest-to-shallowest.
+    Sort clades in-place according to the number of terminal nodes.
+    Deepest clades are placed last by default. Use ``reverse=True`` to
+    sort clades deepest-to-shallowest.
 
 ``prune``
-   Prunes a terminal clade from the tree. If taxon is from a
-   bifurcation, the connecting node will be collapsed and its branch
-   length added to remaining terminal node. This might no longer be a
-   meaningful value.
+    Prunes a terminal clade from the tree. If taxon is from a
+    bifurcation, the connecting node will be collapsed and its branch
+    length added to remaining terminal node. This might no longer be a
+    meaningful value.
 
 ``root_with_outgroup``
-   Reroot this tree with the outgroup clade containing the given
-   targets, i.e. the common ancestor of the outgroup. This method is
-   only available on Tree objects, not Clades.
+    Reroot this tree with the outgroup clade containing the given
+    targets, i.e. the common ancestor of the outgroup. This method is
+    only available on Tree objects, not Clades.
 
-   If the outgroup is identical to self.root, no change occurs. If the
-   outgroup clade is terminal (e.g. a single terminal node is given as
-   the outgroup), a new bifurcating root clade is created with a
-   0-length branch to the given outgroup. Otherwise, the internal node
-   at the base of the outgroup becomes a trifurcating root for the whole
-   tree. If the original root was bifurcating, it is dropped from the
-   tree.
+    If the outgroup is identical to self.root, no change occurs. If the
+    outgroup clade is terminal (e.g. a single terminal node is given as
+    the outgroup), a new bifurcating root clade is created with a
+    0-length branch to the given outgroup. Otherwise, the internal node
+    at the base of the outgroup becomes a trifurcating root for the
+    whole tree. If the original root was bifurcating, it is dropped from
+    the tree.
 
-   In all cases, the total branch length of the tree stays the same.
+    In all cases, the total branch length of the tree stays the same.
 
 ``root_at_midpoint``
-   Reroot this tree at the calculated midpoint between the two most
-   distant tips of the tree. (This uses ``root_with_outgroup`` under the
-   hood.)
+    Reroot this tree at the calculated midpoint between the two most
+    distant tips of the tree. (This uses ``root_with_outgroup`` under
+    the hood.)
 
 ``split``
-   Generate *n* (default 2) new descendants. In a species tree, this is
-   a speciation event. New clades have the given ``branch_length`` and
-   the same name as this clade’s root plus an integer suffix (counting
-   from 0) — for example, splitting a clade named “A” produces the
-   sub-clades “A0” and “A1”.
+    Generate *n* (default 2) new descendants. In a species tree, this is
+    a speciation event. New clades have the given ``branch_length`` and
+    the same name as this clade’s root plus an integer suffix (counting
+    from 0) — for example, splitting a clade named “A” produces the
+    sub-clades “A0” and “A1”.
 
 See the Phylo page on the Biopython wiki
 (http://biopython.org/wiki/Phylo) for more examples of using the
 available methods.
-
-.. _sec:PhyloXML:
 
 Features of PhyloXML trees
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -662,8 +668,6 @@ additional data types and visual cues.
 See the PhyloXML page on the Biopython wiki
 (http://biopython.org/wiki/PhyloXML) for descriptions and examples of
 using the additional annotation features provided by PhyloXML.
-
-.. _sec:PhyloApps:
 
 Running external applications
 -----------------------------
@@ -681,10 +685,10 @@ A quick example:
 
 .. code:: pycon
 
-   >>> from Bio import Phylo
-   >>> from Bio.Phylo.Applications import PhymlCommandline
-   >>> cmd = PhymlCommandline(input="Tests/Phylip/random.phy")
-   >>> out_log, err_log = cmd()
+    >>> from Bio import Phylo
+    >>> from Bio.Phylo.Applications import PhymlCommandline
+    >>> cmd = PhymlCommandline(input="Tests/Phylip/random.phy")
+    >>> out_log, err_log = cmd()
 
 This generates a tree file and a stats file with the names
 [*input filename*]\ ``_phyml_tree.txt`` and
@@ -693,8 +697,8 @@ format:
 
 .. code:: pycon
 
-   >>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
-   >>> Phylo.draw_ascii(tree)
+    >>> tree = Phylo.read("Tests/Phylip/random.phy_phyml_tree.txt", "newick")
+    >>> Phylo.draw_ascii(tree)
 
 A similar wrapper for RAxML
 (https://sco.h-its.org/exelixis/software.html) was added in Biopython
@@ -704,11 +708,8 @@ Biopython 1.62.
 Note that some popular Phylip programs, including ``dnaml`` and
 ``protml``, are already available through the EMBOSS wrappers in
 ``Bio.Emboss.Applications`` if you have the Phylip extensions to EMBOSS
-installed on your system. See
-Section :ref:`sec:alignment-tools` for some
+installed on your system. See Section [sec:alignment-tools] for some
 examples and clues on how to use programs like these.
-
-.. _sec:PhyloPAML:
 
 PAML integration
 ----------------
@@ -732,40 +733,38 @@ Here is an example of typical usage of codeml:
 
 .. code:: pycon
 
-   >>> from Bio.Phylo.PAML import codeml
-   >>> cml = codeml.Codeml()
-   >>> cml.alignment = "Tests/PAML/alignment.phylip"
-   >>> cml.tree = "Tests/PAML/species.tree"
-   >>> cml.out_file = "results.out"
-   >>> cml.working_dir = "./scratch"
-   >>> cml.set_options(seqtype=1,
-   ...         verbose=0,
-   ...         noisy=0,
-   ...         RateAncestor=0,
-   ...         model=0,
-   ...         NSsites=[0, 1, 2],
-   ...         CodonFreq=2,
-   ...         cleandata=1,
-   ...         fix_alpha=1,
-   ...         kappa=4.54006)
-   >>> results = cml.run()
-   >>> ns_sites = results.get("NSsites")
-   >>> m0 = ns_sites.get(0)
-   >>> m0_params = m0.get("parameters")
-   >>> print(m0_params.get("omega"))
+    >>> from Bio.Phylo.PAML import codeml
+    >>> cml = codeml.Codeml()
+    >>> cml.alignment = "Tests/PAML/alignment.phylip"
+    >>> cml.tree = "Tests/PAML/species.tree"
+    >>> cml.out_file = "results.out"
+    >>> cml.working_dir = "./scratch"
+    >>> cml.set_options(seqtype=1,
+    ...         verbose=0,
+    ...         noisy=0,
+    ...         RateAncestor=0,
+    ...         model=0,
+    ...         NSsites=[0, 1, 2],
+    ...         CodonFreq=2,
+    ...         cleandata=1,
+    ...         fix_alpha=1,
+    ...         kappa=4.54006)
+    >>> results = cml.run()
+    >>> ns_sites = results.get("NSsites")
+    >>> m0 = ns_sites.get(0)
+    >>> m0_params = m0.get("parameters")
+    >>> print(m0_params.get("omega"))
 
 Existing output files may be parsed as well using a module’s ``read()``
 function:
 
 .. code:: pycon
 
-   >>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
-   >>> print(results.get("lnL max"))
+    >>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
+    >>> print(results.get("lnL max"))
 
 Detailed documentation for this new module currently lives on the
 Biopython wiki: http://biopython.org/wiki/PAML
-
-.. _sec:PhyloFuture:
 
 Future plans
 ------------
@@ -774,23 +773,23 @@ Bio.Phylo is under active development. Here are some features we might
 add in future releases:
 
 New methods
-   Generally useful functions for operating on Tree or Clade objects
-   appear on the Biopython wiki first, so that casual users can test
-   them and decide if they’re useful before we add them to Bio.Phylo:
+    Generally useful functions for operating on Tree or Clade objects
+    appear on the Biopython wiki first, so that casual users can test
+    them and decide if they’re useful before we add them to Bio.Phylo:
 
-   http://biopython.org/wiki/Phylo_cookbook
+    http://biopython.org/wiki/Phylo_cookbook
 
 Bio.Nexus port
-   Much of this module was written during Google Summer of Code 2009,
-   under the auspices of NESCent, as a project to implement Python
-   support for the phyloXML data format (see :ref:`sec:PhyloXML`).
-   Support for Newick and Nexus formats was added by porting part of the
-   existing Bio.Nexus module to the new classes used by Bio.Phylo.
+    Much of this module was written during Google Summer of Code 2009,
+    under the auspices of NESCent, as a project to implement Python
+    support for the phyloXML data format (see [sec:PhyloXML]). Support
+    for Newick and Nexus formats was added by porting part of the
+    existing Bio.Nexus module to the new classes used by Bio.Phylo.
 
-   Currently, Bio.Nexus contains some useful features that have not yet
-   been ported to Bio.Phylo classes — notably, calculating a consensus
-   tree. If you find some functionality lacking in Bio.Phylo, try poking
-   throught Bio.Nexus to see if it’s there instead.
+    Currently, Bio.Nexus contains some useful features that have not yet
+    been ported to Bio.Phylo classes — notably, calculating a consensus
+    tree. If you find some functionality lacking in Bio.Phylo, try
+    poking throught Bio.Nexus to see if it’s there instead.
 
 We’re open to any suggestions for improving the functionality and
 usability of this module; just let us know on the mailing list or our

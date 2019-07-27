@@ -1,5 +1,3 @@
-.. _chapter:contributing:
-
 Where to go from here – contributing to Biopython
 =================================================
 
@@ -42,12 +40,9 @@ be able to help fill in any blanks.
 Contributing cookbook examples
 ------------------------------
 
-As explained in Chapter :ref:`chapter:cookbook`,
-Biopython now has a wiki collection of user contributed “cookbook”
-examples, http://biopython.org/wiki/Category:Cookbook – maybe you can
-add to this?
-
-.. _sec:maintain_dist:
+As explained in Chapter [chapter:cookbook], Biopython now has a wiki
+collection of user contributed “cookbook” examples,
+http://biopython.org/wiki/Category:Cookbook – maybe you can add to this?
 
 Maintaining a distribution for a platform
 -----------------------------------------
@@ -67,53 +62,53 @@ Below are some tips for certain platforms to maybe get people started
 with helping out:
 
 Windows
-   – Windows products typically have a nice graphical installer that
-   installs all of the essential components in the right place. We use
-   Distutils to create a installer of this type fairly easily.
+    – Windows products typically have a nice graphical installer that
+    installs all of the essential components in the right place. We use
+    Distutils to create a installer of this type fairly easily.
 
-   You must first make sure you have a C compiler on your Windows
-   computer, and that you can compile and install things (this is the
-   hard bit - see the Biopython installation instructions for info on
-   how to do this).
+    You must first make sure you have a C compiler on your Windows
+    computer, and that you can compile and install things (this is the
+    hard bit - see the Biopython installation instructions for info on
+    how to do this).
 
-   Once you are setup with a C compiler, making the installer just
-   requires doing:
+    Once you are setup with a C compiler, making the installer just
+    requires doing:
 
-   .. code:: console
+    .. code:: console
 
-      $ python setup.py bdist_wininst
+        $ python setup.py bdist_wininst
 
-   Now you’ve got a Windows installer. Congrats! At the moment we have
-   no trouble shipping installers built on 32 bit windows. If anyone
-   would like to look into supporting 64 bit Windows that would be
-   great.
+    Now you’ve got a Windows installer. Congrats! At the moment we have
+    no trouble shipping installers built on 32 bit windows. If anyone
+    would like to look into supporting 64 bit Windows that would be
+    great.
 
 RPMs
-   – RPMs are pretty popular package systems on some Linux platforms.
-   There is lots of documentation on RPMs available at
-   http://www.rpm.org to help you get started with them. To create an
-   RPM for your platform is really easy. You just need to be able to
-   build the package from source (having a C compiler that works is thus
-   essential) – see the Biopython installation instructions for more
-   info on this.
+    – RPMs are pretty popular package systems on some Linux platforms.
+    There is lots of documentation on RPMs available at
+    http://www.rpm.org to help you get started with them. To create an
+    RPM for your platform is really easy. You just need to be able to
+    build the package from source (having a C compiler that works is
+    thus essential) – see the Biopython installation instructions for
+    more info on this.
 
-   To make the RPM, you just need to do:
+    To make the RPM, you just need to do:
 
-   .. code:: console
+    .. code:: console
 
-      $ python setup.py bdist_rpm
+        $ python setup.py bdist_rpm
 
-   This will create an RPM for your specific platform and a source RPM
-   in the directory ``dist``. This RPM should be good and ready to go,
-   so this is all you need to do! Nice and easy.
+    This will create an RPM for your specific platform and a source RPM
+    in the directory ``dist``. This RPM should be good and ready to go,
+    so this is all you need to do! Nice and easy.
 
 Macintosh
-   – Since Apple moved to Mac OS X, things have become much easier on
-   the Mac. We generally treat it as just another Unix variant, and
-   installing Biopython from source is just as easy as on Linux. The
-   easiest way to get all the GCC compilers etc installed is to install
-   Apple’s X-Code. We might be able to provide click and run installers
-   for Mac OS X, but to date there hasn’t been any demand.
+    – Since Apple moved to Mac OS X, things have become much easier on
+    the Mac. We generally treat it as just another Unix variant, and
+    installing Biopython from source is just as easy as on Linux. The
+    easiest way to get all the GCC compilers etc installed is to install
+    Apple’s X-Code. We might be able to provide click and run installers
+    for Mac OS X, but to date there hasn’t been any demand.
 
 Once you’ve got a package, please test it on your system to make sure it
 installs everything in a good way and seems to work properly. Once you
@@ -126,8 +121,7 @@ Contributing Unit Tests
 
 Even if you don’t have any new functionality to add to Biopython, but
 you want to write some code, please consider extending our unit test
-coverage. We’ve devoted all of
-Chapter :ref:`chapter:testing` to this topic.
+coverage. We’ve devoted all of Chapter [chapter:testing] to this topic.
 
 Contributing Code
 -----------------
@@ -145,14 +139,13 @@ to make it easier for users. You can read about some of (fairly
 informal) coding style guidelines we try to use in Biopython in the
 contributing documentation at http://biopython.org/wiki/Contributing. We
 also try to add code to the distribution along with tests (see
-Chapter :ref:`chapter:testing` for more info on the
-regression testing framework) and documentation, so that everything can
-stay as workable and well documented as possible (including docstrings).
-This is, of course, the most ideal situation, under many situations
-you’ll be able to find other people on the list who will be willing to
-help add documentation or more tests for your code once you make it
-available. So, to end this paragraph like the last, feel free to start
-working!
+Chapter [chapter:testing] for more info on the regression testing
+framework) and documentation, so that everything can stay as workable
+and well documented as possible (including docstrings). This is, of
+course, the most ideal situation, under many situations you’ll be able
+to find other people on the list who will be willing to help add
+documentation or more tests for your code once you make it available.
+So, to end this paragraph like the last, feel free to start working!
 
 Please note that to make a code contribution you must have the legal
 right to contribute it and license it under the Biopython license. If

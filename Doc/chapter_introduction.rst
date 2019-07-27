@@ -1,5 +1,3 @@
-.. _chapter:introduction:
-
 Introduction
 ============
 
@@ -184,16 +182,18 @@ Frequently Asked Questions (FAQ)
 
    .. code:: pycon
 
-      >>> print "Hello World!"
-      Hello World!
+       >>> print "Hello World!"
+       Hello World!
 
    If you try that on Python 3 you’ll get a ``SyntaxError``. Under
    Python 3 you must write:
 
+   .. doctest
+
    .. code:: pycon
 
-      >>> print("Hello World!")
-      Hello World!
+       >>> print("Hello World!")
+       Hello World!
 
    Surprisingly that will also work on Python 2 – but only for simple
    examples printing one thing. In general you need to add this magic
@@ -202,7 +202,7 @@ Frequently Asked Questions (FAQ)
 
    .. code:: python
 
-      from __future__ import print_function
+       from __future__ import print_function
 
    If you forget to add this magic import, under Python 2 you’ll see
    extra brackets produced by trying to use the print function when
@@ -213,9 +213,9 @@ Frequently Asked Questions (FAQ)
 
    .. code:: pycon
 
-      >>> import Bio
-      >>> print(Bio.__version__)
-      ...
+       >>> import Bio
+       >>> print(Bio.__version__)
+       ...
 
    If the “``import Bio``” line fails, Biopython is not installed. Note
    that those are double underscores before and after version. If the
@@ -252,8 +252,7 @@ Frequently Asked Questions (FAQ)
    ``id(seq1) == id(seq2)``.
 
    If you still need to support old versions of Biopython, use these
-   explicit forms to avoid problems. See
-   Section :ref:`sec:seq-comparison`.
+   explicit forms to avoid problems. See Section [sec:seq-comparison].
 
 #. | *Why is the* ``Seq`` *object missing the upper & lower methods
      described in this Tutorial?*
@@ -273,9 +272,9 @@ Frequently Asked Questions (FAQ)
      ``parse``\ *,* ``read`` *and* ``write`` *take filenames? They
      insist on handles!*
    | You need Biopython 1.54 or later, or just use handles explicitly
-     (see Section :ref:`sec:appendix-handles`).
-     It is especially important to remember to close output handles
-     explicitly after writing your data.
+     (see Section [sec:appendix-handles]). It is especially important to
+     remember to close output handles explicitly after writing your
+     data.
 
 #. | *Why won’t the* ``Bio.SeqIO.write()`` *and* ``Bio.AlignIO.write()``
      *functions accept a single record or alignment? They insist on a
@@ -351,6 +350,6 @@ For more general questions, the Python FAQ pages
 https://docs.python.org/3/faq/index.html may be useful.
 
 .. |image| image:: images/biopython_logo.pdf
-   :width: 6cm
+   :width: 6.00000cm
 .. |image| image:: images/biopython_logo_old.jpg
-   :width: 7cm
+   :width: 7.00000cm

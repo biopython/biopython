@@ -1,5 +1,3 @@
-.. _chapter:graphics:
-
 Graphics including GenomeDiagram
 ================================
 
@@ -11,8 +9,6 @@ provided certain further dependencies such as the `Python Imaging
 Library (PIL) <http://www.pythonware.com/products/pil/>`__ are
 installed, ReportLab can also output bitmap images (including JPEG, PNG,
 GIF, BMP and PICT formats).
-
-.. _sec:genomediagram:
 
 GenomeDiagram
 -------------
@@ -27,23 +23,21 @@ publication by Pritchard et al. (2006)
 :raw-latex:`\cite{pritchard2006}`, which includes some examples images.
 There is a PDF copy of the old manual here,
 http://biopython.org/DIST/docs/GenomeDiagram/userguide.pdf which has
-some more examples.
-
-As the name might suggest, GenomeDiagram was designed for drawing whole
-genomes, in particular prokaryotic genomes, either as linear diagrams
-(optionally broken up into fragments to fit better) or as circular wheel
-diagrams. Have a look at Figure 2 in Toth *et al.* (2006)
-:raw-latex:`\cite{toth2006}` for a good example. It proved also well
-suited to drawing quite detailed figures for smaller genomes such as
-phage, plasmids or mitochrondia, for example see Figures 1 and 2 in Van
-der Auwera *et al.* (2009) :raw-latex:`\cite{vanderauwera2009}` (shown
-with additional manual editing).
+some more examples. As the name might suggest, GenomeDiagram was
+designed for drawing whole genomes, in particular prokaryotic genomes,
+either as linear diagrams (optionally broken up into fragments to fit
+better) or as circular wheel diagrams. Have a look at Figure 2 in Toth
+*et al.* (2006) :raw-latex:`\cite{toth2006}` for a good example. It
+proved also well suited to drawing quite detailed figures for smaller
+genomes such as phage, plasmids or mitochrondia, for example see Figures
+1 and 2 in Van der Auwera *et al.* (2009)
+:raw-latex:`\cite{vanderauwera2009}` (shown with additional manual
+editing).
 
 This module is easiest to use if you have your genome loaded as a
 ``SeqRecord`` object containing lots of ``SeqFeature`` objects - for
-example as loaded from a GenBank file (see
-Chapters :ref:`chapter:seq_annot`
-and :ref:`chapter:seqio`).
+example as loaded from a GenBank file (see Chapters [chapter:seq\_annot]
+and [chapter:seqio]).
 
 Diagrams, tracks, feature-sets and features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,7 +49,6 @@ shown stacked vertically (or radially on circular diagrams). These will
 typically all have the same length and represent the same sequence
 region. You might use one track to show the gene locations, another to
 show regulatory regions, and a third track to show the GC percentage.
-
 The most commonly used type of track will contain features, bundled
 together in feature-sets. You might choose to use one feature-set for
 all your CDS features, and another for tRNA features. This isn’t
@@ -70,14 +63,11 @@ and use their methods to add the features. Secondly, you can create the
 individual objects separately (in whatever order suits your code), and
 then combine them.
 
-.. _sec:gd_top_down:
-
 A top down example
 ~~~~~~~~~~~~~~~~~~
 
 We’re going to draw a whole genome from a ``SeqRecord`` object read in
-from a GenBank file (see
-Chapter :ref:`chapter:seqio`). This example uses the
+from a GenBank file (see Chapter [chapter:seqio]). This example uses the
 pPCP1 plasmid from *Yersinia pestis biovar Microtus*, the file is
 included with the Biopython unit tests under the GenBank folder, or
 online
@@ -86,11 +76,11 @@ from our website.
 
 .. code:: python
 
-   from reportlab.lib import colors
-   from reportlab.lib.units import cm
-   from Bio.Graphics import GenomeDiagram
-   from Bio import SeqIO
-   record = SeqIO.read("NC_005816.gb", "genbank")
+    from reportlab.lib import colors
+    from reportlab.lib.units import cm
+    from Bio.Graphics import GenomeDiagram
+    from Bio import SeqIO
+    record = SeqIO.read("NC_005816.gb", "genbank")
 
 We’re using a top down approach, so after loading in our sequence we
 next create an empty diagram, then add an (empty) track, and to that add
@@ -98,9 +88,9 @@ an (empty) feature set:
 
 .. code:: python
 
-   gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
-   gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
-   gd_feature_set = gd_track_for_features.new_set()
+    gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+    gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
+    gd_feature_set = gd_track_for_features.new_set()
 
 Now the fun part - we take each gene ``SeqFeature`` object in our
 ``SeqRecord``, and use it to generate a feature on the diagram. We’re
@@ -109,15 +99,15 @@ blue.
 
 .. code:: python
 
-   for feature in record.features:
-       if feature.type != "gene":
-           #Exclude this feature
-           continue
-       if len(gd_feature_set) % 2 == 0:
-           color = colors.blue
-       else:
-           color = colors.lightblue
-       gd_feature_set.add_feature(feature, color=color, label=True)
+    for feature in record.features:
+        if feature.type != "gene":
+            #Exclude this feature
+            continue
+        if len(gd_feature_set) % 2 == 0:
+            color = colors.blue
+        else:
+            color = colors.lightblue
+        gd_feature_set.add_feature(feature, color=color, label=True)
 
 Now we come to actually making the output file. This happens in two
 steps, first we call the ``draw`` method, which creates all the shapes
@@ -127,21 +117,20 @@ formats:
 
 .. code:: python
 
-   gd_diagram.draw(format="linear", orientation="landscape", pagesize='A4',
-                   fragments=4, start=0, end=len(record))
-   gd_diagram.write("plasmid_linear.pdf", "PDF")
-   gd_diagram.write("plasmid_linear.eps", "EPS")
-   gd_diagram.write("plasmid_linear.svg", "SVG")
+    gd_diagram.draw(format="linear", orientation="landscape", pagesize='A4',
+                    fragments=4, start=0, end=len(record))
+    gd_diagram.write("plasmid_linear.pdf", "PDF")
+    gd_diagram.write("plasmid_linear.eps", "EPS")
+    gd_diagram.write("plasmid_linear.svg", "SVG")
 
 Also, provided you have the dependencies installed, you can also do
 bitmaps, for example:
 
 .. code:: python
 
-   gd_diagram.write("plasmid_linear.png", "PNG")
+    gd_diagram.write("plasmid_linear.png", "PNG")
 
-The expected output is shown in
-Figure :ref:`fig:plasmid_linear`.
+The expected output is shown in Figure [fig:plasmid\_linear].
 
 .. figure:: images/plasmid_linear.png
    :alt: Simple linear diagram for *Yersinia pestis biovar Microtus*
@@ -151,8 +140,6 @@ Figure :ref:`fig:plasmid_linear`.
    Simple linear diagram for *Yersinia pestis biovar Microtus* plasmid
    pPCP1.
 
-[fig:plasmid_linear]
-
 Notice that the ``fragments`` argument which we set to four controls how
 many pieces the genome gets broken up into.
 
@@ -160,23 +147,20 @@ If you want to do a circular figure, then try this:
 
 .. code:: python
 
-   gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
-                   start=0, end=len(record), circle_core=0.7)
-   gd_diagram.write("plasmid_circular.pdf", "PDF")
+    gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
+                    start=0, end=len(record), circle_core=0.7)
+    gd_diagram.write("plasmid_circular.pdf", "PDF")
 
-The expected output is shown in
-Figure :ref:`fig:plasmid_circular`.
+The expected output is shown in Figure [fig:plasmid\_circular].
 
 .. figure:: images/plasmid_circular.png
    :alt: Simple circular diagram for *Yersinia pestis biovar Microtus*
    plasmid pPCP1.
-   :width: 8cm
-   :height: 8cm
+   :width: 8.00000cm
+   :height: 8.00000cm
 
    Simple circular diagram for *Yersinia pestis biovar Microtus* plasmid
    pPCP1.
-
-[fig:plasmid_circular]
 
 These figures are not very exciting, but we’ve only just got started.
 
@@ -189,90 +173,84 @@ can be done in almost any order) and then combine them.
 
 .. code:: python
 
-   from reportlab.lib import colors
-   from reportlab.lib.units import cm
-   from Bio.Graphics import GenomeDiagram
-   from Bio import SeqIO
-   record = SeqIO.read("NC_005816.gb", "genbank")
+    from reportlab.lib import colors
+    from reportlab.lib.units import cm
+    from Bio.Graphics import GenomeDiagram
+    from Bio import SeqIO
+    record = SeqIO.read("NC_005816.gb", "genbank")
 
-   #Create the feature set and its feature objects,
-   gd_feature_set = GenomeDiagram.FeatureSet()
-   for feature in record.features:
-       if feature.type != "gene":
-           #Exclude this feature
-           continue
-       if len(gd_feature_set) % 2 == 0:
-           color = colors.blue
-       else:
-           color = colors.lightblue
-       gd_feature_set.add_feature(feature, color=color, label=True)
-   #(this for loop is the same as in the previous example)
+    #Create the feature set and its feature objects,
+    gd_feature_set = GenomeDiagram.FeatureSet()
+    for feature in record.features:
+        if feature.type != "gene":
+            #Exclude this feature
+            continue
+        if len(gd_feature_set) % 2 == 0:
+            color = colors.blue
+        else:
+            color = colors.lightblue
+        gd_feature_set.add_feature(feature, color=color, label=True)
+    #(this for loop is the same as in the previous example)
 
-   #Create a track, and a diagram
-   gd_track_for_features = GenomeDiagram.Track(name="Annotated Features")
-   gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+    #Create a track, and a diagram
+    gd_track_for_features = GenomeDiagram.Track(name="Annotated Features")
+    gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
 
-   #Now have to glue the bits together...
-   gd_track_for_features.add_set(gd_feature_set)
-   gd_diagram.add_track(gd_track_for_features, 1)
+    #Now have to glue the bits together...
+    gd_track_for_features.add_set(gd_feature_set)
+    gd_diagram.add_track(gd_track_for_features, 1)
 
 You can now call the ``draw`` and ``write`` methods as before to produce
 a linear or circular diagram, using the code at the end of the top-down
 example above. The figures should be identical.
 
-.. _sec:gd_features_without_seqfeatures:
-
 Features without a SeqFeature
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the above example we used a ``SeqRecord``\ ’s ``SeqFeature`` objects
-to build our diagram (see also
-Section :ref:`sec:seq_features`). Sometimes you
-won’t have ``SeqFeature`` objects, but just the coordinates for a
+to build our diagram (see also Section [sec:seq\_features]). Sometimes
+you won’t have ``SeqFeature`` objects, but just the coordinates for a
 feature you want to draw. You have to create minimal ``SeqFeature``
 object, but this is easy:
 
 .. code:: python
 
-   from Bio.SeqFeature import SeqFeature, FeatureLocation
-   my_seq_feature = SeqFeature(FeatureLocation(50,100),strand=+1)
+    from Bio.SeqFeature import SeqFeature, FeatureLocation
+    my_seq_feature = SeqFeature(FeatureLocation(50,100),strand=+1)
 
 For strand, use ``+1`` for the forward strand, ``-1`` for the reverse
 strand, and ``None`` for both. Here is a short self contained example:
 
 .. code:: python
 
-   from Bio.SeqFeature import SeqFeature, FeatureLocation
-   from Bio.Graphics import GenomeDiagram
-   from reportlab.lib.units import cm
+    from Bio.SeqFeature import SeqFeature, FeatureLocation
+    from Bio.Graphics import GenomeDiagram
+    from reportlab.lib.units import cm
 
-   gdd = GenomeDiagram.Diagram('Test Diagram')
-   gdt_features = gdd.new_track(1, greytrack=False)
-   gds_features = gdt_features.new_set()
+    gdd = GenomeDiagram.Diagram('Test Diagram')
+    gdt_features = gdd.new_track(1, greytrack=False)
+    gds_features = gdt_features.new_set()
 
-   #Add three features to show the strand options,
-   feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
-   gds_features.add_feature(feature, name="Forward", label=True)
-   feature = SeqFeature(FeatureLocation(150, 250), strand=None)
-   gds_features.add_feature(feature, name="Strandless", label=True)
-   feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
-   gds_features.add_feature(feature, name="Reverse", label=True)
+    #Add three features to show the strand options,
+    feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
+    gds_features.add_feature(feature, name="Forward", label=True)
+    feature = SeqFeature(FeatureLocation(150, 250), strand=None)
+    gds_features.add_feature(feature, name="Strandless", label=True)
+    feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
+    gds_features.add_feature(feature, name="Reverse", label=True)
 
-   gdd.draw(format='linear', pagesize=(15*cm,4*cm), fragments=1,
-            start=0, end=400)
-   gdd.write("GD_labels_default.pdf", "pdf")
+    gdd.draw(format='linear', pagesize=(15*cm,4*cm), fragments=1,
+             start=0, end=400)
+    gdd.write("GD_labels_default.pdf", "pdf")
 
 The top part of the image in the next subsection shows the output
 
-The output is shown at the top of
-Figure :ref:`fig:gd_sigil_labels`
+The output is shown at the top of Figure [fig:gd\_sigil\_labels]
 
 (in the default feature color, pale green).
 
 Notice that we have used the ``name`` argument here to specify the
 caption text for these features. This is discussed in more detail next.
-
-.. _sec:gd_feature_captions:
 
 Feature captions
 ~~~~~~~~~~~~~~~~
@@ -282,7 +260,7 @@ object) to add a feature to the diagram:
 
 .. code:: python
 
-   gd_feature_set.add_feature(feature, color=color, label=True)
+    gd_feature_set.add_feature(feature, color=color, label=True)
 
 In the example above the ``SeqFeature`` annotation was used to pick a
 sensible caption for the features. By default the following possible
@@ -292,7 +270,7 @@ More simply, you can specify a name directly:
 
 .. code:: python
 
-   gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
+    gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
 
 In addition to the caption text for each feature’s label, you can also
 choose the font, position (this defaults to the start of the sigil, you
@@ -301,53 +279,49 @@ diagrams only, where this defaults to rotated by :math:`45` degrees):
 
 .. code:: python
 
-   #Large font, parallel with the track
-   gd_feature_set.add_feature(feature, label=True, color="green",
-                              label_size=25, label_angle=0)
+    #Large font, parallel with the track
+    gd_feature_set.add_feature(feature, label=True, color="green",
+                               label_size=25, label_angle=0)
 
-   #Very small font, perpendicular to the track (towards it)
-   gd_feature_set.add_feature(feature, label=True, color="purple",
-                              label_position="end",
-                              label_size=4, label_angle=90)
+    #Very small font, perpendicular to the track (towards it)
+    gd_feature_set.add_feature(feature, label=True, color="purple",
+                               label_position="end",
+                               label_size=4, label_angle=90)
 
-   #Small font, perpendicular to the track (away from it)
-   gd_feature_set.add_feature(feature, label=True, color="blue",
-                              label_position="middle",
-                              label_size=6, label_angle=-90)
+    #Small font, perpendicular to the track (away from it)
+    gd_feature_set.add_feature(feature, label=True, color="blue",
+                               label_position="middle",
+                               label_size=6, label_angle=-90)
 
 Combining each of these three fragments with the complete example in the
 previous section should give something like
 
 this:
 
-[fig:gd_sigil_labels]
+[fig:gd\_sigil\_labels]
 
-the tracks in Figure :ref:`fig:gd_sigil_labels`.
+the tracks in Figure [fig:gd\_sigil\_labels].
 
 .. figure:: images/GD_sigil_labels.png
    :alt: Simple GenomeDiagram showing label options. The top plot in
    pale green shows the default label settings (see
-   Section :ref:`sec:gd_features_without_seqfeatures`) while the
-   rest show variations in the label size, position and orientation (see
-   Section :ref:`sec:gd_feature_captions`).
+   Section [sec:gd\_features\_without\_seqfeatures]) while the rest show
+   variations in the label size, position and orientation (see
+   Section [sec:gd\_feature\_captions]).
    :width: 80.0%
 
    Simple GenomeDiagram showing label options. The top plot in pale
    green shows the default label settings (see
-   Section :ref:`sec:gd_features_without_seqfeatures`) while the
-   rest show variations in the label size, position and orientation (see
-   Section :ref:`sec:gd_feature_captions`). 
-
-[fig:gd_sigil_labels]
+   Section [sec:gd\_features\_without\_seqfeatures]) while the rest show
+   variations in the label size, position and orientation (see
+   Section [sec:gd\_feature\_captions]). 
 
 We’ve not shown it here, but you can also set ``label_color`` to control
-the label’s color (used in Section :ref:`sec:gd_nice_example`).
+the label’s color (used in Section [sec:gd\_nice\_example]).
 
 You’ll notice the default font is quite small - this makes sense because
 you will usually be drawing many (small) features on a page, not just a
 few large ones as shown here.
-
-.. _sec:gd_sigils:
 
 Feature sigils
 ~~~~~~~~~~~~~~
@@ -359,33 +333,33 @@ when GenomeDiagram was added to Biopython 1.50:
 
 .. code:: python
 
-   # Default uses a BOX sigil
-   gd_feature_set.add_feature(feature)
+    # Default uses a BOX sigil
+    gd_feature_set.add_feature(feature)
 
-   # You can make this explicit:
-   gd_feature_set.add_feature(feature, sigil="BOX")
+    # You can make this explicit:
+    gd_feature_set.add_feature(feature, sigil="BOX")
 
-   # Or opt for an arrow:
-   gd_feature_set.add_feature(feature, sigil="ARROW")
+    # Or opt for an arrow:
+    gd_feature_set.add_feature(feature, sigil="ARROW")
 
 Biopython 1.61 added three more sigils,
 
 .. code:: python
 
-   # Box with corners cut off (making it an octagon)
-   gd_feature_set.add_feature(feature, sigil="OCTO")
+    # Box with corners cut off (making it an octagon)
+    gd_feature_set.add_feature(feature, sigil="OCTO")
 
-   # Box with jagged edges (useful for showing breaks in contains)
-   gd_feature_set.add_feature(feature, sigil="JAGGY")
+    # Box with jagged edges (useful for showing breaks in contains)
+    gd_feature_set.add_feature(feature, sigil="JAGGY")
 
-   # Arrow which spans the axis with strand used only for direction
-   gd_feature_set.add_feature(feature, sigil="BIGARROW")
+    # Arrow which spans the axis with strand used only for direction
+    gd_feature_set.add_feature(feature, sigil="BIGARROW")
 
 These are shown
 
 below.
 
-in Figure :ref:`fig:gd_sigils`.
+in Figure [fig:gd\_sigils].
 
 Most sigils fit into a bounding box (as given by the default BOX sigil),
 either above or below the axis for the forward or reverse strand, or
@@ -395,15 +369,11 @@ from the feature’s stand.
 
 .. figure:: images/GD_sigils.png
    :alt: Simple GenomeDiagram showing different sigils (see
-   Section :ref:`sec:gd_sigils`)
+   Section [sec:gd\_sigils])
    :width: 80.0%
 
    Simple GenomeDiagram showing different sigils (see
-   Section :ref:`sec:gd_sigils`)
-
-[fig:gd_sigils]
-
-.. _sec:gd_arrow_sigils:
+   Section [sec:gd\_sigils])
 
 Arrow sigils
 ~~~~~~~~~~~~
@@ -415,169 +385,154 @@ bounding box:
 
 .. code:: python
 
-   # Full height shafts, giving pointed boxes:
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="brown",
-                              arrowshaft_height=1.0)
-   # Or, thin shafts:
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="teal",
-                              arrowshaft_height=0.2)
-   # Or, very thin shafts:
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
-                              arrowshaft_height=0.1)
+    # Full height shafts, giving pointed boxes:
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="brown",
+                               arrowshaft_height=1.0)
+    # Or, thin shafts:
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="teal",
+                               arrowshaft_height=0.2)
+    # Or, very thin shafts:
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
+                               arrowshaft_height=0.1)
 
 The results are shown below:
 
-The results are shown in
-Figure :ref:`fig:gd_sigil_arrow_shafts`.
+The results are shown in Figure [fig:gd\_sigil\_arrow\_shafts].
 
 .. figure:: images/GD_sigil_arrow_shafts.png
    :alt: Simple GenomeDiagram showing arrow shaft options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   Section [sec:gd\_arrow\_sigils])
    :width: 80.0%
 
    Simple GenomeDiagram showing arrow shaft options (see
-   Section :ref:`sec:gd_arrow_sigils`)
-
-[fig:gd_sigil_arrow_shafts]
+   Section [sec:gd\_arrow\_sigils])
 
 Secondly, the length of the arrow head - given as a proportion of the
 height of the bounding box (defaulting to :math:`0.5`, or :math:`50\%`):
 
 .. code:: python
 
-   # Short arrow heads:
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="blue",
-                              arrowhead_length=0.25)
-   # Or, longer arrow heads:
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="orange",
-                              arrowhead_length=1)
-   # Or, very very long arrow heads (i.e. all head, no shaft, so triangles):
-   gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
-                              arrowhead_length=10000)
+    # Short arrow heads:
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="blue",
+                               arrowhead_length=0.25)
+    # Or, longer arrow heads:
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="orange",
+                               arrowhead_length=1)
+    # Or, very very long arrow heads (i.e. all head, no shaft, so triangles):
+    gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
+                               arrowhead_length=10000)
 
 The results are shown below:
 
-The results are shown in
-Figure :ref:`fig:gd_sigil_arrow_heads`.
+The results are shown in Figure [fig:gd\_sigil\_arrow\_heads].
 
 .. figure:: images/GD_sigil_arrow_heads.png
    :alt: Simple GenomeDiagram showing arrow head options (see
-   Section :ref:`sec:gd_arrow_sigils`)
+   Section [sec:gd\_arrow\_sigils])
    :width: 80.0%
 
    Simple GenomeDiagram showing arrow head options (see
-   Section :ref:`sec:gd_arrow_sigils`)
-
-[fig:gd_sigil_arrow_heads]
+   Section [sec:gd\_arrow\_sigils])
 
 Biopython 1.61 adds a new ``BIGARROW`` sigil which always stradles the
 axis, pointing left for the reverse strand or right otherwise:
 
 .. code:: python
 
-   # A large arrow straddling the axis:
-   gd_feature_set.add_feature(feature, sigil="BIGARROW")
+    # A large arrow straddling the axis:
+    gd_feature_set.add_feature(feature, sigil="BIGARROW")
 
 All the shaft and arrow head options shown above for the ``ARROW`` sigil
 can be used for the ``BIGARROW`` sigil too.
-
-.. _sec:gd_nice_example:
 
 A nice example
 ~~~~~~~~~~~~~~
 
 Now let’s return to the pPCP1 plasmid from *Yersinia pestis biovar
 Microtus*, and the top down approach used in
-Section :ref:`sec:gd_top_down`, but take advantage of the sigil
-options we’ve now discussed. This time we’ll use arrows for the genes,
-and overlay them with strand-less features (as plain boxes) showing the
+Section [sec:gd\_top\_down], but take advantage of the sigil options
+we’ve now discussed. This time we’ll use arrows for the genes, and
+overlay them with strand-less features (as plain boxes) showing the
 position of some restriction digest sites.
 
 .. code:: python
 
-   from reportlab.lib import colors
-   from reportlab.lib.units import cm
-   from Bio.Graphics import GenomeDiagram
-   from Bio import SeqIO
-   from Bio.SeqFeature import SeqFeature, FeatureLocation
+    from reportlab.lib import colors
+    from reportlab.lib.units import cm
+    from Bio.Graphics import GenomeDiagram
+    from Bio import SeqIO
+    from Bio.SeqFeature import SeqFeature, FeatureLocation
 
-   record = SeqIO.read("NC_005816.gb", "genbank")
+    record = SeqIO.read("NC_005816.gb", "genbank")
 
-   gd_diagram = GenomeDiagram.Diagram(record.id)
-   gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
-   gd_feature_set = gd_track_for_features.new_set()
+    gd_diagram = GenomeDiagram.Diagram(record.id)
+    gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
+    gd_feature_set = gd_track_for_features.new_set()
 
-   for feature in record.features:
-       if feature.type != "gene":
-           #Exclude this feature
-           continue
-       if len(gd_feature_set) % 2 == 0:
-           color = colors.blue
-       else:
-           color = colors.lightblue
-       gd_feature_set.add_feature(feature, sigil="ARROW",
-                                  color=color, label=True,
-                                  label_size = 14, label_angle=0)
+    for feature in record.features:
+        if feature.type != "gene":
+            #Exclude this feature
+            continue
+        if len(gd_feature_set) % 2 == 0:
+            color = colors.blue
+        else:
+            color = colors.lightblue
+        gd_feature_set.add_feature(feature, sigil="ARROW",
+                                   color=color, label=True,
+                                   label_size = 14, label_angle=0)
 
-   #I want to include some strandless features, so for an example
-   #will use EcoRI recognition sites etc.
-   for site, name, color in [("GAATTC","EcoRI",colors.green),
-                             ("CCCGGG","SmaI",colors.orange),
-                             ("AAGCTT","HindIII",colors.red),
-                             ("GGATCC","BamHI",colors.purple)]:
-       index = 0
-       while True:
-           index  = record.seq.find(site, start=index)
-           if index == -1 : break
-           feature = SeqFeature(FeatureLocation(index, index+len(site)))
-           gd_feature_set.add_feature(feature, color=color, name=name,
-                                      label=True, label_size = 10,
-                                      label_color=color)
-           index += len(site)
+    #I want to include some strandless features, so for an example
+    #will use EcoRI recognition sites etc.
+    for site, name, color in [("GAATTC","EcoRI",colors.green),
+                              ("CCCGGG","SmaI",colors.orange),
+                              ("AAGCTT","HindIII",colors.red),
+                              ("GGATCC","BamHI",colors.purple)]:
+        index = 0
+        while True:
+            index  = record.seq.find(site, start=index)
+            if index == -1 : break
+            feature = SeqFeature(FeatureLocation(index, index+len(site)))
+            gd_feature_set.add_feature(feature, color=color, name=name,
+                                       label=True, label_size = 10,
+                                       label_color=color)
+            index += len(site)
 
-   gd_diagram.draw(format="linear", pagesize='A4', fragments=4,
-                   start=0, end=len(record))
-   gd_diagram.write("plasmid_linear_nice.pdf", "PDF")
-   gd_diagram.write("plasmid_linear_nice.eps", "EPS")
-   gd_diagram.write("plasmid_linear_nice.svg", "SVG")
+    gd_diagram.draw(format="linear", pagesize='A4', fragments=4,
+                    start=0, end=len(record))
+    gd_diagram.write("plasmid_linear_nice.pdf", "PDF")
+    gd_diagram.write("plasmid_linear_nice.eps", "EPS")
+    gd_diagram.write("plasmid_linear_nice.svg", "SVG")
 
-   gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
-                   start=0, end=len(record), circle_core = 0.5)
-   gd_diagram.write("plasmid_circular_nice.pdf", "PDF")
-   gd_diagram.write("plasmid_circular_nice.eps", "EPS")
-   gd_diagram.write("plasmid_circular_nice.svg", "SVG")
+    gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
+                    start=0, end=len(record), circle_core = 0.5)
+    gd_diagram.write("plasmid_circular_nice.pdf", "PDF")
+    gd_diagram.write("plasmid_circular_nice.eps", "EPS")
+    gd_diagram.write("plasmid_circular_nice.svg", "SVG")
 
 And the output:
 
-The expected output is shown in
-Figures :ref:`fig:plasmid_linear_nice`
-and :ref:`fig:plasmid_circular_nice`.
+The expected output is shown in Figures [fig:plasmid\_linear\_nice]
+and [fig:plasmid\_circular\_nice].
 
 .. figure:: images/plasmid_linear_nice.png
    :alt: Linear diagram for *Yersinia pestis biovar Microtus* plasmid
    pPCP1 showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   Section [sec:gd\_nice\_example]).
    :width: 80.0%
 
    Linear diagram for *Yersinia pestis biovar Microtus* plasmid pPCP1
    showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
-
-[fig:plasmid_linear_nice]
+   Section [sec:gd\_nice\_example]).
 
 .. figure:: images/plasmid_circular_nice.png
    :alt: Circular diagram for *Yersinia pestis biovar Microtus* plasmid
    pPCP1 showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
+   Section [sec:gd\_nice\_example]).
    :width: 80.0%
 
    Circular diagram for *Yersinia pestis biovar Microtus* plasmid pPCP1
    showing selected restriction digest sites (see
-   Section :ref:`sec:gd_nice_example`).
-
-[fig:plasmid_circular_nice]
-
-.. _sec:gd_multiple_tracks:
+   Section [sec:gd\_nice\_example]).
 
 Multiple tracks
 ~~~~~~~~~~~~~~~
@@ -600,21 +555,20 @@ following three phage:
    length).
 
 You can download these using Entrez if you like, see
-Section :ref:`sec:efetch` for more details. For the third
-record we’ve worked out where the phage is integrated into the genome,
-and slice the record to extract it (with the features preserved, see
-Section :ref:`sec:SeqRecord-slicing`), and
-must also reverse complement to match the orientation of the first two
-phage (again preserving the features, see
-Section :ref:`sec:SeqRecord-reverse-complement`):
+Section [sec:efetch] for more details. For the third record we’ve worked
+out where the phage is integrated into the genome, and slice the record
+to extract it (with the features preserved, see
+Section [sec:SeqRecord-slicing]), and must also reverse complement to
+match the orientation of the first two phage (again preserving the
+features, see Section [sec:SeqRecord-reverse-complement]):
 
 .. code:: python
 
-   from Bio import SeqIO
+    from Bio import SeqIO
 
-   A_rec = SeqIO.read("NC_002703.gbk", "gb")
-   B_rec = SeqIO.read("AF323668.gbk", "gb")
-   C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
+    A_rec = SeqIO.read("NC_002703.gbk", "gb")
+    B_rec = SeqIO.read("AF323668.gbk", "gb")
+    C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
 
 The figure we are imitating used different colors for different gene
 functions. One way to do this is to edit the GenBank file to record
@@ -628,15 +582,15 @@ shown in Proux *et al.*, they have drawn some unannotated genes.
 
 .. code:: python
 
-   from reportlab.lib.colors import red, grey, orange, green, brown, blue, lightblue, purple
+    from reportlab.lib.colors import red, grey, orange, green, brown, blue, lightblue, purple
 
-   A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
-            + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
-            + [grey, lightblue] + [purple]*2 + [grey]
-   B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [green]*5 \
-            + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
-   C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
-            + [grey]*5
+    A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
+             + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
+             + [grey, lightblue] + [purple]*2 + [grey]
+    B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [green]*5 \
+             + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
+    C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
+             + [grey]*5
 
 Now to draw them – this time we add three tracks to the diagram, and
 also notice they are given different start/end values to reflect their
@@ -644,54 +598,51 @@ different lengths (this requires Biopython 1.59 or later).
 
 .. code:: python
 
-   from Bio.Graphics import GenomeDiagram
+    from Bio.Graphics import GenomeDiagram
 
-   name = "Proux Fig 6"
-   gd_diagram = GenomeDiagram.Diagram(name)
-   max_len = 0
-   for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_colors]):
-       max_len = max(max_len, len(record))
-       gd_track_for_features = gd_diagram.new_track(1,
-                               name=record.name,
-                               greytrack=True,
-                               start=0, end=len(record))
-       gd_feature_set = gd_track_for_features.new_set()
+    name = "Proux Fig 6"
+    gd_diagram = GenomeDiagram.Diagram(name)
+    max_len = 0
+    for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_colors]):
+        max_len = max(max_len, len(record))
+        gd_track_for_features = gd_diagram.new_track(1,
+                                name=record.name,
+                                greytrack=True,
+                                start=0, end=len(record))
+        gd_feature_set = gd_track_for_features.new_set()
 
-       i = 0
-       for feature in record.features:
-           if feature.type != "gene":
-               #Exclude this feature
-               continue
-           gd_feature_set.add_feature(feature, sigil="ARROW",
-                                      color=gene_colors[i], label=True,
-                                      name = str(i+1),
-                                      label_position="start",
-                                      label_size = 6, label_angle=0)
-           i+=1
+        i = 0
+        for feature in record.features:
+            if feature.type != "gene":
+                #Exclude this feature
+                continue
+            gd_feature_set.add_feature(feature, sigil="ARROW",
+                                       color=gene_colors[i], label=True,
+                                       name = str(i+1),
+                                       label_position="start",
+                                       label_size = 6, label_angle=0)
+            i+=1
 
-   gd_diagram.draw(format="linear", pagesize='A4', fragments=1,
-                   start=0, end=max_len)
-   gd_diagram.write(name + ".pdf", "PDF")
-   gd_diagram.write(name + ".eps", "EPS")
-   gd_diagram.write(name + ".svg", "SVG")
+    gd_diagram.draw(format="linear", pagesize='A4', fragments=1,
+                    start=0, end=max_len)
+    gd_diagram.write(name + ".pdf", "PDF")
+    gd_diagram.write(name + ".eps", "EPS")
+    gd_diagram.write(name + ".svg", "SVG")
 
 The result:
 
-The expected output is shown in
-Figure :ref:`fig:three_track_simple`.
+The expected output is shown in Figure [fig:three\_track\_simple].
 
 .. figure:: images/three_track_simple.png
    :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) (see
-   Section :ref:`sec:gd_multiple_tracks`).
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) (see
+   Section [sec:gd\_multiple\_tracks]).
 
    Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) (see
-   Section :ref:`sec:gd_multiple_tracks`).
-
-[fig:three_track_simple]
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) (see
+   Section [sec:gd\_multiple\_tracks]).
 
 I did wonder why in the original manuscript there were no red or orange
 genes marked in the bottom phage. Another important point is here the
@@ -701,8 +652,6 @@ drawn to the same scale (they *are* different lengths).
 The key difference from the published figure is they have color-coded
 links between similar proteins – which is what we will do in the next
 section.
-
-.. _sec:gd_cross_links:
 
 Cross-Links between tracks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -723,57 +672,57 @@ of tuples (percentage similarity score, gene in A, gene in B).
 
 .. code:: python
 
-   # Tuc2009 (NC_002703) vs bIL285 (AF323668)
-   A_vs_B = [
-       (99, "Tuc2009_01", "int"),
-       (33, "Tuc2009_03", "orf4"),
-       (94, "Tuc2009_05", "orf6"),
-       (100,"Tuc2009_06", "orf7"),
-       (97, "Tuc2009_07", "orf8"),
-       (98, "Tuc2009_08", "orf9"),
-       (98, "Tuc2009_09", "orf10"),
-       (100,"Tuc2009_10", "orf12"),
-       (100,"Tuc2009_11", "orf13"),
-       (94, "Tuc2009_12", "orf14"),
-       (87, "Tuc2009_13", "orf15"),
-       (94, "Tuc2009_14", "orf16"),
-       (94, "Tuc2009_15", "orf17"),
-       (88, "Tuc2009_17", "rusA"),
-       (91, "Tuc2009_18", "orf20"),
-       (93, "Tuc2009_19", "orf22"),
-       (71, "Tuc2009_20", "orf23"),
-       (51, "Tuc2009_22", "orf27"),
-       (97, "Tuc2009_23", "orf28"),
-       (88, "Tuc2009_24", "orf29"),
-       (26, "Tuc2009_26", "orf38"),
-       (19, "Tuc2009_46", "orf52"),
-       (77, "Tuc2009_48", "orf54"),
-       (91, "Tuc2009_49", "orf55"),
-       (95, "Tuc2009_52", "orf60"),
-   ]
+    # Tuc2009 (NC_002703) vs bIL285 (AF323668)
+    A_vs_B = [
+        (99, "Tuc2009_01", "int"),
+        (33, "Tuc2009_03", "orf4"),
+        (94, "Tuc2009_05", "orf6"),
+        (100,"Tuc2009_06", "orf7"),
+        (97, "Tuc2009_07", "orf8"),
+        (98, "Tuc2009_08", "orf9"),
+        (98, "Tuc2009_09", "orf10"),
+        (100,"Tuc2009_10", "orf12"),
+        (100,"Tuc2009_11", "orf13"),
+        (94, "Tuc2009_12", "orf14"),
+        (87, "Tuc2009_13", "orf15"),
+        (94, "Tuc2009_14", "orf16"),
+        (94, "Tuc2009_15", "orf17"),
+        (88, "Tuc2009_17", "rusA"),
+        (91, "Tuc2009_18", "orf20"),
+        (93, "Tuc2009_19", "orf22"),
+        (71, "Tuc2009_20", "orf23"),
+        (51, "Tuc2009_22", "orf27"),
+        (97, "Tuc2009_23", "orf28"),
+        (88, "Tuc2009_24", "orf29"),
+        (26, "Tuc2009_26", "orf38"),
+        (19, "Tuc2009_46", "orf52"),
+        (77, "Tuc2009_48", "orf54"),
+        (91, "Tuc2009_49", "orf55"),
+        (95, "Tuc2009_52", "orf60"),
+    ]
 
 Likewise for B and C:
 
 .. code:: python
 
-   # bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
-   B_vs_C = [
-       (42, "orf39", "lin2581"),
-       (31, "orf40", "lin2580"),
-       (49, "orf41", "lin2579"), #terL
-       (54, "orf42", "lin2578"), #portal
-       (55, "orf43", "lin2577"), #protease
-       (33, "orf44", "lin2576"), #mhp
-       (51, "orf46", "lin2575"),
-       (33, "orf47", "lin2574"),
-       (40, "orf48", "lin2573"),
-       (25, "orf49", "lin2572"),
-       (50, "orf50", "lin2571"),
-       (48, "orf51", "lin2570"),
-       (24, "orf52", "lin2568"),
-       (30, "orf53", "lin2567"),
-       (28, "orf54", "lin2566"),
-   ]
+    # bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
+    B_vs_C = [
+        (42, "orf39", "lin2581"),
+        (31, "orf40", "lin2580"),
+        (49, "orf41", "lin2579"), #terL
+        (54, "orf42", "lin2578"), #portal
+        (55, "orf43", "lin2577"), #protease
+        (33, "orf44", "lin2576"), #mhp
+        (51, "orf46", "lin2575"),
+        (33, "orf47", "lin2574"),
+        (40, "orf48", "lin2573"),
+        (25, "orf49", "lin2572"),
+        (50, "orf50", "lin2571"),
+        (48, "orf51", "lin2570"),
+        (24, "orf52", "lin2568"),
+        (30, "orf53", "lin2567"),
+        (28, "orf54", "lin2566"),
+    ]
 
 For the first and last phage these identifiers are locus tags, for the
 middle phage there are no locus tags so I’ve used gene names instead.
@@ -782,41 +731,41 @@ either a locus tag or gene name:
 
 .. code:: python
 
-   def get_feature(features, id, tags=["locus_tag", "gene"]):
-       """Search list of SeqFeature objects for an identifier under the given tags."""
-       for f in features:
-           for key in tags:
-               #tag may not be present in this feature
-               for x in f.qualifiers.get(key, []):
-                   if x == id:
-                        return f
-       raise KeyError(id)
+    def get_feature(features, id, tags=["locus_tag", "gene"]):
+        """Search list of SeqFeature objects for an identifier under the given tags."""
+        for f in features:
+            for key in tags:
+                #tag may not be present in this feature
+                for x in f.qualifiers.get(key, []):
+                    if x == id:
+                         return f
+        raise KeyError(id)
 
 We can now turn those list of identifier pairs into SeqFeature pairs,
 and thus find their location co-ordinates. We can now add all that code
 and the following snippet to the previous example (just before the
 ``gd_diagram.draw(...)`` line – see the finished example script
-`Proux_et_al_2002_Figure_6.py <https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py>`__
+`Proux\_et\_al\_2002\_Figure\_6.py <https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py>`__
 included in the ``Doc/examples`` folder of the Biopython source code) to
 add cross links to the figure:
 
 .. code:: python
 
-   from Bio.Graphics.GenomeDiagram import CrossLink
-   from reportlab.lib import colors
-   # Note it might have been clearer to assign the track numbers explicitly...
-   for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [(A_rec, 3, B_rec, 2, A_vs_B),
-                                            (B_rec, 2, C_rec, 1, B_vs_C)]:
-       track_X = gd_diagram.tracks[tn_X]
-       track_Y = gd_diagram.tracks[tn_Y]
-       for score, id_X, id_Y in X_vs_Y:
-           feature_X = get_feature(rec_X.features, id_X)
-           feature_Y = get_feature(rec_Y.features, id_Y)
-           color = colors.linearlyInterpolatedColor(colors.white, colors.firebrick, 0, 100, score)
-           link_xy = CrossLink((track_X, feature_X.location.start, feature_X.location.end),
-                               (track_Y, feature_Y.location.start, feature_Y.location.end),
-                               color, colors.lightgrey)
-           gd_diagram.cross_track_links.append(link_xy)
+    from Bio.Graphics.GenomeDiagram import CrossLink
+    from reportlab.lib import colors
+    # Note it might have been clearer to assign the track numbers explicitly...
+    for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [(A_rec, 3, B_rec, 2, A_vs_B),
+                                             (B_rec, 2, C_rec, 1, B_vs_C)]:
+        track_X = gd_diagram.tracks[tn_X]
+        track_Y = gd_diagram.tracks[tn_Y]
+        for score, id_X, id_Y in X_vs_Y:
+            feature_X = get_feature(rec_X.features, id_X)
+            feature_Y = get_feature(rec_Y.features, id_Y)
+            color = colors.linearlyInterpolatedColor(colors.white, colors.firebrick, 0, 100, score)
+            link_xy = CrossLink((track_X, feature_X.location.start, feature_X.location.end),
+                                (track_Y, feature_Y.location.start, feature_Y.location.end),
+                                color, colors.lightgrey)
+            gd_diagram.cross_track_links.append(link_xy)
 
 There are several important pieces to this code. First the
 ``GenomeDiagram`` object has a ``cross_track_links`` attribute which is
@@ -836,23 +785,18 @@ would be difficult to interpret.
 
 The result:
 
-The expected output is shown in
-Figure :ref:`fig:three_track_cl`.
+The expected output is shown in Figure [fig:three\_track\_cl].
 
 .. figure:: images/three_track_cl.png
    :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus basic cross-links
-   shaded by percentage identity (see
-   Section :ref:`sec:gd_cross_links`).
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) plus basic cross-links
+   shaded by percentage identity (see Section [sec:gd\_cross\_links]).
 
    Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus basic cross-links
-   shaded by percentage identity (see
-   Section :ref:`sec:gd_cross_links`).
-
-[fig:three_track_cl]
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) plus basic cross-links
+   shaded by percentage identity (see Section [sec:gd\_cross\_links]).
 
 There is still a lot more that can be done within Biopython to help
 improve this figure. First of all, the cross links in this case are
@@ -865,26 +809,23 @@ Furthermore, in cases like this where there are no large gene overlaps,
 we can use the axis-straddling ``BIGARROW`` sigil, which allows us to
 further reduce the vertical space needed for the track. These
 improvements are demonstrated in the example script
-`Proux_et_al_2002_Figure_6.py <https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py>`__
+`Proux\_et\_al\_2002\_Figure\_6.py <https://github.com/biopython/biopython/blob/master/Doc/examples/Proux_et_al_2002_Figure_6.py>`__
 included in the ``Doc/examples`` folder of the Biopython source code.
 
 The result:
 
-The expected output is shown in
-Figure :ref:`fig:three_track_cl2`.
+The expected output is shown in Figure [fig:three\_track\_cl2].
 
 .. figure:: images/three_track_cl2a.png
    :alt: Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus cross-links shaded by
-   percentage identity (see Section :ref:`sec:gd_cross_links`).
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) plus cross-links shaded by
+   percentage identity (see Section [sec:gd\_cross\_links]).
 
    Linear diagram with three tracks for Lactococcus phage Tuc2009
-   (NC_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
-   *Listeria innocua* Clip11262 (NC_003212) plus cross-links shaded by
-   percentage identity (see Section :ref:`sec:gd_cross_links`).
-
-[fig:three_track_cl2]
+   (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+   *Listeria innocua* Clip11262 (NC\_003212) plus cross-links shaded by
+   percentage identity (see Section [sec:gd\_cross\_links]).
 
 Beyond that, finishing touches you might want to do manually in a vector
 image editor include fine tuning the placement of gene labels, and
@@ -929,34 +870,34 @@ For example, if you used to have:
 
 .. code:: python
 
-   from GenomeDiagram import GDFeatureSet, GDDiagram
-   gdd = GDDiagram("An example")
-   ...
+    from GenomeDiagram import GDFeatureSet, GDDiagram
+    gdd = GDDiagram("An example")
+    ...
 
 you could just switch the import statements like this:
 
 .. code:: python
 
-   from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
-   gdd = GDDiagram("An example")
-   ...
+    from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
+    gdd = GDDiagram("An example")
+    ...
 
 and hopefully that should be enough. In the long term you might want to
 switch to the new names, but you would have to change more of your code:
 
 .. code:: python
 
-   from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
-   gdd = Diagram("An example")
-   ...
+    from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
+    gdd = Diagram("An example")
+    ...
 
 or:
 
 .. code:: python
 
-   from Bio.Graphics import GenomeDiagram
-   gdd = GenomeDiagram.Diagram("An example")
-   ...
+    from Bio.Graphics import GenomeDiagram
+    gdd = GenomeDiagram.Diagram("An example")
+    ...
 
 If you run into difficulties, please ask on the Biopython mailing list
 for advice. One catch is that we have not included the old module
@@ -980,14 +921,12 @@ thaliana*.
 
 .. figure:: images/simple_chrom.pdf
    :alt: Simple chromosome diagram for *Arabidopsis thaliana*.
-   :name: fig:simplechromosome
 
    Simple chromosome diagram for *Arabidopsis thaliana*.
 
 .. figure:: images/tRNA_chrom.pdf
    :alt: Chromosome diagram for *Arabidopsis thaliana* showing tRNA
    genes.
-   :name: fig:trnachromosome
 
    Chromosome diagram for *Arabidopsis thaliana* showing tRNA genes.
 
@@ -1001,68 +940,68 @@ to use the FASTA files for the whole chromosomes:
 
 .. code:: python
 
-   from Bio import SeqIO
-   entries = [("Chr I", "CHR_I/NC_003070.fna"),
-              ("Chr II", "CHR_II/NC_003071.fna"),
-              ("Chr III", "CHR_III/NC_003074.fna"),
-              ("Chr IV", "CHR_IV/NC_003075.fna"),
-              ("Chr V", "CHR_V/NC_003076.fna")]
-   for (name, filename) in entries:
-       record = SeqIO.read(filename,"fasta")
-       print(name, len(record))
+    from Bio import SeqIO
+    entries = [("Chr I", "CHR_I/NC_003070.fna"),
+               ("Chr II", "CHR_II/NC_003071.fna"),
+               ("Chr III", "CHR_III/NC_003074.fna"),
+               ("Chr IV", "CHR_IV/NC_003075.fna"),
+               ("Chr V", "CHR_V/NC_003076.fna")]
+    for (name, filename) in entries:
+        record = SeqIO.read(filename,"fasta")
+        print(name, len(record))
 
 This gave the lengths of the five chromosomes, which we’ll now use in
 the following short demonstration of the ``BasicChromosome`` module:
 
 .. code:: python
 
-   from reportlab.lib.units import cm
-   from Bio.Graphics import BasicChromosome
+    from reportlab.lib.units import cm
+    from Bio.Graphics import BasicChromosome
 
-   entries = [("Chr I", 30432563),
-              ("Chr II", 19705359),
-              ("Chr III", 23470805),
-              ("Chr IV", 18585042),
-              ("Chr V", 26992728)]
+    entries = [("Chr I", 30432563),
+               ("Chr II", 19705359),
+               ("Chr III", 23470805),
+               ("Chr IV", 18585042),
+               ("Chr V", 26992728)]
 
-   max_len = 30432563  # Could compute this from the entries dict
-   telomere_length = 1000000  # For illustration
+    max_len = 30432563  # Could compute this from the entries dict
+    telomere_length = 1000000  # For illustration
 
-   chr_diagram = BasicChromosome.Organism()
-   chr_diagram.page_size = (29.7*cm, 21*cm)  # A4 landscape
+    chr_diagram = BasicChromosome.Organism()
+    chr_diagram.page_size = (29.7*cm, 21*cm)  # A4 landscape
 
-   for name, length in entries:
-       cur_chromosome = BasicChromosome.Chromosome(name)
-       # Set the scale to the MAXIMUM length plus the two telomeres in bp,
-       # want the same scale used on all five chromosomes so they can be
-       # compared to each other
-       cur_chromosome.scale_num = max_len + 2 * telomere_length
+    for name, length in entries:
+        cur_chromosome = BasicChromosome.Chromosome(name)
+        # Set the scale to the MAXIMUM length plus the two telomeres in bp,
+        # want the same scale used on all five chromosomes so they can be
+        # compared to each other
+        cur_chromosome.scale_num = max_len + 2 * telomere_length
 
-       # Add an opening telomere
-       start = BasicChromosome.TelomereSegment()
-       start.scale = telomere_length
-       cur_chromosome.add(start)
+        # Add an opening telomere
+        start = BasicChromosome.TelomereSegment()
+        start.scale = telomere_length
+        cur_chromosome.add(start)
 
-       # Add a body - using bp as the scale length here.
-       body = BasicChromosome.ChromosomeSegment()
-       body.scale = length
-       cur_chromosome.add(body)
+        # Add a body - using bp as the scale length here.
+        body = BasicChromosome.ChromosomeSegment()
+        body.scale = length
+        cur_chromosome.add(body)
 
-       # Add a closing telomere
-       end = BasicChromosome.TelomereSegment(inverted=True)
-       end.scale = telomere_length
-       cur_chromosome.add(end)
+        # Add a closing telomere
+        end = BasicChromosome.TelomereSegment(inverted=True)
+        end.scale = telomere_length
+        cur_chromosome.add(end)
 
-       # This chromosome is done
-       chr_diagram.add(cur_chromosome)
+        # This chromosome is done
+        chr_diagram.add(cur_chromosome)
 
-   chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
+    chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
 
 This should create a very simple PDF file, shown
 
 here:
 
-in Figure :ref:`fig:simplechromosome`.
+in Figure [fig:simplechromosome].
 
 This example is deliberately short and sweet. The next example shows the
 location of features of interest.
@@ -1079,55 +1018,55 @@ and preserve the subdirectory names or edit the paths below:
 
 .. code:: python
 
-   from reportlab.lib.units import cm
-   from Bio import SeqIO
-   from Bio.Graphics import BasicChromosome
+    from reportlab.lib.units import cm
+    from Bio import SeqIO
+    from Bio.Graphics import BasicChromosome
 
-   entries = [("Chr I", "CHR_I/NC_003070.gbk"),
-              ("Chr II", "CHR_II/NC_003071.gbk"),
-              ("Chr III", "CHR_III/NC_003074.gbk"),
-              ("Chr IV", "CHR_IV/NC_003075.gbk"),
-              ("Chr V", "CHR_V/NC_003076.gbk")]
+    entries = [("Chr I", "CHR_I/NC_003070.gbk"),
+               ("Chr II", "CHR_II/NC_003071.gbk"),
+               ("Chr III", "CHR_III/NC_003074.gbk"),
+               ("Chr IV", "CHR_IV/NC_003075.gbk"),
+               ("Chr V", "CHR_V/NC_003076.gbk")]
 
-   max_len = 30432563  # Could compute this from the entries dict
-   telomere_length = 1000000  # For illustration
+    max_len = 30432563  # Could compute this from the entries dict
+    telomere_length = 1000000  # For illustration
 
-   chr_diagram = BasicChromosome.Organism()
-   chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+    chr_diagram = BasicChromosome.Organism()
+    chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
 
-   for index, (name, filename) in enumerate(entries):
-       record = SeqIO.read(filename,"genbank")
-       length = len(record)
-       features = [f for f in record.features if f.type=="tRNA"]
-       # Record an Artemis style integer color in the feature's qualifiers,
-       # 1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple
-       for f in features: f.qualifiers["color"] = [index+2]
+    for index, (name, filename) in enumerate(entries):
+        record = SeqIO.read(filename,"genbank")
+        length = len(record)
+        features = [f for f in record.features if f.type=="tRNA"]
+        # Record an Artemis style integer color in the feature's qualifiers,
+        # 1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple
+        for f in features: f.qualifiers["color"] = [index+2]
 
-       cur_chromosome = BasicChromosome.Chromosome(name)
-       # Set the scale to the MAXIMUM length plus the two telomeres in bp,
-       # want the same scale used on all five chromosomes so they can be
-       # compared to each other
-       cur_chromosome.scale_num = max_len + 2 * telomere_length
+        cur_chromosome = BasicChromosome.Chromosome(name)
+        # Set the scale to the MAXIMUM length plus the two telomeres in bp,
+        # want the same scale used on all five chromosomes so they can be
+        # compared to each other
+        cur_chromosome.scale_num = max_len + 2 * telomere_length
 
-       # Add an opening telomere
-       start = BasicChromosome.TelomereSegment()
-       start.scale = telomere_length
-       cur_chromosome.add(start)
+        # Add an opening telomere
+        start = BasicChromosome.TelomereSegment()
+        start.scale = telomere_length
+        cur_chromosome.add(start)
 
-       # Add a body - again using bp as the scale length here.
-       body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
-       body.scale = length
-       cur_chromosome.add(body)
+        # Add a body - again using bp as the scale length here.
+        body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
+        body.scale = length
+        cur_chromosome.add(body)
 
-       # Add a closing telomere
-       end = BasicChromosome.TelomereSegment(inverted=True)
-       end.scale = telomere_length
-       cur_chromosome.add(end)
+        # Add a closing telomere
+        end = BasicChromosome.TelomereSegment(inverted=True)
+        end.scale = telomere_length
+        cur_chromosome.add(end)
 
-       # This chromosome is done
-       chr_diagram.add(cur_chromosome)
+        # This chromosome is done
+        chr_diagram.add(cur_chromosome)
 
-   chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
+    chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
 
 It might warn you about the labels being too close together - have a
 look at the forward strand (right hand side) of Chr I, but it should
@@ -1135,4 +1074,4 @@ create a colorful PDF file, shown
 
 here:
 
-in Figure :ref:`fig:simplechromosome`.
+in Figure [fig:simplechromosome].

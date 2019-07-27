@@ -1,5 +1,3 @@
-.. _chapter:pdb:
-
 Going 3D: The PDB module
 ========================
 
@@ -29,14 +27,14 @@ object:
 
 .. code:: pycon
 
-   >>> from Bio.PDB.MMCIFParser import MMCIFParser
-   >>> parser = MMCIFParser()
+    >>> from Bio.PDB.MMCIFParser import MMCIFParser
+    >>> parser = MMCIFParser()
 
 Then use this parser to create a structure object from the mmCIF file:
 
 .. code:: pycon
 
-   >>> structure = parser.get_structure("1fat", "1fat.cif")
+    >>> structure = parser.get_structure("1fat", "1fat.cif")
 
 To have some more low level access to an mmCIF file, you can use the
 ``MMCIF2Dict`` class to create a Python dictionary that maps all mmCIF
@@ -47,20 +45,20 @@ values. The dictionary is created from the mmCIF file as follows:
 
 .. code:: pycon
 
-   >>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-   >>> mmcif_dict = MMCIF2Dict("1FAT.cif")
+    >>> from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+    >>> mmcif_dict = MMCIF2Dict("1FAT.cif")
 
 Example: get the solvent content from an mmCIF file:
 
 .. code:: pycon
 
-   >>> sc = mmcif_dict["_exptl_crystal.density_percent_sol"]
+    >>> sc = mmcif_dict["_exptl_crystal.density_percent_sol"]
 
 Example: get the list of the :math:`y` coordinates of all atoms
 
 .. code:: pycon
 
-   >>> y_list = mmcif_dict["_atom_site.Cartn_y"]
+    >>> y_list = mmcif_dict["_atom_site.Cartn_y"]
 
 Reading files in the MMTF format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,14 +67,14 @@ You can use the direct MMTFParser to read a structure from a file:
 
 .. code:: pycon
 
-   >>> from Bio.PDB.mmtf import MMTFParser
-   >>> structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
+    >>> from Bio.PDB.mmtf import MMTFParser
+    >>> structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
 
 Or you can use the same class to get a structure by its PDB ID:
 
 .. code:: pycon
 
-   >>> structure = MMTFParser.get_structure_from_url("4CUP")
+    >>> structure = MMTFParser.get_structure_from_url("4CUP")
 
 This gives you a Structure object as if read from a PDB or mmCIF file.
 
@@ -85,15 +83,15 @@ library which Biopython is using internally:
 
 .. code:: pycon
 
-   >>> from mmtf import fetch
-   >>> decoded_data = fetch("4CUP")
+    >>> from mmtf import fetch
+    >>> decoded_data = fetch("4CUP")
 
 For example you can access just the X-coordinate.
 
 .. code:: pycon
 
-   >>> print(decoded_data.x_coord_list)
-   ...
+    >>> print(decoded_data.x_coord_list)
+    ...
 
 Reading a PDB file
 ~~~~~~~~~~~~~~~~~~
@@ -102,14 +100,14 @@ First we create a ``PDBParser`` object:
 
 .. code:: pycon
 
-   >>> from Bio.PDB.PDBParser import PDBParser
-   >>> parser = PDBParser(PERMISSIVE=1)
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> parser = PDBParser(PERMISSIVE=1)
 
 The ``PERMISSIVE`` flag indicates that a number of common problems (see
-:ref:`sec:problem_structures`) associated with PDB files will be
-ignored (but note that some atoms and/or residues will be missing). If
-the flag is not present a ``PDBConstructionException`` will be generated
-if any problems are detected during the parse operation.
+[sec:problem\_structures]) associated with PDB files will be ignored
+(but note that some atoms and/or residues will be missing). If the flag
+is not present a ``PDBConstructionException`` will be generated if any
+problems are detected during the parse operation.
 
 The Structure object is then produced by letting the ``PDBParser``
 object parse a PDB file (the PDB file in this case is called
@@ -117,9 +115,9 @@ object parse a PDB file (the PDB file in this case is called
 
 .. code:: pycon
 
-   >>> structure_id = "1fat"
-   >>> filename = "pdb1fat.ent"
-   >>> structure = parser.get_structure(structure_id, filename)
+    >>> structure_id = "1fat"
+    >>> filename = "pdb1fat.ent"
+    >>> structure = parser.get_structure(structure_id, filename)
 
 You can extract the header and trailer (simple lists of strings) of the
 PDB file from the PDBParser object with the ``get_header`` and
@@ -138,8 +136,8 @@ Example:
 
 .. code:: pycon
 
-   >>> resolution = structure.header["resolution"]
-   >>> keywords = structure.header["keywords"]
+    >>> resolution = structure.header["resolution"]
+    >>> keywords = structure.header["keywords"]
 
 The available keys are ``name``, ``head``, ``deposition_date``,
 ``release_date``, ``structure_method``, ``resolution``,
@@ -161,10 +159,10 @@ object, ie. directly from the PDB file:
 
 .. code:: pycon
 
-   >>> from Bio.PDB import parse_pdb_header
-   >>> with open(filename, "r") as handle:
-   ...     header_dict = parse_pdb_header(handle)
-   ...
+    >>> from Bio.PDB import parse_pdb_header
+    >>> with open(filename, "r") as handle:
+    ...     header_dict = parse_pdb_header(handle)
+    ...
 
 Reading files in the PDB XML format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -181,18 +179,18 @@ format:
 
 .. code:: pycon
 
-   >>> io = MMCIFIO()
-   >>> io.set_structure(s)
-   >>> io.save("out.cif")
+    >>> io = MMCIFIO()
+    >>> io.set_structure(s)
+    >>> io.save("out.cif")
 
 The ``Select`` class can be used in a similar way to ``PDBIO`` above.
 mmCIF dictionaries read using ``MMCIF2Dict`` can also be written:
 
 .. code:: pycon
 
-   >>> io = MMCIFIO()
-   >>> io.set_dict(d)
-   >>> io.save("out.cif")
+    >>> io = MMCIFIO()
+    >>> io.set_dict(d)
+    >>> io.save("out.cif")
 
 Writing PDB files
 ~~~~~~~~~~~~~~~~~
@@ -204,9 +202,9 @@ Example: saving a structure
 
 .. code:: pycon
 
-   >>> io = PDBIO()
-   >>> io.set_structure(s)
-   >>> io.save("out.pdb")
+    >>> io = PDBIO()
+    >>> io.set_structure(s)
+    >>> io.save("out.pdb")
 
 If you want to write out a part of the structure, make use of the
 ``Select`` class (also in ``PDBIO``). Select has four methods:
@@ -227,16 +225,16 @@ following code only writes out glycine residues:
 
 .. code:: pycon
 
-   >>> class GlySelect(Select):
-   ...     def accept_residue(self, residue):
-   ...         if residue.get_name()=="GLY":
-   ...             return True
-   ...         else:
-   ...             return False
-   ...
-   >>> io = PDBIO()
-   >>> io.set_structure(s)
-   >>> io.save("gly_only.pdb", GlySelect())
+    >>> class GlySelect(Select):
+    ...     def accept_residue(self, residue):
+    ...         if residue.get_name()=="GLY":
+    ...             return True
+    ...         else:
+    ...             return False
+    ...
+    >>> io = PDBIO()
+    >>> io.set_structure(s)
+    >>> io.save("gly_only.pdb", GlySelect())
 
 If this is all too complicated for you, the ``Dice`` module contains a
 handy ``extract`` function that writes out all residues in a chain
@@ -260,17 +258,17 @@ This is the way many structural biologists/bioinformaticians think about
 structure, and provides a simple but efficient way to deal with
 structure. Additional stuff is essentially added when needed. A UML
 diagram of the ``Structure`` object (forget about the ``Disordered``
-classes for now) is shown in Fig. :ref:`fig:smcra`. Such a data
-structure is not necessarily best suited for the representation of the
-macromolecular content of a structure, but it is absolutely necessary
-for a good interpretation of the data present in a file that describes
-the structure (typically a PDB or MMCIF file). If this hierarchy cannot
+classes for now) is shown in Fig. [fig:smcra]. Such a data structure is
+not necessarily best suited for the representation of the macromolecular
+content of a structure, but it is absolutely necessary for a good
+interpretation of the data present in a file that describes the
+structure (typically a PDB or MMCIF file). If this hierarchy cannot
 represent the contents of a structure file, it is fairly certain that
 the file contains an error or at least does not describe the structure
 unambiguously. If a SMCRA data structure cannot be generated, there is
 reason to suspect a problem. Parsing a PDB file can thus be used to
 detect likely problems. We will give several examples of this in section
-:ref:`sec:problem_structures`.
+[sec:problem\_structures].
 
 .. figure:: images/smcra.png
    :alt: UML diagram of SMCRA architecture of the ``Structure`` class
@@ -278,7 +276,6 @@ detect likely problems. We will give several examples of this in section
    diamonds denote aggregation, full lines with arrows denote
    referencing, full lines with triangles denote inheritance and dashed
    lines with triangles denote interface realization.
-   :name: fig:smcra
    :width: 80.0%
 
    UML diagram of SMCRA architecture of the ``Structure`` class used to
@@ -308,7 +305,7 @@ respectively) by using an id as a key.
 
 .. code:: pycon
 
-   >>> child_entity = parent_entity[child_id]
+    >>> child_entity = parent_entity[child_id]
 
 You can also get a list of all child Entities of a parent Entity object.
 Note that this list is sorted in a specific way (e.g. according to chain
@@ -316,13 +313,13 @@ identifier for Chain objects in a Model object).
 
 .. code:: pycon
 
-   >>> child_list = parent_entity.get_list()
+    >>> child_list = parent_entity.get_list()
 
 You can also get the parent from a child:
 
 .. code:: pycon
 
-   >>> parent_entity = child_entity.get_parent()
+    >>> parent_entity = child_entity.get_parent()
 
 At all levels of the SMCRA hierarchy, you can also extract a *full id*.
 The full id is a tuple containing all id’s starting from the top object
@@ -331,42 +328,42 @@ e.g. is something like:
 
 .. code:: pycon
 
-   >>> full_id = residue.get_full_id()
-   >>> print(full_id)
-   ("1abc", 0, "A", ("", 10, "A"))
+    >>> full_id = residue.get_full_id()
+    >>> print(full_id)
+    ("1abc", 0, "A", ("", 10, "A"))
 
 This corresponds to:
 
--  The Structure with id ‘̈1abc‘̈
+-  The Structure with id ‘"1abc‘"
 
 -  The Model with id 0
 
--  The Chain with id ‘̈A‘̈
+-  The Chain with id ‘"A‘"
 
--  The Residue with id (‘̈ ‘̈, 10, ‘̈A‘̈).
+-  The Residue with id (‘" ‘", 10, ‘"A‘").
 
 The Residue id indicates that the residue is not a hetero-residue (nor a
 water) because it has a blank hetero field, that its sequence identifier
-is 10 and that its insertion code is ‘̈A‘̈.
+is 10 and that its insertion code is ‘"A‘".
 
 To get the entity’s id, use the ``get_id`` method:
 
 .. code:: pycon
 
-   >>> entity.get_id()
+    >>> entity.get_id()
 
 You can check if the entity has a child with a given id by using the
 ``has_id`` method:
 
 .. code:: pycon
 
-   >>> entity.has_id(entity_id)
+    >>> entity.has_id(entity_id)
 
 The length of an entity is equal to its number of children:
 
 .. code:: pycon
 
-   >>> nr_children = len(entity)
+    >>> nr_children = len(entity)
 
 It is possible to delete, rename, add, etc. child entities from a parent
 entity, but this does not include any sanity checks (e.g. it is possible
@@ -400,7 +397,7 @@ As an example, to get the first model from a Structure object, use
 
 .. code:: pycon
 
-   >>> first_model = structure[0]
+    >>> first_model = structure[0]
 
 The Model object stores a list of Chain children.
 
@@ -414,7 +411,7 @@ object with identifier “A” from a Model object, use
 
 .. code:: pycon
 
-   >>> chain_A = model["A"]
+    >>> chain_A = model["A"]
 
 The Chain object stores a list of Residue children.
 
@@ -433,7 +430,7 @@ A residue id is a tuple with three elements:
    -  blank for standard amino and nucleic acids.
 
    This scheme is adopted for reasons described in section
-   :ref:`sec:hetero_problems`.
+   [sec:hetero\_problems].
 
 -  The **sequence identifier** (resseq), an integer describing the
    position of the residue in the chain (e.g., 100);
@@ -452,10 +449,10 @@ blank, the sequence identifier alone can be used:
 
 .. code:: pycon
 
-   # Full id
-   >>> residue=chain[(" ", 100, " ")]
-   # Shortcut id
-   >>> residue=chain[100]
+    # Full id
+    >>> residue=chain[(" ", 100, " ")]
+    # Shortcut id
+    >>> residue=chain[100]
 
 The reason for the hetero-flag is that many, many PDB files use the same
 sequence identifier for an amino acid and a hetero-residue or a water,
@@ -480,23 +477,23 @@ as a shortcut for the full id:
 
 .. code:: pycon
 
-   # use full id
-   >>> res10 = chain[(" ", 10, " ")]
-   # use shortcut
-   >>> res10 = chain[10]
+    # use full id
+    >>> res10 = chain[(" ", 10, " ")]
+    # use shortcut
+    >>> res10 = chain[10]
 
 Each Residue object in a Chain object should have a unique id. However,
 disordered residues are dealt with in a special way, as described in
-section :ref:`sec:point_mutations`.
+section [sec:point\_mutations].
 
 A Residue object has a number of additional methods:
 
 .. code:: pycon
 
-   >>> residue.get_resname()    # returns the residue name, e.g. "ASN"
-   >>> residue.is_disordered()  # returns 1 if the residue has disordered atoms
-   >>> residue.get_segid()      # returns the SEGID, e.g. "CHN1"
-   >>> residue.has_id(name)     # test if a residue has a certain atom
+    >>> residue.get_resname()    # returns the residue name, e.g. "ASN"
+    >>> residue.is_disordered()  # returns 1 if the residue has disordered atoms
+    >>> residue.get_segid()      # returns the SEGID, e.g. "CHN1"
+    >>> residue.has_id(name)     # test if a residue has a certain atom
 
 You can use ``is_aa(residue)`` to test if a Residue object is an amino
 acid.
@@ -508,7 +505,7 @@ The Atom object stores the data associated with an atom, and has no
 children. The id of an atom is its atom name (e.g. “OG” for the side
 chain oxygen of a Ser residue). An Atom id needs to be unique in a
 Residue. Again, an exception is made for disordered atoms, as described
-in section :ref:`sec:disordered_atoms`.
+in section [sec:disordered\_atoms].
 
 The atom id is simply the atom name (eg. ``’CA’``). In practice, the
 atom name is created by stripping all spaces from the atom name in the
@@ -522,7 +519,7 @@ stripping the spaces would create problems (ie. two atoms called
 
 In a PDB file, an atom name consists of 4 chars, typically with leading
 and trailing spaces. Often these spaces can be removed for ease of use
-(e.g. an amino acid C\ :math:`\alpha` atom is labeled “.CA.” in a PDB
+(e.g. an amino acid C\ :math:` \alpha  ` atom is labeled “.CA.” in a PDB
 file, where the dots represent spaces). To generate an atom name (and
 thus an atom id) the spaces are removed, unless this would result in a
 name collision in a Residue (i.e. two Atom objects with the same atom
@@ -545,17 +542,17 @@ An Atom object has the following additional methods:
 
 .. code:: pycon
 
-   >>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
-   >>> a.get_id()         # id (equals atom name)
-   >>> a.get_coord()      # atomic coordinates
-   >>> a.get_vector()     # atomic coordinates as Vector object
-   >>> a.get_bfactor()    # isotropic B factor
-   >>> a.get_occupancy()  # occupancy
-   >>> a.get_altloc()     # alternative location specifier
-   >>> a.get_sigatm()     # standard deviation of atomic parameters
-   >>> a.get_siguij()     # standard deviation of anisotropic B factor
-   >>> a.get_anisou()     # anisotropic B factor
-   >>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
+    >>> a.get_name()       # atom name (spaces stripped, e.g. "CA")
+    >>> a.get_id()         # id (equals atom name)
+    >>> a.get_coord()      # atomic coordinates
+    >>> a.get_vector()     # atomic coordinates as Vector object
+    >>> a.get_bfactor()    # isotropic B factor
+    >>> a.get_occupancy()  # occupancy
+    >>> a.get_altloc()     # alternative location specifier
+    >>> a.get_sigatm()     # standard deviation of atomic parameters
+    >>> a.get_siguij()     # standard deviation of anisotropic B factor
+    >>> a.get_anisou()     # anisotropic B factor
+    >>> a.get_fullname()   # atom name (with spaces, e.g. ".CA.")
 
 To represent the atom coordinates, siguij, anisotropic B factor and
 sigatm Numpy arrays are used.
@@ -576,20 +573,20 @@ construct a rotation around a certain axis) of the ``Vector`` module:
 
 .. code:: pycon
 
-   # get atom coordinates as vectors
-   >>> n = residue["N"].get_vector()
-   >>> c = residue["C"].get_vector()
-   >>> ca = residue["CA"].get_vector()
-   # center at origin
-   >>> n = n - ca
-   >>> c = c - ca
-   # find rotation matrix that rotates n
-   # -120 degrees along the ca-c vector
-   >>> rot = rotaxis(-pi * 120.0/180.0, c)
-   # apply rotation to ca-n vector
-   >>> cb_at_origin = n.left_multiply(rot)
-   # put on top of ca atom
-   >>> cb = cb_at_origin+ca
+    # get atom coordinates as vectors
+    >>> n = residue["N"].get_vector()
+    >>> c = residue["C"].get_vector()
+    >>> ca = residue["CA"].get_vector()
+    # center at origin
+    >>> n = n - ca
+    >>> c = c - ca
+    # find rotation matrix that rotates n
+    # -120 degrees along the ca-c vector
+    >>> rot = rotaxis(-pi * 120.0/180.0, c)
+    # apply rotation to ca-n vector
+    >>> cb_at_origin = n.left_multiply(rot)
+    # put on top of ca atom
+    >>> cb = cb_at_origin+ca
 
 This example shows that it’s possible to do some quite nontrivial vector
 operations on atomic data, which can be quite useful. In addition to all
@@ -605,24 +602,22 @@ These are some examples:
 
 .. code:: pycon
 
-   >>> model = structure[0]
-   >>> chain = model["A"]
-   >>> residue = chain[100]
-   >>> atom = residue["CA"]
+    >>> model = structure[0]
+    >>> chain = model["A"]
+    >>> residue = chain[100]
+    >>> atom = residue["CA"]
 
 Note that you can use a shortcut:
 
 .. code:: pycon
 
-   >>> atom = structure[0]["A"][100]["CA"]
+    >>> atom = structure[0]["A"][100]["CA"]
 
 Disorder
 --------
 
 Bio.PDB can handle both disordered atoms and point mutations (i.e. a Gly
 and an Ala residue in the same position).
-
-.. _sec:disorder_problems:
 
 General approach
 ~~~~~~~~~~~~~~~~
@@ -639,22 +634,20 @@ of the disordered atoms or residues. Which subset is picked (e.g. which
 of the two disordered OG side chain atom positions of a Ser residue is
 used) can be specified by the user.
 
-.. _sec:disordered_atoms:
-
 Disordered atoms
 ~~~~~~~~~~~~~~~~
 
 Disordered atoms are represented by ordinary ``Atom`` objects, but all
 ``Atom`` objects that represent the same physical atom are stored in a
-``DisorderedAtom`` object (see Fig. :ref:`fig:smcra`). Each ``Atom``
-object in a ``DisorderedAtom`` object can be uniquely indexed using its
-altloc specifier. The ``DisorderedAtom`` object forwards all uncaught
-method calls to the selected Atom object, by default the one that
-represents the atom with the highest occupancy. The user can of course
-change the selected ``Atom`` object, making use of its altloc specifier.
-In this way atom disorder is represented correctly without much
-additional complexity. In other words, if you are not interested in atom
-disorder, you will not be bothered by it.
+``DisorderedAtom`` object (see Fig. [fig:smcra]). Each ``Atom`` object
+in a ``DisorderedAtom`` object can be uniquely indexed using its altloc
+specifier. The ``DisorderedAtom`` object forwards all uncaught method
+calls to the selected Atom object, by default the one that represents
+the atom with the highest occupancy. The user can of course change the
+selected ``Atom`` object, making use of its altloc specifier. In this
+way atom disorder is represented correctly without much additional
+complexity. In other words, if you are not interested in atom disorder,
+you will not be bothered by it.
 
 Each disordered atom has a characteristic altloc identifier. You can
 specify that a ``DisorderedAtom`` object should behave like the ``Atom``
@@ -662,12 +655,12 @@ object associated with a specific altloc identifier:
 
 .. code:: pycon
 
-   >>> atom.disordered_select("A") # select altloc A atom
-   >>> print(atom.get_altloc())
-   "A"
-   >>> atom.disordered_select("B") # select altloc B atom
-   >>> print(atom.get_altloc())
-   "B"
+    >>> atom.disordered_select("A") # select altloc A atom
+    >>> print(atom.get_altloc())
+    "A"
+    >>> atom.disordered_select("B") # select altloc B atom
+    >>> print(atom.get_altloc())
+    "B"
 
 Disordered residues
 ~~~~~~~~~~~~~~~~~~~
@@ -683,8 +676,6 @@ will behave exactly like an ordinary atom (in fact the atom with the
 highest occupancy) by forwarding all uncaught method calls to one of the
 Atom objects (the selected Atom object) it contains.
 
-.. _sec:point_mutations:
-
 Point mutations
 ^^^^^^^^^^^^^^^
 
@@ -696,7 +687,7 @@ Since these residues belong to a different residue type (e.g. let’s say
 Ser 60 and Cys 60) they should not be stored in a single ``Residue``
 object as in the common case. In this case, each residue is represented
 by one ``Residue`` object, and both ``Residue`` objects are stored in a
-single ``DisorderedResidue`` object (see Fig. :ref:`fig:smcra`).
+single ``DisorderedResidue`` object (see Fig. [fig:smcra]).
 
 The ``DisorderedResidue`` object forwards all uncaught methods to the
 selected ``Residue`` object (by default the last ``Residue`` object
@@ -713,8 +704,8 @@ chain behaves as the Cys residue.
 
 .. code:: pycon
 
-   >>> residue = chain[10]
-   >>> residue.disordered_select("CYS")
+    >>> residue = chain[10]
+    >>> residue.disordered_select("CYS")
 
 In addition, you can get a list of all ``Atom`` objects (ie. all
 ``DisorderedAtom`` objects are ’unpacked’ to their individual ``Atom``
@@ -723,8 +714,6 @@ objects) using the ``get_unpacked_list`` method of a
 
 Hetero residues
 ---------------
-
-.. _sec:hetero_problems:
 
 Associated problems
 ~~~~~~~~~~~~~~~~~~~
@@ -736,23 +725,23 @@ each hetero residue, waters and other hetero residues are treated in a
 different way.
 
 Remember that Residue object have the tuple (hetfield, resseq, icode) as
-id. The hetfield is blank () for amino and nucleic acids, and a string
-for waters and other hetero residues. The content of the hetfield is
-explained below.
+id. The hetfield is blank (“ ”) for amino and nucleic acids, and a
+string for waters and other hetero residues. The content of the hetfield
+is explained below.
 
 Water residues
 ~~~~~~~~~~~~~~
 
 The hetfield string of a water residue consists of the letter “W”. So a
-typical residue id for a water is (“W”, 1, ).
+typical residue id for a water is (“W”, 1, “ ”).
 
 Other hetero residues
 ~~~~~~~~~~~~~~~~~~~~~
 
 The hetfield string for other hetero residues starts with “H\_” followed
 by the residue name. A glucose molecule e.g. with residue name “GLC”
-would have hetfield “H_GLC”. Its residue id could e.g. be (“H_GLC”, 1,
-).
+would have hetfield “H\_GLC”. Its residue id could e.g. be (“H\_GLC”, 1,
+“ ”).
 
 Navigating through a Structure object
 -------------------------------------
@@ -762,46 +751,46 @@ Parse a PDB file, and extract some Model, Chain, Residue and Atom objects
 
 .. code:: pycon
 
-   >>> from Bio.PDB.PDBParser import PDBParser
-   >>> parser = PDBParser()
-   >>> structure = parser.get_structure("test", "1fat.pdb")
-   >>> model = structure[0]
-   >>> chain = model["A"]
-   >>> residue = chain[1]
-   >>> atom = residue["CA"]
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> parser = PDBParser()
+    >>> structure = parser.get_structure("test", "1fat.pdb")
+    >>> model = structure[0]
+    >>> chain = model["A"]
+    >>> residue = chain[1]
+    >>> atom = residue["CA"]
 
 Iterating through all atoms of a structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: pycon
 
-   >>> p = PDBParser()
-   >>> structure = p.get_structure("X", "pdb1fat.ent")
-   >>> for model in structure:
-   ...     for chain in model:
-   ...         for residue in chain:
-   ...             for atom in residue:
-   ...                 print(atom)
-   ...
+    >>> p = PDBParser()
+    >>> structure = p.get_structure("X", "pdb1fat.ent")
+    >>> for model in structure:
+    ...     for chain in model:
+    ...         for residue in chain:
+    ...             for atom in residue:
+    ...                 print(atom)
+    ...
 
 There is a shortcut if you want to iterate over all atoms in a
 structure:
 
 .. code:: pycon
 
-   >>> atoms = structure.get_atoms()
-   >>> for atom in atoms:
-   ...     print(atom)
-   ...
+    >>> atoms = structure.get_atoms()
+    >>> for atom in atoms:
+    ...     print(atom)
+    ...
 
 Similarly, to iterate over all atoms in a chain, use
 
 .. code:: pycon
 
-   >>> atoms = chain.get_atoms()
-   >>> for atom in atoms:
-   ...     print(atom)
-   ...
+    >>> atoms = chain.get_atoms()
+    >>> for atom in atoms:
+    ...     print(atom)
+    ...
 
 Iterating over all residues of a model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -810,23 +799,23 @@ or if you want to iterate over all residues in a model:
 
 .. code:: pycon
 
-   >>> residues = model.get_residues()
-   >>> for residue in residues:
-   ...     print(residue)
-   ...
+    >>> residues = model.get_residues()
+    >>> for residue in residues:
+    ...     print(residue)
+    ...
 
 You can also use the ``Selection.unfold_entities`` function to get all
 residues from a structure:
 
 .. code:: pycon
 
-   >>> res_list = Selection.unfold_entities(structure, "R")
+    >>> res_list = Selection.unfold_entities(structure, "R")
 
 or to get all atoms from a chain:
 
 .. code:: pycon
 
-   >>> atom_list = Selection.unfold_entities(chain, "A")
+    >>> atom_list = Selection.unfold_entities(chain, "A")
 
 Obviously, ``A=atom, R=residue, C=chain, M=model, S=structure``. You can
 use this to go up in the hierarchy, e.g. to get a list of (unique)
@@ -834,8 +823,8 @@ use this to go up in the hierarchy, e.g. to get a list of (unique)
 
 .. code:: pycon
 
-   >>> residue_list = Selection.unfold_entities(atom_list, "R")
-   >>> chain_list = Selection.unfold_entities(atom_list, "C")
+    >>> residue_list = Selection.unfold_entities(atom_list, "R")
+    >>> chain_list = Selection.unfold_entities(atom_list, "C")
 
 For more info, see the API documentation.
 
@@ -844,50 +833,50 @@ Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 1
 
 .. code:: pycon
 
-   >>> residue_id = ("H_GLC", 10, " ")
-   >>> residue = chain[residue_id]
+    >>> residue_id = ("H_GLC", 10, " ")
+    >>> residue = chain[residue_id]
 
 Print all hetero residues in chain
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: pycon
 
-   >>> for residue in chain.get_list():
-   ...    residue_id = residue.get_id()
-   ...    hetfield = residue_id[0]
-   ...    if hetfield[0]=="H":
-   ...        print(residue_id)
-   ...
+    >>> for residue in chain.get_list():
+    ...    residue_id = residue.get_id()
+    ...    hetfield = residue_id[0]
+    ...    if hetfield[0]=="H":
+    ...        print(residue_id)
+    ...
 
 Print out the coordinates of all CA atoms in a structure with B factor greater than 50
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: pycon
 
-   >>> for model in structure.get_list():
-   ...     for chain in model.get_list():
-   ...         for residue in chain.get_list():
-   ...             if residue.has_id("CA"):
-   ...                 ca = residue["CA"]
-   ...                 if ca.get_bfactor() > 50.0:
-   ...                     print(ca.get_coord())
-   ...
+    >>> for model in structure.get_list():
+    ...     for chain in model.get_list():
+    ...         for residue in chain.get_list():
+    ...             if residue.has_id("CA"):
+    ...                 ca = residue["CA"]
+    ...                 if ca.get_bfactor() > 50.0:
+    ...                     print(ca.get_coord())
+    ...
 
 Print out all the residues that contain disordered atoms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: pycon
 
-   >>> for model in structure.get_list():
-   ...     for chain in model.get_list():
-   ...         for residue in chain.get_list():
-   ...             if residue.is_disordered():
-   ...                 resseq = residue.get_id()[1]
-   ...                 resname = residue.get_resname()
-   ...                 model_id = model.get_id()
-   ...                 chain_id = chain.get_id()
-   ...                 print(model_id, chain_id, resname, resseq)
-   ...
+    >>> for model in structure.get_list():
+    ...     for chain in model.get_list():
+    ...         for residue in chain.get_list():
+    ...             if residue.is_disordered():
+    ...                 resseq = residue.get_id()[1]
+    ...                 resname = residue.get_resname()
+    ...                 model_id = model.get_id()
+    ...                 chain_id = chain.get_id()
+    ...                 print(model_id, chain_id, resname, resseq)
+    ...
 
 Loop over all disordered atoms, and select all atoms with altloc A (if present)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -897,17 +886,15 @@ the atoms with altloc A are present.
 
 .. code:: pycon
 
-   >>> for model in structure.get_list():
-   ...     for chain in model.get_list():
-   ...         for residue in chain.get_list():
-   ...             if residue.is_disordered():
-   ...                 for atom in residue.get_list():
-   ...                     if atom.is_disordered():
-   ...                         if atom.disordered_has_id("A"):
-   ...                             atom.disordered_select("A")
-   ...
-
-.. _sec:extracting_polypeptides:
+    >>> for model in structure.get_list():
+    ...     for chain in model.get_list():
+    ...         for residue in chain.get_list():
+    ...             if residue.is_disordered():
+    ...                 for atom in residue.get_list():
+    ...                     if atom.is_disordered():
+    ...                         if atom.disordered_has_id("A"):
+    ...                             atom.disordered_select("A")
+    ...
 
 Extracting polypeptides from a ``Structure`` object
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -918,11 +905,11 @@ To extract polypeptides from a structure, construct a list of
 
 .. code:: pycon
 
-   >>> model_nr = 1
-   >>> polypeptide_list = build_peptides(structure, model_nr)
-   >>> for polypeptide in polypeptide_list:
-   ...     print(polypeptide)
-   ...
+    >>> model_nr = 1
+    >>> polypeptide_list = build_peptides(structure, model_nr)
+    >>> for polypeptide in polypeptide_list:
+    ...     print(polypeptide)
+    ...
 
 A Polypeptide object is simply a UserList of Residue objects, and is
 always created from a single Model (in this case model 1). You can use
@@ -935,16 +922,16 @@ Example:
 
 .. code:: pycon
 
-   # Using C-N
-   >>> ppb=PPBuilder()
-   >>> for pp in ppb.build_peptides(structure):
-   ...     print(pp.get_sequence())
-   ...
-   # Using CA-CA
-   >>> ppb=CaPPBuilder()
-   >>> for pp in ppb.build_peptides(structure):
-   ...     print(pp.get_sequence())
-   ...
+    # Using C-N
+    >>> ppb=PPBuilder()
+    >>> for pp in ppb.build_peptides(structure):
+    ...     print(pp.get_sequence())
+    ...
+    # Using CA-CA
+    >>> ppb=CaPPBuilder()
+    >>> for pp in ppb.build_peptides(structure):
+    ...     print(pp.get_sequence())
+    ...
 
 Note that in the above case only model 0 of the structure is considered
 by ``PolypeptideBuilder``. However, it is possible to use
@@ -964,9 +951,9 @@ Example:
 
 .. code:: pycon
 
-   >>> seq = polypeptide.get_sequence()
-   >>> print(seq)
-   Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
+    >>> seq = polypeptide.get_sequence()
+    >>> print(seq)
+    Seq('SNVVE...', <class Bio.Alphabet.ProteinAlphabet>)
 
 Analyzing structures
 --------------------
@@ -979,11 +966,11 @@ between two atoms.
 
 .. code:: pycon
 
-   # Get some atoms
-   >>> ca1 = residue1["CA"]
-   >>> ca2 = residue2["CA"]
-   # Simply subtract the atoms to get their distance
-   >>> distance = ca1-ca2
+    # Get some atoms
+    >>> ca1 = residue1["CA"]
+    >>> ca2 = residue2["CA"]
+    # Simply subtract the atoms to get their distance
+    >>> distance = ca1-ca2
 
 Measuring angles
 ~~~~~~~~~~~~~~~~
@@ -993,10 +980,10 @@ Use the vector representation of the atomic coordinates, and the
 
 .. code:: pycon
 
-   >>> vector1 = atom1.get_vector()
-   >>> vector2 = atom2.get_vector()
-   >>> vector3 = atom3.get_vector()
-   >>> angle = calc_angle(vector1, vector2, vector3)
+    >>> vector1 = atom1.get_vector()
+    >>> vector2 = atom2.get_vector()
+    >>> vector3 = atom3.get_vector()
+    >>> angle = calc_angle(vector1, vector2, vector3)
 
 Measuring torsion angles
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1006,11 +993,11 @@ Use the vector representation of the atomic coordinates, and the
 
 .. code:: pycon
 
-   >>> vector1 = atom1.get_vector()
-   >>> vector2 = atom2.get_vector()
-   >>> vector3 = atom3.get_vector()
-   >>> vector4 = atom4.get_vector()
-   >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
+    >>> vector1 = atom1.get_vector()
+    >>> vector2 = atom2.get_vector()
+    >>> vector3 = atom3.get_vector()
+    >>> vector4 = atom4.get_vector()
+    >>> angle = calc_dihedral(vector1, vector2, vector3, vector4)
 
 Determining atom-atom contacts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1042,16 +1029,16 @@ Example:
 
 .. code:: pycon
 
-   >>> sup = Superimposer()
-   # Specify the atom lists
-   # 'fixed' and 'moving' are lists of Atom objects
-   # The moving atoms will be put on the fixed atoms
-   >>> sup.set_atoms(fixed, moving)
-   # Print rotation/translation/rmsd
-   >>> print(sup.rotran)
-   >>> print(sup.rms)
-   # Apply rotation/translation to the moving atoms
-   >>> sup.apply(moving)
+    >>> sup = Superimposer()
+    # Specify the atom lists
+    # 'fixed' and 'moving' are lists of Atom objects
+    # The moving atoms will be put on the fixed atoms
+    >>> sup.set_atoms(fixed, moving)
+    # Print rotation/translation/rmsd
+    >>> print(sup.rotran)
+    >>> print(sup.rms)
+    # Apply rotation/translation to the moving atoms
+    >>> sup.apply(moving)
 
 To superimpose two structures based on their active sites, use the
 active site atoms to calculate the rotation/translation matrices (as
@@ -1086,16 +1073,16 @@ Example:
 
 .. code:: pycon
 
-   >>> model = structure[0]
-   >>> hse = HSExposure()
-   # Calculate HSEalpha
-   >>> exp_ca = hse.calc_hs_exposure(model, option="CA3")
-   # Calculate HSEbeta
-   >>> exp_cb=hse.calc_hs_exposure(model, option="CB")
-   # Calculate classical coordination number
-   >>> exp_fs = hse.calc_fs_exposure(model)
-   # Print HSEalpha for a residue
-   >>> print(exp_ca[some_residue])
+    >>> model = structure[0]
+    >>> hse = HSExposure()
+    # Calculate HSEalpha
+    >>> exp_ca = hse.calc_hs_exposure(model, option="CA3")
+    # Calculate HSEbeta
+    >>> exp_cb=hse.calc_hs_exposure(model, option="CB")
+    # Calculate classical coordination number
+    >>> exp_fs = hse.calc_fs_exposure(model)
+    # Print HSEalpha for a residue
+    >>> print(exp_ca[some_residue])
 
 Determining the secondary structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1104,30 +1091,34 @@ For this functionality, you need to install DSSP (and obtain a license
 for it — free for academic use, see
 https://swift.cmbi.umcn.nl/gv/dssp/). Then use the ``DSSP`` class, which
 maps ``Residue`` objects to their secondary structure (and accessible
-surface area). The DSSP codes are listed in
-Table :ref:`table:DSSP-codes`. Note that DSSP (the
-program, and thus by consequence the class) cannot handle multiple
-models!
+surface area). The DSSP codes are listed in Table [table:DSSP-codes].
+Note that DSSP (the program, and thus by consequence the class) cannot
+handle multiple models!
 
-.. table:: DSSP codes in Bio.PDB.
++--------+-----------------------------------------+
+| Code   | Secondary structure                     |
++========+=========================================+
+| H      | :math:`\alpha`-helix                    |
++--------+-----------------------------------------+
+| B      | Isolated :math:`\beta`-bridge residue   |
++--------+-----------------------------------------+
+| E      | Strand                                  |
++--------+-----------------------------------------+
+| G      | 3-10 helix                              |
++--------+-----------------------------------------+
+| I      | :math:`\Pi`-helix                       |
++--------+-----------------------------------------+
+| T      | Turn                                    |
++--------+-----------------------------------------+
+| S      | Bend                                    |
++--------+-----------------------------------------+
+| -      | Other                                   |
++--------+-----------------------------------------+
 
-   ==== =====================================
-   Code Secondary structure
-   ==== =====================================
-   H    :math:`\alpha`-helix
-   B    Isolated :math:`\beta`-bridge residue
-   E    Strand
-   G    3-10 helix
-   I    :math:`\Pi`-helix
-   T    Turn
-   S    Bend
-   -    Other
-   ==== =====================================
+Table: DSSP codes in Bio.PDB.
 
 The ``DSSP`` class can also be used to calculate the accessible surface
-area of a residue. But see also section :ref:`sec:residue_depth`.
-
-.. _sec:residue_depth:
+area of a residue. But see also section [sec:residue\_depth].
 
 Calculating the residue depth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1146,9 +1137,9 @@ Example:
 
 .. code:: pycon
 
-   >>> model = structure[0]
-   >>> rd = ResidueDepth(model, pdb_file)
-   >>> residue_depth, ca_depth=rd[some_residue]
+    >>> model = structure[0]
+    >>> rd = ResidueDepth(model, pdb_file)
+    >>> residue_depth, ca_depth=rd[some_residue]
 
 You can also get access to the molecular surface itself (via the
 ``get_surface`` function), in the form of a Numeric Python array with
@@ -1166,11 +1157,11 @@ Example:
 
 .. code:: pycon
 
-   # Permissive parser
-   >>> parser = PDBParser(PERMISSIVE=1)
-   >>> parser = PDBParser() # The same (default)
-   # Strict parser
-   >>> strict_parser = PDBParser(PERMISSIVE=0)
+    # Permissive parser
+    >>> parser = PDBParser(PERMISSIVE=1)
+    >>> parser = PDBParser() # The same (default)
+    # Strict parser
+    >>> strict_parser = PDBParser(PERMISSIVE=0)
 
 In the permissive state (DEFAULT), PDB files that obviously contain
 errors are “corrected” (i.e. some residues or atoms are left out). These
@@ -1196,8 +1187,6 @@ Sometimes a structure contains a list of residues belonging to chain A,
 followed by residues belonging to chain B, and again followed by
 residues belonging to chain A, i.e. the chains are ’broken’. This is
 also correctly interpreted.
-
-.. _sec:problem_structures:
 
 Examples
 ~~~~~~~~
@@ -1267,8 +1256,6 @@ Sometimes a PDB file cannot be unambiguously interpreted. Rather than
 guessing and risking a mistake, an exception is generated, and the user
 is expected to correct the PDB file. These cases are listed below.
 
-.. _duplicate-residues-1:
-
 Duplicate residues
 ^^^^^^^^^^^^^^^^^^
 
@@ -1287,8 +1274,6 @@ based on:
 
 If this does not lead to a unique id something is quite likely wrong,
 and an exception is generated.
-
-.. _duplicate-atoms-1:
 
 Duplicate atoms
 ^^^^^^^^^^^^^^^
@@ -1315,14 +1300,14 @@ for this method is the PDB identifier of the structure.
 
 .. code:: pycon
 
-   >>> pdbl = PDBList()
-   >>> pdbl.retrieve_pdb_file("1FAT")
+    >>> pdbl = PDBList()
+    >>> pdbl.retrieve_pdb_file("1FAT")
 
 The ``PDBList`` class can also be used as a command-line tool:
 
 .. code:: pycon
 
-   python PDBList.py 1fat
+    python PDBList.py 1fat
 
 The downloaded file will be called ``pdb1fat.ent`` and stored in the
 current working directory. Note that the ``retrieve_pdb_file`` method
@@ -1346,9 +1331,9 @@ directory:
 
 .. code:: pycon
 
-   python PDBList.py all /data/pdb
+    python PDBList.py all /data/pdb
 
-   python PDBList.py all /data/pdb -d
+    python PDBList.py all /data/pdb -d
 
 The API method for this is called ``download_entire_pdb``. Adding the
 ``-d`` option will store all files in the same directory. Otherwise,
@@ -1364,8 +1349,8 @@ PDB is present) and calls the ``update_pdb`` method:
 
 .. code:: pycon
 
-   >>> pl = PDBList(pdb="/data/pdb")
-   >>> pl.update_pdb()
+    >>> pl = PDBList(pdb="/data/pdb")
+    >>> pl.update_pdb()
 
 One can of course make a weekly ``cronjob`` out of this to keep the
 local copy automatically up-to-date. The PDB ftp site can also be

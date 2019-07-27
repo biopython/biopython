@@ -42,7 +42,7 @@ Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module lev
 \end{minted}
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include \texttt{email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
@@ -50,7 +50,7 @@ Include \verb|api_key="MyAPIkey"| in the argument list or set it as a module lev
 \texttt{Bio.Entrez} will then use this email address with each call to Entrez.  The \texttt{example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter has been mandatory since June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include \texttt{tool="MyLocalScript"} in the argument list), or you can set a global tool name:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.tool = "MyLocalScript"
@@ -66,7 +66,7 @@ In conclusion, be sensible with your usage levels.  If you plan to download lots
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
 %Run this as a doctest in current directory, requires internet access!
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -125,7 +125,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 
 Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> handle = Entrez.einfo()
@@ -151,7 +151,7 @@ The values stored in this key is the list of database names shown in the XML abo
 
 For each of these databases, we can use EInfo again to obtain more information:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -198,7 +198,7 @@ familiar with a particular database.
 \label{sec:entrez-esearch}
 To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For example, let's search in PubMed for publications related to Biopython:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -284,7 +284,7 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
 You would extract these values for use with another Entrez call such as EFetch:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -298,7 +298,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 \section{ESummary: Retrieving summaries from primary IDs}
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -321,7 +321,7 @@ For most of their databases, the NCBI support several different file formats. Re
 
 One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record EU490707 using \verb+Bio.Entrez.efetch+:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -415,7 +415,7 @@ Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:seqio}), you could directly parse it into a \verb+SeqRecord+:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> from Bio import Entrez
@@ -459,7 +459,7 @@ print(record)
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -484,7 +484,7 @@ and other cool stuff.
 
 Let's use ELink to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 19304878:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -494,7 +494,7 @@ Let's use ELink to find articles related to the Biopython application note publi
 
 The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record[0]["DbFrom"]
 'pubmed'
@@ -504,7 +504,7 @@ The \verb+record+ variable consists of a Python list, one for each database in w
 
 The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-divided into categories):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(record[0]["LinkSetDb"])
 8
@@ -583,7 +583,7 @@ See the \href{https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery}{EGQ
 \section{ESpell: Obtaining spelling suggestions}
 ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.espell()+ to obtain the correct spelling of Biopython:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -671,7 +671,7 @@ Three things can go wrong when parsing an XML file:
 
 The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> handle = open("NC_005816.fna") # a Fasta file
@@ -742,7 +742,7 @@ The third type of error occurs if the XML file contains tags that do not have a 
 
 In this file, for some reason the tag \verb|<DocsumList>| (and several others) are not listed in the DTD file \verb|eInfo_020511.dtd|, which is specified on the second line as the DTD for this XML file. By default, the parser will stop and raise a ValidationError if it cannot find some tag in the DTD:
 
-%doctest ../Tests/Entrez/
+\pandocignoreme .. doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
@@ -753,7 +753,7 @@ Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. T
 \end{minted}
 Optionally, you can instruct the parser to skip such tags instead of raising a ValidationError. This is done by calling \verb|Entrez.read| or \verb|Entrez.parse| with the argument \verb|validate| equal to False:
 
-%doctest ../Tests/Entrez/
+\pandocignoreme .. doctest ../Tests/Entrez/
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> handle = open("einfo3.xml")
@@ -796,7 +796,7 @@ AB  - Bioinformatics research is often difficult to do with commercial software.
 \end{minted}
 We first open the file and then parse it:
 
-%doctest ../Tests/Medline
+\pandocignoreme .. doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
 >>> with open("pubmed_result1.txt") as handle:
@@ -805,7 +805,7 @@ We first open the file and then parse it:
 \end{minted}
 The \verb+record+ now contains the Medline record as a Python dictionary:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record["PMID"]
 '12230038'
@@ -829,7 +829,7 @@ for a brief summary.
 
 To parse a file containing multiple Medline records, you can use the \verb+parse+ function instead:
 
-%doctest ../Tests/Medline
+\pandocignoreme .. doctest ../Tests/Medline
 \begin{minted}{pycon}
 >>> from Bio import Medline
 >>> with open("pubmed_result2.txt") as handle:
@@ -913,7 +913,7 @@ The following code fragment shows how to parse the example GEO file
 
 You can search the ``gds'' database (GEO datasets) with ESearch:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -1063,7 +1063,7 @@ In this example, we will query PubMed for all articles having to do with orchids
 
 Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of these 463 articles:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -1083,7 +1083,7 @@ This returns a Python list containing all of the PubMed IDs of articles related 
 
 Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. Here, we'll download the Medline records in the Medline flat-file format, and use the \verb+Bio.Medline+ module to parse them:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Medline
 >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
@@ -1095,7 +1095,7 @@ NOTE - We've just done a separate search and fetch here, the NCBI much prefer yo
 
 Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> records = list(records)
 \end{minted}
@@ -1154,7 +1154,7 @@ First, we use EGQuery to find out the number of results we will get before actua
 So, we expect to find 4457 Entrez Nucleotide records (this increased from 814 records in 2008; it is likely to continue to increase in the future). If you find some ridiculously high number of hits, you may want to reconsider if you really want to download all of them, which is our next step. 
 Let's use the \verb+retmax+ argument to restrict the maximum number of records retrieved to the number available in 2008:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -1317,7 +1317,7 @@ Finally, if plan to repeat your analysis, rather than downloading the files from
 
 Staying with a plant example, let's now find the lineage of the Cypripedioideae orchid family. First, we search the Taxonomy database for Cypripedioideae, which yields exactly one NCBI taxonomy identifier:
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
@@ -1330,7 +1330,7 @@ Staying with a plant example, let's now find the lineage of the Cypripedioideae 
 \end{minted}
 Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and then parse it:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
 >>> records = Entrez.read(handle)
@@ -1380,7 +1380,7 @@ results - which the NCBI can anticipate and cache.
 To do this, call \verb|Bio.Entrez.esearch()| as normal, but with the
 additional argument of \verb|usehistory="y"|,
 
-%doctest . internet
+\pandocignoreme .. doctest . internet
 \begin{minted}{pycon}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"  # Always tell NCBI who you are
@@ -1392,7 +1392,7 @@ additional argument of \verb|usehistory="y"|,
 
 \noindent When you get the XML output back, it will still include the usual search results.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> acc_list = search_results["IdList"]
 >>> count = int(search_results["Count"])
@@ -1404,7 +1404,7 @@ True
 
 \noindent However, you also get given two additional pieces of information, the \texttt{WebEnv} session cookie, and the \texttt{QueryKey}:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> webenv = search_results["WebEnv"]
 >>> query_key = search_results["QueryKey"]

@@ -1,5 +1,3 @@
-.. _chapter:quick_start:
-
 Quick Start – What can you do with Biopython?
 =============================================
 
@@ -40,15 +38,12 @@ one right way to do something. However, this can also be a real benefit
 because it gives you lots of flexibility and control over the libraries.
 The tutorial helps to show you the common or easy ways to do things so
 that you can just make things work. To learn more about the alternative
-possibilities, look in the Cookbook
-(Chapter :ref:`chapter:cookbook`, this has some cools
-tricks and tips), the Advanced section
-(Chapter :ref:`chapter:advanced`), the built in
-“docstrings” (via the Python help command, or the `API
+possibilities, look in the Cookbook (Chapter [chapter:cookbook], this
+has some cools tricks and tips), the Advanced section
+(Chapter [chapter:advanced]), the built in “docstrings” (via the Python
+help command, or the `API
 documentation <http://biopython.org/DIST/docs/api/>`__) or ultimately
 the code itself.
-
-.. _sec:sequences:
 
 Working with sequences
 ----------------------
@@ -56,57 +51,58 @@ Working with sequences
 Disputably (of course!), the central object in bioinformatics is the
 sequence. Thus, we’ll start with a quick introduction to the Biopython
 mechanisms for dealing with sequences, the ``Seq`` object, which we’ll
-discuss in more detail in
-Chapter :ref:`chapter:seq_objects`.
+discuss in more detail in Chapter [chapter:seq\_objects].
 
 Most of the time when we think about sequences we have in my mind a
 string of letters like ‘``AGTACACTGGT``’. You can create such ``Seq``
 object with this sequence as follows - the “``>>>``” represents the
 Python prompt followed by what you would type in:
 
+.. doctest
+
 .. code:: pycon
 
-   >>> from Bio.Seq import Seq
-   >>> my_seq = Seq("AGTACACTGGT")
-   >>> my_seq
-   Seq('AGTACACTGGT')
-   >>> print(my_seq)
-   AGTACACTGGT
-   >>> my_seq.alphabet
-   Alphabet()
+    >>> from Bio.Seq import Seq
+    >>> my_seq = Seq("AGTACACTGGT")
+    >>> my_seq
+    Seq('AGTACACTGGT')
+    >>> print(my_seq)
+    AGTACACTGGT
+    >>> my_seq.alphabet
+    Alphabet()
 
 What we have here is a sequence object with a *generic* alphabet -
 reflecting the fact we have *not* specified if this is a DNA or protein
 sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines
 and Threonines!). We’ll talk more about alphabets in
-Chapter :ref:`chapter:seq_objects`.
+Chapter [chapter:seq\_objects].
 
 In addition to having an alphabet, the ``Seq`` object differs from the
 Python string in the methods it supports. You can’t do this with a plain
 string:
 
+.. cont-doctest
+
 .. code:: pycon
 
-   >>> my_seq
-   Seq('AGTACACTGGT')
-   >>> my_seq.complement()
-   Seq('TCATGTGACCA')
-   >>> my_seq.reverse_complement()
-   Seq('ACCAGTGTACT')
+    >>> my_seq
+    Seq('AGTACACTGGT')
+    >>> my_seq.complement()
+    Seq('TCATGTGACCA')
+    >>> my_seq.reverse_complement()
+    Seq('ACCAGTGTACT')
 
 The next most important class is the ``SeqRecord`` or Sequence Record.
 This holds a sequence (as a ``Seq`` object) with additional annotation
 including an identifier, name and description. The ``Bio.SeqIO`` module
 for reading and writing sequence file formats works with ``SeqRecord``
 objects, which will be introduced below and covered in more detail by
-Chapter :ref:`chapter:seqio`.
+Chapter [chapter:seqio].
 
 This covers the basic features and uses of the Biopython sequence class.
 Now that you’ve got some idea of what it is like to interact with the
 Biopython libraries, it’s time to delve into the fun, fun world of
 dealing with biological file formats!
-
-.. _sec:orchids:
 
 A usage example
 ---------------
@@ -138,16 +134,13 @@ and are made up of 5 genera: *Cypripedium*, *Paphiopedilum*,
 
 That gives us enough to get started delving for more information. So,
 let’s look at how the Biopython tools can help us. We’ll start with
-sequence parsing in Section :ref:`sec:sequence-parsing`, but the
-orchids will be back later on as well - for example we’ll search PubMed
-for papers about orchids and extract sequence data from GenBank in
-Chapter :ref:`chapter:entrez`, extract data from
-Swiss-Prot from certain orchid proteins in
-Chapter :ref:`chapter:uniprot`, and work with
-ClustalW multiple sequence alignments of orchid proteins in
-Section :ref:`sec:align_clustal`.
-
-.. _sec:sequence-parsing:
+sequence parsing in Section [sec:sequence-parsing], but the orchids will
+be back later on as well - for example we’ll search PubMed for papers
+about orchids and extract sequence data from GenBank in
+Chapter [chapter:entrez], extract data from Swiss-Prot from certain
+orchid proteins in Chapter [chapter:uniprot], and work with ClustalW
+multiple sequence alignments of orchid proteins in
+Section [sec:align\_clustal].
 
 Parsing sequence file formats
 -----------------------------
@@ -162,11 +155,11 @@ regularly, and that formats may contain small subtleties which can break
 even the most well designed parsers.
 
 We are now going to briefly introduce the ``Bio.SeqIO`` module – you can
-find out more in Chapter :ref:`chapter:seqio`. We’ll
-start with an online search for our friends, the lady slipper orchids.
-To keep this introduction simple, we’re just using the NCBI website by
-hand. Let’s just take a look through the nucleotide databases at NCBI,
-using an Entrez online search
+find out more in Chapter [chapter:seqio]. We’ll start with an online
+search for our friends, the lady slipper orchids. To keep this
+introduction simple, we’re just using the NCBI website by hand. Let’s
+just take a look through the nucleotide databases at NCBI, using an
+Entrez online search
 (https://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=Nucleotide) for
 everything mentioning the text Cypripedioideae (this is the subfamily of
 lady slipper orchids).
@@ -184,10 +177,8 @@ If you run the search today, you’ll get hundreds of results! When
 following the tutorial, if you want to see the same list of genes, just
 download the two files above or copy them from ``docs/examples/`` in the
 Biopython source code. In
-Section :ref:`sec:connecting-with-biological-databases` we will
-look at how to do a search like this from within Python.
-
-.. _sec:fasta-parsing:
+Section [sec:connecting-with-biological-databases] we will look at how
+to do a search like this from within Python.
 
 Simple FASTA parsing example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -199,10 +190,10 @@ this:
 
 .. code:: text
 
-   >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
-   CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
-   AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
-   ...
+    >gi|2765658|emb|Z78533.1|CIZ78533 C.irapeanum 5.8S rRNA gene and ITS1 and ITS2 DNA
+    CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGGAATAAACGATCGAGTG
+    AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
+    ...
 
 It contains 94 records, each has a line starting with “``>``”
 (greater-than symbol) followed by the sequence on one or more lines. Now
@@ -210,23 +201,23 @@ try this in Python:
 
 .. code:: python
 
-   from Bio import SeqIO
-   for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
-       print(seq_record.id)
-       print(repr(seq_record.seq))
-       print(len(seq_record))
+    from Bio import SeqIO
+    for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
+        print(seq_record.id)
+        print(repr(seq_record.seq))
+        print(len(seq_record))
 
 You should get something like this on your screen:
 
 .. code:: text
 
-   gi|2765658|emb|Z78533.1|CIZ78533
-   Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetterAlphabet())
-   740
-   ...
-   gi|2765564|emb|Z78439.1|PBZ78439
-   Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', SingleLetterAlphabet())
-   592
+    gi|2765658|emb|Z78533.1|CIZ78533
+    Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', SingleLetterAlphabet())
+    740
+    ...
+    gi|2765564|emb|Z78439.1|PBZ78439
+    Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', SingleLetterAlphabet())
+    592
 
 Notice that the FASTA format does not specify the alphabet, so
 ``Bio.SeqIO`` has defaulted to the rather generic
@@ -243,23 +234,23 @@ the filename and the format string:
 
 .. code:: python
 
-   from Bio import SeqIO
-   for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-       print(seq_record.id)
-       print(repr(seq_record.seq))
-       print(len(seq_record))
+    from Bio import SeqIO
+    for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+        print(seq_record.id)
+        print(repr(seq_record.seq))
+        print(len(seq_record))
 
 This should give:
 
 .. code:: text
 
-   Z78533.1
-   Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
-   740
-   ...
-   Z78439.1
-   Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
-   592
+    Z78533.1
+    Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
+    740
+    ...
+    Z78439.1
+    Seq('CATTGTTGAGATCACATAATAATTGATCGAGTTAATCTGGAGGATCTGTTTACT...GCC', IUPACAmbiguousDNA())
+    592
 
 This time ``Bio.SeqIO`` has been able to choose a sensible alphabet,
 IUPAC Ambiguous DNA. You’ll also notice that a shorter string has been
@@ -270,9 +261,9 @@ I love parsing – please don’t stop talking about it!
 
 Biopython has a lot of parsers, and each has its own little special
 niches based on the sequence format it is parsing and all of that.
-Chapter :ref:`chapter:seqio` covers ``Bio.SeqIO`` in
-more detail, while Chapter :ref:`chapter:align`
-introduces ``Bio.AlignIO`` for sequence alignments.
+Chapter [chapter:seqio] covers ``Bio.SeqIO`` in more detail, while
+Chapter [chapter:align] introduces ``Bio.AlignIO`` for sequence
+alignments.
 
 While the most popular file formats have parsers integrated into
 ``Bio.SeqIO`` and/or ``Bio.AlignIO``, for some of the rarer and unloved
@@ -284,13 +275,11 @@ should include an up to date list of supported file types, and some
 additional examples.
 
 The next place to look for information about specific parsers and how to
-do cool things with them is in the Cookbook
-(Chapter :ref:`chapter:cookbook` of this Tutorial).
-If you don’t find the information you are looking for, please consider
-helping out your poor overworked documentors and submitting a cookbook
-entry about it! (once you figure out how to do it, that is!)
-
-.. _sec:connecting-with-biological-databases:
+do cool things with them is in the Cookbook (Chapter [chapter:cookbook]
+of this Tutorial). If you don’t find the information you are looking
+for, please consider helping out your poor overworked documentors and
+submitting a cookbook entry about it! (once you figure out how to do it,
+that is!)
 
 Connecting with biological databases
 ------------------------------------
@@ -304,10 +293,9 @@ Biopython has code to extract information from the following databases:
 
 -  `Entrez <https://www.ncbi.nlm.nih.gov/Web/Search/entrezfs.html>`__
    (and `PubMed <https://www.ncbi.nlm.nih.gov/PubMed/>`__) from the NCBI
-   – See Chapter :ref:`chapter:entrez`.
+   – See Chapter [chapter:entrez].
 
--  `ExPASy <https://www.expasy.org/>`__ – See
-   Chapter :ref:`chapter:uniprot`.
+-  `ExPASy <https://www.expasy.org/>`__ – See Chapter [chapter:uniprot].
 
 -  `SCOP <http://scop.mrc-lmb.cam.ac.uk/scop/>`__ – See the
    ``Bio.SCOP.search()`` function.
@@ -329,8 +317,8 @@ and looking at the automatically generated documentation.
 
 Once you get a picture of what you want to do, and what libraries in
 Biopython will do it, you should take a peak at the Cookbook
-(Chapter :ref:`chapter:cookbook`), which may have
-example code to do something similar to what you want to do.
+(Chapter [chapter:cookbook]), which may have example code to do
+something similar to what you want to do.
 
 If you know what you want to do, but can’t figure out how to do it,
 please feel free to post questions to the main Biopython list (see

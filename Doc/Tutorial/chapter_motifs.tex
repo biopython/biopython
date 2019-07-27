@@ -27,7 +27,7 @@ Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import
 the Bio.motifs library:
 
-%doctest ../Tests/motifs
+\pandocignoreme .. doctest ../Tests/motifs
 \begin{minted}{pycon}
 >>> from Bio import motifs
 \end{minted}
@@ -41,7 +41,7 @@ or motif finding software.
 
 Suppose we have these instances of a DNA motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> instances = [Seq("TACAA"),
@@ -55,14 +55,14 @@ Suppose we have these instances of a DNA motif:
 \end{minted}
 then we can create a Motif object as follows:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m = motifs.create(instances)
 \end{minted}
 The instances are saved in an attribute \verb+m.instances+, which is essentially a Python list with some added functionality, as described below.
 Printing out the Motif object shows the instances from which it was constructed:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(m)
 TACAA
@@ -76,7 +76,7 @@ AATGC
 \end{minted}
 The length of the motif is defined as the sequence length, which should be the same for all instances:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(m)
 5
@@ -84,7 +84,7 @@ The length of the motif is defined as the sequence length, which should be the s
 The Motif object has an attribute \verb+.counts+ containing the counts of each
 nucleotide at each position. Printing this counts matrix shows it in an easily readable format:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(m.counts)
         0      1      2      3      4
@@ -97,7 +97,7 @@ T:   4.00   0.00   2.00   0.00   0.00
 
 You can access these counts as a dictionary:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.counts["A"]
 [3, 7, 0, 2, 1]
@@ -105,7 +105,7 @@ You can access these counts as a dictionary:
 but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.counts["T", 0]
 4
@@ -123,7 +123,7 @@ You can also directly access columns of the counts matrix
 Instead of the nucleotide itself, you can also use the index of the nucleotide
 in the alphabet of the motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.alphabet
 'ACGT'
@@ -136,7 +136,7 @@ The motif has an associated consensus sequence, defined as the sequence of
 letters along the positions of the motif for which the largest value in the
 corresponding columns of the \verb+.counts+ matrix is obtained:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.consensus
 Seq('TACGC')
@@ -144,7 +144,7 @@ Seq('TACGC')
 as well as an anticonsensus sequence, corresponding to the smallest values in
 the columns of the \verb+.counts+ matrix:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.anticonsensus
 Seq('CCATG')
@@ -155,7 +155,7 @@ You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
 high counts:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.degenerate_consensus
 Seq('WACVC')
@@ -166,7 +166,7 @@ constructed following the rules specified by Cavener \cite{cavener1987}.
 
 We can also get the reverse complement of a motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> r = m.reverse_complement()
 >>> r.consensus
@@ -246,7 +246,7 @@ The parts of the sequence in capital letters are the motif instances that were f
 
 We can create a \verb+Motif+ object from these instances as follows:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
@@ -255,7 +255,7 @@ We can create a \verb+Motif+ object from these instances as follows:
 \end{minted}
 The instances from which this motif was created is stored in the \verb+.instances+ property:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(arnt.instances[:3])
 [Seq('CACGTG'), Seq('CACGTG'), Seq('CACGTG')]
@@ -285,7 +285,7 @@ CGCGTG
 \end{minted}
 The counts matrix of this motif is automatically calculated from the instances:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(arnt.counts)
         0      1      2      3      4      5
@@ -311,7 +311,7 @@ For example, this is the JASPAR file \verb+SRF.pfm+ containing the counts matrix
 \end{minted}
 We can create a motif for this count matrix as follows:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> with open("SRF.pfm") as handle:
 ...     srf = motifs.read(handle, "pfm")
@@ -326,14 +326,14 @@ T:   4.00   2.00   0.00   0.00  13.00  42.00   0.00  45.00   3.00  30.00   0.00 
 \end{minted}
 As this motif was created from the counts matrix directly, it has no instances associated with it:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(srf.instances)
 None
 \end{minted}
 We can now ask for the consensus sequence of these two motifs:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(arnt.counts.consensus)
 CACGTG
@@ -593,7 +593,7 @@ matrix            T  aa:1::9::11:
 \end{minted}
 To parse this file (stored as \verb+meme.dna.oops.txt+), use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> with open("meme.dna.oops.txt") as handle:
 ...     record = motifs.parse(handle, "meme")
@@ -603,7 +603,7 @@ The \verb+motifs.parse+ command reads the complete file directly, so you can
 close the file after calling \verb+motifs.parse+.
 The header information is stored in attributes:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record.version
 '3.0'
@@ -619,7 +619,7 @@ The header information is stored in attributes:
 The record is an object of the \verb+Bio.motifs.meme.Record+ class.
 The class inherits from list, and you can think of \verb+record+ as a list of Motif objects:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(record)
 2
@@ -632,7 +632,7 @@ TTCACATGSCNC
 In addition to these generic motif attributes, each motif also stores its
 specific information as calculated by MEME. For example,
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif.num_occurrences
 7
@@ -647,14 +647,14 @@ specific information as calculated by MEME. For example,
 In addition to using an index into the record, as we did above,
 you can also find it by its name:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif = record["Motif 1"]
 \end{minted}
 Each motif has an attribute \verb+.instances+ with the sequence instances
 in which the motif was found, providing some information on each instance:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> len(motif.instances)
 7
@@ -729,7 +729,7 @@ P0      A      C      G      T
 \end{minted}
 To parse a TRANSFAC file, use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> with open("transfac.dat") as handle:
 ...     record = motifs.parse(handle, "TRANSFAC")
@@ -743,7 +743,7 @@ When parsing a non-compliant file, we recommend to check the record returned by 
 
 The overall version number, if available, is stored as \verb+record.version+:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> record.version
 'EXAMPLE January 15, 2013'
@@ -754,7 +754,7 @@ class, which inherits both from the \verb+Bio.motifs.Motif+ class and
 from a Python dictionary. The dictionary uses the two-letter keys to
 store any additional information about the motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif = record[0]
 >>> motif.degenerate_consensus # Using the Bio.motifs.Motif method
@@ -813,7 +813,7 @@ references associated with the motif, using these two-letter keys:
 
 Printing the motifs writes them out in their native TRANSFAC format:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(record)
 VV  EXAMPLE January 15, 2013
@@ -886,7 +886,7 @@ T [  0.00   0.00   0.00   0.00  20.00   0.00]
 
 To write the motif in a TRANSFAC-like matrix format, use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(m.format("transfac"))
 P0      A      C      G      T
@@ -903,7 +903,7 @@ XX
 To write out multiple motifs, you can use \verb+motifs.write+.
 This function can be used regardless of whether the motifs originated from a TRANSFAC file. For example,
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> two_motifs = [arnt, srf]
 >>> print(motifs.write(two_motifs, "transfac"))
@@ -968,7 +968,7 @@ probabilities from becoming zero. To add a fixed pseudocount to all
 nucleotides at all positions, specify a number for the
 \verb+pseudocounts+ argument:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> pwm = m.counts.normalize(pseudocounts=0.5)
 >>> print(pwm)
@@ -984,7 +984,7 @@ pseudocounts for each nucleotide. For example, as the GC content of
 the human genome is about 40\%, you may want to choose the
 pseudocounts accordingly:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> pwm = m.counts.normalize(pseudocounts={"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6})
 >>> print(pwm)
@@ -998,7 +998,7 @@ T:   0.51   0.07   0.29   0.07   0.07
 The position-weight matrix has its own methods to calculate the
 consensus, anticonsensus, and degenerate consensus sequences:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> pwm.consensus
 Seq('TACGC')
@@ -1012,14 +1012,14 @@ calculated from the position-weight matrix is slightly different
 from the degenerate consensus sequence calculated from the instances
 in the motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m.degenerate_consensus
 Seq('WACVC')
 \end{minted}
 The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> rpwm = pwm.reverse_complement()
 >>> print(rpwm)
@@ -1039,7 +1039,7 @@ odds of a particular symbol to be coming from a motif against the
 background. We can use the \verb|.log_odds()| method on the position-weight
 matrix:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> pssm = pwm.log_odds()
 >>> print(pssm)
@@ -1060,7 +1060,7 @@ calculate the position-specific scoring matrix against a background with
 unequal probabilities for A, C, G, T, use the \verb+background+ argument.
 For example, against a background with a 40\% GC content, use
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
 >>> pssm = pwm.log_odds(background)
@@ -1076,7 +1076,7 @@ T:   0.77  -2.17  -0.05  -2.17  -2.17
 The maximum and minimum score obtainable from the PSSM are stored in the
 \verb+.max+ and \verb+.min+ properties:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print("%4.2f" % pssm.max)
 6.59
@@ -1087,7 +1087,7 @@ The maximum and minimum score obtainable from the PSSM are stored in the
 The mean and standard deviation of the PSSM scores with respect to a specific
 background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> mean = pssm.mean(background)
 >>> std = pssm.std(background)
@@ -1110,7 +1110,7 @@ The \verb+.reverse_complement+, \verb+.consensus+, \verb+.anticonsensus+, and
 The most frequent use for a motif is to find its instances in some
 sequence. For the sake of this section, we will use an artificial sequence like this:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA")
 >>> len(test_seq)
@@ -1122,7 +1122,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for pos, seq in m.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
@@ -1133,7 +1133,7 @@ the true instances of the motif:
 \end{minted}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for pos, seq in r.instances.search(test_seq):
 ...     print("%i %s" % (pos, seq))
@@ -1146,7 +1146,7 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for position, score in pssm.search(test_seq, threshold=3.0):
 ...     print("Position %d: score = %5.3f" % (position, score))
@@ -1202,14 +1202,14 @@ can explore the distribution of PSSM scores. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> distribution = pssm.distribution(background=background, precision=10**4)
 \end{minted}
 The \verb+distribution+ object can be used to determine a number of different thresholds.
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%5.3f" % threshold)
@@ -1217,7 +1217,7 @@ We can specify the requested false-positive rate (probability of ``finding'' a m
 \end{minted}
 or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> threshold = distribution.threshold_fnr(0.1)
 >>> print("%5.3f" % threshold)
@@ -1225,7 +1225,7 @@ or the false-negative rate (probability of ``not finding'' an instance generated
 \end{minted}
 or a threshold (approximately) satisfying some relation between the false-positive rate and the false-negative rate ($\frac{\textrm{fnr}}{\textrm{fpr}}\simeq t$):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> threshold = distribution.threshold_balanced(1000)
 >>> print("%5.3f" % threshold)
@@ -1235,7 +1235,7 @@ or a threshold satisfying (roughly) the equality between the $-log$ of the
 false-positive rate and the information content (as used in patser software by
 Hertz and Stormo):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> threshold = distribution.threshold_patser()
 >>> print("%5.3f" % threshold)
@@ -1246,7 +1246,7 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> threshold = distribution.threshold_fpr(0.01)
 >>> print("%5.3f" % threshold)
@@ -1265,7 +1265,7 @@ Position -6: score = 4.601
 To facilitate searching for potential TFBSs using PSSMs, both the position-weight matrix and the position-specific scoring matrix are associated with each motif. Using the Arnt motif as an example:
 %TODO - Start a new doctest here?
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("Arnt.sites") as handle:
@@ -1298,7 +1298,7 @@ T:   -inf   -inf   -inf   -inf   2.00   -inf
 \end{minted}
 The negative infinities appear here because the corresponding entry in the frequency matrix is 0, and we are using zero pseudocounts by default:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.pseudocounts[letter]))
@@ -1310,7 +1310,7 @@ T: 0.00
 \end{minted}
 If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix and the position-specific scoring matrix are recalculated automatically:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif.pseudocounts = 3.0
 >>> for letter in "ACGT":
@@ -1333,7 +1333,7 @@ T:   0.09   0.09   0.09   0.09   0.72   0.09
 <BLANKLINE>
 \end{minted}
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(motif.pssm)
         0      1      2      3      4      5
@@ -1347,7 +1347,7 @@ You can also set the \verb+.pseudocounts+ to a dictionary over the four nucleoti
 
 The position-specific scoring matrix depends on the background distribution, which is uniform by default:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for letter in "ACGT":
 ...     print("%s: %4.2f" % (letter, motif.background[letter]))
@@ -1359,7 +1359,7 @@ T: 0.25
 \end{minted}
 Again, if you modify the background distribution, the position-specific scoring matrix is recalculated:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif.background = {"A": 0.2, "C": 0.3, "G": 0.3, "T": 0.2}
 >>> print(motif.pssm)
@@ -1372,7 +1372,7 @@ T:  -1.09  -1.09  -1.09  -1.09   1.85  -1.09
 \end{minted}
 Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distribution:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif.background = None
 >>> for letter in "ACGT":
@@ -1385,7 +1385,7 @@ T: 0.25
 \end{minted}
 If you set \verb+motif.background+ equal to a single value, it will be interpreted as the GC content:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motif.background = 0.8
 >>> for letter in "ACGT":
@@ -1398,21 +1398,21 @@ T: 0.10
 \end{minted}
 Note that you can now calculate the mean of the PSSM scores over the background against which it was computed:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print("%f" % motif.pssm.mean(motif.background))
 4.703928
 \end{minted}
 as well as its standard deviation:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print("%f" % motif.pssm.std(motif.background))
 3.290900
 \end{minted}
 and its distribution:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> distribution = motif.pssm.distribution(background=motif.background)
 >>> threshold = distribution.threshold_fpr(0.01)
@@ -1448,7 +1448,7 @@ To give an example, let us first load another motif,
 which is similar to our test motif \verb|m|:
 %TODO - Start a new doctest here?
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> with open("REB1.pfm") as handle:
 ...    m_reb1 = motifs.read(handle, "pfm")
@@ -1466,7 +1466,7 @@ T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
 
 To make the motifs comparable, we choose the same values for the pseudocounts and the background distribution as our motif \verb|m|:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> m_reb1.pseudocounts = {"A":0.6, "C": 0.4, "G": 0.4, "T": 0.6}
 >>> m_reb1.background = {"A":0.3,"C":0.2,"G":0.2,"T":0.3}
@@ -1483,7 +1483,7 @@ We'll compare these motifs using the Pearson correlation.
 Since we want it to resemble a distance measure, we actually take
 $1-r$, where $r$ is the Pearson correlation coefficient (PCC):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> distance, offset = pssm.dist_pearson(pssm_reb1)
 >>> print("distance = %5.3g" % distance)
@@ -1515,7 +1515,7 @@ favorite parameters and saved the output in the file
 \verb|meme.out|. You can retrieve the motifs reported by MEME by
 running the following piece of code:
 
-%doctest ../Tests/motifs
+\pandocignoreme .. doctest ../Tests/motifs
 \begin{minted}{pycon}
 >>> from Bio import motifs
 >>> with open("meme.out") as handle:
@@ -1540,7 +1540,7 @@ The motifs returned by the MEME Parser can be treated exactly like regular
 Motif objects (with instances), they also provide some extra
 functionality, by adding additional information about the instances.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> motifsM[0].consensus
 Seq('CTCAATCGTA')

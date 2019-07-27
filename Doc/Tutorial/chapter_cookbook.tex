@@ -104,7 +104,7 @@ website, \href{https://raw.githubusercontent.com/biopython/biopython/master/Test
 This file contains one and only one record, so we can read it in as a
 \verb|SeqRecord| using the \verb|Bio.SeqIO.read()| function:
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> original_rec = SeqIO.read("NC_005816.gb", "genbank")
@@ -115,7 +115,7 @@ use the built in Python \verb|random| module for this, in particular the functio
 \verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> import random
 >>> nuc_list = list(original_rec.seq)
@@ -128,7 +128,7 @@ shuffled list.  In order to do this, we need to turn the list of nucleotides
 (single letter strings) into a long string -- the standard Python way to do
 this is with the string object's join method.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqRecord import SeqRecord
@@ -854,7 +854,7 @@ this time we'll start with a plain FASTA file with no pre-marked genes:
 {\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
 NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
-%doctest ../Tests/GenBank
+\pandocignoreme .. doctest ../Tests/GenBank
 \begin{minted}{pycon}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
@@ -865,7 +865,7 @@ NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
 ...     for frame in range(3):
@@ -1588,7 +1588,7 @@ alignment. The file containing \href{examples/protein.aln}{protein.aln}
 \href{https://raw.githubusercontent.com/biopython/biopython/master/Doc/examples/protein.aln}{here})
 contains the Clustalw alignment output.
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import AlignIO
 >>> from Bio import Alphabet
@@ -1611,7 +1611,7 @@ when generating a replacement dictionary, by passing in all of the
 characters that should be ignored. Thus we'll create a dictionary of
 replacements for only charged polar amino acids using:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
 ...                                                      "M", "P", "F", "W", "S",
@@ -1638,7 +1638,7 @@ need to go ahead and create a substitution matrix. First, we use the
 replacement dictionary information to create an Accepted Replacement
 Matrix (ARM):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import SubsMat
 >>> my_arm = SubsMat.SeqMat(replace_info)
@@ -1647,7 +1647,7 @@ Matrix (ARM):
 With this accepted replacement matrix, we can go right ahead and
 create our log odds matrix (i.~e.~a standard type Substitution Matrix):
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> my_lom = SubsMat.make_log_odds_matrix(my_arm)
 \end{minted}
@@ -1677,7 +1677,7 @@ Once you've got your log odds matrix, you can display it prettily
 using the function \verb|print_mat|. Doing this on our created matrix
 gives:
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> my_lom.print_mat()
 D   2

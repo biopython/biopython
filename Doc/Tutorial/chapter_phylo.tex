@@ -37,7 +37,7 @@ this demo.
 
 Now, within Python, read the tree file, giving the file name and the name of the format.
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
@@ -45,7 +45,7 @@ Now, within Python, read the tree file, giving the file name and the name of the
 
 Printing the tree object as a string gives us a look at the entire object hierarchy.
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> print(tree)
 Tree(rooted=False, weight=1.0)
@@ -71,7 +71,7 @@ The function \verb|draw_ascii| creates a simple ASCII-art (plain text) dendrogra
 convenient visualization for interactive exploration, in case better graphical tools aren't
 available.
 
-%doctest examples
+\pandocignoreme .. doctest examples
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("simple.dnd", "newick")
@@ -279,7 +279,7 @@ Write a tree or iterable of trees back to file with the \verb|write| function:
 %the files tree1.nwk and other_trees.nwk are created and then deleted during the
 %run of test_Tutorial.py
 
-%cont-doctest
+\pandocignoreme .. cont-doctest
 \begin{minted}{pycon}
 >>> trees = list(Phylo.parse("../../Tests/PhyloXML/phyloxml_examples.xml", "phyloxml"))
 >>> tree1 = trees[0]
@@ -302,7 +302,7 @@ Convert files between any of the supported formats with the \verb|convert| funct
 To use strings as input or output instead of actual files, use \verb|StringIO| as you would
 with SeqIO and AlignIO:
 
-%doctest
+\pandocignoreme .. doctest
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> from StringIO import StringIO
@@ -315,7 +315,7 @@ with SeqIO and AlignIO:
 
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
-%doctest ../Tests
+\pandocignoreme .. doctest ../Tests
 \begin{minted}{pycon}
 >>> from Bio import Phylo
 >>> tree = Phylo.read("PhyloXML/example.xml", "phyloxml")

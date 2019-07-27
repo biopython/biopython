@@ -1,5 +1,3 @@
-.. _chapter:blast:
-
 BLAST
 =====
 
@@ -28,16 +26,13 @@ running BLAST locally (on your own machine), and running BLAST remotely
 this chapter by invoking the NCBI online BLAST service from within a
 Python script.
 
-*NOTE*: The following
-Chapter :ref:`chapter:searchio` describes
+*NOTE*: The following Chapter [chapter:searchio] describes
 ``Bio.SearchIO``, an *experimental* module in Biopython. We intend this
 to ultimately replace the older ``Bio.Blast`` module, as it provides a
 more general framework handling other related sequence searching tools
 as well. However, until that is declared stable, for production code
 please continue to use the ``Bio.Blast`` module for dealing with NCBI
 BLAST.
-
-.. _sec:running-www-blast:
 
 Running BLAST over the Internet
 -------------------------------
@@ -73,7 +68,7 @@ the BLAST web page. We’ll just highlight a few of them here:
    formats, which you can choose with the optional ``format_type``
    keyword: ``"HTML"``, ``"Text"``, ``"ASN.1"``, or ``"XML"``. The
    default is ``"XML"``, as that is the format expected by the parser,
-   described in section :ref:`sec:parsing-blast` below.
+   described in section [sec:parsing-blast] below.
 
 -  The argument ``expect`` sets the expectation or e-value threshold.
 
@@ -82,9 +77,9 @@ own documentation, or that built into Biopython:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> help(NCBIWWW.qblast)
-   ...
+    >>> from Bio.Blast import NCBIWWW
+    >>> help(NCBIWWW.qblast)
+    ...
 
 Note that the default settings on the NCBI BLAST website are not quite
 the same as the defaults on QBLAST. If you get different results, you’ll
@@ -97,8 +92,8 @@ number of your query sequence, you can use:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
+    >>> from Bio.Blast import NCBIWWW
+    >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 
 Alternatively, if we have our query sequence already in a FASTA
 formatted file, we just need to open the file and read in this record as
@@ -106,19 +101,19 @@ a string, and use that as the query argument:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> fasta_string = open("m_cold.fasta").read()
-   >>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
+    >>> from Bio.Blast import NCBIWWW
+    >>> fasta_string = open("m_cold.fasta").read()
+    >>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
 
 We could also have read in the FASTA file as a ``SeqRecord`` and then
 supplied just the sequence itself:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> from Bio import SeqIO
-   >>> record = SeqIO.read("m_cold.fasta", format="fasta")
-   >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
+    >>> from Bio.Blast import NCBIWWW
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read("m_cold.fasta", format="fasta")
+    >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
 
 Supplying just the sequence means that BLAST will assign an identifier
 for your sequence automatically. You might prefer to use the
@@ -127,23 +122,23 @@ include the existing identifier):
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> from Bio import SeqIO
-   >>> record = SeqIO.read("m_cold.fasta", format="fasta")
-   >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
+    >>> from Bio.Blast import NCBIWWW
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read("m_cold.fasta", format="fasta")
+    >>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
 
 This approach makes more sense if you have your sequence(s) in a
 non-FASTA file format which you can extract using ``Bio.SeqIO`` (see
-Chapter :ref:`chapter:seqio`).
+Chapter [chapter:seqio]).
 
 Whatever arguments you give the ``qblast()`` function, you should get
 back your results in a handle object (by default in XML format). The
 next step would be to parse the XML output into Python objects
-representing the search results (Section :ref:`sec:parsing-blast`),
-but you might want to save a local copy of the output file first. I find
-this especially useful when debugging my code that extracts info from
-the BLAST results (because re-running the online search is slow and
-wastes the NCBI computer time).
+representing the search results (Section [sec:parsing-blast]), but you
+might want to save a local copy of the output file first. I find this
+especially useful when debugging my code that extracts info from the
+BLAST results (because re-running the online search is slow and wastes
+the NCBI computer time).
 
 [sec:saving-blast-output]
 
@@ -153,27 +148,25 @@ returns an empty string.
 
 .. code:: pycon
 
-   >>> with open("my_blast.xml", "w") as out_handle:
-   ...     out_handle.write(result_handle.read())
-   ...
-   >>> result_handle.close()
+    >>> with open("my_blast.xml", "w") as out_handle:
+    ...     out_handle.write(result_handle.read())
+    ...
+    >>> result_handle.close()
 
 After doing this, the results are in the file ``my_blast.xml`` and the
 original handle has had all its data extracted (so we closed it).
 However, the ``parse`` function of the BLAST parser (described
-in :ref:`sec:parsing-blast`) takes a file-handle-like object, so
-we can just open the saved file for input:
+in [sec:parsing-blast]) takes a file-handle-like object, so we can just
+open the saved file for input:
 
 .. code:: pycon
 
-   >>> result_handle = open("my_blast.xml")
+    >>> result_handle = open("my_blast.xml")
 
 Now that we’ve got the BLAST results back into a handle again, we are
 ready to do something with them, so this leads us right into the parsing
-section (see Section :ref:`sec:parsing-blast` below). You may want
-to jump ahead to that now ….
-
-.. _sec:running-local-blast:
+section (see Section [sec:parsing-blast] below). You may want to jump
+ahead to that now ….
 
 Running BLAST locally
 ---------------------
@@ -182,8 +175,7 @@ Introduction
 ~~~~~~~~~~~~
 
 Running BLAST locally (as opposed to over the internet, see
-Section :ref:`sec:running-www-blast`) has at least major two
-advantages:
+Section [sec:running-www-blast]) has at least major two advantages:
 
 -  Local BLAST may be faster than BLAST over the internet;
 
@@ -217,11 +209,10 @@ package (see below).
 
 This section will show briefly how to use these tools from within
 Python. If you have already read or tried the alignment tool examples in
-Section :ref:`sec:alignment-tools` this should
-all seem quite straightforward. First, we construct a command line
-string (as you would type in at the command line prompt if running
-standalone BLAST by hand). Then we can execute this command from within
-Python.
+Section [sec:alignment-tools] this should all seem quite
+straightforward. First, we construct a command line string (as you would
+type in at the command line prompt if running standalone BLAST by hand).
+Then we can execute this command from within Python.
 
 For example, taking a FASTA file of gene nucleotide sequences, you might
 want to run a BLASTX (translation) search against the non-redundant (NR)
@@ -230,7 +221,7 @@ downloaded and installed the NR database, you might run:
 
 .. code:: console
 
-   $ blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+    $ blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
 
 This should run BLASTX against the NR database, using an expectation
 cut-off value of :math:`0.001` and produce XML output to the specified
@@ -244,17 +235,17 @@ run it:
 
 .. code:: pycon
 
-   >>> from Bio.Blast.Applications import NcbiblastxCommandline
-   >>> help(NcbiblastxCommandline)
-   ...
-   >>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
-   ...                                      outfmt=5, out="opuntia.xml")
-   >>> blastx_cline
-   NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
-   db='nr', evalue=0.001)
-   >>> print(blastx_cline)
-   blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
-   >>> stdout, stderr = blastx_cline()
+    >>> from Bio.Blast.Applications import NcbiblastxCommandline
+    >>> help(NcbiblastxCommandline)
+    ...
+    >>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
+    ...                                      outfmt=5, out="opuntia.xml")
+    >>> blastx_cline
+    NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
+    db='nr', evalue=0.001)
+    >>> print(blastx_cline)
+    blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
+    >>> stdout, stderr = blastx_cline()
 
 In this example there shouldn’t be any output from BLASTX to the
 terminal, so stdout and stderr should be empty. You may want to check
@@ -264,7 +255,7 @@ As you may recall from earlier examples in the tutorial, the
 ``opuntia.fasta`` contains seven sequences, so the BLAST XML output
 should contain multiple results. Therefore use
 ``Bio.Blast.NCBIXML.parse()`` to parse it as described below in
-Section :ref:`sec:parsing-blast`.
+Section [sec:parsing-blast].
 
 Other versions of BLAST
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -287,8 +278,6 @@ include the command line tools ``wu-blastall`` and ``ab-blastall``,
 which mimicked ``blastall`` from the NCBI “legacy” BLAST suite.
 Biopython does not currently provide wrappers for calling these tools,
 but should be able to parse any NCBI compatible output from them.
-
-.. _sec:parsing-blast:
 
 Parsing BLAST output
 --------------------
@@ -314,10 +303,10 @@ it doesn’t matter how the output was generated, as long as it is in the
 XML format.
 
 -  You can use Biopython to run BLAST over the internet, as described in
-   section :ref:`sec:running-www-blast`.
+   section [sec:running-www-blast].
 
 -  You can use Biopython to run BLAST locally, as described in
-   section :ref:`sec:running-local-blast`.
+   section [sec:running-local-blast].
 
 -  You can do the BLAST search yourself on the NCBI site through your
    web browser, and then save the results. You need to choose XML as the
@@ -334,8 +323,7 @@ fetch the data in order to be able to parse it. Doing things in one of
 these ways, you then need to get a handle to the results. In Python, a
 handle is just a nice general way of describing input to any info source
 so that the info can be retrieved using ``read()`` and ``readline()``
-functions (see
-Section :ref:`sec:appendix-handles`).
+functions (see Section [sec:appendix-handles]).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have ``result_handle``, the handle to the BLAST
@@ -343,8 +331,8 @@ results. For example, using a GI number to do an online search:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIWWW
-   >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
+    >>> from Bio.Blast import NCBIWWW
+    >>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 
 If instead you ran BLAST some other way, and have the BLAST output (in
 XML format) in the file ``my_blast.xml``, all you need to do is to open
@@ -352,7 +340,7 @@ the file for reading:
 
 .. code:: pycon
 
-   >>> result_handle = open("my_blast.xml")
+    >>> result_handle = open("my_blast.xml")
 
 Now that we’ve got a handle, we are ready to parse the output. The code
 to parse it is really quite small. If you expect a single BLAST result
@@ -360,19 +348,18 @@ to parse it is really quite small. If you expect a single BLAST result
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIXML
-   >>> blast_record = NCBIXML.read(result_handle)
+    >>> from Bio.Blast import NCBIXML
+    >>> blast_record = NCBIXML.read(result_handle)
 
 or, if you have lots of results (i.e., multiple query sequences):
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIXML
-   >>> blast_records = NCBIXML.parse(result_handle)
+    >>> from Bio.Blast import NCBIXML
+    >>> blast_records = NCBIXML.parse(result_handle)
 
 Just like ``Bio.SeqIO`` and ``Bio.AlignIO`` (see
-Chapters :ref:`chapter:seqio`
-and :ref:`chapter:align`), we have a pair of input
+Chapters [chapter:seqio] and [chapter:align]), we have a pair of input
 functions, ``read`` and ``parse``, where ``read`` is for when you have
 exactly one object, and ``parse`` is an iterator for when you can have
 lots of objects – but instead of getting ``SeqRecord`` or
@@ -386,26 +373,26 @@ result:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIXML
-   >>> blast_records = NCBIXML.parse(result_handle)
-   >>> blast_record = next(blast_records)
-   # ... do something with blast_record
-   >>> blast_record = next(blast_records)
-   # ... do something with blast_record
-   >>> blast_record = next(blast_records)
-   # ... do something with blast_record
-   >>> blast_record = next(blast_records)
-   Traceback (most recent call last):
-     File "<stdin>", line 1, in <module>
-   StopIteration
-   # No further records
+    >>> from Bio.Blast import NCBIXML
+    >>> blast_records = NCBIXML.parse(result_handle)
+    >>> blast_record = next(blast_records)
+    # ... do something with blast_record
+    >>> blast_record = next(blast_records)
+    # ... do something with blast_record
+    >>> blast_record = next(blast_records)
+    # ... do something with blast_record
+    >>> blast_record = next(blast_records)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    StopIteration
+    # No further records
 
 Or, you can use a ``for``-loop:
 
 .. code:: pycon
 
-   >>> for blast_record in blast_records:
-   ...     # Do something with blast_record
+    >>> for blast_record in blast_records:
+    ...     # Do something with blast_record
 
 Note though that you can step through the BLAST records only once.
 Usually, from each BLAST record you would save the information that you
@@ -414,7 +401,7 @@ can convert the iterator into a list:
 
 .. code:: pycon
 
-   >>> blast_records = list(blast_records)
+    >>> blast_records = list(blast_records)
 
 Now you can access each BLAST record in the list with an index as usual.
 If your BLAST file is huge though, you may run into memory problems
@@ -426,16 +413,16 @@ need to do is to pick up the first (and only) BLAST record in
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIXML
-   >>> blast_records = NCBIXML.parse(result_handle)
-   >>> blast_record = next(blast_records)
+    >>> from Bio.Blast import NCBIXML
+    >>> blast_records = NCBIXML.parse(result_handle)
+    >>> blast_record = next(blast_records)
 
 or more elegantly:
 
 .. code:: pycon
 
-   >>> from Bio.Blast import NCBIXML
-   >>> blast_record = NCBIXML.read(result_handle)
+    >>> from Bio.Blast import NCBIXML
+    >>> blast_record = NCBIXML.read(result_handle)
 
 I guess by now you’re wondering what is in a BLAST record.
 
@@ -456,31 +443,31 @@ The following code does this:
 
 .. code:: pycon
 
-   >>> E_VALUE_THRESH = 0.04
+    >>> E_VALUE_THRESH = 0.04
 
-   >>> for alignment in blast_record.alignments:
-   ...     for hsp in alignment.hsps:
-   ...         if hsp.expect < E_VALUE_THRESH:
-   ...             print("****Alignment****")
-   ...             print("sequence:", alignment.title)
-   ...             print("length:", alignment.length)
-   ...             print("e value:", hsp.expect)
-   ...             print(hsp.query[0:75] + "...")
-   ...             print(hsp.match[0:75] + "...")
-   ...             print(hsp.sbjct[0:75] + "...")
+    >>> for alignment in blast_record.alignments:
+    ...     for hsp in alignment.hsps:
+    ...         if hsp.expect < E_VALUE_THRESH:
+    ...             print("****Alignment****")
+    ...             print("sequence:", alignment.title)
+    ...             print("length:", alignment.length)
+    ...             print("e value:", hsp.expect)
+    ...             print(hsp.query[0:75] + "...")
+    ...             print(hsp.match[0:75] + "...")
+    ...             print(hsp.sbjct[0:75] + "...")
 
 This will print out summary reports like the following:
 
 .. code:: text
 
-   ****Alignment****
-   sequence: >gb|AF283004.1|AF283004 Arabidopsis thaliana cold acclimation protein WCOR413-like protein
-   alpha form mRNA, complete cds
-   length: 783
-   e value: 0.034
-   tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtcccttacatattcctc...
-   ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | |||||||| ||| ||...
-   tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcattccttacatcttcttc...
+    ****Alignment****
+    sequence: >gb|AF283004.1|AF283004 Arabidopsis thaliana cold acclimation protein WCOR413-like protein
+    alpha form mRNA, complete cds
+    length: 783
+    e value: 0.034
+    tacttgttgatattggatcgaacaaactggagaaccaacatgctcacgtcacttttagtcccttacatattcctc...
+    ||||||||| | ||||||||||| || ||||  || || |||||||| |||||| |  | |||||||| ||| ||...
+    tacttgttggtgttggatcgaaccaattggaagacgaatatgctcacatcacttctcattccttacatcttcttc...
 
 Basically, you can do anything you want to with the info in the BLAST
 report once you have parsed it. This will, of course, depend on what you
@@ -496,14 +483,13 @@ defined in ``Bio.Blast.Record`` and are quite complete.
 Here are my attempts at UML class diagrams for the ``Blast`` and
 ``PSIBlast`` record classes. If you are good at UML and see
 mistakes/improvements that can be made, please let me know. The Blast
-class diagram is shown in Figure :ref:`fig:blastrecord`.
+class diagram is shown in Figure [fig:blastrecord].
 
 [fig:blastrecord]
 
 .. figure:: images/BlastRecord.png
    :alt: Class diagram for the Blast Record class representing all of
    the info in a BLAST report
-   :name: fig:blastrecord
    :width: 80.0%
 
    Class diagram for the Blast Record class representing all of the info
@@ -511,13 +497,12 @@ class diagram is shown in Figure :ref:`fig:blastrecord`.
 
 The PSIBlast record object is similar, but has support for the rounds
 that are used in the iteration steps of PSIBlast. The class diagram for
-PSIBlast is shown in Figure :ref:`fig:psiblastrecord`.
+PSIBlast is shown in Figure [fig:psiblastrecord].
 
 [fig:psiblastrecord]
 
 .. figure:: images/PSIBlastRecord.png
    :alt: Class diagram for the PSIBlast Record class.
-   :name: fig:psiblastrecord
    :width: 80.0%
 
    Class diagram for the PSIBlast Record class.

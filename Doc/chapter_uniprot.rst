@@ -1,5 +1,3 @@
-.. _chapter:uniprot:
-
 Swiss-Prot and ExPASy
 =====================
 
@@ -18,11 +16,10 @@ file format for annotated protein sequences.
 Parsing Swiss-Prot records
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In
-Section :ref:`sec:SeqIO_ExPASy_and_SwissProt`,
-we described how to extract the sequence of a Swiss-Prot record as a
-``SeqRecord`` object. Alternatively, you can store the Swiss-Prot record
-in a ``Bio.SwissProt.Record`` object, which in fact stores the complete
+In Section [sec:SeqIO\_ExPASy\_and\_SwissProt], we described how to
+extract the sequence of a Swiss-Prot record as a ``SeqRecord`` object.
+Alternatively, you can store the Swiss-Prot record in a
+``Bio.SwissProt.Record`` object, which in fact stores the complete
 information contained in the Swiss-Prot record. In this section, we
 describe how to extract ``Bio.SwissProt.Record`` objects from a
 Swiss-Prot file.
@@ -35,22 +32,22 @@ Swiss-Prot record is stored:
 
    .. code:: pycon
 
-      >>> handle = open("myswissprotfile.dat")
+       >>> handle = open("myswissprotfile.dat")
 
 -  Open a gzipped Swiss-Prot file:
 
    .. code:: pycon
 
-      >>> import gzip
-      >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
+       >>> import gzip
+       >>> handle = gzip.open("myswissprotfile.dat.gz", "rt")
 
 -  Open a Swiss-Prot file over the internet:
 
    .. code:: pycon
 
-      >>> from urllib.request import urlopen # Python 3 only
-      >>> from io import TextIOWrapper
-      >>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"))
+       >>> from urllib.request import urlopen # Python 3 only
+       >>> from io import TextIOWrapper
+       >>> handle = TextIOWrapper(urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt"))
 
    to open the file stored on the Internet before calling ``read``.
 
@@ -58,33 +55,33 @@ Swiss-Prot record is stored:
 
    .. code:: pycon
 
-      >>> from urllib import urlopen #Python 2 only
-      >>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
+       >>> from urllib import urlopen #Python 2 only
+       >>> handle = urlopen("https://raw.githubusercontent.com/biopython/biopython/master/Tests/SwissProt/F2CXE6.txt")
 
 -  Open a Swiss-Prot file over the internet from the ExPASy database
-   (see section :ref:`sec:expasy_swissprot`):
+   (see section [sec:expasy\_swissprot]):
 
    .. code:: pycon
 
-      >>> from Bio import ExPASy
-      >>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
+       >>> from Bio import ExPASy
+       >>> handle = ExPASy.get_sprot_raw(myaccessionnumber)
 
 The key point is that for the parser, it doesn’t matter how the handle
 was created, as long as it points to data in the Swiss-Prot format.
 
 We can use ``Bio.SeqIO`` as described in
-Section :ref:`sec:SeqIO_ExPASy_and_SwissProt`
-to get file format agnostic ``SeqRecord`` objects. Alternatively, we can
-use ``Bio.SwissProt`` get ``Bio.SwissProt.Record`` objects, which are a
-much closer match to the underlying file format.
+Section [sec:SeqIO\_ExPASy\_and\_SwissProt] to get file format agnostic
+``SeqRecord`` objects. Alternatively, we can use ``Bio.SwissProt`` get
+``Bio.SwissProt.Record`` objects, which are a much closer match to the
+underlying file format.
 
 To read one Swiss-Prot record from the handle, we use the function
 ``read()``:
 
 .. code:: pycon
 
-   >>> from Bio import SwissProt
-   >>> record = SwissProt.read(handle)
+    >>> from Bio import SwissProt
+    >>> record = SwissProt.read(handle)
 
 This function should be used if the handle points to exactly one
 Swiss-Prot record. It raises a ``ValueError`` if no Swiss-Prot record
@@ -94,22 +91,22 @@ We can now print out some information about this record:
 
 .. code:: pycon
 
-   >>> print(record.description)
-   SubName: Full=Plasma membrane intrinsic protein {ECO:0000313|EMBL:BAN04711.1}; SubName: Full=Predicted protein {ECO:0000313|EMBL:BAJ87517.1};
-   >>> for ref in record.references:
-   ...     print("authors:", ref.authors)
-   ...     print("title:", ref.title)
-   ... print(record.organism_classification)
-   ...
-   authors: Matsumoto T., Tanaka T., Sakai H., Amano N., Kanamori H., Kurita K., Kikuta A., Kamiya K., Yamamoto M., Ikawa H., Fujii N., Hori K., Itoh T., Sato K.
-   title: Comprehensive sequence analysis of 24,783 barley full-length cDNAs derived from 12 clone libraries.
-   ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
-   authors: Shibasaka M., Sasano S., Utsugi S., Katsuhara M.
-   title: Functional characterization of a novel plasma membrane intrinsic protein2 in barley.
-   ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
-   authors: Shibasaka M., Katsuhara M., Sasano S.
-   title: 
-   ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
+    >>> print(record.description)
+    SubName: Full=Plasma membrane intrinsic protein {ECO:0000313|EMBL:BAN04711.1}; SubName: Full=Predicted protein {ECO:0000313|EMBL:BAJ87517.1};
+    >>> for ref in record.references:
+    ...     print("authors:", ref.authors)
+    ...     print("title:", ref.title)
+    ... print(record.organism_classification)
+    ...
+    authors: Matsumoto T., Tanaka T., Sakai H., Amano N., Kanamori H., Kurita K., Kikuta A., Kamiya K., Yamamoto M., Ikawa H., Fujii N., Hori K., Itoh T., Sato K.
+    title: Comprehensive sequence analysis of 24,783 barley full-length cDNAs derived from 12 clone libraries.
+    ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
+    authors: Shibasaka M., Sasano S., Utsugi S., Katsuhara M.
+    title: Functional characterization of a novel plasma membrane intrinsic protein2 in barley.
+    ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
+    authors: Shibasaka M., Katsuhara M., Sasano S.
+    title: 
+    ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Poales', 'Poaceae', 'BEP clade', 'Pooideae', 'Triticeae', 'Hordeum']
 
 To parse a file that contains more than one Swiss-Prot record, we use
 the ``parse`` function instead. This function allows us to iterate over
@@ -127,8 +124,8 @@ library ``gzip`` to open and uncompress a ``.gz`` file, like this:
 
 .. code:: pycon
 
-   >>> import gzip
-   >>> handle = gzip.open("uniprot_sprot.dat.gz", "rt")
+    >>> import gzip
+    >>> handle = gzip.open("uniprot_sprot.dat.gz", "rt")
 
 However, uncompressing a large file takes time, and each time you open
 the file for reading in this way, it has to be decompressed on the fly.
@@ -138,7 +135,7 @@ file inside. Then you can open the file for reading as usual:
 
 .. code:: pycon
 
-   >>> handle = open("uniprot_sprot.dat")
+    >>> handle = open("uniprot_sprot.dat")
 
 As of June 2009, the full Swiss-Prot database downloaded from ExPASy
 contained 468851 Swiss-Prot records. One concise way to build up a list
@@ -146,30 +143,30 @@ of the record descriptions is with a list comprehension:
 
 .. code:: pycon
 
-   >>> from Bio import SwissProt
-   >>> handle = open("uniprot_sprot.dat")
-   >>> descriptions = [record.description for record in SwissProt.parse(handle)]
-   >>> len(descriptions)
-   468851
-   >>> descriptions[:5]
-   ['RecName: Full=Protein MGF 100-1R;',
-    'RecName: Full=Protein MGF 100-1R;',
-    'RecName: Full=Protein MGF 100-1R;',
-    'RecName: Full=Protein MGF 100-1R;',
-    'RecName: Full=Protein MGF 100-2L;']
+    >>> from Bio import SwissProt
+    >>> handle = open("uniprot_sprot.dat")
+    >>> descriptions = [record.description for record in SwissProt.parse(handle)]
+    >>> len(descriptions)
+    468851
+    >>> descriptions[:5]
+    ['RecName: Full=Protein MGF 100-1R;',
+     'RecName: Full=Protein MGF 100-1R;',
+     'RecName: Full=Protein MGF 100-1R;',
+     'RecName: Full=Protein MGF 100-1R;',
+     'RecName: Full=Protein MGF 100-2L;']
 
 Or, using a for loop over the record iterator:
 
 .. code:: pycon
 
-   >>> from Bio import SwissProt
-   >>> descriptions = []
-   >>> handle = open("uniprot_sprot.dat")
-   >>> for record in SwissProt.parse(handle):
-   ...     descriptions.append(record.description)
-   ...
-   >>> len(descriptions)
-   468851
+    >>> from Bio import SwissProt
+    >>> descriptions = []
+    >>> handle = open("uniprot_sprot.dat")
+    >>> for record in SwissProt.parse(handle):
+    ...     descriptions.append(record.description)
+    ...
+    >>> len(descriptions)
+    468851
 
 Because this is such a large input file, either way takes about eleven
 minutes on my new desktop computer (using the uncompressed
@@ -180,13 +177,13 @@ Swiss-Prot records. To see the members of a Swiss-Prot record, use
 
 .. code:: pycon
 
-   >>> dir(record)
-   ['__doc__', '__init__', '__module__', 'accessions', 'annotation_update',
-   'comments', 'created', 'cross_references', 'data_class', 'description',
-   'entry_name', 'features', 'gene_name', 'host_organism', 'keywords',
-   'molecule_type', 'organelle', 'organism', 'organism_classification',
-   'references', 'seqinfo', 'sequence', 'sequence_length',
-   'sequence_update', 'taxonomy_id']
+    >>> dir(record)
+    ['__doc__', '__init__', '__module__', 'accessions', 'annotation_update',
+    'comments', 'created', 'cross_references', 'data_class', 'description',
+    'entry_name', 'features', 'gene_name', 'host_organism', 'keywords',
+    'molecule_type', 'organelle', 'organism', 'organism_classification',
+    'references', 'seqinfo', 'sequence', 'sequence_length',
+    'sequence_update', 'taxonomy_id']
 
 Parsing the Swiss-Prot keyword and category list
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -197,29 +194,29 @@ the following form:
 
 .. code:: text
 
-   ID   2Fe-2S.
-   AC   KW-0001
-   DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
-   DE   atoms complexed to 2 inorganic sulfides and 4 sulfur atoms of
-   DE   cysteines from the protein.
-   SY   Fe2S2; [2Fe-2S] cluster; [Fe2S2] cluster; Fe2/S2 (inorganic) cluster;
-   SY   Di-mu-sulfido-diiron; 2 iron, 2 sulfur cluster binding.
-   GO   GO:0051537; 2 iron, 2 sulfur cluster binding
-   HI   Ligand: Iron; Iron-sulfur; 2Fe-2S.
-   HI   Ligand: Metal-binding; 2Fe-2S.
-   CA   Ligand.
-   //
-   ID   3D-structure.
-   AC   KW-0002
-   DE   Protein, or part of a protein, whose three-dimensional structure has
-   DE   been resolved experimentally (for example by X-ray crystallography or
-   DE   NMR spectroscopy) and whose coordinates are available in the PDB
-   DE   database. Can also be used for theoretical models.
-   HI   Technical term: 3D-structure.
-   CA   Technical term.
-   //
-   ID   3Fe-4S.
-   ...
+    ID   2Fe-2S.
+    AC   KW-0001
+    DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
+    DE   atoms complexed to 2 inorganic sulfides and 4 sulfur atoms of
+    DE   cysteines from the protein.
+    SY   Fe2S2; [2Fe-2S] cluster; [Fe2S2] cluster; Fe2/S2 (inorganic) cluster;
+    SY   Di-mu-sulfido-diiron; 2 iron, 2 sulfur cluster binding.
+    GO   GO:0051537; 2 iron, 2 sulfur cluster binding
+    HI   Ligand: Iron; Iron-sulfur; 2Fe-2S.
+    HI   Ligand: Metal-binding; 2Fe-2S.
+    CA   Ligand.
+    //
+    ID   3D-structure.
+    AC   KW-0002
+    DE   Protein, or part of a protein, whose three-dimensional structure has
+    DE   been resolved experimentally (for example by X-ray crystallography or
+    DE   NMR spectroscopy) and whose coordinates are available in the PDB
+    DE   database. Can also be used for theoretical models.
+    HI   Technical term: 3D-structure.
+    CA   Technical term.
+    //
+    ID   3Fe-4S.
+    ...
 
 The entries in this file can be parsed by the ``parse`` function in the
 ``Bio.SwissProt.KeyWList`` module. Each entry is then stored as a
@@ -227,22 +224,22 @@ The entries in this file can be parsed by the ``parse`` function in the
 
 .. code:: pycon
 
-   >>> from Bio.SwissProt import KeyWList
-   >>> handle = open("keywlist.txt")
-   >>> records = KeyWList.parse(handle)
-   >>> for record in records:
-   ...     print(record["ID"])
-   ...     print(record["DE"])
+    >>> from Bio.SwissProt import KeyWList
+    >>> handle = open("keywlist.txt")
+    >>> records = KeyWList.parse(handle)
+    >>> for record in records:
+    ...     print(record["ID"])
+    ...     print(record["DE"])
 
 This prints
 
 .. code:: text
 
-   2Fe-2S.
-   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
-   complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
-   protein.
-   ...
+    2Fe-2S.
+    Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron atoms
+    complexed to 2 inorganic sulfides and 4 sulfur atoms of cysteines from the
+    protein.
+    ...
 
 Parsing Prosite records
 -----------------------
@@ -263,9 +260,9 @@ a file, we again make use of an iterator:
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Prosite
-   >>> handle = open("myprositefile.dat")
-   >>> records = Prosite.parse(handle)
+    >>> from Bio.ExPASy import Prosite
+    >>> handle = open("myprositefile.dat")
+    >>> records = Prosite.parse(handle)
 
 We can now take the records one at a time and print out some
 information. For example, using the file containing the complete Prosite
@@ -273,53 +270,53 @@ database, we’d find
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Prosite
-   >>> handle = open("prosite.dat")
-   >>> records = Prosite.parse(handle)
-   >>> record = next(records)
-   >>> record.accession
-   'PS00001'
-   >>> record.name
-   'ASN_GLYCOSYLATION'
-   >>> record.pdoc
-   'PDOC00001'
-   >>> record = next(records)
-   >>> record.accession
-   'PS00004'
-   >>> record.name
-   'CAMP_PHOSPHO_SITE'
-   >>> record.pdoc
-   'PDOC00004'
-   >>> record = next(records)
-   >>> record.accession
-   'PS00005'
-   >>> record.name
-   'PKC_PHOSPHO_SITE'
-   >>> record.pdoc
-   'PDOC00005'
+    >>> from Bio.ExPASy import Prosite
+    >>> handle = open("prosite.dat")
+    >>> records = Prosite.parse(handle)
+    >>> record = next(records)
+    >>> record.accession
+    'PS00001'
+    >>> record.name
+    'ASN_GLYCOSYLATION'
+    >>> record.pdoc
+    'PDOC00001'
+    >>> record = next(records)
+    >>> record.accession
+    'PS00004'
+    >>> record.name
+    'CAMP_PHOSPHO_SITE'
+    >>> record.pdoc
+    'PDOC00004'
+    >>> record = next(records)
+    >>> record.accession
+    'PS00005'
+    >>> record.name
+    'PKC_PHOSPHO_SITE'
+    >>> record.pdoc
+    'PDOC00005'
 
 and so on. If you’re interested in how many Prosite records there are,
 you could use
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Prosite
-   >>> handle = open("prosite.dat")
-   >>> records = Prosite.parse(handle)
-   >>> n = 0
-   >>> for record in records: n+=1
-   ...
-   >>> n
-   2073
+    >>> from Bio.ExPASy import Prosite
+    >>> handle = open("prosite.dat")
+    >>> records = Prosite.parse(handle)
+    >>> n = 0
+    >>> for record in records: n+=1
+    ...
+    >>> n
+    2073
 
 To read exactly one Prosite from the handle, you can use the ``read``
 function:
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Prosite
-   >>> handle = open("mysingleprositerecord.dat")
-   >>> record = Prosite.read(handle)
+    >>> from Bio.ExPASy import Prosite
+    >>> handle = open("mysingleprositerecord.dat")
+    >>> record = Prosite.read(handle)
 
 This function raises a ValueError if no Prosite record is found, and
 also if more than one Prosite record is found.
@@ -339,10 +336,10 @@ numbers of Prosite documentation record, you can use
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Prodoc
-   >>> handle = open("prosite.doc")
-   >>> records = Prodoc.parse(handle)
-   >>> accessions = [record.accession for record in records]
+    >>> from Bio.ExPASy import Prodoc
+    >>> handle = open("prosite.doc")
+    >>> records = Prodoc.parse(handle)
+    >>> accessions = [record.accession for record in records]
 
 Again a ``read()`` function is provided to read exactly one Prosite
 documentation record from the handle.
@@ -355,29 +352,29 @@ nomenclature. A typical Enzyme record looks as follows:
 
 .. code:: text
 
-   ID   3.1.1.34
-   DE   Lipoprotein lipase.
-   AN   Clearing factor lipase.
-   AN   Diacylglycerol lipase.
-   AN   Diglyceride lipase.
-   CA   Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.
-   CC   -!- Hydrolyzes triacylglycerols in chylomicrons and very low-density
-   CC       lipoproteins (VLDL).
-   CC   -!- Also hydrolyzes diacylglycerol.
-   PR   PROSITE; PDOC00110;
-   DR   P11151, LIPL_BOVIN ;  P11153, LIPL_CAVPO ;  P11602, LIPL_CHICK ;
-   DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
-   DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
-   DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
-   //
+    ID   3.1.1.34
+    DE   Lipoprotein lipase.
+    AN   Clearing factor lipase.
+    AN   Diacylglycerol lipase.
+    AN   Diglyceride lipase.
+    CA   Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.
+    CC   -!- Hydrolyzes triacylglycerols in chylomicrons and very low-density
+    CC       lipoproteins (VLDL).
+    CC   -!- Also hydrolyzes diacylglycerol.
+    PR   PROSITE; PDOC00110;
+    DR   P11151, LIPL_BOVIN ;  P11153, LIPL_CAVPO ;  P11602, LIPL_CHICK ;
+    DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
+    DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
+    DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
+    //
 
 In this example, the first line shows the EC (Enzyme Commission) number
 of lipoprotein lipase (second line). Alternative names of lipoprotein
-lipase are "clearing factor lipase", "diacylglycerol lipase", and
-"diglyceride lipase" (lines 3 through 5). The line starting with "CA"
+lipase are “clearing factor lipase”, “diacylglycerol lipase”, and
+“diglyceride lipase” (lines 3 through 5). The line starting with “CA”
 shows the catalytic activity of this enzyme. Comment lines start with
-"CC". The "PR" line shows references to the Prosite Documentation
-records, and the "DR" lines show references to Swiss-Prot records. Not
+“CC”. The “PR” line shows references to the Prosite Documentation
+records, and the “DR” lines show references to Swiss-Prot records. Not
 of these entries are necessarily present in an Enzyme record.
 
 In Biopython, an Enzyme record is represented by the
@@ -386,33 +383,35 @@ dictionary and has keys corresponding to the two-letter codes used in
 Enzyme files. To read an Enzyme file containing one Enzyme record, use
 the ``read`` function in ``Bio.ExPASy.Enzyme``:
 
-.. code:: pycon
-
-   >>> from Bio.ExPASy import Enzyme
-   >>> with open("lipoprotein.txt") as handle:
-   ...     record = Enzyme.read(handle)
-   ...
-   >>> record["ID"]
-   '3.1.1.34'
-   >>> record["DE"]
-   'Lipoprotein lipase.'
-   >>> record["AN"]
-   ['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
-   >>> record["CA"]
-   'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
-   >>> record["PR"]
-   ['PDOC00110']
+.. doctest ../Tests/Enzymes
 
 .. code:: pycon
 
-   >>> record["CC"]
-   ['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
-   (VLDL).', 'Also hydrolyzes diacylglycerol.']
-   >>> record["DR"]
-   [['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
-   ['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
-   ['O46647', 'LIPL_MUSVI'], ['P49060', 'LIPL_PAPAN'], ['P49923', 'LIPL_PIG'],
-   ['Q06000', 'LIPL_RAT'], ['Q29524', 'LIPL_SHEEP']]
+    >>> from Bio.ExPASy import Enzyme
+    >>> with open("lipoprotein.txt") as handle:
+    ...     record = Enzyme.read(handle)
+    ...
+    >>> record["ID"]
+    '3.1.1.34'
+    >>> record["DE"]
+    'Lipoprotein lipase.'
+    >>> record["AN"]
+    ['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
+    >>> record["CA"]
+    'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
+    >>> record["PR"]
+    ['PDOC00110']
+
+.. code:: pycon
+
+    >>> record["CC"]
+    ['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
+    (VLDL).', 'Also hydrolyzes diacylglycerol.']
+    >>> record["DR"]
+    [['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
+    ['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
+    ['O46647', 'LIPL_MUSVI'], ['P49060', 'LIPL_PAPAN'], ['P49923', 'LIPL_PIG'],
+    ['Q06000', 'LIPL_RAT'], ['Q29524', 'LIPL_SHEEP']]
 
 The ``read`` function raises a ValueError if no Enzyme record is found,
 and also if more than one Enzyme record is found.
@@ -426,16 +425,16 @@ multiple Enzyme records, use the ``parse`` function in
 
 .. code:: pycon
 
-   >>> from Bio.ExPASy import Enzyme
-   >>> handle = open("enzyme.dat")
-   >>> records = Enzyme.parse(handle)
+    >>> from Bio.ExPASy import Enzyme
+    >>> handle = open("enzyme.dat")
+    >>> records = Enzyme.parse(handle)
 
 We can now iterate over the records one at a time. For example, we can
 make a list of all EC numbers for which an Enzyme record is available:
 
 .. code:: pycon
 
-   >>> ecnumbers = [record["ID"] for record in records]
+    >>> ecnumbers = [record["ID"] for record in records]
 
 Accessing the ExPASy server
 ---------------------------
@@ -444,31 +443,29 @@ Swiss-Prot, Prosite, and Prosite documentation records can be downloaded
 from the ExPASy web server at https://www.expasy.org. Four kinds of
 queries are available from ExPASy:
 
-get_prodoc_entry
-   To download a Prosite documentation record in HTML format
+get\_prodoc\_entry
+    To download a Prosite documentation record in HTML format
 
-get_prosite_entry
-   To download a Prosite record in HTML format
+get\_prosite\_entry
+    To download a Prosite record in HTML format
 
-get_prosite_raw
-   To download a Prosite or Prosite documentation record in raw format
+get\_prosite\_raw
+    To download a Prosite or Prosite documentation record in raw format
 
-get_sprot_raw
-   To download a Swiss-Prot record in raw format
+get\_sprot\_raw
+    To download a Swiss-Prot record in raw format
 
 To access this web server from a Python script, we use the
 ``Bio.ExPASy`` module.
-
-.. _sec:expasy_swissprot:
 
 Retrieving a Swiss-Prot record
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let’s say we are looking at chalcone synthases for Orchids (see
-section :ref:`sec:orchids` for some justification for
-looking for interesting things about orchids). Chalcone synthase is
-involved in flavanoid biosynthesis in plants, and flavanoids make lots
-of cool things like pigment colors and UV protectants.
+section [sec:orchids] for some justification for looking for interesting
+things about orchids). Chalcone synthase is involved in flavanoid
+biosynthesis in plants, and flavanoids make lots of cool things like
+pigment colors and UV protectants.
 
 If you do a search on Swiss-Prot, you can find three orchid proteins for
 Chalcone Synthase, id numbers O23729, O23730, O23731. Now, let’s write a
@@ -483,16 +480,16 @@ what I just wrote:
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> from Bio import SwissProt
+    >>> from Bio import ExPASy
+    >>> from Bio import SwissProt
 
-   >>> accessions = ["O23729", "O23730", "O23731"]
-   >>> records = []
+    >>> accessions = ["O23729", "O23730", "O23731"]
+    >>> records = []
 
-   >>> for accession in accessions:
-   ...     handle = ExPASy.get_sprot_raw(accession)
-   ...     record = SwissProt.read(handle)
-   ...     records.append(record)
+    >>> for accession in accessions:
+    ...     handle = ExPASy.get_sprot_raw(accession)
+    ...     record = SwissProt.read(handle)
+    ...     records.append(record)
 
 If the accession number you provided to ``ExPASy.get_sprot_raw`` does
 not exist, then ``SwissProt.read(handle)`` will raise a ``ValueError``.
@@ -501,13 +498,13 @@ numbers:
 
 .. code:: pycon
 
-   >>> for accession in accessions:
-   ...     handle = ExPASy.get_sprot_raw(accession)
-   ...     try:
-   ...         record = SwissProt.read(handle)
-   ...     except ValueException:
-   ...         print("WARNING: Accession %s not found" % accession)
-   ...     records.append(record)
+    >>> for accession in accessions:
+    ...     handle = ExPASy.get_sprot_raw(accession)
+    ...     try:
+    ...         record = SwissProt.read(handle)
+    ...     except ValueException:
+    ...         print("WARNING: Accession %s not found" % accession)
+    ...     records.append(record)
 
 Searching Swiss-Prot
 ~~~~~~~~~~~~~~~~~~~~
@@ -533,30 +530,30 @@ print it out in raw text format, use
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> handle = ExPASy.get_prosite_raw("PS00001")
-   >>> text = handle.read()
-   >>> print(text)
+    >>> from Bio import ExPASy
+    >>> handle = ExPASy.get_prosite_raw("PS00001")
+    >>> text = handle.read()
+    >>> print(text)
 
 To retrieve a Prosite record and parse it into a ``Bio.Prosite.Record``
 object, use
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> from Bio import Prosite
-   >>> handle = ExPASy.get_prosite_raw("PS00001")
-   >>> record = Prosite.read(handle)
+    >>> from Bio import ExPASy
+    >>> from Bio import Prosite
+    >>> handle = ExPASy.get_prosite_raw("PS00001")
+    >>> record = Prosite.read(handle)
 
 The same function can be used to retrieve a Prosite documentation record
 and parse it into a ``Bio.ExPASy.Prodoc.Record`` object:
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> from Bio.ExPASy import Prodoc
-   >>> handle = ExPASy.get_prosite_raw("PDOC00001")
-   >>> record = Prodoc.read(handle)
+    >>> from Bio import ExPASy
+    >>> from Bio.ExPASy import Prodoc
+    >>> handle = ExPASy.get_prosite_raw("PDOC00001")
+    >>> record = Prodoc.read(handle)
 
 For non-existing accession numbers, ``ExPASy.get_prosite_raw`` returns a
 handle to an empty string. When faced with an empty string,
@@ -569,23 +566,23 @@ format. To create a web page showing one Prosite record, you can use
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> handle = ExPASy.get_prosite_entry("PS00001")
-   >>> html = handle.read()
-   >>> with open("myprositerecord.html", "w") as out_handle:
-   ...     out_handle.write(html)
-   ...
+    >>> from Bio import ExPASy
+    >>> handle = ExPASy.get_prosite_entry("PS00001")
+    >>> html = handle.read()
+    >>> with open("myprositerecord.html", "w") as out_handle:
+    ...     out_handle.write(html)
+    ...
 
 and similarly for a Prosite documentation record:
 
 .. code:: pycon
 
-   >>> from Bio import ExPASy
-   >>> handle = ExPASy.get_prodoc_entry("PDOC00001")
-   >>> html = handle.read()
-   >>> with open("myprodocrecord.html", "w") as out_handle:
-   ...     out_handle.write(html)
-   ...
+    >>> from Bio import ExPASy
+    >>> handle = ExPASy.get_prodoc_entry("PDOC00001")
+    >>> html = handle.read()
+    >>> with open("myprodocrecord.html", "w") as out_handle:
+    ...     out_handle.write(html)
+    ...
 
 For these functions, an invalid accession number returns an error
 message in HTML format.
@@ -609,17 +606,17 @@ sequence:
 
 .. code:: text
 
-   MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
-   CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
+    MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+    CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
 
 you can use the following code:
 
 .. code:: pycon
 
-   >>> sequence = "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
-   CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
-   >>> from Bio.ExPASy import ScanProsite
-   >>> handle = ScanProsite.scan(seq=sequence)
+    >>> sequence = "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+    CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
+    >>> from Bio.ExPASy import ScanProsite
+    >>> handle = ScanProsite.scan(seq=sequence)
 
 By executing ``handle.read()``, you can obtain the search results in raw
 XML format. Instead, let’s use ``Bio.ExPASy.ScanProsite.read`` to parse
@@ -627,9 +624,9 @@ the raw XML into a Python object:
 
 .. code:: pycon
 
-   >>> result = ScanProsite.read(handle)
-   >>> type(result)
-   <class 'Bio.ExPASy.ScanProsite.Record'>
+    >>> result = ScanProsite.read(handle)
+    >>> type(result)
+    <class 'Bio.ExPASy.ScanProsite.Record'>
 
 A ``Bio.ExPASy.ScanProsite.Record`` object is derived from a list, with
 each element in the list storing one ScanProsite hit. This object also
@@ -638,24 +635,24 @@ returned by ScanProsite. This ScanProsite search resulted in six hits:
 
 .. code:: pycon
 
-   >>> result.n_seq
-   1
-   >>> result.n_match
-   6
-   >>> len(result)
-   6
-   >>> result[0]
-   {'signature_ac': u'PS50948', 'level': u'0', 'stop': 98, 'sequence_ac': u'USERSEQ1', 'start': 16, 'score': u'8.873'}
-   >>> result[1]
-   {'start': 37, 'stop': 39, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
-   >>> result[2]
-   {'start': 45, 'stop': 48, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00006'}
-   >>> result[3]
-   {'start': 60, 'stop': 62, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
-   >>> result[4]
-   {'start': 80, 'stop': 83, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00004'}
-   >>> result[5]
-   {'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
+    >>> result.n_seq
+    1
+    >>> result.n_match
+    6
+    >>> len(result)
+    6
+    >>> result[0]
+    {'signature_ac': u'PS50948', 'level': u'0', 'stop': 98, 'sequence_ac': u'USERSEQ1', 'start': 16, 'score': u'8.873'}
+    >>> result[1]
+    {'start': 37, 'stop': 39, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+    >>> result[2]
+    {'start': 45, 'stop': 48, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00006'}
+    >>> result[3]
+    {'start': 60, 'stop': 62, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+    >>> result[4]
+    {'start': 80, 'stop': 83, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00004'}
+    >>> result[5]
+    {'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
 
 Other ScanProsite parameters can be passed as keyword arguments; see the
 `documentation for programmatic access of
@@ -665,7 +662,7 @@ matches with low level scores lets use find one additional hit:
 
 .. code:: pycon
 
-   >>> handle = ScanProsite.scan(seq=sequence, lowscore=1)
-   >>> result = ScanProsite.read(handle)
-   >>> result.n_match
-   7
+    >>> handle = ScanProsite.scan(seq=sequence, lowscore=1)
+    >>> result = ScanProsite.read(handle)
+    >>> result.n_match
+    7
