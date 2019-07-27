@@ -20,8 +20,8 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Konstantin Vdovkin
+- Mustafa Anil Tuncel
 - Peter Cock
-
 
 16 July 2019: Biopython 1.74
 ============================

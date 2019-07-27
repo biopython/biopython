@@ -189,6 +189,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Milind Luthra <https://github.com/milindl>
 - morrme <https://github.com/morrme>
+- Mustafa Anil Tuncel <https://github.com/anilbey>
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
