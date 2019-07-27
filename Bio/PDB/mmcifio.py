@@ -196,15 +196,20 @@ class MMCIFIO(object):
                 if (isinstance(sample_val, list) and (isinstance(val, str) or len(val) != n_vals)) or (isinstance(sample_val, str) and isinstance(val, list)):
                     raise ValueError("Inconsistent list sizes in mmCIF dictionary: " + key + "." + i)
             # If the value is a single value, write as key-value pairs
-            if isinstance(sample_val, str):
+            if isinstance(sample_val, str) or (isinstance(sample_val, list) and len(sample_val) == 1):
                 m = 0
                 # Find the maximum key length
                 for i in key_list:
                     if len(i) > m:
                         m = len(i)
                 for i in key_list:
-                    out_file.write("{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4) + self._format_mmcif_col(self.dic[key + "." + i], len(self.dic[key + "." + i])) + "\n")
-            # If the value is a list, write as keys then a value table
+                    # If the value is a single item list, just take the value
+                    if isinstance(sample_val, str):
+                        value_no_list = self.dic[key + "." + i]
+                    else:
+                        value_no_list = self.dic[key + "." + i][0]
+                    out_file.write("{k: <{width}}".format(k=key + "." + i, width=len(key) + m + 4) + self._format_mmcif_col(value_no_list, len(value_no_list)) + "\n")
+            # If the value is more than one value, write as keys then a value table
             elif isinstance(sample_val, list):
                 out_file.write("loop_\n")
                 col_widths = {}

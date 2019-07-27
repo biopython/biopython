@@ -60,7 +60,7 @@ class MMCIF2Dict(dict):
                 if key is None:
                     key = token
                 else:
-                    self[key] = token
+                    self[key] = [token]
                     key = None
 
     # Private methods
