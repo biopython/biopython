@@ -702,6 +702,7 @@ IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
 dbxrefs=['Project:58037'])
 \end{minted}
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(record)
@@ -761,6 +762,7 @@ IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
 \end{minted}
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(sub_record)
@@ -929,6 +931,7 @@ IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
 \end{minted}
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(record)
@@ -959,6 +962,7 @@ IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
 \end{minted}
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> len(shifted)
@@ -1041,4 +1045,5 @@ how most of the annotation is dropped (but not the features):
 >>> print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)))
 TESTING 9609 41 0 0
 \end{minted}
+
 

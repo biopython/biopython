@@ -687,6 +687,7 @@ As an example, let's use the same GenBank file as before:
 >>> orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{minted}
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> seq_record = orchid_dict["Z78475.1"]
@@ -1310,3 +1311,4 @@ including how to output FASTQ efficiently from strings using this code snippet:
 out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
 ...
 \end{minted}
+

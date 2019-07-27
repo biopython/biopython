@@ -177,6 +177,7 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \label{sec:seq-to-string}
 
 If you really do just need a plain string, for example to write to a file, or insert into a database, then this is very easy to get:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> str(my_seq)
@@ -187,6 +188,7 @@ Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a
 you often don't actually have to do this conversion explicitly.
 Python does this automatically in the print function
 (and the print statement under Python 2):
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> print(my_seq)
@@ -194,6 +196,7 @@ GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{minted}
 
 You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the Python string formatting or interpolation operator (\verb|%|):
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
@@ -428,6 +431,7 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
 
 If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> template_dna.reverse_complement().transcribe()
@@ -485,6 +489,7 @@ You should notice in the above protein sequences that in addition to the end sto
 
 The translation tables available in Biopython are based on those \href{https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
@@ -492,6 +497,7 @@ Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{minted}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table=2)
@@ -500,6 +506,7 @@ Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 Now, you may want to translate the nucleotides up to the first in frame stop codon,
 and then stop (as happens in nature):
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate()
@@ -516,6 +523,7 @@ is not translated - and the stop symbol is not included at the end of your prote
 sequence.
 
 You can even specify the stop symbol if you don't like the default asterisk:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> coding_dna.translate(table=2, stop_symbol="@")
@@ -655,6 +663,7 @@ G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
 
 You may find these following properties useful -- for example if you are trying
 to do your own gene finding:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> mito_table.stop_codons
@@ -906,4 +915,5 @@ there are module level functions in \verb|Bio.Seq| will accept plain Python stri
 \end{minted}
 
 \noindent You are, however, encouraged to work with \verb|Seq| objects by default.
+
 

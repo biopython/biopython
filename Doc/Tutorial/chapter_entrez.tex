@@ -1082,6 +1082,7 @@ This returns a Python list containing all of the PubMed IDs of articles related 
 \end{minted}
 
 Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. Here, we'll download the Medline records in the Medline flat-file format, and use the \verb+Bio.Medline+ module to parse them:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> from Bio import Medline
@@ -1093,6 +1094,7 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
 NOTE - We've just done a separate search and fetch here, the NCBI much prefer you to take advantage of their history support in this situation.  See Section~\ref{sec:entrez-webenv}.
 
 Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> records = list(records)
@@ -1327,6 +1329,7 @@ Staying with a plant example, let's now find the lineage of the Cypripedioideae 
 '158330'
 \end{minted}
 Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and then parse it:
+
 %cont-doctest
 \begin{minted}{pycon}
 >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
@@ -1512,3 +1515,4 @@ Now, let's do that all again but with the history \ldots
 \textit{TODO}.
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
+
