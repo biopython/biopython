@@ -7,6 +7,7 @@
 
 """Write a MMTF file."""
 
+from collections import defaultdict
 from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBIO import Select
@@ -105,13 +106,27 @@ class MMTFIO(object):
             raise ValueError("Use set_structure to set a structure to write out")
 
     def _save_structure(self, filepath, select):
+        count_models, count_chains, count_groups, count_atoms = 0, 0, 0, 0
+        for model in self.structure.get_models():
+            if select.accept_model(model):
+                count_models += 1
+                for chain in model.get_chains():
+                    if select.accept_chain(chain):
+                        count_chains += 1
+                        for residue in chain.get_residues():
+                            if select.accept_residue(residue):
+                                count_groups += 1
+                                for atom in residue.get_atoms():
+                                    if select.accept_atom(atom):
+                                        count_atoms += 1
+
         encoder = MMTFEncoder()
         encoder.init_structure(
             total_num_bonds=0,
-            total_num_atoms=len(list(self.structure.get_atoms())),
-            total_num_groups=len(list(self.structure.get_residues())),
-            total_num_chains=len(list(self.structure.get_chains())),
-            total_num_models=len(list(self.structure.get_models())),
+            total_num_atoms=count_atoms,
+            total_num_groups=count_groups,
+            total_num_chains=count_chains,
+            total_num_models=count_models,
             structure_id=self.structure.id
         )
 
@@ -120,14 +135,20 @@ class MMTFIO(object):
             unit_cell=[0, 0, 0, 0, 0, 0]
         )
 
+        # The header information is missing for some structure objects
+        # Missing items are treated as empty strings apart from the resolution
+        header_dict = defaultdict(str, self.structure.header)
+        if header_dict["resolution"] == "":
+            header_dict["resolution"] = 0.0
+
         encoder.set_header_info(
             r_free=0.0,
             r_work=0.0,
-            resolution=self.structure.header["resolution"],
-            title=self.structure.header["name"],
-            deposition_date=self.structure.header["deposition_date"],
-            release_date=self.structure.header["release_date"],
-            experimental_methods=self.structure.header["structure_method"]
+            resolution=header_dict["resolution"],
+            title=header_dict["name"],
+            deposition_date=header_dict["deposition_date"],
+            release_date=header_dict["release_date"],
+            experimental_methods=header_dict["structure_method"]
         )
 
         for mi, model in enumerate(self.structure.get_models()):
@@ -136,7 +157,7 @@ class MMTFIO(object):
 
             encoder.set_model_info(
                 model_id=mi,
-                chain_count=len(list(model.get_chains()))
+                chain_count=sum(1 for c in model.get_chains() if select.accept_chain(c))
             )
             for ci, chain in enumerate(model.get_chains()):
                 if not select.accept_chain(chain):
@@ -145,7 +166,7 @@ class MMTFIO(object):
                 encoder.set_chain_info(
                     chain_id=chain.get_id(),
                     chain_name=chain.get_id(),
-                    num_groups=len(list(chain.get_residues()))
+                    num_groups=sum(1 for r in chain.get_residues() if select.accept_residue(r))
                 )
 
                 prev_residue_type = ""
@@ -184,7 +205,7 @@ class MMTFIO(object):
                         group_number=residue.id[1],
                         insertion_code=residue.id[2],
                         group_type="",
-                        atom_count=len(list(residue.get_atoms())),
+                        atom_count=sum(1 for a in residue.get_atoms() if select.accept_atom(a)),
                         bond_count=0,
                         single_letter_code="",
                         sequence_index=0,
