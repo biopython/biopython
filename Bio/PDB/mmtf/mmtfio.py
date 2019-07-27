@@ -120,6 +120,11 @@ class MMTFIO(object):
                                     if select.accept_atom(atom):
                                         count_atoms += 1
 
+        # If atom serials are missing, renumber atoms starting from 1
+        atom_serials = [a.serial_number for a in self.structure.get_atoms()]
+        renumber_atoms = None in atom_serials
+        atom_n = 1
+
         encoder = MMTFEncoder()
         encoder.init_structure(
             total_num_bonds=0,
@@ -136,7 +141,7 @@ class MMTFIO(object):
         )
 
         # The header information is missing for some structure objects
-        # Missing items are treated as empty strings apart from the resolution
+        # Missing items are treated as empty strings, apart from the resolution
         header_dict = defaultdict(str, self.structure.header)
         if header_dict["resolution"] == "":
             header_dict["resolution"] = 0.0
@@ -215,7 +220,7 @@ class MMTFIO(object):
                         if select.accept_atom(atom):
                             encoder.set_atom_info(
                                 atom_name=atom.name,
-                                serial_number=atom.serial_number,
+                                serial_number=atom_n if renumber_atoms else atom.serial_number,
                                 alternative_location_id=atom.altloc,
                                 x=atom.coord[0],
                                 y=atom.coord[1],
@@ -225,6 +230,7 @@ class MMTFIO(object):
                                 element=atom.element,
                                 charge=0
                             )
+                            atom_n += 1
 
         encoder.finalize_structure()
         encoder.write_file(filepath)
