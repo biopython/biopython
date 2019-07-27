@@ -123,7 +123,8 @@ class MMTFIO(object):
         # If atom serials are missing, renumber atoms starting from 1
         atom_serials = [a.serial_number for a in self.structure.get_atoms()]
         renumber_atoms = None in atom_serials
-        atom_n = 1
+        atom_n = 0
+        chain_i = -1
 
         encoder = MMTFEncoder()
         encoder.init_structure(
@@ -164,7 +165,7 @@ class MMTFIO(object):
                 model_id=mi,
                 chain_count=sum(1 for c in model.get_chains() if select.accept_chain(c))
             )
-            for ci, chain in enumerate(model.get_chains()):
+            for chain in model.get_chains():
                 if not select.accept_chain(chain):
                     continue
 
@@ -174,6 +175,7 @@ class MMTFIO(object):
                     num_groups=sum(1 for r in chain.get_residues() if select.accept_residue(r))
                 )
 
+                chain_i += 1
                 prev_residue_type = ""
                 prev_resname = ""
 
@@ -197,7 +199,7 @@ class MMTFIO(object):
                     # chain due to the starting values above
                     if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
                         encoder.set_entity_info(
-                            chain_indices=[ci],
+                            chain_indices=[chain_i],
                             sequence="",
                             description="",
                             entity_type=entity_type
@@ -218,6 +220,7 @@ class MMTFIO(object):
                     )
                     for atom in residue.get_atoms():
                         if select.accept_atom(atom):
+                            atom_n += 1
                             encoder.set_atom_info(
                                 atom_name=atom.name,
                                 serial_number=atom_n if renumber_atoms else atom.serial_number,
@@ -230,7 +233,6 @@ class MMTFIO(object):
                                 element=atom.element,
                                 charge=0
                             )
-                            atom_n += 1
 
         encoder.finalize_structure()
         encoder.write_file(filepath)
