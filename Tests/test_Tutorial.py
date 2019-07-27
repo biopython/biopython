@@ -107,42 +107,54 @@ if not os.path.isfile(tutorial):
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
 
-# Build a list of all the Tutorial LaTeX files:
-files = [tutorial]
-for latex in os.listdir(os.path.join(tutorial_base, "Tutorial/")):
-    if latex.startswith("chapter_") and latex.endswith(".tex"):
-        files.append(os.path.join(tutorial_base, "Tutorial", latex))
+# Build a list of all the Tutorial RST files:
+files = []
+for rst in os.listdir(tutorial_base):
+    if rst.startswith("chapter_") and rst.endswith(".rst"):
+        files.append(os.path.join(tutorial_base, rst))
 
 
 def _extract(handle):
     line = handle.readline()
-    if line != "\\begin{minted}{pycon}\n":
-        raise ValueError("Any '%doctest' or '%cont-doctest' line should be followed by '\\begin{minted}{pycon}'")
+    if line != "\n":
+        raise ValueError("Any '%doctest' or '%cont-doctest' line should be\
+         followed by an empty line")
+
+    line = handle.readline()
+    if line != ".. code:: pycon\n":
+        raise ValueError("Any '%doctest' or '%cont-doctest' line should be\
+         followed by \".. code:: pycon\\n\"")
+
+    line = handle.readline()
+    if line != "\n":
+        raise ValueError("Any '%doctest' or '%cont-doctest' line should be\
+             followed by an empty line")
+
     lines = []
     while True:
         line = handle.readline()
         if not line:
             if lines:
                 print("".join(lines[:30]))
-                raise ValueError("Didn't find end of test starting: %r", lines[0])
+                break
             else:
-                raise ValueError("Didn't find end of test!")
-        elif line.startswith("\\end{minted}"):
+                raise ValueError("Didn't find lines!")
+        elif line == "\n":
             break
         else:
             lines.append(line)
     return lines
 
 
-def extract_doctests(latex_filename):
-    """Scan LaTeX file and pull out marked doctests as strings.
+def extract_doctests(rst_filename):
+    """Scan RST file and pull out marked doctests as strings.
 
     This is a generator, yielding one tuple per doctest.
     """
-    base_name = os.path.splitext(os.path.basename(latex_filename))[0]
+    base_name = os.path.splitext(os.path.basename(rst_filename))[0]
     deps = ""
     folder = ""
-    with open(latex_filename, _universal_read_mode) as handle:
+    with open(rst_filename, _universal_read_mode) as handle:
         line_number = 0
         lines = []
         name = None
@@ -152,17 +164,17 @@ def extract_doctests(latex_filename):
             if not line:
                 # End of file
                 break
-            elif line.startswith("%cont-doctest"):
+            elif line.startswith(".. cont-doctest"):
                 x = _extract(handle)
                 lines.extend(x)
                 line_number += len(x) + 2
-            elif line.startswith("%doctest"):
+            elif line.startswith(".. doctest"):
                 if lines:
-                    if not lines[0].startswith(">>> "):
+                    if not lines[0].lstrip().startswith(">>> "):
                         raise ValueError("Should start '>>> ' not %r" % lines[0])
                     yield name, "".join(lines), folder, deps
                     lines = []
-                deps = [x.strip() for x in line.split()[1:]]
+                deps = [x.strip() for x in line.split()[2:]]
                 if deps:
                     folder = deps[0]
                     deps = deps[1:]
@@ -173,7 +185,7 @@ def extract_doctests(latex_filename):
                 lines.extend(x)
                 line_number += len(x) + 2
     if lines:
-        if not lines[0].startswith(">>> "):
+        if not lines[0].lstrip().startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
         yield name, "".join(lines), folder, deps
     # yield "dummy", ">>> 2 + 2\n5\n"
@@ -205,9 +217,9 @@ def check_deps(dependencies):
 
 # Create dummy methods on the object purely to hold doctests
 missing_deps = set()
-for latex in files:
-    # print("Extracting doctests from %s" % latex)
-    for name, example, folder, deps in extract_doctests(latex):
+for rst in files:
+    # print("Extracting doctests from %s" % rst)
+    for name, example, folder, deps in extract_doctests(rst):
         missing = check_deps(deps)
         if missing:
             missing_deps.update(missing)
