@@ -30,8 +30,8 @@ class StructureDecoder(object):
         :param structure_id: the id of the structure (e.g. PDB id)
 
         """
-        self.structure_bulder = StructureBuilder()
-        self.structure_bulder.init_structure(structure_id=structure_id)
+        self.structure_builder = StructureBuilder()
+        self.structure_builder.init_structure(structure_id=structure_id)
         self.chain_index_to_type_map = {}
         self.chain_index_to_seq_map = {}
         self.chain_index_to_description_map = {}
@@ -59,7 +59,7 @@ class StructureDecoder(object):
             alternative_location_id = " "
 
         # Atom_name is in twice - the full_name is with spaces
-        self.structure_bulder.init_atom(str(atom_name), numpy.array((x, y, z), "f"),
+        self.structure_builder.init_atom(str(atom_name), numpy.array((x, y, z), "f"),
                                         temperature_factor, occupancy,
                                         alternative_location_id, str(atom_name),
                                         serial_number=serial_number,
@@ -75,7 +75,7 @@ class StructureDecoder(object):
         """
         # A Bradley - chose to use chain_name (auth_id) as it complies
         # with current Biopython. Chain_id might be better.
-        self.structure_bulder.init_chain(chain_id=chain_name)
+        self.structure_builder.init_chain(chain_id=chain_name)
         if self.chain_index_to_type_map[self.chain_counter] == "polymer":
             self.this_type = " "
         elif self.chain_index_to_type_map[self.chain_counter] == "non-polymer":
@@ -121,8 +121,8 @@ class StructureDecoder(object):
         if insertion_code == "\x00":
             insertion_code = " "
 
-        self.structure_bulder.init_seg(" ")
-        self.structure_bulder.init_residue(group_name, self.this_type,
+        self.structure_builder.init_seg(' ')
+        self.structure_builder.init_residue(group_name, self.this_type,
                                            group_number, insertion_code)
 
     def set_model_info(self, model_id, chain_count):
@@ -132,7 +132,7 @@ class StructureDecoder(object):
         :param chain_count: the number of chains in the model
 
         """
-        self.structure_bulder.init_model(model_id)
+        self.structure_builder.init_model(model_id)
 
     def set_xtal_info(self, space_group, unit_cell):
         """Set the crystallographic information for the structure.
@@ -141,7 +141,7 @@ class StructureDecoder(object):
         :param unit_cell: an array of length 6 with the unit cell parameters in order: a, b, c, alpha, beta, gamma
 
         """
-        self.structure_bulder.set_symmetry(space_group, unit_cell)
+        self.structure_builder.set_symmetry(space_group, unit_cell)
 
     def set_header_info(self, r_free, r_work, resolution, title,
                         deposition_date, release_date, experimnetal_methods):
