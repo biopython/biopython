@@ -21,8 +21,6 @@ import os
 import unittest
 
 
-from Bio._py3k import StringIO
-
 from Bio import SubsMat
 from Bio.SubsMat import FreqTable, MatrixInfo
 
@@ -42,9 +40,7 @@ class TestGeo(unittest.TestCase):
         cls.obs_freq_mat = SubsMat._build_obs_freq_mat(cls.acc_rep_mat)
 
     def checkMatrix(self, mat, expected):
-        handle = StringIO()
-        mat.print_mat(f=handle)
-        text = handle.getvalue()
+        text = mat.format()
         self.assertEqual(text, expected)
 
     def test_protein_freq(self):
@@ -304,10 +300,7 @@ class TestGeo(unittest.TestCase):
     def test_log_odds_matris(self):
         lo_mat_prot = SubsMat.make_log_odds_matrix(acc_rep_mat=self.acc_rep_mat,
                                                    round_digit=1)
-        handle = StringIO()
-        lo_mat_prot.print_mat(f=handle, format=" %d",
-                              alphabet='AVILMCFWYHSTNQKRDEGP')
-        text = handle.getvalue()
+        text = lo_mat_prot.format(fmt=" %d", alphabet='AVILMCFWYHSTNQKRDEGP')
         self.assertEqual(text, """\
 A 0
 V 0 1
@@ -329,12 +322,8 @@ D 0 0 -1 0 -1 -1 0 0 0 0 0 0 0 0 0 0 1
 E 0 0 -1 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 1
 G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
-   A   V   I   L   M   C   F   W   Y   H   S   T   N   Q   K   R   D   E   G   P
-""")
-        handle = StringIO()
-        lo_mat_prot.print_full_mat(f=handle, format=" %d",
-                                   alphabet='AVILMCFWYHSTNQKRDEGP')
-        text = handle.getvalue()
+   A   V   I   L   M   C   F   W   Y   H   S   T   N   Q   K   R   D   E   G   P""")
+        text = lo_mat_prot.format(fmt=" %d", alphabet='AVILMCFWYHSTNQKRDEGP', full=True)
         self.assertEqual(text, """\
    A   V   I   L   M   C   F   W   Y   H   S   T   N   Q   K   R   D   E   G   P
 A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -356,8 +345,7 @@ R 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
 D 0 0 -1 0 -1 -1 0 0 0 0 0 0 0 0 0 0 1 0 0 0
 E 0 0 -1 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 1 0 0
 G 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
-P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
-""")
+P 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1""")
         relative_entropy = lo_mat_prot.calculate_relative_entropy(self.obs_freq_mat)
         self.assertAlmostEqual(relative_entropy, 0.162, places=3)
 
@@ -386,8 +374,7 @@ T   1  -1  -1  -1  -2   0  -1   0  -1   0   0   0   0  -1  -1   1   2
 V   0  -3  -3  -3   0  -2  -3   3  -3   1   3  -2  -1  -3  -3   0   0   4
 W  -4   1  -6  -5  -1  -1  -2  -5  -1  -3  -4  -4  -4  -2   2  -2  -2  -4  14
 Y  -4   2  -2  -4   5  -4   4  -3  -4  -1  -3   0  -3  -1  -2  -1  -3  -3   0   9
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.benner22)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -411,8 +398,7 @@ T   1  -1   0   0  -2   0  -1   0   0  -1   0   0   0   0   0   1   2
 V   0  -1  -3  -2   0  -2  -3   3  -2   2   2  -2  -1  -2  -2   0   0   3
 W  -5   0  -6  -6   0  -4  -2  -4  -3  -1  -2  -5  -5  -3  -1  -3  -4  -4  15
 Y  -3   0  -3  -4   5  -4   3  -2  -3   0  -1  -1  -3  -1  -2  -1  -3  -2   1   9
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.benner74)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -436,8 +422,7 @@ T   0   0   0   0  -2  -1   0   0   0  -1   0   0   0   0   0   1   2
 V   0   0  -2  -2   0  -3  -2   3  -1   1   1  -2  -1  -1  -2  -1   0   3
 W  -4   0  -5  -4   3  -4  -1  -2  -3   0  -1  -4  -5  -2  -1  -3  -3  -2  14
 Y  -2   0  -2  -3   5  -4   2  -1  -2   0   0  -1  -3  -1  -2  -1  -2  -1   3   8
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum100)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -464,8 +449,7 @@ W  -4  -6  -5  -7  -5   0  -5  -3  -4  -5  -4  -3  -6  -6  -3  -4  -4  -5  -4  1
 X  -1  -2  -3  -3  -2  -3  -3  -2  -2  -2  -2  -2  -2  -3  -2  -2  -1  -1  -2  -4  -2
 Y  -4  -4  -4  -5  -4   3  -6   1  -3  -4  -3  -3  -3  -5  -3  -3  -3  -3  -3   1  -3   8
 Z  -2   1  -6   0   5  -5  -4  -1  -4   0  -4  -3  -1  -3   3  -1  -1  -2  -3  -4  -2  -4   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum30)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -492,8 +476,7 @@ W  -5  -5  -2  -4  -1   1   1  -5  -3  -2  -2  -3  -7  -3  -1   0  -3  -5  -3  2
 X   0  -1  -2  -1  -1  -1  -1  -1   0   0   0   0   0  -1   0  -1   0   0   0  -2  -1
 Y  -4  -3  -6  -1  -2   3  -3   0  -1  -1   3  -1  -4  -2  -1   0  -2  -1   1   5  -1   9
 Z   0   0   0   0   5  -4  -2   0  -3   1  -1  -1  -1   0   4   0  -1  -1  -3  -1   0  -2   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum35)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -520,8 +503,7 @@ W  -2  -3  -5  -3  -1   1  -1  -4  -1   0   0   1  -2  -4  -1   0  -2  -2  -2  1
 X   0  -1  -2  -1  -1  -1  -1  -1   0   0   0   0   0  -1  -1  -1   0   0   0  -1  -1
 Y  -1  -2  -5  -2  -1   3  -2   0   0  -1   0   0  -2  -3   0   0  -1  -2   0   3  -1   8
 Z  -1   0  -2   1   5  -3  -2  -1  -3   1  -2  -2   0   0   4   0   0  -1  -2  -1   0  -1   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum40)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -548,8 +530,7 @@ W  -3  -4  -6  -5  -2   1  -2  -5  -3  -2  -1  -2  -4  -4  -1  -2  -5  -4  -3  1
 X   0  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1   0  -1  -2  -1  -1   0   0  -1  -2  -1
 Y  -2  -3  -4  -3  -2   4  -3   2   0  -1   0   1  -2  -3  -1  -1  -2  -1  -1   3  -1   9
 Z  -1   2  -3   1   5  -4  -2   0  -4   1  -2  -2   0  -1   4   0   0  -1  -3  -2  -1  -2   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum45)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -576,8 +557,7 @@ W  -2  -4  -5  -4  -3   1  -2  -3  -2  -2  -2  -2  -4  -3  -2  -2  -4  -3  -3  1
 X   0  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   0   0  -1  -2  -1
 Y  -2  -2  -3  -2  -2   3  -3   2   0  -1   0   0  -2  -3  -1  -1  -2  -1  -1   3  -1   8
 Z  -1   2  -3   1   4  -3  -2   0  -3   1  -2  -1   0  -1   4   0   0  -1  -3  -2  -1  -2   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum50)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -604,8 +584,7 @@ W  -3  -5  -5  -5  -3   1  -3  -3  -3  -3  -2  -1  -4  -4  -1  -3  -4  -3  -3  1
 X  -1  -1  -2  -1  -1  -2  -2  -1  -1  -1  -1  -1  -1  -2  -1  -1  -1   0  -1  -3  -1
 Y  -2  -3  -3  -3  -2   4  -3   2  -1  -2  -1   0  -2  -3  -1  -1  -2  -2  -1   2  -1   8
 Z  -1   2  -3   1   5  -4  -2   0  -3   1  -3  -1   0  -1   4   0   0  -1  -3  -2  -1  -2   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum55)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -632,8 +611,7 @@ W  -3  -5  -5  -5  -3   1  -3  -3  -3  -3  -2  -1  -4  -4  -1  -3  -4  -3  -3  1
 X  -1  -1  -2  -1  -1  -2  -2  -1  -1  -1  -1  -1  -1  -2  -1  -1  -1   0  -1  -3  -1
 Y  -2  -3  -3  -3  -2   4  -3   2  -1  -2  -1   0  -2  -3  -1  -1  -2  -2  -1   2  -1   8
 Z  -1   2  -3   1   5  -4  -2   0  -3   1  -3  -1   0  -1   4   0   0  -1  -3  -2  -1  -2   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum60)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -660,8 +638,7 @@ W  -3  -4  -2  -4  -3   1  -2  -2  -2  -3  -2  -1  -4  -4  -2  -3  -3  -2  -3  1
 X   0  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2  -1  -1   0   0  -1  -2  -1
 Y  -2  -2  -2  -3  -2   3  -3   2  -1  -2  -1  -1  -2  -3  -1  -2  -2  -2  -1   2  -1   6
 Z  -1   1  -3   1   4  -3  -2   0  -3   1  -2  -1   0  -1   3   0   0  -1  -2  -2  -1  -2   3
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum62)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -688,8 +665,7 @@ W  -3  -4  -2  -4  -3   1  -2  -2  -3  -3  -2  -1  -4  -4  -2  -3  -3  -2  -3  1
 X   0  -1  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2  -1  -1   0   0  -1  -2  -1
 Y  -2  -3  -2  -3  -2   3  -3   2  -1  -2  -1  -1  -2  -3  -1  -2  -2  -2  -1   2  -1   7
 Z  -1   1  -3   1   4  -3  -2   0  -3   1  -3  -1   0  -1   3   0   0  -1  -2  -3  -1  -2   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum65)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -716,8 +692,7 @@ W  -3  -4  -2  -5  -3   1  -3  -2  -2  -3  -2  -2  -4  -4  -2  -3  -3  -3  -3  1
 X  -1  -1  -2  -1  -1  -2  -2  -1  -1  -1  -1  -1  -1  -2  -1  -1  -1  -1  -1  -2  -1
 Y  -2  -3  -2  -3  -2   3  -3   2  -1  -2  -1  -1  -2  -3  -2  -2  -2  -2  -1   2  -1   7
 Z  -1   1  -4   1   4  -3  -2   0  -3   1  -3  -2   0  -1   3   0   0  -1  -2  -3  -1  -2   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum70)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -744,8 +719,7 @@ W  -3  -4  -3  -5  -4   1  -3  -2  -3  -3  -2  -2  -4  -4  -2  -3  -3  -3  -3  1
 X  -1  -1  -2  -2  -1  -2  -2  -1  -1  -1  -1  -1  -1  -2  -1  -1  -1  -1  -1  -3  -1
 Y  -2  -3  -3  -4  -3   3  -4   2  -1  -2  -1  -1  -2  -3  -2  -2  -2  -2  -2   2  -2   7
 Z  -1   0  -4   1   4  -4  -2   0  -3   1  -3  -2   0  -1   3   0   0  -1  -3  -3  -1  -2   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum75)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -772,8 +746,7 @@ W  -3  -5  -3  -5  -4   1  -3  -2  -3  -4  -2  -2  -4  -5  -2  -3  -3  -3  -3  1
 X  -1  -2  -2  -2  -1  -2  -2  -1  -2  -1  -1  -1  -1  -2  -1  -1  -1  -1  -1  -3  -1
 Y  -2  -3  -3  -4  -3   3  -4   2  -2  -2  -1  -2  -3  -4  -2  -2  -2  -2  -2   2  -2   7
 Z  -1   0  -4   1   4  -4  -2   0  -4   1  -3  -2   0  -2   3   0   0  -1  -3  -3  -1  -3   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum80)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -800,8 +773,7 @@ W  -3  -5  -3  -6  -4   0  -4  -3  -3  -4  -2  -2  -4  -5  -3  -4  -4  -4  -3  1
 X  -1  -2  -3  -2  -1  -2  -2  -2  -2  -1  -2  -1  -1  -2  -1  -1  -1  -1  -1  -3  -1
 Y  -2  -3  -3  -4  -3   3  -4   2  -2  -3  -2  -2  -3  -4  -2  -3  -2  -2  -2   2  -2   7
 Z  -1   0  -4   1   4  -4  -3   0  -4   1  -3  -2   0  -2   3   0   0  -1  -3  -4  -1  -3   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum85)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -828,8 +800,7 @@ W  -3  -5  -4  -6  -4   0  -4  -3  -3  -5  -3  -2  -5  -5  -3  -4  -4  -4  -3  1
 X  -1  -2  -3  -2  -1  -2  -2  -2  -2  -1  -2  -1  -2  -2  -1  -2  -1  -1  -1  -3  -2
 Y  -3  -4  -3  -4  -4   3  -5   2  -2  -3  -2  -2  -3  -4  -2  -3  -2  -2  -2   2  -2   7
 Z  -1   0  -5   1   4  -4  -3   0  -4   1  -4  -2  -1  -2   4   0  -1  -1  -3  -4  -1  -3   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum90)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -856,8 +827,7 @@ W  -4  -6  -4  -6  -5   0  -4  -3  -4  -5  -3  -2  -5  -5  -3  -4  -4  -4  -3  1
 X  -1  -2  -3  -2  -2  -2  -2  -2  -2  -1  -2  -1  -2  -2  -1  -2  -1  -1  -2  -3  -2
 Y  -3  -4  -4  -4  -4   3  -5   1  -2  -3  -2  -2  -3  -4  -3  -3  -3  -2  -3   2  -2   8
 Z  -1   0  -5   0   4  -4  -3   0  -4   1  -4  -2  -1  -2   4   0  -1  -1  -3  -4  -1  -3   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.blosum95)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -884,8 +854,7 @@ W  -4  -6  -4  -6  -5   0  -5  -3  -4  -5  -3  -2  -5  -5  -3  -4  -4  -4  -3  1
 X  -1  -2  -3  -2  -2  -2  -3  -2  -2  -1  -2  -2  -2  -3  -1  -2  -1  -1  -2  -4  -2
 Y  -3  -4  -4  -5  -4   3  -5   1  -2  -3  -2  -3  -3  -5  -3  -3  -3  -3  -3   2  -2   8
 Z  -1   0  -5   0   4  -4  -3   0  -4   0  -4  -2  -1  -2   4  -1  -1  -2  -3  -4  -1  -4   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.feng)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -909,8 +878,7 @@ T   5   2   2   3   1   2   2   3   4   2   3   4   4   3   3   5   6
 V   5   2   3   4   4   4   1   5   3   5   4   2   3   2   2   2   3   6
 W   2   3   0   1   3   3   1   2   1   4   3   0   2   1   2   2   1   3   6
 Y   2   3   2   1   5   2   3   3   1   3   2   3   2   2   1   3   2   3   3   6
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.fitch)
         self.assertEqual(len(mat), 171)
         self.checkMatrix(mat, """\
@@ -932,8 +900,7 @@ U   1   1   1   2   2   1   1   2   1   1   2   2   2   2   3
 V   2   2   1   2   1   1   2   2   1   1   1   1   1   1   2   3
 W   1   1   2   2   1   1   1   2   2   1   0   1   2   0   2   2   3
 Y   2   2   1   1   1   1   2   1   1   1   1   2   2   2   2   2   1   3
-   A   C   E   F   H   I   L   M   N   O   Q   R   S   T   U   V   W   Y
-""")
+   A   C   E   F   H   I   L   M   N   O   Q   R   S   T   U   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.genetic)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -957,8 +924,7 @@ T   0  -1  -2  -2  -2  -2  -1   0   1  -1   0   0   1  -1   0   1   4
 V   1  -2   1   1   1   1  -2   1  -2   1   1  -2  -2  -2  -2  -2  -2   4
 W  -2   4  -2  -3   0   1  -2  -2  -3   0  -2  -3  -1  -2   1   0  -2  -2   7
 Y  -2   2   2   0   2  -1   2  -1   0  -1  -2   2  -2   0  -1   0  -2  -2   0   6
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.gonnet)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -982,8 +948,7 @@ T   0   0   0   0  -2  -1   0   0   0  -1   0   0   0   0   0   1   2
 V   0   0  -2  -1   0  -3  -2   3  -1   1   1  -2  -1  -1  -2  -1   0   3
 W  -3  -1  -5  -4   3  -4   0  -1  -3   0  -1  -3  -5  -2  -1  -3  -3  -2  14
 Y  -2   0  -2  -2   5  -4   2   0  -2   0   0  -1  -3  -1  -1  -1  -1  -1   4   7
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.grant)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1007,8 +972,7 @@ T 157  66 130 150 112 156 168 126 137 123 134 150 177 173 144 157 215
 V 151  23  63  94 165 106 131 186 118 183 194  82 147 119 119  91 146 215
 W  67   0  34  63 175  31 100 154 105 154 148  41  68  85 114  38  87 127 215
 Y 103  21  55  93 193  68 132 182 130 179 179  72 105 116 138  71 123 160 178 215
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.ident)
         self.checkMatrix(mat, """\
 A   6
@@ -1031,8 +995,7 @@ T  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   6
 V  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   6
 W  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   6
 Y  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1   6
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.johnson)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1056,8 +1019,7 @@ T   0  -6  -1   0  -5  -3  -3  -3   0  -4  -3   0  -2   0  -1   2   6
 V   0  -4  -5  -4  -1  -5  -3   3  -3   1   0  -5  -5  -3  -4  -4  -1   7
 W  -5  -9  -6  -7   3  -6  -4  -3  -5  -1   0  -6  -7  -8  -3  -6  -9  -4  15
 Y  -4  -7  -3  -3   3  -5   0  -2  -3  -2  -1  -1  -7  -5  -2  -3  -2  -1   2  10
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.levin)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1081,8 +1043,7 @@ T   0   0   0   0  -1   0   0   0   0   0   0   0   0   0   0   0   2
 V   0   0  -1  -1   0  -1  -1   1  -1   1   0  -1  -1  -1  -1  -1   0   2
 W  -1  -1  -1  -1   0  -1  -1   0  -1   0   0  -1  -1  -1   0  -1  -1   0   2
 Y  -1  -1  -1  -1   1  -1   0   0  -1   0   0  -1  -1  -1  -1  -1  -1   0   0   2
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.mclach)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1106,8 +1067,7 @@ T   3   2   3   4   1   2   4   3   3   3   3   3   3   3   3   5   8
 V   3   1   1   2   3   2   2   5   2   5   4   1   2   2   2   2   3   8
 W   1   2   0   1   6   1   3   3   1   3   1   0   0   2   3   3   2   2   9
 Y   1   1   1   2   6   0   4   3   1   3   2   2   0   1   2   3   1   3   6   9
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.miyata)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1131,8 +1091,7 @@ T   0   0   0   0  -1   0   0   0   0  -1   0   0   0   0   0   0   1
 V   0   0  -2  -1   0  -1   0   0  -1   0   0  -1   0   0  -1   0   0   1
 W  -2  -2  -3  -2   0  -3  -1   0  -1   0   0  -3  -2  -2  -1  -3  -2  -1   1
 Y  -1  -1  -2  -1   0  -2  -1   0  -1   0   0  -2  -1  -1   0  -2  -1   0   0   1
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.nwsgappep)
         self.assertEqual(len(mat), 253)
         self.checkMatrix(mat, """\
@@ -1158,8 +1117,7 @@ V   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0   0   0   1
 W   0   0  -1  -1  -1   1  -1   0   0   0   0   0   0   0   0   1   0   0   0   1
 Y   0   0   1   0   0   1   0   0   0   0   0   0   0   0   0   0   0   0   0   1   1
 Z   0   0   0   0   1   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   1
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam120)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1186,8 +1144,7 @@ W  -7  -6  -8  -8  -8  -1  -8  -3  -6  -5  -3  -6  -4  -7  -6   1  -2  -6  -8  1
 X  -1  -1  -4  -2  -1  -3  -2  -2  -1  -2  -2  -2  -1  -2  -1  -2  -1  -1  -1  -5  -2
 Y  -4  -3  -1  -5  -5   4  -6  -1  -2  -5  -2  -4  -2  -6  -5  -5  -3  -3  -3  -2  -3   8
 Z  -1   2  -7   3   4  -6  -2   1  -3  -1  -3  -2   0  -1   4  -1  -1  -2  -3  -7  -1  -5   4
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam180)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1214,8 +1171,7 @@ W  -8  -7 -10  -9  -9   0  -9  -4  -7  -5  -3  -6  -5  -7  -6   2  -3  -7  -8  1
 X  -1  -1  -4  -1  -1  -3  -2  -1  -1  -1  -2  -1  -1  -1  -1  -2   0  -1  -1  -6  -1
 Y  -5  -4   0  -6  -6   7  -7   0  -2  -6  -2  -4  -2  -7  -6  -6  -4  -4  -4  -1  -3  11
 Z   0   3  -7   3   5  -7  -1   2  -3   0  -3  -2   1  -1   5   0  -1  -1  -3  -8  -1  -6   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam250)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1242,8 +1198,7 @@ W  -6  -5  -8  -7  -7   0  -7  -3  -5  -3  -2  -4  -4  -6  -5   2  -2  -5  -6  1
 X   0  -1  -3  -1  -1  -2  -1  -1  -1  -1  -1  -1   0  -1  -1  -1   0   0  -1  -4  -1
 Y  -3  -3   0  -4  -4   7  -5   0  -1  -4  -1  -2  -2  -5  -4  -4  -3  -3  -2   0  -2  10
 Z   0   2  -5   3   3  -5   0   2  -2   0  -3  -2   1   0   3   0   0  -1  -2  -6  -1  -4   3
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam30)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1270,8 +1225,7 @@ W -13 -10 -15 -15 -17  -4 -15  -7 -14 -12  -6 -13  -8 -14 -13  -2  -5 -13 -15  1
 X  -3  -5  -9  -5  -5  -8  -5  -5  -5  -5  -6  -5  -3  -5  -5  -6  -3  -4  -5 -11  -5
 Y  -8  -6  -4 -11  -8   2 -14  -3  -6  -9  -7 -11  -4 -13 -12 -10  -7  -6  -7  -5  -7  10
 Z  -3   0 -14   1   6 -13  -5  -1  -6  -4  -7  -5  -3  -4   6  -4  -5  -6  -6 -14  -5  -9   6
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam300)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1298,8 +1252,7 @@ W  -6  -6  -9  -7  -8   1  -8  -3  -6  -4  -2  -5  -5  -6  -5   3  -3  -6  -7  2
 X   0   0  -3  -1  -1  -2  -1   0  -1  -1  -1  -1   0  -1   0  -1   0   0   0  -4  -1
 Y  -4  -4   1  -5  -5   9  -6   0  -1  -5   0  -2  -2  -5  -4  -5  -3  -3  -3   0  -2  12
 Z   0   2  -6   3   3  -5   0   2  -2   1  -3  -2   1   0   3   0   0   0  -2  -6  -1  -5   3
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam60)
         self.assertEqual(len(mat), 276)
         self.checkMatrix(mat, """\
@@ -1326,8 +1279,7 @@ W -10  -8 -12 -11 -12  -3 -11  -5 -10  -8  -4  -9  -6 -10  -9   0  -4  -9 -11  1
 X  -2  -3  -6  -3  -3  -5  -3  -3  -3  -3  -4  -3  -2  -3  -3  -4  -2  -2  -3  -8  -3
 Y  -6  -5  -2  -8  -7   3 -10  -2  -4  -7  -5  -7  -3 -10  -8  -8  -5  -5  -5  -3  -5   9
 Z  -2   1 -10   2   5 -10  -3   0  -4  -2  -5  -4  -1  -2   6  -2  -3  -4  -5 -11  -3  -7   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.pam90)
         self.assertEqual(len(mat), 253)
         self.checkMatrix(mat, """\
@@ -1353,8 +1305,7 @@ V   0  -4  -3  -4  -3  -4  -3  -4   3  -5   0   1  -4  -3  -4  -4  -3  -1   6
 W  -8  -7 -10  -9 -10  -2  -9  -4  -8  -6  -3  -7  -5  -8  -7   0  -3  -7  -9  13
 Y  -5  -4  -1  -6  -6   4  -8  -1  -3  -6  -3  -6  -2  -8  -6  -6  -4  -4  -4  -2   9
 Z  -1   2  -8   3   5  -8  -2   1  -3  -1  -4  -3   0  -2   5  -1  -2  -2  -3  -8  -6   5
-   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y   Z
-""")
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y   Z""")
         mat = SubsMat.SeqMat(MatrixInfo.rao)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1378,8 +1329,7 @@ T  10  10   9   8  10  10  10  10   9   9   8  10   8  10   9  11  16
 V   9   8   3   4  11   6   9  12   5  10   9   5   3   6   5   8  10  16
 W  11  11   6   7  11   8  10  11   7  11  10   8   6   9   7  10  11  11  16
 Y   9  10   7   6  10  10   9  10   7   9   8   8   8   8   7  11  11  10  11  16
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.risler)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1403,8 +1353,7 @@ T   1  -1   0   1   0   0   0   1   1   1   0   1   0   1   1   2   2
 V   2  -1   0   1   0   0   0   2   1   2   0   1   0   1   1   1   1   2
 W   0  -1  -1  -1   0  -1  -1   0  -1   0  -1  -1  -1  -1   0   0  -1   0   2
 Y   0  -1   0   0   2   0   0   0   0   0   0   0  -1   0   0   0   0   0   0   2
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
         mat = SubsMat.SeqMat(MatrixInfo.structure)
         self.assertEqual(len(mat), 210)
         self.checkMatrix(mat, """\
@@ -1428,8 +1377,7 @@ T  -1  -5  -1   0  -3  -3  -2  -2   0  -3  -2   0  -1   0  -1   1   5
 V   0  -4  -4  -2  -1  -4  -2   2  -3   1   0  -4  -4  -2  -3  -3  -1   5
 W  -3  -6  -6  -6   2  -4  -3  -2  -3  -1  -2  -5  -4  -5  -2  -5  -5  -4  10
 Y  -3  -6  -3  -2   3  -3   0  -1  -2  -2  -1  -1  -6  -3  -1  -2  -2  -1   2   7
-   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y
-""")
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
 
     def test_matrix_correlations(self):
         blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)

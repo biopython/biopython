@@ -122,6 +122,9 @@ import math
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+
 
 log = math.log
 # Matrix types
@@ -256,41 +259,63 @@ class SeqMat(dict):
                 result[i2] += value / 2
         return result
 
-    def print_full_mat(self, f=None, format="%4d", topformat="%4s",
-                       alphabet=None, factor=1, non_sym=None):
-        """Print the full matrix to the file handle f or stdout."""
-        f = f or sys.stdout
-        # create a temporary dictionary, which holds the full matrix for
-        # printing
-        assert non_sym is None or isinstance(non_sym, float) or \
-        isinstance(non_sym, int)
-        full_mat = copy.copy(self)
-        for i in self:
-            if i[0] != i[1]:
-                full_mat[(i[1], i[0])] = full_mat[i]
+    def format(self, fmt="%4d", letterfmt="%4s", alphabet=None,
+               factor=1, non_sym=None, full=False):
+        """Create a string with the bottom-half matrix (default) or a full matrix.
+
+        User may pass own alphabet, which should contain all letters in the
+        alphabet of the matrix, but may be in a different order. This
+        order will be the order of the letters on the axes.
+       ."""
         if not alphabet:
             alphabet = self.ab_list
+        lines = []
+        assert non_sym is None or isinstance(non_sym, float) or \
+        isinstance(non_sym, int)
         topline = ''
         for i in alphabet:
-            topline = topline + topformat % i
-        topline = topline + '\n'
-        f.write(topline)
+            letterline += letterfmt % i
+        if full:
+            lines.append(letterline)
         for i in alphabet:
-            outline = i
+            line = i
+            flag = False
             for j in alphabet:
-                if alphabet.index(j) > alphabet.index(i) and non_sym is not None:
+                if flag:
                     val = non_sym
                 else:
-                    val = full_mat[i, j]
+                    try:
+                        val = self[i, j]
+                    except KeyError:
+                        val = self[j, i]
                     val *= factor
                 if val <= -999:
                     cur_str = '  ND'
                 else:
-                    cur_str = format % val
+                    cur_str = fmt % val
+                line += cur_str
+                if j == i:
+                    if not full:
+                        break
+                    if non_sym is not None:
+                        flag = True
+            lines.append(line)
+        if not full:
+            lines.append(letterline)
+        return "\n".join(lines)
 
-                outline = outline + cur_str
-            outline = outline + '\n'
-            f.write(outline)
+    def print_full_mat(self, f=None, format="%4d", topformat="%4s",
+                       alphabet=None, factor=1, non_sym=None):
+        """Print the full matrix to the file handle f or stdout."""
+        warnings.warn("SeqMat.print_full_mat has been deprecated, and we intend to remove"
+                      " it in a future release of Biopython. Instead of\n"
+                      " mat.print_full_mat(<arguments>)\n"
+                      " please use\n"
+                      " print(mat.format(<arguments>, full=True)",
+                      BiopythonDeprecationWarning)
+        f = f or sys.stdout
+        text = self.format(format, topformat, alphabet, factor, non_sym, True)
+        f.write(text+'\n')
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
                   alphabet=None, factor=1):
@@ -302,52 +327,19 @@ class SeqMat(dict):
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes.
         """
+        warnings.warn("SeqMat.print_mat has been deprecated, and we intend to remove it"
+                      " in a future release of Biopython. Instead of\n"
+                      " mat.print_mat(<arguments>)\n"
+                      " please use\n"
+                      " print(mat.format(<arguments>)",
+                      BiopythonDeprecationWarning)
         f = f or sys.stdout
-        if not alphabet:
-            alphabet = self.ab_list
-        bottomline = ''
-        for i in alphabet:
-            bottomline = bottomline + bottomformat % i
-        bottomline = bottomline + '\n'
-        for i in alphabet:
-            outline = i
-            for j in alphabet[:alphabet.index(i) + 1]:
-                try:
-                    val = self[j, i]
-                except KeyError:
-                    val = self[i, j]
-                val *= factor
-                if val == -999:
-                    cur_str = '  ND'
-                else:
-                    cur_str = format % val
-
-                outline = outline + cur_str
-            outline = outline + '\n'
-            f.write(outline)
-        f.write(bottomline)
+        text = self.format(format, bottomformat, alphabet, factor, None, False)
+        f.write(text+'\n')
 
     def __str__(self):
         """Print a nice half-matrix."""
-        output = ""
-        alphabet = self.ab_list
-        n = len(alphabet)
-        for i in range(n):
-            c1 = alphabet[i]
-            output += c1
-            for j in range(i + 1):
-                c2 = alphabet[j]
-                try:
-                    val = self[c2, c1]
-                except KeyError:
-                    val = self[c1, c2]
-                if val == -999:
-                    output += '  ND'
-                else:
-                    output += "%4d" % val
-            output += '\n'
-        output += '%4s' * n % tuple(alphabet) + "\n"
-        return output
+        return self.format()
 
     def __sub__(self, other):
         """Return integer subtraction product of the two matrices."""

@@ -1674,12 +1674,12 @@ optional arguments:
 \end{itemize}
 
 Once you've got your log odds matrix, you can display it prettily
-using the function \verb|print_mat|. Doing this on our created matrix
+using the function \verb|format|. Doing this on our created matrix
 gives:
 
 %cont-doctest
 \begin{minted}{pycon}
->>> my_lom.print_mat()
+>>> print(my_lom.format())
 D   2
 E  -1   1
 H  -5  -4   3

@@ -34,4 +34,4 @@ my_lom = SubsMat.make_log_odds_matrix(my_arm)
 
 print('log_odds_mat: %s' % my_lom)
 
-my_lom.print_mat()
+print(my_lom.format())
