@@ -21,9 +21,9 @@ Then use this parser to create a structure object from the mmCIF file:
 \end{minted}
 
 To have some more low level access to an mmCIF file, you can use the \verb+MMCIF2Dict+ class to create a Python dictionary that maps all mmCIF
-tags in an mmCIF file to their values. If there are multiple values
+tags in an mmCIF file to their values. Whether there are multiple values
 (like in the case of tag \verb+_atom_site.Cartn_y+, which holds
-the $y$ coordinates of all atoms), the tag is mapped to a list of values.
+the $y$ coordinates of all atoms) or a single value (like the initial deposition date), the tag is mapped to a list of values.
 The dictionary is created from the mmCIF file as follows:
 
 \begin{minted}{pycon}
