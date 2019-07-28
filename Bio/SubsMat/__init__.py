@@ -261,18 +261,19 @@ class SeqMat(dict):
 
     def format(self, fmt="%4d", letterfmt="%4s", alphabet=None,
                factor=1, non_sym=None, full=False):
-        """Create a string with the bottom-half matrix (default) or a full matrix.
+        """Create a string with the bottom-half (default) or a full matrix.
 
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes.
        ."""
+
         if not alphabet:
             alphabet = self.ab_list
         lines = []
         assert non_sym is None or isinstance(non_sym, float) or \
         isinstance(non_sym, int)
-        topline = ''
+        letterline = ''
         for i in alphabet:
             letterline += letterfmt % i
         if full:
@@ -315,7 +316,7 @@ class SeqMat(dict):
                       BiopythonDeprecationWarning)
         f = f or sys.stdout
         text = self.format(format, topformat, alphabet, factor, non_sym, True)
-        f.write(text+'\n')
+        f.write(text + '\n')
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
                   alphabet=None, factor=1):
@@ -335,7 +336,7 @@ class SeqMat(dict):
                       BiopythonDeprecationWarning)
         f = f or sys.stdout
         text = self.format(format, bottomformat, alphabet, factor, None, False)
-        f.write(text+'\n')
+        f.write(text + '\n')
 
     def __str__(self):
         """Print a nice half-matrix."""
