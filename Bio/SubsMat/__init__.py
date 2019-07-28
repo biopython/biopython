@@ -266,7 +266,7 @@ class SeqMat(dict):
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
         order will be the order of the letters on the axes.
-       ."""
+        """
         if not alphabet:
             alphabet = self.ab_list
         lines = []
