@@ -573,8 +573,7 @@ class _BaseGenBankConsumer(object):
         else:
             keywords = keyword_string
         keyword_list = keywords.split(";")
-        clean_keyword_list = [x.strip() for x in keyword_list]
-        return clean_keyword_list
+        return [x.strip() for x in keyword_list]
 
     @staticmethod
     def _split_accessions(accession_string):
@@ -603,9 +602,7 @@ class _BaseGenBankConsumer(object):
             new_tax_list.extend(new_items)
         while "" in new_tax_list:
             new_tax_list.remove("")
-        clean_tax_list = [x.strip() for x in new_tax_list]
-
-        return clean_tax_list
+        return [x.strip() for x in new_tax_list]
 
     @staticmethod
     def _clean_location(location_string):
