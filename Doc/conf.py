@@ -97,6 +97,10 @@ pygments_style = "sphinx"
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+# If true, figures, tables and code-blocks are automatically numbered if
+# they have a caption. The numref role is enabled.
+numfig = True
+
 # -- Options for autodoc --------------------------------------------------
 
 # This requires Sphinx 1.8 or later:
