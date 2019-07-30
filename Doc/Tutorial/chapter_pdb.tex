@@ -295,14 +295,14 @@ like:
 This corresponds to:
 
 \begin{itemize}
-\item The Structure with id \char`\"{}1abc\char`\"{}
-\item The Model with id 0
-\item The Chain with id \char`\"{}A\char`\"{}
-\item The Residue with id (\char`\"{} \char`\"{}, 10, \char`\"{}A\char`\"{}).
+\item The Structure with id \verb|"1abc"|
+\item The Model with id \verb|0|
+\item The Chain with id \verb|"A"|
+\item The Residue with id \verb|("", 10, "A")|
 \end{itemize}
 The Residue id indicates that the residue is not a hetero-residue (nor a water)
 because it has a blank hetero field, that its sequence identifier is 10 and
-that its insertion code is \char`\"{}A\char`\"{}.
+that its insertion code is \verb|"A"|.
 
 To get the entity's id, use the \verb+get_id+ method:
 \begin{minted}{pycon}
