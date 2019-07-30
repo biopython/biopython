@@ -654,7 +654,7 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 
 \section{Navigating through a Structure object}
 
-\subsubsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
+\subsection*{Parse a PDB file, and extract some Model, Chain, Residue and Atom objects}
 
 \begin{minted}{pycon}
 >>> from Bio.PDB.PDBParser import PDBParser
@@ -666,7 +666,7 @@ would have hetfield ``H\_GLC''. Its residue id could e.g. be (``H\_GLC'',
 >>> atom = residue["CA"]
 \end{minted}
 
-\subsubsection*{Iterating through all atoms of a structure}
+\subsection*{Iterating through all atoms of a structure}
 
 \begin{minted}{pycon}
 >>> p = PDBParser()
@@ -695,7 +695,7 @@ Similarly, to iterate over all atoms in a chain, use
 ...
 \end{minted}
 
-\subsubsection*{Iterating over all residues of a model}
+\subsection*{Iterating over all residues of a model}
 
 or if you want to iterate over all residues in a model:
 \begin{minted}{pycon}
@@ -724,14 +724,14 @@ You can use this to go up in the hierarchy, e.g. to get a list of
 \end{minted}
 For more info, see the API documentation.
 
-\subsubsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
+\subsection*{Extract a hetero residue from a chain (e.g. a glucose (GLC) moiety with resseq 10)}
 
 \begin{minted}{pycon}
 >>> residue_id = ("H_GLC", 10, " ")
 >>> residue = chain[residue_id]
 \end{minted}
 
-\subsubsection*{Print all hetero residues in chain}
+\subsection*{Print all hetero residues in chain}
 
 \begin{minted}{pycon}
 >>> for residue in chain.get_list():
@@ -742,7 +742,7 @@ For more info, see the API documentation.
 ...
 \end{minted}
 
-\subsubsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
+\subsection*{Print out the coordinates of all CA atoms in a structure with B factor greater than 50}
 
 \begin{minted}{pycon}
 >>> for model in structure.get_list():
@@ -755,7 +755,7 @@ For more info, see the API documentation.
 ...
 \end{minted}
 
-\subsubsection*{Print out all the residues that contain disordered atoms}
+\subsection*{Print out all the residues that contain disordered atoms}
 
 \begin{minted}{pycon}
 >>> for model in structure.get_list():
@@ -770,7 +770,7 @@ For more info, see the API documentation.
 ...
 \end{minted}
 
-\subsubsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
+\subsection*{Loop over all disordered atoms, and select all atoms with altloc A (if present)}
 This will make sure that the SMCRA data structure will behave as if only the
 atoms with altloc A are present.
 
@@ -786,8 +786,7 @@ atoms with altloc A are present.
 ...
 \end{minted}
 
-\subsubsection*{Extracting polypeptides from a \texttt{Structure} object}
-\label{sec:extracting_polypeptides}
+\subsection*{Extracting polypeptides from a \texttt{Structure} object}
 
 To extract polypeptides from a structure, construct a list of \texttt{Polypeptide} objects from a \texttt{Structure} object using \texttt{PolypeptideBuilder} as follows:
 
@@ -821,7 +820,7 @@ by \texttt{PolypeptideBuilder}. However, it is possible to use \texttt{Polypepti
 to build \texttt{Polypeptide} objects from \texttt{Model} and \texttt{Chain}
 objects as well.
 
-\subsubsection*{Obtaining the sequence of a structure}
+\subsection*{Obtaining the sequence of a structure}
 
 The first thing to do is to extract all polypeptides from the structure
 (as above). The sequence of each polypeptide can then easily
