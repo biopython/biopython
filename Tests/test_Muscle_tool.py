@@ -184,6 +184,35 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
     """
 
+    def test_simple_msf(self):
+        """Simple muscle call using MSF output."""
+        input_file = "Fasta/f002"
+        self.assertTrue(os.path.isfile(input_file))
+        records = list(SeqIO.parse(input_file, "fasta"))
+        records.sort(key=lambda rec: rec.id)  # noqa: E731
+        cmdline = MuscleCommandline(muscle_exe, input=input_file, msf=True)
+        self.assertEqual(str(cmdline).rstrip(), _escape_filename(muscle_exe) +
+                         " -in Fasta/f002 -msf")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+        child = subprocess.Popen(str(cmdline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 universal_newlines=True,
+                                 shell=(sys.platform != "win32"))
+        # Didn't use -quiet so there should be progress reports on stderr,
+        align = AlignIO.read(child.stdout, "msf")
+        align.sort()  # by record.id
+        self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
+        child.stdout.close()
+        child.stderr.close()
+        del child
+        self.assertEqual(len(records), len(align))
+        for old, new in zip(records, align):
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq))
+
     def test_simple_clustal(self):
         """Simple muscle call using Clustal output with a MUSCLE header."""
         input_file = "Fasta/f002"
