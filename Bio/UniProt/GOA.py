@@ -11,12 +11,14 @@ Uniprot-GOA README + GAF format description:
 ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/README
 
 GAF formats:
-http://www.geneontology.org/GO.format.annotation.shtml
+http://geneontology.org/docs/go-annotation-file-gaf-format-2.1/
+http://geneontology.org/docs/go-annotation-file-gaf-format-2.0/
+
 gp_association (GPA format) README:
-ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_association_readme
+http://geneontology.org/docs/gene-product-association-data-gpad-format/
 
 gp_information (GPI format) README:
-ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gp_information_readme
+http://geneontology.org/docs/gene-product-information-gpi-format/
 """
 
 from __future__ import print_function
@@ -118,9 +120,7 @@ GPI11FIELDS = [
     "Taxon",
     "Parent_Object_ID",
     "DB_Xref",
-    "Gene_Product_Properties",
-    "Annotation_Target_Set",
-    "GO_Annotation_Complete"]
+    "Gene_Product_Properties"]
 
 
 def _gpi10iterator(handle):

@@ -22,6 +22,7 @@ possible, especially the following contributors:
 - Konstantin Vdovkin
 - Mustafa Anil Tuncel
 - Peter Cock
+- Sergio Valqui
 
 16 July 2019: Biopython 1.74
 ============================
