@@ -91,10 +91,10 @@ sum(self)
 
     \item
 \begin{minted}{python}
-print_mat(self,f,format="%4d",bottomformat="%4s",alphabet=None)
+format(self, fmt="%4d", topfmt="%4s", alphabet=None, full=False)
 \end{minted}
 
-    prints the matrix to file handle f. \verb|format| is the format field for the matrix values; \verb|bottomformat| is the format field for the bottom row, containing matrix letters. Example output for a 3-letter alphabet matrix:
+    Creates a string representation of the matrix. \verb|fmt| is the format field for the matrix values; \verb|letterfmt| is the format field for the bottom row (in case of a half matrix) or the top row (in case of a full matrix), containing matrix letters. Example output for a 3-letter alphabet matrix:
 
 \begin{minted}{text}
 A 23
