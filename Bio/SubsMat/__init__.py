@@ -394,18 +394,6 @@ class SeqMat(dict):
         return new_mat
 
 
-class AcceptedReplacementsMatrix(SeqMat):
-    """Accepted replacements matrix."""
-
-
-class ObservedFrequencyMatrix(SeqMat):
-    """Observed frequency matrix."""
-
-
-class ExpectedFrequencyMatrix(SeqMat):
-    """Expected frequency matrix."""
-
-
 class SubstitutionMatrix(SeqMat):
     """Substitution matrix."""
 
@@ -438,8 +426,7 @@ def _build_obs_freq_mat(acc_rep_mat):
     """
     # Note: acc_rep_mat should already be a half_matrix!!
     total = float(sum(acc_rep_mat.values()))
-    obs_freq_mat = ObservedFrequencyMatrix(alphabet=acc_rep_mat.alphabet,
-                                           build_later=1)
+    obs_freq_mat = SeqMat(alphabet=acc_rep_mat.alphabet, build_later=1)
     for i in acc_rep_mat:
         obs_freq_mat[i] = acc_rep_mat[i] / total
     return obs_freq_mat
@@ -464,8 +451,7 @@ def _build_exp_freq_mat(exp_freq_table):
 
     exp_freq_table: should be a FreqTable instance
     """
-    exp_freq_mat = ExpectedFrequencyMatrix(alphabet=exp_freq_table.alphabet,
-                                           build_later=1)
+    exp_freq_mat = SeqMat(alphabet=exp_freq_table.alphabet, build_later=1)
     for i in exp_freq_mat:
         if i[0] == i[1]:
             exp_freq_mat[i] = exp_freq_table[i[0]] ** 2
