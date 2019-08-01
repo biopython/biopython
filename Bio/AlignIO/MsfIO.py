@@ -135,6 +135,19 @@ class MsfIterator(AlignmentIterator):
             )
 
         # There should be a blank line after that header line, then the Name: lines
+        #
+        # In a possible bug, T-COFFEE v12.00 adds 'oo' after the names, as shown here,
+        #
+        # PileUp
+        #
+        #
+        #
+        #    MSF:  628  Type: P    Check:   147   ..
+        #
+        #  Name: AK1H_ECOLI/1-378 oo  Len:  628  Check:  3643  Weight:  1.000
+        #  Name: AKH_HAEIN/1-382 oo  Len:  628  Check:  6504  Weight:  1.000
+        #
+        # //
         ids = []
         checks = []
         weights = []
@@ -148,6 +161,9 @@ class MsfIterator(AlignmentIterator):
                     length, rest = rest.split(" Check: ")
                     check, weight = rest.split(" Weight: ")
                     name = name.strip()
+                    if name.endswith(" oo"):
+                        # T-COFFEE oddity, ignore this
+                        name = name[:-3]
                     if name in ids:
                         raise ValueError("Duplicated ID of %r" % name)
                     if " " in name:
@@ -178,6 +194,12 @@ class MsfIterator(AlignmentIterator):
             # Note might have a coordinate header line (seems to be optional)
             for idx, name in enumerate(ids):
                 line = handle.readline()
+                if idx == 0 and not line.strip():
+                    # T-COFFEE uses two blank lines between blocks, rather than one
+                    while line and not line.strip():
+                        line = handle.readline()
+                if not line:
+                    raise ValueError("End of file where expecting sequence data.")
                 # print("Looking for seq for %s in line: %r" % (name, line))
                 words = line.strip().split()
                 # Should we use column numbers, rather than assuming no spaces in names?
@@ -222,7 +244,7 @@ class MsfIterator(AlignmentIterator):
                     # print("Still looking for seq for %s in line: %r" % (name, line))
                 # Dealt with any coordinate header line, should now be sequence
                 if not words:
-                    raise ValueError("Expected more sequence, got: %r" % line)
+                    raise ValueError("Expected sequence for %s, got: %r" % (name, line))
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
