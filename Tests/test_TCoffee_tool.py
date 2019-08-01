@@ -34,10 +34,11 @@ class TCoffeeApplication(unittest.TestCase):
 
     def setUp(self):
         self.infile1 = "Fasta/fa01"
+        # TODO: Use a temp dir for the output files:
         self.outfile1 = "fa01.aln"
         self.outfile2 = "fa01.html"  # Written by default when no output set
         self.outfile3 = "Fasta/tc_out.pir"
-        self.outfile4 = "Fasta/tc_out.phy"
+        self.outfile4 = "Fasta/tc_out.aln"
 
     def tearDown(self):
         if os.path.isfile(self.outfile1):
@@ -49,7 +50,7 @@ class TCoffeeApplication(unittest.TestCase):
         if os.path.isfile(self.outfile4):
             os.remove(self.outfile4)
 
-    def test_TCoffee_1(self):
+    def test_TCoffee_fasta(self):
         """Round-trip through app and read clustal alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1)
         self.assertEqual(str(cmdline), t_coffee_exe + " -infile Fasta/fa01")
@@ -62,7 +63,7 @@ class TCoffeeApplication(unittest.TestCase):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
-    def test_TCoffee_2(self):
+    def test_TCoffee_pir(self):
         """Round-trip through app and read pir alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, quiet=True)
         cmdline.infile = self.infile1
@@ -80,7 +81,7 @@ class TCoffeeApplication(unittest.TestCase):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
-    def test_TCoffee_3(self):
+    def test_TCoffee_clustalw(self):
         """Round-trip through app and read clustalw alignment from file."""
         cmdline = TCoffeeCommandline(t_coffee_exe, gapopen=-2)
         cmdline.infile = self.infile1
@@ -90,7 +91,7 @@ class TCoffeeApplication(unittest.TestCase):
         cmdline.set_parameter("gapext", -5)
         cmdline.type = "protein"
         self.assertEqual(str(cmdline), t_coffee_exe + " -output clustalw_aln "
-                         "-infile Fasta/fa01 -outfile Fasta/tc_out.phy "
+                         "-infile Fasta/fa01 -outfile Fasta/tc_out.aln "
                          "-type protein -outorder input -gapopen -2 -gapext -5")
         stdout, stderr = cmdline()
         self.assertTrue(stderr.strip().startswith("PROGRAM: T-COFFEE"))
