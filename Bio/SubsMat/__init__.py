@@ -260,7 +260,7 @@ class SeqMat(dict):
         return result
 
     def format(self, fmt="%4d", letterfmt="%4s", alphabet=None,
-               factor=1, non_sym=None, full=False):
+               non_sym=None, full=False):
         """Create a string with the bottom-half (default) or a full matrix.
 
         User may pass own alphabet, which should contain all letters in the
@@ -288,7 +288,6 @@ class SeqMat(dict):
                         val = self[i, j]
                     except KeyError:
                         val = self[j, i]
-                    val *= factor
                 if val <= -999:
                     cur_str = '  ND'
                 else:
@@ -313,8 +312,15 @@ class SeqMat(dict):
                       " please use\n"
                       " print(mat.format(<arguments>, full=True)",
                       BiopythonDeprecationWarning)
+        if factor == 1:
+            mat = self
+        else:
+            mat = factor * self
+            warnings.warn("Instead of 'mat.print_full_mat(..., factor, ...)' please "
+                          "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
+                          BiopythonDeprecationWarning)
         f = f or sys.stdout
-        text = self.format(format, topformat, alphabet, factor, non_sym, True)
+        text = mat.format(format, topformat, alphabet, non_sym, True)
         f.write(text + '\n')
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
@@ -333,8 +339,15 @@ class SeqMat(dict):
                       " please use\n"
                       " print(mat.format(<arguments>)",
                       BiopythonDeprecationWarning)
+        if factor == 1:
+            mat = self
+        else:
+            mat = factor * self
+            warnings.warn("Instead of 'mat.print_mat(..., factor, ...)' please "
+                          "use 'mat2 = factor * mat; print(mat2.format(...))'",
+                          BiopythonDeprecationWarning)
         f = f or sys.stdout
-        text = self.format(format, bottomformat, alphabet, factor, None, False)
+        text = self.format(format, bottomformat, alphabet, None, False)
         f.write(text + '\n')
 
     def __str__(self):
@@ -349,15 +362,29 @@ class SeqMat(dict):
         return mat_diff
 
     def __mul__(self, other):
-        """Matrix multiplication.
+        """Element-wise matrix multiplication.
 
-        Returns a matrix for which each entry is the multiplication product of
-        the two matrices passed.
+        Returns a new matrix created by multiplying each element by other (if
+        other is scalar), or by performing element-wise multiplication of the
+        two matrices (if other is a matrix of the same size).
         """
         new_mat = copy.copy(self)
-        for i in self:
-            new_mat[i] *= other[i]
+        try:  # first try and see if other is a matrix
+            for i in self:
+                new_mat[i] *= other[i]
+        except TypeError:  # other is a scalar value
+            for i in self:
+                new_mat[i] *= other
         return new_mat
+
+    def __rmul__(self, other):
+        """Element-wise matrix multiplication.
+
+        Returns a new matrix created by multiplying each element by other (if
+        other is scalar), or by performing element-wise multiplication of the
+        two matrices (if other is a matrix of the same size).
+        """
+        return self.__mul__(other)
 
     def __add__(self, other):
         """Matrix addition."""
