@@ -316,14 +316,11 @@ class SeqMat(dict):
             mat = self
         else:
             mat = factor * self
-            warnings.warn("""
-Instead of
-mat.print_full_mat(..., factor, ...)
-please use
-mat2 = factor * mat
-print(mat2.format(..., full=True))""", BiopythonDeprecationWarning)
+            warnings.warn("Instead of 'mat.print_full_mat(..., factor, ...)' please "
+                          "use 'mat2 = factor * mat; print(mat2.format(..., full=True))'",
+                          BiopythonDeprecationWarning)
         f = f or sys.stdout
-        text = mat.format(format, topformat, alphabet, factor, non_sym, True)
+        text = mat.format(format, topformat, alphabet, non_sym, True)
         f.write(text + '\n')
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
@@ -346,14 +343,11 @@ print(mat2.format(..., full=True))""", BiopythonDeprecationWarning)
             mat = self
         else:
             mat = factor * self
-            warnings.warn("""
-Instead of
-mat.print_mat(..., factor, ...)
-please use
-mat2 = factor * mat
-print(mat2.format(...))""", BiopythonDeprecationWarning)
+            warnings.warn("Instead of 'mat.print_mat(..., factor, ...)' please "
+                          "use 'mat2 = factor * mat; print(mat2.format(...))'",
+                          BiopythonDeprecationWarning)
         f = f or sys.stdout
-        text = self.format(format, bottomformat, alphabet, factor, None, False)
+        text = self.format(format, bottomformat, alphabet, None, False)
         f.write(text + '\n')
 
     def __str__(self):
@@ -368,7 +362,7 @@ print(mat2.format(...))""", BiopythonDeprecationWarning)
         return mat_diff
 
     def __mul__(self, other):
-        """Matrix multiplication.
+        """Element-wise matrix multiplication.
 
         Returns a new matrix created by multiplying each element by other (if
         other is scalar), or by performing element-wise multiplication of the
@@ -384,7 +378,7 @@ print(mat2.format(...))""", BiopythonDeprecationWarning)
         return new_mat
 
     def __rmul__(self, other):
-        """Matrix multiplication.
+        """Element-wise matrix multiplication.
 
         Returns a new matrix created by multiplying each element by other (if
         other is scalar), or by performing element-wise multiplication of the
