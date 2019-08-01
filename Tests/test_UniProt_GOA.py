@@ -111,9 +111,9 @@ class GoaTests(unittest.TestCase):
         filtered = []
 
         # Fields to filter
-        evidence = {'Evidence': set(['ND'])}
-        synonym = {'Synonym': set(['YA19A_YEAST', 'YAL019W-A'])}
-        taxon_id = {'Taxon_ID': set(['taxon:559292'])}
+        evidence = {'Evidence': {'ND'}}
+        synonym = {'Synonym': {'YA19A_YEAST', 'YAL019W-A'}}
+        taxon_id = {'Taxon_ID': {'taxon:559292'}}
 
         # Temporal file to test writerec
         f_number, f_filtered = tempfile.mkstemp()
