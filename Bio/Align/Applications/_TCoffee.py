@@ -57,8 +57,6 @@ class TCoffeeCommandline(AbstractCommandline):
                     One (or more separated by a comma) of:
                     'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
                     'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
-
-                    Note currently Bio.AlignIO does not parse GCG MSF format.
                     """,
                     equate=False),
             _Option(["-infile", "infile"],
