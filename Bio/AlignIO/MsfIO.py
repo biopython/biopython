@@ -93,9 +93,26 @@ class MsfIterator(AlignmentIterator):
         # By observation, the MSF value is the column count, type is N (nucleotide)
         # or P (protein / amino acid).
         #
+        # In a possible bug, EMBOSS v6.6.0.0 uses CompCheck: rather than Check: as shown,
+        #
+        # $ seqret -sequence Tests/Fasta/f002 -auto -stdout -osformat msf
+        # !!NA_MULTIPLE_ALIGNMENT 1.0
+        #
+        #   stdout MSF: 633 Type: N 01/08/19 CompCheck: 8543 ..
+        #
+        #   Name: G26680     Len: 633  Check: 4334 Weight: 1.00
+        #   Name: G26685     Len: 633  Check: 3818 Weight: 1.00
+        #   Name: G29385     Len: 633  Check:  391 Weight: 1.00
+        #
+        # //
+        #
         parts = line.strip("\n").split()
         offset = parts.index("MSF:")
-        if parts[offset + 2] != "Type:" or parts[-3] != "Check:" or parts[-1] != "..":
+        if (
+            parts[offset + 2] != "Type:"
+            or parts[-3] not in ("Check:", "CompCheck:")
+            or parts[-1] != ".."
+        ):
             raise ValueError(
                 "GCG MSF header line should be "
                 "'<optional text> MSF: <int> Type: <letter> <optional date> Check: <int> ..', "
@@ -158,24 +175,20 @@ class MsfIterator(AlignmentIterator):
         seqs = [[] for _ in ids]  # list of empty lists
         completed_length = 0
         while completed_length < aln_length:
-            # Might have a coordinate header line (seems optional)
-            for i, name in enumerate(ids):
+            # Note might have a coordinate header line (seems to be optional)
+            for idx, name in enumerate(ids):
                 line = handle.readline()
+                # print("Looking for seq for %s in line: %r" % (name, line))
                 words = line.strip().split()
                 # Should we use column numbers, rather than assuming no spaces in names?
-                if not words:
-                    raise ValueError("Expected more sequence, got: %r" % line)
-                elif words[0] == name:
-                    assert len(words) > 1, line
-                    # print(i, name, repr(words))
-                    seqs[i].extend(words[1:])
-                elif i == 0:
-                    # Hopefully this is a coordinate header
+                if idx == 0 and words and words[0] != name:
+                    # print("Actually have a coord line")
+                    # Hopefully this is a coordinate header before the first seq
                     try:
                         i = int(words[0])
                     except ValueError:
                         i = -1
-                    if i != completed_length:
+                    if i != completed_length + 1:
                         raise ValueError(
                             "Expected GCG MSF coordinate line starting %i, got: %r"
                             % (completed_length + 1, line)
@@ -189,13 +202,35 @@ class MsfIterator(AlignmentIterator):
                                 i = int(words[1])
                             except ValueError:
                                 i = -1
-                        if i != completed_length + 50:
+                        if i != (
+                            completed_length + 50
+                            if completed_length + 50 < aln_length
+                            else aln_length
+                        ):
                             raise ValueError(
                                 "Expected GCG MSF coordinate line %i to %i, got: %r"
-                                % (completed_length + 1, completed_length + 50, line)
+                                % (
+                                    completed_length + 1,
+                                    completed_length + 50
+                                    if completed_length + 50 < aln_length
+                                    else aln_length,
+                                    line,
+                                )
                             )
+                    line = handle.readline()
+                    words = line.strip().split()
+                    # print("Still looking for seq for %s in line: %r" % (name, line))
+                # Dealt with any coordinate header line, should now be sequence
+                if not words:
+                    raise ValueError("Expected more sequence, got: %r" % line)
+                elif words[0] == name:
+                    assert len(words) > 1, line
+                    # print(i, name, repr(words))
+                    seqs[idx].extend(words[1:])
                 else:
                     raise ValueError("Expected sequence for %r, got: %r" % (name, line))
+            # TODO - check the sequence lengths thus far are consistent
+            # with blocks of 50?
             completed_length += 50
             line = handle.readline()
             if line.strip():
