@@ -154,6 +154,7 @@ class MsfIterator(AlignmentIterator):
         #
         # //
         ids = []
+        lengths = []
         checks = []
         weights = []
         line = handle.readline()
@@ -174,9 +175,11 @@ class MsfIterator(AlignmentIterator):
                     if " " in name:
                         raise NotImplementedError("Space in ID %r" % name)
                     ids.append(name)
+                    lengths.append(int(length.strip()))
                     checks.append(int(check.strip()))
                     weights.append(float(weight.strip()))
-                    if aln_length != int(length.strip()):
+                    if aln_length < int(length.strip()):
+                        # Can have short sequences in the alignment
                         raise ValueError(
                             "GCG MSF header said alignment length %i, but %s has Len: %s"
                             % (aln_length, name, length)
@@ -249,7 +252,13 @@ class MsfIterator(AlignmentIterator):
                     # print("Still looking for seq for %s in line: %r" % (name, line))
                 # Dealt with any coordinate header line, should now be sequence
                 if not words:
-                    raise ValueError("Expected sequence for %s, got: %r" % (name, line))
+                    # Should be sequence here, but perhaps its a short one?
+                    if lengths[idx] < aln_length and len("".join(seqs[idx])) == lengths[idx]:
+                        # Is this actually allowed in the format? Personally I would
+                        # expect a line with name and a block of trailing ~ here.
+                        pass
+                    else:
+                        raise ValueError("Expected sequence for %s, got: %r" % (name, line))
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
@@ -285,10 +294,16 @@ class MsfIterator(AlignmentIterator):
                     BiopythonParserWarning,
                 )
 
+        # Combine list of strings into single string, remap gaps
+        seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
+        # Apply any trailing padding for short sequences
+        for idx, (length, s) in enumerate(zip(lengths, seqs)):
+            if len(s) < aln_length and len(s) == length:
+                seqs[idx] = s + "-" * (aln_length - len(s))
+
         records = (
             SeqRecord(
-                # Convert tilde or dots to Biopython convention of - for gaps:
-                Seq("".join(s).replace("~", "-").replace(".", "-"), self.alphabet),
+                Seq(s, self.alphabet),
                 id=i,
                 name=i,
                 description=i,
