@@ -58,9 +58,8 @@ class TCoffeeCommandline(AbstractCommandline):
                     'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
                     'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
 
-                    Note that of these Biopython's AlignIO module will only
-                    read clustalw, pir, and fasta.
-                    """,  # TODO - Can we read the PHYLIP output?
+                    Note currently Bio.AlignIO does not parse GCG MSF format.
+                    """,
                     equate=False),
             _Option(["-infile", "infile"],
                     "Specify the input file.",
