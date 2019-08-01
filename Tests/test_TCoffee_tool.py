@@ -39,6 +39,7 @@ class TCoffeeApplication(unittest.TestCase):
         self.outfile2 = "fa01.html"  # Written by default when no output set
         self.outfile3 = "Fasta/tc_out.pir"
         self.outfile4 = "Fasta/tc_out.aln"
+        self.outfile5 = "Fasta/tc_out.phy"
 
     def tearDown(self):
         if os.path.isfile(self.outfile1):
@@ -49,6 +50,8 @@ class TCoffeeApplication(unittest.TestCase):
             os.remove(self.outfile3)
         if os.path.isfile(self.outfile4):
             os.remove(self.outfile4)
+        if os.path.isfile(self.outfile5):
+            os.remove(self.outfile5)
 
     def test_TCoffee_fasta(self):
         """Round-trip through app and read clustal alignment from file."""
@@ -100,6 +103,24 @@ class TCoffeeApplication(unittest.TestCase):
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
+            self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
+
+    def test_TCoffee_phylip(self):
+        """Round-trip through app and read PHYLIP alignment from file."""
+        cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1,
+                                     outfile=self.outfile5,
+                                     quiet=True, output="phylip_aln")
+        self.assertEqual(str(cmdline), t_coffee_exe + " -output phylip_aln "
+                         "-infile Fasta/fa01 -outfile Fasta/tc_out.phy -quiet")
+        stdout, stderr = cmdline()
+        # Can get warnings in stderr output
+        self.assertNotIn("error", stderr.lower(), stderr)
+        align = AlignIO.read(self.outfile5, "phylip")
+        records = list(SeqIO.parse(self.infile1, "fasta"))
+        self.assertEqual(len(records), len(align))
+        for old, new in zip(records, align):
+            # TCoffee does strict 10 character truncation as per original PHYLIP
+            self.assertEqual(old.id[:10], new.id[:10])
             self.assertEqual(str(new.seq).replace("-", ""), str(old.seq).replace("-", ""))
 
 
