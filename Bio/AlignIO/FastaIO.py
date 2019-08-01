@@ -321,9 +321,11 @@ def FastaM10Iterator(handle, alphabet=single_letter_alphabet):
                 key, value = [s.strip() for s in line[2:].split(": ", 1)]
             else:
                 import warnings
+                from Bio import BiopythonParserWarning
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011
                 # Fixed in version 36.3.5b Oct, 2011(preload8)
-                warnings.warn("Missing colon in line: %r" % line)
+                warnings.warn("Missing colon in line: %r" % line,
+                              BiopythonParserWarning)
                 try:
                     key, value = [s.strip() for s in line[2:].split(" ", 1)]
                 except ValueError:
