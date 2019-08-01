@@ -28,7 +28,7 @@ class GoaTests(unittest.TestCase):
         # Check number of records
         self.assertEqual(len(recs), 587)
         # Check keys are same as predefined fields
-        self.assertEqual(list(recs[0].keys()), GOA.GAF20FIELDS)
+        self.assertEqual(sorted(recs[0].keys()), sorted(GOA.GAF20FIELDS))
         # Check values of first record
         self.assertEqual(recs[0]['DB'], 'UniProtKB')
         self.assertEqual(recs[0]['DB_Object_ID'], 'A0A023PXA5')
@@ -48,7 +48,7 @@ class GoaTests(unittest.TestCase):
         # Check number of records
         self.assertEqual(len(recs), 300)
         # Check keys are same as predefined fields
-        self.assertEqual(list(recs[0].keys()), GOA.GAF20FIELDS)
+        self.assertEqual(sorted(recs[0].keys()), sorted(GOA.GAF20FIELDS))
         # Check values of first record
         self.assertEqual(recs[0]['DB'], 'UniProtKB')
         self.assertEqual(recs[0]['DB_Object_ID'], 'P17536')
@@ -66,7 +66,7 @@ class GoaTests(unittest.TestCase):
             for rec in GOA.gpa_iterator(handle):
                 recs.append(rec)
         self.assertEqual(len(recs), 300)
-        self.assertEqual(list(recs[0].keys()), GOA.GPA11FIELDS)
+        self.assertEqual(sorted(recs[0].keys()), sorted(GOA.GPA11FIELDS))
         # Check values of first record
         self.assertEqual(recs[0]['DB'], 'UniProtKB')
         self.assertEqual(recs[0]['DB_Object_ID'], 'A0A023PXA5')
@@ -88,7 +88,7 @@ class GoaTests(unittest.TestCase):
             for rec in GOA.gpi_iterator(handle):
                 recs.append(rec)
         self.assertEqual(len(recs), 300)
-        self.assertEqual(list(recs[0].keys()), GOA.GPI11FIELDS)
+        self.assertEqual(sorted(recs[0].keys()), sorted(GOA.GPI11FIELDS))
         # Check values of first record
         self.assertEqual(recs[0]['DB_Object_ID'], 'A2P2R3')
         self.assertEqual(recs[0]['DB_Object_Symbol'], 'YMR084W')
