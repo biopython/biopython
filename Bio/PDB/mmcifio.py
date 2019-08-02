@@ -243,7 +243,7 @@ class MMCIFIO(object):
         elif self._requires_quote(val):
             # Choose quote character
             if "' " in val:
-                return "{v: <{width}}".format(v="\"" + val + "\"", width=col_width)
+                return "{v: <{width}}".format(v='"' + val + '"', width=col_width)
             else:
                 return "{v: <{width}}".format(v="'" + val + "'", width=col_width)
         # Safe to not quote
@@ -253,14 +253,14 @@ class MMCIFIO(object):
 
     def _requires_newline(self, val):
         # Technically the space can be a tab too
-        if "\n" in val or ("' " in val and "\" " in val):
+        if "\n" in val or ("' " in val and '" ' in val):
             return True
         else:
             return False
 
     def _requires_quote(self, val):
         # Technically the words should be case-insensitive
-        if " " in val or "'" in val or "\"" in val or val[0] in ["_", "#", "$", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
+        if " " in val or "'" in val or '"' in val or val[0] in ["_", "#", "$", "[", "]", ";"] or val.startswith("data_") or val.startswith("save_") or val in ["loop_", "stop_", "global_"]:
             return True
         else:
             return False
@@ -363,7 +363,7 @@ class MMCIFIO(object):
 
         # Data block name is the structure ID with special characters removed
         structure_id = self.structure.id
-        for c in ["#", "$", "'", "\"", "[", "]", " ", "\t", "\n"]:
+        for c in ["#", "$", "'", '"', "[", "]", " ", "\t", "\n"]:
             structure_id = structure_id.replace(c, "")
         atom_dict["data_"] = structure_id
 
