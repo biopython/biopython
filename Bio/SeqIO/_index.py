@@ -347,7 +347,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     key = key[:-1]
             else:
                 raise ValueError(
-                    'Did not recognise the ID line layout:\n%r' % line)
+                    "Did not recognise the ID line layout:\n%r" % line)
             while True:
                 end_offset = handle.tell()
                 line = handle.readline()

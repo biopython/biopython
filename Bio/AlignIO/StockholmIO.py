@@ -386,7 +386,7 @@ class StockholmIterator(AlignmentIterator):
         if not line:
             # Empty file - just give up.
             raise StopIteration
-        if line.strip() != '# STOCKHOLM 1.0':
+        if line.strip() != "# STOCKHOLM 1.0":
             raise ValueError("Did not find STOCKHOLM header")
 
         # Note: If this file follows the PFAM conventions, there should be
@@ -406,7 +406,7 @@ class StockholmIterator(AlignmentIterator):
             if not line:
                 break  # end of file
             line = line.strip()  # remove trailing \n
-            if line == '# STOCKHOLM 1.0':
+            if line == "# STOCKHOLM 1.0":
                 self._header = line
                 break
             elif line == "//":
@@ -429,7 +429,7 @@ class StockholmIterator(AlignmentIterator):
                 seq_id, seq = parts
                 if seq_id not in ids:
                     ids[seq_id] = True
-                seqs.setdefault(seq_id, '')
+                seqs.setdefault(seq_id, "")
                 seqs[seq_id] += seq.replace(".", "-")
             elif len(line) >= 5:
                 # Comment line or meta-data
@@ -443,7 +443,7 @@ class StockholmIterator(AlignmentIterator):
                         gf[feature] = [text]
                     else:
                         gf[feature].append(text)
-                elif line[:5] == '#=GC ':
+                elif line[:5] == "#=GC ":
                     # Generic per-Column annotation, exactly 1 char per column
                     # Format: "#=GC <feature> <exactly 1 char per column>"
                     feature, text = line[5:].strip().split(None, 2)
@@ -451,7 +451,7 @@ class StockholmIterator(AlignmentIterator):
                         gc[feature] = ""
                     gc[feature] += text.strip()  # append to any previous entry
                     # Might be interleaved blocks, so can't check length yet
-                elif line[:5] == '#=GS ':
+                elif line[:5] == "#=GS ":
                     # Generic per-Sequence annotation, free text
                     # Format: "#=GS <seqname> <feature> <free text>"
                     seq_id, feature, text = line[5:].strip().split(None, 2)
@@ -539,7 +539,7 @@ class StockholmIterator(AlignmentIterator):
 
     def _identifier_split(self, identifier):
         """Return (name, start, end) string tuple from an identier (PRIVATE)."""
-        if '/' in identifier:
+        if "/" in identifier:
             name, start_end = identifier.rsplit("/", 1)
             if start_end.count("-") == 1:
                 try:

@@ -522,9 +522,9 @@ def write(sequences, handle, format):
         sequences = [sequences]
 
     if format in _BinaryFormats:
-        mode = 'wb'
+        mode = "wb"
     else:
-        mode = 'w'
+        mode = "w"
 
     with as_handle(handle, mode) as fp:
         # Map the file format to a writer function/class
@@ -624,9 +624,9 @@ def parse(handle, format, alphabet=None):
 
     # Hack for SFF, will need to make this more general in future
     if format in _BinaryFormats:
-        mode = 'rb'
+        mode = "rb"
     else:
-        mode = 'rU'
+        mode = "rU"
 
     # Try and give helpful error messages:
     if not isinstance(format, basestring):
@@ -1076,14 +1076,14 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     <BLANKLINE>
     """
     if in_format in _BinaryFormats:
-        in_mode = 'rb'
+        in_mode = "rb"
     else:
-        in_mode = 'rU'
+        in_mode = "rU"
 
     if out_format in _BinaryFormats:
-        out_mode = 'wb'
+        out_mode = "wb"
     else:
-        out_mode = 'w'
+        out_mode = "w"
 
     # This will check the arguments and issue error messages,
     # after we have opened the file which is a shame.

@@ -99,8 +99,8 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.query = ''
-        self.hit = ''
+        self.query = ""
+        self.hit = ""
         self.gap_threshold = 0
         self.query_length = 0
         self.query_filtered_length = 0
@@ -114,9 +114,9 @@ class Record(object):
         self.evalue = -1
         self.query_start = -1
         self.hit_start = -1
-        self.query_aln = ''
-        self.hit_aln = ''
-        self.positives = ''
+        self.query_aln = ""
+        self.hit_aln = ""
+        self.positives = ""
 
     def query_coverage(self):
         """Return the length of the query covered in the alignment."""

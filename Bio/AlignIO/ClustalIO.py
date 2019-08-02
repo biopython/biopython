@@ -35,7 +35,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         except AttributeError:
             version = ""
         if not version:
-            version = '1.81'
+            version = "1.81"
         if version.startswith("2."):
             # e.g. 2.0.x
             output = "CLUSTAL %s multiple sequence alignment\n\n\n" % version
@@ -109,7 +109,7 @@ class ClustalIterator(AlignmentIterator):
             raise StopIteration
 
         # Whitelisted headers we know about
-        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE', 'MSAPROBS', 'Kalign']
+        known_headers = ["CLUSTAL", "PROBCONS", "MUSCLE", "MSAPROBS", "Kalign"]
         if line.strip().split()[0] not in known_headers:
             raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],
@@ -118,9 +118,9 @@ class ClustalIterator(AlignmentIterator):
         # find the clustal version in the header line
         version = None
         for word in line.split():
-            if word[0] == '(' and word[-1] == ')':
+            if word[0] == "(" and word[-1] == ")":
                 word = word[1:-1]
-            if word[0] in '0123456789':
+            if word[0] in "0123456789":
                 version = word
                 break
 
@@ -236,7 +236,7 @@ class ClustalIterator(AlignmentIterator):
                     start = len(fields[0]) + \
                         line[len(fields[0]):].find(fields[1])
                     if start != seq_cols.start:
-                        raise ValueError('Old location %s -> %i:XX' % (seq_cols, start))
+                        raise ValueError("Old location %s -> %i:XX" % (seq_cols, start))
                     end = start + len(fields[1])
                     seq_cols = slice(start, end)
                     del start, end

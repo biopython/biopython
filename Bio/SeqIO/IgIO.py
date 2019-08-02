@@ -105,7 +105,7 @@ def IgIterator(handle, alphabet=single_letter_alphabet):
         # Return the record and then continue...
         record = SeqRecord(Seq(seq_str, alphabet),
                            id=title, name=title)
-        record.annotations['comment'] = "\n".join(comment_lines)
+        record.annotations["comment"] = "\n".join(comment_lines)
         yield record
 
     # We should be at the end of the file now

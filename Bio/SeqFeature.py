@@ -89,7 +89,7 @@ class SeqFeature(object):
 
     """
 
-    def __init__(self, location=None, type='', location_operator='',
+    def __init__(self, location=None, type="", location_operator="",
                  strand=None, id="<unknown id>",
                  qualifiers=None, sub_features=None,
                  ref=None, ref_db=None):
@@ -570,13 +570,13 @@ class Reference(object):
     def __init__(self):
         """Initialize the class."""
         self.location = []
-        self.authors = ''
-        self.consrtm = ''
-        self.title = ''
-        self.journal = ''
-        self.medline_id = ''
-        self.pubmed_id = ''
-        self.comment = ''
+        self.authors = ""
+        self.consrtm = ""
+        self.title = ""
+        self.journal = ""
+        self.medline_id = ""
+        self.pubmed_id = ""
+        self.comment = ""
 
     def __str__(self):
         """Return the full Reference object as a python string."""
@@ -756,8 +756,8 @@ class FeatureLocation(object):
             raise TypeError("end=%r %s" % (end, type(end)))
         if isinstance(self.start.position, int) and \
                 isinstance(self.end.position, int) and self.start > self.end:
-            raise ValueError('End location ({}) must be greater than or equal '
-                             'to start location ({})'.format(self.end,
+            raise ValueError("End location ({}) must be greater than or equal "
+                             "to start location ({})".format(self.end,
                                                              self.start))
         self.strand = strand
         self.ref = ref

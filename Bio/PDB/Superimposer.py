@@ -50,7 +50,7 @@ class Superimposer(object):
         if self.rotran is None:
             raise PDBException("No transformation has been calculated yet")
         rot, tran = self.rotran
-        rot = rot.astype('f')
-        tran = tran.astype('f')
+        rot = rot.astype("f")
+        tran = tran.astype("f")
         for atom in atom_list:
             atom.transform(rot, tran)

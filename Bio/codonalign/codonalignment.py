@@ -37,7 +37,7 @@ class CodonAlignment(MultipleSeqAlignment):
 
     """
 
-    def __init__(self, records='', name=None, alphabet=default_codon_alphabet):
+    def __init__(self, records="", name=None, alphabet=default_codon_alphabet):
         """Initialize the class."""
         MultipleSeqAlignment.__init__(self, records, alphabet=alphabet)
 
@@ -236,7 +236,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     # prepare codon_dict (taking stop codon as an extra amino acid)
     codon_dict = copy.deepcopy(codon_table.forward_table)
     for stop in codon_table.stop_codons:
-        codon_dict[stop] = 'stop'
+        codon_dict[stop] = "stop"
     # prepare codon_lst
     codon_lst = []
     for codon_aln in codon_alns:
@@ -254,7 +254,7 @@ def mktest(codon_alns, codon_table=default_codon_table, alpha=0.05):
     G, nonsyn_G = _get_codon2codon_matrix(codon_table=codon_table)
     for i in codon_set:
         all_codon = i[0].union(*i[1:])
-        if '-' in all_codon or len(all_codon) == 1:
+        if "-" in all_codon or len(all_codon) == 1:
             continue
         fix_or_not = all(len(k) == 1 for k in i)
         if fix_or_not:
@@ -282,13 +282,13 @@ def _get_codon2codon_matrix(codon_table=default_codon_table):
     Elements in the matrix are number of synonymous and nonsynonymous
     substitutions required for the substitution.
     """
-    base_tuple = ('A', 'T', 'C', 'G')
+    base_tuple = ("A", "T", "C", "G")
     codons = [i for i in list(codon_table.forward_table.keys()) +
-              codon_table.stop_codons if 'U' not in i]
+              codon_table.stop_codons if "U" not in i]
     # set up codon_dict considering stop codons
     codon_dict = codon_table.forward_table
     for stop in codon_table.stop_codons:
-        codon_dict[stop] = 'stop'
+        codon_dict[stop] = "stop"
     # count site
     num = len(codons)
     G = {}  # graph for substitution
@@ -354,7 +354,7 @@ def _dijkstra(graph, start, end):
     while len(unseen_nodes) > 0:
         # Select the node with the lowest value in D (final distance)
         shortest = None
-        node = ''
+        node = ""
         for temp_node in unseen_nodes:
             if shortest is None:
                 shortest = D[temp_node]

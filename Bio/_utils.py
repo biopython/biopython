@@ -53,7 +53,7 @@ def trim_str(string, max_len, concat_char):
     return string
 
 
-def getattr_str(obj, attr, fmt=None, fallback='?'):
+def getattr_str(obj, attr, fmt=None, fallback="?"):
     """Return string of the given object's attribute.
 
     Defaults to the given fallback value if attribute is not present.
@@ -104,7 +104,7 @@ def run_doctest(target_dir=None, *args, **kwargs):
 
     # default doctest options
     default_kwargs = {
-        'optionflags': doctest.ELLIPSIS,
+        "optionflags": doctest.ELLIPSIS,
     }
     kwargs.update(default_kwargs)
 

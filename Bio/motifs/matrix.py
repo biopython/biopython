@@ -37,7 +37,7 @@ try:
         return scores
 
 except ImportError:
-    if platform.python_implementation() == 'CPython':
+    if platform.python_implementation() == "CPython":
         import warnings
         from Bio import BiopythonWarning
         warnings.warn("Using pure-Python as missing Biopython's C code for PWM.",
@@ -222,21 +222,21 @@ class GenericPositionMatrix(dict):
         # Nucleic Acids Research 15(4): 1353-1361. (1987).
         # The same rules are used by TRANSFAC.
         degenerate_nucleotide = {
-            'A': 'A',
-            'C': 'C',
-            'G': 'G',
-            'T': 'T',
-            'AC': 'M',
-            'AG': 'R',
-            'AT': 'W',
-            'CG': 'S',
-            'CT': 'Y',
-            'GT': 'K',
-            'ACG': 'V',
-            'ACT': 'H',
-            'AGT': 'D',
-            'CGT': 'B',
-            'ACGT': 'N',
+            "A": "A",
+            "C": "C",
+            "G": "G",
+            "T": "T",
+            "AC": "M",
+            "AG": "R",
+            "AT": "W",
+            "CG": "S",
+            "CT": "Y",
+            "GT": "K",
+            "ACG": "V",
+            "ACT": "H",
+            "AGT": "D",
+            "CGT": "B",
+            "ACGT": "N",
         }
         sequence = ""
         for i in range(self.length):
@@ -265,7 +265,7 @@ class GenericPositionMatrix(dict):
         total = 0.0
         for i in range(self.length):
             for letter in alphabet:
-                if letter in 'CG':
+                if letter in "CG":
                     gc_total += self[letter][i]
                 total += self[letter][i]
         return gc_total / total
@@ -389,7 +389,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
-        if sorted(self.alphabet) != ['A', 'C', 'G', 'T']:
+        if sorted(self.alphabet) != ["A", "C", "G", "T"]:
             raise ValueError("PSSM has wrong alphabet: %s - Use only with DNA motifs"
                              % self.alphabet)
 

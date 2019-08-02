@@ -48,7 +48,7 @@ class Yn00(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        with open(self.ctl_file, 'w') as ctl_handle:
+        with open(self.ctl_file, "w") as ctl_handle:
             ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
             ctl_handle.write("outfile = %s\n" % self._rel_out_file)
             for option in self._options.items():

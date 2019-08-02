@@ -74,7 +74,7 @@ class Atom(object):
         self.mass = self._assign_atom_mass()
 
         # For atom sorting (protein backbone atoms first)
-        self._sorting_keys = {'N': 0, 'CA': 1, 'C': 2, 'O': 3}
+        self._sorting_keys = {"N": 0, "CA": 1, "C": 2, "O": 3}
 
     # Sorting Methods
     # standard across different objects and allows direct comparison
@@ -196,7 +196,7 @@ class Atom(object):
         if self.element:
             return IUPACData.atom_weights[self.element.capitalize()]
         else:
-            return float('NaN')
+            return float("NaN")
 
     # Special methods
 

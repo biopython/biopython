@@ -568,11 +568,11 @@ class _BaseGenBankConsumer(object):
         # process the keywords into a python list
         if keyword_string == "" or keyword_string == ".":
             keywords = ""
-        elif keyword_string[-1] == '.':
+        elif keyword_string[-1] == ".":
             keywords = keyword_string[:-1]
         else:
             keywords = keyword_string
-        keyword_list = keywords.split(';')
+        keyword_list = keywords.split(";")
         clean_keyword_list = [x.strip() for x in keyword_list]
         return clean_keyword_list
 
@@ -592,17 +592,17 @@ class _BaseGenBankConsumer(object):
             # Missing data, no taxonomy
             return []
 
-        if taxonomy_string[-1] == '.':
+        if taxonomy_string[-1] == ".":
             tax_info = taxonomy_string[:-1]
         else:
             tax_info = taxonomy_string
-        tax_list = tax_info.split(';')
+        tax_list = tax_info.split(";")
         new_tax_list = []
         for tax_item in tax_list:
             new_items = tax_item.split("\n")
             new_tax_list.extend(new_items)
-        while '' in new_tax_list:
-            new_tax_list.remove('')
+        while "" in new_tax_list:
+            new_tax_list.remove("")
         clean_tax_list = [x.strip() for x in new_tax_list]
 
         return clean_tax_list
@@ -617,7 +617,7 @@ class _BaseGenBankConsumer(object):
         # Originally this imported string.whitespace and did a replace
         # via a loop.  It's simpler to just split on whitespace and rejoin
         # the string - and this avoids importing string too.  See Bug 2684.
-        return ''.join(location_string.split())
+        return "".join(location_string.split())
 
     @staticmethod
     def _remove_newlines(text):
@@ -633,7 +633,7 @@ class _BaseGenBankConsumer(object):
     def _normalize_spaces(text):
         """Replace multiple spaces in the passed text with single spaces (PRIVATE)."""
         # get rid of excessive spaces
-        return ' '.join(x for x in text.split(" ") if x)
+        return " ".join(x for x in text.split(" ") if x)
 
     @staticmethod
     def _remove_spaces(text):
@@ -681,7 +681,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._use_fuzziness = use_fuzziness
         self._feature_cleaner = feature_cleaner
 
-        self._seq_type = ''
+        self._seq_type = ""
         self._seq_data = []
         self._cur_reference = None
         self._cur_feature = None
@@ -707,14 +707,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def topology(self, topology):  # noqa: D402
         """Validate and record sequence topology (linear or circular as strings)."""
         if topology:
-            if topology not in ['linear', 'circular']:
+            if topology not in ["linear", "circular"]:
                 raise ParserFailureError("Unexpected topology %r should be linear or circular" % topology)
-            self.data.annotations['topology'] = topology
+            self.data.annotations["topology"] = topology
 
     def molecule_type(self, mol_type):
         """Validate and record the molecule type (for round-trip etc)."""
         if mol_type:
-            if "circular" in mol_type or 'linear' in mol_type:
+            if "circular" in mol_type or "linear" in mol_type:
                 raise ParserFailureError("Molecule type %r should not include topology" % mol_type)
 
             # Writing out records will fail if we have a lower case DNA
@@ -722,17 +722,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # This is a bit ugly, but we don't want to upper case e.g.
             # the m in mRNA, but thanks to the strip we lost the spaces
             # so we need to index from the back
-            if mol_type[-3:].upper() in ('DNA', 'RNA') and not mol_type[-3:].isupper():
+            if mol_type[-3:].upper() in ("DNA", "RNA") and not mol_type[-3:].isupper():
                 warnings.warn("Non-upper case molecule type in LOCUS line: %s"
                               % mol_type, BiopythonParserWarning)
 
-            self.data.annotations['molecule_type'] = mol_type
+            self.data.annotations["molecule_type"] = mol_type
 
     def data_file_division(self, division):
-        self.data.annotations['data_file_division'] = division
+        self.data.annotations["data_file_division"] = division
 
     def date(self, submit_date):
-        self.data.annotations['date'] = submit_date
+        self.data.annotations["date"] = submit_date
 
     def definition(self, definition):
         """Set the definition as the description of the sequence."""
@@ -756,29 +756,29 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # On the off chance there was more than one accession line:
             for acc in new_acc_nums:
                 # Prevent repeat entries
-                if acc not in self.data.annotations['accessions']:
-                    self.data.annotations['accessions'].append(acc)
+                if acc not in self.data.annotations["accessions"]:
+                    self.data.annotations["accessions"].append(acc)
         except KeyError:
-            self.data.annotations['accessions'] = new_acc_nums
+            self.data.annotations["accessions"] = new_acc_nums
 
         # if we haven't set the id information yet, add the first acc num
         if not self.data.id:
             if len(new_acc_nums) > 0:
                 # self.data.id = new_acc_nums[0]
                 # Use the FIRST accession as the ID, not the first on this line!
-                self.data.id = self.data.annotations['accessions'][0]
+                self.data.id = self.data.annotations["accessions"][0]
 
     def wgs(self, content):
-        self.data.annotations['wgs'] = content.split('-')
+        self.data.annotations["wgs"] = content.split("-")
 
     def add_wgs_scafld(self, content):
-        self.data.annotations.setdefault('wgs_scafld', []).append(content.split('-'))
+        self.data.annotations.setdefault("wgs_scafld", []).append(content.split("-"))
 
     def nid(self, content):
-        self.data.annotations['nid'] = content
+        self.data.annotations["nid"] = content
 
     def pid(self, content):
-        self.data.annotations['pid'] = content
+        self.data.annotations["pid"] = content
 
     def version(self, version_id):
         # Want to use the versioned accession as the record.id
@@ -863,55 +863,55 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # ID   X56734; SV 1; linear; mRNA; STD; PLN; 1859 BP.
         # Scanner calls consumer.version_suffix(1)
         assert version.isdigit()
-        self.data.annotations['sequence_version'] = int(version)
+        self.data.annotations["sequence_version"] = int(version)
 
     def db_source(self, content):
-        self.data.annotations['db_source'] = content.rstrip()
+        self.data.annotations["db_source"] = content.rstrip()
 
     def gi(self, content):
-        self.data.annotations['gi'] = content
+        self.data.annotations["gi"] = content
 
     def keywords(self, content):
-        if 'keywords' in self.data.annotations:
+        if "keywords" in self.data.annotations:
             # Multi-line keywords, append to list
             # Note EMBL states "A keyword is never split between lines."
-            self.data.annotations['keywords'].extend(self._split_keywords(content))
+            self.data.annotations["keywords"].extend(self._split_keywords(content))
         else:
-            self.data.annotations['keywords'] = self._split_keywords(content)
+            self.data.annotations["keywords"] = self._split_keywords(content)
 
     def segment(self, content):
-        self.data.annotations['segment'] = content
+        self.data.annotations["segment"] = content
 
     def source(self, content):
         # Note that some software (e.g. VectorNTI) may produce an empty
         # source (rather than using a dot/period as might be expected).
         if content == "":
             source_info = ""
-        elif content[-1] == '.':
+        elif content[-1] == ".":
             source_info = content[:-1]
         else:
             source_info = content
-        self.data.annotations['source'] = source_info
+        self.data.annotations["source"] = source_info
 
     def organism(self, content):
-        self.data.annotations['organism'] = content
+        self.data.annotations["organism"] = content
 
     def taxonomy(self, content):
         """Record (another line of) the taxonomy lineage."""
         lineage = self._split_taxonomy(content)
         try:
-            self.data.annotations['taxonomy'].extend(lineage)
+            self.data.annotations["taxonomy"].extend(lineage)
         except KeyError:
-            self.data.annotations['taxonomy'] = lineage
+            self.data.annotations["taxonomy"] = lineage
 
     def reference_num(self, content):
         """Signal the beginning of a new reference object."""
         # if we have a current reference that hasn't been added to
         # the list of references, add it.
         if self._cur_reference is not None:
-            self.data.annotations['references'].append(self._cur_reference)
+            self.data.annotations["references"].append(self._cur_reference)
         else:
-            self.data.annotations['references'] = []
+            self.data.annotations["references"] = []
 
         self._cur_reference = SeqFeature.Reference()
 
@@ -931,12 +931,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         all_locations = []
         # parse if we've got 'bases' and 'to'
-        if 'bases' in ref_base_info and 'to' in ref_base_info:
+        if "bases" in ref_base_info and "to" in ref_base_info:
             # get rid of the beginning 'bases'
             ref_base_info = ref_base_info[5:]
             locations = self._split_reference_locations(ref_base_info)
             all_locations.extend(locations)
-        elif 'residues' in ref_base_info and 'to' in ref_base_info:
+        elif "residues" in ref_base_info and "to" in ref_base_info:
             residues_start = ref_base_info.find("residues")
             # get only the information after "residues"
             ref_base_info = ref_base_info[(residues_start + len("residues ")):]
@@ -945,8 +945,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # make sure if we are not finding information then we have
         # the string 'sites' or the string 'bases'
-        elif (ref_base_info == 'sites' or
-              ref_base_info.strip() == 'bases'):
+        elif (ref_base_info == "sites" or
+              ref_base_info.strip() == "bases"):
             pass
         # otherwise raise an error
         else:
@@ -966,11 +966,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         based on the reference locations.
         """
         # split possibly multiple locations using the ';'
-        all_base_info = location_string.split(';')
+        all_base_info = location_string.split(";")
 
         new_locations = []
         for base_info in all_base_info:
-            start, end = base_info.split('to')
+            start, end = base_info.split("to")
             new_start, new_end = \
                 self._convert_to_python_numbers(int(start.strip()),
                                                 int(end.strip()))
@@ -980,13 +980,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def authors(self, content):
         if self._cur_reference.authors:
-            self._cur_reference.authors += ' ' + content
+            self._cur_reference.authors += " " + content
         else:
             self._cur_reference.authors = content
 
     def consrtm(self, content):
         if self._cur_reference.consrtm:
-            self._cur_reference.consrtm += ' ' + content
+            self._cur_reference.consrtm += " " + content
         else:
             self._cur_reference.consrtm = content
 
@@ -995,13 +995,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             warnings.warn("GenBank TITLE line without REFERENCE line.",
                           BiopythonParserWarning)
         elif self._cur_reference.title:
-            self._cur_reference.title += ' ' + content
+            self._cur_reference.title += " " + content
         else:
             self._cur_reference.title = content
 
     def journal(self, content):
         if self._cur_reference.journal:
-            self._cur_reference.journal += ' ' + content
+            self._cur_reference.journal += " " + content
         else:
             self._cur_reference.journal = content
 
@@ -1014,18 +1014,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def remark(self, content):
         """Deal with a reference comment."""
         if self._cur_reference.comment:
-            self._cur_reference.comment += ' ' + content
+            self._cur_reference.comment += " " + content
         else:
             self._cur_reference.comment = content
 
     def comment(self, content):
         try:
-            self.data.annotations['comment'] += "\n" + "\n".join(content)
+            self.data.annotations["comment"] += "\n" + "\n".join(content)
         except KeyError:
-            self.data.annotations['comment'] = "\n".join(content)
+            self.data.annotations["comment"] = "\n".join(content)
 
     def structured_comment(self, content):
-        self.data.annotations['structured_comment'] = content
+        self.data.annotations["structured_comment"] = content
 
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line."""
@@ -1035,7 +1035,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """Indicate we've got to the start of the feature table."""
         # make sure we've added on our last reference object
         if self._cur_reference is not None:
-            self.data.annotations['references'].append(self._cur_reference)
+            self.data.annotations["references"].append(self._cur_reference)
             self._cur_reference = None
 
     def feature_key(self, content):
@@ -1059,8 +1059,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # the number 266 and have the information in a more reasonable
         # place. So we'll just grab out the number and feed this to the
         # parser. We shouldn't really be losing any info this way.
-        if 'replace' in location_line:
-            comma_pos = location_line.find(',')
+        if "replace" in location_line:
+            comma_pos = location_line.find(",")
             location_line = location_line[8:comma_pos]
 
         cur_feature = self._cur_feature
@@ -1183,7 +1183,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if "order" in location_line and "join" in location_line:
             # See Bug 3197
             msg = 'Combinations of "join" and "order" within the same ' + \
-                  'location (nested operators) are illegal:\n' + location_line
+                  "location (nested operators) are illegal:\n" + location_line
             raise LocationParserError(msg)
         # This used to be an error....
         cur_feature.location = None
@@ -1205,13 +1205,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             return
 
         # Remove enclosing quotation marks
-        value = re.sub('^"|"$', '', value)
+        value = re.sub('^"|"$', "", value)
 
         # Handle NCBI escaping
         # Warn if escaping is not according to standard
         if re.search(r'[^"]"[^"]|^"[^"]|[^"]"$', value):
             warnings.warn('The NCBI states double-quote characters like " should be escaped as "" '
-                          '(two double - quotes), but here it was not: %r' % value, BiopythonParserWarning)
+                          "(two double - quotes), but here it was not: %r" % value, BiopythonParserWarning)
         # Undo escaping, repeated double quotes -> one double quote
         value = value.replace('""', '"')
 
@@ -1268,7 +1268,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         into a list of strings, and then uses string.join later to put
         them together. Supposedly, this is a big time savings
         """
-        assert ' ' not in content
+        assert " " not in content
         self._seq_data.append(content.upper())
 
     def record_end(self, content):
@@ -1279,13 +1279,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # Try and append the version number to the accession for the full id
         if not self.data.id:
-            if 'accessions' in self.data.annotations:
+            if "accessions" in self.data.annotations:
                 raise ValueError("Problem adding version number to accession: "
-                                 + str(self.data.annotations['accessions']))
+                                 + str(self.data.annotations["accessions"]))
             self.data.id = self.data.name  # Good fall back?
-        elif self.data.id.count('.') == 0:
+        elif self.data.id.count(".") == 0:
             try:
-                self.data.id += '.%i' % self.data.annotations['sequence_version']
+                self.data.id += ".%i" % self.data.annotations["sequence_version"]
             except KeyError:
                 pass
 
@@ -1307,17 +1307,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
-            if 'DNA' in self._seq_type.upper() or 'MRNA' in self._seq_type.upper():
+            if "DNA" in self._seq_type.upper() or "MRNA" in self._seq_type.upper():
                 seq_alphabet = IUPAC.ambiguous_dna
             # are there ever really RNA sequences in GenBank?
-            elif 'RNA' in self._seq_type.upper():
+            elif "RNA" in self._seq_type.upper():
                 # Even for data which was from RNA, the sequence string
                 # is usually given as DNA (T not U).  Bug 2408
                 if "T" in sequence and "U" not in sequence:
                     seq_alphabet = IUPAC.ambiguous_dna
                 else:
                     seq_alphabet = IUPAC.ambiguous_rna
-            elif 'PROTEIN' in self._seq_type.upper() \
+            elif "PROTEIN" in self._seq_type.upper() \
                     or self._seq_type == "PRT":  # PRT is used in EMBL-bank for patents
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
@@ -1349,10 +1349,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_qualifier = None
 
     def wgs(self, content):
-        self.data.wgs = content.split('-')
+        self.data.wgs = content.split("-")
 
     def add_wgs_scafld(self, content):
-        self.data.wgs_scafld.append(content.split('-'))
+        self.data.wgs_scafld.append(content.split("-"))
 
     def locus(self, content):
         self.data.locus = content
@@ -1362,7 +1362,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def residue_type(self, content):
         # Be lenient about parsing, but technically lowercase residue types are malformed.
-        if 'dna' in content or 'rna' in content:
+        if "dna" in content or "rna" in content:
             warnings.warn("Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
                           BiopythonParserWarning)
         self.data.residue_type = content
@@ -1532,7 +1532,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
-        if '=' not in self._cur_qualifier.key:
+        if "=" not in self._cur_qualifier.key:
             self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
@@ -1560,7 +1560,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         list together to make the final sequence. This is faster than
         adding on the new string every time.
         """
-        assert ' ' not in content
+        assert " " not in content
         self._seq_data.append(content.upper())
 
     def record_end(self, content):

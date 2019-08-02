@@ -38,17 +38,17 @@ class Record(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sid = ''
+        self.sid = ""
         self.residues = None
-        self.sccs = ''
-        self.sunid = ''
+        self.sccs = ""
+        self.sunid = ""
         self.hierarchy = {}
         if line:
             self._process(line)
 
     def _process(self, line):
         line = line.rstrip()         # no trailing whitespace
-        columns = line.split('\t')   # separate the tab-delineated cols
+        columns = line.split("\t")   # separate the tab-delineated cols
         if len(columns) != 6:
             raise ValueError("I don't understand the format of %s" % line)
 
@@ -58,7 +58,7 @@ class Record(object):
         self.sunid = int(self.sunid)
 
         for ht in hierarchy.split(","):
-            key, value = ht.split('=')
+            key, value = ht.split("=")
             self.hierarchy[key] = int(value)
 
     def __str__(self):
@@ -69,7 +69,7 @@ class Record(object):
         s.append(self.sccs)
         s.append(self.sunid)
 
-        s.append(','.join('='.join((key, str(value))) for key, value
+        s.append(",".join("=".join((key, str(value))) for key, value
                           in self.hierarchy.items()))
 
         return "\t".join(map(str, s)) + "\n"
@@ -83,7 +83,7 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)
 
@@ -106,7 +106,7 @@ class Index(dict):
                 line = f.readline()
                 if not line:
                     break
-                if line.startswith('#'):
+                if line.startswith("#"):
                     continue
                 record = Record(line)
                 key = record.sid

@@ -128,12 +128,12 @@ def _check_bases(seq_string):
     return " " + seq_string
 
 
-matching = {'A': 'ARWMHVDN', 'C': 'CYSMHBVN', 'G': 'GRSKBVDN',
-            'T': 'TYWKHBDN', 'R': 'ABDGHKMNSRWV', 'Y': 'CBDHKMNSTWVY',
-            'W': 'ABDHKMNRTWVY', 'S': 'CBDGHKMNSRVY', 'M': 'ACBDHMNSRWVY',
-            'K': 'BDGHKNSRTWVY', 'H': 'ACBDHKMNSRTWVY',
-            'B': 'CBDGHKMNSRTWVY', 'V': 'ACBDGHKMNSRWVY',
-            'D': 'ABDGHKMNSRTWVY', 'N': 'ACBDGHKMNSRTWVY'}
+matching = {"A": "ARWMHVDN", "C": "CYSMHBVN", "G": "GRSKBVDN",
+            "T": "TYWKHBDN", "R": "ABDGHKMNSRWV", "Y": "CBDHKMNSTWVY",
+            "W": "ABDHKMNRTWVY", "S": "CBDGHKMNSRVY", "M": "ACBDHMNSRWVY",
+            "K": "BDGHKNSRTWVY", "H": "ACBDHKMNSRTWVY",
+            "B": "CBDGHKMNSRTWVY", "V": "ACBDGHKMNSRWVY",
+            "D": "ABDGHKMNSRTWVY", "N": "ACBDGHKMNSRTWVY"}
 
 DNA = Seq
 
@@ -173,7 +173,7 @@ class FormattedSeq(object):
             self.alphabet = seq.alphabet
             self.klass = seq.klass
         else:
-            raise TypeError('expected Seq or MutableSeq, got %s' % type(seq))
+            raise TypeError("expected Seq or MutableSeq, got %s" % type(seq))
 
     def __len__(self):
         """Return length of ``FormattedSeq``.
@@ -184,7 +184,7 @@ class FormattedSeq(object):
 
     def __repr__(self):
         """Represent ``FormattedSeq`` class as a string."""
-        return 'FormattedSeq(%s, linear=%s)' % (repr(self[1:]),
+        return "FormattedSeq(%s, linear=%s)" % (repr(self[1:]),
                                                 repr(self.linear))
 
     def __eq__(self, other):
@@ -261,7 +261,7 @@ class RestrictionType(type):
     Implement the operator methods.
     """
 
-    def __init__(cls, name='', bases=(), dct=None):
+    def __init__(cls, name="", bases=(), dct=None):
         """Initialize RestrictionType instance.
 
         Not intended to be used in normal operation. The enzymes are
@@ -444,7 +444,7 @@ class RestrictionType(type):
         True
         """
         if not isinstance(other, RestrictionType):
-            raise TypeError('expected RestrictionType, got %s instead'
+            raise TypeError("expected RestrictionType, got %s instead"
                             % type(other))
         return cls._mod1(other)
 
@@ -1042,7 +1042,7 @@ class Unknown(AbstractCut):
         If linear is False, the sequence is considered to be circular and the
         output will be modified accordingly.
         """
-        raise NotImplementedError('%s restriction is unknown.'
+        raise NotImplementedError("%s restriction is unknown."
                                   % cls.__name__)
     catalyze = catalyse
 
@@ -1097,7 +1097,7 @@ class Unknown(AbstractCut):
 
         Can be "3' overhang", "5' overhang", "blunt", "unknown".
         """
-        return 'unknown'
+        return "unknown"
 
     @classmethod
     def compatible_end(cls):
@@ -1224,7 +1224,7 @@ class Blunt(AbstractCut):
 
         Can be "3' overhang", "5' overhang", "blunt", "unknown".
         """
-        return 'blunt'
+        return "blunt"
 
     @classmethod
     def compatible_end(cls, batch=None):
@@ -1633,21 +1633,21 @@ class Defined(AbstractCut):
         f3 = cls.fst3
         site = cls.site
         if cls.cut_twice():
-            re = 'cut twice, not yet implemented sorry.'
+            re = "cut twice, not yet implemented sorry."
         elif cls.is_5overhang():
             if f5 == f3 == 0:
-                re = 'N^' + cls.site + '_N'
+                re = "N^" + cls.site + "_N"
             elif f3 == 0:
-                re = site[:f5] + '^' + site[f5:] + '_N'
+                re = site[:f5] + "^" + site[f5:] + "_N"
             else:
-                re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
+                re = site[:f5] + "^" + site[f5:f3] + "_" + site[f3:]
         elif cls.is_blunt():
-            re = site[:f5] + '^_' + site[f5:]
+            re = site[:f5] + "^_" + site[f5:]
         else:
             if f5 == f3 == 0:
-                re = 'N_' + site + '^N'
+                re = "N_" + site + "^N"
             else:
-                re = site[:f3] + '_' + site[f3:f5] + '^' + site[f5:]
+                re = site[:f3] + "_" + site[f3:f5] + "^" + site[f5:]
         return re
 
     @classmethod
@@ -1774,12 +1774,12 @@ class Ambiguous(AbstractCut):
         else:
             se = cls.ovhgseq
             for base in se:
-                if base in 'ATCG':
+                if base in "ATCG":
                     pass
-                if base in 'N':
-                    se = '.'.join(se.split('N'))
-                if base in 'RYWMSKHDBV':
-                    expand = '[' + matching[base] + ']'
+                if base in "N":
+                    se = ".".join(se.split("N"))
+                if base in "RYWMSKHDBV":
+                    expand = "[" + matching[base] + "]"
                     se = expand.join(se.split(base))
             if re.match(se, other.ovhgseq):
                 return True
@@ -1811,51 +1811,51 @@ class Ambiguous(AbstractCut):
         length = len(cls)
         site = cls.site
         if cls.cut_twice():
-            re = 'cut twice, not yet implemented sorry.'
+            re = "cut twice, not yet implemented sorry."
         elif cls.is_5overhang():
             if f3 == f5 == 0:
-                re = 'N^' + site + '_N'
+                re = "N^" + site + "_N"
             elif 0 <= f5 <= length and 0 <= f3 + length <= length:
-                re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
+                re = site[:f5] + "^" + site[f5:f3] + "_" + site[f3:]
             elif 0 <= f5 <= length:
-                re = site[:f5] + '^' + site[f5:] + f3 * 'N' + '_N'
+                re = site[:f5] + "^" + site[f5:] + f3 * "N" + "_N"
             elif 0 <= f3 + length <= length:
-                re = 'N^' + abs(f5) * 'N' + site[:f3] + '_' + site[f3:]
+                re = "N^" + abs(f5) * "N" + site[:f3] + "_" + site[f3:]
             elif f3 + length < 0:
-                re = 'N^' * abs(f5) * 'N' + '_' + abs(length + f3) * 'N' + site
+                re = "N^" * abs(f5) * "N" + "_" + abs(length + f3) * "N" + site
             elif f5 > length:
-                re = site + (f5 - length) * 'N' + '^' + (length +
-                                                         f3 - f5) * 'N' + '_N'
+                re = site + (f5 - length) * "N" + "^" + (length +
+                                                         f3 - f5) * "N" + "_N"
             else:
-                re = 'N^' + abs(f5) * 'N' + site + f3 * 'N' + '_N'
+                re = "N^" + abs(f5) * "N" + site + f3 * "N" + "_N"
         elif cls.is_blunt():
             if f5 < 0:
-                re = 'N^_' + abs(f5) * 'N' + site
+                re = "N^_" + abs(f5) * "N" + site
             elif f5 > length:
-                re = site + (f5 - length) * 'N' + '^_N'
+                re = site + (f5 - length) * "N" + "^_N"
             else:
-                raise ValueError('%s.easyrepr() : error f5=%i'
+                raise ValueError("%s.easyrepr() : error f5=%i"
                                  % (cls.name, f5))
         else:
             if f3 == 0:
                 if f5 == 0:
-                    re = 'N_' + site + '^N'
+                    re = "N_" + site + "^N"
                 else:
-                    re = site + '_' + (f5 - length) * 'N' + '^N'
+                    re = site + "_" + (f5 - length) * "N" + "^N"
             elif 0 < f3 + length <= length and 0 <= f5 <= length:
-                re = site[:f3] + '_' + site[f3:f5] + '^' + site[f5:]
+                re = site[:f3] + "_" + site[f3:f5] + "^" + site[f5:]
             elif 0 < f3 + length <= length:
-                re = site[:f3] + '_' + site[f3:] + (f5 - length) * 'N' + '^N'
+                re = site[:f3] + "_" + site[f3:] + (f5 - length) * "N" + "^N"
             elif 0 <= f5 <= length:
-                re = 'N_' + 'N' * (f3 + length) + site[:f5] + '^' + site[f5:]
+                re = "N_" + "N" * (f3 + length) + site[:f5] + "^" + site[f5:]
             elif f3 > 0:
-                re = site + f3 * 'N' + '_' + (f5 - f3 - length) * 'N' + '^N'
+                re = site + f3 * "N" + "_" + (f5 - f3 - length) * "N" + "^N"
             elif f5 < 0:
-                re = 'N_' + abs(f3 - f5 + length) * 'N' + '^' + abs(f5) * 'N' \
+                re = "N_" + abs(f3 - f5 + length) * "N" + "^" + abs(f5) * "N" \
                      + site
             else:
-                re = 'N_' + abs(f3 + length) * 'N' + site + (f5 - length) * \
-                     'N' + '^N'
+                re = "N_" + abs(f3 + length) * "N" + site + (f5 - length) * \
+                     "N" + "^N"
         return re
 
 
@@ -1977,7 +1977,7 @@ class NotDefined(AbstractCut):
         >>>
 
         """
-        return '? %s ?' % cls.site
+        return "? %s ?" % cls.site
 
 
 class Commercially_available(AbstractCut):
@@ -1995,7 +1995,7 @@ class Commercially_available(AbstractCut):
     def suppliers(cls):
         """Print a list of suppliers of the enzyme."""
         for s in cls.suppl:
-            print(suppliers_dict[s][0] + ',')
+            print(suppliers_dict[s][0] + ",")
         return
 
     @classmethod
@@ -2075,14 +2075,14 @@ class RestrictionBatch(set):
     def __str__(self):
         """Return a readable representation of the ``RestrictionBatch``."""
         if len(self) < 5:
-            return '+'.join(self.elements())
+            return "+".join(self.elements())
         else:
-            return '...'.join(('+'.join(self.elements()[:2]),
-                               '+'.join(self.elements()[-2:])))
+            return "...".join(("+".join(self.elements()[:2]),
+                               "+".join(self.elements()[-2:])))
 
     def __repr__(self):
         """Represent ``RestrictionBatch`` class as a string for debugging."""
-        return 'RestrictionBatch(%s)' % self.elements()
+        return "RestrictionBatch(%s)" % self.elements()
 
     def __contains__(self, other):
         """Implement ``in`` for ``RestrictionBatch``."""
@@ -2129,7 +2129,7 @@ class RestrictionBatch(set):
             self.add(e)
             return e
         else:
-            raise ValueError('enzyme %s is not in RestrictionBatch'
+            raise ValueError("enzyme %s is not in RestrictionBatch"
                              % e.__name__)
 
     def lambdasplit(self, func):
@@ -2222,7 +2222,7 @@ class RestrictionBatch(set):
                 pass
         except (NameError, SyntaxError):
             pass
-        raise ValueError('%s is not a RestrictionType' % y.__class__)
+        raise ValueError("%s is not a RestrictionType" % y.__class__)
 
     def is_restriction(self, y):
         """Return if enzyme (name) is a known enzyme.
@@ -2282,8 +2282,8 @@ class RestrictionBatch(set):
     @classmethod
     def show_codes(cls):
         """Print a list of supplier codes."""
-        supply = [' = '.join(i) for i in cls.suppl_codes().items()]
-        print('\n'.join(supply))
+        supply = [" = ".join(i) for i in cls.suppl_codes().items()]
+        print("\n".join(supply))
         return
 
     def search(self, dna, linear=True):
@@ -2325,7 +2325,7 @@ class RestrictionBatch(set):
 #                                                                             #
 ###############################################################################
 
-_empty_DNA = DNA('')
+_empty_DNA = DNA("")
 _restrictionbatch = RestrictionBatch()
 
 
@@ -2351,7 +2351,7 @@ class Analysis(RestrictionBatch, PrintFormat):
 
     def __repr__(self):
         """Represent ``Analysis`` class as a string."""
-        return 'Analysis(%s,%s,%s)' %\
+        return "Analysis(%s,%s,%s)" %\
                (repr(self.rb), repr(self.sequence), self.linear)
 
     def _sub_set(self, wanted):
@@ -2372,9 +2372,9 @@ class Analysis(RestrictionBatch, PrintFormat):
         search to only part of the sequence given to analyse.
         """
         if not isinstance(start, int):
-            raise TypeError('expected int, got %s instead' % type(start))
+            raise TypeError("expected int, got %s instead" % type(start))
         if not isinstance(end, int):
-            raise TypeError('expected int, got %s instead' % type(end))
+            raise TypeError("expected int, got %s instead" % type(end))
         if start < 1:  # Looks like this tries to do python list like indexing
             start += len(self.sequence)
         if end < 1:
@@ -2400,7 +2400,7 @@ class Analysis(RestrictionBatch, PrintFormat):
         """
         return start <= site <= len(self.sequence) or 1 <= site < end
 
-    def format_output(self, dct=None, title='', s1=''):
+    def format_output(self, dct=None, title="", s1=""):
         """Collect data and pass to PrintFormat.
 
         If dct is not given the full dictionary is used.
@@ -2409,7 +2409,7 @@ class Analysis(RestrictionBatch, PrintFormat):
             dct = self.mapping
         return PrintFormat.format_output(self, dct, title, s1)
 
-    def print_that(self, dct=None, title='', s1=''):
+    def print_that(self, dct=None, title="", s1=""):
         """Print the output of the analysis.
 
         If dct is not given the full dictionary is used.
@@ -2432,25 +2432,25 @@ class Analysis(RestrictionBatch, PrintFormat):
         you get it right.
         """
         for k, v in what.items():
-            if k in ('NameWidth', 'ConsoleWidth'):
+            if k in ("NameWidth", "ConsoleWidth"):
                 setattr(self, k, v)
                 self.Cmodulo = self.ConsoleWidth % self.NameWidth
                 self.PrefWidth = self.ConsoleWidth - self.Cmodulo
-            elif k == 'sequence':
-                setattr(self, 'sequence', v)
+            elif k == "sequence":
+                setattr(self, "sequence", v)
                 self.search(self.sequence, self.linear)
-            elif k == 'rb':
+            elif k == "rb":
                 self = Analysis.__init__(self, v, self.sequence, self.linear)
-            elif k == 'linear':
-                setattr(self, 'linear', v)
+            elif k == "linear":
+                setattr(self, "linear", v)
                 self.search(self.sequence, v)
-            elif k in ('Indent', 'Maxsize'):
+            elif k in ("Indent", "Maxsize"):
                 setattr(self, k, v)
-            elif k in ('Cmodulo', 'PrefWidth'):
+            elif k in ("Cmodulo", "PrefWidth"):
                 raise AttributeError(
-                    'To change %s, change NameWidth and/or ConsoleWidth' % k)
+                    "To change %s, change NameWidth and/or ConsoleWidth" % k)
             else:
-                raise AttributeError('Analysis has no attribute %s' % k)
+                raise AttributeError("Analysis has no attribute %s" % k)
         return
 
     def full(self, linear=True):
@@ -2674,7 +2674,7 @@ for TYPE, (bases, enzymes) in typedict.items():
     #   now create the particular value of RestrictionType for the classes
     #   in enzymes.
     #
-    T = type.__new__(RestrictionType, 'RestrictionType', bases, {})
+    T = type.__new__(RestrictionType, "RestrictionType", bases, {})
     for k in enzymes:
         #
         #   Now, we go through all the enzymes and assign them their type.
@@ -2706,6 +2706,6 @@ except NameError:
     # Scoping changed in Python 3, the variable isn't leaked
     pass
 locals().update(dict(zip(names, AllEnzymes)))
-__all__ = ('FormattedSeq', 'Analysis', 'RestrictionBatch', 'AllEnzymes',
-           'CommOnly', 'NonComm') + tuple(names)
+__all__ = ("FormattedSeq", "Analysis", "RestrictionBatch", "AllEnzymes",
+           "CommOnly", "NonComm") + tuple(names)
 del k, enzymes, TYPE, bases, names

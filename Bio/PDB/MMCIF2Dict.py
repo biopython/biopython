@@ -21,7 +21,7 @@ class MMCIF2Dict(dict):
 
         """
         self.quote_chars = ['\'', '\"']
-        self.whitespace_chars = [' ', '\t']
+        self.whitespace_chars = [" ", "\t"]
         with as_handle(filename) as handle:
             loop_flag = False
             key = None
@@ -111,7 +111,7 @@ class MMCIF2Dict(dict):
                 token_buffer = [line[1:].rstrip()]
                 for line in handle:
                     line = line.rstrip()
-                    if line == ';':
+                    if line == ";":
                         break
                     token_buffer.append(line)
                 yield "\n".join(token_buffer)

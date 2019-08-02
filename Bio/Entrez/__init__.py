@@ -138,8 +138,8 @@ def epost(db, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
-    variables = {'db': db}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi"
+    variables = {"db": db}
     variables.update(keywds)
     return _open(cgi, variables, post=True)
 
@@ -172,8 +172,8 @@ def efetch(db, **keywords):
     **Warning:** The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-    variables = {'db': db}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+    variables = {"db": db}
     variables.update(keywords)
     post = False
     try:
@@ -224,9 +224,9 @@ def esearch(db, term, **keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
-    variables = {'db': db,
-                 'term': term}
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    variables = {"db": db,
+                 "term": term}
     variables.update(keywds)
     return _open(cgi, variables)
 
@@ -264,7 +264,7 @@ def elink(**keywds):
 
     This is explained in much more detail in the Biopython Tutorial.
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -292,7 +292,7 @@ def einfo(**keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -325,7 +325,7 @@ def esummary(**keywds):
     Crystal Structure Of E. Coli Aconitase B
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -359,7 +359,7 @@ def egquery(**keywds):
     True
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -388,7 +388,7 @@ def espell(**keywds):
     biopython
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi"
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -396,20 +396,20 @@ def espell(**keywds):
 
 def _update_ecitmatch_variables(keywds):
     # XML is the only supported value, and it actually returns TXT.
-    variables = {'retmode': 'xml'}
-    citation_keys = ('journal_title', 'year', 'volume', 'first_page', 'author_name', 'key')
+    variables = {"retmode": "xml"}
+    citation_keys = ("journal_title", "year", "volume", "first_page", "author_name", "key")
 
     # Accept pre-formatted strings
-    if isinstance(keywds['bdata'], str):
+    if isinstance(keywds["bdata"], str):
         variables.update(keywds)
     else:
         # Alternatively accept a nicer interface
-        variables['db'] = keywds['db']
+        variables["db"] = keywds["db"]
         bdata = []
-        for citation in keywds['bdata']:
-            formatted_citation = '|'.join([citation.get(key, "") for key in citation_keys])
+        for citation in keywds["bdata"]:
+            formatted_citation = "|".join([citation.get(key, "") for key in citation_keys])
             bdata.append(formatted_citation)
-        variables['bdata'] = '\r'.join(bdata)
+        variables["bdata"] = "\r".join(bdata)
     return variables
 
 
@@ -439,7 +439,7 @@ def ecitmatch(**keywds):
     >>> handle.close()
 
     """
-    cgi = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi'
+    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/ecitmatch.cgi"
     variables = _update_ecitmatch_variables(keywds)
     return _open(cgi, variables, ecitmatch=True)
 
@@ -614,7 +614,7 @@ def _encode_options(ecitmatch, params):
     options = _urlencode(params, doseq=True)
     # _urlencode encodes pipes, which NCBI expects in ECitMatch
     if ecitmatch:
-        options = options.replace('%7C', '|')
+        options = options.replace("%7C", "|")
     return options
 
 

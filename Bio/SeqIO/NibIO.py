@@ -44,7 +44,7 @@ try:
     hex2bytes = bytes.fromhex  # python3
 except AttributeError:
     # python 2
-    hex2bytes = lambda s: s.decode('hex')  # noqa: E731
+    hex2bytes = lambda s: s.decode("hex")  # noqa: E731
 
 if sys.version_info < (3, ):
     # python2
@@ -53,7 +53,7 @@ if sys.version_info < (3, ):
 elif sys.version_info < (3, 5):
     # python 3.4
     import binascii
-    bytes2hex = lambda b: binascii.hexlify(b).decode('ascii')  # noqa: E731
+    bytes2hex = lambda b: binascii.hexlify(b).decode("ascii")  # noqa: E731
 else:
     # python 3.5 and later
     bytes2hex = lambda b: b.hex()  # noqa: E731
@@ -63,9 +63,9 @@ try:
 except AttributeError:
     def byte2int(b, byteorder):
         """Convert byte array to integer."""
-        if byteorder == 'little':
+        if byteorder == "little":
             return struct.unpack("<i", b)[0]
-        elif byteorder == 'big':
+        elif byteorder == "big":
             return struct.unpack(">i", b)[0]
 else:
     # python 3
@@ -112,26 +112,26 @@ def NibIterator(handle, alphabet=None):
         raise ValueError("Alphabets are ignored.")
     word = handle.read(4)
     signature = bytes2hex(word)
-    if signature == '3a3de96b':
-        byteorder = 'little'  # little-endian
-    elif signature == '6be93d3a':
-        byteorder = 'big'  # big-endian
+    if signature == "3a3de96b":
+        byteorder = "little"  # little-endian
+    elif signature == "6be93d3a":
+        byteorder = "big"  # big-endian
     else:
-        raise ValueError('unexpected signature in Nib header')
+        raise ValueError("unexpected signature in Nib header")
     number = handle.read(4)
     length = byte2int(number, byteorder)
     data = handle.read()
     indices = bytes2hex(data)
     if length % 2 == 0:
         if len(indices) != length:
-            raise ValueError('Unexpected file size')
+            raise ValueError("Unexpected file size")
     elif length % 2 == 1:
         if len(indices) != length + 1:
-            raise ValueError('Unexpected file size')
+            raise ValueError("Unexpected file size")
         indices = indices[:length]
-    if set(indices) != set('01234'):
-        raise ValueError('Unexpected sequence data found in file')
-    table = maketrans('01234', 'TCAGN')
+    if set(indices) != set("01234"):
+        raise ValueError("Unexpected sequence data found in file")
+    table = maketrans("01234", "TCAGN")
     nucleotides = indices.translate(table)
     sequence = Seq(nucleotides)
     record = SeqRecord(sequence)
@@ -149,12 +149,12 @@ class NibWriter(SequenceWriter):
         """
         self.handle = handle
         byteorder = sys.byteorder
-        if byteorder == 'little':  # little-endian
-            signature = '3a3de96b'
-        elif byteorder == 'big':  # big-endian
-            signature = '6be93d3a'
+        if byteorder == "little":  # little-endian
+            signature = "3a3de96b"
+        elif byteorder == "big":  # big-endian
+            signature = "6be93d3a"
         else:
-            raise RuntimeError('unexpected system byte order %s' % byteorder)
+            raise RuntimeError("unexpected system byte order %s" % byteorder)
         handle.write(hex2bytes(signature))
 
     def write_file(self, records):
@@ -165,19 +165,19 @@ class NibWriter(SequenceWriter):
         if count == 0:
             raise ValueError("Must have one sequence")
         if count > 1:
-            raise ValueError('More than one sequence found')
+            raise ValueError("More than one sequence found")
         handle = self.handle
         sequence = record.seq
         nucleotides = str(sequence)
         length = len(sequence)
-        handle.write(struct.pack('i', length))
-        table = maketrans('TCAGNtcagn', '0123401234')
+        handle.write(struct.pack("i", length))
+        table = maketrans("TCAGNtcagn", "0123401234")
         padding = length % 2
-        suffix = padding * 'T'
+        suffix = padding * "T"
         nucleotides += suffix
         indices = nucleotides.translate(table)
-        if set(indices) != set('01234'):
-            raise ValueError('Sequence should contain A,C,G,T,N,a,c,g,t,n only')
+        if set(indices) != set("01234"):
+            raise ValueError("Sequence should contain A,C,G,T,N,a,c,g,t,n only")
         handle.write(hex2bytes(indices))
         return count
 

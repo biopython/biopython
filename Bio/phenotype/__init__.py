@@ -94,8 +94,8 @@ from . import phen_micro
 import warnings
 
 
-warnings.warn('Bio.phenotype is an experimental submodule which may undergo '
-              'significant changes prior to its future official release.',
+warnings.warn("Bio.phenotype is an experimental submodule which may undergo "
+              "significant changes prior to its future official release.",
               BiopythonExperimentalWarning)
 
 # Convention for format names is "mainname-format" in lower case.
@@ -131,7 +131,7 @@ def write(plates, handle, format):
     if isinstance(plates, phen_micro.PlateRecord):
         plates = [plates]
 
-    with as_handle(handle, 'w') as fp:
+    with as_handle(handle, "w") as fp:
         # Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
@@ -178,7 +178,7 @@ def parse(handle, format):
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
 
-    with as_handle(handle, 'rU') as fp:
+    with as_handle(handle, "rU") as fp:
         # Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]

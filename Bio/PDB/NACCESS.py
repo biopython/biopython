@@ -29,7 +29,7 @@ from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtom
 
 
 def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
-                naccess='naccess', temp_path='/tmp/'):
+                naccess="naccess", temp_path="/tmp/"):
     """Run naccess for a pdb file."""
     # make temp directory;
     tmp_path = tempfile.mkdtemp(dir=temp_path)
@@ -37,7 +37,7 @@ def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
     # file name must end with '.pdb' to work with NACCESS
     # -> create temp file of existing pdb
     #    or write model to temp file
-    handle, tmp_pdb_file = tempfile.mkstemp('.pdb', dir=tmp_path)
+    handle, tmp_pdb_file = tempfile.mkstemp(".pdb", dir=tmp_path)
     os.close(handle)
     if pdb_file:
         pdb_file = os.path.abspath(pdb_file)
@@ -55,23 +55,23 @@ def run_naccess(model, pdb_file, probe_size=None, z_slice=None,
     # catch standard out & err
     command = [naccess, tmp_pdb_file]
     if probe_size:
-        command.extend(['-p', probe_size])
+        command.extend(["-p", probe_size])
     if z_slice:
-        command.extend(['-z', z_slice])
+        command.extend(["-z", z_slice])
 
     p = subprocess.Popen(command, universal_newlines=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     os.chdir(old_dir)
 
-    rsa_file = tmp_pdb_file[:-4] + '.rsa'
-    asa_file = tmp_pdb_file[:-4] + '.asa'
+    rsa_file = tmp_pdb_file[:-4] + ".rsa"
+    asa_file = tmp_pdb_file[:-4] + ".asa"
     # Alert user for errors
     if err.strip():
         warnings.warn(err)
 
     if (not os.path.exists(rsa_file)) or (not os.path.exists(asa_file)):
-        raise Exception('NACCESS did not execute or finish properly.')
+        raise Exception("NACCESS did not execute or finish properly.")
 
     # get the output, then delete the temp directory
     with open(rsa_file) as rf:
@@ -87,24 +87,24 @@ def process_rsa_data(rsa_data):
     """Process the .rsa output file: residue level SASA data."""
     naccess_rel_dict = {}
     for line in rsa_data:
-        if line.startswith('RES'):
+        if line.startswith("RES"):
             res_name = line[4:7]
             chain_id = line[8]
             resseq = int(line[9:13])
             icode = line[13]
-            res_id = (' ', resseq, icode)
+            res_id = (" ", resseq, icode)
             naccess_rel_dict[(chain_id, res_id)] = {
-                'res_name': res_name,
-                'all_atoms_abs': float(line[16:22]),
-                'all_atoms_rel': float(line[23:28]),
-                'side_chain_abs': float(line[29:35]),
-                'side_chain_rel': float(line[36:41]),
-                'main_chain_abs': float(line[42:48]),
-                'main_chain_rel': float(line[49:54]),
-                'non_polar_abs': float(line[55:61]),
-                'non_polar_rel': float(line[62:67]),
-                'all_polar_abs': float(line[68:74]),
-                'all_polar_rel': float(line[75:80])}
+                "res_name": res_name,
+                "all_atoms_abs": float(line[16:22]),
+                "all_atoms_rel": float(line[23:28]),
+                "side_chain_abs": float(line[29:35]),
+                "side_chain_rel": float(line[36:41]),
+                "main_chain_abs": float(line[42:48]),
+                "main_chain_rel": float(line[49:54]),
+                "non_polar_abs": float(line[55:61]),
+                "non_polar_rel": float(line[62:67]),
+                "all_polar_abs": float(line[68:74]),
+                "all_polar_rel": float(line[75:80])}
     return naccess_rel_dict
 
 
@@ -117,7 +117,7 @@ def process_asa_data(rsa_data):
         chainid = line[21]
         resseq = int(line[22:26])
         icode = line[26]
-        res_id = (' ', resseq, icode)
+        res_id = (" ", resseq, icode)
         id = (chainid, res_id, atom_id)
         asa = line[54:62]               # solvent accessibility in Angstrom^2
         naccess_atom_dict[id] = asa
@@ -128,7 +128,7 @@ class NACCESS(AbstractResiduePropertyMap):
     """Define NACCESS class for residue properties map."""
 
     def __init__(self, model, pdb_file=None,
-                 naccess_binary='naccess', tmp_directory='/tmp'):
+                 naccess_binary="naccess", tmp_directory="/tmp"):
         """Initialize the class."""
         res_data, atm_data = run_naccess(model, pdb_file,
                                          naccess=naccess_binary,
@@ -144,7 +144,7 @@ class NACCESS(AbstractResiduePropertyMap):
                 res_id = res.get_id()
                 if (chain_id, res_id) in naccess_dict:
                     item = naccess_dict[(chain_id, res_id)]
-                    res_name = item['res_name']
+                    res_name = item["res_name"]
                     assert (res_name == res.get_resname())
                     property_dict[(chain_id, res_id)] = item
                     property_keys.append((chain_id, res_id))
@@ -160,7 +160,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
     """Define NACCESS atomic class for atom properties map."""
 
     def __init__(self, model, pdb_file=None,
-                 naccess_binary='naccess', tmp_directory='/tmp'):
+                 naccess_binary="naccess", tmp_directory="/tmp"):
         """Initialize the class."""
         res_data, atm_data = run_naccess(model, pdb_file,
                                          naccess=naccess_binary,
@@ -182,7 +182,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                         property_dict[full_id] = asa
                         property_keys.append((full_id))
                         property_list.append((atom, asa))
-                        atom.xtra['EXP_NACCESS'] = asa
+                        atom.xtra["EXP_NACCESS"] = asa
         AbstractAtomPropertyMap.__init__(self, property_dict,
                                          property_keys, property_list)
 
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     from Bio.PDB import PDBParser
 
     p = PDBParser()
-    s = p.get_structure('X', sys.argv[1])
+    s = p.get_structure("X", sys.argv[1])
     model = s[0]
 
     n = NACCESS(model, sys.argv[1])

@@ -29,7 +29,7 @@ class Record(list):
         self.warning = None
 
 
-def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
+def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
@@ -49,8 +49,8 @@ def scan(seq="", mirror='https://www.expasy.org', output='xml', **keywords):
     ScanProsite. Search results in the XML format can be parsed into a
     Python object, by using the Bio.ExPASy.ScanProsite.read function.
     """
-    parameters = {'seq': seq,
-                  'output': output}
+    parameters = {"seq": seq,
+                  "output": output}
     for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
@@ -91,7 +91,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5].decode('utf-8') != "<?xml":
+            if data[:5].decode("utf-8") != "<?xml":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)

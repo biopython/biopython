@@ -255,7 +255,7 @@ def parse(handle):
         elif keyword == "EFFECTOR    ":
             record.effector.append(data.strip(";"))
         elif keyword == "GENES       ":
-            if data[3:5] == ': ' or data[4:6] == ': ':
+            if data[3:5] == ": " or data[4:6] == ": ":
                 key, values = data.split(":", 1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
@@ -273,20 +273,20 @@ def parse(handle):
         elif keyword == "NAME        ":
             record.name.append(data.strip(";"))
         elif keyword == "PATHWAY     ":
-            if data[:5] == 'PATH:':
+            if data[:5] == "PATH:":
                 _, map_num, name = data.split(None, 2)
-                pathway = ('PATH', map_num, name)
+                pathway = ("PATH", map_num, name)
                 record.pathway.append(pathway)
             else:
                 ec_num, name = data.split(None, 1)
-                pathway = 'PATH', ec_num, name
+                pathway = "PATH", ec_num, name
                 record.pathway.append(pathway)
         elif keyword == "PRODUCT     ":
             record.product.append(data.strip(";"))
         elif keyword == "REACTION    ":
             record.reaction.append(data.strip(";"))
         elif keyword == "STRUCTURES  ":
-            if data[:4] == 'PDB:':
+            if data[:4] == "PDB:":
                 database = data[:3]
                 accessions = data[4:].split()
                 row = (database, accessions)

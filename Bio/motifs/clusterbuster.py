@@ -26,13 +26,13 @@ def read(handle):
     """
     motif_nbr = 0
     record = Record()
-    nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+    nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
     motif_name = ""
 
     for line in handle:
         line = line.strip()
         if line:
-            if line.startswith('>'):
+            if line.startswith(">"):
 
                 if motif_nbr != 0:
                     motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
@@ -40,19 +40,19 @@ def read(handle):
                     record.append(motif)
 
                 motif_name = line[1:].strip()
-                nucleotide_counts = {'A': [], 'C': [], 'G': [], 'T': []}
+                nucleotide_counts = {"A": [], "C": [], "G": [], "T": []}
                 motif_nbr += 1
             else:
-                if line.startswith('#'):
+                if line.startswith("#"):
                     continue
 
                 matrix_columns = line.split()
 
                 if len(matrix_columns) == 4:
                     [nucleotide_counts[nucleotide].append(float(nucleotide_count))
-                     for nucleotide, nucleotide_count in zip(['A', 'C', 'G', 'T'], matrix_columns)]
+                     for nucleotide, nucleotide_count in zip(["A", "C", "G", "T"], matrix_columns)]
 
-    motif = motifs.Motif(alphabet='GATC', counts=nucleotide_counts)
+    motif = motifs.Motif(alphabet="GATC", counts=nucleotide_counts)
     motif.name = motif_name
     record.append(motif)
 
@@ -63,12 +63,12 @@ def write(motifs):
     """Return the representation of motifs in Cluster Buster position frequency matrix format."""
     lines = []
     for m in motifs:
-        line = '>{0}\n'.format(m.name)
+        line = ">{0}\n".format(m.name)
         lines.append(line)
-        for ACGT_counts in zip(m.counts['A'], m.counts['C'], m.counts['G'], m.counts['T']):
-            lines.append('{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n'.format(*ACGT_counts))
+        for ACGT_counts in zip(m.counts["A"], m.counts["C"], m.counts["G"], m.counts["T"]):
+            lines.append("{0:0.0f}\t{1:0.0f}\t{2:0.0f}\t{3:0.0f}\n".format(*ACGT_counts))
 
     # Finished; glue the lines together.
-    text = ''.join(lines)
+    text = "".join(lines)
 
     return text

@@ -34,24 +34,24 @@ def to_networkx(tree):
     # 0.99: edges accept weight as a string, nothing else
     # pre-0.99: edges accept no additional data
     # Ubuntu Lucid LTS uses v0.99, let's support everything
-    if networkx.__version__ >= '1.0':
+    if networkx.__version__ >= "1.0":
         def add_edge(graph, n1, n2):
             graph.add_edge(n1, n2, weight=n2.branch_length or 1.0)
             # Copy branch color value as hex, if available
-            if hasattr(n2, 'color') and n2.color is not None:
-                graph[n1][n2]['color'] = n2.color.to_hex()
-            elif hasattr(n1, 'color') and n1.color is not None:
+            if hasattr(n2, "color") and n2.color is not None:
+                graph[n1][n2]["color"] = n2.color.to_hex()
+            elif hasattr(n1, "color") and n1.color is not None:
                 # Cascading color attributes
-                graph[n1][n2]['color'] = n1.color.to_hex()
+                graph[n1][n2]["color"] = n1.color.to_hex()
                 n2.color = n1.color
             # Copy branch weight value (float) if available
-            if hasattr(n2, 'width') and n2.width is not None:
-                graph[n1][n2]['width'] = n2.width
-            elif hasattr(n1, 'width') and n1.width is not None:
+            if hasattr(n2, "width") and n2.width is not None:
+                graph[n1][n2]["width"] = n2.width
+            elif hasattr(n1, "width") and n1.width is not None:
                 # Cascading width attributes
-                graph[n1][n2]['width'] = n1.width
+                graph[n1][n2]["width"] = n1.width
                 n2.width = n1.width
-    elif networkx.__version__ >= '0.99':
+    elif networkx.__version__ >= "0.99":
         def add_edge(graph, n1, n2):
             graph.add_edge(n1, n2, (n2.branch_length or 1.0))
     else:
@@ -74,8 +74,8 @@ def to_networkx(tree):
     return G
 
 
-def draw_graphviz(tree, label_func=str, prog='twopi', args='',
-                  node_color='#c0deff', **kwargs):
+def draw_graphviz(tree, label_func=str, prog="twopi", args="",
+                  node_color="#c0deff", **kwargs):
     """Display a tree or clade as a graph, using the graphviz engine.
 
     Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
@@ -151,10 +151,10 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     try:
         # NetworkX version 1.8 or later (2013-01-20)
         Gi = networkx.convert_node_labels_to_integers(G,
-                                                      label_attribute='label')
+                                                      label_attribute="label")
         int_labels = {}
         for integer, nodeattrs in Gi.node.items():
-            int_labels[nodeattrs['label']] = integer
+            int_labels[nodeattrs["label"]] = integer
     except TypeError:
         # Older NetworkX versions (before 1.8)
         Gi = networkx.convert_node_labels_to_integers(G,
@@ -162,7 +162,7 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         int_labels = Gi.node_labels
 
     try:
-        if hasattr(networkx, 'graphviz_layout'):
+        if hasattr(networkx, "graphviz_layout"):
             # networkx versions before 1.11 (#1247)
             graphviz_layout = networkx.graphviz_layout
         else:
@@ -184,18 +184,18 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
                 except (LookupError, AttributeError, ValueError):
                     pass
 
-    if 'nodelist' in kwargs:
-        labels = dict(get_label_mapping(G, set(kwargs['nodelist'])))
+    if "nodelist" in kwargs:
+        labels = dict(get_label_mapping(G, set(kwargs["nodelist"])))
     else:
         labels = dict(get_label_mapping(G, None))
-    kwargs['nodelist'] = list(labels.keys())
-    if 'edge_color' not in kwargs:
-        kwargs['edge_color'] = [isinstance(e[2], dict) and
-                                e[2].get('color', 'k') or 'k'
+    kwargs["nodelist"] = list(labels.keys())
+    if "edge_color" not in kwargs:
+        kwargs["edge_color"] = [isinstance(e[2], dict) and
+                                e[2].get("color", "k") or "k"
                                 for e in G.edges(data=True)]
-    if 'width' not in kwargs:
-        kwargs['width'] = [isinstance(e[2], dict) and
-                           e[2].get('width', 1.0) or 1.0
+    if "width" not in kwargs:
+        kwargs["width"] = [isinstance(e[2], dict) and
+                           e[2].get("width", 1.0) or 1.0
                            for e in G.edges(data=True)]
 
     posn = {n: posi[int_labels[n]] for n in G}
@@ -264,7 +264,7 @@ def draw_ascii(tree, file=None, column_width=80):
 
     col_positions = get_col_positions(tree)
     row_positions = get_row_positions(tree)
-    char_matrix = [[' ' for x in range(drawing_width)]
+    char_matrix = [[" " for x in range(drawing_width)]
                    for y in range(drawing_height)]
 
     def draw_clade(clade, startcol):
@@ -272,16 +272,16 @@ def draw_ascii(tree, file=None, column_width=80):
         thisrow = row_positions[clade]
         # Draw a horizontal line
         for col in range(startcol, thiscol):
-            char_matrix[thisrow][col] = '_'
+            char_matrix[thisrow][col] = "_"
         if clade.clades:
             # Draw a vertical line
             toprow = row_positions[clade.clades[0]]
             botrow = row_positions[clade.clades[-1]]
             for row in range(toprow + 1, botrow + 1):
-                char_matrix[row][thiscol] = '|'
+                char_matrix[row][thiscol] = "|"
             # NB: Short terminal branches need something to stop rstrip()
             if (col_positions[clade.clades[0]] - thiscol) < 2:
-                char_matrix[toprow][thiscol] = ','
+                char_matrix[toprow][thiscol] = ","
             # Draw descendents
             for child in clade:
                 draw_clade(child, thiscol + 1)
@@ -289,12 +289,12 @@ def draw_ascii(tree, file=None, column_width=80):
     draw_clade(tree.root, 0)
     # Print the complete drawing
     for idx, row in enumerate(char_matrix):
-        line = ''.join(row).rstrip()
+        line = "".join(row).rstrip()
         # Add labels for terminal taxa in the right margin
         if idx % 2 == 0:
-            line += ' ' + str(taxa[idx // 2])
-        file.write(line + '\n')
-    file.write('\n')
+            line += " " + str(taxa[idx // 2])
+        file.write(line + "\n")
+    file.write("\n")
 
 
 def draw(tree, label_func=str, do_show=True, show_confidence=True,
@@ -377,9 +377,9 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     if not branch_labels:
         if show_confidence:
             def format_branch_label(clade):
-                if hasattr(clade, 'confidences'):
+                if hasattr(clade, "confidences"):
                     # phyloXML supports multiple confidences
-                    return '/'.join(conf2str(cnf.value)
+                    return "/".join(conf2str(cnf.value)
                                     for cnf in clade.confidences)
                 if clade.confidence is not None:
                     return conf2str(clade.confidence)
@@ -404,11 +404,11 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         else:
             # label_colors is presumed to be a dict
             def get_label_color(label):
-                return label_colors.get(label, 'black')
+                return label_colors.get(label, "black")
     else:
         def get_label_color(label):
             # if label_colors is not specified, use black
-            return 'black'
+            return "black"
 
     # Layout
 
@@ -456,22 +456,22 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
 
-    def draw_clade_lines(use_linecollection=False, orientation='horizontal',
+    def draw_clade_lines(use_linecollection=False, orientation="horizontal",
                          y_here=0, x_start=0, x_here=0, y_bot=0, y_top=0,
-                         color='black', lw='.1'):
+                         color="black", lw=".1"):
         """Create a line with or without a line collection object.
 
         Graphical formatting of the lines representing clades in the plot can be
         customized by altering this function.
         """
-        if not use_linecollection and orientation == 'horizontal':
+        if not use_linecollection and orientation == "horizontal":
             axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
-        elif use_linecollection and orientation == 'horizontal':
+        elif use_linecollection and orientation == "horizontal":
             horizontal_linecollections.append(mpcollections.LineCollection(
                 [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw),)
-        elif not use_linecollection and orientation == 'vertical':
+        elif not use_linecollection and orientation == "vertical":
             axes.vlines(x_here, y_bot, y_top, color=color)
-        elif use_linecollection and orientation == 'vertical':
+        elif use_linecollection and orientation == "vertical":
             vertical_linecollections.append(mpcollections.LineCollection(
                 [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw),)
 
@@ -480,36 +480,36 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         x_here = x_posns[clade]
         y_here = y_posns[clade]
         # phyloXML-only graphics annotations
-        if hasattr(clade, 'color') and clade.color is not None:
+        if hasattr(clade, "color") and clade.color is not None:
             color = clade.color.to_hex()
-        if hasattr(clade, 'width') and clade.width is not None:
-            lw = clade.width * plt.rcParams['lines.linewidth']
+        if hasattr(clade, "width") and clade.width is not None:
+            lw = clade.width * plt.rcParams["lines.linewidth"]
         # Draw a horizontal line from start to here
-        draw_clade_lines(use_linecollection=True, orientation='horizontal',
+        draw_clade_lines(use_linecollection=True, orientation="horizontal",
                          y_here=y_here, x_start=x_start, x_here=x_here, color=color, lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
-            axes.text(x_here, y_here, ' %s' %
-                      label, verticalalignment='center',
+            axes.text(x_here, y_here, " %s" %
+                      label, verticalalignment="center",
                       color=get_label_color(label))
         # Add label above the branch (optional)
         conf_label = format_branch_label(clade)
         if conf_label:
             axes.text(0.5 * (x_start + x_here), y_here, conf_label,
-                      fontsize='small', horizontalalignment='center')
+                      fontsize="small", horizontalalignment="center")
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
-            draw_clade_lines(use_linecollection=True, orientation='vertical',
+            draw_clade_lines(use_linecollection=True, orientation="vertical",
                              x_here=x_here, y_bot=y_bot, y_top=y_top, color=color, lw=lw)
             # Draw descendents
             for child in clade:
                 draw_clade(child, x_here, color, lw)
 
-    draw_clade(tree.root, 0, 'k', plt.rcParams['lines.linewidth'])
+    draw_clade(tree.root, 0, "k", plt.rcParams["lines.linewidth"])
 
     # If line collections were used to create clade lines, here they are added
     # to the pyplot plot.
@@ -520,10 +520,10 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
 
     # Aesthetics
 
-    if hasattr(tree, 'name') and tree.name:
+    if hasattr(tree, "name") and tree.name:
         axes.set_title(tree.name)
-    axes.set_xlabel('branch length')
-    axes.set_ylabel('taxa')
+    axes.set_xlabel("branch length")
+    axes.set_ylabel("taxa")
     # Add margins around the tree to prevent overlapping the axes
     xmax = max(x_posns.values())
     axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
@@ -538,8 +538,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
             [i for i in value]
         except TypeError:
             raise ValueError('Keyword argument "%s=%s" is not in the format '
-                             'pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),'
-                             ' or pyplot_option_name=(dict) '
+                             "pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),"
+                             " or pyplot_option_name=(dict) "
                              % (key, value))
         if isinstance(value, dict):
             getattr(plt, str(key))(**dict(value))

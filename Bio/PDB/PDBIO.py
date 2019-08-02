@@ -127,8 +127,8 @@ class PDBIO(object):
             structure = pdb_object
         else:
             sb = StructureBuilder()
-            sb.init_structure('pdb')
-            sb.init_seg(' ')
+            sb.init_structure("pdb")
+            sb.init_seg(" ")
             # Build parts as necessary
             if pdb_object.level == "M":
                 sb.structure.add(pdb_object.copy())
@@ -138,23 +138,23 @@ class PDBIO(object):
                 if pdb_object.level == "C":
                     sb.structure[0].add(pdb_object.copy())
                 else:
-                    sb.init_chain('A')
+                    sb.init_chain("A")
                     if pdb_object.level == "R":
                         try:
                             parent_id = pdb_object.parent.id
-                            sb.structure[0]['A'].id = parent_id
+                            sb.structure[0]["A"].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]['A'].add(pdb_object.copy())
+                        sb.structure[0]["A"].add(pdb_object.copy())
                     else:
                         # Atom
-                        sb.init_residue('DUM', ' ', 1, ' ')
+                        sb.init_residue("DUM", " ", 1, " ")
                         try:
                             parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]['A'].id = parent_id
+                            sb.structure[0]["A"].id = parent_id
                         except Exception:
                             pass
-                        sb.structure[0]['A'].child_list[0].add(pdb_object.copy())
+                        sb.structure[0]["A"].child_list[0].add(pdb_object.copy())
 
             # Return structure
             structure = sb.structure
@@ -238,6 +238,6 @@ class PDBIO(object):
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
         if write_end:
-            fp.write('END\n')
+            fp.write("END\n")
         if close_file:
             fp.close()

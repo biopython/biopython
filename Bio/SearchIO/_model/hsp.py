@@ -251,7 +251,7 @@ class HSP(_BaseHSP):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', )
+    _NON_STICKY_ATTRS = ("_items", )
 
     def __init__(self, fragments=(), output_index=-1):
         """Initialize an HSP object.
@@ -275,8 +275,8 @@ class HSP(_BaseHSP):
         # TODO - Move this into the for look in case hsps is a single use
         # iterable?
         # check that all fragments contain the same IDs, descriptions, alphabet
-        for attr in ('query_id', 'query_description', 'hit_id',
-                     'hit_description', 'alphabet'):
+        for attr in ("query_id", "query_description", "hit_id",
+                     "hit_description", "alphabet"):
             if len({getattr(frag, attr) for frag in fragments}) != 1:
                 raise ValueError("HSP object can not contain fragments with "
                                  "more than one %s." % attr)
@@ -318,41 +318,41 @@ class HSP(_BaseHSP):
         # set hsp info line
         statline = []
         # evalue
-        evalue = getattr_str(self, 'evalue', fmt='%.2g')
-        statline.append('evalue ' + evalue)
+        evalue = getattr_str(self, "evalue", fmt="%.2g")
+        statline.append("evalue " + evalue)
         # bitscore
-        bitscore = getattr_str(self, 'bitscore', fmt='%.2f')
-        statline.append('bitscore ' + bitscore)
-        lines.append('Quick stats: ' + '; '.join(statline))
+        bitscore = getattr_str(self, "bitscore", fmt="%.2f")
+        statline.append("bitscore " + bitscore)
+        lines.append("Quick stats: " + "; ".join(statline))
 
         if len(self.fragments) == 1:
-            return '\n'.join([self._str_hsp_header(), '\n'.join(lines),
+            return "\n".join([self._str_hsp_header(), "\n".join(lines),
                               self.fragments[0]._str_aln()])
         else:
-            lines.append('  Fragments: %s  %s  %s  %s' %
-                         ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
-            pattern = '%16s  %14s  %22s  %22s'
-            lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
-            lines.append(pattern % ('-' * 3, '-' * 14, '-' * 22, '-' * 22))
+            lines.append("  Fragments: %s  %s  %s  %s" %
+                         ("-" * 3, "-" * 14, "-" * 22, "-" * 22))
+            pattern = "%16s  %14s  %22s  %22s"
+            lines.append(pattern % ("#", "Span", "Query range", "Hit range"))
+            lines.append(pattern % ("-" * 3, "-" * 14, "-" * 22, "-" * 22))
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
-                aln_span = getattr_str(block, 'aln_span')
+                aln_span = getattr_str(block, "aln_span")
                 # query region
-                query_start = getattr_str(block, 'query_start')
-                query_end = getattr_str(block, 'query_end')
-                query_range = '[%s:%s]' % (query_start, query_end)
+                query_start = getattr_str(block, "query_start")
+                query_end = getattr_str(block, "query_end")
+                query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 20
-                query_range = trim_str(query_range, 22, '~]')
+                query_range = trim_str(query_range, 22, "~]")
                 # hit region
-                hit_start = getattr_str(block, 'hit_start')
-                hit_end = getattr_str(block, 'hit_end')
-                hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = trim_str(hit_range, 22, '~]')
+                hit_start = getattr_str(block, "hit_start")
+                hit_end = getattr_str(block, "hit_end")
+                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = trim_str(hit_range, 22, "~]")
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
-            return self._str_hsp_header() + '\n' + '\n'.join(lines)
+            return self._str_hsp_header() + "\n" + "\n".join(lines)
 
     def __getitem__(self, idx):
         """Return object of index idx."""
@@ -418,9 +418,9 @@ class HSP(_BaseHSP):
 
     # coordinate properties #
     def _get_coords(self, seq_type, coord_type):
-        assert seq_type in ('hit', 'query')
-        assert coord_type in ('start', 'end')
-        coord_name = '%s_%s' % (seq_type, coord_type)
+        assert seq_type in ("hit", "query")
+        assert coord_type in ("start", "end")
+        coord_name = "%s_%s" % (seq_type, coord_type)
         coords = [getattr(frag, coord_name) for frag in self.fragments]
         if None in coords:
             warnings.warn("'None' exist in %s coordinates; ignored" %
@@ -428,26 +428,26 @@ class HSP(_BaseHSP):
         return coords
 
     def _hit_start_get(self):
-        return min(self._get_coords('hit', 'start'))
+        return min(self._get_coords("hit", "start"))
 
     hit_start = property(fget=_hit_start_get,
                          doc="Smallest coordinate value of all hit fragments.")
 
     def _query_start_get(self):
-        return min(self._get_coords('query', 'start'))
+        return min(self._get_coords("query", "start"))
 
     query_start = property(fget=_query_start_get,
                            doc="Smallest coordinate value of all "
                                "query fragments.")
 
     def _hit_end_get(self):
-        return max(self._get_coords('hit', 'end'))
+        return max(self._get_coords("hit", "end"))
 
     hit_end = property(fget=_hit_end_get,
                        doc="Largest coordinate value of all hit fragments.")
 
     def _query_end_get(self):
-        return max(self._get_coords('query', 'end'))
+        return max(self._get_coords("query", "end"))
 
     query_end = property(fget=_query_end_get,
                          doc="Largest coordinate value of all hit fragments.")
@@ -486,9 +486,9 @@ class HSP(_BaseHSP):
 
     def _inter_ranges_get(self, seq_type):
         # this property assumes that there are no mixed strands in a hit/query
-        assert seq_type in ('query', 'hit')
-        strand = getattr(self, '%s_strand_all' % seq_type)[0]
-        coords = getattr(self, '%s_range_all' % seq_type)
+        assert seq_type in ("query", "hit")
+        strand = getattr(self, "%s_strand_all" % seq_type)[0]
+        coords = getattr(self, "%s_range_all" % seq_type)
         # determine function used to set inter range
         # start and end coordinates, given two pairs
         # of fragment start and end coordinates
@@ -505,32 +505,32 @@ class HSP(_BaseHSP):
         return inter_coords
 
     def _hit_inter_ranges_get(self):
-        return self._inter_ranges_get('hit')
+        return self._inter_ranges_get("hit")
 
     hit_inter_ranges = property(fget=_hit_inter_ranges_get,
                                 doc="Hit sequence coordinates of the regions "
                                     "between fragments.")
 
     def _query_inter_ranges_get(self):
-        return self._inter_ranges_get('query')
+        return self._inter_ranges_get("query")
 
     query_inter_ranges = property(fget=_query_inter_ranges_get,
                                   doc="Query sequence coordinates of the "
                                       "regions between fragments.")
 
     def _inter_spans_get(self, seq_type):
-        assert seq_type in ('query', 'hit')
-        attr_name = '%s_inter_ranges' % seq_type
+        assert seq_type in ("query", "hit")
+        attr_name = "%s_inter_ranges" % seq_type
         return [coord[1] - coord[0] for coord in getattr(self, attr_name)]
 
     def _hit_inter_spans_get(self):
-        return self._inter_spans_get('hit')
+        return self._inter_spans_get("hit")
 
     hit_inter_spans = property(fget=_hit_inter_spans_get,
                                doc="Lengths of regions between hit fragments.")
 
     def _query_inter_spans_get(self):
-        return self._inter_spans_get('query')
+        return self._inter_spans_get("query")
 
     query_inter_spans = property(fget=_query_inter_spans_get,
                                  doc="Lengths of regions between query "
@@ -544,19 +544,19 @@ class HSP(_BaseHSP):
                                  "HSPFragment objects.")
 
     # first item properties with setters
-    hit_description = fullcascade('hit_description',
+    hit_description = fullcascade("hit_description",
                                   doc="Description of the hit sequence.")
 
-    query_description = fullcascade('query_description',
+    query_description = fullcascade("query_description",
                                     doc="Description of the query sequence.")
 
-    hit_id = fullcascade('hit_id',
+    hit_id = fullcascade("hit_id",
                          doc="ID of the hit sequence.")
 
-    query_id = fullcascade('query_id',
+    query_id = fullcascade("query_id",
                            doc="ID of the query sequence.")
 
-    alphabet = fullcascade('alphabet',
+    alphabet = fullcascade("alphabet",
                            doc="Alphabet used in hit and query "
                                "SeqRecord objects.")
 
@@ -564,108 +564,108 @@ class HSP(_BaseHSP):
     fragment = singleitem(
             doc="HSPFragment object, first fragment.")
 
-    hit = singleitem('hit',
+    hit = singleitem("hit",
                      doc="Hit sequence as a SeqRecord object, first fragment.")
 
-    query = singleitem('query',
+    query = singleitem("query",
                        doc="Query sequence as a SeqRecord object, "
                            "first fragment.")
 
-    aln = singleitem('aln',
+    aln = singleitem("aln",
                      doc="Alignment of the first fragment as a "
                          "MultipleSeqAlignment object.")
 
-    aln_annotation = singleitem('aln_annotation',
+    aln_annotation = singleitem("aln_annotation",
                                 doc="Dictionary of annotation(s) of the first "
                                     "fragment's alignment.")
 
-    hit_features = singleitem('hit_features',
+    hit_features = singleitem("hit_features",
                               doc="Hit sequence features, first fragment.")
 
-    query_features = singleitem('query_features',
+    query_features = singleitem("query_features",
                                 doc="Query sequence features, first fragment.")
 
-    hit_strand = singleitem('hit_strand',
+    hit_strand = singleitem("hit_strand",
                             doc="Hit strand orientation, first fragment.")
 
-    query_strand = singleitem('query_strand',
+    query_strand = singleitem("query_strand",
                               doc="Query strand orientation, first fragment.")
 
-    hit_frame = singleitem('hit_frame',
+    hit_frame = singleitem("hit_frame",
                            doc="Hit sequence reading frame, first fragment.")
 
-    query_frame = singleitem('query_frame',
+    query_frame = singleitem("query_frame",
                              doc="Query sequence reading frame, first "
                                  "fragment.")
 
     # properties for multi-fragment HSPs
     fragments = allitems(doc="List of all HSPFragment objects.")
 
-    hit_all = allitems('hit',
+    hit_all = allitems("hit",
                        doc="List of all fragments' hit sequences as SeqRecord "
                            "objects.")
 
-    query_all = allitems('query',
+    query_all = allitems("query",
                          doc="List of all fragments' query sequences as "
                              "SeqRecord objects.")
 
-    aln_all = allitems('aln',
+    aln_all = allitems("aln",
                        doc="List of all fragments' alignments as "
                            "MultipleSeqAlignment objects.")
 
-    aln_annotation_all = allitems('aln_annotation',
+    aln_annotation_all = allitems("aln_annotation",
                                   doc="Dictionary of annotation(s) of all "
                                       "fragments' alignments.")
 
-    hit_features_all = allitems('hit_features',
+    hit_features_all = allitems("hit_features",
                                 doc="List of all hit sequence features.")
 
-    query_features_all = allitems('query_features',
+    query_features_all = allitems("query_features",
                                   doc="List of all query sequence features.")
 
-    hit_strand_all = allitems('hit_strand',
+    hit_strand_all = allitems("hit_strand",
                               doc="List of all fragments' hit sequence "
                                   "strands.")
 
-    query_strand_all = allitems('query_strand',
+    query_strand_all = allitems("query_strand",
                                 doc="List of all fragments' query sequence "
                                     "strands")
 
-    hit_frame_all = allitems('hit_frame',
+    hit_frame_all = allitems("hit_frame",
                              doc="List of all fragments' hit sequence reading "
                                  "frames.")
 
-    query_frame_all = allitems('query_frame',
+    query_frame_all = allitems("query_frame",
                                doc="List of all fragments' query sequence "
                                    "reading frames.")
 
-    hit_start_all = allitems('hit_start',
+    hit_start_all = allitems("hit_start",
                              doc="List of all fragments' hit start "
                                  "coordinates.")
 
-    query_start_all = allitems('query_start',
+    query_start_all = allitems("query_start",
                                doc="List of all fragments' query start "
                                    "coordinates.")
 
-    hit_end_all = allitems('hit_end',
+    hit_end_all = allitems("hit_end",
                            doc="List of all fragments' hit end coordinates.")
 
-    query_end_all = allitems('query_end',
+    query_end_all = allitems("query_end",
                              doc="List of all fragments' query end "
                                  "coordinates.")
 
-    hit_span_all = allitems('hit_span',
+    hit_span_all = allitems("hit_span",
                             doc="List of all fragments' hit sequence size.")
 
-    query_span_all = allitems('query_span',
+    query_span_all = allitems("query_span",
                               doc="List of all fragments' query sequence "
                                   "size.")
 
-    hit_range_all = allitems('hit_range',
+    hit_range_all = allitems("hit_range",
                              doc="List of all fragments' hit start and end "
                                  "coordinates.")
 
-    query_range_all = allitems('query_range',
+    query_range_all = allitems("query_range",
                                doc="List of all fragments' query start and "
                                    "end coordinates.")
 
@@ -721,7 +721,7 @@ class HSPFragment(_BaseHSP):
 
     """
 
-    def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
+    def __init__(self, hit_id="<unknown id>", query_id="<unknown id>",
                  hit=None, query=None, alphabet=single_letter_alphabet):
         """Initialize the class."""
         self._alphabet = alphabet
@@ -730,13 +730,13 @@ class HSPFragment(_BaseHSP):
         self._hit_id = hit_id
         self._query_id = query_id
 
-        for seq_type in ('query', 'hit'):
+        for seq_type in ("query", "hit"):
             # query or hit attributes default attributes
-            setattr(self, '_%s_description' % seq_type, '<unknown description>')
-            setattr(self, '_%s_features' % seq_type, [])
+            setattr(self, "_%s_description" % seq_type, "<unknown description>")
+            setattr(self, "_%s_features" % seq_type, [])
             # query or hit attributes whose default attribute is None
-            for attr in ('strand', 'frame', 'start', 'end'):
-                setattr(self, '%s_%s' % (seq_type, attr), None)
+            for attr in ("strand", "frame", "start", "end"):
+                setattr(self, "%s_%s" % (seq_type, attr), None)
             # self.query or self.hit
             if eval(seq_type):
                 setattr(self, seq_type, eval(seq_type))
@@ -758,7 +758,7 @@ class HSPFragment(_BaseHSP):
 
     def __str__(self):
         """Return string of HSP header and alignments."""
-        return self._str_hsp_header() + '\n' + self._str_aln()
+        return self._str_hsp_header() + "\n" + self._str_aln()
 
     def __getitem__(self, idx):
         """Return object of index idx."""
@@ -776,9 +776,9 @@ class HSPFragment(_BaseHSP):
                 obj.hit = self.hit[idx]
                 obj.hit_features = obj.hit.features
             # description, strand, frame
-            for attr in ('description', 'strand', 'frame'):
-                for seq_type in ('hit', 'query'):
-                    attr_name = '%s_%s' % (seq_type, attr)
+            for attr in ("description", "strand", "frame"):
+                for seq_type in ("hit", "query"):
+                    attr_name = "%s_%s" % (seq_type, attr)
                     self_val = getattr(self, attr_name)
                     setattr(obj, attr_name, self_val)
             # alignment annotation should be transferred, since we can compute
@@ -795,46 +795,46 @@ class HSPFragment(_BaseHSP):
     def _str_aln(self):
         lines = []
         # alignment length
-        aln_span = getattr_str(self, 'aln_span')
-        lines.append('  Fragments: 1 (%s columns)' % aln_span)
+        aln_span = getattr_str(self, "aln_span")
+        lines.append("  Fragments: 1 (%s columns)" % aln_span)
         # sequences
         if self.query is not None and self.hit is not None:
             try:
                 qseq = str(self.query.seq)
             except AttributeError:  # query is None
-                qseq = '?'
+                qseq = "?"
             try:
                 hseq = str(self.hit.seq)
             except AttributeError:  # hit is None
-                hseq = '?'
+                hseq = "?"
 
             # similarity line
-            simil = ''
-            if 'similarity' in self.aln_annotation and \
-                    isinstance(self.aln_annotation.get('similarity'), basestring):
-                simil = self.aln_annotation['similarity']
+            simil = ""
+            if "similarity" in self.aln_annotation and \
+                    isinstance(self.aln_annotation.get("similarity"), basestring):
+                simil = self.aln_annotation["similarity"]
 
             if self.aln_span <= 67:
-                lines.append("%10s - %s" % ('Query', qseq))
+                lines.append("%10s - %s" % ("Query", qseq))
                 if simil:
                     lines.append("             %s" % simil)
-                lines.append("%10s - %s" % ('Hit', hseq))
+                lines.append("%10s - %s" % ("Hit", hseq))
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
                 if self.aln_span - 66 > 3:
-                    cont = '~' * 3
+                    cont = "~" * 3
                 else:
-                    cont = '~' * (self.aln_span - 66)
+                    cont = "~" * (self.aln_span - 66)
                 lines.append("%10s - %s%s%s" %
-                             ('Query', qseq[:59], cont, qseq[-5:]))
+                             ("Query", qseq[:59], cont, qseq[-5:]))
                 if simil:
                     lines.append("             %s%s%s" %
                                  (simil[:59], cont, simil[-5:]))
                 lines.append("%10s - %s%s%s" %
-                             ('Hit', hseq[:59], cont, hseq[-5:]))
+                             ("Hit", hseq[:59], cont, hseq[-5:]))
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     # sequence properties #
     def _set_seq(self, seq, seq_type):
@@ -846,7 +846,7 @@ class HSPFragment(_BaseHSP):
         :type seq_type: string, choice of 'hit' or 'query'
 
         """
-        assert seq_type in ('hit', 'query')
+        assert seq_type in ("hit", "query")
         if seq is None:
             return seq  # return immediately if seq is None
         else:
@@ -854,18 +854,18 @@ class HSPFragment(_BaseHSP):
                 raise TypeError("%s sequence must be a string or a SeqRecord"
                                 " object." % seq_type)
         # check length if the opposite sequence is not None
-        opp_type = 'hit' if seq_type == 'query' else 'query'
-        opp_seq = getattr(self, '_%s' % opp_type, None)
+        opp_type = "hit" if seq_type == "query" else "query"
+        opp_seq = getattr(self, "_%s" % opp_type, None)
         if opp_seq is not None:
             if len(seq) != len(opp_seq):
                 raise ValueError("Sequence lengths do not match. Expected: "
                                  "%r (%s); found: %r (%s)." %
                                  (len(opp_seq), opp_type, len(seq), seq_type))
 
-        seq_id = getattr(self, '%s_id' % seq_type)
-        seq_desc = getattr(self, '%s_description' % seq_type)
-        seq_feats = getattr(self, '%s_features' % seq_type)
-        seq_name = 'aligned %s sequence' % seq_type
+        seq_id = getattr(self, "%s_id" % seq_type)
+        seq_desc = getattr(self, "%s_description" % seq_type)
+        seq_feats = getattr(self, "%s_features" % seq_type)
+        seq_name = "aligned %s sequence" % seq_type
 
         if isinstance(seq, SeqRecord):
             seq.id = seq_id
@@ -883,7 +883,7 @@ class HSPFragment(_BaseHSP):
         return self._hit
 
     def _hit_set(self, value):
-        self._hit = self._set_seq(value, 'hit')
+        self._hit = self._set_seq(value, "hit")
 
     hit = property(fget=_hit_get, fset=_hit_set,
                    doc="Hit sequence as a SeqRecord object, defaults to "
@@ -893,7 +893,7 @@ class HSPFragment(_BaseHSP):
         return self._query
 
     def _query_set(self, value):
-        self._query = self._set_seq(value, 'query')
+        self._query = self._set_seq(value, "query")
 
     query = property(fget=_query_get, fset=_query_set,
                      doc="Query sequence as a SeqRecord object, defaults "
@@ -936,7 +936,7 @@ class HSPFragment(_BaseHSP):
         # length of alignment (gaps included)
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        if not hasattr(self, '_aln_span'):
+        if not hasattr(self, "_aln_span"):
             if self.query is not None:
                 self._aln_span = len(self.query)
             elif self.hit is not None:
@@ -952,22 +952,22 @@ class HSPFragment(_BaseHSP):
                             "fragment.")
 
     # id, description, and features properties #
-    hit_description = fragcascade('description', 'hit',
+    hit_description = fragcascade("description", "hit",
                                   doc="Hit sequence description.")
 
-    query_description = fragcascade('description', 'query',
+    query_description = fragcascade("description", "query",
                                     doc="Query sequence description.")
 
-    hit_id = fragcascade('id', 'hit',
+    hit_id = fragcascade("id", "hit",
                          doc="Hit sequence ID.")
 
-    query_id = fragcascade('id', 'query',
+    query_id = fragcascade("id", "query",
                            doc="Query sequence ID.")
 
-    hit_features = fragcascade('features', 'hit',
+    hit_features = fragcascade("features", "hit",
                                doc="Hit sequence features.")
 
-    query_features = fragcascade('features', 'query',
+    query_features = fragcascade("features", "query",
                                  doc="Query sequence features.")
 
     # strand properties #
@@ -979,23 +979,23 @@ class HSPFragment(_BaseHSP):
         return strand
 
     def _get_strand(self, seq_type):
-        assert seq_type in ('hit', 'query')
-        strand = getattr(self, '_%s_strand' % seq_type)
+        assert seq_type in ("hit", "query")
+        strand = getattr(self, "_%s_strand" % seq_type)
 
         if strand is None:
             # try to compute strand from frame
-            frame = getattr(self, '%s_frame' % seq_type)
+            frame = getattr(self, "%s_frame" % seq_type)
             if frame is not None:
                 try:
                     strand = frame // abs(frame)
                 except ZeroDivisionError:
                     strand = 0
-                setattr(self, '%s_strand' % seq_type, strand)
+                setattr(self, "%s_strand" % seq_type, strand)
 
         return strand
 
     def _hit_strand_get(self):
-        return self._get_strand('hit')
+        return self._get_strand("hit")
 
     def _hit_strand_set(self, value):
         self._hit_strand = self._prep_strand(value)
@@ -1004,7 +1004,7 @@ class HSPFragment(_BaseHSP):
                           doc="Hit sequence strand, defaults to None.")
 
     def _query_strand_get(self):
-        return self._get_strand('query')
+        return self._get_strand("query")
 
     def _query_strand_set(self, value):
         self._query_strand = self._prep_strand(value)
@@ -1065,7 +1065,7 @@ class HSPFragment(_BaseHSP):
 
     def _hit_start_set(self, value):
         """Set the sequence hit start coordinate (PRIVATE)."""
-        self._hit_start = self._prep_coord(value, 'hit_end', le)
+        self._hit_start = self._prep_coord(value, "hit_end", le)
 
     hit_start = property(fget=_hit_start_get, fset=_hit_start_set,
                          doc="Hit sequence start coordinate, defaults to "
@@ -1077,7 +1077,7 @@ class HSPFragment(_BaseHSP):
 
     def _query_start_set(self, value):
         """Set the query sequence start coordinate (PRIVATE)."""
-        self._query_start = self._prep_coord(value, 'query_end', le)
+        self._query_start = self._prep_coord(value, "query_end", le)
 
     query_start = property(fget=_query_start_get, fset=_query_start_set,
                            doc="Query sequence start coordinate, defaults to "
@@ -1089,7 +1089,7 @@ class HSPFragment(_BaseHSP):
 
     def _hit_end_set(self, value):
         """Set the hit sequence end coordinate (PRIVATE)."""
-        self._hit_end = self._prep_coord(value, 'hit_start', ge)
+        self._hit_end = self._prep_coord(value, "hit_start", ge)
 
     hit_end = property(fget=_hit_end_get, fset=_hit_end_set,
                        doc="Hit sequence end coordinate, defaults to None.")
@@ -1100,7 +1100,7 @@ class HSPFragment(_BaseHSP):
 
     def _query_end_set(self, value):
         """Set the query sequence end coordinate (PRIVATE)."""
-        self._query_end = self._prep_coord(value, 'query_start', ge)
+        self._query_end = self._prep_coord(value, "query_start", ge)
 
     query_end = property(fget=_query_end_get, fset=_query_end_set,
                          doc="Query sequence end coordinate, defaults to None.")

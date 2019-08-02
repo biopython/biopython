@@ -248,10 +248,10 @@ class Vector(object):
             if len(x) != 3:
                 raise ValueError("Vector: x is not a "
                                  "list/tuple/array of 3 numbers")
-            self._ar = numpy.array(x, 'd')
+            self._ar = numpy.array(x, "d")
         else:
             # Three numbers
-            self._ar = numpy.array((x, y, z), 'd')
+            self._ar = numpy.array((x, y, z), "d")
 
     def __repr__(self):
         """Return vector 3D coordinates."""

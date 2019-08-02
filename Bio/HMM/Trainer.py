@@ -39,7 +39,7 @@ class TrainingSequence(object):
 
         """
         if len(state_path) > 0 and len(emissions) != len(state_path):
-            raise ValueError('State path does not match associated emissions.')
+            raise ValueError("State path does not match associated emissions.")
         self.emissions = emissions
         self.states = state_path
 

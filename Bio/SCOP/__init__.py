@@ -59,29 +59,29 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 
 
-nodeCodeDict = {'cl': 'class', 'cf': 'fold', 'sf': 'superfamily',
-                'fa': 'family', 'dm': 'protein', 'sp': 'species', 'px': 'domain'}
+nodeCodeDict = {"cl": "class", "cf": "fold", "sf": "superfamily",
+                "fa": "family", "dm": "protein", "sp": "species", "px": "domain"}
 
 
-_nodetype_to_code = {'class': 'cl', 'fold': 'cf', 'superfamily': 'sf',
-                     'family': 'fa', 'protein': 'dm', 'species': 'sp', 'domain': 'px'}
+_nodetype_to_code = {"class": "cl", "fold": "cf", "superfamily": "sf",
+                     "family": "fa", "protein": "dm", "species": "sp", "domain": "px"}
 
-nodeCodeOrder = ['ro', 'cl', 'cf', 'sf', 'fa', 'dm', 'sp', 'px']
+nodeCodeOrder = ["ro", "cl", "cf", "sf", "fa", "dm", "sp", "px"]
 
 astralBibIds = [10, 20, 25, 30, 35, 40, 50, 70, 90, 95, 100]
 
 astralEvs = [10, 5, 1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 1e-4, 1e-5, 1e-10, 1e-15,
              1e-20, 1e-25, 1e-50]
 
-astralEv_to_file = {10: 'e+1', 5: 'e+0,7', 1: 'e+0', 0.5: 'e-0,3', 0.1: 'e-1',
-                    0.05: 'e-1,3', 0.01: 'e-2', 0.005: 'e-2,3', 0.001: 'e-3',
-                    1e-4: 'e-4', 1e-5: 'e-5', 1e-10: 'e-10', 1e-15: 'e-15',
-                    1e-20: 'e-20', 1e-25: 'e-25', 1e-50: 'e-50'}
+astralEv_to_file = {10: "e+1", 5: "e+0,7", 1: "e+0", 0.5: "e-0,3", 0.1: "e-1",
+                    0.05: "e-1,3", 0.01: "e-2", 0.005: "e-2,3", 0.001: "e-3",
+                    1e-4: "e-4", 1e-5: "e-5", 1e-10: "e-10", 1e-15: "e-15",
+                    1e-20: "e-20", 1e-25: "e-25", 1e-50: "e-50"}
 
-astralEv_to_sql = {10: 'e1', 5: 'e0_7', 1: 'e0', 0.5: 'e_0_3', 0.1: 'e_1',
-                   0.05: 'e_1_3', 0.01: 'e_2', 0.005: 'e_2_3', 0.001: 'e_3',
-                   1e-4: 'e_4', 1e-5: 'e_5', 1e-10: 'e_10', 1e-15: 'e_15',
-                   1e-20: 'e_20', 1e-25: 'e_25', 1e-50: 'e_50'}
+astralEv_to_sql = {10: "e1", 5: "e0_7", 1: "e0", 0.5: "e_0_3", 0.1: "e_1",
+                   0.05: "e_1_3", 0.01: "e_2", 0.005: "e_2_3", 0.001: "e_3",
+                   1e-4: "e_4", 1e-5: "e_5", 1e-10: "e_10", 1e-15: "e_15",
+                   1e-20: "e_20", 1e-25: "e_25", 1e-50: "e_50"}
 
 try:
     # See if the cmp function exists (will on Python 2)
@@ -201,22 +201,22 @@ class Scop(object):
                     if cla_handle or des_handle or hie_handle:
                         raise RuntimeError("Cannot specify SCOP directory and specific files")
 
-                    cla_handle = _open_scop_file(dir_path, version, 'cla')
-                    des_handle = _open_scop_file(dir_path, version, 'des')
-                    hie_handle = _open_scop_file(dir_path, version, 'hie')
+                    cla_handle = _open_scop_file(dir_path, version, "cla")
+                    des_handle = _open_scop_file(dir_path, version, "des")
+                    hie_handle = _open_scop_file(dir_path, version, "hie")
 
                 root = Node()
                 domains = []
                 root.sunid = 0
-                root.type = 'ro'
+                root.type = "ro"
                 sunidDict[root.sunid] = root
                 self.root = root
-                root.description = 'SCOP Root'
+                root.description = "SCOP Root"
 
                 # Build the rest of the nodes using the DES file
                 records = Des.parse(des_handle)
                 for record in records:
-                    if record.nodetype == 'px':
+                    if record.nodetype == "px":
                         n = Domain()
                         n.sid = record.name
                         domains.append(n)
@@ -237,7 +237,7 @@ class Scop(object):
 
                     n = sunidDict[record.sunid]
 
-                    if record.parent != '':  # Not root node
+                    if record.parent != "":  # Not root node
 
                         if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
@@ -303,7 +303,7 @@ class Scop(object):
     def getDomains(self):
         """Return an ordered tuple of all SCOP Domains."""
         if self.db_handle:
-            return self.getRoot().getDescendents('px')
+            return self.getRoot().getDescendents("px")
         else:
             return self._domains
 
@@ -367,7 +367,7 @@ class Scop(object):
 
             n.sunid, n.type, n.sccs, n.description = data
 
-            if data[1] != 'ro':
+            if data[1] != "ro":
                 cur.execute("SELECT parent FROM hie WHERE child=%s", sunid)
                 n.parent = cur.fetchone()[0]
 
@@ -400,7 +400,7 @@ class Scop(object):
         des_list = []
 
         # SQL cla table knows nothing about 'ro'
-        if node.type == 'ro':
+        if node.type == "ro":
             for c in node.getChildren():
                 for d in self.getDescendentsFromSQL(c, type):
                     des_list.append(d)
@@ -408,7 +408,7 @@ class Scop(object):
 
         cur = self.db_handle.cursor()
 
-        if type != 'px':
+        if type != "px":
             cur.execute("SELECT DISTINCT des.sunid,des.type,des.sccs,description FROM \
             cla,des WHERE cla." + node.type + "=%s AND cla." + type + "=des.sunid", (node.sunid))
             data = cur.fetchall()
@@ -475,9 +475,9 @@ class Scop(object):
             c = n.toClaRecord()
             cur.execute("INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
-                         n.getAscendent('cl').sunid, n.getAscendent('cf').sunid,
-                         n.getAscendent('sf').sunid, n.getAscendent('fa').sunid,
-                         n.getAscendent('dm').sunid, n.getAscendent('sp').sunid,
+                         n.getAscendent("cl").sunid, n.getAscendent("cf").sunid,
+                         n.getAscendent("sf").sunid, n.getAscendent("fa").sunid,
+                         n.getAscendent("dm").sunid, n.getAscendent("sp").sunid,
                          n.sunid))
 
     def write_des_sql(self, handle):
@@ -514,12 +514,12 @@ class Node(object):
         to lookup related references using the SQL methods.  If no instance
         is provided, it is assumed the whole tree exists and is connected.
         """
-        self.sunid = ''
+        self.sunid = ""
         self.parent = None
         self.children = []
-        self.sccs = ''
-        self.type = ''
-        self.description = ''
+        self.sccs = ""
+        self.type = ""
+        self.description = ""
         self.scop = scop
 
     def __str__(self):
@@ -539,7 +539,7 @@ class Node(object):
         if self.getParent():  # Not root node
             rec.parent = str(self.getParent().sunid)
         else:
-            rec.parent = '-'
+            rec.parent = "-"
         for c in self.getChildren():
             rec.children.append(str(c.sunid))
         return rec
@@ -580,7 +580,7 @@ class Node(object):
         if self.scop:
             return self.scop.getDescendentsFromSQL(self, node_type)
         while nodes[0].type != node_type:
-            if nodes[0].type == 'px':
+            if nodes[0].type == "px":
                 return []  # Fell of the bottom of the hierarchy
             child_list = []
             for n in nodes:
@@ -607,7 +607,7 @@ class Node(object):
                 return None
 
             while n.type != node_type:
-                if n.type == 'ro':
+                if n.type == "ro":
                     return None  # Fell of the top of the hierarchy
                 n = n.getParent()
 
@@ -627,7 +627,7 @@ class Domain(Node):
     def __init__(self, scop=None):
         """Initialize a SCOP Domain object."""
         Node.__init__(self, scop=scop)
-        self.sid = ''
+        self.sid = ""
         self.residues = None
 
     def __str__(self):
@@ -774,7 +774,7 @@ class Astral(object):
         if filename:
             file_handle.close()
 
-        doms = [a for a in doms if a[0] == 'd']
+        doms = [a for a in doms if a[0] == "d"]
         doms = [self.scop.getDomainBySid(x) for x in doms]
         return doms
 
@@ -855,7 +855,7 @@ class Astral(object):
 
 
 def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
-           cgi='http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi', **keywds):
+           cgi="http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi", **keywds):
     """Access SCOP search and return a handle to the results.
 
     Access search.cgi and return a handle to the results.  See the
@@ -865,8 +865,8 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     Raises an IOError if there's a network error.
 
     """
-    params = {'pdb': pdb, 'key': key, 'sid': sid, 'disp': disp,
-              'dir': dir, 'loc': loc}
+    params = {"pdb": pdb, "key": key, "sid": sid, "disp": disp,
+              "dir": dir, "loc": loc}
     variables = {}
     for k, v in params.items():
         if v is not None:

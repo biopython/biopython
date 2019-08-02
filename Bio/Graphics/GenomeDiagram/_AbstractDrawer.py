@@ -203,7 +203,7 @@ def draw_polygon(list_of_points,
 
 
 def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
-               shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
+               shaft_height_ratio=0.4, head_length_ratio=0.5, orientation="right",
                colour=None, **kwargs):
     """Draw an arrow.
 
@@ -233,9 +233,9 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     # using the same relative co-ordinates:
     xmin, ymin = min(x1, x2), min(y1, y2)
     xmax, ymax = max(x1, x2), max(y1, y2)
-    if orientation == 'right':
+    if orientation == "right":
         x1, x2, y1, y2 = xmin, xmax, ymin, ymax
-    elif orientation == 'left':
+    elif orientation == "left":
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
     else:
         raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
@@ -361,7 +361,7 @@ class AbstractDrawer(object):
 
     """
 
-    def __init__(self, parent, pagesize='A3', orientation='landscape',
+    def __init__(self, parent, pagesize="A3", orientation="landscape",
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, cross_track_links=None):
         """Create the object.
@@ -423,9 +423,9 @@ class AbstractDrawer(object):
         shortside, longside = min(pagesize), max(pagesize)
 
         orientation = orientation.lower()
-        if orientation not in ('landscape', 'portrait'):
+        if orientation not in ("landscape", "portrait"):
             raise ValueError("Orientation %s not recognised" % orientation)
-        if orientation == 'landscape':
+        if orientation == "landscape":
             self.pagesize = (longside, shortside)
         else:
             self.pagesize = (shortside, longside)

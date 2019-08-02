@@ -68,7 +68,7 @@ except ImportError:
 from Bio.motifs import jaspar, matrix
 
 
-JASPAR_DFLT_COLLECTION = 'CORE'
+JASPAR_DFLT_COLLECTION = "CORE"
 
 
 class JASPAR5(object):
@@ -344,7 +344,7 @@ class JASPAR5(object):
         collection = row[2]
         name = row[3]
 
-        matrix_id = "".join([base_id, '.', str(version)])
+        matrix_id = "".join([base_id, ".", str(version)])
 
         # fetch the counts matrix
         counts = self._fetch_counts_matrix(int_id)
@@ -389,19 +389,19 @@ class JASPAR5(object):
         for row in rows:
             attr = row[0]
             val = row[1]
-            if attr == 'class':
+            if attr == "class":
                 motif.tf_class = val
-            elif attr == 'family':
+            elif attr == "family":
                 motif.tf_family = val
-            elif attr == 'tax_group':
+            elif attr == "tax_group":
                 motif.tax_group = val
-            elif attr == 'type':
+            elif attr == "type":
                 motif.data_type = val
-            elif attr == 'pazar_tf_id':
+            elif attr == "pazar_tf_id":
                 motif.pazar_id = val
-            elif attr == 'medline':
+            elif attr == "medline":
                 motif.medline = val
-            elif attr == 'comment':
+            elif attr == "comment":
                 motif.comment = val
             else:
                 """
@@ -420,7 +420,7 @@ class JASPAR5(object):
         counts = {}
         cur = self.dbh.cursor()
 
-        for base in 'ACGT':
+        for base in "ACGT":
             base_counts = []
 
             cur.execute("""select val from MATRIX_DATA where ID = %s
@@ -432,7 +432,7 @@ class JASPAR5(object):
 
             counts[base] = [float(x) for x in base_counts]
 
-        return matrix.GenericPositionMatrix('ACGT', counts)
+        return matrix.GenericPositionMatrix("ACGT", counts)
 
     def _fetch_internal_id_list(
         self, collection=JASPAR_DFLT_COLLECTION, tf_name=None, tf_class=None,

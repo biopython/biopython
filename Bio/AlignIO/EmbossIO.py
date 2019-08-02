@@ -117,14 +117,14 @@ class EmbossIterator(AlignmentIterator):
                 length_of_seqs = int(parts[1].strip())
 
             # Parse the rest of the header
-            if key == 'identity':
-                header_dict['identity'] = int(parts[1].strip().split('/')[0])
-            if key == 'similarity':
-                header_dict['similarity'] = int(parts[1].strip().split('/')[0])
-            if key == 'gaps':
-                header_dict['gaps'] = int(parts[1].strip().split('/')[0])
-            if key == 'score':
-                header_dict['score'] = float(parts[1].strip())
+            if key == "identity":
+                header_dict["identity"] = int(parts[1].strip().split("/")[0])
+            if key == "similarity":
+                header_dict["similarity"] = int(parts[1].strip().split("/")[0])
+            if key == "gaps":
+                header_dict["gaps"] = int(parts[1].strip().split("/")[0])
+            if key == "score":
+                header_dict["score"] = float(parts[1].strip())
 
             # And read in another line...
             line = handle.readline()

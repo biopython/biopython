@@ -77,12 +77,12 @@ def _format_date(pdb_date):
     else:
         century = 1900
     date = str(century + year) + "-"
-    all_months = ['xxx', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-                  'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    all_months = ["xxx", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+                  "Aug", "Sep", "Oct", "Nov", "Dec"]
     month = str(all_months.index(pdb_date[3:6]))
     if len(month) == 1:
-        month = '0' + month
-    date = date + month + '-' + pdb_date[:2]
+        month = "0" + month
+    date = date + month + "-" + pdb_date[:2]
     return date
 
 
@@ -104,10 +104,10 @@ def _nice_case(line):
     nextCap = 1
     while i < len(line_lower):
         c = line_lower[i]
-        if c >= 'a' and c <= 'z' and nextCap:
+        if c >= "a" and c <= "z" and nextCap:
             c = c.upper()
             nextCap = 0
-        elif c in ' .,;:\t-_':
+        elif c in " .,;:\t-_":
             nextCap = 1
         s += c
         i += 1
@@ -122,7 +122,7 @@ def parse_pdb_header(infile):
     compound.
     """
     header = []
-    with File.as_handle(infile, 'r') as f:
+    with File.as_handle(infile, "r") as f:
         for l in f:
             record_type = l[0:6]
             if record_type in ("ATOM  ", "HETATM", "MODEL "):
@@ -181,22 +181,22 @@ def _parse_remark_465(line):
 def _parse_pdb_header_list(header):
     # database fields
     dict = {
-        'name': "",
-        'head': '',
-        'idcode': '',
-        'deposition_date': "1909-01-08",
-        'release_date': "1909-01-08",
-        'structure_method': "unknown",
-        'resolution': 0.0,
-        'structure_reference': "unknown",
-        'journal_reference': "unknown",
-        'author': "",
-        'compound': {'1': {'misc': ''}}, 'source': {'1': {'misc': ''}},
-        'has_missing_residues': False,
-        'missing_residues': []}
+        "name": "",
+        "head": "",
+        "idcode": "",
+        "deposition_date": "1909-01-08",
+        "release_date": "1909-01-08",
+        "structure_method": "unknown",
+        "resolution": 0.0,
+        "structure_reference": "unknown",
+        "journal_reference": "unknown",
+        "author": "",
+        "compound": {"1": {"misc": ""}}, "source": {"1": {"misc": ""}},
+        "has_missing_residues": False,
+        "missing_residues": []}
 
-    dict['structure_reference'] = _get_references(header)
-    dict['journal_reference'] = _get_journal(header)
+    dict["structure_reference"] = _get_references(header)
+    dict["journal_reference"] = _get_journal(header)
     comp_molid = "1"
     last_comp_key = "misc"
     last_src_key = "misc"
@@ -212,39 +212,39 @@ def _parse_pdb_header_list(header):
         # From here, all the keys from the header are being parsed
         if key == "TITLE":
             name = _chop_end_codes(tail).lower()
-            if 'name' in dict:
-                dict['name'] += " " + name
+            if "name" in dict:
+                dict["name"] += " " + name
             else:
-                dict['name'] = name
+                dict["name"] = name
         elif key == "HEADER":
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
-                dict['deposition_date'] = _format_date(_nice_case(rr.group()))
+                dict["deposition_date"] = _format_date(_nice_case(rr.group()))
             rr = re.search(r"\s+([1-9][0-9A-Z]{3})\s*\Z", tail)
             if rr is not None:
-                dict['idcode'] = rr.group(1)
+                dict["idcode"] = rr.group(1)
             head = _chop_end_misc(tail).lower()
-            dict['head'] = head
+            dict["head"] = head
         elif key == "COMPND":
             tt = re.sub(r"\;\s*\Z", "", _chop_end_codes(tail)).lower()
             # look for E.C. numbers in COMPND lines
-            rec = re.search(r'\d+\.\d+\.\d+\.\d+', tt)
+            rec = re.search(r"\d+\.\d+\.\d+\.\d+", tt)
             if rec:
-                dict['compound'][comp_molid]['ec_number'] = rec.group()
+                dict["compound"][comp_molid]["ec_number"] = rec.group()
                 tt = re.sub(r"\((e\.c\.)*\d+\.\d+\.\d+\.\d+\)", "", tt)
             tok = tt.split(":")
             if len(tok) >= 2:
                 ckey = tok[0]
                 cval = re.sub(r"\A\s*", "", tok[1])
-                if ckey == 'mol_id':
-                    dict['compound'][cval] = {'misc': ''}
+                if ckey == "mol_id":
+                    dict["compound"][cval] = {"misc": ""}
                     comp_molid = cval
                     last_comp_key = "misc"
                 else:
-                    dict['compound'][comp_molid][ckey] = cval
+                    dict["compound"][comp_molid][ckey] = cval
                     last_comp_key = ckey
             else:
-                dict['compound'][comp_molid][last_comp_key] += tok[0] + " "
+                dict["compound"][comp_molid][last_comp_key] += tok[0] + " "
         elif key == "SOURCE":
             tt = re.sub(r"\;\s*\Z", "", _chop_end_codes(tail)).lower()
             tok = tt.split(":")
@@ -252,66 +252,66 @@ def _parse_pdb_header_list(header):
             if len(tok) >= 2:
                 ckey = tok[0]
                 cval = re.sub(r"\A\s*", "", tok[1])
-                if ckey == 'mol_id':
-                    dict['source'][cval] = {'misc': ''}
+                if ckey == "mol_id":
+                    dict["source"][cval] = {"misc": ""}
                     comp_molid = cval
                     last_src_key = "misc"
                 else:
-                    dict['source'][comp_molid][ckey] = cval
+                    dict["source"][comp_molid][ckey] = cval
                     last_src_key = ckey
             else:
-                dict['source'][comp_molid][last_src_key] += tok[0] + " "
+                dict["source"][comp_molid][last_src_key] += tok[0] + " "
         elif key == "KEYWDS":
             kwd = _chop_end_codes(tail).lower()
-            if 'keywords' in dict:
-                dict['keywords'] += " " + kwd
+            if "keywords" in dict:
+                dict["keywords"] += " " + kwd
             else:
-                dict['keywords'] = kwd
+                dict["keywords"] = kwd
         elif key == "EXPDTA":
             expd = _chop_end_codes(tail)
             # chop junk at end of lines for some structures
-            expd = re.sub(r'\s\s\s\s\s\s\s.*\Z', '', expd)
+            expd = re.sub(r"\s\s\s\s\s\s\s.*\Z", "", expd)
             # if re.search('\Anmr',expd,re.IGNORECASE): expd='nmr'
             # if re.search('x-ray diffraction',expd,re.IGNORECASE): expd='x-ray diffraction'
-            dict['structure_method'] = expd.lower()
+            dict["structure_method"] = expd.lower()
         elif key == "CAVEAT":
             # make Annotation entries out of these!!!
             pass
         elif key == "REVDAT":
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
-                dict['release_date'] = _format_date(_nice_case(rr.group()))
+                dict["release_date"] = _format_date(_nice_case(rr.group()))
         elif key == "JRNL":
             # print("%s:%s" % (key, tail))
-            if 'journal' in dict:
-                dict['journal'] += tail
+            if "journal" in dict:
+                dict["journal"] += tail
             else:
-                dict['journal'] = tail
+                dict["journal"] = tail
         elif key == "AUTHOR":
             auth = _nice_case(_chop_end_codes(tail))
-            if 'author' in dict:
-                dict['author'] += auth
+            if "author" in dict:
+                dict["author"] += auth
             else:
-                dict['author'] = auth
+                dict["author"] = auth
         elif key == "REMARK":
             if re.search("REMARK   2 RESOLUTION.", hh):
-                r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", '', hh))
+                r = _chop_end_codes(re.sub("REMARK   2 RESOLUTION.", "", hh))
                 r = re.sub(r"\s+ANGSTROM.*", "", r)
                 try:
-                    dict['resolution'] = float(r)
+                    dict["resolution"] = float(r)
                 except ValueError:
                     # print('nonstandard resolution %r' % r)
-                    dict['resolution'] = None
+                    dict["resolution"] = None
             elif hh.startswith("REMARK 465"):
                 if tail:
-                    dict['has_missing_residues'] = True
+                    dict["has_missing_residues"] = True
                     missing_res_info = _parse_remark_465(tail)
                     if missing_res_info:
-                        dict['missing_residues'].append(missing_res_info)
+                        dict["missing_residues"].append(missing_res_info)
         else:
             # print(key)
             pass
-    if dict['structure_method'] == 'unknown':
-        if dict['resolution'] > 0.0:
-            dict['structure_method'] = 'x-ray diffraction'
+    if dict["structure_method"] == "unknown":
+        if dict["resolution"] > 0.0:
+            dict["structure_method"] = "x-ray diffraction"
     return dict

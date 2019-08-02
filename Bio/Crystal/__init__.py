@@ -25,18 +25,18 @@ class CrystalError(Exception):
 
 def wrap_line(line):
     """Add end of line at character eighty, to match PDB record standard."""
-    output = ''
+    output = ""
     for i in range(0, len(line), 80):
-        output += '%s\n' % line[i: i + 80]
+        output += "%s\n" % line[i: i + 80]
     return output
 
 
 def validate_key(key):
     """Check if key is a string and has at least one character."""
     if not isinstance(key, str):
-        raise CrystalError('chain requires a string label')
+        raise CrystalError("chain requires a string label")
     if len(key) != 1:
-        raise CrystalError('chain label should contain one letter')
+        raise CrystalError("chain label should contain one letter")
 
 
 class Hetero(object):
@@ -50,13 +50,13 @@ class Hetero(object):
         """Initialize the class."""
         # Enforce string storage
         if not isinstance(data, str):
-            raise CrystalError('Hetero data must be an alphanumeric string')
+            raise CrystalError("Hetero data must be an alphanumeric string")
         if data.isalnum() == 0:
-            raise CrystalError('Hetero data must be an alphanumeric string')
+            raise CrystalError("Hetero data must be an alphanumeric string")
         if len(data) > 3:
-            raise CrystalError('Hetero data may contain up to 3 characters')
+            raise CrystalError("Hetero data may contain up to 3 characters")
         if len(data) < 1:
-            raise CrystalError('Hetero data must not be empty')
+            raise CrystalError("Hetero data must not be empty")
 
         self.data = data[:].lower()
 
@@ -80,18 +80,18 @@ class Hetero(object):
 class Chain(object):
     """Class representing a sequence of Hetero elements."""
 
-    def __init__(self, residues=''):
+    def __init__(self, residues=""):
         """Initialize the class."""
         self.data = []
         if isinstance(residues, str):
-            residues = residues.replace('*', ' ')
+            residues = residues.replace("*", " ")
             residues = residues.strip()
             elements = residues.split()
             self.data = [Hetero(x) for x in elements]
         elif isinstance(residues, list):
             for element in residues:
                 if not isinstance(element, Hetero):
-                    raise CrystalError('Text must be a string')
+                    raise CrystalError("Text must be a string")
             for residue in residues:
                 self.data.append(residue)
         elif isinstance(residues, Chain):
@@ -111,9 +111,9 @@ class Chain(object):
             raise TypeError
 
     def __str__(self):
-        output = ''
+        output = ""
         for element in self.data:
-            output = output + '%s ' % element
+            output = output + "%s " % element
         output = output.strip()
         output = wrap_line(output)
         return output
@@ -238,7 +238,7 @@ class Crystal(object):
         """Initialize the class."""
         # Enforce storage
         if not isinstance(data, dict):
-            raise CrystalError('Crystal must be a dictionary')
+            raise CrystalError("Crystal must be a dictionary")
         if data is None:
             self.data = {}
         else:
@@ -261,15 +261,15 @@ class Crystal(object):
                 raise TypeError
 
     def __repr__(self):
-        output = ''
+        output = ""
         for key in sorted(self.data):
-            output += '%s : %s\n' % (key, self.data[key])
+            output += "%s : %s\n" % (key, self.data[key])
         return output
 
     def __str__(self):
-        output = ''
+        output = ""
         for key in sorted(self.data):
-            output += '%s : %s\n' % (key, self.data[key])
+            output += "%s : %s\n" % (key, self.data[key])
         return output
 
     def tostring(self):

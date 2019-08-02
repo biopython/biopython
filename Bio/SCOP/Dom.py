@@ -27,9 +27,9 @@ class Record(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.sid = ''
+        self.sid = ""
         self.residues = []
-        self.hierarchy = ''
+        self.hierarchy = ""
         if line:
             self._process(line)
 
@@ -71,6 +71,6 @@ def parse(handle):
 
     """
     for line in handle:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         yield Record(line)

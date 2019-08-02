@@ -104,15 +104,15 @@ def parse(handle):
     record = None
     primer = None
     while True:
-        if line.startswith('# EPRIMER3') or line.startswith('# PRIMER3'):
+        if line.startswith("# EPRIMER3") or line.startswith("# PRIMER3"):
             # Record data
             if record is not None:
                 yield record
             record = Record()
             record.comments += line
             primer = None
-        elif line.startswith('#'):
-            if line.strip() != '#                      Start  Len   Tm     GC%   Sequence':
+        elif line.startswith("#"):
+            if line.strip() != "#                      Start  Len   Tm     GC%   Sequence":
                 record.comments += line
         elif not line.strip():
             pass
@@ -152,7 +152,7 @@ def parse(handle):
             try:
                 primer.internal_seq = words[6]
             except IndexError:  # eprimer3 reports oligo without sequence
-                primer.internal_seq = ''
+                primer.internal_seq = ""
         try:
             line = next(handle)
         except StopIteration:

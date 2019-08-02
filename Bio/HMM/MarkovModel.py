@@ -607,15 +607,15 @@ class HiddenMarkovModel(object):
         state_path_prob = max(all_probs.values())
 
         # find the last pointer we need to trace back from
-        last_state = ''
+        last_state = ""
         for state in all_probs:
             if all_probs[state] == state_path_prob:
                 last_state = state
 
-        assert last_state != '', "Didn't find the last state to trace from!"
+        assert last_state != "", "Didn't find the last state to trace from!"
 
         # --- traceback
-        traceback_seq = MutableSeq('', state_alphabet)
+        traceback_seq = MutableSeq("", state_alphabet)
 
         loop_seq = list(range(1, len(sequence)))
         loop_seq.reverse()

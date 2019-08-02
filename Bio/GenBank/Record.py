@@ -164,33 +164,33 @@ class Record(object):
     def __init__(self):
         """Initialize."""
         self.accession = []
-        self.base_counts = ''
-        self.comment = ''
-        self.contig = ''
-        self.data_file_division = ''
-        self.date = ''
-        self.db_source = ''
+        self.base_counts = ""
+        self.comment = ""
+        self.contig = ""
+        self.data_file_division = ""
+        self.date = ""
+        self.db_source = ""
         self.dblinks = []
-        self.definition = ''
+        self.definition = ""
         self.features = []
-        self.gi = ''
+        self.gi = ""
         self.keywords = []
-        self.locus = ''
-        self.nid = ''
-        self.organism = ''
-        self.origin = ''
-        self.pid = ''
+        self.locus = ""
+        self.nid = ""
+        self.organism = ""
+        self.origin = ""
+        self.pid = ""
         self.primary = []
         self.projects = []
         self.references = []
-        self.residue_type = ''
-        self.segment = ''
-        self.sequence = ''
-        self.size = ''
-        self.source = ''
+        self.residue_type = ""
+        self.segment = ""
+        self.sequence = ""
+        self.size = ""
+        self.source = ""
         self.taxonomy = []
-        self.version = ''
-        self.wgs = ''
+        self.version = ""
+        self.wgs = ""
         self.wgs_scafld = []
 
     def __str__(self):
@@ -412,8 +412,8 @@ class Record(object):
             output += Record.BASE_FORMAT % "BASE COUNT  "
             # split up the base counts into their individual parts
             count_parts = self.base_counts.split(" ")
-            while '' in count_parts:
-                count_parts.remove('')
+            while "" in count_parts:
+                count_parts.remove("")
             # deal with the standard case, with a normal origin line
             # like: 474 a    356 c    428 g    364 t
             if len(count_parts) % 2 == 0:
@@ -485,7 +485,7 @@ class Record(object):
         if self.contig:
             output += Record.BASE_FORMAT % "CONTIG"
             output += _wrapped_genbank(self.contig,
-                                       Record.GB_BASE_INDENT, split_char=',')
+                                       Record.GB_BASE_INDENT, split_char=",")
         return output
 
 
@@ -507,15 +507,15 @@ class Reference(object):
 
     def __init__(self):
         """Initialize."""
-        self.number = ''
-        self.bases = ''
-        self.authors = ''
-        self.consrtm = ''
-        self.title = ''
-        self.journal = ''
-        self.medline_id = ''
-        self.pubmed_id = ''
-        self.remark = ''
+        self.number = ""
+        self.bases = ""
+        self.authors = ""
+        self.consrtm = ""
+        self.title = ""
+        self.journal = ""
+        self.medline_id = ""
+        self.pubmed_id = ""
+        self.remark = ""
 
     def __str__(self):
         """Convert the reference to a GenBank format string."""
@@ -624,7 +624,7 @@ class Feature(object):
         """Return feature as a GenBank format string."""
         output = Record.INTERNAL_FEATURE_FORMAT % self.key
         output += _wrapped_genbank(self.location, Record.GB_FEATURE_INDENT,
-                                   split_char=',')
+                                   split_char=",")
         for qualifier in self.qualifiers:
             output += str(qualifier)
         return output

@@ -22,12 +22,12 @@ I designed the algorithm according to a note by David L. Tabb, available at:
 http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf
 """
 
-positive_pKs = {'Nterm': 7.5, 'K': 10.0, 'R': 12.0, 'H': 5.98}
-negative_pKs = {'Cterm': 3.55, 'D': 4.05, 'E': 4.45, 'C': 9.0, 'Y': 10.0}
-pKcterminal = {'D': 4.55, 'E': 4.75}
-pKnterminal = {'A': 7.59, 'M': 7.0, 'S': 6.93, 'P': 8.36, 'T': 6.82, 'V': 7.44,
-               'E': 7.7}
-charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
+positive_pKs = {"Nterm": 7.5, "K": 10.0, "R": 12.0, "H": 5.98}
+negative_pKs = {"Cterm": 3.55, "D": 4.05, "E": 4.45, "C": 9.0, "Y": 10.0}
+pKcterminal = {"D": 4.55, "E": 4.75}
+pKnterminal = {"A": 7.59, "M": 7.0, "S": 6.93, "P": 8.36, "T": 6.82, "V": 7.44,
+               "E": 7.7}
+charged_aas = ("K", "R", "H", "D", "E", "C", "Y")
 
 
 class IsoelectricPoint(object):
@@ -49,8 +49,8 @@ class IsoelectricPoint(object):
         charged = {}
         for aa in charged_aas:
             charged[aa] = float(AminoAcidsContent[aa])
-        charged['Nterm'] = 1.0
-        charged['Cterm'] = 1.0
+        charged["Nterm"] = 1.0
+        charged["Cterm"] = 1.0
         return charged
 
     # This function calculates the total charge of the protein at a given pH.
@@ -78,9 +78,9 @@ class IsoelectricPoint(object):
         nterm = self.sequence[0]
         cterm = self.sequence[-1]
         if nterm in pKnterminal:
-            pos_pKs['Nterm'] = pKnterminal[nterm]
+            pos_pKs["Nterm"] = pKnterminal[nterm]
         if cterm in pKcterminal:
-            neg_pKs['Cterm'] = pKcterminal[cterm]
+            neg_pKs["Cterm"] = pKcterminal[cterm]
 
         # Bracket between pH1 and pH2
         pH = 7.0

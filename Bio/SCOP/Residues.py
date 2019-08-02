@@ -35,7 +35,7 @@ class Residues(object):
 
     def __init__(self, str=None):
         """Initialize the class."""
-        self.pdbid = ''
+        self.pdbid = ""
         self.fragments = ()
         if str is not None:
             self._parse(str)
@@ -49,7 +49,7 @@ class Residues(object):
             self.pdbid = m.group(1)
             str = m.group(2)  # Everything else
 
-        if str == '' or str == '-' or str == '(-)':  # no fragments, whole sequence
+        if str == "" or str == "-" or str == "(-)":  # no fragments, whole sequence
             return
 
         fragments = []
@@ -63,7 +63,7 @@ class Residues(object):
                 raise ValueError("I don't understand the format of %s" % l)
 
             if chain:
-                if chain[-1] != ':':
+                if chain[-1] != ":":
                     raise ValueError("I don't understand the chain in %s" % l)
                 chain = chain[:-1]   # chop off the ':'
             else:
@@ -76,10 +76,10 @@ class Residues(object):
         """Represent the SCOP residues record as a string."""
         prefix = ""
         if self.pdbid:
-            prefix = self.pdbid + ' '
+            prefix = self.pdbid + " "
 
         if not self.fragments:
-            return prefix + '-'
+            return prefix + "-"
         strs = []
         for chain, start, end in self.fragments:
             s = []

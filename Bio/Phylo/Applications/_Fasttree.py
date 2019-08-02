@@ -56,13 +56,13 @@ class FastTreeCommandline(AbstractCommandline):
 
     """
 
-    def __init__(self, cmd='fasttree', **kwargs):
+    def __init__(self, cmd="fasttree", **kwargs):
         """Initialize the class."""
         self.parameters = [
-            _Switch(['-nt', 'nt'],
+            _Switch(["-nt", "nt"],
                     "By default FastTree expects protein alignments, use -nt for nucleotides",
                     ),
-            _Option(['-n', 'n'],
+            _Option(["-n", "n"],
                     """-n -- read N multiple alignments in.
 
                     This only works with phylip interleaved format. For example, you can
@@ -72,14 +72,14 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-quote', 'quote'],
+            _Switch(["-quote", "quote"],
                     """-quote -- add quotes to sequence names in output.
 
                     Quote sequence names in the output and allow spaces, commas,
                     parentheses, and colons in them but not ' characters (fasta files only).
                     """,
                     ),
-            _Option(['-pseudo', 'pseudo'],
+            _Option(["-pseudo", "pseudo"],
                     """-pseudo [weight] -- Pseudocounts are used with sequence distance estimation.
 
                     Use pseudocounts to estimate distances between sequences with little or no
@@ -90,7 +90,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_numeric,
                     equate=False,
                     ),
-            _Option(['-boot', 'boot'],
+            _Option(["-boot", "boot"],
                     """Specify the number of resamples for support values.
 
                     Support value options:
@@ -104,7 +104,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-nosupport', 'nosupport'],
+            _Switch(["-nosupport", "nosupport"],
                     """Turn off support values.
 
                     Support value options:
@@ -116,7 +116,7 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -nosupport to turn off support values or -boot 100 to use just 100 resamples.
                     """,
                     ),
-            _Option(['-intree', 'intree'],
+            _Option(["-intree", "intree"],
                     """-intree newickfile -- read the starting tree in from newickfile.
 
                     Any branch lengths in the starting trees are ignored.
@@ -125,21 +125,21 @@ class FastTreeCommandline(AbstractCommandline):
                     filename=True,
                     equate=False,
                     ),
-            _Option(['-intree1', 'intree1'],
+            _Option(["-intree1", "intree1"],
                     "intree1 newickfile -- read the same starting tree for each alignment.",
                     filename=True,
                     equate=False,
                     ),
-            _Switch(['-quiet', 'quiet'],
+            _Switch(["-quiet", "quiet"],
                     """-quiet -- do not write to standard error during normal operation
 
                     (no progress indicator, no options summary, no likelihood values, etc.)
                     """,
                     ),
-            _Switch(['-nopr', 'nopr'],
+            _Switch(["-nopr", "nopr"],
                     "-nopr -- do not write the progress indicator to stderr.",
                     ),
-            _Option(['-nni', 'nni'],
+            _Option(["-nni", "nni"],
                     """Set the rounds of minimum-evolution nearest-neighbor interchanges
 
                     Topology refinement:
@@ -153,7 +153,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Option(['-spr', 'spr'],
+            _Option(["-spr", "spr"],
                     """Set the rounds of subtree-prune-regraft moves
 
                     Topology refinement:
@@ -168,7 +168,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-noml', 'noml'],
+            _Switch(["-noml", "noml"],
                     """Deactivate min-evo NNIs and SPRs.
 
                     Topology refinement:
@@ -183,7 +183,7 @@ class FastTreeCommandline(AbstractCommandline):
                     an approximately maximum-likelihood tree with further NNIs).
                     """,
                     ),
-            _Switch(['-mllen', 'mllen'],
+            _Switch(["-mllen", "mllen"],
                     """Optimize branch lengths on a fixed topology.
 
                     Topology refinement:
@@ -198,7 +198,7 @@ class FastTreeCommandline(AbstractCommandline):
                     Use -mllen -nome with -intree to optimize branch lengths on a fixed topology.
                     """,
                     ),
-            _Switch(['-nome', 'nome'],
+            _Switch(["-nome", "nome"],
                     """Changes support values calculation to a minimum-evolution bootstrap method.
 
                     Topology refinement:
@@ -219,7 +219,7 @@ class FastTreeCommandline(AbstractCommandline):
                     In either case, the support values are proportions ranging from 0 to 1.
                     """,
                     ),
-            _Option(['-mlnni', 'mlnni'],
+            _Option(["-mlnni", "mlnni"],
                     """Set the number of rounds of maximum-likelihood NNIs.
 
                     Topology refinement:
@@ -235,7 +235,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Option(['-mlacc', 'mlacc'],
+            _Option(["-mlacc", "mlacc"],
                     """Option for optimization of branches at each NNI.
 
                     Topology refinement:
@@ -252,7 +252,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-slownni', 'slownni'],
+            _Switch(["-slownni", "slownni"],
                     """Turn off heuristics to avoid constant subtrees with NNIs.
 
                     Topology refinement:
@@ -267,31 +267,31 @@ class FastTreeCommandline(AbstractCommandline):
                     (affects both ML and ME NNIs).
                     """,
                     ),
-            _Switch(['-wag', 'wag'],
+            _Switch(["-wag", "wag"],
                     """Maximum likelihood model options.
 
                     Whelan-And-Goldman 2001 model instead of (default)
                     Jones-Taylor-Thorton 1992 model (a.a. only)
                     """,
                     ),
-            _Switch(['-gtr', 'gtr'],
+            _Switch(["-gtr", "gtr"],
                     """Maximum likelihood model options.
 
                     Use generalized time-reversible instead of (default)
                     Jukes-Cantor (nt only)
                     """,
                     ),
-            _Option(['-cat', 'cat'],
+            _Option(["-cat", "cat"],
                     """Maximum likelihood model options.
 
                     Specify the number of rate categories of sites (default 20).""",
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-nocat', 'nocat'],
+            _Switch(["-nocat", "nocat"],
                     "Maximum likelihood model options: No CAT model (just 1 category)",
                     ),
-            _Switch(['-gamma', 'gamma'],
+            _Switch(["-gamma", "gamma"],
                     """Report the likelihood under the discrete gamma model.
 
                     Maximum likelihood model options:
@@ -304,7 +304,7 @@ class FastTreeCommandline(AbstractCommandline):
                     GammaLogToPaup.pl and documentation on the FastTree web site.
                     """,
                     ),
-            _Switch(['-slow', 'slow'],
+            _Switch(["-slow", "slow"],
                     """Use an exhaustive search.
 
                     Searching for the best join:
@@ -314,7 +314,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -slow takes half an hour instead of 8 seconds for 1,250 proteins
                     """,
                     ),
-            _Switch(['-fastest', 'fastest'],
+            _Switch(["-fastest", "fastest"],
                     """Search the visible set (the top hit for each node) only.
 
                     Searching for the best join:
@@ -327,7 +327,7 @@ class FastTreeCommandline(AbstractCommandline):
                     -fastest sets -2nd on as well, use -fastest -no2nd to avoid this
                     """,
                     ),
-            _Switch(['-2nd', 'second'],
+            _Switch(["-2nd", "second"],
                     """Turn 2nd-level top hits heuristic on.
 
                     Top-hit heuristics:
@@ -342,7 +342,7 @@ class FastTreeCommandline(AbstractCommandline):
                     (By default, -fastest turns on -2nd.)
                     """,
                     ),
-            _Switch(['-no2nd', 'no2nd'],
+            _Switch(["-no2nd", "no2nd"],
                     """Turn 2nd-level top hits heuristic off.
 
                     Top-hit heuristics:
@@ -357,7 +357,7 @@ class FastTreeCommandline(AbstractCommandline):
                     (By default, -fastest turns on -2nd.)
                     """,
                     ),
-            _Option(['-seed', 'seed'],
+            _Option(["-seed", "seed"],
                     """Use -seed to initialize the random number generator.
 
                     Support value options:
@@ -369,7 +369,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-top', 'top'],
+            _Switch(["-top", "top"],
                     """Top-hit list to speed up search
 
                     Top-hit heuristics:
@@ -379,7 +379,7 @@ class FastTreeCommandline(AbstractCommandline):
                     and all new joined nodes to each other.
                     """,
                     ),
-            _Switch(['-notop', 'notop'],
+            _Switch(["-notop", "notop"],
                     """Turn off top-hit list to speed up search
 
                     Top-hit heuristics:
@@ -389,7 +389,7 @@ class FastTreeCommandline(AbstractCommandline):
                     and all new joined nodes to each other.
                     """,
                     ),
-            _Option(['-topm', 'topm'],
+            _Option(["-topm", "topm"],
                     """Change the top hits calculation method
 
                     Top-hit heuristics:
@@ -403,7 +403,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_numeric,
                     equate=False,
                     ),
-            _Option(['-close', 'close'],
+            _Option(["-close", "close"],
                     """Modify the close heuristic for the top-hit list
 
                     Top-hit heuristics:
@@ -413,7 +413,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_numeric,
                     equate=False,
                     ),
-            _Option(['-refresh', 'refresh'],
+            _Option(["-refresh", "refresh"],
                     """Parameter for conditions that joined nodes are compared to other nodes
 
                     Top-hit heuristics:
@@ -425,7 +425,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_numeric,
                     equate=False,
                     ),
-            _Option(['-matrix', 'matrix'],
+            _Option(["-matrix", "matrix"],
                     """Specify a matrix for nucleotide or amino acid distances
 
                     Distances:
@@ -437,7 +437,7 @@ class FastTreeCommandline(AbstractCommandline):
                     filename=True,
                     equate=False,
                     ),
-            _Switch(['-nomatrix', 'nomatrix'],
+            _Switch(["-nomatrix", "nomatrix"],
                     """Specify that no matrix should be used for nucleotide or amino acid distances
 
                     Distances:
@@ -447,24 +447,24 @@ class FastTreeCommandline(AbstractCommandline):
                     To specify a different matrix, use -matrix FilePrefix or -nomatrix
                     """,
                     ),
-            _Switch(['-nj', 'nj'],
+            _Switch(["-nj", "nj"],
                     "Join options: regular (unweighted) neighbor-joining (default)",
                     ),
-            _Switch(['-bionj', 'bionj'],
+            _Switch(["-bionj", "bionj"],
                     """Join options: weighted joins as in BIONJ.
 
                     FastTree will also weight joins during NNIs.
                     """,
                     ),
-            _Option(['-gtrrates', 'gtrrates'],
+            _Option(["-gtrrates", "gtrrates"],
                     "-gtrrates ac ag at cg ct gt",
                     equate=False,
                     ),
-            _Option(['-gtrfreq', 'gtrfreq'],
+            _Option(["-gtrfreq", "gtrfreq"],
                     "-gtrfreq A C G T",
                     equate=False,
                     ),
-            _Option(['-constraints', 'constraints'],
+            _Option(["-constraints", "constraints"],
                     """Specifies an alignment file for use with constrained topology searching
 
                     Constrained topology search options:
@@ -476,7 +476,7 @@ class FastTreeCommandline(AbstractCommandline):
                     filename=True,
                     equate=False,
                     ),
-            _Option(['-constraintWeight', 'constraintWeight'],
+            _Option(["-constraintWeight", "constraintWeight"],
                     """Weight strength of contraints in topology searching.
 
                     Constrained topology search options:
@@ -487,7 +487,7 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_numeric,
                     equate=False,
                     ),
-            _Option(['-log', 'log'],
+            _Option(["-log", "log"],
                     """Create log files of data such as intermediate trees and per-site rates
 
                     -log logfile -- save intermediate trees so you can extract
@@ -497,12 +497,12 @@ class FastTreeCommandline(AbstractCommandline):
                     filename=True,
                     equate=False,
                     ),
-            _Option(['-makematrix', 'makematrix'],
+            _Option(["-makematrix", "makematrix"],
                     "-makematrix [alignment]",
                     filename=True,
                     equate=False,
                     ),
-            _Switch(['-rawdist', 'rawdist'],
+            _Switch(["-rawdist", "rawdist"],
                     """Turn off or adjust log-correction in AA or NT distances.
 
                     Use -rawdist to turn the log-correction off or to use
@@ -515,7 +515,7 @@ class FastTreeCommandline(AbstractCommandline):
                     To specify a different matrix, use -matrix FilePrefix or -nomatrix
                     """,
                     ),
-            _Option(['-sprlength', 'sprlength'],
+            _Option(["-sprlength", "sprlength"],
                     """Set maximum SPR move length in topology refinement (default 10).
 
                     Topology refinement:
@@ -530,9 +530,9 @@ class FastTreeCommandline(AbstractCommandline):
                     checker_function=_is_int,
                     equate=False,
                     ),
-            _Switch(['-help', 'help'], "Show the help."),
-            _Switch(['-expert', 'expert'], "Show the expert level help."),
-            _Option(['-out', 'out'],
+            _Switch(["-help", "help"], "Show the help."),
+            _Switch(["-expert", "expert"], "Show the expert level help."),
+            _Option(["-out", "out"],
                     """Enter <output file>
 
                     The path to a Newick Tree output file needs to be specified.
@@ -540,7 +540,7 @@ class FastTreeCommandline(AbstractCommandline):
                     filename=True,
                     equate=False,
                     ),
-            _Argument(['input'],
+            _Argument(["input"],
                       """Enter <input file>
 
                       An input file of sequence alignments in fasta or phylip format

@@ -133,8 +133,8 @@ def parse_others(lines, results, sequences):
                 res_matches = re.findall(r"[dSNwrho]{1,3} =.{7,8}?",
                                          line_stats)
                 for stat_pair in res_matches:
-                    stat = stat_pair.split('=')[0].strip()
-                    value = stat_pair.split('=')[1].strip()
+                    stat = stat_pair.split("=")[0].strip()
+                    value = stat_pair.split("=")[1].strip()
                     try:
                         stats[stat] = float(value)
                     except ValueError:

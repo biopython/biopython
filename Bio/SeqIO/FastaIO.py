@@ -43,7 +43,7 @@ def SimpleFastaParser(handle):
     # Skip any text before the first record (e.g. blank lines, comments)
     # This matches the previous implementation where .readline() was used
     for line in handle:
-        if line[0] == '>':
+        if line[0] == ">":
             title = line[1:].rstrip()
             break
         elif isinstance(line[0], int):
@@ -59,14 +59,14 @@ def SimpleFastaParser(handle):
     # when not opened in universal read lines mode)
     lines = []
     for line in handle:
-        if line[0] == '>':
-            yield title, ''.join(lines).replace(" ", "").replace("\r", "")
+        if line[0] == ">":
+            yield title, "".join(lines).replace(" ", "").replace("\r", "")
             lines = []
             title = line[1:].rstrip()
             continue
         lines.append(line.rstrip())
 
-    yield title, ''.join(lines).replace(" ", "").replace("\r", "")
+    yield title, "".join(lines).replace(" ", "").replace("\r", "")
 
 
 def FastaTwoLineParser(handle):
@@ -105,13 +105,13 @@ def FastaTwoLineParser(handle):
     idx = -1  # for empty file
     for idx, line in enumerate(handle):
         if idx % 2 == 0:  # title line
-            if line[0] != '>':
+            if line[0] != ">":
                 raise ValueError("Expected FASTA record starting with '>' character. "
                                  "Perhaps this file is using FASTA line wrapping? "
                                  "Got: '{}'".format(line))
             title = line[1:].rstrip()
         else:  # sequence line
-            if line[0] == '>':
+            if line[0] == ">":
                 raise ValueError("Two '>' FASTA lines in a row. Missing sequence line "
                                  "if this is strict two-line-per-record FASTA format. "
                                  "Have '>{}' and '{}'".format(title, line))
@@ -124,7 +124,7 @@ def FastaTwoLineParser(handle):
                          "if this is strict two-line-per-record FASTA format. "
                          "Have title line '{}'".format(line))
     else:
-        assert line[0] != '>', "line[0] == '>' ; this should be impossible!"
+        assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
 
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):

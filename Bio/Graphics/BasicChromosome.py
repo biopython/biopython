@@ -103,7 +103,7 @@ class Organism(_ChromosomeComponent):
     add and remove functions.
     """
 
-    def __init__(self, output_format='pdf'):
+    def __init__(self, output_format="pdf"):
         """Initialize."""
         _ChromosomeComponent.__init__(self)
 
@@ -166,7 +166,7 @@ class Organism(_ChromosomeComponent):
     def _draw_title(self, cur_drawing, title, width, height):
         """Write out the title of the organism figure (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
-        title_string.fontName = 'Helvetica-Bold'
+        title_string.fontName = "Helvetica-Bold"
         title_string.fontSize = self.title_size
         title_string.textAnchor = "middle"
 
@@ -289,9 +289,9 @@ class Chromosome(_ChromosomeComponent):
         y_position = self.end_y_position
 
         label_string = String(x_position, y_position, label_name)
-        label_string.fontName = 'Times-BoldItalic'
+        label_string.fontName = "Times-BoldItalic"
         label_string.fontSize = self.title_size
-        label_string.textAnchor = 'middle'
+        label_string.textAnchor = "middle"
 
         cur_drawing.add(label_string)
 
@@ -344,7 +344,7 @@ class Chromosome(_ChromosomeComponent):
                                      strokeWidth=0.25))
                 label_string = String(x2, y2, name,
                                       textAnchor=anchor)
-                label_string.fontName = 'Helvetica'
+                label_string.fontName = "Helvetica"
                 label_string.fontSize = h
                 if color_label:
                     label_string.fillColor = color
@@ -480,7 +480,7 @@ class ChromosomeSegment(_ChromosomeComponent):
                        self.end_y_position)
 
             label_string = String(label_x, label_y, self.label)
-            label_string.fontName = 'Helvetica'
+            label_string.fontName = "Helvetica"
             label_string.fontSize = self.label_size
 
             cur_drawing.add(label_string)
@@ -602,7 +602,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
 
     def __init__(self, bp_length, features,
                  default_feature_color=colors.blue,
-                 name_qualifiers=('gene', 'label', 'name', 'locus_tag', 'product')):
+                 name_qualifiers=("gene", "label", "name", "locus_tag", "product")):
         """Initialize.
 
         The features can either be SeqFeature objects, or tuples of values:
@@ -664,7 +664,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 strand = f.strand
                 try:
                     # Handles Artemis colour integers, HTML colors, etc
-                    color = _color_trans.translate(f.qualifiers['color'][0])
+                    color = _color_trans.translate(f.qualifiers["color"][0])
                 except Exception:  # TODO: ValueError?
                     color = self.default_feature_color
                 fill_color = color

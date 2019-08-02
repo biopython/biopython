@@ -318,7 +318,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         if quote:
             line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
         else:
-            line = '%s/%s=%s' % (self.QUALIFIER_INDENT_STR, key, value)
+            line = "%s/%s=%s" % (self.QUALIFIER_INDENT_STR, key, value)
         if len(line) <= self.MAX_WIDTH:
             self.handle.write(line + "\n")
             return
@@ -670,7 +670,7 @@ class GenBankWriter(_InsdcWriter):
 
         # Accommodate longer header, with long accessions and lengths
         if len(locus) > 16 and len(str(len(record))) > (11 - (len(locus) - 16)):
-            name_length = locus + ' ' + str(len(record))
+            name_length = locus + " " + str(len(record))
 
         # This is the older, standard 80 position header
         else:
@@ -691,15 +691,15 @@ class GenBankWriter(_InsdcWriter):
         # Extra long header
         if len(line) > 80:
             splitline = line.split()
-            if splitline[3] not in ['bp', 'aa']:
-                raise ValueError('LOCUS line does not contain size units at '
-                                 'expected position:\n' + line)
+            if splitline[3] not in ["bp", "aa"]:
+                raise ValueError("LOCUS line does not contain size units at "
+                                 "expected position:\n" + line)
 
             if not (splitline[4].strip() == ""
-                    or 'DNA' in splitline[4].strip().upper()
-                    or 'RNA' in splitline[4].strip().upper()):
-                raise ValueError('LOCUS line does not contain valid '
-                                 'sequence type (DNA, RNA, ...):\n' + line)
+                    or "DNA" in splitline[4].strip().upper()
+                    or "RNA" in splitline[4].strip().upper()):
+                raise ValueError("LOCUS line does not contain valid "
+                                 "sequence type (DNA, RNA, ...):\n" + line)
 
             self.handle.write(line)
 
@@ -717,35 +717,35 @@ class GenBankWriter(_InsdcWriter):
             assert line[12:40].split() == [locus, str(len(record))], line
 
             # Tests copied from Bio.GenBank.Scanner
-            if line[40:44] not in [' bp ', ' aa ']:
-                raise ValueError('LOCUS line does not contain size units at '
-                                 'expected position:\n' + line)
-            if line[44:47] not in ['   ', 'ss-', 'ds-', 'ms-']:
-                raise ValueError('LOCUS line does not have valid strand '
-                                 'type (Single stranded, ...):\n' + line)
+            if line[40:44] not in [" bp ", " aa "]:
+                raise ValueError("LOCUS line does not contain size units at "
+                                 "expected position:\n" + line)
+            if line[44:47] not in ["   ", "ss-", "ds-", "ms-"]:
+                raise ValueError("LOCUS line does not have valid strand "
+                                 "type (Single stranded, ...):\n" + line)
             if not (line[47:54].strip() == ""
-                    or 'DNA' in line[47:54].strip().upper()
-                    or 'RNA' in line[47:54].strip().upper()):
-                raise ValueError('LOCUS line does not contain valid '
-                                 'sequence type (DNA, RNA, ...):\n' + line)
-            if line[54:55] != ' ':
-                raise ValueError('LOCUS line does not contain space at '
-                                 'position 55:\n' + line)
-            if line[55:63].strip() not in ['', 'linear', 'circular']:
-                raise ValueError('LOCUS line does not contain valid '
-                                 'entry (linear, circular, ...):\n' + line)
-            if line[63:64] != ' ':
-                raise ValueError('LOCUS line does not contain space at '
-                                 'position 64:\n' + line)
-            if line[67:68] != ' ':
-                raise ValueError('LOCUS line does not contain space at '
-                                 'position 68:\n' + line)
-            if line[70:71] != '-':
-                raise ValueError('LOCUS line does not contain - at '
-                                 'position 71 in date:\n' + line)
-            if line[74:75] != '-':
-                raise ValueError('LOCUS line does not contain - at '
-                                 'position 75 in date:\n' + line)
+                    or "DNA" in line[47:54].strip().upper()
+                    or "RNA" in line[47:54].strip().upper()):
+                raise ValueError("LOCUS line does not contain valid "
+                                 "sequence type (DNA, RNA, ...):\n" + line)
+            if line[54:55] != " ":
+                raise ValueError("LOCUS line does not contain space at "
+                                 "position 55:\n" + line)
+            if line[55:63].strip() not in ["", "linear", "circular"]:
+                raise ValueError("LOCUS line does not contain valid "
+                                 "entry (linear, circular, ...):\n" + line)
+            if line[63:64] != " ":
+                raise ValueError("LOCUS line does not contain space at "
+                                 "position 64:\n" + line)
+            if line[67:68] != " ":
+                raise ValueError("LOCUS line does not contain space at "
+                                 "position 68:\n" + line)
+            if line[70:71] != "-":
+                raise ValueError("LOCUS line does not contain - at "
+                                 "position 71 in date:\n" + line)
+            if line[74:75] != "-":
+                raise ValueError("LOCUS line does not contain - at "
+                                 "position 75 in date:\n" + line)
 
             self.handle.write(line)
 
@@ -887,7 +887,7 @@ class GenBankWriter(_InsdcWriter):
         # see ftp://ftp.ncbi.nih.gov/genbank/gbrel.txt [3.4.5]
         # and discussion https://github.com/biopython/biopython/pull/616
         # So let's add a period
-        descr += '.'
+        descr += "."
         self._write_multi_line("DEFINITION", descr)
 
         self._write_single_line("ACCESSION", accession)
@@ -1023,10 +1023,10 @@ class EmblWriter(_InsdcWriter):
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(a, Alphabet.DNAAlphabet):
             # TODO - What if we have RNA?
-            a_count = data.count('A') + data.count('a')
-            c_count = data.count('C') + data.count('c')
-            g_count = data.count('G') + data.count('g')
-            t_count = data.count('T') + data.count('t')
+            a_count = data.count("A") + data.count("a")
+            c_count = data.count("C") + data.count("c")
+            g_count = data.count("G") + data.count("g")
+            t_count = data.count("T") + data.count("t")
             other = seq_len - (a_count + c_count + g_count + t_count)
             handle.write("SQ   Sequence %i BP; %i A; %i C; %i G; %i T; %i other;\n"
                          % (seq_len, a_count, c_count, g_count, t_count, other))

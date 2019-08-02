@@ -67,11 +67,11 @@ class rd(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.name = ''
+        self.name = ""
         self.padded_bases = None
         self.info_items = None
         self.read_tags = None
-        self.sequence = ''
+        self.sequence = ""
 
 
 class qa(object):
@@ -96,15 +96,15 @@ class ds(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.chromat_file = ''
-        self.phd_file = ''
-        self.time = ''
-        self.chem = ''
-        self.dye = ''
-        self.template = ''
-        self.direction = ''
+        self.chromat_file = ""
+        self.phd_file = ""
+        self.time = ""
+        self.chem = ""
+        self.dye = ""
+        self.template = ""
+        self.direction = ""
         if line:
-            tags = ['CHROMAT_FILE', 'PHD_FILE', 'TIME', 'CHEM', 'DYE', 'TEMPLATE', 'DIRECTION']
+            tags = ["CHROMAT_FILE", "PHD_FILE", "TIME", "CHEM", "DYE", "TEMPLATE", "DIRECTION"]
             poss = [line.find(x) for x in tags]
             tagpos = dict(zip(poss, tags))
             if -1 in tagpos:
@@ -124,7 +124,7 @@ class af(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
+        self.name = ""
         self.coru = None
         self.padded_start = None
         if line:
@@ -139,7 +139,7 @@ class bs(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
+        self.name = ""
         self.padded_start = None
         self.padded_end = None
         if line:
@@ -154,12 +154,12 @@ class rt(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
-        self.tag_type = ''
-        self.program = ''
+        self.name = ""
+        self.tag_type = ""
+        self.program = ""
         self.padded_start = None
         self.padded_end = None
-        self.date = ''
+        self.date = ""
         self.comment = []
         if line:
             header = line.split()
@@ -176,13 +176,13 @@ class ct(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
-        self.tag_type = ''
-        self.program = ''
+        self.name = ""
+        self.tag_type = ""
+        self.program = ""
         self.padded_start = None
         self.padded_end = None
-        self.date = ''
-        self.notrans = ''
+        self.date = ""
+        self.notrans = ""
         self.info = []
         self.comment = []
         if line:
@@ -202,9 +202,9 @@ class wa(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.tag_type = ''
-        self.program = ''
-        self.date = ''
+        self.tag_type = ""
+        self.program = ""
+        self.date = ""
         self.info = []
         if line:
             header = line.split()
@@ -218,9 +218,9 @@ class wr(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
-        self.aligned = ''
-        self.program = ''
+        self.name = ""
+        self.aligned = ""
+        self.program = ""
         self.date = []
         if line:
             header = line.split()
@@ -254,7 +254,7 @@ class Contig(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.name = ''
+        self.name = ""
         self.nbases = None
         self.nreads = None
         self.nsegments = None
@@ -296,7 +296,7 @@ def parse(handle):
         # at beginning, skip the AS and look for first CO command
         try:
             while True:
-                if line.startswith('CO'):
+                if line.startswith("CO"):
                     break
                 line = next(handle)
         except StopIteration:
@@ -424,7 +424,7 @@ def parse(handle):
                                 if line.endswith("C}"):
                                     break
                                 record.reads[-1].rt[-1].comment.append(line)
-                        elif line == '}':
+                        elif line == "}":
                             break
                         else:
                             record.reads[-1].rt.append(rt(line))
@@ -434,7 +434,7 @@ def parse(handle):
                         record.reads[-1].wr = []
                     for line in handle:
                         line = line.strip()
-                        if line == '}':
+                        if line == "}":
                             break
                         record.reads[-1].wr.append(wr(line))
                     line = ""
@@ -448,7 +448,7 @@ def parse(handle):
                     record.wa.append(wa(line))
                     for line in handle:
                         line = line.strip()
-                        if line == '}':
+                        if line == "}":
                             break
                         record.wa[-1].info.append(line)
                     line = ""
@@ -468,7 +468,7 @@ def parse(handle):
                                 if line.endswith("C}"):
                                     break
                                 record.ct[-1].comment.append(line)
-                        elif line == '}':
+                        elif line == "}":
                             break
                         else:
                             record.ct[-1].info.append(line)
@@ -476,7 +476,7 @@ def parse(handle):
                 else:
                     break
 
-            if not line.startswith('RD'):  # another read?
+            if not line.startswith("RD"):  # another read?
                 break
 
         yield record
@@ -556,7 +556,7 @@ def read(handle):
         raise ValueError("Premature end of file")
 
     # check if the file starts correctly
-    if not line.startswith('AS'):
+    if not line.startswith("AS"):
         raise ValueError("File does not start with 'AS'.")
 
     words = line.split()

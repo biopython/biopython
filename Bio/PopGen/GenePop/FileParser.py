@@ -73,34 +73,34 @@ class FileRecord(object):
         Marker length will be 3.
         """
         marker_len = 3
-        rep = [self.comment_line + '\n']
-        rep.append('\n'.join(self.loci_list) + '\n')
+        rep = [self.comment_line + "\n"]
+        rep.append("\n".join(self.loci_list) + "\n")
         current_pop = self.current_pop
         current_ind = self.current_ind
         self._handle.seek(0)
         self.skip_header()
-        rep.append('Pop\n')
+        rep.append("Pop\n")
         more = True
         while more:
             res = self.get_individual()
             if res is True:
-                rep.append('Pop\n')
+                rep.append("Pop\n")
             elif res is False:
                 more = False
             else:
                 name, markers = res
                 rep.append(name)
-                rep.append(',')
+                rep.append(",")
                 for marker in markers:
-                    rep.append(' ')
+                    rep.append(" ")
                     for al in marker:
                         if al is None:
-                            al = '0'
+                            al = "0"
                         aStr = str(al)
                         while len(aStr) < marker_len:
-                            aStr = "".join(['0', aStr])
+                            aStr = "".join(["0", aStr])
                         rep.append(aStr)
-                rep.append('\n')
+                rep.append("\n")
         self.seek_position(current_pop, current_ind)
         return "".join(rep)
 
@@ -111,16 +111,16 @@ class FileRecord(object):
         # We can now have one loci per line or all loci in a single line
         # separated by either space or comma+space...
         # We will remove all commas on loci... that should not be a problem
-        sample_loci_line = self._handle.readline().rstrip().replace(',', '')
-        all_loci = sample_loci_line.split(' ')
+        sample_loci_line = self._handle.readline().rstrip().replace(",", "")
+        all_loci = sample_loci_line.split(" ")
         self.loci_list.extend(all_loci)
         for line in self._handle:
             line = line.rstrip()
-            if line.upper() == 'POP':
+            if line.upper() == "POP":
                 break
             self.loci_list.append(line)
         else:
-            raise ValueError('No population data found, file probably not GenePop related')
+            raise ValueError("No population data found, file probably not GenePop related")
         # self._after_pop = True
         self.current_pop = 0
         self.current_ind = 0
@@ -156,7 +156,7 @@ class FileRecord(object):
             if line == "":
                 return False
             line = line.rstrip()
-            if line.upper() == 'POP':
+            if line.upper() == "POP":
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -173,7 +173,7 @@ class FileRecord(object):
         """
         for line in self._handle:
             line = line.rstrip()
-            if line.upper() == 'POP':
+            if line.upper() == "POP":
                 self.current_pop += 1
                 self.current_ind = 0
                 return True
@@ -214,15 +214,15 @@ class FileRecord(object):
                         name, markers = l_parser
                         f.write(name + ",")
                         for marker in markers:
-                            f.write(' ')
+                            f.write(" ")
                             for al in marker:
                                 if al is None:
-                                    al = '0'
+                                    al = "0"
                                 aStr = str(al)
                                 while len(aStr) < 3:
-                                    aStr = "".join(['0', aStr])
+                                    aStr = "".join(["0", aStr])
                                 f.write(aStr)
-                        f.write('\n')
+                        f.write("\n")
 
                 l_parser = old_rec.get_individual()
 
@@ -255,15 +255,15 @@ class FileRecord(object):
                             marker_pos += 1
                             continue
                         marker_pos += 1
-                        f.write(' ')
+                        f.write(" ")
                         for al in marker:
                             if al is None:
-                                al = '0'
+                                al = "0"
                             aStr = str(al)
                             while len(aStr) < 3:
-                                aStr = "".join(['0', aStr])
+                                aStr = "".join(["0", aStr])
                             f.write(aStr)
-                    f.write('\n')
+                    f.write("\n")
 
                 l_parser = old_rec.get_individual()
 
@@ -301,15 +301,15 @@ class FileRecord(object):
                             marker_pos += 1
                             continue
                         marker_pos += 1
-                        f.write(' ')
+                        f.write(" ")
                         for al in marker:
                             if al is None:
-                                al = '0'
+                                al = "0"
                             aStr = str(al)
                             while len(aStr) < 3:
-                                aStr = "".join(['0', aStr])
+                                aStr = "".join(["0", aStr])
                             f.write(aStr)
-                    f.write('\n')
+                    f.write("\n")
 
                 l_parser = old_rec.get_individual()
 

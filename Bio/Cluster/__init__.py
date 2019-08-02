@@ -24,18 +24,18 @@ except ImportError:
 
 from . import _cluster
 
-__all__ = ('Node',
-           'Tree',
-           'kcluster',
-           'kmedoids',
-           'treecluster',
-           'somcluster',
-           'clusterdistance',
-           'clustercentroids',
-           'distancematrix',
-           'pca',
-           'Record',
-           'read')
+__all__ = ("Node",
+           "Tree",
+           "kcluster",
+           "kmedoids",
+           "treecluster",
+           "somcluster",
+           "clusterdistance",
+           "clustercentroids",
+           "distancematrix",
+           "pca",
+           "Record",
+           "read")
 
 
 __version__ = _cluster.version()
@@ -69,13 +69,13 @@ class Tree(_cluster.Tree):
 
         """
         n = len(self) + 1
-        indices = numpy.ones(n, dtype='intc')
+        indices = numpy.ones(n, dtype="intc")
         if order is None:
-            order = numpy.ones(n, dtype='d')
+            order = numpy.ones(n, dtype="d")
         elif isinstance(order, numpy.ndarray):
-            order = numpy.require(order, dtype='d', requirements='C')
+            order = numpy.require(order, dtype="d", requirements="C")
         else:
-            order = numpy.array(order, dtype='d')
+            order = numpy.array(order, dtype="d")
         _cluster.Tree.sort(self, indices, order)
         return indices
 
@@ -90,7 +90,7 @@ class Tree(_cluster.Tree):
          - nclusters: The desired number of clusters.
         """
         n = len(self) + 1
-        indices = numpy.ones(n, dtype='intc')
+        indices = numpy.ones(n, dtype="intc")
         if nclusters is None:
             nclusters = n
         _cluster.Tree.cut(self, indices, nclusters)
@@ -98,7 +98,7 @@ class Tree(_cluster.Tree):
 
 
 def kcluster(data, nclusters=2, mask=None, weight=None, transpose=False,
-             npass=1, method='a', dist='e', initialid=None):
+             npass=1, method="a", dist="e", initialid=None):
     """Perform k-means clustering.
 
     This function performs k-means clustering on the values in data, and
@@ -226,8 +226,8 @@ def kmedoids(distance, nclusters=2, npass=1, initialid=None):
     return clusterid, error, nfound
 
 
-def treecluster(data, mask=None, weight=None, transpose=False, method='m',
-                dist='e', distancematrix=None):
+def treecluster(data, mask=None, weight=None, transpose=False, method="m",
+                dist="e", distancematrix=None):
     """Perform hierarchical clustering, and return a Tree object.
 
     This function implements the pairwise single, complete, centroid, and
@@ -299,9 +299,9 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     result. See the description of the Tree class for more information.
     """
     if data is None and distancematrix is None:
-        raise ValueError('use either data or distancematrix')
+        raise ValueError("use either data or distancematrix")
     if data is not None and distancematrix is not None:
-        raise ValueError('use either data or distancematrix; do not use both')
+        raise ValueError("use either data or distancematrix; do not use both")
     if data is not None:
         data = __check_data(data)
         shape = data.shape
@@ -311,9 +311,9 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
     if distancematrix is not None:
         distancematrix = __check_distancematrix(distancematrix)
         if mask is not None:
-            raise ValueError('mask is ignored if distancematrix is used')
+            raise ValueError("mask is ignored if distancematrix is used")
         if weight is not None:
-            raise ValueError('weight is ignored if distancematrix is used')
+            raise ValueError("weight is ignored if distancematrix is used")
     tree = Tree()
     _cluster.treecluster(tree, data, mask, weight, transpose, method, dist,
                          distancematrix)
@@ -321,7 +321,7 @@ def treecluster(data, mask=None, weight=None, transpose=False, method='m',
 
 
 def somcluster(data, mask=None, weight=None, transpose=False,
-               nxgrid=2, nygrid=1, inittau=0.02, niter=1, dist='e'):
+               nxgrid=2, nygrid=1, inittau=0.02, niter=1, dist="e"):
     """Calculate a Self-Organizing Map.
 
     This function implements a Self-Organizing Map on a rectangular grid.
@@ -373,15 +373,15 @@ def somcluster(data, mask=None, weight=None, transpose=False,
         raise ValueError("nxgrid should be a positive integer (default is 2)")
     if nygrid < 1:
         raise ValueError("nygrid should be a positive integer (default is 1)")
-    clusterids = numpy.ones((nitems, 2), dtype='intc')
-    celldata = numpy.empty((nxgrid, nygrid, ndata), dtype='d')
+    clusterids = numpy.ones((nitems, 2), dtype="intc")
+    celldata = numpy.empty((nxgrid, nygrid, ndata), dtype="d")
     _cluster.somcluster(clusterids, celldata, data, mask, weight, transpose,
                         inittau, niter, dist)
     return clusterids, celldata
 
 
 def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
-                    method='a', dist='e', transpose=False):
+                    method="a", dist="e", transpose=False):
     """Calculate and return the distance between two clusters.
 
     Keyword arguments:
@@ -429,7 +429,7 @@ def clusterdistance(data, mask=None, weight=None, index1=None, index2=None,
                                     method, dist, transpose)
 
 
-def clustercentroids(data, mask=None, clusterid=None, method='a',
+def clustercentroids(data, mask=None, clusterid=None, method="a",
                      transpose=False):
     """Calculate and return the centroid of each cluster.
 
@@ -462,13 +462,13 @@ def clustercentroids(data, mask=None, clusterid=None, method='a',
     mask = __check_mask(mask, data.shape)
     if clusterid is None:
         n = data.shape[1] if transpose else data.shape[0]
-        clusterid = numpy.zeros(n, dtype='intc')
+        clusterid = numpy.zeros(n, dtype="intc")
     else:
-        clusterid = numpy.require(clusterid, dtype='intc', requirements='C')
+        clusterid = numpy.require(clusterid, dtype="intc", requirements="C")
     return _cluster.clustercentroids(data, mask, clusterid, method, transpose)
 
 
-def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
+def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
     """Calculate and return a distance matrix from the data.
 
     This function returns the distance matrix calculated from the data.
@@ -527,7 +527,7 @@ def distancematrix(data, mask=None, weight=None, transpose=False, dist='e'):
     else:
         nitems, ndata = shape
     weight = __check_weight(weight, ndata)
-    matrix = [numpy.empty(i, dtype='d') for i in range(nitems)]
+    matrix = [numpy.empty(i, dtype="d") for i in range(nitems)]
     _cluster.distancematrix(data, mask, weight, transpose, dist, matrix)
     return matrix
 
@@ -564,10 +564,10 @@ def pca(data):
     data = __check_data(data)
     nrows, ncols = data.shape
     nmin = min(nrows, ncols)
-    columnmean = numpy.empty(ncols, dtype='d')
-    pc = numpy.empty((nmin, ncols), dtype='d')
-    coordinates = numpy.empty((nrows, nmin), dtype='d')
-    eigenvalues = numpy.empty(nmin, dtype='d')
+    columnmean = numpy.empty(ncols, dtype="d")
+    pc = numpy.empty((nmin, ncols), dtype="d")
+    coordinates = numpy.empty((nrows, nmin), dtype="d")
+    eigenvalues = numpy.empty(nmin, dtype="d")
     _cluster.pca(data, columnmean, coordinates, pc, eigenvalues)
     return columnmean, coordinates, pc, eigenvalues
 
@@ -687,7 +687,7 @@ class Record(object):
         if self.gorder:
             self.gorder = numpy.array(self.gorder)
 
-    def treecluster(self, transpose=False, method='m', dist='e'):
+    def treecluster(self, transpose=False, method="m", dist="e"):
         """Apply hierarchical clustering and return a Tree object.
 
         The pairwise single, complete, centroid, and average linkage
@@ -722,7 +722,7 @@ class Record(object):
                            dist)
 
     def kcluster(self, nclusters=2, transpose=False, npass=1,
-                 method='a', dist='e', initialid=None):
+                 method="a", dist="e", initialid=None):
         """Apply k-means or k-median clustering.
 
         This method returns a tuple (clusterid, error, nfound).
@@ -770,7 +770,7 @@ class Record(object):
                         npass, method, dist, initialid)
 
     def somcluster(self, transpose=False, nxgrid=2, nygrid=1, inittau=0.02,
-                   niter=1, dist='e'):
+                   niter=1, dist="e"):
         """Calculate a self-organizing map on a rectangular grid.
 
         The somcluster method returns a tuple (clusterid, celldata).
@@ -812,7 +812,7 @@ class Record(object):
         return somcluster(self.data, self.mask, weight, transpose,
                           nxgrid, nygrid, inittau, niter, dist)
 
-    def clustercentroids(self, clusterid=None, method='a', transpose=False):
+    def clustercentroids(self, clusterid=None, method="a", transpose=False):
         """Calculate the cluster centroids and return a tuple (cdata, cmask).
 
         The centroid is defined as either the mean or the median over all
@@ -841,7 +841,7 @@ class Record(object):
         return clustercentroids(self.data, self.mask, clusterid, method,
                                 transpose)
 
-    def clusterdistance(self, index1=0, index2=0, method='a', dist='e',
+    def clusterdistance(self, index1=0, index2=0, method="a", dist="e",
                         transpose=False):
         """Calculate the distance between two clusters.
 
@@ -884,7 +884,7 @@ class Record(object):
         return clusterdistance(self.data, self.mask, weight,
                                index1, index2, method, dist, transpose)
 
-    def distancematrix(self, transpose=False, dist='e'):
+    def distancematrix(self, transpose=False, dist="e"):
         """Calculate the distance matrix and return it as a list of arrays.
 
         Keyword arguments:
@@ -1007,7 +1007,7 @@ class Record(object):
         index = tree.sort(order)
         nnodes = len(tree)
         with open(jobname + extension, "w") as outputfile:
-            nodeID = [''] * nnodes
+            nodeID = [""] * nnodes
             nodedist = numpy.array([node.distance for node in tree[:]])
             for nodeindex in range(nnodes):
                 min1 = tree[nodeindex].left
@@ -1062,7 +1062,7 @@ class Record(object):
         else:
             genename = self.genename
         (ngenes, nexps) = numpy.shape(self.data)
-        with open(jobname + '.cdt', 'w') as outputfile:
+        with open(jobname + ".cdt", "w") as outputfile:
             if self.mask is not None:
                 mask = self.mask
             else:
@@ -1076,38 +1076,38 @@ class Record(object):
             else:
                 eweight = numpy.ones(nexps)
             if gid:
-                outputfile.write('GID\t')
+                outputfile.write("GID\t")
             outputfile.write(self.uniqid)
-            outputfile.write('\tNAME\tGWEIGHT')
+            outputfile.write("\tNAME\tGWEIGHT")
             # Now add headers for data columns.
             for j in expindex:
-                outputfile.write('\t%s' % self.expid[j])
-            outputfile.write('\n')
+                outputfile.write("\t%s" % self.expid[j])
+            outputfile.write("\n")
             if aid:
                 outputfile.write("AID")
                 if gid:
-                    outputfile.write('\t')
+                    outputfile.write("\t")
                 outputfile.write("\t\t")
                 for j in expindex:
-                    outputfile.write('\tARRY%dX' % j)
-                outputfile.write('\n')
-            outputfile.write('EWEIGHT')
+                    outputfile.write("\tARRY%dX" % j)
+                outputfile.write("\n")
+            outputfile.write("EWEIGHT")
             if gid:
-                outputfile.write('\t')
-            outputfile.write('\t\t')
+                outputfile.write("\t")
+            outputfile.write("\t\t")
             for j in expindex:
-                outputfile.write('\t%f' % eweight[j])
-            outputfile.write('\n')
+                outputfile.write("\t%f" % eweight[j])
+            outputfile.write("\n")
             for i in geneindex:
                 if gid:
-                    outputfile.write('GENE%dX\t' % i)
+                    outputfile.write("GENE%dX\t" % i)
                 outputfile.write("%s\t%s\t%f" %
                                  (self.geneid[i], genename[i], gweight[i]))
                 for j in expindex:
-                    outputfile.write('\t')
+                    outputfile.write("\t")
                     if mask[i, j]:
                         outputfile.write(str(self.data[i, j]))
-                outputfile.write('\n')
+                outputfile.write("\n")
 
 
 def read(handle):
@@ -1124,9 +1124,9 @@ def read(handle):
 
 def __check_data(data):
     if isinstance(data, numpy.ndarray):
-        data = numpy.require(data, dtype='d', requirements='C')
+        data = numpy.require(data, dtype="d", requirements="C")
     else:
-        data = numpy.array(data, dtype='d')
+        data = numpy.array(data, dtype="d")
     if data.ndim != 2:
         raise ValueError("data should be 2-dimensional")
     return data
@@ -1134,53 +1134,53 @@ def __check_data(data):
 
 def __check_mask(mask, shape):
     if mask is None:
-        return numpy.ones(shape, dtype='intc')
+        return numpy.ones(shape, dtype="intc")
     elif isinstance(mask, numpy.ndarray):
-        return numpy.require(mask, dtype='intc', requirements='C')
+        return numpy.require(mask, dtype="intc", requirements="C")
     else:
-        return numpy.array(mask, dtype='intc')
+        return numpy.array(mask, dtype="intc")
 
 
 def __check_weight(weight, ndata):
     if weight is None:
-        return numpy.ones(ndata, dtype='d')
+        return numpy.ones(ndata, dtype="d")
     elif isinstance(weight, numpy.ndarray):
-        return numpy.require(weight, dtype='d', requirements='C')
+        return numpy.require(weight, dtype="d", requirements="C")
     else:
-        return numpy.array(weight, dtype='d')
+        return numpy.array(weight, dtype="d")
 
 
 def __check_initialid(initialid, npass, nitems):
     if initialid is None:
         if npass <= 0:
             raise ValueError("npass should be a positive integer")
-        clusterid = numpy.empty(nitems, dtype='intc')
+        clusterid = numpy.empty(nitems, dtype="intc")
     else:
         npass = 0
-        clusterid = numpy.array(initialid, dtype='intc')
+        clusterid = numpy.array(initialid, dtype="intc")
     return clusterid, npass
 
 
 def __check_index(index):
     if index is None:
-        return numpy.zeros(1, dtype='intc')
+        return numpy.zeros(1, dtype="intc")
     elif isinstance(index, numbers.Integral):
-        return numpy.array([index], dtype='intc')
+        return numpy.array([index], dtype="intc")
     elif isinstance(index, numpy.ndarray):
-        return numpy.require(index, dtype='intc', requirements='C')
+        return numpy.require(index, dtype="intc", requirements="C")
     else:
-        return numpy.array(index, dtype='intc')
+        return numpy.array(index, dtype="intc")
 
 
 def __check_distancematrix(distancematrix):
     if distancematrix is None:
         return distancematrix
     elif isinstance(distancematrix, numpy.ndarray):
-        distancematrix = numpy.require(distancematrix, dtype='d', requirements='C')
+        distancematrix = numpy.require(distancematrix, dtype="d", requirements="C")
         return distancematrix
     else:
         try:
-            distancematrix = numpy.array(distancematrix, dtype='d')
+            distancematrix = numpy.array(distancematrix, dtype="d")
         except ValueError:
             pass
         else:
@@ -1189,9 +1189,9 @@ def __check_distancematrix(distancematrix):
         d = [None] * n
         for i, row in enumerate(distancematrix):
             if isinstance(row, numpy.ndarray):
-                row = numpy.require(row, dtype='d', requirements='C')
+                row = numpy.require(row, dtype="d", requirements="C")
             else:
-                row = numpy.array(row, dtype='d')
+                row = numpy.array(row, dtype="d")
             if row.ndim != 1:
                 raise ValueError("row %d is not one-dimensional" % i)
             m = len(row)

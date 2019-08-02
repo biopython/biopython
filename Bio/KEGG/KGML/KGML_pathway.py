@@ -64,25 +64,25 @@ class Pathway(object):
 
     def __init__(self):
         """Initialize the class."""
-        self._name = ''
-        self.org = ''
+        self._name = ""
+        self.org = ""
         self._number = None
-        self.title = ''
-        self.image = ''
-        self.link = ''
+        self.title = ""
+        self.image = ""
+        self.link = ""
         self.entries = {}
         self._reactions = {}
         self._relations = set()
 
     def get_KGML(self):
         """Return the pathway as a string in prettified KGML format."""
-        header = '\n'.join(['<?xml version="1.0"?>',
-                            '<!DOCTYPE pathway SYSTEM ' +
+        header = "\n".join(['<?xml version="1.0"?>',
+                            "<!DOCTYPE pathway SYSTEM " +
                             '"http://www.genome.jp/kegg/xml/' +
                             'KGML_v0.7.1_.dtd">',
-                            '<!-- Created by KGML_Pathway.py %s -->' %
+                            "<!-- Created by KGML_Pathway.py %s -->" %
                             time.asctime()])
-        rough_xml = header + _as_string(ET.tostring(self.element, 'utf-8'))
+        rough_xml = header + _as_string(ET.tostring(self.element, "utf-8"))
         reparsed = minidom.parseString(rough_xml)
         return reparsed.toprettyxml(indent="  ")
 
@@ -138,25 +138,25 @@ class Pathway(object):
 
     def __str__(self):
         """Return a readable summary description string."""
-        outstr = ['Pathway: %s' % self.title,
-                  'KEGG ID: %s' % self.name,
-                  'Image file: %s' % self.image,
-                  'Organism: %s' % self.org,
-                  'Entries: %d' % len(self.entries),
-                  'Entry types:']
-        for t in ['ortholog', 'enzyme', 'reaction',
-                  'gene', 'group', 'compound', 'map']:
+        outstr = ["Pathway: %s" % self.title,
+                  "KEGG ID: %s" % self.name,
+                  "Image file: %s" % self.image,
+                  "Organism: %s" % self.org,
+                  "Entries: %d" % len(self.entries),
+                  "Entry types:"]
+        for t in ["ortholog", "enzyme", "reaction",
+                  "gene", "group", "compound", "map"]:
             etype = [e for e in self.entries.values() if e.type == t]
             if len(etype):
-                outstr.append('\t%s: %d' % (t, len(etype)))
-        return '\n'.join(outstr) + '\n'
+                outstr.append("\t%s: %d" % (t, len(etype)))
+        return "\n".join(outstr) + "\n"
 
     # Assert correct formatting of the pathway name, and other attributes
     def _getname(self):
         return self._name
 
     def _setname(self, value):
-        if not value.startswith('path:'):
+        if not value.startswith("path:"):
             raise ValueError("Pathway name should begin with 'path:', "
                              "got %s" % value)
         self._name = value
@@ -180,22 +180,22 @@ class Pathway(object):
     @property
     def compounds(self):
         """Get a list of entries of type compound."""
-        return [e for e in self.entries.values() if e.type == 'compound']
+        return [e for e in self.entries.values() if e.type == "compound"]
 
     @property
     def maps(self):
         """Get a list of entries of type map."""
-        return [e for e in self.entries.values() if e.type == 'map']
+        return [e for e in self.entries.values() if e.type == "map"]
 
     @property
     def orthologs(self):
         """Get a list of entries of type ortholog."""
-        return [e for e in self.entries.values() if e.type == 'ortholog']
+        return [e for e in self.entries.values() if e.type == "ortholog"]
 
     @property
     def genes(self):
         """Get a list of entries of type gene."""
-        return [e for e in self.entries.values() if e.type == 'gene']
+        return [e for e in self.entries.values() if e.type == "gene"]
 
     @property
     def reactions(self):
@@ -216,13 +216,13 @@ class Pathway(object):
     def element(self):
         """Return the Pathway as a valid KGML element."""
         # The root is this Pathway element
-        pathway = ET.Element('pathway')
-        pathway.attrib = {'name': self._name,
-                          'org': self.org,
-                          'number': str(self._number),
-                          'title': self.title,
-                          'image': self.image,
-                          'link': self.link,
+        pathway = ET.Element("pathway")
+        pathway.attrib = {"name": self._name,
+                          "org": self.org,
+                          "number": str(self._number),
+                          "title": self.title,
+                          "image": self.image,
+                          "link": self.link,
                           }
         # We add the Entries in node ID order
         for eid, entry in sorted(self.entries.items()):
@@ -277,9 +277,9 @@ class Entry(object):
         """Initialize the class."""
         self._id = None
         self._names = []
-        self.type = ''
-        self.image = ''
-        self.link = ''
+        self.type = ""
+        self.image = ""
+        self.link = ""
         self.graphics = []
         self.components = set()
         self.alt = []
@@ -288,14 +288,14 @@ class Entry(object):
 
     def __str__(self):
         """Return readable descriptive string."""
-        outstr = ['Entry node ID: %d' % self.id,
-                  'Names: %s' % self.name,
-                  'Type: %s' % self.type,
-                  'Components: %s' % self.components,
-                  'Reactions: %s' % self.reaction,
-                  'Graphics elements: %d %s' % (len(self.graphics),
+        outstr = ["Entry node ID: %d" % self.id,
+                  "Names: %s" % self.name,
+                  "Type: %s" % self.type,
+                  "Components: %s" % self.components,
+                  "Reactions: %s" % self.reaction,
+                  "Graphics elements: %d %s" % (len(self.graphics),
                                                 self.graphics)]
-        return '\n'.join(outstr) + '\n'
+        return "\n".join(outstr) + "\n"
 
     def add_component(self, element):
         """Add an element to the entry.
@@ -323,7 +323,7 @@ class Entry(object):
 
     # Names may be given as a space-separated list of KEGG identifiers
     def _getname(self):
-        return ' '.join(self._names)
+        return " ".join(self._names)
 
     def _setname(self, value):
         self._names = value.split()
@@ -335,7 +335,7 @@ class Entry(object):
 
     # Reactions may be given as a space-separated list of KEGG identifiers
     def _getreaction(self):
-        return ' '.join(self._reactions)
+        return " ".join(self._reactions)
 
     def _setreaction(self, value):
         self._reactions = value.split()
@@ -361,14 +361,14 @@ class Entry(object):
     def element(self):
         """Return the Entry as a valid KGML element."""
         # The root is this Entry element
-        entry = ET.Element('entry')
-        entry.attrib = {'id': str(self._id),
-                        'name': self.name,
-                        'link': self.link,
-                        'type': self.type
+        entry = ET.Element("entry")
+        entry.attrib = {"id": str(self._id),
+                        "name": self.name,
+                        "link": self.link,
+                        "type": self.type
                         }
         if len(self._reactions):
-            entry.attrib['reaction'] = self.reaction
+            entry.attrib["reaction"] = self.reaction
         if len(self.graphics):
             for g in self.graphics:
                 entry.append(g.element)
@@ -434,8 +434,8 @@ class Component(object):
     def element(self):
         """Return the Component as a valid KGML element."""
         # The root is this Component element
-        component = ET.Element('component')
-        component.attrib = {'id': str(self._id)}
+        component = ET.Element("component")
+        component.attrib = {"id": str(self._id)}
         return component
 
 
@@ -467,15 +467,15 @@ class Graphics(object):
 
     def __init__(self, parent):
         """Initialize the class."""
-        self.name = ''
+        self.name = ""
         self._x = None
         self._y = None
         self._coords = None
-        self.type = ''
+        self.type = ""
         self._width = None
         self._height = None
-        self.fgcolor = ''
-        self.bgcolor = ''
+        self.fgcolor = ""
+        self.bgcolor = ""
         self._parent = parent
 
     # We make sure that the XY coordinates, width and height are numbers
@@ -528,7 +528,7 @@ class Graphics(object):
         return self._coords
 
     def _setcoords(self, value):
-        clist = [int(e) for e in value.split(',')]
+        clist = [int(e) for e in value.split(",")]
         self._coords = [tuple(clist[i:i + 2]) for i in range(0, len(clist), 2)]
 
     def _delcoords(self):
@@ -541,8 +541,8 @@ class Graphics(object):
         return self._fgcolor
 
     def _setfgcolor(self, value):
-        if value == 'none':
-            self._fgcolor = '#000000'  # this default defined in KGML spec
+        if value == "none":
+            self._fgcolor = "#000000"  # this default defined in KGML spec
         else:
             self._fgcolor = value
 
@@ -555,8 +555,8 @@ class Graphics(object):
         return self._bgcolor
 
     def _setbgcolor(self, value):
-        if value == 'none':
-            self._bgcolor = '#000000'  # this default defined in KGML spec
+        if value == "none":
+            self._bgcolor = "#000000"  # this default defined in KGML spec
         else:
             self._bgcolor = value
 
@@ -569,26 +569,26 @@ class Graphics(object):
     def element(self):
         """Return the Graphics as a valid KGML element."""
         # The root is this Component element
-        graphics = ET.Element('graphics')
+        graphics = ET.Element("graphics")
         if isinstance(self.fgcolor, str):  # Assumes that string is hexstring
             fghex = self.fgcolor
         else:  # Assumes ReportLab Color object
-            fghex = '#' + self.fgcolor.hexval()[2:]
+            fghex = "#" + self.fgcolor.hexval()[2:]
         if isinstance(self.bgcolor, str):  # Assumes that string is hexstring
             bghex = self.bgcolor
         else:  # Assumes ReportLab Color object
-            bghex = '#' + self.bgcolor.hexval()[2:]
-        graphics.attrib = {'name': self.name,
-                           'type': self.type,
-                           'fgcolor': fghex,
-                           'bgcolor': bghex}
-        for (n, attr) in [('x', '_x'), ('y', '_y'),
-                          ('width', '_width'), ('height', '_height')]:
+            bghex = "#" + self.bgcolor.hexval()[2:]
+        graphics.attrib = {"name": self.name,
+                           "type": self.type,
+                           "fgcolor": fghex,
+                           "bgcolor": bghex}
+        for (n, attr) in [("x", "_x"), ("y", "_y"),
+                          ("width", "_width"), ("height", "_height")]:
             if getattr(self, attr) is not None:
                 graphics.attrib[n] = str(getattr(self, attr))
-        if self.type == 'line':  # Need to write polycoords
-            graphics.attrib['coords'] = \
-                ','.join([str(e) for e in chain.from_iterable(self.coords)])
+        if self.type == "line":  # Need to write polycoords
+            graphics.attrib["coords"] = \
+                ",".join([str(e) for e in chain.from_iterable(self.coords)])
         return graphics
 
     @property
@@ -600,7 +600,7 @@ class Graphics(object):
         circle, rectangle, roundrectangle elements, so we have to
         adjust for the relevant width/height.
         """
-        if self.type == 'line':
+        if self.type == "line":
             xlist = [x for x, y in self.coords]
             ylist = [y for x, y in self.coords]
             return [(min(xlist), min(ylist)),
@@ -636,22 +636,22 @@ class Reaction(object):
         """Initialize the class."""
         self._id = None
         self._names = []
-        self.type = ''
+        self.type = ""
         self._substrates = set()
         self._products = set()
         self._pathway = None
 
     def __str__(self):
         """Return an informative human-readable string."""
-        outstr = ['Reaction node ID: %s' % self.id,
-                  'Reaction KEGG IDs: %s' % self.name,
-                  'Type: %s' % self.type,
-                  'Substrates: %s' %
-                  ','.join([s.name for s in self.substrates]),
-                  'Products: %s' %
-                  ','.join([s.name for s in self.products]),
+        outstr = ["Reaction node ID: %s" % self.id,
+                  "Reaction KEGG IDs: %s" % self.name,
+                  "Type: %s" % self.type,
+                  "Substrates: %s" %
+                  ",".join([s.name for s in self.substrates]),
+                  "Products: %s" %
+                  ",".join([s.name for s in self.products]),
                   ]
-        return '\n'.join(outstr) + '\n'
+        return "\n".join(outstr) + "\n"
 
     def add_substrate(self, substrate_id):
         """Add a substrate, identified by its node ID, to the reaction."""
@@ -685,7 +685,7 @@ class Reaction(object):
 
     # Names may show up as a space-separated list of several KEGG identifiers
     def _getnames(self):
-        return ' '.join(self._names)
+        return " ".join(self._names)
 
     def _setnames(self, value):
         self._names.extend(value.split())
@@ -721,19 +721,19 @@ class Reaction(object):
     def element(self):
         """Return KGML element describing the Reaction."""
         # The root is this Relation element
-        reaction = ET.Element('reaction')
-        reaction.attrib = {'id': str(self.id),
-                           'name': self.name,
-                           'type': self.type}
+        reaction = ET.Element("reaction")
+        reaction.attrib = {"id": str(self.id),
+                           "name": self.name,
+                           "type": self.type}
         for s in self._substrates:
-            substrate = ET.Element('substrate')
-            substrate.attrib['id'] = str(s)
-            substrate.attrib['name'] = self._pathway.entries[s].name
+            substrate = ET.Element("substrate")
+            substrate.attrib["id"] = str(s)
+            substrate.attrib["name"] = self._pathway.entries[s].name
             reaction.append(substrate)
         for p in self._products:
-            product = ET.Element('product')
-            product.attrib['id'] = str(p)
-            product.attrib['name'] = self._pathway.entries[p].name
+            product = ET.Element("product")
+            product.attrib["id"] = str(p)
+            product.attrib["name"] = self._pathway.entries[p].name
             reaction.append(product)
         return reaction
 
@@ -761,18 +761,18 @@ class Relation(object):
         """Initialize the class."""
         self._entry1 = None
         self._entry2 = None
-        self.type = ''
+        self.type = ""
         self.subtypes = []
         self._pathway = None
 
     def __str__(self):
         """Return a useful human-readable string."""
-        outstr = ['Relation (subtypes: %d):' % len(self.subtypes),
-                  'Entry1:', str(self.entry1),
-                  'Entry2:', str(self.entry2)]
+        outstr = ["Relation (subtypes: %d):" % len(self.subtypes),
+                  "Entry1:", str(self.entry1),
+                  "Entry2:", str(self.entry2)]
         for s in self.subtypes:
-            outstr.extend(['Subtype: %s' % s[0], str(s[1])])
-        return '\n'.join(outstr)
+            outstr.extend(["Subtype: %s" % s[0], str(s[1])])
+        return "\n".join(outstr)
 
     # Properties entry1 and entry2
     def _getentry1(self):
@@ -805,12 +805,12 @@ class Relation(object):
     def element(self):
         """Return KGML element describing the Relation."""
         # The root is this Relation element
-        relation = ET.Element('relation')
-        relation.attrib = {'entry1': str(self._entry1),
-                           'entry2': str(self._entry2),
-                           'type': self.type}
+        relation = ET.Element("relation")
+        relation.attrib = {"entry1": str(self._entry1),
+                           "entry2": str(self._entry2),
+                           "type": self.type}
         for (name, value) in self.subtypes:
-            subtype = ET.Element('subtype')
+            subtype = ET.Element("subtype")
             subtype.attrib[name] = str(value)
             relation.append(subtype)
         return relation

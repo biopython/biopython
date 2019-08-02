@@ -101,43 +101,43 @@ def SwissIterator(handle):
             if dbxref not in record.dbxrefs:
                 record.dbxrefs.append(dbxref)
         annotations = record.annotations
-        annotations['accessions'] = swiss_record.accessions
+        annotations["accessions"] = swiss_record.accessions
         if swiss_record.protein_existence:
-            annotations['protein_existence'] = swiss_record.protein_existence
+            annotations["protein_existence"] = swiss_record.protein_existence
         if swiss_record.created:
-            annotations['date'] = swiss_record.created[0]
-            annotations['sequence_version'] = swiss_record.created[1]
+            annotations["date"] = swiss_record.created[0]
+            annotations["sequence_version"] = swiss_record.created[1]
         if swiss_record.sequence_update:
             annotations[
-                'date_last_sequence_update'] = swiss_record.sequence_update[0]
-            annotations['sequence_version'] = swiss_record.sequence_update[1]
+                "date_last_sequence_update"] = swiss_record.sequence_update[0]
+            annotations["sequence_version"] = swiss_record.sequence_update[1]
         if swiss_record.annotation_update:
-            annotations['date_last_annotation_update'] = swiss_record.annotation_update[0]
-            annotations['entry_version'] = swiss_record.annotation_update[1]
+            annotations["date_last_annotation_update"] = swiss_record.annotation_update[0]
+            annotations["entry_version"] = swiss_record.annotation_update[1]
         if swiss_record.gene_name:
-            annotations['gene_name'] = swiss_record.gene_name
-        annotations['organism'] = swiss_record.organism.rstrip(".")
-        annotations['taxonomy'] = swiss_record.organism_classification
-        annotations['ncbi_taxid'] = swiss_record.taxonomy_id
+            annotations["gene_name"] = swiss_record.gene_name
+        annotations["organism"] = swiss_record.organism.rstrip(".")
+        annotations["taxonomy"] = swiss_record.organism_classification
+        annotations["ncbi_taxid"] = swiss_record.taxonomy_id
         if swiss_record.host_organism:
-            annotations['organism_host'] = swiss_record.host_organism
+            annotations["organism_host"] = swiss_record.host_organism
         if swiss_record.host_taxonomy_id:
-            annotations['host_ncbi_taxid'] = swiss_record.host_taxonomy_id
+            annotations["host_ncbi_taxid"] = swiss_record.host_taxonomy_id
         if swiss_record.comments:
-            annotations['comment'] = "\n".join(swiss_record.comments)
+            annotations["comment"] = "\n".join(swiss_record.comments)
         if swiss_record.references:
-            annotations['references'] = []
+            annotations["references"] = []
             for reference in swiss_record.references:
                 feature = SeqFeature.Reference()
                 feature.comment = " ".join("%s=%s;" % k_v for k_v in reference.comments)
                 for key, value in reference.references:
-                    if key == 'PubMed':
+                    if key == "PubMed":
                         feature.pubmed_id = value
-                    elif key == 'MEDLINE':
+                    elif key == "MEDLINE":
                         feature.medline_id = value
-                    elif key == 'DOI':
+                    elif key == "DOI":
                         pass
-                    elif key == 'AGRICOLA':
+                    elif key == "AGRICOLA":
                         pass
                     else:
                         raise ValueError(
@@ -145,7 +145,7 @@ def SwissIterator(handle):
                 feature.authors = reference.authors
                 feature.title = reference.title
                 feature.journal = reference.location
-                annotations['references'].append(feature)
+                annotations["references"].append(feature)
         if swiss_record.keywords:
-            record.annotations['keywords'] = swiss_record.keywords
+            record.annotations["keywords"] = swiss_record.keywords
         yield record

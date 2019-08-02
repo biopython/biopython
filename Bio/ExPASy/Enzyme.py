@@ -76,11 +76,11 @@ class Record(dict):
     def __init__(self):
         """Initialize the class."""
         dict.__init__(self)
-        self["ID"] = ''
-        self["DE"] = ''
+        self["ID"] = ""
+        self["DE"] = ""
         self["AN"] = []
-        self["CA"] = ''
-        self["CF"] = ''
+        self["CA"] = ""
+        self["CF"] = ""
         self["CC"] = []   # one comment per line
         self["PR"] = []
         self["DR"] = []
@@ -127,9 +127,9 @@ def __read(handle):
         elif key == "CA":
             record["CA"] += value
         elif key == "DR":
-            pair_data = value.rstrip(";").split(';')
+            pair_data = value.rstrip(";").split(";")
             for pair in pair_data:
-                t1, t2 = pair.split(',')
+                t1, t2 = pair.split(",")
                 row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
         elif key == "CF":
@@ -141,7 +141,7 @@ def __read(handle):
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
-        elif key == 'CC':
+        elif key == "CC":
             if value.startswith("-!- "):
                 record["CC"].append(value[4:])
             elif value.startswith("    ") and record["CC"]:

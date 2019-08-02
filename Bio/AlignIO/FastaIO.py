@@ -45,14 +45,14 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
     entries are prsent as a result of using the -X command line option.
     """
     align_stripped = alignment_seq_with_flanking.strip("-")
-    display_start = int(annotation['al_display_start'])
-    if int(annotation['al_start']) <= int(annotation['al_stop']):
-        start = int(annotation['al_start']) - display_start
-        end = int(annotation['al_stop']) - display_start + 1
+    display_start = int(annotation["al_display_start"])
+    if int(annotation["al_start"]) <= int(annotation["al_stop"]):
+        start = int(annotation["al_start"]) - display_start
+        end = int(annotation["al_stop"]) - display_start + 1
     else:
         # FASTA has flipped this sequence...
-        start = display_start - int(annotation['al_start'])
-        end = display_start - int(annotation['al_stop']) + 1
+        start = display_start - int(annotation["al_start"])
+        end = display_start - int(annotation["al_stop"]) + 1
 
     end += align_stripped.count("-")
     if start < 0 or start >= end or end > len(align_stripped):

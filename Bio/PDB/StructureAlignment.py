@@ -28,8 +28,8 @@ class StructureAlignment(object):
         """
         length = fasta_align.get_alignment_length()
         # Get the residues in the models
-        rl1 = Selection.unfold_entities(m1, 'R')
-        rl2 = Selection.unfold_entities(m2, 'R')
+        rl1 = Selection.unfold_entities(m1, "R")
+        rl2 = Selection.unfold_entities(m2, "R")
         # Residue positions
         p1 = 0
         p2 = 0

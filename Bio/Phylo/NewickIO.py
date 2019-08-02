@@ -23,17 +23,17 @@ class NewickError(Exception):
 
 
 tokens = [
-    (r"\(", 'open parens'),
-    (r"\)", 'close parens'),
-    (r"[^\s\(\)\[\]\'\:\;\,]+", 'unquoted node label'),
-    (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", 'edge length'),
-    (r"\,", 'comma'),
-    (r"\[(\\.|[^\]])*\]", 'comment'),
-    (r"\'(\\.|[^\'])*\'", 'quoted node label'),
-    (r"\;", 'semicolon'),
-    (r"\n", 'newline'),
+    (r"\(", "open parens"),
+    (r"\)", "close parens"),
+    (r"[^\s\(\)\[\]\'\:\;\,]+", "unquoted node label"),
+    (r"\:\ ?[+-]?[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?", "edge length"),
+    (r"\,", "comma"),
+    (r"\[(\\.|[^\]])*\]", "comment"),
+    (r"\'(\\.|[^\'])*\'", "quoted node label"),
+    (r"\;", "semicolon"),
+    (r"\n", "newline"),
 ]
-tokenizer = re.compile('(%s)' % '|'.join(token[0] for token in tokens))
+tokenizer = re.compile("(%s)" % "|".join(token[0] for token in tokens))
 token_dict = {name: re.compile(token) for token, name in tokens}
 
 
@@ -75,14 +75,14 @@ def _parse_confidence(text):
 
 
 def _format_comment(text):
-    return '[%s]' % (text.replace('[', '\\[').replace(']', '\\]'))
+    return "[%s]" % (text.replace("[", "\\[").replace("]", "\\]"))
 
 
 def _get_comment(clade):
-    if hasattr(clade, 'comment') and clade.comment:
+    if hasattr(clade, "comment") and clade.comment:
         return _format_comment(str(clade.comment))
     else:
-        return ''
+        return ""
 
 
 class Parser(object):
@@ -106,7 +106,7 @@ class Parser(object):
         self.values_are_confidence = values_are_confidence
         self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
-        buf = ''
+        buf = ""
         unicodeChecked = False
         unicodeLines = ("\xef", "\xff", "\xfe", "\x00")
         for line in self.handle:
@@ -119,9 +119,9 @@ class Parser(object):
                                       "ASCII before it can be parsed.")
                 unicodeChecked = True
             buf += line.rstrip()
-            if buf.endswith(';'):
+            if buf.endswith(";"):
                 yield self._parse_tree(buf)
-                buf = ''
+                buf = ""
         if buf:
             # Last tree is missing a terminal ';' character -- that's OK
             yield self._parse_tree(buf)
@@ -145,20 +145,20 @@ class Parser(object):
                 # quoted label; add characters to clade name
                 current_clade.name = token[1:-1]
 
-            elif token.startswith('['):
+            elif token.startswith("["):
                 # comment
                 current_clade.comment = token[1:-1]
                 if self.comments_are_confidence:
                     # Try to use this comment as a numeric support value
                     current_clade.confidence = _parse_confidence(current_clade.comment)
 
-            elif token == '(':
+            elif token == "(":
                 # start a new clade, which is a child of the current clade
                 current_clade = new_clade(current_clade)
                 entering_branch_length = False
                 lp_count += 1
 
-            elif token == ',':
+            elif token == ",":
                 # if the current clade is the root, then the external parentheses
                 # are missing and a new root should be created
                 if current_clade is root_clade:
@@ -169,19 +169,19 @@ class Parser(object):
                 current_clade = new_clade(parent)
                 entering_branch_length = False
 
-            elif token == ')':
+            elif token == ")":
                 # done adding children for this parent clade
                 parent = self.process_clade(current_clade)
                 if not parent:
-                    raise NewickError('Parenthesis mismatch.')
+                    raise NewickError("Parenthesis mismatch.")
                 current_clade = parent
                 entering_branch_length = False
                 rp_count += 1
 
-            elif token == ';':
+            elif token == ";":
                 break
 
-            elif token.startswith(':'):
+            elif token.startswith(":"):
                 # branch length or confidence
                 value = float(token[1:])
                 if self.values_are_confidence:
@@ -189,7 +189,7 @@ class Parser(object):
                 else:
                     current_clade.branch_length = value
 
-            elif token == '\n':
+            elif token == "\n":
                 pass
 
             else:
@@ -197,12 +197,12 @@ class Parser(object):
                 current_clade.name = token
 
         if not lp_count == rp_count:
-            raise NewickError('Number of open/close parentheses do not match.')
+            raise NewickError("Number of open/close parentheses do not match.")
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
             next_token = next(tokens)
-            raise NewickError('Text after semicolon in Newick tree: %s'
+            raise NewickError("Text after semicolon in Newick tree: %s"
                               % next_token.group())
         except StopIteration:
             pass
@@ -228,7 +228,7 @@ class Parser(object):
             if clade.confidence is not None:
                 clade.name = None
 
-        if hasattr(clade, 'parent'):
+        if hasattr(clade, "parent"):
             parent = clade.parent
             parent.clades.append(clade)
             del clade.parent
@@ -249,14 +249,14 @@ class Writer(object):
         """Write this instance's trees to a file handle."""
         count = 0
         for treestr in self.to_strings(**kwargs):
-            handle.write(treestr + '\n')
+            handle.write(treestr + "\n")
             count += 1
         return count
 
     def to_strings(self, confidence_as_branch_length=False,
                    branch_length_only=False, plain=False,
                    plain_newick=True, ladderize=None, max_confidence=1.0,
-                   format_confidence='%1.2f', format_branch_length='%1.5f'):
+                   format_confidence="%1.2f", format_branch_length="%1.5f"):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
         if confidence_as_branch_length or branch_length_only:
@@ -267,37 +267,37 @@ class Writer(object):
 
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
-            label = clade.name or ''
+            label = clade.name or ""
             if label:
-                unquoted_label = re.match(token_dict['unquoted node label'], label)
+                unquoted_label = re.match(token_dict["unquoted node label"], label)
                 if (not unquoted_label) or (unquoted_label.end() < len(label)):
                     label = "'%s'" % label.replace(
-                        '\\', '\\\\').replace("'", "\\'")
+                        "\\", "\\\\").replace("'", "\\'")
 
             if clade.is_terminal():    # terminal
                 return (label + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
-                return '(%s)%s' % (','.join(subtrees),
+                return "(%s)%s" % (",".join(subtrees),
                                    label + make_info_string(clade))
 
         # Convert each tree to a string
         for tree in self.trees:
-            if ladderize in ('left', 'LEFT', 'right', 'RIGHT'):
+            if ladderize in ("left", "LEFT", "right", "RIGHT"):
                 # Nexus compatibility shim, kind of
-                tree.ladderize(reverse=(ladderize in ('right', 'RIGHT')))
-            rawtree = newickize(tree.root) + ';'
+                tree.ladderize(reverse=(ladderize in ("right", "RIGHT")))
+            rawtree = newickize(tree.root) + ";"
             if plain_newick:
                 yield rawtree
                 continue
             # Nexus-style (?) notation before the raw Newick tree
-            treeline = ['tree', (tree.name or 'a_tree'), '=']
+            treeline = ["tree", (tree.name or "a_tree"), "="]
             if tree.weight != 1:
-                treeline.append('[&W%s]' % round(float(tree.weight), 3))
+                treeline.append("[&W%s]" % round(float(tree.weight), 3))
             if tree.rooted:
-                treeline.append('[&R]')
+                treeline.append("[&R]")
             treeline.append(rawtree)
-            yield ' '.join(treeline)
+            yield " ".join(treeline)
 
     def _info_factory(self, plain, confidence_as_branch_length,
                       branch_length_only, max_confidence, format_confidence,
@@ -313,25 +313,25 @@ class Writer(object):
             def make_info_string(clade, terminal=False):
                 if terminal:
                     # terminal branches have 100% support
-                    return (':' + format_confidence % max_confidence) + _get_comment(clade)
+                    return (":" + format_confidence % max_confidence) + _get_comment(clade)
                 else:
-                    return (':' + format_confidence % clade.confidence) + _get_comment(clade)
+                    return (":" + format_confidence % clade.confidence) + _get_comment(clade)
 
         elif branch_length_only:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
-                return (':' + format_branch_length % clade.branch_length) + _get_comment(clade)
+                return (":" + format_branch_length % clade.branch_length) + _get_comment(clade)
 
         else:
             # write support and branchlengths (e.g. .con tree of mrbayes)
             def make_info_string(clade, terminal=False):
                 if (terminal or
-                        not hasattr(clade, 'confidence') or
+                        not hasattr(clade, "confidence") or
                         clade.confidence is None):
-                    return (':' + format_branch_length
+                    return (":" + format_branch_length
                             ) % (clade.branch_length or 0.0) + _get_comment(clade)
                 else:
-                    return (format_confidence + ':' + format_branch_length
+                    return (format_confidence + ":" + format_branch_length
                             ) % (clade.confidence, clade.branch_length or 0.0) + _get_comment(clade)
 
         return make_info_string

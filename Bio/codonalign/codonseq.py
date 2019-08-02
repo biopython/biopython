@@ -54,7 +54,7 @@ class CodonSeq(Seq):
 
     """
 
-    def __init__(self, data='', alphabet=default_codon_alphabet,
+    def __init__(self, data="", alphabet=default_codon_alphabet,
                  gap_char="-", rf_table=None):
         """Initialize the class."""
         # rf_table should be a tuple or list indicating the every
@@ -134,7 +134,7 @@ class CodonSeq(Seq):
 
             def cslice(p):
                 aa_slice = aa_index[p]
-                codon_slice = ''
+                codon_slice = ""
                 for i in aa_slice:
                     codon_slice += self._data[i * 3:i * 3 + 3]
                 return codon_slice
@@ -166,16 +166,16 @@ class CodonSeq(Seq):
         p = -1  # initiation
         for i in rf_table:
             if isinstance(i, float):
-                amino_acids.append('-')
+                amino_acids.append("-")
                 continue
             # elif '---' == tr_seq[i:i+3]:
             #    amino_acids.append('-')
             #    continue
-            elif '-' in tr_seq[i:i + 3]:
+            elif "-" in tr_seq[i:i + 3]:
                 # considering two types of frameshift
                 if p == -1 or p - i == 3:
                     p = i
-                    codon = tr_seq[i:i + 6].replace('-', '')[:3]
+                    codon = tr_seq[i:i + 6].replace("-", "")[:3]
                 elif p - i > 3:
                     codon = tr_seq[i:i + 3]
                     p = i
@@ -340,25 +340,25 @@ def cal_dn_ds(codon_seq1, codon_seq2, method="NG86",
                                len(codon_seq2.get_full_rf_table()))
                            )
     if cfreq is None:
-        cfreq = 'F3x4'
-    elif cfreq is not None and method != 'ML':
+        cfreq = "F3x4"
+    elif cfreq is not None and method != "ML":
         raise RuntimeError("cfreq can only be specified when you "
                            "are using ML method")
-    if cfreq not in ('F1x4', 'F3x4', 'F61'):
+    if cfreq not in ("F1x4", "F3x4", "F61"):
         import warnings
         warnings.warn("Unknown cfreq ({0}). Only F1x4, F3x4 and F61 are "
                       "acceptable. Use F3x4 in the following.".format(cfreq))
-        cfreq = 'F3x4'
+        cfreq = "F3x4"
     seq1_codon_lst = _get_codon_list(codon_seq1)
     seq2_codon_lst = _get_codon_list(codon_seq2)
     # remove gaps in seq_codon_lst
     seq1 = []
     seq2 = []
     for i, j in zip(seq1_codon_lst, seq2_codon_lst):
-        if ('-' not in i) and ('-' not in j):
+        if ("-" not in i) and ("-" not in j):
             seq1.append(i)
             seq2.append(j)
-    dnds_func = {'ML': _ml, 'NG86': _ng86, 'LWL85': _lwl85, 'YN00': _yn00}
+    dnds_func = {"ML": _ml, "NG86": _ng86, "LWL85": _lwl85, "YN00": _yn00}
     if method == "ML":
         return dnds_func[method](seq1, seq2, cfreq, codon_table)
     else:
@@ -406,14 +406,14 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
     """
     S_site = 0  # synonymous sites
     N_site = 0  # non-synonymous sites
-    purine = ('A', 'G')
-    pyrimidine = ('T', 'C')
-    base_tuple = ('A', 'T', 'C', 'G')
+    purine = ("A", "G")
+    pyrimidine = ("T", "C")
+    base_tuple = ("A", "T", "C", "G")
     for codon in codon_lst:
-        neighbor_codon = {'transition': [], 'transversion': []}
+        neighbor_codon = {"transition": [], "transversion": []}
         # classify neighbor codons
-        codon = codon.replace('U', 'T')
-        if codon == '---':
+        codon = codon.replace("U", "T")
+        if codon == "---":
             continue
         for n, i in enumerate(codon):
             for j in base_tuple:
@@ -422,29 +422,29 @@ def _count_site_NG86(codon_lst, k=1, codon_table=default_codon_table):
                 elif i in purine and j in purine:
                     codon_chars = [c for c in codon]
                     codon_chars[n] = j
-                    this_codon = ''.join(codon_chars)
-                    neighbor_codon['transition'].append(this_codon)
+                    this_codon = "".join(codon_chars)
+                    neighbor_codon["transition"].append(this_codon)
                 elif i in pyrimidine and j in pyrimidine:
                     codon_chars = [c for c in codon]
                     codon_chars[n] = j
-                    this_codon = ''.join(codon_chars)
-                    neighbor_codon['transition'].append(this_codon)
+                    this_codon = "".join(codon_chars)
+                    neighbor_codon["transition"].append(this_codon)
                 else:
                     codon_chars = [c for c in codon]
                     codon_chars[n] = j
-                    this_codon = ''.join(codon_chars)
-                    neighbor_codon['transversion'].append(this_codon)
+                    this_codon = "".join(codon_chars)
+                    neighbor_codon["transversion"].append(this_codon)
         # count synonymous and non-synonymous sites
         aa = codon_table.forward_table[codon]
         this_codon_N_site = this_codon_S_site = 0
-        for neighbor in neighbor_codon['transition']:
+        for neighbor in neighbor_codon["transition"]:
             if neighbor in codon_table.stop_codons:
                 this_codon_N_site += 1
             elif codon_table.forward_table[neighbor] == aa:
                 this_codon_S_site += 1
             else:
                 this_codon_N_site += 1
-        for neighbor in neighbor_codon['transversion']:
+        for neighbor in neighbor_codon["transversion"]:
             if neighbor in codon_table.stop_codons:
                 this_codon_N_site += k
             elif codon_table.forward_table[neighbor] == aa:
@@ -471,9 +471,9 @@ def _count_diff_NG86(codon1, codon2, codon_table=default_codon_table):
         raise RuntimeError("codon should be three letter string ({0}, {1} "
                            "detected)".format(len(codon1), len(codon2)))
     SN = [0, 0]  # synonymous and nonsynonymous counts
-    if codon1 == '---' or codon2 == '---':
+    if codon1 == "---" or codon2 == "---":
         return SN
-    base_tuple = ('A', 'C', 'G', 'T')
+    base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
@@ -558,11 +558,11 @@ def _lwl85(seq1, seq2, k, codon_table):
     for codon in seq1 + seq2:
         fold_num = codon_fold_dict[codon]
         for f in fold_num:
-            if f == '0':
+            if f == "0":
                 fold0[0] += 1
-            elif f == '2':
+            elif f == "2":
                 fold2[0] += 1
-            elif f == '4':
+            elif f == "4":
                 fold4[0] += 1
     L = [sum(fold0) / 2.0, sum(fold2) / 2.0, sum(fold4) / 2.0]
     # count number of differences in different degenerate classes
@@ -590,8 +590,8 @@ def _lwl85(seq1, seq2, k, codon_table):
 def _get_codon_fold(codon_table):
     """Classify different position in a codon into different folds (PRIVATE)."""
     def find_fold_class(codon, forward_table):
-        base = {'A', 'T', 'C', 'G'}
-        fold = ''
+        base = {"A", "T", "C", "G"}
+        fold = ""
         codon_base_lst = [i for i in codon]
         for i, b in enumerate(codon_base_lst):
             other_base = base - set(b)
@@ -599,15 +599,15 @@ def _get_codon_fold(codon_table):
             for j in other_base:
                 codon_base_lst[i] = j
                 try:
-                    aa.append(forward_table[''.join(codon_base_lst)])
+                    aa.append(forward_table["".join(codon_base_lst)])
                 except KeyError:
-                    aa.append('stop')
+                    aa.append("stop")
             if aa.count(forward_table[codon]) == 0:
-                fold += '0'
+                fold += "0"
             elif aa.count(forward_table[codon]) in (1, 2):
-                fold += '2'
+                fold += "2"
             elif aa.count(forward_table[codon]) == 3:
-                fold += '4'
+                fold += "4"
             else:
                 raise RuntimeError("Unknown Error, cannot assign the "
                                    "position to a fold")
@@ -615,10 +615,10 @@ def _get_codon_fold(codon_table):
         return fold
     fold_table = {}
     for codon in codon_table.forward_table:
-        if 'U' not in codon:
+        if "U" not in codon:
             fold_table[codon] = find_fold_class(codon,
                                                 codon_table.forward_table)
-    fold_table["---"] = '---'
+    fold_table["---"] = "---"
     return fold_table
 
 
@@ -631,34 +631,34 @@ def _diff_codon(codon1, codon2, fold_dict):
     """
     P0 = P2 = P4 = Q0 = Q2 = Q4 = 0
     fold_num = fold_dict[codon1]
-    purine = ('A', 'G')
-    pyrimidine = ('T', 'C')
+    purine = ("A", "G")
+    pyrimidine = ("T", "C")
     for n, (i, j) in enumerate(zip(codon1, codon2)):
         if i != j and (i in purine and j in purine):
-            if fold_num[n] == '0':
+            if fold_num[n] == "0":
                 P0 += 1
-            elif fold_num[n] == '2':
+            elif fold_num[n] == "2":
                 P2 += 1
-            elif fold_num[n] == '4':
+            elif fold_num[n] == "4":
                 P4 += 1
             else:
                 raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
         if i != j and (i in pyrimidine and j in pyrimidine):
-            if fold_num[n] == '0':
+            if fold_num[n] == "0":
                 P0 += 1
-            elif fold_num[n] == '2':
+            elif fold_num[n] == "2":
                 P2 += 1
-            elif fold_num[n] == '4':
+            elif fold_num[n] == "4":
                 P4 += 1
             else:
                 raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
         if i != j and ((i in purine and j in pyrimidine) or
                        (i in pyrimidine and j in purine)):
-            if fold_num[n] == '0':
+            if fold_num[n] == "0":
                 Q0 += 1
-            elif fold_num[n] == '2':
+            elif fold_num[n] == "2":
                 Q2 += 1
-            elif fold_num[n] == '4':
+            elif fold_num[n] == "4":
                 Q4 += 1
             else:
                 raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
@@ -676,24 +676,24 @@ def _yn00(seq1, seq2, k, codon_table):
     """
     from collections import defaultdict
     from scipy.linalg import expm
-    fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
-              {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-              {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
+    fcodon = [{"A": 0, "G": 0, "C": 0, "T": 0},
+              {"A": 0, "G": 0, "C": 0, "T": 0},
+              {"A": 0, "G": 0, "C": 0, "T": 0}]
     codon_fold_dict = _get_codon_fold(codon_table)
     fold0_cnt = defaultdict(int)
     fold4_cnt = defaultdict(int)
     for codon in seq1 + seq2:
         # count sites at different codon position
-        if codon != '---':
+        if codon != "---":
             fcodon[0][codon[0]] += 1
             fcodon[1][codon[1]] += 1
             fcodon[2][codon[2]] += 1
         # count sites in different degenerate fold class
         fold_num = codon_fold_dict[codon]
         for i, f in enumerate(fold_num):
-            if f == '0':
+            if f == "0":
                 fold0_cnt[codon[i]] += 1
-            elif f == '4':
+            elif f == "4":
                 fold4_cnt[codon[i]] += 1
     f0_total = sum(fold0_cnt.values())
     f4_total = sum(fold4_cnt.values())
@@ -713,7 +713,7 @@ def _yn00(seq1, seq2, k, codon_table):
         fcodon[i] = {j: k / tot for j, k in fcodon[i].items()}
     pi = defaultdict(int)
     for i in list(codon_table.forward_table.keys()) + codon_table.stop_codons:
-        if 'U' not in i:
+        if "U" not in i:
             pi[i] = 0
     for i in seq1 + seq2:
         pi[i] += 1
@@ -725,10 +725,10 @@ def _yn00(seq1, seq2, k, codon_table):
                                                     codon_table=codon_table)
     N_sites = (N_sites1 + N_sites2) / 2
     S_sites = (S_sites1 + S_sites2) / 2
-    bfreqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},
-               {'A': 0, 'T': 0, 'C': 0, 'G': 0}]
+    bfreqSN = [{"A": 0, "T": 0, "C": 0, "G": 0},
+               {"A": 0, "T": 0, "C": 0, "G": 0}]
     for i in range(2):
-        for b in ('A', 'T', 'C', 'G'):
+        for b in ("A", "T", "C", "G"):
             bfreqSN[i][b] = (bfreqSN1[i][b] + bfreqSN2[i][b]) / 2
     # use NG86 method to get initial t and w
     SN = [0, 0]
@@ -749,14 +749,14 @@ def _yn00(seq1, seq2, k, codon_table):
         # count synonymous and nonsynonymous differences under kappa, w, t
         codon_lst = [i for i in
                      list(codon_table.forward_table.keys()) +
-                     codon_table.stop_codons if 'U' not in i]
+                     codon_table.stop_codons if "U" not in i]
         Q = _get_Q(pi, kappa, w, codon_lst, codon_table)
         P = expm(Q * t)
         TV = [0, 0, 0, 0]  # synonymous/nonsynonymous transition/transversion
         sites = [0, 0]
         codon_npath = {}
         for i, j in zip(seq1, seq2):
-            if i != '---' and j != '---':
+            if i != "---" and j != "---":
                 codon_npath.setdefault((i, j), 0)
                 codon_npath[(i, j)] += 1
         for i in codon_npath:
@@ -784,8 +784,8 @@ def _get_TV(codon_lst1, codon_lst2, codon_table=default_codon_table):
      - V - proportions of transversional differences
 
     """
-    purine = ('A', 'G')
-    pyrimidine = ('C', 'T')
+    purine = ("A", "G")
+    pyrimidine = ("C", "T")
     TV = [0, 0]
     sites = 0
     for codon1, codon2 in zip(codon_lst1, codon_lst2):
@@ -809,23 +809,23 @@ def _get_kappa_t(pi, TV, t=False):
 
     The following formula and variable names are according to PMID: 10666704
     """
-    pi['Y'] = pi['T'] + pi['C']
-    pi['R'] = pi['A'] + pi['G']
-    A = (2 * (pi['T'] * pi['C'] + pi['A'] * pi['G']) +
-         2 * (pi['T'] * pi['C'] * pi['R'] / pi['Y'] + pi['A'] * pi['G'] * pi['Y'] / pi['R']) *
-         (1 - TV[1] / (2 * pi['Y'] * pi['R'])) - TV[0]) / \
-        (2 * (pi['T'] * pi['C'] / pi['Y'] + pi['A'] * pi['G'] / pi['R']))
-    B = 1 - TV[1] / (2 * pi['Y'] * pi['R'])
+    pi["Y"] = pi["T"] + pi["C"]
+    pi["R"] = pi["A"] + pi["G"]
+    A = (2 * (pi["T"] * pi["C"] + pi["A"] * pi["G"]) +
+         2 * (pi["T"] * pi["C"] * pi["R"] / pi["Y"] + pi["A"] * pi["G"] * pi["Y"] / pi["R"]) *
+         (1 - TV[1] / (2 * pi["Y"] * pi["R"])) - TV[0]) / \
+        (2 * (pi["T"] * pi["C"] / pi["Y"] + pi["A"] * pi["G"] / pi["R"]))
+    B = 1 - TV[1] / (2 * pi["Y"] * pi["R"])
     a = -0.5 * log(A)  # this seems to be an error in YANG's original paper
     b = -0.5 * log(B)
     kappaF84 = a / b - 1
     if t is False:
-        kappaHKY85 = 1 + (pi['T'] * pi['C'] / pi['Y'] + pi['A'] * pi['G'] / pi['R']) *\
-                     kappaF84 / (pi['T'] * pi['C'] + pi['A'] * pi['G'])
+        kappaHKY85 = 1 + (pi["T"] * pi["C"] / pi["Y"] + pi["A"] * pi["G"] / pi["R"]) *\
+                     kappaF84 / (pi["T"] * pi["C"] + pi["A"] * pi["G"])
         return kappaHKY85
     else:
-        t = (4 * pi['T'] * pi['C'] * (1 + kappaF84 / pi['Y']) +
-             4 * pi['A'] * pi['G'] * (1 + kappaF84 / pi['R']) + 4 * pi['Y'] * pi['R']) * b
+        t = (4 * pi["T"] * pi["C"] * (1 + kappaF84 / pi["Y"]) +
+             4 * pi["A"] * pi["G"] * (1 + kappaF84 / pi["R"]) + 4 * pi["Y"] * pi["R"]) * b
         return t
 
 
@@ -848,19 +848,19 @@ def _count_site_YN00(codon_lst1, codon_lst2, pi, k,
                            (len(codon_lst1), len(codon_lst2)))
     else:
         length = len(codon_lst1)
-    purine = ('A', 'G')
-    pyrimidine = ('T', 'C')
-    base_tuple = ('A', 'T', 'C', 'G')
+    purine = ("A", "G")
+    pyrimidine = ("T", "C")
+    base_tuple = ("A", "T", "C", "G")
     codon_dict = codon_table.forward_table
     stop = codon_table.stop_codons
     codon_npath = {}
     for i, j in zip(codon_lst1, codon_lst2):
-        if i != '---' and j != '---':
+        if i != "---" and j != "---":
             codon_npath.setdefault((i, j), 0)
             codon_npath[(i, j)] += 1
     S_sites = N_sites = 0
-    freqSN = [{'A': 0, 'T': 0, 'C': 0, 'G': 0},  # synonymous
-              {'A': 0, 'T': 0, 'C': 0, 'G': 0}]  # nonsynonymous
+    freqSN = [{"A": 0, "T": 0, "C": 0, "G": 0},  # synonymous
+              {"A": 0, "T": 0, "C": 0, "G": 0}]  # nonsynonymous
     for codon_pair, npath in codon_npath.items():
         codon = codon_pair[0]
         S = N = 0
@@ -912,9 +912,9 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
                            "detected)".format(len(codon1), len(codon2)))
     TV = [0, 0, 0, 0]  # transition and transversion counts (synonymous and nonsynonymous)
     site = 0
-    if codon1 == '---' or codon2 == '---':
+    if codon1 == "---" or codon2 == "---":
         return TV
-    base_tuple = ('A', 'C', 'G', 'T')
+    base_tuple = ("A", "C", "G", "T")
     if not all(i in base_tuple for i in codon1):
         raise RuntimeError("Unrecognized character detected in codon1 {0} "
                            "(Codons consist of "
@@ -932,8 +932,8 @@ def _count_diff_YN00(codon1, codon2, P, codon_lst,
                 diff_pos.append(i)
 
         def count_TV(codon1, codon2, diff, codon_table, weight=1):
-            purine = ('A', 'G')
-            pyrimidine = ('T', 'C')
+            purine = ("A", "G")
+            pyrimidine = ("T", "C")
             dic = codon_table.forward_table
             stop = codon_table.stop_codons
             if codon1 in stop or codon2 in stop:
@@ -1029,11 +1029,11 @@ def _ml(seq1, seq2, cmethod, codon_table):
     pi = _get_pi(seq1, seq2, cmethod, codon_table=codon_table)
     for i, j in zip(seq1, seq2):
         # if i != j and ('---' not in (i, j)):
-        if '---' not in (i, j):
+        if "---" not in (i, j):
             codon_cnt[(i, j)] += 1
     codon_lst = [i for i in
                  list(codon_table.forward_table.keys()) + codon_table.stop_codons
-                 if 'U' not in i]
+                 if "U" not in i]
 
     # apply optimization
     def func(params, pi=pi, codon_cnt=codon_cnt, codon_lst=codon_lst,
@@ -1045,7 +1045,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
                     codon_table=codon_table)
 
     # count sites
-    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B',
+    opt_res = minimize(func, [1, 0.1, 2], method="L-BFGS-B",
                        bounds=((1e-10, 20), (1e-10, 20), (1e-10, 10)),
                        tol=1e-5)
     t, k, w = opt_res.x
@@ -1068,7 +1068,7 @@ def _ml(seq1, seq2, cmethod, codon_table):
     Sd *= t
     Nd *= t
     # count differences (with w fixed to 1)
-    opt_res = minimize(func, [1, 0.1, 2], method='L-BFGS-B',
+    opt_res = minimize(func, [1, 0.1, 2], method="L-BFGS-B",
                        bounds=((1e-10, 20), (1e-10, 20), (1, 1)),
                        tol=1e-5)
     t, k, w = opt_res.x
@@ -1105,24 +1105,24 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
     # Stop codon should not be allowed according to Yang.
     # Try to modify this!
     pi = {}
-    if cmethod == 'F1x4':
-        fcodon = {'A': 0, 'G': 0, 'C': 0, 'T': 0}
+    if cmethod == "F1x4":
+        fcodon = {"A": 0, "G": 0, "C": 0, "T": 0}
         for i in seq1 + seq2:
-            if i != '---':
+            if i != "---":
                 for c in i:
                     fcodon[c] += 1
         tot = sum(fcodon.values())
         fcodon = {j: k / tot for j, k in fcodon.items()}
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
-            if 'U' not in i:
+            if "U" not in i:
                 pi[i] = fcodon[i[0]] * fcodon[i[1]] * fcodon[i[2]]
-    elif cmethod == 'F3x4':
+    elif cmethod == "F3x4":
         # three codon position
-        fcodon = [{'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                  {'A': 0, 'G': 0, 'C': 0, 'T': 0}]
+        fcodon = [{"A": 0, "G": 0, "C": 0, "T": 0},
+                  {"A": 0, "G": 0, "C": 0, "T": 0},
+                  {"A": 0, "G": 0, "C": 0, "T": 0}]
         for i in seq1 + seq2:
-            if i != '---':
+            if i != "---":
                 fcodon[0][i[0]] += 1
                 fcodon[1][i[1]] += 1
                 fcodon[2][i[2]] += 1
@@ -1131,14 +1131,14 @@ def _get_pi(seq1, seq2, cmethod, codon_table=default_codon_table):
             fcodon[i] = {j: k / tot for j, k in fcodon[i].items()}
         for i in list(codon_table.forward_table.keys()) + \
                 codon_table.stop_codons:
-            if 'U' not in i:
+            if "U" not in i:
                 pi[i] = fcodon[0][i[0]] * fcodon[1][i[1]] * fcodon[2][i[2]]
-    elif cmethod == 'F61':
+    elif cmethod == "F61":
         for i in codon_table.forward_table.keys() + codon_table.stop_codons:
-            if 'U' not in i:
+            if "U" not in i:
                 pi[i] = 0.1
         for i in seq1 + seq2:
-            if i != '---':
+            if i != "---":
                 pi[i] += 1
         tot = sum(pi.values())
         pi = {j: k / tot for j, k in pi.items()}
@@ -1163,8 +1163,8 @@ def _q(i, j, pi, k, w, codon_table=default_codon_table):
         return 0
     if (i not in pi) or (j not in pi):
         return 0
-    purine = ('A', 'G')
-    pyrimidine = ('T', 'C')
+    purine = ("A", "G")
+    pyrimidine = ("T", "C")
     diff = []
     for n, (c1, c2) in enumerate(zip(i, j)):
         if c1 != c2:

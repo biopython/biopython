@@ -40,8 +40,8 @@ def normalize_letters(one_letter_code):
 
     Letters are uppercased, and "." ("Unknown") is converted to "X".
     """
-    if one_letter_code == '.':
-        return 'X'
+    if one_letter_code == ".":
+        return "X"
     else:
         return one_letter_code.upper()
 
@@ -102,13 +102,13 @@ class SeqMapIndex(dict):
         pdbid = residues.pdbid
         frags = residues.fragments
         if not frags:
-            frags = (('_', '', ''),)  # All residues of unnamed chain
+            frags = (("_", "", ""),)  # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
             chainid = frag[0]
-            if chainid in ['', '-', ' ', '_']:
-                chainid = '_'
+            if chainid in ["", "-", " ", "_"]:
+                chainid = "_"
             id = pdbid + chainid
 
             sm = self[id]
@@ -149,10 +149,10 @@ class SeqMap(object):
 
     def __init__(self, line=None):
         """Initialize the class."""
-        self.pdbid = ''
-        self.pdb_datestamp = ''
-        self.version = ''
-        self.flags = ''
+        self.pdbid = ""
+        self.pdb_datestamp = ""
+        self.version = ""
+        self.flags = ""
         self.res = []
         if line:
             self._process(line)
@@ -225,7 +225,7 @@ class SeqMap(object):
         if self.pdb_datestamp != other.pdb_datestamp:
             raise TypeError("Different pdb dates!")
         if self.flags != other.flags:
-            self.flags = ''
+            self.flags = ""
         self.res += other.res
 
     def __iadd__(self, other):
@@ -260,11 +260,11 @@ class SeqMap(object):
         # The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
-            if r.atom == 'X':  # Unknown residue type
+            if r.atom == "X":  # Unknown residue type
                 continue
             chainid = r.chainid
-            if chainid == '_':
-                chainid = ' '
+            if chainid == "_":
+                chainid = " "
             resid = r.resid
             resSet[(chainid, resid)] = r
 
@@ -305,10 +305,10 @@ class Res(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.chainid = ''
-        self.resid = ''
-        self.atom = ''
-        self.seqres = ''
+        self.chainid = ""
+        self.resid = ""
+        self.atom = ""
+        self.seqres = ""
 
 
 def parse(handle):

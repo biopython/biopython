@@ -54,8 +54,8 @@ def _maketrans(complement_mapping):
 
     For internal use only.
     """
-    before = ''.join(complement_mapping.keys())
-    after = ''.join(complement_mapping.values())
+    before = "".join(complement_mapping.keys())
+    after = "".join(complement_mapping.values())
     before += before.lower()
     after += after.lower()
     if sys.version_info[0] == 3:
@@ -137,7 +137,7 @@ class Seq(object):
                                                   str(self)[-3:],
                                                   a)
         else:
-            return '{0}({1!r}{2!s})'.format(self.__class__.__name__,
+            return "{0}({1!r}{2!s})".format(self.__class__.__name__,
                                             self._data,
                                             a)
 
@@ -931,11 +931,11 @@ class Seq(object):
             ttable = _dna_complement_table
         elif isinstance(base, Alphabet.RNAAlphabet):
             ttable = _rna_complement_table
-        elif ('U' in self._data or 'u' in self._data) \
-                and ('T' in self._data or 't' in self._data):
+        elif ("U" in self._data or "u" in self._data) \
+                and ("T" in self._data or "t" in self._data):
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif 'U' in self._data or 'u' in self._data:
+        elif "U" in self._data or "u" in self._data:
             ttable = _rna_complement_table
         else:
             ttable = _dna_complement_table
@@ -1010,7 +1010,7 @@ class Seq(object):
             alphabet = IUPAC.ambiguous_rna
         else:
             alphabet = Alphabet.generic_rna
-        return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
+        return Seq(str(self).replace("T", "U").replace("t", "u"), alphabet)
 
     def back_transcribe(self):
         """Return the DNA sequence from an RNA sequence by creating a new Seq object.
@@ -1166,7 +1166,7 @@ class Seq(object):
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
             else:
-                raise ValueError('Bad table argument')
+                raise ValueError("Bad table argument")
         else:
             # Assume its a table ID
             if self.alphabet == IUPAC.unambiguous_dna:
@@ -2482,10 +2482,10 @@ class MutableSeq(object):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
-        elif 'U' in self.data and 'T' in self.data:
+        elif "U" in self.data and "T" in self.data:
             # TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif 'U' in self.data:
+        elif "U" in self.data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
@@ -2579,7 +2579,7 @@ def transcribe(dna):
     elif isinstance(dna, MutableSeq):
         return dna.toseq().transcribe()
     else:
-        return dna.replace('T', 'U').replace('t', 'u')
+        return dna.replace("T", "U").replace("t", "u")
 
 
 def back_transcribe(rna):
@@ -2601,7 +2601,7 @@ def back_transcribe(rna):
     elif isinstance(rna, MutableSeq):
         return rna.toseq().back_transcribe()
     else:
-        return rna.replace('U', 'T').replace('u', 't')
+        return rna.replace("U", "T").replace("u", "t")
 
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
@@ -2853,7 +2853,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
             else:
-                raise ValueError('Bad table argument')
+                raise ValueError("Bad table argument")
         return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds,
                               gap=gap)
 
@@ -2903,10 +2903,10 @@ def complement(sequence):
     # string into a Seq, use the reverse_complement method, and convert back
     # to a string.
     # This worked, but is over five times slower on short sequences!
-    if ('U' in sequence or 'u' in sequence) \
-            and ('T' in sequence or 't' in sequence):
+    if ("U" in sequence or "u" in sequence) \
+            and ("T" in sequence or "t" in sequence):
         raise ValueError("Mixed RNA/DNA found")
-    elif 'U' in sequence or 'u' in sequence:
+    elif "U" in sequence or "u" in sequence:
         ttable = _rna_complement_table
     else:
         ttable = _dna_complement_table

@@ -36,7 +36,7 @@ class DistributionPage(object):
     on a single page.
     """
 
-    def __init__(self, output_format='pdf'):
+    def __init__(self, output_format="pdf"):
         """Initialize."""
         self.distributions = []
 
@@ -81,7 +81,7 @@ class DistributionPage(object):
     def _draw_title(self, cur_drawing, title, width, height):
         """Add the title of the figure to the drawing (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
-        title_string.fontName = 'Helvetica-Bold'
+        title_string.fontName = "Helvetica-Bold"
         title_string.fontSize = self.title_size
         title_string.textAnchor = "middle"
 
@@ -204,7 +204,7 @@ class BarChartDistribution(object):
         x_center = start_x + (end_x - start_x) / 2
         y_pos = end_y + (self.padding_percent * (start_y - end_y)) / 2
         title_string = String(x_center, y_pos, title)
-        title_string.fontName = 'Helvetica-Bold'
+        title_string.fontName = "Helvetica-Bold"
         title_string.fontSize = self.chart_title_size
         title_string.textAnchor = "middle"
 

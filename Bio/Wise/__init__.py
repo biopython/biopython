@@ -63,7 +63,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
     cmdline.extend((">", output_filename))
     if quiet:
         cmdline.extend(("2>", "/dev/null"))
-    return ' '.join(cmdline)
+    return " ".join(cmdline)
 
 
 def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
@@ -71,7 +71,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
     if not pair or len(pair) != 2:
         raise ValueError("Expected pair of filename, not %s" % repr(pair))
 
-    output_file = tempfile.NamedTemporaryFile(mode='r')
+    output_file = tempfile.NamedTemporaryFile(mode="r")
     input_files = tempfile.NamedTemporaryFile(mode="w"), tempfile.NamedTemporaryFile(mode="w")
 
     if dry_run:
@@ -87,8 +87,8 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
         # Pipe the file through Biopython's Fasta parser/writer
         # to make sure it conforms to the Fasta standard (in particular,
         # Wise2 may choke on long lines in the Fasta file)
-        records = SeqIO.parse(open(filename), 'fasta')
-        SeqIO.write(records, input_file, 'fasta')
+        records = SeqIO.parse(open(filename), "fasta")
+        SeqIO.write(records, input_file, "fasta")
         input_file.flush()
 
     input_file_names = [input_file.name for input_file in input_files]

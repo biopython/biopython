@@ -13,26 +13,26 @@ from Bio._utils import read_forward
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Alphabet import generic_protein
 
-__all__ = ('Hhsuite2TextParser', )
+__all__ = ("Hhsuite2TextParser", )
 
 # precompile regex patterns for faster processing
 # regex for query name capture
-_RE_QUERY = re.compile(r'^Query\s+(.+)\s?$')
+_RE_QUERY = re.compile(r"^Query\s+(.+)\s?$")
 
 # regex for version string capture
-_RE_HIT_BLOCK_START = re.compile(r'^No +(\d+)\s+$')
+_RE_HIT_BLOCK_START = re.compile(r"^No +(\d+)\s+$")
 
 # id and full description
-_RE_HIT_BLOCK_DESC = re.compile(r'>(\S+)\s+(.*)$')
+_RE_HIT_BLOCK_DESC = re.compile(r">(\S+)\s+(.*)$")
 
 # sequence alignment line
 # Q sp|Q9BSU1|CP07  229 DAKMRVFERSVYFGDSCQDVLSMLGSPHKV  258 (422)
-_RE_MATCH_BLOCK_QUERY_SEQ = re.compile(r'^Q\s+(.+) +(\d+) +([A-Z-]+) +(\d+) +\(\d+\)$')
-_RE_MATCH_BLOCK_HIT_SEQ = re.compile(r'^T\s+(.+) +(\d+) +([A-Z-]+) +(\d+) +\(\d+\)$')
+_RE_MATCH_BLOCK_QUERY_SEQ = re.compile(r"^Q\s+(.+) +(\d+) +([A-Z-]+) +(\d+) +\(\d+\)$")
+_RE_MATCH_BLOCK_HIT_SEQ = re.compile(r"^T\s+(.+) +(\d+) +([A-Z-]+) +(\d+) +\(\d+\)$")
 
-_END_OF_FILE_MARKER = 'Done!'
+_END_OF_FILE_MARKER = "Done!"
 
-_PROGRAM = 'HHSUITE'
+_PROGRAM = "HHSUITE"
 
 # Maximum number of lines to read before expecting a hit block
 # This determines the maximum numnber of hits that would be allowed in
@@ -87,7 +87,7 @@ class Hhsuite2TextParser(object):
             regx = re.search(_RE_QUERY, self.line)
             if regx:
                 self.query_id = regx.group(1)
-            if self.line.startswith('Match_columns'):
+            if self.line.startswith("Match_columns"):
                 self.seq_len = int(self.line.strip().split()[1])
             self.line = self.handle.readline().strip()
         return meta
@@ -99,17 +99,17 @@ class Hhsuite2TextParser(object):
         if not match:
             raise RuntimeError("Unexpected content in HIT_BLOCK_DESC line'{}'".format(self.line))
         hit_data = {
-            'hit_id': match.group(1),
-            'description': match.group(2).lstrip(' ;'),
-            'evalue': None,
-            'hit_start': None,
-            'hit_end': None,
-            'hit_seq': '',
-            'prob': None,
-            'query_start': None,
-            'query_end': None,
-            'query_seq': '',
-            'score': None
+            "hit_id": match.group(1),
+            "description": match.group(2).lstrip(" ;"),
+            "evalue": None,
+            "hit_start": None,
+            "hit_end": None,
+            "hit_seq": "",
+            "prob": None,
+            "query_start": None,
+            "query_end": None,
+            "query_seq": "",
+            "score": None
         }
         self.line = self.handle.readline()
         self._process_score_line(self.line, hit_data)
@@ -134,11 +134,11 @@ class Hhsuite2TextParser(object):
         E-value could be in decimal or scientific notation, so split the string rather then use regexp - this
         also means we should be tolerant of additional fields being added/removed
         """
-        score_map = {'E-value': 'evalue',
-                     'Score': 'score',
-                     'Probab': 'prob'}
+        score_map = {"E-value": "evalue",
+                     "Score": "score",
+                     "Probab": "prob"}
         for score_pair in line.strip().split():
-            key, value = score_pair.split('=')
+            key, value = score_pair.split("=")
             if key in score_map:
                 try:
                     hit_data[score_map[key]] = float(value)
@@ -167,24 +167,24 @@ class Hhsuite2TextParser(object):
             It's not possible to distinguish a sequence line from a Consensus line with
             a regexp, so need to check the ID column.
             """
-            return match.group(1).strip() != 'Consensus'
+            return match.group(1).strip() != "Consensus"
 
         while True:
             if not self.line.strip():  # blank lines indicate the end of a hit block
                 return
             match = re.match(_RE_MATCH_BLOCK_QUERY_SEQ, self.line)
             if match and match_is_valid(match):
-                hit_match_data['query_seq'] += match.group(3).strip()
-                if hit_match_data['query_start'] is None:
-                    hit_match_data['query_start'] = int(match.group(2))
-                hit_match_data['query_end'] = int(match.group(4))
+                hit_match_data["query_seq"] += match.group(3).strip()
+                if hit_match_data["query_start"] is None:
+                    hit_match_data["query_start"] = int(match.group(2))
+                hit_match_data["query_end"] = int(match.group(4))
             else:
                 match = re.match(_RE_MATCH_BLOCK_HIT_SEQ, self.line)
                 if match and match_is_valid(match):
-                    hit_match_data['hit_seq'] += match.group(3).strip()
-                    if hit_match_data['hit_start'] is None:
-                        hit_match_data['hit_start'] = int(match.group(2))
-                    hit_match_data['hit_end'] = int(match.group(4))
+                    hit_match_data["hit_seq"] += match.group(3).strip()
+                    if hit_match_data["hit_start"] is None:
+                        hit_match_data["hit_start"] = int(match.group(2))
+                    hit_match_data["hit_end"] = int(match.group(4))
             self.line = self.handle.readline()
 
     def _create_qresult(self, hit_blocks):
@@ -193,34 +193,34 @@ class Hhsuite2TextParser(object):
         hit_dict = OrderedDict()
 
         for output_index, block in enumerate(hit_blocks):
-            hit_id = block['hit_id']
+            hit_id = block["hit_id"]
 
             frag = HSPFragment(hit_id, query_id)
             frag.alphabet = generic_protein
-            frag.query_start = block['query_start'] - 1
-            frag.query_end = block['query_end']
-            frag.hit_start = block['hit_start'] - 1
-            frag.hit_end = block['hit_end']
-            frag.hit = block['hit_seq']
-            frag.query = block['query_seq']
+            frag.query_start = block["query_start"] - 1
+            frag.query_end = block["query_end"]
+            frag.hit_start = block["hit_start"] - 1
+            frag.hit_end = block["hit_end"]
+            frag.hit = block["hit_seq"]
+            frag.query = block["query_seq"]
 
             hsp = HSP([frag])
             hsp.hit_id = hit_id
             hsp.output_index = output_index
             hsp.query_id = query_id
-            hsp.hit_description = block['description']
+            hsp.hit_description = block["description"]
             is_included = True  # Should everything should be included?
             hsp.is_included = is_included
-            hsp.evalue = block['evalue']
-            hsp.score = block['score']
-            hsp.prob = block['prob']
+            hsp.evalue = block["evalue"]
+            hsp.score = block["score"]
+            hsp.prob = block["prob"]
 
             if hit_id not in hit_dict:
                 hit = Hit([hsp], hit_id)
-                hit.description = block['description']
+                hit.description = block["description"]
                 hit.is_included = is_included
-                hit.evalue = block['evalue']
-                hit.score = block['score']
+                hit.evalue = block["evalue"]
+                hit.score = block["score"]
                 hit_dict[hit_id] = hit
             else:
                 hit_dict[hit_id].append(hsp)

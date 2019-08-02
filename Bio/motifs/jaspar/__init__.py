@@ -22,7 +22,7 @@ class Motif(motifs.Motif):
     file, a 'jaspar' format file or a JASPAR database).
     """
 
-    def __init__(self, matrix_id, name, alphabet='ACGT', instances=None,
+    def __init__(self, matrix_id, name, alphabet="ACGT", instances=None,
                  counts=None, collection=None, tf_class=None, tf_family=None,
                  species=None, tax_group=None, acc=None, data_type=None,
                  medline=None, pazar_id=None, comment=None):
@@ -159,14 +159,14 @@ def write(motifs, format):
     """Return the representation of motifs in "pfm" or "jaspar" format."""
     letters = "ACGT"
     lines = []
-    if format == 'pfm':
+    if format == "pfm":
         motif = motifs[0]
         counts = motif.counts
         for letter in letters:
             terms = ["{0:6.2f}".format(value) for value in counts[letter]]
             line = "{0}\n".format(" ".join(terms))
             lines.append(line)
-    elif format == 'jaspar':
+    elif format == "jaspar":
         for m in motifs:
             counts = m.counts
             try:
@@ -190,7 +190,7 @@ def write(motifs, format):
 
 def _read_pfm(handle):
     """Read the motif from a JASPAR .pfm file (PRIVATE)."""
-    alphabet = 'ACGT'
+    alphabet = "ACGT"
     counts = {}
 
     for letter, line in zip(alphabet, handle):
@@ -210,7 +210,7 @@ def _read_pfm(handle):
 
 def _read_sites(handle):
     """Read the motif from JASPAR .sites file (PRIVATE)."""
-    alphabet = 'ACGT'
+    alphabet = "ACGT"
     instances = []
 
     for line in handle:
@@ -259,7 +259,7 @@ def _read_jaspar(handle):
                 2	19	11	50	29	47	22	81	1	6
 
     """
-    alphabet = 'ACGT'
+    alphabet = "ACGT"
     counts = {}
 
     record = Record()
@@ -271,7 +271,7 @@ def _read_jaspar(handle):
     identifier = None
     name = None
     row_count = 0
-    nucleotides = ['A', 'C', 'G', 'T']
+    nucleotides = ["A", "C", "G", "T"]
     for line in handle:
         line = line.strip()
 
@@ -352,7 +352,7 @@ def split_jaspar_id(id):
     Components are base ID and version number, e.g. 'MA0047.2' is returned as
     ('MA0047', 2).
     """
-    id_split = id.split('.')
+    id_split = id.split(".")
 
     base_id = None
     version = None

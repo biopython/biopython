@@ -120,58 +120,58 @@ class _BitString(str):
     def __new__(cls, strdata):
         """Init from a binary string data."""
         if (isinstance(strdata, str) and
-                len(strdata) == strdata.count('0') + strdata.count('1')):
+                len(strdata) == strdata.count("0") + strdata.count("1")):
             return str.__new__(cls, strdata)
         else:
             raise TypeError(
                 "The input should be a binary string composed of '0' and '1'")
 
     def __and__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = selfint & otherint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __or__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = selfint | otherint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __xor__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = selfint ^ otherint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __rand__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = otherint & selfint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __ror__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = otherint | selfint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __rxor__(self, other):
-        selfint = literal_eval('0b' + self)
-        otherint = literal_eval('0b' + other)
+        selfint = literal_eval("0b" + self)
+        otherint = literal_eval("0b" + other)
         resultint = otherint ^ selfint
         return _BitString(bin(resultint)[2:].zfill(len(self)))
 
     def __repr__(self):
-        return '_BitString(' + str.__repr__(self) + ')'
+        return "_BitString(" + str.__repr__(self) + ")"
 
     def index_one(self):
         """Return a list of positions where the element is '1'."""
-        return [i for i, n in enumerate(self) if n == '1']
+        return [i for i, n in enumerate(self) if n == "1"]
 
     def index_zero(self):
         """Return a list of positions where the element is '0'."""
-        return [i for i, n in enumerate(self) if n == '0']
+        return [i for i, n in enumerate(self) if n == "0"]
 
     def contains(self, other):
         """Check if current bitstr1 contains another one bitstr2.
@@ -187,7 +187,7 @@ class _BitString(str):
 
         """
         xorbit = self ^ other
-        return (xorbit.count('1') == self.count('1') - other.count('1'))
+        return (xorbit.count("1") == self.count("1") - other.count("1"))
 
     def independent(self, other):
         """Check if current bitstr1 is independent of another one bitstr2.
@@ -199,7 +199,7 @@ class _BitString(str):
         of the same length.
         """
         xorbit = self ^ other
-        return (xorbit.count('1') == self.count('1') + other.count('1'))
+        return (xorbit.count("1") == self.count("1") + other.count("1"))
 
     def iscompatible(self, other):
         """Check if current bitstr1 is compatible with another bitstr2.
@@ -214,7 +214,7 @@ class _BitString(str):
 
     @classmethod
     def from_bool(cls, bools):
-        return cls(''.join(map(str, map(int, bools))))
+        return cls("".join(map(str, map(int, bools))))
 
 
 def strict_consensus(trees):
@@ -235,13 +235,13 @@ def strict_consensus(trees):
     # Store bitstrs for strict clades
     strict_bitstrs = [bitstr for bitstr, t in bitstr_counts.items()
                       if t[0] == tree_count]
-    strict_bitstrs.sort(key=lambda bitstr: bitstr.count('1'), reverse=True)
+    strict_bitstrs.sort(key=lambda bitstr: bitstr.count("1"), reverse=True)
     # Create root
     root = BaseTree.Clade()
-    if strict_bitstrs[0].count('1') == len(terms):
+    if strict_bitstrs[0].count("1") == len(terms):
         root.clades.extend(terms)
     else:
-        raise ValueError('Taxons in provided trees should be consistent')
+        raise ValueError("Taxons in provided trees should be consistent")
     # make a bitstr to clades dict and store root clade
     bitstr_clades = {strict_bitstrs[0]: root}
     # create inner clades
@@ -295,14 +295,14 @@ def majority_consensus(trees, cutoff=0):
     # Sort bitstrs by descending #occurrences, then #tips, then tip order
     bitstrs = sorted(bitstr_counts.keys(),
                      key=lambda bitstr: (bitstr_counts[bitstr][0],
-                                         bitstr.count('1'),
+                                         bitstr.count("1"),
                                          str(bitstr)),
                      reverse=True)
     root = BaseTree.Clade()
-    if bitstrs[0].count('1') == len(terms):
+    if bitstrs[0].count("1") == len(terms):
         root.clades.extend(terms)
     else:
-        raise ValueError('Taxons in provided trees should be consistent')
+        raise ValueError("Taxons in provided trees should be consistent")
     # Make a bitstr-to-clades dict and store root clade
     bitstr_clades = {bitstrs[0]: root}
     # create inner clades
@@ -317,7 +317,7 @@ def majority_consensus(trees, cutoff=0):
         clade.clades.extend(clade_terms)
         clade.confidence = confidence
         clade.branch_length = branch_length_sum / count_in_trees
-        bsckeys = sorted(bitstr_clades, key=lambda bs: bs.count('1'),
+        bsckeys = sorted(bitstr_clades, key=lambda bs: bs.count("1"),
                          reverse=True)
 
         # check if current clade is compatible with previous clades and
@@ -391,7 +391,7 @@ def _part(clades):
     if len(terms) == 1 or len(terms) == 2:
         new_clade = clades[0]
     else:
-        bitstrs = {_BitString('1' * len(terms))}
+        bitstrs = {_BitString("1" * len(terms))}
         for clade in clades:
             for child in clade.clades:
                 bitstr = _clade_to_bitstr(child, term_names)
@@ -414,7 +414,7 @@ def _part(clades):
                 # bitstrs = bitstrs | to_add
                 bitstrs ^= to_remove
                 if to_add:
-                    for ta in sorted(to_add, key=lambda bs: bs.count('1')):
+                    for ta in sorted(to_add, key=lambda bs: bs.count("1")):
                         independent = True
                         for bs in bitstrs:
                             if not ta.independent(bs):

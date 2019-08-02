@@ -32,7 +32,7 @@ class _XMLparser(ContentHandler):
 
         """
         self._tag = []
-        self._value = ''
+        self._value = ""
         self._debug = debug
         self._debug_ignore_list = []
         self._method_name_level = 1
@@ -56,7 +56,7 @@ class _XMLparser(ContentHandler):
             return
 
         # Try to call a method (defined in subclasses)
-        method = 'start_' + self._node_method_name(name)
+        method = "start_" + self._node_method_name(name)
 
         # Note could use try / except AttributeError
         # BUT I found often triggered by nested errors...
@@ -96,7 +96,7 @@ class _XMLparser(ContentHandler):
         # DON'T strip any white space, we may need it e.g. the hsp-midline
 
         # Try to call a method (defined in subclasses)
-        method = 'end_' + self._node_method_name(name)
+        method = "end_" + self._node_method_name(name)
 
         # Note could use try / except AttributeError
         # BUT I found often triggered by nested errors...
@@ -111,14 +111,14 @@ class _XMLparser(ContentHandler):
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer
-        self._value = ''
+        self._value = ""
 
         self._tag.pop()
 
     def _node_method_name(self, name):
         if self._method_name_level == 1:
             return name
-        return '/'.join(self._tag[-self._method_name_level:])
+        return "/".join(self._tag[-self._method_name_level:])
 
 
 class BlastParser(_XMLparser):
@@ -167,125 +167,125 @@ class BlastParser(_XMLparser):
         self._parameters.filter = None  # Maybe I should update the class?
 
     def _on_root_node(self, name):
-        if name == 'BlastOutput':
+        if name == "BlastOutput":
             self._setup_blast_v1()
-        elif name == 'BlastXML2':
+        elif name == "BlastXML2":
             self._setup_blast_v2()
         else:
-            raise ValueError('Invalid root node name: %s. Root node should be either BlastOutput or BlastXML2' % name)
+            raise ValueError("Invalid root node name: %s. Root node should be either BlastOutput or BlastXML2" % name)
 
     def _setup_blast_v1(self):
         self._method_map = {
-            'start_Iteration': self._start_blast_record,
-            'end_Iteration': self._end_blast_record,
-            'end_BlastOutput_program': self._set_header_application,
-            'end_BlastOutput_version': self._set_header_version,
-            'end_BlastOutput_reference': self._set_header_reference,
-            'end_BlastOutput_db': self._set_header_database,
-            'end_BlastOutput_query-ID': self._set_header_query_id,
-            'end_BlastOutput_query-def': self._set_header_query,
-            'end_BlastOutput_query-len': self._set_header_query_letters,
-            'end_Iteration_query-ID': self._set_record_query_id,
-            'end_Iteration_query-def': self._set_record_query_def,
-            'end_Iteration_query-len': self._set_record_query_letters,
-            'end_BlastOutput_hits': self._set_record_hits,
-            'end_Parameters_matrix': self._set_parameters_matrix,
-            'end_Parameters_expect': self._set_parameters_expect,
-            'end_Parameters_sc-match': self._set_parameters_sc_match,
-            'end_Parameters_sc-mismatch': self._set_parameters_sc_mismatch,
-            'end_Parameters_gap-open': self._set_parameters_gap_penalties,
-            'end_Parameters_gap-extend': self._set_parameters_gap_extend,
-            'end_Parameters_filter': self._set_parameters_filter,
-            'start_Hit': self._start_hit,
-            'end_Hit': self._end_hit,
-            'end_Hit_id': self.set_hit_id,
-            'end_Hit_def': self.set_hit_def,
-            'end_Hit_accession': self.set_hit_accession,
-            'end_Hit_len': self.set_hit_len,
-            'start_Hsp': self._start_hsp,
-            'end_Hsp_score': self._set_hsp_score,
-            'end_Hsp_bit-score': self._set_hsp_bit_score,
-            'end_Hsp_evalue': self._set_hsp_e_value,
-            'end_Hsp_query-from': self._set_hsp_query_start,
-            'end_Hsp_query-to': self._set_hsp_query_end,
-            'end_Hsp_hit-from': self._set_hsp_hit_from,
-            'end_Hsp_hit-to': self._set_hsp_hit_to,
-            'end_Hsp_query-frame': self._set_hsp_query_frame,
-            'end_Hsp_hit-frame': self._set_hsp_hit_frame,
-            'end_Hsp_identity': self._set_hsp_identity,
-            'end_Hsp_positive': self._set_hsp_positive,
-            'end_Hsp_gaps': self._set_hsp_gaps,
-            'end_Hsp_align-len': self._set_hsp_align_len,
-            'end_Hsp_qseq': self._set_hsp_query_seq,
-            'end_Hsp_hseq': self._set_hsp_subject_seq,
-            'end_Hsp_midline': self._set_hsp_midline,
-            'end_Statistics_db-num': self._set_statistics_db_num,
-            'end_Statistics_db-len': self._set_statistics_db_len,
-            'end_Statistics_hsp-len': self._set_statistics_hsp_len,
-            'end_Statistics_eff-space': self._set_statistics_eff_space,
-            'end_Statistics_kappa': self._set_statistics_kappa,
-            'end_Statistics_lambda': self._set_statistics_lambda,
-            'end_Statistics_entropy': self._set_statistics_entropy,
+            "start_Iteration": self._start_blast_record,
+            "end_Iteration": self._end_blast_record,
+            "end_BlastOutput_program": self._set_header_application,
+            "end_BlastOutput_version": self._set_header_version,
+            "end_BlastOutput_reference": self._set_header_reference,
+            "end_BlastOutput_db": self._set_header_database,
+            "end_BlastOutput_query-ID": self._set_header_query_id,
+            "end_BlastOutput_query-def": self._set_header_query,
+            "end_BlastOutput_query-len": self._set_header_query_letters,
+            "end_Iteration_query-ID": self._set_record_query_id,
+            "end_Iteration_query-def": self._set_record_query_def,
+            "end_Iteration_query-len": self._set_record_query_letters,
+            "end_BlastOutput_hits": self._set_record_hits,
+            "end_Parameters_matrix": self._set_parameters_matrix,
+            "end_Parameters_expect": self._set_parameters_expect,
+            "end_Parameters_sc-match": self._set_parameters_sc_match,
+            "end_Parameters_sc-mismatch": self._set_parameters_sc_mismatch,
+            "end_Parameters_gap-open": self._set_parameters_gap_penalties,
+            "end_Parameters_gap-extend": self._set_parameters_gap_extend,
+            "end_Parameters_filter": self._set_parameters_filter,
+            "start_Hit": self._start_hit,
+            "end_Hit": self._end_hit,
+            "end_Hit_id": self.set_hit_id,
+            "end_Hit_def": self.set_hit_def,
+            "end_Hit_accession": self.set_hit_accession,
+            "end_Hit_len": self.set_hit_len,
+            "start_Hsp": self._start_hsp,
+            "end_Hsp_score": self._set_hsp_score,
+            "end_Hsp_bit-score": self._set_hsp_bit_score,
+            "end_Hsp_evalue": self._set_hsp_e_value,
+            "end_Hsp_query-from": self._set_hsp_query_start,
+            "end_Hsp_query-to": self._set_hsp_query_end,
+            "end_Hsp_hit-from": self._set_hsp_hit_from,
+            "end_Hsp_hit-to": self._set_hsp_hit_to,
+            "end_Hsp_query-frame": self._set_hsp_query_frame,
+            "end_Hsp_hit-frame": self._set_hsp_hit_frame,
+            "end_Hsp_identity": self._set_hsp_identity,
+            "end_Hsp_positive": self._set_hsp_positive,
+            "end_Hsp_gaps": self._set_hsp_gaps,
+            "end_Hsp_align-len": self._set_hsp_align_len,
+            "end_Hsp_qseq": self._set_hsp_query_seq,
+            "end_Hsp_hseq": self._set_hsp_subject_seq,
+            "end_Hsp_midline": self._set_hsp_midline,
+            "end_Statistics_db-num": self._set_statistics_db_num,
+            "end_Statistics_db-len": self._set_statistics_db_len,
+            "end_Statistics_hsp-len": self._set_statistics_hsp_len,
+            "end_Statistics_eff-space": self._set_statistics_eff_space,
+            "end_Statistics_kappa": self._set_statistics_kappa,
+            "end_Statistics_lambda": self._set_statistics_lambda,
+            "end_Statistics_entropy": self._set_statistics_entropy,
         }
 
     def _setup_blast_v2(self):
         self._method_name_level = 2
         self._xml_version = 2
         self._method_map = {
-            'start_report/Report': self._start_blast_record,
-            'end_report/Report': self._end_blast_record,
-            'end_Report/program': self._set_header_application,
-            'end_Report/version': self._set_header_version,
-            'end_Report/reference': self._set_header_reference,
-            'end_Target/db': self._set_header_database,
-            'end_Search/query-id': self._set_record_query_id,
-            'end_Search/query-title': self._set_record_query_def,
-            'end_Search/query-len': self._set_record_query_letters,
-            'end_BlastOutput_hits': self._set_record_hits,
-            'end_Parameters/matrix': self._set_parameters_matrix,
-            'end_Parameters/expect': self._set_parameters_expect,
-            'end_Parameters/sc-match': self._set_parameters_sc_match,
-            'end_Parameters/sc-mismatch': self._set_parameters_sc_mismatch,
-            'end_Parameters/gap-open': self._set_parameters_gap_penalties,
-            'end_Parameters/gap-extend': self._set_parameters_gap_extend,
-            'end_Parameters/filter': self._set_parameters_filter,
-            'start_hits/Hit': self._start_hit,
-            'end_hits/Hit': self._end_hit,
-            'start_description/HitDescr': self._start_hit_descr_item,
-            'end_description/HitDescr': self._end_hit_descr_item,
-            'end_HitDescr/id': self._end_description_id,
-            'end_HitDescr/accession': self._end_description_accession,
-            'end_HitDescr/title': self._end_description_title,
-            'end_HitDescr/taxid': self._end_description_taxid,
-            'end_HitDescr/sciname': self._end_description_sciname,
-            'end_Hit/len': self.set_hit_len,
-            'start_hsps/Hsp': self._start_hsp,
-            'end_hsps/Hsp': self._end_hsp,
-            'end_Hsp/score': self._set_hsp_score,
-            'end_Hsp/bit-score': self._set_hsp_bit_score,
-            'end_Hsp/evalue': self._set_hsp_e_value,
-            'end_Hsp/query-from': self._set_hsp_query_start,
-            'end_Hsp/query-to': self._set_hsp_query_end,
-            'end_Hsp/hit-from': self._set_hsp_hit_from,
-            'end_Hsp/hit-to': self._set_hsp_hit_to,
-            'end_Hsp/query-frame': self._set_hsp_query_frame,
-            'end_Hsp/hit-frame': self._set_hsp_hit_frame,
-            'end_Hsp/query-strand': self._set_hsp_query_strand,
-            'end_Hsp/hit-strand': self._set_hsp_hit_strand,
-            'end_Hsp/identity': self._set_hsp_identity,
-            'end_Hsp/positive': self._set_hsp_positive,
-            'end_Hsp/gaps': self._set_hsp_gaps,
-            'end_Hsp/align-len': self._set_hsp_align_len,
-            'end_Hsp/qseq': self._set_hsp_query_seq,
-            'end_Hsp/hseq': self._set_hsp_subject_seq,
-            'end_Hsp/midline': self._set_hsp_midline,
-            'end_Statistics/db-num': self._set_statistics_db_num,
-            'end_Statistics/db-len': self._set_statistics_db_len,
-            'end_Statistics/hsp-len': self._set_statistics_hsp_len,
-            'end_Statistics/eff-space': self._set_statistics_eff_space,
-            'end_Statistics/kappa': self._set_statistics_kappa,
-            'end_Statistics/lambda': self._set_statistics_lambda,
-            'end_Statistics/entropy': self._set_statistics_entropy,
+            "start_report/Report": self._start_blast_record,
+            "end_report/Report": self._end_blast_record,
+            "end_Report/program": self._set_header_application,
+            "end_Report/version": self._set_header_version,
+            "end_Report/reference": self._set_header_reference,
+            "end_Target/db": self._set_header_database,
+            "end_Search/query-id": self._set_record_query_id,
+            "end_Search/query-title": self._set_record_query_def,
+            "end_Search/query-len": self._set_record_query_letters,
+            "end_BlastOutput_hits": self._set_record_hits,
+            "end_Parameters/matrix": self._set_parameters_matrix,
+            "end_Parameters/expect": self._set_parameters_expect,
+            "end_Parameters/sc-match": self._set_parameters_sc_match,
+            "end_Parameters/sc-mismatch": self._set_parameters_sc_mismatch,
+            "end_Parameters/gap-open": self._set_parameters_gap_penalties,
+            "end_Parameters/gap-extend": self._set_parameters_gap_extend,
+            "end_Parameters/filter": self._set_parameters_filter,
+            "start_hits/Hit": self._start_hit,
+            "end_hits/Hit": self._end_hit,
+            "start_description/HitDescr": self._start_hit_descr_item,
+            "end_description/HitDescr": self._end_hit_descr_item,
+            "end_HitDescr/id": self._end_description_id,
+            "end_HitDescr/accession": self._end_description_accession,
+            "end_HitDescr/title": self._end_description_title,
+            "end_HitDescr/taxid": self._end_description_taxid,
+            "end_HitDescr/sciname": self._end_description_sciname,
+            "end_Hit/len": self.set_hit_len,
+            "start_hsps/Hsp": self._start_hsp,
+            "end_hsps/Hsp": self._end_hsp,
+            "end_Hsp/score": self._set_hsp_score,
+            "end_Hsp/bit-score": self._set_hsp_bit_score,
+            "end_Hsp/evalue": self._set_hsp_e_value,
+            "end_Hsp/query-from": self._set_hsp_query_start,
+            "end_Hsp/query-to": self._set_hsp_query_end,
+            "end_Hsp/hit-from": self._set_hsp_hit_from,
+            "end_Hsp/hit-to": self._set_hsp_hit_to,
+            "end_Hsp/query-frame": self._set_hsp_query_frame,
+            "end_Hsp/hit-frame": self._set_hsp_hit_frame,
+            "end_Hsp/query-strand": self._set_hsp_query_strand,
+            "end_Hsp/hit-strand": self._set_hsp_hit_strand,
+            "end_Hsp/identity": self._set_hsp_identity,
+            "end_Hsp/positive": self._set_hsp_positive,
+            "end_Hsp/gaps": self._set_hsp_gaps,
+            "end_Hsp/align-len": self._set_hsp_align_len,
+            "end_Hsp/qseq": self._set_hsp_query_seq,
+            "end_Hsp/hseq": self._set_hsp_subject_seq,
+            "end_Hsp/midline": self._set_hsp_midline,
+            "end_Statistics/db-num": self._set_statistics_db_num,
+            "end_Statistics/db-len": self._set_statistics_db_len,
+            "end_Statistics/hsp-len": self._set_statistics_hsp_len,
+            "end_Statistics/eff-space": self._set_statistics_eff_space,
+            "end_Statistics/kappa": self._set_statistics_kappa,
+            "end_Statistics/lambda": self._set_statistics_lambda,
+            "end_Statistics/entropy": self._set_statistics_entropy,
         }
 
     def _start_blast_record(self):
@@ -520,7 +520,7 @@ class BlastParser(_XMLparser):
     def set_hit_id(self):
         """Record the identifier of the database sequence (PRIVATE)."""
         self._hit.hit_id = self._value
-        self._hit.title = self._value + ' '
+        self._hit.title = self._value + " "
 
     def set_hit_def(self):
         """Record the definition line of the database sequence (PRIVATE)."""
@@ -599,8 +599,8 @@ class BlastParser(_XMLparser):
         """Frame of the query if applicable (PRIVATE)."""
         v = int(self._value)
         self._hsp.frame = (v,)
-        if self._header.application == 'BLASTN':
-            self._hsp.strand = ('Plus' if v > 0 else 'Minus',)
+        if self._header.application == "BLASTN":
+            self._hsp.strand = ("Plus" if v > 0 else "Minus",)
 
     def _set_hsp_hit_frame(self):
         """Frame of the database sequence if applicable (PRIVATE)."""
@@ -609,20 +609,20 @@ class BlastParser(_XMLparser):
             self._hsp.frame = (0, v)
         else:
             self._hsp.frame += (v,)
-        if self._header.application == 'BLASTN':
-            self._hsp.strand += ('Plus' if v > 0 else 'Minus',)
+        if self._header.application == "BLASTN":
+            self._hsp.strand += ("Plus" if v > 0 else "Minus",)
 
     def _set_hsp_query_strand(self):
         """Frame of the query if applicable (PRIVATE)."""
         self._hsp.strand = (self._value,)
-        if self._header.application == 'BLASTN':
-            self._hsp.frame = (1 if self._value == 'Plus' else -1,)
+        if self._header.application == "BLASTN":
+            self._hsp.frame = (1 if self._value == "Plus" else -1,)
 
     def _set_hsp_hit_strand(self):
         """Frame of the database sequence if applicable (PRIVATE)."""
         self._hsp.strand += (self._value,)
-        if self._header.application == 'BLASTN':
-            self._hsp.frame += (1 if self._value == 'Plus' else -1,)
+        if self._header.application == "BLASTN":
+            self._hsp.frame += (1 if self._value == "Plus" else -1,)
 
     def _set_hsp_identity(self):
         """Record the number of identities in the alignment (PRIVATE)."""
@@ -710,7 +710,7 @@ class BlastParser(_XMLparser):
     def _end_description_accession(self):
         """XML v2. The accession value of the database sequence (PRIVATE)."""
         self._hit_descr_item.accession = self._value
-        if not getattr(self._hit, 'accession', None):
+        if not getattr(self._hit, "accession", None):
             self._hit.accession = self._value
 
     def _end_description_title(self):

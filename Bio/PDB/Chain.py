@@ -24,9 +24,9 @@ class Chain(Entity):
     def __gt__(self, other):
         """Validate if id is greater than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id > other.id
@@ -36,9 +36,9 @@ class Chain(Entity):
     def __ge__(self, other):
         """Validate if id is greater or equal than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id >= other.id
@@ -48,9 +48,9 @@ class Chain(Entity):
     def __lt__(self, other):
         """Validate if id is less than other.id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id < other.id
@@ -60,9 +60,9 @@ class Chain(Entity):
     def __le__(self, other):
         """Validate if id is less or equal than other id."""
         if isinstance(other, Chain):
-            if self.id == ' ' and other.id != ' ':
+            if self.id == " " and other.id != " ":
                 return 0
-            elif self.id != ' ' and other.id == ' ':
+            elif self.id != " " and other.id == " ":
                 return 1
             else:
                 return self.id <= other.id
@@ -85,7 +85,7 @@ class Chain(Entity):
 
         """
         if isinstance(id, int):
-            id = (' ', id, ' ')
+            id = (" ", id, " ")
         return id
 
     def __getitem__(self, id):

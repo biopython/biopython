@@ -14,10 +14,10 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ('Hmmer2TextParser', 'Hmmer2TextIndexer')
+__all__ = ("Hmmer2TextParser", "Hmmer2TextIndexer")
 
 
-_HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
+_HSP_ALIGN_LINE = re.compile(r"(\S+):\s+domain (\d+) of (\d+)")
 
 
 class _HitPlaceholder(object):
@@ -44,9 +44,9 @@ class Hmmer2TextParser(object):
     def __iter__(self):
         """Iterate over Hmmer2TextParser, yields query results."""
         for qresult in self.parse_qresult():
-            qresult.program = self._meta.get('program')
-            qresult.target = self._meta.get('target')
-            qresult.version = self._meta.get('version')
+            qresult.program = self._meta.get("program")
+            qresult.target = self._meta.get("target")
+            qresult.version = self._meta.get("version")
             yield qresult
 
     def read_next(self, rstrip=True):
@@ -67,7 +67,7 @@ class Hmmer2TextParser(object):
 
     def parse_key_value(self):
         """Parse key-value pair separated by colon."""
-        key, value = self.line.split(':', 1)
+        key, value = self.line.split(":", 1)
         return key.strip(), value.strip()
 
     def parse_preamble(self):
@@ -76,30 +76,30 @@ class Hmmer2TextParser(object):
         state = "GENERIC"
         while self.read_next():
             if state == "GENERIC":
-                if self.line.startswith('hmm'):
-                    meta['program'] = self.line.split('-')[0].strip()
-                elif self.line.startswith('HMMER is'):
+                if self.line.startswith("hmm"):
+                    meta["program"] = self.line.split("-")[0].strip()
+                elif self.line.startswith("HMMER is"):
                     continue
-                elif self.line.startswith('HMMER'):
-                    meta['version'] = self.line.split()[1]
-                elif self.line.count('-') == 36:
+                elif self.line.startswith("HMMER"):
+                    meta["version"] = self.line.split()[1]
+                elif self.line.count("-") == 36:
                     state = "OPTIONS"
                 continue
 
             assert state == "OPTIONS"
-            assert 'program' in meta
+            assert "program" in meta
 
-            if self.line.count('-') == 32:
+            if self.line.count("-") == 32:
                 break
 
             key, value = self.parse_key_value()
-            if meta['program'] == 'hmmsearch':
-                if key == 'Sequence database':
-                    meta['target'] = value
+            if meta["program"] == "hmmsearch":
+                if key == "Sequence database":
+                    meta["target"] = value
                     continue
-            elif meta['program'] == 'hmmpfam':
-                if key == 'HMM file':
-                    meta['target'] = value
+            elif meta["program"] == "hmmpfam":
+                if key == "HMM file":
+                    meta["target"] = value
                     continue
             meta[key] = value
 
@@ -108,17 +108,17 @@ class Hmmer2TextParser(object):
     def parse_qresult(self):
         """Parse a HMMER2 query block."""
         while self.read_next():
-            if not self.line.startswith('Query'):
+            if not self.line.startswith("Query"):
                 return
             _, id_ = self.parse_key_value()
             self.qresult = QueryResult(id=id_)
 
             description = None
 
-            while self.read_next() and not self.line.startswith('Scores'):
-                if self.line.startswith('Accession'):
+            while self.read_next() and not self.line.startswith("Scores"):
+                if self.line.startswith("Accession"):
                     self.qresult.accession = self.parse_key_value()[1]
-                if self.line.startswith('Description'):
+                if self.line.startswith("Description"):
                     description = self.parse_key_value()[1]
 
             hit_placeholders = self.parse_hits()
@@ -126,7 +126,7 @@ class Hmmer2TextParser(object):
                 self.parse_hsps(hit_placeholders)
                 self.parse_hsp_alignments()
 
-            while not self.line.startswith('Query'):
+            while not self.line.startswith("Query"):
                 self.read_next()
                 if not self.line:
                     break
@@ -140,14 +140,14 @@ class Hmmer2TextParser(object):
         """Parse a HMMER2 hit block, beginning with the hit table."""
         hit_placeholders = []
         while self.read_next():
-            if self.line.startswith('Parsed'):
+            if self.line.startswith("Parsed"):
                 break
-            if self.line.find('no hits') > -1:
+            if self.line.find("no hits") > -1:
                 break
 
-            if self.line.startswith('Sequence') or \
-               self.line.startswith('Model') or \
-               self.line.startswith('-------- '):
+            if self.line.startswith("Sequence") or \
+               self.line.startswith("Model") or \
+               self.line.startswith("-------- "):
                 continue
 
             fields = self.line.split()
@@ -155,7 +155,7 @@ class Hmmer2TextParser(object):
             domain_obs_num = int(fields.pop())
             evalue = float(fields.pop())
             bitscore = float(fields.pop())
-            description = ' '.join(fields).strip()
+            description = " ".join(fields).strip()
 
             hit = _HitPlaceholder()
             hit.id_ = id_
@@ -173,13 +173,13 @@ class Hmmer2TextParser(object):
         # so store Hit objects separately first
         unordered_hits = {}
         while self.read_next():
-            if self.line.startswith('Alignments') or \
-               self.line.startswith('Histogram') or \
-               self.line == '//':
+            if self.line.startswith("Alignments") or \
+               self.line.startswith("Histogram") or \
+               self.line == "//":
                 break
-            if self.line.startswith('Model') or \
-               self.line.startswith('Sequence') or \
-               self.line.startswith('--------'):
+            if self.line.startswith("Model") or \
+               self.line.startswith("Sequence") or \
+               self.line.startswith("--------"):
                 continue
 
             id_, domain, seq_f, seq_t, seq_compl, hmm_f, hmm_t, hmm_compl,\
@@ -187,12 +187,12 @@ class Hmmer2TextParser(object):
 
             frag = HSPFragment(id_, self.qresult.id)
             frag.alphabet = generic_protein
-            if self._meta['program'] == 'hmmpfam':
+            if self._meta["program"] == "hmmpfam":
                 frag.hit_start = int(hmm_f) - 1
                 frag.hit_end = int(hmm_t)
                 frag.query_start = int(seq_f) - 1
                 frag.query_end = int(seq_t)
-            elif self._meta['program'] == 'hmmsearch':
+            elif self._meta["program"] == "hmmsearch":
                 frag.query_start = int(hmm_f) - 1
                 frag.query_end = int(hmm_t)
                 frag.hit_start = int(seq_f) - 1
@@ -201,11 +201,11 @@ class Hmmer2TextParser(object):
             hsp = HSP([frag])
             hsp.evalue = float(evalue)
             hsp.bitscore = float(score)
-            hsp.domain_index = int(domain.split('/')[0])
-            if self._meta['program'] == 'hmmpfam':
+            hsp.domain_index = int(domain.split("/")[0])
+            if self._meta["program"] == "hmmpfam":
                 hsp.hit_endtype = hmm_compl
                 hsp.query_endtype = seq_compl
-            elif self._meta['program'] == 'hmmsearch':
+            elif self._meta["program"] == "hmmsearch":
                 hsp.query_endtype = hmm_compl
                 hsp.hit_endtype = seq_compl
 
@@ -225,11 +225,11 @@ class Hmmer2TextParser(object):
 
     def parse_hsp_alignments(self):
         """Parse a HMMER2 HSP alignment block."""
-        if not self.line.startswith('Alignments'):
+        if not self.line.startswith("Alignments"):
             return
 
         while self.read_next():
-            if self.line == '//' or self.line.startswith('Histogram'):
+            if self.line == "//" or self.line.startswith("Histogram"):
                 break
 
             match = re.search(_HSP_ALIGN_LINE, self.line)
@@ -246,21 +246,21 @@ class Hmmer2TextParser(object):
 
             frag = hit[idx - 1][0]
 
-            hmmseq = ''
-            consensus = ''
-            otherseq = ''
-            structureseq = ''
+            hmmseq = ""
+            consensus = ""
+            otherseq = ""
+            structureseq = ""
             pad = 0
-            while self.read_next() and self.line.startswith(' '):
+            while self.read_next() and self.line.startswith(" "):
                 # if there's structure information, parse that
-                if self.line[16:18] == 'CS':
+                if self.line[16:18] == "CS":
                     structureseq += self.line[19:].strip()
 
                     if not self.read_next():
                         break
 
                 # skip the *-> start marker if it exists
-                if self.line[19:22] == '*->':
+                if self.line[19:22] == "*->":
                     seq = self.line[22:]
                     pad = 3
                 else:
@@ -275,7 +275,7 @@ class Hmmer2TextParser(object):
                 # If there's no consensus sequence, hmmer2 doesn't
                 # bother to put spaces here, so add extra padding
                 extra_padding = len(hmmseq) - len(consensus)
-                consensus += ' ' * extra_padding
+                consensus += " " * extra_padding
 
                 if not self.read_next():
                     break
@@ -291,18 +291,18 @@ class Hmmer2TextParser(object):
             self.push_back(self.line)
 
             # get rid of the end marker
-            if hmmseq.endswith('<-*'):
+            if hmmseq.endswith("<-*"):
                 hmmseq = hmmseq[:-3]
                 consensus = consensus[:-3]
 
             # add similarity sequence to annotation
-            frag.aln_annotation['similarity'] = consensus
+            frag.aln_annotation["similarity"] = consensus
 
             # if there's structure information, add it to the fragment
             if structureseq:
-                frag.aln_annotation['CS'] = structureseq
+                frag.aln_annotation["CS"] = structureseq
 
-            if self._meta['program'] == 'hmmpfam':
+            if self._meta["program"] == "hmmpfam":
                 frag.hit = hmmseq
                 frag.query = otherseq
             else:
@@ -314,22 +314,22 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
     """Indexer for hmmer2-text format."""
 
     _parser = Hmmer2TextParser
-    qresult_start = _as_bytes('Query')
+    qresult_start = _as_bytes("Query")
     # qresults_ends for hmmpfam and hmmsearch
     # need to anticipate both since hmmsearch have different query end mark
-    qresult_end = _as_bytes('//')
+    qresult_end = _as_bytes("//")
 
     def __iter__(self):
         """Iterate over Hmmer2TextIndexer; yields query results' key, offsets, 0."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(_as_bytes(r'Query\s*(?:sequence|HMM)?:\s*(.*)'))
+        regex_id = re.compile(_as_bytes(r"Query\s*(?:sequence|HMM)?:\s*(.*)"))
 
         # determine flag for hmmsearch
         is_hmmsearch = False
         line = read_forward(handle)
-        if line.startswith(_as_bytes('hmmsearch')):
+        if line.startswith(_as_bytes("hmmsearch")):
             is_hmmsearch = True
 
         while True:

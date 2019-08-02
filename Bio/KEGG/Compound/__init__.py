@@ -155,7 +155,7 @@ def parse(handle):
                 record.enzyme.append(enzyme)
         elif keyword == "PATHWAY     ":
             map, name = data.split("  ")
-            pathway = ('PATH', map, name)
+            pathway = ("PATH", map, name)
             record.pathway.append(pathway)
         elif keyword == "FORMULA     ":
             record.formula = data
