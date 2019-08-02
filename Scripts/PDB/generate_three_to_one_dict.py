@@ -83,7 +83,7 @@ while line:
             three_to_one_buf.append("%s\n" % (current_line,))
             current_line = "    "
 
-        current_line = '%s\'%s\':\'%s\',' % (current_line, three, one)
+        current_line = "%s'%s':'%s'," % (current_line, three, one)
         counter += 1
 
         if one != "?":
@@ -91,8 +91,8 @@ while line:
                 three_to_one_buf_noq.append("%s\n" % (current_line_noq,))
                 current_line_noq = "    "
 
-            current_line_noq = '%s\'%s\':\'%s\',' % (current_line_noq, three,
-                                                     one)
+            current_line_noq = "%s'%s':'%s'," % (current_line_noq, three,
+                                                 one)
             counter_noq += 1
 
         found_one = False
