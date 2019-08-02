@@ -175,19 +175,23 @@ class MsfIterator(AlignmentIterator):
                     if " " in name:
                         raise NotImplementedError("Space in ID %r" % name)
                     ids.append(name)
+                    # Expect aln_length <= int(length.strip()), see below
                     lengths.append(int(length.strip()))
                     checks.append(int(check.strip()))
                     weights.append(float(weight.strip()))
-                    if aln_length < int(length.strip()):
-                        # Can have short sequences in the alignment
-                        raise ValueError(
-                            "GCG MSF header said alignment length %i, but %s has Len: %s"
-                            % (aln_length, name, length)
-                        )
                 else:
                     raise ValueError("Malformed GCG MSF name line: %r" % line)
         if not line:
             raise ValueError("End of file while looking for end of header // line.")
+
+        if aln_length != max(lengths):
+            # Can we continue if assume aln_length was an error?
+            max_length = max(lengths)
+            max_count = sum(1 for _ in lengths if _ == max_length)
+            raise ValueError(
+                "GCG MSF header said alignment length %i, but %s of %i sequences said Len: %s"
+                % (aln_length, max_count, len(ids), max_length)
+            )
 
         line = handle.readline()
         if not line:
@@ -253,12 +257,17 @@ class MsfIterator(AlignmentIterator):
                 # Dealt with any coordinate header line, should now be sequence
                 if not words:
                     # Should be sequence here, but perhaps its a short one?
-                    if lengths[idx] < aln_length and len("".join(seqs[idx])) == lengths[idx]:
+                    if (
+                        lengths[idx] < aln_length
+                        and len("".join(seqs[idx])) == lengths[idx]
+                    ):
                         # Is this actually allowed in the format? Personally I would
                         # expect a line with name and a block of trailing ~ here.
                         pass
                     else:
-                        raise ValueError("Expected sequence for %s, got: %r" % (name, line))
+                        raise ValueError(
+                            "Expected sequence for %s, got: %r" % (name, line)
+                        )
                 elif words[0] == name:
                     assert len(words) > 1, line
                     # print(i, name, repr(words))
@@ -286,13 +295,7 @@ class MsfIterator(AlignmentIterator):
                 self._header = line
                 break
             else:
-                import warnings
-                from Bio import BiopythonParserWarning
-
-                warnings.warn(
-                    "Unexpected line after GCG MSF alignment: %r" % line,
-                    BiopythonParserWarning,
-                )
+                raise ValueError("Unexpected line after GCG MSF alignment: %r" % line)
 
         # Combine list of strings into single string, remap gaps
         seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
