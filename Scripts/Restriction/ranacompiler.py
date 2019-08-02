@@ -24,11 +24,11 @@
 """Convert a series of Rebase files into a Restriction_Dictionary.py module.
 
 The Rebase files are in the emboss format:
- - `emboss_e.###` - contains information about the restriction sites.
- - `emboss_r.###` - contains general information about the enzymes.
- - `emboss_s.###` - contains information about the suppliers.
+ - ``emboss_e.###`` - contains information about the restriction sites.
+ - ``emboss_r.###`` - contains general information about the enzymes.
+ - ``emboss_s.###`` - contains information about the suppliers.
 
-Here `###` is the 3 digit number REBASE release number (e.g. 312). The first
+Here ``###`` is the 3 digit number REBASE release number (e.g. 312). The first
 digit is the last digit of the year (e.g. 3 for 2013) and the two last the
 month (e.g. 12 for December).
 
@@ -841,7 +841,7 @@ class DictionaryBuilder(object):
         #   and the name with '_as' at the end for the antisense sequence.
         #
         rg = ""
-        if is_palindrom(dna):
+        if is_palindrome(dna):
             line.append(True)
             rg = "".join(["(?=(?P<", name, ">", regex(site.upper()), "))"])
         else:
