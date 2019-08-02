@@ -20,7 +20,7 @@ class MMCIF2Dict(dict):
          - file - name of the PDB file OR an open filehandle
 
         """
-        self.quote_chars = ['\'', '\"']
+        self.quote_chars = ["'", '"']
         self.whitespace_chars = [" ", "\t"]
         with as_handle(filename) as handle:
             loop_flag = False
