@@ -36,7 +36,7 @@ class TestGeo(unittest.TestCase):
         # Don't want to use text mode on Python 3,
         with open(pickle_file, 'rb') as handle:
             dictionary = pickle.load(handle)
-        cls.acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(dictionary)
+        cls.acc_rep_mat = SubsMat.SeqMat(dictionary)
         cls.obs_freq_mat = SubsMat._build_obs_freq_mat(cls.acc_rep_mat)
 
     def checkMatrix(self, mat, expected):
