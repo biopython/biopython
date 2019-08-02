@@ -84,7 +84,7 @@ class KeyWListTest(unittest.TestCase):
         self.assertEqual(record["DE"], "Protein which contains at least one 3Fe-4S iron-sulfur cluster: 3 iron atoms complexed to 4 inorganic sulfides and 3 sulfur atoms of cysteines from the protein. In a number of iron-sulfur proteins, the 4Fe-4S cluster can be reversibly converted by oxidation and loss of one iron ion to a 3Fe-4S cluster.")
         self.assertEqual(record["SY"], "")
         self.assertEqual(len(record["GO"]), 1)
-        self.assertEqual(record["GO"], ['GO:0051538; 3 iron, 4 sulfur cluster binding'])
+        self.assertEqual(record["GO"], ["GO:0051538; 3 iron, 4 sulfur cluster binding"])
         self.assertEqual(len(record["HI"]), 2)
         self.assertEqual(record["HI"][0], "Ligand: Iron; Iron-sulfur; 3Fe-4S.")
         self.assertEqual(record["HI"][1], "Ligand: Metal-binding; 3Fe-4S.")

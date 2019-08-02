@@ -122,7 +122,7 @@ class ParseReal(unittest.TestCase):
 
         for atoms in [s_atoms, f_atoms]:
             self.assertEqual(len(atoms), 644)
-            atom_names = ['N', 'CA', 'C', 'O', 'CB']
+            atom_names = ["N", "CA", "C", "O", "CB"]
             self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
@@ -151,7 +151,7 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(s_atoms), len(f_atoms))
 
         for atoms in [s_atoms, f_atoms]:
-            atom_names = ['N', 'CA', 'C', 'O', 'CB']
+            atom_names = ["N", "CA", "C", "O", "CB"]
             self.assertSequenceEqual([a.get_name() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_id() for a in atoms[:5]], atom_names)
             self.assertSequenceEqual([a.get_fullname() for a in atoms[:5]], atom_names)
@@ -164,7 +164,7 @@ class ParseReal(unittest.TestCase):
             ansiou = numpy.array([0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=numpy.float32)
             numpy.testing.assert_array_equal(atoms[0].get_anisou(), ansiou)
             ansiou = numpy.array([1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=numpy.float32)
-            atom_937 = list(f_structure[0]['A'])[114]['CB']
+            atom_937 = list(f_structure[0]["A"])[114]["CB"]
             numpy.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
 
     def testModels(self):
@@ -172,7 +172,7 @@ class ParseReal(unittest.TestCase):
         parser = MMCIFParser(QUIET=1)
         f_parser = FastMMCIFParser(QUIET=1)
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = parser.get_structure("example", "PDB/1LCD.cif")
             f_structure = f_parser.get_structure("example", "PDB/1LCD.cif")
 
@@ -223,7 +223,7 @@ class ParseReal(unittest.TestCase):
         """Test file with residue insertion codes."""
         parser = MMCIFParser(QUIET=1)
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = parser.get_structure("example", "PDB/4ZHL.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
@@ -292,12 +292,12 @@ class ParseReal(unittest.TestCase):
 
         # Quickly check that we can switch between residues and that the
         # correct set of residues was parsed.
-        res_1.disordered_select('PRO')
+        res_1.disordered_select("PRO")
         self.assertAlmostEqual(
             res_1["CA"].get_occupancy(),
             0.83, 2, "Residue 1 proline occupancy correcy")
 
-        res_1.disordered_select('SER')
+        res_1.disordered_select("SER")
         self.assertAlmostEqual(
             res_1["CA"].get_occupancy(),
             0.17, 2, "Residue 1 serine occupancy correcy")
@@ -317,7 +317,7 @@ class CIFtoPDB(unittest.TestCase):
         pdb_writer.save(filename)
 
         pdb_parser = PDBParser(QUIET=1)
-        pdb_struct = pdb_parser.get_structure('example_pdb', filename)
+        pdb_struct = pdb_parser.get_structure("example_pdb", filename)
 
         # comparisons
         self.assertEqual(len(pdb_struct), len(cif_struct))
@@ -332,6 +332,6 @@ class CIFtoPDB(unittest.TestCase):
         self.assertSequenceEqual(pdb_atom_elems, cif_atom_elems)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

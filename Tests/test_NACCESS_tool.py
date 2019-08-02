@@ -39,6 +39,6 @@ class NACCESS_test(unittest.TestCase):
         self.assertEqual(len(naccess), 66)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

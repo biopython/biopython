@@ -13,11 +13,11 @@ from search_tests_common import CheckRaw, CheckIndex
 class BlastXmlRawCases(CheckRaw):
     """Check BLAST XML get_raw method."""
 
-    fmt = 'blast-xml'
+    fmt = "blast-xml"
 
     def test_blastxml_2226_multiple_first(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, first (xml_2226_blastp_001.xml)."""
-        filename = 'Blast/xml_2226_blastp_001.xml'
+        filename = "Blast/xml_2226_blastp_001.xml"
         raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
@@ -42,7 +42,7 @@ class BlastXmlRawCases(CheckRaw):
 
     def test_blastxml_2226_multiple_middle(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, middle (xml_2226_blastp_001.xml)."""
-        filename = 'Blast/xml_2226_blastp_001.xml'
+        filename = "Blast/xml_2226_blastp_001.xml"
         raw = """    <Iteration>
       <Iteration_iter-num>2</Iteration_iter-num>
       <Iteration_query-ID>Query_2</Iteration_query-ID>
@@ -207,7 +207,7 @@ class BlastXmlRawCases(CheckRaw):
 
     def test_blastxml_2226_multiple_last(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, last (xml_2226_blastp_001.xml)."""
-        filename = 'Blast/xml_2226_blastp_001.xml'
+        filename = "Blast/xml_2226_blastp_001.xml"
         raw = """    <Iteration>
       <Iteration_iter-num>3</Iteration_iter-num>
       <Iteration_query-ID>Query_3</Iteration_query-ID>
@@ -467,7 +467,7 @@ class BlastXmlRawCases(CheckRaw):
 
     def test_blastxml_2226_single(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, single query (xml_2226_blastp_004.xml)."""
-        filename = 'Blast/xml_2226_blastp_004.xml'
+        filename = "Blast/xml_2226_blastp_004.xml"
         raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
@@ -728,36 +728,36 @@ class BlastXmlRawCases(CheckRaw):
 
 class BlastXmlIndexCases(CheckIndex):
 
-    fmt = 'blast-xml'
+    fmt = "blast-xml"
 
     def test_blastxml_2212L_blastp_001(self):
         """Test blast-xml indexing, BLAST 2.2.12."""
-        filename = 'Blast/xml_2212L_blastp_001.xml'
+        filename = "Blast/xml_2212L_blastp_001.xml"
         self.check_index(filename, self.fmt)
 
     def test_blastxml_2218_blastp_001(self):
         """Test blast-xml indexing, BLAST 2.2.18+."""
-        filename = 'Blast/xml_2218_blastp_001.xml'
+        filename = "Blast/xml_2218_blastp_001.xml"
         self.check_index(filename, self.fmt)
 
     def test_blastxml_2222_blastx_001(self):
         """Test blast-xml indexing, BLAST 2.2.22+."""
-        filename = 'Blast/xml_2222_blastx_001.xml'
+        filename = "Blast/xml_2222_blastx_001.xml"
         self.check_index(filename, self.fmt)
 
     def test_blastxml_2226_tblastn_001(self):
         """Test blast-xml indexing, BLAST 2.2.26+, multiple queries."""
-        filename = 'Blast/xml_2226_tblastn_001.xml'
+        filename = "Blast/xml_2226_tblastn_001.xml"
         self.check_index(filename, self.fmt)
 
     def test_blastxml_2226_tblastn_002(self):
         """Test blast-xml indexing, BlAST 2.2.26+, single query, no hits."""
-        filename = 'Blast/xml_2226_tblastn_002.xml'
+        filename = "Blast/xml_2226_tblastn_002.xml"
         self.check_index(filename, self.fmt)
 
     def test_blastxml_2226_tblastn_004(self):
         """Test blast-xml indexing, BLAST 2.2.26+, single query, multiple hits."""
-        filename = 'Blast/xml_2226_tblastn_004.xml'
+        filename = "Blast/xml_2226_tblastn_004.xml"
         self.check_index(filename, self.fmt)
 
 

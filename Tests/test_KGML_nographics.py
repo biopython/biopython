@@ -39,8 +39,8 @@ class KGMLPathwayTest(unittest.TestCase):
 
     def setUp(self):
         # Does our output director exist?  If not, create it
-        if not os.path.isdir('KEGG'):
-            os.mkdir('KEGG')
+        if not os.path.isdir("KEGG"):
+            os.mkdir("KEGG")
         # Define some data to work with as a list of tuples:
         # (infilename, outfilename, (entry_count, ortholog_count,
         # compound_count, map_counts), pathway_image,
@@ -58,19 +58,19 @@ class KGMLPathwayTest(unittest.TestCase):
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
         self.ko_ids = \
-            {'ko:K00239', 'ko:K00240', 'ko:K00241', 'ko:K00242', 'ko:K00244',
-             'ko:K00245', 'ko:K00246', 'ko:K00247', 'ko:K00174', 'ko:K00175',
-             'ko:K00177', 'ko:K00176', 'ko:K00382', 'ko:K00164', 'ko:K00164',
-             'ko:K00658', 'ko:K01902', 'ko:K01903', 'ko:K01899', 'ko:K01900',
-             'ko:K01899', 'ko:K01900', 'ko:K00031', 'ko:K00030', 'ko:K00031',
-             'ko:K01648', 'ko:K00234', 'ko:K00235', 'ko:K00236', 'ko:K00237',
-             'ko:K01676', 'ko:K01677', 'ko:K01678', 'ko:K01679', 'ko:K01681',
-             'ko:K01682', 'ko:K01681', 'ko:K01682', 'ko:K01647', 'ko:K00025',
-             'ko:K00026', 'ko:K00024', 'ko:K01958', 'ko:K01959', 'ko:K01960',
-             'ko:K00163', 'ko:K00161', 'ko:K00162', 'ko:K00163', 'ko:K00161',
-             'ko:K00162', 'ko:K00382', 'ko:K00627', 'ko:K00169', 'ko:K00170',
-             'ko:K00172', 'ko:K00171', 'ko:K01643', 'ko:K01644', 'ko:K01646',
-             'ko:K01610', 'ko:K01596'}
+            {"ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242", "ko:K00244",
+             "ko:K00245", "ko:K00246", "ko:K00247", "ko:K00174", "ko:K00175",
+             "ko:K00177", "ko:K00176", "ko:K00382", "ko:K00164", "ko:K00164",
+             "ko:K00658", "ko:K01902", "ko:K01903", "ko:K01899", "ko:K01900",
+             "ko:K01899", "ko:K01900", "ko:K00031", "ko:K00030", "ko:K00031",
+             "ko:K01648", "ko:K00234", "ko:K00235", "ko:K00236", "ko:K00237",
+             "ko:K01676", "ko:K01677", "ko:K01678", "ko:K01679", "ko:K01681",
+             "ko:K01682", "ko:K01681", "ko:K01682", "ko:K01647", "ko:K00025",
+             "ko:K00026", "ko:K00024", "ko:K01958", "ko:K01959", "ko:K01960",
+             "ko:K00163", "ko:K00161", "ko:K00162", "ko:K00163", "ko:K00161",
+             "ko:K00162", "ko:K00382", "ko:K00627", "ko:K00169", "ko:K00170",
+             "ko:K00172", "ko:K00171", "ko:K01643", "ko:K01644", "ko:K01646",
+             "ko:K01610", "ko:K01596"}
 
     def tearDown(self):
         for p in self.data:
@@ -84,7 +84,7 @@ class KGMLPathwayTest(unittest.TestCase):
         """
         for p in self.data:
             # Test opening file
-            with open(p.infilename, 'rU') as f:
+            with open(p.infilename, "rU") as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),
@@ -93,10 +93,10 @@ class KGMLPathwayTest(unittest.TestCase):
                                   len(pathway.maps)),
                                  p.element_counts)
             # Test writing file
-            with open(p.outfilename, 'w') as f:
+            with open(p.outfilename, "w") as f:
                 f.write(pathway.get_KGML())
             # Can we read the file we wrote?
-            with open(p.outfilename, 'rU') as f:
+            with open(p.outfilename, "rU") as f:
                 pathway = read(f)
                 # Do we have the correct number of elements of each type
                 self.assertEqual((len(pathway.entries),
@@ -106,6 +106,6 @@ class KGMLPathwayTest(unittest.TestCase):
                                  p.element_counts)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

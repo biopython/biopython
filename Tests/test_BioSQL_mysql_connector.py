@@ -14,8 +14,8 @@ from common_BioSQL import *  # noqa: F403
 from common_BioSQL import load_biosql_ini, check_config
 
 
-DBDRIVER = 'mysql.connector'
-DBTYPE = 'mysql'
+DBDRIVER = "mysql.connector"
+DBTYPE = "mysql"
 
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 

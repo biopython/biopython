@@ -49,10 +49,10 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "AACGTT")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['0', '0', '1', '2', '3', '3'])
+        self.assertEqual(state_list, ["0", "0", "1", "2", "3", "3"])
         self.assertAlmostEqual(state_float, 0.0082128906)
-        self.assertEqual(markov_model.states, ['0', '1', '2', '3'])
-        self.assertEqual(markov_model.alphabet, ['A', 'C', 'G', 'T'])
+        self.assertEqual(markov_model.states, ["0", "1", "2", "3"])
+        self.assertEqual(markov_model.alphabet, ["A", "C", "G", "T"])
         self.assertEqual(len(markov_model.p_initial), 4)
         self.assertAlmostEqual(markov_model.p_initial[0], 1.0)
         self.assertAlmostEqual(markov_model.p_initial[1], 0.0)
@@ -138,8 +138,8 @@ class TestMarkovModel(unittest.TestCase):
         markov_model = MarkovModel.MarkovModel(states, alphabet,
                                                p_initial, p_transition,
                                                p_emission)
-        self.assertEqual(markov_model.states, ['CP', 'IP'])
-        self.assertEqual(markov_model.alphabet, ['cola', 'ice_t', 'lem'])
+        self.assertEqual(markov_model.states, ["CP", "IP"])
+        self.assertEqual(markov_model.alphabet, ["cola", "ice_t", "lem"])
         self.assertEqual(len(markov_model.p_initial), 2)
         self.assertAlmostEqual(markov_model.p_initial[0], 1.0,
                                places=4)
@@ -182,7 +182,7 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "TGCC")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['N', 'N', 'N', 'N'])
+        self.assertEqual(state_list, ["N", "N", "N", "N"])
 
     def test_topcoder2(self):
         # NNNRRRNNRRNRRN
@@ -198,7 +198,7 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "CCTGAGTTAGTCGT")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['N', 'N', 'N', 'R', 'R', 'R', 'N', 'N', 'R', 'R', 'N', 'R', 'R', 'N'])
+        self.assertEqual(state_list, ["N", "N", "N", "R", "R", "R", "N", "N", "R", "R", "N", "R", "R", "N"])
 
     def test_topcoder3(self):
         # NRRRRRRRRRRRNNNNRRRRRRRRR
@@ -214,7 +214,7 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "CCGTACTTACCCAGGACCGCAGTCC")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['N', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'N', 'N', 'N', 'N', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'])
+        self.assertEqual(state_list, ["N", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "N", "N", "N", "N", "R", "R", "R", "R", "R", "R", "R", "R", "R"])
 
     def test_topcoder4(self):
         # NRRRRRRRRRR
@@ -230,7 +230,7 @@ class TestMarkovModel(unittest.TestCase):
         states = MarkovModel.find_states(markov_model, "TTAGCAGTGCG")
         self.assertEqual(len(states), 1)
         state_list, state_float = states[0]
-        self.assertEqual(state_list, ['N', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'])
+        self.assertEqual(state_list, ["N", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R"])
 
     def test_topcoder5(self):
         # N
@@ -278,8 +278,8 @@ class TestMarkovModel(unittest.TestCase):
         handle.seek(0)
         markov_model_load = MarkovModel.load(handle)
 
-        self.assertEqual(''.join(markov_model_load.states), states)
-        self.assertEqual(''.join(markov_model_load.alphabet), alphabet)
+        self.assertEqual("".join(markov_model_load.states), states)
+        self.assertEqual("".join(markov_model_load.alphabet), alphabet)
         self.assertTrue(array_equal(markov_model_load.p_initial, p_initial))
         self.assertTrue(array_equal
                         (markov_model_load.p_transition, p_transition))
@@ -318,8 +318,8 @@ class TestMarkovModel(unittest.TestCase):
              [3.33333333e-001, 6.66666667e-001, 3.33333333e-301, 3.33333333e-301]])
 
         markov_model = MarkovModel.train_bw(states, alphabet, training_data)
-        self.assertEqual(''.join(markov_model.states), ''.join(states))
-        self.assertEqual(''.join(markov_model.alphabet), ''.join(alphabet))
+        self.assertEqual("".join(markov_model.states), "".join(states))
+        self.assertEqual("".join(markov_model.alphabet), "".join(alphabet))
         self.assertTrue(array_equal(
             around(markov_model.p_initial, decimals=3),
             around(output_p_initial, decimals=3)))
@@ -415,8 +415,8 @@ class TestMarkovModel(unittest.TestCase):
         self.assertEqual(viterbi_output[0][0][1], output1[1])
         self.assertEqual(viterbi_output[0][0][2], output1[2])
         self.assertEqual(
-            float('%.3f' % viterbi_output[0][1]),
-            float('%.3f' % output2))
+            float("%.3f" % viterbi_output[0][1]),
+            float("%.3f" % output2))
 
     def test_normalize_and_copy_and_check(self):
         matrix_in1 = array(
@@ -465,20 +465,20 @@ class TestMarkovModel(unittest.TestCase):
         output = 10.304721798
         output1 = 3.40760596444
         self.assertEqual(
-            float('%.3f' % MarkovModel._logsum(matrix)),
-            float('%.3f' % output))
+            float("%.3f" % MarkovModel._logsum(matrix)),
+            float("%.3f" % output))
         self.assertEqual(
-            float('%.3f' % MarkovModel._logsum(matrix1)),
-            float('%.3f' % output1))
+            float("%.3f" % MarkovModel._logsum(matrix1)),
+            float("%.3f" % output1))
 
         output2 = 29873.342245
         output3 = 30.1928748506
         self.assertEqual(
-            float('%.3f' % MarkovModel._exp_logsum(matrix)),
-            float('%.3f' % output2))
+            float("%.3f" % MarkovModel._exp_logsum(matrix)),
+            float("%.3f" % output2))
         self.assertEqual(
-            float('%.3f' % MarkovModel._exp_logsum(matrix1)),
-            float('%.3f' % output3))
+            float("%.3f" % MarkovModel._exp_logsum(matrix1)),
+            float("%.3f" % output3))
 
     def test_logvecadd(self):
         vec1 = log(array([1, 2, 3, 4]))
@@ -489,6 +489,6 @@ class TestMarkovModel(unittest.TestCase):
             array_equal(around(MarkovModel._logvecadd(vec1, vec2), decimals=3), around(sumvec, decimals=3)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

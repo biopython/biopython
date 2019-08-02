@@ -72,7 +72,7 @@ if "--offline" in sys.argv:
     # Allow manual override via "python test_Tutorial.py --offline"
     online = False
 
-warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+warnings.simplefilter("ignore", BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor
@@ -85,7 +85,7 @@ if sys.version_info[0] >= 3:
         ">>> print(2+2)\n4\n"
     assert rt.refactor_docstring(
         '>>> print("Two plus two is", 2+2)\n'
-        'Two plus two is 4\n', "example2") == \
+        "Two plus two is 4\n", "example2") == \
         '>>> print("Two plus two is", 2+2)\nTwo plus two is 4\n'
 
 # Cache this to restore the cwd at the end of the tests

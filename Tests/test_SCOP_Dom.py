@@ -15,7 +15,7 @@ from Bio.SCOP import Dom
 
 class DomTests(unittest.TestCase):
     def setUp(self):
-        self.filename = './SCOP/testDom.txt'
+        self.filename = "./SCOP/testDom.txt"
 
     def testParse(self):
         """Test if all records in a DOM file are being read."""
@@ -46,15 +46,15 @@ class DomTests(unittest.TestCase):
 
     def testRecord(self):
         """Test one record in detail."""
-        recLine = 'd7hbib_\t7hbi\tb:\t1.001.001.001.001.001'
+        recLine = "d7hbib_\t7hbi\tb:\t1.001.001.001.001.001"
 
         rec = Dom.Record(recLine)
-        self.assertEqual(rec.sid, 'd7hbib_')
-        self.assertEqual(rec.residues.pdbid, '7hbi')
-        self.assertEqual(rec.residues.fragments, (('b', '', ''),))
-        self.assertEqual(rec.hierarchy, '1.001.001.001.001.001')
+        self.assertEqual(rec.sid, "d7hbib_")
+        self.assertEqual(rec.residues.pdbid, "7hbi")
+        self.assertEqual(rec.residues.fragments, (("b", "", ""),))
+        self.assertEqual(rec.hierarchy, "1.001.001.001.001.001")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

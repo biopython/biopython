@@ -576,7 +576,7 @@ class TestSeqMultiplication(unittest.TestCase):
             with self.assertRaises(TypeError):
                 seq * 3.0
             with self.assertRaises(TypeError):
-                seq * ''
+                seq * ""
 
     def test_rmul_method(self):
         """Test rmul method; relies on addition method."""
@@ -589,7 +589,7 @@ class TestSeqMultiplication(unittest.TestCase):
             with self.assertRaises(TypeError):
                 3.0 * seq
             with self.assertRaises(TypeError):
-                '' * seq
+                "" * seq
 
     def test_imul_method(self):
         """Test imul method; relies on addition and mull methods."""
@@ -604,7 +604,7 @@ class TestSeqMultiplication(unittest.TestCase):
             with self.assertRaises(TypeError):
                 seq *= 3.0
             with self.assertRaises(TypeError):
-                seq *= ''
+                seq *= ""
 
 
 class TestMutableSeq(unittest.TestCase):
@@ -644,7 +644,7 @@ class TestMutableSeq(unittest.TestCase):
 
     def test_equal_comparison_of_incompatible_alphabets(self):
         with self.assertWarns(BiopythonWarning):
-            self.mutable_s == MutableSeq('UCAAAAGGA', IUPAC.ambiguous_rna)
+            self.mutable_s == MutableSeq("UCAAAAGGA", IUPAC.ambiguous_rna)
 
     def test_not_equal_comparison(self):
         """Test __ne__ comparison method."""
@@ -746,10 +746,10 @@ class TestMutableSeq(unittest.TestCase):
         self.assertIsInstance(self.mutable_s.toseq(), Seq.Seq)
 
     def test_first_nucleotide(self):
-        self.assertEqual('T', self.mutable_s[0])
+        self.assertEqual("T", self.mutable_s[0])
 
     def test_setting_slices(self):
-        self.assertEqual(MutableSeq('CAAA', IUPAC.ambiguous_dna),
+        self.assertEqual(MutableSeq("CAAA", IUPAC.ambiguous_dna),
                          self.mutable_s[1:5], "Slice mutable seq")
 
         self.mutable_s[1:3] = "GAT"
@@ -803,7 +803,7 @@ class TestMutableSeq(unittest.TestCase):
         self.assertEqual(MutableSeq("TCAAAAGATGCATCATG", IUPAC.ambiguous_dna),
                          self.mutable_s, "Remove first G")
 
-        self.assertRaises(ValueError, self.mutable_s.remove, 'Z')
+        self.assertRaises(ValueError, self.mutable_s.remove, "Z")
 
     def test_count(self):
         self.assertEqual(7, self.mutable_s.count("A"))
@@ -841,12 +841,12 @@ class TestMutableSeq(unittest.TestCase):
     def test_complement_rna_string(self):
         seq = Seq.MutableSeq("AUGaaaCUG")
         seq.complement()
-        self.assertEqual('UACuuuGAC', str(seq))
+        self.assertEqual("UACuuuGAC", str(seq))
 
     def test_complement_dna_string(self):
         seq = Seq.MutableSeq("ATGaaaCTG")
         seq.complement()
-        self.assertEqual('TACtttGAC', str(seq))
+        self.assertEqual("TACtttGAC", str(seq))
 
     def test_reverse_complement(self):
         self.mutable_s.reverse_complement()
@@ -906,7 +906,7 @@ class TestUnknownSeq(unittest.TestCase):
             Seq.UnknownSeq(-10)
 
         with self.assertRaises(ValueError):
-            Seq.UnknownSeq(6, character='??')
+            Seq.UnknownSeq(6, character="??")
 
     def test_length(self):
         self.assertEqual(6, len(self.s))
@@ -991,7 +991,7 @@ class TestUnknownSeq(unittest.TestCase):
 
         seq = Seq.UnknownSeq(20,
                              alphabet=Alphabet.Gapped(Alphabet.DNAAlphabet(),
-                                                      "-"), character='-')
+                                                      "-"), character="-")
         self.assertEqual("", seq.ungap("-"))
 
 
@@ -1226,7 +1226,7 @@ class TestTranslating(unittest.TestCase):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
             if isinstance(nucleotide_seq, Seq.Seq) and \
-               'X' not in str(nucleotide_seq):
+               "X" not in str(nucleotide_seq):
                 expected = Seq.translate(nucleotide_seq)
                 self.assertEqual(repr(expected),
                                  repr(nucleotide_seq.translate()))
@@ -1375,11 +1375,11 @@ class TestTranslating(unittest.TestCase):
         for nucleotide_seq in self.test_seqs:
             nucleotide_seq = nucleotide_seq[:3 * (len(nucleotide_seq) // 3)]
             if isinstance(nucleotide_seq, Seq.Seq) and \
-               'X' not in str(nucleotide_seq):
+               "X" not in str(nucleotide_seq):
                 short = Seq.translate(nucleotide_seq, to_stop=True)
                 self.assertEqual(
                     str(short),
-                    str(Seq.translate(nucleotide_seq).split('*')[0]))
+                    str(Seq.translate(nucleotide_seq).split("*")[0]))
 
         seq = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
         self.assertEqual("VAIVMGRWKGAR", Seq.translate(seq, table=2,
@@ -1401,17 +1401,17 @@ class TestTranslating(unittest.TestCase):
                 Seq.translate(codon)
 
     def test_translation_of_glutamine(self):
-        for codon in ['SAR', 'SAG', 'SAA']:
-            self.assertEqual('Z', Seq.translate(codon))
+        for codon in ["SAR", "SAG", "SAA"]:
+            self.assertEqual("Z", Seq.translate(codon))
 
     def test_translation_of_asparagine(self):
-        for codon in ['RAY', 'RAT', 'RAC']:
-            self.assertEqual('B', Seq.translate(codon))
+        for codon in ["RAY", "RAT", "RAC"]:
+            self.assertEqual("B", Seq.translate(codon))
 
     def test_translation_of_leucine(self):
-        for codon in ['WTA', 'MTY', 'MTT', 'MTW', 'MTM', 'MTH', 'MTA', 'MTC',
-                      'HTA']:
-            self.assertEqual('J', Seq.translate(codon))
+        for codon in ["WTA", "MTY", "MTT", "MTW", "MTM", "MTH", "MTA", "MTC",
+                      "HTA"]:
+            self.assertEqual("J", Seq.translate(codon))
 
     def test_translation_with_bad_table_argument(self):
         table = {}
@@ -1487,17 +1487,17 @@ class TestStopCodons(unittest.TestCase):
             self.assertEqual("**W**", str(Seq.translate(nucleotide_seq,
                                                         table=2)))
             self.assertEqual("**WRR", str(Seq.translate(nucleotide_seq,
-                                          table='Yeast Mitochondrial')))
+                                          table="Yeast Mitochondrial")))
             self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq,
                                                         table=5)))
             self.assertEqual("**WSS", str(Seq.translate(nucleotide_seq,
                                                         table=9)))
             self.assertEqual("**CRR", str(Seq.translate(nucleotide_seq,
-                                          table='Euplotid Nuclear')))
+                                          table="Euplotid Nuclear")))
             self.assertEqual("***RR", str(Seq.translate(nucleotide_seq,
                                                         table=11)))
             self.assertEqual("***RR", str(Seq.translate(nucleotide_seq,
-                                                        table='Bacterial')))
+                                                        table="Bacterial")))
 
     def test_translation_of_stops(self):
         self.assertEqual(Seq.translate("TAT"), "Y")

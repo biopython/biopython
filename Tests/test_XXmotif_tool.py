@@ -18,7 +18,7 @@ from Bio.motifs.applications import XXmotifCommandline
 
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 xxmotif_exe = None
 if sys.platform == "win32":

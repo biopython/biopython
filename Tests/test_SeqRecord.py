@@ -148,7 +148,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
 
     def test_format(self):
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
-        self.assertEqual(expected, self.record.format('fasta'))
+        self.assertEqual(expected, self.record.format("fasta"))
 
     def test_upper(self):
         self.assertEqual("ABCDEFGHIJKLMNOPQRSTUVWZYX", str(self.record.lower().upper().seq))
@@ -160,7 +160,7 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX', ProteinAlphabet())"""
         self.assertEqual("B", self.record[1])
         self.assertEqual("BC", self.record[1:3].seq)
         with self.assertRaises(ValueError):
-            c = self.record['a'].seq
+            c = self.record["a"].seq
 
     def test_slice_variants(self):
         """Simple slices using different start/end values."""
@@ -313,8 +313,8 @@ class SeqRecordMethodsMore(unittest.TestCase):
         s = SeqRecord(Seq("ACTG"), id="TestID", name="TestName",
                       description="TestDescription", dbxrefs=["TestDbxrefs"],
                       features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
-                      annotations={'organism': 'bombyx'},
-                      letter_annotations={'test': 'abcd'})
+                      annotations={"organism": "bombyx"},
+                      letter_annotations={"test": "abcd"})
         rc = s.reverse_complement(id=True, name=True, description=True,
                                   dbxrefs=True, features=True, annotations=True,
                                   letter_annotations=True)
@@ -340,13 +340,13 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual("[SeqFeature(FeatureLocation(ExactPosition(1), ExactPosition(4)), type='Site')]",
                          repr(rc2.features))
 
-        self.assertEqual({'organism': 'bombyx'}, rc.annotations)
-        self.assertEqual({'organism': 'bombyx'},
-                         s.reverse_complement(annotations={'organism': 'bombyx'}).annotations)
+        self.assertEqual({"organism": "bombyx"}, rc.annotations)
+        self.assertEqual({"organism": "bombyx"},
+                         s.reverse_complement(annotations={"organism": "bombyx"}).annotations)
 
-        self.assertEqual({'test': 'dcba'}, rc.letter_annotations)
-        self.assertEqual({'test': 'abcd'},
-                         s.reverse_complement(letter_annotations={'test': 'abcd'}).letter_annotations)
+        self.assertEqual({"test": "dcba"}, rc.letter_annotations)
+        self.assertEqual({"test": "abcd"},
+                         s.reverse_complement(letter_annotations={"test": "abcd"}).letter_annotations)
 
     def test_reverse_complement_mutable_seq(self):
         s = SeqRecord(MutableSeq("ACTG"))
@@ -356,8 +356,8 @@ class SeqRecordMethodsMore(unittest.TestCase):
         s = SeqRecord(Seq("ATGGTGTAA"), id="TestID", name="TestName",
                       description="TestDescription", dbxrefs=["TestDbxrefs"],
                       features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
-                      annotations={'organism': 'bombyx'},
-                      letter_annotations={'test': 'abcdefghi'})
+                      annotations={"organism": "bombyx"},
+                      letter_annotations={"test": "abcdefghi"})
 
         t = s.translate()
         self.assertEqual(t.seq, "MV*")
@@ -377,7 +377,7 @@ class SeqRecordMethodsMore(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {'organism': 'bombyx'})
+        self.assertEqual(t.annotations, {"organism": "bombyx"})
         self.assertFalse(t.letter_annotations)
 
     def test_lt_exception(self):
@@ -426,8 +426,8 @@ class TestTranslation(unittest.TestCase):
         self.s = SeqRecord(Seq("ATGGTGTAA"), id="TestID", name="TestName",
                            description="TestDescription", dbxrefs=["TestDbxrefs"],
                            features=[SeqFeature(FeatureLocation(0, 3), type="Site")],
-                           annotations={'organism': 'bombyx'},
-                           letter_annotations={'test': 'abcdefghi'})
+                           annotations={"organism": "bombyx"},
+                           letter_annotations={"test": "abcdefghi"})
 
     def test_defaults(self):
         t = self.s.translate()
@@ -449,7 +449,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "TestDescription")
         self.assertEqual(t.dbxrefs, ["TestDbxrefs"])
         self.assertFalse(t.features)
-        self.assertEqual(t.annotations, {'organism': 'bombyx'})
+        self.assertEqual(t.annotations, {"organism": "bombyx"})
         self.assertFalse(t.letter_annotations)
 
         # Should not preserve these
@@ -468,7 +468,7 @@ class TestTranslation(unittest.TestCase):
         self.assertEqual(t.description, "Baz")
         self.assertEqual(t.dbxrefs, ["Nope"])
         self.assertEqual(len(t.features), 1)
-        self.assertEqual(t.annotations, {'a': 'team'})
+        self.assertEqual(t.annotations, {"a": "team"})
         self.assertEqual(t.letter_annotations, {"aa": ["Met", "Val"]})
 
 

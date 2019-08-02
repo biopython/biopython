@@ -12,11 +12,11 @@ from search_tests_common import CheckRaw, CheckIndex
 
 class Hmmer3TextRawCases(CheckRaw):
 
-    fmt = 'hmmer3-text'
+    fmt = "hmmer3-text"
 
     def test_hmmer3text_30_multiple_first(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, first (text_30_hmmscan_001.out)."""
-        filename = 'Hmmer/text_30_hmmscan_001.out'
+        filename = "Hmmer/text_30_hmmscan_001.out"
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -61,7 +61,7 @@ Domain search space  (domZ):               0  [number of targets reported over t
 
     def test_hmmer3text_30_multiple_middle(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)."""
-        filename = 'Hmmer/text_30_hmmscan_001.out'
+        filename = "Hmmer/text_30_hmmscan_001.out"
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -123,7 +123,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
 
     def test_hmmer3text_30_multiple_last(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)."""
-        filename = 'Hmmer/text_30_hmmscan_001.out'
+        filename = "Hmmer/text_30_hmmscan_001.out"
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -239,7 +239,7 @@ Domain search space  (domZ):               5  [number of targets reported over t
 
     def test_hmmer3text_30_single(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)."""
-        filename = 'Hmmer/text_30_hmmscan_003.out'
+        filename = "Hmmer/text_30_hmmscan_003.out"
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -302,36 +302,36 @@ Domain search space  (domZ):               1  [number of targets reported over t
 
 class Hmmer3TextIndexCases(CheckIndex):
 
-    fmt = 'hmmer3-text'
+    fmt = "hmmer3-text"
 
     def test_hmmertext_text_30_hmmscan_001(self):
         """Test hmmer3-text indexing, HMMER 3.0, multiple queries."""
-        filename = 'Hmmer/text_30_hmmscan_001.out'
+        filename = "Hmmer/text_30_hmmscan_001.out"
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_002(self):
         """Test hmmer3-text indexing, HMMER 3.0, single query, no hits."""
-        filename = 'Hmmer/text_30_hmmscan_002.out'
+        filename = "Hmmer/text_30_hmmscan_002.out"
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_006(self):
         """Test hmmer3-text indexing, HMMER 3.0, single query, multiple hits."""
-        filename = 'Hmmer/text_30_hmmscan_006.out'
+        filename = "Hmmer/text_30_hmmscan_006.out"
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_007(self):
         """Test hmmer3-text indexing, HMMER 3.0, single query, no alignments."""
-        filename = 'Hmmer/text_30_hmmscan_007.out'
+        filename = "Hmmer/text_30_hmmscan_007.out"
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_008(self):
         """Test hmmer3-text indexing, HMMER 3.0, single query, no alignment width."""
-        filename = 'Hmmer/text_30_hmmscan_008.out'
+        filename = "Hmmer/text_30_hmmscan_008.out"
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmsearch_005(self):
         """Test hmmer3-text indexing, HMMER 3.0, multiple queries."""
-        filename = 'Hmmer/text_30_hmmsearch_005.out'
+        filename = "Hmmer/text_30_hmmsearch_005.out"
         self.check_index(filename, self.fmt)
 
 

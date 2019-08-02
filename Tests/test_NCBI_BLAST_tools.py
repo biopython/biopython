@@ -251,16 +251,16 @@ class BlastDB(unittest.TestCase):
 
     # makeblastdb makes files in the same dir as the input, clean these up
     def tearDown(self):
-        blastdb_matcher_prot = re.compile(r'NC_005816\.faa\.p.+')
-        for file in os.listdir('GenBank/'):
+        blastdb_matcher_prot = re.compile(r"NC_005816\.faa\.p.+")
+        for file in os.listdir("GenBank/"):
             if blastdb_matcher_prot.match(file):
-                path = os.path.join('GenBank/', file)
+                path = os.path.join("GenBank/", file)
                 os.remove(path)
 
-        blastdb_matcher_nucl = re.compile(r'NC_005816\.fna\.n.+')
-        for file in os.listdir('GenBank/'):
+        blastdb_matcher_nucl = re.compile(r"NC_005816\.fna\.n.+")
+        for file in os.listdir("GenBank/"):
             if blastdb_matcher_nucl.match(file):
-                path = os.path.join('GenBank/', file)
+                path = os.path.join("GenBank/", file)
                 os.remove(path)
 
 
@@ -269,8 +269,8 @@ class CheckCompleteArgList(unittest.TestCase):
         global exe_names
         exe = exe_names[exe_name]
         # dbtype must be set to initialize NcbimakeblastdbCommandline
-        if exe_name == 'makeblastdb':
-            cline = wrapper(exe, h=True, dbtype='prot')
+        if exe_name == "makeblastdb":
+            cline = wrapper(exe, h=True, dbtype="prot")
         else:
             cline = wrapper(exe, h=True)
         names = {parameter.names[0]

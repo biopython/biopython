@@ -33,8 +33,8 @@ class SuperimposerTests(unittest.TestCase):
         fixed = Selection.unfold_entities(s1, "A")
         s2 = p.get_structure("MOVING", pdb1)
         moving = Selection.unfold_entities(s2, "A")
-        rot = numpy.identity(3).astype('f')
-        tran = numpy.array((1.0, 2.0, 3.0), 'f')
+        rot = numpy.identity(3).astype("f")
+        tran = numpy.array((1.0, 2.0, 3.0), "f")
         for atom in moving:
             atom.transform(rot, tran)
         sup = Superimposer()
@@ -42,65 +42,65 @@ class SuperimposerTests(unittest.TestCase):
         self.assertTrue(numpy.allclose(sup.rotran[0], numpy.identity(3)))
         self.assertTrue(numpy.allclose(sup.rotran[1], numpy.array([-1.0, -2.0, -3.0])))
         self.assertAlmostEqual(sup.rms, 0.0, places=3)
-        atom_list = ['N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N',
-                     'N', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C',
-                     'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N',
-                     'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'C', 'C', 'C', 'O', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'N', 'N', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'O',
-                     'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'C', 'C', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'O', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'O', 'N', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'O', 'O', 'N',
-                     'C', 'C', 'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C',
-                     'C', 'C', 'N', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'C', 'N', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'N', 'C', 'C',
-                     'O', 'C', 'N', 'C', 'C', 'O', 'C', 'O', 'C', 'N', 'C',
-                     'C', 'O', 'C', 'C', 'C', 'C', 'N', 'C', 'C', 'O', 'C',
-                     'C', 'C', 'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'C',
-                     'O', 'O', 'N', 'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N',
-                     'C', 'C', 'O', 'C', 'C', 'SE', 'C', 'N', 'C', 'C', 'O',
-                     'C', 'O', 'C', 'N', 'C', 'C', 'O', 'C', 'N', 'C', 'C',
-                     'O', 'C', 'S', 'N', 'C', 'C', 'O', 'C', 'C', 'C', 'O',
-                     'N', 'N', 'C', 'C', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
-                     'O', 'O', 'O', 'O', 'O', 'O']
+        atom_list = ["N", "C", "C", "O", "C", "C", "SE", "C", "N", "C", "C",
+                     "O", "C", "C", "O", "O", "N", "C", "C", "O", "C", "C",
+                     "C", "C", "N", "C", "C", "O", "C", "C", "C", "N", "C",
+                     "N", "N", "N", "C", "C", "O", "C", "C", "C", "O", "N",
+                     "N", "C", "C", "O", "N", "C", "C", "O", "C", "C", "C",
+                     "N", "C", "C", "O", "C", "C", "C", "C", "N", "N", "C",
+                     "C", "O", "C", "C", "C", "O", "O", "N", "C", "C", "O",
+                     "C", "C", "C", "N", "C", "C", "O", "C", "C", "C", "C",
+                     "C", "C", "C", "N", "C", "C", "O", "C", "C", "C", "N",
+                     "C", "N", "N", "N", "C", "C", "O", "C", "C", "O", "O",
+                     "N", "C", "C", "O", "C", "C", "C", "C", "C", "C", "C",
+                     "O", "N", "C", "C", "O", "C", "C", "C", "N", "C", "C",
+                     "O", "C", "C", "O", "O", "N", "C", "C", "O", "C", "C",
+                     "C", "N", "C", "N", "N", "N", "C", "C", "O", "C", "C",
+                     "C", "C", "C", "C", "C", "N", "C", "C", "O", "C", "C",
+                     "C", "C", "C", "C", "C", "O", "N", "C", "C", "O", "C",
+                     "C", "C", "C", "N", "N", "C", "C", "O", "C", "O", "C",
+                     "N", "C", "C", "O", "C", "C", "C", "C", "N", "C", "C",
+                     "O", "C", "C", "C", "N", "C", "N", "N", "N", "C", "C",
+                     "O", "C", "N", "C", "C", "O", "C", "C", "C", "O", "O",
+                     "N", "C", "C", "O", "C", "C", "C", "O", "N", "N", "C",
+                     "C", "O", "C", "N", "C", "C", "O", "C", "O", "N", "C",
+                     "C", "O", "C", "C", "C", "O", "N", "N", "C", "C", "O",
+                     "C", "C", "C", "O", "O", "N", "C", "C", "O", "C", "C",
+                     "C", "N", "C", "C", "O", "C", "C", "C", "C", "N", "N",
+                     "C", "C", "O", "C", "C", "O", "N", "N", "C", "C", "O",
+                     "C", "C", "C", "C", "N", "C", "C", "C", "C", "C", "N",
+                     "C", "C", "O", "C", "C", "SE", "C", "N", "C", "C", "O",
+                     "C", "O", "C", "N", "C", "C", "O", "C", "C", "C", "O",
+                     "O", "N", "C", "C", "O", "C", "O", "C", "N", "C", "C",
+                     "O", "C", "C", "C", "C", "N", "C", "C", "O", "C", "C",
+                     "C", "C", "N", "C", "C", "O", "C", "C", "C", "N", "C",
+                     "C", "O", "C", "C", "C", "O", "N", "N", "C", "C", "O",
+                     "C", "C", "O", "N", "N", "C", "C", "O", "C", "N", "C",
+                     "C", "O", "C", "C", "O", "N", "N", "C", "C", "O", "C",
+                     "C", "C", "N", "C", "C", "O", "C", "C", "O", "O", "N",
+                     "C", "C", "O", "C", "S", "N", "C", "C", "O", "C", "C",
+                     "C", "C", "N", "N", "C", "C", "O", "C", "O", "C", "N",
+                     "C", "C", "O", "C", "C", "C", "C", "N", "C", "C", "O",
+                     "C", "C", "C", "C", "N", "C", "C", "O", "C", "C", "C",
+                     "C", "N", "N", "C", "C", "O", "C", "N", "C", "C", "O",
+                     "C", "C", "C", "C", "N", "C", "C", "O", "N", "C", "C",
+                     "O", "C", "C", "C", "N", "C", "C", "O", "N", "C", "C",
+                     "O", "C", "N", "C", "C", "O", "C", "O", "C", "N", "C",
+                     "C", "O", "C", "C", "C", "C", "N", "C", "C", "O", "C",
+                     "C", "C", "O", "O", "N", "C", "C", "O", "C", "C", "C",
+                     "O", "O", "N", "C", "C", "O", "C", "C", "SE", "C", "N",
+                     "C", "C", "O", "C", "C", "SE", "C", "N", "C", "C", "O",
+                     "C", "O", "C", "N", "C", "C", "O", "C", "N", "C", "C",
+                     "O", "C", "S", "N", "C", "C", "O", "C", "C", "C", "O",
+                     "N", "N", "C", "C", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O",
+                     "O", "O", "O", "O", "O", "O"]
         sup.apply(moving)
         atom_moved = []
         for aa in moving:
@@ -108,6 +108,6 @@ class SuperimposerTests(unittest.TestCase):
         self.assertEqual(atom_moved, atom_list)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

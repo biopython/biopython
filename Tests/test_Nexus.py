@@ -31,27 +31,27 @@ class OldSelfTests(unittest.TestCase):
     def test_trees_and_taxa_block(self):
         """Basic tree file with TREES and TAXA block."""
         nexus1 = Nexus.Nexus()
-        nexus1.read('Nexus/bats.nex')
+        nexus1.read("Nexus/bats.nex")
 
     def test_data_and_codons_block(self):
         """Simple sequence data file with DATA and CODONS block."""
         nexus2 = Nexus.Nexus()
-        nexus2.read('Nexus/codonposset.nex')
+        nexus2.read("Nexus/codonposset.nex")
 
     def test_data_sets_trees_unknown_block(self):
         """Sequence data file with DATA, SETS, TREES and an unknown block."""
         nexus3 = Nexus.Nexus()
-        nexus3.read('Nexus/test_Nexus_input.nex')
+        nexus3.read("Nexus/test_Nexus_input.nex")
 
     def test_taxa_and_characters_block(self):
         """Taxa and characters multi-state block."""
         nexus4 = Nexus.Nexus()
-        nexus4.read('Nexus/vSysLab_Ganaspidium_multistate.nex')
+        nexus4.read("Nexus/vSysLab_Ganaspidium_multistate.nex")
 
     def test_taxa_and_characters_with_many_codings_one_without_state(self):
         """Taxa and chr blocks, over 9 codings, 1 character without states."""
         nexus5 = Nexus.Nexus()
-        nexus5.read('Nexus/vSysLab_Heptascelio_no-states_10+chars.nex')
+        nexus5.read("Nexus/vSysLab_Heptascelio_no-states_10+chars.nex")
 
     def test_taxa_and_characters_with_many_codings_two_without_state(self):
         """Taxa and chr blocks, over 9 codings, 2 character without states."""
@@ -60,7 +60,7 @@ class OldSelfTests(unittest.TestCase):
         # Bio.Nexus.Nexus.NexusError: Unsupported datatype: continuous
         self.assertRaises(Nexus.NexusError,
                           nexus6.read,
-                          'Nexus/vSysLab_Oreiscelio_discrete+continuous.nex')
+                          "Nexus/vSysLab_Oreiscelio_discrete+continuous.nex")
 
 
 class NexusTest1(unittest.TestCase):
@@ -109,13 +109,13 @@ class NexusTest1(unittest.TestCase):
                                        "t7",
                                        "t8",
                                        "t9"])
-        self.assertEqual(n.charlabels, {0: 'a',
-                                        1: 'b',
-                                        2: 'c',
-                                        4: 'f',
-                                        9: 'A',
-                                        10: 'B',
-                                        22: 'x',
+        self.assertEqual(n.charlabels, {0: "a",
+                                        1: "b",
+                                        2: "c",
+                                        4: "f",
+                                        9: "A",
+                                        10: "B",
+                                        22: "x",
                                         23: "y",
                                         29: "1,2,3 can't decide for a name?!",
                                         47: "final"})
@@ -142,59 +142,59 @@ class NexusTest1(unittest.TestCase):
                           })
         self.assertEqual(n.taxsets,
                          {"normal": ["isn'that [a] strange name?",
-                                     'one should be punished, for (that)!',
-                                     't1',
-                                     't5',
-                                     't6',
-                                     't8'],
+                                     "one should be punished, for (that)!",
+                                     "t1",
+                                     "t5",
+                                     "t6",
+                                     "t8"],
                           "reference": ["isn'that [a] strange name?",
-                                        'one should be punished, for (that)!',
-                                        't1',
-                                        't2 the name',
-                                        't5',
-                                        't6'],
+                                        "one should be punished, for (that)!",
+                                        "t1",
+                                        "t2 the name",
+                                        "t5",
+                                        "t6"],
                           "tbyname1": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't1',
-                                       't2 the name',
-                                       't5',
-                                       't6'],
+                                       "one should be punished, for (that)!",
+                                       "t1",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6"],
                           "tbyname2": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name',
-                                       't5',
-                                       't6',
-                                       't7'],
-                          "tbyname3": ['t1',
-                                       't2 the name'],
+                                       "one should be punished, for (that)!",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6",
+                                       "t7"],
+                          "tbyname3": ["t1",
+                                       "t2 the name"],
                           })
         self.assertEqual(len(n.charpartitions), 2)
-        self.assertIn('codons', n.charpartitions)
-        self.assertIn('part', n.charpartitions)
-        self.assertEqual(n.charpartitions['codons'],
-                         {'a': [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45],
-                          'b': [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
-                          'c': [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47],
+        self.assertIn("codons", n.charpartitions)
+        self.assertIn("part", n.charpartitions)
+        self.assertEqual(n.charpartitions["codons"],
+                         {"a": [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45],
+                          "b": [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46],
+                          "c": [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47],
                           })
-        self.assertEqual(n.charpartitions['part'],
+        self.assertEqual(n.charpartitions["part"],
                          {"one": [0, 1, 2, 3, 4, 5, 6, 7],
                           "three": [16, 17, 18, 19, 20, 21, 22, 23],
                           "two": [8, 9, 10, 11, 12, 13, 14, 15],
                           })
-        self.assertEqual(list(n.taxpartitions), ['taxpart'])
-        self.assertEqual(n.taxpartitions['taxpart'],
+        self.assertEqual(list(n.taxpartitions), ["taxpart"])
+        self.assertEqual(n.taxpartitions["taxpart"],
                          {"badnames": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name'],
-                          "goodnames": ['t1', 't5', 't6', 't7', 't8', 't9'],
+                                       "one should be punished, for (that)!",
+                                       "t2 the name"],
+                          "goodnames": ["t1", "t5", "t6", "t7", "t8", "t9"],
                           })
 
         # now we check excluding characters, deleting taxa,
         # and exporting adjusted sets
         f1 = tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f1,
-                           delete=['t1', 't7'],
-                           exclude=n.invert(n.charsets['big']))
+                           delete=["t1", "t7"],
+                           exclude=n.invert(n.charsets["big"]))
         f1.seek(0)
         nf1 = Nexus.Nexus(f1)
         self.assertEqual(os.path.normpath(nf1.filename),
@@ -212,60 +212,60 @@ class NexusTest1(unittest.TestCase):
                                          "t6",
                                          "t8",
                                          "t9"])
-        self.assertEqual(nf1.charlabels, {0: 'a', 1: 'c', 2: 'f'})
-        self.assertEqual(nf1.charsets, {'big': [0, 1, 2, 3],
-                                        'bigchunk': [1, 2, 3],
-                                        'byname': [0, 2, 3],
-                                        'c1': [0, 1, 2, 3],
-                                        'firsthalf': [0, 1, 2, 3],
-                                        'mix': [0, 2],
-                                        'mux': [0, 2],
-                                        'pos1': [0, 3],
-                                        'pos2': [2],
-                                        'pos3': [1],
+        self.assertEqual(nf1.charlabels, {0: "a", 1: "c", 2: "f"})
+        self.assertEqual(nf1.charsets, {"big": [0, 1, 2, 3],
+                                        "bigchunk": [1, 2, 3],
+                                        "byname": [0, 2, 3],
+                                        "c1": [0, 1, 2, 3],
+                                        "firsthalf": [0, 1, 2, 3],
+                                        "mix": [0, 2],
+                                        "mux": [0, 2],
+                                        "pos1": [0, 3],
+                                        "pos2": [2],
+                                        "pos3": [1],
                                         })
         self.assertEqual(nf1.taxsets,
-                         {'normal': ["isn'that [a] strange name?",
-                                     'one should be punished, for (that)!',
-                                     't5',
-                                     't6',
-                                     't8'],
-                          'reference': ["isn'that [a] strange name?",
-                                        'one should be punished, for (that)!',
-                                        't2 the name',
-                                        't5',
-                                        't6'],
-                          'tbyname1': ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name',
-                                       't5',
-                                       't6'],
-                          'tbyname2': ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name',
-                                       't5',
-                                       't6'],
-                          'tbyname3': ['t2 the name'],
+                         {"normal": ["isn'that [a] strange name?",
+                                     "one should be punished, for (that)!",
+                                     "t5",
+                                     "t6",
+                                     "t8"],
+                          "reference": ["isn'that [a] strange name?",
+                                        "one should be punished, for (that)!",
+                                        "t2 the name",
+                                        "t5",
+                                        "t6"],
+                          "tbyname1": ["isn'that [a] strange name?",
+                                       "one should be punished, for (that)!",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6"],
+                          "tbyname2": ["isn'that [a] strange name?",
+                                       "one should be punished, for (that)!",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6"],
+                          "tbyname3": ["t2 the name"],
                           })
         self.assertEqual(len(nf1.charpartitions), 2)
-        self.assertIn('codons', nf1.charpartitions)
-        self.assertIn('part', nf1.charpartitions)
-        self.assertEqual(nf1.charpartitions['codons'], {'a': [0, 3],
-                                                        'b': [2],
-                                                        'c': [1]})
-        self.assertEqual(nf1.charpartitions['part'], {'one': [0, 1, 2, 3]})
+        self.assertIn("codons", nf1.charpartitions)
+        self.assertIn("part", nf1.charpartitions)
+        self.assertEqual(nf1.charpartitions["codons"], {"a": [0, 3],
+                                                        "b": [2],
+                                                        "c": [1]})
+        self.assertEqual(nf1.charpartitions["part"], {"one": [0, 1, 2, 3]})
 
-        self.assertEqual(list(nf1.taxpartitions), ['taxpart'])
-        self.assertEqual(nf1.taxpartitions['taxpart'],
+        self.assertEqual(list(nf1.taxpartitions), ["taxpart"])
+        self.assertEqual(nf1.taxpartitions["taxpart"],
                          {"badnames": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name'],
-                          "goodnames": ['t5', 't6', 't8', 't9'],
+                                       "one should be punished, for (that)!",
+                                       "t2 the name"],
+                          "goodnames": ["t5", "t6", "t8", "t9"],
                           })
 
         f2 = tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
-                           delete=['t2_the_name'],
+                           delete=["t2_the_name"],
                            exclude=list(range(3, 40, 4)))
         f2.seek(0)
         nf2 = Nexus.Nexus(f2)
@@ -315,53 +315,53 @@ class NexusTest1(unittest.TestCase):
 
         self.assertEqual(nf2.taxsets,
                          {"normal": ["isn'that [a] strange name?",
-                                     'one should be punished, for (that)!',
-                                     't1',
-                                     't5',
-                                     't6',
-                                     't8'],
+                                     "one should be punished, for (that)!",
+                                     "t1",
+                                     "t5",
+                                     "t6",
+                                     "t8"],
                           "reference": ["isn'that [a] strange name?",
-                                        'one should be punished, for (that)!',
-                                        't1',
-                                        't2 the name',
-                                        't5',
-                                        't6'],
+                                        "one should be punished, for (that)!",
+                                        "t1",
+                                        "t2 the name",
+                                        "t5",
+                                        "t6"],
                           "tbyname1": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't1',
-                                       't2 the name',
-                                       't5',
-                                       't6'],
+                                       "one should be punished, for (that)!",
+                                       "t1",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6"],
                           "tbyname2": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name',
-                                       't5',
-                                       't6',
-                                       't7'],
-                          "tbyname3": ['t1',
-                                       't2 the name']})
+                                       "one should be punished, for (that)!",
+                                       "t2 the name",
+                                       "t5",
+                                       "t6",
+                                       "t7"],
+                          "tbyname3": ["t1",
+                                       "t2 the name"]})
         self.assertEqual(len(nf2.charpartitions), 2)
-        self.assertIn('codons', nf2.charpartitions)
-        self.assertIn('part', nf2.charpartitions)
-        self.assertEqual(nf2.charpartitions['codons'],
+        self.assertIn("codons", nf2.charpartitions)
+        self.assertIn("part", nf2.charpartitions)
+        self.assertEqual(nf2.charpartitions["codons"],
                          {"a": [0, 5, 7, 9, 14, 16, 18, 23, 25, 27, 32, 35],
                           "b": [1, 3, 8, 10, 12, 17, 19, 21, 26, 28, 30, 33, 36],
                           "c": [2, 4, 6, 11, 13, 15, 20, 22, 24, 29, 31, 34, 37],
                           })
-        self.assertEqual(nf2.charpartitions['part'],
+        self.assertEqual(nf2.charpartitions["part"],
                          {"one": [0, 1, 2, 3, 4, 5],
                           "three": [12, 13, 14, 15, 16, 17],
                           "two": [6, 7, 8, 9, 10, 11],
                           })
-        self.assertEqual(list(nf2.taxpartitions), ['taxpart'])
-        self.assertEqual(nf2.taxpartitions['taxpart'],
+        self.assertEqual(list(nf2.taxpartitions), ["taxpart"])
+        self.assertEqual(nf2.taxpartitions["taxpart"],
                          {"badnames": ["isn'that [a] strange name?",
-                                       'one should be punished, for (that)!',
-                                       't2 the name'],
-                          "goodnames": ['t1', 't5', 't6', 't7', 't8', 't9'],
+                                       "one should be punished, for (that)!",
+                                       "t2 the name"],
+                          "goodnames": ["t1", "t5", "t6", "t7", "t8", "t9"],
                           })
         # check the stepmatrix
-        self.assertEqual(n.weighted_stepmatrix(name='matrix_test'),
+        self.assertEqual(n.weighted_stepmatrix(name="matrix_test"),
                          """\
 usertype matrix_test stepmatrix=5
         A        C        G        T        -
@@ -418,12 +418,12 @@ usertype matrix_test stepmatrix=5
         n = Nexus.Nexus(self.handle)
         t3 = n.trees[2]
         t2 = n.trees[2]
-        t3.root_with_outgroup(['t1', 't5'])
+        t3.root_with_outgroup(["t1", "t5"])
         self.assertEqual(str(t3),
                          "tree tree1 = (((((('one should be punished, for (that)!','isn''that [a] strange name?'),'t2 the name'),t8,t9),t6),t7),(t5,t1));")
-        self.assertEqual(t3.is_monophyletic(['t8', 't9', 't6', 't7']), -1)
-        self.assertEqual(t3.is_monophyletic(['t1', 't5']), 13)
-        t3.split(parent_id=t3.search_taxon('t9'))
+        self.assertEqual(t3.is_monophyletic(["t8", "t9", "t6", "t7"]), -1)
+        self.assertEqual(t3.is_monophyletic(["t1", "t5"]), 13)
+        t3.split(parent_id=t3.search_taxon("t9"))
         stdout = sys.stdout
         try:
             sys.stdout = StringIO()
@@ -465,36 +465,36 @@ Root:  16
         ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)" \
                "TT1:25.000000)Taxaceae:90.000000;"
         tree = Trees.Tree(ts1b)
-        self.assertEqual(self._get_flat_nodes(tree), [('Taxaceae', 90.0, None, None),
-                                                      ('Cephalotaxus', 125.0, None, None),
-                                                      ('TT1', 25.0, None, None),
-                                                      ('Taxus', 100.0, None, None),
-                                                      ('Torreya', 100.0, None, None)])
-        tree.prune('Torreya')
+        self.assertEqual(self._get_flat_nodes(tree), [("Taxaceae", 90.0, None, None),
+                                                      ("Cephalotaxus", 125.0, None, None),
+                                                      ("TT1", 25.0, None, None),
+                                                      ("Taxus", 100.0, None, None),
+                                                      ("Torreya", 100.0, None, None)])
+        tree.prune("Torreya")
         self.assertEqual(tree.all_ids(), [0, 1, 3])
         ts1c = ("(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"
                 "25.000000)90.000000;")
         tree = Trees.Tree(ts1c)
         self.assertEqual(self._get_flat_nodes(tree), [(None, 90.0, None, None),
-                                                      ('Cephalotaxus', 125.0, None, None),
+                                                      ("Cephalotaxus", 125.0, None, None),
                                                       (None, 25.0, None, None),
-                                                      ('Taxus', 100.0, None, None),
-                                                      ('Torreya', 100.0, None, None)])
+                                                      ("Taxus", 100.0, None, None),
+                                                      ("Torreya", 100.0, None, None)])
         self.assertFalse(tree.has_support())
         with self.assertRaises(Exception) as context:
             tree.randomize()
         self.assertTrue("Either numer of taxa or list of taxa must be specified." in str(context.exception))
         tree_rand = Trees.Tree(ts1c)
         tree_rand.randomize(ntax=4)
-        self.assertEqual(sorted(tree_rand.get_taxa()), ['taxon1', 'taxon2',
-                                                        'taxon3', 'taxon4'])
+        self.assertEqual(sorted(tree_rand.get_taxa()), ["taxon1", "taxon2",
+                                                        "taxon3", "taxon4"])
         tree.branchlength2support()
         tree.convert_absolute_support(2)
         self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, 90.0, None),
-                                                      ('Cephalotaxus', 0.0, 62.5, None),
+                                                      ("Cephalotaxus", 0.0, 62.5, None),
                                                       (None, 0.0, 12.5, None),
-                                                      ('Taxus', 0.0, 50.0, None),
-                                                      ('Torreya', 0.0, 50.0, None)])
+                                                      ("Taxus", 0.0, 50.0, None),
+                                                      ("Torreya", 0.0, 50.0, None)])
 
         ts2 = ("(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"
                "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"
@@ -540,7 +540,7 @@ Root:  16
                                                                          0.1894244])
 
         subtree = tree.set_subtree(10)
-        self.assertEqual(sorted(list(subtree)), ['E 0', 'E 7'])
+        self.assertEqual(sorted(list(subtree)), ["E 0", "E 7"])
         tree.collapse_genera()
         self.assertEqual(tree.all_ids(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 17])
 
@@ -604,12 +604,12 @@ Root:  16
         # A tree with simple comments throughout the tree.
         ts1b = "((12:0.13,19[&comment1]:0.13)[&comment2]:0.1,(20:0.171,11:0.171):0.13)[&comment3];"
         tree = Trees.Tree(ts1b)
-        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, None, '[&comment3]'),
-                                                      (None, 0.1, None, '[&comment2]'),
-                                                      (None, 0.13, None, None), ('12', 0.13, None, None),
-                                                      ('19', 0.13, None, '[&comment1]'),
-                                                      ('20', 0.171, None, None),
-                                                      ('11', 0.171, None, None)])
+        self.assertEqual(self._get_flat_nodes(tree), [(None, 0.0, None, "[&comment3]"),
+                                                      (None, 0.1, None, "[&comment2]"),
+                                                      (None, 0.13, None, None), ("12", 0.13, None, None),
+                                                      ("19", 0.13, None, "[&comment1]"),
+                                                      ("20", 0.171, None, None),
+                                                      ("11", 0.171, None, None)])
 
         # A tree with more complex comments throughout the tree.
         # This is typical of the MCC trees produced by `treeannotator` in the beast-mcmc suite of phylogenetic tools
@@ -618,15 +618,15 @@ Root:  16
         tree = Trees.Tree(ts1b)
         self.assertEqual(self._get_flat_nodes(tree),
                          [(None, 0.0, None,
-                           '[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0]'),
+                           "[&height_95%_HPD={0.7527502510685965,0.821862094763501},height_median=0.8014438411766163,height=0.795965080422763,posterior=1.0,height_range={0.49863013698599995,0.821862094763501},length=0.0]"),
                           (None, 0.23042678598484334, None,
-                           '[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]'),
+                           "[&height_95%_HPD={0.5289500597932948,0.6973881165460601},length_range={0.02586430194846201,0.29509451958008265},length_95%_HPD={0.0840287249314221,0.2411078625957056}]"),
                           (None, 0.20039426358269385, None,
-                           '[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]'),
-                          ('9', 0.055354097721950546, None,
-                           '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]'),
-                          ('5', 0.055354097721950546, None,
-                           '[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]')])
+                           "[&height_95%_HPD={0.3110921040545068,0.38690865205576275},length_range={0.09675588357303178,0.4332959544380489},length_95%_HPD={0.16680375169879613,0.36500804261814374}]"),
+                          ("9", 0.055354097721950546, None,
+                           "[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.513906814545109E-4,0.4381986285528381},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]"),
+                          ("5", 0.055354097721950546, None,
+                           "[&rate_range={1.3E-5,0.10958320752991428},height_95%_HPD={0.309132419999969,0.3091324199999691},length_range={3.865051168833178E-5,0.4391594442572986},height_median=0.309132419999969,length_95%_HPD={0.003011577063374571,0.08041621647998398}]")])
 
 
 class TestSelf(unittest.TestCase):

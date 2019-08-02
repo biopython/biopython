@@ -21,8 +21,8 @@ except ImportError:
         "Install networkx if you wish to use it with Bio.Phylo")
 
 # Example PhyloXML file
-EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
-EX_APAF = 'PhyloXML/apaf.xml'
+EX_DOLLO = "PhyloXML/o_tol_332_d_dollo.xml"
+EX_APAF = "PhyloXML/apaf.xml"
 
 
 class UtilTests(unittest.TestCase):
@@ -30,11 +30,11 @@ class UtilTests(unittest.TestCase):
 
     def test_to_networkx(self):
         """Tree to Graph conversion, if networkx is available."""
-        tree = Phylo.read(EX_DOLLO, 'phyloxml')
+        tree = Phylo.read(EX_DOLLO, "phyloxml")
         G = Phylo.to_networkx(tree)
         self.assertEqual(len(G.nodes()), 659)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

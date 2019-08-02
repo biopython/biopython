@@ -16,12 +16,12 @@ except ImportError:
 
 class TestCluster(unittest.TestCase):
 
-    module = 'Bio.Cluster'
+    module = "Bio.Cluster"
 
     def test_matrix_parse(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import treecluster
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import treecluster
 
         # Normal matrix, no errors
@@ -100,7 +100,7 @@ class TestCluster(unittest.TestCase):
 
         # Matrix with bad cells
         data8 = [[7.1, 7.2, 7.3, 7.4, 7.5],
-                 [7.1, 7.2, 7.3, 7.4, 'snoopy'],
+                 [7.1, 7.2, 7.3, 7.4, "snoopy"],
                  [7.1, 7.2, 7.3, None, None]]
 
         # Matrix with a bad row
@@ -110,7 +110,7 @@ class TestCluster(unittest.TestCase):
 
         # Various references that don't point to matrices at all
         data10 = "snoopy"
-        data11 = {'a': [[2.3, 1.2], [3.3, 5.6]]}
+        data11 = {"a": [[2.3, 1.2], [3.3, 5.6]]}
         data12 = []
         data13 = [None]
 
@@ -120,11 +120,11 @@ class TestCluster(unittest.TestCase):
                               [[1.1, 1.5], [1.1, 2.3], [6.5, 0.4]]])
 
         # Array with non-numerical values
-        data15 = numpy.array([['a', 'b', 'c'],
-                              ['e', 'f', 'g']], 'c')
+        data15 = numpy.array([["a", "b", "c"],
+                              ["e", "f", "g"]], "c")
 
         # Empty array
-        data16 = numpy.array([[]], 'd')
+        data16 = numpy.array([[]], "d")
 
         self.assertRaises(ValueError, treecluster, data7)
         self.assertRaises(ValueError, treecluster, data8)
@@ -138,9 +138,9 @@ class TestCluster(unittest.TestCase):
         self.assertRaises(ValueError, treecluster, data16)
 
     def test_mask_parse(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import treecluster
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import treecluster
 
         # data matrix
@@ -241,7 +241,7 @@ class TestCluster(unittest.TestCase):
 
         # Matrix with bad cells
         mask10 = [[1, 1, 0, 1, 0],
-                  [1, 1, 1, 0, 'snoopy'],
+                  [1, 1, 1, 0, "snoopy"],
                   [1, 1, 0, 1, 1],
                   [1, 0, 1, 1, 0]]
 
@@ -252,11 +252,11 @@ class TestCluster(unittest.TestCase):
                   [1, 0, 1, 1, 0]]
 
         # Array with non-numerical values
-        mask12 = numpy.array([['a', 'b', 'c'],
-                              ['e', 'f', 'g']], 'c')
+        mask12 = numpy.array([["a", "b", "c"],
+                              ["e", "f", "g"]], "c")
 
         # Empty arrays
-        mask13 = numpy.array([[]], 'd')
+        mask13 = numpy.array([[]], "d")
         mask14 = []
 
         # Array of incorrect rank
@@ -266,7 +266,7 @@ class TestCluster(unittest.TestCase):
 
         # References that cannot be converted to a matrix of int
         mask16 = "snoopy"
-        mask17 = {'a': [[1, 0], [1, 1]]}
+        mask17 = {"a": [[1, 0], [1, 1]]}
         mask18 = [None]
 
         self.assertRaises(ValueError, treecluster, data, mask7)
@@ -283,9 +283,9 @@ class TestCluster(unittest.TestCase):
         self.assertRaises(TypeError, treecluster, data, mask18)
 
     def test_kcluster(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import kcluster
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import kcluster
 
         nclusters = 3
@@ -303,7 +303,7 @@ class TestCluster(unittest.TestCase):
         clusterid, error, nfound = kcluster(data, nclusters=nclusters,
                                             mask=mask, weight=weight,
                                             transpose=False, npass=100,
-                                            method='a', dist='e')
+                                            method="a", dist="e")
         self.assertEqual(len(clusterid), len(data))
 
         correct = [0, 1, 1, 2]
@@ -342,7 +342,7 @@ class TestCluster(unittest.TestCase):
 
         clusterid, error, nfound = kcluster(data, nclusters=3, mask=mask,
                                             weight=weight, transpose=False,
-                                            npass=100, method='a', dist='e')
+                                            npass=100, method="a", dist="e")
         self.assertEqual(len(clusterid), len(data))
 
         correct = [0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 1]
@@ -351,9 +351,9 @@ class TestCluster(unittest.TestCase):
             self.assertEqual(clusterid[i], mapping[correct[i]])
 
     def test_clusterdistance(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import clusterdistance
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import clusterdistance
 
         # First data set
@@ -373,16 +373,16 @@ class TestCluster(unittest.TestCase):
         c3 = [3]
 
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c1, index2=c2, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 6.650, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c1, index2=c3, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 23.796, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c2, index2=c3, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 8.606, places=3)
 
         # Second data set
@@ -420,22 +420,22 @@ class TestCluster(unittest.TestCase):
         c3 = [8]
 
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c1, index2=c2, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 5.833, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c1, index2=c3, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 3.298, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
-                                   index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=False)
+                                   index1=c2, index2=c3, dist="e",
+                                   method="a", transpose=False)
         self.assertAlmostEqual(distance, 0.360, places=3)
 
     def test_tree(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import Node, Tree
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import Node, Tree
 
         node = Node(2, 3)
@@ -479,9 +479,9 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(tree[2].distance, 0.9)
 
     def test_treecluster(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import treecluster
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import treecluster
 
         # First data set
@@ -498,7 +498,7 @@ class TestCluster(unittest.TestCase):
         # test first data set
         # Pairwise average-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
-                           transpose=False, method='a', dist='e')
+                           transpose=False, method="a", dist="e")
         self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 2)
         self.assertEqual(tree[0].right, 1)
@@ -548,7 +548,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise single-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
-                           transpose=False, method='s', dist='e')
+                           transpose=False, method="s", dist="e")
         self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 1)
         self.assertEqual(tree[0].right, 2)
@@ -598,7 +598,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise centroid-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
-                           transpose=False, method='c', dist='e')
+                           transpose=False, method="c", dist="e")
         self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 1)
         self.assertEqual(tree[0].right, 2)
@@ -648,7 +648,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise maximum-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
-                           transpose=False, method='m', dist='e')
+                           transpose=False, method="m", dist="e")
         self.assertEqual(len(tree), len(data1) - 1)
         self.assertEqual(tree[0].left, 2)
         self.assertEqual(tree[0].right, 1)
@@ -728,7 +728,7 @@ class TestCluster(unittest.TestCase):
         # Test second data set
         # Pairwise average-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
-                           transpose=False, method='a', dist='e')
+                           transpose=False, method="a", dist="e")
         self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 5)
         self.assertEqual(tree[0].right, 4)
@@ -859,7 +859,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise single-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
-                           transpose=False, method='s', dist='e')
+                           transpose=False, method="s", dist="e")
         self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 4)
         self.assertEqual(tree[0].right, 5)
@@ -915,7 +915,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise centroid-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
-                           transpose=False, method='c', dist='e')
+                           transpose=False, method="c", dist="e")
         self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 4)
         self.assertEqual(tree[0].right, 5)
@@ -971,7 +971,7 @@ class TestCluster(unittest.TestCase):
 
         # Pairwise maximum-linkage clustering
         tree = treecluster(data=data2, mask=mask2, weight=weight2,
-                           transpose=False, method='m', dist='e')
+                           transpose=False, method="m", dist="e")
         self.assertEqual(len(tree), len(data2) - 1)
         self.assertEqual(tree[0].left, 5)
         self.assertEqual(tree[0].right, 4)
@@ -1026,9 +1026,9 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(indices[12], 0)
 
     def test_somcluster(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import somcluster
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import somcluster
 
         # First data set
@@ -1044,7 +1044,7 @@ class TestCluster(unittest.TestCase):
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
                                          transpose=False, nxgrid=10, nygrid=10,
-                                         inittau=0.02, niter=100, dist='e')
+                                         inittau=0.02, niter=100, dist="e")
         self.assertEqual(len(clusterid), len(data))
         self.assertEqual(len(clusterid[0]), 2)
 
@@ -1079,14 +1079,14 @@ class TestCluster(unittest.TestCase):
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
                                          transpose=False, nxgrid=10, nygrid=10,
-                                         inittau=0.02, niter=100, dist='e')
+                                         inittau=0.02, niter=100, dist="e")
         self.assertEqual(len(clusterid), len(data))
         self.assertEqual(len(clusterid[0]), 2)
 
     def test_distancematrix_kmedoids(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import distancematrix, kmedoids
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import distancematrix, kmedoids
 
         data = numpy.array([[2.2, 3.3, 4.4],
@@ -1212,9 +1212,9 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][7], 36.745, places=3)
 
     def test_pca(self):
-        if TestCluster.module == 'Bio.Cluster':
+        if TestCluster.module == "Bio.Cluster":
             from Bio.Cluster import pca
-        elif TestCluster.module == 'Pycluster':
+        elif TestCluster.module == "Pycluster":
             from Pycluster import pca
 
         data = numpy.array([[3.1, 1.2],
@@ -1318,6 +1318,6 @@ class TestCluster(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    TestCluster.module = 'Bio.Cluster'
+    TestCluster.module = "Bio.Cluster"
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

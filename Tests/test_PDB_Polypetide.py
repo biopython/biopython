@@ -64,6 +64,6 @@ class PolypeptideTests(unittest.TestCase):
         self.assertAlmostEqual(thetas[2], 2.0702447422720143, places=3)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

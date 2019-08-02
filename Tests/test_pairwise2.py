@@ -25,6 +25,6 @@ if pairwise2.rint == pairwise2._python_rint:
                                          "'cpairwise2'")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

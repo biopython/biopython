@@ -16,7 +16,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):
         """Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)."""
-        filename = 'xml_2212L_blastp_001.xml'
+        filename = "xml_2212L_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
         handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
@@ -1400,7 +1400,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastn_001(self):
         """Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)."""
-        filename = 'xml_2212L_blastn_001.xml'
+        filename = "xml_2212L_blastn_001.xml"
         datafile = os.path.join("Blast", filename)
         handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
@@ -1428,7 +1428,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastx_001(self):
         """Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)."""
-        filename = 'xml_2212L_blastx_001.xml'
+        filename = "xml_2212L_blastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1452,7 +1452,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_tblastn_001(self):
         """Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xml_2212L_tblastn_001)."""
-        filename = 'xml_2212L_tblastn_001.xml'
+        filename = "xml_2212L_tblastn_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1471,7 +1471,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_tblastx_001(self):
         """Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)."""
-        filename = 'xml_2212L_tblastx_001.xml'
+        filename = "xml_2212L_tblastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1492,7 +1492,7 @@ class TestNCBIXML(unittest.TestCase):
         """Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)."""
         # NOTE - no date in version field, downloaded 2008/05/08
 
-        filename = 'xml_2218_blastp_001.xml'
+        filename = "xml_2218_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1557,7 +1557,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2218_blastp_002(self):
         """Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)."""
-        filename = 'xml_2218_blastp_002.xml'
+        filename = "xml_2218_blastp_002.xml"
         datafile = os.path.join("Blast", filename)
         handle = open(datafile, "rb")
         records = NCBIXML.parse(handle)
@@ -1572,7 +1572,7 @@ class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2218L_blastp_001(self):
         """Parsing BLASTP 2.2.18, Fake query (xml_2218L_blastp_001)."""
-        filename = 'xml_2218L_blastp_001.xml'
+        filename = "xml_2218L_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1592,7 +1592,7 @@ class TestNCBIXML(unittest.TestCase):
         """Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)."""
         # See also plain text file bt081.txt (matching output from blastx tool)
 
-        filename = 'xml_2222_blastx_001.xml'
+        filename = "xml_2222_blastx_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1600,7 +1600,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence")
         self.assertEqual(record.query_letters, 1002)
@@ -1615,7 +1615,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds")
         self.assertEqual(record.query_letters, 2050)
@@ -1633,7 +1633,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence")
         self.assertEqual(record.query_letters, 550)
@@ -1647,7 +1647,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
         self.assertEqual(record.query_letters, 655)
@@ -1663,7 +1663,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence")
         self.assertEqual(record.query_letters, 623)
@@ -1679,7 +1679,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds")
         self.assertEqual(record.query_letters, 309)
@@ -1695,7 +1695,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTX")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product")
         self.assertEqual(record.query_letters, 2551)
@@ -1716,7 +1716,7 @@ class TestNCBIXML(unittest.TestCase):
         """Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)."""
         # This is from blastp NOT blastall
 
-        filename = 'xml_2222_blastp_001.xml'
+        filename = "xml_2222_blastp_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1724,7 +1724,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.version, "2.2.22+")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
         self.assertEqual(record.query_letters, 107)
@@ -1759,7 +1759,7 @@ class TestNCBIXML(unittest.TestCase):
         # The old text parser would return a single PSI BLAST record object with three rounds.
         # This may change... although it may require a PSI BLAST specific XML parser.
 
-        filename = 'xml_2218L_rpsblast_001.xml'
+        filename = "xml_2218L_rpsblast_001.xml"
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile, "rb")
@@ -1767,7 +1767,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.version, "2.2.18")
         self.assertEqual(record.date, "Mar-02-2008")
         self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
         self.assertEqual(record.query_letters, 131)
@@ -1808,7 +1808,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.version, "2.2.18")
         self.assertEqual(record.date, "Mar-02-2008")
         self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
         self.assertEqual(record.query_letters, 131)
@@ -1835,7 +1835,7 @@ class TestNCBIXML(unittest.TestCase):
 
         record = next(records)
         self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.version, "2.2.18")
         self.assertEqual(record.date, "Mar-02-2008")
         self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
         self.assertEqual(record.query_letters, 131)
@@ -1866,12 +1866,12 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2900_blastp_001_v1(self):
-        record = self._test_xml_2900_blastp_001('xml_2900_blastp_001.xml')
+        record = self._test_xml_2900_blastp_001("xml_2900_blastp_001.xml")
 
         description = record.descriptions[0]
         self.assertEqual(len(description.title), 4706)
         self.assertEqual(description.title[:300],
-                         'gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella] >gi|24115132|ref|NP_709642.1| twin-arginine translocation protein TatA [Shigella flexneri 2a str. 301] >gi|82778983|ref|YP_405332.1| twin-arginine translocation protein TatA [Shigella dysenteri')
+                         "gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella] >gi|24115132|ref|NP_709642.1| twin-arginine translocation protein TatA [Shigella flexneri 2a str. 301] >gi|82778983|ref|YP_405332.1| twin-arginine translocation protein TatA [Shigella dysenteri")
         description = record.descriptions[1]
         self.assertEqual(len(description.title), 106)
         self.assertEqual(description.title,
@@ -1879,7 +1879,7 @@ class TestNCBIXML(unittest.TestCase):
         description = record.descriptions[2]
         self.assertEqual(len(description.title), 979)
         self.assertEqual(description.title[:300],
-                         'gi|73857826|gb|AAZ90533.1| conserved hypothetical protein [Shigella sonnei Ss046] >gi|331067587|gb|EGI38991.1| Sec-independent protein translocase protein TatA [Escherichia coli TA280] >gi|412965214|emb|CCK49144.1| sec-independent protein translocase protein tata/e homolog 2 [Escherichia coli chi712')
+                         "gi|73857826|gb|AAZ90533.1| conserved hypothetical protein [Shigella sonnei Ss046] >gi|331067587|gb|EGI38991.1| Sec-independent protein translocase protein TatA [Escherichia coli TA280] >gi|412965214|emb|CCK49144.1| sec-independent protein translocase protein tata/e homolog 2 [Escherichia coli chi712")
         description = record.descriptions[3]
         self.assertEqual(len(description.title), 260)
         self.assertEqual(description.title,
@@ -1895,7 +1895,7 @@ class TestNCBIXML(unittest.TestCase):
         description = record.descriptions[6]
         self.assertEqual(len(description.title), 774516)
         self.assertEqual(description.title[:300],
-                         'gi|481023661|ref|WP_001295260.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Proteobacteria] >gi|15834020|ref|NP_312793.1| TatABCE protein translocation system subunit TatA [Escherichia coli O157:H7 str. Sakai] >gi|90111653|ref|NP_418280.4| twin arginine protein translocation sys')
+                         "gi|481023661|ref|WP_001295260.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Proteobacteria] >gi|15834020|ref|NP_312793.1| TatABCE protein translocation system subunit TatA [Escherichia coli O157:H7 str. Sakai] >gi|90111653|ref|NP_418280.4| twin arginine protein translocation sys")
         description = record.descriptions[7]
         self.assertEqual(len(description.title), 238)
         self.assertEqual(description.title,
@@ -1903,29 +1903,29 @@ class TestNCBIXML(unittest.TestCase):
         description = record.descriptions[8]
         self.assertEqual(len(description.title), 2111)
         self.assertEqual(description.title[:300],
-                         'gi|491167042|ref|WP_005025412.1| MULTISPECIES: twin-arginine translocase subunit TatA [Enterobacteriaceae] >gi|320176770|gb|EFW51804.1| Twin-arginine translocation protein TatA [Shigella dysenteriae CDC 74-1112] >gi|391297993|gb|EIQ56018.1| twin arginine-targeting translocase, TatA/E family protein ')
+                         "gi|491167042|ref|WP_005025412.1| MULTISPECIES: twin-arginine translocase subunit TatA [Enterobacteriaceae] >gi|320176770|gb|EFW51804.1| Twin-arginine translocation protein TatA [Shigella dysenteriae CDC 74-1112] >gi|391297993|gb|EIQ56018.1| twin arginine-targeting translocase, TatA/E family protein ")
         description = record.descriptions[9]
         self.assertEqual(len(description.title), 384)
         self.assertEqual(description.title[:300],
-                         'gi|332996954|gb|EGK16572.1| sec-independent translocase protein tatA [Shigella flexneri VA-6] >gi|391245379|gb|EIQ04650.1| twin arginine-targeting translocase, TatA/E family protein [Shigella flexneri K-1770] >gi|1411457050|emb|SRN34259.1| twin arginine translocase protein A [Shigella flexneri] >gi|')
+                         "gi|332996954|gb|EGK16572.1| sec-independent translocase protein tatA [Shigella flexneri VA-6] >gi|391245379|gb|EIQ04650.1| twin arginine-targeting translocase, TatA/E family protein [Shigella flexneri K-1770] >gi|1411457050|emb|SRN34259.1| twin arginine translocase protein A [Shigella flexneri] >gi|")
 
     def test_xml_2900_blastp_001_v2(self):
-        record = self._test_xml_2900_blastp_001('xml_2900_blastp_001_v2.xml')
+        record = self._test_xml_2900_blastp_001("xml_2900_blastp_001_v2.xml")
 
         alignment = record.alignments[0]
         self.assertEqual(alignment.title,
-                         'gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]')
+                         "gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]")
 
         description = record.descriptions[0]
         self.assertEqual(description.title,
-                         'gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]')
+                         "gi|447157535|ref|WP_001234791.1| MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]")
         self.assertEqual(len(description.items), 48)
         description_item = description.items[0]
-        self.assertEqual(description_item.id, 'gi|447157535|ref|WP_001234791.1|')
-        self.assertEqual(description_item.accession, 'WP_001234791')
-        self.assertEqual(description_item.title, 'MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]')
+        self.assertEqual(description_item.id, "gi|447157535|ref|WP_001234791.1|")
+        self.assertEqual(description_item.accession, "WP_001234791")
+        self.assertEqual(description_item.title, "MULTISPECIES: Sec-independent protein translocase subunit TatA [Shigella]")
         self.assertEqual(description_item.taxid, 620)
-        self.assertEqual(description_item.sciname, 'Shigella')
+        self.assertEqual(description_item.sciname, "Shigella")
 
     def _test_xml_2900_blastp_001(self, filename):
         datafile = os.path.join("Blast", filename)
@@ -2213,10 +2213,10 @@ class TestNCBIXML(unittest.TestCase):
         return record
 
     def test_xml_2900_blastn_001_v1(self):
-        self._test_xml_2900_blastn_001('xml_2900_blastn_001.xml')
+        self._test_xml_2900_blastn_001("xml_2900_blastn_001.xml")
 
     def test_xml_2900_blastn_001_v2(self):
-        self._test_xml_2900_blastn_001('xml_2900_blastn_001_v2.xml')
+        self._test_xml_2900_blastn_001("xml_2900_blastn_001_v2.xml")
 
     def _test_xml_2900_blastn_001(self, filename):
         datafile = os.path.join("Blast", filename)
@@ -2254,7 +2254,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 101449177)
         self.assertEqual(hsp.sbjct_end, 101449144)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
 
         alignment = record.alignments[1]
         self.assertEqual(alignment.hit_id, "gi|372099103|ref|NC_000073.6|")
@@ -2277,7 +2277,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 131772185)
         self.assertEqual(hsp.sbjct_end, 131772157)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
 
         alignment = record.alignments[2]
         self.assertEqual(alignment.hit_id, "gi|372099106|ref|NC_000070.6|")
@@ -2300,7 +2300,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 9607562)
         self.assertEqual(hsp.sbjct_end, 9607539)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
         hsp = alignment.hsps[1]
         self.assertEqual(hsp.align_length, 32)
         self.assertEqual(hsp.identities, 28)
@@ -2315,7 +2315,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 142902532)
         self.assertEqual(hsp.sbjct_end, 142902563)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
 
         alignment = record.alignments[3]
         self.assertEqual(alignment.hit_id, "gi|372099108|ref|NC_000068.7|")
@@ -2338,7 +2338,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 3799647)
         self.assertEqual(hsp.sbjct_end, 3799677)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
         hsp = alignment.hsps[1]
         self.assertEqual(hsp.align_length, 25)
         self.assertEqual(hsp.identities, 23)
@@ -2353,7 +2353,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 70278960)
         self.assertEqual(hsp.sbjct_end, 70278984)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|372099097|ref|NC_000079.6|")
@@ -2376,7 +2376,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 26806584)
         self.assertEqual(hsp.sbjct_end, 26806557)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
         hsp = alignment.hsps[1]
         self.assertEqual(hsp.align_length, 40)
         self.assertEqual(hsp.identities, 32)
@@ -2391,7 +2391,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 56840340)
         self.assertEqual(hsp.sbjct_end, 56840301)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
 
         alignment = record.alignments[5]
         self.assertEqual(alignment.hit_id, "gi|372099098|ref|NC_000078.6|")
@@ -2414,7 +2414,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 113030663)
         self.assertEqual(hsp.sbjct_end, 113030685)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
         hsp = alignment.hsps[1]
         self.assertEqual(hsp.align_length, 32)
         self.assertEqual(hsp.identities, 28)
@@ -2429,7 +2429,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 108990272)
         self.assertEqual(hsp.sbjct_end, 108990242)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
 
         alignment = record.alignments[6]
         self.assertEqual(alignment.hit_id, "gi|372099109|ref|NC_000067.6|")
@@ -2452,7 +2452,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 65190108)
         self.assertEqual(hsp.sbjct_end, 65190148)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
 
         alignment = record.alignments[7]
         self.assertEqual(alignment.hit_id, "gi|372099101|ref|NC_000075.6|")
@@ -2475,7 +2475,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 58227241)
         self.assertEqual(hsp.sbjct_end, 58227195)
         self.assertEqual(hsp.frame, (1, -1))
-        self.assertEqual(hsp.strand, ('Plus', 'Minus'))
+        self.assertEqual(hsp.strand, ("Plus", "Minus"))
 
         alignment = record.alignments[8]
         self.assertEqual(alignment.hit_id, "gi|372099100|ref|NC_000076.6|")
@@ -2498,7 +2498,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 119337186)
         self.assertEqual(hsp.sbjct_end, 119337205)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
 
         alignment = record.alignments[9]
         self.assertEqual(alignment.hit_id, "gi|372099094|ref|NC_000082.6|")
@@ -2521,7 +2521,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(hsp.sbjct_start, 18854780)
         self.assertEqual(hsp.sbjct_end, 18854835)
         self.assertEqual(hsp.frame, (1, 1))
-        self.assertEqual(hsp.strand, ('Plus', 'Plus'))
+        self.assertEqual(hsp.strand, ("Plus", "Plus"))
         self.assertEqual(len(record.descriptions), 10)
         description = record.descriptions[0]
         self.assertEqual(description.score, 44.0)
@@ -2568,10 +2568,10 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2900_blastx_001_v1(self):
-        self._test_xml_2900_blastx_001('xml_2900_blastx_001.xml')
+        self._test_xml_2900_blastx_001("xml_2900_blastx_001.xml")
 
     def test_xml_2900_blastx_001_v2(self):
-        self._test_xml_2900_blastx_001('xml_2900_blastx_001_v2.xml')
+        self._test_xml_2900_blastx_001("xml_2900_blastx_001_v2.xml")
 
     def _test_xml_2900_blastx_001(self, filename):
         datafile = os.path.join("Blast", filename)
@@ -2888,10 +2888,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.num_alignments, 1)
 
     def test_xml_2900_tblastn_001_v1(self):
-        self._test_xml_2900_tblastn_001('xml_2900_tblastn_001.xml')
+        self._test_xml_2900_tblastn_001("xml_2900_tblastn_001.xml")
 
     def test_xml_2900_tblastn_001_v2(self):
-        self._test_xml_2900_tblastn_001('xml_2900_tblastn_001_v2.xml')
+        self._test_xml_2900_tblastn_001("xml_2900_tblastn_001_v2.xml")
 
     def _test_xml_2900_tblastn_001(self, filename):
         datafile = os.path.join("Blast", filename)
@@ -2943,10 +2943,10 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
     def test_xml_2900_tblastx_001_v1(self):
-        self._test_xml_2900_tblastx_001('xml_2900_tblastx_001.xml')
+        self._test_xml_2900_tblastx_001("xml_2900_tblastx_001.xml")
 
     def test_xml_2900_tblastx_001_v2(self):
-        self._test_xml_2900_tblastx_001('xml_2900_tblastx_001_v2.xml')
+        self._test_xml_2900_tblastx_001("xml_2900_tblastx_001_v2.xml")
 
     def _test_xml_2900_tblastx_001(self, filename):
         datafile = os.path.join("Blast", filename)

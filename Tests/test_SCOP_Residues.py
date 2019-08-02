@@ -54,7 +54,7 @@ class ResiduesTests(unittest.TestCase):
 
             r = Residues("104l A:112-113")
             self.assertEqual(r.pdbid, "104l")
-            self.assertEqual(r.fragments, (('A', '112', '113'),))
+            self.assertEqual(r.fragments, (("A", "112", "113"),))
 
     def testJustPdbId(self):
         r = Residues("1sds")
@@ -65,6 +65,6 @@ class ResiduesTests(unittest.TestCase):
         self.assertRaises(ValueError, Residues, "09324923423hh./;,.389")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

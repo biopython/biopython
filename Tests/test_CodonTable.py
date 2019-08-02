@@ -102,21 +102,21 @@ class AmbiguousCodonsTests(unittest.TestCase):
 
     def test_list_ambiguous_codons(self):
         """Check if stop codons are properly extended."""
-        self.assertEqual(list_ambiguous_codons(['TGA', 'TAA'],
+        self.assertEqual(list_ambiguous_codons(["TGA", "TAA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TGA', 'TAA', 'TRA'])
-        self.assertEqual(list_ambiguous_codons(['TAG', 'TGA'],
+                         ["TGA", "TAA", "TRA"])
+        self.assertEqual(list_ambiguous_codons(["TAG", "TGA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TAG', 'TGA'])
-        self.assertEqual(list_ambiguous_codons(['TAG', 'TAA'],
+                         ["TAG", "TGA"])
+        self.assertEqual(list_ambiguous_codons(["TAG", "TAA"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TAG', 'TAA', 'TAR'])
-        self.assertEqual(list_ambiguous_codons(['UAG', 'UAA'],
+                         ["TAG", "TAA", "TAR"])
+        self.assertEqual(list_ambiguous_codons(["UAG", "UAA"],
                                                IUPACData.ambiguous_rna_values),
-                         ['UAG', 'UAA', 'UAR'])
-        self.assertEqual(list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
+                         ["UAG", "UAA", "UAR"])
+        self.assertEqual(list_ambiguous_codons(["TGA", "TAA", "TAG"],
                                                IUPACData.ambiguous_dna_values),
-                         ['TGA', 'TAA', 'TAG', 'TAR', 'TRA'])
+                         ["TGA", "TAA", "TAG", "TAR", "TRA"])
 
     def test_coding(self):
         """Check a few ambiguous codons for correct coding."""
@@ -698,14 +698,14 @@ class ErrorConditions(unittest.TestCase):
     def test_list_possible_proteins(self):
         """Raise errors in list_possible proteins."""
         table = unambiguous_dna_by_id[1]
-        amb_values = {'T': 'T', 'G': 'G', 'A': 'A', 'R': ('A', 'G')}
+        amb_values = {"T": "T", "G": "G", "A": "A", "R": ("A", "G")}
         with self.assertRaises(TranslationError):
             # Can be stop or amino acid:
-            codon = ['T', 'R', 'R']
+            codon = ["T", "R", "R"]
             list_possible_proteins(codon, table.forward_table, amb_values)
         with self.assertRaises(KeyError):
             # Is a stop codon:
-            codon = ['T', 'G', 'A']
+            codon = ["T", "G", "A"]
             list_possible_proteins(codon, table.forward_table, amb_values)
 
     def test_ambiguous_forward_table(self):
@@ -714,7 +714,7 @@ class ErrorConditions(unittest.TestCase):
         self.assertEqual(table.forward_table.get("ZZZ"), None)
         with self.assertRaises(KeyError):
             table.forward_table["ZZZ"]  # KeyError it's a stop codon
-            table.forward_table['TGA']  # KeyError stop codon
+            table.forward_table["TGA"]  # KeyError stop codon
         with self.assertRaises(TranslationError):
             table.forward_table["WWW"]  # Translation error does not code
 

@@ -53,8 +53,8 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
 
     def setUp(self):
         # Does our output directory exist?  If not, create it
-        if not os.path.isdir('KEGG'):
-            os.mkdir('KEGG')
+        if not os.path.isdir("KEGG"):
+            os.mkdir("KEGG")
         # Define some data to work with as a list of tuples:
         # (infilename, outfilename, (entry_count, ortholog_count,
         # compound_count, map_counts), pathway_image,
@@ -75,12 +75,12 @@ class KGMLPathwayOnlineTest(unittest.TestCase):
         """
         # We test rendering of the original KEGG KGML using imported files
         for p in self.data:
-            with open(p.infilename, 'rU') as f:
+            with open(p.infilename, "rU") as f:
                 pathway = read(f)
                 kgml_map = KGMLCanvas(pathway, import_imagemap=True)
-                kgml_map.draw(p.output_stem + '_importmap.pdf')
+                kgml_map.draw(p.output_stem + "_importmap.pdf")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -28,44 +28,44 @@ else:
 # This is just the standard table with less stop codons
 # (replaced with coding for O as an artificial example)
 special_table = CodonTable(forward_table={
-    'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
-    'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y', 'TAA': 'O',
-    'TGT': 'C', 'TGC': 'C', 'TGA': 'O', 'TGG': 'W',
-    'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
-    'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
-    'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-    'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-    'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
-    'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
-    'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
-    'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-    'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-    'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-    'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
-    'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
-    start_codons=['TAA', 'TAG', 'TGA'],
-    stop_codons=['TAG'])
+    "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+    "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+    "TAT": "Y", "TAC": "Y", "TAA": "O",
+    "TGT": "C", "TGC": "C", "TGA": "O", "TGG": "W",
+    "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+    "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+    "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+    "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+    "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+    "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+    "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+    "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+    "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+    "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+    "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+    "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G"},
+    start_codons=["TAA", "TAG", "TGA"],
+    stop_codons=["TAG"])
 
 Chilodonella_uncinata_table = CodonTable(forward_table={
-    'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
-    'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',  # noqa: E241
-    'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
-    'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
-    'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
-    'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-    'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-    'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
-    'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
-    'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
-    'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-    'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-    'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-    'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
-    'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
-    start_codons=['ATG'],
-    stop_codons=['TAA'])
+    "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+    "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+    "TAT": "Y", "TAC": "Y",             "TAG": "Q",  # noqa: E241
+    "TGT": "C", "TGC": "C", "TGA": "W", "TGG": "W",
+    "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+    "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+    "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+    "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+    "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+    "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+    "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+    "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+    "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+    "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+    "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+    "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G"},
+    start_codons=["ATG"],
+    stop_codons=["TAA"])
 
 
 class StringMethodTests(unittest.TestCase):
@@ -453,7 +453,7 @@ class StringMethodTests(unittest.TestCase):
                 continue
             with warnings.catch_warnings():
                 # Silence change in behaviour warning
-                warnings.simplefilter('ignore', BiopythonWarning)
+                warnings.simplefilter("ignore", BiopythonWarning)
                 self.assertEqual(hash(str(example1)), hash(example1),
                                  "Hash mismatch, %r for %r vs %r for %r"
                                  % (hash(str(example1)), id(example1),
@@ -464,7 +464,7 @@ class StringMethodTests(unittest.TestCase):
             for example2 in self._examples:
                 with warnings.catch_warnings():
                     # Silence alphabet warning
-                    warnings.simplefilter('ignore', BiopythonWarning)
+                    warnings.simplefilter("ignore", BiopythonWarning)
                     self.assertEqual(str(example1) == str(example2),
                                      example1 == example2,
                                      "Checking %r == %r" % (example1, example2))
@@ -652,13 +652,13 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("***RR", str(nuc.translate("SGC0")))
             self.assertEqual("**W**", str(nuc.translate(table=2)))
             self.assertEqual("**WRR",
-                             str(nuc.translate(table='Yeast Mitochondrial')))
+                             str(nuc.translate(table="Yeast Mitochondrial")))
             self.assertEqual("**WSS", str(nuc.translate(table=5)))
             self.assertEqual("**WSS", str(nuc.translate(table=9)))
-            self.assertEqual("**CRR", str(nuc.translate(table='Euplotid Nuclear')))
+            self.assertEqual("**CRR", str(nuc.translate(table="Euplotid Nuclear")))
             self.assertEqual("***RR", str(nuc.translate(table=11)))
-            self.assertEqual("***RR", str(nuc.translate(table='11')))
-            self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
+            self.assertEqual("***RR", str(nuc.translate(table="11")))
+            self.assertEqual("***RR", str(nuc.translate(table="Bacterial")))
             self.assertEqual("**GRR", str(nuc.translate(table=25)))
             self.assertEqual("", str(nuc.translate(to_stop=True)))
             self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
@@ -669,8 +669,8 @@ class StringMethodTests(unittest.TestCase):
                              translate(str(nuc), table=Chilodonella_uncinata_table))
             self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
             self.assertEqual("", translate(str(nuc), to_stop=True))
-            self.assertEqual("***RR", translate(str(nuc), table='Bacterial'))
-            self.assertEqual("***RR", translate(str(nuc), table='11'))
+            self.assertEqual("***RR", translate(str(nuc), table="Bacterial"))
+            self.assertEqual("***RR", translate(str(nuc), table="11"))
             self.assertEqual("***RR", translate(str(nuc), table=11))
             self.assertEqual("**W**", translate(str(nuc), table=2))
         self.assertEqual(str(Seq("TAT").translate()), "Y")
@@ -744,7 +744,7 @@ class StringMethodTests(unittest.TestCase):
         """Checks that a ValueError is thrown for all non-iterable types."""
         # No iterable types which contain non-accepted types either.
 
-        spacer = Seq('NNNNN')
+        spacer = Seq("NNNNN")
         self.assertRaises(ValueError, spacer.join, 5)
         self.assertRaises(ValueError, spacer.join, "ATG")
         self.assertRaises(ValueError, spacer.join, Seq("ATG"))
@@ -775,28 +775,28 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_Seq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
-        spacer = Seq('NNNNN', generic_dna)
-        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_rna), Seq('NNNNN', generic_rna)])
-        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), Seq('NNNNN', generic_protein)])
+        spacer = Seq("NNNNN", generic_dna)
+        self.assertRaises(TypeError, spacer.join, [Seq("NNNNN", generic_rna), Seq("NNNNN", generic_rna)])
+        self.assertRaises(TypeError, spacer.join, [Seq("NNNNN", generic_protein), Seq("NNNNN", generic_protein)])
 
     def test_join_UnknownSeq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
         spacer = UnknownSeq(5, character="-", alphabet=generic_dna)
         self.assertRaises(TypeError, spacer.join, [UnknownSeq(5, character="-", alphabet=generic_rna), UnknownSeq(5, character="-", alphabet=generic_rna)])
-        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), UnknownSeq(5, character="-", alphabet=generic_protein)])
+        self.assertRaises(TypeError, spacer.join, [Seq("NNNNN", generic_protein), UnknownSeq(5, character="-", alphabet=generic_protein)])
 
     def test_join_MutableSeq_TypeError(self):
         """Checks that a TypeError is thrown for incompatible alphabets."""
-        spacer = MutableSeq('NNNNN', generic_dna)
-        self.assertRaises(TypeError, spacer.join, [MutableSeq('NNNNN', generic_rna), MutableSeq('NNNNN', generic_rna)])
-        self.assertRaises(TypeError, spacer.join, [Seq('NNNNN', generic_protein), MutableSeq('NNNNN', generic_protein)])
+        spacer = MutableSeq("NNNNN", generic_dna)
+        self.assertRaises(TypeError, spacer.join, [MutableSeq("NNNNN", generic_rna), MutableSeq("NNNNN", generic_rna)])
+        self.assertRaises(TypeError, spacer.join, [Seq("NNNNN", generic_protein), MutableSeq("NNNNN", generic_protein)])
 
     def test_join_Seq(self):
         """Checks if Seq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
-        spacer1 = Seq('', generic_dna)
-        spacers = [spacer1, Seq('NNNNN', generic_dna), Seq('GGG', generic_nucleotide)]
+        spacer1 = Seq("", generic_dna)
+        spacers = [spacer1, Seq("NNNNN", generic_dna), Seq("GGG", generic_nucleotide)]
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
         example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
 
@@ -813,12 +813,12 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
-        filename = 'Fasta/f003'
-        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        filename = "Fasta/f003"
+        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
-        spacer = Seq('NNNNN')
-        spacer1 = Seq('')
+        spacer = Seq("NNNNN")
+        spacer1 = Seq("")
         # seq objects with spacer
         seq_concatenated = spacer.join(seqlist)
         # seq objects with empty spacer
@@ -831,7 +831,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
         with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, 'fasta'))
+            spacer.join(SeqIO.parse(filename, "fasta"))
 
     def test_join_UnknownSeq(self):
         """Checks if UnknownSeq join correctly concatenates sequence with the spacer."""
@@ -856,8 +856,8 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_UnknownSeq_with_file(self):
         """Checks if UnknownSeq join correctly concatenates sequence from a file with the spacer."""
-        filename = 'Fasta/f003'
-        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        filename = "Fasta/f003"
+        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = UnknownSeq(0, character="-", alphabet=generic_dna)
@@ -874,14 +874,14 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
         with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, 'fasta'))
+            spacer.join(SeqIO.parse(filename, "fasta"))
 
     def test_join_MutableSeq(self):
         """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
         # Only expect it to take Seq objects and/or strings in an iterable!
 
-        spacer1 = MutableSeq('', generic_dna)
-        spacers = [spacer1, MutableSeq('NNNNN', generic_dna), MutableSeq('GGG', generic_nucleotide)]
+        spacer1 = MutableSeq("", generic_dna)
+        spacers = [spacer1, MutableSeq("NNNNN", generic_dna), MutableSeq("GGG", generic_nucleotide)]
         example_strings = ["ATG", "ATG", "ATG", "ATG"]
         example_strings_seqs = ["ATG", "ATG", Seq("ATG", generic_dna), "ATG"]
 
@@ -898,12 +898,12 @@ class StringMethodTests(unittest.TestCase):
 
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
-        filename = 'Fasta/f003'
-        seqlist = [record.seq for record in SeqIO.parse(filename, 'fasta')]
+        filename = "Fasta/f003"
+        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
-        spacer = MutableSeq('NNNNN')
-        spacer1 = MutableSeq('')
+        spacer = MutableSeq("NNNNN")
+        spacer1 = MutableSeq("")
         # seq objects with spacer
         seq_concatenated = spacer.join(seqlist)
         # seq objects with empty spacer
@@ -916,7 +916,7 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(seq_concatenated), ref_data)
         self.assertEqual(str(seq_concatenated1), ref_data1)
         with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, 'fasta'))
+            spacer.join(SeqIO.parse(filename, "fasta"))
 
     # TODO - Addition...
 
@@ -926,10 +926,10 @@ class FileBasedTests(unittest.TestCase):
 
     def test_unknown_seq_ungap(self):
         """Test ungap() works properly on UnknownSeq instances."""
-        rec = SeqIO.read('GenBank/NT_019265.gb', 'genbank')
+        rec = SeqIO.read("GenBank/NT_019265.gb", "genbank")
         self.assertIsInstance(rec.seq, UnknownSeq)
 
-        ungapped_seq = rec.features[1].extract(rec.seq).ungap('-')
+        ungapped_seq = rec.features[1].extract(rec.seq).ungap("-")
         self.assertIsInstance(ungapped_seq, UnknownSeq)
 
 

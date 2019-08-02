@@ -41,7 +41,7 @@ def codeml(vers=None, verbose=False):
         cml.working_dir = "temp"
         ctl_file = os.path.join("Control_files",
                                 "codeml",
-                                '.'.join([test[0], "ctl"]))
+                                ".".join([test[0], "ctl"]))
         alignment = os.path.join("Alignments", test[1])
         tree = os.path.join("Trees", test[2])
         cml.read_ctl_file(ctl_file)
@@ -51,13 +51,13 @@ def codeml(vers=None, verbose=False):
             # M2a_rel (NSsites 22) was introduced in PAML 4.6
             if test[0] == "m2a_rel" and int(version.split("_")[1][0]) < 6:
                 continue
-            print("\t{0}".format(version.replace('_', '.')))
+            print("\t{0}".format(version.replace("_", ".")))
             if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and \
                version == "4_6":
                 cml.tree = ".".join([cml.tree, "4.6"])
-            out_file = '.'.join(['-'.join([test[0], version]), "out"])
+            out_file = ".".join(["-".join([test[0], version]), "out"])
             cml.out_file = os.path.join("Results", "codeml", test[0], out_file)
-            bin = ''.join(["codeml", version])
+            bin = "".join(["codeml", version])
             cml.run(command=bin, verbose=verbose, parse=False)
 
 
@@ -75,7 +75,7 @@ def baseml(vers=None, verbose=False):
         print(test[0])
         bml = baseml.Baseml()
         for version in versions:
-            print("\t{0}".format(version.replace('_', '.')))
+            print("\t{0}".format(version.replace("_", ".")))
             if test[1] is not None:
                 for n in test[1]:
                     if (version in ["4_3", "4_4", "4_4c", "4_5"] and
@@ -119,12 +119,12 @@ def yn00(vers=None, verbose=False):
         print(test)
         yn = yn00.Yn00()
         for version in versions:
-            print("\t{0}".format(version.replace('_', '.')))
+            print("\t{0}".format(version.replace("_", ".")))
             ctl_file = (os.path.join("Control_files", "yn00",
                         "{0}.ctl".format(test)))
             yn.read_ctl_file(ctl_file)
             out_file = "{0}-{1}.out".format(test, version)
-            yn.out_file = os.path.join("Results", 'yn00', out_file)
+            yn.out_file = os.path.join("Results", "yn00", out_file)
             bin = "yn00{0}".format(version)
             yn.run(command=bin, verbose=verbose, parse=False)
 

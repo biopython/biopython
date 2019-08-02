@@ -18,8 +18,8 @@ from common_BioSQL_online import share_config
 import requires_internet
 requires_internet.check()
 
-DBDRIVER = 'mysql.connector'
-DBTYPE = 'mysql'
+DBDRIVER = "mysql.connector"
+DBTYPE = "mysql"
 
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 

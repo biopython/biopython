@@ -322,7 +322,7 @@ class IndexDictTests(unittest.TestCase):
                 # BiopythonParserWarning: Could not parse the SFF index:
                 # Unknown magic number b'.diy' in SFF index header:
                 # b'.diy1.00'
-                warnings.simplefilter('ignore', BiopythonParserWarning)
+                warnings.simplefilter("ignore", BiopythonParserWarning)
 
             rec_dict = SeqIO.index(filename, format, alphabet)
             self.check_dict_methods(rec_dict, id_list, id_list)
@@ -397,7 +397,7 @@ class IndexDictTests(unittest.TestCase):
                 # BiopythonParserWarning: Could not parse the SFF index:
                 # Unknown magic number b'.diy' in SFF index header:
                 # b'.diy1.00'
-                warnings.simplefilter('ignore', BiopythonParserWarning)
+                warnings.simplefilter("ignore", BiopythonParserWarning)
 
             rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
             self.check_dict_methods(rec_dict, key_list, id_list)
@@ -514,7 +514,7 @@ class IndexDictTests(unittest.TestCase):
 
         if format in ["sff"]:
             with warnings.catch_warnings():
-                warnings.simplefilter('ignore', BiopythonParserWarning)
+                warnings.simplefilter("ignore", BiopythonParserWarning)
                 rec_dict = SeqIO.index(filename, format, alphabet,
                                        key_function=lambda x: x.lower())  # noqa: E731
                 if sqlite3:

@@ -117,9 +117,9 @@ class TaxonomyTest(unittest.TestCase):
         taxon_record = Entrez.read(handle)
         entrez_tax = []
 
-        for t in taxon_record[0]['LineageEx']:
-            entrez_tax.append(t['ScientificName'])
-        entrez_tax.append(taxon_record[0]['ScientificName'])
+        for t in taxon_record[0]["LineageEx"]:
+            entrez_tax.append(t["ScientificName"])
+        entrez_tax.append(taxon_record[0]["ScientificName"])
         self.db.load(self.iterator, True)
 
         # do some simple tests to make sure we actually loaded the right
@@ -131,7 +131,7 @@ class TaxonomyTest(unittest.TestCase):
         test_record = self.db.lookup(accession="X55053")
 
         # make sure that the ncbi taxonomy id is corrent
-        self.assertEqual(test_record.annotations['ncbi_taxid'], 3702)
+        self.assertEqual(test_record.annotations["ncbi_taxid"], 3702)
         # make sure that the taxonomic lineage is the same as reported
         # using the Entrez module
-        self.assertEqual(test_record.annotations['taxonomy'], entrez_tax)
+        self.assertEqual(test_record.annotations["taxonomy"], entrez_tax)

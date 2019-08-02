@@ -205,24 +205,24 @@ class TestReading(unittest.TestCase):
 
     def test_read_clustal1(self):
         """Parse an alignment file and get an aligment object."""
-        path = os.path.join(os.getcwd(), 'Clustalw', 'opuntia.aln')
+        path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(alignment.format("clustal"), opuntia_clustal)
 
     def test_read_clustal2(self):
         """Parse an alignment file and get an aligment object."""
-        path = os.path.join(os.curdir, 'Clustalw', 'cw02.aln')
+        path = os.path.join(os.curdir, "Clustalw", "cw02.aln")
         alignment = AlignIO.read(path, "clustal")
         self.assertEqual(alignment.format("clustal"), cw02_clustal)
 
     def test_read_write_clustal(self):
         """Test the base alignment stuff."""
-        path = os.path.join(os.getcwd(), 'Clustalw', 'opuntia.aln')
+        path = os.path.join(os.getcwd(), "Clustalw", "opuntia.aln")
         alignment = AlignIO.read(path, "clustal", alphabet=Alphabet.Gapped(IUPAC.unambiguous_dna))
         self.assertEqual(len(alignment), 7)
         seq_record = alignment[0]
         self.assertEqual(seq_record.description, "gi|6273285|gb|AF191659.1|AF191")
-        self.assertEqual(seq_record.seq, Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA'))
+        self.assertEqual(seq_record.seq, Seq("TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATA----------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCCATTGATTTAGTGTACCAGA"))
         seq_record = alignment[1]
         self.assertEqual(seq_record.description, "gi|6273284|gb|AF191658.1|AF191")
         self.assertEqual(seq_record.seq, "TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATA--------ATATATTTCAAATTTCCTTATATACCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA")
@@ -246,25 +246,25 @@ class TestReading(unittest.TestCase):
         consensus = align_info.dumb_consensus()
         self.assertIsInstance(consensus, Seq)
         self.assertEqual(consensus, "TATACATTAAAGXAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAATATATATATATATATAATATATTTCAAATTXCCTTATATATCCAAATATAAAAATATCTAATAAATTAGATGAATATCAAAGAATCTATTGATTTAGTGTACCAGA")
-        dictionary = align_info.replacement_dictionary(['N'])
+        dictionary = align_info.replacement_dictionary(["N"])
         self.assertEqual(len(dictionary), 16)
-        self.assertAlmostEqual(dictionary[('A', 'A')], 1395.0, places=1)
-        self.assertAlmostEqual(dictionary[('A', 'C')], 3.0, places=1)
-        self.assertAlmostEqual(dictionary[('A', 'G')], 13.0, places=1)
-        self.assertAlmostEqual(dictionary[('A', 'T')], 6.0, places=1)
-        self.assertAlmostEqual(dictionary[('C', 'A')], 3.0, places=1)
-        self.assertAlmostEqual(dictionary[('C', 'C')], 271.0, places=1)
-        self.assertAlmostEqual(dictionary[('C', 'G')], 0, places=1)
-        self.assertAlmostEqual(dictionary[('C', 'T')], 16.0, places=1)
-        self.assertAlmostEqual(dictionary[('G', 'A')], 5.0, places=1)
-        self.assertAlmostEqual(dictionary[('G', 'C')], 0, places=1)
-        self.assertAlmostEqual(dictionary[('G', 'G')], 480.0, places=1)
-        self.assertAlmostEqual(dictionary[('G', 'T')], 0, places=1)
-        self.assertAlmostEqual(dictionary[('T', 'A')], 6.0, places=1)
-        self.assertAlmostEqual(dictionary[('T', 'C')], 12.0, places=1)
-        self.assertAlmostEqual(dictionary[('T', 'G')], 0, places=1)
-        self.assertAlmostEqual(dictionary[('T', 'T')], 874.0, places=1)
-        matrix = align_info.pos_specific_score_matrix(consensus, ['N'])
+        self.assertAlmostEqual(dictionary[("A", "A")], 1395.0, places=1)
+        self.assertAlmostEqual(dictionary[("A", "C")], 3.0, places=1)
+        self.assertAlmostEqual(dictionary[("A", "G")], 13.0, places=1)
+        self.assertAlmostEqual(dictionary[("A", "T")], 6.0, places=1)
+        self.assertAlmostEqual(dictionary[("C", "A")], 3.0, places=1)
+        self.assertAlmostEqual(dictionary[("C", "C")], 271.0, places=1)
+        self.assertAlmostEqual(dictionary[("C", "G")], 0, places=1)
+        self.assertAlmostEqual(dictionary[("C", "T")], 16.0, places=1)
+        self.assertAlmostEqual(dictionary[("G", "A")], 5.0, places=1)
+        self.assertAlmostEqual(dictionary[("G", "C")], 0, places=1)
+        self.assertAlmostEqual(dictionary[("G", "G")], 480.0, places=1)
+        self.assertAlmostEqual(dictionary[("G", "T")], 0, places=1)
+        self.assertAlmostEqual(dictionary[("T", "A")], 6.0, places=1)
+        self.assertAlmostEqual(dictionary[("T", "C")], 12.0, places=1)
+        self.assertAlmostEqual(dictionary[("T", "G")], 0, places=1)
+        self.assertAlmostEqual(dictionary[("T", "T")], 874.0, places=1)
+        matrix = align_info.pos_specific_score_matrix(consensus, ["N"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -425,7 +425,7 @@ G  0.0 0.0 7.0 0.0
 A  7.0 0.0 0.0 0.0
 """)
 
-        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=['N'])
+        matrix = align_info.pos_specific_score_matrix(chars_to_ignore=["N"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -587,7 +587,7 @@ A  7.0 0.0 0.0 0.0
 """)
 
         second_seq = alignment[1].seq
-        matrix = align_info.pos_specific_score_matrix(second_seq, ['N'])
+        matrix = align_info.pos_specific_score_matrix(second_seq, ["N"])
         self.assertEqual(str(matrix), """\
     A   C   G   T
 T  0.0 0.0 0.0 7.0
@@ -747,15 +747,15 @@ A  7.0 0.0 0.0 0.0
 G  0.0 0.0 7.0 0.0
 A  7.0 0.0 0.0 0.0
 """)
-        value = align_info.information_content(5, 50, chars_to_ignore=['N'])
+        value = align_info.information_content(5, 50, chars_to_ignore=["N"])
         self.assertAlmostEqual(value, 88.42, places=2)
-        value = align_info.information_content(chars_to_ignore=['N'])
+        value = align_info.information_content(chars_to_ignore=["N"])
         self.assertAlmostEqual(value, 287.55, places=2)
-        e_freq = {'G': 0.25, 'C': 0.25, 'A': 0.25, 'T': 0.25}
+        e_freq = {"G": 0.25, "C": 0.25, "A": 0.25, "T": 0.25}
         e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                            IUPAC.unambiguous_dna)
         value = align_info.information_content(e_freq_table=e_freq_table,
-                                               chars_to_ignore=['N'])
+                                               chars_to_ignore=["N"])
         self.assertAlmostEqual(value, 287.55, places=2)
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
         self.assertAlmostEqual(align_info.ic_vector[1], 2.00, places=2)
@@ -923,7 +923,7 @@ A  7.0 0.0 0.0 0.0
 """)
 
     def test_read_fasta(self):
-        path = os.path.join(os.curdir, 'Quality', 'example.fasta')
+        path = os.path.join(os.curdir, "Quality", "example.fasta")
         alignment = AlignIO.read(path, "fasta",
                                  alphabet=Alphabet.Gapped(IUPAC.ambiguous_dna))
         self.assertEqual(len(alignment), 3)
@@ -949,8 +949,8 @@ GTTGCTTCTGGCGTGGGTGGGGGGG EAS54_6_R1_2_1_443_348""")
 
     def test_format_conversion(self):
         """Parse the alignment file and get an aligment object."""
-        path = os.path.join(os.curdir, 'Clustalw', 'opuntia.aln')
-        alignment = AlignIO.read(path, 'clustal')
+        path = os.path.join(os.curdir, "Clustalw", "opuntia.aln")
+        alignment = AlignIO.read(path, "clustal")
         self.assertEqual(alignment.format("fasta"), opuntia_fasta)
         self.assertEqual(alignment.format("clustal"), opuntia_clustal)
 

@@ -44,7 +44,7 @@ class TestEnzyme(unittest.TestCase):
 
     def test_lipoprotein(self):
         """Parsing ENZYME record for lipoprotein lipase (3.1.1.34)."""
-        filename = os.path.join('Enzymes', 'lipoprotein.txt')
+        filename = os.path.join("Enzymes", "lipoprotein.txt")
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -55,9 +55,9 @@ class TestEnzyme(unittest.TestCase):
         self.assertEqual(record["AN"][1], "Diacylglycerol lipase.")
         self.assertEqual(record["AN"][2], "Diglyceride lipase.")
         self.assertEqual(record["CA"], "Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.")
-        self.assertEqual(record["CC"][0], 'Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins (VLDL).')
+        self.assertEqual(record["CC"][0], "Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins (VLDL).")
         self.assertEqual(record["CC"][1], "Also hydrolyzes diacylglycerol.")
-        self.assertEqual(record['PR'], ["PDOC00110"])
+        self.assertEqual(record["PR"], ["PDOC00110"])
         self.assertEqual(record["DR"][0], ["P11151", "LIPL_BOVIN"])
         self.assertEqual(record["DR"][1], ["P11153", "LIPL_CAVPO"])
         self.assertEqual(record["DR"][2], ["P11602", "LIPL_CHICK"])
@@ -74,7 +74,7 @@ class TestEnzyme(unittest.TestCase):
 
     def test_proline(self):
         """Parsing ENZYME record for proline racemase (5.1.1.4)."""
-        filename = os.path.join('Enzymes', 'proline.txt')
+        filename = os.path.join("Enzymes", "proline.txt")
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -96,7 +96,7 @@ class TestEnzyme(unittest.TestCase):
 
     def test_valine(self):
         """Parsing ENZYME record for valine decarboxylase (4.1.1.14)."""
-        filename = os.path.join('Enzymes', 'valine.txt')
+        filename = os.path.join("Enzymes", "valine.txt")
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()
@@ -111,7 +111,7 @@ class TestEnzyme(unittest.TestCase):
 
     def test_lactate(self):
         """Parsing ENZYME record for lactate racemase (5.1.2.1)."""
-        filename = os.path.join('Enzymes', 'lactate.txt')
+        filename = os.path.join("Enzymes", "lactate.txt")
         handle = open(filename)
         record = Enzyme.read(handle)
         handle.close()

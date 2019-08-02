@@ -484,7 +484,7 @@ class TestWriteRead(unittest.TestCase):
             handle = StringIO()
             with warnings.catch_warnings():
                 # TODO - Have a Biopython defined "DataLossWarning?"
-                warnings.simplefilter('ignore', BiopythonWarning)
+                warnings.simplefilter("ignore", BiopythonWarning)
                 SeqIO.write(records, handle, format)
             handle.seek(0)
             compare_records(records,
@@ -507,7 +507,7 @@ class TestWriteRead(unittest.TestCase):
                    ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
         with warnings.catch_warnings():
             # TODO - Have a Biopython defined "DataLossWarning?"
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                        ["fastq-solexa", "fastq-illumina"])
 
@@ -735,10 +735,10 @@ class TestSFF(unittest.TestCase):
         self.assertEqual(len(record), 395)
         s = str(record.seq.lower())
         # Apply overlapping clipping
-        record.annotations['clip_qual_left'] = 51
-        record.annotations['clip_qual_right'] = 44
-        record.annotations['clip_adapter_left'] = 50
-        record.annotations['clip_adapter_right'] = 75
+        record.annotations["clip_qual_left"] = 51
+        record.annotations["clip_qual_right"] = 44
+        record.annotations["clip_adapter_left"] = 50
+        record.annotations["clip_adapter_right"] = 75
         self.assertEqual(len(record), 395)
         self.assertEqual(len(record.seq), 395)
         # Save the clipped record...
@@ -751,10 +751,10 @@ class TestSFF(unittest.TestCase):
             warnings.simplefilter("always", BiopythonParserWarning)
             record = SeqIO.read(h, "sff")
             self.assertEqual(len(w), 1, w)
-        self.assertEqual(record.annotations['clip_qual_left'], 51)
-        self.assertEqual(record.annotations['clip_qual_right'], 44)
-        self.assertEqual(record.annotations['clip_adapter_left'], 50)
-        self.assertEqual(record.annotations['clip_adapter_right'], 75)
+        self.assertEqual(record.annotations["clip_qual_left"], 51)
+        self.assertEqual(record.annotations["clip_qual_right"], 44)
+        self.assertEqual(record.annotations["clip_adapter_left"], 50)
+        self.assertEqual(record.annotations["clip_adapter_right"], 75)
         self.assertEqual(len(record), 395)
         self.assertEqual(s, str(record.seq.lower()))
         # And check with trimming applied...

@@ -45,8 +45,8 @@ class NmrTests(unittest.TestCase):
                                                 "0.010   +E   0.000  0.49840 0.49840 0")
 
         # Peaklist residue dict check
-        self.assertEqual(len(self.peaklist.residue_dict('H1')['10']), 1)
-        self.assertEqual(self.peaklist.residue_dict('H1')['10'][0], "8  10.hn   7.663   0.021"
+        self.assertEqual(len(self.peaklist.residue_dict("H1")["10"]), 1)
+        self.assertEqual(self.peaklist.residue_dict("H1")["10"][0], "8  10.hn   7.663   0.021"
                                                                     "   0.010   ++   0.000   "
                                                                     "10.n   118.341   0.324   "
                                                                     "0.010   +E   0.000   10.n"
@@ -101,18 +101,18 @@ class NmrTests(unittest.TestCase):
                 res += 1
 
             # Open the output file and write the data
-            with open(self.f_predicted, 'a') as outfile:
+            with open(self.f_predicted, "a") as outfile:
                 outfile.writelines(out_list)  # Write the output lines to the file
 
             # Compare the content of the predicted output file with expected file
-            pre_content = open(self.f_predicted, 'r').read()
-            exp_content = open(self.xpk_expected, 'r').read()
+            pre_content = open(self.f_predicted, "r").read()
+            exp_content = open(self.xpk_expected, "r").read()
             self.assertEqual(pre_content, exp_content)
 
         finally:
             os.remove(self.f_predicted)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

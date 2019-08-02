@@ -22,18 +22,18 @@ class TestAlignerProperties(unittest.TestCase):
         aligner.epsilon = 1.e-8
         self.assertAlmostEqual(aligner.epsilon, 1.e-8)
         with self.assertRaises(TypeError):
-            aligner.epsilon = 'not a number'
+            aligner.epsilon = "not a number"
         with self.assertRaises(TypeError):
             aligner.epsilon = None
 
     def test_aligner_property_mode(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
-        self.assertEqual(aligner.mode, 'global')
-        aligner.mode = 'local'
-        self.assertEqual(aligner.mode, 'local')
+        aligner.mode = "global"
+        self.assertEqual(aligner.mode, "global")
+        aligner.mode = "local"
+        self.assertEqual(aligner.mode, "local")
         with self.assertRaises(ValueError):
-            aligner.mode = 'wrong'
+            aligner.mode = "wrong"
 
     def test_aligner_property_match_mismatch(self):
         aligner = Align.PairwiseAligner()
@@ -42,9 +42,9 @@ class TestAlignerProperties(unittest.TestCase):
         aligner.mismatch_score = -2.0
         self.assertAlmostEqual(aligner.mismatch_score, -2.0)
         with self.assertRaises(ValueError):
-            aligner.match_score = 'not a number'
+            aligner.match_score = "not a number"
         with self.assertRaises(ValueError):
-            aligner.mismatch_score = 'not a number'
+            aligner.mismatch_score = "not a number"
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 3.000000
@@ -155,13 +155,13 @@ Pairwise sequence aligner with parameters
   mode: global
 """)
         with self.assertRaises(ValueError):
-            aligner.target_gap_score = 'wrong'
+            aligner.target_gap_score = "wrong"
         with self.assertRaises(ValueError):
-            aligner.query_gap_score = 'wrong'
+            aligner.query_gap_score = "wrong"
         with self.assertRaises(TypeError):
-            aligner.target_end_gap_score = 'wrong'
+            aligner.target_end_gap_score = "wrong"
         with self.assertRaises(TypeError):
-            aligner.query_end_gap_score = 'wrong'
+            aligner.query_end_gap_score = "wrong"
 
     def test_aligner_nonexisting_property(self):
         aligner = Align.PairwiseAligner()
@@ -177,7 +177,7 @@ class TestPairwiseGlobal(unittest.TestCase):
         seq1 = "GAACT"
         seq2 = "GAT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -220,12 +220,12 @@ G-A-T
 
     def test_align_affine1_score(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 0
         aligner.mismatch_score = -1
         aligner.open_gap_score = -5
         aligner.extend_gap_score = -1
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 0.000000
@@ -252,9 +252,9 @@ class TestPairwiseLocal(unittest.TestCase):
 
     def test_smithwaterman(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.gap_score = -0.1
-        self.assertEqual(aligner.algorithm, 'Smith-Waterman')
+        self.assertEqual(aligner.algorithm, "Smith-Waterman")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -288,10 +288,10 @@ zA-Bz
 
     def test_gotoh_local(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
-        self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -328,12 +328,12 @@ class TestPairwiseOpenPenalty(unittest.TestCase):
 
     def test_match_score_open_penalty1(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 2
         aligner.mismatch_score = -1
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 2.000000
@@ -377,12 +377,12 @@ A-
 
     def test_match_score_open_penalty2(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 1.5
         aligner.mismatch_score = 0.0
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.500000
@@ -426,10 +426,10 @@ GA-
 
     def test_match_score_open_penalty3(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.query_open_gap_score = -0.1
         aligner.query_extend_gap_score = 0.0
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -465,11 +465,11 @@ GA--T
 
     def test_match_score_open_penalty4(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.mismatch_score = -2.0
         aligner.open_gap_score = -0.1
         aligner.extend_gap_score = 0.0
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -516,10 +516,10 @@ class TestPairwiseExtendPenalty(unittest.TestCase):
 
     def test_extend_penalty1(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -0.5
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -555,10 +555,10 @@ G--T
 
     def test_extend_penalty2(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -1.5
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -605,10 +605,10 @@ class TestPairwisePenalizeExtendWhenOpening(unittest.TestCase):
 
     def test_penalize_extend_when_opening(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -1.7
         aligner.extend_gap_score = -1.5
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -647,7 +647,7 @@ class TestPairwisePenalizeEndgaps(unittest.TestCase):
 
     def test_penalize_end_gaps(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -0.2
         aligner.extend_gap_score = -0.8
         end_score = 0.0
@@ -671,7 +671,7 @@ Pairwise sequence aligner with parameters
   query_right_extend_gap_score: 0.000000
   mode: global
 """)
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         seq1 = "GACT"
         seq2 = "GT"
         score = aligner.score(seq1, seq2)
@@ -710,7 +710,7 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         seq1 = "GAT"
         seq2 = "GTCT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         open_score, extend_score = (-0.3, 0)
         aligner.target_open_gap_score = open_score
         aligner.target_extend_gap_score = extend_score
@@ -721,7 +721,7 @@ class TestPairwiseSeparateGapPenalties(unittest.TestCase):
         aligner.query_extend_gap_score = extend_score
         aligner.query_end_open_gap_score = open_score
         aligner.query_end_extend_gap_score = extend_score
-        self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -763,7 +763,7 @@ GTCT
 
     def test_separate_gap_penalties2(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.target_open_gap_score = -0.3
         aligner.target_extend_gap_score = 0.0
         aligner.query_open_gap_score = -0.2
@@ -809,7 +809,7 @@ class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
         seq1 = "GAAT"
         seq2 = "GTCCT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         open_score, extend_score = (-0.1, 0)
         aligner.target_open_gap_score = open_score
         aligner.target_extend_gap_score = extend_score
@@ -906,7 +906,7 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         seq1 = "ATAT"
         seq2 = "ATT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.substitution_matrix = self.match_dict
         aligner.open_gap_score = -0.5
         aligner.extend_gap_score = 0.0
@@ -953,7 +953,7 @@ AT-T
         seq1 = "ATAT"
         seq2 = "ATT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.substitution_matrix = self.match_dict
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
@@ -991,7 +991,7 @@ ATT.
         seq1 = "ATT"
         seq2 = "ATAT"
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.substitution_matrix = self.match_dict
         aligner.open_gap_score = -1.0
         aligner.extend_gap_score = 0.0
@@ -1030,10 +1030,10 @@ class TestPairwiseOneCharacter(unittest.TestCase):
 
     def test_align_one_char1(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
-        self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -1067,10 +1067,10 @@ abcde
 
     def test_align_one_char2(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
-        self.assertEqual(aligner.algorithm, 'Gotoh local alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -1112,10 +1112,10 @@ abcce
 
     def test_align_one_char3(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -1151,10 +1151,10 @@ abcde
 
     def test_align_one_char_score3(self):
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.open_gap_score = -0.3
         aligner.extend_gap_score = -0.1
-        self.assertEqual(aligner.algorithm, 'Gotoh global alignment algorithm')
+        self.assertEqual(aligner.algorithm, "Gotoh global alignment algorithm")
         self.assertEqual(str(aligner), """\
 Pairwise sequence aligner with parameters
   match_score: 1.000000
@@ -1193,7 +1193,7 @@ class TestPerSiteGapPenalties(unittest.TestCase):
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
@@ -1235,7 +1235,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
@@ -1283,7 +1283,7 @@ AAB------------BBAAAACCCCAAAABBBAA--
                 return -1
             return -10
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'global'
+        aligner.mode = "global"
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
@@ -1369,7 +1369,7 @@ TTG--GAA
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
@@ -1419,7 +1419,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         # Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
         specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)  # noqa: E731
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -1
         aligner.target_gap_score = nogaps
@@ -1467,7 +1467,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
                 return -1
             return -10
         aligner = Align.PairwiseAligner()
-        aligner.mode = 'local'
+        aligner.mode = "local"
         aligner.match_score = 1
         aligner.mismatch_score = -10
         aligner.target_gap_score = gap_score
@@ -1542,17 +1542,17 @@ TTGGAA
         seq2 = "TTGGAA"
 
         def gap_score(i, n):
-            raise RuntimeError('broken gap function')
+            raise RuntimeError("broken gap function")
         aligner = Align.PairwiseAligner()
         aligner.target_gap_score = gap_score
         aligner.query_gap_score = -1
-        aligner.mode = 'global'
+        aligner.mode = "global"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
-        aligner.mode = 'local'
+        aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
@@ -1560,13 +1560,13 @@ TTGGAA
             alignments = list(alignments)
         aligner.target_gap_score = -1
         aligner.query_gap_score = gap_score
-        aligner.mode = 'global'
+        aligner.mode = "global"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
             alignments = aligner.align(seq1, seq2)
             alignments = list(alignments)
-        aligner.mode = 'local'
+        aligner.mode = "local"
         with self.assertRaises(RuntimeError):
             aligner.score(seq1, seq2)
         with self.assertRaises(RuntimeError):
@@ -1574,6 +1574,6 @@ TTGGAA
             alignments = list(alignments)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

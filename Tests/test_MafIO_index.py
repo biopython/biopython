@@ -452,7 +452,7 @@ if sqlite3:
                 "otoGar1.scaffold_334.1-359464": 52,
                 "loxAfr1.scaffold_75566": 54}
             for seq_id, length in correct_lengths.items():
-                self.assertEqual(len(seq_dict[seq_id].ungap('-')), length)
+                self.assertEqual(len(seq_dict[seq_id].ungap("-")), length)
 
         def test_correct_spliced_sequences_1(self):
             """Checking that spliced sequences are correct.
@@ -489,7 +489,7 @@ if sqlite3:
                 "otoGar1.scaffold_334.1-359464": "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
                 "loxAfr1.scaffold_75566": "GGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
             for seq_id, sequence in correct_sequences.items():
-                self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
+                self.assertEqual(seq_dict[seq_id].ungap("-"), sequence)
 
         def test_correct_spliced_sequences_2(self):
             """Checking that spliced sequences are correct.
@@ -543,7 +543,7 @@ if sqlite3:
                 "otoGar1.scaffold_334.1-359464": "GGAAGCATAAACTTTTAATCTATGAAATATCAAATCACTTGGGCAATAGCTG",
                 "loxAfr1.scaffold_75566": "TTTGGTTAGAATTATGCTTTAATTCAAAACTTCCGGGAGTATAAACCATTTAGTCTGCGAAATGCCAAATCTTCAGGGGAAAAAGCTG"}
             for seq_id, sequence in correct_sequences.items():
-                self.assertEqual(seq_dict[seq_id].ungap('-'), sequence)
+                self.assertEqual(seq_dict[seq_id].ungap("-"), sequence)
 
     class TestSearchBadMAF(unittest.TestCase):
         """Test index searching on an incorrectly-formatted MAF."""

@@ -19,10 +19,10 @@ from Bio.Emboss.Applications import FProtParsCommandline, FConsenseCommandline
 from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
-exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist', 'fprotpars', 'fconsense',
-               'fseqboot', 'ftreedist', 'fdnapars']
+exes_wanted = ["fdnadist", "fneighbor", "fprotdist", "fprotpars", "fconsense",
+               "fseqboot", "ftreedist", "fdnapars"]
 exes = {}  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
@@ -90,22 +90,22 @@ class DistanceTests(unittest.TestCase):
     def tearDown(self):
         clean_up()
 
-    test_taxa = ['Archaeohip', 'Calippus', 'Hypohippus', 'M._secundu',
-                 'Merychippu', 'Mesohippus', 'Nannipus', 'Neohippari',
-                 'Parahippus', 'Pliohippus']
+    test_taxa = ["Archaeohip", "Calippus", "Hypohippus", "M._secundu",
+                 "Merychippu", "Mesohippus", "Nannipus", "Neohippari",
+                 "Parahippus", "Pliohippus"]
 
     def distances_from_alignment(self, filename, DNA=True):
         """Check we can make a distance matrix from a given alignment."""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline = FDNADistCommandline(exes["fdnadist"],
-                                        method='j',
+                                        method="j",
                                         sequence=filename,
                                         outfile="test_file",
                                         auto=True)
         else:
             cline = FProtDistCommandline(exes["fprotdist"],
-                                         method='j',
+                                         method="j",
                                          sequence=filename,
                                          outfile="test_file",
                                          auto=True)

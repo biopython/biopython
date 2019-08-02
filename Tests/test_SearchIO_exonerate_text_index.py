@@ -13,16 +13,16 @@ from search_tests_common import CheckIndex
 
 class ExonerateTextIndexCases(CheckIndex):
 
-    fmt = 'exonerate-text'
+    fmt = "exonerate-text"
 
     def test_exn_22_m_est2genome(self):
         """Test exonerate-text indexing, single."""
-        filename = os.path.join('Exonerate', 'exn_22_m_est2genome.exn')
+        filename = os.path.join("Exonerate", "exn_22_m_est2genome.exn")
         self.check_index(filename, self.fmt)
 
     def test_exn_22_q_multiple(self):
         """Test exonerate-text indexing, single."""
-        filename = os.path.join('Exonerate', 'exn_22_q_multiple.exn')
+        filename = os.path.join("Exonerate", "exn_22_q_multiple.exn")
         self.check_index(filename, self.fmt)
 
 

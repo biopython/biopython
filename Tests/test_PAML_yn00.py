@@ -132,7 +132,7 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, yn00.read, self.results_file)
 
     def testParseAllVersions(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             self.assertEqual(len(results), 5)
@@ -140,7 +140,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]), 5)
 
     def testParseLongNames(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00_long-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_long-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...
@@ -151,7 +151,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual({len(v) for taxa in results.values() for v in taxa.values()}, {5})
 
     def testParseDottedNames(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00_dotted-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_dotted-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...
@@ -164,7 +164,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(results["Homo.sapie"]["Pan.troglo"]), 5)
 
     def testParseDottedNumNames(self):
-        pattern = os.path.join(self.results_dir, "yn00", 'yn00_dottednum-*')
+        pattern = os.path.join(self.results_dir, "yn00", "yn00_dottednum-*")
         for results_file in glob.glob(pattern):
             results = yn00.read(results_file)
             # Expect seven taxa...

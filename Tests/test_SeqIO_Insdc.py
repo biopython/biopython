@@ -32,9 +32,9 @@ class TestEmbl(unittest.TestCase):
         self.assertEqual(len(record), 315)
         # Multiple keywords:
         self.assertEqual(record.annotations["keywords"],
-                         ['JP 2005522996-A/12', 'test-data',
-                          'lot and lots of keywords for this example',
-                          'multi-line keywords'])
+                         ["JP 2005522996-A/12", "test-data",
+                          "lot and lots of keywords for this example",
+                          "multi-line keywords"])
         self.assertEqual(record.annotations["topology"], "linear")
 
     def test_annotation3(self):
@@ -63,9 +63,9 @@ class TestEmbl(unittest.TestCase):
         record = SeqRecord(Seq("A" * 100, generic_dna), "dummy",
                            features=[f])
         gbk = record.format("gb")
-        self.assertIn(' /empty\n', gbk)
-        self.assertIn(' /zero=0\n', gbk)
-        self.assertIn(' /one=1\n', gbk)
+        self.assertIn(" /empty\n", gbk)
+        self.assertIn(" /zero=0\n", gbk)
+        self.assertIn(" /one=1\n", gbk)
         self.assertIn(' /text="blah"\n', gbk)
 
 
@@ -76,8 +76,8 @@ class TestEmblRewrite(unittest.TestCase):
 
         # TODO - Check these properties:
         old.dbxrefs = []
-        old.annotations['accessions'] = old.annotations['accessions'][:1]
-        del old.annotations['references']
+        old.annotations["accessions"] = old.annotations["accessions"][:1]
+        del old.annotations["references"]
 
         buffer = StringIO()
         self.assertEqual(1, SeqIO.write(old, buffer, "embl"))

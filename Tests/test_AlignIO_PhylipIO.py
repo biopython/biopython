@@ -136,9 +136,9 @@ class TestPhylipIO(unittest.TestCase):
         for alignment in PhylipIterator(handle):
             for record in alignment:
                 ids.append(record.id)
-        self.assertEqual(ids, ['V_Harveyi_', 'B_subtilis', 'B_subtilis',
-                               'YA80_HAEIN', 'FLIY_ECOLI', 'E_coli_Gln',
-                               'Deinococcu', 'HISJ_E_COL'])
+        self.assertEqual(ids, ["V_Harveyi_", "B_subtilis", "B_subtilis",
+                               "YA80_HAEIN", "FLIY_ECOLI", "E_coli_Gln",
+                               "Deinococcu", "HISJ_E_COL"])
 
         expected = """mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
         fdidlakelc krintqctfv enpldalips lkakkidaim sslsitekrq qeiaftdkly

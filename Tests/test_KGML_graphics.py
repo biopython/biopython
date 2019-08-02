@@ -27,7 +27,7 @@ except ImportError:
         "Install reportlab if you want to use Bio.Graphics.")
 
 try:
-    c = HexColor('#8080F780')
+    c = HexColor("#8080F780")
 except TypeError:
     # Known to fail under ReportLab 2.6 with:
     # unsupported operand type(s) for &: 'int' and 'float'
@@ -73,8 +73,8 @@ class KGMLPathwayTest(unittest.TestCase):
 
     def setUp(self):
         # Does our output directory exist?  If not, create it
-        if not os.path.isdir('KEGG'):
-            os.mkdir('KEGG')
+        if not os.path.isdir("KEGG"):
+            os.mkdir("KEGG")
         # Define some data to work with as a list of tuples:
         # (infilename, outfilename, (entry_count, ortholog_count,
         # compound_count, map_counts), pathway_image,
@@ -87,34 +87,34 @@ class KGMLPathwayTest(unittest.TestCase):
         # appearance. These are KO IDs for reactions that take part in ko00020,
         # the TCA cycle
         self.ko_ids = \
-            {'ko:K00239', 'ko:K00240', 'ko:K00241', 'ko:K00242',
-             'ko:K00244', 'ko:K00245', 'ko:K00246', 'ko:K00247',
-             'ko:K00174', 'ko:K00175', 'ko:K00177', 'ko:K00176',
-             'ko:K00382', 'ko:K00164', 'ko:K00164', 'ko:K00658',
-             'ko:K01902', 'ko:K01903', 'ko:K01899', 'ko:K01900',
-             'ko:K01899', 'ko:K01900', 'ko:K00031', 'ko:K00030',
-             'ko:K00031', 'ko:K01648', 'ko:K00234', 'ko:K00235',
-             'ko:K00236', 'ko:K00237', 'ko:K01676', 'ko:K01677',
-             'ko:K01678', 'ko:K01679', 'ko:K01681', 'ko:K01682',
-             'ko:K01681', 'ko:K01682', 'ko:K01647', 'ko:K00025',
-             'ko:K00026', 'ko:K00024', 'ko:K01958', 'ko:K01959',
-             'ko:K01960', 'ko:K00163', 'ko:K00161', 'ko:K00162',
-             'ko:K00163', 'ko:K00161', 'ko:K00162', 'ko:K00382',
-             'ko:K00627', 'ko:K00169', 'ko:K00170', 'ko:K00172',
-             'ko:K00171', 'ko:K01643', 'ko:K01644', 'ko:K01646',
-             'ko:K01610', 'ko:K01596'}
+            {"ko:K00239", "ko:K00240", "ko:K00241", "ko:K00242",
+             "ko:K00244", "ko:K00245", "ko:K00246", "ko:K00247",
+             "ko:K00174", "ko:K00175", "ko:K00177", "ko:K00176",
+             "ko:K00382", "ko:K00164", "ko:K00164", "ko:K00658",
+             "ko:K01902", "ko:K01903", "ko:K01899", "ko:K01900",
+             "ko:K01899", "ko:K01900", "ko:K00031", "ko:K00030",
+             "ko:K00031", "ko:K01648", "ko:K00234", "ko:K00235",
+             "ko:K00236", "ko:K00237", "ko:K01676", "ko:K01677",
+             "ko:K01678", "ko:K01679", "ko:K01681", "ko:K01682",
+             "ko:K01681", "ko:K01682", "ko:K01647", "ko:K00025",
+             "ko:K00026", "ko:K00024", "ko:K01958", "ko:K01959",
+             "ko:K01960", "ko:K00163", "ko:K00161", "ko:K00162",
+             "ko:K00163", "ko:K00161", "ko:K00162", "ko:K00382",
+             "ko:K00627", "ko:K00169", "ko:K00170", "ko:K00172",
+             "ko:K00171", "ko:K01643", "ko:K01644", "ko:K01646",
+             "ko:K01610", "ko:K01596"}
 
     def test_render_KGML_basic(self):
         """Basic rendering of KGML: write to PDF without modification."""
         # We test rendering of the original KEGG KGML using only local
         # files.
         for p in self.data:
-            with open(p.infilename, 'rU') as f:
+            with open(p.infilename, "rU") as f:
                 pathway = read(f)
                 pathway.image = p.pathway_image
                 kgml_map = KGMLCanvas(pathway)
                 kgml_map.import_imagemap = p.show_pathway_image
-                kgml_map.draw(p.output_stem + '_original.pdf')
+                kgml_map.draw(p.output_stem + "_original.pdf")
 
     def test_render_KGML_modify(self):
         """Rendering of KGML to PDF, with modification."""
@@ -129,7 +129,7 @@ class KGMLPathwayTest(unittest.TestCase):
                 for g in r.graphics:
                     g.width = 10
             kgml_map = KGMLCanvas(pathway)
-            kgml_map.draw(p[0].output_stem + '_widths.pdf')
+            kgml_map.draw(p[0].output_stem + "_widths.pdf")
         # We test rendering of the original KGML for KO3070,
         # modifying the reaction colours for each ortholog entry
         with open(p[1].infilename) as f:
@@ -145,7 +145,7 @@ class KGMLPathwayTest(unittest.TestCase):
             kgml_map = KGMLCanvas(pathway)
             pathway.image = p[1].pathway_image
             kgml_map.import_imagemap = p[1].show_pathway_image
-            kgml_map.draw(p[1].output_stem + '_colors.pdf')
+            kgml_map.draw(p[1].output_stem + "_colors.pdf")
 
     def test_render_KGML_transparency(self):
         """Rendering of KGML to PDF, with color alpha channel."""
@@ -163,7 +163,7 @@ class KGMLPathwayTest(unittest.TestCase):
                     g.fgcolor = g.fgcolor + "77"
                     g.width = 20
             kgml_map = KGMLCanvas(pathway)
-            kgml_map.draw(p[0].output_stem + '_transparency.pdf')
+            kgml_map.draw(p[0].output_stem + "_transparency.pdf")
         # We test rendering of the original KGML for KO3070,
         # modifying the alpha channel for each ortholog entry
         with open(p[1].infilename) as f:
@@ -181,9 +181,9 @@ class KGMLPathwayTest(unittest.TestCase):
             kgml_map = KGMLCanvas(pathway)
             pathway.image = p[1].pathway_image
             kgml_map.import_imagemap = p[1].show_pathway_image
-            kgml_map.draw(p[1].output_stem + '_transparency.pdf')
+            kgml_map.draw(p[1].output_stem + "_transparency.pdf")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

@@ -18,8 +18,8 @@ from common_BioSQL_online import share_config
 import requires_internet
 requires_internet.check()
 
-DBDRIVER = 'psycopg2'
-DBTYPE = 'pg'
+DBDRIVER = "psycopg2"
+DBTYPE = "pg"
 DBHOST, DBUSER, DBPASSWD, TESTDB = load_biosql_ini(DBTYPE)
 
 # This will abort if driver not installed etc:

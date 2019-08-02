@@ -19,7 +19,7 @@ from Bio._py3k import getoutput
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 msaprobs_exe = None
 try:

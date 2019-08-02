@@ -25,7 +25,7 @@ class ParseReal(unittest.TestCase):
     def test_parse_pdb_with_remark_465(self):
         """Tests that parse_pdb_header now can identify some REMARK 465 entries."""
         header = parse_pdb_header("PDB/2XHE.pdb")
-        self.assertEqual(header['idcode'], '2XHE')
+        self.assertEqual(header["idcode"], "2XHE")
         self.assertTrue(header["has_missing_residues"])
         self.assertEqual(len(header["missing_residues"]), 142)
         self.assertIn({"model": None, "res_name": "GLN", "chain": "B", "ssseq": 267, "insertion": None},
@@ -51,11 +51,11 @@ class ParseReal(unittest.TestCase):
     def test_parse_header_line(self):
         """Unit test for parsing and converting fields in HEADER record."""
         header = parse_pdb_header("PDB/header.pdb")
-        self.assertEqual(header['head'], 'structural genomics, unknown function')
-        self.assertEqual(header['idcode'], '3EFG')
-        self.assertEqual(header['deposition_date'], '2008-09-08')
+        self.assertEqual(header["head"], "structural genomics, unknown function")
+        self.assertEqual(header["idcode"], "3EFG")
+        self.assertEqual(header["deposition_date"], "2008-09-08")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

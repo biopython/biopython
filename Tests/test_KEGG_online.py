@@ -184,7 +184,7 @@ class KEGGTests(unittest.TestCase):
         h = kegg_get("hsa:10458+ece:Z5100", "aaseq")
         self.assertEqual(h.url,
                          "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
-        data = SeqIO.parse(h, 'fasta')
+        data = SeqIO.parse(h, "fasta")
         self.assertEqual(len(list(data)), 2)
         h.close()
 
@@ -192,7 +192,7 @@ class KEGGTests(unittest.TestCase):
         h = kegg_get(["hsa:10458", "ece:Z5100"], "aaseq")
         self.assertEqual(h.url,
                          "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq")
-        data = SeqIO.parse(h, 'fasta')
+        data = SeqIO.parse(h, "fasta")
         self.assertEqual(len(list(data)), 2)
         h.close()
 
@@ -200,7 +200,7 @@ class KEGGTests(unittest.TestCase):
         h = kegg_get("hsa:10458+ece:Z5100", "ntseq")
         self.assertEqual(h.url,
                          "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
-        data = SeqIO.parse(h, 'fasta')
+        data = SeqIO.parse(h, "fasta")
         self.assertEqual(len(list(data)), 2)
         h.close()
 
@@ -208,7 +208,7 @@ class KEGGTests(unittest.TestCase):
         h = kegg_get(["hsa:10458", "ece:Z5100"], "ntseq")
         self.assertEqual(h.url,
                          "http://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq")
-        data = SeqIO.parse(h, 'fasta')
+        data = SeqIO.parse(h, "fasta")
         self.assertEqual(len(list(data)), 2)
         h.close()
 
@@ -283,6 +283,6 @@ class KGMLPathwayTests(unittest.TestCase):
         h.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
