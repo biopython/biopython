@@ -68,7 +68,7 @@ class DatabaseLoader(object):
         self._load_biosequence(record, bioentry_id)
         self._load_comment(record, bioentry_id)
         self._load_dbxrefs(record, bioentry_id)
-        references = record.annotations.get('references', ())
+        references = record.annotations.get("references", ())
         for reference, rank in zip(references, list(range(len(references)))):
             self._load_reference(reference, rank, bioentry_id)
         self._load_annotations(record, bioentry_id)
@@ -114,7 +114,7 @@ class DatabaseLoader(object):
               r"WHERE name = %s"
         fields = [name]
         if ontology_id:
-            sql += ' AND ontology_id = %s'
+            sql += " AND ontology_id = %s"
             fields.append(ontology_id)
         id_results = self.adaptor.execute_and_fetchall(sql, fields)
         # something is wrong
@@ -172,8 +172,8 @@ class DatabaseLoader(object):
         if not ncbi_taxon_id:
             # Secondly, look for a source feature
             for f in record.features:
-                if f.type == 'source':
-                    quals = getattr(f, 'qualifiers', {})
+                if f.type == "source":
+                    quals = getattr(f, "qualifiers", {})
                     if "db_xref" in quals:
                         for db_xref in f.qualifiers["db_xref"]:
                             if db_xref.startswith("taxon:"):
@@ -593,7 +593,7 @@ class DatabaseLoader(object):
 
         if record.id.count(".") == 1:  # try to get a version from the id
             # This assumes the string is something like "XXXXXXXX.123"
-            accession, version = record.id.split('.')
+            accession, version = record.id.split(".")
             try:
                 version = int(version)
             except ValueError:
@@ -620,7 +620,7 @@ class DatabaseLoader(object):
             identifier = record.id
 
         # Allow description and division to default to NULL as in BioPerl.
-        description = getattr(record, 'description', None)
+        description = getattr(record, "description", None)
         division = record.annotations.get("data_file_division")
 
         sql = """
@@ -653,7 +653,7 @@ class DatabaseLoader(object):
                                    description,
                                    version))
         # now retrieve the id for the bioentry
-        return self.adaptor.last_id('bioentry')
+        return self.adaptor.last_id("bioentry")
 
     def _load_bioentry_date(self, record, bioentry_id):
         """Add the effective date of the entry into the database (PRIVATE).
@@ -669,9 +669,9 @@ class DatabaseLoader(object):
             date = date[0]
         annotation_tags_id = self._get_ontology_id("Annotation Tags")
         date_id = self._get_term_id("date_changed", annotation_tags_id)
-        sql = 'INSERT INTO bioentry_qualifier_value' \
+        sql = "INSERT INTO bioentry_qualifier_value" \
               ' (bioentry_id, term_id, value, "rank")' \
-              ' VALUES (%s, %s, %s, 1)'
+              " VALUES (%s, %s, %s, 1)"
         self.adaptor.execute(sql, (bioentry_id, date_id, date))
 
     def _load_biosequence(self, record, bioentry_id):
@@ -718,7 +718,7 @@ class DatabaseLoader(object):
          - bioentry_id - corresponding database identifier
 
         """
-        comments = record.annotations.get('comment')
+        comments = record.annotations.get("comment")
         if not comments:
             return
         if not isinstance(comments, list):
@@ -726,11 +726,11 @@ class DatabaseLoader(object):
             comments = [comments]
 
         for index, comment in enumerate(comments):
-            comment = comment.replace('\n', ' ')
+            comment = comment.replace("\n", " ")
             # TODO - Store each line as a separate entry?  This would preserve
             # the newlines, but we should check BioPerl etc to be consistent.
             sql = 'INSERT INTO comment (bioentry_id, comment_text, "rank")' \
-                  ' VALUES (%s, %s, %s)'
+                  " VALUES (%s, %s, %s)"
             self.adaptor.execute(sql, (bioentry_id, comment, index + 1))
 
     def _load_annotations(self, record, bioentry_id):
@@ -748,10 +748,10 @@ class DatabaseLoader(object):
         mono_sql = "INSERT INTO bioentry_qualifier_value" \
                    "(bioentry_id, term_id, value)" \
                    " VALUES (%s, %s, %s)"
-        many_sql = 'INSERT INTO bioentry_qualifier_value'\
+        many_sql = "INSERT INTO bioentry_qualifier_value"\
                    '(bioentry_id, term_id, value, "rank")' \
-                   ' VALUES (%s, %s, %s, %s)'
-        tag_ontology_id = self._get_ontology_id('Annotation Tags')
+                   " VALUES (%s, %s, %s, %s)"
+        tag_ontology_id = self._get_ontology_id("Annotation Tags")
         for key, value in record.annotations.items():
             if key in ["references", "comment", "ncbi_taxid", "date"]:
                 # Handled separately
@@ -837,7 +837,7 @@ class DatabaseLoader(object):
             start = None
             end = None
 
-        sql = 'INSERT INTO bioentry_reference (bioentry_id, reference_id,' \
+        sql = "INSERT INTO bioentry_reference (bioentry_id, reference_id," \
               ' start_pos, end_pos, "rank") VALUES (%s, %s, %s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, reference_id,
                                    start, end, rank + 1))
@@ -850,7 +850,7 @@ class DatabaseLoader(object):
         # mappings but instead be put in the term table
         # (http://www.biosql.org/wiki/Annotation_Mapping)
         try:
-            source = feature.qualifiers['source']
+            source = feature.qualifiers["source"]
             if isinstance(source, list):
                 source = source[0]
             seqfeature_id = self._load_seqfeature_basic(feature.type,
@@ -866,24 +866,24 @@ class DatabaseLoader(object):
         self._load_seqfeature_qualifiers(feature.qualifiers, seqfeature_id)
 
     def _load_seqfeature_basic(self, feature_type, feature_rank, bioentry_id,
-                               source='EMBL/GenBank/SwissProt'):
+                               source="EMBL/GenBank/SwissProt"):
         """Load the first tables of a seqfeature and returns the id (PRIVATE).
 
         This loads the "key" of the seqfeature (ie. CDS, gene) and
         the basic seqfeature table itself.
         """
-        ontology_id = self._get_ontology_id('SeqFeature Keys')
+        ontology_id = self._get_ontology_id("SeqFeature Keys")
         seqfeature_key_id = self._get_term_id(feature_type,
                                               ontology_id=ontology_id)
-        source_cat_id = self._get_ontology_id('SeqFeature Sources')
+        source_cat_id = self._get_ontology_id("SeqFeature Sources")
         source_term_id = self._get_term_id(source,
                                            ontology_id=source_cat_id)
 
-        sql = 'INSERT INTO seqfeature (bioentry_id, type_term_id, ' \
+        sql = "INSERT INTO seqfeature (bioentry_id, type_term_id, " \
               'source_term_id, "rank") VALUES (%s, %s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, seqfeature_key_id,
                                    source_term_id, feature_rank + 1))
-        return self.adaptor.last_id('seqfeature')
+        return self.adaptor.last_id("seqfeature")
 
     def _load_seqfeature_locations(self, feature, seqfeature_id):
         """Load all of the locations for a SeqFeature into tables (PRIVATE).
@@ -967,9 +967,9 @@ class DatabaseLoader(object):
         else:
             dbxref_id = None
 
-        sql = 'INSERT INTO location (seqfeature_id, dbxref_id, term_id,' \
+        sql = "INSERT INTO location (seqfeature_id, dbxref_id, term_id," \
               'start_pos, end_pos, strand, "rank") ' \
-              'VALUES (%s, %s, %s, %s, %s, %s, %s)'
+              "VALUES (%s, %s, %s, %s, %s, %s, %s)"
         self.adaptor.execute(sql, (seqfeature_id, dbxref_id, loc_term_id,
                                    start, end, strand, rank))
 
@@ -1001,13 +1001,13 @@ class DatabaseLoader(object):
             {key : [value1, value2]}
 
         """
-        tag_ontology_id = self._get_ontology_id('Annotation Tags')
+        tag_ontology_id = self._get_ontology_id("Annotation Tags")
         for qualifier_key in qualifiers:
             # Treat db_xref qualifiers differently to sequence annotation
             # qualifiers by populating the seqfeature_dbxref and dbxref
             # tables.  Other qualifiers go into the seqfeature_qualifier_value
             # and (if new) term tables.
-            if qualifier_key != 'db_xref':
+            if qualifier_key != "db_xref":
                 qualifier_key_id = self._get_term_id(qualifier_key,
                                                      ontology_id=tag_ontology_id)
                 # now add all of the values to their table
@@ -1018,9 +1018,9 @@ class DatabaseLoader(object):
                     entries = [entries]
                 for qual_value_rank in range(len(entries)):
                     qualifier_value = entries[qual_value_rank]
-                    sql = 'INSERT INTO seqfeature_qualifier_value '\
+                    sql = "INSERT INTO seqfeature_qualifier_value "\
                           ' (seqfeature_id, term_id, "rank", value) VALUES'\
-                          ' (%s, %s, %s, %s)'
+                          " (%s, %s, %s, %s)"
                     self.adaptor.execute(sql, (seqfeature_id,
                                                qualifier_key_id,
                                                qual_value_rank + 1,
@@ -1057,7 +1057,7 @@ class DatabaseLoader(object):
             # Split the DB:accession format string at colons.  We have to
             # account for multiple-line and multiple-accession entries
             try:
-                dbxref_data = value.replace(' ', '').replace('\n', '').split(':')
+                dbxref_data = value.replace(" ", "").replace("\n", "").split(":")
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except Exception:
@@ -1083,8 +1083,8 @@ class DatabaseLoader(object):
         if there is no record.
         """
         # Check for an existing record
-        sql = r'SELECT dbxref_id FROM dbxref WHERE dbname = %s ' \
-              r'AND accession = %s'
+        sql = r"SELECT dbxref_id FROM dbxref WHERE dbname = %s " \
+              r"AND accession = %s"
         dbxref_id = self.adaptor.execute_and_fetch_col0(sql, (db, accession))
         # If there was a record, return the dbxref_id, else create the
         # record and return the created dbxref_id
@@ -1116,9 +1116,9 @@ class DatabaseLoader(object):
         Insert a seqfeature_dbxref row and return the seqfeature_id and
         dbxref_id
         """
-        sql = 'INSERT INTO seqfeature_dbxref ' \
+        sql = "INSERT INTO seqfeature_dbxref " \
               '(seqfeature_id, dbxref_id, "rank") VALUES' \
-              '(%s, %s, %s)'
+              "(%s, %s, %s)"
         self.adaptor.execute(sql, (seqfeature_id, dbxref_id, rank))
         return (seqfeature_id, dbxref_id)
 
@@ -1137,7 +1137,7 @@ class DatabaseLoader(object):
             # "GO:GO:123" and "GO:123" in different vintages.
             assert value.count("\n") == 0
             try:
-                db, accession = value.split(':', 1)
+                db, accession = value.split(":", 1)
                 db = db.strip()
                 accession = accession.strip()
             except Exception:
@@ -1171,9 +1171,9 @@ class DatabaseLoader(object):
 
         Returns the seqfeature_id and dbxref_id (PRIVATE).
         """
-        sql = 'INSERT INTO bioentry_dbxref ' \
+        sql = "INSERT INTO bioentry_dbxref " \
               '(bioentry_id,dbxref_id,"rank") VALUES ' \
-              '(%s, %s, %s)'
+              "(%s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id, dbxref_id, rank))
         return (bioentry_id, dbxref_id)
 
