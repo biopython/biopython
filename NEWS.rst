@@ -16,13 +16,20 @@ also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
+Values from mmCIF files are now read in as a list even when they consist of a
+single value. This change improves consistency and reduces the likelihood of
+making an error, but will require user code to be updated accordingly.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Chris Rands
+- Joe Greener
 - Konstantin Vdovkin
 - Mustafa Anil Tuncel
 - Peter Cock
+- Sergio Valqui
+
 
 16 July 2019: Biopython 1.74
 ============================

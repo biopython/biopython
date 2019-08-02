@@ -204,14 +204,14 @@ class MMCIFParser(object):
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
-            a = float(mmcif_dict["_cell.length_a"])
-            b = float(mmcif_dict["_cell.length_b"])
-            c = float(mmcif_dict["_cell.length_c"])
-            alpha = float(mmcif_dict["_cell.angle_alpha"])
-            beta = float(mmcif_dict["_cell.angle_beta"])
-            gamma = float(mmcif_dict["_cell.angle_gamma"])
+            a = float(mmcif_dict["_cell.length_a"][0])
+            b = float(mmcif_dict["_cell.length_b"][0])
+            c = float(mmcif_dict["_cell.length_c"][0])
+            alpha = float(mmcif_dict["_cell.angle_alpha"][0])
+            beta = float(mmcif_dict["_cell.angle_beta"][0])
+            gamma = float(mmcif_dict["_cell.angle_gamma"][0])
             cell = numpy.array((a, b, c, alpha, beta, gamma), "f")
-            spacegroup = mmcif_dict["_symmetry.space_group_name_H-M"]
+            spacegroup = mmcif_dict["_symmetry.space_group_name_H-M"][0]
             spacegroup = spacegroup[1:-1]  # get rid of quotes!!
             if spacegroup is None:
                 raise Exception
