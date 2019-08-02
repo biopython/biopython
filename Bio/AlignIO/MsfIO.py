@@ -299,10 +299,20 @@ class MsfIterator(AlignmentIterator):
 
         # Combine list of strings into single string, remap gaps
         seqs = ["".join(s).replace("~", "-").replace(".", "-") for s in seqs]
+
         # Apply any trailing padding for short sequences
+        padded = False
         for idx, (length, s) in enumerate(zip(lengths, seqs)):
             if len(s) < aln_length and len(s) == length:
+                padded = True
                 seqs[idx] = s + "-" * (aln_length - len(s))
+        if padded:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn(
+                "One of more alignment sequences were truncated and have been gap padded",
+                BiopythonParserWarning
+            )
 
         records = (
             SeqRecord(
