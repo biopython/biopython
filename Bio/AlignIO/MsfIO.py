@@ -188,10 +188,21 @@ class MsfIterator(AlignmentIterator):
             # Can we continue if assume aln_length was an error?
             max_length = max(lengths)
             max_count = sum(1 for _ in lengths if _ == max_length)
-            raise ValueError(
-                "GCG MSF header said alignment length %i, but %s of %i sequences said Len: %s"
-                % (aln_length, max_count, len(ids), max_length)
-            )
+            if max_count > 0.75 * len(ids):
+                import warnings
+                from Bio import BiopythonParserWarning
+                warnings.warn(
+                    "GCG MSF header said alignment length %i, "
+                    "but %s of %i sequences said Len: %s - attempting to continue"
+                    % (aln_length, max_count, len(ids), max_length),
+                    BiopythonParserWarning
+                )
+                aln_length = max_length
+            else:
+                raise ValueError(
+                    "GCG MSF header said alignment length %i, but %s of %i sequences said Len: %s"
+                    % (aln_length, max_count, len(ids), max_length)
+                )
 
         line = handle.readline()
         if not line:
