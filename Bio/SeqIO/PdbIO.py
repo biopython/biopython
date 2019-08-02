@@ -66,7 +66,7 @@ def AtomIterator(pdb_id, struct):
                     gapsize = postgap - pregap - 1
                     res_out.extend(restype(x) for x in residues[prev_idx:i])
                     prev_idx = i
-                    res_out.append('X' * gapsize)
+                    res_out.append("X" * gapsize)
                 else:
                     warnings.warn("Ignoring out-of-order residues after a gap",
                                   BiopythonParserWarning)
@@ -86,7 +86,7 @@ def AtomIterator(pdb_id, struct):
         # if len(structure) > 1 :
         #     id = ("Model%s|" % str(model.id)) + id
 
-        record = SeqRecord(Seq(''.join(res_out), generic_protein),
+        record = SeqRecord(Seq("".join(res_out), generic_protein),
                            id=record_id, description=record_id)
 
         record.annotations["model"] = model.id
@@ -138,7 +138,7 @@ def PdbSeqresIterator(handle):
     metadata = collections.defaultdict(list)
     for line in handle:
         rec_name = line[0:6].strip()
-        if rec_name == 'SEQRES':
+        if rec_name == "SEQRES":
             # NB: We only actually need chain ID and the residues here;
             # commented bits are placeholders from the wwPDB spec.
             # Serial number of the SEQRES record for the current chain.
@@ -152,7 +152,7 @@ def PdbSeqresIterator(handle):
             # num_res = int(line[13:17])
             residues = [seq1(res, custom_map=protein_letters_3to1) for res in line[19:].split()]
             chains[chn_id].extend(residues)
-        elif rec_name == 'DBREF':
+        elif rec_name == "DBREF":
             #  ID code of this entry (PDB ID)
             pdb_id = line[7:11]
             # Chain identifier.
@@ -181,23 +181,23 @@ def PdbSeqresIterator(handle):
             # Insertion code of the ending residue of the segment, if PDB is the
             # reference.
             # db_icode_end = line[67]
-            metadata[chn_id].append({'pdb_id': pdb_id, 'database': database,
-                                    'db_acc': db_acc, 'db_id_code': db_id_code})
+            metadata[chn_id].append({"pdb_id": pdb_id, "database": database,
+                                    "db_acc": db_acc, "db_id_code": db_id_code})
         # ENH: 'SEQADV' 'MODRES'
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq(''.join(residues), generic_protein))
+        record = SeqRecord(Seq("".join(residues), generic_protein))
         record.annotations = {"chain": chn_id}
         if chn_id in metadata:
             m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m['pdb_id'], chn_id)
-            record.description = ("%s:%s %s" % (m['database'],
-                                                m['db_acc'],
-                                                m['db_id_code']))
+            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
+            record.description = ("%s:%s %s" % (m["database"],
+                                                m["db_acc"],
+                                                m["db_id_code"]))
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend([
-                    "%s:%s" % (melem['database'], melem['db_acc']),
-                    "%s:%s" % (melem['database'], melem['db_id_code'])])
+                    "%s:%s" % (melem["database"], melem["db_acc"]),
+                    "%s:%s" % (melem["database"], melem["db_id_code"])])
         else:
             record.id = chn_id
         yield record
@@ -259,7 +259,7 @@ def PdbAtomIterator(handle):
     firstline = undo_handle.peekline()
 
     # check if file is empty
-    if firstline == '':
+    if firstline == "":
         raise ValueError("Empty file.")
 
     if firstline.startswith("HEADER"):
@@ -267,7 +267,7 @@ def PdbAtomIterator(handle):
     else:
         warnings.warn("First line is not a 'HEADER'; can't determine PDB ID. "
                       "Line: %r" % firstline, BiopythonParserWarning)
-        pdb_id = '????'
+        pdb_id = "????"
 
     struct = PDBParser().get_structure(pdb_id, undo_handle)
     for record in AtomIterator(pdb_id, struct):
@@ -383,22 +383,22 @@ def CifSeqresIterator(handle):
         struct_ref = struct_refs[ref_id]
 
         # The names here mirror those in PdbIO
-        metadata[chain_id].append({'pdb_id': pdb_id})
+        metadata[chain_id].append({"pdb_id": pdb_id})
         metadata[chain_id][-1].update(struct_ref)
 
     for chn_id, residues in sorted(chains.items()):
-        record = SeqRecord(Seq(''.join(residues), generic_protein))
+        record = SeqRecord(Seq("".join(residues), generic_protein))
         record.annotations = {"chain": chn_id}
         if chn_id in metadata:
             m = metadata[chn_id][0]
-            record.id = record.name = "%s:%s" % (m['pdb_id'], chn_id)
-            record.description = ("%s:%s %s" % (m['database'],
-                                                m['db_acc'],
-                                                m['db_id_code']))
+            record.id = record.name = "%s:%s" % (m["pdb_id"], chn_id)
+            record.description = ("%s:%s %s" % (m["database"],
+                                                m["db_acc"],
+                                                m["db_id_code"]))
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend([
-                    "%s:%s" % (melem['database'], melem['db_acc']),
-                    "%s:%s" % (melem['database'], melem['db_id_code'])])
+                    "%s:%s" % (melem["database"], melem["db_acc"]),
+                    "%s:%s" % (melem["database"], melem["db_id_code"])])
         else:
             record.id = chn_id
         yield record
@@ -476,7 +476,7 @@ def CifAtomIterator(handle):
     else:
         warnings.warn("Could not find the '_entry.id' field; can't determine "
                       "PDB ID.", BiopythonParserWarning)
-        pdb_id = '????'
+        pdb_id = "????"
 
     buffer.seek(0)
     struct = MMCIFParser().get_structure(pdb_id, buffer)
@@ -484,6 +484,6 @@ def CifAtomIterator(handle):
         yield record
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=0)

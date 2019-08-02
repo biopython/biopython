@@ -457,12 +457,12 @@ class MultipleSeqAlignment(object):
         # in BioPerl, but I'm not positive what the best thing to do on
         # this is...
         if start:
-            new_record.annotations['start'] = start
+            new_record.annotations["start"] = start
         if end:
-            new_record.annotations['end'] = end
+            new_record.annotations["end"] = end
 
         # another hack to add weight information to the sequence
-        new_record.annotations['weight'] = weight
+        new_record.annotations["weight"] = weight
 
         self._records.append(new_record)
 
@@ -967,7 +967,7 @@ class PairwiseAlignment(object):
         return self.path >= other.path
 
     def __format__(self, format_spec):
-        if format_spec == 'psl':
+        if format_spec == "psl":
             return self._format_psl()
         return str(self)
 
@@ -999,21 +999,21 @@ class PairwiseAlignment(object):
             end = max(end1, end2)
             aligned_seq1 += "." * (end - end1) + seq1[:end1]
             aligned_seq2 += "." * (end - end2) + seq2[:end2]
-            pattern += '.' * end
+            pattern += "." * end
         start1 = end1
         start2 = end2
         for end1, end2 in path[1:]:
             gap = 0
             if end1 == start1:
                 gap = end2 - start2
-                aligned_seq1 += '-' * gap
+                aligned_seq1 += "-" * gap
                 aligned_seq2 += seq2[start2:end2]
-                pattern += '-' * gap
+                pattern += "-" * gap
             elif end2 == start2:
                 gap = end1 - start1
                 aligned_seq1 += seq1[start1:end1]
-                aligned_seq2 += '-' * gap
-                pattern += '-' * gap
+                aligned_seq2 += "-" * gap
+                pattern += "-" * gap
             else:
                 s1 = seq1[start1:end1]
                 s2 = seq2[start2:end2]
@@ -1021,17 +1021,17 @@ class PairwiseAlignment(object):
                 aligned_seq2 += s2
                 for c1, c2 in zip(s1, s2):
                     if c1 == c2:
-                        pattern += '|'
+                        pattern += "|"
                     else:
-                        pattern += 'X'
+                        pattern += "X"
             start1 = end1
             start2 = end2
         n1 -= end1
         n2 -= end2
         n = max(n1, n2)
-        aligned_seq1 += seq1[end1:] + '.' * (n - n1)
-        aligned_seq2 += seq2[end2:] + '.' * (n - n2)
-        pattern += '.' * n
+        aligned_seq1 += seq1[end1:] + "." * (n - n1)
+        aligned_seq2 += seq2[end2:] + "." * (n - n2)
+        pattern += "." * n
         return "%s\n%s\n%s\n" % (aligned_seq1, pattern, aligned_seq2)
 
     def _format_psl(self):
@@ -1070,7 +1070,7 @@ class PairwiseAlignment(object):
         blockSizes = []
         qStarts = []
         tStarts = []
-        strand = '+'
+        strand = "+"
         start1 = 0
         start2 = 0
         start1, start2 = self.path[0]
@@ -1101,7 +1101,7 @@ class PairwiseAlignment(object):
                 qStarts.append(start2)
                 blockSizes.append(count1)
                 for c1, c2 in zip(seq1[start1:end1], seq2[start2:end2]):
-                    if c1 == 'N' or c2 == 'N':
+                    if c1 == "N" or c2 == "N":
                         Ns += 1
                     elif c1 == c2:
                         match += 1
@@ -1257,7 +1257,7 @@ class PairwiseAlignments(object):
             try:
                 alignment = next(self)
             except StopIteration:
-                raise IndexError('index out of range')
+                raise IndexError("index out of range")
         return alignment
 
     def __iter__(self):

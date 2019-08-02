@@ -43,7 +43,7 @@ class ComparativeScatterPlot(object):
 
     """
 
-    def __init__(self, output_format='pdf'):
+    def __init__(self, output_format="pdf"):
         """Initialize."""
         # customizable attributes
         self.number_of_columns = 1
@@ -87,7 +87,7 @@ class ComparativeScatterPlot(object):
     def _draw_title(self, cur_drawing, title, width, height):
         """Add a title to the page we are outputting (PRIVATE)."""
         title_string = String(width / 2, height - inch, title)
-        title_string.fontName = 'Helvetica-Bold'
+        title_string.fontName = "Helvetica-Bold"
         title_string.fontSize = self.title_size
         title_string.textAnchor = "middle"
 

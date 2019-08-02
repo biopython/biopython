@@ -52,7 +52,7 @@ class GraphSet(object):
         self._graphs = {}       # Holds graphs, keyed by unique id
         self.name = name        # Holds description of graph
 
-    def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
+    def new_graph(self, data, name=None, style="bar", color=colors.lightgreen,
                   altcolor=colors.darkseagreen, linewidth=1, center=None,
                   colour=None, altcolour=None, centre=None):
         """Add a GraphData object to the diagram.

@@ -279,8 +279,8 @@ class DataHandler(object):
     from Bio import Entrez
     global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
     global_xsd_dir = os.path.join(str(Entrez.__path__[0]), "XSDs")
-    local_dtd_dir = ''
-    local_xsd_dir = ''
+    local_dtd_dir = ""
+    local_xsd_dir = ""
 
     del Entrez
 
@@ -314,9 +314,9 @@ class DataHandler(object):
         """Set up the parser and let it parse the XML results."""
         # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
         # expects binary data
-        if handle.__class__.__name__ == 'EvilHandleHack':
+        if handle.__class__.__name__ == "EvilHandleHack":
             handle = handle._handle
-        if handle.__class__.__name__ == 'TextIOWrapper':
+        if handle.__class__.__name__ == "TextIOWrapper":
             handle = handle.buffer
         if hasattr(handle, "closed") and handle.closed:
             # Should avoid a possible Segmentation Fault, see:
@@ -417,7 +417,7 @@ class DataHandler(object):
 
     def startNamespaceDeclHandler(self, prefix, uri):
         """Handle start of an XML namespace declaration."""
-        if prefix == 'xsi':
+        if prefix == "xsi":
             # This is an xml schema
             self.schema_namespace = uri
             self.parser.StartElementHandler = self.schemaHandler
@@ -436,7 +436,7 @@ class DataHandler(object):
 
     def endNamespaceDeclHandler(self, prefix):
         """Handle end of an XML namespace declaration."""
-        if prefix != 'xsi':
+        if prefix != "xsi":
             self.namespace_level[prefix] -= 1
             if self.namespace_level[prefix] == 0:
                 for key, value in self.namespace_prefix.items():
@@ -469,7 +469,7 @@ class DataHandler(object):
     def startElementHandler(self, tag, attrs):
         """Handle start of an XML element."""
         if tag in self.items:
-            assert tag == 'Item'
+            assert tag == "Item"
             name = str(attrs["Name"])  # convert from Unicode
             itemtype = str(attrs["Type"])  # convert from Unicode
             del attrs["Type"]
@@ -587,7 +587,7 @@ class DataHandler(object):
             else:
                 prefix = self.namespace_prefix[uri]
                 if self.namespace_level[prefix] == 1:
-                    attrs = {'xmlns': uri}
+                    attrs = {"xmlns": uri}
         if prefix:
             key = "%s:%s" % (prefix, name)
         else:
@@ -618,7 +618,7 @@ class DataHandler(object):
         attributes = self.attributes
         self.attributes = None
         if tag in self.items:
-            assert tag == 'Item'
+            assert tag == "Item"
             key = str(attributes["Name"])  # convert from Unicode
             del attributes["Name"]
         else:
@@ -672,7 +672,7 @@ class DataHandler(object):
         """Handle end of an XML integer element."""
         attributes = self.attributes
         self.attributes = None
-        assert tag == 'Item'
+        assert tag == "Item"
         key = str(attributes["Name"])  # convert from Unicode
         del attributes["Name"]
         if self.data:
@@ -713,32 +713,32 @@ class DataHandler(object):
             keys = []
             multiple = []
             assert element.tag == prefix + "element"
-            name = element.attrib['name']
+            name = element.attrib["name"]
             assert len(element) == 1
             complexType = element[0]
             assert complexType.tag == prefix + "complexType"
             for component in complexType:
                 tag = component.tag
-                if tag == prefix + 'attribute':
+                if tag == prefix + "attribute":
                     # we could distinguish by type; keeping string for now
-                    attribute_keys.append(component.attrib['name'])
-                elif tag == prefix + 'sequence':
-                    maxOccurs = component.attrib.get('maxOccurs', '1')
+                    attribute_keys.append(component.attrib["name"])
+                elif tag == prefix + "sequence":
+                    maxOccurs = component.attrib.get("maxOccurs", "1")
                     for key in component:
                         assert key.tag == prefix + "element"
-                        ref = key.attrib['ref']
+                        ref = key.attrib["ref"]
                         keys.append(ref)
-                        if maxOccurs != '1' or key.attrib.get('maxOccurs', '1') != '1':
+                        if maxOccurs != "1" or key.attrib.get("maxOccurs", "1") != "1":
                             multiple.append(ref)
-                elif tag == prefix + 'simpleContent':
+                elif tag == prefix + "simpleContent":
                     assert len(component) == 1
                     extension = component[0]
-                    assert extension.tag == prefix + 'extension'
-                    assert extension.attrib['base'] == 'xs:string'
+                    assert extension.tag == prefix + "extension"
+                    assert extension.attrib["base"] == "xs:string"
                     for attribute in extension:
                         assert attribute.tag == prefix + "attribute"
                         # we could distinguish by type; keeping string for now
-                        attribute_keys.append(attribute.attrib['name'])
+                        attribute_keys.append(attribute.attrib["name"])
                     isSimpleContent = True
             allowed_tags = frozenset(keys)
             if len(keys) == 1 and keys == multiple:
@@ -765,11 +765,11 @@ class DataHandler(object):
         if name.upper() == "ERROR":
             self.errors.add(name)
             return
-        if name == 'Item' and model == (expat.model.XML_CTYPE_MIXED,
+        if name == "Item" and model == (expat.model.XML_CTYPE_MIXED,
                                         expat.model.XML_CQUANT_REP,
                                         None, ((expat.model.XML_CTYPE_NAME,
                                                 expat.model.XML_CQUANT_NONE,
-                                                'Item',
+                                                "Item",
                                                 ()
                                                 ),
                                                )
@@ -919,10 +919,10 @@ class DataHandler(object):
         urlinfo = _urlparse(systemId)
         # Following attribute requires Python 2.5+
         # if urlinfo.scheme=='http':
-        if urlinfo[0] in ['http', 'https', 'ftp']:
+        if urlinfo[0] in ["http", "https", "ftp"]:
             # Then this is an absolute path to the DTD.
             url = systemId
-        elif urlinfo[0] == '':
+        elif urlinfo[0] == "":
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
             try:
@@ -969,15 +969,15 @@ class DataHandler(object):
         # If user hasn't set a custom cache location, initialize it.
         if self.directory is None:
             import platform
-            if platform.system() == 'Windows':
+            if platform.system() == "Windows":
                 self.directory = os.path.join(os.getenv("APPDATA"), "biopython")
             else:  # Unix/Linux/Mac
-                home = os.path.expanduser('~')
-                self.directory = os.path.join(home, '.config', 'biopython')
+                home = os.path.expanduser("~")
+                self.directory = os.path.join(home, ".config", "biopython")
                 del home
             del platform
         # Create DTD local directory
-        self.local_dtd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'DTDs')
+        self.local_dtd_dir = os.path.join(self.directory, "Bio", "Entrez", "DTDs")
         try:
             os.makedirs(self.local_dtd_dir)  # use exist_ok=True on Python >= 3.2
         except OSError as exception:
@@ -987,7 +987,7 @@ class DataHandler(object):
             if not os.path.isdir(self.local_dtd_dir):
                 raise exception
         # Create XSD local directory
-        self.local_xsd_dir = os.path.join(self.directory, 'Bio', 'Entrez', 'XSDs')
+        self.local_xsd_dir = os.path.join(self.directory, "Bio", "Entrez", "XSDs")
         try:
             os.makedirs(self.local_xsd_dir)  # use exist_ok=True on Python >= 3.2
         except OSError as exception:

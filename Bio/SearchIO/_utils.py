@@ -34,12 +34,12 @@ def get_processor(format, mapping):
                              "%r" % (format, "', '".join(mapping)))
 
     mod_name, obj_name = obj_info
-    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
+    mod = __import__("Bio.SearchIO.%s" % mod_name, fromlist=[""])
 
     return getattr(mod, obj_name)
 
 
-def singleitem(attr=None, doc=''):
+def singleitem(attr=None, doc=""):
     """Property for fetching attribute from first entry of container.
 
     Returns a property that fetches the given attribute from
@@ -55,7 +55,7 @@ def singleitem(attr=None, doc=''):
     return property(fget=getter, doc=doc)
 
 
-def allitems(attr=None, doc=''):
+def allitems(attr=None, doc=""):
     """Property for fetching attribute from all entries of container.
 
     Returns a property that fetches the given attributes from
@@ -68,7 +68,7 @@ def allitems(attr=None, doc=''):
     return property(fget=getter, doc=doc)
 
 
-def fullcascade(attr, doc=''):
+def fullcascade(attr, doc=""):
     """Return a getter property with a cascading setter.
 
     This is similar to ``optionalcascade``, but for SearchIO containers that have
@@ -88,7 +88,7 @@ def fullcascade(attr, doc=''):
     return property(fget=getter, fset=setter, doc=doc)
 
 
-def optionalcascade(cont_attr, item_attr, doc=''):
+def optionalcascade(cont_attr, item_attr, doc=""):
     """Return a getter property with a cascading setter.
 
     This is used for the ``id`` and ``description`` properties of the container
@@ -117,15 +117,15 @@ def optionalcascade(cont_attr, item_attr, doc=''):
     return property(fget=getter, fset=setter, doc=doc)
 
 
-def fragcascade(attr, seq_type, doc=''):
+def fragcascade(attr, seq_type, doc=""):
     """Return a getter property with cascading setter, for HSPFragment objects.
 
     Similar to ``partialcascade``, but for HSPFragment objects and acts on ``query``
     or ``hit`` properties of the object if they are not None.
 
     """
-    assert seq_type in ('hit', 'query')
-    attr_name = '_%s_%s' % (seq_type, attr)
+    assert seq_type in ("hit", "query")
+    attr_name = "_%s_%s" % (seq_type, attr)
 
     def getter(self):
         return getattr(self, attr_name)

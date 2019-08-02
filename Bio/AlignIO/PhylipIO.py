@@ -182,7 +182,7 @@ class PhylipIterator(AlignmentIterator):
         remainder are sequence data.
         """
         seq_id = line[:self.id_width].strip()
-        seq = line[self.id_width:].strip().replace(' ', '')
+        seq = line[self.id_width:].strip().replace(" ", "")
         return seq_id, seq
 
     def __next__(self):

@@ -131,17 +131,17 @@ def save(mm, handle):
     """Save MarkovModel object into handle."""
     # This will fail if there are spaces in the states or alphabet.
     w = handle.write
-    w("STATES: %s\n" % ' '.join(mm.states))
-    w("ALPHABET: %s\n" % ' '.join(mm.alphabet))
+    w("STATES: %s\n" % " ".join(mm.states))
+    w("ALPHABET: %s\n" % " ".join(mm.alphabet))
     w("INITIAL:\n")
     for i in range(len(mm.p_initial)):
         w("  %s: %g\n" % (mm.states[i], mm.p_initial[i]))
     w("TRANSITION:\n")
     for i in range(len(mm.p_transition)):
-        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_transition[i])))
+        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_transition[i])))
     w("EMISSION:\n")
     for i in range(len(mm.p_emission)):
-        w("  %s: %s\n" % (mm.states[i], ' '.join(str(x) for x in mm.p_emission[i])))
+        w("  %s: %s\n" % (mm.states[i], " ".join(str(x) for x in mm.p_emission[i])))
 
 
 # XXX allow them to specify starting points

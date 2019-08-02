@@ -182,7 +182,7 @@ class QueryResult(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new QueryResult class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', '__alt_hit_ids', )
+    _NON_STICKY_ATTRS = ("_items", "__alt_hit_ids", )
 
     def __init__(self, hits=(), id=None, hit_key_function=None):
         """Initialize a QueryResult object.
@@ -201,9 +201,9 @@ class QueryResult(_BaseSearchObject):
         self._items = OrderedDict()
         self._description = None
         self.__alt_hit_ids = {}
-        self.program = '<unknown program>'
-        self.target = '<unknown target>'
-        self.version = '<unknown version>'
+        self.program = "<unknown program>"
+        self.target = "<unknown target>"
+        self.version = "<unknown version>"
 
         # validate Hit objects and fill up self._items
         for hit in hits:
@@ -211,7 +211,7 @@ class QueryResult(_BaseSearchObject):
             self.append(hit)
 
     # handle Python 2 OrderedDict behavior
-    if hasattr(OrderedDict, 'iteritems'):
+    if hasattr(OrderedDict, "iteritems"):
 
         def __iter__(self):
             """Iterate over hit items."""
@@ -310,42 +310,42 @@ class QueryResult(_BaseSearchObject):
         lines = []
 
         # set program and version line
-        lines.append('Program: %s (%s)' % (self.program, self.version))
+        lines.append("Program: %s (%s)" % (self.program, self.version))
 
         # set query id line
-        qid_line = '  Query: %s' % self.id
-        if hasattr(self, 'seq_len'):
-            qid_line += ' (%i)' % self.seq_len
+        qid_line = "  Query: %s" % self.id
+        if hasattr(self, "seq_len"):
+            qid_line += " (%i)" % self.seq_len
         if self.description:
-            qid_line += trim_str('\n         %s' % self.description, 80, '...')
+            qid_line += trim_str("\n         %s" % self.description, 80, "...")
         lines.append(qid_line)
 
         # set target line
-        lines.append(' Target: %s' % self.target)
+        lines.append(" Target: %s" % self.target)
 
         # set hit lines
         if not self.hits:
-            lines.append('   Hits: 0')
+            lines.append("   Hits: 0")
         else:
-            lines.append('   Hits: %s  %s  %s' % ('-' * 4, '-' * 5, '-' * 58))
-            pattern = '%13s  %5s  %s'
-            lines.append(pattern % ('#', '# HSP', 'ID + description'))
-            lines.append(pattern % ('-' * 4, '-' * 5, '-' * 58))
+            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            pattern = "%13s  %5s  %s"
+            lines.append(pattern % ("#", "# HSP", "ID + description"))
+            lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
-                    hid_line = '%s  %s' % (hit.id, hit.description)
+                    hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + '...'
+                        hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, str(len(hit)), hid_line))
                 elif idx > len(self.hits) - 4:
-                    hid_line = '%s  %s' % (hit.id, hit.description)
+                    hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + '...'
+                        hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, str(len(hit)), hid_line))
                 elif idx == 30:
-                    lines.append('%14s' % '~~~')
+                    lines.append("%14s" % "~~~")
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __getitem__(self, hit_key):
         """Return a QueryResult object that matches the hit_key."""
@@ -448,8 +448,8 @@ class QueryResult(_BaseSearchObject):
         return
 
     # properties #
-    id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
-    description = optionalcascade('_description', 'query_description',
+    id = optionalcascade("_id", "query_id", """QueryResult ID string""")
+    description = optionalcascade("_description", "query_description",
                                   """QueryResult description""")
 
     @property

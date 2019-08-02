@@ -101,7 +101,7 @@ class Hit(_BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', )
+    _NON_STICKY_ATTRS = ("_items", )
 
     def __init__(self, hsps=(), id=None, query_id=None):
         """Initialize a Hit object.
@@ -129,8 +129,8 @@ class Hit(_BaseSearchObject):
 
         # TODO - Move this into the for look below in case
         # hsps is a single use iterator?
-        for attr in ('query_id', 'query_description', 'hit_id',
-                     'hit_description'):
+        for attr in ("query_id", "query_description", "hit_id",
+                     "hit_description"):
             # HACK: setting the if clause to '> 1' allows for empty hit objects.
             # This makes it easier to work with file formats with unpredictable
             # hit-hsp ordering. The empty hit object itself is nonfunctional,
@@ -176,24 +176,24 @@ class Hit(_BaseSearchObject):
         lines = []
 
         # set query id line
-        qid_line = 'Query: %s' % self.query_id
+        qid_line = "Query: %s" % self.query_id
         if self.query_description:
-            qid_line += trim_str('\n       %s' %
-                                 self.query_description, 80, '...')
+            qid_line += trim_str("\n       %s" %
+                                 self.query_description, 80, "...")
         lines.append(qid_line)
 
         # set hit id line
-        hid_line = '  Hit: %s' % self.id
-        if hasattr(self, 'seq_len'):
-            hid_line += ' (%i)' % self.seq_len
+        hid_line = "  Hit: %s" % self.id
+        if hasattr(self, "seq_len"):
+            hid_line += " (%i)" % self.seq_len
         if self.description:
-            hid_line += trim_str('\n       %s' % self.description,
-                                 80, '...')
+            hid_line += trim_str("\n       %s" % self.description,
+                                 80, "...")
         lines.append(hid_line)
 
         # set attributes lines
         for key, value in sorted(self.attributes.items()):
-            lines.append(' %s: %s' % (key, value))
+            lines.append(" %s: %s" % (key, value))
 
         # set dbxrefs line
         if self.dbxrefs:
@@ -202,38 +202,38 @@ class Hit(_BaseSearchObject):
 
         # set hsp line and table
         if not self.hsps:
-            lines.append(' HSPs: ?')
+            lines.append(" HSPs: ?")
         else:
-            lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
-                         ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15,
-                          '-' * 21))
-            pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
-            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
-                                    'Query range', 'Hit range'))
-            lines.append(pattern % ('-' * 4, '-' * 8, '-' * 9, '-' * 6, '-' * 15, '-' * 21))
+            lines.append(" HSPs: %s  %s  %s  %s  %s  %s" %
+                         ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15,
+                          "-" * 21))
+            pattern = "%11s  %8s  %9s  %6s  %15s  %21s"
+            lines.append(pattern % ("#", "E-value", "Bit score", "Span",
+                                    "Query range", "Hit range"))
+            lines.append(pattern % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
-                evalue = getattr_str(hsp, 'evalue', fmt='%.2g')
+                evalue = getattr_str(hsp, "evalue", fmt="%.2g")
                 # bitscore
-                bitscore = getattr_str(hsp, 'bitscore', fmt='%.2f')
+                bitscore = getattr_str(hsp, "bitscore", fmt="%.2f")
                 # alignment length
-                aln_span = getattr_str(hsp, 'aln_span')
+                aln_span = getattr_str(hsp, "aln_span")
                 # query region
-                query_start = getattr_str(hsp, 'query_start')
-                query_end = getattr_str(hsp, 'query_end')
-                query_range = '[%s:%s]' % (query_start, query_end)
+                query_start = getattr_str(hsp, "query_start")
+                query_end = getattr_str(hsp, "query_end")
+                query_range = "[%s:%s]" % (query_start, query_end)
                 # max column length is 18
-                query_range = trim_str(query_range, 15, '~]')
+                query_range = trim_str(query_range, 15, "~]")
                 # hit region
-                hit_start = getattr_str(hsp, 'hit_start')
-                hit_end = getattr_str(hsp, 'hit_end')
-                hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = trim_str(hit_range, 21, '~]')
+                hit_start = getattr_str(hsp, "hit_start")
+                hit_end = getattr_str(hsp, "hit_end")
+                hit_range = "[%s:%s]" % (hit_start, hit_end)
+                hit_range = trim_str(hit_range, 21, "~]")
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span,
                              query_range, hit_range))
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __getitem__(self, idx):
         """Return the HSP object at the given index."""
@@ -304,13 +304,13 @@ class Hit(_BaseSearchObject):
                 self.query_description = hsp.query_description
 
     # properties #
-    description = optionalcascade('_description', 'hit_description',
+    description = optionalcascade("_description", "hit_description",
                                   """Hit description""")
-    query_description = optionalcascade('_query_description',
-                                        'query_description',
+    query_description = optionalcascade("_query_description",
+                                        "query_description",
                                         """Description of the query that produced the hit""")
-    id = optionalcascade('_id', 'hit_id', """Hit ID string.""")
-    query_id = optionalcascade('_query_id', 'query_id',
+    id = optionalcascade("_id", "hit_id", """Hit ID string.""")
+    query_id = optionalcascade("_query_id", "query_id",
                                """ID string of the query that produced the hit""")
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")

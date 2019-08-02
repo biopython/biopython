@@ -49,7 +49,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     if classes != {0, 1}:
         raise ValueError("Classes should be 0's and 1's")
     if typecode is None:
-        typecode = 'd'
+        typecode = "d"
 
     # Dimensionality of the data is the dimensionality of the
     # observations plus a constant dimension.

@@ -300,7 +300,7 @@ class FragmentMapper(object):
                         assert(index >= 0)
                         fd[res] = mflist[index]
             except PDBException as why:
-                if why == 'CHAINBREAK':
+                if why == "CHAINBREAK":
                     # Funny polypeptide - skip
                     pass
                 else:

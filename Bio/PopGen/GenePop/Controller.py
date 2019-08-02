@@ -32,18 +32,18 @@ def _gp_int(tok):
 
 def _read_allele_freq_table(f):
     line = f.readline()
-    while ' --' not in line:
+    while " --" not in line:
         if line == "":
             raise StopIteration
-        if 'No data' in line:
+        if "No data" in line:
             return None, None
         line = f.readline()
-    alleles = [x for x in f.readline().rstrip().split(" ") if x != '']
+    alleles = [x for x in f.readline().rstrip().split(" ") if x != ""]
     alleles = [_gp_int(x) for x in alleles]
     line = f.readline().rstrip()
     table = []
     while line != "":
-        parts = [x for x in line.split(" ") if x != '']
+        parts = [x for x in line.split(" ") if x != ""]
         try:
             table.append(
                 (parts[0], [_gp_float(x) for x in parts[1: -1]],
@@ -58,10 +58,10 @@ def _read_allele_freq_table(f):
 def _read_table(f, funs):
     table = []
     line = f.readline().rstrip()
-    while '---' not in line:
+    while "---" not in line:
         line = f.readline().rstrip()
     line = f.readline().rstrip()
-    while '===' not in line and '---' not in line and line != "":
+    while "===" not in line and "---" not in line and line != "":
         toks = [x for x in line.split(" ") if x != ""]
         parts = []
         for i in range(len(toks)):
@@ -87,12 +87,12 @@ def _read_triangle_matrix(f):
 def _read_headed_triangle_matrix(f):
     matrix = {}
     header = f.readline().rstrip()
-    if '---' in header or '===' in header:
+    if "---" in header or "===" in header:
         header = f.readline().rstrip()
-    nlines = len([x for x in header.split(' ') if x != '']) - 1
+    nlines = len([x for x in header.split(" ") if x != ""]) - 1
     for line_pop in range(nlines):
         line = f.readline().rstrip()
-        vals = [x for x in line.split(' ')[1:] if x != '']
+        vals = [x for x in line.split(" ")[1:] if x != ""]
         clean_vals = []
         for val in vals:
             try:
@@ -176,7 +176,7 @@ class _FileIterator(object):
 class _GenePopCommandline(AbstractCommandline):
     """Return a Command Line Wrapper for GenePop (PRIVATE)."""
 
-    def __init__(self, genepop_dir=None, cmd='Genepop', **kwargs):
+    def __init__(self, genepop_dir=None, cmd="Genepop", **kwargs):
         self.parameters = [
             _Argument(["command"], "GenePop option to be called",
                       is_required=True),
@@ -592,7 +592,7 @@ class GenePopController(object):
             else:
                 line = self.stream.readline()
             loci_content = {}
-            while line != '':
+            while line != "":
                 line = line.rstrip()
                 if "Tables of allelic frequencies for each locus" in line:
                     return self.curr_pop, loci_content
@@ -651,7 +651,7 @@ class GenePopController(object):
                 freq_fis = {}
                 overall_fis = None
                 while "----" not in line:
-                    vals = [x for x in line.rstrip().split(' ') if x != '']
+                    vals = [x for x in line.rstrip().split(" ") if x != ""]
                     if vals[0] == "Tot":
                         overall_fis = (_gp_int(vals[1]),
                                        _gp_float(vals[2]),
@@ -748,9 +748,9 @@ class GenePopController(object):
         self._run_genepop([".FST"], [6, 1], fname)
         with open(fname + ".FST") as f:
             line = f.readline()
-            while line != '':
-                if line.startswith('           All:'):
-                    toks = [x for x in line.rstrip().split(' ') if x != ""]
+            while line != "":
+                if line.startswith("           All:"):
+                    toks = [x for x in line.rstrip().split(" ") if x != ""]
                     try:
                         allFis = _gp_float(toks[1])
                     except ValueError:
@@ -777,24 +777,24 @@ class GenePopController(object):
             fit = None
             qintra = None
             qinter = None
-            while line != '':
+            while line != "":
                 line = line.rstrip()
-                if line.startswith('  Locus:'):
+                if line.startswith("  Locus:"):
                     if locus is not None:
                         self.last_line = line
                         return locus, fis, fst, fit, qintra, qinter
                     else:
-                        locus = line.split(':')[1].lstrip()
-                elif line.startswith('Fis^='):
-                    fis = _gp_float(line.split(' ')[1])
-                elif line.startswith('Fst^='):
-                    fst = _gp_float(line.split(' ')[1])
-                elif line.startswith('Fit^='):
-                    fit = _gp_float(line.split(' ')[1])
-                elif line.startswith('1-Qintra^='):
-                    qintra = _gp_float(line.split(' ')[1])
-                elif line.startswith('1-Qinter^='):
-                    qinter = _gp_float(line.split(' ')[1])
+                        locus = line.split(":")[1].lstrip()
+                elif line.startswith("Fis^="):
+                    fis = _gp_float(line.split(" ")[1])
+                elif line.startswith("Fst^="):
+                    fst = _gp_float(line.split(" ")[1])
+                elif line.startswith("Fit^="):
+                    fit = _gp_float(line.split(" ")[1])
+                elif line.startswith("1-Qintra^="):
+                    qintra = _gp_float(line.split(" ")[1])
+                elif line.startswith("1-Qinter^="):
+                    qinter = _gp_float(line.split(" ")[1])
                     return locus, fis, fst, fit, qintra, qinter
                 line = self.stream.readline()
             if locus is not None:

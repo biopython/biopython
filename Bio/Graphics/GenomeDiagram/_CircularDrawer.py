@@ -61,7 +61,7 @@ class CircularDrawer(AbstractDrawer):
 
     """
 
-    def __init__(self, parent=None, pagesize='A3', orientation='landscape',
+    def __init__(self, parent=None, pagesize="A3", orientation="landscape",
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, track_size=0.75,
                  circular=1, circle_core=0.0, cross_track_links=None):
@@ -284,17 +284,17 @@ class CircularDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
         # subtended at the diagram center, and the color as arguments
-        draw_methods = {'BOX': self._draw_sigil_box,
-                        'OCTO': self._draw_sigil_cut_corner_box,
-                        'JAGGY': self._draw_sigil_jaggy,
-                        'ARROW': self._draw_sigil_arrow,
-                        'BIGARROW': self._draw_sigil_big_arrow,
+        draw_methods = {"BOX": self._draw_sigil_box,
+                        "OCTO": self._draw_sigil_cut_corner_box,
+                        "JAGGY": self._draw_sigil_jaggy,
+                        "ARROW": self._draw_sigil_arrow,
+                        "BIGARROW": self._draw_sigil_big_arrow,
                         }
 
         # Get sigil for the feature, location dependent on the feature strand
         method = draw_methods[feature.sigil]
-        kwargs['head_length_ratio'] = feature.arrowhead_length
-        kwargs['shaft_height_ratio'] = feature.arrowshaft_height
+        kwargs["head_length_ratio"] = feature.arrowhead_length
+        kwargs["shaft_height_ratio"] = feature.arrowshaft_height
 
         # Support for clickable links... needs ReportLab 2.4 or later
         # which added support for links in SVG output.
@@ -317,7 +317,7 @@ class CircularDrawer(AbstractDrawer):
                 strand = feature.label_strand
             else:
                 strand = feature.strand
-            if feature.label_position in ('start', "5'", 'left'):
+            if feature.label_position in ("start", "5'", "left"):
                 # Position the label at the feature's start
                 if strand != -1:
                     label_angle = startangle + 0.5 * pi  # Make text radial
@@ -325,11 +325,11 @@ class CircularDrawer(AbstractDrawer):
                 else:
                     label_angle = endangle + 0.5 * pi  # Make text radial
                     sinval, cosval = endsin, endcos
-            elif feature.label_position in ('middle', 'center', 'centre'):
+            elif feature.label_position in ("middle", "center", "centre"):
                 # Position the label at the feature's midpoint
                 label_angle = midangle + 0.5 * pi  # Make text radial
                 sinval, cosval = midsin, midcos
-            elif feature.label_position in ('end', "3'", 'right'):
+            elif feature.label_position in ("end", "3'", "right"):
                 # Position the label at the feature's end
                 if strand != -1:
                     label_angle = endangle + 0.5 * pi  # Make text radial
@@ -353,13 +353,13 @@ class CircularDrawer(AbstractDrawer):
                 if startangle < pi:  # Turn text round
                     label_angle -= pi
                 else:
-                    labelgroup.contents[0].textAnchor = 'end'
+                    labelgroup.contents[0].textAnchor = "end"
             else:
                 # Feature label on bottom
                 radius = btm
                 if startangle < pi:  # Turn text round and anchor end
                     label_angle -= pi
-                    labelgroup.contents[0].textAnchor = 'end'
+                    labelgroup.contents[0].textAnchor = "end"
             x_pos = self.xcenter + radius * sinval
             y_pos = self.ycenter + radius * cosval
             coslabel = cos(label_angle)
@@ -460,9 +460,9 @@ class CircularDrawer(AbstractDrawer):
         elements = []  # Holds graph elements
 
         # Distribution dictionary for how to draw the graph
-        style_methods = {'line': self.draw_line_graph,
-                         'heat': self.draw_heat_graph,
-                         'bar': self.draw_bar_graph
+        style_methods = {"line": self.draw_line_graph,
+                         "heat": self.draw_heat_graph,
+                         "bar": self.draw_bar_graph
                          }
 
         for graph in set.get_graphs():
@@ -773,7 +773,7 @@ class CircularDrawer(AbstractDrawer):
                                            fontName=track.scale_font,
                                            fontSize=track.scale_fontsize,
                                            fillColor=track.scale_color)
-                            label.textAnchor = 'middle'
+                            label.textAnchor = "middle"
                             labelgroup = Group(label)
                             labelgroup.transform = (tickcos, -ticksin,
                                                     ticksin, tickcos,
@@ -805,7 +805,7 @@ class CircularDrawer(AbstractDrawer):
         tick = Line(x0, y0, x1, y1, strokeColor=track.scale_color)
         if draw_label:
             # Put tick position on as label
-            if track.scale_format == 'SInt':
+            if track.scale_format == "SInt":
                 if tickpos >= 1000000:
                     tickstring = str(tickpos // 1000000) + " Mbp"
                 elif tickpos >= 1000:
@@ -819,7 +819,7 @@ class CircularDrawer(AbstractDrawer):
                            fontSize=track.scale_fontsize,
                            fillColor=track.scale_color)
             if tickangle > pi:
-                label.textAnchor = 'end'
+                label.textAnchor = "end"
             # LP: This label_offset depends on ascent_descent data, which is not available for all
             # fonts, so has been deprecated.
             # if 0.5*pi < tickangle < 1.5*pi:
@@ -892,7 +892,7 @@ class CircularDrawer(AbstractDrawer):
                 labelgroup = Group(label)
                 labelangle = self.sweep * 2 * pi * (pos - self.start) / self.length - pi / 2
                 if theta > pi:
-                    label.textAnchor = 'end'    # Anchor end of text to inner radius
+                    label.textAnchor = "end"    # Anchor end of text to inner radius
                     labelangle += pi            # and reorient it
                 cosA, sinA = cos(labelangle), sin(labelangle)
                 labelgroup.transform = (cosA, -sinA, sinA,
@@ -1154,7 +1154,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                         color, border=None,
                         shaft_height_ratio=0.4, head_length_ratio=0.5,
-                        orientation='right', colour=None, **kwargs):
+                        orientation="right", colour=None, **kwargs):
         """Draw an arrow along an arc (PRIVATE)."""
         # Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:

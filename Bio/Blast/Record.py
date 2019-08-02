@@ -46,15 +46,15 @@ class Header(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.application = ''
-        self.version = ''
-        self.date = ''
-        self.reference = ''
+        self.application = ""
+        self.version = ""
+        self.date = ""
+        self.reference = ""
 
-        self.query = ''
+        self.query = ""
         self.query_letters = None
 
-        self.database = ''
+        self.database = ""
         self.database_sequences = None
         self.database_letters = None
 
@@ -72,7 +72,7 @@ class Description(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.title = ''
+        self.title = ""
         self.score = None
         self.bits = None
         self.e = None
@@ -138,17 +138,17 @@ class Alignment(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.title = ''
-        self.hit_id = ''
-        self.hit_def = ''
+        self.title = ""
+        self.hit_id = ""
+        self.hit_def = ""
         self.length = None
         self.hsps = []
 
     def __str__(self):
         """Return the BLAST alignment as a formatted string."""
-        lines = self.title.split('\n')
+        lines = self.title.split("\n")
         lines.append("Length = %s\n" % self.length)
-        return '\n           '.join(lines)
+        return "\n           ".join(lines)
 
 
 class HSP(object):
@@ -213,11 +213,11 @@ class HSP(object):
         self.strand = (None, None)
         self.frame = ()
 
-        self.query = ''
+        self.query = ""
         self.query_start = None
         self.query_end = None
-        self.match = ''
-        self.sbjct = ''
+        self.match = ""
+        self.sbjct = ""
         self.sbjct_start = None
         self.sbjct_end = None
 
@@ -284,7 +284,7 @@ class MultipleAlignment(object):
         parse_number = 0
         n = 0
         for name, start, seq, end in self.alignment:
-            if name == 'QUERY':  # QUERY is the first in each alignment block
+            if name == "QUERY":  # QUERY is the first in each alignment block
                 parse_number += 1
                 n = 0
 
@@ -383,7 +383,7 @@ class Parameters(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.matrix = ''
+        self.matrix = ""
         self.gap_penalties = (None, None)
         self.sc_match = None
         self.sc_mismatch = None

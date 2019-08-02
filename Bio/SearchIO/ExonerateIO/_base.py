@@ -14,11 +14,11 @@ from Bio.SeqUtils import seq1
 
 
 # strand char-value mapping
-_STRAND_MAP = {'+': 1, '-': -1, '.': 0}
+_STRAND_MAP = {"+": 1, "-": -1, ".": 0}
 
-_RE_SHIFTS = re.compile(r'(#+)')
+_RE_SHIFTS = re.compile(r"(#+)")
 # regex for checking whether a vulgar line has protein/translated components
-_RE_TRANS = re.compile(r'[53ISCF]')
+_RE_TRANS = re.compile(r"[53ISCF]")
 
 
 def _set_frame(frag):
@@ -110,7 +110,7 @@ def _adjust_aa_seq(fraglist):
 
     Argument fraglist should be a list of HSPFragments objects.
     """
-    custom_map = {'***': '*', '<->': '-'}
+    custom_map = {"***": "*", "<->": "-"}
     hsp_hstart = fraglist[0].hit_start
     hsp_qstart = fraglist[0].query_start
     frag_phases = _get_fragments_phase(fraglist)
@@ -138,13 +138,13 @@ def _adjust_aa_seq(fraglist):
         hseq1_post = "X" if h_triplets_post else ""
         hseq1 = seq1("".join(h_triplets), custom_map=custom_map)
         hstart = hsp_hstart + (len(hseq1_pre) * hstep)
-        hend = hstart + len(hseq1.replace('-', '')) * hstep
+        hend = hstart + len(hseq1.replace("-", "")) * hstep
 
         qseq1_pre = "X" if q_triplets_pre else ""
         qseq1_post = "X" if q_triplets_post else ""
         qseq1 = seq1("".join(q_triplets), custom_map=custom_map)
         qstart = hsp_qstart + len(qseq1_pre)
-        qend = qstart + len(qseq1.replace('-', ''))
+        qend = qstart + len(qseq1.replace("-", ""))
 
         # replace the old frag sequences with the new ones
         frag.hit = None
@@ -176,9 +176,9 @@ def _split_fragment(frag):
     # given an HSPFragment object with frameshift(s), this method splits it
     # into fragments without frameshifts by sequentially chopping it off
     # starting from the beginning
-    simil = frag.aln_annotation['similarity']
+    simil = frag.aln_annotation["similarity"]
     # we should have at least 1 frame shift for splitting
-    assert simil.count('#') > 0
+    assert simil.count("#") > 0
 
     split_frags = []
     qstep = 1 if frag.query_strand >= 0 else -1
@@ -195,7 +195,7 @@ def _split_fragment(frag):
             s_stop = s_start + len(shifts)
             split = frag[abs_pos:abs_pos + s_start]
         except AttributeError:  # no '#' in simil, i.e. last frag
-            shifts = ''
+            shifts = ""
             s_start = 0
             s_stop = len(simil)
             split = frag[abs_pos:]
@@ -203,9 +203,9 @@ def _split_fragment(frag):
         # coordinates for the split strand
         qstart, hstart = qpos, hpos
         qpos += (len(split) - sum(str(split.query.seq).count(x)
-                 for x in ('-', '<', '>'))) * qstep
+                 for x in ("-", "<", ">"))) * qstep
         hpos += (len(split) - sum(str(split.hit.seq).count(x)
-                 for x in ('-', '<', '>'))) * hstep
+                 for x in ("-", "<", ">"))) * hstep
 
         split.hit_start = min(hstart, hpos)
         split.query_start = min(qstart, qpos)
@@ -218,11 +218,11 @@ def _split_fragment(frag):
             seqs = (str(frag[abs_slice].query.seq),
                     str(frag[abs_slice].hit.seq))
         elif len(frag.aln_annotation) == 3:
-            seqs = (frag[abs_slice].aln_annotation['query_annotation'],
-                    frag[abs_slice].aln_annotation['hit_annotation'],)
-        if '#' in seqs[0]:
+            seqs = (frag[abs_slice].aln_annotation["query_annotation"],
+                    frag[abs_slice].aln_annotation["hit_annotation"],)
+        if "#" in seqs[0]:
             qpos += len(shifts) * qstep
-        elif '#' in seqs[1]:
+        elif "#" in seqs[1]:
             hpos += len(shifts) * hstep
 
         # set frame
@@ -239,37 +239,37 @@ def _create_hsp(hid, qid, hspd):
     """Return a list of HSP objects from the given parsed HSP values (PRIVATE)."""
     frags = []
     # we are iterating over query_ranges, but hit_ranges works just as well
-    for idx, qcoords in enumerate(hspd['query_ranges']):
+    for idx, qcoords in enumerate(hspd["query_ranges"]):
         # get sequences, create object
-        hseqlist = hspd.get('hit')
-        hseq = '' if hseqlist is None else hseqlist[idx]
-        qseqlist = hspd.get('query')
-        qseq = '' if qseqlist is None else qseqlist[idx]
+        hseqlist = hspd.get("hit")
+        hseq = "" if hseqlist is None else hseqlist[idx]
+        qseqlist = hspd.get("query")
+        qseq = "" if qseqlist is None else qseqlist[idx]
         frag = HSPFragment(hid, qid, hit=hseq, query=qseq)
         # coordinates
         frag.query_start = qcoords[0]
         frag.query_end = qcoords[1]
-        frag.hit_start = hspd['hit_ranges'][idx][0]
-        frag.hit_end = hspd['hit_ranges'][idx][1]
+        frag.hit_start = hspd["hit_ranges"][idx][0]
+        frag.hit_end = hspd["hit_ranges"][idx][1]
         # alignment annotation
         try:
-            aln_annot = hspd.get('aln_annotation', {})
+            aln_annot = hspd.get("aln_annotation", {})
             for key, value in aln_annot.items():
                 frag.aln_annotation[key] = value[idx]
         except IndexError:
             pass
         # strands
-        frag.query_strand = hspd['query_strand']
-        frag.hit_strand = hspd['hit_strand']
+        frag.query_strand = hspd["query_strand"]
+        frag.hit_strand = hspd["hit_strand"]
         # and append the hsp object to the list
-        if frag.aln_annotation.get('similarity') is not None:
-            if '#' in frag.aln_annotation['similarity']:
+        if frag.aln_annotation.get("similarity") is not None:
+            if "#" in frag.aln_annotation["similarity"]:
                 frags.extend(_split_fragment(frag))
                 continue
         # try to set frame if there are translation in the alignment
         if len(frag.aln_annotation) > 1 or \
            frag.query_strand == 0 or \
-           ('vulgar_comp' in hspd and re.search(_RE_TRANS, hspd['vulgar_comp'])):
+           ("vulgar_comp" in hspd and re.search(_RE_TRANS, hspd["vulgar_comp"])):
             _set_frame(frag)
 
         frags.append(frag)
@@ -282,8 +282,8 @@ def _create_hsp(hid, qid, hspd):
 
     hsp = HSP(frags)
     # set hsp-specific attributes
-    for attr in ('score', 'hit_split_codons', 'query_split_codons',
-                 'model', 'vulgar_comp', 'cigar_comp', 'alphabet'):
+    for attr in ("score", "hit_split_codons", "query_split_codons",
+                 "model", "vulgar_comp", "cigar_comp", "alphabet"):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])
 
@@ -293,10 +293,10 @@ def _create_hsp(hid, qid, hspd):
 def _parse_hit_or_query_line(line):
     """Parse the 'Query:' line of exonerate alignment outputs (PRIVATE)."""
     try:
-        mark, id, desc = line.split(' ', 2)
+        mark, id, desc = line.split(" ", 2)
     except ValueError:  # no desc
-        mark, id = line.split(' ', 1)
-        desc = ''
+        mark, id = line.split(" ", 1)
+        desc = ""
 
     return id, desc
 
@@ -315,18 +315,18 @@ class _BaseExonerateParser(object):
         while True:
             self.line = self.handle.readline()
             # flag for human-readable alignment block
-            if self.line.startswith('C4 Alignment:') and not \
+            if self.line.startswith("C4 Alignment:") and not \
                     self.has_c4_alignment:
                 self.has_c4_alignment = True
-            if self.line.startswith('C4 Alignment:') or \
-                    self.line.startswith('vulgar:') or \
-                    self.line.startswith('cigar:'):
+            if self.line.startswith("C4 Alignment:") or \
+                    self.line.startswith("vulgar:") or \
+                    self.line.startswith("cigar:"):
                 break
-            elif not self.line or self.line.startswith('-- completed '):
+            elif not self.line or self.line.startswith("-- completed "):
                 return
 
         for qresult in self._parse_qresult():
-            qresult.program = 'exonerate'
+            qresult.program = "exonerate"
             # HACK: so that all descriptions are set
             qresult.description = qresult.description
             for hit in qresult:
@@ -355,50 +355,50 @@ class _BaseExonerateParser(object):
         qresult, hit, hsp = {}, {}, {}
         for line in aln_header:
             # query line
-            if line.startswith('Query:'):
-                qresult['id'], qresult['description'] = \
+            if line.startswith("Query:"):
+                qresult["id"], qresult["description"] = \
                         _parse_hit_or_query_line(line)
             # target line
-            elif line.startswith('Target:'):
-                hit['id'], hit['description'] = \
+            elif line.startswith("Target:"):
+                hit["id"], hit["description"] = \
                         _parse_hit_or_query_line(line)
             # model line
-            elif line.startswith('Model:'):
-                qresult['model'] = line.split(' ', 1)[1]
+            elif line.startswith("Model:"):
+                qresult["model"] = line.split(" ", 1)[1]
             # score line
-            elif line.startswith('Raw score:'):
-                hsp['score'] = line.split(' ', 2)[2]
+            elif line.startswith("Raw score:"):
+                hsp["score"] = line.split(" ", 2)[2]
             # query range line
-            elif line.startswith('Query range:'):
+            elif line.startswith("Query range:"):
                 # line is always 'Query range: \d+ -> \d+', so we can pluck
                 # the numbers directly
-                hsp['query_start'], hsp['query_end'] = line.split(' ', 4)[2:5:2]
+                hsp["query_start"], hsp["query_end"] = line.split(" ", 4)[2:5:2]
             # hit range line
-            elif line.startswith('Target range:'):
+            elif line.startswith("Target range:"):
                 # same logic with query range
-                hsp['hit_start'], hsp['hit_end'] = line.split(' ', 4)[2:5:2]
+                hsp["hit_start"], hsp["hit_end"] = line.split(" ", 4)[2:5:2]
 
         # determine strand
-        if qresult['description'].endswith(':[revcomp]'):
-            hsp['query_strand'] = '-'
-            qresult['description'] = qresult['description'].replace(':[revcomp]', '')
-        elif 'protein2' in qresult['model']:
-            hsp['query_strand'] = '.'
+        if qresult["description"].endswith(":[revcomp]"):
+            hsp["query_strand"] = "-"
+            qresult["description"] = qresult["description"].replace(":[revcomp]", "")
+        elif "protein2" in qresult["model"]:
+            hsp["query_strand"] = "."
         else:
-            hsp['query_strand'] = '+'
-        if hit['description'].endswith(':[revcomp]'):
-            hsp['hit_strand'] = '-'
-            hit['description'] = hit['description'].replace(':[revcomp]', '')
-        elif '2protein' in qresult['model']:
-            hsp['hit_strand'] = '.'
+            hsp["query_strand"] = "+"
+        if hit["description"].endswith(":[revcomp]"):
+            hsp["hit_strand"] = "-"
+            hit["description"] = hit["description"].replace(":[revcomp]", "")
+        elif "2protein" in qresult["model"]:
+            hsp["hit_strand"] = "."
         else:
-            hsp['hit_strand'] = '+'
+            hsp["hit_strand"] = "+"
 
         # NOTE: we haven't processed the coordinates types
         # and the strands are not yet Biopython's standard (1 / -1 / 0)
         # since it's easier if we do the conversion later
 
-        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+        return {"qresult": qresult, "hit": hit, "hsp": hsp}
 
     def _parse_qresult(self):
         # state values
@@ -416,7 +416,7 @@ class _BaseExonerateParser(object):
         hit_list, hsp_list = [], []
         # if the file has c4 alignments, use that as the alignment mark
         if self.has_c4_alignment:
-            self._ALN_MARK = 'C4 Alignment:'
+            self._ALN_MARK = "C4 Alignment:"
 
         while True:
             self.read_until(lambda line: line.startswith(self._ALN_MARK))
@@ -428,17 +428,17 @@ class _BaseExonerateParser(object):
             if self.line:
                 assert self.line.startswith(self._ALN_MARK), self.line
                 # create temp dicts for storing parsed values
-                header = {'qresult': {}, 'hit': {}, 'hsp': {}}
+                header = {"qresult": {}, "hit": {}, "hsp": {}}
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
                     self.read_until(lambda line:
-                                    line.strip().startswith('Query:'))
+                                    line.strip().startswith("Query:"))
                     header = self._parse_alignment_header()
                 # parse the block contents
                 cur = self.parse_alignment_block(header)
-                cur_qid = cur['qresult']['id']
-                cur_hid = cur['hit']['id']
-            elif not self.line or self.line.startswith('-- completed '):
+                cur_qid = cur["qresult"]["id"]
+                cur_hid = cur["hit"]["id"]
+            elif not self.line or self.line.startswith("-- completed "):
                 file_state = state_EOF
                 cur_qid, cur_hid = None, None
 
@@ -454,12 +454,12 @@ class _BaseExonerateParser(object):
                 hit_state = state_HIT_SAME
 
             if prev is not None:
-                hsp = _create_hsp(prev_hid, prev_qid, prev['hsp'])
+                hsp = _create_hsp(prev_hid, prev_qid, prev["hsp"])
                 hsp_list.append(hsp)
 
                 if hit_state == state_HIT_NEW:
                     hit = Hit(hsp_list)
-                    for attr, value in prev['hit'].items():
+                    for attr, value in prev["hit"].items():
                         setattr(hit, attr, value)
                     hit_list.append(hit)
                     hsp_list = []
@@ -470,7 +470,7 @@ class _BaseExonerateParser(object):
                         # not using append since Exonerate may separate the
                         # same hit if it has different strands
                         qresult.absorb(hit)
-                    for attr, value in prev['qresult'].items():
+                    for attr, value in prev["qresult"].items():
                         setattr(qresult, attr, value)
                     yield qresult
                     if file_state == state_EOF:

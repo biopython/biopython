@@ -19,8 +19,8 @@ class BlastTableEntry(object):
     def __init__(self, in_rec):
         """Initialize the class."""
         bt_fields = in_rec.split()
-        self.qid = bt_fields[0].split('|')
-        self.sid = bt_fields[1].split('|')
+        self.qid = bt_fields[0].split("|")
+        self.sid = bt_fields[1].split("|")
         self.pid = float(bt_fields[2])
         self.ali_len = int(bt_fields[3])
         self.mis = int(bt_fields[4])
@@ -49,11 +49,11 @@ class BlastTableRec(object):
         self.entries.append(entry)
 
 
-reader_keywords = {'BLASTP': 'version',
-                   'Iteration': 'iteration',
-                   'Query': 'query',
-                   'Database': 'database',
-                   'Fields': 'fields'}
+reader_keywords = {"BLASTP": "version",
+                   "Iteration": "iteration",
+                   "Query": "query",
+                   "Database": "database",
+                   "Fields": "fields"}
 
 
 class BlastTableReader(object):
@@ -64,7 +64,7 @@ class BlastTableReader(object):
         self.handle = handle
         inline = self.handle.readline()
         # zip forward to start of record
-        while inline and 'BLASTP' not in inline:
+        while inline and "BLASTP" not in inline:
             inline = self.handle.readline()
         self._lookahead = inline
         self._n = 0
@@ -78,7 +78,7 @@ class BlastTableReader(object):
         if not inline:
             return None
         while inline:
-            if inline[0] == '#':
+            if inline[0] == "#":
                 if self._in_header:
                     self._in_header = self._consume_header(inline)
                 else:
@@ -104,7 +104,7 @@ class BlastTableReader(object):
     def _consume_header(self, inline):
         for keyword in reader_keywords:
             if keyword in inline:
-                return self._Parse('_parse_%s' % reader_keywords[keyword], inline)
+                return self._Parse("_parse_%s" % reader_keywords[keyword], inline)
 
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]

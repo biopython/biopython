@@ -37,7 +37,7 @@ class _ShelveIndex(dict):
     # index 'dat' file is 42Mb and 'dir' file is 8Mb.
 
     __version = 2
-    __version_key = '__version'
+    __version_key = "__version"
 
     def __init__(self, indexname, truncate=None):
         dict.__init__(self)
@@ -45,18 +45,18 @@ class _ShelveIndex(dict):
             if truncate:
                 # In python 1.52 and before, dumbdbm (under shelve)
                 # doesn't clear the old database.
-                files = [indexname + '.dir',
-                         indexname + '.dat',
-                         indexname + '.bak'
+                files = [indexname + ".dir",
+                         indexname + ".dat",
+                         indexname + ".bak"
                          ]
                 for file in files:
                     if os.path.exists(file):
                         os.unlink(file)
                 raise Exception("open a new shelf")
-            self.data = shelve.open(indexname, flag='r')
+            self.data = shelve.open(indexname, flag="r")
         except Exception:  # TODO: Which exception?
             # No database exists.
-            self.data = shelve.open(indexname, flag='n')
+            self.data = shelve.open(indexname, flag="n")
             self.data[self.__version_key] = self.__version
         else:
             # Check to make sure the database is the correct version.
@@ -68,7 +68,7 @@ class _ShelveIndex(dict):
                               % (version, self.__version))
 
     def __del__(self):
-        if 'data' in self.__dict__:
+        if "data" in self.__dict__:
             self.data.close()
 
 
@@ -81,7 +81,7 @@ class _InMemoryIndex(dict):
     # [...]
 
     __version = 3
-    __version_key = '__version'
+    __version_key = "__version"
 
     def __init__(self, indexname, truncate=None):
         self._indexname = indexname
@@ -124,7 +124,7 @@ class _InMemoryIndex(dict):
 
     def __del__(self):
         if self.__changed:
-            with open(self._indexname, 'w') as handle:
+            with open(self._indexname, "w") as handle:
                 handle.write("%s\n" % self._tostr(self.__version))
                 for key, value in self.items():
                     handle.write("%s %s\n" %
@@ -139,13 +139,13 @@ class _InMemoryIndex(dict):
         # It's not the most efficient way of storing things, but it's
         # relatively fast.
         s = pickle.dumps(obj)
-        intlist = array.array('b', s)
-        return ','.join(str(i) for i in intlist)
+        intlist = array.array("b", s)
+        return ",".join(str(i) for i in intlist)
 
     def _toobj(self, str):
-        intlist = [int(i) for i in str.split(',')]
-        intlist = array.array('b', intlist)
-        return pickle.loads(''.join(chr(i) for i in intlist))
+        intlist = [int(i) for i in str.split(",")]
+        intlist = array.array("b", intlist)
+        return pickle.loads("".join(chr(i) for i in intlist))
 
 
 Index = _InMemoryIndex

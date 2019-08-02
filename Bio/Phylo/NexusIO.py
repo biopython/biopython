@@ -63,15 +63,15 @@ def write(obj, handle, **kwargs):
     """
     trees = list(obj)
     writer = NewickIO.Writer(trees)
-    nexus_trees = [TREE_TEMPLATE % {'index': idx + 1, 'tree': nwk}
+    nexus_trees = [TREE_TEMPLATE % {"index": idx + 1, "tree": nwk}
                    for idx, nwk in enumerate(
         writer.to_strings(plain=False, plain_newick=True,
                           **kwargs))]
     tax_labels = [str(x.name) for x in chain(*(t.get_terminals() for t in trees))]
     text = NEX_TEMPLATE % {
-        'count': len(tax_labels),
-        'labels': ' '.join(tax_labels),
-        'trees': '\n'.join(nexus_trees),
+        "count": len(tax_labels),
+        "labels": " ".join(tax_labels),
+        "trees": "\n".join(nexus_trees),
     }
     handle.write(text)
     return len(nexus_trees)

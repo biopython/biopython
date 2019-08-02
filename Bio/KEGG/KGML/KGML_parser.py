@@ -62,7 +62,7 @@ def parse(handle, debug=0):
     This is a generator for the return of multiple Pathway objects.
     """
     # Check handle
-    if not hasattr(handle, 'read'):
+    if not hasattr(handle, "read"):
         if isinstance(handle, str):
             handle = StringIO(handle)
         else:
@@ -71,7 +71,7 @@ def parse(handle, debug=0):
             raise Exception(exc_txt)
     # Parse XML and return each Pathway
     for event, elem in \
-            ElementTree.iterparse(handle, events=('start', 'end')):
+            ElementTree.iterparse(handle, events=("start", "end")):
         if event == "end" and elem.tag == "pathway":
             yield KGMLParser(elem).parse()
             elem.clear()
@@ -120,9 +120,9 @@ class KGMLParser(object):
             for k, v in element.attrib.items():
                 new_entry.__setattr__(k, v)
             for subelement in element.getchildren():
-                if subelement.tag == 'graphics':
+                if subelement.tag == "graphics":
                     _parse_graphics(subelement, new_entry)
-                elif subelement.tag == 'component':
+                elif subelement.tag == "component":
                     _parse_component(subelement, new_entry)
             self.pathway.add_entry(new_entry)
 
@@ -143,20 +143,20 @@ class KGMLParser(object):
             for k, v in element.attrib.items():
                 new_reaction.__setattr__(k, v)
             for subelement in element.getchildren():
-                if subelement.tag == 'substrate':
-                    new_reaction.add_substrate(int(subelement.attrib['id']))
-                elif subelement.tag == 'product':
-                    new_reaction.add_product(int(subelement.attrib['id']))
+                if subelement.tag == "substrate":
+                    new_reaction.add_substrate(int(subelement.attrib["id"]))
+                elif subelement.tag == "product":
+                    new_reaction.add_product(int(subelement.attrib["id"]))
             self.pathway.add_reaction(new_reaction)
 
         def _parse_relation(element):
             new_relation = Relation()
-            new_relation.entry1 = int(element.attrib['entry1'])
-            new_relation.entry2 = int(element.attrib['entry2'])
-            new_relation.type = element.attrib['type']
+            new_relation.entry1 = int(element.attrib["entry1"])
+            new_relation.entry2 = int(element.attrib["entry2"])
+            new_relation.type = element.attrib["type"]
             for subtype in element.getchildren():
-                name, value = subtype.attrib['name'], subtype.attrib['value']
-                if name in ('compound', 'hidden compound'):
+                name, value = subtype.attrib["name"], subtype.attrib["value"]
+                if name in ("compound", "hidden compound"):
                     new_relation.subtypes.append((name, int(value)))
                 else:
                     new_relation.subtypes.append((name, value))
@@ -168,11 +168,11 @@ class KGMLParser(object):
         # Get information about the pathway itself
         _parse_pathway(self.entry.attrib)
         for element in self.entry.getchildren():
-            if element.tag == 'entry':
+            if element.tag == "entry":
                 _parse_entry(element)
-            elif element.tag == 'reaction':
+            elif element.tag == "reaction":
                 _parse_reaction(element)
-            elif element.tag == 'relation':
+            elif element.tag == "relation":
                 _parse_relation(element)
             # Parsing of some elements not implemented - no examples yet
             else:

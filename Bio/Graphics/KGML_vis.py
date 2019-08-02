@@ -45,7 +45,7 @@ def darken(color, factor=0.7):
     factor indicated in the parameter.
     """
     newcol = color_to_reportlab(color)
-    for a in ['red', 'green', 'blue']:
+    for a in ["red", "green", "blue"]:
         setattr(newcol, a, factor * getattr(newcol, a))
     return newcol
 
@@ -87,10 +87,10 @@ def get_temp_imagefilename(url):
     img = _urlopen(url).read()
     im = Image.open(BytesIO(img))
     # im.transpose(Image.FLIP_TOP_BOTTOM)
-    f = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+    f = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
     fname = f.name
     f.close()
-    im.save(fname, 'PNG')
+    im.save(fname, "PNG")
     return fname
 
 
@@ -99,7 +99,7 @@ class KGMLCanvas(object):
 
     def __init__(self, pathway, import_imagemap=False, label_compounds=True,
                  label_orthologs=True, label_reaction_entries=True,
-                 label_maps=True, show_maps=False, fontname='Helvetica',
+                 label_maps=True, show_maps=False, fontname="Helvetica",
                  fontsize=6, draw_relations=True, show_orthologs=True,
                  show_compounds=True, show_genes=True,
                  show_reaction_entries=True, margins=(0.02, 0.02)):
@@ -187,11 +187,11 @@ class KGMLCanvas(object):
         """
         for m in self.pathway.maps:
             for g in m.graphics:
-                self.drawing.setStrokeColor('#888888')
-                self.drawing.setFillColor('#DDDDDD')
+                self.drawing.setStrokeColor("#888888")
+                self.drawing.setFillColor("#DDDDDD")
                 self.__add_graphics(g)
                 if self.label_maps:
-                    self.drawing.setFillColor('#888888')
+                    self.drawing.setFillColor("#888888")
                     self.__add_labels(g)
 
     def __add_graphics(self, graphics):
@@ -199,7 +199,7 @@ class KGMLCanvas(object):
 
         Add text, add after the graphics object, for sane Z-ordering.
         """
-        if graphics.type == 'line':
+        if graphics.type == "line":
             p = self.drawing.beginPath()
             x, y = graphics.coords[0]
             # There are optional settings for lines that aren't necessarily
@@ -216,16 +216,16 @@ class KGMLCanvas(object):
         # KGML defines the (x, y) coordinates as the centre of the circle/
         # rectangle/roundrectangle, but Reportlab uses the co-ordinates of the
         # lower-left corner for rectangle/elif.
-        if graphics.type == 'circle':
+        if graphics.type == "circle":
             self.drawing.circle(graphics.x, graphics.y, graphics.width * 0.5,
                                 stroke=1, fill=1)
-        elif graphics.type == 'roundrectangle':
+        elif graphics.type == "roundrectangle":
             self.drawing.roundRect(graphics.x - graphics.width * 0.5,
                                    graphics.y - graphics.height * 0.5,
                                    graphics.width, graphics.height,
                                    min(graphics.width, graphics.height) * 0.1,
                                    stroke=1, fill=1)
-        elif graphics.type == 'rectangle':
+        elif graphics.type == "rectangle":
             self.drawing.rect(graphics.x - graphics.width * 0.5,
                               graphics.y - graphics.height * 0.5,
                               graphics.width, graphics.height,
@@ -237,7 +237,7 @@ class KGMLCanvas(object):
         We don't check that the labels fit inside objects such as circles/
         rectangles/roundrectangles.
         """
-        if graphics.type == 'line':
+        if graphics.type == "line":
             # We use the midpoint of the line - sort of - we take the median
             # line segment (list-wise, not in terms of length), and use the
             # midpoint of that line.  We could have other options here,
@@ -251,18 +251,18 @@ class KGMLCanvas(object):
             x1, y1 = graphics.coords[idx1]
             x2, y2 = graphics.coords[idx2]
             x, y = 0.5 * (x1 + x2), 0.5 * (y1 + y2)
-        elif graphics.type == 'circle':
+        elif graphics.type == "circle":
             x, y = graphics.x, graphics.y
-        elif graphics.type in ('rectangle', 'roundrectangle'):
+        elif graphics.type in ("rectangle", "roundrectangle"):
             x, y = graphics.x, graphics.y
         # How big so we want the text, and how many characters?
-        if graphics._parent.type == 'map':
+        if graphics._parent.type == "map":
             text = graphics.name
             self.drawing.setFont(self.fontname, self.fontsize + 2)
         elif len(graphics.name) < 15:
             text = graphics.name
         else:
-            text = graphics.name[:12] + '...'
+            text = graphics.name[:12] + "..."
         self.drawing.drawCentredString(x, y, text)
         self.drawing.setFont(self.fontname, self.fontsize)
 
@@ -352,7 +352,7 @@ class KGMLCanvas(object):
         """
         # Dashed lines for maplinks, solid for everything else
         for relation in list(self.pathway.relations):
-            if relation.type == 'maplink':
+            if relation.type == "maplink":
                 self.drawing.setDash(6, 3)
             else:
                 self.drawing.setDash()

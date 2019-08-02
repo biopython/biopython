@@ -24,8 +24,8 @@ class FSSPAlign(MultipleSeqAlignment):
     """Provision to do single Multi Sequence Alignment from FSSP files."""
 
     def _add_numbering_table(self, new_record):
-        new_record.annotations['abs2pdb'] = {}
-        new_record.annotations['pdb2abs'] = {}
+        new_record.annotations["abs2pdb"] = {}
+        new_record.annotations["pdb2abs"] = {}
 
 
 class FSSPMultAlign(dict):
@@ -42,7 +42,7 @@ def mult_align(sum_dict, align_dict):
     """Return multiple alignment instance (MultipleSeqAlignment)."""
     mult_align_dict = {}
     for j in align_dict.abs(1).pos_align_dict:
-        mult_align_dict[j] = ''
+        mult_align_dict[j] = ""
 
     for i in range(1, len(align_dict) + 1):
         # loop on positions

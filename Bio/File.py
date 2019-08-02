@@ -55,7 +55,7 @@ except ImportError:
 
 
 @contextlib.contextmanager
-def as_handle(handleish, mode='r', **kwargs):
+def as_handle(handleish, mode="r", **kwargs):
     r"""Context manager to ensure we are using a handle.
 
     Context manager for arguments that can be passed to SeqIO and AlignIO read, write,
@@ -101,7 +101,7 @@ def as_handle(handleish, mode='r', **kwargs):
     """
     # If we're running under a version of Python that supports PEP 519, try
     # to convert 'handleish' to a string with 'os.fspath'.
-    if hasattr(os, 'fspath'):
+    if hasattr(os, "fspath"):
         try:
             handleish = os.fspath(handleish)
         except TypeError:
@@ -111,7 +111,7 @@ def as_handle(handleish, mode='r', **kwargs):
     if isinstance(handleish, basestring):
         if sys.version_info[0] >= 3 and "U" in mode:
             mode = mode.replace("U", "")
-        if 'encoding' in kwargs:
+        if "encoding" in kwargs:
             with codecs.open(handleish, mode, **kwargs) as fp:
                 yield fp
         else:
@@ -206,7 +206,7 @@ class UndoHandle(object):
             saved = "".join(self._saved)
             self._saved[:] = []
         else:
-            saved = ''
+            saved = ""
             while size > 0 and self._saved:
                 if len(self._saved[0]) <= size:
                     size = size - len(self._saved[0])

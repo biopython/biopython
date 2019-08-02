@@ -28,7 +28,7 @@ try:
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
-        'Install scipy to extract curve parameters.')
+        "Install scipy to extract curve parameters.")
 
 
 def logistic(x, A, u, d, v, y0):

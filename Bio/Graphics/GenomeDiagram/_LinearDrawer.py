@@ -79,7 +79,7 @@ class LinearDrawer(AbstractDrawer):
 
     """
 
-    def __init__(self, parent=None, pagesize='A3', orientation='landscape',
+    def __init__(self, parent=None, pagesize="A3", orientation="landscape",
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, fragments=10,
                  fragment_size=None, track_size=0.75, cross_track_links=None):
@@ -331,7 +331,7 @@ class LinearDrawer(AbstractDrawer):
         ticktop = tctr + ticklen        # Y co-ord of tick top
         tick = Line(tickx, tctr, tickx, ticktop, strokeColor=track.scale_color)
         if draw_label:  # Put tick position on as label
-            if track.scale_format == 'SInt':
+            if track.scale_format == "SInt":
                 if tickpos >= 1000000:
                     tickstring = str(tickpos // 1000000) + " Mbp"
                 elif tickpos >= 1000:
@@ -879,20 +879,20 @@ class LinearDrawer(AbstractDrawer):
             for locstart, locend in feature.locations:
                 print(self.canvas_location(locstart))
                 print(self.canvas_location(locend))
-            print('FEATURE\n%s' % feature)
+            print("FEATURE\n%s" % feature)
             raise
 
         # Distribution dictionary for various ways of drawing the feature
-        draw_methods = {'BOX': self._draw_sigil_box,
-                        'ARROW': self._draw_sigil_arrow,
-                        'BIGARROW': self._draw_sigil_big_arrow,
-                        'OCTO': self._draw_sigil_octo,
-                        'JAGGY': self._draw_sigil_jaggy,
+        draw_methods = {"BOX": self._draw_sigil_box,
+                        "ARROW": self._draw_sigil_arrow,
+                        "BIGARROW": self._draw_sigil_big_arrow,
+                        "OCTO": self._draw_sigil_octo,
+                        "JAGGY": self._draw_sigil_jaggy,
                         }
 
         method = draw_methods[feature.sigil]
-        kwargs['head_length_ratio'] = feature.arrowhead_length
-        kwargs['shaft_height_ratio'] = feature.arrowshaft_height
+        kwargs["head_length_ratio"] = feature.arrowhead_length
+        kwargs["shaft_height_ratio"] = feature.arrowshaft_height
 
         # Support for clickable links... needs ReportLab 2.4 or later
         # which added support for links in SVG output.
@@ -920,9 +920,9 @@ class LinearDrawer(AbstractDrawer):
             # the height and rotation of the label)
             if strand != -1:
                 rotation = angle2trig(feature.label_angle)
-                if feature.label_position in ('end', "3'", 'right'):
+                if feature.label_position in ("end", "3'", "right"):
                     pos = x1
-                elif feature.label_position in ('middle', 'center', 'centre'):
+                elif feature.label_position in ("middle", "center", "centre"):
                     pos = (x1 + x0) / 2.
                 else:
                     # Default to start, i.e. 'start', "5'", 'left'
@@ -931,9 +931,9 @@ class LinearDrawer(AbstractDrawer):
                                         rotation[3], pos, top)
             else:   # Feature on bottom strand
                 rotation = angle2trig(feature.label_angle + 180)
-                if feature.label_position in ('end', "3'", 'right'):
+                if feature.label_position in ("end", "3'", "right"):
                     pos = x0
-                elif feature.label_position in ('middle', 'center', 'centre'):
+                elif feature.label_position in ("middle", "center", "centre"):
                     pos = (x1 + x0) / 2.
                 else:
                     # Default to start, i.e. 'start', "5'", 'left'
@@ -956,9 +956,9 @@ class LinearDrawer(AbstractDrawer):
         elements = []   # Holds graph elements
 
         # Distribution dictionary for how to draw the graph
-        style_methods = {'line': self.draw_line_graph,
-                         'heat': self.draw_heat_graph,
-                         'bar': self.draw_bar_graph
+        style_methods = {"line": self.draw_line_graph,
+                         "heat": self.draw_heat_graph,
+                         "bar": self.draw_bar_graph
                          }
 
         for graph in set.get_graphs():

@@ -22,12 +22,12 @@ from Bio.codonalign.codonalphabet import default_codon_table, default_codon_alph
 from Bio.codonalign.codonalphabet import get_codon_alphabet as _get_codon_alphabet
 
 import warnings
-warnings.warn('Bio.codonalign is an experimental module which may undergo '
-              'significant changes prior to its future official release.',
+warnings.warn("Bio.codonalign is an experimental module which may undergo "
+              "significant changes prior to its future official release.",
               BiopythonExperimentalWarning)
 
 
-def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
+def build(pro_align, nucl_seqs, corr_dict=None, gap_char="-", unknown="X",
           codon_table=default_codon_table, alphabet=None,
           complete_protein=False, anchor_len=10, max_score=10):
     """Build a codon alignment from protein alignment and corresponding nucleotides.
@@ -141,7 +141,7 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
             diff = pro_id - nucl_id
             raise ValueError("Protein Record {0} cannot find a nucleotide "
                              "sequence match, please check the "
-                             "id".format(', '.join(diff)))
+                             "id".format(", ".join(diff)))
         else:
             pro_nucl_pair = []
             for pro_rec in pro_align:
@@ -186,16 +186,16 @@ def build(pro_align, nucl_seqs, corr_dict=None, gap_char='-', unknown='X',
 
 def _codons2re(codons):
     """Generate regular expression based on a given list of codons (PRIVATE)."""
-    reg = ''
+    reg = ""
     for i in zip(*codons):
         if len(set(i)) == 1:
-            reg += ''.join(set(i))
+            reg += "".join(set(i))
         else:
-            reg += '[' + ''.join(set(i)) + ']'
+            reg += "[" + "".join(set(i)) + "]"
     return reg
 
 
-def _get_aa_regex(codon_table, stop='*', unknown='X'):
+def _get_aa_regex(codon_table, stop="*", unknown="X"):
     """Set up the regular expression of a given CodonTable (PRIVATE).
 
     >>> from Bio.Data.CodonTable import generic_by_id
@@ -225,11 +225,11 @@ def _get_aa_regex(codon_table, stop='*', unknown='X'):
     for aa, codons in aa2codon.items():
         aa2codon[aa] = _codons2re(codons)
     aa2codon[stop] = _codons2re(codon_table.stop_codons)
-    aa2codon[unknown] = '...'
+    aa2codon[unknown] = "..."
     return aa2codon
 
 
-def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
+def _check_corr(pro, nucl, gap_char="-", codon_table=default_codon_table,
                 complete_protein=False, anchor_len=10):
     """Check if the nucleotide can be translated into the protein (PRIVATE).
 
@@ -243,7 +243,7 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                         "check your input.")
 
     def get_alpha(alpha):
-        if hasattr(alpha, 'alphabet'):
+        if hasattr(alpha, "alphabet"):
             return get_alpha(alpha.alphabet)
         else:
             return alpha
@@ -295,17 +295,17 @@ def _check_corr(pro, nucl, gap_char='-', codon_table=default_codon_table,
                 for aa in anchor:
                     if complete_protein and i == 0:
                         qcodon += _codons2re(codon_table.start_codons)
-                        fncodon += aa2re['X']
+                        fncodon += aa2re["X"]
                         continue
                     qcodon += aa2re[aa]
-                    fncodon += aa2re['X']
+                    fncodon += aa2re["X"]
                 match = re.search(qcodon, nucl_seq)
             elif this_anchor_len > anchor_len:
                 last_qcodon = ""
                 last_fcodon = ""
                 for j in range(anchor_len, len(anchor)):
                     last_qcodon += aa2re[anchor[j]]
-                    last_fcodon += aa2re['X']
+                    last_fcodon += aa2re["X"]
                 match = re.search(last_qcodon, nucl_seq)
             # build full_pro_re from anchors
             if match:
@@ -450,7 +450,7 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
             qcodon += "$"
             match = re.search(qcodon, sh_nuc)
             if match:
-                qcodon = qcodon.replace('^', '').replace('$', '')
+                qcodon = qcodon.replace("^", "").replace("$", "")
                 shift_id_pos += 1
                 return qcodon, shift_id_pos
         if not match:
@@ -473,10 +473,10 @@ def _get_shift_anchor_re(sh_anc, sh_nuc, shift_val, aa2re, anchor_len,
                             shift_id[shift_id_pos].upper())
                 else:
                     qcodon += aa2re[aa]
-            qcodon += '$'
+            qcodon += "$"
             match = re.search(qcodon, sh_nuc)
             if match:
-                qcodon = qcodon.replace('^', '').replace('$', '')
+                qcodon = qcodon.replace("^", "").replace("$", "")
                 shift_id_pos += 1
                 return qcodon, shift_id_pos
         if not match:
@@ -490,10 +490,10 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
         aas = []
         m = 0
         for i in re_aa:
-            if i == '[':
+            if i == "[":
                 m = -1
-                aas.append('')
-            elif i == ']':
+                aas.append("")
+            elif i == "]":
                 m = 0
                 continue
             elif m == -1:
@@ -503,22 +503,22 @@ def _merge_aa2re(aa1, aa2, shift_val, aa2re, reid):
         return aas
     scodon = list(map(get_aa_from_codonre, (aa2re[aa1], aa2re[aa2])))
     if shift_val == 1:
-        intersect = ''.join(set(scodon[0][2]) & set(scodon[1][0]))
-        scodonre = '(?P<' + reid + '>'
-        scodonre += '[' + scodon[0][0] + ']' + \
-                    '[' + scodon[0][1] + ']' + \
-                    '[' + intersect + ']' + \
-                    '[' + scodon[1][1] + ']' + \
-                    '[' + scodon[1][2] + ']'
+        intersect = "".join(set(scodon[0][2]) & set(scodon[1][0]))
+        scodonre = "(?P<" + reid + ">"
+        scodonre += "[" + scodon[0][0] + "]" + \
+                    "[" + scodon[0][1] + "]" + \
+                    "[" + intersect + "]" + \
+                    "[" + scodon[1][1] + "]" + \
+                    "[" + scodon[1][2] + "]"
     elif shift_val == 2:
-        intersect1 = ''.join(set(scodon[0][1]) & set(scodon[1][0]))
-        intersect2 = ''.join(set(scodon[0][2]) & set(scodon[1][1]))
-        scodonre = '(?P<' + reid + '>'
-        scodonre += '[' + scodon[0][0] + ']' + \
-                    '[' + intersect1 + ']' + \
-                    '[' + intersect2 + ']' + \
-                    '[' + scodon[1][2] + ']'
-    scodonre += ')'
+        intersect1 = "".join(set(scodon[0][1]) & set(scodon[1][0]))
+        intersect2 = "".join(set(scodon[0][2]) & set(scodon[1][1]))
+        scodonre = "(?P<" + reid + ">"
+        scodonre += "[" + scodon[0][0] + "]" + \
+                    "[" + intersect1 + "]" + \
+                    "[" + intersect2 + "]" + \
+                    "[" + scodon[1][2] + "]"
+    scodonre += ")"
     return scodonre
 
 
@@ -628,20 +628,20 @@ def _get_codon_rec(pro, nucl, span_mode, alphabet, gap_char="-",
                     codon_seq += this_codon
                     aa_num += 1
             else:
-                if aa_num < len(pro.seq.ungap('-')) - 1 and \
+                if aa_num < len(pro.seq.ungap("-")) - 1 and \
                         rf_table[aa_num + 1] - rf_table[aa_num] - 3 < 0:
                     max_score -= 1
                     start = rf_table[aa_num]
                     end = start + (3 - shift_val)
                     ngap = shift_val
-                    this_codon = nucl_seq._data[start:end] + '-' * ngap
+                    this_codon = nucl_seq._data[start:end] + "-" * ngap
                 elif rf_table[aa_num] - rf_table[aa_num - 1] - 3 > 0:
                     max_score -= 1
                     start = rf_table[aa_num - 1] + 3
                     end = rf_table[aa_num]
                     ngap = 3 - (rf_table[aa_num] - rf_table[aa_num - 1] - 3)
                     this_codon = (nucl_seq._data[start:end]
-                                  + '-' * ngap
+                                  + "-" * ngap
                                   + nucl_seq._data[rf_table[aa_num]:rf_table[aa_num] + 3])
                 else:
                     start = rf_table[aa_num]
@@ -709,7 +709,7 @@ def _align_shift_recs(recs):
                 else:
                     gap_num = 0
                 if gap_num != 0:
-                    gaps = '-' * int(gap_num)
+                    gaps = "-" * int(gap_num)
                     seq = (recs[j].seq._data[:int(k)] + gaps
                            + recs[j].seq._data[int(k):])
                     full_rf_table = full_rf_table_lst[j]

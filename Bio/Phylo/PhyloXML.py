@@ -100,8 +100,8 @@ class Phyloxml(PhyloElement):
 
     def __str__(self):
         """Return name of phylogenies in the object."""
-        return '%s([%s])' % (self.__class__.__name__,
-                             ',\n'.join(map(str, self.phylogenies)))
+        return "%s([%s])" % (self.__class__.__name__,
+                             ",\n".join(map(str, self.phylogenies)))
 
 
 class Other(PhyloElement):
@@ -236,7 +236,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             if isinstance(elem, Sequence) and elem.mol_seq.is_aligned:
                 return True
             return False
-        seqs = self._filter_search(is_aligned_seq, 'preorder', True)
+        seqs = self._filter_search(is_aligned_seq, "preorder", True)
         try:
             first_seq = next(seqs)
         except StopIteration:
@@ -471,7 +471,7 @@ class Accession(PhyloElement):
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
-        return '%s:%s' % (self.source, self.value)
+        return "%s:%s" % (self.source, self.value)
 
 
 class Annotation(PhyloElement):
@@ -498,7 +498,7 @@ class Annotation(PhyloElement):
 
     """
 
-    re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
+    re_ref = re.compile(r"[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+")
 
     def __init__(self,
                  # Attributes
@@ -581,7 +581,7 @@ class Confidence(PhyloElement):
 
     """
 
-    def __init__(self, value, type='unknown'):
+    def __init__(self, value, type="unknown"):
         """Initialize values for the Confidence object."""
         self.value = value
         self.type = type
@@ -776,7 +776,7 @@ class Date(PhyloElement):
     def __str__(self):
         """Show the class name and the human-readable date."""
         if self.unit and self.value is not None:
-            return '%s %s' % (self.value, self.unit)
+            return "%s %s" % (self.value, self.unit)
         if self.desc is not None:
             return self.desc
         return self.__class__.__name__
@@ -829,8 +829,8 @@ class Events(PhyloElement):
     keys and deleting a key resets that attribute's value back to None.
     """
 
-    ok_type = {'transfer', 'fusion', 'speciation_or_duplication', 'other',
-               'mixed', 'unassigned'}
+    ok_type = {"transfer", "fusion", "speciation_or_duplication", "other",
+               "mixed", "unassigned"}
 
     def __init__(self, type=None, duplications=None, speciations=None,
                  losses=None, confidence=None):
@@ -900,7 +900,7 @@ class Id(PhyloElement):
     def __str__(self):
         """Return identifier as a string."""
         if self.provider is not None:
-            return '%s:%s' % (self.provider, self.value)
+            return "%s:%s" % (self.provider, self.value)
         return self.value
 
 
@@ -916,7 +916,7 @@ class MolSeq(PhyloElement):
 
     """
 
-    re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
+    re_value = re.compile(r"[a-zA-Z\.\-\?\*_]+")
 
     def __init__(self, value, is_aligned=None):
         """Initialize parameters for the MolSeq object."""
@@ -971,8 +971,8 @@ class Polygon(PhyloElement):
 
     def __str__(self):
         """Return list of points as a string."""
-        return '%s([%s])' % (self.__class__.__name__,
-                             ',\n'.join(map(str, self.points)))
+        return "%s([%s])" % (self.__class__.__name__,
+                             ",\n".join(map(str, self.points)))
 
 
 class Property(PhyloElement):
@@ -1001,18 +1001,18 @@ class Property(PhyloElement):
 
     """
 
-    re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
-    ok_applies_to = {'phylogeny', 'clade', 'node', 'annotation',
-                     'parent_branch', 'other'}
-    ok_datatype = {'xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
-                   'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
-                   'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
-                   'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
-                   'xsd:normalizedString', 'xsd:token', 'xsd:integer',
-                   'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
-                   'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
-                   'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
-                   'xsd:positiveInteger'}
+    re_ref = re.compile(r"[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+")
+    ok_applies_to = {"phylogeny", "clade", "node", "annotation",
+                     "parent_branch", "other"}
+    ok_datatype = {"xsd:string", "xsd:boolean", "xsd:decimal", "xsd:float",
+                   "xsd:double", "xsd:duration", "xsd:dateTime", "xsd:time", "xsd:date",
+                   "xsd:gYearMonth", "xsd:gYear", "xsd:gMonthDay", "xsd:gDay",
+                   "xsd:gMonth", "xsd:hexBinary", "xsd:base64Binary", "xsd:anyURI",
+                   "xsd:normalizedString", "xsd:token", "xsd:integer",
+                   "xsd:nonPositiveInteger", "xsd:negativeInteger", "xsd:long", "xsd:int",
+                   "xsd:short", "xsd:byte", "xsd:nonNegativeInteger", "xsd:unsignedLong",
+                   "xsd:unsignedInt", "xsd:unsignedShort", "xsd:unsignedByte",
+                   "xsd:positiveInteger"}
 
     def __init__(self, value, ref, applies_to, datatype,
                  unit=None, id_ref=None):
@@ -1063,14 +1063,14 @@ class ProteinDomain(PhyloElement):
         return ProteinDomain(feat.id,
                              feat.location.nofuzzy_start,
                              feat.location.nofuzzy_end,
-                             confidence=feat.qualifiers.get('confidence'))
+                             confidence=feat.qualifiers.get("confidence"))
 
     def to_seqfeature(self):
         """Create a SeqFeature from the ProteinDomain Object."""
         feat = SeqFeature(location=FeatureLocation(self.start, self.end),
                           id=self.value)
-        if hasattr(self, 'confidence'):
-            feat.qualifiers['confidence'] = self.confidence
+        if hasattr(self, "confidence"):
+            feat.qualifiers["confidence"] = self.confidence
         return feat
 
 
@@ -1081,7 +1081,7 @@ class Reference(PhyloElement):
     ``desc`` element.
     """
 
-    re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
+    re_doi = re.compile(r"[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+")
 
     def __init__(self, doi=None, desc=None):
         """Initialize elements of the Reference class object."""
@@ -1125,10 +1125,10 @@ class Sequence(PhyloElement):
 
     """
 
-    alphabets = {'dna': Alphabet.generic_dna,
-                 'rna': Alphabet.generic_rna,
-                 'protein': Alphabet.generic_protein}
-    re_symbol = re.compile(r'\S{1,10}')
+    alphabets = {"dna": Alphabet.generic_dna,
+                 "rna": Alphabet.generic_rna,
+                 "protein": Alphabet.generic_protein}
+    re_symbol = re.compile(r"\S{1,10}")
 
     def __init__(self,
                  # Attributes
@@ -1161,44 +1161,44 @@ class Sequence(PhyloElement):
         if is_aligned is None:
             is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
         params = {
-            'accession': Accession(record.id, ''),
-            'symbol': record.name,
-            'name': record.description,
-            'mol_seq': MolSeq(str(record.seq), is_aligned),
+            "accession": Accession(record.id, ""),
+            "symbol": record.name,
+            "name": record.description,
+            "mol_seq": MolSeq(str(record.seq), is_aligned),
         }
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            params['type'] = 'dna'
+            params["type"] = "dna"
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            params['type'] = 'rna'
+            params["type"] = "rna"
         elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            params['type'] = 'protein'
+            params["type"] = "protein"
 
         # Unpack record.annotations
-        for key in ('id_ref', 'id_source', 'location'):
+        for key in ("id_ref", "id_source", "location"):
             if key in record.annotations:
                 params[key] = record.annotations[key]
-        if isinstance(record.annotations.get('uri'), dict):
-            params['uri'] = Uri(**record.annotations['uri'])
+        if isinstance(record.annotations.get("uri"), dict):
+            params["uri"] = Uri(**record.annotations["uri"])
         # Build a Sequence.annotation object
-        if record.annotations.get('annotations'):
-            params['annotations'] = []
-            for annot in record.annotations['annotations']:
+        if record.annotations.get("annotations"):
+            params["annotations"] = []
+            for annot in record.annotations["annotations"]:
                 ann_args = {}
-                for key in ('ref', 'source', 'evidence', 'type', 'desc'):
+                for key in ("ref", "source", "evidence", "type", "desc"):
                     if key in annot:
                         ann_args[key] = annot[key]
-                if isinstance(annot.get('confidence'), list):
-                    ann_args['confidence'] = Confidence(
-                        *annot['confidence'])
-                if isinstance(annot.get('properties'), list):
-                    ann_args['properties'] = [Property(**prop)
-                                              for prop in annot['properties']
+                if isinstance(annot.get("confidence"), list):
+                    ann_args["confidence"] = Confidence(
+                        *annot["confidence"])
+                if isinstance(annot.get("properties"), list):
+                    ann_args["properties"] = [Property(**prop)
+                                              for prop in annot["properties"]
                                               if isinstance(prop, dict)]
-                params['annotations'].append(Annotation(**ann_args))
+                params["annotations"].append(Annotation(**ann_args))
 
         # Unpack record.features
         if record.features:
-            params['domain_architecture'] = DomainArchitecture(
+            params["domain_architecture"] = DomainArchitecture(
                 length=len(record.seq),
                 domains=[ProteinDomain.from_seqfeature(feat)
                          for feat in record.features])
@@ -1242,9 +1242,9 @@ class Sequence(PhyloElement):
 
         seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
                            **clean_dict({
-                               'id': str(self.accession),
-                               'name': self.symbol,
-                               'description': self.name,
+                               "id": str(self.accession),
+                               "name": self.symbol,
+                               "description": self.name,
                                # 'dbxrefs': None,
                            }))
         if self.domain_architecture:
@@ -1252,30 +1252,30 @@ class Sequence(PhyloElement):
                                for dom in self.domain_architecture.domains]
         # Sequence attributes with no SeqRecord equivalent
         seqrec.annotations = clean_dict({
-            'id_ref': self.id_ref,
-            'id_source': self.id_source,
-            'location': self.location,
-            'uri': self.uri and clean_dict({
-                'value': self.uri.value,
-                'desc': self.uri.desc,
-                'type': self.uri.type,
+            "id_ref": self.id_ref,
+            "id_source": self.id_source,
+            "location": self.location,
+            "uri": self.uri and clean_dict({
+                "value": self.uri.value,
+                "desc": self.uri.desc,
+                "type": self.uri.type,
             }),
-            'annotations': self.annotations and [
+            "annotations": self.annotations and [
                 clean_dict({
-                    'ref': ann.ref,
-                    'source': ann.source,
-                    'evidence': ann.evidence,
-                    'type': ann.type,
-                    'confidence': ann.confidence and [
+                    "ref": ann.ref,
+                    "source": ann.source,
+                    "evidence": ann.evidence,
+                    "type": ann.type,
+                    "confidence": ann.confidence and [
                         ann.confidence.value,
                         ann.confidence.type],
-                    'properties': [clean_dict({
-                        'value': prop.value,
-                        'ref': prop.ref,
-                        'applies_to': prop.applies_to,
-                        'datatype': prop.datatype,
-                        'unit': prop.unit,
-                        'id_ref': prop.id_ref})
+                    "properties": [clean_dict({
+                        "value": prop.value,
+                        "ref": prop.ref,
+                        "applies_to": prop.applies_to,
+                        "datatype": prop.datatype,
+                        "unit": prop.unit,
+                        "id_ref": prop.id_ref})
                         for prop in ann.properties],
                 }) for ann in self.annotations],
         })
@@ -1309,8 +1309,8 @@ class SequenceRelation(PhyloElement):
 
     """
 
-    ok_type = {'orthology', 'one_to_one_orthology', 'super_orthology',
-               'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'}
+    ok_type = {"orthology", "one_to_one_orthology", "super_orthology",
+               "paralogy", "ultra_paralogy", "xenology", "unknown", "other"}
 
     def __init__(self, type, id_ref_0, id_ref_1,
                  distance=None, confidence=None):
@@ -1354,17 +1354,17 @@ class Taxonomy(PhyloElement):
 
     """
 
-    re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
-    ok_rank = {'domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
-               'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
-               'superdivision', 'division', 'subdivision', 'infradivision',
-               'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
-               'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
-               'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
-               'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
-               'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
-               'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
-               'unknown', 'other'}
+    re_code = re.compile(r"[a-zA-Z0-9_]{2,10}")
+    ok_rank = {"domain", "kingdom", "subkingdom", "branch", "infrakingdom",
+               "superphylum", "phylum", "subphylum", "infraphylum", "microphylum",
+               "superdivision", "division", "subdivision", "infradivision",
+               "superclass", "class", "subclass", "infraclass", "superlegion",
+               "legion", "sublegion", "infralegion", "supercohort", "cohort",
+               "subcohort", "infracohort", "superorder", "order", "suborder",
+               "superfamily", "family", "subfamily", "supertribe", "tribe", "subtribe",
+               "infratribe", "genus", "subgenus", "superspecies", "species",
+               "subspecies", "variety", "subvariety", "form", "subform", "cultivar",
+               "unknown", "other"}
 
     def __init__(self,
                  # Attributes

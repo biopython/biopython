@@ -148,7 +148,7 @@ class SeqMat(dict):
     def _alphabet_from_matrix(self):
         """Set alphabet letters from the matrix entries (PRIVATE)."""
         ab_dict = {}
-        s = ''
+        s = ""
         for i in self:
             ab_dict[i[0]] = 1
             ab_dict[i[1]] = 1
@@ -156,7 +156,7 @@ class SeqMat(dict):
             s += i
         self.alphabet.letters = s
 
-    def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
+    def __init__(self, data=None, alphabet=None, mat_name="", build_later=0):
         """Initialize.
 
         User may supply:
@@ -272,7 +272,7 @@ class SeqMat(dict):
         lines = []
         assert non_sym is None or isinstance(non_sym, float) or \
         isinstance(non_sym, int)
-        letterline = ''
+        letterline = ""
         for i in alphabet:
             letterline += letterfmt % i
         if full:
@@ -289,7 +289,7 @@ class SeqMat(dict):
                     except KeyError:
                         val = self[j, i]
                 if val <= -999:
-                    cur_str = '  ND'
+                    cur_str = "  ND"
                 else:
                     cur_str = fmt % val
                 line += cur_str
@@ -321,7 +321,7 @@ class SeqMat(dict):
                           BiopythonDeprecationWarning)
         f = f or sys.stdout
         text = mat.format(format, topformat, alphabet, non_sym, True)
-        f.write(text + '\n')
+        f.write(text + "\n")
 
     def print_mat(self, f=None, format="%4d", bottomformat="%4s",
                   alphabet=None, factor=1):
@@ -348,7 +348,7 @@ class SeqMat(dict):
                           BiopythonDeprecationWarning)
         f = f or sys.stdout
         text = self.format(format, bottomformat, alphabet, None, False)
-        f.write(text + '\n')
+        f.write(text + "\n")
 
     def __str__(self):
         """Print a nice half-matrix."""
@@ -536,7 +536,7 @@ def read_text_matrix(data_file):
         table.append(i.split())
     # remove records beginning with ``#''
     for rec in table[:]:
-        if (rec.count('#') > 0):
+        if (rec.count("#") > 0):
             table.remove(rec)
 
     # remove null lists
@@ -549,7 +549,7 @@ def read_text_matrix(data_file):
         # print(j)
         row = alphabet[j]
         # row = rec[0]
-        if re.compile(r'[A-z\*]').match(rec[0]):
+        if re.compile(r"[A-z\*]").match(rec[0]):
             first_col = 1
         else:
             first_col = 0
@@ -561,7 +561,7 @@ def read_text_matrix(data_file):
         j += 1
     # delete entries with an asterisk
     for i in matrix:
-        if '*' in i:
+        if "*" in i:
             del(matrix[i])
     ret_mat = SeqMat(matrix)
     return ret_mat

@@ -315,7 +315,7 @@ def _sff_file_header(handle):
     # number_of_flows_per_read   H
     # flowgram_format_code       B
     # [rest of file header depends on the number of flows and how many keys]
-    fmt = '>4s4BQIIHHHB'
+    fmt = ">4s4BQIIHHHB"
     assert 31 == struct.calcsize(fmt)
     data = handle.read(31)
     if not data:
@@ -372,7 +372,7 @@ def _sff_do_slow_index(handle):
     number_of_flows_per_read, flow_chars, key_sequence \
         = _sff_file_header(handle)
     # Now on to the reads...
-    read_header_fmt = '>2HI4H'
+    read_header_fmt = ">2HI4H"
     read_header_size = struct.calcsize(read_header_fmt)
     # NOTE - assuming flowgram_format==1, which means struct type H
     read_flow_fmt = ">%iH" % number_of_flows_per_read
@@ -579,7 +579,7 @@ def _sff_read_roche_index(handle):
                          % (handle.tell(), read_index_offset + read_index_size))
 
 
-_valid_UAN_read_name = re.compile(r'^[a-zA-Z0-9]{14}$')
+_valid_UAN_read_name = re.compile(r"^[a-zA-Z0-9]{14}$")
 
 
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
@@ -595,7 +595,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     # clip_adapter_left      H
     # clip_adapter_right     H
     # [rest of read header depends on the name length etc]
-    read_header_fmt = '>2HI4H'
+    read_header_fmt = ">2HI4H"
     read_header_size = struct.calcsize(read_header_fmt)
     read_flow_fmt = ">%iH" % number_of_flows_per_read
     read_flow_size = struct.calcsize(read_flow_fmt)
@@ -757,7 +757,7 @@ def _get_read_region(read_name):
 
 def _sff_read_raw_record(handle, number_of_flows_per_read):
     """Extract the next read in the file as a raw (bytes) string (PRIVATE)."""
-    read_header_fmt = '>2HI'
+    read_header_fmt = ">2HI"
     read_header_size = struct.calcsize(read_header_fmt)
     read_flow_fmt = ">%iH" % number_of_flows_per_read
     read_flow_size = struct.calcsize(read_flow_fmt)
@@ -918,7 +918,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     # clip_adapter_left      H
     # clip_adapter_right     H
     # [rest of read header depends on the name length etc]
-    read_header_fmt = '>2HI4H'
+    read_header_fmt = ">2HI4H"
     read_header_size = struct.calcsize(read_header_fmt)
     read_flow_fmt = ">%iH" % number_of_flows_per_read
     read_flow_size = struct.calcsize(read_flow_fmt)
@@ -1190,7 +1190,7 @@ class SffWriter(SequenceWriter):
         # number_of_flows_per_read   H
         # flowgram_format_code       B
         # [rest of file header depends on the number of flows and how many keys]
-        fmt = '>I4BQIIHHHB%is%is' % (
+        fmt = ">I4BQIIHHHB%is%is" % (
             self._number_of_flows_per_read, key_length)
         # According to the spec, the header_length field should be the total
         # number of bytes required by this set of header fields, and should be
@@ -1290,7 +1290,7 @@ class SffWriter(SequenceWriter):
         # flow index
         # sequence
         # padding
-        read_header_fmt = '>2HI4H%is' % name_len
+        read_header_fmt = ">2HI4H%is" % name_len
         if struct.calcsize(read_header_fmt) % 8 == 0:
             padding = 0
         else:

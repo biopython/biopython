@@ -43,10 +43,10 @@ class RaxmlCommandline(AbstractCommandline):
 
     """
 
-    def __init__(self, cmd='raxmlHPC', **kwargs):
+    def __init__(self, cmd="raxmlHPC", **kwargs):
         """Initialize the class."""
         self.parameters = [
-                _Option(['-a', 'weight_filename'],
+                _Option(["-a", "weight_filename"],
                         "Name of a column weight file to assign individual weights "
                         "to each column of the alignment. Those weights must be "
                         "integers separated by any type and number of whitespaces "
@@ -55,12 +55,12 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-b', 'bootstrap_seed'],
+                _Option(["-b", "bootstrap_seed"],
                         "Random seed for bootstrapping.",
                         equate=False,
                         ),
 
-                _Option(['-c', 'num_categories'],
+                _Option(["-c", "num_categories"],
                         "Number of distinct rate categories for RAxML when "
                         "evolution model is set to GTRCAT or GTRMIX."
                         "Individual per-site rates are categorized into this "
@@ -69,11 +69,11 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Switch(['-d', 'random_starting_tree'],
+                _Switch(["-d", "random_starting_tree"],
                         "Start ML optimization from random starting tree."
                         ),
 
-                _Option(['-e', 'epsilon'],
+                _Option(["-e", "epsilon"],
                         "Set model optimization precision in log likelihood units "
                         "for final optimization of tree topology under MIX/MIXI "
                         "or GAMMA/GAMMAI."
@@ -83,7 +83,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-E', 'exclude_filename'],
+                _Option(["-E", "exclude_filename"],
                         "An exclude file name, containing a specification of "
                         "alignment positions you wish to exclude.  Format is "
                         "similar to Nexus, the file shall contain entries like "
@@ -94,7 +94,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-f', 'algorithm'],
+                _Option(["-f", "algorithm"],
                         """Select algorithm:
 
                         a: Rapid Bootstrap analysis and search for best-scoring ML
@@ -141,7 +141,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-g', 'grouping_constraint'],
+                _Option(["-g", "grouping_constraint"],
                         "File name of a multifurcating constraint tree. "
                         "this tree does not need to be comprehensive, i.e. "
                         "contain all taxa.",
@@ -149,24 +149,24 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-i', 'rearrangements'],
+                _Option(["-i", "rearrangements"],
                         "Initial rearrangement setting for the subsequent "
                         "application of topological changes phase.",
                         equate=False,
                         ),
 
-                _Switch(['-j', 'checkpoints'],
+                _Switch(["-j", "checkpoints"],
                         "Write checkpoints (intermediate tree topologies)."
                         ),
 
-                _Switch(['-k', 'bootstrap_branch_lengths'],
+                _Switch(["-k", "bootstrap_branch_lengths"],
                         "Print bootstrapped trees with branch lengths. "
                         "The bootstraps will run a bit longer, because model "
                         "parameters will be optimized at the end of each run. "
                         "Use with CATMIX/PROTMIX or GAMMA/GAMMAI."
                         ),
 
-                _Option(['-l', 'cluster_threshold'],
+                _Option(["-l", "cluster_threshold"],
                         "Threshold for sequence similarity clustering. "
                         "RAxML will then print out an alignment to a file "
                         "called sequenceFileName.reducedBy.threshold that "
@@ -179,7 +179,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-L', 'cluster_threshold_fast'],
+                _Option(["-L", "cluster_threshold_fast"],
                         "Same functionality as '-l', but uses a less "
                         "exhaustive and thus faster clustering algorithm. "
                         "This is intended for very large datasets with more "
@@ -187,7 +187,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-m', 'model'],
+                _Option(["-m", "model"],
                         """Model of Nucleotide or Amino Acid Substitution:
 
                         NUCLEOTIDES:
@@ -234,7 +234,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Switch(['-M', 'partition_branch_lengths'],
+                _Switch(["-M", "partition_branch_lengths"],
                         "Switch on estimation of individual per-partition "
                         "branch lengths. Only has effect when used in "
                         "combination with 'partition_filename' ('-q'). "
@@ -244,13 +244,13 @@ class RaxmlCommandline(AbstractCommandline):
                         "partition lengths. "
                         ),
 
-                _Option(['-n', 'name'],
+                _Option(["-n", "name"],
                         "Name used in the output files.",
                         filename=True,
                         equate=False,
                         ),
 
-                _Option(['-o', 'outgroup'],
+                _Option(["-o", "outgroup"],
                         "Name of a single outgroup or a comma-separated list "
                         "of outgroups, eg '-o Rat' or '-o Rat,Mouse'. In case "
                         "that multiple outgroups are not monophyletic the "
@@ -260,7 +260,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-q', 'partition_filename'],
+                _Option(["-q", "partition_filename"],
                         "File name containing the assignment of models to "
                         "alignment partitions for multiple models of "
                         "substitution. For the syntax of this file please "
@@ -269,7 +269,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-p', 'parsimony_seed'],
+                _Option(["-p", "parsimony_seed"],
                         "Random number seed for the parsimony inferences. "
                         "This allows you to reproduce your results and will "
                         "help developers debug the program. This option HAS "
@@ -277,7 +277,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-P', 'protein_model'],
+                _Option(["-P", "protein_model"],
                         "File name of a user-defined AA (Protein) substitution "
                         "model. This file must contain 420 entries, the first "
                         "400 being the AA substitution rates (this must be a "
@@ -287,7 +287,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-r', 'binary_constraint'],
+                _Option(["-r", "binary_constraint"],
                         "File name of a binary constraint tree. "
                         "This tree does not need to be comprehensive, i.e. "
                         "contain all taxa.",
@@ -295,19 +295,19 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-s', 'sequences'],
+                _Option(["-s", "sequences"],
                         "Name of the alignment data file, in PHYLIP format.",
                         filename=True,
                         equate=False,
                         ),
 
-                _Option(['-t', 'starting_tree'],
+                _Option(["-t", "starting_tree"],
                         "File name of a user starting tree, in Newick format.",
                         filename=True,
                         equate=False,
                         ),
 
-                _Option(['-T', 'threads'],
+                _Option(["-T", "threads"],
                         "Number of threads to run. "
                         "PTHREADS VERSION ONLY! "
                         "Make sure to set this at most the number of CPUs "
@@ -316,7 +316,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-u', 'num_bootstrap_searches'],
+                _Option(["-u", "num_bootstrap_searches"],
                         "Number of multiple bootstrap searches per replicate. "
                         "Use this to obtain better ML trees for each "
                         "replicate. Default: 1 ML search per bootstrap "
@@ -324,27 +324,27 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Switch(['-v', 'version'],
+                _Switch(["-v", "version"],
                         "Display version information."
                         ),
 
-                _Option(['-w', 'working_dir'],
+                _Option(["-w", "working_dir"],
                         "Name of the working directory where RAxML will "
                         "write its output files. Default: current directory.",
                         filename=True,
                         equate=False,
                         ),
 
-                _Option(['-x', 'rapid_bootstrap_seed'],
+                _Option(["-x", "rapid_bootstrap_seed"],
                         "Random seed for rapid bootstrapping.",
                         equate=False,
                         ),
 
-                _Switch(['-y', 'parsimony'],
+                _Switch(["-y", "parsimony"],
                         "Only compute a parsimony starting tree, then exit."
                         ),
 
-                _Option(['-z', 'bipartition_filename'],
+                _Option(["-z", "bipartition_filename"],
                         "Name of a file containing multiple trees, e.g. from "
                         "a bootstrap run, that shall be used to draw "
                         "bipartition values onto a tree provided with '-t'. "
@@ -356,7 +356,7 @@ class RaxmlCommandline(AbstractCommandline):
                         equate=False,
                         ),
 
-                _Option(['-N', '-#', 'num_replicates'],
+                _Option(["-N", "-#", "num_replicates"],
                         "Number of alternative runs on distinct starting trees. "
                         "In combination with the '-b' option, this will invoke a "
                         "multiple bootstrap analysis. "

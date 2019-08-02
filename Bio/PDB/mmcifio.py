@@ -77,8 +77,8 @@ class MMCIFIO(object):
             structure = pdb_object
         else:
             sb = StructureBuilder()
-            sb.init_structure('pdb')
-            sb.init_seg(' ')
+            sb.init_structure("pdb")
+            sb.init_seg(" ")
             # Build parts as necessary
             if pdb_object.level == "M":
                 sb.structure.add(pdb_object)
@@ -88,23 +88,23 @@ class MMCIFIO(object):
                 if pdb_object.level == "C":
                     sb.structure[0].add(pdb_object)
                 else:
-                    sb.init_chain('A')
+                    sb.init_chain("A")
                     if pdb_object.level == "R":
                         try:
                             parent_id = pdb_object.parent.id
-                            sb.structure[0]['A'].id = parent_id
+                            sb.structure[0]["A"].id = parent_id
                         except ValueError:
                             pass
-                        sb.structure[0]['A'].add(pdb_object)
+                        sb.structure[0]["A"].add(pdb_object)
                     else:
                         # Atom
-                        sb.init_residue('DUM', ' ', 1, ' ')
+                        sb.init_residue("DUM", " ", 1, " ")
                         try:
                             parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]['A'].id = parent_id
+                            sb.structure[0]["A"].id = parent_id
                         except ValueError:
                             pass
-                        sb.structure[0]['A'].child_list[0].add(pdb_object)
+                        sb.structure[0]["A"].child_list[0].add(pdb_object)
 
             # Return structure
             structure = sb.structure
@@ -143,9 +143,9 @@ class MMCIFIO(object):
             fp = filepath
             close_file = False
         # Decide whether to save a Structure object or an mmCIF dictionary
-        if hasattr(self, 'structure'):
+        if hasattr(self, "structure"):
             self._save_structure(fp, select, preserve_atom_numbering)
-        elif hasattr(self, 'dic'):
+        elif hasattr(self, "dic"):
             self._save_dict(fp)
         else:
             raise ValueError("Use set_structure or set_dict to set a structure or dictionary to write out")

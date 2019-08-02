@@ -20,7 +20,7 @@ except ValueError:
         except ValueError:
             if text.lower() == "nan":
                 import struct
-                return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
+                return struct.unpack("d", struct.pack("Q", 0xfff8000000000000))[0]
             else:
                 raise
 

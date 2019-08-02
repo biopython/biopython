@@ -139,9 +139,9 @@ class ColorTranslator(object):
             2 \t 255 \t 0 \t 0 \t Red: Information transfer
 
         """
-        with open(filename, 'r').readlines() as lines:
+        with open(filename, "r").readlines() as lines:
             for line in lines:
-                data = line.strip().split('\t')
+                data = line.strip().split("\t")
                 try:
                     label = int(data[0])
                     red, green, blue = int(data[1]), int(data[2]), int(data[3])
@@ -175,8 +175,8 @@ class ColorTranslator(object):
         try:
             value = int(value)
         except ValueError:
-            if value.count('.'):  # dot-delimited
-                value = int(value.split('.', 1)[0])  # Use only first integer
+            if value.count("."):  # dot-delimited
+                value = int(value.split(".", 1)[0])  # Use only first integer
             else:
                 raise
         if value in self._artemis_colorscheme:
@@ -229,6 +229,6 @@ class ColorTranslator(object):
         return colors.Color(red, green, blue)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from Bio._utils import run_doctest
     run_doctest(verbose=2)

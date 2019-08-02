@@ -26,7 +26,7 @@ class CodonAlphabet(Alphabet):
 
     size = 3
     letters = None
-    name = ''
+    name = ""
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.names[0])
@@ -41,7 +41,7 @@ def get_codon_alphabet(codon_table, gap_char="-"):
         letters.append(gap_char * 3)
     generic_codon_alphabet = CodonAlphabet()
     generic_codon_alphabet.letters = letters
-    generic_codon_alphabet.gap_char = '-'
+    generic_codon_alphabet.gap_char = "-"
     generic_codon_alphabet.names = codon_table.names
     return generic_codon_alphabet
 

@@ -60,7 +60,7 @@ class AbstractConsumer(object):
         pass
 
     def __getattr__(self, attr):
-        if attr[:6] == 'start_' or attr[:4] == 'end_':
+        if attr[:6] == "start_" or attr[:4] == "end_":
             method = self._unhandled_section
         else:
             method = self._unhandled
@@ -97,11 +97,11 @@ class TaggingConsumer(AbstractConsumer):
 
     def unhandled_section(self):
         """Tag an unhandled section."""
-        self._print_name('unhandled_section')
+        self._print_name("unhandled_section")
 
     def unhandled(self, data):
         """Tag unhandled data."""
-        self._print_name('unhandled', data)
+        self._print_name("unhandled", data)
 
     def _print_name(self, name, data=None):
         if data is None:
@@ -114,7 +114,7 @@ class TaggingConsumer(AbstractConsumer):
                 data[:self._maxwidth - self._colwidth - 2].rstrip()))
 
     def __getattr__(self, attr):
-        if attr[:6] == 'start_' or attr[:4] == 'end_':
+        if attr[:6] == "start_" or attr[:4] == "end_":
             method = lambda a=attr, s=self: s._print_name(a)  # noqa: E731
         else:
             method = lambda x, a=attr, s=self: s._print_name(a, x)  # noqa: E731
@@ -242,8 +242,8 @@ def is_blank_line(line, allow_spaces=0):
     if not line:
         return 1
     if allow_spaces:
-        return line.rstrip() == ''
-    return line[0] == '\n' or line[0] == '\r'
+        return line.rstrip() == ""
+    return line[0] == "\n" or line[0] == "\r"
 
 
 def safe_readline(handle):

@@ -263,29 +263,29 @@ class align(object):
 
         # match code -> tuple of (parameters, docstring)
         match2args = {
-            'x': ([], ''),
-            'm': (['match', 'mismatch'],
+            "x": ([], ""),
+            "m": (["match", "mismatch"],
                   "match is the score to given to identical characters.\n"
                   "mismatch is the score given to non-identical ones."),
-            'd': (['match_dict'],
+            "d": (["match_dict"],
                   "match_dict is a dictionary where the keys are tuples\n"
                   "of pairs of characters and the values are the scores,\n"
                   "e.g. ('A', 'C') : 2.5."),
-            'c': (['match_fn'],
+            "c": (["match_fn"],
                   "match_fn is a callback function that takes two "
                   "characters and returns the score between them."),
         }
         # penalty code -> tuple of (parameters, docstring)
         penalty2args = {
-            'x': ([], ''),
-            's': (['open', 'extend'],
+            "x": ([], ""),
+            "s": (["open", "extend"],
                   "open and extend are the gap penalties when a gap is\n"
                   "opened and extended.  They should be negative."),
-            'd': (['openA', 'extendA', 'openB', 'extendB'],
+            "d": (["openA", "extendA", "openB", "extendB"],
                   "openA and extendA are the gap penalties for sequenceA,\n"
                   "and openB and extendB for sequenceB.  The penalties\n"
                   "should be negative."),
-            'c': (['gap_A_fn', 'gap_B_fn'],
+            "c": (["gap_A_fn", "gap_B_fn"],
                   "gap_A_fn and gap_B_fn are callback functions that takes\n"
                   "(1) the index where the gap is opened, and (2) the length\n"
                   "of the gap.  They should return a gap penalty."),
@@ -313,7 +313,7 @@ class align(object):
                 raise AttributeError("unknown penalty type %r" % penalty_type)
 
             # Now get the names of the parameters to this function.
-            param_names = ['sequenceA', 'sequenceB']
+            param_names = ["sequenceA", "sequenceB"]
             param_names.extend(match_args)
             param_names.extend(penalty_args)
             self.function_name = name
@@ -323,7 +323,7 @@ class align(object):
             self.__name__ = self.function_name
             # Set the doc string.
             doc = "%s(%s) -> alignments\n" % (
-                self.__name__, ', '.join(self.param_names))
+                self.__name__, ", ".join(self.param_names))
             if match_doc:
                 doc += "\n%s\n" % match_doc
             if penalty_doc:
@@ -351,31 +351,31 @@ alignment occurs.
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
-                   'sequenceA', 'sequenceB',
-                   'gap_A_fn', 'gap_B_fn', 'match_fn']:
+                   "sequenceA", "sequenceB",
+                   "gap_A_fn", "gap_B_fn", "match_fn"]:
                     keywds[self.param_names[i]] = args[i]
                     i += 1
-                elif self.param_names[i] == 'match':
-                    assert self.param_names[i + 1] == 'mismatch'
+                elif self.param_names[i] == "match":
+                    assert self.param_names[i + 1] == "mismatch"
                     match, mismatch = args[i], args[i + 1]
-                    keywds['match_fn'] = identity_match(match, mismatch)
+                    keywds["match_fn"] = identity_match(match, mismatch)
                     i += 2
-                elif self.param_names[i] == 'match_dict':
-                    keywds['match_fn'] = dictionary_match(args[i])
+                elif self.param_names[i] == "match_dict":
+                    keywds["match_fn"] = dictionary_match(args[i])
                     i += 1
-                elif self.param_names[i] == 'open':
-                    assert self.param_names[i + 1] == 'extend'
+                elif self.param_names[i] == "open":
+                    assert self.param_names[i + 1] == "extend"
                     open, extend = args[i], args[i + 1]
-                    pe = keywds.get('penalize_extend_when_opening', 0)
-                    keywds['gap_A_fn'] = affine_penalty(open, extend, pe)
-                    keywds['gap_B_fn'] = affine_penalty(open, extend, pe)
+                    pe = keywds.get("penalize_extend_when_opening", 0)
+                    keywds["gap_A_fn"] = affine_penalty(open, extend, pe)
+                    keywds["gap_B_fn"] = affine_penalty(open, extend, pe)
                     i += 2
-                elif self.param_names[i] == 'openA':
-                    assert self.param_names[i + 3] == 'extendB'
+                elif self.param_names[i] == "openA":
+                    assert self.param_names[i + 3] == "extendB"
                     openA, extendA, openB, extendB = args[i:i + 4]
-                    pe = keywds.get('penalize_extend_when_opening', 0)
-                    keywds['gap_A_fn'] = affine_penalty(openA, extendA, pe)
-                    keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
+                    pe = keywds.get("penalize_extend_when_opening", 0)
+                    keywds["gap_A_fn"] = affine_penalty(openA, extendA, pe)
+                    keywds["gap_B_fn"] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
                     raise ValueError("unknown parameter %r"
@@ -383,26 +383,26 @@ alignment occurs.
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
-            pe = keywds.get('penalize_extend_when_opening', 0)
+            pe = keywds.get("penalize_extend_when_opening", 0)
             default_params = [
-                ('match_fn', identity_match(1, 0)),
-                ('gap_A_fn', affine_penalty(0, 0, pe)),
-                ('gap_B_fn', affine_penalty(0, 0, pe)),
-                ('penalize_extend_when_opening', 0),
-                ('penalize_end_gaps', self.align_type == 'global'),
-                ('align_globally', self.align_type == 'global'),
-                ('gap_char', '-'),
-                ('force_generic', 0),
-                ('score_only', 0),
-                ('one_alignment_only', 0),
+                ("match_fn", identity_match(1, 0)),
+                ("gap_A_fn", affine_penalty(0, 0, pe)),
+                ("gap_B_fn", affine_penalty(0, 0, pe)),
+                ("penalize_extend_when_opening", 0),
+                ("penalize_end_gaps", self.align_type == "global"),
+                ("align_globally", self.align_type == "global"),
+                ("gap_char", "-"),
+                ("force_generic", 0),
+                ("score_only", 0),
+                ("one_alignment_only", 0),
             ]
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
-            value = keywds['penalize_end_gaps']
+            value = keywds["penalize_end_gaps"]
             try:
                 n = len(value)
             except TypeError:
-                keywds['penalize_end_gaps'] = tuple([value] * 2)
+                keywds["penalize_end_gaps"] = tuple([value] * 2)
             else:
                 assert n == 2
             return keywds
@@ -419,8 +419,8 @@ alignment occurs.
         wrapper = self.alignment_function(attr)
         wrapper_type = type(wrapper)
         wrapper_dict = wrapper_type.__dict__.copy()
-        wrapper_dict['__doc__'] = wrapper.__doc__
-        new_alignment_function = type('alignment_function', (object,),
+        wrapper_dict["__doc__"] = wrapper.__doc__
+        new_alignment_function = type("alignment_function", (object,),
                                       wrapper_dict)
 
         return new_alignment_function(attr)
@@ -444,9 +444,9 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         sequenceA + gap_char
         sequenceB + gap_char
     except TypeError:
-        raise TypeError('both sequences must be of the same type, either '
-                        'string/sequence object or list. Gap character must '
-                        'fit the sequence type (string or list)')
+        raise TypeError("both sequences must be of the same type, either "
+                        "string/sequence object or list. Gap character must "
+                        "fit the sequence type (string or list)")
 
     if not isinstance(sequenceA, list):
         sequenceA = str(sequenceA)
@@ -454,7 +454,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         sequenceB = str(sequenceB)
     if not align_globally and (penalize_end_gaps[0] or penalize_end_gaps[1]):
         warnings.warn('"penalize_end_gaps" should not be used in local '
-                      'alignments. The resulting score may be wrong.',
+                      "alignments. The resulting score may be wrong.",
                       BiopythonWarning)
 
     if (not force_generic) and isinstance(gap_A_fn, affine_penalty) \
@@ -851,7 +851,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, best_score, score_matrix,
                     x = _find_gap_open(sequenceA, sequenceB, ali_seqA,
                                        ali_seqB, end, row, col, col_gap,
                                        gap_char, score_matrix, trace_matrix,
-                                       in_process, gap_A_fn, col, row, 'col',
+                                       in_process, gap_A_fn, col, row, "col",
                                        best_score, align_globally)
                     ali_seqA, ali_seqB, row, col, in_process, dead_end = x
             elif trace == 16:  # = col extend = extend gap in seqB
@@ -860,7 +860,7 @@ def _recover_alignments(sequenceA, sequenceB, starts, best_score, score_matrix,
                 x = _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB,
                                    end, row, col, col_gap, gap_char,
                                    score_matrix, trace_matrix, in_process,
-                                   gap_B_fn, row, col, 'row', best_score,
+                                   gap_B_fn, row, col, "row", best_score,
                                    align_globally)
                 ali_seqA, ali_seqB, row, col, in_process, dead_end = x
 
@@ -981,7 +981,7 @@ def _find_gap_open(sequenceA, sequenceB, ali_seqA, ali_seqB, end, row, col,
     dead_end = False
     target_score = score_matrix[row][col]
     for n in range(target):
-        if direction == 'col':
+        if direction == "col":
             col -= 1
             ali_seqA += gap_char
             ali_seqB += sequenceB[col:col + 1]
@@ -1120,21 +1120,21 @@ def format_alignment(align1, align2, score, begin, end):
     which give the Python indices (0-based) of the bases/amino acids
     in the *aligned* sequences.
     """
-    start1 = start2 = ''
+    start1 = start2 = ""
     start_m = begin  # Begin of match line (how many spaces to include)
     # Is this a local alignment?
     if begin != 0 or end != len(align1):
         # Calculate the actual start positions in the un-aligned sequences
         # This will only work if the gap symbol is '-' or ['-']!
-        start1 = str(len(align1[:begin]) - align1[:begin].count('-') + 1) + ' '
-        start2 = str(len(align2[:begin]) - align2[:begin].count('-') + 1) + ' '
+        start1 = str(len(align1[:begin]) - align1[:begin].count("-") + 1) + " "
+        start2 = str(len(align2[:begin]) - align2[:begin].count("-") + 1) + " "
         start_m = max(len(start1), len(start2))
 
     if isinstance(align1, list):
         # List elements will be separated by spaces, since they can be
         # of different lengths
-        align1 = [a + ' ' for a in align1]
-        align2 = [a + ' ' for a in align2]
+        align1 = [a + " " for a in align1]
+        align2 = [a + " " for a in align2]
 
     s1_line = ["{:>{width}}".format(start1, width=start_m)]  # seq1 line
     m_line = [" " * start_m]  # match line
@@ -1147,14 +1147,14 @@ def format_alignment(align1, align2, score, begin, end):
         s1_line.append("{:^{width}}".format(a, width=m_len))
         s2_line.append("{:^{width}}".format(b, width=m_len))
         if a == b:
-            m_line.append("{:^{width}}".format('|', width=m_len))  # match
+            m_line.append("{:^{width}}".format("|", width=m_len))  # match
         elif a.strip() == "-" or b.strip() == "-":
-            m_line.append("{:^{width}}".format(' ', width=m_len))  # gap
+            m_line.append("{:^{width}}".format(" ", width=m_len))  # gap
         else:
-            m_line.append("{:^{width}}".format('.', width=m_len))  # mismatch
+            m_line.append("{:^{width}}".format(".", width=m_len))  # mismatch
 
     s2_line.append("\n  Score=%g\n" % score)
-    return '\n'.join([''.join(s1_line), ''.join(m_line), ''.join(s2_line)])
+    return "\n".join(["".join(s1_line), "".join(m_line), "".join(s2_line)])
 
 
 # Try and load C implementations of functions. If I can't,
@@ -1169,8 +1169,8 @@ _python_rint = rint
 try:
     from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
 except ImportError:
-    warnings.warn('Import of C module failed. Falling back to pure Python ' +
-                  'implementation. This may be slooow...', BiopythonWarning)
+    warnings.warn("Import of C module failed. Falling back to pure Python " +
+                  "implementation. This may be slooow...", BiopythonWarning)
 
 if __name__ == "__main__":
     from Bio._utils import run_doctest

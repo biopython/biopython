@@ -102,10 +102,10 @@ class Record(dict):
     def __init__(self):
         """Initialize the class."""
         dict.__init__(self)
-        self["ID"] = ''
-        self["AC"] = ''
-        self["AS"] = ''
-        self["SY"] = ''
+        self["ID"] = ""
+        self["AC"] = ""
+        self["AS"] = ""
+        self["SY"] = ""
         self["DR"] = []
         self["RX"] = []
         self["WW"] = []
@@ -115,8 +115,8 @@ class Record(dict):
         self["OX"] = []
         self["HI"] = []
         self["OI"] = []
-        self["SX"] = ''
-        self["CA"] = ''
+        self["SX"] = ""
+        self["CA"] = ""
 
     def __repr__(self):
         if self["ID"]:
@@ -166,7 +166,7 @@ def __read(handle):
                      "ST", "DI", "OX", "HI", "OI", "SX", "CA"]:
             record[key].append(value)
         elif key == "DR":
-            k, v = value.split(';')
+            k, v = value.split(";")
             record["DR"].append((k.strip(), v.strip()))
         elif key == "//":
             if record:

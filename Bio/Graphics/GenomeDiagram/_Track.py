@@ -83,10 +83,10 @@ class Track(object):
 
     def __init__(self, name=None, height=1, hide=0, greytrack=0,
                  greytrack_labels=5, greytrack_fontsize=8,
-                 greytrack_font='Helvetica', greytrack_font_rotation=0,
+                 greytrack_font="Helvetica", greytrack_font_rotation=0,
                  greytrack_font_color=_grey,
                  scale=1, scale_format=None, scale_color=colors.black,
-                 scale_font='Helvetica', scale_fontsize=6,
+                 scale_font="Helvetica", scale_fontsize=6,
                  scale_fontangle=45, scale_largeticks=0.5, scale_ticks=1,
                  scale_smallticks=0.3, scale_largetick_interval=1e6,
                  scale_smalltick_interval=1e4, scale_largetick_labels=1,
@@ -191,14 +191,14 @@ class Track(object):
         self._sets[self._next_id] = set  # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
 
-    def new_set(self, type='feature', **args):
+    def new_set(self, type="feature", **args):
         """Create a new FeatureSet or GraphSet object.
 
         Create a new FeatureSet or GraphSet object, add it to the
         track, and return for user manipulation
         """
-        type_dict = {'feature': FeatureSet,
-                     'graph': GraphSet
+        type_dict = {"feature": FeatureSet,
+                     "graph": GraphSet
                      }
         set = type_dict[type]()
         for key in args:

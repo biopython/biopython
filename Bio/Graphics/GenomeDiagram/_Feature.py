@@ -97,12 +97,12 @@ class Feature(object):
         self.border = border
         self._feature = None            # Bio.SeqFeature object to wrap
         self.hide = 0                   # show by default
-        self.sigil = 'BOX'
+        self.sigil = "BOX"
         self.arrowhead_length = 0.5  # 50% of the box height
         self.arrowshaft_height = 0.4  # 40% of the box height
-        self.name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']
+        self.name_qualifiers = ["gene", "label", "name", "locus_tag", "product"]
         self.label = label
-        self.label_font = 'Helvetica'
+        self.label_font = "Helvetica"
         self.label_size = 6
         self.label_color = colors.black
         self.label_angle = 45
@@ -137,9 +137,9 @@ class Feature(object):
             self.strand = 0
         else:
             self.strand = int(self._feature.strand)                 # Feature strand
-        if 'color' in self._feature.qualifiers:                # Artemis color (if present)
+        if "color" in self._feature.qualifiers:                # Artemis color (if present)
             self.color = self._colortranslator.artemis_color(
-                                         self._feature.qualifiers['color'][0])
+                                         self._feature.qualifiers["color"][0])
         self.name = self.type
         for qualifier in self.name_qualifiers:
             if qualifier in self._feature.qualifiers:
@@ -183,7 +183,7 @@ class Feature(object):
 # RUN AS SCRIPT
 ################################################################################
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Test code
     gdf = Feature()

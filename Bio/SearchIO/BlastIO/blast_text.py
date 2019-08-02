@@ -17,7 +17,7 @@ from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._legacy import NCBIStandalone
 
 
-__all__ = ('BlastTextParser', )
+__all__ = ("BlastTextParser", )
 
 
 class BlastTextParser(object):
@@ -34,13 +34,13 @@ class BlastTextParser(object):
         for rec in self.blast_iter:
             # set attributes to SearchIO's
             # get id and desc
-            if rec.query.startswith('>'):
+            if rec.query.startswith(">"):
                 rec.query = rec.query[1:]
             try:
-                qid, qdesc = rec.query.split(' ', 1)
+                qid, qdesc = rec.query.split(" ", 1)
             except ValueError:
-                qid, qdesc = rec.query, ''
-            qdesc = qdesc.replace('\n', '').replace('\r', '')
+                qid, qdesc = rec.query, ""
+            qdesc = qdesc.replace("\n", "").replace("\r", "")
 
             qresult = QueryResult(id=qid)
             qresult.program = rec.application.lower()
@@ -49,23 +49,23 @@ class BlastTextParser(object):
             qresult.version = rec.version
 
             # determine alphabet based on program
-            if qresult.program == 'blastn':
+            if qresult.program == "blastn":
                 alphabet = generic_dna
-            elif qresult.program in ['blastp', 'blastx', 'tblastn', 'tblastx']:
+            elif qresult.program in ["blastp", "blastx", "tblastn", "tblastx"]:
                 alphabet = generic_protein
 
             # iterate over the 'alignments' (hits) and the hit table
             for idx, aln in enumerate(rec.alignments):
                 # get id and desc
-                if aln.title.startswith('> '):
+                if aln.title.startswith("> "):
                     aln.title = aln.title[2:]
-                elif aln.title.startswith('>'):
+                elif aln.title.startswith(">"):
                     aln.title = aln.title[1:]
                 try:
-                    hid, hdesc = aln.title.split(' ', 1)
+                    hid, hdesc = aln.title.split(" ", 1)
                 except ValueError:
-                    hid, hdesc = aln.title, ''
-                hdesc = hdesc.replace('\n', '').replace('\r', '')
+                    hid, hdesc = aln.title, ""
+                hdesc = hdesc.replace("\n", "").replace("\r", "")
 
                 # iterate over the hsps and group them in a list
                 hsp_list = []
@@ -78,14 +78,14 @@ class BlastTextParser(object):
                     try:
                         frag.query_frame = int(bhsp.frame[0])
                     except IndexError:
-                        if qresult.program in ('blastp', 'tblastn'):
+                        if qresult.program in ("blastp", "tblastn"):
                             frag.query_frame = 0
                         else:
                             frag.query_frame = 1
                     try:
                         frag.hit_frame = int(bhsp.frame[1])
                     except IndexError:
-                        if qresult.program in ('blastp', 'tblastn'):
+                        if qresult.program in ("blastp", "tblastn"):
                             frag.hit_frame = 0
                         else:
                             frag.hit_frame = 1
@@ -98,19 +98,19 @@ class BlastTextParser(object):
                                          bhsp.sbjct_end) - 1
                     frag.hit_end = max(bhsp.sbjct_start, bhsp.sbjct_end)
                     # set query, hit sequences and its annotation
-                    qseq = ''
-                    hseq = ''
-                    midline = ''
+                    qseq = ""
+                    hseq = ""
+                    midline = ""
                     for seqtrio in zip(bhsp.query, bhsp.sbjct, bhsp.match):
                         qchar, hchar, mchar = seqtrio
-                        if qchar == ' ' or hchar == ' ':
-                            assert all(' ' == x for x in seqtrio)
+                        if qchar == " " or hchar == " ":
+                            assert all(" " == x for x in seqtrio)
                         else:
                             qseq += qchar
                             hseq += hchar
                             midline += mchar
                     frag.query, frag.hit = qseq, hseq
-                    frag.aln_annotation['similarity'] = midline
+                    frag.aln_annotation["similarity"] = midline
 
                     # create HSP object with the fragment
                     hsp = HSP([frag])

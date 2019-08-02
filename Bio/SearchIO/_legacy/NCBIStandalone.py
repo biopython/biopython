@@ -39,7 +39,7 @@ from Bio.Blast import Record
 from Bio import BiopythonWarning
 import warnings
 
-_score_e_re = re.compile(r'Score +E')
+_score_e_re = re.compile(r"Score +E")
 
 
 class LowQualityBlastError(Exception):
@@ -104,7 +104,7 @@ class _Scanner(object):
             uhandle = File.UndoHandle(handle)
 
         # Try to fast-forward to the beginning of the blast report.
-        read_and_call_until(uhandle, consumer.noevent, contains='BLAST')
+        read_and_call_until(uhandle, consumer.noevent, contains="BLAST")
         # Now scan the BLAST report.
         self._scan_header(uhandle, consumer)
         self._scan_rounds(uhandle, consumer)
@@ -157,7 +157,7 @@ class _Scanner(object):
 
         consumer.start_header()
 
-        read_and_call(uhandle, consumer.version, contains='BLAST')
+        read_and_call(uhandle, consumer.version, contains="BLAST")
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # There might be a <pre> line, for qblast output.
@@ -165,7 +165,7 @@ class _Scanner(object):
 
         # Read the reference(s)
         while attempt_read_and_call(uhandle,
-                                    consumer.reference, start='Reference'):
+                                    consumer.reference, start="Reference"):
             # References are normally multiline terminated by a blank line
             # (or, based on the old code, the RID line)
             while True:
@@ -204,26 +204,26 @@ class _Scanner(object):
             # This is an old style query then database...
 
             # Read the Query lines and the following blank line.
-            read_and_call(uhandle, consumer.query_info, start='Query=')
+            read_and_call(uhandle, consumer.query_info, start="Query=")
             read_and_call_until(uhandle, consumer.query_info, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
             # Read the database lines and the following blank line.
-            read_and_call_until(uhandle, consumer.database_info, end='total letters')
-            read_and_call(uhandle, consumer.database_info, contains='sequences')
+            read_and_call_until(uhandle, consumer.database_info, end="total letters")
+            read_and_call(uhandle, consumer.database_info, contains="sequences")
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         elif line.startswith("Database:"):
             # This is a new style database then query...
-            read_and_call_until(uhandle, consumer.database_info, end='total letters')
-            read_and_call(uhandle, consumer.database_info, contains='sequences')
+            read_and_call_until(uhandle, consumer.database_info, end="total letters")
+            read_and_call(uhandle, consumer.database_info, contains="sequences")
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
             # Read the Query lines and the following blank line.
             # Or, on BLAST 2.2.22+ there is no blank link - need to spot
             # the "... Score     E" line instead.
-            read_and_call(uhandle, consumer.query_info, start='Query=')
+            read_and_call(uhandle, consumer.query_info, start="Query=")
             # BLAST 2.2.25+ has a blank line before Length=
-            read_and_call_until(uhandle, consumer.query_info, start='Length=')
+            read_and_call_until(uhandle, consumer.query_info, start="Length=")
             while True:
                 line = uhandle.peekline()
                 if not line.strip() or _score_e_re.search(line) is not None:
@@ -246,10 +246,10 @@ class _Scanner(object):
 
         while not self._eof(uhandle):
             line = safe_peekline(uhandle)
-            if not line.startswith('Searching') and \
-               not line.startswith('Results from round') and \
+            if not line.startswith("Searching") and \
+               not line.startswith("Results from round") and \
                _score_e_re.search(line) is None and \
-               'No hits found' not in line:
+               "No hits found" not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
             self._scan_alignments(uhandle, consumer)
@@ -281,7 +281,7 @@ class _Scanner(object):
 
         # Read 'Searching'
         # This line seems to be missing in BLASTN 2.1.2 (others?)
-        attempt_read_and_call(uhandle, consumer.noevent, start='Searching')
+        attempt_read_and_call(uhandle, consumer.noevent, start="Searching")
 
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
@@ -316,7 +316,7 @@ class _Scanner(object):
         # Skip a bunch of blank lines.
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         # Check for the results line if it's there.
-        if attempt_read_and_call(uhandle, consumer.round, start='Results'):
+        if attempt_read_and_call(uhandle, consumer.round, start="Results"):
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # Three things can happen here:
@@ -331,7 +331,7 @@ class _Scanner(object):
            has_re=_score_e_re):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
-                                  contains='No hits found')
+                                  contains="No hits found")
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
@@ -344,11 +344,11 @@ class _Scanner(object):
 
         # Read the score header lines
         read_and_call(uhandle, consumer.description_header,
-                      start='Sequences producing')
+                      start="Sequences producing")
 
         # If PSI-BLAST, read the 'Sequences used in model' line.
         attempt_read_and_call(uhandle, consumer.model_sequences,
-                              start='Sequences used in model')
+                              start="Sequences used in model")
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # In BLAT, rather than a "No hits found" line, we just
@@ -361,7 +361,7 @@ class _Scanner(object):
 
         # Read the descriptions and the following blank lines, making
         # sure that there are descriptions.
-        if not uhandle.peekline().startswith('Sequences not found'):
+        if not uhandle.peekline().startswith("Sequences not found"):
             read_and_call_until(uhandle, consumer.description, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -370,7 +370,7 @@ class _Scanner(object):
         # case where there were no sequences not found previously, in
         # which case there will be no more descriptions.
         if attempt_read_and_call(uhandle, consumer.nonmodel_sequences,
-                                 start='Sequences not found'):
+                                 start="Sequences not found"):
             # Read the descriptions and the following blank lines.
             read_and_call_while(uhandle, consumer.noevent, blank=1)
             line = safe_peekline(uhandle)
@@ -378,12 +378,12 @@ class _Scanner(object):
             # there will be a 'Sequences not found' line followed by no
             # descriptions. Check for this case since the first thing you'll
             # get is a blank line and then 'QUERY'
-            if not line.startswith('CONVERGED') and line[0] != '>' \
-                    and not line.startswith('QUERY'):
+            if not line.startswith("CONVERGED") and line[0] != ">" \
+                    and not line.startswith("QUERY"):
                 read_and_call_until(uhandle, consumer.description, blank=1)
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
 
-        attempt_read_and_call(uhandle, consumer.converged, start='CONVERGED')
+        attempt_read_and_call(uhandle, consumer.converged, start="CONVERGED")
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         consumer.end_descriptions()
@@ -400,12 +400,12 @@ class _Scanner(object):
         if not line:
             # EOF
             return
-        elif line.startswith('  Database') or line.startswith("Lambda"):
+        elif line.startswith("  Database") or line.startswith("Lambda"):
             return
-        elif line[0] == '>':
+        elif line[0] == ">":
             # XXX make a better check here between pairwise and masterslave
             self._scan_pairwise_alignments(uhandle, consumer)
-        elif line.startswith('Effective'):
+        elif line.startswith("Effective"):
             return
         else:
             # XXX put in a check to make sure I'm in a masterslave alignment
@@ -414,7 +414,7 @@ class _Scanner(object):
     def _scan_pairwise_alignments(self, uhandle, consumer):
         while not self._eof(uhandle):
             line = safe_peekline(uhandle)
-            if line[0] != '>':
+            if line[0] != ">":
                 break
             self._scan_one_pairwise_alignment(uhandle, consumer)
 
@@ -431,7 +431,7 @@ class _Scanner(object):
                 # Shouldn't have issued that _scan_alignment_header event...
                 break
             line = safe_peekline(uhandle)
-            if not line.startswith(' Score'):
+            if not line.startswith(" Score"):
                 break
             self._scan_hsp(uhandle, consumer)
         consumer.end_alignment()
@@ -447,10 +447,10 @@ class _Scanner(object):
         #  gi|15829258|ref|NP_308031.1| threonine synthase
         #  ...
         # Length=428
-        read_and_call(uhandle, consumer.title, start='>')
+        read_and_call(uhandle, consumer.title, start=">")
         while True:
             line = safe_readline(uhandle)
-            if line.lstrip().startswith(('Length =', 'Length=')):
+            if line.lstrip().startswith(("Length =", "Length=")):
                 consumer.length(line)
                 break
             elif is_blank_line(line):
@@ -461,7 +461,7 @@ class _Scanner(object):
         # Older versions of BLAST will have a line with some spaces.
         # Version 2.0.14 (maybe 2.0.13?) and above print a true blank line.
         if not attempt_read_and_call(uhandle, consumer.noevent,
-                                     start='          '):
+                                     start="          "):
             read_and_call(uhandle, consumer.noevent, blank=1)
 
     def _scan_hsp(self, uhandle, consumer):
@@ -477,12 +477,12 @@ class _Scanner(object):
         #  Frame = +3
         #
 
-        read_and_call(uhandle, consumer.score, start=' Score')
-        read_and_call(uhandle, consumer.identities, start=' Identities')
+        read_and_call(uhandle, consumer.score, start=" Score")
+        read_and_call(uhandle, consumer.identities, start=" Identities")
         # BLASTN
-        attempt_read_and_call(uhandle, consumer.strand, start=' Strand')
+        attempt_read_and_call(uhandle, consumer.strand, start=" Strand")
         # BLASTX, TBLASTN, TBLASTX
-        attempt_read_and_call(uhandle, consumer.frame, start=' Frame')
+        attempt_read_and_call(uhandle, consumer.frame, start=" Frame")
         read_and_call(uhandle, consumer.noevent, blank=1)
 
     def _scan_hsp_alignment(self, uhandle, consumer):
@@ -497,10 +497,10 @@ class _Scanner(object):
 
         while True:
             # Blastn adds an extra line filled with spaces before Query
-            attempt_read_and_call(uhandle, consumer.noevent, start='     ')
-            read_and_call(uhandle, consumer.query, start='Query')
-            read_and_call(uhandle, consumer.align, start='     ')
-            read_and_call(uhandle, consumer.sbjct, start='Sbjct')
+            attempt_read_and_call(uhandle, consumer.noevent, start="     ")
+            read_and_call(uhandle, consumer.query, start="Query")
+            read_and_call(uhandle, consumer.align, start="     ")
+            read_and_call(uhandle, consumer.sbjct, start="Sbjct")
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError as err:
@@ -512,7 +512,7 @@ class _Scanner(object):
                 break
             line = safe_peekline(uhandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
-            if not (line.startswith('Query') or line.startswith('     ')):
+            if not (line.startswith("Query") or line.startswith("     ")):
                 break
 
     def _scan_masterslave_alignment(self, uhandle, consumer):
@@ -524,11 +524,11 @@ class _Scanner(object):
             # round, which can also be a 'Results from round' if no
             # searching line is present
             # patch by chapmanb
-            if line.startswith('Searching') or \
-                    line.startswith('Results from round'):
+            if line.startswith("Searching") or \
+                    line.startswith("Results from round"):
                 uhandle.saveline(line)
                 break
-            elif line.startswith('  Database'):
+            elif line.startswith("  Database"):
                 uhandle.saveline(line)
                 break
             elif is_blank_line(line):
@@ -590,7 +590,7 @@ class _Scanner(object):
         # Sameet Mehta reported seeing output from BLASTN 2.2.9 that
         # was missing the "Database" stanza completely.
         while attempt_read_and_call(uhandle, consumer.database,
-                                    start='  Database'):
+                                    start="  Database"):
             # BLAT output ends abruptly here, without any of the other
             # information.  Check to see if this is the case.  If so,
             # then end the database report here gracefully.
@@ -600,22 +600,22 @@ class _Scanner(object):
                 return
 
             # Database can span multiple lines.
-            read_and_call_until(uhandle, consumer.database, start='    Posted')
-            read_and_call(uhandle, consumer.posted_date, start='    Posted')
+            read_and_call_until(uhandle, consumer.database, start="    Posted")
+            read_and_call(uhandle, consumer.posted_date, start="    Posted")
             read_and_call(uhandle, consumer.num_letters_in_database,
-                          start='  Number of letters')
+                          start="  Number of letters")
             read_and_call(uhandle, consumer.num_sequences_in_database,
-                          start='  Number of sequences')
+                          start="  Number of sequences")
             # There may not be a line starting with spaces...
-            attempt_read_and_call(uhandle, consumer.noevent, start='  ')
+            attempt_read_and_call(uhandle, consumer.noevent, start="  ")
 
             line = safe_readline(uhandle)
             uhandle.saveline(line)
-            if 'Lambda' in line:
+            if "Lambda" in line:
                 break
 
         try:
-            read_and_call(uhandle, consumer.noevent, start='Lambda')
+            read_and_call(uhandle, consumer.noevent, start="Lambda")
             read_and_call(uhandle, consumer.ka_params)
         except Exception:  # TODO: ValueError, AttributeError?
             pass
@@ -624,9 +624,9 @@ class _Scanner(object):
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)
 
         # not BLASTP
-        attempt_read_and_call(uhandle, consumer.gapped, start='Gapped')
+        attempt_read_and_call(uhandle, consumer.gapped, start="Gapped")
         # not TBLASTX
-        if attempt_read_and_call(uhandle, consumer.noevent, start='Lambda'):
+        if attempt_read_and_call(uhandle, consumer.noevent, start="Lambda"):
             read_and_call(uhandle, consumer.ka_params_gap)
 
         # Blast 2.2.4 can sometimes skip the whole parameter section.
@@ -704,23 +704,23 @@ class _Scanner(object):
         consumer.start_parameters()
 
         # Matrix line may be missing in BLASTN 2.2.9
-        attempt_read_and_call(uhandle, consumer.matrix, start='Matrix')
+        attempt_read_and_call(uhandle, consumer.matrix, start="Matrix")
         # not TBLASTX
-        attempt_read_and_call(uhandle, consumer.gap_penalties, start='Gap')
+        attempt_read_and_call(uhandle, consumer.gap_penalties, start="Gap")
 
         attempt_read_and_call(uhandle, consumer.num_sequences,
-                              start='Number of Sequences')
+                              start="Number of Sequences")
         attempt_read_and_call(uhandle, consumer.num_hits,
-                              start='Number of Hits')
+                              start="Number of Hits")
         attempt_read_and_call(uhandle, consumer.num_sequences,
-                              start='Number of Sequences')
+                              start="Number of Sequences")
         attempt_read_and_call(uhandle, consumer.num_extends,
-                              start='Number of extensions')
+                              start="Number of extensions")
         attempt_read_and_call(uhandle, consumer.num_good_extends,
-                              start='Number of successful')
+                              start="Number of successful")
 
         attempt_read_and_call(uhandle, consumer.num_seqs_better_e,
-                              start='Number of sequences')
+                              start="Number of sequences")
 
         # not BLASTN, TBLASTX
         if attempt_read_and_call(uhandle, consumer.hsps_no_gap,
@@ -757,55 +757,55 @@ class _Scanner(object):
         attempt_read_and_call(uhandle, consumer.noevent,
                               start="Length adjustment")
         attempt_read_and_call(uhandle, consumer.effective_hsp_length,
-                              start='effective HSP')
+                              start="effective HSP")
         # Not in blastx 2.2.1
         attempt_read_and_call(
             uhandle, consumer.effective_query_length,
-            has_re=re.compile(r'[Ee]ffective length of query'))
+            has_re=re.compile(r"[Ee]ffective length of query"))
 
         # This is not in BLASTP 2.2.15
         attempt_read_and_call(
             uhandle, consumer.effective_database_length,
-            has_re=re.compile(r'[Ee]ffective length of \s*[Dd]atabase'))
+            has_re=re.compile(r"[Ee]ffective length of \s*[Dd]atabase"))
         # Not in blastx 2.2.1, added a ':' to distinguish between
         # this and the 'effective search space used' line
         attempt_read_and_call(
             uhandle, consumer.effective_search_space,
-            has_re=re.compile(r'[Ee]ffective search space:'))
+            has_re=re.compile(r"[Ee]ffective search space:"))
         # Does not appear in BLASTP 2.0.5
         attempt_read_and_call(
             uhandle, consumer.effective_search_space_used,
-            has_re=re.compile(r'[Ee]ffective search space used'))
+            has_re=re.compile(r"[Ee]ffective search space used"))
 
         # BLASTX, TBLASTN, TBLASTX
-        attempt_read_and_call(uhandle, consumer.frameshift, start='frameshift')
+        attempt_read_and_call(uhandle, consumer.frameshift, start="frameshift")
 
         # not in BLASTN 2.2.9
-        attempt_read_and_call(uhandle, consumer.threshold, start='T')
+        attempt_read_and_call(uhandle, consumer.threshold, start="T")
         # In BLASTX 2.2.15 replaced by: "Neighboring words threshold: 12"
-        attempt_read_and_call(uhandle, consumer.threshold, start='Neighboring words threshold')
+        attempt_read_and_call(uhandle, consumer.threshold, start="Neighboring words threshold")
 
         # not in BLASTX 2.2.15
-        attempt_read_and_call(uhandle, consumer.window_size, start='A')
+        attempt_read_and_call(uhandle, consumer.window_size, start="A")
         # get this instead: "Window for multiple hits: 40"
-        attempt_read_and_call(uhandle, consumer.window_size, start='Window for multiple hits')
+        attempt_read_and_call(uhandle, consumer.window_size, start="Window for multiple hits")
 
         # not in BLASTX 2.2.22+
-        attempt_read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
+        attempt_read_and_call(uhandle, consumer.dropoff_1st_pass, start="X1")
         # not TBLASTN
-        attempt_read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
+        attempt_read_and_call(uhandle, consumer.gap_x_dropoff, start="X2")
 
         # not BLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff_final,
-                              start='X3')
+                              start="X3")
 
         # not TBLASTN
-        attempt_read_and_call(uhandle, consumer.gap_trigger, start='S1')
+        attempt_read_and_call(uhandle, consumer.gap_trigger, start="S1")
         # not in blastx 2.2.1
         # first we make sure we have additional lines to work with, if
         # not then the file is done and we don't have a final S2
         if not is_blank_line(uhandle.peekline(), allow_spaces=1):
-            read_and_call(uhandle, consumer.blast_cutoff, start='S2')
+            read_and_call(uhandle, consumer.blast_cutoff, start="S2")
 
         consumer.end_parameters()
 
@@ -852,18 +852,18 @@ class _HeaderConsumer(object):
             self._header.date = c[2][1:-1]
 
     def reference(self, line):
-        if line.startswith('Reference: '):
+        if line.startswith("Reference: "):
             self._header.reference = line[11:]
         else:
             self._header.reference = self._header.reference + line
 
     def query_info(self, line):
-        if line.startswith('Query= '):
+        if line.startswith("Query= "):
             self._header.query = line[7:].lstrip()
-        elif line.startswith('Length='):
+        elif line.startswith("Length="):
             # New style way to give the query length in BLAST 2.2.22+ (the C++ code)
             self._header.query_letters = _safe_int(line[7:].strip())
-        elif not line.startswith('       '):  # continuation of query_info
+        elif not line.startswith("       "):  # continuation of query_info
             self._header.query = "%s%s" % (self._header.query, line)
         else:
             # Hope it is the old style way to give the query length:
@@ -874,9 +874,9 @@ class _HeaderConsumer(object):
 
     def database_info(self, line):
         line = line.rstrip()
-        if line.startswith('Database: '):
+        if line.startswith("Database: "):
             self._header.database = line[10:]
-        elif not line.endswith('total letters'):
+        elif not line.endswith("total letters"):
             if self._header.database:
                 # Need to include a space when merging multi line datase descr
                 self._header.database = self._header.database + " " + line.strip()
@@ -907,25 +907,25 @@ class _DescriptionConsumer(object):
         self.__has_n = 0   # Does the description line contain an N value?
 
     def description_header(self, line):
-        if line.startswith('Sequences producing'):
+        if line.startswith("Sequences producing"):
             cols = line.split()
-            if cols[-1] == 'N':
+            if cols[-1] == "N":
                 self.__has_n = 1
 
     def description(self, line):
         dh = self._parse(line)
-        if self._type == 'model':
+        if self._type == "model":
             self._model_sequences.append(dh)
-        elif self._type == 'nonmodel':
+        elif self._type == "nonmodel":
             self._nonmodel_sequences.append(dh)
         else:
             self._descriptions.append(dh)
 
     def model_sequences(self, line):
-        self._type = 'model'
+        self._type = "model"
 
     def nonmodel_sequences(self, line):
-        self._type = 'nonmodel'
+        self._type = "nonmodel"
 
     def converged(self, line):
         self._converged = 1
@@ -934,7 +934,7 @@ class _DescriptionConsumer(object):
         pass
 
     def round(self, line):
-        if not line.startswith('Results from round'):
+        if not line.startswith("Results from round"):
             raise ValueError("I didn't understand the round line\n%s" % line)
         self._roundnum = _safe_int(line[18:].strip())
 
@@ -999,7 +999,7 @@ class _AlignmentConsumer(object):
 
     def multalign(self, line):
         # Standalone version uses 'QUERY', while WWW version uses blast_tmp.
-        if line.startswith('QUERY') or line.startswith('blast_tmp'):
+        if line.startswith("QUERY") or line.startswith("blast_tmp"):
             # If this is the first line of the multiple alignment,
             # then I need to figure out how the line is formatted.
 
@@ -1037,7 +1037,7 @@ class _AlignmentConsumer(object):
         seq = line[self._seq_index:self._seq_index + self._seq_length].rstrip()
         # right pad the sequence with spaces if necessary
         if len(seq) < self._seq_length:
-            seq += ' ' * (self._seq_length - len(seq))
+            seq += " " * (self._seq_length - len(seq))
 
         # I need to make sure the sequence is aligned correctly with the query.
         # First, I will find the length of the query.  Then, if necessary,
@@ -1168,14 +1168,14 @@ class _HSPConsumer(object):
         self._hsp.identities = _safe_int(x), _safe_int(y)
         self._hsp.align_length = _safe_int(y)
 
-        if 'Positives' in line:
+        if "Positives" in line:
             x, y = _re_search(
                 r"Positives = (\d+)\/(\d+)", line,
                 "I could not find the positives in line\n%s" % line)
             self._hsp.positives = _safe_int(x), _safe_int(y)
             assert self._hsp.align_length == _safe_int(y)
 
-        if 'Gaps' in line:
+        if "Gaps" in line:
             x, y = _re_search(
                 r"Gaps = (\d+)\/(\d+)", line,
                 "I could not find the gaps in line\n%s" % line)
@@ -1191,7 +1191,7 @@ class _HSPConsumer(object):
         # Frame can be in formats:
         # Frame = +1
         # Frame = +2 / +2
-        if '/' in line:
+        if "/" in line:
             self._hsp.frame = _re_search(
                 r"Frame\s?=\s?([-+][123])\s?/\s?([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
@@ -1239,7 +1239,7 @@ class _HSPConsumer(object):
         seq = line[self._query_start_index:].rstrip()
         if len(seq) < self._query_len:
             # Make sure the alignment is the same length as the query
-            seq += ' ' * (self._query_len - len(seq))
+            seq += " " * (self._query_len - len(seq))
         elif len(seq) < self._query_len:
             raise ValueError("Match is longer than the query in line\n%s"
                              % line)
@@ -1259,7 +1259,7 @@ class _HSPConsumer(object):
         # so far, it only occurs with 1-line short "matches"
         # I have decided to let these pass as they appear
         if not seq.strip():
-            seq = ' ' * self._query_len
+            seq = " " * self._query_len
         else:
             seq = seq.strip()
         self._hsp.sbjct += seq
@@ -1333,7 +1333,7 @@ class _ParametersConsumer(object):
             line, (3, 5), ncols=6, expected={2: "Existence:", 4: "Extension:"})]
 
     def num_hits(self, line):
-        if '1st pass' in line:
+        if "1st pass" in line:
             x, = _get_cols(line, (-4,), ncols=11, expected={2: "Hits"})
             self._params.num_hits = _safe_int(x)
         else:
@@ -1341,7 +1341,7 @@ class _ParametersConsumer(object):
             self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
-        if '1st pass' in line:
+        if "1st pass" in line:
             x, = _get_cols(line, (-4,), ncols=9, expected={2: "Sequences:"})
             self._params.num_sequences = _safe_int(x)
         else:
@@ -1349,7 +1349,7 @@ class _ParametersConsumer(object):
             self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
-        if '1st pass' in line:
+        if "1st pass" in line:
             x, = _get_cols(line, (-4,), ncols=9, expected={2: "extensions:"})
             self._params.num_extends = _safe_int(x)
         else:
@@ -1357,7 +1357,7 @@ class _ParametersConsumer(object):
             self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
-        if '1st pass' in line:
+        if "1st pass" in line:
             x, = _get_cols(line, (-4,), ncols=10, expected={3: "extensions:"})
             self._params.num_good_extends = _safe_int(x)
         else:
@@ -1651,9 +1651,9 @@ class Iterator(object):
             if not line:
                 break
             # If I've reached the next one, then put the line back and stop.
-            if lines and (line.startswith('BLAST') or
-                          line.startswith('BLAST', 1) or
-                          line.startswith('<?xml ')):
+            if lines and (line.startswith("BLAST") or
+                          line.startswith("BLAST", 1) or
+                          line.startswith("<?xml ")):
                 self._uhandle.saveline(line)
                 break
             # New style files omit the BLAST line to mark a new query:
@@ -1680,7 +1680,7 @@ class Iterator(object):
         if not lines:
             return None
 
-        data = ''.join(lines)
+        data = "".join(lines)
         if self._parser is not None:
             return self._parser.parse(StringIO(data))
         return data
@@ -1730,7 +1730,7 @@ def _safe_int(str):
     except ValueError:
         # Something went wrong.  Try to clean up the string.
         # Remove all commas from the string
-        str = str.replace(',', '')
+        str = str.replace(",", "")
     # try again after removing commas.
     # Note int() will return a long rather than overflow
     try:
@@ -1751,13 +1751,13 @@ def _safe_float(str):
     # we need to check the string for this condition.
 
     # Sometimes BLAST leaves of the '1' in front of an exponent.
-    if str and str[0] in ['E', 'e']:
-        str = '1' + str
+    if str and str[0] in ["E", "e"]:
+        str = "1" + str
     try:
         return float(str)
     except ValueError:
         # Remove all commas from the string
-        str = str.replace(',', '')
+        str = str.replace(",", "")
     # try again.
     return float(str)
 
@@ -1767,11 +1767,11 @@ class _BlastErrorConsumer(_BlastConsumer):
         _BlastConsumer.__init__(self)
 
     def noevent(self, line):
-        if 'Query must be at least wordsize' in line:
+        if "Query must be at least wordsize" in line:
             raise ShortQueryBlastError("Query must be at least wordsize")
         # Now pass the line back up to the superclass.
-        method = getattr(_BlastConsumer, 'noevent',
-                         _BlastConsumer.__getattr__(self, 'noevent'))
+        method = getattr(_BlastConsumer, "noevent",
+                         _BlastConsumer.__getattr__(self, "noevent"))
         method(line)
 
 
@@ -1841,7 +1841,7 @@ class BlastErrorParser(AbstractParser):
             # 'Searchingdone' instead of 'Searching......done' seems
             # to indicate a failure to perform the BLAST due to
             # low quality sequence
-            if line.startswith('Searchingdone'):
+            if line.startswith("Searchingdone"):
                 raise LowQualityBlastError("Blast failure occurred on query: ",
                                            data_record.query)
             line = handle.readline()

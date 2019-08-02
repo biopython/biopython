@@ -104,27 +104,27 @@ class SequenceLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.acc = ''
-        self.nid = ''
-        self.lid = ''
-        self.pid = ''
-        self.clone = ''
-        self.image = ''
+        self.acc = ""
+        self.nid = ""
+        self.lid = ""
+        self.pid = ""
+        self.clone = ""
+        self.image = ""
         self.is_image = False
-        self.end = ''
-        self.mgc = ''
-        self.seqtype = ''
-        self.trace = ''
+        self.end = ""
+        self.mgc = ""
+        self.seqtype = ""
+        self.trace = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
         for part in parts:
             key, val = part.split("=")
-            if key == 'CLONE':
-                if val[:5] == 'IMAGE':
+            if key == "CLONE":
+                if val[:5] == "IMAGE":
                     self.is_image = True
                     self.image = val[6:]
             setattr(self, key.lower(), val)
@@ -149,17 +149,17 @@ class ProtsimLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.org = ''
-        self.protgi = ''
-        self.protid = ''
-        self.pct = ''
-        self.aln = ''
+        self.org = ""
+        self.protgi = ""
+        self.protid = ""
+        self.pct = ""
+        self.aln = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split('; ')
+        parts = text.split("; ")
 
         for part in parts:
             key, val = part.split("=")
@@ -183,14 +183,14 @@ class STSLine(object):
 
     def __init__(self, text=None):
         """Initialize the class."""
-        self.acc = ''
-        self.unists = ''
+        self.acc = ""
+        self.unists = ""
         if text is not None:
             self.text = text
             self._init_from_text(text)
 
     def _init_from_text(self, text):
-        parts = text.split(' ')
+        parts = text.split(" ")
 
         for part in parts:
             key, val = part.split("=")
@@ -231,18 +231,18 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.ID = ''  # ID line
-        self.species = ''  # Hs, Bt, etc.
-        self.title = ''  # TITLE line
-        self.symbol = ''  # GENE line
-        self.cytoband = ''  # CYTOBAND line
+        self.ID = ""  # ID line
+        self.species = ""  # Hs, Bt, etc.
+        self.title = ""  # TITLE line
+        self.symbol = ""  # GENE line
+        self.cytoband = ""  # CYTOBAND line
         self.express = []  # EXPRESS line, parsed on ';'
-        self.restr_expr = ''  # RESTR_EXPR line
-        self.gnm_terminus = ''  # GNM_TERMINUS line
-        self.gene_id = ''  # GENE_ID line
-        self.locuslink = ''  # LOCUSLINK line
-        self.homol = ''  # HOMOL line
-        self.chromosome = ''  # CHROMOSOME line
+        self.restr_expr = ""  # RESTR_EXPR line
+        self.gnm_terminus = ""  # GNM_TERMINUS line
+        self.gene_id = ""  # GENE_ID line
+        self.locuslink = ""  # LOCUSLINK line
+        self.homol = ""  # HOMOL line
+        self.chromosome = ""  # CHROMOSOME line
         self.protsim = []  # PROTSIM entries, array of Protsims
         self.sequence = []  # SEQUENCE entries, array of Sequence entries
         self.sts = []  # STS entries, array of STS entries
@@ -287,7 +287,7 @@ def _read(handle):
         if tag == "ID":
             record = Record()
             record.ID = value
-            record.species = record.ID.split('.')[0]
+            record.species = record.ID.split(".")[0]
         elif tag == "TITLE":
             record.title = value
         elif tag == "GENE":
@@ -322,7 +322,7 @@ def _read(handle):
         elif tag == "STS":
             sts = STSLine(value)
             record.sts.append(sts)
-        elif tag == '//':
+        elif tag == "//":
             if len(record.sequence) != scount:
                 raise ValueError("The number of sequences specified in the record"
                                  " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))

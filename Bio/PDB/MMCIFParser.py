@@ -72,7 +72,7 @@ class MMCIFParser(object):
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
-        _unassigned = {'.', '?'}
+        _unassigned = {".", "?"}
 
         mmcif_dict = self._mmcif_dict
         atom_id_list = mmcif_dict["_atom_site.label_atom_id"]
@@ -192,7 +192,7 @@ class MMCIFParser(object):
                 current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
-            coord = numpy.array((x, y, z), 'f')
+            coord = numpy.array((x, y, z), "f")
             element = element_list[i].upper() if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                                         name, element=element)
@@ -200,7 +200,7 @@ class MMCIFParser(object):
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
                      aniso_u22[i], aniso_u23[i], aniso_u33[i])
                 mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, 'f')
+                anisou_array = numpy.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
@@ -210,7 +210,7 @@ class MMCIFParser(object):
             alpha = float(mmcif_dict["_cell.angle_alpha"])
             beta = float(mmcif_dict["_cell.angle_beta"])
             gamma = float(mmcif_dict["_cell.angle_gamma"])
-            cell = numpy.array((a, b, c, alpha, beta, gamma), 'f')
+            cell = numpy.array((a, b, c, alpha, beta, gamma), "f")
             spacegroup = mmcif_dict["_symmetry.space_group_name_H-M"]
             spacegroup = spacegroup[1:-1]  # get rid of quotes!!
             if spacegroup is None:
@@ -276,22 +276,22 @@ class FastMMCIFParser(object):
         # two special chars as placeholders in the mmCIF format
         # for item values that cannot be explicitly assigned
         # see: pdbx/mmcif syntax web page
-        _unassigned = {'.', '?'}
+        _unassigned = {".", "?"}
 
         # Read only _atom_site. and atom_site_anisotrop entries
         read_atom, read_aniso = False, False
         _fields, _records = [], []
         _anisof, _anisors = [], []
         for line in filehandle:
-            if line.startswith('_atom_site.'):
+            if line.startswith("_atom_site."):
                 read_atom = True
                 _fields.append(line.strip())
-            elif line.startswith('_atom_site_anisotrop.'):
+            elif line.startswith("_atom_site_anisotrop."):
                 read_aniso = True
                 _anisof.append(line.strip())
-            elif read_atom and line.startswith('#'):
+            elif read_atom and line.startswith("#"):
                 read_atom = False
-            elif read_aniso and line.startswith('#'):
+            elif read_aniso and line.startswith("#"):
                 read_aniso = False
             elif read_atom:
                 _records.append(line.strip())
@@ -433,7 +433,7 @@ class FastMMCIFParser(object):
                 current_resname = resname
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, icode)
 
-            coord = numpy.array((x, y, z), 'f')
+            coord = numpy.array((x, y, z), "f")
             element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                                         name, element=element)
@@ -441,5 +441,5 @@ class FastMMCIFParser(object):
                 u = (aniso_u11[i], aniso_u12[i], aniso_u13[i],
                      aniso_u22[i], aniso_u23[i], aniso_u33[i])
                 mapped_anisou = [float(_) for _ in u]
-                anisou_array = numpy.array(mapped_anisou, 'f')
+                anisou_array = numpy.array(mapped_anisou, "f")
                 structure_builder.set_anisou(anisou_array)

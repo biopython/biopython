@@ -132,7 +132,7 @@ class ProteinAnalysis(object):
         Calculates the aromaticity value of a protein according to Lobry, 1994.
         It is simply the relative frequency of Phe+Trp+Tyr.
         """
-        aromatic_aas = 'YWF'
+        aromatic_aas = "YWF"
         aa_percentages = self.get_amino_acids_percent()
 
         aromaticity = sum(aa_percentages[aa] for aa in aromatic_aas)
@@ -268,8 +268,8 @@ class ProteinAnalysis(object):
                     back = param_dict[subsequence[window - j - 1]]
                     score += weights[j] * front + weights[j] * back
                 except KeyError:
-                    sys.stderr.write('warning: %s or %s is not a standard '
-                                     'amino acid.\n'
+                    sys.stderr.write("warning: %s or %s is not a standard "
+                                     "amino acid.\n"
                                      % (subsequence[j],
                                         subsequence[window - j - 1]))
 
@@ -278,7 +278,7 @@ class ProteinAnalysis(object):
             if middle in param_dict:
                 score += param_dict[middle]
             else:
-                sys.stderr.write('warning: %s  is not a standard amino acid.\n'
+                sys.stderr.write("warning: %s  is not a standard amino acid.\n"
                                  % middle)
 
             scores.append(score / sum_of_weights)
@@ -309,9 +309,9 @@ class ProteinAnalysis(object):
         """
         aa_percentages = self.get_amino_acids_percent()
 
-        helix = sum(aa_percentages[r] for r in 'VIYFWL')
-        turn = sum(aa_percentages[r] for r in 'NPGS')
-        sheet = sum(aa_percentages[r] for r in 'EMAL')
+        helix = sum(aa_percentages[r] for r in "VIYFWL")
+        turn = sum(aa_percentages[r] for r in "NPGS")
+        sheet = sum(aa_percentages[r] for r in "EMAL")
 
         return helix, turn, sheet
 
@@ -322,8 +322,8 @@ class ProteinAnalysis(object):
         (reduced) and cystines residues (Cys-Cys-bond)
         """
         num_aa = self.count_amino_acids()
-        mec_reduced = num_aa['W'] * 5500 + num_aa['Y'] * 1490
-        mec_cystines = mec_reduced + (num_aa['C'] // 2) * 125
+        mec_reduced = num_aa["W"] * 5500 + num_aa["Y"] * 1490
+        mec_cystines = mec_reduced + (num_aa["C"] // 2) * 125
         return(mec_reduced, mec_cystines)
 
 

@@ -41,7 +41,7 @@ def psea(pname):
     fname = run_psea(pname)
     start = 0
     ss = ""
-    with open(fname, 'r') as fp:
+    with open(fname, "r") as fp:
         for l in fp.readlines():
             if l[0:6] == ">p-sea":
                 start = 1
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     # Parse PDB file
     p = PDBParser()
-    s = p.get_structure('X', sys.argv[1])
+    s = p.get_structure("X", sys.argv[1])
 
     # Annotate structure with PSEA secondary structure info
     PSEA(s[0], sys.argv[1])

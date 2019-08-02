@@ -85,7 +85,7 @@ def parse(handle, format, strict=True):
     elif format == "clusterbuster":
         from Bio.motifs import clusterbuster
         return clusterbuster.read(handle)
-    elif format in ('pfm-four-columns', 'pfm-four-rows'):
+    elif format in ("pfm-four-columns", "pfm-four-rows"):
         from Bio.motifs import pfm
         return pfm.read(handle, format)
     elif format == "xms":
@@ -97,7 +97,7 @@ def parse(handle, format, strict=True):
     elif format == "transfac":
         from Bio.motifs import transfac
         return transfac.read(handle, strict)
-    elif format in ('pfm', 'sites', 'jaspar'):
+    elif format in ("pfm", "sites", "jaspar"):
         from Bio.motifs import jaspar
         return jaspar.read(handle, format)
     else:
@@ -195,7 +195,7 @@ class Instances(list):
             if a is None:
                 # If we didn't get a meaningful alphabet from the instances,
                 # assume it is DNA.
-                a = 'ACGT'
+                a = "ACGT"
             if alphabet is None:
                 alphabet = a
             elif alphabet != a:
@@ -263,7 +263,7 @@ class Motif(object):
             except AttributeError:
                 pass
             if alphabet is None:
-                alphabet = 'ACGT'
+                alphabet = "ACGT"
             self.instances = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
@@ -278,7 +278,7 @@ class Motif(object):
             self.instances = None
             self.length = None
             if alphabet is None:
-                alphabet = 'ACGT'
+                alphabet = "ACGT"
         self.alphabet = alphabet
         self.pseudocounts = None
         self.background = None
@@ -341,10 +341,10 @@ class Motif(object):
                 raise Exception("Setting the background to a single value only "
                                 "works for DNA motifs (in which case the value "
                                 "is interpreted as the GC content")
-            self._background['A'] = (1.0 - value) / 2.0
-            self._background['C'] = value / 2.0
-            self._background['G'] = value / 2.0
-            self._background['T'] = (1.0 - value) / 2.0
+            self._background["A"] = (1.0 - value) / 2.0
+            self._background["C"] = value / 2.0
+            self._background["G"] = value / 2.0
+            self._background["T"] = (1.0 - value) / 2.0
         total = sum(self._background.values())
         for letter in self.alphabet:
             self._background[letter] /= total
@@ -477,52 +477,52 @@ class Motif(object):
         """
         from Bio._py3k import urlopen, urlencode, Request
 
-        if self.alphabet == 'ACDEFGHIKLMNPQRSTVWY':
+        if self.alphabet == "ACDEFGHIKLMNPQRSTVWY":
             alpha = "alphabet_protein"
-        elif self.alphabet == 'ACGU':
+        elif self.alphabet == "ACGU":
             alpha = "alphabet_rna"
-        elif self.alphabet == 'ACGT':
+        elif self.alphabet == "ACGT":
             alpha = "alphabet_dna"
         else:
             alpha = "auto"
 
-        frequencies = self.format('transfac')
-        url = 'http://weblogo.threeplusone.com/create.cgi'
-        values = {'sequences': frequencies,
-                  'format': format.lower(),
-                  'stack_width': 'medium',
-                  'stacks_per_line': '40',
-                  'alphabet': alpha,
-                  'ignore_lower_case': True,
-                  'unit_name': "bits",
-                  'first_index': '1',
-                  'logo_start': '1',
-                  'logo_end': str(self.length),
-                  'composition': "comp_auto",
-                  'percentCG': '',
-                  'scale_width': True,
-                  'show_errorbars': True,
-                  'logo_title': '',
-                  'logo_label': '',
-                  'show_xaxis': True,
-                  'xaxis_label': '',
-                  'show_yaxis': True,
-                  'yaxis_label': '',
-                  'yaxis_scale': 'auto',
-                  'yaxis_tic_interval': '1.0',
-                  'show_ends': True,
-                  'show_fineprint': True,
-                  'color_scheme': 'color_auto',
-                  'symbols0': '',
-                  'symbols1': '',
-                  'symbols2': '',
-                  'symbols3': '',
-                  'symbols4': '',
-                  'color0': '',
-                  'color1': '',
-                  'color2': '',
-                  'color3': '',
-                  'color4': '',
+        frequencies = self.format("transfac")
+        url = "http://weblogo.threeplusone.com/create.cgi"
+        values = {"sequences": frequencies,
+                  "format": format.lower(),
+                  "stack_width": "medium",
+                  "stacks_per_line": "40",
+                  "alphabet": alpha,
+                  "ignore_lower_case": True,
+                  "unit_name": "bits",
+                  "first_index": "1",
+                  "logo_start": "1",
+                  "logo_end": str(self.length),
+                  "composition": "comp_auto",
+                  "percentCG": "",
+                  "scale_width": True,
+                  "show_errorbars": True,
+                  "logo_title": "",
+                  "logo_label": "",
+                  "show_xaxis": True,
+                  "xaxis_label": "",
+                  "show_yaxis": True,
+                  "yaxis_label": "",
+                  "yaxis_scale": "auto",
+                  "yaxis_tic_interval": "1.0",
+                  "show_ends": True,
+                  "show_fineprint": True,
+                  "color_scheme": "color_auto",
+                  "symbols0": "",
+                  "symbols1": "",
+                  "symbols2": "",
+                  "symbols3": "",
+                  "symbols4": "",
+                  "color0": "",
+                  "color1": "",
+                  "color2": "",
+                  "color3": "",
+                  "color4": "",
                   }
 
         values.update(
@@ -544,7 +544,7 @@ class Motif(object):
          - transfac : TRANSFAC like files
 
         """
-        if format in ('pfm', 'jaspar'):
+        if format in ("pfm", "jaspar"):
             from Bio.motifs import jaspar
             motifs = [self]
             return jaspar.write(motifs, format)

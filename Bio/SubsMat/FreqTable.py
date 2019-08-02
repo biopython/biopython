@@ -68,7 +68,7 @@ class FreqTable(dict):
 
     def _alphabet_from_input(self):
         """Order the alphabet (PRIVATE)."""
-        s = ''
+        s = ""
         for i in sorted(self):
             s += i
         return s

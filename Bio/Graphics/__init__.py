@@ -49,17 +49,17 @@ def _write(drawing, output_file, format, dpi=72):
         # bitmap format is attempted.
         renderPM = None
 
-    formatdict = {'PS': renderPS, 'EPS': renderPS,
+    formatdict = {"PS": renderPS, "EPS": renderPS,
                   # not sure which you actually get, PS or EPS, but
                   # GenomeDiagram used PS while other modules used EPS.
-                  'PDF': renderPDF,
-                  'SVG': renderSVG,
-                  'JPG': renderPM,
-                  'BMP': renderPM,
-                  'GIF': renderPM,
-                  'PNG': renderPM,
-                  'TIFF': renderPM,
-                  'TIF': renderPM
+                  "PDF": renderPDF,
+                  "SVG": renderSVG,
+                  "JPG": renderPM,
+                  "BMP": renderPM,
+                  "GIF": renderPM,
+                  "PNG": renderPM,
+                  "TIFF": renderPM,
+                  "TIF": renderPM
                   }
     try:
         # If output is not a string, then .upper() will trigger

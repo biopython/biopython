@@ -295,7 +295,7 @@ class _Matrix(object):
 
     def __str__(self):
         """Get a lower triangular matrix string."""
-        matrix_string = '\n'.join(
+        matrix_string = "\n".join(
             [self.names[i] + "\t" + "\t".join([str(n) for n in self.matrix[i]])
              for i in range(0, len(self))])
         matrix_string = matrix_string + "\n\t" + "\t".join(self.names)
@@ -409,7 +409,7 @@ class DistanceCalculator(object):
 
     """
 
-    dna_alphabet = ['A', 'T', 'C', 'G']
+    dna_alphabet = ["A", "T", "C", "G"]
 
     # BLAST nucleic acid scoring matrix
     blastn = [[5],
@@ -423,31 +423,31 @@ class DistanceCalculator(object):
              [-5, -1, 6],
              [-1, -5, -5, 6]]
 
-    protein_alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L',
-                        'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y',
-                        'Z']
+    protein_alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L",
+                        "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y",
+                        "Z"]
 
     # matrices available
-    dna_matrices = {'blastn': blastn, 'trans': trans}
+    dna_matrices = {"blastn": blastn, "trans": trans}
     protein_models = MatrixInfo.available_matrices
     protein_matrices = {name: getattr(MatrixInfo, name)
                         for name in protein_models}
 
     dna_models = list(dna_matrices.keys())
 
-    models = ['identity'] + dna_models + protein_models
+    models = ["identity"] + dna_models + protein_models
 
-    def __init__(self, model='identity', skip_letters=None):
+    def __init__(self, model="identity", skip_letters=None):
         """Initialize with a distance model."""
         # Shim for backward compatibility (#491)
         if skip_letters:
             self.skip_letters = skip_letters
-        elif model == 'identity':
+        elif model == "identity":
             self.skip_letters = ()
         else:
-            self.skip_letters = ('-', '*')
+            self.skip_letters = ("-", "*")
 
-        if model == 'identity':
+        if model == "identity":
             self.scoring_matrix = None
         elif model in self.dna_models:
             self.scoring_matrix = _Matrix(self.dna_alphabet,
@@ -585,7 +585,7 @@ class DistanceTreeConstructor(TreeConstructor):
 
     """
 
-    methods = ['nj', 'upgma']
+    methods = ["nj", "upgma"]
 
     def __init__(self, distance_calculator=None, method="nj"):
         """Initialize the class."""
@@ -604,7 +604,7 @@ class DistanceTreeConstructor(TreeConstructor):
         if self.distance_calculator:
             dm = self.distance_calculator.get_distance(msa)
             tree = None
-            if self.method == 'upgma':
+            if self.method == "upgma":
                 tree = self.upgma(dm)
             else:
                 tree = self.nj(dm)
@@ -1031,7 +1031,7 @@ class ParsimonyScorer(Scorer):
                     clade_states[clade] = state
             # Sankoff algorithm with the penalty matrix
             else:
-                inf = float('inf')
+                inf = float("inf")
                 # init score arrays for terminal clades
                 alphabet = self.matrix.names
                 length = len(alphabet)

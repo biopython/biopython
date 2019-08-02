@@ -89,7 +89,7 @@ class PDBList(object):
     http://www.pdb.org/.
     """
 
-    def __init__(self, server='ftp://ftp.wwpdb.org', pdb=None,
+    def __init__(self, server="ftp://ftp.wwpdb.org", pdb=None,
                  obsolete_pdb=None, verbose=True):
         """Initialize the class with the default server or a custom one.
 
@@ -109,7 +109,7 @@ class PDBList(object):
         if obsolete_pdb:
             self.obsolete_pdb = obsolete_pdb
         else:
-            self.obsolete_pdb = os.path.join(self.local_pdb, 'obsolete')
+            self.obsolete_pdb = os.path.join(self.local_pdb, "obsolete")
             if not os.access(self.obsolete_pdb, os.F_OK):
                 os.makedirs(self.obsolete_pdb)
 
@@ -159,12 +159,12 @@ class PDBList(object):
             -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
 
         """
-        path = self.pdb_server + '/pub/pdb/data/status/latest/'
+        path = self.pdb_server + "/pub/pdb/data/status/latest/"
 
         # Retrieve the lists
-        added = self.get_status_list(path + 'added.pdb')
-        modified = self.get_status_list(path + 'modified.pdb')
-        obsolete = self.get_status_list(path + 'obsolete.pdb')
+        added = self.get_status_list(path + "added.pdb")
+        modified = self.get_status_list(path + "modified.pdb")
+        obsolete = self.get_status_list(path + "obsolete.pdb")
         return [added, modified, obsolete]
 
     def get_all_entries(self):
@@ -172,7 +172,7 @@ class PDBList(object):
 
         Returns a list of PDB codes in the index file.
         """
-        url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
+        url = self.pdb_server + "/pub/pdb/derived_data/index/entries.idx"
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(_urlopen(url)) as handle:
@@ -203,7 +203,7 @@ class PDBList(object):
             ...
 
         """
-        url = self.pdb_server + '/pub/pdb/data/status/obsolete.dat'
+        url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
         with contextlib.closing(_urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to include an assert to check for mis-reading the data.
@@ -263,22 +263,22 @@ class PDBList(object):
 
         # Get the compressed PDB structure
         code = pdb_code.lower()
-        archive = {'pdb': 'pdb%s.ent.gz', 'mmCif': '%s.cif.gz', 'xml': '%s.xml.gz', 'mmtf': '%s',
-                   'bundle': '%s-pdb-bundle.tar.gz'}
+        archive = {"pdb": "pdb%s.ent.gz", "mmCif": "%s.cif.gz", "xml": "%s.xml.gz", "mmtf": "%s",
+                   "bundle": "%s-pdb-bundle.tar.gz"}
         archive_fn = archive[file_format] % code
 
         if file_format not in archive.keys():
             raise("Specified file_format %s doesn't exists or is not supported. Maybe a typo. "
                   "Please, use one of the following: mmCif, pdb, xml, mmtf, bundle" % file_format)
 
-        if file_format in ('pdb', 'mmCif', 'xml'):
+        if file_format in ("pdb", "mmCif", "xml"):
             pdb_dir = "divided" if not obsolete else "obsolete"
             file_type = "pdb" if file_format == "pdb" else "mmCIF" if file_format == "mmCif" else "XML"
-            url = (self.pdb_server + '/pub/pdb/data/structures/%s/%s/%s/%s' % (pdb_dir, file_type, code[1:3], archive_fn))
-        elif file_format == 'bundle':
-            url = (self.pdb_server + '/pub/pdb/compatible/pdb_bundle/%s/%s/%s' % (code[1:3], code, archive_fn))
+            url = (self.pdb_server + "/pub/pdb/data/structures/%s/%s/%s/%s" % (pdb_dir, file_type, code[1:3], archive_fn))
+        elif file_format == "bundle":
+            url = (self.pdb_server + "/pub/pdb/compatible/pdb_bundle/%s/%s/%s" % (code[1:3], code, archive_fn))
         else:
-            url = ('http://mmtf.rcsb.org/v1.0/full/%s' % code)
+            url = ("http://mmtf.rcsb.org/v1.0/full/%s" % code)
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -290,8 +290,8 @@ class PDBList(object):
         if not os.access(path, os.F_OK):
             os.makedirs(path)
         filename = os.path.join(path, archive_fn)
-        final = {'pdb': 'pdb%s.ent', 'mmCif': '%s.cif', 'xml': '%s.xml',
-                 'mmtf': '%s.mmtf', 'bundle': '%s-pdb-bundle.tar'}
+        final = {"pdb": "pdb%s.ent", "mmCif": "%s.cif", "xml": "%s.xml",
+                 "mmtf": "%s.mmtf", "bundle": "%s-pdb-bundle.tar"}
         final_file = os.path.join(path, final[file_format] % code)
 
         # Skip download if the file already exists
@@ -310,8 +310,8 @@ class PDBList(object):
         except IOError:
             print("Desired structure doesn't exists")
         else:
-            with gzip.open(filename, 'rb') as gz:
-                with open(final_file, 'wb') as out:
+            with gzip.open(filename, "rb") as gz:
+                with open(final_file, "wb") as out:
                     out.writelines(gz)
             os.remove(filename)
         return final_file
@@ -335,7 +335,7 @@ class PDBList(object):
             try:
                 self.retrieve_pdb_file(pdb_code, file_format=file_format)
             except Exception:
-                print('error %s\n' % pdb_code)
+                print("error %s\n" % pdb_code)
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
@@ -343,13 +343,13 @@ class PDBList(object):
         for pdb_code in obsolete:
             if self.flat_tree:
                 old_file = os.path.join(self.local_pdb,
-                                        'pdb%s.ent' % pdb_code)
+                                        "pdb%s.ent" % pdb_code)
                 new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(self.local_pdb, pdb_code[1:3],
-                                        'pdb%s.ent' % pdb_code)
+                                        "pdb%s.ent" % pdb_code)
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, 'pdb%s.ent' % pdb_code)
+            new_file = os.path.join(new_dir, "pdb%s.ent" % pdb_code)
             if os.path.isfile(old_file):
                 if not os.path.isdir(new_dir):
                     os.mkdir(new_dir)
@@ -426,8 +426,8 @@ class PDBList(object):
             self.retrieve_pdb_file(pdb_code, file_format=file_format)
         # Write the list
         if listfile:
-            with open(listfile, 'w') as outfile:
-                outfile.writelines((x + '\n' for x in entries))
+            with open(listfile, "w") as outfile:
+                outfile.writelines((x + "\n" for x in entries))
 
     def download_obsolete_entries(self, listfile=None, file_format=None):
         """Retrieve all obsolete PDB entries not present in local obsolete PDB copy.
@@ -448,18 +448,18 @@ class PDBList(object):
 
         # Write the list
         if listfile:
-            with open(listfile, 'w') as outfile:
-                outfile.writelines((x + '\n' for x in entries))
+            with open(listfile, "w") as outfile:
+                outfile.writelines((x + "\n" for x in entries))
 
-    def get_seqres_file(self, savefile='pdb_seqres.txt'):
+    def get_seqres_file(self, savefile="pdb_seqres.txt"):
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         if self._verbose:
             print("Retrieving sequence file (takes over 110 MB).")
-        url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
+        url = self.pdb_server + "/pub/pdb/derived_data/pdb_seqres.txt"
         _urlretrieve(url, savefile)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     doc = """PDBList.py
     (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
@@ -498,11 +498,11 @@ if __name__ == '__main__':
         pl = PDBList(pdb=pdb_path)
         if len(sys.argv) > 3:
             for option in sys.argv[3:]:
-                if option == '-d':
+                if option == "-d":
                     pl.flat_tree = True
-                elif option == '-o':
+                elif option == "-o":
                     overwrite = True
-                elif option in ('-pdb', '-xml', '-mmtf'):
+                elif option in ("-pdb", "-xml", "-mmtf"):
                     file_format = option[1:]
     else:
         pdb_path = os.getcwd()
@@ -510,16 +510,16 @@ if __name__ == '__main__':
         pl.flat_tree = True
 
     if len(sys.argv) > 1:
-        if sys.argv[1] == 'update':
+        if sys.argv[1] == "update":
             # update PDB
             print("updating local PDB at " + pdb_path)
             pl.update_pdb(file_format=file_format)
 
-        elif sys.argv[1] == 'all':
+        elif sys.argv[1] == "all":
             # get the entire PDB
             pl.download_entire_pdb(file_format=file_format)
 
-        elif sys.argv[1] == 'obsol':
+        elif sys.argv[1] == "obsol":
             # get all obsolete entries
             pl.download_obsolete_entries(pdb_path, file_format=file_format)
 
@@ -527,7 +527,7 @@ if __name__ == '__main__':
             # get single PDB entry
             pl.retrieve_pdb_file(sys.argv[1], pdir=pdb_path, file_format=file_format, overwrite=overwrite)
 
-        elif sys.argv[1][0] == '(':
+        elif sys.argv[1][0] == "(":
             # get a set of PDB entries
             pdb_ids = re.findall(sys.argv[1], "[0-9A-Za-z]{4}")
             for pdb_id in pdb_ids:

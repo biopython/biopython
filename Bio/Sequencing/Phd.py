@@ -19,10 +19,10 @@ from Bio import Seq
 from Bio.Alphabet import generic_dna
 
 
-CKEYWORDS = ['CHROMAT_FILE', 'ABI_THUMBPRINT', 'PHRED_VERSION', 'CALL_METHOD',
-             'QUALITY_LEVELS', 'TIME', 'TRACE_ARRAY_MIN_INDEX',
-             'TRACE_ARRAY_MAX_INDEX', 'TRIM', 'TRACE_PEAK_AREA_RATIO', 'CHEM',
-             'DYE']
+CKEYWORDS = ["CHROMAT_FILE", "ABI_THUMBPRINT", "PHRED_VERSION", "CALL_METHOD",
+             "QUALITY_LEVELS", "TIME", "TRACE_ARRAY_MIN_INDEX",
+             "TRACE_ARRAY_MAX_INDEX", "TRIM", "TRACE_PEAK_AREA_RATIO", "CHEM",
+             "DYE"]
 
 
 class Record(object):
@@ -30,13 +30,13 @@ class Record(object):
 
     def __init__(self):
         """Initialize the class."""
-        self.file_name = ''
+        self.file_name = ""
         self.comments = {}
         for kw in CKEYWORDS:
             self.comments[kw.lower()] = None
         self.sites = []
-        self.seq = ''
-        self.seq_trimmed = ''
+        self.seq = ""
+        self.seq_trimmed = ""
 
 
 def read(handle):
@@ -68,36 +68,36 @@ def read(handle):
         keyword, value = line.split(":", 1)
         keyword = keyword.lower()
         value = value.strip()
-        if keyword in ('chromat_file',
-                       'phred_version',
-                       'call_method',
-                       'chem',
-                       'dye',
-                       'time',
-                       'basecaller_version',
-                       'trace_processor_version'):
+        if keyword in ("chromat_file",
+                       "phred_version",
+                       "call_method",
+                       "chem",
+                       "dye",
+                       "time",
+                       "basecaller_version",
+                       "trace_processor_version"):
             record.comments[keyword] = value
-        elif keyword in ('abi_thumbprint',
-                         'quality_levels',
-                         'trace_array_min_index',
-                         'trace_array_max_index'):
+        elif keyword in ("abi_thumbprint",
+                         "quality_levels",
+                         "trace_array_min_index",
+                         "trace_array_max_index"):
             record.comments[keyword] = int(value)
-        elif keyword == 'trace_peak_area_ratio':
+        elif keyword == "trace_peak_area_ratio":
             record.comments[keyword] = float(value)
-        elif keyword == 'trim':
+        elif keyword == "trim":
             first, last, prob = value.split()
             record.comments[keyword] = (int(first), int(last), float(prob))
     else:
         raise ValueError("Failed to find END_COMMENT line")
 
     for line in handle:
-        if line.startswith('BEGIN_DNA'):
+        if line.startswith("BEGIN_DNA"):
             break
     else:
         raise ValueError("Failed to find BEGIN_DNA line")
 
     for line in handle:
-        if line.startswith('END_DNA'):
+        if line.startswith("END_DNA"):
             break
         else:
             # Line is: "site quality peak_location"
@@ -116,9 +116,9 @@ def read(handle):
     else:
         raise ValueError("Failed to find END_SEQUENCE line")
 
-    record.seq = Seq.Seq(''.join(n[0] for n in record.sites), generic_dna)
-    if record.comments['trim'] is not None:
-        first, last = record.comments['trim'][:2]
+    record.seq = Seq.Seq("".join(n[0] for n in record.sites), generic_dna)
+    if record.comments["trim"] is not None:
+        first, last = record.comments["trim"][:2]
         record.seq_trimmed = record.seq[first:last]
 
     return record

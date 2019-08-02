@@ -21,15 +21,15 @@ from Bio.Phylo import (
 )
 
 supported_formats = {
-    'newick': NewickIO,
-    'nexus': NexusIO,
-    'phyloxml': PhyloXMLIO,
-    'nexml': NeXMLIO,
+    "newick": NewickIO,
+    "nexus": NexusIO,
+    "phyloxml": PhyloXMLIO,
+    "nexml": NeXMLIO,
 }
 
 try:
     from Bio.Phylo import CDAOIO
-    supported_formats['cdao'] = CDAOIO
+    supported_formats["cdao"] = CDAOIO
 except ImportError:
     pass
 
@@ -48,8 +48,8 @@ def parse(file, format, **kwargs):
     True
 
     """
-    with File.as_handle(file, 'r') as fp:
-        for tree in getattr(supported_formats[format], 'parse')(fp, **kwargs):
+    with File.as_handle(file, "r") as fp:
+        for tree in getattr(supported_formats[format], "parse")(fp, **kwargs):
             yield tree
 
 
@@ -78,8 +78,8 @@ def write(trees, file, format, **kwargs):
     if isinstance(trees, (BaseTree.Tree, BaseTree.Clade)):
         # Passed a single tree instead of an iterable -- that's OK
         trees = [trees]
-    with File.as_handle(file, 'w+') as fp:
-        n = getattr(supported_formats[format], 'write')(trees, fp, **kwargs)
+    with File.as_handle(file, "w+") as fp:
+        n = getattr(supported_formats[format], "write")(trees, fp, **kwargs)
     return n
 
 

@@ -214,58 +214,58 @@ else:
     _dict = dict
 
 
-__all__ = ('read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert')
+__all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabParser'),
-        'blast-text': ('BlastIO', 'BlastTextParser'),
-        'blast-xml': ('BlastIO', 'BlastXmlParser'),
-        'blat-psl': ('BlatIO', 'BlatPslParser'),
-        'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarParser'),
-        'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
-        'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
-        'fasta-m10': ('FastaIO', 'FastaM10Parser'),
-        'hhsuite2-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
-        'hhsuite3-text': ('HHsuiteIO', 'Hhsuite2TextParser'),
-        'hmmer2-text': ('HmmerIO', 'Hmmer2TextParser'),
-        'hmmer3-text': ('HmmerIO', 'Hmmer3TextParser'),
-        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabParser'),
+        "blast-tab": ("BlastIO", "BlastTabParser"),
+        "blast-text": ("BlastIO", "BlastTextParser"),
+        "blast-xml": ("BlastIO", "BlastXmlParser"),
+        "blat-psl": ("BlatIO", "BlatPslParser"),
+        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
+        "exonerate-text": ("ExonerateIO", "ExonerateTextParser"),
+        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarParser"),
+        "fasta-m10": ("FastaIO", "FastaM10Parser"),
+        "hhsuite2-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+        "hhsuite3-text": ("HHsuiteIO", "Hhsuite2TextParser"),
+        "hmmer2-text": ("HmmerIO", "Hmmer2TextParser"),
+        "hmmer3-text": ("HmmerIO", "Hmmer3TextParser"),
+        "hmmer3-tab": ("HmmerIO", "Hmmer3TabParser"),
         # for hmmer3-domtab, the specific program is part of the format name
         # as we need it distinguish hit / target coordinates
-        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
-        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
-        'interproscan-xml': ('InterproscanIO', 'InterproscanXmlParser'),
-        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
+        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+        "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
+        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
 }
 
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabIndexer'),
-        'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
-        'blat-psl': ('BlatIO', 'BlatPslIndexer'),
-        'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarIndexer'),
-        'exonerate-text': ('ExonerateIO', 'ExonerateTextIndexer'),
-        'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarIndexer'),
-        'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
-        'hmmer2-text': ('HmmerIO', 'Hmmer2TextIndexer'),
-        'hmmer3-text': ('HmmerIO', 'Hmmer3TextIndexer'),
-        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabIndexer'),
-        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitIndexer'),
-        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
-        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
+        "blast-tab": ("BlastIO", "BlastTabIndexer"),
+        "blast-xml": ("BlastIO", "BlastXmlIndexer"),
+        "blat-psl": ("BlatIO", "BlatPslIndexer"),
+        "exonerate-cigar": ("ExonerateIO", "ExonerateCigarIndexer"),
+        "exonerate-text": ("ExonerateIO", "ExonerateTextIndexer"),
+        "exonerate-vulgar": ("ExonerateIO", "ExonerateVulgarIndexer"),
+        "fasta-m10": ("FastaIO", "FastaM10Indexer"),
+        "hmmer2-text": ("HmmerIO", "Hmmer2TextIndexer"),
+        "hmmer3-text": ("HmmerIO", "Hmmer3TextIndexer"),
+        "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
+        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
+        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
 }
 
 # dictionary of supported formats for write()
 _WRITER_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabWriter'),
-        'blast-xml': ('BlastIO', 'BlastXmlWriter'),
-        'blat-psl': ('BlatIO', 'BlatPslWriter'),
-        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabWriter'),
-        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitWriter'),
-        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
-        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
+        "blast-tab": ("BlastIO", "BlastTabWriter"),
+        "blast-xml": ("BlastIO", "BlastXmlWriter"),
+        "blat-psl": ("BlatIO", "BlatPslWriter"),
+        "hmmer3-tab": ("HmmerIO", "Hmmer3TabWriter"),
+        "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitWriter"),
+        "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
+        "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryWriter"),
 }
 
 
@@ -310,11 +310,11 @@ def parse(handle, format=None, **kwargs):
 
     # HACK: force BLAST XML decoding to use utf-8
     handle_kwargs = {}
-    if format == 'blast-xml' and sys.version_info[0] > 2:
-        handle_kwargs['encoding'] = 'utf-8'
+    if format == "blast-xml" and sys.version_info[0] > 2:
+        handle_kwargs["encoding"] = "utf-8"
 
     # and start iterating
-    with as_handle(handle, 'rU', **handle_kwargs) as source_file:
+    with as_handle(handle, "rU", **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
 
         for qresult in generator:
@@ -630,7 +630,7 @@ def write(qresults, handle, format=None, **kwargs):
     writer_class = get_processor(format, _WRITER_MAP)
 
     # write to the handle
-    with as_handle(handle, 'w') as target_file:
+    with as_handle(handle, "w") as target_file:
         writer = writer_class(target_file, **kwargs)
         # count how many qresults, hits, and hsps
         qresult_count, hit_count, hsp_count, frag_count = writer.write_file(qresults)

@@ -101,7 +101,7 @@ class Peaklist(object):
 
     def __init__(self, infn):
         """Initialize the class."""
-        with open(infn, 'r') as infile:
+        with open(infn, "r") as infile:
 
             # Read in the header lines
             self.firstline = infile.readline().split("\012")[0]
@@ -178,7 +178,7 @@ class Peaklist(object):
 
     def write_header(self, outfn):
         """Write header lines from input file to handle ``outfn``."""
-        with open(outfn, 'w') as outfile:
+        with open(outfn, "w") as outfile:
             outfile.write(self.firstline)
             outfile.write("\012")
             outfile.write(self.axislabels)

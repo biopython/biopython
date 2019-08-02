@@ -137,17 +137,17 @@ class FeatureSet(object):
                     getattr(feature, attribute) == value]
         # If the comparator is 'not', return all features where the attribute
         # value does not match that passed
-        elif comparator == 'not':
+        elif comparator == "not":
             return [feature for feature in self.features.values() if
                     getattr(feature, attribute) != value]
         # If the comparator is 'startswith', return all features where the attribute
         # value does not match that passed
-        elif comparator == 'startswith':
+        elif comparator == "startswith":
             return [feature for feature in self.features.values() if
                     getattr(feature, attribute).startswith(value)]
         # If the comparator is 'like', use a regular expression search to identify
         # features
-        elif comparator == 'like':
+        elif comparator == "like":
             return [feature for feature in self.features.values() if
                     re.search(value, getattr(feature, attribute))]
         # As a final option, just return an empty list

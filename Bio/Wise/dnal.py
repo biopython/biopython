@@ -125,7 +125,7 @@ def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_STA
         return Statistics(temp_file.name, match, mismatch, gap, extension)
     except AttributeError:
         try:
-            keywds['dry_run']
+            keywds["dry_run"]
             return None
         except KeyError:
             raise

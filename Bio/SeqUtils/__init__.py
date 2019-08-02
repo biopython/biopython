@@ -38,7 +38,7 @@ def GC(seq):
 
     Note that this will return zero for an empty sequence.
     """
-    gc = sum(seq.count(x) for x in ['G', 'C', 'g', 'c', 'S', 's'])
+    gc = sum(seq.count(x) for x in ["G", "C", "g", "c", "S", "s"])
     try:
         return gc * 100.0 / len(seq)
     except ZeroDivisionError:
@@ -59,15 +59,15 @@ def GC123(seq):
     nucleotides.
     """
     d = {}
-    for nt in ['A', 'T', 'G', 'C']:
+    for nt in ["A", "T", "G", "C"]:
         d[nt] = [0, 0, 0]
 
     for i in range(0, len(seq), 3):
         codon = seq[i:i + 3]
         if len(codon) < 3:
-            codon += '  '
+            codon += "  "
         for pos in range(0, 3):
-            for nt in ['A', 'T', 'G', 'C']:
+            for nt in ["A", "T", "G", "C"]:
                 if codon[pos] == nt or codon[pos] == nt.lower():
                     d[nt][pos] += 1
     gc = {}
@@ -75,12 +75,12 @@ def GC123(seq):
     nall = 0
     for i in range(0, 3):
         try:
-            n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
-            gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
+            n = d["G"][i] + d["C"][i] + d["T"][i] + d["A"][i]
+            gc[i] = (d["G"][i] + d["C"][i]) * 100.0 / n
         except Exception:  # TODO - ValueError?
             gc[i] = 0
 
-        gcall = gcall + d['G'][i] + d['C'][i]
+        gcall = gcall + d["G"][i] + d["C"][i]
         nall = nall + n
 
     gcall = 100.0 * gcall / nall
@@ -101,8 +101,8 @@ def GC_skew(seq, window=100):
     values = []
     for i in range(0, len(seq), window):
         s = seq[i: i + window]
-        g = s.count('G') + s.count('g')
-        c = s.count('C') + s.count('c')
+        g = s.count("G") + s.count("g")
+        c = s.count("C") + s.count("c")
         try:
             skew = (g - c) / float(g + c)
         except ZeroDivisionError:
@@ -121,9 +121,9 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     yscroll = tkinter.Scrollbar(orient=tkinter.VERTICAL)
     xscroll = tkinter.Scrollbar(orient=tkinter.HORIZONTAL)
     canvas = tkinter.Canvas(yscrollcommand=yscroll.set,
-                            xscrollcommand=xscroll.set, background='white')
+                            xscrollcommand=xscroll.set, background="white")
     win = canvas.winfo_toplevel()
-    win.geometry('700x700')
+    win.geometry("700x700")
 
     yscroll.config(command=canvas.yview)
     xscroll.config(command=canvas.xview)
@@ -136,14 +136,14 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
     x1, x2, y1, y2 = X0 - r, X0 + r, Y0 - r, Y0 + r
 
     ty = Y0
-    canvas.create_text(X0, ty, text='%s...%s (%d nt)' % (seq[:7],
+    canvas.create_text(X0, ty, text="%s...%s (%d nt)" % (seq[:7],
                                                          seq[-7:], len(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text='GC %3.2f%%' % (GC(seq)))
+    canvas.create_text(X0, ty, text="GC %3.2f%%" % (GC(seq)))
     ty += 20
-    canvas.create_text(X0, ty, text='GC Skew', fill='blue')
+    canvas.create_text(X0, ty, text="GC Skew", fill="blue")
     ty += 20
-    canvas.create_text(X0, ty, text='Accumulated GC Skew', fill='magenta')
+    canvas.create_text(X0, ty, text="Accumulated GC Skew", fill="magenta")
     ty += 20
     canvas.create_oval(x1, y1, x2, y2)
 
@@ -159,7 +159,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill='blue')
+        canvas.create_line(x1, y1, x2, y2, fill="blue")
         # accumulated GC skew
         r1 = r - 50
         r2 = r1 - acc
@@ -167,7 +167,7 @@ def xGC_skew(seq, window=1000, zoom=100, r=300, px=100, py=100):
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill='magenta')
+        canvas.create_line(x1, y1, x2, y2, fill="magenta")
 
         canvas.update()
         start += window
@@ -181,13 +181,13 @@ def nt_search(seq, subseq):
     Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
     searches only on forward strand.
     """
-    pattern = ''
+    pattern = ""
     for nt in subseq:
         value = IUPACData.ambiguous_dna_values[nt]
         if len(value) == 1:
             pattern += value
         else:
-            pattern += '[%s]' % value
+            pattern += "[%s]" % value
 
     pos = -1
     result = [pattern]
@@ -207,7 +207,7 @@ def nt_search(seq, subseq):
 ######################
 
 
-def seq3(seq, custom_map=None, undef_code='Xaa'):
+def seq3(seq, custom_map=None, undef_code="Xaa"):
     """Convert protein sequence from one-letter to three-letter code.
 
     The single required input argument 'seq' should be a protein sequence using
@@ -247,17 +247,17 @@ def seq3(seq, custom_map=None, undef_code='Xaa'):
     This function was inspired by BioPerl's seq3.
     """
     if custom_map is None:
-        custom_map = {'*': 'Ter'}
+        custom_map = {"*": "Ter"}
     # not doing .update() on IUPACData dict with custom_map dict
     # to preserve its initial state (may be imported in other modules)
     threecode = dict(list(IUPACData.protein_letters_1to3_extended.items()) +
                      list(custom_map.items()))
     # We use a default of 'Xaa' for undefined letters
     # Note this will map '-' to 'Xaa' which may be undesirable!
-    return ''.join(threecode.get(aa, undef_code) for aa in seq)
+    return "".join(threecode.get(aa, undef_code) for aa in seq)
 
 
-def seq1(seq, custom_map=None, undef_code='X'):
+def seq1(seq, custom_map=None, undef_code="X"):
     """Convert protein sequence from three-letter to one-letter code.
 
     The single required input argument 'seq' should be a protein sequence
@@ -302,7 +302,7 @@ def seq1(seq, custom_map=None, undef_code='X'):
 
     """
     if custom_map is None:
-        custom_map = {'Ter': '*'}
+        custom_map = {"Ter": "*"}
     # reverse map of threecode
     # upper() on all keys to enable caps-insensitive input seq handling
     onecode = {k.upper(): v for k, v in
@@ -310,7 +310,7 @@ def seq1(seq, custom_map=None, undef_code='X'):
     # add the given termination codon code and custom maps
     onecode.update((k.upper(), v) for k, v in custom_map.items())
     seqlist = [seq[3 * i:3 * (i + 1)] for i in range(len(seq) // 3)]
-    return ''.join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
+    return "".join(onecode.get(aa.upper(), undef_code) for aa in seqlist)
 
 
 ######################################
@@ -377,47 +377,47 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
     # Rewritten by Markus Piotrowski, 2014
 
     # Find the alphabet type
-    tmp_type = ''
+    tmp_type = ""
     if isinstance(seq, (Seq, MutableSeq)):
         base_alphabet = Alphabet._get_base_alphabet(seq.alphabet)
         if isinstance(base_alphabet, Alphabet.DNAAlphabet):
-            tmp_type = 'DNA'
+            tmp_type = "DNA"
         elif isinstance(base_alphabet, Alphabet.RNAAlphabet):
-            tmp_type = 'RNA'
+            tmp_type = "RNA"
         elif isinstance(base_alphabet, Alphabet.ProteinAlphabet):
-            tmp_type = 'protein'
+            tmp_type = "protein"
         elif isinstance(base_alphabet, Alphabet.ThreeLetterProtein):
-            tmp_type = 'protein'
+            tmp_type = "protein"
             # Convert to one-letter sequence. Have to use a string for seq1
             seq = Seq(seq1(str(seq)), alphabet=Alphabet.ProteinAlphabet())
         elif not isinstance(base_alphabet, Alphabet.Alphabet):
             raise TypeError("%s is not a valid alphabet for mass calculations"
                             % base_alphabet)
         else:
-            tmp_type = 'DNA'  # backward compatibity
+            tmp_type = "DNA"  # backward compatibity
         if seq_type and tmp_type and tmp_type != seq_type:
             raise ValueError("seq_type=%r contradicts %s from seq alphabet"
                              % (seq_type, tmp_type))
         seq_type = tmp_type
     elif isinstance(seq, str):
         if seq_type is None:
-            seq_type = 'DNA'  # backward compatibity
+            seq_type = "DNA"  # backward compatibity
     else:
         raise TypeError("Expected a string or Seq object, not seq=%r" % seq)
 
-    seq = ''.join(str(seq).split()).upper()  # Do the minimum formatting
+    seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
 
-    if seq_type == 'DNA':
+    if seq_type == "DNA":
         if monoisotopic:
             weight_table = IUPACData.monoisotopic_unambiguous_dna_weights
         else:
             weight_table = IUPACData.unambiguous_dna_weights
-    elif seq_type == 'RNA':
+    elif seq_type == "RNA":
         if monoisotopic:
             weight_table = IUPACData.monoisotopic_unambiguous_rna_weights
         else:
             weight_table = IUPACData.unambiguous_rna_weights
-    elif seq_type == 'protein':
+    elif seq_type == "protein":
         if monoisotopic:
             weight_table = IUPACData.monoisotopic_protein_weights
         else:
@@ -436,16 +436,16 @@ def molecular_weight(seq, seq_type=None, double_stranded=False, circular=False,
         if circular:
             weight -= water
     except KeyError as e:
-        raise ValueError('%s is not a valid unambiguous letter for %s'
+        raise ValueError("%s is not a valid unambiguous letter for %s"
                          % (e, seq_type))
 
-    if seq_type in ('DNA', 'RNA') and double_stranded:
+    if seq_type in ("DNA", "RNA") and double_stranded:
         seq = str(Seq(seq).complement())
         weight += sum(weight_table[x] for x in seq) - (len(seq) - 1) * water
         if circular:
             weight -= water
-    elif seq_type == 'protein' and double_stranded:
-        raise ValueError('double-stranded proteins await their discovery')
+    elif seq_type == "protein" and double_stranded:
+        raise ValueError("double-stranded proteins await their discovery")
 
     return weight
 
@@ -488,14 +488,14 @@ def six_frame_translations(seq, genetic_code=1):
 
     # create header
     if length > 20:
-        short = '%s ... %s' % (seq[:10], seq[-10:])
+        short = "%s ... %s" % (seq[:10], seq[-10:])
     else:
         short = seq
-    header = 'GC_Frame: '
-    for nt in ['a', 't', 'g', 'c']:
-        header += '%s:%d ' % (nt, seq.count(nt.upper()))
+    header = "GC_Frame: "
+    for nt in ["a", "t", "g", "c"]:
+        header += "%s:%d " % (nt, seq.count(nt.upper()))
 
-    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),
+    header += "\nSequence: %s, %d nt, %0.2f %%GC\n\n\n" % (short.lower(),
                                                            length, GC(seq))
     res = header
 
@@ -503,17 +503,17 @@ def six_frame_translations(seq, genetic_code=1):
         subseq = seq[i:i + 60]
         csubseq = comp[i:i + 60]
         p = i // 3
-        res += '%d/%d\n' % (i + 1, i / 3 + 1)
-        res += '  ' + '  '.join(frames[3][p:p + 20]) + '\n'
-        res += ' ' + '  '.join(frames[2][p:p + 20]) + '\n'
-        res += '  '.join(frames[1][p:p + 20]) + '\n'
+        res += "%d/%d\n" % (i + 1, i / 3 + 1)
+        res += "  " + "  ".join(frames[3][p:p + 20]) + "\n"
+        res += " " + "  ".join(frames[2][p:p + 20]) + "\n"
+        res += "  ".join(frames[1][p:p + 20]) + "\n"
         # seq
-        res += subseq.lower() + '%5d %%\n' % int(GC(subseq))
-        res += csubseq.lower() + '\n'
+        res += subseq.lower() + "%5d %%\n" % int(GC(subseq))
+        res += csubseq.lower() + "\n"
         # - frames
-        res += '  '.join(frames[-2][p:p + 20]) + ' \n'
-        res += ' ' + '  '.join(frames[-1][p:p + 20]) + '\n'
-        res += '  ' + '  '.join(frames[-3][p:p + 20]) + '\n\n'
+        res += "  ".join(frames[-2][p:p + 20]) + " \n"
+        res += " " + "  ".join(frames[-1][p:p + 20]) + "\n"
+        res += "  " + "  ".join(frames[-3][p:p + 20]) + "\n\n"
     return res
 
 

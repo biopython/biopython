@@ -53,7 +53,7 @@ def read(handle):
 
     while True:
         for line in handle:
-            if line.startswith('MOTIF'):
+            if line.startswith("MOTIF"):
                 break
         else:
             return record
@@ -100,7 +100,7 @@ class Record(list):
 def _read_background(record, handle):
     """Read background letter frequencies (PRIVATE)."""
     for line in handle:
-        if line.startswith('Background letter frequencies'):
+        if line.startswith("Background letter frequencies"):
             break
     else:
         raise ValueError("Improper input file. File should contain a line starting background frequencies.")
@@ -111,13 +111,13 @@ def _read_background(record, handle):
     line = line.strip()
     ls = line.split()
     A, C, G, T = float(ls[1]), float(ls[3]), float(ls[5]), float(ls[7])
-    record.background = {'A': A, 'C': C, 'G': G, 'T': T}
+    record.background = {"A": A, "C": C, "G": G, "T": T}
 
 
 def _read_version(record, handle):
     """Read MEME version (PRIVATE)."""
     for line in handle:
-        if line.startswith('MEME version'):
+        if line.startswith("MEME version"):
             break
     else:
         raise ValueError("Improper input file. File should contain a line starting MEME version.")
@@ -129,17 +129,17 @@ def _read_version(record, handle):
 def _read_alphabet(record, handle):
     """Read alphabet (PRIVATE)."""
     for line in handle:
-        if line.startswith('ALPHABET'):
+        if line.startswith("ALPHABET"):
             break
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with 'ALPHABET'")
-    if not line.startswith('ALPHABET= '):
+    if not line.startswith("ALPHABET= "):
         raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
-    line = line.strip().replace('ALPHABET= ', '')
-    if line == 'ACGT':
-        al = 'ACGT'
+    line = line.strip().replace("ALPHABET= ", "")
+    if line == "ACGT":
+        al = "ACGT"
     else:
-        al = 'ACDEFGHIKLMNPQRSTVWY'
+        al = "ACDEFGHIKLMNPQRSTVWY"
     record.alphabet = al
 
 
@@ -155,10 +155,10 @@ def _read_lpm(line, handle):
         counts[2].append(int(float(freqs[2]) * 1000000))
         counts[3].append(int(float(freqs[3]) * 1000000))
     c = {}
-    c['A'] = counts[0]
-    c['C'] = counts[1]
-    c['G'] = counts[2]
-    c['T'] = counts[3]
+    c["A"] = counts[0]
+    c["C"] = counts[1]
+    c["G"] = counts[2]
+    c["T"] = counts[3]
     return c
 
 
@@ -167,7 +167,7 @@ def _read_motif_statistics(line, handle):
     # minimal :
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
     for line in handle:
-        if line.startswith('letter-probability matrix:'):
+        if line.startswith("letter-probability matrix:"):
             break
     num_occurrences = int(line.split("nsites=")[1].split()[0])
     length = int(line.split("w=")[1].split()[0])
@@ -178,10 +178,10 @@ def _read_motif_statistics(line, handle):
 def _read_motif_name(handle):
     """Read motif name (PRIVATE)."""
     for line in handle:
-        if 'sorted by position p-value' in line:
+        if "sorted by position p-value" in line:
             break
     else:
-        raise ValueError('Unexpected end of stream: Failed to find motif name')
+        raise ValueError("Unexpected end of stream: Failed to find motif name")
     line = line.strip()
     words = line.split()
     name = " ".join(words[0:2])

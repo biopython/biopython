@@ -84,8 +84,8 @@ class Diagram(object):
 
     """
 
-    def __init__(self, name=None, format='circular', pagesize='A3',
-                 orientation='landscape', x=0.05, y=0.05, xl=None,
+    def __init__(self, name=None, format="circular", pagesize="A3",
+                 orientation="landscape", x=0.05, y=0.05, xl=None,
                  xr=None, yt=None, yb=None, start=None, end=None,
                  tracklines=False, fragments=10, fragment_size=None,
                  track_size=0.75, circular=True, circle_core=0.0):
@@ -152,7 +152,7 @@ class Diagram(object):
         # diagrams.  At the moment, we detect overrides with an or in the
         # Instantiation arguments, but I suspect there's a neater way to do
         # this.
-        if format == 'linear':
+        if format == "linear":
             drawer = LinearDrawer(self, _first_defined(pagesize, self.pagesize),
                                   _first_defined(orientation, self.orientation),
                                   _first_defined(x, self.x),
@@ -187,7 +187,7 @@ class Diagram(object):
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
 
-    def write(self, filename='test1.ps', output='PS', dpi=72):
+    def write(self, filename="test1.ps", output="PS", dpi=72):
         """Write the drawn diagram to a specified file, in a specified format.
 
         Arguments:
@@ -207,7 +207,7 @@ class Diagram(object):
         """
         return _write(self.drawing, filename, output, dpi=dpi)
 
-    def write_to_string(self, output='PS', dpi=72):
+    def write_to_string(self, output="PS", dpi=72):
         """Return a byte string containing the diagram in the requested format.
 
         Arguments:
@@ -371,5 +371,5 @@ class Diagram(object):
         outstr.append("%d tracks" % len(self.tracks))
         for level in self.get_levels():
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
-        outstr = '\n'.join(outstr)
+        outstr = "\n".join(outstr)
         return outstr

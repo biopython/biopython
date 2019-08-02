@@ -497,11 +497,11 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
                     (the default), or 'vecscreen'.""",
-                    checker_function=lambda value: value in ['blastn',
-                                                             'blastn-short',
-                                                             'dc-megablast',
-                                                             'megablast',
-                                                             'vecscreen'],
+                    checker_function=lambda value: value in ["blastn",
+                                                             "blastn-short",
+                                                             "dc-megablast",
+                                                             "megablast",
+                                                             "vecscreen"],
                     equate=False),
             _Option(["-penalty", "penalty"],
                     "Penalty for a nucleotide mismatch (integer, at most zero).",
@@ -542,7 +542,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
 
                     Allowed values: 'coding', 'coding_and_optimal' or 'optimal'
                     Requires: template_length.""",
-                    checker_function=lambda value: value in ['coding', 'coding_and_optimal', 'optimal'],
+                    checker_function=lambda value: value in ["coding", "coding_and_optimal", "optimal"],
                     equate=False),
             _Option(["-template_length", "template_length"],
                     """Discontiguous MegaBLAST template length (integer).
@@ -550,7 +550,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Allowed values: 16, 18, 21
 
                     Requires: template_type.""",
-                    checker_function=lambda value: value in [16, 18, 21, '16', '18', '21'],
+                    checker_function=lambda value: value in [16, 18, 21, "16", "18", "21"],
                     equate=False),
             # Extension options:
             _Switch(["-no_greedy", "no_greedy"],
@@ -1280,7 +1280,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
                     "Molecule type of target db ('nucl' or 'prot')",
                     equate=False,
                     is_required=True,
-                    checker_function=lambda x: x == 'nucl' or x == 'prot'),
+                    checker_function=lambda x: x == "nucl" or x == "prot"),
             _Option(["-in", "input_file"],
                     "Input file/database name",
                     filename=True,
@@ -1345,7 +1345,7 @@ class NcbimakeblastdbCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def _input_type_checker(command, x):
-        return x in ('asn1_bin', 'asn1_txt', 'blastdb', 'fasta')
+        return x in ("asn1_bin", "asn1_txt", "blastdb", "fasta")
 
     def _validate(self):
         incompatibles = {"mask_id": ["gi_mask"],

@@ -71,7 +71,7 @@ class SummaryInfo(object):
 
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
-        consensus = ''
+        consensus = ""
 
         # find the length of the consensus we are creating
         con_len = self.alignment.get_alignment_length()
@@ -86,7 +86,7 @@ class SummaryInfo(object):
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
-                    if record.seq[n] != '-' and record.seq[n] != '.':
+                    if record.seq[n] != "-" and record.seq[n] != ".":
                         if record.seq[n] not in atom_dict:
                             atom_dict[record.seq[n]] = 1
                         else:
@@ -132,7 +132,7 @@ class SummaryInfo(object):
 
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
-        consensus = ''
+        consensus = ""
 
         # find the length of the consensus we are creating
         con_len = self.alignment.get_alignment_length()
@@ -270,8 +270,8 @@ class SummaryInfo(object):
                 rep_dict = self._pair_replacement(
                     self.alignment[rec_num1].seq,
                     self.alignment[rec_num2].seq,
-                    self.alignment[rec_num1].annotations.get('weight', 1.0),
-                    self.alignment[rec_num2].annotations.get('weight', 1.0),
+                    self.alignment[rec_num1].annotations.get("weight", 1.0),
+                    self.alignment[rec_num2].annotations.get("weight", 1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -363,7 +363,7 @@ class SummaryInfo(object):
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             skip_items.append(self.alignment._alphabet.gap_char)
             all_letters = all_letters.replace(
-                self.alignment._alphabet.gap_char, '')
+                self.alignment._alphabet.gap_char, "")
 
         # now create the dictionary
         for first_letter in all_letters:
@@ -408,7 +408,7 @@ class SummaryInfo(object):
             chars_to_ignore.append(self.alignment._alphabet.gap_char)
 
         for char in chars_to_ignore:
-            all_letters = all_letters.replace(char, '')
+            all_letters = all_letters.replace(char, "")
 
         if axis_seq:
             left_seq = axis_seq
@@ -429,7 +429,7 @@ class SummaryInfo(object):
                     this_residue = None
 
                 if this_residue and this_residue not in chars_to_ignore:
-                    weight = record.annotations.get('weight', 1.0)
+                    weight = record.annotations.get("weight", 1.0)
                     try:
                         score_dict[this_residue] += weight
                     # if we get a KeyError then we have an alphabet problem
@@ -521,7 +521,7 @@ class SummaryInfo(object):
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
         for char in chars_to_ignore:
-            all_letters = all_letters.replace(char, '')
+            all_letters = all_letters.replace(char, "")
 
         info_content = {}
         for residue_num in range(start, end):
@@ -584,7 +584,7 @@ class SummaryInfo(object):
         for record in all_records:
             try:
                 if record.seq[residue_num] not in to_ignore:
-                    weight = record.annotations.get('weight', 1.0)
+                    weight = record.annotations.get("weight", 1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
             # getting a key error means we've got a problem with the alphabet

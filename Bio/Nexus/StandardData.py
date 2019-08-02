@@ -37,46 +37,46 @@ class StandardData(object):
         # Transfer each coding to a position within a sequence
         multi_coding = False
         uncertain_coding = False
-        coding_list = {'t': 'std', 'd': []}
+        coding_list = {"t": "std", "d": []}
 
         for pos, coding in enumerate(data):
             # Check if in a multiple coded or uncertain character
             if multi_coding:
                 # End multicoding if close parenthesis
-                if coding == ')':
+                if coding == ")":
                     multi_coding = False
                 else:
                     # Add current coding to list and advance to next coding
-                    coding_list['d'].append(coding)
+                    coding_list["d"].append(coding)
                     continue
             elif uncertain_coding:
                 # End multicoding if close parenthesis
-                if coding == '}':
+                if coding == "}":
                     uncertain_coding = False
                 else:
                     # Add current coding to list and advance to next coding
-                    coding_list['d'].append(coding)
+                    coding_list["d"].append(coding)
                     continue
             else:
                 # Check if a multiple coded or uncertain character is starting
-                if coding == '(':
+                if coding == "(":
                     multi_coding = True
-                    coding_list['t'] = 'multi'
+                    coding_list["t"] = "multi"
                     continue
-                elif coding == '{':
+                elif coding == "{":
                     uncertain_coding = True
-                    coding_list['t'] = 'uncer'
+                    coding_list["t"] = "uncer"
                     continue
-                elif coding in [')', '}']:
+                elif coding in [")", "}"]:
                     raise NexusError('Improper character "' + coding +
                                      '" at position ' + pos +
-                                     ' of a coding sequence.')
+                                     " of a coding sequence.")
                 else:
-                    coding_list['d'].append(coding)
+                    coding_list["d"].append(coding)
 
             # Add character coding to data
             self._data.append(coding_list.copy())
-            coding_list = {'t': 'std', 'd': []}
+            coding_list = {"t": "std", "d": []}
 
     def __len__(self):
         """Return the length of the coding, use len(my_coding)."""
@@ -112,12 +112,12 @@ class StandardData(object):
 
     def __str__(self):
         """Return the full coding as a python string, use str(my_coding)."""
-        str_return = ''
+        str_return = ""
         for coding in self._data:
-            if coding['t'] == 'multi':
-                str_return += '(' + ''.join(coding['d']) + ')'
-            elif coding['t'] == 'uncer':
-                str_return += '{' + ''.join(coding['d']) + '}'
+            if coding["t"] == "multi":
+                str_return += "(" + "".join(coding["d"]) + ")"
+            elif coding["t"] == "uncer":
+                str_return += "{" + "".join(coding["d"]) + "}"
             else:
-                str_return += coding['d'][0]
+                str_return += coding["d"][0]
         return str_return

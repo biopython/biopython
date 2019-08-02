@@ -44,7 +44,7 @@ class GraphData(object):
 
     """
 
-    def __init__(self, id=None, data=None, name=None, style='bar',
+    def __init__(self, id=None, data=None, name=None, style="bar",
                  color=colors.lightgreen, altcolor=colors.darkseagreen,
                  center=None, colour=None, altcolour=None):
         """Initialize.

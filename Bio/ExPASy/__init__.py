@@ -22,7 +22,7 @@ from Bio._py3k import _binary_to_string_handle
 
 
 def get_prodoc_entry(id,
-                     cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry'):
+                     cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry"):
     """Get a text handle to a PRODOC entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
@@ -42,7 +42,7 @@ def get_prodoc_entry(id,
 
 
 def get_prosite_entry(id,
-                      cgi='https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry'):
+                      cgi="https://prosite.expasy.org/cgi-bin/prosite/get-prosite-entry"):
     """Get a text handle to a PROSITE entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy

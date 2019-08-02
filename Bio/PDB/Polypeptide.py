@@ -209,9 +209,9 @@ class Polypeptide(list):
         for i in range(0, lng):
             res = self[i]
             try:
-                n = res['N'].get_vector()
-                ca = res['CA'].get_vector()
-                c = res['C'].get_vector()
+                n = res["N"].get_vector()
+                ca = res["CA"].get_vector()
+                c = res["C"].get_vector()
             except Exception:
                 # Some atoms are missing
                 # Phi/Psi cannot be calculated for this residue
@@ -223,7 +223,7 @@ class Polypeptide(list):
             if i > 0:
                 rp = self[i - 1]
                 try:
-                    cp = rp['C'].get_vector()
+                    cp = rp["C"].get_vector()
                     phi = calc_dihedral(cp, n, ca, c)
                 except Exception:
                     phi = None
@@ -234,7 +234,7 @@ class Polypeptide(list):
             if i < (lng - 1):
                 rn = self[i + 1]
                 try:
-                    nn = rn['N'].get_vector()
+                    nn = rn["N"].get_vector()
                     psi = calc_dihedral(n, ca, c, nn)
                 except Exception:
                     psi = None
@@ -283,7 +283,7 @@ class Polypeptide(list):
         """
         s = ""
         for res in self:
-            s += SCOPData.protein_letters_3to1.get(res.get_resname(), 'X')
+            s += SCOPData.protein_letters_3to1.get(res.get_resname(), "X")
         seq = Seq(s, generic_protein)
         return seq
 

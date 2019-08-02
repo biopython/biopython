@@ -102,7 +102,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
         """Return entity identifier on residue (PRIVATE)."""
         chain_id, res_id = ent_id
         if isinstance(res_id, int):
-            ent_id = (chain_id, (' ', res_id, ' '))
+            ent_id = (chain_id, (" ", res_id, " "))
         return ent_id
 
 
@@ -122,5 +122,5 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
             chain_id, res_id, atom_name = ent_id
             icode = None
         if isinstance(res_id, int):
-            ent_id = (chain_id, (' ', res_id, ' '), atom_name, icode)
+            ent_id = (chain_id, (" ", res_id, " "), atom_name, icode)
         return ent_id

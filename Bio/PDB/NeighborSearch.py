@@ -87,7 +87,7 @@ class NeighborSearch(object):
         """
         if level not in entity_levels:
             raise PDBException("%s: Unknown level" % level)
-        center = numpy.require(center, dtype='d', requirements='C')
+        center = numpy.require(center, dtype="d", requirements="C")
         if center.shape != (3,):
             raise Exception("Expected a 3-dimensional NumPy array")
         points = self.kdt.search(center, radius)

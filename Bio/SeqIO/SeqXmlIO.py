@@ -63,7 +63,7 @@ class XMLRecordIterator(object):
 
                     if node.localName == self._recordTag:
                         # create an empty SeqRecord
-                        record = SeqRecord('', id='')
+                        record = SeqRecord("", id="")
 
                     # call matching methods with attributes only
                     if hasattr(self, "_attr_" + node.localName):
@@ -368,10 +368,10 @@ class SeqXmlWriter(SequentialSequenceWriter):
 
                 if not isinstance(dbxref, basestring):
                     raise TypeError("dbxrefs should be of type list of string")
-                if dbxref.find(':') < 1:
+                if dbxref.find(":") < 1:
                     raise ValueError("dbxrefs should be in the form ['source:id', 'source:id' ]")
 
-                dbsource, dbid = dbxref.split(':', 1)
+                dbsource, dbid = dbxref.split(":", 1)
 
                 attr = {"source": dbsource, "id": dbid}
                 self.xml_generator.startElement("DBRef", AttributesImpl(attr))
