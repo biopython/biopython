@@ -27,10 +27,10 @@ class Generic_dbutils(object):
 
     def tname(self, table):
         """Return the name of the table."""
-        if table != 'biosequence':
+        if table != "biosequence":
             return table
         else:
-            return 'bioentry'
+            return "bioentry"
 
     def last_id(self, cursor, table):
         """Return the last used id for a table."""

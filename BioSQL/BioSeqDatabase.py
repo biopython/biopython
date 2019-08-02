@@ -108,7 +108,7 @@ def open_database(driver="MySQLdb", **kwargs):
         server = DBServer(conn, module)
 
     # Sets MySQL to allow double quotes, rather than only backticks
-    if driver in ['MySQLdb', 'mysql.connector']:
+    if driver in ["MySQLdb", "mysql.connector"]:
         server.adaptor.execute("SET sql_mode='ANSI_QUOTES';")
 
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
@@ -132,10 +132,10 @@ def open_database(driver="MySQLdb", **kwargs):
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
-    elif driver == 'sqlite3':
+    elif driver == "sqlite3":
         # Tell SQLite that we want to use foreign keys
         # https://www.sqlite.org/foreignkeys.html#fk_enable
-        server.adaptor.execute('PRAGMA foreign_keys = ON')
+        server.adaptor.execute("PRAGMA foreign_keys = ON")
 
     return server
 
@@ -659,12 +659,12 @@ _interface_specific_adaptors = {
 
 _allowed_lookups = {
     # Lookup name / function name to get id, function to list all ids
-    'primary_id': "fetch_seqid_by_identifier",
-    'gi': "fetch_seqid_by_identifier",
-    'display_id': "fetch_seqid_by_display_id",
-    'name': "fetch_seqid_by_display_id",
-    'accession': "fetch_seqid_by_accession",
-    'version': "fetch_seqid_by_version",
+    "primary_id": "fetch_seqid_by_identifier",
+    "gi": "fetch_seqid_by_identifier",
+    "display_id": "fetch_seqid_by_display_id",
+    "name": "fetch_seqid_by_display_id",
+    "accession": "fetch_seqid_by_accession",
+    "version": "fetch_seqid_by_version",
 }
 
 
@@ -904,7 +904,7 @@ class BioSeqDatabase(object):
             if _POSTGRES_RULES_PRESENT:
                 # Recreate what the Loader's _load_bioentry_table will do:
                 if cur_record.id.count(".") == 1:
-                    accession, version = cur_record.id.split('.')
+                    accession, version = cur_record.id.split(".")
                     try:
                         version = int(version)
                     except ValueError:
