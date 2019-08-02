@@ -54,7 +54,7 @@ class UndoHandleTests(unittest.TestCase):
         """Test read method."""
         h = File.UndoHandle(StringIO("some text"))
         h.saveline("more text")
-        self.assertEqual(h.read(), 'more textsome text')
+        self.assertEqual(h.read(), "more textsome text")
 
     def test_undohandle_read_block(self):
         """Test reading in blocks."""
@@ -99,7 +99,7 @@ class AsHandleTestCase(unittest.TestCase):
     def setUp(self):
         """Initialise temporary directory."""
         # Create a directory to work in
-        self.temp_dir = tempfile.mkdtemp(prefix='biopython-test')
+        self.temp_dir = tempfile.mkdtemp(prefix="biopython-test")
 
     def tearDown(self):
         """Remove temporary directory."""
@@ -110,8 +110,8 @@ class AsHandleTestCase(unittest.TestCase):
 
     def test_handle(self):
         """Test as_handle with a file-like object argument."""
-        p = self._path('test_file.fasta')
-        with open(p, 'wb') as fp:
+        p = self._path("test_file.fasta")
+        with open(p, "wb") as fp:
             with File.as_handle(fp) as handle:
                 self.assertEqual(fp, handle, "as_handle should "
                                  "return argument when given a "
@@ -124,8 +124,8 @@ class AsHandleTestCase(unittest.TestCase):
 
     def test_string_path(self):
         """Test as_handle with a string path argument."""
-        p = self._path('test_file.fasta')
-        mode = 'wb'
+        p = self._path("test_file.fasta")
+        mode = "wb"
         with File.as_handle(p, mode=mode) as handle:
             self.assertEqual(p, handle.name)
             self.assertEqual(mode, handle.mode)
@@ -134,13 +134,13 @@ class AsHandleTestCase(unittest.TestCase):
 
     @unittest.skipIf(
         sys.version_info < (3, 6),
-        'Passing Path objects to File.as_handle requires Python >= 3.6',
+        "Passing Path objects to File.as_handle requires Python >= 3.6",
     )
     def test_path_object(self):
         """Test as_handle with a pathlib.Path object."""
         from pathlib import Path
-        p = Path(self._path('test_file.fasta'))
-        mode = 'wb'
+        p = Path(self._path("test_file.fasta"))
+        mode = "wb"
         with File.as_handle(p, mode=mode) as handle:
             self.assertEqual(str(p.absolute()), handle.name)
             self.assertEqual(mode, handle.mode)
@@ -149,7 +149,7 @@ class AsHandleTestCase(unittest.TestCase):
 
     @unittest.skipIf(
         sys.version_info < (3, 6),
-        'Passing path-like objects to File.as_handle requires Python >= 3.6',
+        "Passing path-like objects to File.as_handle requires Python >= 3.6",
     )
     def test_custom_path_like_object(self):
         """Test as_handle with a custom path-like object."""
@@ -160,8 +160,8 @@ class AsHandleTestCase(unittest.TestCase):
             def __fspath__(self):
                 return self.path
 
-        p = CustomPathLike(self._path('test_file.fasta'))
-        mode = 'wb'
+        p = CustomPathLike(self._path("test_file.fasta"))
+        mode = "wb"
         with File.as_handle(p, mode=mode) as handle:
             self.assertEqual(p.path, handle.name)
             self.assertEqual(mode, handle.mode)

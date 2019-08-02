@@ -64,21 +64,21 @@ class TestUAN(unittest.TestCase):
     """Test annotations."""
 
     def setUp(self):
-        self.records = [record for record in SeqIO.parse('Roche/E3MFGYR02_random_10_reads.sff', 'sff')]
+        self.records = [record for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")]
         self.test_annotations = {}
         for line in test_data.splitlines():
             fields = re.split(r"\s+", line.strip())
-            if '>' in line:
-                current_name = fields[0].lstrip('>')
+            if ">" in line:
+                current_name = fields[0].lstrip(">")
                 self.test_annotations[current_name] = {}
-            elif 'Prefix' in line:
-                time_list = [int(v) for v in fields[2].split('_')[1:-1]]
+            elif "Prefix" in line:
+                time_list = [int(v) for v in fields[2].split("_")[1:-1]]
                 self.test_annotations[current_name]["time"] = time_list
-            elif 'Region' in line:
+            elif "Region" in line:
                 region = int(fields[-1])
                 self.test_annotations[current_name]["region"] = region
-            elif 'XY' in line:
-                x, y = [int(v) for v in fields[-1].split('_')]
+            elif "XY" in line:
+                x, y = [int(v) for v in fields[-1].split("_")]
                 self.test_annotations[current_name]["coords"] = (x, y)
 
     def test_time(self):
@@ -319,8 +319,8 @@ class TestConcatenated(unittest.TestCase):
     def test_parses_gzipped_stream(self):
         import gzip
         count = 0
-        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", 'rb')
-        for record in SeqIO.parse(fh, 'sff'):
+        fh = gzip.open("Roche/E3MFGYR02_random_10_reads.sff.gz", "rb")
+        for record in SeqIO.parse(fh, "sff"):
             count += 1
         self.assertEqual(10, count)
 

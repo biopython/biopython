@@ -32,7 +32,7 @@ class CompareStructures(unittest.TestCase):
     def setUp(self):
 
         # Silence!
-        warnings.simplefilter('ignore', PDBConstructionWarning)
+        warnings.simplefilter("ignore", PDBConstructionWarning)
 
         pdbparser = PDBParser(QUIET=1)
         cifparser = MMCIFParser(QUIET=1)
@@ -42,8 +42,8 @@ class CompareStructures(unittest.TestCase):
         pdb_file = os.path.join(modpath, "PDB", "1LCD.pdb")
         cif_file = os.path.join(modpath, "PDB", "1LCD.cif")
 
-        self.pdbo = pdbparser.get_structure('pdb', pdb_file)
-        self.cifo = cifparser.get_structure('pdb', cif_file)
+        self.pdbo = pdbparser.get_structure("pdb", pdb_file)
+        self.cifo = cifparser.get_structure("pdb", cif_file)
 
     def test_compare_models(self):
         """Compared parsed models."""
@@ -64,6 +64,6 @@ class CompareStructures(unittest.TestCase):
         self.assertEqual([i[1] for i in cif_chains], [i[1] for i in pdb_chains])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

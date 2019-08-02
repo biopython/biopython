@@ -28,7 +28,7 @@ from Bio.Application import ApplicationError
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 fasttree_exe = None
 if sys.platform == "win32":
@@ -84,7 +84,7 @@ class FastTreeTestCase(unittest.TestCase):
         self.assertEqual(str(eval(repr(cline))), str(cline))
         out, err = cline()
         self.assertTrue(err.strip().startswith("FastTree"))
-        tree = Phylo.read(StringIO(out), 'newick')
+        tree = Phylo.read(StringIO(out), "newick")
 
         def lookup_by_names(tree):
             names = {}

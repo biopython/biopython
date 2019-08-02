@@ -200,10 +200,10 @@ class ModTest(unittest.TestCase):
     def testParseModel(self):
         res_dir = os.path.join(self.results_dir, "baseml", "model")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
+            version = results_file.split("-")[1].split(".")[0]
             model = results_file[5]
             version_msg = "Improper parsing for model %s version %s" \
-                          % (model, version.replace('_', '.'))
+                          % (model, version.replace("_", "."))
             results_path = os.path.join(res_dir, results_file)
             results = baseml.read(results_path)
             # There are 6 top-levels: parameters, tree, lnL, version,
@@ -234,10 +234,10 @@ class ModTest(unittest.TestCase):
         # prevents this analysis from completing
         res_dir = os.path.join(self.results_dir, "baseml", "alpha1rho1")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
+            version = results_file.split("-")[1].split(".")[0]
             model = results_file[5]
             version_msg = "Improper parsing for model %s version %s" \
-                          % (model, version.replace('_', '.'))
+                          % (model, version.replace("_", "."))
             results_path = os.path.join(res_dir, results_file)
             results = baseml.read(results_path)
             # There are 6 top-levels: parameters, tree, lnL, version,
@@ -254,10 +254,10 @@ class ModTest(unittest.TestCase):
     def testParseNhomo(self):
         res_dir = os.path.join(self.results_dir, "baseml", "nhomo")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
+            version = results_file.split("-")[1].split(".")[0]
             n = results_file[5]
             version_msg = "Improper parsing for nhomo %s version %s" \
-                          % (n, version.replace('_', '.'))
+                          % (n, version.replace("_", "."))
             results_path = os.path.join(res_dir, results_file)
             results = baseml.read(results_path)
             # There are 6 top-levels: parameters, tree, lnL, version,
@@ -276,9 +276,9 @@ class ModTest(unittest.TestCase):
     def testParseSEs(self):
         res_dir = os.path.join(self.results_dir, "baseml", "SE")
         for results_file in os.listdir(res_dir):
-            version = results_file.split('-')[1].split('.')[0]
+            version = results_file.split("-")[1].split(".")[0]
             version_msg = "Improper parsing for version %s" \
-                          % version.replace('_', '.')
+                          % version.replace("_", ".")
             results_path = os.path.join(res_dir, results_file)
             results = baseml.read(results_path)
             # There are 6 top-levels: parameters, tree, lnL, version,

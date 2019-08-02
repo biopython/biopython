@@ -30,11 +30,11 @@ from Bio import BiopythonExperimentalWarning
 
 import warnings
 with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+    warnings.simplefilter("ignore", BiopythonExperimentalWarning)
     from Bio import phenotype
 
 # Example plate files
-JSON_PLATE = 'phenotype/Plate.json'
+JSON_PLATE = "phenotype/Plate.json"
 
 
 class TestPhenoMicro(unittest.TestCase):
@@ -45,16 +45,16 @@ class TestPhenoMicro(unittest.TestCase):
         with open(JSON_PLATE) as handle:
             p = json.load(handle)
 
-        times = p['measurements']['Hour']
-        w = phenotype.phen_micro.WellRecord('A10',
-                                            signals={times[i]: p['measurements']['A10'][i]
+        times = p["measurements"]["Hour"]
+        w = phenotype.phen_micro.WellRecord("A10",
+                                            signals={times[i]: p["measurements"]["A10"][i]
                                                      for i in range(len(times))})
 
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', OptimizeWarning)
+            warnings.simplefilter("ignore", OptimizeWarning)
             w.fit()
         self.assertAlmostEqual(w.area, 20879.5)
-        self.assertEqual(w.model, 'gompertz')
+        self.assertEqual(w.model, "gompertz")
         self.assertAlmostEqual(w.lag, 6.0425868725090357, places=5)
         self.assertAlmostEqual(w.plateau, 188.51404344898586, places=5)
         self.assertAlmostEqual(w.slope, 48.190618284831132, places=4)

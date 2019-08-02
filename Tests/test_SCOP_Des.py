@@ -13,7 +13,7 @@ from Bio.SCOP import Des
 class DesTests(unittest.TestCase):
 
     def setUp(self):
-        self.filename = './SCOP/dir.des.scop.txt_test'
+        self.filename = "./SCOP/dir.des.scop.txt_test"
 
     def testParse(self):
         """Test if all records in a DES file are being read."""
@@ -45,8 +45,8 @@ class DesTests(unittest.TestCase):
 
     def testRecord(self):
         """Test one record in detail."""
-        recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
-        recFields = (49268, 'sp', 'b.1.2.1', '', 'Human (Homo sapiens)')
+        recLine = "49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n"
+        recFields = (49268, "sp", "b.1.2.1", "", "Human (Homo sapiens)")
 
         record = Des.Record(recLine)
         self.assertEqual(record.sunid, recFields[0])
@@ -56,6 +56,6 @@ class DesTests(unittest.TestCase):
         self.assertEqual(record.description, recFields[4])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

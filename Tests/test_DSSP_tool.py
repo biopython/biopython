@@ -20,15 +20,15 @@ from Bio.PDB import PDBParser, MMCIFParser
 from Bio.PDB import DSSP
 
 # DSSP version, if known, as DSSP <2.2.0 does not support mmcif files
-dssp_version = '0.0.0'
+dssp_version = "0.0.0"
 # Check if DSSP is installed
-quiet_kwargs = {'stdout': subprocess.PIPE, 'stderr': subprocess.STDOUT}
+quiet_kwargs = {"stdout": subprocess.PIPE, "stderr": subprocess.STDOUT}
 try:
     try:
         # Newer versions of DSSP
         version_string = subprocess.check_output(["dssp", "--version"],
                                                  universal_newlines=True)
-        dssp_version = re.search(r'\s*([\d.]+)', version_string).group(1)
+        dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
     except subprocess.CalledProcessError:
         # Older versions of DSSP
         subprocess.check_call(["dssp", "-h"], **quiet_kwargs)
@@ -36,7 +36,7 @@ except OSError:
     try:
         version_string = subprocess.check_output(["mkdssp", "--version"],
                                                  universal_newlines=True)
-        dssp_version = re.search(r'\s*([\d.]+)', version_string).group(1)
+        dssp_version = re.search(r"\s*([\d.]+)", version_string).group(1)
     except OSError:
         raise MissingExternalDependencyError(
             "Install dssp if you want to use it from Biopython.")
@@ -54,7 +54,7 @@ class DSSP_test(unittest.TestCase):
         self.assertEqual(len(dssp), 130)
 
     # Only run mmCIF tests if DSSP version installed supports mmcif
-    if StrictVersion(dssp_version) >= StrictVersion('2.2.0'):
+    if StrictVersion(dssp_version) >= StrictVersion("2.2.0"):
         def test_dssp_with_mmcif_file(self):
             """Test DSSP generation from MMCIF."""
             p = MMCIFParser()
@@ -72,6 +72,6 @@ class DSSP_test(unittest.TestCase):
             self.assertEqual(len(dssp), 24)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

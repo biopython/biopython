@@ -35,8 +35,8 @@ class CheckRaw(unittest.TestCase):
         new = idx.get_raw(id)
         self.assertTrue(isinstance(new, bytes),
                         "Didn't get bytes from %s get_raw" % self.fmt)
-        self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                         new.replace(b'\r\n', b'\n'))
+        self.assertEqual(raw.replace(b"\r\n", b"\n"),
+                         new.replace(b"\r\n", b"\n"))
         idx.close()
 
         # Now again, but using SQLite backend
@@ -45,8 +45,8 @@ class CheckRaw(unittest.TestCase):
             new = idx.get_raw(id)
             self.assertTrue(isinstance(new, bytes),
                             "Didn't get bytes from %s get_raw" % self.fmt)
-            self.assertEqual(raw.replace(b'\r\n', b'\n'),
-                             new.replace(b'\r\n', b'\n'))
+            self.assertEqual(raw.replace(b"\r\n", b"\n"),
+                             new.replace(b"\r\n", b"\n"))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
@@ -78,7 +78,7 @@ class CheckIndex(unittest.TestCase):
                          % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
-            db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
+            db_indexed = SearchIO.index_db(":memory:", [filename], format, **kwargs)
             self.assertEqual(len(parsed), len(db_indexed),
                              "Should be %i records in %s, index_db says %i"
                              % (len(parsed), filename, len(db_indexed)))
@@ -111,7 +111,7 @@ def _num_difference(obj_a, obj_b):
     attrs_a = set(obj_a.__dict__)
     attrs_b = set(obj_b.__dict__)
     diff = attrs_a.symmetric_difference(attrs_b)
-    privates = len([x for x in diff if x.startswith('_')])
+    privates = len([x for x in diff if x.startswith("_")])
     return len(diff) - privates
 
 
@@ -140,7 +140,7 @@ def compare_attrs(obj_a, obj_b, attrs):
     """Compare attribute values of two objects."""
     for attr in attrs:
         # don't check for contained items, they are handled separately
-        if attr.startswith('_items'):
+        if attr.startswith("_items"):
             continue
         # get attribute values from each objects
         val_a = getattr(obj_a, attr)
@@ -149,7 +149,7 @@ def compare_attrs(obj_a, obj_b, attrs):
         # special case for HSP and HSPFragment {hit,query}
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
-        if attr in ('_hit', '_query') and (val_a is not None and val_b is
+        if attr in ("_hit", "_query") and (val_a is not None and val_b is
                                            not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
@@ -170,7 +170,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
                                                            values_b)
         # if it's an alphabet, check the class names as alphabets are instances
-        elif attr == '_alphabet':
+        elif attr == "_alphabet":
             alph_a = val_a.__class__.__name__
             alph_b = val_b.__class__.__name__
             assert alph_a == alph_b, "%s: %r vs %r" % (attr, alph_a, alph_b)

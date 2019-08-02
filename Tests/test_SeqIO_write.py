@@ -141,7 +141,7 @@ class WriterTests(unittest.TestCase):
         if err_msg:
             try:
                 with warnings.catch_warnings():
-                    warnings.simplefilter('ignore', BiopythonWarning)
+                    warnings.simplefilter("ignore", BiopythonWarning)
                     SeqIO.write(records, handle, format)
             except err_type as err:
                 self.assertEqual(str(err), err_msg)

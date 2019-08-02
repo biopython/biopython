@@ -23,11 +23,11 @@ class TestTranscriptionTranslation(unittest.TestCase):
         s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
         rna = dna.transcribe()
-        self.assertEqual(str(rna), 'GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU')
+        self.assertEqual(str(rna), "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU")
         s = "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU"
         rna = Seq.Seq(s, IUPAC.unambiguous_rna)
         dna = rna.back_transcribe()
-        self.assertEqual(str(dna), 'GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT')
+        self.assertEqual(str(dna), "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT")
 
     def test_translation(self):
         s = ""
@@ -41,19 +41,19 @@ class TestTranscriptionTranslation(unittest.TestCase):
         s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCA"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
         protein = dna.translate(to_stop=True)
-        self.assertEqual(str(protein), 'ENSFSLDFL')
+        self.assertEqual(str(protein), "ENSFSLDFL")
         s = "GAA"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
         protein = dna.translate(15, to_stop=True)
         self.assertEqual(str(protein), "E")
         s = "ATA"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
-        protein = dna.translate('Vertebrate Mitochondrial', to_stop=True)
-        self.assertEqual(str(protein), 'M')
+        protein = dna.translate("Vertebrate Mitochondrial", to_stop=True)
+        self.assertEqual(str(protein), "M")
         s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATAT"
         dna = Seq.Seq(s, IUPAC.unambiguous_dna)
-        protein = dna.translate('SGC8', to_stop=True)
-        self.assertEqual(str(protein), 'ENSFSLDFLWNPSPSNDAWDSSY')
+        protein = dna.translate("SGC8", to_stop=True)
+        self.assertEqual(str(protein), "ENSFSLDFLWNPSPSNDAWDSSY")
 
     def test_dna_rna_translation(self):
         s = "TCAAAAAGGTGCATCTAGATG"
@@ -82,9 +82,9 @@ class TestTranscriptionTranslation(unittest.TestCase):
     def test_ambiguous(self):
         s = "RATGATTARAATYTA"
         dna = Seq.Seq(s, IUPAC.ambiguous_dna)
-        protein = dna.translate('Vertebrate Mitochondrial')
+        protein = dna.translate("Vertebrate Mitochondrial")
         self.assertEqual(str(protein), "BD*NL")
-        stop_protein = dna.translate('SGC1', to_stop=True)
+        stop_protein = dna.translate("SGC1", to_stop=True)
         self.assertEqual(str(stop_protein), "BD")
 
 

@@ -23,6 +23,6 @@ pairwise2._make_score_matrix_fast = pairwise2._python_make_score_matrix_fast
 pairwise2.rint = pairwise2._python_rint
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

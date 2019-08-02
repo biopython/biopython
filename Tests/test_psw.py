@@ -12,8 +12,8 @@ import sys
 
 from Bio.Wise import psw
 
-if 'requires_wise' in sys.modules:
-    del sys.modules['requires_wise']
+if "requires_wise" in sys.modules:
+    del sys.modules["requires_wise"]
 import requires_wise  # noqa: E402
 
 
@@ -99,7 +99,7 @@ def testing_suite():
     unittest_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 'test_'
+    test_loader.testMethodPrefix = "test_"
     tests = [TestPSW]
 
     for test in tests:

@@ -55,7 +55,7 @@ class ParseMMTF(unittest.TestCase):
     def check_mmtf_vs_cif(self, mmtf_filename, cif_filename):
         """Compare parsed structures for MMTF and CIF files."""
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter("ignore", PDBConstructionWarning)
             mmtf_struct = MMTFParser.get_structure(mmtf_filename)
         mmcif_parser = MMCIFParser()
         mmcif_struct = mmcif_parser.get_structure("4CUP", cif_filename)
@@ -96,13 +96,13 @@ class SimpleParseMMTF(unittest.TestCase):
     def test_4ZHL(self):
         """Parse 4ZHL.mmtf."""
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = MMTFParser.get_structure("PDB/4ZHL.mmtf")
 
     def test_1A80(self):
         """Parse 1A8O.mmtf."""
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', PDBConstructionWarning)
+            warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = MMTFParser.get_structure("PDB/1A8O.mmtf")
 
 

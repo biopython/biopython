@@ -45,15 +45,15 @@ rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = {
-    'clustal',
-    'emboss',
-    'fasta', 'fasta-2line',
-    'fastq', 'fastq-illumina', 'fastq-solexa',
-    'ig',
-    'phylip', 'phylip-relaxed', 'phylip-sequential',
-    'qual',
-    'stockholm',
-    'tab',
+    "clustal",
+    "emboss",
+    "fasta", "fasta-2line",
+    "fastq", "fastq-illumina", "fastq-solexa",
+    "ig",
+    "phylip", "phylip-relaxed", "phylip-sequential",
+    "qual",
+    "stockholm",
+    "tab",
 }
 possible_unknown_seq_formats = {
     "embl",
@@ -311,8 +311,8 @@ class TestSeqIO(unittest.TestCase):
                                      "'%s' vs '%s'" % (r1.id, r2.id))
                 elif format in ["fasta", "fasta-2line"]:
                     self.assertEqual(r1.id.split()[0], r2.id)
-                elif format == 'nib':
-                    self.assertEqual(r2.id, '<unknown id>')
+                elif format == "nib":
+                    self.assertEqual(r2.id, "<unknown id>")
                 else:
                     self.assertEqual(r1.id, r2.id,
                                      "'%s' vs '%s'" % (r1.id, r2.id))

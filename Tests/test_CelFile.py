@@ -27,9 +27,9 @@ class testCelFile(unittest.TestCase):
         GridCornerUR = (3570, 107)
         GridCornerLR = (3597, 3470)
         GridCornerLL = (234, 3492)
-        DatHeader = '[11..65533]  1g_A9AF:CLS=3684 RWS=3684 XIN=1  YIN=1  VE=30        2.0 08/23/07 11:23:24 50205880  M10      Tgondii_SNP1.1sq          570  25356.509766  3.500000  1.5600  6'
-        Algorithm = 'Percentile'
-        AlgorithmParameters = 'Percentile:75;CellMargin:2;OutlierHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize:TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutliersInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExtenstion:2;PoolHeightExtension:2;UseSubgrids:FALSE;RandomizePixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000'
+        DatHeader = "[11..65533]  1g_A9AF:CLS=3684 RWS=3684 XIN=1  YIN=1  VE=30        2.0 08/23/07 11:23:24 50205880  M10      Tgondii_SNP1.1sq          570  25356.509766  3.500000  1.5600  6"
+        Algorithm = "Percentile"
+        AlgorithmParameters = "Percentile:75;CellMargin:2;OutlierHigh:1.500;OutlierLow:1.004;AlgVersion:6.0;FixedCellSize:TRUE;FullFeatureWidth:7;FullFeatureHeight:7;IgnoreOutliersInShiftRows:FALSE;FeatureExtraction:TRUE;PoolWidthExtenstion:2;PoolHeightExtension:2;UseSubgrids:FALSE;RandomizePixels:FALSE;ErrorBasis:StdvMean;StdMult:1.000000"
         NumberCells = 25
         intensities = numpy.array([[234.0, 170.0, 22177.0, 164.0, 22104.0],
                                    [188.0, 188.0, 21871.0, 168.0, 21883.0],
@@ -67,7 +67,7 @@ class testCelFile(unittest.TestCase):
                     [0., 0., 0., 0., 0.],
                     [0., 0., 0., 0., 0.]]
 
-        with open('./Affy/affy_v3_example.CEL') as handle:
+        with open("./Affy/affy_v3_example.CEL") as handle:
             cel = CelFile.read(handle)
             self.assertEqual(version, cel.version)
             self.assertEqual(GridCornerUL, cel.GridCornerUL)
@@ -91,6 +91,6 @@ class testCelFile(unittest.TestCase):
             assert_array_equal(modified, cel.modified)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

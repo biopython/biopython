@@ -70,7 +70,7 @@ def temp_db_filename():
     # TESTDB = ':memory:'
     # Instead, we use (if we can) /dev/shm
     try:
-        h, test_db_fname = tempfile.mkstemp("_BioSQL.db", dir='/dev/shm')
+        h, test_db_fname = tempfile.mkstemp("_BioSQL.db", dir="/dev/shm")
     except OSError:
         # We can't use /dev/shm
         h, test_db_fname = tempfile.mkstemp("_BioSQL.db")
@@ -302,7 +302,7 @@ class MultiReadTest(unittest.TestCase):
                                                    db=TESTDB)
 
         self.db = self.server["biosql-test"]
-        self.db2 = self.server['biosql-test2']
+        self.db2 = self.server["biosql-test2"]
 
     def tearDown(self):
         self.server.close()
@@ -317,7 +317,7 @@ class MultiReadTest(unittest.TestCase):
         self.assertIn("biosql-test", server)
         self.assertIn("biosql-test2", server)
         self.assertEqual(2, len(server))
-        self.assertEqual(["biosql-test", 'biosql-test2'], list(server.keys()))
+        self.assertEqual(["biosql-test", "biosql-test2"], list(server.keys()))
         # Check we can delete the namespace...
         del server["biosql-test"]
         del server["biosql-test2"]
@@ -464,7 +464,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
-        self.assertTrue(hasattr(test_record, 'annotations'))
+        self.assertTrue(hasattr(test_record, "annotations"))
         # XXX should do something with annotations once they are like
         # a dictionary
         for feature in test_record.features:
@@ -554,14 +554,14 @@ class SeqInterfaceTest(unittest.TestCase):
         new_seq = test_seq[:10]
         self.assertTrue(isinstance(new_seq, BioSeq.DBSeq))
         # simple slicing
-        self.assertEqual(str(test_seq[:5]), 'ATTTG')
-        self.assertEqual(str(test_seq[0:5]), 'ATTTG')
-        self.assertEqual(str(test_seq[2:3]), 'T')
-        self.assertEqual(str(test_seq[2:4]), 'TT')
-        self.assertEqual(str(test_seq[870:]), 'TTGAATTATA')
+        self.assertEqual(str(test_seq[:5]), "ATTTG")
+        self.assertEqual(str(test_seq[0:5]), "ATTTG")
+        self.assertEqual(str(test_seq[2:3]), "T")
+        self.assertEqual(str(test_seq[2:4]), "TT")
+        self.assertEqual(str(test_seq[870:]), "TTGAATTATA")
         # getting more fancy
-        self.assertEqual(test_seq[-1], 'A')
-        self.assertEqual(test_seq[1], 'T')
+        self.assertEqual(test_seq[-1], "A")
+        self.assertEqual(test_seq[1], "T")
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
@@ -642,10 +642,10 @@ class LoaderTest(unittest.TestCase):
             item_ids.append(item.id)
         item_names.sort()
         item_ids.sort()
-        self.assertEqual(item_names, ['AF297471', 'ARU237582', 'ATCOR66M',
-                                      'ATKIN2', 'BNAKINI', 'BRRBIF72'])
-        self.assertEqual(item_ids, ['AF297471.1', 'AJ237582.1', 'L31939.1',
-                                    'M81224.1', 'X55053.1', 'X62281.1'])
+        self.assertEqual(item_names, ["AF297471", "ARU237582", "ATCOR66M",
+                                      "ATKIN2", "BNAKINI", "BRRBIF72"])
+        self.assertEqual(item_ids, ["AF297471.1", "AJ237582.1", "L31939.1",
+                                    "M81224.1", "X55053.1", "X62281.1"])
 
 
 class DeleteTest(unittest.TestCase):
@@ -794,7 +794,7 @@ class ClosedLoopTest(unittest.TestCase):
         """From GenBank file to BioSQL and back to a GenBank file, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
@@ -809,7 +809,7 @@ class ClosedLoopTest(unittest.TestCase):
         """From GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
@@ -876,7 +876,7 @@ class TransferTest(unittest.TestCase):
         """From GenBank file to BioSQL, then again to a new namespace, NC_005816."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
@@ -891,7 +891,7 @@ class TransferTest(unittest.TestCase):
         """From GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully supported
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
             self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
@@ -1002,14 +1002,14 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(test_record.id, "X55053.1")
         self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
-        self.assertEqual(str(test_record.seq[:10]), 'AACAAAACAC')
+        self.assertEqual(str(test_record.seq[:10]), "AACAAAACAC")
 
         test_record = self.db.lookup(accession="X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
-        self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
+        self.assertEqual(str(test_record.seq[:10]), "ATTTGGCCTA")
 
     def test_seq_feature(self):
         """In depth check that SeqFeatures are transmitted through the db."""
@@ -1127,75 +1127,75 @@ class AutoSeqIOTests(unittest.TestCase):
                     compare_record(record, db_rec)
 
             if "gi" in record.annotations:
-                key = record.annotations['gi']
+                key = record.annotations["gi"]
                 if key != record.id:
                     # print(" - Retrieving by GI '%s'," % key)
                     db_rec = db.lookup(primary_id=key)
                     compare_record(record, db_rec)
 
     def test_SeqIO_loading(self):
-        self.check('fasta', 'Fasta/lupine.nu')
-        self.check('fasta', 'Fasta/elderberry.nu')
-        self.check('fasta', 'Fasta/phlox.nu')
-        self.check('fasta', 'Fasta/centaurea.nu')
-        self.check('fasta', 'Fasta/wisteria.nu')
-        self.check('fasta', 'Fasta/sweetpea.nu')
-        self.check('fasta', 'Fasta/lavender.nu')
-        self.check('fasta', 'Fasta/aster.pro')
-        self.check('fasta', 'Fasta/loveliesbleeding.pro')
-        self.check('fasta', 'Fasta/rose.pro')
-        self.check('fasta', 'Fasta/rosemary.pro')
-        self.check('fasta', 'Fasta/f001')
-        self.check('fasta', 'Fasta/f002', 3)
-        self.check('fasta', 'Fasta/fa01', 2)
-        self.check('fasta', 'GFF/NC_001802.fna')
-        self.check('fasta', 'GFF/multi.fna', 3)
-        self.check('fasta', 'Registry/seqs.fasta', 2)
-        self.check('swiss', 'SwissProt/sp001')
-        self.check('swiss', 'SwissProt/sp002')
-        self.check('swiss', 'SwissProt/sp003')
-        self.check('swiss', 'SwissProt/sp004')
-        self.check('swiss', 'SwissProt/sp005')
-        self.check('swiss', 'SwissProt/sp006')
-        self.check('swiss', 'SwissProt/sp007')
-        self.check('swiss', 'SwissProt/sp008')
-        self.check('swiss', 'SwissProt/sp009')
-        self.check('swiss', 'SwissProt/sp010')
-        self.check('swiss', 'SwissProt/sp011')
-        self.check('swiss', 'SwissProt/sp012')
-        self.check('swiss', 'SwissProt/sp013')
-        self.check('swiss', 'SwissProt/sp014')
-        self.check('swiss', 'SwissProt/sp015')
-        self.check('swiss', 'SwissProt/sp016')
-        self.check('swiss', 'Registry/EDD_RAT.dat')
-        self.check('genbank', 'GenBank/noref.gb')
-        self.check('genbank', 'GenBank/cor6_6.gb', 6)
-        self.check('genbank', 'GenBank/iro.gb')
-        self.check('genbank', 'GenBank/pri1.gb')
-        self.check('genbank', 'GenBank/arab1.gb')
+        self.check("fasta", "Fasta/lupine.nu")
+        self.check("fasta", "Fasta/elderberry.nu")
+        self.check("fasta", "Fasta/phlox.nu")
+        self.check("fasta", "Fasta/centaurea.nu")
+        self.check("fasta", "Fasta/wisteria.nu")
+        self.check("fasta", "Fasta/sweetpea.nu")
+        self.check("fasta", "Fasta/lavender.nu")
+        self.check("fasta", "Fasta/aster.pro")
+        self.check("fasta", "Fasta/loveliesbleeding.pro")
+        self.check("fasta", "Fasta/rose.pro")
+        self.check("fasta", "Fasta/rosemary.pro")
+        self.check("fasta", "Fasta/f001")
+        self.check("fasta", "Fasta/f002", 3)
+        self.check("fasta", "Fasta/fa01", 2)
+        self.check("fasta", "GFF/NC_001802.fna")
+        self.check("fasta", "GFF/multi.fna", 3)
+        self.check("fasta", "Registry/seqs.fasta", 2)
+        self.check("swiss", "SwissProt/sp001")
+        self.check("swiss", "SwissProt/sp002")
+        self.check("swiss", "SwissProt/sp003")
+        self.check("swiss", "SwissProt/sp004")
+        self.check("swiss", "SwissProt/sp005")
+        self.check("swiss", "SwissProt/sp006")
+        self.check("swiss", "SwissProt/sp007")
+        self.check("swiss", "SwissProt/sp008")
+        self.check("swiss", "SwissProt/sp009")
+        self.check("swiss", "SwissProt/sp010")
+        self.check("swiss", "SwissProt/sp011")
+        self.check("swiss", "SwissProt/sp012")
+        self.check("swiss", "SwissProt/sp013")
+        self.check("swiss", "SwissProt/sp014")
+        self.check("swiss", "SwissProt/sp015")
+        self.check("swiss", "SwissProt/sp016")
+        self.check("swiss", "Registry/EDD_RAT.dat")
+        self.check("genbank", "GenBank/noref.gb")
+        self.check("genbank", "GenBank/cor6_6.gb", 6)
+        self.check("genbank", "GenBank/iro.gb")
+        self.check("genbank", "GenBank/pri1.gb")
+        self.check("genbank", "GenBank/arab1.gb")
         with warnings.catch_warnings():
             # BiopythonWarning: order location operators are not fully
             # supported
             warnings.simplefilter("ignore", BiopythonWarning)
-            self.check('genbank', 'GenBank/protein_refseq2.gb')
-        self.check('genbank', 'GenBank/extra_keywords.gb')
-        self.check('genbank', 'GenBank/one_of.gb')
-        self.check('genbank', 'GenBank/NT_019265.gb')
-        self.check('genbank', 'GenBank/origin_line.gb')
-        self.check('genbank', 'GenBank/blank_seq.gb')
+            self.check("genbank", "GenBank/protein_refseq2.gb")
+        self.check("genbank", "GenBank/extra_keywords.gb")
+        self.check("genbank", "GenBank/one_of.gb")
+        self.check("genbank", "GenBank/NT_019265.gb")
+        self.check("genbank", "GenBank/origin_line.gb")
+        self.check("genbank", "GenBank/blank_seq.gb")
         with warnings.catch_warnings():
             # BiopythonWarning: bond location operators are not fully supported
             warnings.simplefilter("ignore", BiopythonWarning)
-            self.check('genbank', 'GenBank/dbsource_wrap.gb')
+            self.check("genbank", "GenBank/dbsource_wrap.gb")
             # BiopythonWarning: order location operators are not fully
             # supported
-            self.check('genbank', 'GenBank/NC_005816.gb')
-        self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
-        self.check('genbank', 'GFF/NC_001422.gbk')
-        self.check('embl', 'EMBL/TRBG361.embl')
-        self.check('embl', 'EMBL/DD231055_edited.embl')
-        self.check('embl', 'EMBL/SC10H5.embl')
-        self.check('embl', 'EMBL/U87107.embl')
+            self.check("genbank", "GenBank/NC_005816.gb")
+        self.check("genbank", "GenBank/gbvrl1_start.seq", 3)
+        self.check("genbank", "GFF/NC_001422.gbk")
+        self.check("embl", "EMBL/TRBG361.embl")
+        self.check("embl", "EMBL/DD231055_edited.embl")
+        self.check("embl", "EMBL/SC10H5.embl")
+        self.check("embl", "EMBL/U87107.embl")
         self.assertEqual(len(self.db), 66)
 
 
@@ -1221,15 +1221,15 @@ class SwissProtUnknownPositionTest(unittest.TestCase):
 
     def test_ambiguous_location(self):
         """Loaded uniprot-xml with ambiguous location in BioSQL."""
-        id = 'P97881'
+        id = "P97881"
         seqiter = SeqIO.parse("SwissProt/%s.xml" % id, "uniprot-xml")
         self.assertTrue(self.db.load(seqiter) == 1)
 
         dbrecord = self.db.lookup(primary_id=id)
         for feature in dbrecord.features:
-            if feature.type == 'signal peptide':
+            if feature.type == "signal peptide":
                 self.assertTrue(isinstance(feature.location.end, UnknownPosition))
-            elif feature.type == 'chain':
+            elif feature.type == "chain":
                 self.assertTrue(isinstance(feature.location.start, UnknownPosition))
             else:
                 self.assertTrue(isinstance(feature.location.start, ExactPosition))

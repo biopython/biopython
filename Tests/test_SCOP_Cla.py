@@ -15,7 +15,7 @@ from Bio.SCOP import Cla
 class ClaTests(unittest.TestCase):
 
     def setUp(self):
-        self.filename = './SCOP/dir.cla.scop.txt_test'
+        self.filename = "./SCOP/dir.cla.scop.txt_test"
 
     def testParse(self):
         """Test if all records in a CLA file are being read."""
@@ -41,11 +41,11 @@ class ClaTests(unittest.TestCase):
                 # unordered, therefore we need only check that they are all
                 # there, NOT that they are in the same order.
                 # End of line is platform dependent. Strip it off
-                expected_hierarchy = line.rstrip().split('\t')[5].split(',')
-                expected_hierarchy = dict(pair.split('=') for pair
+                expected_hierarchy = line.rstrip().split("\t")[5].split(",")
+                expected_hierarchy = dict(pair.split("=") for pair
                                           in expected_hierarchy)
-                actual_hierarchy = str(record).rstrip().split('\t')[5].split(',')
-                actual_hierarchy = dict(pair.split('=') for pair
+                actual_hierarchy = str(record).rstrip().split("\t")[5].split(",")
+                actual_hierarchy = dict(pair.split("=") for pair
                                         in actual_hierarchy)
                 self.assertEqual(len(actual_hierarchy),
                                  len(expected_hierarchy))
@@ -61,33 +61,33 @@ class ClaTests(unittest.TestCase):
 
     def testRecord(self):
         """Test one record in detail."""
-        recLine = 'd1dan.1\t1dan\tT:,U:91-106\tb.1.2.1\t21953\tcl=48724,cf=48725,sf=49265,fa=49266,dm=49267,sp=49268,px=21953'
+        recLine = "d1dan.1\t1dan\tT:,U:91-106\tb.1.2.1\t21953\tcl=48724,cf=48725,sf=49265,fa=49266,dm=49267,sp=49268,px=21953"
 
         record = Cla.Record(recLine)
-        self.assertEqual(record.sid, 'd1dan.1')
-        self.assertEqual(record.residues.pdbid, '1dan')
-        self.assertEqual(record.residues.fragments, (('T', '', ''), ('U', '91', '106')))
-        self.assertEqual(record.sccs, 'b.1.2.1')
+        self.assertEqual(record.sid, "d1dan.1")
+        self.assertEqual(record.residues.pdbid, "1dan")
+        self.assertEqual(record.residues.fragments, (("T", "", ""), ("U", "91", "106")))
+        self.assertEqual(record.sccs, "b.1.2.1")
         self.assertEqual(record.sunid, 21953)
-        self.assertEqual(record.hierarchy, {'cl': 48724,
-                                            'cf': 48725,
-                                            'sf': 49265,
-                                            'fa': 49266,
-                                            'dm': 49267,
-                                            'sp': 49268,
-                                            'px': 21953})
+        self.assertEqual(record.hierarchy, {"cl": 48724,
+                                            "cf": 48725,
+                                            "sf": 49265,
+                                            "fa": 49266,
+                                            "dm": 49267,
+                                            "sp": 49268,
+                                            "px": 21953})
 
     def testIndex(self):
         """Test CLA file indexing."""
         index = Cla.Index(self.filename)
 
         self.assertEqual(len(index), 14)
-        self.assertIn('d4hbia_', index)
+        self.assertIn("d4hbia_", index)
 
-        rec = index['d1hbia_']
+        rec = index["d1hbia_"]
         self.assertEqual(rec.sunid, 14996)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

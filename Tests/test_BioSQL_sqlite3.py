@@ -18,11 +18,11 @@ from common_BioSQL import *  # noqa: F403
 from common_BioSQL import load_biosql_ini, check_config, compare_records, temp_db_filename
 
 # Constants for the database driver
-DBDRIVER = 'sqlite3'
-DBTYPE = 'sqlite'
+DBDRIVER = "sqlite3"
+DBTYPE = "sqlite"
 
 DBHOST = None
-DBUSER = 'root'
+DBUSER = "root"
 DBPASSWD = None
 TESTDB = temp_db_filename()
 

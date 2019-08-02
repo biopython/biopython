@@ -47,7 +47,7 @@ class TestQblast(unittest.TestCase):
         # GI:160837788 aka NP_075631.2
         # the actin related protein 2/3 complex, subunit 1B [Mus musculus]
         self.run_qblast("blastp", "nr", "NP_075631.2", 0.001,
-                        "rat [ORGN]", {'megablast': 'FALSE'},
+                        "rat [ORGN]", {"megablast": "FALSE"},
                         ["NP_112408.1", "AAH59131.1", "EDM14357.1",
                          "NP_001008766.1", "NP_001102411.1", "EDL80109.1",
                          "EDL80106.1", "NP_001100434.1", "AAI67084.1"])
@@ -55,7 +55,7 @@ class TestQblast(unittest.TestCase):
     def test_pcr_primers(self):
         # This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
         self.run_qblast("blastn", "nr", "GTACCTTGATTTCGTATTC" + ("N" * 30) + "GACTCTACTACCTTTACCC",
-                        10, "pan [ORGN]", {'megablast': 'FALSE'},
+                        10, "pan [ORGN]", {"megablast": "FALSE"},
                         ["XM_009432096.3", "XM_009432102.3", "XM_009432101.3",
                          "XM_016930487.2", "XM_009432104.3", "XM_009432099.3",
                          "XR_001710553.2", "XM_016930485.2", "XM_009432089.3",
@@ -74,7 +74,7 @@ class TestQblast(unittest.TestCase):
                         AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
                         GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
                         ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-                        0.0000001, None, {'megablast': 'FALSE'},
+                        0.0000001, None, {"megablast": "FALSE"},
                         ["XP_021665344.1", "XP_021615158.1", "XP_017223689.1",
                          "OMP06800.1", "XP_021634873.1", "XP_021299673.1",
                          "XP_002311451.2", "XP_021976565.1", "OMO90244.1"])
@@ -122,10 +122,10 @@ class TestQblast(unittest.TestCase):
                         GCAAGACCAACACCCTGAACCAGCAGAGCATCTGCATCAAGAGCGAGATCCAACGATACGTTGAAATTCG
                         CTTGTGTGCCACTGGTAAATCCACCCCCCCTAAGCCTCTAATAGGGAGACCTTAG""",
                         0.0000001, None, {
-                            'template_type': 0,
-                            'template_length': 18,
-                            'megablast': 'on',
-                        }, ['XM_635681.1', 'XM_008496783.1'])
+                            "template_type": 0,
+                            "template_length": 18,
+                            "megablast": "on",
+                        }, ["XM_635681.1", "XM_008496783.1"])
 
     def run_qblast(self, program, database, query, e_value, entrez_filter, additional_args, expected_hits):
         """Do qblast searches with given parameters and analyze results."""
@@ -211,13 +211,13 @@ class TestQblast(unittest.TestCase):
     def test_short_query(self):
         """Test SHORT_QUERY_ADJUST parameter."""
         # Should give no hits:
-        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5)
+        my_search = NCBIWWW.qblast("blastp", "nr", "ICWENRM", hitlist_size=5)
         my_hits = NCBIXML.read(my_search)
         my_search.close()
         self.assertEqual(len(my_hits.alignments), 0)
 
         # Should give hits:
-        my_search = NCBIWWW.qblast('blastp', 'nr', 'ICWENRM', hitlist_size=5,
+        my_search = NCBIWWW.qblast("blastp", "nr", "ICWENRM", hitlist_size=5,
                                    short_query=True)
         my_hits = NCBIXML.read(my_search)
         my_search.close()
@@ -225,22 +225,22 @@ class TestQblast(unittest.TestCase):
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
-            warnings.simplefilter('always')
+            warnings.simplefilter("always")
             # Trigger a warning.
-            my_search = NCBIWWW.qblast('blastn', 'nt', 'ATGTCAACTTCAGAA',
+            my_search = NCBIWWW.qblast("blastn", "nt", "ATGTCAACTTCAGAA",
                                        hitlist_size=5, short_query=True)
             # Verify some things
             self.assertEqual(len(w), 1)
             self.assertEqual(w[-1].category, BiopythonWarning)
-            self.assertIn('blastn', str(w[-1].message))
+            self.assertIn("blastn", str(w[-1].message))
             my_hits = NCBIXML.read(my_search)
             my_search.close()
             self.assertEqual(len(my_hits.alignments), 5)
 
     def test_error_conditions(self):
         """Test if exceptions were properly handled."""
-        self.assertRaises(ValueError, NCBIWWW.qblast, 'megablast', 'nt',
-                          'ATGCGTACGCAGCTAAAGTAAACCTATCGCGTCTCCT')
+        self.assertRaises(ValueError, NCBIWWW.qblast, "megablast", "nt",
+                          "ATGCGTACGCAGCTAAAGTAAACCTATCGCGTCTCCT")
 
 
 if __name__ == "__main__":

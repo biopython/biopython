@@ -13,8 +13,8 @@ from Bio._py3k import StringIO
 
 from Bio import Wise
 
-if 'requires_wise' in sys.modules:
-    del sys.modules['requires_wise']
+if "requires_wise" in sys.modules:
+    del sys.modules["requires_wise"]
 import requires_wise  # noqa: E402
 
 

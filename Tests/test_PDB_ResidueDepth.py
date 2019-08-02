@@ -39,47 +39,47 @@ class ResidueDepthTests(unittest.TestCase):
             s = p.get_structure("X", prot_file)
         model = s[0]
         rd = ResidueDepth(model)
-        res_chain = ''
+        res_chain = ""
         for item in rd.property_list[:100]:
             res_chain = res_chain + item[0].get_resname()
         self.assertEqual(res_chain, first_100_residues)
 
     def test_ResidueDepth_2XHE(self):
-        self.check_msms('PDB/2XHE.pdb', 'HISMETSERLEULYSSERALAVALLYSTHRVALLEUTH'
-                                        'RASNSERLEUARGSERVALALAASPGLYGLYASPTRPL'
-                                        'YSVALLEUVALVALASPLYSPROALALEUARGMETILE'
-                                        'SERGLUCYSALAARGMETSERGLUILELEUASPLEUGL'
-                                        'YVALTHRVALVALGLUASPVALSERLYSGLNARGLYSV'
-                                        'ALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPRO'
-                                        'THRGLUGLUASNLEUASPTYRVALILEARGASPPHEAL'
-                                        'AASPARGTHRPROTHRTYRGLUALAALAHISLEU')
+        self.check_msms("PDB/2XHE.pdb", "HISMETSERLEULYSSERALAVALLYSTHRVALLEUTH"
+                                        "RASNSERLEUARGSERVALALAASPGLYGLYASPTRPL"
+                                        "YSVALLEUVALVALASPLYSPROALALEUARGMETILE"
+                                        "SERGLUCYSALAARGMETSERGLUILELEUASPLEUGL"
+                                        "YVALTHRVALVALGLUASPVALSERLYSGLNARGLYSV"
+                                        "ALLEUPROGLNPHEHISGLYVALTYRPHEILEGLUPRO"
+                                        "THRGLUGLUASNLEUASPTYRVALILEARGASPPHEAL"
+                                        "AASPARGTHRPROTHRTYRGLUALAALAHISLEU")
 
     def test_ResidueDepth_2BEG(self):
-        self.check_msms('PDB/2BEG.pdb', 'LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGL'
-                                        'YALAILEILEGLYLEUMETVALGLYGLYVALVALILEA'
-                                        'LALEUVALPHEPHEALAGLUASPVALGLYSERASNLYS'
-                                        'GLYALAILEILEGLYLEUMETVALGLYGLYVALVALIL'
-                                        'EALALEUVALPHEPHEALAGLUASPVALGLYSERASNL'
-                                        'YSGLYALAILEILEGLYLEUMETVALGLYGLYVALVAL'
-                                        'ILEALALEUVALPHEPHEALAGLUASPVALGLYSERAS'
-                                        'NLYSGLYALAILEILEGLYLEUMETVALGLYGLY')
+        self.check_msms("PDB/2BEG.pdb", "LEUVALPHEPHEALAGLUASPVALGLYSERASNLYSGL"
+                                        "YALAILEILEGLYLEUMETVALGLYGLYVALVALILEA"
+                                        "LALEUVALPHEPHEALAGLUASPVALGLYSERASNLYS"
+                                        "GLYALAILEILEGLYLEUMETVALGLYGLYVALVALIL"
+                                        "EALALEUVALPHEPHEALAGLUASPVALGLYSERASNL"
+                                        "YSGLYALAILEILEGLYLEUMETVALGLYGLYVALVAL"
+                                        "ILEALALEUVALPHEPHEALAGLUASPVALGLYSERAS"
+                                        "NLYSGLYALAILEILEGLYLEUMETVALGLYGLY")
 
     def test_ResidueDepth_1LCD(self):
-        self.check_msms('PDB/1LCD.pdb', 'METLYSPROVALTHRLEUTYRASPVALALAGLUTYRAL'
-                                        'AGLYVALSERTYRGLNTHRVALSERARGVALVALASNG'
-                                        'LNALASERHISVALSERALALYSTHRARGGLULYSVAL'
-                                        'GLUALAALAMETALAGLULEUASNTYRILEPROASNAR'
-                                        'G')
+        self.check_msms("PDB/1LCD.pdb", "METLYSPROVALTHRLEUTYRASPVALALAGLUTYRAL"
+                                        "AGLYVALSERTYRGLNTHRVALSERARGVALVALASNG"
+                                        "LNALASERHISVALSERALALYSTHRARGGLULYSVAL"
+                                        "GLUALAALAMETALAGLULEUASNTYRILEPROASNAR"
+                                        "G")
 
     def test_ResidueDepth_1A8O(self):
-        self.check_msms('PDB/1A8O.pdb', 'MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGAS'
-                                        'PTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUG'
-                                        'LNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHR'
-                                        'LEULEUVALGLNASNALAASNPROASPCYSLYSTHRIL'
-                                        'ELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUM'
-                                        'SEMSETHRALACYSGLNGLY')
+        self.check_msms("PDB/1A8O.pdb", "MSEASPILEARGGLNGLYPROLYSGLUPROPHEARGAS"
+                                        "PTYRVALASPARGPHETYRLYSTHRLEUARGALAGLUG"
+                                        "LNALASERGLNGLUVALLYSASNTRPMSETHRGLUTHR"
+                                        "LEULEUVALGLNASNALAASNPROASPCYSLYSTHRIL"
+                                        "ELEULYSALALEUGLYPROGLYALATHRLEUGLUGLUM"
+                                        "SEMSETHRALACYSGLNGLY")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

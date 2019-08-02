@@ -33,7 +33,7 @@ from Bio.HMM import Trainer
 from Bio.HMM import Utilities
 
 
-if os.name == 'java':
+if os.name == "java":
     from Bio import MissingExternalDependencyError
     # This is a slight miss-use of MissingExternalDependencyError,
     # but it will do in the short term to skip this unit test on Jython
@@ -48,42 +48,42 @@ VERBOSE = 0
 
 # -- set up our alphabets
 class DiceRollAlphabet(Alphabet.Alphabet):
-    letters = ['1', '2', '3', '4', '5', '6']
+    letters = ["1", "2", "3", "4", "5", "6"]
 
 
 class DiceTypeAlphabet(Alphabet.Alphabet):
-    letters = ['F', 'L']
+    letters = ["F", "L"]
 
 
 # -- useful functions
 def _loaded_dice_roll(chance_num, cur_state):
     """Generate a loaded dice roll based on the state and a random number."""
-    if cur_state == 'F':
+    if cur_state == "F":
         if chance_num <= (float(1) / float(6)):
-            return '1'
+            return "1"
         elif chance_num <= (float(2) / float(6)):
-            return '2'
+            return "2"
         elif chance_num <= (float(3) / float(6)):
-            return '3'
+            return "3"
         elif chance_num <= (float(4) / float(6)):
-            return '4'
+            return "4"
         elif chance_num <= (float(5) / float(6)):
-            return '5'
+            return "5"
         else:
-            return '6'
-    elif cur_state == 'L':
+            return "6"
+    elif cur_state == "L":
         if chance_num <= (float(1) / float(10)):
-            return '1'
+            return "1"
         elif chance_num <= (float(2) / float(10)):
-            return '2'
+            return "2"
         elif chance_num <= (float(3) / float(10)):
-            return '3'
+            return "3"
         elif chance_num <= (float(4) / float(10)):
-            return '4'
+            return "4"
         elif chance_num <= (float(5) / float(10)):
-            return '5'
+            return "5"
         else:
-            return '6'
+            return "6"
     else:
         raise ValueError("Unexpected cur_state %s" % cur_state)
 
@@ -97,9 +97,9 @@ def generate_rolls(num_rolls):
 
     """
     # start off in the fair state
-    cur_state = 'F'
-    roll_seq = MutableSeq('', DiceRollAlphabet())
-    state_seq = MutableSeq('', DiceTypeAlphabet())
+    cur_state = "F"
+    roll_seq = MutableSeq("", DiceRollAlphabet())
+    state_seq = MutableSeq("", DiceTypeAlphabet())
     # generate the sequence
     for roll in range(num_rolls):
         state_seq.append(cur_state)
@@ -110,12 +110,12 @@ def generate_rolls(num_rolls):
         roll_seq.append(new_roll)
         # now give us a chance to switch to a new state
         chance_num = random.random()
-        if cur_state == 'F':
+        if cur_state == "F":
             if chance_num <= .05:
-                cur_state = 'L'
-        elif cur_state == 'L':
+                cur_state = "L"
+        elif cur_state == "L":
             if chance_num <= .1:
-                cur_state = 'F'
+                cur_state = "F"
     return roll_seq.toseq(), state_seq.toseq()
 
 

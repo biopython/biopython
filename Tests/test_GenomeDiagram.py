@@ -128,14 +128,14 @@ def calc_gc_content(sequence):
     calc_gc_content(sequence)
     """
     d = {}
-    for nt in ['A', 'T', 'G', 'C']:
+    for nt in ["A", "T", "G", "C"]:
         d[nt] = sequence.count(nt) + sequence.count(nt.lower())
-    gc = d.get('G', 0) + d.get('C', 0)
+    gc = d.get("G", 0) + d.get("C", 0)
 
     if gc == 0:
         return 0
     # print(gc*100.0/(d['A'] +d['T'] + gc))
-    return gc * 1. / (d['A'] + d['T'] + gc)
+    return gc * 1. / (d["A"] + d["T"] + gc)
 
 
 def calc_at_content(sequence):
@@ -147,13 +147,13 @@ def calc_at_content(sequence):
     calc_at_content(sequence)
     """
     d = {}
-    for nt in ['A', 'T', 'G', 'C']:
+    for nt in ["A", "T", "G", "C"]:
         d[nt] = sequence.count(nt) + sequence.count(nt.lower())
-    at = d.get('A', 0) + d.get('T', 0)
+    at = d.get("A", 0) + d.get("T", 0)
 
     if at == 0:
         return 0
-    return at * 1. / (d['G'] + d['G'] + at)
+    return at * 1. / (d["G"] + d["G"] + at)
 
 
 def calc_gc_skew(sequence):
@@ -164,8 +164,8 @@ def calc_gc_skew(sequence):
 
     calc_gc_skew(sequence)
     """
-    g = sequence.count('G') + sequence.count('g')
-    c = sequence.count('C') + sequence.count('c')
+    g = sequence.count("G") + sequence.count("g")
+    c = sequence.count("C") + sequence.count("c")
     if g + c == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
@@ -180,8 +180,8 @@ def calc_at_skew(sequence):
 
     calc_at_skew(sequence)
     """
-    a = sequence.count('A') + sequence.count('a')
-    t = sequence.count('T') + sequence.count('t')
+    a = sequence.count("A") + sequence.count("a")
+    t = sequence.count("T") + sequence.count("t")
     if a + t == 0:
         return 0.0  # TODO - return NaN or None here?
     else:
@@ -243,7 +243,7 @@ class GraphTest(unittest.TestCase):
         data2 = [math.cos(x * scale) for x in range(points)]
         data3 = [2 * math.sin(2 * x * scale) for x in range(points)]
 
-        gdd = Diagram('Test Diagram', circular=False,
+        gdd = Diagram("Test Diagram", circular=False,
                       y=0.01, yt=0.01, yb=0.01,
                       x=0.01, xl=0.01, xr=0.01)
         gdt_data = gdd.new_track(1, greytrack=False)
@@ -256,18 +256,18 @@ class GraphTest(unittest.TestCase):
                                color=color, altcolor=color,
                                center=0)
 
-        gdd.draw(format='linear',
+        gdd.draw(format="linear",
                  tracklines=False,
                  pagesize=(15 * cm, 15 * cm),
                  fragments=1,
                  start=0, end=points)
-        gdd.write(os.path.join('Graphics', "line_graph.pdf"), "pdf")
+        gdd.write(os.path.join("Graphics", "line_graph.pdf"), "pdf")
         # Circular diagram
         gdd.draw(tracklines=False,
                  pagesize=(15 * cm, 15 * cm),
                  circular=True,  # Data designed to be periodic
                  start=0, end=points, circle_core=0.5)
-        gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
+        gdd.write(os.path.join("Graphics", "line_graph_c.pdf"), "pdf")
 
     def test_slicing(self):
         """Check GraphData slicing."""
@@ -284,7 +284,7 @@ class LabelTest(unittest.TestCase):
 
     def setUp(self):
         """Start a diagram."""
-        self.gdd = Diagram('Test Diagram', circular=False,
+        self.gdd = Diagram("Test Diagram", circular=False,
                            y=0.01, yt=0.01, yb=0.01,
                            x=0.01, xl=0.01, xr=0.01)
 
@@ -297,17 +297,17 @@ class LabelTest(unittest.TestCase):
             orient = "landscape"
         else:
             orient = "portrait"
-        self.gdd.draw(format='linear', orientation=orient,
+        self.gdd.draw(format="linear", orientation=orient,
                       tracklines=False,
                       pagesize=(15 * cm, 5 * cm * tracks),
                       fragments=1,
                       start=0, end=400)
-        self.gdd.write(os.path.join('Graphics', name + ".pdf"), "pdf")
+        self.gdd.write(os.path.join("Graphics", name + ".pdf"), "pdf")
         global renderPM
         if renderPM:
             try:
                 # For the tutorial this is useful:
-                self.gdd.write(os.path.join('Graphics', name + ".png"), "png")
+                self.gdd.write(os.path.join("Graphics", name + ".png"), "png")
             except renderPM.RenderPMError:
                 # Probably a font problem, e.g.
                 # RenderPMError: Can't setFont(Times-Roman) missing the T1 files?
@@ -325,7 +325,7 @@ class LabelTest(unittest.TestCase):
                           fragments=1,
                           circle_core=0.5,
                           start=0, end=400)
-            self.gdd.write(os.path.join('Graphics', name + "_c.pdf"), "pdf")
+            self.gdd.write(os.path.join("Graphics", name + "_c.pdf"), "pdf")
 
     def add_track_with_sigils(self, **kwargs):
         """Add track with sigils."""
@@ -364,7 +364,7 @@ class SigilsTest(unittest.TestCase):
 
     def setUp(self):
         """Initialise diagram."""
-        self.gdd = Diagram('Test Diagram', circular=False,
+        self.gdd = Diagram("Test Diagram", circular=False,
                            y=0.01, yt=0.01, yb=0.01,
                            x=0.01, xl=0.01, xr=0.01)
 
@@ -393,17 +393,17 @@ class SigilsTest(unittest.TestCase):
             orient = "landscape"
         else:
             orient = "portrait"
-        self.gdd.draw(format='linear', orientation=orient,
+        self.gdd.draw(format="linear", orientation=orient,
                       tracklines=False,
                       pagesize=(15 * cm, 5 * cm * tracks),
                       fragments=1,
                       start=0, end=400)
-        self.gdd.write(os.path.join('Graphics', name + ".pdf"), "pdf")
+        self.gdd.write(os.path.join("Graphics", name + ".pdf"), "pdf")
         global renderPM
         if renderPM:
             # For the tutorial this might be useful:
             try:
-                self.gdd.write(os.path.join('Graphics', name + ".png"), "png")
+                self.gdd.write(os.path.join("Graphics", name + ".png"), "png")
             except renderPM.RenderPMError:
                 # Probably a font problem
                 renderPM = None
@@ -414,7 +414,7 @@ class SigilsTest(unittest.TestCase):
                           fragments=1,
                           circle_core=0.5,
                           start=0, end=400)
-            self.gdd.write(os.path.join('Graphics', name + "_c.pdf"), "pdf")
+            self.gdd.write(os.path.join("Graphics", name + "_c.pdf"), "pdf")
 
     def test_all_sigils(self):
         """All sigils."""
@@ -628,11 +628,11 @@ class DiagramTest(unittest.TestCase):
 
     def setUp(self):
         """Test setup, just loads a GenBank file as a SeqRecord."""
-        handle = open(os.path.join("GenBank", "NC_005816.gb"), 'r')
+        handle = open(os.path.join("GenBank", "NC_005816.gb"), "r")
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 
-        self.gdd = Diagram('Test Diagram')
+        self.gdd = Diagram("Test Diagram")
         # Add a track of features,
         self.gdd.new_track(1, greytrack=True, name="CDS Features",
                            greytrack_labels=0, height=0.5)
@@ -700,7 +700,7 @@ class DiagramTest(unittest.TestCase):
 
     def test_write_arguments(self):
         """Check how the write methods respond to output format arguments."""
-        gdd = Diagram('Test Diagram')
+        gdd = Diagram("Test Diagram")
         gdd.drawing = None  # Hack - need the ReportLab drawing object to be created.
         filename = os.path.join("Graphics", "error.txt")
         # We (now) allow valid formats in any case.
@@ -716,7 +716,7 @@ class DiagramTest(unittest.TestCase):
         start = 6500
         end = 8750
 
-        gdd = Diagram('Test Diagram',
+        gdd = Diagram("Test Diagram",
                       # For the circular diagram we don't want a closed cirle:
                       circular=False,
                       )
@@ -766,32 +766,32 @@ class DiagramTest(unittest.TestCase):
                                      label=True)
 
         # And draw it...
-        gdd.draw(format='linear', orientation='landscape',
+        gdd.draw(format="linear", orientation="landscape",
                  tracklines=False, pagesize=(10 * cm, 6 * cm), fragments=1,
                  start=start, end=end)
-        output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
-        gdd.write(output_filename, 'PDF')
+        output_filename = os.path.join("Graphics", "GD_region_linear.pdf")
+        gdd.write(output_filename, "PDF")
 
         # Also check the write_to_string (bytes string) method matches,
-        assert open(output_filename, "rb").read() == gdd.write_to_string('PDF')
+        assert open(output_filename, "rb").read() == gdd.write_to_string("PDF")
 
-        output_filename = os.path.join('Graphics', 'GD_region_linear.svg')
-        gdd.write(output_filename, 'SVG')
+        output_filename = os.path.join("Graphics", "GD_region_linear.svg")
+        gdd.write(output_filename, "SVG")
 
         # Circular with a particular start/end is a bit odd, but by setting
         # circular=False (above) a sweep of 90% is used (a wedge is left out)
-        gdd.draw(format='circular',
+        gdd.draw(format="circular",
                  tracklines=False, pagesize=(10 * cm, 10 * cm),
                  start=start, end=end)
-        output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
-        gdd.write(output_filename, 'PDF')
-        output_filename = os.path.join('Graphics', 'GD_region_circular.svg')
-        gdd.write(output_filename, 'SVG')
+        output_filename = os.path.join("Graphics", "GD_region_circular.pdf")
+        gdd.write(output_filename, "PDF")
+        output_filename = os.path.join("Graphics", "GD_region_circular.svg")
+        gdd.write(output_filename, "SVG")
 
     def test_diagram_via_methods_pdf(self):
         """Construct and draw PDF using method approach."""
         genbank_entry = self.record
-        gdd = Diagram('Test Diagram')
+        gdd = Diagram("Test Diagram")
 
         # Add a track of features,
         gdt_features = gdd.new_track(1, greytrack=True,
@@ -854,51 +854,51 @@ class DiagramTest(unittest.TestCase):
 
         step = len(genbank_entry) // 200
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                            'GC content', style='line',
+                            "GC content", style="line",
                             color=colors.lightgreen,
                             altcolor=colors.darkseagreen)
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                            'AT content', style='line',
+                            "AT content", style="line",
                             color=colors.orange,
                             altcolor=colors.red)
 
         # Finally draw it in both formats,
-        gdd.draw(format='linear', orientation='landscape', tracklines=0,
-                 pagesize='A4', fragments=3)
-        output_filename = os.path.join('Graphics', 'GD_by_meth_linear.pdf')
-        gdd.write(output_filename, 'PDF')
+        gdd.draw(format="linear", orientation="landscape", tracklines=0,
+                 pagesize="A4", fragments=3)
+        output_filename = os.path.join("Graphics", "GD_by_meth_linear.pdf")
+        gdd.write(output_filename, "PDF")
 
-        gdd.draw(format='circular', tracklines=False, circle_core=0.8,
+        gdd.draw(format="circular", tracklines=False, circle_core=0.8,
                  pagesize=(20 * cm, 20 * cm), circular=True)
-        output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
-        gdd.write(output_filename, 'PDF')
+        output_filename = os.path.join("Graphics", "GD_by_meth_circular.pdf")
+        gdd.write(output_filename, "PDF")
 
     def test_diagram_via_object_pdf(self):
         """Construct and draw PDF using object approach."""
         genbank_entry = self.record
-        gdd = Diagram('Test Diagram')
+        gdd = Diagram("Test Diagram")
 
-        gdt1 = Track('CDS features', greytrack=True,
+        gdt1 = Track("CDS features", greytrack=True,
                      scale_largetick_interval=1e4,
                      scale_smalltick_interval=1e3,
                      greytrack_labels=10,
                      greytrack_font_color="red",
                      scale_format="SInt")
-        gdt2 = Track('gene features', greytrack=1, scale_largetick_interval=1e4)
+        gdt2 = Track("gene features", greytrack=1, scale_largetick_interval=1e4)
 
         # First add some feature sets:
-        gdfsA = FeatureSet(name='CDS backgrounds')
-        gdfsB = FeatureSet(name='gene background')
+        gdfsA = FeatureSet(name="CDS backgrounds")
+        gdfsB = FeatureSet(name="gene background")
 
-        gdfs1 = FeatureSet(name='CDS features')
-        gdfs2 = FeatureSet(name='gene features')
-        gdfs3 = FeatureSet(name='misc_features')
-        gdfs4 = FeatureSet(name='repeat regions')
+        gdfs1 = FeatureSet(name="CDS features")
+        gdfs2 = FeatureSet(name="gene features")
+        gdfs3 = FeatureSet(name="misc_features")
+        gdfs4 = FeatureSet(name="repeat regions")
 
         prev_gene = None
         cds_count = 0
         for feature in genbank_entry.features:
-            if feature.type == 'CDS':
+            if feature.type == "CDS":
                 cds_count += 1
                 if prev_gene:
                     # Assuming it goes with this CDS!
@@ -915,7 +915,7 @@ class DiagramTest(unittest.TestCase):
                     # Cross link,
                     gdd.cross_track_links.append(CrossLink(a, b, light, dark))
                     prev_gene = None
-            if feature.type == 'gene':
+            if feature.type == "gene":
                 prev_gene = feature
 
         # Some cross links on the same linear diagram fragment,
@@ -965,35 +965,35 @@ class DiagramTest(unittest.TestCase):
 
         cds_count = 0
         for feature in genbank_entry.features:
-            if feature.type == 'CDS':
+            if feature.type == "CDS":
                 cds_count += 1
                 if cds_count % 2 == 0:
                     gdfs1.add_feature(feature, color=colors.pink, sigil="ARROW")
                 else:
                     gdfs1.add_feature(feature, color=colors.red, sigil="ARROW")
 
-            if feature.type == 'gene':
+            if feature.type == "gene":
                 # Note we set the colour of ALL the genes later on as a test,
                 gdfs2.add_feature(feature, sigil="ARROW")
 
-            if feature.type == 'misc_feature':
+            if feature.type == "misc_feature":
                 gdfs3.add_feature(feature, color=colors.orange)
 
-            if feature.type == 'repeat_region':
+            if feature.type == "repeat_region":
                 gdfs4.add_feature(feature, color=colors.purple)
 
         # gdd.cross_track_links = gdd.cross_track_links[:1]
 
-        gdfs1.set_all_features('label', 1)
-        gdfs2.set_all_features('label', 1)
-        gdfs3.set_all_features('label', 1)
-        gdfs4.set_all_features('label', 1)
+        gdfs1.set_all_features("label", 1)
+        gdfs2.set_all_features("label", 1)
+        gdfs3.set_all_features("label", 1)
+        gdfs4.set_all_features("label", 1)
 
-        gdfs3.set_all_features('hide', 0)
-        gdfs4.set_all_features('hide', 0)
+        gdfs3.set_all_features("hide", 0)
+        gdfs4.set_all_features("hide", 0)
 
         # gdfs1.set_all_features('color', colors.red)
-        gdfs2.set_all_features('color', colors.blue)
+        gdfs2.set_all_features("color", colors.blue)
 
         gdt1.add_set(gdfsA)  # Before CDS so under them!
         gdt1.add_set(gdfs1)
@@ -1001,7 +1001,7 @@ class DiagramTest(unittest.TestCase):
         gdt2.add_set(gdfsB)  # Before genes so under them!
         gdt2.add_set(gdfs2)
 
-        gdt3 = Track('misc features and repeats', greytrack=1,
+        gdt3 = Track("misc features and repeats", greytrack=1,
                      scale_largetick_interval=1e4)
         gdt3.add_set(gdfs3)
         gdt3.add_set(gdfs4)
@@ -1011,35 +1011,35 @@ class DiagramTest(unittest.TestCase):
         # Use a fairly large step so we can easily tell the difference
         # between the bar and line graphs.
         step = len(genbank_entry) // 200
-        gdgs1 = GraphSet('GC skew')
+        gdgs1 = GraphSet("GC skew")
 
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
-        gdgs1.new_graph(graphdata1, 'GC Skew', style='bar',
+        gdgs1.new_graph(graphdata1, "GC Skew", style="bar",
                         color=colors.violet, altcolor=colors.purple)
 
-        gdt4 = Track('GC Skew (bar)', height=1.94, greytrack=1,
+        gdt4 = Track("GC Skew (bar)", height=1.94, greytrack=1,
                      scale_largetick_interval=1e4)
         gdt4.add_set(gdgs1)
 
-        gdgs2 = GraphSet('GC and AT Content')
+        gdgs2 = GraphSet("GC and AT Content")
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                        'GC content', style='line', color=colors.lightgreen,
+                        "GC content", style="line", color=colors.lightgreen,
                         altcolor=colors.darkseagreen)
 
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                        'AT content', style='line', color=colors.orange,
+                        "AT content", style="line", color=colors.orange,
                         altcolor=colors.red)
 
-        gdt5 = Track('GC Content(green line), AT Content(red line)',
+        gdt5 = Track("GC Content(green line), AT Content(red line)",
                      height=1.94, greytrack=1, scale_largetick_interval=1e4)
         gdt5.add_set(gdgs2)
 
-        gdgs3 = GraphSet('Di-nucleotide count')
+        gdgs3 = GraphSet("Di-nucleotide count")
         step = len(genbank_entry) // 400  # smaller step
         gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
-                        'Di-nucleotide count', style='heat',
+                        "Di-nucleotide count", style="heat",
                         color=colors.red, altcolor=colors.orange)
-        gdt6 = Track('Di-nucleotide count', height=0.5, greytrack=False, scale=False)
+        gdt6 = Track("Di-nucleotide count", height=0.5, greytrack=False, scale=False)
         gdt6.add_set(gdgs3)
 
         # Add the tracks (from both features and graphs)
@@ -1052,28 +1052,28 @@ class DiagramTest(unittest.TestCase):
         gdd.add_track(gdt6, 8)  # Feature depth
 
         # Finally draw it in both formats, and full view and partial
-        gdd.draw(format='circular', orientation='landscape',
-                 tracklines=0, pagesize='A0')
-        output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
-        gdd.write(output_filename, 'PDF')
+        gdd.draw(format="circular", orientation="landscape",
+                 tracklines=0, pagesize="A0")
+        output_filename = os.path.join("Graphics", "GD_by_obj_circular.pdf")
+        gdd.write(output_filename, "PDF")
 
         gdd.circular = False
-        gdd.draw(format='circular', orientation='landscape',
-                 tracklines=0, pagesize='A0', start=3000, end=6300)
-        output_filename = os.path.join('Graphics', 'GD_by_obj_frag_circular.pdf')
-        gdd.write(output_filename, 'PDF')
+        gdd.draw(format="circular", orientation="landscape",
+                 tracklines=0, pagesize="A0", start=3000, end=6300)
+        output_filename = os.path.join("Graphics", "GD_by_obj_frag_circular.pdf")
+        gdd.write(output_filename, "PDF")
 
-        gdd.draw(format='linear', orientation='landscape',
-                 tracklines=0, pagesize='A0', fragments=3)
-        output_filename = os.path.join('Graphics', 'GD_by_obj_linear.pdf')
-        gdd.write(output_filename, 'PDF')
+        gdd.draw(format="linear", orientation="landscape",
+                 tracklines=0, pagesize="A0", fragments=3)
+        output_filename = os.path.join("Graphics", "GD_by_obj_linear.pdf")
+        gdd.write(output_filename, "PDF")
 
         gdd.set_all_tracks("greytrack_labels", 2)
-        gdd.draw(format='linear', orientation='landscape',
+        gdd.draw(format="linear", orientation="landscape",
                  tracklines=0, pagesize=(30 * cm, 10 * cm), fragments=1,
                  start=3000, end=6300)
-        output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
-        gdd.write(output_filename, 'PDF')
+        output_filename = os.path.join("Graphics", "GD_by_obj_frag_linear.pdf")
+        gdd.write(output_filename, "PDF")
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ if not raxml_exe:
         "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
 
 # Example Phylip file with 4 aligned protein sequences
-EX_PHYLIP = 'Phylip/interlaced2.phy'
+EX_PHYLIP = "Phylip/interlaced2.phy"
 
 
 class AppTests(unittest.TestCase):
@@ -39,24 +39,24 @@ class AppTests(unittest.TestCase):
                                sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
-        self.assertIn('-p', str(cmd))
+        self.assertIn("-p", str(cmd))
         # Smoke test
         try:
             out, err = cmd()
             self.assertTrue(len(out) > 0)
             self.assertEqual(len(err), 0)
             # Check the output tree
-            tree = Phylo.read('RAxML_result.test', 'newick')
+            tree = Phylo.read("RAxML_result.test", "newick")
             self.assertEqual(tree.count_terminals(), 4)
         finally:
             # Remove RAxML-generated files, or RAxML will complain bitterly
             # during the next run
-            for fname in ['RAxML_info.test',
-                          'RAxML_log.test',
-                          'RAxML_parsimonyTree.test',
-                          'RAxML_result.test',
+            for fname in ["RAxML_info.test",
+                          "RAxML_log.test",
+                          "RAxML_parsimonyTree.test",
+                          "RAxML_result.test",
                           # Present in 7.2.X+  but not 7.0.4:
-                          'RAxML_bestTree.test',
+                          "RAxML_bestTree.test",
                           ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
@@ -64,6 +64,6 @@ class AppTests(unittest.TestCase):
 
 # ---------------------------------------------------------
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

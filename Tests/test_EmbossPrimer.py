@@ -94,7 +94,7 @@ class Primer3ParseTest(unittest.TestCase):
                          "# EPRIMER3 RESULTS FOR YNL138W-A\n")
         self.assertEqual(primer_info.primers[0].internal_length, 22)
         self.assertEqual(primer_info.primers[1].internal_seq,
-                         'TTGCGCTTTAGTTTGAATTGAA')
+                         "TTGCGCTTTAGTTTGAATTGAA")
         self.assertEqual(primer_info.primers[2].internal_tm, 58.62)
         self.assertEqual(primer_info.primers[3].internal_start, 16)
         self.assertEqual(primer_info.primers[4].internal_gc, 35.00)

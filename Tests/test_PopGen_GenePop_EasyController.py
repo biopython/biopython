@@ -15,10 +15,10 @@ from Bio.PopGen.GenePop.EasyController import EasyController
 # test_PopGen_GenePop_nodepend tests code that does not require genepop
 
 found = False
-for path in os.environ['PATH'].split(os.pathsep):
+for path in os.environ["PATH"].split(os.pathsep):
     try:
         for filename in os.listdir(path):
-            if filename.startswith('Genepop'):
+            if filename.startswith("Genepop"):
                 found = True
     except os.error:
         pass  # Path doesn't exist - correct to pass

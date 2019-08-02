@@ -70,7 +70,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertTrue(
             array_equal(around(self.sup.tran, decimals=3), around(calc_tran, decimals=3)))
         calc_rms = 0.003
-        self.assertEqual(float('%.3f' % self.sup.rms), calc_rms)
+        self.assertEqual(float("%.3f" % self.sup.rms), calc_rms)
         self.assertIsNone(self.sup.init_rms)
 
     def test_get_transformed(self):
@@ -110,7 +110,7 @@ class QCPSuperimposerTest(unittest.TestCase):
     def test_get_rms(self):
         self.sup.run()
         calc_rms = 0.003
-        self.assertEqual(float('%.3f' % self.sup.get_rms()), calc_rms)
+        self.assertEqual(float("%.3f" % self.sup.get_rms()), calc_rms)
 
     # Old test from Bio/PDB/QCPSuperimposer/__init__.py
 
@@ -147,7 +147,7 @@ class QCPSuperimposerTest(unittest.TestCase):
             array_equal(around(self.sup.rot, decimals=3), around(rot, decimals=3)))
         self.assertTrue(
             array_equal(around(self.sup.tran, decimals=3), around(tran, decimals=3)))
-        self.assertEqual(float('%.3f' % self.sup.rms), around(rms, decimals=3))
+        self.assertEqual(float("%.3f" % self.sup.rms), around(rms, decimals=3))
 
         rms_get = self.sup.get_rms()
         self.assertTrue(

@@ -20,7 +20,7 @@ from numpy import random
 import warnings
 from Bio import BiopythonDeprecationWarning
 with warnings.catch_warnings():
-    warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+    warnings.simplefilter("ignore", BiopythonDeprecationWarning)
     try:
         from Bio.KDTree import _CKDTree
         del _CKDTree

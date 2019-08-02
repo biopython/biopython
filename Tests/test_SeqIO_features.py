@@ -197,19 +197,19 @@ def make_join_feature(f_list, ftype="misc_feature"):
 # the feature location [leaves the source feature in place]
 with open("GenBank/iro.gb", _universal_read_mode) as handle:
     gbk_template = handle.read()
-gbk_template = gbk_template.replace('     gene            341..756\n'
+gbk_template = gbk_template.replace("     gene            341..756\n"
                                     '                     /gene="FTCD"\n',
-                                    '     misc_feature    %s\n'
+                                    "     misc_feature    %s\n"
                                     '                     /note="Test case"\n')
-gbk_template = gbk_template.replace('     exon            341..384\n'
+gbk_template = gbk_template.replace("     exon            341..384\n"
                                     '                     /gene="FTCD"\n'
-                                    '                     /number=1\n', '')
-gbk_template = gbk_template.replace('     intron          385..617\n'
+                                    "                     /number=1\n", "")
+gbk_template = gbk_template.replace("     intron          385..617\n"
                                     '                     /gene="FTCD"\n'
-                                    '                     /number=1\n', '')
-gbk_template = gbk_template.replace('     exon            618..756\n'
+                                    "                     /number=1\n", "")
+gbk_template = gbk_template.replace("     exon            618..756\n"
                                     '                     /gene="FTCD"\n'
-                                    '                     /number=2\n', '')
+                                    "                     /number=2\n", "")
 assert len(gbk_template) == 4445
 assert gbk_template.count("%") == 1, gbk_template
 

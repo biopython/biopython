@@ -64,7 +64,7 @@ except ImportError:
 def is_pypy():
     import platform
     try:
-        if platform.python_implementation() == 'PyPy':
+        if platform.python_implementation() == "PyPy":
             return True
     except AttributeError:
         # New in Python 2.6, not in Jython yet either
@@ -78,20 +78,20 @@ VERBOSITY = 0
 # Following modules have historic failures. If you fix one of these
 # please remove here!
 EXCLUDE_DOCTEST_MODULES = [
-    'Bio.PDB',
-    'Bio.PDB.AbstractPropertyMap',
-    'Bio.Phylo.Applications._Fasttree',
-    'Bio.Phylo._io',
-    'Bio.Phylo.TreeConstruction',
-    'Bio.Phylo._utils',
+    "Bio.PDB",
+    "Bio.PDB.AbstractPropertyMap",
+    "Bio.Phylo.Applications._Fasttree",
+    "Bio.Phylo._io",
+    "Bio.Phylo.TreeConstruction",
+    "Bio.Phylo._utils",
 ]
 
 # Exclude modules with online activity
 # They are not excluded by default, use --offline to exclude them
 ONLINE_DOCTEST_MODULES = [
-    'Bio.Entrez',
-    'Bio.ExPASy',
-    'Bio.TogoWS',
+    "Bio.Entrez",
+    "Bio.ExPASy",
+    "Bio.TogoWS",
     ]
 
 # Silently ignore any doctests for modules requiring numpy!
@@ -130,9 +130,9 @@ if numpy is None:
         "Bio.PDB.Structure",
         "Bio.PDB.Superimposer",
         "Bio.PDB.Vector",
-        'Bio.phenotype',
-        'Bio.phenotype.parse',
-        'Bio.phenotype.phen_micro',
+        "Bio.phenotype",
+        "Bio.phenotype.parse",
+        "Bio.phenotype.phen_micro",
         "Bio.phenotype.pm_fitting",
         "Bio.SeqIO.PdbIO",
         "Bio.Statistics.lowess",
@@ -158,15 +158,15 @@ def find_modules(path):
     modules = set()
     for pkg in find_packages(path):
         modules.add(pkg)
-        pkgpath = path + '/' + pkg.replace('.', '/')
+        pkgpath = path + "/" + pkg.replace(".", "/")
         if sys.version_info < (3, 6):
             for _, name, ispkg in iter_modules([pkgpath]):
                 if not ispkg:
-                    modules.add(pkg + '.' + name)
+                    modules.add(pkg + "." + name)
         else:
             for info in iter_modules([pkgpath]):
                 if not info.ispkg:
-                    modules.add(pkg + '.' + info.name)
+                    modules.add(pkg + "." + info.name)
     return modules
 
 
@@ -177,7 +177,7 @@ def _have_bug17666():
     Checks for http://bugs.python.org/issue17666 expected in Python 2.7.4,
     3.2.4 and 3.3.1 only.
     """
-    if os.name == 'java':
+    if os.name == "java":
         # Jython not affected
         return False
     import gzip
@@ -202,7 +202,7 @@ def _have_bug17666():
 if _have_bug17666():
     EXCLUDE_DOCTEST_MODULES.append("Bio.bgzf")
 
-SYSTEM_LANG = os.environ.get('LANG', 'C')  # Cache this
+SYSTEM_LANG = os.environ.get("LANG", "C")  # Cache this
 
 
 def main(argv):
@@ -231,7 +231,7 @@ def main(argv):
 
     # get the command line options
     try:
-        opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
+        opts, args = getopt.getopt(argv, "gv", ["generate", "verbose",
                                                 "doctest", "help", "offline"])
     except getopt.error as msg:
         print(msg)
@@ -278,7 +278,7 @@ def main(argv):
 
 class TestRunner(unittest.TextTestRunner):
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         file = sys.argv[0]
     else:
         file = __file__
@@ -306,7 +306,7 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.append("doctest")
         if "doctest" in self.tests:
             self.tests.remove("doctest")
-            modules = find_modules(self.testdir + '/..')
+            modules = find_modules(self.testdir + "/..")
             modules.difference_update(set(EXCLUDE_DOCTEST_MODULES))
             self.tests.extend(sorted(list(modules)))
         stream = StringIO()
@@ -321,7 +321,7 @@ class TestRunner(unittest.TextTestRunner):
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
         global SYSTEM_LANG
-        os.environ['LANG'] = SYSTEM_LANG
+        os.environ["LANG"] = SYSTEM_LANG
         # Always run tests from the Tests/ folder where run_tests.py
         # should be located (as we assume this with relative paths etc)
         os.chdir(self.testdir)
@@ -430,7 +430,7 @@ class TestRunner(unittest.TextTestRunner):
         stop_time = time.time()
         time_taken = stop_time - start_time
         sys.stderr.write(self.stream.getvalue())
-        sys.stderr.write('-' * 70 + "\n")
+        sys.stderr.write("-" * 70 + "\n")
         sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
                          (total, total != 1 and "s" or "", time_taken))
         sys.stderr.write("\n")

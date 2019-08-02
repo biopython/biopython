@@ -15,7 +15,7 @@ class TestProdocRead(unittest.TestCase):
 
     def test_read_pdoc00100(self):
         """Reading Prodoc record PDOC00100."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00100.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00100.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -173,7 +173,7 @@ PubMed=2165531""")
 
     def test_read_pdoc00113(self):
         """Reading Prodoc record PDOC00113."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00113.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00113.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -243,7 +243,7 @@ PubMed=1654502""")
 
     def test_read_pdoc00144(self):
         """Reading Prodoc record PDOC00144."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00144.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00144.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -302,7 +302,7 @@ PubMed=3136164""")
 
     def test_read_pdoc00149(self):
         """Reading Prodoc record PDOC00149."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00149.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00149.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -381,7 +381,7 @@ PubMed=8236444""")
 
     def test_read_pdoc00340(self):
         """Reading Prodoc record PDOC00340."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00340.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00340.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -483,7 +483,7 @@ PubMed=2203335""")
 
     def test_read_pdoc00424(self):
         """Reading Prodoc record PDOC00424."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00424.txt',)
+        filename = os.path.join("Prosite", "Doc", "pdoc00424.txt",)
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -563,7 +563,7 @@ PubMed=7961661""")
 
     def test_read_pdoc00472(self):
         """Reading Prodoc record PDOC00472."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00472.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00472.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -626,7 +626,7 @@ PubMed=1850705""")
         self.assertEqual(record.references[1].authors,
                          "Sanchez-Lopez R., Nicholson R., Gesnel M.C., Matrisian L.M., Breathnach R.")
         self.assertEqual(record.references[1].citation,
-                         'J. Biol. Chem. 263:11892-11899(1988).')
+                         "J. Biol. Chem. 263:11892-11899(1988).")
         self.assertEqual(record.references[2].number, "3")
         self.assertEqual(record.references[2].authors,
                          "Park A.J., Matrisian L.M., Kells A.F., Pearson R., Yuan Z.Y., Navre M.")
@@ -656,7 +656,7 @@ PubMed=1584806""")
 
     def test_read_pdoc00640(self):
         """Reading Prodoc record PDOC00640."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00640.txt',)
+        filename = os.path.join("Prosite", "Doc", "pdoc00640.txt",)
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -746,11 +746,11 @@ Structure 4:265-275(1996).
 PubMed=8805535""")
         self.assertEqual(record.references[5].number, "E1")
         self.assertEqual(record.references[5].authors, "")
-        self.assertEqual(record.references[5].citation, 'http://www.expasy.org/cgi-bin/lists?glycosid.txt')
+        self.assertEqual(record.references[5].citation, "http://www.expasy.org/cgi-bin/lists?glycosid.txt")
 
     def test_read_pdoc00787(self):
         """Reading Prodoc record PDOC00787."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00787.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00787.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -806,13 +806,13 @@ several families of glycosyl hydrolases."
 Proc. Natl. Acad. Sci. U.S.A. 92:7090-7094(1995).
 PubMed=7624375""")
         self.assertEqual(record.references[2].number, "E1")
-        self.assertEqual(record.references[2].authors, '')
+        self.assertEqual(record.references[2].authors, "")
         self.assertEqual(record.references[2].citation,
                          "http://www.expasy.org/cgi-bin/lists?glycosid.txt")
 
     def test_read_pdoc0933(self):
         """Reading Prodoc record PDOC00933."""
-        filename = os.path.join('Prosite', 'Doc', 'pdoc00933.txt')
+        filename = os.path.join("Prosite", "Doc", "pdoc00933.txt")
         with open(filename) as handle:
             record = Prodoc.read(handle)
 
@@ -855,7 +855,7 @@ residue.
         self.assertEqual(record.references[0].number, "1")
         self.assertEqual(record.references[0].authors,
                          "Concise Encyclopedia Biochemistry, Second Edition, Walter de Gruyter, Berlin New-York (1988).")
-        self.assertEqual(record.references[0].citation, '')
+        self.assertEqual(record.references[0].citation, "")
         self.assertEqual(record.references[1].number, "2")
         self.assertEqual(record.references[1].authors, "Takagi T.")
         self.assertEqual(record.references[1].citation,
@@ -883,8 +883,8 @@ class TestProdocParse(unittest.TestCase):
 
     def test_parse_pdoc(self):
         """Parsing an excerpt of prosite.doc."""
-        filename = os.path.join('Prosite', 'Doc',
-                                'prosite.excerpt.doc')
+        filename = os.path.join("Prosite", "Doc",
+                                "prosite.excerpt.doc")
         with open(filename) as handle:
             records = Prodoc.parse(handle)
 

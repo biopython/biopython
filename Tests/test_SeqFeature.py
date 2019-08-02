@@ -23,17 +23,17 @@ class TestReference(unittest.TestCase):
 
     def test_eq_identical(self):
         """Test two identical references eq() to True."""
-        testfile = path.join('GenBank', 'origin_line.gb')
-        rec1 = SeqIO.read(testfile, 'genbank')
-        rec2 = SeqIO.read(testfile, 'genbank')
+        testfile = path.join("GenBank", "origin_line.gb")
+        rec1 = SeqIO.read(testfile, "genbank")
+        rec2 = SeqIO.read(testfile, "genbank")
 
-        self.assertEqual(rec1.annotations['references'][0], rec1.annotations['references'][0])
-        cmp1, cmp2 = rec1.annotations['references'][0], rec2.annotations['references'][0]
+        self.assertEqual(rec1.annotations["references"][0], rec1.annotations["references"][0])
+        cmp1, cmp2 = rec1.annotations["references"][0], rec2.annotations["references"][0]
         self.assertEqual(cmp1, cmp2)
-        self.assertNotEqual(rec1.annotations['references'][0], rec1.annotations['references'][1])
-        self.assertNotEqual(rec1.annotations['references'][0], rec2.annotations['references'][1])
-        self.assertEqual(rec1.annotations['references'][1], rec1.annotations['references'][1])
-        self.assertEqual(rec1.annotations['references'][1], rec2.annotations['references'][1])
+        self.assertNotEqual(rec1.annotations["references"][0], rec1.annotations["references"][1])
+        self.assertNotEqual(rec1.annotations["references"][0], rec2.annotations["references"][1])
+        self.assertEqual(rec1.annotations["references"][1], rec1.annotations["references"][1])
+        self.assertEqual(rec1.annotations["references"][1], rec2.annotations["references"][1])
 
 
 class TestFeatureLocation(unittest.TestCase):
@@ -53,8 +53,8 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = FeatureLocation(23, 42, 1)
         self.assertEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
-        loc2 = FeatureLocation(23, 42, 1, 'foo', 'bar')
+        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
+        loc2 = FeatureLocation(23, 42, 1, "foo", "bar")
         self.assertEqual(loc1, loc2)
 
     def test_eq_not_identical(self):
@@ -75,12 +75,12 @@ class TestFeatureLocation(unittest.TestCase):
         loc2 = (23, 42, 1)
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo')
-        loc2 = FeatureLocation(23, 42, 1, 'bar')
+        loc1 = FeatureLocation(23, 42, 1, "foo")
+        loc2 = FeatureLocation(23, 42, 1, "bar")
         self.assertNotEqual(loc1, loc2)
 
-        loc1 = FeatureLocation(23, 42, 1, 'foo', 'bar')
-        loc2 = FeatureLocation(23, 42, 1, 'foo', 'baz')
+        loc1 = FeatureLocation(23, 42, 1, "foo", "bar")
+        loc2 = FeatureLocation(23, 42, 1, "foo", "baz")
         self.assertNotEqual(loc1, loc2)
 
     def test_start_before_end(self):
@@ -133,7 +133,7 @@ class TestCompoundLocation(unittest.TestCase):
         self.assertNotEqual(loc1, loc2)
 
         loc1 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)])
-        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], 'order')
+        loc2 = CompoundLocation([FeatureLocation(12, 17, 1), FeatureLocation(23, 42, 1)], "order")
         self.assertNotEqual(loc1, loc2)
 
         loc1 = FeatureLocation(12, 17, 1) + FeatureLocation(23, 42, 1)
@@ -148,7 +148,7 @@ class TestSeqFeature(unittest.TestCase):
         """Test that a CDS feature is subject to respective checks."""
         seq = Seq.Seq("GGTTACACTTACCGATAATGTCTCTGATGA", generic_dna)
         f = SeqFeature(FeatureLocation(0, 30), type="CDS")
-        f.qualifiers['transl_table'] = [11]
+        f.qualifiers["transl_table"] = [11]
         with self.assertRaises(TranslationError):
             f.translate(seq)
 

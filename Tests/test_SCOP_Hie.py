@@ -13,7 +13,7 @@ from Bio.SCOP import Hie
 class HieTests(unittest.TestCase):
 
     def setUp(self):
-        self.filename = './SCOP/dir.hie.scop.txt_test'
+        self.filename = "./SCOP/dir.hie.scop.txt_test"
 
     def testParse(self):
         """Test if all records in a HIE file are being read."""
@@ -43,6 +43,6 @@ class HieTests(unittest.TestCase):
         self.assertRaises(ValueError, Hie.Record, corruptRec)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

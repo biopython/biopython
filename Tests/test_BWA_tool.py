@@ -22,7 +22,7 @@ from Bio.Sequencing.Applications import BwaMemCommandline
 #################################################################
 
 # Try to avoid problems when the OS is in another language
-os.environ['LANG'] = 'C'
+os.environ["LANG"] = "C"
 
 bwa_exe = None
 if sys.platform == "win32":
@@ -69,7 +69,7 @@ class BwaTestCase(unittest.TestCase):
 
     def setUp(self):
         self.reference_file = "BWA/human_g1k_v37_truncated.fasta"
-        self.reference_extensions = ['amb', 'ann', 'bwt', 'pac', 'sa']
+        self.reference_extensions = ["amb", "ann", "bwt", "pac", "sa"]
         self.infile1 = "BWA/HNSCC1_1_truncated.fastq"
         self.infile2 = "BWA/HNSCC1_2_truncated.fastq"
         self.saifile1 = "BWA/1.sai"
@@ -101,7 +101,7 @@ class BwaTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(index_file),
                             "Index File %s not found"
                             % (index_file))
-        self.assertTrue('Finished constructing BWT' in str(stdout) + str(stderr),
+        self.assertTrue("Finished constructing BWT" in str(stdout) + str(stderr),
                         "FASTA indexing failed:\n%s\nStdout:%s\nStderr:%s\n"
                         % (cmdline, stdout, stderr))
 

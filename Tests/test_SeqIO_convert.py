@@ -35,7 +35,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     qual_truncate = truncation_expected(out_format)
     with warnings.catch_warnings():
         if qual_truncate:
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
         SeqIO.write(records, handle, out_format)
     handle.seek(0)
     # Now load it back and check it agrees,
@@ -45,7 +45,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     handle2 = StringIO()
     with warnings.catch_warnings():
         if qual_truncate:
-            warnings.simplefilter('ignore', BiopythonWarning)
+            warnings.simplefilter("ignore", BiopythonWarning)
         SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
     # We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
@@ -60,7 +60,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         handle = StringIO()
         with warnings.catch_warnings():
             if qual_truncate:
-                warnings.simplefilter('ignore', BiopythonWarning)
+                warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(records, handle, out_format)
         handle.seek(0)
         raise ValueError("Parse or write should have failed!")
@@ -71,7 +71,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         handle2 = StringIO()
         with warnings.catch_warnings():
             if qual_truncate:
-                warnings.simplefilter('ignore', BiopythonWarning)
+                warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
         raise ValueError("Convert should have failed!")
     except ValueError as err2:

@@ -32,34 +32,34 @@ class CarTest(unittest.TestCase):
         # by Eric Meisner November 22, 2003
         # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
         xcar = [
-            ['Red', 'Sports', 'Domestic'],
-            ['Red', 'Sports', 'Domestic'],
-            ['Red', 'Sports', 'Domestic'],
-            ['Yellow', 'Sports', 'Domestic'],
-            ['Yellow', 'Sports', 'Imported'],
-            ['Yellow', 'SUV', 'Imported'],
-            ['Yellow', 'SUV', 'Imported'],
-            ['Yellow', 'SUV', 'Domestic'],
-            ['Red', 'SUV', 'Imported'],
-            ['Red', 'Sports', 'Imported'],
+            ["Red", "Sports", "Domestic"],
+            ["Red", "Sports", "Domestic"],
+            ["Red", "Sports", "Domestic"],
+            ["Yellow", "Sports", "Domestic"],
+            ["Yellow", "Sports", "Imported"],
+            ["Yellow", "SUV", "Imported"],
+            ["Yellow", "SUV", "Imported"],
+            ["Yellow", "SUV", "Domestic"],
+            ["Red", "SUV", "Imported"],
+            ["Red", "Sports", "Imported"],
             ]
 
         ycar = [
-            'Yes',
-            'No',
-            'Yes',
-            'No',
-            'Yes',
-            'No',
-            'Yes',
-            'No',
-            'No',
-            'Yes',
+            "Yes",
+            "No",
+            "Yes",
+            "No",
+            "Yes",
+            "No",
+            "Yes",
+            "No",
+            "No",
+            "Yes",
             ]
 
         carmodel = NaiveBayes.train(xcar, ycar)
-        self.assertEqual("Yes", NaiveBayes.classify(carmodel, ['Red', 'Sports', 'Domestic']))
-        self.assertEqual("No", NaiveBayes.classify(carmodel, ['Red', 'SUV', 'Domestic']))
+        self.assertEqual("Yes", NaiveBayes.classify(carmodel, ["Red", "Sports", "Domestic"]))
+        self.assertEqual("No", NaiveBayes.classify(carmodel, ["Red", "SUV", "Domestic"]))
 
 
 class NaiveBayesTest(unittest.TestCase):
@@ -77,14 +77,14 @@ class NaiveBayesTest(unittest.TestCase):
             [5.75, 150, 9],
         ]
         self.ys = [
-            'male',
-            'male',
-            'male',
-            'male',
-            'female',
-            'female',
-            'female',
-            'female',
+            "male",
+            "male",
+            "male",
+            "male",
+            "female",
+            "female",
+            "female",
+            "female",
         ]
         self.model = NaiveBayes.train(self.xs, self.ys)
         self.test = [6, 130, 8]
@@ -103,10 +103,10 @@ class NaiveBayesTest(unittest.TestCase):
         self.assertRaises(ValueError, NaiveBayes.train, xs, self.ys)
 
     def test_train_function_with_priors(self):
-        model = NaiveBayes.train(self.xs, self.ys, priors={'male': 0.1, 'female': 0.9})
+        model = NaiveBayes.train(self.xs, self.ys, priors={"male": 0.1, "female": 0.9})
         result = NaiveBayes.calculate(model, self.test, scale=True)
         expected = -692.0
-        self.assertEqual(expected, round(result['male']))
+        self.assertEqual(expected, round(result["male"]))
 
     def test_classify_function(self):
         expected = "female"
@@ -121,7 +121,7 @@ class NaiveBayesTest(unittest.TestCase):
     def test_calculate_function_with_scale(self):
         result = NaiveBayes.calculate(self.model, self.test, scale=True)
         expected = -689.0
-        self.assertEqual(expected, round(result['male']))
+        self.assertEqual(expected, round(result["male"]))
 
 
 if __name__ == "__main__":

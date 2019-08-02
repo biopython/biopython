@@ -24,12 +24,12 @@ class StructureAlignTests(unittest.TestCase):
         al_file = "PDB/alignment_file.fa"
         pdb2 = "PDB/1A8O.pdb"
         pdb1 = "PDB/2XHE.pdb"
-        with open(al_file, 'r') as handle:
+        with open(al_file, "r") as handle:
             records = AlignIO.read(handle, "fasta")
         p = PDBParser()
-        s1 = p.get_structure('1', pdb1)
+        s1 = p.get_structure("1", pdb1)
         p = PDBParser()
-        s2 = p.get_structure('2', pdb2)
+        s2 = p.get_structure("2", pdb2)
         m1 = s1[0]
         m2 = s2[0]
         al = StructureAlignment(records, m1, m2)
@@ -38,12 +38,12 @@ class StructureAlignTests(unittest.TestCase):
         self.assertTrue(len(al.map21), 70)
         chain1_A = m1["A"]
         chain2_A = m2["A"]
-        self.assertEqual(chain1_A[202].get_resname(), 'ILE')
-        self.assertEqual(chain2_A[202].get_resname(), 'LEU')
+        self.assertEqual(chain1_A[202].get_resname(), "ILE")
+        self.assertEqual(chain2_A[202].get_resname(), "LEU")
         self.assertEqual(chain1_A[291].get_resname(), chain2_A[180].get_resname())
         self.assertNotEqual(chain1_A[291].get_resname(), chain2_A[181].get_resname())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
