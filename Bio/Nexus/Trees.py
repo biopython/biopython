@@ -394,7 +394,7 @@ class Tree(Nodes.Chain):
                 print("Taxon/taxa %s is/are missing in tree %s" % (",".join(missing1), self.name))
             if missing2:
                 print("Taxon/taxa %s is/are missing in tree %s" % (",".join(missing2), tree2.name))
-            raise TreeError('Can\'t compare trees with different taxon compositions.')
+            raise TreeError("Can't compare trees with different taxon compositions.")
         t1 = [(set(self.get_taxa(n)), self.node(n).data.support) for n in self.all_ids() if
               self.node(n).succ and
               (self.node(n).data and self.node(n).data.support and self.node(n).data.support >= threshold)]

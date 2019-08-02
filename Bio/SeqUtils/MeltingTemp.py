@@ -556,7 +556,7 @@ def salt_correction(Na=0, K=0, Tris=0, Mg=0, dNTPs=0, method=1, seq=None):
                 (c + d * math.log(mg)) + (1 / (2.0 * (len(seq) - 1))) *
                 (e + f * math.log(mg) + g * math.log(mg) ** 2)) * 1e-5
     if method > 7:
-        raise ValueError('Allowed values for parameter \'method\' are 1-7.')
+        raise ValueError("Allowed values for parameter 'method' are 1-7.")
     return corr
 
 
@@ -607,11 +607,11 @@ def chem_correction(melting_temp, DMSO=0, fmd=0, DMSOfactor=0.75,
         # Blake & Delcourt (1996), Nucl Acids Res 11: 2095-2103
         if fmdmethod == 2:
             if GC is None or GC < 0:
-                raise ValueError('\'GC\' is missing or negative')
+                raise ValueError("'GC' is missing or negative")
             # Note: Here fmd is given in molar
             melting_temp += (0.453 * (GC / 100.0) - 2.88) * fmd
         if fmdmethod not in (1, 2):
-            raise ValueError('\'fmdmethod\' must be 1 or 2')
+            raise ValueError("'fmdmethod' must be 1 or 2")
     return melting_temp
 
 
@@ -724,7 +724,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
         sum(map(seq.count, ("D", "H"))) * 33.33 / len(seq)
     if strict and tmp:
         raise ValueError("ambiguous bases B, D, H, K, M, N, R, V, Y not "
-                         'allowed when \'strict=True\'')
+                         "allowed when 'strict=True'")
     else:
         percent_gc += tmp
     if userset:
@@ -755,7 +755,7 @@ def Tm_GC(seq, check=True, strict=True, valueset=7, userset=None, Na=50, K=0,
             A, B, C, D = (77.1, 0.41, 528, 1)
             saltcorr = 4
     if valueset > 8:
-        raise ValueError('allowed values for parameter \'valueset\' are 0-8.')
+        raise ValueError("allowed values for parameter 'valueset' are 0-8.")
 
     melting_temp = A + B * percent_gc - C / (len(seq) * 1.0)
     if saltcorr:
@@ -770,13 +770,12 @@ def _key_error(neighbors, strict):
     """Throw an error or a warning if there is no data for the neighbors (PRIVATE)."""
     # We haven't found the key in the tables
     if strict:
-        raise ValueError('no thermodynamic data for neighbors \'' + neighbors +
-                         '\' available')
+        raise ValueError("no thermodynamic data for neighbors %r available"
+                         % neighbors)
     else:
-        warnings.warn('no themodynamic data for neighbors \'' + neighbors +
-                      '\' available. Calculation will be wrong',
+        warnings.warn("no themodynamic data for neighbors %r available. "
+                      "Calculation will be wrong" % neighbors,
                       BiopythonWarning)
-        return
 
 
 def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,

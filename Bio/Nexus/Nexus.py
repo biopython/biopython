@@ -713,7 +713,7 @@ class Nexus(object):
                     yield title, blocklines
                     blocklines = []
                 else:
-                    raise NexusError('Unmatched \'end\'.')
+                    raise NexusError("Unmatched 'end'.")
             elif inblock:
                 blocklines.append(cl)
 
@@ -895,7 +895,7 @@ class Nexus(object):
             if c is None:
                 break
             elif c != ",":
-                raise NexusError('Missing \',\' in line %s.' % options)
+                raise NexusError("Missing ',' in line %s." % options)
 
     def _charstatelabels(self, options):
         self.charlabels = {}
@@ -929,7 +929,7 @@ class Nexus(object):
             elif c != ",":
                 # Check if states are defined, otherwise report error
                 if c != "/":
-                    raise NexusError('Missing \',\' in line %s.' % options)
+                    raise NexusError("Missing ',' in line %s." % options)
 
                 # Get the first state
                 state = quotestrip(opts.next_word())
@@ -1088,7 +1088,7 @@ class Nexus(object):
                 if c is None:
                     break
                 elif c != ",":
-                    raise NexusError('Missing \',\' in line %s.' % options)
+                    raise NexusError("Missing ',' in line %s." % options)
             except NexusError:
                 raise
             except Exception:  # TODO: ValueError?
@@ -1132,7 +1132,7 @@ class Nexus(object):
                 try:
                     tree.node(n).data.taxon = safename(self.translate[int(tree.node(n).data.taxon)])
                 except (ValueError, KeyError):
-                    raise NexusError('Unable to substitute %s using \'translate\' data.'
+                    raise NexusError("Unable to substitute %s using 'translate' data."
                                      % tree.node(n).data.taxon)
         self.trees.append(tree)
 
@@ -1852,7 +1852,7 @@ class Nexus(object):
     def _adjust_charlabels(self, exclude=None, insert=None):
         """Return adjusted indices of self.charlabels if characters are excluded or inserted (PRIVATE)."""
         if exclude and insert:
-            raise NexusError('Can\'t exclude and insert at the same time')
+            raise NexusError("Can't exclude and insert at the same time")
         if not self.charlabels:
             return None
         labels = sorted(self.charlabels)
