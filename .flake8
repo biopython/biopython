@@ -36,6 +36,8 @@ ignore =
     # Optional ignores for local installations:
     # =========================================
     BLK100, # Black would make changes, only on local installations (so far)
+    PIE781, # Assigning to temp variable and then returning, not enforcing
+
 # ========================
 # Folder specific ignores:
 # ========================
@@ -48,9 +50,9 @@ per-file-ignores =
     /Bio/*:E122,E126,F401,F841,D105,B009,B010,B011,C812,C815
     /Tests/*:F401,F841,D101,D102,D103,B009,B010,B011,C812
 
-#=============================
-# per-file-ignores error codes
-#==============================
+# =============================
+# per-file-ignores error codes:
+# =============================
 #Bio/*:E122 continuation line missing indentation or outdented TODO? (264 occurrences)
 #      E126 continuation line over-indented for hanging indent TODO?  (54 occurrences)
 #      F401 module imported but unused TODO? (107 occurrences)
@@ -77,3 +79,7 @@ per-file-ignores =
 #             instead callers should raise AssertionError()
 #        C812 missing trailing comma
 
+# =====================
+# flake-quote settings:
+# =====================
+inline-quotes = double
