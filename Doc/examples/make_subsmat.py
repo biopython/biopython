@@ -16,7 +16,7 @@ from Bio.Alphabet import IUPAC, Gapped
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = AlignIO.read('protein.aln', 'clustal',
+c_align = AlignIO.read("protein.aln", "clustal",
                        alphabet=Gapped(IUPAC.protein))
 summary_align = AlignInfo.SummaryInfo(c_align)
 
@@ -32,6 +32,6 @@ print(replace_info)
 
 my_lom = SubsMat.make_log_odds_matrix(my_arm)
 
-print('log_odds_mat: %s' % my_lom)
+print("log_odds_mat: %s" % my_lom)
 
 print(my_lom.format())

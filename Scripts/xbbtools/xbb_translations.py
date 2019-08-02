@@ -53,19 +53,19 @@ class xbb_translations(object):
         """Print a short header for the translation window."""
         length = len(seq)
         if length > 20:
-            short = '%s ... %s' % (seq[:10], seq[-10:])
+            short = "%s ... %s" % (seq[:10], seq[-10:])
         else:
             short = seq
 
-        date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
-        res = '%s: %s, ' % (txt, date)
+        date = time.strftime("%y %b %d, %X", time.localtime(time.time()))
+        res = "%s: %s, " % (txt, date)
 
-        for nt in ['a', 't', 'g', 'c']:
-            res += '%s:%d ' % (nt, seq.count(nt.upper()))
+        for nt in ["a", "t", "g", "c"]:
+            res += "%s:%d " % (nt, seq.count(nt.upper()))
 
-        res += '\nSequence: %s, %d nt, %0.2f %%GC\n' % (short.lower(),
+        res += "\nSequence: %s, %d nt, %0.2f %%GC\n" % (short.lower(),
                                                         length, self.gc(seq))
-        res += '\n\n'
+        res += "\n\n"
         return res
 
     def frame_nice(self, seq, frame, translation_table=1):
@@ -73,33 +73,33 @@ class xbb_translations(object):
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
         protein_length = len(protein)
-        protein = '  '.join([aa for aa in protein])
-        protein += (((length - (abs(frame) - 1)) % 3) + 2) * ' '
+        protein = "  ".join([aa for aa in protein])
+        protein += (((length - (abs(frame) - 1)) % 3) + 2) * " "
         if frame < 0:
             protein = protein[::-1]
-        res = self.header_nice('Frame {} translation'.format(frame), seq)
+        res = self.header_nice("Frame {} translation".format(frame), seq)
         for i in range(0, length, 60):
             subseq = seq[i:i + 60]
             p = i // 3
             if frame > 0:
-                res += '%d/%d\n' % (i + 1, p + 1)
-                res += ' ' * (frame - 1) + protein[i:i + 60] + '\n'
+                res += "%d/%d\n" % (i + 1, p + 1)
+                res += " " * (frame - 1) + protein[i:i + 60] + "\n"
                 # seq
-                res += (subseq.lower() + '%5d %%\n' % int(self.gc(subseq)) +
-                        '\n')
+                res += (subseq.lower() + "%5d %%\n" % int(self.gc(subseq)) +
+                        "\n")
             else:
-                res += '%d/%d\n' % (i + 1, protein_length -
+                res += "%d/%d\n" % (i + 1, protein_length -
                                     len(protein[:i].split()))
                 # seq
-                res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
-                res += protein[i:i + 60] + '\n\n'
+                res += subseq.lower() + "%5d %%\n" % int(self.gc(subseq))
+                res += protein[i:i + 60] + "\n\n"
         return res
 
     def gc(self, seq):
         """Calculate GC content in percent (0-100)."""
         return GC(seq)
 
-    def gcframe(self, seq, translation_table=1, direction='both'):
+    def gcframe(self, seq, translation_table=1, direction="both"):
         """Print a pretty print tranlation in several frames."""
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
@@ -111,47 +111,47 @@ class xbb_translations(object):
             frames[-(i + 1)] = self.reverse(self.frame1(anti[i:],
                                                         translation_table))
 
-        res = self.header_nice('GCFrame', seq)
+        res = self.header_nice("GCFrame", seq)
 
         for i in range(0, length, 60):
             subseq = seq[i:i + 60]
             csubseq = comp[i:i + 60]
             p = i // 3
-            if direction in ('plus', 'both'):
+            if direction in ("plus", "both"):
                 # + frames
-                res += '%d/%d\n' % (i + 1, i // 3 + 1)
-                res += '  ' + '  '.join(frames[3][p:p + 20]) + '\n'
-                res += ' ' + '  '.join(frames[2][p:p + 20]) + '\n'
-                res += '  '.join(frames[1][p:p + 20]) + '\n'
+                res += "%d/%d\n" % (i + 1, i // 3 + 1)
+                res += "  " + "  ".join(frames[3][p:p + 20]) + "\n"
+                res += " " + "  ".join(frames[2][p:p + 20]) + "\n"
+                res += "  ".join(frames[1][p:p + 20]) + "\n"
             # seq
-            res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
-            res += csubseq.lower() + '\n'
-            if direction == 'plus':
-                res += '\n'
-            if direction in ('minus', 'both'):
+            res += subseq.lower() + "%5d %%\n" % int(self.gc(subseq))
+            res += csubseq.lower() + "\n"
+            if direction == "plus":
+                res += "\n"
+            if direction in ("minus", "both"):
                 # - frames
-                res += '  '.join(frames[-2][p:p + 20]) + ' \n'
-                res += ' ' + '  '.join(frames[-1][p:p + 20]) + '\n'
-                res += '  ' + '  '.join(frames[-3][p:p + 20]) + '\n\n'
+                res += "  ".join(frames[-2][p:p + 20]) + " \n"
+                res += " " + "  ".join(frames[-1][p:p + 20]) + "\n"
+                res += "  " + "  ".join(frames[-3][p:p + 20]) + "\n\n"
 
         return res
 
 
-if __name__ == '__main__':
-    s = 'ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCT' \
-        'TACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTC' \
-        'GGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAAT' \
-        'GGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCT' \
-        'ACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCG' \
-        'TGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACC' \
-        'AGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAA' \
-        'GGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAG' \
-        'CCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTG' \
-        'TAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGAT' \
-        'ACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTT' \
-        'AGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA'
+if __name__ == "__main__":
+    s = "ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCT" \
+        "TACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTC" \
+        "GGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAAT" \
+        "GGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCT" \
+        "ACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCG" \
+        "TGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACC" \
+        "AGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAA" \
+        "GGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAG" \
+        "CCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTG" \
+        "TAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGAT" \
+        "ACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTT" \
+        "AGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA"
 
     test = xbb_translations()
 
-    print('============================================================')
+    print("============================================================")
     print(test.gcframe(s))

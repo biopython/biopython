@@ -29,7 +29,7 @@ from Bio import SeqIO
 
 def get_accession_num(seq_record):
     """Extract accession number from sequence id."""
-    accession_atoms = seq_record.id.split('|')
+    accession_atoms = seq_record.id.split("|")
     gb_name = accession_atoms[3]
     # strip the version info before returning
     return gb_name[:-2]
@@ -46,9 +46,9 @@ rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta", generic_dna)
 orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
 for id_num in orchid_dict:
-    print('id number: %s' % id_num)
-    print('description: %s' % orchid_dict[id_num].description)
-    print('sequence: %s' % orchid_dict[id_num].seq)
+    print("id number: %s" % id_num)
+    print("description: %s" % orchid_dict[id_num].description)
+    print("sequence: %s" % orchid_dict[id_num].seq)
 
 
 # Indexed
@@ -61,6 +61,6 @@ for id_num in orchid_dict:
 orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", generic_dna)
 
 for id_num in orchid_dict:
-    print('id number: %s' % id_num)
-    print('description: %s' % orchid_dict[id_num].description)
-    print('sequence: %s' % orchid_dict[id_num].seq)
+    print("id number: %s" % id_num)
+    print("description: %s" % orchid_dict[id_num].description)
+    print("sequence: %s" % orchid_dict[id_num].seq)

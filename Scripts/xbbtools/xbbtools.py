@@ -22,7 +22,7 @@ from xbb_widget import xbb_widget
 
 
 win = tk.Tk()
-win.title('xbb tools')
+win.title("xbb tools")
 xbbtools = xbb_widget()
 
 try:

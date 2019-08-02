@@ -35,11 +35,11 @@ class NotePad(tk.Toplevel):
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu=self.menubar)
-        self.yscroll = ttk.Scrollbar(self, orient='vertical')
+        self.yscroll = ttk.Scrollbar(self, orient="vertical")
         self.tid = tk.Text(self, width=88, yscrollcommand=self.yscroll.set)
         self.yscroll.configure(command=self.tid.yview)
-        self.tid.pack(side='left', fill='both', expand=1)
-        self.yscroll.pack(side='right', fill='y')
+        self.tid.pack(side="left", fill="both", expand=1)
+        self.yscroll.pack(side="right", fill="y")
 
     def text_id(self):
         """Get reference to notepad window."""
@@ -53,5 +53,5 @@ class NotePad(tk.Toplevel):
         """Save text from notepad to file."""
         file = filedialog.asksaveasfilename()
         if file:
-            with open(file, 'w') as fid:
-                fid.write(self.tid.get(0.0, 'end'))
+            with open(file, "w") as fid:
+                fid.write(self.tid.get(0.0, "end"))

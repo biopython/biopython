@@ -54,10 +54,10 @@ print("""
 
 """[1:])
 
-version = ''
+version = ""
 for line in open("gc.prt").readlines():
     if not version and line.startswith("--  Version"):
-        version = line.split('Version', 1)[1].strip()
+        version = line.split("Version", 1)[1].strip()
         print("# Data from NCBI genetic code table version %s\n" % version)
     if line[:2] == " {":
         names = []
@@ -72,7 +72,7 @@ for line in open("gc.prt").readlines():
     elif line == ' Mitochondrial; Mycoplasma; Spiroplasma" ,\n':
         names[-1] = names[-1] + " Mitochondrial; Mycoplasma; Spiroplasma"
     elif line[:4] == "  id":
-        id = int(re.search(r'(\d+)', line).group(1))
+        id = int(re.search(r"(\d+)", line).group(1))
     elif line[:10] == "  ncbieaa ":
         aa = line[12:12 + 64]
     elif line[:10] == "  sncbieaa":
@@ -109,7 +109,7 @@ for line in open("gc.prt").readlines():
                         % codons, indent=INDENT + 14))
         print("")
     elif line[:2] == "--" or line in ("\n", "}\n",
-                                      'Genetic-code-table ::= {\n'):
+                                      "Genetic-code-table ::= {\n"):
         pass
     else:
         raise Exception("Unparsed: " + repr(line))

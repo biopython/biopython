@@ -175,7 +175,7 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec],
                                    label_size=6, label_angle=0)
         i += 1
 
-gd_diagram.draw(format="linear", pagesize='A4', fragments=1,
+gd_diagram.draw(format="linear", pagesize="A4", fragments=1,
                 start=0, end=max_len)
 gd_diagram.write(name + ".pdf", "PDF")
 gd_diagram.write(name + ".eps", "EPS")
