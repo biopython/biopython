@@ -65,7 +65,7 @@ class DebuggingConsumer(object):
     def __getattr__(self, attr):
         """Override __getattr__."""
         self._prev_attr = attr
-        if attr.startswith('start_') or attr.startswith('end_'):
+        if attr.startswith("start_") or attr.startswith("end_"):
             return self._decorated_section
         else:
             return self._decorated
@@ -180,9 +180,9 @@ def test_blast_output(outfile):
     for linenum in range(start, end):
         line = chomp(lines[linenum])
         if linenum == consumer.linenum:
-            prefix = '*'
+            prefix = "*"
         else:
-            prefix = ' '
+            prefix = " "
 
         s = "%s%*d %s" % (prefix, ndigits, linenum, line)
         s = s[:80]
@@ -230,7 +230,7 @@ def test_blast_output(outfile):
 
 
 VERBOSITY = 0
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hpnov")
     except getopt.error as err:
@@ -246,16 +246,16 @@ if __name__ == '__main__':
 
     PROTEIN = NUCLEOTIDE = OUTPUT = None
     for opt, arg in optlist:
-        if opt == '-h':
+        if opt == "-h":
             print(USAGE)
             sys.exit(0)
-        elif opt == '-p':
+        elif opt == "-p":
             PROTEIN = 1
-        elif opt == '-n':
+        elif opt == "-n":
             NUCLEOTIDE = 1
-        elif opt == '-o':
+        elif opt == "-o":
             OUTPUT = 1
-        elif opt == '-v':
+        elif opt == "-v":
             VERBOSITY += 1
 
     if len([x for x in (PROTEIN, NUCLEOTIDE, OUTPUT) if x is not None]) != 1:

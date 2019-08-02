@@ -30,7 +30,7 @@ if len(sys.argv) != 2:
 
 parser = GenBank.FeatureParser(debug_level=2)
 
-with open(sys.argv[1], 'r') as handle:
+with open(sys.argv[1], "r") as handle:
 
     iterator = GenBank.Iterator(handle, parser)
 
@@ -47,7 +47,7 @@ with open(sys.argv[1], 'r') as handle:
         print("Description: %s" % cur_record.description)
         print("Annotations****")
         for annotation_key in cur_record.annotations:
-            if annotation_key != 'references':
+            if annotation_key != "references":
                 print("Key: %s" % annotation_key)
                 print("Value: %s" % cur_record.annotations[annotation_key])
             else:

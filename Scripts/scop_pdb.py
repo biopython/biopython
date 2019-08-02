@@ -118,7 +118,7 @@ def main():
 
     if input is None:
         sids = args[2:]
-    elif input == '-':
+    elif input == "-":
         sids = sys.stdin
     else:
         in_handle = open(input)
@@ -126,19 +126,19 @@ def main():
 
     try:
         for sid in sids:
-            if not sid or sid[0:1] == '#':
+            if not sid or sid[0:1] == "#":
                 continue
             id = sid[0:7]
             pdbid = id[1:5]
             s = pdbid[0:1]
-            if s == '0' or s == 's':
+            if s == "0" or s == "s":
                 sys.stderr.write("No coordinates for domain %s\n" % id)
                 continue
 
             if output is None:
                 filename = id + ".ent"
                 out_handle = open(filename, "w+")
-            elif output == '-':
+            elif output == "-":
                 out_handle = sys.stdout
             else:
                 out_handle = open(output, "w+")

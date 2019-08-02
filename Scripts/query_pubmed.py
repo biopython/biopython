@@ -30,7 +30,7 @@ Arguments:
 """)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         optlist, args = getopt.getopt(sys.argv[1:], "hcd:")
     except getopt.error as x:
@@ -44,11 +44,11 @@ if __name__ == '__main__':
     show_help = False
     count_only = False
     for opt, arg in optlist:
-        if opt == '-h':
+        if opt == "-h":
             show_help = True
-        elif opt == '-c':
+        elif opt == "-c":
             count_only = True
-        elif opt == '-d':
+        elif opt == "-d":
             sys.stderr.write("The delay parameter is now ignored\n")
     if show_help:
         print_usage()

@@ -59,29 +59,29 @@ class DB_Index(object):
 
     def Create(self, infile, outfile):
         """Build the database from file."""
-        db = gdbm.open(outfile, 'n')
+        db = gdbm.open(outfile, "n")
         with open(infile) as fid:
 
-            db['datafile'] = os.path.abspath(infile)
+            db["datafile"] = os.path.abspath(infile)
 
             while True:
                 line = fid.readline()
                 if not line or not len(line):
                     break
 
-                if line[:3] == 'ID ':
+                if line[:3] == "ID ":
                     id = string.split(line)[1]
                     start = fid.tell() - len(line)
 
-                elif line[:3] == 'AC ':
+                elif line[:3] == "AC ":
                     acc = string.split(line)[1]
-                    if acc[-1] == ';':
+                    if acc[-1] == ";":
                         acc = acc[:-1]
 
-                elif line[:2] == '//':
+                elif line[:2] == "//":
                     stop = fid.tell()
                     try:
-                        value = '%d %d' % (start, stop)
+                        value = "%d %d" % (start, stop)
                         db[id] = value
                         db[acc] = value
                         id, acc, start, stop = None, None, None, None
@@ -95,10 +95,10 @@ class DB_Index(object):
     def Open(self, indexfile=None):
         """Open the indexed database file."""
         if not indexfile:
-            indexfile = os.path.join(os.environ['PYPHY'], 'nr.dat.indexed')
+            indexfile = os.path.join(os.environ["PYPHY"], "nr.dat.indexed")
 
         self.db = gdbm.open(indexfile)
-        self.datafile = self.db['datafile']
+        self.datafile = self.db["datafile"]
         self.fid = open(self.datafile)
 
     def Close(self):
@@ -122,8 +122,8 @@ class DB_Index(object):
         if not entry:
             return None
 
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'OS   ':
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "OS   ":
                 OS = string.strip(line[5:])
                 if OS[-1] == ".":
                     OS = OS[0:-1]
@@ -134,8 +134,8 @@ class DB_Index(object):
 
     def FixOS(self, os):
         """Extract species from organism species field (OS)."""
-        os = string.split(os, ',')[0]
-        os = string.split(os, '(')[0]
+        os = string.split(os, ",")[0]
+        os = string.split(os, "(")[0]
         return string.strip(os)
 
     def Get_Taxonomy(self, id):
@@ -144,8 +144,8 @@ class DB_Index(object):
         if not entry:
             return None
         OC = ""
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'OC   ':
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "OC   ":
                 OC = OC + string.strip(line[5:])
                 if OC[-1] == ".":
                     OC = OC[0:-1]
@@ -177,9 +177,9 @@ class DB_Index(object):
         entry = self.Get(id)
         if not entry:
             return None
-        GN = ''
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'GN   ':
+        GN = ""
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "GN   ":
                 GN = string.strip(line[5:])
                 if GN[-1] == ".":
                     GN = GN[0:-1]
@@ -194,16 +194,16 @@ class DB_Index(object):
         if not entry:
             return None, None, None
         OS, OC, GN = "", "", ""
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'OS   ':
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "OS   ":
                 OS = string.strip(line[5:])
                 if OS[-1] == ".":
                     OS = OS[0:-1]
-            if line[0:5] == 'OC   ':
+            if line[0:5] == "OC   ":
                 OC = OC + string.strip(line[5:])
                 if OC[-1] == ".":
                     OC = OC[0:-1]
-            if line[0:5] == 'GN   ':
+            if line[0:5] == "GN   ":
                 GN = string.strip(line[5:])
                 if GN[-1] == ".":
                     GN = GN[0:-1]
@@ -217,16 +217,16 @@ class DB_Index(object):
         if not entry:
             return None, None, None
         OS, OC, OG = "", "", ""
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'OS   ':
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "OS   ":
                 OS = string.strip(line[5:])
                 if OS[-1] == ".":
                     OS = OS[0:-1]
-            if line[0:5] == 'OC   ':
+            if line[0:5] == "OC   ":
                 OC = OC + string.strip(line[5:])
                 if OC[-1] == ".":
                     OC = OC[0:-1]
-            if line[0:5] == 'OG   ':
+            if line[0:5] == "OG   ":
                 OG = string.strip(line[5:])
                 if OG[-1] == ".":
                     OG = OG[0:-1]
@@ -241,17 +241,17 @@ class DB_Index(object):
             return ""
         SQ = ""
         record = 0
-        for line in string.split(entry, '\n'):
+        for line in string.split(entry, "\n"):
             if record:
                 SQ = SQ + string.strip(line[5:])
-            if line[0:5] == 'SQ   ':
+            if line[0:5] == "SQ   ":
                 record = 1
             if line[0:2] == "//":
                 break
 
-        SQ = re.sub('[ \n]', '', SQ)
+        SQ = re.sub("[ \n]", "", SQ)
         if fasta:
-            SQ = '>%s\n%s' % (id, re.sub('(.{60})', '\\1\n', SQ))
+            SQ = ">%s\n%s" % (id, re.sub("(.{60})", "\\1\n", SQ))
         return SQ
 
     def Get_XX(self, id, xx):
@@ -260,8 +260,8 @@ class DB_Index(object):
         if not entry:
             return ""
         XX = ""
-        for line in string.split(entry, '\n'):
-            if line[0:5] == '%s   ' % xx:
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "%s   " % xx:
                 XX = XX + string.strip(line[5:])
                 if XX[-1] == ".":
                     XX = XX[0:-1]
@@ -275,13 +275,13 @@ class DB_Index(object):
         if not entry:
             return []
         keywords = []
-        for line in string.split(entry, '\n'):
-            if line[0:5] == 'KW   ':
-                for i in string.split(string.strip(line[5:]), ';'):
+        for line in string.split(entry, "\n"):
+            if line[0:5] == "KW   ":
+                for i in string.split(string.strip(line[5:]), ";"):
                     kw = string.strip(i)
                     if len(kw) < 2:
                         continue
-                    if kw[-1] == '.':
+                    if kw[-1] == ".":
                         kw = kw[:-1]
                     keywords.append(kw)
             if line[0:2] == "//":
@@ -292,35 +292,35 @@ class DB_Index(object):
 def usage(exit=0):
     """Print a short help message."""
     name = os.path.basename(sys.argv[0])
-    print('Usage: %s <db> <gene ID>' % name)
-    print('  or   %s --index <db.dat>' % name)
+    print("Usage: %s <db> <gene ID>" % name)
+    print("  or   %s --index <db.dat>" % name)
     if exit:
         sys.exit(0)
 
 
-if __name__ == '__main__':
-    pyphy_home = os.environ.get('PYPHY')
+if __name__ == "__main__":
+    pyphy_home = os.environ.get("PYPHY")
 
     if len(sys.argv) == 1:
         usage(exit=1)
     db_index = DB_Index(open=0)
     func = db_index.Get
     for arg in sys.argv[1:]:
-        if arg == '--index':
+        if arg == "--index":
             sys.argv.remove(arg)
             infile = sys.argv[1]
-            outfile = os.path.basename(infile) + '.indexed'
+            outfile = os.path.basename(infile) + ".indexed"
             db_index.Create(infile, outfile)
             sys.exit(0)
 
-        elif arg[:4] == '-Get':
+        elif arg[:4] == "-Get":
             sys.argv.remove(arg)
             func = getattr(db_index, arg[1:])
 
-        elif arg == '-h' or arg == '--help':
+        elif arg == "-h" or arg == "--help":
             usage(exit=1)
 
-    db = 'nr.dat'
+    db = "nr.dat"
     if len(sys.argv) == 2:
         # shortcut, mostly we use nr.dat so dont bother to name it
         ids = sys.argv[1:]
@@ -331,7 +331,7 @@ if __name__ == '__main__':
         except Exception:
             usage(exit=1)
 
-    dbfile = os.path.join(pyphy_home, db + '.indexed')
+    dbfile = os.path.join(pyphy_home, db + ".indexed")
     db_index.Open(dbfile)
     for id in ids:
         # print(db_index.Get(id))
