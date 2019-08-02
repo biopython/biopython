@@ -20,6 +20,9 @@ Values from mmCIF files are now read in as a list even when they consist of a
 single value. This change improves consistency and reduces the likelihood of
 making an error, but will require user code to be updated accordingly.
 
+The restriction enzyme list in Bio.Restriction has been updated to the August
+2019 release of REBASE.
+
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
@@ -92,6 +95,9 @@ releases. Class structure remains the same plus an additional attribute
 maximum number of tries and the sleep between them can be configured by
 changing ``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
 (The defaults are 3 tries and 15 seconds, respectively.)
+
+The restriction enzyme list in Bio.Restriction has been updated to the May
+2019 release of REBASE.
 
 All tests using the older print-and-compare approach have been replaced by
 unittests following Python's standard testing framework.

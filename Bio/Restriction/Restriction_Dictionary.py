@@ -14,7 +14,7 @@ The following dictionaries used to be defined in one go, but that does
 not work on Jython due to JVM limitations. Therefore we break this up
 into steps, using temporary functions to avoid the JVM limits.
 
-Used REBASE emboss files version 905 (2019).
+Used REBASE emboss files version 908 (2019).
 
 """
 rest_dict = {}
@@ -13747,6 +13747,31 @@ rest_dict["HpyAXIV"] = _temp()
 
 def _temp():
     return {
+        "charac": (None, None, None, None, "GGANNAG"),
+        "compsite": "(?=(?P<HpyAXVIII>GGA..AG))|(?=(?P<HpyAXVIII_as>CT..TCC))",
+        "dna": None,
+        "freq": 1024.0,
+        "fst3": None,
+        "fst5": None,
+        "inact_temp": 65,
+        "opt_temp": 37,
+        "ovhg": None,
+        "ovhgseq": None,
+        "results": None,
+        "scd3": None,
+        "scd5": None,
+        "site": "GGANNAG",
+        "size": 7,
+        "substrat": "DNA",
+        "suppl": (),
+    }
+
+
+rest_dict["HpyAXVIII"] = _temp()
+
+
+def _temp():
+    return {
         "charac": (None, None, None, None, "CRTTAA"),
         "compsite": "(?=(?P<HpyAXVI_mut1>C[AG]TTAA))|(?=(?P<HpyAXVI_mut1_as>TTAA[CT]G))",
         "dna": None,
@@ -14118,6 +14143,31 @@ def _temp():
 
 
 rest_dict["HspAI"] = _temp()
+
+
+def _temp():
+    return {
+        "charac": (None, None, None, None, "GAGCAGC"),
+        "compsite": "(?=(?P<HspMHR1II>GAGCAGC))|(?=(?P<HspMHR1II_as>GCTGCTC))",
+        "dna": None,
+        "freq": 16384.0,
+        "fst3": None,
+        "fst5": None,
+        "inact_temp": 65,
+        "opt_temp": 37,
+        "ovhg": None,
+        "ovhgseq": None,
+        "results": None,
+        "scd3": None,
+        "scd5": None,
+        "site": "GAGCAGC",
+        "size": 7,
+        "substrat": "DNA",
+        "suppl": (),
+    }
+
+
+rest_dict["HspMHR1II"] = _temp()
 
 
 def _temp():
@@ -24101,7 +24151,7 @@ suppliers = {}
 def _temp():
     return (
         "Life Technologies",
-        ["BshTI", "MluI", "HpaII", "MreI", "BclI", "SacI", "PauI", "BglI", "SalI", "MspI", "ScaI", "Bsu15I", "Mva1269I", "Bsp68I", "LweI", "SmiI", "PteI", "Mph1103I", "TscAI", "NcoI", "PsyI", "BseJI", "ClaI", "MauBI", "Eco24I", "CseI", "Eco47III", "Eco91I", "DraI", "BseXI", "BstXI", "RruI", "Esp3I", "BseSI", "Cfr9I", "AarI", "OliI", "PvuI", "BspOI", "DpnI", "Hin6I", "LguI", "Van91I", "Bst1107I", "Bme1390I", "PacI", "Psp5II", "TaqI", "Eco52I", "GsuI", "KpnI", "SspDI", "SsiI", "RseI", "MlsI", "NdeI", "HapII", "Cfr13I", "MboII", "SdaI", "BmsI", "BglII", "TasI", "AjuI", "AloI", "FspBI", "SchI", "PfoI", "Bpu10I", "BshNI", "SacII", "Acc65I", "BmeT110I", "XapI", "TaaI", "PscI", "Bsp1407I", "NruI", "MvaI", "PasI", "Hin1II", "PaeI", "Bsh1236I", "MssI", "CpoI", "Eco130I", "PspFI", "TaiI", "FspAI", "BfmI", "Eco47I", "BoxI", "RsaI", "HincII", "HpyF10VI", "XbaI", "Lsp1109I", "AjiI", "Bsp119I", "MboI", "AluI", "SduI", "SgsI", "BseGI", "Eco72I", "BcnI", "SgeI", "EcoRII", "Alw21I", "XagI", "Hpy8I", "PsuI", "SmaI", "NheI", "BplI", "Ppu21I", "SmoI", "FaqI", "AdeI", "StuI", "BcuI", "BspTI", "SpeI", "SphI", "BseLI", "AasI", "PvuII", "EheI", "BveI", "FokI", "Hin1I", "Alw26I", "Cfr10I", "SgrDI", "Eco31I", "HinfI", "Eam1105I", "BsuRI", "Eam1104I", "Ecl136II", "XmaJI", "SfaAI", "HphI", "Psp1406I", "Csp6I", "EcoO109I", "BseMII", "HindIII", "EcoRV", "AatII", "BfuI", "EcoRI", "XmiI", "TauI", "XhoI", "Bsp143I", "BspPI", "MnlI", "PfeI", "CaiI", "Bpu1102I", "MunI", "Tru1I", "BspLI", "Eco105I", "NsbI", "PstI", "VspI", "Alw44I", "SfiI", "BpiI", "XceI", "BseMI", "HaeIII", "Kpn2I", "Cfr42I", "SatI", "AccI", "SspI", "Eco32I", "KflI", "BseDI", "KspAI", "Eco81I", "BauI", "AanI", "ApaI", "SaqAI", "EcoT22I", "Eco88I", "Eco57I", "Eco147I", "PdmI", "BalI", "CsiI", "AfaI", "Bsp120I", "NotI", "MbiI", "BamHI", "BfoI", "TatI", "HpaI", "HpyF3I", "Pfl23II", "Bsh1285I", "HhaI", "NmuCI", "BseNI", "PagI", "PdiI"],
+        ["AanI", "AarI", "AasI", "AatII", "AccI", "Acc65I", "AdeI", "AfaI", "AjiI", "AjuI", "AloI", "AluI", "Alw21I", "Alw26I", "Alw44I", "ApaI", "BalI", "BamHI", "BauI", "BclI", "BcnI", "BcuI", "BfmI", "BfoI", "BfuI", "BglI", "BglII", "Bme1390I", "BmeT110I", "BmsI", "BoxI", "BpiI", "BplI", "Bpu10I", "Bpu1102I", "BseDI", "BseGI", "BseJI", "BseLI", "BseMI", "BseMII", "BseNI", "BseSI", "BseXI", "Bsh1236I", "Bsh1285I", "BshNI", "BshTI", "Bsp68I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspLI", "BspOI", "BspPI", "BspTI", "Bst1107I", "BstXI", "Bsu15I", "BsuRI", "BveI", "CaiI", "Cfr9I", "Cfr10I", "Cfr13I", "Cfr42I", "ClaI", "CpoI", "CseI", "CsiI", "Csp6I", "DpnI", "DraI", "Eam1104I", "Eam1105I", "Ecl136II", "Eco24I", "Eco31I", "Eco32I", "Eco47I", "Eco47III", "Eco52I", "Eco57I", "Eco72I", "Eco81I", "Eco88I", "Eco91I", "Eco105I", "Eco130I", "Eco147I", "EcoO109I", "EcoRI", "EcoRII", "EcoRV", "EcoT22I", "EheI", "Esp3I", "FaqI", "FokI", "FspAI", "FspBI", "GsuI", "HaeIII", "HapII", "HhaI", "Hin1I", "Hin1II", "Hin6I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy8I", "HpyF3I", "HpyF10VI", "KflI", "KpnI", "Kpn2I", "KspAI", "LguI", "Lsp1109I", "LweI", "MauBI", "MbiI", "MboI", "MboII", "MlsI", "MluI", "MnlI", "Mph1103I", "MreI", "MspI", "MssI", "MunI", "MvaI", "Mva1269I", "NcoI", "NdeI", "NheI", "NmuCI", "NotI", "NruI", "NsbI", "OliI", "PacI", "PaeI", "PagI", "PasI", "PauI", "PdiI", "PdmI", "PfeI", "Pfl23II", "PfoI", "Ppu21I", "PscI", "Psp5II", "Psp1406I", "PspFI", "PstI", "PsuI", "PsyI", "PteI", "PvuI", "PvuII", "RruI", "RsaI", "RseI", "SacI", "SacII", "SalI", "SaqAI", "SatI", "ScaI", "SchI", "SdaI", "SduI", "SfaAI", "SfiI", "SgeI", "SgrDI", "SgsI", "SmaI", "SmiI", "SmoI", "SpeI", "SphI", "SsiI", "SspI", "SspDI", "StuI", "TaaI", "TaiI", "TaqI", "TasI", "TatI", "TauI", "Tru1I", "TscAI", "Van91I", "VspI", "XagI", "XapI", "XbaI", "XceI", "XhoI", "XmaJI", "XmiI"],
     )
 
 
@@ -24111,7 +24161,7 @@ suppliers["B"] = _temp()
 def _temp():
     return (
         "Minotech Biotechnology",
-        ["SgrBI", "BclI", "BglI", "SalI", "PspPI", "ScaI", "SnaBI", "BstEII", "NcoI", "BshFI", "AsuII", "BssAI", "BseAI", "TaqI", "KpnI", "BglII", "NaeI", "BseBI", "NruI", "RsaI", "BsiSI", "XbaI", "MboI", "AluI", "SlaI", "SseBI", "SmaI", "NheI", "SstI", "Sau3AI", "SphI", "PvuII", "ApaLI", "HinfI", "MspCI", "HindIII", "EcoRV", "EcoRI", "BseCI", "PstI", "SfiI", "SspI", "CspAI", "NotI", "BamHI", "HpaI", "StyI"],
+        ["AluI", "ApaLI", "AsuII", "BamHI", "BclI", "BglI", "BglII", "BseAI", "BseBI", "BseCI", "BshFI", "BsiSI", "BssAI", "BstEII", "CspAI", "EcoRI", "EcoRV", "HindIII", "HinfI", "HpaI", "KpnI", "MboI", "MspCI", "NaeI", "NcoI", "NheI", "NotI", "NruI", "PspPI", "PstI", "PvuII", "RsaI", "SalI", "Sau3AI", "ScaI", "SfiI", "SgrBI", "SlaI", "SmaI", "SnaBI", "SphI", "SseBI", "SspI", "SstI", "StyI", "TaqI", "XbaI"],
     )
 
 
@@ -24131,7 +24181,7 @@ suppliers["E"] = _temp()
 def _temp():
     return (
         "SibEnzyme Ltd.",
-        ["AsuNHI", "AgsI", "MluI", "CciI", "BstHHI", "HpaII", "AhlI", "KroI", "PspN4I", "BglI", "SalI", "PspEI", "MspI", "VneI", "BstH2I", "BisI", "BmtI", "PspXI", "AsiGI", "CciNI", "Sfr274I", "SmiI", "Ksp22I", "BstSFI", "BssT1I", "PciSI", "Bsp19I", "Bse1I", "AspS9I", "AbsI", "FauNDI", "LmnI", "AclWI", "DraI", "Bst2UI", "AluBI", "PsrI", "BstACI", "BstXI", "BstDEI", "GluI", "AcoI", "XmaI", "BstF5I", "BstMBI", "BstENI", "BssECI", "FalI", "EgeI", "Ama87I", "BstDSI", "BstV2I", "AjnI", "AspLEI", "PalAI", "Zsp2I", "DseDI", "BstAUI", "Bpu14I", "FaeI", "TaqI", "KpnI", "BstSNI", "AclI", "MboII", "BglII", "PspPPI", "SetI", "AcsI", "BstNSI", "BseX3I", "RsaNI", "Bpu10I", "Rsr2I", "Acc65I", "Bst2BI", "NruI", "Ple19I", "TseFI", "SspMI", "PciI", "MalI", "Bse118I", "BsuI", "BsePI", "BstMCI", "Bme18I", "RsaI", "BssNAI", "BstV1I", "Bsp13I", "Bst4CI", "MabI", "AsuHPI", "BtrI", "XbaI", "ArsI", "BstC8I", "Psp124BI", "GlaI", "HgaI", "BstX2I", "AluI", "ZraI", "Bse21I", "Sfr303I", "BstSCI", "Bse3DI", "Bso31I", "AccB7I", "BstKTI", "AccBSI", "SmaI", "SmiMI", "BspACI", "AspA2I", "Bsp1720I", "Bsc4I", "SphI", "Mly113I", "FriOI", "PvuII", "MfeI", "ErhI", "FokI", "AsuC2I", "GsaI", "HinfI", "MroNI", "BsuRI", "PpsI", "BstPAI", "PsiI", "HspAI", "RgaI", "MspA1I", "Fsp4HI", "Kzo9I", "Acc36I", "DraIII", "Acc16I", "MspR9I", "HindIII", "Tth111I", "EcoRV", "AatII", "MroXI", "EcoRI", "ZrmI", "BstFNI", "BslFI", "Bsa29I", "MnlI", "SbfI", "PstI", "Bse8I", "FauI", "VspI", "SfiI", "Bst6I", "BspFNI", "Bbv12I", "HaeIII", "BstAPI", "SspI", "AfeI", "PspOMI", "BstMAI", "BstSLI", "ApaI", "BlsI", "Mox20I", "FblI", "BmuI", "PcsI", "BstMWI", "BarI", "PctI", "FaiI", "BpmI", "PstNI", "AcuI", "AccB1I", "PceI", "PkrI", "HpySE526I", "Sse9I", "Tru9I", "MhlI", "BstBAI", "MteI", "DriI", "AoxI", "EcoICRI", "FatI", "BamHI", "Psp6I", "BstAFI", "SfaNI", "RigI", "HpaI", "PspCI", "HindII", "PspLI", "AsiSI"],
+        ["AatII", "AbsI", "Acc16I", "Acc36I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AclWI", "AcoI", "AcsI", "AcuI", "AfeI", "AgsI", "AhlI", "AjnI", "AluI", "AluBI", "Ama87I", "AoxI", "ApaI", "ArsI", "AsiGI", "AsiSI", "AspA2I", "AspLEI", "AspS9I", "AsuC2I", "AsuHPI", "AsuNHI", "BamHI", "BarI", "Bbv12I", "BglI", "BglII", "BisI", "BlsI", "Bme18I", "BmtI", "BmuI", "BpmI", "Bpu10I", "Bpu14I", "Bsa29I", "Bsc4I", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BslFI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BspACI", "BspFNI", "BssECI", "BssNAI", "BssT1I", "Bst6I", "BstACI", "BstAFI", "BstAPI", "BstAUI", "Bst2BI", "BstBAI", "Bst4CI", "BstC8I", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstKTI", "BstMAI", "BstMBI", "BstMCI", "BstMWI", "BstNSI", "BstPAI", "BstSCI", "BstSFI", "BstSLI", "BstSNI", "Bst2UI", "BstV1I", "BstV2I", "BstXI", "BstX2I", "BsuI", "BsuRI", "BtrI", "CciI", "CciNI", "DraI", "DraIII", "DriI", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "EgeI", "ErhI", "FaeI", "FaiI", "FalI", "FatI", "FauI", "FauNDI", "FblI", "FokI", "FriOI", "Fsp4HI", "GlaI", "GluI", "GsaI", "HaeIII", "HgaI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HpySE526I", "HspAI", "KpnI", "KroI", "Ksp22I", "Kzo9I", "LmnI", "MabI", "MalI", "MboII", "MfeI", "MhlI", "MluI", "Mly113I", "MnlI", "Mox20I", "MroNI", "MroXI", "MspI", "MspA1I", "MspR9I", "MteI", "NruI", "PalAI", "PceI", "PciI", "PciSI", "PcsI", "PctI", "PkrI", "Ple19I", "PpsI", "PsiI", "Psp6I", "Psp124BI", "PspCI", "PspEI", "PspLI", "PspN4I", "PspOMI", "PspPPI", "PspXI", "PsrI", "PstI", "PstNI", "PvuII", "RgaI", "RigI", "RsaI", "RsaNI", "Rsr2I", "SalI", "SbfI", "SetI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "SspMI", "TaqI", "Tru9I", "TseFI", "Tth111I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "ZrmI", "Zsp2I"],
     )
 
 
@@ -24141,7 +24191,7 @@ suppliers["I"] = _temp()
 def _temp():
     return (
         "Nippon Gene Co., Ltd.",
-        ["BssHII", "AxyI", "MluI", "BclI", "SacI", "EcoT38I", "BglI", "SalI", "MspI", "ScaI", "BstEII", "NcoI", "AgeI", "DraI", "BstXI", "SwaI", "AvaI", "TaqI", "AseI", "KpnI", "Sau96I", "HaeII", "NdeI", "MboII", "AflII", "BglII", "AccII", "SacII", "NruI", "NarI", "RsaI", "HincII", "XbaI", "AluI", "ScrFI", "EcoRII", "SmaI", "NheI", "StuI", "Sau3AI", "SpeI", "SphI", "FspI", "PvuII", "FokI", "HinfI", "NciI", "EcoO109I", "HindIII", "EcoRV", "EcoRI", "XhoI", "Bsp1286I", "AccIII", "PstI", "BsmI", "Alw44I", "SfiI", "HaeIII", "NdeII", "AccI", "SspI", "NsiI", "ApaI", "NspV", "BalI", "NotI", "AcyI", "BamHI", "AvaII", "HpaI", "StyI", "HhaI"],
+        ["AccI", "AccII", "AccIII", "AcyI", "AflII", "AgeI", "AluI", "Alw44I", "ApaI", "AseI", "AvaI", "AvaII", "AxyI", "BalI", "BamHI", "BclI", "BglI", "BglII", "BsmI", "Bsp1286I", "BssHII", "BstEII", "BstXI", "DraI", "EcoO109I", "EcoRI", "EcoRII", "EcoRV", "EcoT38I", "FokI", "FspI", "HaeII", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "KpnI", "MboII", "MluI", "MspI", "NarI", "NciI", "NcoI", "NdeI", "NdeII", "NheI", "NotI", "NruI", "NsiI", "NspV", "PstI", "PvuII", "RsaI", "SacI", "SacII", "SalI", "Sau96I", "Sau3AI", "ScaI", "ScrFI", "SfiI", "SmaI", "SpeI", "SphI", "SspI", "StuI", "StyI", "SwaI", "TaqI", "XbaI", "XhoI"],
     )
 
 
@@ -24151,7 +24201,7 @@ suppliers["J"] = _temp()
 def _temp():
     return (
         "Takara Bio Inc.",
-        ["BssHII", "PshBI", "MluI", "BspT107I", "SacI", "XspI", "BglI", "SalI", "MspI", "BstPI", "ScaI", "BanII", "PmaCI", "SnaBI", "SmiI", "BmgT120I", "NcoI", "ClaI", "DraI", "BstXI", "PshAI", "PvuI", "DpnI", "Van91I", "Bst1107I", "TaqI", "EaeI", "Eco52I", "BspT104I", "KpnI", "HaeII", "EcoO65I", "NdeI", "HapII", "MboII", "AflII", "EcoT14I", "BglII", "NaeI", "AccII", "SacII", "BmeT110I", "Aor51HI", "Bsp1407I", "NruI", "Sse8387I", "CpoI", "HincII", "XbaI", "MboI", "AluI", "BcnI", "SmaI", "NheI", "StuI", "Sau3AI", "SpeI", "SphI", "PvuII", "MflI", "FokI", "Hin1I", "ApaLI", "Cfr10I", "HinfI", "Psp1406I", "EcoO109I", "HindIII", "Tth111I", "EcoRV", "AatII", "EcoRI", "XhoI", "VpaK11BI", "Bsp1286I", "AccIII", "Bpu1102I", "MunI", "Aor13HI", "PstI", "SfiI", "BlnI", "HaeIII", "BciT130I", "AccI", "SspI", "FbaI", "Eco81I", "ApaI", "EcoT22I", "BalI", "DdeI", "AfaI", "NotI", "BamHI", "HpaI", "HhaI"],
+        ["AatII", "AccI", "AccII", "AccIII", "AfaI", "AflII", "AluI", "Aor13HI", "Aor51HI", "ApaI", "ApaLI", "BalI", "BamHI", "BanII", "BciT130I", "BcnI", "BglI", "BglII", "BlnI", "BmeT110I", "BmgT120I", "Bpu1102I", "Bsp1286I", "Bsp1407I", "BspT104I", "BspT107I", "BssHII", "Bst1107I", "BstPI", "BstXI", "Cfr10I", "ClaI", "CpoI", "DdeI", "DpnI", "DraI", "EaeI", "Eco52I", "Eco81I", "EcoO65I", "EcoO109I", "EcoRI", "EcoRV", "EcoT14I", "EcoT22I", "FbaI", "FokI", "HaeII", "HaeIII", "HapII", "HhaI", "Hin1I", "HincII", "HindIII", "HinfI", "HpaI", "KpnI", "MboI", "MboII", "MflI", "MluI", "MspI", "MunI", "NaeI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "PmaCI", "PshAI", "PshBI", "Psp1406I", "PstI", "PvuI", "PvuII", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SmaI", "SmiI", "SnaBI", "SpeI", "SphI", "Sse8387I", "SspI", "StuI", "TaqI", "Tth111I", "Van91I", "VpaK11BI", "XbaI", "XhoI", "XspI"],
     )
 
 
@@ -24161,7 +24211,7 @@ suppliers["K"] = _temp()
 def _temp():
     return (
         "Roche Applied Science",
-        ["BssHII", "MluI", "BclI", "SacI", "SalI", "Asp718I", "ScaI", "SnaBI", "NcoI", "ClaI", "Eco47III", "DraI", "BstXI", "SwaI", "PvuI", "DpnI", "BbrPI", "TaqI", "SexAI", "KpnI", "NdeI", "BglII", "MaeI", "NruI", "MvaI", "NarI", "RsaI", "MaeII", "AflIII", "XbaI", "MvnI", "AluI", "CfoI", "SmaI", "NheI", "StuI", "Sau3AI", "SpeI", "SphI", "MaeIII", "PvuII", "FokI", "HinfI", "DraIII", "MluNI", "HindIII", "EcoRV", "AatII", "EcoRI", "XhoI", "MunI", "PstI", "BsmI", "SfiI", "BlnI", "HaeIII", "NdeII", "AccI", "NsiI", "ApaI", "SfuI", "BfrI", "KspI", "Tru9I", "DdeI", "NotI", "MroI", "Asp700I", "BamHI", "HpaI", "HindII"],
+        ["AatII", "AccI", "AflIII", "AluI", "ApaI", "Asp700I", "Asp718I", "BamHI", "BbrPI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "BssHII", "BstXI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "DraIII", "Eco47III", "EcoRI", "EcoRV", "FokI", "HaeIII", "HindII", "HindIII", "HinfI", "HpaI", "KpnI", "KspI", "MaeI", "MaeII", "MaeIII", "MluI", "MluNI", "MroI", "MunI", "MvaI", "MvnI", "NarI", "NcoI", "NdeI", "NdeII", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SalI", "Sau3AI", "ScaI", "SexAI", "SfiI", "SfuI", "SmaI", "SnaBI", "SpeI", "SphI", "StuI", "SwaI", "TaqI", "Tru9I", "XbaI", "XhoI"],
     )
 
 
@@ -24171,7 +24221,7 @@ suppliers["M"] = _temp()
 def _temp():
     return (
         "New England Biolabs",
-        ["BssHII", "EciI", "BsrFI", "DpnII", "AlwI", "MluI", "AlwNI", "NgoMIV", "HpaII", "TspMI", "BclI", "MlyI", "BsaWI", "SacI", "MwoI", "BfaI", "DrdI", "BmgBI", "BglI", "SalI", "MspI", "ScaI", "BanII", "MslI", "BmtI", "PspXI", "BsaBI", "SnaBI", "BstEII", "NcoI", "BtgI", "ClaI", "BsaI", "BsrBI", "AgeI", "XmnI", "DraI", "Hpy166II", "Hpy99I", "StyD4I", "BstXI", "PspGI", "BsiHKAI", "PpuMI", "BsoBI", "BlpI", "Esp3I", "PshAI", "XmaI", "BtsIMutI", "SwaI", "AvaI", "PvuI", "DpnI", "CspCI", "PflFI", "BpuEI", "PacI", "TaqI", "EaeI", "SexAI", "BsrI", "AseI", "KpnI", "Sau96I", "BstNI", "HaeII", "AclI", "ApoI", "HpyCH4IV", "NdeI", "MboII", "AflII", "TseI", "BglII", "SmlI", "NaeI", "Bpu10I", "SacII", "Acc65I", "BspQI", "MseI", "AvrII", "NruI", "BaeI", "BtsCI", "PciI", "BcgI", "BsaHI", "SfoI", "MspJI", "NarI", "Bsu36I", "RsaI", "HincII", "AflIII", "BspCNI", "BsgI", "XbaI", "AbaSI", "BfuAI", "TfiI", "PmlI", "BbvI", "MboI", "HgaI", "BanI", "AluI", "BaeGI", "ZraI", "Hpy188III", "RsrII", "BspMI", "MluCI", "AciI", "ScrFI", "MscI", "BseYI", "CviQI", "BmrI", "Hpy188I", "SmaI", "PleI", "EcoNI", "NheI", "BccI", "FspEI", "BsiEI", "StuI", "Sau3AI", "BcoDI", "SpeI", "BsiWI", "SphI", "HpyAV", "FspI", "CviAII", "PvuII", "Eco53kI", "MfeI", "BsrDI", "BssSI", "TspRI", "FokI", "ApaLI", "ApeKI", "HinfI", "BciVI", "HinP1I", "NciI", "PsiI", "BceAI", "HphI", "MspA1I", "BsmAI", "DraIII", "EcoO109I", "HindIII", "BtsI", "SapI", "Tth111I", "EcoRV", "AatII", "EcoRI", "BsmFI", "XhoI", "Bsp1286I", "PluTI", "MnlI", "EagI", "AscI", "AhdI", "NlaIII", "SbfI", "PstI", "FauI", "SfcI", "BspEI", "BsmI", "SfiI", "BstUI", "BstZ17I", "KasI", "HaeIII", "BsmBI", "XcmI", "LpnPI", "BstAPI", "AccI", "SspI", "HpyCH4III", "BsrGI", "AfeI", "SrfI", "SgrAI", "NsiI", "BspHI", "BstYI", "PspOMI", "PmeI", "FseI", "ApaI", "BseRI", "MmeI", "BtgZI", "BpmI", "EarI", "CviKI_1", "AcuI", "NspI", "BstBI", "HpyCH4V", "NlaIV", "BbsI", "DdeI", "NotI", "BsaXI", "FatI", "BamHI", "BslI", "AvaII", "BspDI", "PaeR7I", "SfaNI", "HpaI", "BsaJI", "BbvCI", "Fnu4HI", "Cac8I", "Tsp45I", "StyI", "PflMI", "HhaI", "AsiSI", "AleI", "NmeAIII", "BsaAI"],
+        ["AatII", "AbaSI", "AccI", "Acc65I", "AciI", "AclI", "AcuI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwI", "AlwNI", "ApaI", "ApaLI", "ApeKI", "ApoI", "AscI", "AseI", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeI", "BaeGI", "BamHI", "BanI", "BanII", "BbsI", "BbvI", "BbvCI", "BccI", "BceAI", "BcgI", "BciVI", "BclI", "BcoDI", "BfaI", "BfuAI", "BglI", "BglII", "BlpI", "BmgBI", "BmrI", "BmtI", "BpmI", "Bpu10I", "BpuEI", "BsaI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsaXI", "BseRI", "BseYI", "BsgI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "BsmI", "BsmAI", "BsmBI", "BsmFI", "BsoBI", "Bsp1286I", "BspCNI", "BspDI", "BspEI", "BspHI", "BspMI", "BspQI", "BsrI", "BsrBI", "BsrDI", "BsrFI", "BsrGI", "BssHII", "BssSI", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BtgZI", "BtsI", "BtsIMutI", "BtsCI", "Cac8I", "ClaI", "CspCI", "CviAII", "CviKI_1", "CviQI", "DdeI", "DpnI", "DpnII", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EarI", "EciI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "Esp3I", "FatI", "FauI", "Fnu4HI", "FokI", "FseI", "FspI", "FspEI", "HaeII", "HaeIII", "HgaI", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "HphI", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyAV", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnPI", "MboI", "MboII", "MfeI", "MluI", "MluCI", "MlyI", "MmeI", "MnlI", "MscI", "MseI", "MslI", "MspI", "MspA1I", "MspJI", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "NmeAIII", "NotI", "NruI", "NsiI", "NspI", "PacI", "PaeR7I", "PciI", "PflFI", "PflMI", "PleI", "PluTI", "PmeI", "PmlI", "PpuMI", "PshAI", "PsiI", "PspGI", "PspOMI", "PspXI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "SapI", "Sau96I", "Sau3AI", "SbfI", "ScaI", "ScrFI", "SexAI", "SfaNI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "SspI", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspMI", "TspRI", "Tth111I", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"],
     )
 
 
@@ -24181,7 +24231,7 @@ suppliers["N"] = _temp()
 def _temp():
     return (
         "Toyobo Biochemicals",
-        ["MluI", "BclI", "SacI", "BglI", "SalI", "ScaI", "NcoI", "PvuI", "DpnI", "PacI", "KpnI", "BglII", "SacII", "HincII", "AluI", "MscI", "SmaI", "NheI", "SpeI", "SphI", "PvuII", "HinfI", "HindIII", "EcoRV", "EcoRI", "XhoI", "PstI", "SfiI", "HaeIII", "DdeI", "NotI", "MroI", "BamHI"],
+        ["AluI", "BamHI", "BclI", "BglI", "BglII", "DdeI", "DpnI", "EcoRI", "EcoRV", "HaeIII", "HincII", "HindIII", "HinfI", "KpnI", "MluI", "MroI", "MscI", "NcoI", "NheI", "NotI", "PacI", "PstI", "PvuI", "PvuII", "SacI", "SacII", "SalI", "ScaI", "SfiI", "SmaI", "SpeI", "SphI", "XhoI"],
     )
 
 
@@ -24191,7 +24241,7 @@ suppliers["O"] = _temp()
 def _temp():
     return (
         "Molecular Biology Resources - CHIMERx",
-        ["BssHII", "MluI", "HpaII", "SacI", "BglI", "SalI", "MspI", "ScaI", "NcoI", "ClaI", "CviJI", "DraI", "BstXI", "AcvI", "AvaI", "PvuI", "DpnI", "TaqI", "KpnI", "NdeI", "MboII", "BglII", "SacII", "NruI", "NarI", "TaqII", "RsaI", "HincII", "XbaI", "TspGWI", "MboI", "AluI", "RsrII", "SmaI", "NheI", "StuI", "SpeI", "SphI", "PvuII", "HinfI", "BsiHKCI", "HindIII", "Tth111I", "EcoRV", "EcoRI", "XhoI", "MnlI", "PinAI", "PstI", "SfiI", "HaeIII", "AccI", "SspI", "NsiI", "ApaI", "TspDTI", "BalI", "DdeI", "NotI", "BamHI", "HpaI", "HhaI"],
+        ["AccI", "AcvI", "AluI", "ApaI", "AvaI", "BalI", "BamHI", "BglI", "BglII", "BsiHKCI", "BssHII", "BstXI", "ClaI", "CviJI", "DdeI", "DpnI", "DraI", "EcoRI", "EcoRV", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "KpnI", "MboI", "MboII", "MluI", "MnlI", "MspI", "NarI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PinAI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "ScaI", "SfiI", "SmaI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "TaqII", "TspDTI", "TspGWI", "Tth111I", "XbaI", "XhoI"],
     )
 
 
@@ -24201,7 +24251,7 @@ suppliers["Q"] = _temp()
 def _temp():
     return (
         "Promega Corporation",
-        ["BssHII", "MluI", "HpaII", "BclI", "SacI", "BglI", "SalI", "MspI", "ScaI", "SnaBI", "BstEII", "NcoI", "ClaI", "AgeI", "XmnI", "Eco47III", "DraI", "BstXI", "XmaI", "PvuI", "DpnI", "TaqI", "KpnI", "HaeII", "NdeI", "MboII", "BglII", "SacII", "NruI", "CspI", "NarI", "RsaI", "Hsp92II", "HincII", "XbaI", "MboI", "BanI", "AluI", "CfoI", "SmaI", "NheI", "StuI", "Sau3AI", "SpeI", "SphI", "PvuII", "HinfI", "NciI", "MspA1I", "HindIII", "SgfI", "EcoRV", "EcoRI", "XhoI", "AccIII", "PstI", "VspI", "BstZI", "SfiI", "Hsp92I", "HaeIII", "AccI", "SspI", "NsiI", "ApaI", "BalI", "Tru9I", "DdeI", "NotI", "EcoICRI", "BamHI", "AvaII", "HpaI", "HhaI"],
+        ["AccI", "AccIII", "AgeI", "AluI", "ApaI", "AvaII", "BalI", "BamHI", "BanI", "BclI", "BglI", "BglII", "BssHII", "BstEII", "BstXI", "BstZI", "CfoI", "ClaI", "CspI", "DdeI", "DpnI", "DraI", "Eco47III", "EcoICRI", "EcoRI", "EcoRV", "HaeII", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "Hsp92I", "Hsp92II", "KpnI", "MboI", "MboII", "MluI", "MspI", "MspA1I", "NarI", "NciI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SgfI", "SmaI", "SnaBI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "Tru9I", "VspI", "XbaI", "XhoI", "XmaI", "XmnI"],
     )
 
 
@@ -24211,7 +24261,7 @@ suppliers["R"] = _temp()
 def _temp():
     return (
         "Sigma Chemical Corporation",
-        ["MluI", "BclI", "SacI", "SalI", "Asp718I", "ScaI", "NcoI", "ClaI", "Eco47III", "DraI", "SwaI", "PvuI", "DpnI", "TaqI", "KpnI", "NdeI", "BglII", "NruI", "RsaI", "AflIII", "XbaI", "AluI", "CfoI", "SmaI", "NheI", "StuI", "SpeI", "SphI", "MaeIII", "PvuII", "HindIII", "EcoRV", "EcoRI", "XhoI", "MunI", "EclXI", "PstI", "BsmI", "SfiI", "BlnI", "HaeIII", "NsiI", "ApaI", "SfuI", "BfrI", "KspI", "DdeI", "NotI", "BamHI", "HpaI", "HindII"],
+        ["AflIII", "AluI", "ApaI", "Asp718I", "BamHI", "BclI", "BfrI", "BglII", "BlnI", "BsmI", "CfoI", "ClaI", "DdeI", "DpnI", "DraI", "EclXI", "Eco47III", "EcoRI", "EcoRV", "HaeIII", "HindII", "HindIII", "HpaI", "KpnI", "KspI", "MaeIII", "MluI", "MunI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PstI", "PvuI", "PvuII", "RsaI", "SacI", "SalI", "ScaI", "SfiI", "SfuI", "SmaI", "SpeI", "SphI", "StuI", "SwaI", "TaqI", "XbaI", "XhoI"],
     )
 
 
@@ -24221,7 +24271,7 @@ suppliers["S"] = _temp()
 def _temp():
     return (
         "Vivantis Technologies",
-        ["BssMI", "AsuNHI", "MluI", "BstHHI", "HpaII", "AhlI", "BglI", "SalI", "PspEI", "MspI", "VneI", "BstH2I", "BmtI", "AsiGI", "CciNI", "Sfr274I", "SmiI", "Ksp22I", "BssT1I", "Bsp19I", "Bse1I", "AspS9I", "BmcAI", "FauNDI", "DraI", "Bst2UI", "Vha464I", "BstXI", "BstDEI", "XmaI", "BstF5I", "BstMBI", "BstENI", "Ama87I", "BstDSI", "BstV2I", "AspLEI", "Zsp2I", "DseDI", "BstAUI", "Bpu14I", "TaqI", "KpnI", "BstSNI", "AclI", "MboII", "BmrFI", "BglII", "AcsI", "BstNSI", "BmeRI", "BseX3I", "Bpu10I", "Rsr2I", "Acc65I", "BtuMI", "Bse118I", "BsnI", "BmiI", "BsePI", "BstMCI", "Bme18I", "RsaI", "BssNAI", "Bsp13I", "Bst4CI", "AsuHPI", "XbaI", "Psp124BI", "BstX2I", "AluI", "ZraI", "Bse21I", "Sfr303I", "BpuMI", "Bse3DI", "Bso31I", "AccB7I", "AccBSI", "SmaI", "SmiMI", "AspA2I", "Bsp1720I", "SphI", "FriOI", "PvuII", "BshVI", "FokI", "HinfI", "MroNI", "BstPAI", "HspAI", "MspA1I", "DraIII", "Acc16I", "HindIII", "Tth111I", "EcoRV", "AatII", "MroXI", "EcoRI", "DinI", "BstFNI", "AfiI", "MnlI", "SbfI", "PstI", "Bse8I", "VspI", "SfiI", "Bst6I", "Msp20I", "Bbv12I", "SspI", "PspOMI", "BstMAI", "ApaI", "FblI", "PctI", "AccB1I", "BssNI", "PceI", "Sse9I", "Tru9I", "MhlI", "BstBAI", "EcoICRI", "BamHI", "SfaNI", "HpaI", "PspCI", "HindII"],
+        ["AatII", "Acc16I", "Acc65I", "AccB1I", "AccB7I", "AccBSI", "AclI", "AcsI", "AfiI", "AhlI", "AluI", "Ama87I", "ApaI", "AsiGI", "AspA2I", "AspLEI", "AspS9I", "AsuHPI", "AsuNHI", "BamHI", "Bbv12I", "BglI", "BglII", "BmcAI", "Bme18I", "BmeRI", "BmiI", "BmrFI", "BmtI", "Bpu10I", "Bpu14I", "BpuMI", "Bse1I", "Bse8I", "Bse21I", "Bse118I", "Bse3DI", "BsePI", "BseX3I", "BshVI", "BsnI", "Bso31I", "Bsp13I", "Bsp19I", "Bsp1720I", "BssMI", "BssNI", "BssNAI", "BssT1I", "Bst6I", "BstAUI", "BstBAI", "Bst4CI", "BstDEI", "BstDSI", "BstENI", "BstF5I", "BstFNI", "BstH2I", "BstHHI", "BstMAI", "BstMBI", "BstMCI", "BstNSI", "BstPAI", "BstSNI", "Bst2UI", "BstV2I", "BstXI", "BstX2I", "BtuMI", "CciNI", "DinI", "DraI", "DraIII", "DseDI", "EcoICRI", "EcoRI", "EcoRV", "FauNDI", "FblI", "FokI", "FriOI", "HindII", "HindIII", "HinfI", "HpaI", "HpaII", "HspAI", "KpnI", "Ksp22I", "MboII", "MhlI", "MluI", "MnlI", "MroNI", "MroXI", "MspI", "Msp20I", "MspA1I", "PceI", "PctI", "Psp124BI", "PspCI", "PspEI", "PspOMI", "PstI", "PvuII", "RsaI", "Rsr2I", "SalI", "SbfI", "SfaNI", "SfiI", "Sfr274I", "Sfr303I", "SmaI", "SmiI", "SmiMI", "SphI", "Sse9I", "SspI", "TaqI", "Tru9I", "Tth111I", "Vha464I", "VneI", "VspI", "XbaI", "XmaI", "ZraI", "Zsp2I"],
     )
 
 
@@ -24231,7 +24281,7 @@ suppliers["V"] = _temp()
 def _temp():
     return (
         "EURx Ltd.",
-        ["BssHII", "MluI", "HpaII", "BspTNI", "SacI", "BglI", "SalI", "MspI", "ScaI", "BanII", "NcoI", "ClaI", "CviJI", "DraI", "BstXI", "AcvI", "AvaI", "PvuI", "DpnI", "TaqI", "SinI", "KpnI", "NdeI", "MboII", "BglII", "SacII", "NruI", "NarI", "TaqII", "RsaI", "HincII", "XbaI", "BspANI", "TspGWI", "MboI", "AluI", "RsrII", "SmaI", "NheI", "StuI", "Sau3AI", "SpeI", "SphI", "PvuII", "FokI", "HinfI", "BsiHKCI", "HindIII", "Tth111I", "EcoRV", "EcoRI", "XhoI", "MnlI", "PinAI", "PstI", "BspMAI", "SfiI", "HaeIII", "AccI", "SspI", "NsiI", "ApaI", "MmeI", "TspDTI", "BalI", "DdeI", "NotI", "BamHI", "BsuTUI", "AvaII", "HpaI", "HhaI"],
+        ["AccI", "AcvI", "AluI", "ApaI", "AvaI", "AvaII", "BalI", "BamHI", "BanII", "BglI", "BglII", "BsiHKCI", "BspANI", "BspMAI", "BspTNI", "BssHII", "BstXI", "BsuTUI", "ClaI", "CviJI", "DdeI", "DpnI", "DraI", "EcoRI", "EcoRV", "FokI", "HaeIII", "HhaI", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "KpnI", "MboI", "MboII", "MluI", "MmeI", "MnlI", "MspI", "NarI", "NcoI", "NdeI", "NheI", "NotI", "NruI", "NsiI", "PinAI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "Sau3AI", "ScaI", "SfiI", "SinI", "SmaI", "SpeI", "SphI", "SspI", "StuI", "TaqI", "TaqII", "TspDTI", "TspGWI", "Tth111I", "XbaI", "XhoI"],
     )
 
 
@@ -24241,7 +24291,7 @@ suppliers["X"] = _temp()
 def _temp():
     return (
         "SinaClon BioScience Co.",
-        ["NcoI", "BstXI", "KpnI", "RsaI", "BsiSI", "MboI", "AluI", "SlaI", "SmaI", "FokI", "HinfI", "HindIII", "EcoRI", "BamHI"],
+        ["AluI", "BamHI", "BsiSI", "BstXI", "EcoRI", "FokI", "HindIII", "HinfI", "KpnI", "MboI", "NcoI", "RsaI", "SlaI", "SmaI"],
     )
 
 
@@ -24284,7 +24334,7 @@ typedict["type142"] = _temp()
 def _temp():
     return (
         ("Palindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["FalI", "BplI"],
+        ["BplI", "FalI"],
     )
 
 
@@ -24294,7 +24344,7 @@ typedict["type143"] = _temp()
 def _temp():
     return (
         ("Palindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["BdaI", "AlfI"],
+        ["AlfI", "BdaI"],
     )
 
 
@@ -24304,7 +24354,7 @@ typedict["type144"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["SpoDI", "OspHL35III", "Xca85IV", "Pba2294I", "Kpn156V", "Pcr308II", "Cgl13032I", "RspPBTS2III", "Rmu369III", "Pal408I", "EsaSSI", "Pse18267I", "HpyUM032XIV", "PpiP13II", "BbuB31I", "Hpy99XIV_mut1", "Sba460II", "AbaB8342IV", "Eco4465II", "Cdu23823II", "RflFIII", "CcrNAIII", "Pdi8503III", "MspI7IV", "Bga514I", "Bau1417V", "Nbr128II", "Cgl13032II", "Lra68I", "Adh6U21I", "Kpn327I", "Mlu211III", "Pst273I", "CjeFV", "Bbr7017II", "Fco1691IV", "Asp103I", "SenSARA26III", "HdeNY26I", "Lsp48III", "EcoMVII", "Bbr57III", "BscGI", "Bsp3004IV", "DvuIII", "SenA1673III", "SpnRII", "PliMI", "EcoE1140I", "SurP32aII", "Ble402II", "Ecl35734I", "Sbo46I", "Pac19842II", "BbuB31II", "HdeZA17I", "Sno506I", "Hpy99XIV", "Bbr7017III", "Aco12261II", "AspJHL3II", "Asp114pII", "FspPK15I", "SthSt3II", "KpnNIH50I", "Sth20745III", "Cco14983VI", "CfrMH16VI", "Cdi11397I", "Mba11I", "EcoNIH6II", "RdeGBI", "Jma19592II", "Vtu19109I", "CjeFIII", "FtnUV", "Ssp714II", "AhyYL17I", "PinP23II", "PflPt14I", "Hpy300XI", "AspNIH4III", "Hpy99XXII", "ObaBS10I", "DrdII", "Eco43896II", "Cch467III", "Lba2029III", "TpyTP2I", "Cje265V", "MspSC27II", "HpyAXVI_mut2", "Bbr52II", "AchA6III", "BanLI", "HbaII", "SmaUMH5I", "NhaXI", "CjeNV", "Lpl1004II", "RpaTI", "Vdi96II", "BkrAM31DI", "BspNCI", "Cau10061II", "PinP59III", "PacIII", "Cal14237I", "Rsp531II", "Esp3007I", "BloAII", "CfrMH13II", "Cfupf3II", "Csp2014I", "Lde4408II", "Ssp6803IV", "Cba16038I", "PfrJS12V", "SenTFIV", "GauT27I", "Pdu1735I", "HpyAXIV", "LlaG50I", "KpnNIH30III", "Cba13II", "Psp0357II", "MtuHN878II", "Lmo911II", "Pst145I", "Lsp6406VI", "Gba708II", "MkaDII", "PfrJS12IV", "Jma19592I", "Eli8509II", "VchE4II", "Awo1030IV", "Saf8902III", "Sen17963III", "EcoHSI", "Nal45188II", "BfaSII", "Cbo67071IV", "Mcr10I", "Aod1I", "Cla11845III", "AhyRBAHI", "MspI7II", "Rtr1953I", "Bve1B23I", "Rsp008IV", "HpyAXVI_mut1", "Rba2021I", "KpnNH25III", "Lmo370I", "ScoDS2II", "Cco14983V", "AbaCIII", "CjeNII", "AteTI", "Aba6411II", "SmaUMH8I", "Sag901I", "Rsp008V", "AspSLV7III", "HpyUM037X", "OgrI", "AspDUT2V", "PfrJS15III", "Jsp2502II", "Pst14472I", "LsaDS4I", "Ecl234I", "NpeUS61II", "Acc65V", "Bsp460III", "Cje54107III", "Cma23826I", "Hpy99XIII", "TspARh3I", "AcoY31II", "Cly7489II", "CalB3II", "Bag18758I", "Kor51II", "Van9116I", "Asu14238IV", "Pin17FIII", "HpyUM032XIII_mut1", "PcaII", "Bce3081I"],
+        ["Aba6411II", "AbaB8342IV", "AbaCIII", "Acc65V", "AchA6III", "Aco12261II", "AcoY31II", "Adh6U21I", "AhyRBAHI", "AhyYL17I", "Aod1I", "Asp103I", "AspDUT2V", "AspJHL3II", "AspNIH4III", "AspSLV7III", "Asp114pII", "Asu14238IV", "AteTI", "Awo1030IV", "Bag18758I", "BanLI", "Bau1417V", "Bbr52II", "Bbr57III", "Bbr7017II", "Bbr7017III", "BbuB31I", "BbuB31II", "Bce3081I", "BfaSII", "Bga514I", "BkrAM31DI", "Ble402II", "BloAII", "BscGI", "Bsp460III", "Bsp3004IV", "BspNCI", "Bve1B23I", "Cal14237I", "CalB3II", "Cau10061II", "Cba13II", "Cba16038I", "Cbo67071IV", "Cch467III", "Cco14983V", "Cco14983VI", "CcrNAIII", "Cdi11397I", "Cdu23823II", "CfrMH13II", "CfrMH16VI", "Cfupf3II", "Cgl13032I", "Cgl13032II", "Cje265V", "Cje54107III", "CjeFIII", "CjeFV", "CjeNII", "CjeNV", "Cla11845III", "Cly7489II", "Cma23826I", "Csp2014I", "DrdII", "DvuIII", "Ecl234I", "Ecl35734I", "Eco4465II", "Eco43896II", "EcoE1140I", "EcoHSI", "EcoMVII", "EcoNIH6II", "Eli8509II", "EsaSSI", "Esp3007I", "Fco1691IV", "FspPK15I", "FtnUV", "GauT27I", "Gba708II", "HbaII", "HdeNY26I", "HdeZA17I", "Hpy99XIII", "Hpy99XIV", "Hpy99XIV_mut1", "Hpy99XXII", "Hpy300XI", "HpyAXIV", "HpyAXVI_mut1", "HpyAXVI_mut2", "HpyAXVIII", "HpyUM032XIII_mut1", "HpyUM032XIV", "HpyUM037X", "HspMHR1II", "Jma19592I", "Jma19592II", "Jsp2502II", "Kor51II", "Kpn156V", "Kpn327I", "KpnNH25III", "KpnNIH30III", "KpnNIH50I", "Lba2029III", "Lde4408II", "LlaG50I", "Lmo370I", "Lmo911II", "Lpl1004II", "Lra68I", "LsaDS4I", "Lsp48III", "Lsp6406VI", "Mba11I", "Mcr10I", "MkaDII", "Mlu211III", "MspI7II", "MspI7IV", "MspSC27II", "MtuHN878II", "Nal45188II", "Nbr128II", "NhaXI", "NpeUS61II", "ObaBS10I", "OgrI", "OspHL35III", "PacIII", "Pac19842II", "Pal408I", "Pba2294I", "PcaII", "Pcr308II", "Pdi8503III", "Pdu1735I", "PflPt14I", "PfrJS12IV", "PfrJS12V", "PfrJS15III", "Pin17FIII", "PinP23II", "PinP59III", "PliMI", "PpiP13II", "Pse18267I", "Psp0357II", "Pst145I", "Pst273I", "Pst14472I", "Rba2021I", "RdeGBI", "RflFIII", "Rmu369III", "RpaTI", "Rsp008IV", "Rsp008V", "Rsp531II", "RspPBTS2III", "Rtr1953I", "Saf8902III", "Sag901I", "Sba460II", "Sbo46I", "ScoDS2II", "Sen17963III", "SenA1673III", "SenSARA26III", "SenTFIV", "SmaUMH5I", "SmaUMH8I", "Sno506I", "SpnRII", "SpoDI", "Ssp714II", "Ssp6803IV", "Sth20745III", "SthSt3II", "SurP32aII", "TpyTP2I", "TspARh3I", "Van9116I", "VchE4II", "Vdi96II", "Vtu19109I", "Xca85IV"],
     )
 
 
@@ -24314,7 +24364,7 @@ typedict["type146"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "NoCut", "Unknown", "NotDefined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["UbaF14I", "CjeP659IV", "PsuGI", "CjuII", "AlwFI", "BspGI", "Pfl1108I", "UbaF13I", "AbaUMB2I", "RlaI", "PenI", "UbaF12I", "TsuI", "UbaF9I", "FinI", "UbaF11I", "UbaPI", "BmgI"],
+        ["AbaUMB2I", "AlwFI", "BmgI", "BspGI", "CjeP659IV", "CjuII", "FinI", "PenI", "Pfl1108I", "PsuGI", "RlaI", "TsuI", "UbaF9I", "UbaF11I", "UbaF12I", "UbaF13I", "UbaF14I", "UbaPI"],
     )
 
 
@@ -24324,7 +24374,7 @@ typedict["type148"] = _temp()
 def _temp():
     return (
         ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["MjaIV", "HpyUM032XIII"],
+        ["HpyUM032XIII", "MjaIV"],
     )
 
 
@@ -24334,7 +24384,7 @@ typedict["type2"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Blunt", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["MlyI", "BsrBI"],
+        ["BsrBI", "MlyI"],
     )
 
 
@@ -24354,7 +24404,7 @@ typedict["type210"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["BmgBI", "SchI", "BtrI", "AjiI", "AccBSI", "MbiI"],
+        ["AccBSI", "AjiI", "BmgBI", "BtrI", "MbiI", "SchI"],
     )
 
 
@@ -24374,7 +24424,7 @@ typedict["type212"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AciI", "BspACI", "BssSI", "BbvCI"],
+        ["AciI", "BbvCI", "BspACI", "BssSI"],
     )
 
 
@@ -24384,7 +24434,7 @@ typedict["type221"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["SsiI", "Bst2BI", "PspFI", "BseYI", "BauI"],
+        ["BauI", "BseYI", "Bst2BI", "PspFI", "SsiI"],
     )
 
 
@@ -24394,7 +24444,7 @@ typedict["type223"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["SimI", "GdiII", "BsiI"],
+        ["BsiI", "GdiII", "SimI"],
     )
 
 
@@ -24404,7 +24454,7 @@ typedict["type224"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AlwI", "BsaI", "Esp3I", "Bpu10I", "Lsp1109I", "BfuAI", "BbvI", "HgaI", "BspMI", "PleI", "BccI", "BcoDI", "FokI", "Alw26I", "Eco31I", "BceAI", "BsmAI", "SapI", "BsmFI", "BsmBI", "BtgZI", "EarI"],
+        ["AlwI", "Alw26I", "BbvI", "BccI", "BceAI", "BcoDI", "BfuAI", "Bpu10I", "BsaI", "BsmAI", "BsmBI", "BsmFI", "BspMI", "BtgZI", "EarI", "Eco31I", "Esp3I", "FokI", "HgaI", "Lsp1109I", "PleI", "SapI"],
     )
 
 
@@ -24414,7 +24464,7 @@ typedict["type225"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["StsI", "BscAI"],
+        ["BscAI", "StsI"],
     )
 
 
@@ -24424,7 +24474,7 @@ typedict["type226"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["BspTNI", "LweI", "PciSI", "CseI", "AclWI", "BseXI", "BstV2I", "AarI", "LguI", "BmsI", "BspQI", "MspJI", "BstV1I", "Bso31I", "FaqI", "FspEI", "BveI", "PpsI", "Eam1104I", "Acc36I", "BspPI", "BslFI", "FauI", "Bst6I", "BpiI", "LpnPI", "BstMAI", "BbsI", "SfaNI"],
+        ["AarI", "Acc36I", "AclWI", "BbsI", "BmsI", "BpiI", "BseXI", "BslFI", "Bso31I", "BspPI", "BspQI", "BspTNI", "Bst6I", "BstMAI", "BstV1I", "BstV2I", "BveI", "CseI", "Eam1104I", "FaqI", "FauI", "FspEI", "LguI", "LpnPI", "LweI", "MspJI", "PciSI", "PpsI", "SfaNI"],
     )
 
 
@@ -24434,7 +24484,7 @@ typedict["type227"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["SgrTI", "Sth132I", "EcoBLMcrX", "BbvII", "BinI", "AspBHI", "BspD6I", "BcefI", "AceIII", "Ksp632I"],
+        ["AceIII", "AspBHI", "BbvII", "BcefI", "BinI", "BspD6I", "EcoBLMcrX", "Ksp632I", "SgrTI", "Sth132I"],
     )
 
 
@@ -24454,7 +24504,7 @@ typedict["type235"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["BstF5I", "BpuEI", "BsrI", "MboII", "TaqII", "BspCNI", "BsgI", "TspGWI", "BmrI", "HpyAV", "HphI", "BseMII", "MnlI", "BseRI", "MmeI", "Eco57I", "BpmI", "AcuI", "NmeAIII"],
+        ["AcuI", "BmrI", "BpmI", "BpuEI", "BseMII", "BseRI", "BsgI", "BspCNI", "BsrI", "BstF5I", "Eco57I", "HphI", "HpyAV", "MboII", "MmeI", "MnlI", "NmeAIII", "TaqII", "TspGWI"],
     )
 
 
@@ -24464,7 +24514,7 @@ typedict["type237"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["MaqI", "RpaBI", "DraRI", "SdeAI", "RceI", "WviI", "BfiI", "CstMI", "PspOMII", "TaqIII", "RlaII", "DrdIV", "CchII", "AmaCSI", "PlaDI", "NmeA6CIII", "TsoI", "SstE37I", "RpaB5I", "CdpI", "CchIII", "CjeNIII", "BsbI", "NlaCI", "AquII", "AquIV", "ApyPI", "Tth111II", "RpaI", "PspPRI", "AquIII", "RdeGBII"],
+        ["AmaCSI", "ApyPI", "AquII", "AquIII", "AquIV", "BfiI", "BsbI", "CchII", "CchIII", "CdpI", "CjeNIII", "CstMI", "DraRI", "DrdIV", "MaqI", "NlaCI", "NmeA6CIII", "PlaDI", "PspOMII", "PspPRI", "RceI", "RdeGBII", "RlaII", "RpaI", "RpaBI", "RpaB5I", "SdeAI", "SstE37I", "TaqIII", "TsoI", "Tth111II", "WviI"],
     )
 
 
@@ -24474,7 +24524,7 @@ typedict["type238"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["EciI", "Mva1269I", "Bse1I", "LmnI", "BtsIMutI", "GsuI", "BtsCI", "BsuI", "AsuHPI", "AbaSI", "BseGI", "Bse3DI", "BsrDI", "BciVI", "BtsI", "BfuI", "BsmI", "BseMI", "TspDTI", "BmuI", "PctI", "BseNI"],
+        ["AbaSI", "AsuHPI", "BciVI", "BfuI", "BmuI", "Bse1I", "Bse3DI", "BseGI", "BseMI", "BseNI", "BsmI", "BsrDI", "BsuI", "BtsI", "BtsIMutI", "BtsCI", "EciI", "GsuI", "LmnI", "Mva1269I", "PctI", "TspDTI"],
     )
 
 
@@ -24484,7 +24534,7 @@ typedict["type239"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["BmeDI", "Bce83I", "Hin4II", "Eco57MI", "YkrI", "RleAI"],
+        ["Bce83I", "BmeDI", "Eco57MI", "Hin4II", "RleAI", "YkrI"],
     )
 
 
@@ -24504,7 +24554,7 @@ typedict["type274"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["CspCI", "AloI", "BcgI"],
+        ["AloI", "BcgI", "CspCI"],
     )
 
 
@@ -24514,7 +24564,7 @@ typedict["type285"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["TstI", "NgoAVIII", "PpiI", "SdeOSI", "CjeI"],
+        ["CjeI", "NgoAVIII", "PpiI", "SdeOSI", "TstI"],
     )
 
 
@@ -24524,7 +24574,7 @@ typedict["type286"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["PsrI", "AjuI", "BaeI", "ArsI", "BarI", "BsaXI"],
+        ["AjuI", "ArsI", "BaeI", "BarI", "BsaXI", "PsrI"],
     )
 
 
@@ -24534,7 +24584,7 @@ typedict["type287"] = _temp()
 def _temp():
     return (
         ("NonPalindromic", "TwoCuts", "Ov3", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["CjePI", "Bsp24I", "Hin4I"],
+        ["Bsp24I", "CjePI", "Hin4I"],
     )
 
 
@@ -24544,7 +24594,7 @@ typedict["type288"] = _temp()
 def _temp():
     return (
         ("Palindromic", "NoCut", "Unknown", "NotDefined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["NhoI", "CjuI", "AvaIII", "TssI", "Dde51507I", "SnaI", "HgiEII"],
+        ["AvaIII", "CjuI", "Dde51507I", "HgiEII", "NhoI", "SnaI", "TssI"],
     )
 
 
@@ -24554,7 +24604,7 @@ typedict["type4"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["ScaI", "SnaBI", "CviJI", "XmnI", "DraI", "AluBI", "PshAI", "SwaI", "NaeI", "NruI", "SfoI", "RsaI", "HincII", "BstC8I", "PmlI", "AluI", "Hpy8I", "SmaI", "FspI", "PvuII", "BsuRI", "MspA1I", "EcoRV", "BstUI", "HaeIII", "SspI", "BalI", "NlaIV", "HpaI", "Cac8I", "HindII", "AleI", "BsaAI"],
+        ["AleI", "AluI", "AluBI", "BalI", "BsaAI", "BstC8I", "BstUI", "BsuRI", "Cac8I", "CviJI", "DraI", "EcoRV", "FspI", "HaeIII", "HincII", "HindII", "HpaI", "Hpy8I", "MspA1I", "NaeI", "NlaIV", "NruI", "PmlI", "PshAI", "PsiI", "PvuII", "RsaI", "ScaI", "SfoI", "SmaI", "SnaBI", "SspI", "SwaI", "XmnI"],
     )
 
 
@@ -24564,7 +24614,7 @@ typedict["type65"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["FnuDII", "EsaBC3I", "CviRI"],
+        ["CviRI", "EsaBC3I", "FnuDII"],
     )
 
 
@@ -24574,7 +24624,7 @@ typedict["type66"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["PspN4I", "MslI", "Bsp68I", "PmaCI", "BsaBI", "SmiI", "BseJI", "BshFI", "BmcAI", "Eco47III", "Hpy166II", "AcvI", "RruI", "EgeI", "OliI", "DpnI", "Bst1107I", "BbrPI", "BstSNI", "RseI", "MlsI", "AccII", "BtuMI", "Aor51HI", "Bsh1236I", "MalI", "MssI", "BsnI", "FspAI", "BmiI", "BoxI", "BssNAI", "BspANI", "GlaI", "MvnI", "ZraI", "Eco72I", "MscI", "SseBI", "SmiMI", "Ppu21I", "StuI", "Eco53kI", "EheI", "BstPAI", "PsiI", "Ecl136II", "Acc16I", "MluNI", "MroXI", "ZrmI", "DinI", "BstFNI", "BspLI", "Eco105I", "NsbI", "Bse8I", "BspFNI", "BstZ17I", "Msp20I", "AfeI", "SrfI", "Eco32I", "KspAI", "AanI", "PmeI", "Mox20I", "FaiI", "Eco147I", "CviKI_1", "PdmI", "HpyCH4V", "PceI", "BstBAI", "AfaI", "Asp700I", "EcoICRI", "PspCI", "PdiI"],
+        ["AanI", "AccII", "Acc16I", "AcvI", "AfaI", "AfeI", "Aor51HI", "Asp700I", "BbrPI", "BmcAI", "BmiI", "BoxI", "BsaBI", "Bse8I", "BseJI", "Bsh1236I", "BshFI", "BsnI", "Bsp68I", "BspANI", "BspFNI", "BspLI", "BssNAI", "Bst1107I", "BstBAI", "BstFNI", "BstPAI", "BstSNI", "BstZ17I", "BtuMI", "CviKI_1", "DinI", "DpnI", "Ecl136II", "Eco32I", "Eco47III", "Eco72I", "Eco105I", "Eco147I", "EcoICRI", "Eco53kI", "EgeI", "EheI", "FaiI", "FspAI", "GlaI", "Hpy166II", "HpyCH4V", "KspAI", "MalI", "MlsI", "MluNI", "Mox20I", "MroXI", "MscI", "MslI", "Msp20I", "MssI", "MvnI", "NsbI", "OliI", "PceI", "PdiI", "PdmI", "PmaCI", "PmeI", "Ppu21I", "PspCI", "PspN4I", "RruI", "RseI", "SmiI", "SmiMI", "SrfI", "SseBI", "StuI", "ZraI", "ZrmI"],
     )
 
 
@@ -24584,7 +24634,7 @@ typedict["type67"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Blunt", "Defined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["Pfl8569I", "HaeI", "NspBII", "SciI", "LpnI", "AhaIII", "Sth302II", "MstI"],
+        ["AhaIII", "HaeI", "LpnI", "MstI", "NspBII", "Pfl8569I", "SciI", "Sth302II"],
     )
 
 
@@ -24594,7 +24644,7 @@ typedict["type68"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["BssHII", "BsrFI", "DpnII", "MluI", "NgoMIV", "HpaII", "TspMI", "BclI", "BsaWI", "SalI", "MspI", "Bsu15I", "NcoI", "ClaI", "AgeI", "XmaI", "Cfr9I", "TaqI", "EaeI", "AseI", "AclI", "ApoI", "HpyCH4IV", "NdeI", "HapII", "AflII", "BglII", "Acc65I", "MseI", "BsaHI", "XbaI", "MboI", "CviQI", "NheI", "Sau3AI", "BsiWI", "CviAII", "MfeI", "ApaLI", "Cfr10I", "HinP1I", "HspAI", "HindIII", "EcoRI", "XhoI", "BseCI", "AccIII", "MunI", "EagI", "AscI", "VspI", "KasI", "Kpn2I", "SgrAI", "BspHI", "BstYI", "Sse9I", "NotI", "FatI", "BamHI", "PaeR7I"],
+        ["AccIII", "Acc65I", "AclI", "AflII", "AgeI", "ApaLI", "ApoI", "AscI", "AseI", "BamHI", "BclI", "BglII", "BsaHI", "BsaWI", "BseCI", "BsiWI", "BspHI", "BsrFI", "BssHII", "BstYI", "Bsu15I", "Cfr9I", "Cfr10I", "ClaI", "CviAII", "CviQI", "DpnII", "EaeI", "EagI", "EcoRI", "FatI", "HapII", "HinP1I", "HindIII", "HpaII", "HpyCH4IV", "HspAI", "KasI", "Kpn2I", "MboI", "MfeI", "MluI", "MseI", "MspI", "MunI", "NcoI", "NdeI", "NgoMIV", "NheI", "NotI", "PaeR7I", "SalI", "Sau3AI", "SgrAI", "Sse9I", "TaqI", "TspMI", "VspI", "XbaI", "XhoI", "XmaI"],
     )
 
 
@@ -24604,7 +24654,7 @@ typedict["type77"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["XmaIII", "CfrI", "XhoII"],
+        ["CfrI", "XhoII", "XmaIII"],
     )
 
 
@@ -24614,7 +24664,7 @@ typedict["type78"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["BssMI", "AsuNHI", "PshBI", "BshTI", "CciI", "MreI", "AhlI", "XspI", "KroI", "BfaI", "PauI", "Asp718I", "VneI", "PspXI", "AsiGI", "CciNI", "Sfr274I", "PteI", "Ksp22I", "Bsp19I", "MauBI", "AbsI", "AsuII", "FauNDI", "Vha464I", "BstACI", "AcoI", "BstMBI", "BssAI", "BseAI", "Hin6I", "PalAI", "BstAUI", "Bpu14I", "Eco52I", "BspT104I", "SspDI", "TasI", "AcsI", "BseX3I", "FspBI", "RsaNI", "AvrII", "MaeI", "XapI", "PscI", "Bsp1407I", "SspMI", "PciI", "Bse118I", "NarI", "BsePI", "MaeII", "Bsp13I", "BsiSI", "Bsp119I", "BstX2I", "SlaI", "SgsI", "MluCI", "PsuI", "AspA2I", "BcuI", "BspTI", "SpeI", "Mly113I", "MflI", "BshVI", "Hin1I", "SgrDI", "MroNI", "XmaJI", "MspCI", "Psp1406I", "Kzo9I", "Csp6I", "Bsp143I", "Bsa29I", "Tru1I", "Aor13HI", "PinAI", "EclXI", "BspEI", "BstZI", "Alw44I", "Hsp92I", "BlnI", "NdeII", "BsrGI", "CspAI", "FbaI", "PspOMI", "SaqAI", "SfuI", "NspV", "BfrI", "BstBI", "BssNI", "HpySE526I", "Tru9I", "Bsp120I", "MroI", "AoxI", "AcyI", "BsuTUI", "BspDI", "BstAFI", "TatI", "Pfl23II", "PspLI", "PagI"],
+        ["AbsI", "AcoI", "AcsI", "AcyI", "AhlI", "Alw44I", "Aor13HI", "AoxI", "AsiGI", "Asp718I", "AspA2I", "AsuII", "AsuNHI", "AvrII", "BcuI", "BfaI", "BfrI", "BlnI", "Bpu14I", "Bsa29I", "Bse118I", "BseAI", "BsePI", "BseX3I", "BshTI", "BshVI", "BsiSI", "Bsp13I", "Bsp19I", "Bsp119I", "Bsp120I", "Bsp143I", "Bsp1407I", "BspDI", "BspEI", "BspTI", "BspT104I", "BsrGI", "BssAI", "BssMI", "BssNI", "BstACI", "BstAFI", "BstAUI", "BstBI", "BstMBI", "BstX2I", "BstZI", "BsuTUI", "CciI", "CciNI", "Csp6I", "CspAI", "EclXI", "Eco52I", "FauNDI", "FbaI", "FspBI", "Hin1I", "Hin6I", "HpySE526I", "Hsp92I", "KroI", "Ksp22I", "Kzo9I", "MaeI", "MaeII", "MauBI", "MflI", "MluCI", "Mly113I", "MreI", "MroI", "MroNI", "MspCI", "NarI", "NdeII", "NspV", "PagI", "PalAI", "PauI", "PciI", "Pfl23II", "PinAI", "PscI", "PshBI", "Psp1406I", "PspLI", "PspOMI", "PspXI", "PsuI", "PteI", "RsaNI", "SaqAI", "Sfr274I", "SfuI", "SgrDI", "SgsI", "SlaI", "SpeI", "SspDI", "SspMI", "TasI", "TatI", "Tru1I", "Tru9I", "Vha464I", "VneI", "XapI", "XmaJI", "XspI"],
     )
 
 
@@ -24624,7 +24674,7 @@ typedict["type79"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Defined", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["SelI", "BspLU11I", "SplI", "TspEI", "Asi256I", "Ppu10I", "Sse232I", "BetI", "BspMII"],
+        ["Asi256I", "BetI", "BspLU11I", "BspMII", "Ppu10I", "SelI", "SplI", "Sse232I", "TspEI"],
     )
 
 
@@ -24634,7 +24684,7 @@ typedict["type80"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["PspPI", "AspS9I", "StyD4I", "PspGI", "PpuMI", "BsoBI", "BlpI", "BssECI", "AjnI", "AvaI", "SexAI", "SinI", "Sau96I", "BstNI", "Cfr13I", "TseI", "SmlI", "MvaI", "Bsu36I", "AflIII", "TfiI", "BanI", "RsrII", "BcnI", "ScrFI", "EcoRII", "EcoNI", "ApeKI", "HinfI", "NciI", "Fsp4HI", "EcoO109I", "Tth111I", "AccI", "DdeI", "AvaII", "BsaJI", "Fnu4HI", "Tsp45I", "StyI"],
+        ["AccI", "AflIII", "AjnI", "ApeKI", "AspS9I", "AvaI", "AvaII", "BanI", "BcnI", "BlpI", "BsaJI", "BsoBI", "BssECI", "BstNI", "Bsu36I", "Cfr13I", "DdeI", "EcoNI", "EcoO109I", "EcoRII", "Fnu4HI", "Fsp4HI", "HinfI", "MvaI", "NciI", "PpuMI", "PspGI", "PspPI", "RsrII", "Sau96I", "ScrFI", "SexAI", "SinI", "SmlI", "StyI", "StyD4I", "TfiI", "TseI", "Tsp45I", "Tth111I"],
     )
 
 
@@ -24644,7 +24694,7 @@ typedict["type81"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["HgiCI", "EcoHI"],
+        ["EcoHI", "HgiCI"],
     )
 
 
@@ -24654,7 +24704,7 @@ typedict["type82"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AxyI", "BspT107I", "PspEI", "BisI", "BstPI", "BstSFI", "BstEII", "BmgT120I", "BssT1I", "PsyI", "BtgI", "Eco91I", "Bst2UI", "BstDEI", "GluI", "BstENI", "Ama87I", "BstDSI", "PflFI", "Bme1390I", "Psp5II", "EcoO65I", "BmrFI", "EcoT14I", "PspPPI", "BseBI", "PfoI", "BshNI", "Rsr2I", "BmeT110I", "PasI", "TseFI", "CpoI", "Eco130I", "CspI", "BfmI", "Eco47I", "Bme18I", "MabI", "Hpy188III", "Bse21I", "BstSCI", "BpuMI", "SgeI", "XagI", "SmoI", "Bsp1720I", "MaeIII", "ErhI", "AsuC2I", "BsiHKCI", "MspR9I", "XmiI", "VpaK11BI", "PfeI", "Bpu1102I", "SfcI", "SatI", "BciT130I", "KflI", "BseDI", "Eco81I", "Eco88I", "FblI", "AccB1I", "CsiI", "MteI", "Psp6I", "HpyF3I", "NmuCI"],
+        ["AccB1I", "Ama87I", "AsuC2I", "AxyI", "BciT130I", "BfmI", "BisI", "Bme18I", "Bme1390I", "BmeT110I", "BmgT120I", "BmrFI", "Bpu1102I", "BpuMI", "Bse21I", "BseBI", "BseDI", "BshNI", "BsiHKCI", "Bsp1720I", "BspT107I", "BssT1I", "BstDEI", "BstDSI", "BstEII", "BstENI", "BstPI", "BstSCI", "BstSFI", "Bst2UI", "BtgI", "CpoI", "CsiI", "CspI", "Eco47I", "Eco81I", "Eco88I", "Eco91I", "Eco130I", "EcoO65I", "EcoT14I", "ErhI", "FblI", "GluI", "Hpy188III", "HpyF3I", "KflI", "MabI", "MaeIII", "MspR9I", "MteI", "NmuCI", "PasI", "PfeI", "PflFI", "PfoI", "Psp5II", "Psp6I", "PspEI", "PspPPI", "PsyI", "Rsr2I", "SatI", "SfcI", "SgeI", "SmoI", "TseFI", "VpaK11BI", "XagI", "XmiI"],
     )
 
 
@@ -24664,7 +24714,7 @@ typedict["type83"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov5", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["SanDI", "DsaI", "SauI", "DraII", "UnbI", "VpaK11AI", "Hpy178III", "SfeI", "CauII", "AsuI", "SecI", "EspI", "Sse8647I"],
+        ["AsuI", "CauII", "DraII", "DsaI", "EspI", "Hpy178III", "SanDI", "SauI", "SecI", "SfeI", "Sse8647I", "UnbI", "VpaK11AI"],
     )
 
 
@@ -24674,7 +24724,7 @@ typedict["type84"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["SacI", "KpnI", "HaeII", "SacII", "AatII", "PluTI", "NlaIII", "PstI", "Cfr42I", "FseI", "ApaI", "NspI", "HhaI", "AsiSI"],
+        ["AatII", "ApaI", "AsiSI", "Cfr42I", "FseI", "HaeII", "HhaI", "KpnI", "NlaIII", "NspI", "PluTI", "PstI", "SacI", "SacII"],
     )
 
 
@@ -24684,7 +24734,7 @@ typedict["type89"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Dep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["PabI", "McaTI"],
+        ["McaTI", "PabI"],
     )
 
 
@@ -24694,7 +24744,7 @@ typedict["type90"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Defined", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["SgrBI", "BstHHI", "BstH2I", "BmtI", "Mph1103I", "PvuI", "BspOI", "AspLEI", "Zsp2I", "PacI", "FaeI", "SdaI", "BstNSI", "Ple19I", "Hin1II", "Sse8387I", "PaeI", "TaiI", "Hsp92II", "Psp124BI", "Sfr303I", "CfoI", "BstKTI", "SstI", "SphI", "SfaAI", "RgaI", "SgfI", "SbfI", "BspMAI", "XceI", "NsiI", "EcoT22I", "KspI", "BfoI", "RigI"],
+        ["AspLEI", "BfoI", "BmtI", "BspMAI", "BspOI", "BstH2I", "BstHHI", "BstKTI", "BstNSI", "CfoI", "EcoT22I", "FaeI", "Hin1II", "Hsp92II", "KspI", "Mph1103I", "NsiI", "PacI", "PaeI", "Ple19I", "Psp124BI", "PvuI", "RgaI", "RigI", "SbfI", "SdaI", "SfaAI", "Sfr303I", "SgfI", "SgrBI", "SphI", "Sse8387I", "SstI", "TaiI", "XceI", "Zsp2I"],
     )
 
 
@@ -24714,7 +24764,7 @@ typedict["type92"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Dep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AgsI", "MwoI", "EcoT38I", "BglI", "BanII", "Hpy99I", "BstXI", "BaeGI", "Hpy188I", "Bsc4I", "TspRI", "DraIII", "Bsp1286I", "AhdI", "SfiI", "XcmI", "BstAPI", "BslI"],
+        ["AgsI", "AhdI", "BaeGI", "BanII", "BglI", "Bsc4I", "BslI", "Bsp1286I", "BstAPI", "BstXI", "DraIII", "EcoT38I", "Hpy99I", "Hpy188I", "MwoI", "SfiI", "TspRI", "XcmI"],
     )
 
 
@@ -24734,7 +24784,7 @@ typedict["type94"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Commercially_available", "AbstractCut", "RestrictionType"),
-        ["AlwNI", "DrdI", "TscAI", "Eco24I", "BsiHKAI", "BseSI", "Van91I", "DseDI", "SetI", "BmeRI", "TaaI", "BstMCI", "HpyF10VI", "Bst4CI", "SduI", "Alw21I", "AccB7I", "AdeI", "BsiEI", "BseLI", "FriOI", "AasI", "Eam1105I", "TauI", "AfiI", "CaiI", "Bbv12I", "HpyCH4III", "BstSLI", "BlsI", "PcsI", "BstMWI", "PstNI", "PkrI", "MhlI", "DriI", "Bsh1285I", "PflMI"],
+        ["AasI", "AccB7I", "AdeI", "AfiI", "Alw21I", "AlwNI", "Bbv12I", "BlsI", "BmeRI", "BseLI", "BseSI", "Bsh1285I", "BsiEI", "BsiHKAI", "Bst4CI", "BstMCI", "BstMWI", "BstSLI", "CaiI", "DrdI", "DriI", "DseDI", "Eam1105I", "Eco24I", "FriOI", "HpyCH4III", "HpyF10VI", "MhlI", "PcsI", "PflMI", "PkrI", "PstNI", "SduI", "SetI", "TaaI", "TauI", "TscAI", "Van91I"],
     )
 
 
@@ -24744,7 +24794,7 @@ typedict["type95"] = _temp()
 def _temp():
     return (
         ("Palindromic", "OneCut", "Ov3", "Ambiguous", "Meth_Undep", "Not_available", "AbstractCut", "RestrictionType"),
-        ["Nli3877I", "Psp03I", "BsiYI", "ApaBI", "Tsp4CI", "FmuI", "McrI", "HgiJII", "PssI", "HgiAI"],
+        ["ApaBI", "BsiYI", "FmuI", "HgiAI", "HgiJII", "McrI", "Nli3877I", "Psp03I", "PssI", "Tsp4CI"],
     )
 
 
