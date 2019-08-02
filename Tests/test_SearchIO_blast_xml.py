@@ -201,7 +201,7 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+ repeatMasking=none", qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual(23, qresult.stat_db_num)
         self.assertEqual(67750, qresult.stat_db_len)
@@ -401,7 +401,7 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
+        self.assertEqual("range=chr1:1207307-1207372 5'pad=0 3'pad=0 "
                          "strand=+ repeatMasking=none",
                          qresult.description)
         self.assertEqual(66, qresult.seq_len)
@@ -572,7 +572,7 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
+        self.assertEqual("range=chr1:1207307-1207372 5'pad=0 3'pad=0 "
                          "strand=+ repeatMasking=none", qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual(2933984, qresult.stat_db_num)
@@ -1760,7 +1760,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 "
                          "strand=+ repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
@@ -1903,7 +1903,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual("db/minirefseq_prot", qresult.target)
 
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+ repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
@@ -2024,7 +2024,7 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = next(qresults)
         counter += 1
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 "
                          "strand=+ repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual(12646943, qresult.stat_db_num)
@@ -2167,7 +2167,7 @@ class TblastnXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual("gi|450259|gb|L27825.1|EMEVERA1AA", hit.id)
-        self.assertEqual('Emericella nidulans (verA) gene, complete cds, ORF 1 gene, complete cds, and ORF 2 gene, 5\' end', hit.description)
+        self.assertEqual("Emericella nidulans (verA) gene, complete cds, ORF 1 gene, complete cds, and ORF 2 gene, 5' end", hit.description)
         self.assertEqual(4310, hit.seq_len)
         self.assertEqual(2, len(hit))
 

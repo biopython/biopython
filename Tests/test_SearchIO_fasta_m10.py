@@ -673,7 +673,7 @@ class Fasta35Cases(unittest.TestCase):
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual("gi|116660610|gb|EG558221.1|EG558221", hit.id)
-        self.assertEqual('CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5\', mRNA sequence', hit.description)
+        self.assertEqual("CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5', mRNA sequence", hit.description)
         self.assertEqual(573, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp

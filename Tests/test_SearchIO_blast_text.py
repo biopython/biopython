@@ -143,7 +143,7 @@ class BlastnCases(BaseBlastCases):
         # test first qresult
         qresult = qresults[0]
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+repeatMasking=none", qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual("NCBI Transcript Reference Sequences", qresult.target)
         self.assertEqual("blastn", qresult.program)
@@ -319,7 +319,7 @@ class BlastnCases(BaseBlastCases):
         # test third qresult
         qresult = qresults[2]
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+repeatMasking=none", qresult.description)
         self.assertEqual(66, qresult.seq_len)
         self.assertEqual("minirefseq_mrna", qresult.target)
         self.assertEqual("blastn", qresult.program)
@@ -927,7 +927,7 @@ class BlastxCases(BaseBlastCases):
         # test first qresult
         qresult = qresults[0]
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 strand=+repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual("NCBI Protein Reference Sequences", qresult.target)
         self.assertEqual("blastx", qresult.program)
@@ -1058,7 +1058,7 @@ class BlastxCases(BaseBlastCases):
         # test second qresult
         qresult = qresults[1]
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 strand=+repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual("minirefseq_prot", qresult.target)
         self.assertEqual("blastx", qresult.program)
@@ -1689,7 +1689,7 @@ class TblastxCases(BaseBlastCases):
         # test first qresult
         qresult = qresults[0]
         self.assertEqual("hg19_dna", qresult.id)
-        self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 strand=+repeatMasking=none', qresult.description)
+        self.assertEqual("range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+repeatMasking=none", qresult.description)
         self.assertEqual(485, qresult.seq_len)
         self.assertEqual("NCBI Transcript Reference Sequences", qresult.target)
         self.assertEqual("tblastx", qresult.program)
@@ -1750,7 +1750,7 @@ class TblastxCases(BaseBlastCases):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual("ref|XM_003255417.1|", hit.id)
-        self.assertEqual('PREDICTED: Nomascus leucogenys 5\'-nucleotidase, cytosolic II, transcript variant 2 (NT5C2), mRNA', hit.description)
+        self.assertEqual("PREDICTED: Nomascus leucogenys 5'-nucleotidase, cytosolic II, transcript variant 2 (NT5C2), mRNA", hit.description)
         self.assertEqual(3285, hit.seq_len)
         self.assertEqual(3, len(hit))
         # first qresult, second hit, first hsp
