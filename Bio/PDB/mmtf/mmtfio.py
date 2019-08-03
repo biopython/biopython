@@ -107,32 +107,19 @@ class MMTFIO(object):
 
     def _save_structure(self, filepath, select):
         count_models, count_chains, count_groups, count_atoms = 0, 0, 0, 0
-        for model in self.structure.get_models():
-            if select.accept_model(model):
-                count_models += 1
-                for chain in model.get_chains():
-                    if select.accept_chain(chain):
-                        count_chains += 1
-                        for residue in chain.get_residues():
-                            if select.accept_residue(residue):
-                                count_groups += 1
-                                for atom in residue.get_atoms():
-                                    if select.accept_atom(atom):
-                                        count_atoms += 1
 
         # If atom serials are missing, renumber atoms starting from 1
         atom_serials = [a.serial_number for a in self.structure.get_atoms()]
         renumber_atoms = None in atom_serials
-        atom_n = 0
-        chain_i = -1
 
         encoder = MMTFEncoder()
+        # The counts are set to 0 here and changed later once we have the values
         encoder.init_structure(
             total_num_bonds=0,
-            total_num_atoms=count_atoms,
-            total_num_groups=count_groups,
-            total_num_chains=count_chains,
-            total_num_models=count_models,
+            total_num_atoms=0,
+            total_num_groups=0,
+            total_num_chains=0,
+            total_num_models=0,
             structure_id=self.structure.id
         )
 
@@ -157,25 +144,23 @@ class MMTFIO(object):
             experimental_methods=header_dict["structure_method"]
         )
 
+        # Tracks values to replace arrays at the end
+        chains_per_model = []
+        groups_per_chain = []
+
         for mi, model in enumerate(self.structure.get_models()):
             if not select.accept_model(model):
                 continue
 
+            count_models += 1
             encoder.set_model_info(
                 model_id=mi,
-                chain_count=sum(1 for c in model.get_chains() if select.accept_chain(c))
+                chain_count=0 # Set to 0 here and changed later
             )
             for chain in model.get_chains():
                 if not select.accept_chain(chain):
                     continue
 
-                encoder.set_chain_info(
-                    chain_id=chain.get_id(),
-                    chain_name=chain.get_id(),
-                    num_groups=sum(1 for r in chain.get_residues() if select.accept_residue(r))
-                )
-
-                chain_i += 1
                 prev_residue_type = ""
                 prev_resname = ""
 
@@ -183,6 +168,7 @@ class MMTFIO(object):
                     if not select.accept_residue(residue):
                         continue
 
+                    count_groups += 1
                     hetfield, resseq, icode = residue.get_id()
                     if hetfield == " ":
                         residue_type = "ATOM"
@@ -194,16 +180,29 @@ class MMTFIO(object):
                         residue_type = "HETATM"
                         entity_type = "non-polymer"
                     resname = residue.get_resname()
+
                     # Check if the molecule changes within the chain
                     # This will always increment for the first residue in a
-                    # chain due to the starting values above
+                    #  chain due to the starting values above
+                    # Checking for similar entities is non-trivial from the
+                    #  strucure object so we treat each molecule as a separate
+                    #  entity
                     if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
                         encoder.set_entity_info(
-                            chain_indices=[chain_i],
+                            chain_indices=[count_chains],
                             sequence="",
                             description="",
                             entity_type=entity_type
                         )
+                        encoder.set_chain_info(
+                            chain_id=chain.get_id(), # This should increment
+                            chain_name=chain.get_id(),
+                            num_groups=0  # Set to 0 here and changed later
+                        )
+                        if count_chains > 0:
+                            groups_per_chain.append(count_groups - sum(groups_per_chain) - 1)
+                        count_chains += 1
+
                     prev_residue_type = residue_type
                     prev_resname = resname
 
@@ -220,10 +219,10 @@ class MMTFIO(object):
                     )
                     for atom in residue.get_atoms():
                         if select.accept_atom(atom):
-                            atom_n += 1
+                            count_atoms += 1
                             encoder.set_atom_info(
                                 atom_name=atom.name,
-                                serial_number=atom_n if renumber_atoms else atom.serial_number,
+                                serial_number=count_atoms if renumber_atoms else atom.serial_number,
                                 alternative_location_id=atom.altloc,
                                 x=atom.coord[0],
                                 y=atom.coord[1],
@@ -233,6 +232,17 @@ class MMTFIO(object):
                                 element=atom.element,
                                 charge=0
                             )
+
+            chains_per_model.append(count_chains - sum(chains_per_model))
+
+        groups_per_chain.append(count_groups - sum(groups_per_chain))
+
+        encoder.chains_per_model = chains_per_model
+        encoder.groups_per_chain = groups_per_chain
+        encoder.total_num_atoms = count_atoms
+        encoder.total_num_groups = count_groups
+        encoder.total_num_chains = count_chains
+        encoder.total_num_models = count_models
 
         encoder.finalize_structure()
         encoder.write_file(filepath)
