@@ -147,14 +147,11 @@ class SeqMat(dict):
 
     def _alphabet_from_matrix(self):
         """Set alphabet letters from the matrix entries (PRIVATE)."""
-        ab_dict = {}
-        s = ""
+        ab_set = set()
         for i in self:
-            ab_dict[i[0]] = 1
-            ab_dict[i[1]] = 1
-        for i in sorted(ab_dict):
-            s += i
-        self.alphabet.letters = s
+            ab_set.add(i[0])
+            ab_set.add(i[1])
+        self.alphabet.letters = "".join(sorted(ab_set))
 
     def __init__(self, data=None, alphabet=None, mat_name="", build_later=0):
         """Initialize.
