@@ -301,8 +301,8 @@ names are also used in Bio.AlignIO and include the following:
     - imgt    - An EMBL like format from IMGT where the feature tables are more
       indented to allow for longer feature types.
     - nib     - UCSC's nib file format for nucleotide sequences, which uses one
-                nibble (4 bits) to represent each nucleotide, and stores two
-                nucleotides in one byte.
+      nibble (4 bits) to represent each nucleotide, and stores two nucleotides in
+      one byte.
     - pdb-seqres -  Reads a Protein Data Bank (PDB) file to determine the
       complete protein sequence as it appears in the header (no dependencies).
     - pdb-atom - Uses Bio.PDB to determine the (partial) protein sequence as
