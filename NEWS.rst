@@ -23,6 +23,7 @@ making an error, but will require user code to be updated accordingly.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris Rands
 - Joe Greener
 - Konstantin Vdovkin
 - Mustafa Anil Tuncel

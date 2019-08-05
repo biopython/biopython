@@ -1946,7 +1946,7 @@ class MutableSeq(object):
             self.array_indicator = "c"
         if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
-        elif isinstance(data, Seq):
+        elif isinstance(data, (Seq, int, float)):
             raise TypeError("The sequence data given to a MutableSeq object "
                             "should be a string or an array "
                             "(not a Seq object etc)")
@@ -2295,7 +2295,7 @@ class MutableSeq(object):
         >>> my_seq
         MutableSeq('ACTCGACGT')
 
-        Returns the last character of the sequence
+        Returns the last character of the sequence.
         """
         c = self.data[i]
         del self.data[i]

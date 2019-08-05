@@ -739,6 +739,8 @@ class StringMethodTests(unittest.TestCase):
         """Check MutableSeq __init__ gives TypeError exceptions."""
         self.assertRaises(TypeError, MutableSeq, (Seq("A")))
         self.assertRaises(TypeError, MutableSeq, (UnknownSeq(1)))
+        self.assertRaises(TypeError, MutableSeq, 1)
+        self.assertRaises(TypeError, MutableSeq, 1.0)
 
     def test_join_Seq_ValueError(self):
         """Checks that a ValueError is thrown for all non-iterable types."""
