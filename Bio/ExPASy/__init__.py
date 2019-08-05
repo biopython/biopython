@@ -26,6 +26,7 @@ def get_prodoc_entry(id,
     """Get a text handle to a PRODOC entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
+    >>> import os
     >>> in_handle = ExPASy.get_prodoc_entry('PDOC00001')
     >>> html = in_handle.read()
     >>> in_handle.close()
@@ -34,6 +35,7 @@ def get_prodoc_entry(id,
     ...     # Python2/3 docstring workaround: Revise for 'Python 3 only'
     ...     _ = out_handle.write(html)
     ...
+    >>> os.remove("myprodocrecord.html")  # tidy up
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'
@@ -46,6 +48,7 @@ def get_prosite_entry(id,
     """Get a text handle to a PROSITE entry at ExPASy in HTML format.
 
     >>> from Bio import ExPASy
+    >>> import os
     >>> in_handle = ExPASy.get_prosite_entry('PS00001')
     >>> html = in_handle.read()
     >>> in_handle.close()
@@ -54,6 +57,7 @@ def get_prosite_entry(id,
     ...     # Python 2/3 docstring workaround: Revise for 'Python 3 only'
     ...     _ = out_handle.write(html)
     ...
+    >>> os.remove("myprositerecord.html")  # tidy up
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this text: 'There is currently no PROSITE entry for'

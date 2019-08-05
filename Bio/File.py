@@ -78,6 +78,7 @@ def as_handle(handleish, mode="r", **kwargs):
     Examples
     --------
     >>> from Bio import File
+    >>> import os
     >>> with File.as_handle('seqs.fasta', 'w') as fp:
     ...     # Python2/3 docstring workaround, revise for 'Python 3 only'.
     ...     _ = fp.write('>test\nACGT')
@@ -93,6 +94,7 @@ def as_handle(handleish, mode="r", **kwargs):
     >>> fp.closed
     False
     >>> fp.close()
+    >>> os.remove("seqs.fasta")  # tidy up
 
     Note that if the mode argument includes U (for universal new lines)
     this will be removed under Python 3 where is is redundant and has
@@ -309,7 +311,7 @@ class _IndexedSeqFileDict(_dict_base):
 
     As used in Bio.SeqIO, by default the SeqRecord's id string is used
     as the dictionary key. In Bio.SearchIO, the query's id string is
-    used. This can be changed by suppling an optional key_function,
+    used. This can be changed by supplying an optional key_function,
     a callback function which will be given the record id and must
     return the desired key. For example, this allows you to parse
     NCBI style FASTA identifiers, and extract the GI number to use
