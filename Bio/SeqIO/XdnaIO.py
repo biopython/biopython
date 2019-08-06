@@ -209,12 +209,12 @@ class XdnaWriter(SequenceWriter):
 
         record = records[0]
 
-        alptype = type(record.seq.alphabet)
-        if issubclass(alptype, Alphabet.DNAAlphabet):
+        alptype = Alphabet._get_base_alphabet(record.seq.alphabet)
+        if isinstance(alptype, Alphabet.DNAAlphabet):
             seqtype = 1
-        elif issubclass(alptype, Alphabet.RNAAlphabet):
+        elif isinstance(alptype, Alphabet.RNAAlphabet):
             seqtype = 3
-        elif issubclass(alptype, Alphabet.ProteinAlphabet):
+        elif isinstance(alptype, Alphabet.ProteinAlphabet):
             seqtype = 4
         else:
             seqtype = 0
