@@ -23,6 +23,11 @@ making an error, but will require user code to be updated accordingly.
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
+``Bio.SeqIO`` now supports reading and writing files in the native format of
+Christian Marck's DNA Strider program ("xdna" format, also used by Serial
+Cloner), as well as reading files in the native formats of GSL Biotech's
+SnapGene and Textco Biosoftware's Gene Construction Kit.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -33,6 +38,7 @@ possible, especially the following contributors:
 
 - Chris MacRaild
 - Chris Rands
+- Damien Goutte-Gattat (first contribution)
 - Joe Greener
 - Konstantin Vdovkin
 - Mike Moritz (first contribution)
