@@ -90,13 +90,13 @@ class WriterTests(unittest.TestCase):
                                       "sff", "mauve"]:
             self.check_write_fails(records, format, ValueError,
                                    "Must have at least one sequence")
-        elif not records and format == "nib":
+        elif not records and format in ["nib", "xdna"]:
             self.check_write_fails(records, format, ValueError,
                                    "Must have one sequence")
         elif lengths > 1 and format in AlignIO._FormatToWriter:
             self.check_write_fails(records, format, ValueError,
                                    "Sequences must all be the same length")
-        elif len(records) > 1 and format == "nib":
+        elif len(records) > 1 and format in ["nib", "xdna"]:
             self.check_write_fails(records, format, ValueError,
                                    "More than one sequence found")
         elif records and format in ["fastq", "fastq-sanger", "fastq-solexa",

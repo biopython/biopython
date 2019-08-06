@@ -294,6 +294,7 @@ names are also used in Bio.AlignIO and include the following:
       which encodes PHRED quality scores with an ASCII offset of 64
       (not 33). Note as of version 1.8 of the CASAVA pipeline Illumina
       will produce FASTQ files using the standard Sanger encoding.
+    - gck     - Gene Construction Kit's format.
     - genbank - The GenBank or GenPept flat file format.
     - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
     - ig      - The IntelliGenetics file format, apparently the same as the
@@ -315,6 +316,7 @@ names are also used in Bio.AlignIO and include the following:
     - seqxml  - SeqXML, simple XML format described in Schmitt et al (2011).
     - sff     - Standard Flowgram Format (SFF), typical output from Roche 454.
     - sff-trim - Standard Flowgram Format (SFF) with given trimming applied.
+    - snapgene - SnapGene's native format.
     - swiss   - Plain text Swiss-Prot aka UniProt format.
     - tab     - Simple two column tab separated sequence files, where each
       line holds a record's identifier and sequence. For example,
@@ -325,6 +327,7 @@ names are also used in Bio.AlignIO and include the following:
       in separate FASTA files).
     - uniprot-xml - The UniProt XML format (replacement for the SwissProt plain
       text format which we call "swiss")
+    - xdna        - DNA Strider's and SerialCloner's native format.
 
 Note that while Bio.SeqIO can read all the above file formats, it cannot
 write to all of them.
@@ -390,6 +393,7 @@ from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from . import AbiIO
 from . import AceIO
 from . import FastaIO
+from . import GckIO
 from . import IgIO  # IntelliGenetics or MASE format
 from . import InsdcIO  # EMBL and GenBank
 from . import NibIO
@@ -398,10 +402,12 @@ from . import PhdIO
 from . import PirIO
 from . import SeqXmlIO
 from . import SffIO
+from . import SnapGeneIO
 from . import SwissIO
 from . import TabIO
 from . import QualityIO  # FastQ and qual files
 from . import UniprotIO
+from . import XdnaIO
 
 if sys.version_info < (3, 6):
     from collections import OrderedDict as _dict
@@ -427,6 +433,7 @@ _FormatToIterator = {"abi": AbiIO.AbiIterator,
                      "embl": InsdcIO.EmblIterator,
                      "embl-cds": InsdcIO.EmblCdsFeatureIterator,
                      "gb": InsdcIO.GenBankIterator,
+                     "gck": GckIO.GckIterator,
                      "genbank": InsdcIO.GenBankIterator,
                      "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
                      "imgt": InsdcIO.ImgtIterator,
@@ -444,11 +451,13 @@ _FormatToIterator = {"abi": AbiIO.AbiIterator,
                      "qual": QualityIO.QualPhredIterator,
                      "seqxml": SeqXmlIO.SeqXmlIterator,
                      "sff": SffIO.SffIterator,
+                     "snapgene": SnapGeneIO.SnapGeneIterator,
                      # Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
                      "swiss": SwissIO.SwissIterator,
                      "tab": TabIO.TabIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
+                     "xdna": XdnaIO.XdnaIterator
                      }
 
 _FormatToString = {
@@ -481,9 +490,11 @@ _FormatToWriter = {"fasta": FastaIO.FastaWriter,
                    "seqxml": SeqXmlIO.SeqXmlWriter,
                    "sff": SffIO.SffWriter,
                    "tab": TabIO.TabWriter,
+                   "xdna": XdnaIO.XdnaWriter
                    }
 
-_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "seqxml", "nib"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim", "gck", "seqxml",
+                  "snapgene", "nib", "xdna"]
 
 
 def write(sequences, handle, format):

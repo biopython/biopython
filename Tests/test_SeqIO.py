@@ -580,6 +580,7 @@ class TestSeqIO(unittest.TestCase):
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "More than one sequence found",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -617,6 +618,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("clustal", True, "Clustalw/cw02.aln", 2, ids, names, sequences, lengths, alignment, messages)
@@ -657,6 +659,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("clustal", True, "Clustalw/opuntia.aln", 7, ids, names, sequences, lengths, alignment, messages)
@@ -697,6 +700,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("clustal", True, "Clustalw/hedgehog.aln", 5, ids, names, sequences, lengths, alignment, messages)
@@ -732,6 +736,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation",
                     ]
@@ -1103,6 +1108,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1138,6 +1144,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1203,6 +1210,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1243,6 +1251,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1283,6 +1292,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1323,6 +1333,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1414,6 +1425,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=test3).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("fasta", True, "GFF/multi.fna", 3, ids, names, sequences, lengths, alignment, messages)
@@ -1446,6 +1458,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -1489,6 +1502,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=t9).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("nexus", True, "Nexus/test_Nexus_input.nex", 9, ids, names, sequences, lengths, alignment, messages)
 
@@ -1862,6 +1876,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2031,6 +2046,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2327,6 +2343,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2453,6 +2470,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2490,6 +2508,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=NRP00210945).",
                     "Sequence type is UnknownSeq but SeqXML requires sequence",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2684,6 +2703,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=DI500020).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2785,6 +2805,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA03131.1).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -2822,6 +2843,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("stockholm", True, "Stockholm/simple.sth", 2, ids, names, sequences, lengths, alignment, messages)
@@ -2862,6 +2884,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("stockholm", True, "Stockholm/funny.sth", 6, ids, names, sequences, lengths, alignment, messages)
@@ -2903,6 +2926,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/reference_dna.phy", 6, ids, names, sequences, lengths, alignment, messages)
@@ -2944,6 +2968,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/reference_dna2.phy", 6, ids, names, sequences, lengths, alignment, messages)
@@ -2984,6 +3009,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/hennigian.phy", 10, ids, names, sequences, lengths, alignment, messages)
@@ -3025,6 +3051,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/horses.phy", 10, ids, names, sequences, lengths, alignment, messages)
@@ -3065,6 +3092,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=J).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/random.phy", 10, ids, names, sequences, lengths, alignment, messages)
@@ -3102,6 +3130,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/interlaced.phy", 3, ids, names, sequences, lengths, alignment, messages)
@@ -3142,6 +3171,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("phylip", True, "Phylip/interlaced2.phy", 4, ids, names, sequences, lengths, alignment, messages)
@@ -3182,6 +3212,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("emboss", True, "Emboss/alignret.txt", 4, ids, names, sequences, lengths, alignment, messages)
@@ -3219,6 +3250,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3256,6 +3288,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("emboss", True, "Emboss/water.txt", 2, ids, names, sequences, lengths, alignment, messages)
@@ -3281,6 +3314,7 @@ class TestSeqIO(unittest.TestCase):
                     "Sequences must all be the same length",
                     "More than one sequence found",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3316,6 +3350,7 @@ class TestSeqIO(unittest.TestCase):
         messages = ["Repeated name 'HWI-EAS94_' (originally 'HWI-EAS94_4_1_1_537_446'), possibly due to truncation",
                     "More than one sequence found",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Repeated name 'HWI-EAS94_' (originally 'HWI-EAS94_4_1_1_537_446'), possibly due to truncation",
                     ]
         self.perform_test("phd", False, "Phd/phd_solexa", 2, ids, names, sequences, lengths, alignment, messages)
@@ -3352,6 +3387,7 @@ class TestSeqIO(unittest.TestCase):
                     "Sequences must all be the same length",
                     "More than one sequence found",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3420,6 +3456,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3463,6 +3500,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     ]
         self.perform_test("ig", True, "IntelliGenetics/VIF_mase-pro.txt", 16, ids, names, sequences, lengths, alignment, messages)
@@ -3501,6 +3539,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3537,6 +3576,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3573,6 +3613,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3609,6 +3650,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3645,6 +3687,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -3678,6 +3721,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("pir", True, "NBRF/clustalw.pir", 2, ids, names, sequences, lengths, alignment, messages)
 
@@ -3715,6 +3759,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
                     ]
@@ -3742,6 +3787,7 @@ class TestSeqIO(unittest.TestCase):
                     "More than one sequence found",
                     "Sequence type is UnknownSeq but SeqXML requires sequence",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
                     ]
@@ -3776,6 +3822,7 @@ class TestSeqIO(unittest.TestCase):
                     "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
                     ]
@@ -3810,6 +3857,7 @@ class TestSeqIO(unittest.TestCase):
                     "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation",
                     ]
@@ -3847,6 +3895,7 @@ class TestSeqIO(unittest.TestCase):
                     "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation",
                     ]
@@ -3956,6 +4005,7 @@ class TestSeqIO(unittest.TestCase):
                     "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Need a DNA, RNA or Protein alphabet",
                     "Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation",
                     ]
@@ -3990,6 +4040,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -4029,6 +4080,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -4065,6 +4117,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
                     "Sequences must all be the same length",
@@ -4159,6 +4212,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "source should be of type string",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("pdb-atom", False, "PDB/2BEG.pdb", 5, ids, names, sequences, lengths, alignment, messages)
 
@@ -4226,6 +4280,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("pdb-seqres", False, "PDB/2BEG.pdb", 5, ids, names, sequences, lengths, alignment, messages)
 
@@ -4273,6 +4328,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("cif-atom", False, "PDB/2BEG.cif", 5, ids, names, sequences, lengths, alignment, messages)
 
@@ -4320,6 +4376,7 @@ class TestSeqIO(unittest.TestCase):
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "No suitable quality scores found in letter_annotations of SeqRecord (id=2BEG:E).",
                     "Missing SFF flow information",
+                    "More than one sequence found",
                     ]
         self.perform_test("cif-seqres", False, "PDB/2BEG.cif", 5, ids, names, sequences, lengths, alignment, messages)
 
