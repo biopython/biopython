@@ -4380,6 +4380,44 @@ class TestSeqIO(unittest.TestCase):
                     ]
         self.perform_test("cif-seqres", False, "PDB/2BEG.cif", 5, ids, names, sequences, lengths, alignment, messages)
 
+    def test_xdna1(self):
+        sequences = ["acttgctataccccgctaccttaaccctggccgtcgcaag...agcagat",
+                     ]
+        ids = ["Sample",
+               ]
+        names = ["Sample",
+                 ]
+        lengths = [1000]
+        alignment = None
+        messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "Missing SFF flow information",
+                    ]
+        self.perform_test("xdna", False, "Xdna/sample-a.xdna", 1, ids, names, sequences, lengths, alignment, messages)
+
+    def test_snapgene1(self):
+        sequences = ["gcacactaagccttccatctattcggcttcttgctctgca...atcgtag",
+                     ]
+        ids = ["Sample",
+               ]
+        names = ["Sample",
+                 ]
+        lengths = [1000]
+        alignment = None
+        messages = ["No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "No suitable quality scores found in letter_annotations of SeqRecord (id=Sample).",
+                    "Missing SFF flow information",
+                    ]
+        self.perform_test("snapgene", False, "SnapGene/sample-d.dna", 1, ids, names, sequences, lengths, alignment, messages)
+
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
