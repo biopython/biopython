@@ -10,6 +10,8 @@ from io import BytesIO
 import unittest
 
 from Bio import Alphabet, SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class TestXdna(unittest.TestCase):
@@ -166,6 +168,28 @@ class TestInvalidXdna(unittest.TestCase):
         h = self.munge_buffer(feature_byte, 3)
         with self.assertRaisesRegexp(ValueError, "Cannot read 1 bytes from handle"):
             SeqIO.read(h, 'xdna')
+        h.close()
+
+
+class TestXdnaWriter(unittest.TestCase):
+
+    def test_write_sequence_type(self):
+        """Write correct sequence type."""
+        h = BytesIO()
+
+        record = SeqRecord(Seq('ACGT'))
+
+        for alphabet, expected_byte in [
+                (Alphabet.generic_alphabet, 0),
+                (Alphabet.generic_dna, 1),
+                (Alphabet.generic_rna, 3),
+                (Alphabet.generic_protein, 4)]:
+            record.seq.alphabet = alphabet
+            h.seek(0, 0)
+            SeqIO.write([record], h, 'xdna')
+            buf = bytearray(h.getvalue())
+            self.assertEqual(expected_byte, buf[1])
+
         h.close()
 
 
