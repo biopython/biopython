@@ -66,7 +66,11 @@ def _read_p4string(handle):
 
 
 def GckIterator(handle):
-    """Parse a GCK file and return a SeqRecord object."""
+    """Parse a GCK file and return a SeqRecord object.
+
+    Note that a GCK file can only contain one sequence, so this
+    iterator will always return a single record.
+    """
     # Skip file header
     # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
     # always be 12, maybe this could act as a magic cookie. Bytes
