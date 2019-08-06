@@ -236,7 +236,11 @@ def _get_child_value(node, name, default=None, error=None):
 
 
 def SnapGeneIterator(handle):
-    """Parse a SnapGene file and return a SeqRecord object."""
+    """Parse a SnapGene file and return a SeqRecord object.
+
+    Note that a SnapGene file can only contain one sequence, so this
+    iterator will always return a single record.
+    """
     record = SeqRecord(None)
     n = 0
 
