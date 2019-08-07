@@ -128,6 +128,30 @@ class TestCorruptedSnapGene(unittest.TestCase):
             SeqIO.read(h, 'snapgene')
         h.close()
 
+    def test_extra_dna(self):
+        """Read a file with supernumerary DNA packet."""
+        # Fabricate a file with a duplicated DNA packet
+        buf = bytearray(self.buffer)
+        buf.extend(self.buffer[19:1025])    # Append duplicated DNA packet
+        h = BytesIO(buf)
+        with self.assertRaisesRegexp(ValueError, "The file contains more than one DNA packet"):
+            SeqIO.read(h, 'snapgene')
+        h.close()
+
+    def test_truncated_packet(self):
+        """Read a file with incomplete packet."""
+        # Truncate before the end of the length bytes
+        h = BytesIO(self.buffer[3:])
+        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+            SeqIO.read(h, 'snapgene')
+        h.close()
+
+        # Truncate before the end of the data
+        h = BytesIO(self.buffer[10:])
+        with self.assertRaisesRegexp(ValueError, "Unexpected end of packet"):
+            SeqIO.read(h, 'snapgene')
+        h.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
