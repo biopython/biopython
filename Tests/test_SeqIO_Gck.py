@@ -279,9 +279,10 @@ class TestGckWithDGVC(unittest.TestCase):
                 return
 
             try:
-                with urlopen('https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip') as response:
-                    with open('Gck/DGVC_GCK.zip', 'wb') as f:
-                        shutil.copyfileobj(response, f)
+                src = urlopen('https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip')
+                with open('Gck/DGVC_GCK.zip', 'wb') as dst:
+                    shutil.copyfileobj(src, dst)
+                src.close()
             except HTTPError:
                 self.skipTest("Cannot download the sample files")
                 return
