@@ -26,7 +26,7 @@ PDB-style Astral files.
 ``Bio.SeqIO`` now supports reading and writing files in the native format of
 Christian Marck's DNA Strider program ("xdna" format, also used by Serial
 Cloner), as well as reading files in the native formats of GSL Biotech's
-SnapGene and Textco Biosoftware's Gene Construction Kit.
+SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
