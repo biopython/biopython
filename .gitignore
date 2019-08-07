@@ -50,6 +50,9 @@ Tests/Graphics/*.eps
 Tests/Graphics/*.svg
 Tests/Graphics/*.png
 
+# This file is downloaded when testing the Bio.SeqIO.GckIO module.
+Tests/Gck/DGVC_GCK.zip
+
 #Ignore the local BioSQL test settings:
 Tests/biosql.ini
 

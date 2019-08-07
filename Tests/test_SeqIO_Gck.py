@@ -8,24 +8,20 @@
 
 from io import BytesIO
 import os.path
+import shutil
 import unittest
+from zipfile import ZipFile
 
-from Bio import SeqIO
+from Bio import SeqIO, MissingExternalDependencyError
+from Bio._py3k import urlopen, HTTPError
+import requires_internet
 
-# The Gck parser has been developed using the files of the
-# Drosophila Gateway Vector Collection from Carnegie Science
-# (<https://emb.carnegiescience.edu/drosophila-gateway-vector-collection>)
-# as sample Gck files. We cannot redistribute those files along with
-# Biopython, therefore we skip the test case by default.
-#
-# To test the Gck parser, download the GCK.zip archive from the URL
-# above and place the files it contains under a 'Tests/Gck' directory.
-@unittest.skipUnless(os.path.exists('Gck'), 'Gck sample files not available')
-class TestGck(unittest.TestCase):
+
+class TestGckWithDGVC(unittest.TestCase):
 
     sample_data = {
         'pACW': {
-            'file': 'Gck/pACW',
+            'file': 'Drosophila Gateway Vectors GCK/pACW',
             'name': 'Construct:',
             'id': 'Construct:',
             'description': 'Construct:  pACTIN-RW-SV',
@@ -119,7 +115,7 @@ class TestGck(unittest.TestCase):
                 ]
             },
         'pPWF': {
-            'file': 'Gck/pPWG',
+            'file': 'Drosophila Gateway Vectors GCK/pPWG',
             'name': 'Construct:',
             'id': 'Construct:',
             'description': 'Construct:  pPWF',
@@ -270,10 +266,39 @@ class TestGck(unittest.TestCase):
             }
         }
 
+    def setUp(self):
+        # We are using the files of the Drosophila Gateway Vector Collection
+        # (<https://emb.carnegiescience.edu/drosophila-gateway-vector-collection>)
+        # as sample Gck files. We cannot redistribute those files along with
+        # Biopython, so we need to download them now for the tests to run.
+        if not os.path.exists('Gck/DGVC_GCK.zip'):
+            try:
+                requires_internet.check()
+            except MissingExternalDependencyError:
+                self.skipTest("Sample files missing and no Internet access")
+                return
+
+            try:
+                with urlopen('https://emb.carnegiescience.edu/sites/default/files/DGVC_GCK.zip') as response:
+                    with open('Gck/DGVC_GCK.zip', 'wb') as f:
+                        shutil.copyfileobj(response, f)
+            except HTTPError:
+                self.skipTest("Cannot download the sample files")
+                return
+
+        self.zipdata = ZipFile('Gck/DGVC_GCK.zip')
+        with self.zipdata.open('Drosophila Gateway Vectors GCK/pACW') as f:
+            # Keep one of the file in memory for the corruption tests below
+            self.buffer = f.read()
+
+    def tearDown(self):
+        self.zipdata.close()
+
     def test_read(self):
         """Read sample files."""
         for sample in self.sample_data.values():
-            record = SeqIO.read(sample['file'], 'gck')
+            f = self.zipdata.open(sample['file'])
+            record = SeqIO.read(f, 'gck')
             self.assertEqual(sample['name'], record.name)
             self.assertEqual(sample['id'], record.id)
             self.assertEqual(sample['description'], record.description)
@@ -290,14 +315,7 @@ class TestGck(unittest.TestCase):
                 self.assertEqual(exp_feat['strand'], read_feat.location.strand)
                 self.assertEqual(exp_feat['label'], read_feat.qualifiers['label'][0])
 
-
-@unittest.skipUnless(os.path.exists('Gck'), 'Gck sample files not available')
-class TestInvalidGck(unittest.TestCase):
-
-    def setUp(self):
-        f = open('Gck/pACW', 'rb')
-        self.buffer = f.read()
-        f.close()
+            f.close()
 
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
