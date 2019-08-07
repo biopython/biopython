@@ -7,11 +7,23 @@
 """Tests for the SeqIO Xdna module."""
 
 from io import BytesIO
-import unittest
 
-from Bio import Alphabet, SeqIO
+from Bio import Alphabet, SeqIO, BiopythonWarning
 from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature, FeatureLocation, BeforePosition
 from Bio.SeqRecord import SeqRecord
+
+import sys
+if sys.version_info[0] < 3:
+    try:
+        import unittest2 as unittest
+        has_assert_warn = True
+    except ImportError:
+        import unittest
+        has_assert_warn = False
+else:
+    import unittest
+    has_assert_warn = True
 
 
 class TestXdna(unittest.TestCase):
@@ -189,6 +201,37 @@ class TestXdnaWriter(unittest.TestCase):
             SeqIO.write([record], h, 'xdna')
             buf = bytearray(h.getvalue())
             self.assertEqual(expected_byte, buf[1])
+
+        h.close()
+
+    @unittest.skipUnless(has_assert_warn, 'No assertWarn support in unittest')
+    def test_warnings_on_data_loss(self):
+        """Emit warnings when dropping data on write."""
+        h = BytesIO()
+
+        # Fabricate a record with > 255 features
+        record = SeqRecord(Seq('ACGT'))
+        for i in range(260):
+            feature = SeqFeature(FeatureLocation(1, 2), type='misc_feature')
+            record.features.append(feature)
+        with self.assertWarnsRegex(BiopythonWarning, "Too many features"):
+            SeqIO.write([record], h, 'xdna')
+
+        # Now a record with a fuzzy-located feature
+        feature = SeqFeature(FeatureLocation(BeforePosition(2), 3),
+                             type='misc_feature')
+        record.features = [feature]
+        with self.assertWarnsRegex(BiopythonWarning, r"Dropping \d+ features with fuzzy locations"):
+            SeqIO.write([record], h, 'xdna')
+
+        # Now a record with a feature with a qualifier too long
+        qualifiers = {'note': ["x" * 260]}
+        feature = SeqFeature(FeatureLocation(2, 3),
+                             type='misc_feature',
+                             qualifiers=qualifiers)
+        record.features = [feature]
+        with self.assertWarnsRegex(BiopythonWarning, "Some annotations were truncated to 255 characters"):
+            SeqIO.write([record], h, 'xdna')
 
         h.close()
 

@@ -13,8 +13,9 @@ and also used by Serial Cloner.
 
 from re import match
 from struct import pack, unpack
+import warnings
 
-from Bio import Alphabet
+from Bio import Alphabet, BiopythonWarning
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
@@ -208,6 +209,7 @@ class XdnaWriter(SequenceWriter):
             raise ValueError("More than one sequence found")
 
         record = records[0]
+        self._has_truncated_strings = False
 
         alptype = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(alptype, Alphabet.DNAAlphabet):
@@ -253,10 +255,19 @@ class XdnaWriter(SequenceWriter):
         # We must skip features with fuzzy locations as they cannot be
         # represented in the Xdna format
         features = [f for f in record.features if type(f.location.start) == ExactPosition and type(f.location.end) == ExactPosition]
+        drop = len(record.features) - len(features)
+        if drop > 0:
+            warnings.warn("Dropping {} features with fuzzy locations".format(drop),
+                          BiopythonWarning)
+
         # We also cannot store more than 255 features as the number of
         # features is stored on a single byte...
         if len(features) > 255:
+            drop = len(features) - 255
+            warnings.warn("Too many features, dropping the last {}".format(drop),
+                          BiopythonWarning)
             features = features[:255]
+
         self.handle.write(pack('>B', len(features)))
         for feature in features:
             self._write_pstring(feature.qualifiers.get('label', [''])[0])
@@ -286,11 +297,16 @@ class XdnaWriter(SequenceWriter):
             self.handle.write(pack('>BBBB', strand, 1, 0, 1))
             self._write_pstring('127,127,127')
 
+        if self._has_truncated_strings:
+            warnings.warn("Some annotations were truncated to 255 characters",
+                          BiopythonWarning)
+
         return 1
 
     def _write_pstring(self, s):
         """Write the given string as a Pascal string."""
         if len(s) > 255:
+            self._has_truncated_strings = True
             s = s[:255]
         self.handle.write(pack('>B', len(s)))
         self.handle.write(s.encode('ASCII'))
