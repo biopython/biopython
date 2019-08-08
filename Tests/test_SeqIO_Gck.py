@@ -288,9 +288,6 @@ class TestGckWithDGVC(unittest.TestCase):
                 return
 
         self.zipdata = ZipFile('Gck/DGVC_GCK.zip')
-        with self.zipdata.open('Drosophila Gateway Vectors GCK/pACW') as f:
-            # Keep one of the file in memory for the corruption tests below
-            self.buffer = f.read()
 
     def tearDown(self):
         self.zipdata.close()
@@ -318,6 +315,36 @@ class TestGckWithDGVC(unittest.TestCase):
 
             f.close()
 
+
+class TestGckWithArtificialData(unittest.TestCase):
+
+    def setUp(self):
+        with open('Gck/artificial.gck', 'rb') as f:
+            self.buffer = f.read()
+
+    def test_read(self):
+        """Read an artificial sample file."""
+        h = BytesIO(self.buffer)
+        record = SeqIO.read(h, 'gck')
+        self.assertEqual('ACGTACGTACGT', record.seq)
+        self.assertEqual('Sample construct', record.description)
+        self.assertEqual('linear', record.annotations['topology'])
+        self.assertEqual(2, len(record.features))
+
+        self.assertEqual(2, record.features[0].location.start)
+        self.assertEqual(6, record.features[0].location.end)
+        self.assertEqual(1, record.features[0].location.strand)
+        self.assertEqual('misc_feature', record.features[0].type)
+        self.assertEqual('FeatureA', record.features[0].qualifiers['label'][0])
+
+        self.assertEqual(7, record.features[1].location.start)
+        self.assertEqual(11, record.features[1].location.end)
+        self.assertEqual(-1, record.features[1].location.strand)
+        self.assertEqual('CDS', record.features[1].type)
+        self.assertEqual('FeatureB', record.features[1].qualifiers['label'][0])
+
+        h.close()
+
     def munge_buffer(self, position, value):
         mod_buffer = bytearray(self.buffer)
         if isinstance(value, list):
@@ -329,25 +356,25 @@ class TestGckWithDGVC(unittest.TestCase):
     def test_conflicting_lengths(self):
         """Read a file with incorrect length."""
         # Change the sequence length as indicated in the sequence packet
-        h = self.munge_buffer(28, [0x00, 0x00, 0x20, 0x15])
+        h = self.munge_buffer(0x1C, [0x00, 0x00, 0x20, 0x15])
         with self.assertRaisesRegexp(ValueError, "Conflicting sequence length values"):
             SeqIO.read(h, 'gck')
         h.close()
 
         # Change the sequence length as indicated in the features packet
-        h = self.munge_buffer(8135, [0x00, 0x00, 0x20, 0x15])
+        h = self.munge_buffer(0x36, [0x00, 0x00, 0x20, 0x15])
         with self.assertRaisesRegexp(ValueError, "Conflicting sequence length values"):
             SeqIO.read(h, 'gck')
         h.close()
 
         # Change the number of features
-        h = self.munge_buffer(8140, 0x30)
+        h = self.munge_buffer(0x3B, 0x30)
         with self.assertRaisesRegexp(ValueError, "Features packet size inconsistent with number of features"):
             SeqIO.read(h, 'gck')
         h.close()
 
         # Change the number of restriction sites
-        h = self.munge_buffer(10528, 0x30)
+        h = self.munge_buffer(0x137, 0x30)
         with self.assertRaisesRegexp(ValueError, "Sites packet size inconsistent with number of sites"):
             SeqIO.read(h, 'gck')
         h.close()
