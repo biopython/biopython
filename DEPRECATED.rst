@@ -64,6 +64,10 @@ Jython
 Biopython was mostly working under Jython 2.7.0, but support for Jython
 was deprecated as of Release 1.70.
 
+Bio.Index
+=========
+Deprecated in release 1.75, was not used anywhere in Biopython.
+
 Bio.Restriction.RanaConfig
 ==========================
 Removed in Biopython 1.74 without explicit depreciation period. RanaConfig was
