@@ -27,6 +27,14 @@ try:
 except ImportError:
     import pickle  # Python 3
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.warn("Bio.Index has been deprecated, and we intend to remove it"
+              " in a future release of Biopython. If you would like to"
+              " continue using Bio.Index, please contact the Biopython"
+              " developers via the mailing list or GitHub.",
+              BiopythonDeprecationWarning)
+
 
 class _ShelveIndex(dict):
     """An index file wrapped around shelve."""
