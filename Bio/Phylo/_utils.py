@@ -103,16 +103,16 @@ def draw_graphviz(tree, label_func=str, prog="twopi", args="",
             ValueError); all other exception types will still be raised. This
             means you can use a lambda expression that simply attempts to look
             up the desired value without checking if the intermediate attributes
-            are available:
+            are available::
 
-                >>> from Bio import Phylo, AlignIO
-                >>> from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
-                >>> constructor = DistanceTreeConstructor()
-                >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
-                >>> calculator = DistanceCalculator('identity')
-                >>> dm = calculator.get_distance(aln)
-                >>> tree = constructor.upgma(dm)
-                >>> Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
+                from Bio import Phylo, AlignIO
+                from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+                constructor = DistanceTreeConstructor()
+                aln = AlignIO.read(open('/TreeConstruction/msa.phy'), 'phylip')
+                calculator = DistanceCalculator('identity')
+                dm = calculator.get_distance(aln)
+                tree = constructor.upgma(dm)
+                Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
 
         prog : string
             The Graphviz program to use when rendering the graph. 'twopi'
@@ -127,12 +127,14 @@ def draw_graphviz(tree, label_func=str, prog="twopi", args="",
 
     Examples
     --------
-    >>> import pylab
-    >>> from Bio import Phylo
-    >>> tree = Phylo.read('ex/apaf.xml', 'phyloxml')
-    >>> Phylo.draw_graphviz(tree)
-    >>> pylab.show()
-    >>> pylab.savefig('apaf.png')
+    Load a PhyloXML format tree, and draw a PNG using GraphViz::
+
+        import pylab
+        from Bio import Phylo
+        tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
+        Phylo.draw_graphviz(tree)
+        pylab.show()
+        pylab.savefig('apaf.png')
 
     """
     # Deprecated in Biopython 1.70 (#1247)
@@ -310,17 +312,17 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict), or
     pyplot_option_name=(dict).
 
-    Example using the pyplot options 'axhspan' and 'axvline':
+    Example using the pyplot options 'axhspan' and 'axvline'::
 
-    >>> from Bio import Phylo, AlignIO
-    >>> from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
-    >>> constructor = DistanceTreeConstructor()
-    >>> aln = AlignIO.read(open('Tests/TreeConstruction/msa.phy'), 'phylip')
-    >>> calculator = DistanceCalculator('identity')
-    >>> dm = calculator.get_distance(aln)
-    >>> tree = constructor.upgma(dm)
-    >>> Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
-    ...     axvline={'x':'0', 'ymin':'0', 'ymax':'1'})
+        from Bio import Phylo, AlignIO
+        from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+        constructor = DistanceTreeConstructor()
+        aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+        calculator = DistanceCalculator('identity')
+        dm = calculator.get_distance(aln)
+        tree = constructor.upgma(dm)
+        Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
+        ... axvline={'x':0, 'ymin':0, 'ymax':1})
 
     Visual aspects of the plot can also be modified using pyplot's own functions
     and objects (via pylab or matplotlib). In particular, the pyplot.rcParams

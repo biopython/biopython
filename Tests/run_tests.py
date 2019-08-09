@@ -80,10 +80,6 @@ VERBOSITY = 0
 EXCLUDE_DOCTEST_MODULES = [
     "Bio.PDB",
     "Bio.PDB.AbstractPropertyMap",
-    "Bio.Phylo.Applications._Fasttree",
-    "Bio.Phylo._io",
-    "Bio.Phylo.TreeConstruction",
-    "Bio.Phylo._utils",
 ]
 
 # Exclude modules with online activity
@@ -152,6 +148,7 @@ except ImportError:
 # Can't easily write exceptions with consistent class name in python 2 and 3
 if sys.version_info[0] == 2:
     EXCLUDE_DOCTEST_MODULES.append("Bio.Seq")
+    EXCLUDE_DOCTEST_MODULES.append("Bio.Phylo")
 
 
 def find_modules(path):
