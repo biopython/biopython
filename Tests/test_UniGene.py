@@ -814,6 +814,47 @@ class TestUniGene(unittest.TestCase):
         # Make sure that there are no more records
         self.assertRaises(StopIteration, next, records)
 
+        self.assertEqual(repr(record.sequence), "[ACC=AB120409.1; NID=g45597282;"
+                                                " PID=g45597283; SEQTYPE=mRNA, "
+                                                "ACC=NM_001082527.1; NID=g146262002; "
+                                                "PID=g146262003; SEQTYPE=mRNA, ACC=AB120410.1; "
+                                                "NID=g45597284; PID=g45597285; SEQTYPE=mRNA, "
+                                                "ACC=AB120411.1; NID=g45597286; PID=g45597287; "
+                                                "SEQTYPE=mRNA, ACC=CD467202.1; NID=g31388470; "
+                                                "CLONE=LeukoS1_2_D11_A023; END=5'; LID=13774; "
+                                                "SEQTYPE=EST; TRACE=891190473, ACC=CD535974.1; "
+                                                "NID=g31578389; CLONE=LeukoN6_2_F07_A028; "
+                                                "END=3'; LID=13844; SEQTYPE=EST; TRACE=891184067, "
+                                                "ACC=CD469544.1; NID=g31390812; CLONE=LeukoS2_4_"
+                                                "D05_A024; END=5'; LID=13776; SEQTYPE=EST; "
+                                                "TRACE=891191700, ACC=CD528742.1; NID=g31567364; "
+                                                "CLONE=LeukoN3_7_F08_A025; END=3'; LID=13842; "
+                                                "SEQTYPE=EST; TRACE=891187302, ACC=CD469487.1; "
+                                                "NID=g31390755; CLONE=LeukoS2_4_D05_A024; END=3'; "
+                                                "LID=13776; SEQTYPE=EST; "
+                                                "TRACE=891191801]")
+        self.assertEqual(repr(record.protsim), "[ORG=10090; PROTGI=156766061; "
+                                               "PROTID=NP_001074708.2; PCT=50.00; ALN=281, "
+                                               "ORG=9606; PROTGI=32490553; PROTID=NP_067073.1; "
+                                               "PCT=62.42; ALN=296, ORG=13616; PROTGI=126346255; "
+                                               "PROTID=XP_001375479.1; PCT=40.43; ALN=281, "
+                                               "ORG=9615; PROTGI=73947540; PROTID=XP_854148.1; "
+                                               "PCT=42.11; ALN=303, ORG=9913; PROTGI=194674905; "
+                                               "PROTID=XP_001788837.1; PCT=61.11; ALN=233, "
+                                               "ORG=9258; PROTGI=149631692; "
+                                               "PROTID=XP_001516158.1; PCT=35.65; ALN=229, "
+                                               "ORG=9796; PROTGI=146262003; "
+                                               "PROTID=NP_001075996.1; PCT=100.00; ALN=279, "
+                                               "ORG=10116; PROTGI=109461031; "
+                                               "PROTID=XP_001065532.1; PCT=52.77; ALN=269, "
+                                               "ORG=9544; PROTGI=100818611; "
+                                               "PROTID=NP_001035767.1; PCT=57.35; ALN=277, "
+                                               "ORG=9823; PROTGI=178057314; "
+                                               "PROTID=NP_001116615.1; PCT=43.01; ALN=278, "
+                                               "ORG=9598; PROTGI=58801536; "
+                                               "PROTID=NP_001009045.1; "
+                                               "PCT=54.51; ALN=276]")
+
         handle.close()
 
     def test_read(self):
@@ -821,7 +862,6 @@ class TestUniGene(unittest.TestCase):
         # Start of the UniGene file for Homo sapiens downloaded from:
         # ftp://ftp.ncbi.nih.gov/repository/UniGene/Homo_sapiens
         handle = open("UniGene/Hs.2.data")
-
         record = UniGene.read(handle)
         self.assertEqual(record.ID, "Hs.2")
         self.assertEqual(record.title, "N-acetyltransferase 2 (arylamine N-acetyltransferase)")
@@ -1126,6 +1166,24 @@ class TestUniGene(unittest.TestCase):
         self.assertEqual(record.sequence[37].lid, "8800")
         self.assertEqual(record.sequence[37].seqtype, "EST")
 
+        self.assertEqual(repr(record.sts), "[ACC=PMC310725P3 UNISTS=272646, ACC=WIAF-2120 "
+                                           "UNISTS=44576, ACC=G59899 UNISTS=137181, ACC=G06461 "
+                                           "UNISTS=17088, ACC=GDB:310612 UNISTS=156422, "
+                                           "ACC=GDB:310613 UNISTS=156423, ACC=GDB:187676 "
+                                           "UNISTS=155563]")
+
+        self.assertEqual(repr(record), "<Record> Hs.2 NAT2\nN-acetyltransferase 2 "
+                                       "(arylamine N-acetyltransferase)")
+
+        handle.close()
+
+    def test_read_value_error(self):
+
+        handle = open("UniGene/Eca.1.2425.data")
+        # Test More than one SwissProt record found
+        self.assertRaises(ValueError, UniGene.read, handle)
+        # Test No SwissProt record found, reached the end of record
+        self.assertRaises(ValueError, UniGene.read, handle)
         handle.close()
 
 
