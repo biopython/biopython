@@ -1182,7 +1182,11 @@ class TestUniGene(unittest.TestCase):
         handle = open("UniGene/Eca.1.2425.data")
         # Test More than one SwissProt record found
         self.assertRaises(ValueError, UniGene.read, handle)
+        handle.close()
+
+        handle = open("UniGene/Hs.2.data")
         # Test No SwissProt record found, reached the end of record
+        record = UniGene.read(handle)
         self.assertRaises(ValueError, UniGene.read, handle)
         handle.close()
 
