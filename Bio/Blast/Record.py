@@ -223,8 +223,12 @@ class HSP(object):
 
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
-        lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
-                 % (self.score, self.bits, self.expect, self.align_length)]
+        if any(i is None for i in (self.score, self.bits, self.expect, self.align_length)):
+            lines = ["Score %s (%s bits), expectation %s, alignment length %s"
+                     % (self.score, self.bits, self.expect, self.align_length)]
+        else:
+            lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
+                     % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
                                              str(self.query),
