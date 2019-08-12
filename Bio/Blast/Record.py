@@ -229,6 +229,8 @@ class HSP(object):
         else:
             lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
                      % (self.score, self.bits, self.expect, self.align_length)]
+        if self.align_length is None:
+            return "\n".join(lines)
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
                                              str(self.query),
