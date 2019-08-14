@@ -5,7 +5,6 @@
 
 """Tests the basic functionality of the GEO parsers."""
 
-import os
 import sys
 
 import unittest
@@ -3164,6 +3163,91 @@ class TestGeo(unittest.TestCase):
             self.assertEqual(record.entity_attributes["Series_overall_design"], "Drosophila embryos were selected at successive stages of early development for RNA extraction and hybridization on Affymetrix microarrays. We sought to obtain homogeneous populations of embryos at each developmental stage in order to increase the temporal resolution of expression profiles. To that end, we hand-selected embryos according to morphological criteria at five time-points: before pole cell formation, i.e. before zygotic transcription (T0), during the slow phase (T1) and the fast phase (T2) of cellularisation and at the beginning (T3) and the end (T4) of gastrulation.")
             self.assertEqual(len(record.col_defs), 0)
             self.assertEqual(len(record.table_rows), 0)
+
+    def test_record_str(self):
+        path = "Geo/GSM804.txt"
+        with open(path) as handle:
+            records = Geo.parse(handle)
+            record = next(records)
+            self.assertEqual(str(record), "GEO Type: SAMPLE\n"
+                                          "GEO Id: GSM804\n"
+                                          "Sample_author: Antoine,M,Snijders\n\n"
+                                          "Sample_author: Norma,,Nowak\n\n"
+                                          "Sample_author: Richard,,Segraves\n\n"
+                                          "Sample_author: Stephanie,,Blackwood\n\n"
+                                          "Sample_author: Nils,,Brown\n\n"
+                                          "Sample_author: Jeffery,,Conroy\n\n"
+                                          "Sample_author: Greg,,Hamilton\n\n"
+                                          "Sample_author: Anna,K,Hindle\n\n"
+                                          "Sample_author: Bing,,Huey\n\n"
+                                          "Sample_author: Karen,,Kimura\n\n"
+                                          "Sample_author: Sindy,,Law\n\n"
+                                          "Sample_author: Ken,,Myambo\n\n"
+                                          "Sample_author: Joel,,Palmer\n\n"
+                                          "Sample_author: Bauke,,Ylstra\n\n"
+                                          "Sample_author: Jingzhu,P,Yue\n\n"
+                                          "Sample_author: Joe,W,Gray\n\n"
+                                          "Sample_author: Ajay,N,Jain\n\n"
+                                          "Sample_author: Daniel,,Pinkel\n\n"
+                                          "Sample_author: Donna,G,Albertson\n\n"
+                                          "Sample_description: Coriell Cell Repositories "
+                                          "cell line <a h\n"
+                                          "ref=\"http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296\">GM05296</a>.\n\n"
+                                          "Sample_description: Fibroblast cell line derived "
+                                          "from a 1 mo\n"
+                                          "nth old female with multiple congenital malformations, "
+                                          "dysmorphic features, intr\n"
+                                          "auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, \n"
+                                          "microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit\n"
+                                          "y, and 1 copy of catalase gene.\n\n"
+                                          "Sample_description: Chromosome abnormalities are present.\n\n"
+                                          "Sample_description: Karyotype is 46,XX,-11,+der(11)inv ins(1\n"
+                                          "1;10)(11pter> 11p13::10q21>10q24::11p13>11qter)mat\n\n"
+                                          "Sample_organism: Homo sapiens\n\n"
+                                          "Sample_platform_id: GPL28\n\n"
+                                          "Sample_pubmed_id: 11687795\n\n"
+                                          "Sample_series_id: GSE16\n\n"
+                                          "Sample_status: Public on Feb 12 2002\n\n"
+                                          "Sample_submission_date: Jan 17 2002\n\n"
+                                          "Sample_submitter_city: San Francisco,CA,94143,USA\n\n"
+                                          "Sample_submitter_department: Comprehensive Cancer Center\n\n"
+                                          "Sample_submitter_email: albertson@cc.ucsf.edu\n\n"
+                                          "Sample_submitter_institute: University of California San Francisco\n\n"
+                                          "Sample_submitter_name: Donna,G,Albertson\n\n"
+                                          "Sample_submitter_phone: 415 502-8463\n\n"
+                                          "Sample_target_source1: Cell line GM05296\n\n"
+                                          "Sample_target_source2: normal male reference genomic DNA\n\n"
+                                          "Sample_title: CGH_Albertson_GM05296-001218\n\n"
+                                          "Sample_type: dual channel genomic\n\n"
+                                          "Column Header Definitions\n"
+                                          "    ID_REF: Unique row identifier, genome position o\n"
+                                          "    rder\n\n"
+                                          "    LINEAR_RATIO: Mean of replicate Cy3/Cy5 ratios\n\n"
+                                          "    LOG2STDDEV: Standard deviation of VALUE\n\n"
+                                          "    NO_REPLICATES: Number of replicate spot measurements\n\n"
+                                          "    VALUE: aka LOG2RATIO, mean of log base 2 of LIN\n"
+                                          "    EAR_RATIO\n\n"
+                                          "0: ID_REF	VALUE	LINEAR_RATIO	LOG2STDDEV	NO_REPLICATES\t\n"
+                                          "1: 1		1.047765	0.011853\t3\t\n"
+                                          "2: 2\t\t\t\t0\t\n"
+                                          "3: 3	0.008824	1.006135	0.00143\t3\t\n"
+                                          "4: 4	-0.000894	0.99938	0.001454\t3\t\n"
+                                          "5: 5	0.075875	1.054	0.003077	3\t\n"
+                                          "6: 6	0.017303	1.012066	0.005876	2\t\n"
+                                          "7: 7	-0.006766	0.995321	0.013881	3\t\n"
+                                          "8: 8	0.020755	1.014491	0.005506	3\t\n"
+                                          "9: 9	-0.094938	0.936313	0.012662	3\t\n"
+                                          "10: 10	-0.054527	0.96291	0.01073	3\t\n"
+                                          "11: 11	-0.025057	0.982782	0.003855	3\t\n"
+                                          "12: 12				0\t\n"
+                                          "13: 13	0.108454	1.078072	0.005196	3\t\n"
+                                          "14: 14	0.078633	1.056017	0.009165	3\t\n"
+                                          "15: 15	0.098571	1.070712	0.007834	3\t\n"
+                                          "16: 16	0.044048	1.031003	0.013651	3\t\n"
+                                          "17: 17	0.018039	1.012582	0.005471	3\t\n"
+                                          "18: 18	-0.088807	0.9403	0.010571	3\t\n"
+                                          "19: 19	0.016349	1.011397	0.007113	3\t\n"
+                                          "20: 20	0.030977	1.021704	0.016798	3\t\n")
 
 
 if __name__ == "__main__":
