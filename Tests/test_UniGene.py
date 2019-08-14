@@ -1179,16 +1179,14 @@ class TestUniGene(unittest.TestCase):
 
     def test_read_value_error(self):
 
-        handle = open("UniGene/Eca.1.2425.data")
         # Test More than one SwissProt record found
-        self.assertRaises(ValueError, UniGene.read, handle)
-        handle.close()
+        with open("UniGene/Eca.1.2425.data") as handle:
+            self.assertRaises(ValueError, UniGene.read, handle)
 
-        handle = open("UniGene/Hs.2.data")
         # Test No SwissProt record found, reached the end of record
-        record = UniGene.read(handle)
-        self.assertRaises(ValueError, UniGene.read, handle)
-        handle.close()
+        with open("UniGene/Hs.2.data") as handle:
+            UniGene.read(handle)
+            self.assertRaises(ValueError, UniGene.read, handle)
 
 
 if __name__ == "__main__":
