@@ -11,7 +11,10 @@ from Bio.Blast.Record import HSP
 class TestHsp(unittest.TestCase):
     def test_str(self):
         # Test empty instance
-        self.assertEqual(str(HSP()), 'Score None (None bits), expectation None, alignment length None')
+        self.assertEqual(
+            str(HSP()), 
+            'Score <unknown> (<unknown> bits), expectation <unknown>, alignment length <unknown>'
+        )
 
         # Test instance with non-default attributes
         hsp = HSP()
