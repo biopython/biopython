@@ -1,7 +1,10 @@
 # Copyright (C) 2015, Anuj Sharma (anuj.sharma80@gmail.com)
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Structural alignment using Quaternion Characteristic Polynomial (QCP).
 
 QCPSuperimposer finds the best rotation and translation to put
