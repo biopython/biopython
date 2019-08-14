@@ -778,8 +778,8 @@ def _key_error(neighbors, strict):
                       BiopythonWarning)
 
 
-def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
-          tmm_table=DNA_TMM1, imm_table=DNA_IMM1, de_table=DNA_DE1,
+def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0,
+          nn_table=None, tmm_table=None, imm_table=None, de_table=None,
           dnac1=25, dnac2=25, selfcomp=False, Na=50, K=0, Tris=0, Mg=0,
           dNTPs=0, saltcorr=5):
     """Return the Tm using nearest neighbor thermodynamics.
@@ -828,7 +828,7 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
        Peyret et al., 1999; Watkins & SantaLucia, 2005)
      - de_table: Thermodynamic values for dangling ends:
 
-        - DNA_DE1: for DNA. Values from Bommarito et al. (2000). Default
+        - DNA_DE1: for DNA. Values from Bommarito et al. (2000) (default)
         - RNA_DE1: for RNA. Values from Turner & Mathews (2010)
 
      - dnac1: Concentration of the higher concentrated strand [nM]. Typically
@@ -848,6 +848,16 @@ def Tm_NN(seq, check=True, strict=True, c_seq=None, shift=0, nn_table=DNA_NN3,
      - saltcorr: See method 'Tm_GC'. Default=5. 0 means no salt correction.
 
     """
+    # Set defaults
+    if not nn_table:
+        nn_table = DNA_NN3
+    if not tmm_table:
+        tmm_table = DNA_TMM1
+    if not imm_table:
+        imm_table = DNA_IMM1
+    if not de_table:
+        de_table = DNA_DE1
+
     seq = str(seq)
     if not c_seq:
         # c_seq must be provided by user if dangling ends or mismatches should
