@@ -26,6 +26,13 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 
 
+def fmt_(value, format_spec="%s", default_str="<unknown>"):
+    """Ensure the given value formats to a string correctly"""
+    if value is None:
+        return default_str
+    return format_spec % value
+
+
 class Header(object):
     """Saves information from a blast header.
 
@@ -223,12 +230,12 @@ class HSP(object):
 
     def __str__(self):
         """Return the BLAST HSP as a formatted string."""
-        if any(i is None for i in (self.score, self.bits, self.expect, self.align_length)):
-            lines = ["Score %s (%s bits), expectation %s, alignment length %s"
-                     % (self.score, self.bits, self.expect, self.align_length)]
-        else:
-            lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
-                     % (self.score, self.bits, self.expect, self.align_length)]
+        lines = ["Score %s (%s bits), expectation %s, alignment length %s" % (
+            fmt_(self.score, '%i'), 
+            fmt_(self.bits, '%i'), 
+            fmt_(self.expect, '%0.1e'), 
+            fmt_(self.align_length, '%i'),
+        )]
         if self.align_length is None:
             return "\n".join(lines)
         if self.align_length < 50:
