@@ -1709,7 +1709,7 @@ class WithinPosition(int, AbstractPosition):
 
     def __getnewargs__(self):
         """Return the arguments accepted by __new__.
-        
+
         Necessary to allow pickling and unpickling of class instances.
         """
         return (int(self), self._left, self._right)
@@ -1824,7 +1824,7 @@ class BetweenPosition(int, AbstractPosition):
 
     def __getnewargs__(self):
         """Return the arguments accepted by __new__.
-        
+
         Necessary to allow pickling and unpickling of class instances.
         """
         return (int(self), self._left, self._right)
@@ -2073,7 +2073,7 @@ class OneOfPosition(int, AbstractPosition):
 
     def __getnewargs__(self):
         """Return the arguments accepted by __new__.
-        
+
         Necessary to allow pickling and unpickling of class instances.
         """
         return (int(self), self.position_choices)

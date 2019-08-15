@@ -207,7 +207,7 @@ class TestPositions(unittest.TestCase):
         # test __getnewargs__
         self.assertEqual(within_pos.__getnewargs__(), (10, 10, 13))
         self.assertEqual(between_pos.__getnewargs__(), (24, 20, 24))
-        self.assertEqual(oneof_pos.__getnewargs__(), 
+        self.assertEqual(oneof_pos.__getnewargs__(),
                          (1888, [ExactPosition(1888), ExactPosition(1901)]))
         # test pickle behaviour
         within_pos2 = pickle.loads(pickle.dumps(within_pos))
