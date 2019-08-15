@@ -3,6 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Test for Blast records."""
+
 import unittest
 
 from Bio.Blast.Record import HSP
@@ -12,7 +14,7 @@ class TestHsp(unittest.TestCase):
     def test_str(self):
         # Test empty instance
         self.assertEqual(
-            str(HSP()), 
+            str(HSP()),
             'Score <unknown> (<unknown> bits), expectation <unknown>, alignment length <unknown>'
         )
 
@@ -22,11 +24,12 @@ class TestHsp(unittest.TestCase):
         hsp.bits = 2.0
         hsp.expect = 3.0
         hsp.align_length = 4
+        # Ignore trailing whitespace in output
         self.assertEqual(
-            str(hsp()),
+            '\n'.join(l.strip() for l in str(hsp()).split('\n')),
             """Score 1 (2 bits), expectation 3.0e+00, alignment length 4
 Query:    None  None
-               
+
 Sbjct:    None  None"""
         )
 
