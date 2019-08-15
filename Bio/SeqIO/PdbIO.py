@@ -55,7 +55,7 @@ def AtomIterator(pdb_id, struct):
         gaps = []
         rnumbers = [r.id[1] for r in residues]
         for i, rnum in enumerate(rnumbers[:-1]):
-            if rnumbers[i + 1] != rnum + 1:
+            if rnumbers[i + 1] > rnum + 1:
                 # It's a gap!
                 gaps.append((i + 1, rnum, rnumbers[i + 1]))
         if gaps:
