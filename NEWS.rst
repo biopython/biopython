@@ -23,6 +23,11 @@ making an error, but will require user code to be updated accordingly.
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
+As in recent releases, more of our code is now explicitly available under
+either our original "Biopython License Agreement", or the very similar but
+more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
+more details.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
