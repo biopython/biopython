@@ -1695,22 +1695,6 @@ class WithinPosition(int, AbstractPosition):
     >>> p2 == 13
     True
 
-
-    To allow pickling and unpickling of class instances, the arguments
-    to __new__ must be defined by __getnewargs__:
-
-    >>> p.__getnewargs__() == (10, 10, 13)
-    True
-
-    >>> import pickle
-    >>> p3 = pickle.loads(pickle.dumps(p))
-    >>> p3 == p
-    True
-    >>> p3._left == p._left
-    True
-    >>> p3._right == p._right
-    True
-
     """
 
     def __new__(cls, position, left, right):
@@ -1723,8 +1707,11 @@ class WithinPosition(int, AbstractPosition):
         obj._right = right
         return obj
 
-    # Must define this to allow instances to be unpickled
     def __getnewargs__(self):
+        """Return the arguments accepted by __new__.
+        
+        Necessary to allow pickling and unpickling of class instances.
+        """
         return (int(self), self._left, self._right)
 
     def __repr__(self):
@@ -1825,21 +1812,6 @@ class BetweenPosition(int, AbstractPosition):
     i.e. For equality (and sorting) the position objects behave like
     integers.
 
-    To allow pickling and unpickling of class instances, the arguments
-    to __new__ must be defined by __getnewargs__:
-
-    >>> p.__getnewargs__() == (456, 123, 456)
-    True
-
-    >>> import pickle
-    >>> p3 = pickle.loads(pickle.dumps(p))
-    >>> p3 == p
-    True
-    >>> p3._left == p._left
-    True
-    >>> p3._right == p._right
-    True
-
     """
 
     def __new__(cls, position, left, right):
@@ -1850,8 +1822,11 @@ class BetweenPosition(int, AbstractPosition):
         obj._right = right
         return obj
 
-    # Must define this to allow instances to be unpickled
     def __getnewargs__(self):
+        """Return the arguments accepted by __new__.
+        
+        Necessary to allow pickling and unpickling of class instances.
+        """
         return (int(self), self._left, self._right)
 
     def __repr__(self):
@@ -2079,20 +2054,6 @@ class OneOfPosition(int, AbstractPosition):
     >>> p2 == 1901
     True
 
-    To allow pickling and unpickling of class instances, the arguments
-    to __new__ must be defined by __getnewargs__:
-
-    >>> p.__getnewargs__() == (1888, [ExactPosition(1888), ExactPosition(1901)])
-    True
-
-    >>> import pickle
-    >>> p3 = pickle.loads(pickle.dumps(p))
-    >>> p3 == p
-    True
-    >>> p3.position_choices == p.position_choices
-    True
-
-
     """
 
     def __new__(cls, position, choices):
@@ -2110,8 +2071,11 @@ class OneOfPosition(int, AbstractPosition):
         obj.position_choices = choices
         return obj
 
-    # Must define this to allow instances to be unpickled
     def __getnewargs__(self):
+        """Return the arguments accepted by __new__.
+        
+        Necessary to allow pickling and unpickling of class instances.
+        """
         return (int(self), self.position_choices)
 
     @property
