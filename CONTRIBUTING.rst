@@ -31,8 +31,8 @@ Coding Conventions
 Biopython tries to follow the coding conventions laid out in PEP8 and PEP257,
 with the notable exception of existing module names which are not lower case.
 
- - http://www.python.org/dev/peps/pep-0008/
- - http://www.python.org/dev/peps/pep-0257/
+- http://www.python.org/dev/peps/pep-0008/
+- http://www.python.org/dev/peps/pep-0257/
 
 We use the continuous integration service TravisCI to enforce some of these
 checks, so if you are making a contribution it is best to check this locally.
