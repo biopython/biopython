@@ -66,6 +66,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Chaitanya Gupta <https://github.com/iCHAIT>
 - Cheng Soon Ong <chengsoon.ong at tuebingen.mpg.de>
 - Chris Lasher <chris.lasher at gmail.com>
+- Chris MacRaild <https://github.com/macraild>
 - Chris Mitchell <https://github.com/chrismit>
 - Chris Rands <https://github.com/chris-rands>
 - Chris Warth <https://github.com/cswarth>
