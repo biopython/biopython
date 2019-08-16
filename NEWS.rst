@@ -26,6 +26,7 @@ PDB-style Astral files.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Chris MacRaild 
 - Chris Rands
 - Joe Greener
 - Konstantin Vdovkin
