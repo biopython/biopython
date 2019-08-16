@@ -166,6 +166,7 @@ class TestPdbAtom(AtomTestGenerator("pdb", "pdb-atom")):
         self.assertEqual(str(chain.seq), "E")
 
     def test_atom_with_insertion(self):
+        """Read a PDB with residue insertion code."""
         chain = SeqIO.read("PDB/2n0n_M1.pdb", "pdb-atom")
         self.assertEqual(str(chain.seq), "HAEGKFTSEF")
 
