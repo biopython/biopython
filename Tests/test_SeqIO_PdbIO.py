@@ -36,6 +36,7 @@ def SeqresTestGenerator(extension, parser):
             ``pdb`` or ``cif``).
         parser:
             The name of the SeqIO parser to use (e.g. ``pdb-atom``).
+
     """
     class SeqresTests(unittest.TestCase):
         """Use "parser" to parse sequence records from a structure file.
@@ -43,6 +44,7 @@ def SeqresTestGenerator(extension, parser):
         Args:
             parser (str): Name of the parser used by SeqIO.
             extension (str): Extension of the files to parse.
+
         """
 
         def test_seqres_parse(self):
@@ -162,6 +164,10 @@ class TestPdbAtom(AtomTestGenerator("pdb", "pdb-atom")):
         self.assertEqual(chain.id, "????:A")
         self.assertEqual(chain.annotations["chain"], "A")
         self.assertEqual(str(chain.seq), "E")
+
+    def test_atom_with_insertion(self):
+        chain = SeqIO.read("PDB/2n0n_M1.pdb", "pdb-atom")
+        self.assertEqual(str(chain.seq), "HAEGKFTSEF")
 
 
 class TestCifAtom(AtomTestGenerator("cif", "cif-atom")):
