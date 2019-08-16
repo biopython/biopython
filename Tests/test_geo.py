@@ -3214,7 +3214,7 @@ ref="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.
 
 Sample_description: Fibroblast cell line derived from a 1 mo
 nth old female with multiple congenital malformations, dysmorphic features, intr
-auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, 
+auterine growth retardation, heart murmur, cleft palate, equinovarus deformity,
 microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit
 y, and 1 copy of catalase gene.
 
@@ -3268,27 +3268,27 @@ Column Header Definitions
     VALUE: aka LOG2RATIO, mean of log base 2 of LIN
     EAR_RATIO
 
-0: ID_REF	VALUE	LINEAR_RATIO	LOG2STDDEV	NO_REPLICATES	
-1: 1		1.047765	0.011853	3	
-2: 2				0	
-3: 3	0.008824	1.006135	0.00143	3	
-4: 4	-0.000894	0.99938	0.001454	3	
-5: 5	0.075875	1.054	0.003077	3	
-6: 6	0.017303	1.012066	0.005876	2	
-7: 7	-0.006766	0.995321	0.013881	3	
-8: 8	0.020755	1.014491	0.005506	3	
-9: 9	-0.094938	0.936313	0.012662	3	
-10: 10	-0.054527	0.96291	0.01073	3	
-11: 11	-0.025057	0.982782	0.003855	3	
-12: 12				0	
-13: 13	0.108454	1.078072	0.005196	3	
-14: 14	0.078633	1.056017	0.009165	3	
-15: 15	0.098571	1.070712	0.007834	3	
-16: 16	0.044048	1.031003	0.013651	3	
-17: 17	0.018039	1.012582	0.005471	3	
-18: 18	-0.088807	0.9403	0.010571	3	
-19: 19	0.016349	1.011397	0.007113	3	
-20: 20	0.030977	1.021704	0.016798	3	
+0: ID_REF	VALUE	LINEAR_RATIO	LOG2STDDEV	NO_REPLICATES
+1: 1		1.047765	0.011853	3
+2: 2				0
+3: 3	0.008824	1.006135	0.00143	3
+4: 4	-0.000894	0.99938	0.001454	3
+5: 5	0.075875	1.054	0.003077	3
+6: 6	0.017303	1.012066	0.005876	2
+7: 7	-0.006766	0.995321	0.013881	3
+8: 8	0.020755	1.014491	0.005506	3
+9: 9	-0.094938	0.936313	0.012662	3
+10: 10	-0.054527	0.96291	0.01073	3
+11: 11	-0.025057	0.982782	0.003855	3
+12: 12				0
+13: 13	0.108454	1.078072	0.005196	3
+14: 14	0.078633	1.056017	0.009165	3
+15: 15	0.098571	1.070712	0.007834	3
+16: 16	0.044048	1.031003	0.013651	3
+17: 17	0.018039	1.012582	0.005471	3
+18: 18	-0.088807	0.9403	0.010571	3
+19: 19	0.016349	1.011397	0.007113	3
+20: 20	0.030977	1.021704	0.016798	3
 """)
 
 
