@@ -3214,9 +3214,8 @@ ref="http://locus.umdnj.edu/nigms/nigms_cgi/display.cgi?GM05296">GM05296</a>.
 
 Sample_description: Fibroblast cell line derived from a 1 mo
 nth old female with multiple congenital malformations, dysmorphic features, intr
-auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, """
-                                          """
-microcephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit
+auterine growth retardation, heart murmur, cleft palate, equinovarus deformity, \
+\nmicrocephaly, coloboma of right iris, clinodactyly, reduced RBC catalase activit
 y, and 1 copy of catalase gene.
 
 Sample_description: Chromosome abnormalities are present.
