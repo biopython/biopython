@@ -13,7 +13,7 @@
 # - basics - quick things like style and packaging
 # - test - the actual functional tests which are slow
 
-dist: xenial
+dist: bionic
 services:
   - mysql
   - postgresql
