@@ -7,11 +7,15 @@
 
 """Write a MMTF file."""
 
+import itertools
 from collections import defaultdict
+from string import ascii_uppercase
 from Bio._py3k import basestring
 from Bio.PDB.StructureBuilder import StructureBuilder
 from Bio.PDB.PDBIO import Select, StructureIO
 from mmtf.api.mmtf_writer import MMTFEncoder
+from Bio.SeqUtils import seq1
+from Bio.Data.SCOPData import protein_letters_3to1
 
 _select = Select()
 
@@ -65,6 +69,12 @@ class MMTFIO(StructureIO):
         else:
             raise ValueError("Use set_structure to set a structure to write out")
 
+    def _chain_id_iterator(self):
+        """Label chains sequentially: A, B, ..., Z, AA, AB etc."""
+        for size in itertools.count(1):
+            for s in itertools.product(ascii_uppercase, repeat=size):
+                yield "".join(s)
+
     def _save_structure(self, filepath, select):
         count_models, count_chains, count_groups, count_atoms = 0, 0, 0, 0
 
@@ -104,9 +114,11 @@ class MMTFIO(StructureIO):
             experimental_methods=header_dict["structure_method"]
         )
 
-        # Tracks values to replace arrays at the end
+        # Tracks values to replace them at the end
         chains_per_model = []
         groups_per_chain = []
+
+        chain_id_iterator = self._chain_id_iterator()
 
         for mi, model in enumerate(self.structure.get_models()):
             if not select.accept_model(model):
@@ -121,8 +133,11 @@ class MMTFIO(StructureIO):
                 if not select.accept_chain(chain):
                     continue
 
+                seqs = []
+                seq = ""
                 prev_residue_type = ""
                 prev_resname = ""
+                first_chain = True
 
                 for residue in chain.get_residues():
                     if not select.accept_residue(residue):
@@ -145,23 +160,30 @@ class MMTFIO(StructureIO):
                     # This will always increment for the first residue in a
                     #  chain due to the starting values above
                     # Checking for similar entities is non-trivial from the
-                    #  strucure object so we treat each molecule as a separate
+                    #  structure object so we treat each molecule as a separate
                     #  entity
                     if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
                         encoder.set_entity_info(
                             chain_indices=[count_chains],
-                            sequence="",
+                            sequence="", # Set to empty here and changed later
                             description="",
                             entity_type=entity_type
                         )
                         encoder.set_chain_info(
-                            chain_id=chain.get_id(), # This should increment
+                            chain_id=next(chain_id_iterator),
                             chain_name=chain.get_id(),
                             num_groups=0  # Set to 0 here and changed later
                         )
                         if count_chains > 0:
                             groups_per_chain.append(count_groups - sum(groups_per_chain) - 1)
+                        if not first_chain:
+                            seqs.append(seq)
+                        first_chain = False
                         count_chains += 1
+                        seq = ""
+
+                    if entity_type == "polymer":
+                        seq += seq1(residue.resname, custom_map=protein_letters_3to1)
 
                     prev_residue_type = residue_type
                     prev_resname = resname
@@ -192,6 +214,12 @@ class MMTFIO(StructureIO):
                                 element=atom.element,
                                 charge=0
                             )
+
+                seqs.append(seq)
+                # Now that we have the sequences, edit the entities
+                start_ind = len(encoder.entity_list) - len(seqs)
+                for i, seq in enumerate(seqs):
+                    encoder.entity_list[start_ind + i]["sequence"] = seq
 
             chains_per_model.append(count_chains - sum(chains_per_model))
 
