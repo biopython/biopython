@@ -183,7 +183,7 @@ class MMTFIO(StructureIO):
                         seq = ""
 
                     if entity_type == "polymer":
-                        seq += seq1(residue.resname, custom_map=protein_letters_3to1)
+                        seq += seq1(resname, custom_map=protein_letters_3to1)
 
                     prev_residue_type = residue_type
                     prev_resname = resname
@@ -191,21 +191,21 @@ class MMTFIO(StructureIO):
                     encoder.set_group_info(
                         group_name=resname,
                         group_number=residue.id[1],
-                        insertion_code=residue.id[2],
-                        group_type="",
-                        atom_count=sum(1 for a in residue.get_atoms() if select.accept_atom(a)),
+                        insertion_code="\x00" if residue.id[2] == " " else residue.id[2],
+                        group_type="", # Value in the chemcomp dictionary, which is unknown here
+                        atom_count=sum(1 for a in residue.get_unpacked_list() if select.accept_atom(a)),
                         bond_count=0,
-                        single_letter_code="",
-                        sequence_index=0,
-                        secondary_structure_type=0
+                        single_letter_code=seq1(resname, custom_map=protein_letters_3to1),
+                        sequence_index=len(seq) - 1 if entity_type == "polymer" else -1,
+                        secondary_structure_type=-1
                     )
-                    for atom in residue.get_atoms():
+                    for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
                             count_atoms += 1
                             encoder.set_atom_info(
                                 atom_name=atom.name,
                                 serial_number=count_atoms if renumber_atoms else atom.serial_number,
-                                alternative_location_id=atom.altloc,
+                                alternative_location_id="\x00" if atom.altloc == " " else atom.altloc,
                                 x=atom.coord[0],
                                 y=atom.coord[1],
                                 z=atom.coord[2],
@@ -227,10 +227,10 @@ class MMTFIO(StructureIO):
 
         encoder.chains_per_model = chains_per_model
         encoder.groups_per_chain = groups_per_chain
-        encoder.total_num_atoms = count_atoms
-        encoder.total_num_groups = count_groups
-        encoder.total_num_chains = count_chains
-        encoder.total_num_models = count_models
+        encoder.num_atoms = count_atoms
+        encoder.num_groups = count_groups
+        encoder.num_chains = count_chains
+        encoder.num_models = count_models
 
         encoder.finalize_structure()
         encoder.write_file(filepath)
