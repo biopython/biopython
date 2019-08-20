@@ -45,7 +45,54 @@ class Select(object):
 _select = Select()
 
 
-class PDBIO(object):
+class StructureIO(object):
+    """Base class to derive structure file format writers from."""
+
+    def __init__(self):
+        """Initialise."""
+        pass
+
+    def set_structure(self, pdb_object):
+        """Check what the user is providing and build a structure."""
+        if pdb_object.level == "S":
+            structure = pdb_object
+        else:
+            sb = StructureBuilder()
+            sb.init_structure('pdb')
+            sb.init_seg(' ')
+            # Build parts as necessary
+            if pdb_object.level == "M":
+                sb.structure.add(pdb_object.copy())
+                self.structure = sb.structure
+            else:
+                sb.init_model(0)
+                if pdb_object.level == "C":
+                    sb.structure[0].add(pdb_object.copy())
+                else:
+                    sb.init_chain('A')
+                    if pdb_object.level == "R":
+                        try:
+                            parent_id = pdb_object.parent.id
+                            sb.structure[0]['A'].id = parent_id
+                        except Exception:
+                            pass
+                        sb.structure[0]['A'].add(pdb_object.copy())
+                    else:
+                        # Atom
+                        sb.init_residue('DUM', ' ', 1, ' ')
+                        try:
+                            parent_id = pdb_object.parent.parent.id
+                            sb.structure[0]['A'].id = parent_id
+                        except Exception:
+                            pass
+                        sb.structure[0]['A'].child_list[0].add(pdb_object.copy())
+
+            # Return structure
+            structure = sb.structure
+        self.structure = structure
+
+
+class PDBIO(StructureIO):
     """Write a Structure object (or a subset of a Structure object) as a PDB file.
 
     Examples
@@ -120,45 +167,6 @@ class PDBIO(object):
         return _ATOM_FORMAT_STRING % args
 
     # Public methods
-
-    def set_structure(self, pdb_object):
-        """Check what the user is providing and build a structure."""
-        if pdb_object.level == "S":
-            structure = pdb_object
-        else:
-            sb = StructureBuilder()
-            sb.init_structure("pdb")
-            sb.init_seg(" ")
-            # Build parts as necessary
-            if pdb_object.level == "M":
-                sb.structure.add(pdb_object.copy())
-                self.structure = sb.structure
-            else:
-                sb.init_model(0)
-                if pdb_object.level == "C":
-                    sb.structure[0].add(pdb_object.copy())
-                else:
-                    sb.init_chain("A")
-                    if pdb_object.level == "R":
-                        try:
-                            parent_id = pdb_object.parent.id
-                            sb.structure[0]["A"].id = parent_id
-                        except Exception:
-                            pass
-                        sb.structure[0]["A"].add(pdb_object.copy())
-                    else:
-                        # Atom
-                        sb.init_residue("DUM", " ", 1, " ")
-                        try:
-                            parent_id = pdb_object.parent.parent.id
-                            sb.structure[0]["A"].id = parent_id
-                        except Exception:
-                            pass
-                        sb.structure[0]["A"].child_list[0].add(pdb_object.copy())
-
-            # Return structure
-            structure = sb.structure
-        self.structure = structure
 
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
