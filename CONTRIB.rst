@@ -112,6 +112,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Gert Hulselmans <https://github.com/ghuls>
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
+- Harry Jubb <https://github.com/harryjubb>
 - Harry Zuzan <iliketobicycle at domain yahoo.ca>
 - Hector Martinez <https://github.com/hmarlo>
 - Hongbo Zhu <https://github.com/hongbo-zhu-cn>
