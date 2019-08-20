@@ -9,7 +9,7 @@ Bio.PDB is a Biopython module that focuses on working with crystal structures of
 
 \subsection{Reading an mmCIF file}
 
-Similarly to the case of PDB files, first create an \texttt{MMCIFParser} object:
+First create an \texttt{MMCIFParser} object:
 
 \begin{minted}{pycon}
 >>> from Bio.PDB.MMCIFParser import MMCIFParser
@@ -99,7 +99,7 @@ incomplete or erroneous information. Many of the errors have been
 fixed in the equivalent mmCIF files. \emph{Hence, if you are interested
 in the header information, it is a good idea to extract information
 from mmCIF files using the} \texttt{\emph{MMCIF2Dict}} \emph{tool
-described below, instead of parsing the PDB header. }
+described above, instead of parsing the PDB header. }
 
 Now that is clarified, let's return to parsing the PDB header. The
 structure object has an attribute called \texttt{header} which is
@@ -147,14 +147,14 @@ via the mailing list if you need this.
 
 \subsection{Writing mmCIF files}
 
-A similar interface can be used to write structures to the mmCIF file format:
+The \texttt{MMCIFIO} class can be used to write structures to the mmCIF file format:
 
 \begin{minted}{pycon}
 >>> io = MMCIFIO()
 >>> io.set_structure(s)
 >>> io.save("out.cif")
 \end{minted}
-The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} above.
+The \texttt{Select} class can be used in a similar way to \texttt{PDBIO} below.
 mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
 
 \begin{minted}{pycon}
@@ -165,7 +165,7 @@ mmCIF dictionaries read using \texttt{MMCIF2Dict} can also be written:
 
 \subsection{Writing PDB files}
 
-Use the PDBIO class for this. It's easy to write out specific parts
+Use the \texttt{PDBIO} class for this. It's easy to write out specific parts
 of a structure too, of course.
 
 Example: saving a structure
