@@ -206,6 +206,23 @@ If this is all too complicated for you, the \texttt{Dice} module contains
 a handy \texttt{extract} function that writes out all residues in
 a chain between a start and end residue.
 
+\subsection{Writing MMTF files}
+
+To write structures to the MMTF file format:
+
+\begin{minted}{pycon}
+>>> from Bio.PDB.mmtf import MMTFIO
+>>> io = MMTFIO()
+>>> io.set_structure(s)
+>>> io.save("out.mmtf")
+\end{minted}
+
+The \texttt{Select} class can be used as above. Note that the bonding
+information contained in standard MMTF files is not written out as it is not
+easy to determine from the structure object. In addition, molecules that are
+grouped into the same entity in standard MMTF files are treated as separate
+entities by \texttt{MMTFIO}.
+
 
 \section{Structure representation}
 
