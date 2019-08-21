@@ -12,6 +12,7 @@ except ImportError:
     raise MissingPythonDependencyError("Install mmtf to use Bio.PDB.mmtf "
                                        "(e.g. pip install mmtf-python)")
 from Bio.PDB.mmtf.DefaultParser import StructureDecoder
+from .mmtfio import MMTFIO
 
 
 def get_from_decoded(decoder):
@@ -45,5 +46,3 @@ class MMTFParser(object):
         """
         decoder = parse(file_path)
         return get_from_decoded(decoder)
-
-from .mmtfio import MMTFIO
