@@ -19,6 +19,7 @@ from Bio.Data.SCOPData import protein_letters_3to1
 
 _select = Select()
 
+
 class MMTFIO(StructureIO):
     """Write a Structure object as a MMTF file.
 
@@ -129,8 +130,8 @@ class MMTFIO(StructureIO):
 
             count_models += 1
             encoder.set_model_info(
-                model_id=mi, # According to mmtf-python this is meaningless
-                chain_count=0 # Set to 0 here and changed later
+                model_id=mi,  # According to mmtf-python this is meaningless
+                chain_count=0  # Set to 0 here and changed later
             )
             for chain in model.get_chains():
                 if not select.accept_chain(chain):
@@ -168,7 +169,7 @@ class MMTFIO(StructureIO):
                     if residue_type != prev_residue_type or (residue_type == "HETATM" and resname != prev_resname):
                         encoder.set_entity_info(
                             chain_indices=[count_chains],
-                            sequence="", # Set to empty here and changed later
+                            sequence="",  # Set to empty here and changed later
                             description="",
                             entity_type=entity_type
                         )
@@ -195,7 +196,7 @@ class MMTFIO(StructureIO):
                         group_name=resname,
                         group_number=residue.id[1],
                         insertion_code="\x00" if residue.id[2] == " " else residue.id[2],
-                        group_type="", # Value in the chemcomp dictionary, which is unknown here
+                        group_type="",  # Value in the chemcomp dictionary, which is unknown here
                         atom_count=sum(1 for a in residue.get_unpacked_list() if select.accept_atom(a)),
                         bond_count=0,
                         single_letter_code=seq1(resname, custom_map=protein_letters_3to1),
