@@ -155,6 +155,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
 - Kian Ho <https://github.com/kianho>
+- Kiran Mukhyala <https://github.com/mukhyala>
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
 - Konstantin Vdovkin <https://github.com/rtf_const>
