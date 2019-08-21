@@ -95,18 +95,21 @@ class MMTFIO(StructureIO):
 
         encoder.set_xtal_info(
             space_group="",
-            unit_cell=[0, 0, 0, 0, 0, 0]
+            unit_cell=None
         )
 
         # The header information is missing for some structure objects
-        # Missing items are treated as empty strings, apart from the resolution
         header_dict = defaultdict(str, self.structure.header)
         if header_dict["resolution"] == "":
-            header_dict["resolution"] = 0.0
+            header_dict["resolution"] = None
+        if header_dict["structure_method"] == "":
+            header_dict["structure_method"] = []
+        else:
+            header_dict["structure_method"] = [header_dict["structure_method"]]
 
         encoder.set_header_info(
-            r_free=0.0,
-            r_work=0.0,
+            r_free=None,
+            r_work=None,
             resolution=header_dict["resolution"],
             title=header_dict["name"],
             deposition_date=header_dict["deposition_date"],
@@ -118,15 +121,15 @@ class MMTFIO(StructureIO):
         chains_per_model = []
         groups_per_chain = []
 
-        chain_id_iterator = self._chain_id_iterator()
-
         for mi, model in enumerate(self.structure.get_models()):
             if not select.accept_model(model):
                 continue
 
+            chain_id_iterator = self._chain_id_iterator()
+
             count_models += 1
             encoder.set_model_info(
-                model_id=mi,
+                model_id=mi, # According to mmtf-python this is meaningless
                 chain_count=0 # Set to 0 here and changed later
             )
             for chain in model.get_chains():
@@ -171,7 +174,7 @@ class MMTFIO(StructureIO):
                         )
                         encoder.set_chain_info(
                             chain_id=next(chain_id_iterator),
-                            chain_name=chain.get_id(),
+                            chain_name="\x00" if len(chain.get_id().strip()) == 0 else chain.get_id(),
                             num_groups=0  # Set to 0 here and changed later
                         )
                         if count_chains > 0:
@@ -199,6 +202,7 @@ class MMTFIO(StructureIO):
                         sequence_index=len(seq) - 1 if entity_type == "polymer" else -1,
                         secondary_structure_type=-1
                     )
+
                     for atom in residue.get_unpacked_list():
                         if select.accept_atom(atom):
                             count_atoms += 1
@@ -216,7 +220,7 @@ class MMTFIO(StructureIO):
                             )
 
                 seqs.append(seq)
-                # Now that we have the sequences, edit the entities
+                # Now that we have the sequences, edit the entities to add them
                 start_ind = len(encoder.entity_list) - len(seqs)
                 for i, seq in enumerate(seqs):
                     encoder.entity_list[start_ind + i]["sequence"] = seq
