@@ -143,7 +143,7 @@ class MMTFIO(StructureIO):
                 prev_resname = ""
                 first_chain = True
 
-                for residue in chain.get_residues():
+                for residue in chain.get_unpacked_list():
                     if not select.accept_residue(residue):
                         continue
 
