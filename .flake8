@@ -8,6 +8,7 @@
 # flake8-bugbear: B###
 # flake8-commas: C#### (in case installed locally)
 # flake8-black : BLK### (in case installed locally)
+# flake8-pie : PIE### (in case installed locally)
 # flake8-quote : Q### (in case installed locally)
 # =================================================
 [flake8]
