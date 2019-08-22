@@ -127,7 +127,7 @@ def parse(handle):
     textkeys = ("ID", "PMID", "SO", "RF", "NI", "JC", "TA", "IS", "CY", "TT",
                 "CA", "IP", "VI", "DP", "YR", "PG", "LID", "DA", "LR", "OWN",
                 "STAT", "DCOM", "PUBM", "DEP", "PL", "JID", "SB", "PMC",
-                "EDAT", "MHDA", "PST", "AB", "AD", "EA", "TI", "JT")
+                "EDAT", "MHDA", "PST", "AB", "EA", "TI", "JT")
     handle = iter(handle)
 
     key = ""
@@ -137,6 +137,9 @@ def parse(handle):
         if line[:6] == "      ":  # continuation line
             if key == "MH":
                 # Multi-line MESH term, want to append to last entry in list
+                record[key][-1] += line[5:]  # including space using line[5:]
+            elif key == "AD":
+                # Multi-line AD term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:
                 record[key].append(line[6:])
