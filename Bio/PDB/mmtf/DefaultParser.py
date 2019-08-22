@@ -60,10 +60,10 @@ class StructureDecoder(object):
 
         # Atom_name is in twice - the full_name is with spaces
         self.structure_builder.init_atom(str(atom_name), numpy.array((x, y, z), "f"),
-                                        temperature_factor, occupancy,
-                                        alternative_location_id, str(atom_name),
-                                        serial_number=serial_number,
-                                        element=str(element).upper())
+                                         temperature_factor, occupancy,
+                                         alternative_location_id, str(atom_name),
+                                         serial_number=serial_number,
+                                         element=str(element).upper())
 
     def set_chain_info(self, chain_id, chain_name, num_groups):
         """Set the chain information.
@@ -123,7 +123,7 @@ class StructureDecoder(object):
 
         self.structure_builder.init_seg(' ')
         self.structure_builder.init_residue(group_name, self.this_type,
-                                           group_number, insertion_code)
+                                            group_number, insertion_code)
 
     def set_model_info(self, model_id, chain_count):
         """Set the information for a model.

@@ -137,8 +137,8 @@ class WriteMMTF(unittest.TestCase):
             self.assertEqual(len(dict_back.b_factor_list), 644)
             self.assertEqual(len(dict_back.occupancy_list), 644)
             self.assertEqual(dict_back.x_coord_list[5], 20.022)
-            self.assertEqual(set(dict_back.ins_code_list), set(["\x00"]))
-            self.assertEqual(set(dict_back.alt_loc_list), set(["\x00"]))
+            self.assertEqual(set(dict_back.ins_code_list), {"\x00"})
+            self.assertEqual(set(dict_back.alt_loc_list), {"\x00"})
             self.assertEqual(list(dict_back.atom_id_list), list(range(1, 645)))
             self.assertEqual(list(dict_back.sequence_index_list), list(range(70)) + [-1] * 88)
             self.assertEqual(dict_back.chain_id_list, ["A", "B"])
@@ -151,8 +151,7 @@ class WriteMMTF(unittest.TestCase):
             self.assertEqual(len(dict_back.entity_list), 2)
             self.assertEqual(dict_back.entity_list[0]["type"], "polymer")
             self.assertEqual(dict_back.entity_list[0]["chainIndexList"], [0])
-            self.assertEqual(dict_back.entity_list[0]["sequence"],
-                                "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG")
+            self.assertEqual(dict_back.entity_list[0]["sequence"], "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG")
             self.assertEqual(dict_back.entity_list[1]["type"], "water")
             self.assertEqual(dict_back.entity_list[1]["chainIndexList"], [1])
             self.assertEqual(dict_back.entity_list[1]["sequence"], "")
@@ -208,7 +207,7 @@ class WriteMMTF(unittest.TestCase):
             dict_back = mmtf.parse(filename)
             self.assertEqual(dict_back.num_atoms, 116)
             self.assertEqual(len(dict_back.x_coord_list), 116)
-            self.assertEqual(set(dict_back.alt_loc_list), set(["\x00", "A", "B"]))
+            self.assertEqual(set(dict_back.alt_loc_list), {"\x00", "A", "B"})
         finally:
             os.remove(filename)
 
