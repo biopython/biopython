@@ -31,8 +31,9 @@ SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 The ``MMTFIO`` class is added that allows writing of MMTF file format files
 from a Biopython structure object. ``MMTFIO`` has a similar interface to
 ``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write out
-a specified selection. This final addition to the six combinations of read/write
-for PDB/mmCIF/MMTF in Biopython allows conversion between the file formats.
+a specified selection. This final addition to the six combinations of
+read/write for PDB/mmCIF/MMTF in Biopython allows conversion between the file
+formats.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
