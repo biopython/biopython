@@ -1,9 +1,11 @@
-# Copyright 2000 by Bertrand Frottier .  All rights reserved.
+# Copyright 2000 by Bertrand Frottier.  All rights reserved.
 # Revisions 2005-2006 copyright Michiel de Hoon
 # Revisions 2006-2009 copyright Peter Cock
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Code to work with the BLAST XML output.
 
 The BLAST XML DTD file is on the NCBI FTP site at:
