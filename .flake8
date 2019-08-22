@@ -8,6 +8,7 @@
 # flake8-bugbear: B###
 # flake8-commas: C#### (in case installed locally)
 # flake8-black : BLK### (in case installed locally)
+# flake8-quote : Q### (in case installed locally)
 # =================================================
 [flake8]
 doctests = True
@@ -79,7 +80,7 @@ per-file-ignores =
 #             instead callers should raise AssertionError()
 #        C812 missing trailing comma
 
-# =====================
-# flake-quote settings:
-# =====================
+# ======================
+# flake8-quote settings:
+# ======================
 inline-quotes = double
