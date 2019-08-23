@@ -135,11 +135,8 @@ def parse(handle):
     for line in handle:
         line = line.rstrip()
         if line[:6] == "      ":  # continuation line
-            if key == "MH":
+            if key in ["MH", "AD"]::
                 # Multi-line MESH term, want to append to last entry in list
-                record[key][-1] += line[5:]  # including space using line[5:]
-            elif key == "AD":
-                # Multi-line AD term, want to append to last entry in list
                 record[key][-1] += line[5:]  # including space using line[5:]
             else:
                 record[key].append(line[6:])
