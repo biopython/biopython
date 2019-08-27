@@ -128,7 +128,6 @@ if numpy is None:
         "Bio.PDB.Vector",
         "Bio.phenotype",
         "Bio.phenotype.parse",
-        #"Bio.phenotype.phen_micro",
         "Bio.phenotype.pm_fitting",
         "Bio.SeqIO.PdbIO",
         "Bio.Statistics.lowess",
