@@ -109,7 +109,15 @@ class PlateRecord(object):
     H01
     H02
     H03
-    ...
+    H04
+    H05
+    H06
+    H07
+    H08
+    H09
+    H10
+    H11
+    H12
 
     All the wells belonging to a "column" (identified by the number of the well)
     in the plate can be obtained:
