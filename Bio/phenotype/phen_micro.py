@@ -64,7 +64,7 @@ class PlateRecord(object):
     accessed calling their id as an index or iterating on the PlateRecord:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> print(well.id)
     A05
@@ -136,7 +136,7 @@ class PlateRecord(object):
     Two PlateRecord objects can be compared: if all their wells are equal the
     two plates are considered equal:
 
-    >>> plate2 = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate2 = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> plate == plate2
     True
 
@@ -215,7 +215,7 @@ class PlateRecord(object):
         plate[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
 
         You can access a well of the plate, using its id.
 
@@ -578,7 +578,7 @@ class WellRecord(object):
     WellRecord or using lists indexes or slices:
 
     >>> from Bio import phenotype
-    >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+    >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
     >>> for time, signal in well:
     ...    print("Time: %f, Signal: %f" % (time, signal)) # doctest:+ELLIPSIS
@@ -801,7 +801,7 @@ class WellRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
+        >>> plate = phenotype.read("phenotype/Plate.json", "pm-json")
         >>> record = plate['A05']
         >>> print(record)
         Plate ID: PM01
