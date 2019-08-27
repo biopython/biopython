@@ -547,7 +547,7 @@ class PlateRecord(object):
         method.  e.g.
 
         >>> from Bio import phenotype
-        >>> record = next(phenotype.parse("Tests/phenotype/Plates.csv", "pm-csv"))
+        >>> record = next(phenotype.parse("phenotype/Plates.csv", "pm-csv"))
         >>> print(record)
         Plate ID: PM01
         Well: 96
