@@ -66,11 +66,8 @@ class PlateRecord(object):
     >>> from Bio import phenotype
     >>> plate = phenotype.read("Tests/phenotype/Plate.json", "pm-json")
     >>> well = plate['A05']
-    >>> for well in plate:
-    ...    print(well.id)
-    ...
-    A01
-    ...
+    >>> print(well.id)
+    A05
 
     The plate rows and columns can be queried with an indexing system similar
     to NumPy and other matrices:
