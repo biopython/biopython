@@ -124,11 +124,14 @@ class PlateRecord(object):
 
     >>> for well in plate.get_column(12):
     ...     print(well.id)
-    ...
     A12
     B12
     C12
-    ...
+    D12
+    E12
+    F12
+    G12
+    H12
 
     Two PlateRecord objects can be compared: if all their wells are equal the
     two plates are considered equal:
