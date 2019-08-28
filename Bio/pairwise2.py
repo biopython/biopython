@@ -134,6 +134,24 @@ Some examples:
       Score=3
     <BLANKLINE>
 
+  To restore the 'historic' behaviour of ``format_alignemt``, i.e., showing
+  also the un-aligned parts of both sequences, use the new keyword parameter
+  ``full_sequences``:
+
+    >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
+    ...     print(format_alignment(*a, full_sequences=True))
+    ACCGT
+    | || 
+    A-CG-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    || | 
+    AC-G-
+      Score=3
+    <BLANKLINE>
+
+
 - Do a global alignment. Identical characters are given 2 points, 1 point is
   deducted for each non-identical character. Don't penalize gaps.
 
@@ -1121,10 +1139,10 @@ def format_alignment(align1, align2, score, begin, end,
     which give the Python indices (0-based) of the bases/amino acids
     in the *aligned* sequences.
 
-    If you want to see the whole sequences (including the non-
-    aligned parts), use ``full_sequences=True``. In this
-    case, the non-aligned leading and trailing parts are also
-    indicated by spaces in the match-line.
+    If you want to restore the 'historic' behaviour, that means
+    displaying the whole sequences (including the non-aligned parts),
+    use ``full_sequences=True``. In this case, the non-aligned leading
+    and trailing parts are also indicated by spaces in the match-line.
     """
     align_begin = begin
     align_end = end
