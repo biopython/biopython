@@ -289,6 +289,7 @@ class TestCluster(unittest.TestCase):
             from Pycluster import kcluster, clustercentroids
 
         nclusters = 3
+
         # First data set
         weight = numpy.array([1, 1, 1, 1, 1])
         data = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
@@ -306,6 +307,34 @@ class TestCluster(unittest.TestCase):
                                             transpose=False, npass=100,
                                             method="a", dist="e")
         self.assertEqual(len(clusterid), len(data))
+
+        correct = [0, 1, 1, 2]
+        mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
+        for i in range(len(clusterid)):
+            self.assertEqual(clusterid[i], mapping[correct[i]])
+
+        cdata, cmask = clustercentroids(data, mask=mask, clusterid=clusterid,
+                                        method="a", transpose=False)
+
+        self.assertEqual(cdata.shape, (nclusters, ncols))
+        self.assertEqual(cmask.shape, (nclusters, ncols))
+        for value in cmask.flat:
+            self.assertEqual(value, 1)
+
+        correct = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
+                               [ 3.6, 2.7, 0.8, 3.9, 1.0],
+                               [ 9.9, 2.0, 0.0, 5.0, 0.0]])
+        for i in range(nclusters):
+            for j in range(ncols):
+                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
+
+        # First data set, using transpose=True
+        weight = numpy.array([1, 1, 1, 1])
+        clusterid, error, nfound = kcluster(data, nclusters=nclusters,
+                                            mask=mask, weight=weight,
+                                            transpose=True, npass=100,
+                                            method="a", dist="e")
+        self.assertEqual(len(clusterid), ncols)
 
         correct = [0, 1, 1, 2]
         mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
