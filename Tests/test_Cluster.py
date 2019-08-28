@@ -284,9 +284,9 @@ class TestCluster(unittest.TestCase):
 
     def test_kcluster(self):
         if TestCluster.module == "Bio.Cluster":
-            from Bio.Cluster import kcluster
+            from Bio.Cluster import kcluster, clustercentroids
         elif TestCluster.module == "Pycluster":
-            from Pycluster import kcluster
+            from Pycluster import kcluster, clustercentroids
 
         nclusters = 3
         # First data set
@@ -299,6 +299,7 @@ class TestCluster(unittest.TestCase):
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1]], int)
+        nrows, ncols = data.shape
 
         clusterid, error, nfound = kcluster(data, nclusters=nclusters,
                                             mask=mask, weight=weight,
@@ -310,6 +311,21 @@ class TestCluster(unittest.TestCase):
         mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
         for i in range(len(clusterid)):
             self.assertEqual(clusterid[i], mapping[correct[i]])
+
+        cdata, cmask = clustercentroids(data, mask=mask, clusterid=clusterid,
+                                        method="a", transpose=False)
+
+        self.assertEqual(cdata.shape, (nclusters, ncols))
+        self.assertEqual(cmask.shape, (nclusters, ncols))
+        for value in cmask.flat:
+            self.assertEqual(value, 1)
+
+        correct = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
+                               [ 3.6, 2.7, 0.8, 3.9, 1.0],
+                               [ 9.9, 2.0, 0.0, 5.0, 0.0]])
+        for i in range(nclusters):
+            for j in range(ncols):
+                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
 
         # Second data set
         weight = numpy.array([1, 1])
@@ -339,6 +355,7 @@ class TestCluster(unittest.TestCase):
                             [1, 1],
                             [1, 1],
                             [1, 1]], int)
+        nrows, ncols = data.shape
 
         clusterid, error, nfound = kcluster(data, nclusters=3, mask=mask,
                                             weight=weight, transpose=False,
@@ -349,6 +366,21 @@ class TestCluster(unittest.TestCase):
         mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
         for i in range(len(clusterid)):
             self.assertEqual(clusterid[i], mapping[correct[i]])
+
+        cdata, cmask = clustercentroids(data, mask=mask, clusterid=clusterid,
+                                        method="a", transpose=False)
+
+        self.assertEqual(cdata.shape, (nclusters, ncols))
+        self.assertEqual(cmask.shape, (nclusters, ncols))
+        for value in cmask.flat:
+            self.assertEqual(value, 1)
+
+        correct = numpy.array([[ 1.5000000, 1.55],
+                               [ 5.3333333, 5.55],
+                               [ 3.1000000, 3.30]])
+        for i in range(nclusters):
+            for j in range(ncols):
+                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
 
     def test_clusterdistance(self):
         if TestCluster.module == "Bio.Cluster":

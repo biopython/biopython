@@ -2049,11 +2049,12 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
                              "cdata",
                              "cmask",
                               NULL };
-    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&ciO&O&", kwlist,
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&iO&O&", kwlist,
                                      data_converter, &data,
                                      mask_converter, &mask,
                                      index_converter, &clusterid,
-                                     &method,
+                                     method_kcluster_converter, &method,
                                      &transpose,
                                      data_converter, &cdata,
                                      mask_converter, &cmask)) goto exit;
