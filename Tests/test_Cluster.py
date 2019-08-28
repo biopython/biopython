@@ -336,25 +336,26 @@ class TestCluster(unittest.TestCase):
                                             method="a", dist="e")
         self.assertEqual(len(clusterid), ncols)
 
-        correct = [0, 1, 1, 2]
+        correct = [0, 1, 1, 2, 1]
         mapping = [clusterid[correct.index(i)] for i in range(nclusters)]
         for i in range(len(clusterid)):
             self.assertEqual(clusterid[i], mapping[correct[i]])
 
         cdata, cmask = clustercentroids(data, mask=mask, clusterid=clusterid,
-                                        method="a", transpose=False)
+                                        method="a", transpose=True)
 
-        self.assertEqual(cdata.shape, (nclusters, ncols))
-        self.assertEqual(cmask.shape, (nclusters, ncols))
+        self.assertEqual(cdata.shape, (nrows, nclusters))
+        self.assertEqual(cmask.shape, (nrows, nclusters))
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                               [ 3.6, 2.7, 0.8, 3.9, 1.0],
-                               [ 9.9, 2.0, 0.0, 5.0, 0.0]])
-        for i in range(nclusters):
-            for j in range(ncols):
-                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
+        correct = numpy.array([[1.1, 3.6666666667, 4.4],
+                               [3.1, 2.0000000000, 2.4],
+                               [4.1, 1.0000000000, 5.4],
+                               [9.9, 0.6666666667, 5.0]])
+        for i in range(nrows):
+            for j in range(nclusters):
+                self.assertAlmostEqual(cdata[i, mapping[j]], correct[i,j])
 
         # Second data set
         weight = numpy.array([1, 1])
@@ -556,7 +557,6 @@ class TestCluster(unittest.TestCase):
                              [1, 1, 1, 1, 1],
                              [1, 1, 1, 1, 1]], int)
 
-        # test first data set
         # Pairwise average-linkage clustering
         tree = treecluster(data=data1, mask=mask1, weight=weight1,
                            transpose=False, method="a", dist="e")
@@ -756,6 +756,254 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(indices[1], 0)
         self.assertEqual(indices[2], 2)
         self.assertEqual(indices[3], 1)
+
+        # First data set, using transpose=True
+        weight1 = [1, 1, 1, 1]
+        data1 = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                             [3.1, 3.2, 1.3, 2.4, 1.5],
+                             [4.1, 2.2, 0.3, 5.4, 0.5],
+                             [9.7, 2.0, 0.0, 5.0, 0.0]])
+        mask1 = numpy.array([[1, 1, 1, 1, 1],
+                             [1, 1, 1, 1, 1],
+                             [1, 1, 1, 1, 1],
+                             [1, 1, 1, 1, 1]], int)
+        nrows, ncols = data1.shape
+
+        # Pairwise average-linkage clustering
+        tree = treecluster(data=data1, mask=mask1, weight=weight1,
+                           transpose=True, method="a", dist="e")
+        self.assertEqual(len(tree), ncols - 1)
+        self.assertEqual(tree[0].left, 4)
+        self.assertEqual(tree[0].right, 2)
+        self.assertAlmostEqual(tree[0].distance, 1.230, places=3)
+        self.assertEqual(tree[1].left, -1)
+        self.assertEqual(tree[1].right, 1)
+        self.assertAlmostEqual(tree[1].distance, 4.1375, places=3)
+        self.assertEqual(tree[2].left, 3)
+        self.assertEqual(tree[2].right, 0)
+        self.assertAlmostEqual(tree[2].distance, 8.790, places=3)
+        self.assertEqual(tree[3].left, -2)
+        self.assertEqual(tree[3].right, -3)
+        self.assertAlmostEqual(tree[3].distance, 18.2867, places=3)
+        indices = tree.cut(nclusters=1)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 0)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=2)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 1)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=3)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 2)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=4)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 3)
+        self.assertEqual(indices[1], 1)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 0)
+        indices = tree.sort([0, 1, 2, 3, 4])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 1)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 4)
+        indices = tree.sort([0, 4, 3, 2, 1])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 4)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 1)
+
+        # Pairwise single-linkage clustering
+        tree = treecluster(data=data1, mask=mask1, weight=weight1,
+                           transpose=True, method="s", dist="e")
+        self.assertEqual(len(tree), ncols - 1)
+        self.assertEqual(tree[0].left, 2)
+        self.assertEqual(tree[0].right, 4)
+        self.assertAlmostEqual(tree[0].distance, 1.230, places=3)
+        self.assertEqual(tree[1].left, 1)
+        self.assertEqual(tree[1].right, -1)
+        self.assertAlmostEqual(tree[1].distance, 3.1075, places=3)
+        self.assertEqual(tree[2].left, 3)
+        self.assertEqual(tree[2].right, -2)
+        self.assertAlmostEqual(tree[2].distance, 6.180, places=3)
+        self.assertEqual(tree[3].left, 0)
+        self.assertEqual(tree[3].right, -3)
+        self.assertAlmostEqual(tree[3].distance, 8.790, places=3)
+        indices = tree.cut(nclusters=1)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 0)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=2)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 1)
+        self.assertEqual(indices[2], 1)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 1)
+        indices = tree.cut(nclusters=3)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 2)
+        self.assertEqual(indices[2], 2)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 2)
+        indices = tree.cut(nclusters=4)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 2)
+        self.assertEqual(indices[2], 3)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 3)
+        indices = tree.sort([0, 1, 2, 3, 4])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 1)
+        self.assertEqual(indices[2], 2)
+        self.assertEqual(indices[3], 4)
+        self.assertEqual(indices[4], 3)
+        indices = tree.sort([0, 4, 3, 2, 1])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 4)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 1)
+
+        # Pairwise centroid-linkage clustering
+        tree = treecluster(data=data1, mask=mask1, weight=weight1,
+                           transpose=True, method="c", dist="e")
+        self.assertEqual(len(tree), ncols - 1)
+        self.assertEqual(tree[0].left, 2)
+        self.assertEqual(tree[0].right, 4)
+        self.assertAlmostEqual(tree[0].distance, 1.23, places=3)
+        self.assertEqual(tree[1].left, 1)
+        self.assertEqual(tree[1].right, -1)
+        self.assertAlmostEqual(tree[1].distance, 3.83, places=3)
+        self.assertEqual(tree[2].left, 0)
+        self.assertEqual(tree[2].right, 3)
+        self.assertAlmostEqual(tree[2].distance, 8.79, places=3)
+        self.assertEqual(tree[3].left, -3)
+        self.assertEqual(tree[3].right, -2)
+        self.assertAlmostEqual(tree[3].distance, 15.0331, places=3)
+        indices = tree.sort([0, 1, 2, 3, 4])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 1)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 4)
+        indices = tree.cut(nclusters=1)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 0)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=2)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 1)
+        self.assertEqual(indices[2], 1)
+        self.assertEqual(indices[3], 0)
+        self.assertEqual(indices[4], 1)
+        indices = tree.cut(nclusters=3)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 2)
+        self.assertEqual(indices[2], 2)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 2)
+        indices = tree.cut(nclusters=4)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 2)
+        self.assertEqual(indices[2], 3)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 3)
+        indices = tree.sort([0, 4, 3, 2, 1])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 4)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 1)
+
+        # Pairwise maximum-linkage clustering
+        tree = treecluster(data=data1, mask=mask1, weight=weight1,
+                           transpose=True, method="m", dist="e")
+        self.assertEqual(len(tree), ncols - 1)
+        self.assertEqual(tree[0].left, 4)
+        self.assertEqual(tree[0].right, 2)
+        self.assertAlmostEqual(tree[0].distance, 1.230, places=3)
+        self.assertEqual(tree[1].left, -1)
+        self.assertEqual(tree[1].right, 1)
+        self.assertAlmostEqual(tree[1].distance, 5.1675, places=3)
+        self.assertEqual(tree[2].left, 3)
+        self.assertEqual(tree[2].right, 0)
+        self.assertAlmostEqual(tree[2].distance, 8.790, places=3)
+        self.assertEqual(tree[3].left, -2)
+        self.assertEqual(tree[3].right, -3)
+        self.assertAlmostEqual(tree[3].distance, 32.2425, places=3)
+        indices = tree.cut(nclusters=1)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 0)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=2)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 1)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=3)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 2)
+        self.assertEqual(indices[1], 0)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 1)
+        self.assertEqual(indices[4], 0)
+        indices = tree.cut(nclusters=4)
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 3)
+        self.assertEqual(indices[1], 1)
+        self.assertEqual(indices[2], 0)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 0)
+        indices = tree.sort([0, 1, 2, 3, 4])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 1)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 4)
+        indices = tree.sort([0, 4, 3, 2, 1])
+        self.assertEqual(len(indices), ncols)
+        self.assertEqual(indices[0], 0)
+        self.assertEqual(indices[1], 3)
+        self.assertEqual(indices[2], 4)
+        self.assertEqual(indices[3], 2)
+        self.assertEqual(indices[4], 1)
 
         # Second data set
         weight2 = [1, 1]
@@ -1102,11 +1350,20 @@ class TestCluster(unittest.TestCase):
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1],
                             [1, 1, 1, 1, 1]], int)
+        nrows, ncols = data.shape
 
         clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
                                          transpose=False, nxgrid=10, nygrid=10,
                                          inittau=0.02, niter=100, dist="e")
-        self.assertEqual(len(clusterid), len(data))
+        self.assertEqual(len(clusterid), nrows)
+        self.assertEqual(len(clusterid[0]), 2)
+
+        # First data set, using transpose=True
+        weight = [1, 1, 1, 1]
+        clusterid, celldata = somcluster(data=data, mask=mask, weight=weight,
+                                         transpose=True, nxgrid=10, nygrid=10,
+                                         inittau=0.02, niter=100, dist="e")
+        self.assertEqual(len(clusterid), ncols)
         self.assertEqual(len(clusterid[0]), 2)
 
         # Second data set
