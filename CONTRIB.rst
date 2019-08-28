@@ -81,6 +81,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Damien Goutte-Gattat <dgouttegattat at incenp dot org>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - Darcy Mason <https://github.com/darcymason>
+- Dariusz Izak <https://github.com/dizak>
 - David Cain <gmail, david joseph cain>
 - David Koppstein <https://github.com/dkoppstein>
 - David Nicholson <https://github.com/danich1>
