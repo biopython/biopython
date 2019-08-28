@@ -36,6 +36,8 @@ class Atom(object):
         fullname,
         serial_number,
         element=None,
+        charge=None,
+        radius=None
     ):
         """Initialize Atom object.
 
@@ -60,6 +62,12 @@ class Atom(object):
 
         :param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         :type element: uppercase string (or None if unknown)
+
+        :param charge: atom charge
+        :type charge: number
+
+        :param radius: atom radius
+        :type radius: number
         """
         self.level = "A"
         # Reference to the residue
@@ -83,6 +91,8 @@ class Atom(object):
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
+        self.charge = charge
+        self.radius = radius
 
         # For atom sorting (protein backbone atoms first)
         self._sorting_keys = {"N": 0, "CA": 1, "C": 2, "O": 3}
@@ -286,6 +296,14 @@ class Atom(object):
         """
         self.anisou_array = anisou_array
 
+    def set_charge(self, charge):
+        """Set charge."""
+        self.charge = charge
+
+    def set_radius(self, radius):
+        """Set radius."""
+        self.radius = radius
+
     # Public methods
 
     def flag_disorder(self):
@@ -372,6 +390,14 @@ class Atom(object):
     def get_level(self):
         """Return level."""
         return self.level
+
+    def get_charge(self):
+        """Return charge."""
+        return self.charge
+
+    def get_radius(self):
+        """Return radius."""
+        return self.radius
 
     def transform(self, rot, tran):
         """Apply rotation and translation to the atomic coordinates.
