@@ -966,7 +966,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
-             key_function=None):
+             key_function=None, check_same_thread=True):
     """Index several sequence files and return a dictionary like object.
 
     The index is stored in an SQLite database rather than in memory (as in the
@@ -985,6 +985,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
      - key_function - Optional callback function which when given a
        SeqRecord identifier string should return a unique
        key for the dictionary.
+     - check_same_thread - Optinal parameter to allow the SQLite index
+       to be accessed in a multi-threaded environment (e.g. Flask server)
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
@@ -1049,7 +1051,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     return _SQLiteManySeqFilesDict(index_filename, filenames,
                                    proxy_factory, format,
-                                   key_function, repr)
+                                   key_function, repr,
+                                   check_same_thread=check_same_thread)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
