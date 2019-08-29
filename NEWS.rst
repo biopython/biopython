@@ -16,15 +16,8 @@ also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
-Values from mmCIF files are now read in as a list even when they consist of a
-single value. This change improves consistency and reduces the likelihood of
-making an error, but will require user code to be updated accordingly.
-
 The restriction enzyme list in Bio.Restriction has been updated to the August
 2019 release of REBASE.
-
-``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
-PDB-style Astral files.
 
 ``Bio.SeqIO`` now supports reading and writing files in the native format of
 Christian Marck's DNA Strider program ("xdna" format, also used by Serial
@@ -33,10 +26,16 @@ SnapGene ("snapgene") and Textco Biosoftware's Gene Construction Kit ("gck").
 
 The ``MMTFIO`` class is added that allows writing of MMTF file format files
 from a Biopython structure object. ``MMTFIO`` has a similar interface to
-``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write out
-a specified selection. This final addition to the six combinations of
-read/write for PDB/mmCIF/MMTF in Biopython allows conversion between the file
-formats.
+``PDBIO`` and ``MMCIFIO``, including the use of a ``Select`` class to write
+out a specified selection. This final addition to read/write support for
+PDB/mmCIF/MMTF in Biopython allows conversion between all three file formats.
+
+Values from mmCIF files are now read in as a list even when they consist of a
+single value. This change improves consistency and reduces the likelihood of
+making an error, but will require user code to be updated accordingly.
+
+``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
+PDB-style Astral files.
 
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
