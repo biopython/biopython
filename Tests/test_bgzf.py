@@ -416,6 +416,10 @@ class BgzfTests(unittest.TestCase):
 
         h.close()
 
+    def test_append_mode(self):
+        with self.assertRaises(NotImplementedError):
+            bgzf.open(self.temp_file, "ab")
+
     def test_many_blocks_in_single_read(self):
         n = 1000
 
