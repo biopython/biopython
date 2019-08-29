@@ -447,6 +447,27 @@ class TestCluster(unittest.TestCase):
                                    method="a", transpose=False)
         self.assertAlmostEqual(distance, 8.606, places=3)
 
+        # First data set, using transpose=True
+        weight = numpy.array([1, 1, 1, 1])
+
+        # Cluster assignments
+        c1 = [0, 2]
+        c2 = [1, 4]
+        c3 = [3]
+
+        distance = clusterdistance(data, mask=mask, weight=weight,
+                                   index1=c1, index2=c2, dist="e",
+                                   method="a", transpose=True)
+        self.assertAlmostEqual(distance, 4.7675, places=3)
+        distance = clusterdistance(data, mask=mask, weight=weight,
+                                   index1=c1, index2=c3, dist="e",
+                                   method="a", transpose=True)
+        self.assertAlmostEqual(distance, 3.780625, places=3)
+        distance = clusterdistance(data, mask=mask, weight=weight,
+                                   index1=c2, index2=c3, dist="e",
+                                   method="a", transpose=True)
+        self.assertAlmostEqual(distance, 8.176875, places=3)
+
         # Second data set
         weight = numpy.array([1, 1])
         data = numpy.array([[1.1, 1.2],
@@ -1407,6 +1428,7 @@ class TestCluster(unittest.TestCase):
         elif TestCluster.module == "Pycluster":
             from Pycluster import distancematrix, kmedoids
 
+        # transpose=False
         data = numpy.array([[2.2, 3.3, 4.4],
                             [2.1, 1.4, 5.6],
                             [7.8, 9.0, 1.2],
@@ -1471,6 +1493,7 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][5], 33.640, places=3)
         self.assertAlmostEqual(matrix[8][6], 18.266, places=3)
         self.assertAlmostEqual(matrix[8][7], 18.448, places=3)
+
         clusterid, error, nfound = kmedoids(matrix, npass=1000)
         self.assertEqual(clusterid[0], 5)
         self.assertEqual(clusterid[1], 5)
@@ -1485,6 +1508,10 @@ class TestCluster(unittest.TestCase):
 
         # check if default weights can be used
         matrix = distancematrix(data, mask=mask)
+        self.assertEqual(len(matrix), 9)
+        for i in range(3):
+            self.assertEqual(len(matrix[i]), i)
+
         self.assertAlmostEqual(matrix[1][0], 1.687, places=3)
 
         self.assertAlmostEqual(matrix[2][0], 21.365, places=3)
@@ -1528,6 +1555,33 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(matrix[8][5], 33.640, places=3)
         self.assertAlmostEqual(matrix[8][6], 22.497, places=3)
         self.assertAlmostEqual(matrix[8][7], 36.745, places=3)
+
+        # transpose=True
+        weight = numpy.array([2.0, 1.0, 0.5, 0.1, 0.9, 3.0, 2.0, 1.5, 0.2])
+        matrix = distancematrix(data, mask=mask, weight=weight, transpose=True)
+        self.assertEqual(len(matrix), 3)
+        for i in range(3):
+            self.assertEqual(len(matrix[i]), i)
+
+        self.assertAlmostEqual(matrix[1][0], 3.080323, places=3)
+        self.assertAlmostEqual(matrix[2][0], 9.324416, places=3)
+        self.assertAlmostEqual(matrix[2][1], 11.569701, places=3)
+
+        clusterid, error, nfound = kmedoids(matrix, npass=1000)
+        self.assertEqual(clusterid[0], 0)
+        self.assertEqual(clusterid[1], 0)
+        self.assertEqual(clusterid[2], 2)
+        self.assertAlmostEqual(error, 3.08032258, places=3)
+
+        # check if default weights can be used
+        matrix = distancematrix(data, mask=mask, transpose=True)
+        self.assertEqual(len(matrix), 3)
+        for i in range(3):
+            self.assertEqual(len(matrix[i]), i)
+
+        self.assertAlmostEqual(matrix[1][0], 10.47166667, places=3)
+        self.assertAlmostEqual(matrix[2][0],  8.61571429, places=3)
+        self.assertAlmostEqual(matrix[2][1], 21.24428571, places=3)
 
     def test_pca(self):
         if TestCluster.module == "Bio.Cluster":
