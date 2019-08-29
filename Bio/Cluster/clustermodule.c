@@ -2031,7 +2031,6 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
 {
     int nrows;
     int ncols;
-    int nitems;
     int nclusters;
     Data data = {0};
     Mask mask = {0};
@@ -2050,14 +2049,15 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
                              "cdata",
                              "cmask",
                               NULL };
-    if(!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&O&ci", kwlist,
-                                    data_converter, &data,
-                                    mask_converter, &mask,
-                                    index_converter, &clusterid,
-                                    &method,
-                                    &transpose,
-                                    data_converter, &cdata,
-                                    mask_converter, &cmask)) goto exit;
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywords, "O&O&O&O&iO&O&", kwlist,
+                                     data_converter, &data,
+                                     mask_converter, &mask,
+                                     index_converter, &clusterid,
+                                     method_kcluster_converter, &method,
+                                     &transpose,
+                                     data_converter, &cdata,
+                                     mask_converter, &cmask)) goto exit;
     if (!data.values) {
         PyErr_SetString(PyExc_RuntimeError, "data is None");
         goto exit;
@@ -2074,18 +2074,37 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
             mask.view.shape[0], mask.view.shape[1], data.nrows, data.ncols);
         goto exit;
     }
-    nitems = transpose ? ncols : nrows;
     nclusters = check_clusterid(clusterid);
     if (nclusters == 0) goto exit;
-    if (cdata.nrows != nitems) {
+    if (transpose == 0) nrows = nclusters;
+    else ncols = nclusters;
+    if (cdata.nrows != nrows) {
         PyErr_Format(PyExc_RuntimeError,
                      "cdata has incorrect number of rows (%d, expected %d)",
-                     cdata.nrows, nitems);
+                     cdata.nrows, nrows);
+        goto exit;
+    }
+    if (cdata.ncols != ncols) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cdata has incorrect number of columns (%d, expected %d)",
+                     cdata.ncols, ncols);
+        goto exit;
+    }
+    if (cmask.view.shape[0] != nrows) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cmask has incorrect number of rows (%zd, expected %d)",
+                     cmask.view.shape[0], nrows);
+        goto exit;
+    }
+    if (cmask.view.shape[1] != ncols) {
+        PyErr_Format(PyExc_RuntimeError,
+                     "cmask has incorrect number of columns (%zd, expected %d)",
+                     cmask.view.shape[1], ncols);
         goto exit;
     }
     ok = getclustercentroids(nclusters,
-                             nrows,
-                             ncols,
+                             data.nrows,
+                             data.ncols,
                              data.values,
                              mask.values,
                              clusterid.buf,

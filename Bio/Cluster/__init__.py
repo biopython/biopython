@@ -460,12 +460,23 @@ def clustercentroids(data, mask=None, clusterid=None, method="a",
     """
     data = __check_data(data)
     mask = __check_mask(mask, data.shape)
+    nrows, ncolumns = data.shape
     if clusterid is None:
-        n = data.shape[1] if transpose else data.shape[0]
+        n = ncolumns if transpose else nrows
         clusterid = numpy.zeros(n, dtype="intc")
+        nclusters = 1
     else:
         clusterid = numpy.require(clusterid, dtype="intc", requirements="C")
-    return _cluster.clustercentroids(data, mask, clusterid, method, transpose)
+        nclusters = max(clusterid + 1)
+    if transpose:
+        shape = (nrows, nclusters)
+    else:
+        shape = (nclusters, ncolumns)
+    cdata = numpy.zeros(shape, dtype='d')
+    cmask = numpy.zeros(shape, dtype='intc')
+    _cluster.clustercentroids(data, mask, clusterid, method, transpose,
+                              cdata, cmask)
+    return cdata, cmask
 
 
 def distancematrix(data, mask=None, weight=None, transpose=False, dist="e"):
