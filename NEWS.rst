@@ -55,6 +55,7 @@ possible, especially the following contributors:
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
 - Peter Cock
+- Peter Kerpedjiev
 - Sergio Valqui
 
 
