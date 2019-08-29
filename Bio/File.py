@@ -535,8 +535,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
     def __init__(self, index_filename, filenames,
                  proxy_factory, format,
-                 key_function, repr, max_open=10,
-                 check_same_thread=True):
+                 key_function, repr, max_open=10):
         """Initialize the class."""
         # TODO? - Don't keep filename list in memory (just in DB)?
         # Should save a chunk of memory if dealing with 1000s of files.
@@ -560,7 +559,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._repr = repr
         self._max_open = max_open
         self._proxies = {}
-        self._check_same_thread = check_same_thread
 
         # Note if using SQLite :memory: trick index filename, this will
         # give $PWD as the relative path (which is fine).
@@ -580,7 +578,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         proxy_factory = self._proxy_factory
 
         con = _sqlite.connect(index_filename,
-                              check_same_thread=self._check_same_thread)
+                              check_same_thread=False)
         self._con = con
         # Check the count...
         try:

@@ -112,24 +112,9 @@ if sqlite3:
             self.assertEqual(54, len(d))
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
 
-        def test_old_no_check_same_thread(self):
-            """Using check_same_thread=True (the default) raises an exception
-            when index_db is accessed from a thread"""
-            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
-            self.assertEqual(d._check_same_thread, True)
-
-            def reader_thread():
-                self.assertRaises(sqlite3.ProgrammingError, d.__getitem__, 'alpha')
-
-            reader = threading.Thread(target=reader_thread)
-            reader.start()
-            reader.join()
-
         def test_old_check_same_thread(self):
             """Setting check_same_thread to False doesn't raise an exception"""
-            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx",
-                               check_same_thread=False)
-            self.assertEqual(d._check_same_thread, False)
+            d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
 
             def reader_thread():
                 try:
