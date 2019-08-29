@@ -321,12 +321,12 @@ class TestCluster(unittest.TestCase):
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array([[ 1.1, 2.2, 3.3, 4.4, 5.5],
-                               [ 3.6, 2.7, 0.8, 3.9, 1.0],
-                               [ 9.9, 2.0, 0.0, 5.0, 0.0]])
+        correct = numpy.array([[1.1, 2.2, 3.3, 4.4, 5.5],
+                               [3.6, 2.7, 0.8, 3.9, 1.0],
+                               [9.9, 2.0, 0.0, 5.0, 0.0]])
         for i in range(nclusters):
             for j in range(ncols):
-                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
+                self.assertAlmostEqual(cdata[mapping[i], j], correct[i, j])
 
         # First data set, using transpose=True
         weight = numpy.array([1, 1, 1, 1])
@@ -355,7 +355,7 @@ class TestCluster(unittest.TestCase):
                                [9.9, 0.6666666667, 5.0]])
         for i in range(nrows):
             for j in range(nclusters):
-                self.assertAlmostEqual(cdata[i, mapping[j]], correct[i,j])
+                self.assertAlmostEqual(cdata[i, mapping[j]], correct[i, j])
 
         # Second data set
         weight = numpy.array([1, 1])
@@ -405,12 +405,12 @@ class TestCluster(unittest.TestCase):
         for value in cmask.flat:
             self.assertEqual(value, 1)
 
-        correct = numpy.array([[ 1.5000000, 1.55],
-                               [ 5.3333333, 5.55],
-                               [ 3.1000000, 3.30]])
+        correct = numpy.array([[1.5000000, 1.55],
+                               [5.3333333, 5.55],
+                               [3.1000000, 3.30]])
         for i in range(nclusters):
             for j in range(ncols):
-                self.assertAlmostEqual(cdata[mapping[i],j], correct[i,j])
+                self.assertAlmostEqual(cdata[mapping[i], j], correct[i, j])
 
     def test_clusterdistance(self):
         if TestCluster.module == "Bio.Cluster":
@@ -1580,7 +1580,7 @@ class TestCluster(unittest.TestCase):
             self.assertEqual(len(matrix[i]), i)
 
         self.assertAlmostEqual(matrix[1][0], 10.47166667, places=3)
-        self.assertAlmostEqual(matrix[2][0],  8.61571429, places=3)
+        self.assertAlmostEqual(matrix[2][0], 8.61571429, places=3)
         self.assertAlmostEqual(matrix[2][1], 21.24428571, places=3)
 
     def test_pca(self):
