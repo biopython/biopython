@@ -113,7 +113,7 @@ if sqlite3:
             self.assertRaises(FileNotFoundError, d.get_raw, "alpha")
 
         def test_old_check_same_thread(self):
-            """Setting check_same_thread to False doesn't raise an exception"""
+            """Setting check_same_thread to False doesn't raise an exception."""
             d = SeqIO.index_db("Roche/triple_sff_rel_paths.idx")
 
             def reader_thread():
