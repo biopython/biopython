@@ -121,8 +121,8 @@ scikit-learn or TensorFlow instead.
 
 Bio.Phylo.CDAOIO.CDAOError
 --------------------------
-This exception was deprecated as of Release 1.70, and is no longer used
-within Biopython.
+This exception was deprecated as of Release 1.70 as it was no longer used
+within Biopython, and removed in Release 1.75.
 
 Bio.DocSQL
 ----------
