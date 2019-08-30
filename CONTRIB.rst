@@ -157,6 +157,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kevin Wu <https://github.com/kevinwuhoo>
 - Kian Ho <https://github.com/kianho>
 - Kiran Mukhyala <https://github.com/mukhyala>
+- Klaus Kopec <https://github.com/klauskopec>
 - Konrad Förstner <https://github.com/konrad>
 - Konstantin Okonechnikov <k.okonechnikov at domain gmail.com>
 - Konstantin Vdovkin <https://github.com/rtf_const>
