@@ -34,7 +34,7 @@
 #define	max(x, y)	((x) > (y) ? (x) : (y))
 #endif
 
-#define CLUSTERVERSION "1.58"
+#define CLUSTERVERSION "1.59"
 
 /* Chapter 2 */
 double clusterdistance(int nrows, int ncolumns, double** data, int** mask,

@@ -472,8 +472,8 @@ def clustercentroids(data, mask=None, clusterid=None, method="a",
         shape = (nrows, nclusters)
     else:
         shape = (nclusters, ncolumns)
-    cdata = numpy.zeros(shape, dtype='d')
-    cmask = numpy.zeros(shape, dtype='intc')
+    cdata = numpy.zeros(shape, dtype="d")
+    cmask = numpy.zeros(shape, dtype="intc")
     _cluster.clustercentroids(data, mask, clusterid, method, transpose,
                               cdata, cmask)
     return cdata, cmask
