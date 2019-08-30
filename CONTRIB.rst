@@ -78,7 +78,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
 - Cymon J Cox <https://github.com/cymon>
-- Damien Goutte-Gattat <dgouttegattat at incenp dot org>
+- Damien Goutte-Gattat <https://github.com/gouttegd>
 - Dan Vogel <dmv at domain andrew.cmu.edu>
 - Darcy Mason <https://github.com/darcymason>
 - David Cain <gmail, david joseph cain>
