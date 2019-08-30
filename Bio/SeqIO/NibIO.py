@@ -1,9 +1,10 @@
 # Copyright 2019 by Michiel de Hoon.  All rights reserved.
 # Based on code contributed and copyright 2016 by Peter Cock.
 #
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 """Bio.SeqIO support for the UCSC nib file format.
 
 Nib stands for nibble (4 bit) representation of nucleotide sequences.
