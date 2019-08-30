@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
 # Copyright 2003, by Kristian Rother. All rights reserved.
-# This code is part of the Biopython distribution and governed by its
-# license.  Please see the LICENSE file that should have been included
-# as part of this package.
-
+#
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
 #
 # PDBList.py
 #
@@ -29,9 +29,6 @@
 #   homepage : http://jaceksmietanski.net
 #   email    : jacek.smietanski@ii.uj.edu.pl
 #
-# This code is released under the conditions of the Biopython license.
-# Please see the LICENSE file that should have been included as part of this
-# package.
 # It may be distributed freely with respect to the original authors.
 # Any maintainer of the Biopython code may change this notice
 # when appropriate.
