@@ -11,8 +11,9 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.75
 ===============================================
 
-This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and 3.8. It has
-also been tested on PyPy2.7 v6.0.0 and PyPy3.5 v6.0.0.
+This release of Biopython supports Python 2.7, 3.5, 3.6, 3.7 and is expected
+to work on the soon to be released Python 3.8. It has also been tested on
+PyPy2.7 v7.1.1 and PyPy3.5 v7.1.1-beta0.
 
 Note we intend to drop Python 2.7 support in early 2020.
 
