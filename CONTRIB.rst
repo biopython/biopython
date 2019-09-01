@@ -166,7 +166,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kuan-Yi Li <https://github.com/kuanyili>
 - Kurt Graff <https://github.com/graph1994>
 - Kyle Ellrott <https://github.com/kellrott>
-- Leighton Pritchard <lpritc at domain scri.sari.ac.uk>
+- Leighton Pritchard <https://github.com/widdowquinn>
 - Lenna Peterson <ark first-name at gmail dot com>
 - Leonhard Heizinger <https://github.com/he-leon>
 - Leszek Pryszcz <https://github.com/lpryszcz>
