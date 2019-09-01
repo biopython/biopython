@@ -33,5 +33,20 @@ FEATURES             Location/Qualifiers
      gene            6801..100
                      /gene="fake"
                      /note="Bad location, should be a join wrapping origin"
+     CDS             join(5400..5600,5700..6100,6801..100)
+                     /gene="white"
+                     /note="compound location, spanning origin"
+     CDS             join(<5400..5600,5700..6100,6801..100)
+                     /gene="white"
+                     /note="compound, inexact, location, spanning origin"
+     CDS             join(5400..5600,5700..6100,<6801..100)
+                     /gene="white"
+                     /note="compound location, with inexact
+                     feature spanning origin"
+     CDS             join(5400..5600,5700..6100,complement(<6801..100))
+                     /gene="white"
+                     /note="compound location, with inexact
+                     feature spanning origin"
+
 CONTIG      join(ABCD0123456789.1:1..7000)
 //

@@ -3267,6 +3267,32 @@ class GenBankTests(unittest.TestCase):
                              "Please fix input file, this could have "
                              "unintended behavior.")
 
+    def test_compound_complex_origin_wrap(self):
+        """Test the attempts to fix compound complex origin wrapping."""
+        from Bio.SeqFeature import CompoundLocation
+        path = "GenBank/bad_origin_wrap.gb"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonParserWarning)
+            record = SeqIO.read(path, "genbank")
+
+            self.assertIsInstance(record.features[3].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[3].location),
+                             "join{[<5399:5600](+), [5699:6100](+), "
+                             "[6800:7000](+), [0:100](+)}")
+
+            self.assertIsInstance(record.features[4].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[4].location),
+                             "join{[5399:5600](+), [5699:6100](+), "
+                             "[<6800:7000](+), [0:100](+)}")
+
+            self.assertIsInstance(record.features[5].location,
+                                  CompoundLocation)
+            self.assertEqual(str(record.features[5].location),
+                             "join{[5399:5600](+), [5699:6100](+), "
+                             "[0:100](-), [<6800:7000](-)}")
+
     def test_implicit_orign_wrap_extract_and_translate(self):
         """Test that features wrapped around origin give expected data."""
         path = "GenBank/bad_origin_wrap_CDS.gb"
