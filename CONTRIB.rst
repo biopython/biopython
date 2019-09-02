@@ -240,6 +240,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Steve Marshall <https://github.com/hungryhoser>
 - Stuart Nelis <https://github.com/biostu24>
 - Sunhwan Jo <https://github.com/sunhwan>
+- Suresh Panneerselvam <https://github.com/Amrithasuresh>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
 - Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
 - Ted Cybulski <https://github.com/tcyb>
