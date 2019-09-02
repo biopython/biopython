@@ -1,10 +1,11 @@
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
-#           2014-2015 by Joe Cora (standard data)
-# This code is part of the Biopython distribution and governed by its
-# license. Please see the LICENSE file that should have been included
-# as part of this package.
+# Revisions copyright 2014-2015 by Joe Cora (standard data)
 #
-# Bug reports welcome: fkauff@biologie.uni-kl.de or on Biopython's bugzilla.
+# This file is part of the Biopython distribution and governed by your
+# choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
+# Please see the LICENSE file that should have been included as part of this
+# package.
+
 """Nexus class. Parse the contents of a NEXUS file.
 
 Based upon 'NEXUS: An extensible file format for systematic information'
