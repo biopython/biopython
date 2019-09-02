@@ -165,11 +165,10 @@ def report_PIC(entity, reportDict=None, verbose=False):
 
     return reportDict
 
-# TODO: redundant????
-
 
 def add_PIC(pdb_struct):
     """Add PIC attribute data to input PDB Structure object."""
+# TODO: update pic nomenclature
     for chn in pdb_struct.get_chains():
         chn.internal_coord = IC_Chain(chn)
         chn.internal_coord.dihedra_from_atoms()
