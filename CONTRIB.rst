@@ -73,7 +73,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Christiam Camacho <https://github.com/christiam>
 - Christian Brueffer <christian at domain brueffer.de>
 - Christian Zmasek <https://github.com/cmzmasek>
-- Chunlei Wu <https://github.com/newgene/>
+- Chunlei Wu <https://github.com/newgene>
 - Claude Paroz <claude at two (as digit) xlibre dot net>
 - Connor McCoy <cmccoy at the dot org domain fhcrc>
 - Connor T. Skennerton <https://github.com/ctSkennerton>
@@ -101,7 +101,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Francesco Gastaldello <https://github.com/Gasta88>
 - Francisco Pina-Martins <https://github.com/StuntsPT>
 - Franco Caramia <https://github.com/fcaramia>
-- Frank Kauff <fkauff at domain duke.edu>
+- Frank Kauff <https://github.com/frankkl>
 - François Coste <https://github.com/francoiscoste>
 - Frederic Sapet <https://github.com/FredericBGA>
 - Frederic Sohm <fsms at domain users.sourceforge.net>
@@ -127,9 +127,9 @@ please open an issue on GitHub or mention it on the mailing list.
 - Jason A. Hackney <jhackney at domain stanford.edu>
 - Jeff Hussmann <first dot last at gmail dot com>
 - Jeffrey Chang <https://github.com/jchang>
-- Jeffrey Finkelstein <https://github.com/jfinkels/>
-- Jens Thomas <https://github.com/linucks/>
-- Jeremy LaBarge <https://github.com/biojerm/biopython>
+- Jeffrey Finkelstein <https://github.com/jfinkels>
+- Jens Thomas <https://github.com/linucks>
+- Jeremy LaBarge <https://github.com/biojerm>
 - Jeroen Van Goey <https://github.com/BioGeek>
 - Jerven Bolleman <https://github.com/JervenBolleman>
 - Jian-Long Huang <https://github.com/jlhg>
@@ -181,7 +181,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Mateusz Korycinski <https://github.com/mkorycinski>
 - Matt Ruffalo <https://github.com/mruffalo>
 - Matt Shirley <https://github.com/mdshw5>
-- Matteo Sticco <https://github.com/sticken88/>
+- Matteo Sticco <https://github.com/sticken88>
 - Maximilian Greil <https://github.com/MaxGreil>
 - Maximilian Peters <maximili.peters at mail.huji.ac.il>
 - Melissa Gymrek <https://github.com/mgymrek>
@@ -198,9 +198,9 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nader Morshed <https://github.com/naderm>
 - Nate Sutton <https://github.com/nmsutton>
 - Nathan J. Edwards <nje5 at edu domain georgetown>
-- Nick Negretti <https://github.com/nimne/>
+- Nick Negretti <https://github.com/nimne>
 - Nicolas Fontrodona <https://github.com/NFontrodona>
-- Nigel Delaney <https://github.com/evolvedmicrobe/>
+- Nigel Delaney <https://github.com/evolvedmicrobe>
 - Noam Kremen <https://github.com/noamkremen>
 - Olivier Morelle <https://github.com/Oli4>
 - Oscar G. Garcia <https://github.com/oscarmaestre>
@@ -235,7 +235,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sjoerd de Vries <sjoerd at domain nmr.chem.uu.nl>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
-- Stefans Mezulis <https://github.com/StefansM/>
+- Stefans Mezulis <https://github.com/StefansM>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
 - Stuart Nelis <https://github.com/biostu24>
