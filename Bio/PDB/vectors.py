@@ -390,6 +390,12 @@ Robert T. Miller 2019
 """
 
 
+try:
+    import numpy
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy to build proteins from internal coordinates.")
 def homog_rot_mtx(angle_rads, axis):
     """Generate a 4x4 single-axis numpy rotation matrix.
 
@@ -415,18 +421,16 @@ def homog_rot_mtx(angle_rads, axis):
                             [0, sinang, cosang, 0],
                             [0, 0, 0, 1]], dtype=numpy.float64)
 
-
-def homog_trans_mtx(xyz):
+def homog_trans_mtx(x, y, z):
     """Generate a 4x4 numpy translation matrix.
 
-    :param list[3] xyz: translation in each axis
+    :param x, y, z: translation in each axis
     """
-    return numpy.array([[1, 0, 0, xyz[0]],
-                        [0, 1, 0, xyz[1]],
-                        [0, 0, 1, xyz[2]],
+    return numpy.array([[1, 0, 0, x],
+                        [0, 1, 0, y],
+                        [0, 0, 1, z],
                         [0, 0, 0, 1]
                         ], dtype=numpy.float64)
-
 
 def homog_scale_mtx(scale):
     """Generate a 4x4 numpy scaling matrix.
@@ -438,7 +442,6 @@ def homog_scale_mtx(scale):
                         [0, 0, scale, 0],
                         [0, 0, 0, 1]
                         ], dtype=numpy.float64)
-
 
 def get_spherical_coordinates(xyz):
     """Compute spherical coordinates (r, theta, phi) for X,Y,Z point.
@@ -469,6 +472,7 @@ def coord_space(acs, rev=False):
         (to return from coord_space)
     :returns: 4x4 numpy array, x2 if rev=True
     """
+    
     dbg = False
     if dbg:
         for ac in acs:
@@ -478,16 +482,20 @@ def coord_space(acs, rev=False):
     a1 = acs[1]
     a2 = acs[2]
 
+    a10n = -a1[0]
+    a11n = -a1[1]
+    a12n = -a1[2]
+
     # tx acs[1] to origin
-    tm = homog_trans_mtx([-a1[0], -a1[1], -a1[2]])
+    tm = homog_trans_mtx(-a1[0], -a1[1], -a1[2])
 
     # directly translate a2 using a1
     p = a2 - a1
     sc = get_spherical_coordinates(p)
 
-    if dbg:
-        print('p', p.transpose())
-        print('sc', sc)
+    #if dbg:
+    #    print('p', p.transpose())
+    #    print('sc', sc)
 
     mrz = homog_rot_mtx(-sc[1], 'z')  # rotate translated a3 -theta about Z
     mry = homog_rot_mtx(-sc[2], 'y')  # rotate translated a3 -phi about Y
@@ -496,9 +504,9 @@ def coord_space(acs, rev=False):
     # mt = mry @ mrz @ tm  # python 3.5 and later
     mt = mry.dot(mrz.dot(tm))
 
-    if dbg:
+   # if dbg:
         # print('mt * a2', (mt @ a2).transpose())
-        print('mt * a2', (mt.dot(a2)).transpose())
+   #     print('mt * a2', (mt.dot(a2)).transpose())
 
     # p = mt @ a0
     p = mt.dot(a0)
@@ -526,7 +534,7 @@ def coord_space(acs, rev=False):
     # rotate a2 theta about Z
     mrz = homog_rot_mtx(sc[1], 'z')
     # translation matrix origin to a1
-    tm = homog_trans_mtx([a1[0], a1[1], a1[2]])
+    tm = homog_trans_mtx(a1[0], a1[1], a1[2])
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = tm.dot(mrz.dot(mry.dot(mrz2)))
