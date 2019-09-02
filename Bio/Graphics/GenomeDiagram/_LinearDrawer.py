@@ -627,9 +627,8 @@ class LinearDrawer(AbstractDrawer):
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
-                labelstep = (
-                    self.pagewidth
-                ) / track.greytrack_labels  # how far apart should they be?
+                # # how far apart should they be?
+                labelstep = self.pagewidth / track.greytrack_labels
                 label = String(
                     0,
                     0,
@@ -657,9 +656,8 @@ class LinearDrawer(AbstractDrawer):
                         x,
                         tbtm,
                     )
-                    if (
-                        not self.xlim - x <= labelstep
-                    ):  # Don't overlap the end of the track
+                    if not self.xlim - x <= labelstep:
+                        # Don't overlap the end of the track
                         greytrack_labels.append(labelgroup)
 
         return greytrack_bgs, greytrack_labels

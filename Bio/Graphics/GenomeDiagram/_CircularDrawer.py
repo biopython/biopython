@@ -138,10 +138,11 @@ class CircularDrawer(AbstractDrawer):
         # Useful measurements on the page
         self.track_size = track_size
         self.circle_core = circle_core
-        if not circular:  # Determine the proportion of the circumference
-            self.sweep = 0.9  # around which information will be drawn
+        # Determine proportion of circumference around which information will be drawn
+        if not circular:
+            self.sweep = 0.9
         else:
-            self.sweep = 1
+            self.sweep = 1.0
 
     def set_track_heights(self):
         """Initialize track heights.
