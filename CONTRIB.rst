@@ -241,7 +241,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Stuart Nelis <https://github.com/biostu24>
 - Sunhwan Jo <https://github.com/sunhwan>
 - Tarcisio Fedrizzi <https://github.com/hcraT>
-- Tarjei Mikkelsen <tarjei at domain genome.wi.mit.edu>
+- Tarjei Mikkelsen <https://github.com/tmikkelsen>
 - Ted Cybulski <https://github.com/tcyb>
 - Terry Jones <https://github.com/terrycojones>
 - Thomas Hamelryck <thamelry at domain binf.ku.dk>
