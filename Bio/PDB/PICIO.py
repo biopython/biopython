@@ -27,6 +27,7 @@ def read_PIC(file):
     """Load Protein Internal Coordinate (PIC) data from file.
 
     PIC file format:
+        # comment lines start with #
         (optional) PDB HEADER record
             - idcode and deposition date recommended but optional
             - deposition date in PDB format or as changed by Biopython
@@ -88,7 +89,9 @@ def read_PIC(file):
 
     with as_handle(file, mode='r') as handle:
         for aline in handle.readlines():
-            if aline.startswith('HEADER '):
+            if aline.startswith('#'):
+                pass  # skip comment lines
+            elif aline.startswith('HEADER '):
                 m = pdb_hdr_re.match(aline)
                 if m:
                     header_dict['head'] = m.group('cf')  # classification
