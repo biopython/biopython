@@ -84,17 +84,33 @@ class Diagram(object):
 
     """
 
-    def __init__(self, name=None, format="circular", pagesize="A3",
-                 orientation="landscape", x=0.05, y=0.05, xl=None,
-                 xr=None, yt=None, yb=None, start=None, end=None,
-                 tracklines=False, fragments=10, fragment_size=None,
-                 track_size=0.75, circular=True, circle_core=0.0):
+    def __init__(
+        self,
+        name=None,
+        format="circular",
+        pagesize="A3",
+        orientation="landscape",
+        x=0.05,
+        y=0.05,
+        xl=None,
+        xr=None,
+        yt=None,
+        yb=None,
+        start=None,
+        end=None,
+        tracklines=False,
+        fragments=10,
+        fragment_size=None,
+        track_size=0.75,
+        circular=True,
+        circle_core=0.0,
+    ):
         """Initialize.
 
         gdd = Diagram(name=None)
         """
-        self.tracks = {}   # Holds all Track objects, keyed by level
-        self.name = name    # Description of the diagram
+        self.tracks = {}  # Holds all Track objects, keyed by level
+        self.name = name  # Description of the diagram
         # Diagram page setup attributes
         self.format = format
         self.pagesize = pagesize
@@ -117,7 +133,7 @@ class Diagram(object):
                 self.fragment_size = 1
             else:
                 # Otherwise keep a 10% gap between fragments
-                self.fragment_size = .9
+                self.fragment_size = 0.9
         self.track_size = track_size
         self.circular = circular
         self.circle_core = circle_core
@@ -139,11 +155,27 @@ class Diagram(object):
                 if getattr(track, attr) != value:
                     setattr(track, attr, value)
 
-    def draw(self, format=None, pagesize=None, orientation=None,
-             x=None, y=None, xl=None, xr=None, yt=None, yb=None,
-             start=None, end=None, tracklines=None, fragments=None,
-             fragment_size=None, track_size=None, circular=None,
-             circle_core=None, cross_track_links=None):
+    def draw(
+        self,
+        format=None,
+        pagesize=None,
+        orientation=None,
+        x=None,
+        y=None,
+        xl=None,
+        xr=None,
+        yt=None,
+        yb=None,
+        start=None,
+        end=None,
+        tracklines=None,
+        fragments=None,
+        fragment_size=None,
+        track_size=None,
+        circular=None,
+        circle_core=None,
+        cross_track_links=None,
+    ):
         """Draw the diagram, with passed parameters overriding existing attributes.
 
         gdd.draw(format='circular')
@@ -153,38 +185,44 @@ class Diagram(object):
         # Instantiation arguments, but I suspect there's a neater way to do
         # this.
         if format == "linear":
-            drawer = LinearDrawer(self, _first_defined(pagesize, self.pagesize),
-                                  _first_defined(orientation, self.orientation),
-                                  _first_defined(x, self.x),
-                                  _first_defined(y, self.y),
-                                  _first_defined(xl, self.xl),
-                                  _first_defined(xr, self.xr),
-                                  _first_defined(yt, self.yt),
-                                  _first_defined(yb, self.yb),
-                                  _first_defined(start, self.start),
-                                  _first_defined(end, self.end),
-                                  _first_defined(tracklines, self.tracklines),
-                                  _first_defined(fragments, self.fragments),
-                                  _first_defined(fragment_size, self.fragment_size),
-                                  _first_defined(track_size, self.track_size),
-                                  _first_defined(cross_track_links, self.cross_track_links))
+            drawer = LinearDrawer(
+                self,
+                _first_defined(pagesize, self.pagesize),
+                _first_defined(orientation, self.orientation),
+                _first_defined(x, self.x),
+                _first_defined(y, self.y),
+                _first_defined(xl, self.xl),
+                _first_defined(xr, self.xr),
+                _first_defined(yt, self.yt),
+                _first_defined(yb, self.yb),
+                _first_defined(start, self.start),
+                _first_defined(end, self.end),
+                _first_defined(tracklines, self.tracklines),
+                _first_defined(fragments, self.fragments),
+                _first_defined(fragment_size, self.fragment_size),
+                _first_defined(track_size, self.track_size),
+                _first_defined(cross_track_links, self.cross_track_links),
+            )
         else:
-            drawer = CircularDrawer(self, _first_defined(pagesize, self.pagesize),
-                                    _first_defined(orientation, self.orientation),
-                                    _first_defined(x, self.x),
-                                    _first_defined(y, self.y),
-                                    _first_defined(xl, self.xl),
-                                    _first_defined(xr, self.xr),
-                                    _first_defined(yt, self.yt),
-                                    _first_defined(yb, self.yb),
-                                    _first_defined(start, self.start),
-                                    _first_defined(end, self.end),
-                                    _first_defined(tracklines, self.tracklines),
-                                    _first_defined(track_size, self.track_size),
-                                    _first_defined(circular, self.circular),
-                                    _first_defined(circle_core, self.circle_core),
-                                    _first_defined(cross_track_links, self.cross_track_links))
-        drawer.draw()   # Tell the drawer to complete the drawing
+            drawer = CircularDrawer(
+                self,
+                _first_defined(pagesize, self.pagesize),
+                _first_defined(orientation, self.orientation),
+                _first_defined(x, self.x),
+                _first_defined(y, self.y),
+                _first_defined(xl, self.xl),
+                _first_defined(xr, self.xr),
+                _first_defined(yt, self.yt),
+                _first_defined(yb, self.yb),
+                _first_defined(start, self.start),
+                _first_defined(end, self.end),
+                _first_defined(tracklines, self.tracklines),
+                _first_defined(track_size, self.track_size),
+                _first_defined(circular, self.circular),
+                _first_defined(circle_core, self.circle_core),
+                _first_defined(cross_track_links, self.cross_track_links),
+            )
+        drawer.draw()  # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
 
     def write(self, filename="test1.ps", output="PS", dpi=72):
@@ -229,6 +267,7 @@ class Diagram(object):
         #
         # TODO - Rename this method to include keyword bytes?
         from io import BytesIO
+
         handle = BytesIO()
         self.write(handle, output, dpi)
         return handle.getvalue()
@@ -248,16 +287,18 @@ class Diagram(object):
         """
         if track is None:
             raise ValueError("Must specify track")
-        if track_level not in self.tracks:     # No track at that level
-            self.tracks[track_level] = track   # so just add it
-        else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
-            occupied_levels.reverse()           # ...reverse it (highest first)
+        if track_level not in self.tracks:  # No track at that level
+            self.tracks[track_level] = track  # so just add it
+        else:  # Already a track there, so shunt all higher tracks up one
+            occupied_levels = sorted(
+                self.get_levels()
+            )  # Get list of occupied levels...
+            occupied_levels.reverse()  # ...reverse it (highest first)
             for val in occupied_levels:
                 # If track value >= that to be added
                 if val >= track.track_level:
                     self.tracks[val + 1] = self.tracks[val]  # ...increment by 1
-            self.tracks[track_level] = track   # And put the new track in
+            self.tracks[track_level] = track  # And put the new track in
         self.tracks[track_level].track_level = track_level
 
     def new_track(self, track_level, **args):
@@ -274,11 +315,13 @@ class Diagram(object):
         newtrack = Track()
         for key in args:
             setattr(newtrack, key, args[key])
-        if track_level not in self.tracks:        # No track at that level
-            self.tracks[track_level] = newtrack   # so just add it
-        else:       # Already a track there, so shunt all higher tracks up one
-            occupied_levels = sorted(self.get_levels())  # Get list of occupied levels...
-            occupied_levels.reverse()           # ...reverse (highest first)...
+        if track_level not in self.tracks:  # No track at that level
+            self.tracks[track_level] = newtrack  # so just add it
+        else:  # Already a track there, so shunt all higher tracks up one
+            occupied_levels = sorted(
+                self.get_levels()
+            )  # Get list of occupied levels...
+            occupied_levels.reverse()  # ...reverse (highest first)...
             for val in occupied_levels:
                 if val >= track_level:
                     # Track value >= that to be added, increment by 1
@@ -328,15 +371,15 @@ class Diagram(object):
           tracks.
 
         """
-        track = low                 # Start numbering from here
+        track = low  # Start numbering from here
         levels = self.get_levels()
 
-        conversion = {}             # Holds new set of levels
-        for level in levels:        # Starting at low...
+        conversion = {}  # Holds new set of levels
+        for level in levels:  # Starting at low...
             conversion[track] = self.tracks[level]  # Add old tracks to new set
             conversion[track].track_level = track
-            track += step                           # step interval
-        self.tracks = conversion   # Replace old set of levels with new set
+            track += step  # step interval
+        self.tracks = conversion  # Replace old set of levels with new set
 
     def get_levels(self):
         """Return a sorted list of levels occupied by tracks in the diagram."""
@@ -359,7 +402,7 @@ class Diagram(object):
             low, high = track.range()
             lows.append(low)
             highs.append(high)
-        return min(lows), max(highs)      # Return extremes from all tracks
+        return min(lows), max(highs)  # Return extremes from all tracks
 
     def __getitem__(self, key):
         """Return the track contained at the level of the passed key."""
