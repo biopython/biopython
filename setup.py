@@ -138,7 +138,9 @@ if sys.version_info[:2] < (2, 7):
     sys.exit(1)
 elif sys.version_info[0] < 3:
     sys.stderr.write(
-        "WARNING: Biopython will drop support for Python 2.7 in early 2020.\n"
+        "=" * 66 +
+        "\nWARNING: Biopython will drop support for Python 2.7 in early 2020.\n" +
+        "=" * 66 + "\n"
     )
 elif sys.version_info[0] == 3 and sys.version_info[:2] < (3, 5):
     sys.stderr.write("Biopython requires Python 3.5 or later (or Python 2.7). "
