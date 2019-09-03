@@ -3254,7 +3254,7 @@ class GenBankTests(unittest.TestCase):
             self.assertIn("It appears that '6801..100' is a feature "
                           "that spans the origin", str(cm.exception))
 
-    def test_implicit_orign_wrap_fix(self):
+    def test_001_implicit_orign_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
         path = "GenBank/bad_origin_wrap.gb"
         with warnings.catch_warnings():
