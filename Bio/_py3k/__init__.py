@@ -135,6 +135,14 @@ if sys.version_info[0] >= 3:
     from urllib.parse import urlencode, quote
     from urllib.error import URLError, HTTPError
 
+    exec("""\
+def raise_from(value, from_value):
+    try:
+        raise value from from_value
+    finally:
+        value = None
+""")
+
 else:
     # Python 2 code
     from __builtin__ import open, basestring, unicode
@@ -195,6 +203,9 @@ else:
 
     # Under urllib.error on Python 3:
     from urllib2 import URLError, HTTPError
+
+    def raise_from(value, from_value):
+        raise value
 
 
 if sys.platform == "win32":
