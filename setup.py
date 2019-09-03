@@ -189,6 +189,12 @@ class install_biopython(install):
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
+        if sys.version_info[0] < 3:
+            sys.stderr.write(
+                "=" * 66 +
+                "\nWARNING: Biopython will drop support for Python 2.7 in early 2020.\n" +
+                "=" * 66 + "\n"
+            )
 
 
 class build_py_biopython(build_py):
