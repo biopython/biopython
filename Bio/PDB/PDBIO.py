@@ -17,6 +17,9 @@ from Bio.Data.IUPACData import atom_weights
 _ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
 )
+_PQR_ATOM_FORMAT_STRING = (
+    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7.4f  %6.4f      %2s\n"
+)
 
 
 class Select(object):
@@ -98,7 +101,7 @@ class StructureIO(object):
 
 
 class PDBIO(StructureIO):
-    """Write a Structure object (or a subset of a Structure object) as a PDB file.
+    """Write a Structure object (or a subset of a Structure object) as a PDB or PQR file.
 
     Examples
     --------
@@ -115,15 +118,19 @@ class PDBIO(StructureIO):
 
     """
 
-    def __init__(self, use_model_flag=0):
+    def __init__(self, use_model_flag=0, is_pqr = False):
         """Create the PDBIO object.
 
         :param use_model_flag: if 1, force use of the MODEL record in output.
         :type use_model_flag: int
+        :param is_pqr: if True, build PQR file. Otherwise build PDB file.
+        :type is_pqr: Boolean
         """
         self.use_model_flag = use_model_flag
+        self.is_pqr = is_pqr
 
-    # private mathods
+
+    # private methods
 
     def _get_atom_line(
         self,
@@ -161,45 +168,95 @@ class PDBIO(StructureIO):
 
         altloc = atom.get_altloc()
         x, y, z = atom.get_coord()
-        bfactor = atom.get_bfactor()
-        occupancy = atom.get_occupancy()
-        try:
-            occupancy_str = "%6.2f" % occupancy
-        except TypeError:
-            if occupancy is None:
-                occupancy_str = " " * 6
-                import warnings
-                from Bio import BiopythonWarning
 
-                warnings.warn(
-                    "Missing occupancy in atom %s written as blank"
-                    % repr(atom.get_full_id()),
-                    BiopythonWarning,
-                )
-            else:
-                raise TypeError(
-                    "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
+        # PDB Arguments
+        if self.is_pqr == False:
+            bfactor = atom.get_bfactor()
+            occupancy = atom.get_occupancy()
+            
+            radius = None
+            charge = None
+        
+        # PQR Arguments
+        else:
+            radius = atom.get_radius()
+            charge = atom.get_charge()
+        
+            bfactor = None
+            occupancy = None
+            
+        if self.is_pqr == False:
+            try:
+                occupancy_str = "%6.2f" % occupancy
+            except TypeError:
+                if occupancy is None:
+                    occupancy_str = " " * 6
+                    import warnings
+                    from Bio import BiopythonWarning
+
+                    warnings.warn(
+                        "Missing occupancy in atom %s written as blank"
+                        % repr(atom.get_full_id()),
+                        BiopythonWarning,
+                    )
+                else:
+                    raise TypeError(
+                        "Invalid occupancy %r in atom %r" % (occupancy, atom.get_full_id())
+                    )
+
+            args = (
+                record_type,
+                atom_number,
+                name,
+                altloc,
+                resname,
+                chain_id,
+                resseq,
+                icode,
+                x,
+                y,
+                z,
+                occupancy_str,
+                bfactor,
+                segid,
+                element,
+                charge,
+            )
+            return _ATOM_FORMAT_STRING % args
+        
+        else: # (PQR case)  
+            # Should we do the same for radius?
+            try:
+                charge = "%7.4f" % charge
+            except TypeError:
+                if charge is None:
+                    charge = " " * 7
+                    import warnings
+                    from Bio import BiopythonWarning
+                    warnings.warn("Missing charge in atom %s written as blank" %
+                              repr(atom.get_full_id()), BiopythonWarning)
+                else:
+                    raise TypeError("Invalid charge %r in atom %r"
+                              % (charge, atom.get_full_id()))
+
+            args = (
+                record_type, 
+                atom_number, 
+                name, 
+                altloc, 
+                resname, 
+                chain_id,
+                resseq, 
+                icode, 
+                x, 
+                y, 
+                z, 
+                charge, 
+                radius, 
+                element,
                 )
 
-        args = (
-            record_type,
-            atom_number,
-            name,
-            altloc,
-            resname,
-            chain_id,
-            resseq,
-            icode,
-            x,
-            y,
-            z,
-            occupancy_str,
-            bfactor,
-            segid,
-            element,
-            charge,
-        )
-        return _ATOM_FORMAT_STRING % args
+            return _PQR_ATOM_FORMAT_STRING % args
 
     # Public methods
 
