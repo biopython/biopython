@@ -16,6 +16,7 @@ from struct import pack, unpack
 import warnings
 
 from Bio import Alphabet, BiopythonWarning
+from Bio._utils import _read_header
 from Bio.Seq import Seq
 from Bio.SeqIO.Interfaces import SequenceWriter
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
@@ -153,7 +154,7 @@ def XdnaIterator(handle):
     # Biopython's SeqRecord has no such concept of a sequence origin as far
     # as I know, so we ignore that value. SerialCloner has no such concept
     # either and always generates files with a neg_length of zero.
-    header = _read(handle, 112)
+    header = _read_header(handle, 112)
     (version, type, topology, length, neg_length, com_length) = unpack(
         ">BBB25xII60xI12x", header
     )

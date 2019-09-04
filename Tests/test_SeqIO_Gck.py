@@ -380,6 +380,16 @@ class TestGckWithArtificialData(unittest.TestCase):
         h.close()
 
 
+class TestGckWithImproperHeader(unittest.TestCase):
+
+    def test_read(self):
+        """Read a file with an incomplete header."""
+        handle = BytesIO(b"tiny")
+        with self.assertRaisesRegexp(ValueError, "Improper header, cannot read 24 bytes from handle"):
+            SeqIO.read(handle, "gck")
+        handle.close()
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

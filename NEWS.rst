@@ -59,6 +59,7 @@ possible, especially the following contributors:
 - Chris MacRaild
 - Chris Rands
 - Damien Goutte-Gattat (first contribution)
+- Devang Thakkar
 - Harry Jubb
 - Joe Greener
 - Kiran Mukhyala (first contribution)

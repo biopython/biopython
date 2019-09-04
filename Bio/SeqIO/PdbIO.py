@@ -139,9 +139,13 @@ def PdbSeqresIterator(handle):
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SeqUtils
     from Bio.SeqUtils import seq1
 
+    # raise exception if file is empty
+    empty = True
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
     for line in handle:
+        empty = False
         rec_name = line[0:6].strip()
         if rec_name == "SEQRES":
             # NB: We only actually need chain ID and the residues here;
@@ -197,6 +201,9 @@ def PdbSeqresIterator(handle):
                 }
             )
         # ENH: 'SEQADV' 'MODRES'
+
+    if empty:
+        raise ValueError("Empty file.")
 
     for chn_id, residues in sorted(chains.items()):
         record = SeqRecord(Seq("".join(residues), generic_protein))
@@ -270,17 +277,16 @@ def PdbAtomIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
 
-    # Deduce the PDB ID from the PDB header
-    # ENH: or filename?
     from Bio.File import UndoHandle
 
     undo_handle = UndoHandle(handle)
     firstline = undo_handle.peekline()
-
     # check if file is empty
-    if firstline == "":
+    if not firstline:
         raise ValueError("Empty file.")
 
+    # Deduce the PDB ID from the PDB header
+    # ENH: or filename?
     if firstline.startswith("HEADER"):
         pdb_id = firstline[62:66]
     else:
@@ -367,9 +373,16 @@ def CifSeqresIterator(handle):
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
+    from Bio.File import UndoHandle
+    undo_handle = UndoHandle(handle)
+
+    # check if file is empty
+    if not undo_handle.peekline():
+        raise ValueError("Empty file.")
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
-    records = MMCIF2Dict(handle)
+    records = MMCIF2Dict(undo_handle)
 
     # Explicitly convert records to list (See #1533).
     # If an item is not present, use an empty list
@@ -500,7 +513,7 @@ def CifAtomIterator(handle):
     shutil.copyfileobj(handle, buffer)
 
     # check if file is empty
-    if len(buffer.getvalue()) == 0:
+    if not buffer.getvalue():
         raise ValueError("Empty file.")
 
     buffer.seek(0)

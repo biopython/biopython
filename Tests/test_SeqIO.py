@@ -4421,13 +4421,18 @@ class TestSeqIO(unittest.TestCase):
     def test_empty_file(self):
         """Check parsers can cope with an empty file."""
         for t_format in SeqIO._FormatToIterator:
-            if t_format in SeqIO._BinaryFormats or \
-               t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom", "cif-atom"):
-                # Not allowed empty SFF files.
-                continue
-            handle = StringIO()
-            records = list(SeqIO.parse(handle, t_format))
-            self.assertEqual(len(records), 0)
+            if t_format in SeqIO._BinaryFormats:
+                handle = BytesIO()
+                with self.assertRaisesRegexp(ValueError, "Empty file."):
+                    list(SeqIO.parse(handle, t_format))
+            elif t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom", "cif-atom", "cif-seqres"):
+                handle = StringIO()
+                with self.assertRaisesRegexp(ValueError, "Empty file."):
+                    list(SeqIO.parse(handle, t_format))
+            else:
+                handle = StringIO()
+                records = list(SeqIO.parse(handle, t_format))
+                self.assertEqual(len(records), 0)
 
 
 if __name__ == "__main__":

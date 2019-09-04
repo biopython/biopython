@@ -57,7 +57,12 @@ class XMLRecordIterator(object):
         """Iterate over the records in the XML file."""
         record = None
         try:
+            empty = True
             for event, node in self._events:
+
+                # the for loop is entered only if there is some content in self._events
+                # if the empty flag is still True, the file is empty
+                empty = False
 
                 if event == "START_ELEMENT" and node.namespaceURI == self._namespace:
 
@@ -85,6 +90,9 @@ class XMLRecordIterator(object):
                     and node.localName == self._recordTag
                 ):
                     yield record
+
+            if empty:
+                raise ValueError("Empty file.")
 
         except SAXParseException as e:
 
