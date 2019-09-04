@@ -117,6 +117,11 @@ def NibIterator(handle, alphabet=None):
     if alphabet is not None:
         raise ValueError("Alphabets are ignored.")
     word = handle.read(4)
+
+    # check if file is empty
+    if not word:
+        raise ValueError("Empty file.")
+
     signature = bytes2hex(word)
     if signature == "3a3de96b":
         byteorder = "little"  # little-endian

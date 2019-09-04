@@ -14,6 +14,7 @@ from Textco BioSoftware, Inc.
 from struct import unpack
 
 from Bio import Alphabet
+from Bio._utils import _read_header
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -75,7 +76,8 @@ def GckIterator(handle):
     # GCK files start with a 24-bytes header. Bytes 4 and 8 seem to
     # always be 12, maybe this could act as a magic cookie. Bytes
     # 17-20 and 21-24 contain variable values of unknown meaning.
-    _read(handle, 24)
+    # check if file is empty
+    _read_header(handle, 24)
 
     # Read the actual sequence data
     packet, length = _read_packet(handle)
