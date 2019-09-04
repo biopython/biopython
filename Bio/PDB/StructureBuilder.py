@@ -261,6 +261,80 @@ class StructureBuilder(object):
             # The atom is not disordered
             residue.add(self.atom)
 
+    def init_atom_from_pqr(self, name, coord, charge, radius, altloc, fullname,
+                           serial_number=None, element=None):
+        """Create a new Atom object from PQR files.
+
+        Arguments:
+         - name - string, atom name, e.g. CA, spaces should be stripped
+         - coord - Numeric array (Float0, size 3), atomic coordinates
+         - charge - float, atom charge
+         - radius - float, atom radius
+         - altloc - string, alternative location specifier
+         - fullname - string, atom name including spaces, e.g. " CA "
+         - element - string, upper case, e.g. "HG" for mercury
+
+        """
+        residue = self.residue
+        # if residue is None, an exception was generated during
+        # the construction of the residue
+        if residue is None:
+            return
+        # First check if this atom is already present in the residue.
+        # If it is, it might be due to the fact that the two atoms have atom
+        # names that differ only in spaces (e.g. "CA.." and ".CA.",
+        # where the dots are spaces). If that is so, use all spaces
+        # in the atom name of the current atom.
+        if residue.has_id(name):
+            duplicate_atom = residue[name]
+            # atom name with spaces of duplicate atom
+            duplicate_fullname = duplicate_atom.get_fullname()
+            if duplicate_fullname != fullname:
+                # name of current atom now includes spaces
+                name = fullname
+                warnings.warn("Atom names %r and %r differ "
+                              "only in spaces at line %i."
+                              % (duplicate_fullname, fullname,
+                                 self.line_counter),
+                              PDBConstructionWarning)
+        self.atom = Atom(name, coord, charge, radius, altloc,
+                         fullname, serial_number, element)
+        if altloc != " ":
+            # The atom is disordered
+            if residue.has_id(name):
+                # Residue already contains this atom
+                duplicate_atom = residue[name]
+                if duplicate_atom.is_disordered() == 2:
+                    duplicate_atom.disordered_add(self.atom)
+                else:
+                    # This is an error in the PDB file:
+                    # a disordered atom is found with a blank altloc
+                    # Detach the duplicate atom, and put it in a
+                    # DisorderedAtom object together with the current
+                    # atom.
+                    residue.detach_child(name)
+                    disordered_atom = DisorderedAtom(name)
+                    residue.add(disordered_atom)
+                    disordered_atom.disordered_add(self.atom)
+                    disordered_atom.disordered_add(duplicate_atom)
+                    residue.flag_disordered()
+                    warnings.warn("WARNING: disordered atom found "
+                                  "with blank altloc before line %i.\n"
+                                  % self.line_counter,
+                                  PDBConstructionWarning)
+            else:
+                # The residue does not contain this disordered atom
+                # so we create a new one.
+                disordered_atom = DisorderedAtom(name)
+                residue.add(disordered_atom)
+                # Add the real atom to the disordered atom, and the
+                # disordered atom to the residue
+                disordered_atom.disordered_add(self.atom)
+                residue.flag_disordered()
+        else:
+            # The atom is not disordered
+            residue.add(self.atom)
+
     def set_anisou(self, anisou_array):
         """Set anisotropic B factor of current Atom."""
         self.atom.set_anisou(anisou_array)
