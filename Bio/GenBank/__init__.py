@@ -1122,6 +1122,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                            strand))
                 except ValueError:
                     # Could be non-integers, more likely bad origin wrapping
+
+                    # In the case of bad origin wrapping, _loc will return
+                    # a CompoundLocation. CompoundLocation.parts returns a
+                    # list of the FeatureLocation objects inside the
+                    # CompoundLocation.
                     locs.extend(_loc(part,
                                      self._expected_size,
                                      strand,
@@ -1164,6 +1169,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 else:
                     part_strand = strand
                 try:
+                    # There is likely a problem with origin wrapping.
+                    # Using _loc to return a CompoundLocation of the
+                    # wrapped feature and returning the two FeatureLocation
+                    # objects to extend to the list of feature locations.
                     loc = _loc(part, self._expected_size, part_strand,
                                seq_type=self._seq_type.lower()).parts
 
@@ -1171,6 +1180,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     print(location_line)
                     print(part)
                     raise err
+                # loc will be a list of one or two FeatureLocation items.
                 locs.extend(loc)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
