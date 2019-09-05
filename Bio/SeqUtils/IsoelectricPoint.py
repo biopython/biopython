@@ -38,7 +38,7 @@ class IsoelectricPoint(object):
     :protein_sequence: A ``Bio.Seq`` or string object containing a protein
                        sequence.
     :aa_content: A dictionary with amino acid letters as keys and it's
-                 occurences as integers, e.g. ``{'A': 3, 'C': 0, ...}``.
+                 occurences as integers, e.g. ``{"A": 3, "C": 0, ...}``.
                  Default: ``None``. If ``None``, the dic will be calculated
                  from the given sequence.
 
@@ -55,8 +55,8 @@ class IsoelectricPoint(object):
     names):
 
     >>> from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
-    >>> protein = IP('INGAR')
-    >>> print('IEP of peptide {} is {:.2f}'
+    >>> protein = IP("INGAR")
+    >>> print("IEP of peptide {} is {:.2f}"
     ...       .format(protein.sequence, protein.pi()))
     IEP of peptide INGAR is 9.75
     >>> print("It's charge at pH 7 is {:.2f}"
@@ -65,11 +65,11 @@ class IsoelectricPoint(object):
 
 
     >>> from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
-    >>> protein = PA('PETER')
-    >>> print('IEP of {}: {:.2f}'.format(protein.sequence,
+    >>> protein = PA("PETER")
+    >>> print("IEP of {}: {:.2f}".format(protein.sequence,
     ...                                  protein.isoelectric_point()))
     IEP of PETER: 4.53
-    >>> print('Charge at pH 4.53: {:.2f}'
+    >>> print("Charge at pH 4.53: {:.2f}"
     ...       .format(protein.charge_at_pH(4.53)))
     Charge at pH 4.53: 0.00
 
@@ -90,15 +90,9 @@ class IsoelectricPoint(object):
     def _select_charged(self, aa_content):
         charged = {}
         for aa in charged_aas:
-<<<<<<< HEAD
-            charged[aa] = float(AminoAcidsContent[aa])
+            charged[aa] = float(aa_content[aa])
         charged["Nterm"] = 1.0
         charged["Cterm"] = 1.0
-=======
-            charged[aa] = float(aa_content[aa])
-        charged['Nterm'] = 1.0
-        charged['Cterm'] = 1.0
->>>>>>> f0e502f8d... Introduce charge_at_pH functionality
         return charged
 
     def _update_pKs_tables(self):
@@ -107,9 +101,9 @@ class IsoelectricPoint(object):
         neg_pKs = negative_pKs.copy()
         nterm, cterm = self.sequence[0], self.sequence[-1]
         if nterm in pKnterminal:
-            pos_pKs['Nterm'] = pKnterminal[nterm]
+            pos_pKs["Nterm"] = pKnterminal[nterm]
         if cterm in pKcterminal:
-            neg_pKs['Cterm'] = pKcterminal[cterm]
+            neg_pKs["Cterm"] = pKcterminal[cterm]
         return pos_pKs, neg_pKs
 
     # This function calculates the total charge of the protein at a given pH.
@@ -136,18 +130,6 @@ class IsoelectricPoint(object):
     # the protein is 0 (or close).
     def pi(self):
         """Calculate and return the isoelectric point as float."""
-<<<<<<< HEAD
-        pos_pKs = dict(positive_pKs)
-        neg_pKs = dict(negative_pKs)
-        nterm = self.sequence[0]
-        cterm = self.sequence[-1]
-        if nterm in pKnterminal:
-            pos_pKs["Nterm"] = pKnterminal[nterm]
-        if cterm in pKcterminal:
-            neg_pKs["Cterm"] = pKcterminal[cterm]
-
-=======
->>>>>>> f0e502f8d... Introduce charge_at_pH functionality
         # Bracket between pH1 and pH2
         pH = 7
         charge = self._chargeR(pH)
