@@ -273,6 +273,31 @@ class TestGeo(unittest.TestCase):
         self.assertAlmostEqual(self.obs_freq_mat[("W", "Y")], 0.002553, places=6)
         self.assertAlmostEqual(self.obs_freq_mat[("Y", "Y")], 0.004104, places=6)
 
+    def test_observed_frequency_to_substitution_matrix(self):
+        of_to_sm = SubsMat.observed_frequency_to_substitution_matrix(self.obs_freq_mat)
+        self.assertEqual(str(of_to_sm), """\
+A   1
+C   0   8
+D   0   0   2
+E   1   0   1   2
+F   0   1   0   0   1
+G   0   0   0   0   0   3
+H   0   0   0   0   0   0   4
+I   1   1   0   0   1   0   0   2
+K   0   0   1   1   0   0   1   0   1
+L   0   1   0   0   1   0   0   1   0   1
+M   0   0   0   0   1   0   0   1   0   1   1
+N   0   0   1   1   0   1   1   0   1   0   0   1
+P   0   0   1   1   0   0   0   0   1   0   0   1   3
+Q   1   0   1   1   0   0   1   0   1   0   0   1   1   1
+R   1   0   1   1   0   0   1   0   1   0   0   1   1   1   2
+S   1   0   1   1   0   0   1   0   1   0   0   1   1   1   0   1
+T   1   0   0   1   0   0   1   0   1   0   0   1   0   1   1   1   1
+V   0   1   0   0   1   0   0   1   0   1   1   0   0   0   0   0   0   1
+W   0   0   0   0   1   0   0   1   0   1   1   0   0   0   0   0   0   0   6
+Y   0   0   0   0   1   0   1   0   0   1   1   0   0   0   0   0   0   1   1   2
+   A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
+
     def test_obs_freq_mat_sum(self):
         counts = self.obs_freq_mat.sum()
         self.assertEqual(len(counts), 20)
@@ -1379,6 +1404,107 @@ W  -3  -6  -6  -6   2  -4  -3  -2  -3  -1  -2  -5  -4  -5  -2  -5  -5  -4  10
 Y  -3  -6  -3  -2   3  -3   0  -1  -2  -2  -1  -1  -6  -3  -1  -2  -2  -1   2   7
    A   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   Y""")
 
+    def test_sequence_matrix_make_entropy(self):
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        blosum30.make_entropy()
+        self.assertAlmostEqual(blosum30.entropy, -644.0119, places=4)
+
+    def test_sequence_matrix_str(self):
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        self.assertEqual(str(blosum30), """\
+A   4
+B   0   5
+C  -3  -2  17
+D   0   5  -3   9
+E   0   0   1   1   6
+F  -2  -3  -3  -5  -4  10
+G   0   0  -4  -1  -2  -3   8
+H  -2  -2  -5  -2   0  -3  -3  14
+I   0  -2  -2  -4  -3   0  -1  -2   6
+K   0   0  -3   0   2  -1  -1  -2  -2   4
+L  -1  -1   0  -1  -1   2  -2  -1   2  -2   4
+M   1  -2  -2  -3  -1  -2  -2   2   1   2   2   6
+N   0   4  -1   1  -1  -1   0  -1   0   0  -2   0   8
+P  -1  -2  -3  -1   1  -4  -1   1  -3   1  -3  -4  -3  11
+Q   1  -1  -2  -1   2  -3  -2   0  -2   0  -2  -1  -1   0   8
+R  -1  -2  -2  -1  -1  -1  -2  -1  -3   1  -2   0  -2  -1   3   8
+S   1   0  -2   0   0  -1   0  -1  -1   0  -2  -2   0  -1  -1  -1   4
+T   1   0  -2  -1  -2  -2  -2  -2   0  -1   0   0   1   0   0  -3   2   5
+V   1  -2  -2  -2  -3   1  -3  -3   4  -2   1   0  -2  -4  -3  -1  -1   1   5
+W  -5  -5  -2  -4  -1   1   1  -5  -3  -2  -2  -3  -7  -3  -1   0  -3  -5  -3  20
+X   0  -1  -2  -1  -1  -1  -1  -1   0   0   0   0   0  -1   0  -1   0   0   0  -2  -1
+Y  -4  -3  -6  -1  -2   3  -3   0  -1  -1   3  -1  -4  -2  -1   0  -2  -1   1   5  -1   9
+Z   0   0   0   0   5  -4  -2   0  -3   1  -1  -1  -1   0   4   0  -1  -1  -3  -1   0  -2   4
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
+
+    def test_sequence_matrix_operations(self):
+        blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        # subtraction
+        seqmatdiff = blosum90 - blosum30
+        self.assertEqual(seqmatdiff, -321)
+        # multiplication
+        seqmatmul = blosum90 * blosum30
+        self.assertEqual(str(seqmatmul), """\
+A  20
+B   0  20
+C   3   8 153
+D   0  20  15  63
+E   0   0  -6   1  36
+F   6  12   9  25  20  70
+G   0   0  16   2   6  15  48
+H   4   2  25   4   0   6   9 112
+I   0  10   4  20  12   0   5   8  30
+K   0   0  12   0   0   4   2   2   8  24
+L   2   5   0   5   4   0  10   4   2   6  20
+M  -2   8   4  12   3   2   8  -6   1  -4   4  42
+N   0  16   4   1   1   4   0   0   0   0   8   0  56
+P   1   6  12   3  -2  16   3  -3  12  -2  12  12   9  88
+Q  -1   1   8   1   4  12   6   0   8   0   6   0   0   0  56
+R   2   4  10   3   1   4   6   0  12   2   6   0   2   3   3  48
+S   1   0   4   0   0   3   0   2   3   0   6   4   0   2   1   1  20
+T   0   0   4   2   2   6   6   4   0   1   0   0   0   0   0   6   2  30
+V  -1   8   4  10   9  -2  15  12  12   6   0   0   8  12   9   3   2  -1  25
+W  20  30   8  24   5   0  -4  15  12  10   6   6  35  15   3   0  12  20   9 220
+X   0   2   6   2   2   2   2   2   0   0   0   0   0   2   0   2   0   0   0   6   2
+Y  12  12  24   4   8   9  15   0   2   3  -6   2  12   8   3   0   6   2  -3  10   2  72
+Z   0   0   0   0  20  16   6   0  12   1   4   2   1   0  16   0   1   1   9   4   0   6  16
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
+
+        # Addition
+        seqmatadd = blosum90 + blosum30
+        self.assertEqual(str(seqmatadd), """\
+A   9
+B  -2   9
+C  -4  -6  26
+D  -3   9  -8  16
+E  -1   0  -5   2  12
+F  -5  -7  -6 -10  -9  17
+G   0  -2  -8  -3  -5  -8  14
+H  -4  -3 -10  -4  -1  -5  -6  22
+I  -2  -7  -4  -9  -7  -1  -6  -6  11
+K  -1  -1  -7  -1   2  -5  -3  -3  -6  10
+L  -3  -6  -2  -6  -5   2  -7  -5   3  -5   9
+M  -1  -6  -4  -7  -4  -3  -6  -1   2   0   4  13
+N  -2   8  -5   2  -2  -5  -1  -1  -4   0  -6  -3  15
+P  -2  -5  -7  -4  -1  -8  -4  -2  -7  -1  -7  -7  -6  19
+Q   0  -2  -6  -2   4  -7  -5   1  -6   1  -5  -1  -1  -2  15
+R  -3  -4  -7  -4  -2  -5  -5  -1  -7   3  -5  -2  -3  -4   4  14
+S   2   0  -4  -1  -1  -4  -1  -3  -4  -1  -5  -4   0  -3  -2  -2   9
+T   1  -1  -4  -3  -3  -5  -5  -4  -1  -2  -2  -1   1  -2  -1  -5   3  11
+V   0  -6  -4  -7  -6  -1  -8  -7   7  -5   1   0  -6  -7  -6  -4  -3   0  10
+W  -9 -11  -6 -10  -6   1  -3  -8  -7  -7  -5  -5 -12  -8  -4  -4  -7  -9  -6  31
+X  -1  -3  -5  -3  -3  -3  -3  -3  -2  -1  -2  -1  -2  -3  -1  -3  -1  -1  -2  -5  -3
+Y  -7  -7 -10  -5  -6   6  -8   1  -3  -4   1  -3  -7  -6  -4  -3  -5  -3  -2   7  -3  17
+Z  -1   0  -5   0   9  -8  -5   0  -7   2  -5  -3  -2  -2   8   0  -2  -2  -6  -5  -1  -5   8
+   A   B   C   D   E   F   G   H   I   K   L   M   N   P   Q   R   S   T   V   W   X   Y   Z""")
+
+    def test_two_mat_relative_entropy(self):
+        blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        rel_entropy = SubsMat.two_mat_relative_entropy(blosum30, blosum90)
+        self.assertAlmostEqual(rel_entropy, 0.0688, places=4)
+
     def test_matrix_correlations(self):
         blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
         blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
@@ -1386,6 +1512,12 @@ Y  -3  -6  -3  -2   3  -3   0  -1  -2  -2  -1  -1  -6  -3  -1  -2  -2  -1   2   
         self.assertAlmostEqual(correlation, 0.878, places=3)
         correlation = SubsMat.two_mat_correlation(blosum90, blosum30)
         self.assertAlmostEqual(correlation, 0.878, places=3)
+
+    def test_two_mat_DJS(self):
+        blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+        blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+        djs = SubsMat.two_mat_DJS(blosum30, blosum90)
+        self.assertAlmostEqual(djs, 15.319, places=3)
 
 
 if __name__ == "__main__":
