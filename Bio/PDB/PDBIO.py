@@ -129,7 +129,6 @@ class PDBIO(StructureIO):
         self.use_model_flag = use_model_flag
         self.is_pqr = is_pqr
 
-
     # private methods
 
     def _get_atom_line(
@@ -224,8 +223,8 @@ class PDBIO(StructureIO):
             )
             return _ATOM_FORMAT_STRING % args
         
-        else: # (PQR case)  
-            # Should we do the same for radius?
+        else:
+            # PQR case
             try:
                 charge = "%7.4f" % charge
             except TypeError:
