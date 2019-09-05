@@ -370,7 +370,11 @@ from Bio.SeqIO.Interfaces import _clean, _get_seq_string
 from math import log
 import warnings
 from Bio import BiopythonWarning, BiopythonParserWarning
-
+from itertools import chain
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
 
 # define score offsets. See discussion for differences between Sanger and
 # Solexa offsets.
@@ -794,6 +798,100 @@ def _get_solexa_quality_str(record):
                    for qp in qualities)
 
 
+def FastqStrictIterator(handle):
+    """Iterate over strictly four line Fastq records as string tuples.
+
+    In contrast to the FastqGeneralIterator, this iterator does allow for the
+    splitting of records over multiple lines.  Line wrapping is out of vogue and
+    hence this iterator provides a faster but stricter alternative to the
+    FastqGeneralIterator.
+
+    Iterate over Fastq records as string tuples (not as SeqRecord objects).
+
+    This code does not try to interpret the quality string numerically.  It
+    just returns tuples of the title, sequence and quality as strings.
+
+    Our SeqRecord based FASTQ iterators call this function internally, and then
+    turn the strings into a SeqRecord objects, mapping the quality string into
+    a list of numerical scores.  If you want to do a custom quality mapping,
+    then you might consider calling this function directly.
+
+    Because we now know that the records have four lines each, we can simply
+    iterate over groups of four lines without having to worry about identifying
+    what each line is.
+
+    There are some quality checks that the FASTQ file must pass in order to be
+    a valid FASTQ file.  These checks can be classified into two levels: record
+    and file.  The checks that each record has to pass are defined in the check
+    function below.  As for the file level checks, it is enough to check for
+    them with the first record.  For example, it is sufficent to check if the
+    first record is in a binary format to ascertain if the file is in the
+    binary format.  Finally, since we are reading the records from an iterator
+    of lines, the reading process has been placed in a try block to gracefully
+    raise an Incomplete Record error in case the record is incomplete.
+
+    """
+    def check(line_1, line_2, line_3, line_4):
+        """Perform checks to test the validity of FASTQ records.
+
+        The FASTQ records are expected to meet some format requirements which
+        are checked here.  The first line of the record must begin with a '@'.
+        The second line, which is the read sequence, must not have any white
+        space within the sequence. Next, the length of the read sequence and
+        the quality sequence must be equal.
+        """
+        # Record level check 1: Check if start of title line is @
+        if line_1[0] != "@":
+            raise ValueError("FASTQ records should start with '@' character.")
+        # Record level check 2: Check if start of second title line is +
+        if line_3[0] != "+":
+            raise ValueError("Quality title should start with '+' character.")
+        # Record level check 3: If quality caption exists, check for equality
+        if line_3[1:-1] and line_3[1:] != line_1[1:]:
+            raise ValueError("Sequence and quality captions differ.")
+        # Record level check 4: Ensure there is no white space in the sequence
+        if " " in line_2 or "\t" in line_2:
+            raise ValueError("Whitespace is not allowed in the sequence.")
+        # Record level check 5: Ensure the sequence and quality are of same length
+        if len(line_2) != len(line_4):
+            raise ValueError("Lengths of sequence and quality values differ "
+                             " for %s (%i and %i)."
+                             % (line_1[1:-1], len(line_2), len(line_4)))
+
+    # File level check 1: Ensure the file is not empty
+    try:
+        first_1 = next(handle)
+    except StopIteration as e:
+        return
+    # File level check 2: check if file is in binary format
+    if first_1[0].isdigit():
+        raise ValueError("Is this handle in binary mode not text mode?")
+
+    # Reset the handle
+    handle = chain([first_1], handle)
+    # zip the iterators, one for each line, and iterate over them
+    for line_1, line_2, line_3, line_4 in zip_longest(
+            handle, handle, handle, handle):
+        # Record level check 0: Ensure the record is complete
+        try:
+            # Avoid stripping newlines from line 1 and line 3 for speed
+            line_2, line_4 = line_2.rstrip(), line_4.rstrip()
+        except AttributeError as e:
+            # If a record is incomplete, zip_longest uses None as the default
+            # fillvalue instead, which raises an AttributeError on using rstrip()
+            exc = ValueError('Incomplete record encountered')
+            # If an exception is caught in a try block, it has a context
+            # associated with it.  In Py3, this context and the attached
+            # 'During the handling of this exception, another exception occurred'
+            # can be avoided by raising the exception from None:
+            # raise ValueError('Error') from None but this is not allowed in Py2.
+            exc.__cause__ = None
+            raise exc
+        # Record level checks 1, 2, 3, 4, 5: Defined within check()
+        check(line_1, line_2, line_3, line_4)
+        yield (line_1[1:-1], line_2, line_4)
+
+
 # TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle):
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).
@@ -1025,6 +1123,101 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     for letter in range(0, 255):
         q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle):
+        if title2ids:
+            id, name, descr = title2ids(title_line)
+        else:
+            descr = title_line
+            id = descr.split()[0]
+            name = id
+        record = SeqRecord(Seq(seq_string, alphabet),
+                           id=id, name=name, description=descr)
+        qualities = [q_mapping[letter] for letter in quality_string]
+        if qualities and (min(qualities) < 0 or max(qualities) > 93):
+            raise ValueError("Invalid character in quality string")
+        # For speed, will now use a dirty trick to speed up assigning the
+        # qualities. We do this to bypass the length check imposed by the
+        # per-letter-annotations restricted dict (as this has already been
+        # checked by FastqGeneralIterator). This is equivalent to:
+        # record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "phred_quality", qualities)
+        yield record
+
+
+def FastqFourLineIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
+    """Iterate over FASTQ records as SeqRecord objects.
+
+    Arguments:
+     - handle - input file
+     - alphabet - optional alphabet
+     - title2ids - A function that, when given the title line from the FASTQ
+       file (without the beginning >), will return the id, name and
+       description (in that order) for the record as a tuple of strings.
+       If this is not given, then the entire title line will be used as
+       the description, and the first word as the id and name.
+
+    Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
+
+    For each sequence in a (Sanger style) FASTQ file there is a matching string
+    encoding the PHRED qualities (integers between 0 and about 90) using ASCII
+    values with an offset of 33.
+
+    For example, consider a file containing three short reads::
+
+        @EAS54_6_R1_2_1_413_324
+        CCCTTCTTGTCTTCAGCGTTTCTCC
+        +
+        ;;3;;;;;;;;;;;;7;;;;;;;88
+        @EAS54_6_R1_2_1_540_792
+        TTGGCAGGCCAAGGCCGATGGATCA
+        +
+        ;;;;;;;;;;;7;;;;;-;;;3;83
+        @EAS54_6_R1_2_1_443_348
+        GTTGCTTCTGGCGTGGGTGGGGGGG
+        +
+        ;;;;;;;;;;;9;7;;.7;393333
+
+    For each sequence (e.g. "CCCTTCTTGTCTTCAGCGTTTCTCC") there is a matching
+    string encoding the PHRED qualities using a ASCII values with an offset of
+    33 (e.g. ";;3;;;;;;;;;;;;7;;;;;;;88").
+
+    Using this module directly you might run:
+
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in FastqPhredIterator(handle):
+    ...         print("%s %s" % (record.id, record.seq))
+    EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
+    EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
+    EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
+
+    Typically however, you would call this via Bio.SeqIO instead with "fastq"
+    (or "fastq-sanger") as the format:
+
+    >>> from Bio import SeqIO
+    >>> with open("Quality/example.fastq", "rU") as handle:
+    ...     for record in SeqIO.parse(handle, "fastq"):
+    ...         print("%s %s" % (record.id, record.seq))
+    EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
+    EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
+    EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
+
+    If you want to look at the qualities, they are record in each record's
+    per-letter-annotation dictionary as a simple list of integers:
+
+    >>> print(record.letter_annotations["phred_quality"])
+    [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
+
+    """
+    assert SANGER_SCORE_OFFSET == ord("!")
+    # Originally, I used a list expression for each record:
+    #
+    # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
+    #
+    # Precomputing is faster, perhaps partly by avoiding the subtractions.
+    q_mapping = dict()
+    for letter in range(0, 255):
+        q_mapping[chr(letter)] = letter - SANGER_SCORE_OFFSET
+    for title_line, seq_string, quality_string in FastqStrictIterator(handle):
         if title2ids:
             id, name, descr = title2ids(title_line)
         else:
