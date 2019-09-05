@@ -47,6 +47,9 @@ pretty print method ``format_alignment`` to restore the output of local
 alignments to the 'old' format (showing the whole sequences including the
 un-aligned parts instead of only showing the aligned parts).
 
+A new function ``charge_at_pH(pH)`` has been added to ``ProtParam`` and
+``IsoelectricPoint`` in ``Bio.SeqUtils``.
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
