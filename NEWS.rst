@@ -38,6 +38,11 @@ making an error, but will require user code to be updated accordingly.
 ``Bio.PDB`` has been updated to support parsing REMARK 99 header entries from
 PDB-style Astral files.
 
+A new keyword parameter ``full_sequences`` was added to ``Bio.pairwise2``'s
+pretty print method ``format_alignment`` to restore the output of local
+alignments to the 'old' format (showing the whole sequences including the
+un-aligned parts instead of only showing the aligned parts).
+
 As in recent releases, more of our code is now explicitly available under
 either our original "Biopython License Agreement", or the very similar but
 more commonly used "3-Clause BSD License".  See the ``LICENSE.rst`` file for
@@ -53,6 +58,7 @@ possible, especially the following contributors:
 - Joe Greener
 - Kiran Mukhyala (first contribution)
 - Konstantin Vdovkin
+- Markus Piotrowski
 - Mike Moritz (first contribution)
 - Mustafa Anil Tuncel
 - Nick Negretti

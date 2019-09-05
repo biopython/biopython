@@ -134,6 +134,24 @@ Some examples:
       Score=3
     <BLANKLINE>
 
+  To restore the 'historic' behaviour of ``format_alignemt``, i.e., showing
+  also the un-aligned parts of both sequences, use the new keyword parameter
+  ``full_sequences``:
+
+    >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
+    ...     print(format_alignment(*a, full_sequences=True))
+    ACCGT
+    | || 
+    A-CG-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    || | 
+    AC-G-
+      Score=3
+    <BLANKLINE>
+
+
 - Do a global alignment. Identical characters are given 2 points, 1 point is
   deducted for each non-identical character. Don't penalize gaps.
 
@@ -1099,7 +1117,8 @@ def print_matrix(matrix):
                        for j in range(len(matrix[i]))))
 
 
-def format_alignment(align1, align2, score, begin, end):
+def format_alignment(align1, align2, score, begin, end,
+                     full_sequences=False):
     """Format the alignment prettily into a string.
 
     IMPORTANT: Gap symbol must be "-" (or ['-'] for lists)!
@@ -1119,16 +1138,27 @@ def format_alignment(align1, align2, score, begin, end):
     NOTE: This is different to the alignment's begin/end values,
     which give the Python indices (0-based) of the bases/amino acids
     in the *aligned* sequences.
+
+    If you want to restore the 'historic' behaviour, that means
+    displaying the whole sequences (including the non-aligned parts),
+    use ``full_sequences=True``. In this case, the non-aligned leading
+    and trailing parts are also indicated by spaces in the match-line.
     """
-    start1 = start2 = ""
+    align_begin = begin
+    align_end = end
+    start1 = start2 = ''
     start_m = begin  # Begin of match line (how many spaces to include)
-    # Is this a local alignment?
-    if begin != 0 or end != len(align1):
+    # For local alignments:
+    if not full_sequences and (begin != 0 or end != len(align1)):
         # Calculate the actual start positions in the un-aligned sequences
         # This will only work if the gap symbol is '-' or ['-']!
         start1 = str(len(align1[:begin]) - align1[:begin].count("-") + 1) + " "
         start2 = str(len(align2[:begin]) - align2[:begin].count("-") + 1) + " "
         start_m = max(len(start1), len(start2))
+    elif full_sequences:
+        start_m = 0
+        begin = 0
+        end = len(align1)
 
     if isinstance(align1, list):
         # List elements will be separated by spaces, since they can be
@@ -1140,12 +1170,16 @@ def format_alignment(align1, align2, score, begin, end):
     m_line = [" " * start_m]  # match line
     s2_line = ["{:>{width}}".format(start2, width=start_m)]  # seq2 line
 
-    for a, b in zip(align1[begin:end], align2[begin:end]):
+    for n, (a, b) in enumerate(zip(align1[begin:end],
+                                   align2[begin:end])):
         # Since list elements can be of different length, we center them,
         # using the maximum length of the two compared elements as width
         m_len = max(len(a), len(b))
         s1_line.append("{:^{width}}".format(a, width=m_len))
         s2_line.append("{:^{width}}".format(b, width=m_len))
+        if full_sequences and (n < align_begin or n >= align_end):
+            m_line.append("{:^{width}}".format(' ', width=m_len))  # space
+            continue
         if a == b:
             m_line.append("{:^{width}}".format("|", width=m_len))  # match
         elif a.strip() == "-" or b.strip() == "-":
