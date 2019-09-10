@@ -2171,7 +2171,7 @@ class IC_Chain:
 
     def _add_residue(self, res, last_res, last_ord_res):
         """Set rprev, rnext, determine chain break."""
-        if not hasattr(res, 'internal_coord'):
+        if not res.internal_coord:
             res.internal_coord = IC_Residue(res)
         if (0 < len(last_res) and last_ord_res == last_res
                 and self._peptide_check(last_ord_res[0].residue, res)):
@@ -2277,9 +2277,9 @@ class IC_Chain:
         for res in self.chain.get_residues():
             if 2 == res.is_disordered():
                 for r in res.child_dict.values():
-                    if hasattr(r, 'internal_coord'):
+                    if r.internal_coord:
                         r.internal_coord.coords_to_residue()
-            elif hasattr(res, 'internal_coord'):
+            elif res.internal_coord:
                 res.internal_coord.coords_to_residue()
 
     # TODO: fix to allow only updating parts of structure

@@ -18,17 +18,14 @@ except ImportError:
 from Bio.PDB.PDBExceptions import PDBException
 from Bio._py3k import StringIO
 
+from Bio.PDB.Structure import Structure
 from Bio.PDB.ic_classes import IC_Residue, IC_Chain
 from Bio.PDB.PICIO import write_PIC, read_PIC
 
 
-def _chn_atic(chn, allBonds=False):
-    if not hasattr(chn, 'internal_coord'):
-        chn.internal_coord = IC_Chain(chn)
-    chn.internal_coord.dihedra_from_atoms(allBonds)
 
 
-def atom_to_internal_coordinates(entity, allBonds=False):
+def xatom_to_internal_coordinates(entity, allBonds=False):
     """Create/update internal coordinates from Atom X,Y,Z coordinates.
 
     Internal coordinates are bond length, angle and dihedral angles.
@@ -43,7 +40,7 @@ def atom_to_internal_coordinates(entity, allBonds=False):
                            "Atom alone")
     elif 'R' == lev:
         # works better at chain level but leave option here
-        if not hasattr(entity, 'internal_coord'):
+        if not entity.internal_coord:
             entity.internal_coord = IC_Residue(entity)
         entity.internal_coord.dihedra_from_atoms(allBonds)
     elif 'C' == lev:
@@ -53,7 +50,7 @@ def atom_to_internal_coordinates(entity, allBonds=False):
             _chn_atic(chn, allBonds)
 
 
-def internal_to_atom_coordinates(struct):
+def xinternal_to_atom_coordinates(struct):
     """Create/update atom coordinates from internal coordinates.
 
     :param Structure struct: Biopython PDB Structure object with .pic
@@ -62,7 +59,7 @@ def internal_to_atom_coordinates(struct):
     :raises Exception: if any chain does not have .pic attribute
     """
     for chn in struct.get_chains():
-        if hasattr(chn, 'internal_coord'):
+        if chn.internal_coord:
             chn.internal_coord.internal_to_atom_coordinates()
         else:
             raise Exception(
@@ -70,10 +67,10 @@ def internal_to_atom_coordinates(struct):
                 % (struct, chn))
 
 
-def structure_rebuild_test(pdb_structure, verbose=False):
+def structure_rebuild_test(entity, verbose=False):
     """Test rebuild PDB structure from internal coordinates.
 
-    :param pdb_structure: Biopython Structure
+    :param entity: Biopython Structure, Model or Chain
         Structure to test
     :param verbose: bool
         print extra messages
@@ -81,14 +78,14 @@ def structure_rebuild_test(pdb_structure, verbose=False):
         comparison dict from compare_residues()
     """
     sp = StringIO()
-    atom_to_internal_coordinates(pdb_structure)
-    write_PIC(pdb_structure, sp)
+    entity.atom_to_internal_coordinates()
+    write_PIC(entity, sp)
     sp.seek(0)
     pdb2 = read_PIC(sp)
     if verbose:
         report_PIC(pdb2, verbose=True)
-    internal_to_atom_coordinates(pdb2)
-    r = compare_residues(pdb_structure, pdb2, verbose=verbose)
+    pdb2.internal_to_atom_coordinates()
+    r = compare_residues(entity, pdb2, verbose=verbose)
     return r
 
 
@@ -117,7 +114,7 @@ def report_PIC(entity, reportDict=None, verbose=False):
         if 'A' == entity.level:
             raise PDBException("No PIC output at Atom level")
         elif 'R' == entity.level:
-            if hasattr(entity, 'internal_coord'):
+            if entity.internal_coord:
                 reportDict['res'] += 1
                 dlen = len(entity.internal_coord.dihedra)
                 hlen = len(entity.internal_coord.hedra)
@@ -166,32 +163,31 @@ def report_PIC(entity, reportDict=None, verbose=False):
     return reportDict
 
 
-def add_PIC(pdb_struct):
-    """Add PIC attribute data to input PDB Structure object."""
-# TODO: update pic nomenclature
-    for chn in pdb_struct.get_chains():
-        chn.internal_coord = IC_Chain(chn)
-        chn.internal_coord.dihedra_from_atoms()
-
-
 def PIC_duplicate(entity):
     """Duplicate structure entity with PIC data, no atom coordinates.
 
     Employs write_PIC(), read_PIC() with StringIO buffer.
     Calls atom_to_internal_coordinates() if needed.
 
-    :param entity: Biopython PDB Entity
+    :param entity: Biopython PDB Entity (will fail for Atom)
     :returns: Biopython PDBStructure, no Atom objects
     """
     sp = StringIO()
     hasInternalCoords = False
     for res in entity.get_residues():
-        if hasattr(res, 'internal_coord'):
+        if res.internal_coord:
             if len(res.internal_coord.hedra) > 0:
                 hasInternalCoords = True
                 break
     if not hasInternalCoords:
-        atom_to_internal_coordinates(entity)
+        lev = entity.level
+        if 'R' == lev:
+            # works better at chain level but leave option here
+            if not entity.internal_coord:
+                entity.internal_coord = IC_Residue(entity)
+            entity.internal_coord.dihedra_from_atoms()
+        else:
+            entity.atom_to_internal_coordinates()
 
     write_PIC(entity, sp)
     sp.seek(0)

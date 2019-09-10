@@ -8,7 +8,7 @@
 """Chain class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
-
+from Bio.PDB.ic_classes import IC_Chain
 
 class Chain(Entity):
     """Define Chain class.
@@ -20,6 +20,7 @@ class Chain(Entity):
     def __init__(self, id):
         """Initialize the class."""
         self.level = "C"
+        self.internal_coord = None;
         Entity.__init__(self, id)
 
     # Sorting methods: empty chain IDs come last.
@@ -172,3 +173,29 @@ class Chain(Entity):
         for r in self.get_residues():
             for a in r:
                 yield a
+
+    def atom_to_internal_coordinates(self, allBonds=False):
+        """Create/update internal coordinates from Atom X,Y,Z coordinates.
+
+        Internal coordinates are bond length, angle and dihedral angles.
+
+        :param allBonds bool: default False
+        include hedra and dihedra for bonds around sidechain rings.
+        (not required to capture all atoms)
+        """
+        if not self.internal_coord:
+            self.internal_coord = IC_Chain(self)
+        self.internal_coord.dihedra_from_atoms(allBonds)
+
+    def internal_to_atom_coordinates(self):
+        """Create/update atom coordinates from internal coordinates.
+
+        :raises Exception: if any chain does not have .pic attribute
+        """
+        if self.internal_coord:
+            self.internal_coord.internal_to_atom_coordinates()
+        else:
+            raise Exception(
+                'Structure %s Chain %s does not have internal coordinates set'
+                % (self.parent.parent, self))
+    

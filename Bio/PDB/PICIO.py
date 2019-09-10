@@ -136,7 +136,7 @@ def read_PIC(file):
                     sb_res = struct_builder.residue
                     if 2 == sb_res.is_disordered():
                         for r in sb_res.child_dict.values():
-                            if not hasattr(r, 'internal_coord'):
+                            if not r.internal_coord:
                                 sb_res = r
                                 break
                     sb_res.internal_coord = IC_Residue(sb_res)
@@ -177,7 +177,7 @@ def read_PIC(file):
                             m2 = bfac2_re.match(bfac_pair)
                             if (m2
                                 and sb_res is not None
-                                    and hasattr(sb_res, 'internal_coord')):
+                                    and sb_res.internal_coord):
                                 rp = sb_res.internal_coord
                                 rp.bfactors[m2.group(1)] = float(m2.group(2))
             else:
@@ -201,7 +201,7 @@ def read_PIC(file):
 
 
 def _wpr(entity, fp, pdbid, chainid):
-    if hasattr(entity, 'internal_coord'):
+    if entity.internal_coord:
         if not chainid or not pdbid:
             chain = entity.parent
             if not chainid:

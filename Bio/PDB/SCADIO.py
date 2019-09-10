@@ -11,8 +11,7 @@ from Bio.File import as_handle
 from Bio.PDB.PDBExceptions import PDBException
 
 from Bio.PDB.ic_classes import IC_Residue, IC_Chain
-from Bio.PDB.internal_coords import internal_to_atom_coordinates
-from Bio.PDB.internal_coords import atom_to_internal_coordinates
+from Bio.PDB.Structure import Structure
 from Bio.PDB.vectors import homog_scale_mtx
 
 
@@ -49,15 +48,15 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
     have_PIC_Atoms = False
     if 'S' == entity.level or 'M' == entity.level:
         for chn in entity.get_chains():
-            if not hasattr(chn, 'internal_coord'):
+            if not chn.internal_coord:
                 chn.internal_coord = IC_Chain(chn)
                 have_PIC_Atoms = True
     elif 'C' == entity.level:
-        if not hasattr(entity, 'internal_coord'):
+        if not entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             have_PIC_Atoms = True
     elif 'R' == entity.level:
-        if not hasattr(entity, 'internal_coord'):
+        if not entity.internal_coord:
             entity.internal_coord = IC_Residue(entity)
             have_PIC_Atoms = True
     else:
@@ -65,12 +64,12 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
 
     if not have_PIC_Atoms and scale is not None:
         # if loaded pic file and need to scale, generate atom coords
-        internal_to_atom_coordinates(entity)
+        entity.internal_to_atom_coordinates()
 
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
         for res in entity.get_residues():
-            if hasattr(res, 'internal_coord'):
+            if res.internal_coord:
                 res.internal_coord.applyMtx(scaleMtx)
                 if res.internal_coord.gly_Cbeta:
                     res.internal_coord.scale = scale
@@ -79,13 +78,13 @@ def write_SCAD(entity, file, scale=None, handle='protein', pdbid=None,
     # -- hedron bond lengths have changed
     # if not scaling, still need to generate internal coordinate
     # bonds for ring sidechains
-    atom_to_internal_coordinates(entity, allBonds=True)
+    entity.atom_to_internal_coordinates(allBonds=True)
 
     # clear initNCaC - want at origin, not match PDB file
     for chn in entity.get_chains():
         chn.internal_coord.initNCaC = {}
 
-    internal_to_atom_coordinates(entity)
+    entity.internal_to_atom_coordinates()
 
     with as_handle(file, 'w') as fp:
 
