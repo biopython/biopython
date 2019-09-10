@@ -390,12 +390,6 @@ Robert T. Miller 2019
 """
 
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(
-        "Install NumPy to build proteins from internal coordinates.")
 def homog_rot_mtx(angle_rads, axis):
     """Generate a 4x4 single-axis numpy rotation matrix.
 
@@ -421,6 +415,7 @@ def homog_rot_mtx(angle_rads, axis):
                             [0, sinang, cosang, 0],
                             [0, 0, 0, 1]], dtype=numpy.float64)
 
+
 def homog_trans_mtx(x, y, z):
     """Generate a 4x4 numpy translation matrix.
 
@@ -432,6 +427,7 @@ def homog_trans_mtx(x, y, z):
                         [0, 0, 0, 1]
                         ], dtype=numpy.float64)
 
+
 def homog_scale_mtx(scale):
     """Generate a 4x4 numpy scaling matrix.
 
@@ -442,6 +438,7 @@ def homog_scale_mtx(scale):
                         [0, 0, scale, 0],
                         [0, 0, 0, 1]
                         ], dtype=numpy.float64)
+
 
 def get_spherical_coordinates(xyz):
     """Compute spherical coordinates (r, theta, phi) for X,Y,Z point.
@@ -472,7 +469,6 @@ def coord_space(acs, rev=False):
         (to return from coord_space)
     :returns: 4x4 numpy array, x2 if rev=True
     """
-    
     dbg = False
     if dbg:
         for ac in acs:
@@ -493,7 +489,7 @@ def coord_space(acs, rev=False):
     p = a2 - a1
     sc = get_spherical_coordinates(p)
 
-    #if dbg:
+    # if dbg:
     #    print('p', p.transpose())
     #    print('sc', sc)
 
@@ -504,9 +500,9 @@ def coord_space(acs, rev=False):
     # mt = mry @ mrz @ tm  # python 3.5 and later
     mt = mry.dot(mrz.dot(tm))
 
-   # if dbg:
-        # print('mt * a2', (mt @ a2).transpose())
-   #     print('mt * a2', (mt.dot(a2)).transpose())
+    # if dbg:
+    #     print('mt * a2', (mt @ a2).transpose())
+    #     print('mt * a2', (mt.dot(a2)).transpose())
 
     # p = mt @ a0
     p = mt.dot(a0)
